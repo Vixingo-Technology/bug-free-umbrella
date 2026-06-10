@@ -1,0 +1,30 @@
+@import "tailwindcss";
+
+@theme {
+  --color-accent-red: #C41E3A;
+  --color-accent-gold: #B8860B;
+  --color-bg-deep: #FFFFFF;
+  --color-bg-charcoal: #F5F5F7;
+}
+
+@layer utilities {
+  .glass {
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+  }
+  .glass-hover:hover {
+    background: rgba(196, 30, 58, 0.04);
+    border-color: rgba(196, 30, 58, 0.15);
+  }
+  .hero-gradient {
+    background: radial-gradient(circle at 75% 25%, #FFFFFF 0%, #FAFAFC 60%, #F5F5F7 100%);
+  }
+  .vertical-text {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+  }
+  .belt-glow {
+    box-shadow: 0 10px 40px rgba(184, 134, 11, 0.15);
+  }
+}

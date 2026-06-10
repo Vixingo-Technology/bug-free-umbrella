@@ -1,0 +1,6 @@
+{
+  "name": "Japan Karate Association Bangladesh",
+  "description": "Premium cinematic platform for JKA Bangladesh Shotokan Karate.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
