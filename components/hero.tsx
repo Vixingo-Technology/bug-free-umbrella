@@ -1,8 +1,6 @@
 "use client";
 
 import { motion, useScroll, useTransform } from "motion/react";
-import Image from "next/image";
-import { ChevronDown } from "lucide-react";
 import { useRef } from "react";
 
 export default function Hero() {
@@ -14,6 +12,8 @@ export default function Hero() {
 
     const y1 = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
     const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
+    const backgroundVideoId = "8QRrnc0UGGg";
+    const backgroundVideoSrc = `https://www.youtube-nocookie.com/embed/${backgroundVideoId}?autoplay=1&mute=1&controls=0&loop=1&playlist=${backgroundVideoId}&playsinline=1&modestbranding=1&rel=0&disablekb=1&fs=0&iv_load_policy=3`;
 
     return (
         <section
@@ -23,20 +23,19 @@ export default function Hero() {
             {/* Background Video/Image Parallax */}
             <motion.div
                 style={{ y: y1 }}
-                className="absolute inset-0 w-full h-full z-0 opacity-80"
+                className="absolute inset-0 w-full h-full z-0"
             >
-                <div className="absolute inset-0 bg-gradient-to-b from-bg-deep/40 via-bg-deep/70 to-bg-deep z-10" />
-                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-accent-red/5 via-transparent to-transparent z-10" />
-                <Image
-                    src="https://picsum.photos/seed/dojo/1920/1080"
-                    alt="Dojo Background"
-                    fill
-                    priority
-                    className="object-cover opacity-15 grayscale blur-[1px]"
-                    referrerPolicy="no-referrer"
-                />
-                {/* Dynamic Fog Pattern */}
-                <div className="absolute inset-0 z-10 opacity-5 bg-[url('https://picsum.photos/seed/noise/1000/1000')] bg-repeat mix-blend-overlay"></div>
+                <div className="absolute inset-0 overflow-hidden bg-zinc-950">
+                    <iframe
+                        src={backgroundVideoSrc}
+                        title="Cinematic karate training background video"
+                        allow="autoplay; encrypted-media; picture-in-picture"
+                        className="absolute left-1/2 top-1/2 h-[56.25vw] min-h-full min-w-[177.78vh] w-[100vw] -translate-x-1/2 -translate-y-1/2 scale-110 pointer-events-none opacity-35 saturate-0 contrast-125 brightness-75"
+                    />
+                </div>
+                <div className="absolute inset-0 bg-gradient-to-b from-bg-deep/20 via-bg-deep/55 to-bg-deep z-10" />
+                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-accent-red/10 via-transparent to-transparent z-10" />
+                <div className="absolute inset-0 z-10 opacity-5 bg-[url('https://picsum.photos/seed/noise/1000/1000')] bg-repeat mix-blend-overlay" />
             </motion.div>
 
             {/* Content */}
