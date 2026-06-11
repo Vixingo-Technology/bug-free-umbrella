@@ -1,10 +1,11 @@
 "use client";
 
 import { motion, useScroll, useTransform } from "motion/react";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 export default function Hero() {
     const containerRef = useRef(null);
+    const [videoReady, setVideoReady] = useState(false);
     const { scrollYProgress } = useScroll({
         target: containerRef,
         offset: ["start start", "end start"],
@@ -30,9 +31,43 @@ export default function Hero() {
                         src={backgroundVideoSrc}
                         title="Cinematic karate training background video"
                         allow="autoplay; encrypted-media; picture-in-picture"
-                        className="absolute left-1/2 top-1/2 h-[56.25vw] min-h-full min-w-[177.78vh] w-[100vw] -translate-x-1/2 -translate-y-1/2 scale-110 pointer-events-none opacity-35 saturate-0 contrast-125 brightness-75"
+                        onLoad={() => setVideoReady(true)}
+                        className={`absolute left-1/2 top-1/2 h-[56.25vw] min-h-full min-w-[177.78vh] w-[100vw] -translate-x-1/2 -translate-y-1/2 scale-110 pointer-events-none transition-opacity duration-700 saturate-0 contrast-125 brightness-75 ${videoReady ? "opacity-35" : "opacity-0"}`}
                     />
                 </div>
+                {!videoReady ? (
+                    <motion.div
+                        initial={{ opacity: 1 }}
+                        animate={{ opacity: 1 }}
+                        className="absolute inset-0 z-20 flex items-center justify-center bg-bg-deep"
+                    >
+                        <div className="flex flex-col items-center gap-4 text-center">
+                            <div className="relative flex h-24 w-24 items-center justify-center">
+                                <div className="absolute inset-0 rounded-full border border-accent-gold/25" />
+                                <motion.div
+                                    animate={{ rotate: 360 }}
+                                    transition={{
+                                        duration: 1.8,
+                                        repeat: Infinity,
+                                        ease: "linear",
+                                    }}
+                                    className="absolute inset-2 rounded-full border border-accent-red border-t-transparent"
+                                />
+                                <span className="font-serif text-3xl italic text-zinc-950">
+                                    空手
+                                </span>
+                            </div>
+                            <div>
+                                <p className="text-[10px] font-semibold tracking-[0.55em] uppercase text-accent-gold">
+                                    Loading Dojo
+                                </p>
+                                <p className="mt-2 text-xs uppercase tracking-[0.35em] text-zinc-500">
+                                    Preparing the film
+                                </p>
+                            </div>
+                        </div>
+                    </motion.div>
+                ) : null}
                 <div className="absolute inset-0 bg-gradient-to-b from-bg-deep/20 via-bg-deep/55 to-bg-deep z-10" />
                 <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-accent-red/10 via-transparent to-transparent z-10" />
                 <div className="absolute inset-0 z-10 opacity-5 bg-[url('https://picsum.photos/seed/noise/1000/1000')] bg-repeat mix-blend-overlay" />
