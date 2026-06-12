@@ -2,10 +2,12 @@
 
 import { motion, useScroll, useTransform } from "motion/react";
 import { useRef, useState } from "react";
+import { useLanguage } from "@/components/language-provider";
 
 export default function Hero() {
     const containerRef = useRef(null);
     const [videoReady, setVideoReady] = useState(false);
+    const { copy } = useLanguage();
     const { scrollYProgress } = useScroll({
         target: containerRef,
         offset: ["start start", "end start"],
@@ -13,27 +15,28 @@ export default function Hero() {
 
     const y1 = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
     const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
-    const backgroundVideoId = "8QRrnc0UGGg";
-    const backgroundVideoSrc = `https://www.youtube-nocookie.com/embed/${backgroundVideoId}?autoplay=1&mute=1&controls=0&loop=1&playlist=${backgroundVideoId}&playsinline=1&modestbranding=1&rel=0&disablekb=1&fs=0&iv_load_policy=3`;
-
     return (
         <section
             ref={containerRef}
-            className="relative h-screen w-full flex items-center justify-center overflow-hidden hero-gradient"
+            className="relative h-screen w-full flex items-center justify-center overflow-hidden hero-gradient font-heading text-zinc-950"
         >
             {/* Background Video/Image Parallax */}
             <motion.div
                 style={{ y: y1 }}
                 className="absolute inset-0 w-full h-full z-0"
             >
-                <div className="absolute inset-0 overflow-hidden bg-zinc-950">
-                    <iframe
-                        src={backgroundVideoSrc}
-                        title="Cinematic karate training background video"
-                        allow="autoplay; encrypted-media; picture-in-picture"
-                        onLoad={() => setVideoReady(true)}
-                        className={`absolute left-1/2 top-1/2 h-[56.25vw] min-h-full min-w-[177.78vh] w-[100vw] -translate-x-1/2 -translate-y-1/2 scale-110 pointer-events-none transition-opacity duration-700 saturate-0 contrast-125 brightness-75 ${videoReady ? "opacity-35" : "opacity-0"}`}
-                    />
+                <div className="absolute inset-0 overflow-hidden ">
+                    {/* bg-zinc-950 */}
+                    <video
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                        onLoadedData={() => setVideoReady(true)}
+                        className={`absolute inset-0 h-full w-full object-cover pointer-events-none transition-opacity duration-700 saturate-0 contrast-125 brightness-65 ${videoReady ? "opacity-28" : "opacity-0"}`}
+                    >
+                        <source src="/assets/bg.mp4" type="video/mp4" />
+                    </video>
                 </div>
                 {!videoReady ? (
                     <motion.div
@@ -51,29 +54,29 @@ export default function Hero() {
                                         repeat: Infinity,
                                         ease: "linear",
                                     }}
-                                    className="absolute inset-2 rounded-full border border-accent-red border-t-transparent"
+                                    className="absolute inset-2 rounded-full border border-zinc-900/20 border-t-transparent"
                                 />
                                 <span className="font-serif text-3xl italic text-zinc-950">
                                     空手
                                 </span>
                             </div>
                             <div>
-                                <p className="text-[10px] font-semibold tracking-[0.55em] uppercase text-accent-gold">
-                                    Loading Dojo
+                                <p className="text-[10px] font-semibold tracking-[0.55em] uppercase text-zinc-800">
+                                    {copy.hero.loadingTitle}
                                 </p>
-                                <p className="mt-2 text-xs uppercase tracking-[0.35em] text-zinc-500">
-                                    Preparing the film
+                                <p className="mt-2 text-xs uppercase tracking-[0.35em] text-zinc-600">
+                                    {copy.hero.loadingSubtitle}
                                 </p>
                             </div>
                         </div>
                     </motion.div>
                 ) : null}
-                <div className="absolute inset-0 bg-gradient-to-b from-bg-deep/20 via-bg-deep/55 to-bg-deep z-10" />
-                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-accent-red/10 via-transparent to-transparent z-10" />
+                <div className="absolute inset-0 bg-gradient-to-b from-bg-deep/28 via-bg-deep/70 to-bg-deep z-10" />
+                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-accent-gold/10 via-transparent to-transparent z-10" />
                 <div className="absolute inset-0 z-10 opacity-5 bg-[url('https://picsum.photos/seed/noise/1000/1000')] bg-repeat mix-blend-overlay" />
             </motion.div>
 
-            {/* Content */}
+
             <motion.div
                 style={{ opacity }}
                 className="relative z-20 max-w-7xl mx-auto px-6 text-center lg:text-left flex flex-col lg:flex-row items-center w-full"
@@ -98,14 +101,14 @@ export default function Hero() {
                             delay: 0.4,
                             ease: "easeOut",
                         }}
-                        className="font-serif text-5xl md:text-7xl lg:text-7xl text-zinc-900 mb-6 leading-tight font-bold"
+                        className="font-heading text-5xl md:text-7xl lg:text-7xl text-zinc-950 mb-6 leading-[0.92] font-bold"
                     >
-                        THE HIGHEST
+                        {copy.hero.titleLines[0]}
                         <br />
-                        TRADITION OF
+                        {copy.hero.titleLines[1]}
                         <br />
                         <span className="italic font-light text-accent-red">
-                            MASTERY.
+                            {copy.hero.titleLines[2]}
                         </span>
                     </motion.h1>
 
@@ -113,12 +116,9 @@ export default function Hero() {
                         initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 1, delay: 0.6 }}
-                        className="text-zinc-600 text-sm max-w-sm mx-auto lg:mx-0 leading-relaxed mb-8"
+                        className="text-zinc-700 text-base md:text-lg max-w-md mx-auto lg:mx-0 leading-relaxed mb-8"
                     >
-                        The sole legal representative of Japan Karate
-                        Association (JKA) in Bangladesh. Preserving the
-                        discipline, respect, and power of traditional karate-do
-                        since 1978.
+                        {copy.hero.description}
                     </motion.p>
 
                     <motion.div
@@ -131,13 +131,13 @@ export default function Hero() {
                             href="#membership"
                             className="px-8 py-4 bg-accent-red hover:bg-accent-red/90 text-white text-[10px] tracking-widest uppercase font-bold transition-colors shadow-sm"
                         >
-                            Begin Your Journey
+                            {copy.hero.primaryCta}
                         </a>
                         <a
                             href="#branches"
-                            className="px-8 py-4 border border-zinc-300 text-zinc-800 text-[10px] tracking-widest uppercase font-bold glass hover:bg-zinc-50 transition-colors"
+                            className="px-8 py-4 border border-zinc-300 text-zinc-900 text-[10px] tracking-widest uppercase font-bold glass hover:bg-zinc-50 transition-colors"
                         >
-                            Explore Dojos
+                            {copy.hero.secondaryCta}
                         </a>
                     </motion.div>
                 </div>
@@ -162,13 +162,13 @@ export default function Hero() {
                             <div className="w-2.5 h-[400px] bg-zinc-950 shadow-lg relative rounded-b-sm">
                                 <div className="absolute bottom-0 w-full h-24 bg-accent-gold"></div>
                                 <div className="absolute top-10 -left-0.5 text-[8px] vertical-text font-bold text-white tracking-[0.2em]">
-                                    JAPAN KARATE ASSOCIATION BANGLADESH
+                                    {copy.hero.verticalBrand}
                                 </div>
                             </div>
                             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 rounded-full border border-accent-gold/10 blur-xl"></div>
                         </div>
                         {/* Elegant Japanese Calligraphy Character representing "Karate" or "Way/Do" */}
-                        <h2 className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center justify-center font-serif text-[400px] text-zinc-900/[0.15] pointer-events-none">
+                        <h2 className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center justify-center font-serif text-[400px] text-zinc-900/[0.12] pointer-events-none">
                             空手
                         </h2>
                     </motion.div>

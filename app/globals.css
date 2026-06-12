@@ -7,6 +7,12 @@
   --color-bg-charcoal: #F5F5F7;
 }
 
+html[lang="bn"] {
+  --font-sans: var(--font-bangla) !important;
+  --font-serif: var(--font-bangla) !important;
+  --font-heading: var(--font-bangla) !important;
+}
+
 @layer utilities {
   .glass {
     background: rgba(255, 255, 255, 0.75);

@@ -2,8 +2,11 @@
 
 import { motion } from "motion/react";
 import Image from "next/image";
+import { useLanguage } from "@/components/language-provider";
 
 export default function About() {
+    const { copy } = useLanguage();
+
     return (
         <section
             id="about"
@@ -61,11 +64,11 @@ export default function About() {
                             transition={{ duration: 0.8 }}
                             className="font-serif text-4xl lg:text-5xl font-bold text-zinc-900 mb-6 uppercase tracking-wider"
                         >
-                            Upholding the <br />{" "}
+                            {copy.about.titleBefore} <br />{" "}
                             <span className="text-accent-red italic lowercase font-serif font-normal">
-                                spirit of
+                                {copy.about.titleHighlight}
                             </span>{" "}
-                            Shotokan
+                            {copy.about.titleAfter}
                         </motion.h2>
 
                         <motion.div
@@ -83,19 +86,9 @@ export default function About() {
                             transition={{ duration: 0.8, delay: 0.3 }}
                             className="space-y-6 text-zinc-700 font-normal text-lg leading-relaxed"
                         >
-                            <p>
-                                Japan Karate Association (JKA) Bangladesh stands
-                                as the premier authority of Shotokan Karate in
-                                the nation. We are directly affiliated with JKA
-                                World Federation, Tokyo, Japan.
-                            </p>
-                            <p>
-                                Our mission is to cultivate not just physical
-                                strength, but the indomitable spirit, character,
-                                and discipline that true martial arts require.
-                                We follow the exact syllabus and standards set
-                                by the masters in Japan.
-                            </p>
+                            {copy.about.paragraphs.map((paragraph) => (
+                                <p key={paragraph}>{paragraph}</p>
+                            ))}
                         </motion.div>
 
                         <motion.div
@@ -105,22 +98,16 @@ export default function About() {
                             transition={{ duration: 0.8, delay: 0.5 }}
                             className="mt-12 grid grid-cols-2 gap-8"
                         >
-                            <div>
-                                <h4 className="text-4xl font-heading font-bold text-zinc-900 mb-2">
-                                    50+
-                                </h4>
-                                <p className="text-xs uppercase tracking-[0.2em] text-zinc-500 font-semibold">
-                                    Regional Branches
-                                </p>
-                            </div>
-                            <div>
-                                <h4 className="text-4xl font-heading font-bold text-zinc-900 mb-2">
-                                    10k+
-                                </h4>
-                                <p className="text-xs uppercase tracking-[0.2em] text-zinc-500 font-semibold">
-                                    Active Students
-                                </p>
-                            </div>
+                            {copy.about.stats.map((stat) => (
+                                <div key={stat.label}>
+                                    <h4 className="text-4xl font-heading font-bold text-zinc-900 mb-2">
+                                        {stat.value}
+                                    </h4>
+                                    <p className="text-xs uppercase tracking-[0.2em] text-zinc-500 font-semibold">
+                                        {stat.label}
+                                    </p>
+                                </div>
+                            ))}
                         </motion.div>
                     </div>
                 </div>

@@ -2,15 +2,11 @@
 
 import { motion } from "motion/react";
 import { Search, MapPin } from "lucide-react";
+import { useLanguage } from "@/components/language-provider";
 
 export default function Branches() {
-    const regions = [
-        { name: "Dhaka Division", count: 24 },
-        { name: "Chattogram Division", count: 12 },
-        { name: "Sylhet Division", count: 6 },
-        { name: "Rajshahi Division", count: 5 },
-        { name: "Khulna Division", count: 4 },
-    ];
+    const { copy } = useLanguage();
+    const regions = copy.branches.regions;
 
     return (
         <section
@@ -21,12 +17,11 @@ export default function Branches() {
                 {/* Left: Info */}
                 <div className="flex-1">
                     <h2 className="font-serif text-3xl md:text-5xl text-zinc-900 mb-6 uppercase tracking-widest font-bold">
-                        Locate a Dojo
+                        {copy.branches.heading}
                     </h2>
                     <div className="h-px w-24 bg-accent-red mb-8"></div>
                     <p className="text-zinc-650 font-normal max-w-md mb-12">
-                        With over 50 registered branches nationwide, find a
-                        certified JKA Dojo near you and begin your journey.
+                        {copy.branches.description}
                     </p>
 
                     <div className="relative mb-12">
@@ -36,7 +31,7 @@ export default function Branches() {
                         />
                         <input
                             type="text"
-                            placeholder="SEARCH REGION OR CITY..."
+                            placeholder={copy.branches.searchPlaceholder}
                             className="w-full bg-white border border-zinc-200 text-zinc-950 px-12 py-4 focus:outline-none focus:border-accent-red font-mono text-sm tracking-widest placeholder:text-zinc-400 transition-colors shadow-sm"
                         />
                     </div>
@@ -61,7 +56,8 @@ export default function Branches() {
                                     </span>
                                 </div>
                                 <span className="text-zinc-500 font-mono text-xs font-bold">
-                                    {region.count} DOJOS
+                                    {region.count}{" "}
+                                    {copy.branches.dojoCountLabel}
                                 </span>
                             </motion.div>
                         ))}
@@ -77,7 +73,7 @@ export default function Branches() {
                             <div className="w-3 h-3 bg-accent-red rounded-full"></div>
                         </div>
                         <p className="text-accent-red font-mono text-xs mt-4 tracking-widest uppercase font-bold">
-                            Interactive Map
+                            {copy.branches.mapLabel}
                         </p>
                     </div>
                 </div>
