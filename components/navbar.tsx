@@ -38,7 +38,7 @@ export default function Navbar() {
                         {/* Logo */}
                         <Image src={Logo} alt="Logo" width={40} height={40} />
                         <div className="flex flex-col">
-                            <span className="font-heading font-bold text-zinc-900 tracking-[0.4em] text-xs leading-tight">
+                            <span className="font-karate font-bold text-zinc-900 tracking-[0.4em] text-xs leading-tight">
                                 JKA{" "}
                                 <span className="text-accent-red">BANGLADESH</span>
                             </span>

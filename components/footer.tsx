@@ -24,7 +24,7 @@ export default function Footer() {
                                 <div className="w-5 h-5 bg-accent-red rounded-full"></div>
                             </div>
                             <div className="flex flex-col">
-                                <span className="font-heading font-bold text-zinc-900 tracking-[0.4em] text-xs leading-tight">
+                                <span className="font-karate font-bold text-zinc-900 tracking-[0.4em] text-xs leading-tight">
                                     JKA{" "}
                                     <span className="text-accent-red">
                                         BANGLADESH

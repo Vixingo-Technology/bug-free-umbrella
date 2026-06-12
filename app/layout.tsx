@@ -16,6 +16,11 @@ const spaceGrotesk = Space_Grotesk({
     variable: "--font-heading",
 });
 
+const karateFont = localFont({
+    src: "../assets/Karate.ttf",
+    variable: "--font-karate",
+});
+
 const playfairDisplay = Playfair_Display({
     subsets: ["latin"],
     variable: "--font-serif",
@@ -47,7 +52,7 @@ export default async function RootLayout({
     return (
         <html
             lang={initialLanguage}
-            className={`light ${inter.variable} ${spaceGrotesk.variable} ${playfairDisplay.variable} ${banglaFont.variable} scroll-smooth`}
+            className={`light ${inter.variable} ${spaceGrotesk.variable} ${karateFont.variable} ${playfairDisplay.variable} ${banglaFont.variable} scroll-smooth`}
         >
             <body
                 className="bg-bg-deep text-zinc-900 font-sans antialiased overflow-x-hidden selection:bg-accent-red selection:text-white"

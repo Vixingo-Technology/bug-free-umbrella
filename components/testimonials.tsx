@@ -17,7 +17,7 @@ export default function Testimonials() {
             </div>
 
             <div className="max-w-7xl mx-auto px-6 lg:px-12 text-center">
-                <h2 className="font-serif text-3xl md:text-5xl text-zinc-900 mb-4 uppercase tracking-widest font-bold">
+                <h2 className="font-karate text-3xl md:text-5xl text-zinc-900 mb-4 uppercase tracking-widest font-bold">
                     {copy.testimonials.heading}
                 </h2>
                 <div className="h-px w-24 bg-accent-red mx-auto mb-20"></div>

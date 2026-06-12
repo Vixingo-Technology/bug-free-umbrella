@@ -5,6 +5,12 @@
   --color-accent-gold: #B8860B;
   --color-bg-deep: #FFFFFF;
   --color-bg-charcoal: #F5F5F7;
+  
+  --font-sans: var(--font-sans);
+  --font-serif: var(--font-serif);
+  --font-heading: var(--font-heading);
+  --font-karate: var(--font-karate);
+  --font-bangla: var(--font-bangla);
 }
 
 html[lang="bn"] {

@@ -24,7 +24,7 @@ export default function Benefits() {
         <section className="py-32 bg-bg-deep relative">
             <div className="max-w-7xl mx-auto px-6 lg:px-12 relative z-10">
                 <div className="text-center mb-20">
-                    <h2 className="font-serif text-3xl md:text-5xl text-zinc-900 mb-4 uppercase tracking-widest font-bold">
+                    <h2 className="font-karate text-3xl md:text-5xl text-zinc-900 mb-4 uppercase tracking-widest font-bold">
                         {copy.benefits.headingBefore}{" "}
                         <span className="italic text-accent-red font-serif normal-case font-normal">
                             {copy.benefits.headingHighlight}

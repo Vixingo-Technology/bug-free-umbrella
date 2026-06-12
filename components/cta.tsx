@@ -32,7 +32,7 @@ export default function CTA() {
                     viewport={{ once: true }}
                     transition={{ duration: 1 }}
                 >
-                    <h2 className="font-serif text-5xl md:text-7xl text-zinc-900 mb-6 leading-tight tracking-tighter font-bold">
+                    <h2 className="font-karate text-5xl md:text-7xl text-zinc-900 mb-6 leading-tight tracking-tighter font-bold">
                         {copy.cta.headingLines[0]} <br />
                         <span className="italic text-accent-red font-serif font-normal text-4xl md:text-5xl uppercase tracking-widest block mt-2">
                             {copy.cta.headingLines[1]}

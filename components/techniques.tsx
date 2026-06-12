@@ -15,7 +15,7 @@ export default function Techniques() {
         >
             <div className="max-w-[1440px] mx-auto px-6">
                 <div className="text-center mb-24">
-                    <h2 className="font-serif text-3xl md:text-5xl text-zinc-900 mb-6 uppercase tracking-widest relative inline-block font-bold">
+                    <h2 className="font-karate text-3xl md:text-5xl text-zinc-900 mb-6 uppercase tracking-widest relative inline-block font-bold">
                         {copy.techniques.heading}
                         <span className="absolute -top-12 left-1/2 -translate-x-1/2 text-[80px] font-black text-zinc-900/[0.03] -z-10 whitespace-nowrap">
                             三つの柱

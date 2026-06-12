@@ -14,7 +14,7 @@ export default function Journey() {
             <div className="max-w-7xl mx-auto px-6 lg:px-12 relative z-10">
                 <div className="flex flex-col md:flex-row justify-between items-end mb-20 gap-6">
                     <div>
-                        <h2 className="font-serif text-3xl md:text-5xl text-zinc-900 mb-4 uppercase tracking-widest font-bold">
+                        <h2 className="font-karate text-3xl md:text-5xl text-zinc-900 mb-4 uppercase tracking-widest font-bold">
                             {copy.journey.heading}
                         </h2>
                         <div className="h-px w-24 bg-accent-red mb-6"></div>

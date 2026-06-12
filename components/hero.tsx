@@ -123,9 +123,11 @@ export default function Hero() {
                         }}
                         className="font-heading text-5xl md:text-7xl lg:text-7xl text-zinc-950 mb-6 leading-[0.92] font-bold"
                     >
-                        {copy.hero.titleLines[0]}
-                        <br />
-                        {copy.hero.titleLines[1]}
+                        <span className="font-karate">
+                            {copy.hero.titleLines[0]}
+                            <br />
+                            {copy.hero.titleLines[1]}
+                        </span>
                         <br />
                         <span className="italic font-light text-accent-red drop-shadow-[0_0_15px_rgba(196,30,58,0.3)]">
                             {copy.hero.titleLines[2]}
@@ -181,7 +183,7 @@ export default function Hero() {
                         <div className="relative z-20">
                             <div className="w-5 h-[400px] bg-zinc-950 shadow-lg relative rounded-b-sm">
                                 <div className="absolute bottom-0 w-full h-35 bg-accent-red "></div>
-                                <div className="absolute top-11  text-[11px] vertical-text font-bold text-white tracking-[0.2em]">
+                                <div className="absolute top-10  text-[12px] vertical-text font-bold text-white tracking-[0.2em]">
                                     {copy.hero.verticalBrand}
                                 </div>
                             </div>

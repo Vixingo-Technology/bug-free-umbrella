@@ -16,7 +16,7 @@ export default function Branches() {
             <div className="max-w-7xl mx-auto px-6 lg:px-12 flex flex-col lg:flex-row gap-16">
                 {/* Left: Info */}
                 <div className="flex-1">
-                    <h2 className="font-serif text-3xl md:text-5xl text-zinc-900 mb-6 uppercase tracking-widest font-bold">
+                    <h2 className="font-karate text-3xl md:text-5xl text-zinc-900 mb-6 uppercase tracking-widest font-bold">
                         {copy.branches.heading}
                     </h2>
                     <div className="h-px w-24 bg-accent-red mb-8"></div>

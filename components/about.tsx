@@ -62,7 +62,7 @@ export default function About() {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ duration: 0.8 }}
-                            className="font-serif text-4xl lg:text-5xl font-bold text-zinc-900 mb-6 uppercase tracking-wider"
+                            className="font-karate text-4xl lg:text-5xl font-bold text-zinc-900 mb-6 uppercase tracking-wider"
                         >
                             {copy.about.titleBefore} <br />{" "}
                             <span className="text-accent-red italic lowercase font-serif font-normal">
