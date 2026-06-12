@@ -28,6 +28,9 @@ const banglaFont = localFont({
 
 export const metadata: Metadata = {
     title: "Japan Karate Association Bangladesh - Premium Heritage",
+    icons: {
+        icon: "/favicon.ico",
+    },
     description:
         "The highest tradition of Shotokan Karate representing JKA in Bangladesh.",
 };

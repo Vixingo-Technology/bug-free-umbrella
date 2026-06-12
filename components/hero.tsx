@@ -1,13 +1,32 @@
 "use client";
 
 import { motion, useScroll, useTransform } from "motion/react";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useLanguage } from "@/components/language-provider";
 
 export default function Hero() {
     const containerRef = useRef(null);
+    const videoRef = useRef<HTMLVideoElement>(null);
     const [videoReady, setVideoReady] = useState(false);
     const { copy } = useLanguage();
+
+    useEffect(() => {
+        if (videoRef.current && videoRef.current.readyState >= 2) {
+            setVideoReady(true);
+        }
+    }, []);
+
+    useEffect(() => {
+        if (!videoReady) {
+            document.body.style.overflow = "hidden";
+        } else {
+            document.body.style.overflow = "unset";
+        }
+        return () => {
+            document.body.style.overflow = "unset";
+        };
+    }, [videoReady]);
+
     const { scrollYProgress } = useScroll({
         target: containerRef,
         offset: ["start start", "end start"],
@@ -28,6 +47,7 @@ export default function Hero() {
                 <div className="absolute inset-0 overflow-hidden ">
                     {/* bg-zinc-950 */}
                     <video
+                        ref={videoRef}
                         autoPlay
                         loop
                         muted
@@ -42,7 +62,7 @@ export default function Hero() {
                     <motion.div
                         initial={{ opacity: 1 }}
                         animate={{ opacity: 1 }}
-                        className="absolute inset-0 z-20 flex items-center justify-center bg-bg-deep"
+                        className="fixed inset-0 z-[9999] h-[100dvh] w-screen flex items-center justify-center bg-bg-deep"
                     >
                         <div className="flex flex-col items-center gap-4 text-center">
                             <div className="relative flex h-24 w-24 items-center justify-center">
@@ -72,7 +92,7 @@ export default function Hero() {
                     </motion.div>
                 ) : null}
                 <div className="absolute inset-0 bg-gradient-to-b from-bg-deep/28 via-bg-deep/70 to-bg-deep z-10" />
-                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-accent-gold/10 via-transparent to-transparent z-10" />
+                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-accent-red/25 via-transparent to-transparent z-10 mix-blend-overlay" />
                 <div className="absolute inset-0 z-10 opacity-5 bg-[url('https://picsum.photos/seed/noise/1000/1000')] bg-repeat mix-blend-overlay" />
             </motion.div>
 
@@ -88,7 +108,7 @@ export default function Hero() {
                         transition={{ duration: 1, delay: 0.2 }}
                         className="mb-4 justify-center lg:justify-start"
                     >
-                        <span className="text-accent-gold tracking-[0.6em] text-xs font-semibold uppercase">
+                        <span className="text-accent-red drop-shadow-[0_0_8px_rgba(196,30,58,0.6)] tracking-[0.6em] text-xs font-bold uppercase">
                             Shotokan Heritage
                         </span>
                     </motion.div>
@@ -107,7 +127,7 @@ export default function Hero() {
                         <br />
                         {copy.hero.titleLines[1]}
                         <br />
-                        <span className="italic font-light text-accent-red">
+                        <span className="italic font-light text-accent-red drop-shadow-[0_0_15px_rgba(196,30,58,0.3)]">
                             {copy.hero.titleLines[2]}
                         </span>
                     </motion.h1>
@@ -159,13 +179,13 @@ export default function Hero() {
 
                         {/* Symbolic Black Belt Concept */}
                         <div className="relative z-20">
-                            <div className="w-2.5 h-[400px] bg-zinc-950 shadow-lg relative rounded-b-sm">
-                                <div className="absolute bottom-0 w-full h-24 bg-accent-gold"></div>
-                                <div className="absolute top-10 -left-0.5 text-[8px] vertical-text font-bold text-white tracking-[0.2em]">
+                            <div className="w-5 h-[400px] bg-zinc-950 shadow-lg relative rounded-b-sm">
+                                <div className="absolute bottom-0 w-full h-35 bg-accent-red "></div>
+                                <div className="absolute top-11  text-[11px] vertical-text font-bold text-white tracking-[0.2em]">
                                     {copy.hero.verticalBrand}
                                 </div>
                             </div>
-                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 rounded-full border border-accent-gold/10 blur-xl"></div>
+                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-90 rounded-full border border-accent-red/30 blur-xl shadow-[0_0_60px_rgba(196,30,58,0.2)]"></div>
                         </div>
                         {/* Elegant Japanese Calligraphy Character representing "Karate" or "Way/Do" */}
                         <h2 className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center justify-center font-serif text-[400px] text-zinc-900/[0.12] pointer-events-none">
