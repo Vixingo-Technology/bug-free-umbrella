@@ -2,13 +2,19 @@
 
 import { motion } from "motion/react";
 import { useEffect, useState } from "react";
-import { Languages, Menu, X } from "lucide-react";
+import { Languages, Menu, X, LogIn, LayoutDashboard, LogOut } from "lucide-react";
 import { useLanguage } from "@/components/language-provider";
 import Image from "next/image";
+import Link from "next/link";
 import Logo from "@/assets/jka_logo.svg";
+import { createClient } from "@/lib/supabase/client";
+import { signoutAction } from "@/app/actions/auth";
+import type { User } from "@supabase/supabase-js";
+
 export default function Navbar() {
     const [scrolled, setScrolled] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const [user, setUser] = useState<User | null>(null);
     const { copy, language, toggleLanguage } = useLanguage();
 
     useEffect(() => {
@@ -17,6 +23,22 @@ export default function Navbar() {
         };
         window.addEventListener("scroll", handleScroll);
         return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
+
+    useEffect(() => {
+        const supabase = createClient();
+
+        supabase.auth.getUser().then(({ data: { user } }) => {
+            setUser(user);
+        });
+
+        const {
+            data: { subscription },
+        } = supabase.auth.onAuthStateChange((_event, session) => {
+            setUser(session?.user ?? null);
+        });
+
+        return () => subscription.unsubscribe();
     }, []);
 
     const navLinks = copy.nav.links;
@@ -56,12 +78,37 @@ export default function Navbar() {
                                 {link.name}
                             </a>
                         ))}
-                        <a
-                            href="#membership"
-                            className="text-accent-red hover:text-accent-gold transition-all duration-300"
-                        >
-                            {copy.nav.membership}
-                        </a>
+
+                        {/* Auth Links */}
+                        {user ? (
+                            <>
+                                <Link
+                                    href="/dashboard"
+                                    className="inline-flex items-center gap-1.5 text-accent-red hover:text-accent-gold transition-all duration-300"
+                                >
+                                    <LayoutDashboard size={14} />
+                                    Dashboard
+                                </Link>
+                                <form action={signoutAction}>
+                                    <button
+                                        type="submit"
+                                        className="inline-flex items-center gap-1.5 text-zinc-500 hover:text-accent-red transition-all duration-300 cursor-pointer"
+                                    >
+                                        <LogOut size={14} />
+                                        Sign Out
+                                    </button>
+                                </form>
+                            </>
+                        ) : (
+                            <Link
+                                href="/login"
+                                className="inline-flex items-center gap-1.5 text-accent-red hover:text-accent-gold transition-all duration-300"
+                            >
+                                <LogIn size={14} />
+                                Sign In
+                            </Link>
+                        )}
+
                         <button
                             type="button"
                             onClick={toggleLanguage}
@@ -106,13 +153,40 @@ export default function Navbar() {
                             {link.name}
                         </a>
                     ))}
-                    <a
-                        href="#membership"
-                        onClick={() => setMobileMenuOpen(false)}
-                        className="mt-6 px-8 py-3 bg-accent-red hover:bg-accent-red/90 text-white font-semibold tracking-widest uppercase transition-colors"
-                    >
-                        {copy.nav.membership}
-                    </a>
+
+                    {/* Auth Links - Mobile */}
+                    {user ? (
+                        <>
+                            <Link
+                                href="/dashboard"
+                                onClick={() => setMobileMenuOpen(false)}
+                                className="mt-6 px-8 py-3 bg-accent-red hover:bg-accent-red/90 text-white font-semibold tracking-widest uppercase transition-colors inline-flex items-center gap-2"
+                            >
+                                <LayoutDashboard size={16} />
+                                Dashboard
+                            </Link>
+                            <form action={signoutAction}>
+                                <button
+                                    type="submit"
+                                    onClick={() => setMobileMenuOpen(false)}
+                                    className="px-8 py-3 border border-zinc-300 text-zinc-700 hover:border-accent-red hover:text-accent-red font-semibold tracking-widest uppercase transition-colors inline-flex items-center gap-2 cursor-pointer"
+                                >
+                                    <LogOut size={16} />
+                                    Sign Out
+                                </button>
+                            </form>
+                        </>
+                    ) : (
+                        <Link
+                            href="/login"
+                            onClick={() => setMobileMenuOpen(false)}
+                            className="mt-6 px-8 py-3 bg-accent-red hover:bg-accent-red/90 text-white font-semibold tracking-widest uppercase transition-colors inline-flex items-center gap-2"
+                        >
+                            <LogIn size={16} />
+                            Sign In
+                        </Link>
+                    )}
+
                     <button
                         type="button"
                         onClick={() => {

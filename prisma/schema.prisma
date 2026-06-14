@@ -1,0 +1,108 @@
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  STUDENT
+  INSTRUCTOR
+  ADMIN
+}
+
+model Member {
+  id           String    @id @db.Uuid // Matches auth.users(id)
+  fullName     String    @map("full_name")
+  email        String    @unique
+  phone        String?
+  currentRank  String?   @map("current_rank")
+  dojoId       String?   @map("dojo_id") @db.Uuid
+  expiryDate   DateTime? @map("expiry_date") @db.Date
+  role         Role      @default(STUDENT)
+
+  dojo         Dojo?     @relation("DojoMembers", fields: [dojoId], references: [id], onDelete: SetNull)
+  headDojos    Dojo[]    @relation("DojoHead")
+  
+  gradings     Grading[] @relation("MemberGradings")
+  
+  matchesAsA   TournamentMatch[] @relation("MatchParticipantA")
+  matchesAsB   TournamentMatch[] @relation("MatchParticipantB")
+  matchesWon   TournamentMatch[] @relation("MatchWinner")
+  
+  orders       ShopOrder[]
+
+  @@map("members")
+}
+
+model Dojo {
+  id               String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name             String
+  city             String
+  lat              Decimal? @db.Decimal
+  lng              Decimal? @db.Decimal
+  headInstructorId String?  @map("head_instructor_id") @db.Uuid
+  schedule         Json?
+
+  headInstructor   Member?  @relation("DojoHead", fields: [headInstructorId], references: [id], onDelete: SetNull)
+  members          Member[] @relation("DojoMembers")
+
+  @@map("dojos")
+}
+
+model BeltRank {
+  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  nameEn       String   @map("name_en")
+  nameBn       String   @map("name_bn")
+  colorHex     String   @map("color_hex")
+  requiredKata String?  @map("required_kata")
+
+  gradingsFrom Grading[] @relation("GradingFromRank")
+  gradingsTo   Grading[] @relation("GradingToRank")
+
+  @@map("belt_ranks")
+}
+
+model Grading {
+  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  memberId       String   @map("member_id") @db.Uuid
+  fromRankId     String?  @map("from_rank_id") @db.Uuid
+  toRankId       String?  @map("to_rank_id") @db.Uuid
+  result         String?  // PENDING, PASSED, FAILED
+  certificateUrl String?  @map("certificate_url")
+
+  member         Member   @relation("MemberGradings", fields: [memberId], references: [id], onDelete: Cascade)
+  fromRank       BeltRank? @relation("GradingFromRank", fields: [fromRankId], references: [id], onDelete: SetNull)
+  toRank         BeltRank? @relation("GradingToRank", fields: [toRankId], references: [id], onDelete: SetNull)
+
+  @@map("gradings")
+}
+
+model TournamentMatch {
+  id             String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tournamentId   String? @map("tournament_id") @db.Uuid
+  participantAId String  @map("participant_a_id") @db.Uuid
+  participantBId String  @map("participant_b_id") @db.Uuid
+  winnerId       String? @map("winner_id") @db.Uuid
+
+  participantA   Member  @relation("MatchParticipantA", fields: [participantAId], references: [id], onDelete: Cascade)
+  participantB   Member  @relation("MatchParticipantB", fields: [participantBId], references: [id], onDelete: Cascade)
+  winner         Member? @relation("MatchWinner", fields: [winnerId], references: [id], onDelete: SetNull)
+
+  @@map("tournament_matches")
+}
+
+model ShopOrder {
+  id            String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  memberId      String  @map("member_id") @db.Uuid
+  totalBdt      Decimal @map("total_bdt") @db.Decimal
+  paymentStatus String  @map("payment_status")
+  itemsJson     Json    @map("items_json")
+
+  member        Member  @relation(fields: [memberId], references: [id], onDelete: Cascade)
+
+  @@map("shop_orders")
+}

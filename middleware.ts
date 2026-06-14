@@ -1,8 +1,10 @@
-import { NextRequest, NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
+import { updateSession } from "@/lib/supabase/middleware";
 
-export default function middleware(request: NextRequest) {
+export default async function middleware(request: NextRequest) {
     const url = request.nextUrl.clone();
 
+    // Handle locale redirects (existing logic)
     if (url.pathname === "/en" || url.pathname === "/bn") {
         url.pathname = "/";
         return NextResponse.redirect(url);
@@ -13,9 +15,10 @@ export default function middleware(request: NextRequest) {
         return NextResponse.redirect(url);
     }
 
-    return NextResponse.next();
+    // Supabase session refresh + route protection
+    return await updateSession(request);
 }
 
 export const config = {
-    matcher: ["/((?!_next|api|favicon.ico).*)"],
+    matcher: ["/((?!_next|api|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)"],
 };
