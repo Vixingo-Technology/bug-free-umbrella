@@ -22,7 +22,7 @@ export async function loginAction(formData: FormData) {
         return { error: error.message };
     }
 
-    redirect("/dashboard");
+    redirect("/portal");
 }
 
 export async function signupAction(formData: FormData) {
@@ -56,7 +56,7 @@ export async function signupAction(formData: FormData) {
         return { error: error.message };
     }
 
-    redirect("/dashboard");
+    redirect("/portal");
 }
 
 export async function signoutAction() {

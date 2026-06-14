@@ -1,7 +1,29 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from "../prisma/generated/client";
+import { PrismaPg } from "@prisma/adapter-pg";
+import { Pool } from "pg";
 
-const globalForPrisma = globalThis as unknown as { prisma: PrismaClient };
+declare global {
+    // eslint-disable-next-line no-var
+    var __prisma: PrismaClient | undefined;
+}
 
-export const prisma = globalForPrisma.prisma || new PrismaClient();
+function createPrismaClient(): PrismaClient {
+    const connectionString = process.env.DATABASE_URL;
 
-if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
+    if (!connectionString) {
+        // No DB configured — return a no-op client (safe for build-time)
+        const placeholderPool = new Pool({ connectionString: "postgresql://localhost/placeholder" });
+        return new PrismaClient({ adapter: new PrismaPg(placeholderPool) });
+    }
+
+    const pool = new Pool({ connectionString });
+    const adapter = new PrismaPg(pool);
+    return new PrismaClient({ adapter });
+}
+
+export const prisma: PrismaClient =
+    globalThis.__prisma ?? createPrismaClient();
+
+if (process.env.NODE_ENV !== "production") {
+    globalThis.__prisma = prisma;
+}
