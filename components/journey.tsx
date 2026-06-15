@@ -1,10 +1,10 @@
 "use client";
 
 import { motion } from "motion/react";
-import { useLanguage } from "@/components/language-provider";
+import { siteContent } from "@/lib/i18n/site-content";
 
 export default function Journey() {
-    const { copy } = useLanguage();
+    const copy = siteContent;
     const belts = copy.journey.belts;
 
     return (

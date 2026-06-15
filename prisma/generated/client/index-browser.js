@@ -122,8 +122,7 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
 
 exports.Prisma.BeltRankScalarFieldEnum = {
   id: 'id',
-  name_en: 'name_en',
-  name_bn: 'name_bn',
+  name: 'name',
   kyu_dan: 'kyu_dan',
   color_hex: 'color_hex',
   order_index: 'order_index',
@@ -134,8 +133,6 @@ exports.Prisma.BeltRankScalarFieldEnum = {
 exports.Prisma.DojoScalarFieldEnum = {
   id: 'id',
   name: 'name',
-  name_en: 'name_en',
-  name_bn: 'name_bn',
   address: 'address',
   city: 'city',
   latitude: 'latitude',
@@ -178,8 +175,6 @@ exports.Prisma.InstructorScalarFieldEnum = {
   member_id: 'member_id',
   dojo_id: 'dojo_id',
   bio: 'bio',
-  bio_en: 'bio_en',
-  bio_bn: 'bio_bn',
   is_active: 'is_active',
   created_at: 'created_at',
   updated_at: 'updated_at'
@@ -233,8 +228,6 @@ exports.Prisma.GradingScalarFieldEnum = {
 exports.Prisma.EventScalarFieldEnum = {
   id: 'id',
   title: 'title',
-  title_en: 'title_en',
-  title_bn: 'title_bn',
   description: 'description',
   event_date: 'event_date',
   location: 'location',
@@ -267,8 +260,6 @@ exports.Prisma.NotificationScalarFieldEnum = {
 exports.Prisma.ShopProductScalarFieldEnum = {
   id: 'id',
   name: 'name',
-  name_en: 'name_en',
-  name_bn: 'name_bn',
   description: 'description',
   price: 'price',
   stock: 'stock',
@@ -302,8 +293,6 @@ exports.Prisma.ShopOrderItemScalarFieldEnum = {
 exports.Prisma.TournamentScalarFieldEnum = {
   id: 'id',
   name: 'name',
-  name_en: 'name_en',
-  name_bn: 'name_bn',
   description: 'description',
   date: 'date',
   location: 'location',

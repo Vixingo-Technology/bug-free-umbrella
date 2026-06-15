@@ -2,13 +2,13 @@
 
 import { motion, useScroll, useTransform } from "motion/react";
 import { useRef, useState, useEffect } from "react";
-import { useLanguage } from "@/components/language-provider";
+import { siteContent } from "@/lib/i18n/site-content";
 
 export default function Hero() {
     const containerRef = useRef(null);
     const videoRef = useRef<HTMLVideoElement>(null);
     const [videoReady, setVideoReady] = useState(false);
-    const { copy } = useLanguage();
+    const copy = siteContent;
 
     useEffect(() => {
         if (videoRef.current && videoRef.current.readyState >= 2) {

@@ -2,14 +2,14 @@
 
 import { motion } from "motion/react";
 import { Calendar, MapPin, ArrowRight } from "lucide-react";
-import { useLanguage } from "@/components/language-provider";
+import { siteContent } from "@/lib/i18n/site-content";
 
 export default function Events() {
-    const { copy } = useLanguage();
+    const copy = siteContent;
     const events = copy.events.items;
 
     const isCompleted = (status: string) =>
-        status === "Completed" || status === "সম্পন্ন";
+        status === "Completed";
 
     return (
         <section id="events" className="py-32 bg-bg-deep relative">

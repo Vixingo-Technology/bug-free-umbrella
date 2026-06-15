@@ -9,10 +9,10 @@ import {
     BookOpen,
     Fingerprint,
 } from "lucide-react";
-import { useLanguage } from "@/components/language-provider";
+import { siteContent } from "@/lib/i18n/site-content";
 
 export default function Benefits() {
-    const { copy } = useLanguage();
+    const copy = siteContent;
     const iconMap = [Globe, BookOpen, Award, Fingerprint, Shield, Plane];
     const benefits = copy.benefits.items.map((item, index) => ({
         Icon: iconMap[index],

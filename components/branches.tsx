@@ -2,10 +2,10 @@
 
 import { motion } from "motion/react";
 import { Search, MapPin } from "lucide-react";
-import { useLanguage } from "@/components/language-provider";
+import { siteContent } from "@/lib/i18n/site-content";
 
 export default function Branches() {
-    const { copy } = useLanguage();
+    const copy = siteContent;
     const regions = copy.branches.regions;
 
     return (

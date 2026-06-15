@@ -3,10 +3,10 @@
 import { motion } from "motion/react";
 import { Quote } from "lucide-react";
 import Image from "next/image";
-import { useLanguage } from "@/components/language-provider";
+import { siteContent } from "@/lib/i18n/site-content";
 
 export default function Testimonials() {
-    const { copy } = useLanguage();
+    const copy = siteContent;
     const testimonials = copy.testimonials.items;
 
     return (

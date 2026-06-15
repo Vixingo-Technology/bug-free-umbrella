@@ -13,9 +13,9 @@ datasource db {
   provider = "postgresql"
 }
 
-// ─────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
 // ENUMS
-// ─────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
 
 enum MemberRole {
   STUDENT
@@ -52,14 +52,13 @@ enum NotificationType {
   RENEWAL
 }
 
-// ─────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
 // BELT RANKS
-// ─────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
 
 model BeltRank {
   id          String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name_en     String  @unique
-  name_bn     String?
+  name        String  @unique
   kyu_dan     String?
   color_hex   String?
   order_index Int     @unique
@@ -76,15 +75,13 @@ model BeltRank {
   @@map("belt_ranks")
 }
 
-// ─────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
 // DOJOS
-// ─────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
 
 model Dojo {
   id        String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name      String
-  name_en   String?
-  name_bn   String?
   address   String?
   city      String?
   latitude  Float?
@@ -108,9 +105,9 @@ model Dojo {
   @@map("dojos")
 }
 
-// ─────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
 // MEMBERS  (mirrors auth.users via id)
-// ─────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
 
 model Member {
   id            String     @id @db.Uuid // = auth.users.id
@@ -145,9 +142,9 @@ model Member {
   @@map("members")
 }
 
-// ─────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
 // ADMINS  (super-admin elevation)
-// ─────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
 
 model Admin {
   id        String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
@@ -161,17 +158,15 @@ model Admin {
   @@map("admins")
 }
 
-// ─────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
 // INSTRUCTORS
-// ─────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
 
 model Instructor {
   id        String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   member_id String  @unique @db.Uuid
   dojo_id   String? @db.Uuid
   bio       String?
-  bio_en    String?
-  bio_bn    String?
   is_active Boolean @default(true)
 
   member Member @relation(fields: [member_id], references: [id], onDelete: Cascade)
@@ -183,9 +178,9 @@ model Instructor {
   @@map("instructors")
 }
 
-// ─────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
 // ATTENDANCE
-// ─────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
 
 model Attendance {
   id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
@@ -204,9 +199,9 @@ model Attendance {
   @@map("attendance")
 }
 
-// ─────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
 // GRADING EVENTS  (exam sessions)
-// ─────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
 
 model GradingEvent {
   id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
@@ -227,9 +222,9 @@ model GradingEvent {
   @@map("grading_events")
 }
 
-// ─────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
 // GRADING APPLICATIONS
-// ─────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
 
 model GradingApplication {
   id               String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
@@ -248,9 +243,9 @@ model GradingApplication {
   @@map("grading_applications")
 }
 
-// ─────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
 // GRADINGS  (results)
-// ─────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
 
 model Grading {
   id               String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
@@ -273,15 +268,13 @@ model Grading {
   @@map("gradings")
 }
 
-// ─────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
 // EVENTS  (public events, managed via CMS)
-// ─────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
 
 model Event {
   id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   title        String
-  title_en     String?
-  title_bn     String?
   description  String?
   event_date   DateTime
   location     String?
@@ -297,9 +290,9 @@ model Event {
   @@map("events")
 }
 
-// ─────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
 // EVENT REGISTRATIONS
-// ─────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
 
 model EventRegistration {
   id        String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
@@ -315,9 +308,9 @@ model EventRegistration {
   @@map("event_registrations")
 }
 
-// ─────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
 // NOTIFICATIONS
-// ─────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
 
 model Notification {
   id        String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
@@ -336,15 +329,13 @@ model Notification {
   @@map("notifications")
 }
 
-// ─────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
 // SHOP PRODUCTS
-// ─────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
 
 model ShopProduct {
   id          String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name        String
-  name_en     String?
-  name_bn     String?
   description String?
   price       Decimal @db.Decimal(10, 2)
   stock       Int     @default(0)
@@ -359,9 +350,9 @@ model ShopProduct {
   @@map("shop_products")
 }
 
-// ─────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
 // SHOP ORDERS
-// ─────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
 
 model ShopOrder {
   id             String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
@@ -382,9 +373,9 @@ model ShopOrder {
   @@map("shop_orders")
 }
 
-// ─────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
 // SHOP ORDER ITEMS  (line items)
-// ─────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
 
 model ShopOrderItem {
   id         String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
@@ -393,21 +384,19 @@ model ShopOrderItem {
   quantity   Int
   unit_price Decimal @db.Decimal(10, 2)
 
-  order   ShopOrder   @relation(fields: [order_id], references: [id], onDelete: Cascade)
+  order   ShopOrder   @relation(fields: [order_id], references: [id])
   product ShopProduct @relation(fields: [product_id], references: [id])
 
   @@map("shop_order_items")
 }
 
-// ─────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
 // TOURNAMENTS
-// ─────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
 
 model Tournament {
   id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name         String
-  name_en      String?
-  name_bn      String?
   description  String?
   date         DateTime
   location     String?
@@ -422,9 +411,9 @@ model Tournament {
   @@map("tournaments")
 }
 
-// ─────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
 // TOURNAMENT PARTICIPANTS
-// ─────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
 
 model TournamentParticipant {
   id            String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
@@ -446,9 +435,9 @@ model TournamentParticipant {
   @@map("tournament_participants")
 }
 
-// ─────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
 // TOURNAMENT MATCHES
-// ─────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
 
 model TournamentMatch {
   id              String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
@@ -460,7 +449,7 @@ model TournamentMatch {
   match_order     Int?
   notes           String?
 
-  tournament   Tournament             @relation(fields: [tournament_id], references: [id], onDelete: Cascade)
+  tournament   Tournament             @relation(fields: [tournament_id], references: [id])
   participant1 TournamentParticipant? @relation("MatchParticipant1", fields: [participant1_id], references: [id])
   participant2 TournamentParticipant? @relation("MatchParticipant2", fields: [participant2_id], references: [id])
   winner       TournamentParticipant? @relation("MatchWinner", fields: [winner_id], references: [id])

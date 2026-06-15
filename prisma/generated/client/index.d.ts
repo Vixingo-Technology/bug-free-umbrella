@@ -2932,8 +2932,7 @@ export namespace Prisma {
 
   export type BeltRankMinAggregateOutputType = {
     id: string | null
-    name_en: string | null
-    name_bn: string | null
+    name: string | null
     kyu_dan: string | null
     color_hex: string | null
     order_index: number | null
@@ -2943,8 +2942,7 @@ export namespace Prisma {
 
   export type BeltRankMaxAggregateOutputType = {
     id: string | null
-    name_en: string | null
-    name_bn: string | null
+    name: string | null
     kyu_dan: string | null
     color_hex: string | null
     order_index: number | null
@@ -2954,8 +2952,7 @@ export namespace Prisma {
 
   export type BeltRankCountAggregateOutputType = {
     id: number
-    name_en: number
-    name_bn: number
+    name: number
     kyu_dan: number
     color_hex: number
     order_index: number
@@ -2975,8 +2972,7 @@ export namespace Prisma {
 
   export type BeltRankMinAggregateInputType = {
     id?: true
-    name_en?: true
-    name_bn?: true
+    name?: true
     kyu_dan?: true
     color_hex?: true
     order_index?: true
@@ -2986,8 +2982,7 @@ export namespace Prisma {
 
   export type BeltRankMaxAggregateInputType = {
     id?: true
-    name_en?: true
-    name_bn?: true
+    name?: true
     kyu_dan?: true
     color_hex?: true
     order_index?: true
@@ -2997,8 +2992,7 @@ export namespace Prisma {
 
   export type BeltRankCountAggregateInputType = {
     id?: true
-    name_en?: true
-    name_bn?: true
+    name?: true
     kyu_dan?: true
     color_hex?: true
     order_index?: true
@@ -3095,8 +3089,7 @@ export namespace Prisma {
 
   export type BeltRankGroupByOutputType = {
     id: string
-    name_en: string
-    name_bn: string | null
+    name: string
     kyu_dan: string | null
     color_hex: string | null
     order_index: number
@@ -3125,8 +3118,7 @@ export namespace Prisma {
 
   export type BeltRankSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    name_en?: boolean
-    name_bn?: boolean
+    name?: boolean
     kyu_dan?: boolean
     color_hex?: boolean
     order_index?: boolean
@@ -3141,8 +3133,7 @@ export namespace Prisma {
 
   export type BeltRankSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    name_en?: boolean
-    name_bn?: boolean
+    name?: boolean
     kyu_dan?: boolean
     color_hex?: boolean
     order_index?: boolean
@@ -3152,8 +3143,7 @@ export namespace Prisma {
 
   export type BeltRankSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    name_en?: boolean
-    name_bn?: boolean
+    name?: boolean
     kyu_dan?: boolean
     color_hex?: boolean
     order_index?: boolean
@@ -3163,8 +3153,7 @@ export namespace Prisma {
 
   export type BeltRankSelectScalar = {
     id?: boolean
-    name_en?: boolean
-    name_bn?: boolean
+    name?: boolean
     kyu_dan?: boolean
     color_hex?: boolean
     order_index?: boolean
@@ -3172,7 +3161,7 @@ export namespace Prisma {
     updated_at?: boolean
   }
 
-  export type BeltRankOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name_en" | "name_bn" | "kyu_dan" | "color_hex" | "order_index" | "created_at" | "updated_at", ExtArgs["result"]["beltRank"]>
+  export type BeltRankOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "kyu_dan" | "color_hex" | "order_index" | "created_at" | "updated_at", ExtArgs["result"]["beltRank"]>
   export type BeltRankInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     gradings_from?: boolean | BeltRank$gradings_fromArgs<ExtArgs>
     gradings_to?: boolean | BeltRank$gradings_toArgs<ExtArgs>
@@ -3193,8 +3182,7 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      name_en: string
-      name_bn: string | null
+      name: string
       kyu_dan: string | null
       color_hex: string | null
       order_index: number
@@ -3628,8 +3616,7 @@ export namespace Prisma {
    */
   interface BeltRankFieldRefs {
     readonly id: FieldRef<"BeltRank", 'String'>
-    readonly name_en: FieldRef<"BeltRank", 'String'>
-    readonly name_bn: FieldRef<"BeltRank", 'String'>
+    readonly name: FieldRef<"BeltRank", 'String'>
     readonly kyu_dan: FieldRef<"BeltRank", 'String'>
     readonly color_hex: FieldRef<"BeltRank", 'String'>
     readonly order_index: FieldRef<"BeltRank", 'Int'>
@@ -4167,8 +4154,6 @@ export namespace Prisma {
   export type DojoMinAggregateOutputType = {
     id: string | null
     name: string | null
-    name_en: string | null
-    name_bn: string | null
     address: string | null
     city: string | null
     latitude: number | null
@@ -4184,8 +4169,6 @@ export namespace Prisma {
   export type DojoMaxAggregateOutputType = {
     id: string | null
     name: string | null
-    name_en: string | null
-    name_bn: string | null
     address: string | null
     city: string | null
     latitude: number | null
@@ -4201,8 +4184,6 @@ export namespace Prisma {
   export type DojoCountAggregateOutputType = {
     id: number
     name: number
-    name_en: number
-    name_bn: number
     address: number
     city: number
     latitude: number
@@ -4231,8 +4212,6 @@ export namespace Prisma {
   export type DojoMinAggregateInputType = {
     id?: true
     name?: true
-    name_en?: true
-    name_bn?: true
     address?: true
     city?: true
     latitude?: true
@@ -4248,8 +4227,6 @@ export namespace Prisma {
   export type DojoMaxAggregateInputType = {
     id?: true
     name?: true
-    name_en?: true
-    name_bn?: true
     address?: true
     city?: true
     latitude?: true
@@ -4265,8 +4242,6 @@ export namespace Prisma {
   export type DojoCountAggregateInputType = {
     id?: true
     name?: true
-    name_en?: true
-    name_bn?: true
     address?: true
     city?: true
     latitude?: true
@@ -4370,8 +4345,6 @@ export namespace Prisma {
   export type DojoGroupByOutputType = {
     id: string
     name: string
-    name_en: string | null
-    name_bn: string | null
     address: string | null
     city: string | null
     latitude: number | null
@@ -4407,8 +4380,6 @@ export namespace Prisma {
   export type DojoSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
-    name_en?: boolean
-    name_bn?: boolean
     address?: boolean
     city?: boolean
     latitude?: boolean
@@ -4430,8 +4401,6 @@ export namespace Prisma {
   export type DojoSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
-    name_en?: boolean
-    name_bn?: boolean
     address?: boolean
     city?: boolean
     latitude?: boolean
@@ -4449,8 +4418,6 @@ export namespace Prisma {
   export type DojoSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
-    name_en?: boolean
-    name_bn?: boolean
     address?: boolean
     city?: boolean
     latitude?: boolean
@@ -4468,8 +4435,6 @@ export namespace Prisma {
   export type DojoSelectScalar = {
     id?: boolean
     name?: boolean
-    name_en?: boolean
-    name_bn?: boolean
     address?: boolean
     city?: boolean
     latitude?: boolean
@@ -4483,7 +4448,7 @@ export namespace Prisma {
     updated_at?: boolean
   }
 
-  export type DojoOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "name_en" | "name_bn" | "address" | "city" | "latitude" | "longitude" | "phone" | "email" | "schedule" | "is_active" | "head_instructor_id" | "created_at" | "updated_at", ExtArgs["result"]["dojo"]>
+  export type DojoOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "address" | "city" | "latitude" | "longitude" | "phone" | "email" | "schedule" | "is_active" | "head_instructor_id" | "created_at" | "updated_at", ExtArgs["result"]["dojo"]>
   export type DojoInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     head_instructor?: boolean | Dojo$head_instructorArgs<ExtArgs>
     members?: boolean | Dojo$membersArgs<ExtArgs>
@@ -4509,8 +4474,6 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: string
       name: string
-      name_en: string | null
-      name_bn: string | null
       address: string | null
       city: string | null
       latitude: number | null
@@ -4951,8 +4914,6 @@ export namespace Prisma {
   interface DojoFieldRefs {
     readonly id: FieldRef<"Dojo", 'String'>
     readonly name: FieldRef<"Dojo", 'String'>
-    readonly name_en: FieldRef<"Dojo", 'String'>
-    readonly name_bn: FieldRef<"Dojo", 'String'>
     readonly address: FieldRef<"Dojo", 'String'>
     readonly city: FieldRef<"Dojo", 'String'>
     readonly latitude: FieldRef<"Dojo", 'Float'>
@@ -8010,8 +7971,6 @@ export namespace Prisma {
     member_id: string | null
     dojo_id: string | null
     bio: string | null
-    bio_en: string | null
-    bio_bn: string | null
     is_active: boolean | null
     created_at: Date | null
     updated_at: Date | null
@@ -8022,8 +7981,6 @@ export namespace Prisma {
     member_id: string | null
     dojo_id: string | null
     bio: string | null
-    bio_en: string | null
-    bio_bn: string | null
     is_active: boolean | null
     created_at: Date | null
     updated_at: Date | null
@@ -8034,8 +7991,6 @@ export namespace Prisma {
     member_id: number
     dojo_id: number
     bio: number
-    bio_en: number
-    bio_bn: number
     is_active: number
     created_at: number
     updated_at: number
@@ -8048,8 +8003,6 @@ export namespace Prisma {
     member_id?: true
     dojo_id?: true
     bio?: true
-    bio_en?: true
-    bio_bn?: true
     is_active?: true
     created_at?: true
     updated_at?: true
@@ -8060,8 +8013,6 @@ export namespace Prisma {
     member_id?: true
     dojo_id?: true
     bio?: true
-    bio_en?: true
-    bio_bn?: true
     is_active?: true
     created_at?: true
     updated_at?: true
@@ -8072,8 +8023,6 @@ export namespace Prisma {
     member_id?: true
     dojo_id?: true
     bio?: true
-    bio_en?: true
-    bio_bn?: true
     is_active?: true
     created_at?: true
     updated_at?: true
@@ -8157,8 +8106,6 @@ export namespace Prisma {
     member_id: string
     dojo_id: string | null
     bio: string | null
-    bio_en: string | null
-    bio_bn: string | null
     is_active: boolean
     created_at: Date
     updated_at: Date
@@ -8186,8 +8133,6 @@ export namespace Prisma {
     member_id?: boolean
     dojo_id?: boolean
     bio?: boolean
-    bio_en?: boolean
-    bio_bn?: boolean
     is_active?: boolean
     created_at?: boolean
     updated_at?: boolean
@@ -8200,8 +8145,6 @@ export namespace Prisma {
     member_id?: boolean
     dojo_id?: boolean
     bio?: boolean
-    bio_en?: boolean
-    bio_bn?: boolean
     is_active?: boolean
     created_at?: boolean
     updated_at?: boolean
@@ -8214,8 +8157,6 @@ export namespace Prisma {
     member_id?: boolean
     dojo_id?: boolean
     bio?: boolean
-    bio_en?: boolean
-    bio_bn?: boolean
     is_active?: boolean
     created_at?: boolean
     updated_at?: boolean
@@ -8228,14 +8169,12 @@ export namespace Prisma {
     member_id?: boolean
     dojo_id?: boolean
     bio?: boolean
-    bio_en?: boolean
-    bio_bn?: boolean
     is_active?: boolean
     created_at?: boolean
     updated_at?: boolean
   }
 
-  export type InstructorOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "member_id" | "dojo_id" | "bio" | "bio_en" | "bio_bn" | "is_active" | "created_at" | "updated_at", ExtArgs["result"]["instructor"]>
+  export type InstructorOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "member_id" | "dojo_id" | "bio" | "is_active" | "created_at" | "updated_at", ExtArgs["result"]["instructor"]>
   export type InstructorInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     member?: boolean | MemberDefaultArgs<ExtArgs>
     dojo?: boolean | Instructor$dojoArgs<ExtArgs>
@@ -8260,8 +8199,6 @@ export namespace Prisma {
       member_id: string
       dojo_id: string | null
       bio: string | null
-      bio_en: string | null
-      bio_bn: string | null
       is_active: boolean
       created_at: Date
       updated_at: Date
@@ -8694,8 +8631,6 @@ export namespace Prisma {
     readonly member_id: FieldRef<"Instructor", 'String'>
     readonly dojo_id: FieldRef<"Instructor", 'String'>
     readonly bio: FieldRef<"Instructor", 'String'>
-    readonly bio_en: FieldRef<"Instructor", 'String'>
-    readonly bio_bn: FieldRef<"Instructor", 'String'>
     readonly is_active: FieldRef<"Instructor", 'Boolean'>
     readonly created_at: FieldRef<"Instructor", 'DateTime'>
     readonly updated_at: FieldRef<"Instructor", 'DateTime'>
@@ -13801,8 +13736,6 @@ export namespace Prisma {
   export type EventMinAggregateOutputType = {
     id: string | null
     title: string | null
-    title_en: string | null
-    title_bn: string | null
     description: string | null
     event_date: Date | null
     location: string | null
@@ -13816,8 +13749,6 @@ export namespace Prisma {
   export type EventMaxAggregateOutputType = {
     id: string | null
     title: string | null
-    title_en: string | null
-    title_bn: string | null
     description: string | null
     event_date: Date | null
     location: string | null
@@ -13831,8 +13762,6 @@ export namespace Prisma {
   export type EventCountAggregateOutputType = {
     id: number
     title: number
-    title_en: number
-    title_bn: number
     description: number
     event_date: number
     location: number
@@ -13856,8 +13785,6 @@ export namespace Prisma {
   export type EventMinAggregateInputType = {
     id?: true
     title?: true
-    title_en?: true
-    title_bn?: true
     description?: true
     event_date?: true
     location?: true
@@ -13871,8 +13798,6 @@ export namespace Prisma {
   export type EventMaxAggregateInputType = {
     id?: true
     title?: true
-    title_en?: true
-    title_bn?: true
     description?: true
     event_date?: true
     location?: true
@@ -13886,8 +13811,6 @@ export namespace Prisma {
   export type EventCountAggregateInputType = {
     id?: true
     title?: true
-    title_en?: true
-    title_bn?: true
     description?: true
     event_date?: true
     location?: true
@@ -13988,8 +13911,6 @@ export namespace Prisma {
   export type EventGroupByOutputType = {
     id: string
     title: string
-    title_en: string | null
-    title_bn: string | null
     description: string | null
     event_date: Date
     location: string | null
@@ -14022,8 +13943,6 @@ export namespace Prisma {
   export type EventSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     title?: boolean
-    title_en?: boolean
-    title_bn?: boolean
     description?: boolean
     event_date?: boolean
     location?: boolean
@@ -14039,8 +13958,6 @@ export namespace Prisma {
   export type EventSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     title?: boolean
-    title_en?: boolean
-    title_bn?: boolean
     description?: boolean
     event_date?: boolean
     location?: boolean
@@ -14054,8 +13971,6 @@ export namespace Prisma {
   export type EventSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     title?: boolean
-    title_en?: boolean
-    title_bn?: boolean
     description?: boolean
     event_date?: boolean
     location?: boolean
@@ -14069,8 +13984,6 @@ export namespace Prisma {
   export type EventSelectScalar = {
     id?: boolean
     title?: boolean
-    title_en?: boolean
-    title_bn?: boolean
     description?: boolean
     event_date?: boolean
     location?: boolean
@@ -14081,7 +13994,7 @@ export namespace Prisma {
     updated_at?: boolean
   }
 
-  export type EventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "title_en" | "title_bn" | "description" | "event_date" | "location" | "image_url" | "is_published" | "max_capacity" | "created_at" | "updated_at", ExtArgs["result"]["event"]>
+  export type EventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "event_date" | "location" | "image_url" | "is_published" | "max_capacity" | "created_at" | "updated_at", ExtArgs["result"]["event"]>
   export type EventInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     registrations?: boolean | Event$registrationsArgs<ExtArgs>
     _count?: boolean | EventCountOutputTypeDefaultArgs<ExtArgs>
@@ -14097,8 +14010,6 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: string
       title: string
-      title_en: string | null
-      title_bn: string | null
       description: string | null
       event_date: Date
       location: string | null
@@ -14533,8 +14444,6 @@ export namespace Prisma {
   interface EventFieldRefs {
     readonly id: FieldRef<"Event", 'String'>
     readonly title: FieldRef<"Event", 'String'>
-    readonly title_en: FieldRef<"Event", 'String'>
-    readonly title_bn: FieldRef<"Event", 'String'>
     readonly description: FieldRef<"Event", 'String'>
     readonly event_date: FieldRef<"Event", 'DateTime'>
     readonly location: FieldRef<"Event", 'String'>
@@ -17176,8 +17085,6 @@ export namespace Prisma {
   export type ShopProductMinAggregateOutputType = {
     id: string | null
     name: string | null
-    name_en: string | null
-    name_bn: string | null
     description: string | null
     price: Decimal | null
     stock: number | null
@@ -17190,8 +17097,6 @@ export namespace Prisma {
   export type ShopProductMaxAggregateOutputType = {
     id: string | null
     name: string | null
-    name_en: string | null
-    name_bn: string | null
     description: string | null
     price: Decimal | null
     stock: number | null
@@ -17204,8 +17109,6 @@ export namespace Prisma {
   export type ShopProductCountAggregateOutputType = {
     id: number
     name: number
-    name_en: number
-    name_bn: number
     description: number
     price: number
     stock: number
@@ -17230,8 +17133,6 @@ export namespace Prisma {
   export type ShopProductMinAggregateInputType = {
     id?: true
     name?: true
-    name_en?: true
-    name_bn?: true
     description?: true
     price?: true
     stock?: true
@@ -17244,8 +17145,6 @@ export namespace Prisma {
   export type ShopProductMaxAggregateInputType = {
     id?: true
     name?: true
-    name_en?: true
-    name_bn?: true
     description?: true
     price?: true
     stock?: true
@@ -17258,8 +17157,6 @@ export namespace Prisma {
   export type ShopProductCountAggregateInputType = {
     id?: true
     name?: true
-    name_en?: true
-    name_bn?: true
     description?: true
     price?: true
     stock?: true
@@ -17359,8 +17256,6 @@ export namespace Prisma {
   export type ShopProductGroupByOutputType = {
     id: string
     name: string
-    name_en: string | null
-    name_bn: string | null
     description: string | null
     price: Decimal
     stock: number
@@ -17392,8 +17287,6 @@ export namespace Prisma {
   export type ShopProductSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
-    name_en?: boolean
-    name_bn?: boolean
     description?: boolean
     price?: boolean
     stock?: boolean
@@ -17408,8 +17301,6 @@ export namespace Prisma {
   export type ShopProductSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
-    name_en?: boolean
-    name_bn?: boolean
     description?: boolean
     price?: boolean
     stock?: boolean
@@ -17422,8 +17313,6 @@ export namespace Prisma {
   export type ShopProductSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
-    name_en?: boolean
-    name_bn?: boolean
     description?: boolean
     price?: boolean
     stock?: boolean
@@ -17436,8 +17325,6 @@ export namespace Prisma {
   export type ShopProductSelectScalar = {
     id?: boolean
     name?: boolean
-    name_en?: boolean
-    name_bn?: boolean
     description?: boolean
     price?: boolean
     stock?: boolean
@@ -17447,7 +17334,7 @@ export namespace Prisma {
     updated_at?: boolean
   }
 
-  export type ShopProductOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "name_en" | "name_bn" | "description" | "price" | "stock" | "image_url" | "is_active" | "created_at" | "updated_at", ExtArgs["result"]["shopProduct"]>
+  export type ShopProductOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "price" | "stock" | "image_url" | "is_active" | "created_at" | "updated_at", ExtArgs["result"]["shopProduct"]>
   export type ShopProductInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     order_items?: boolean | ShopProduct$order_itemsArgs<ExtArgs>
     _count?: boolean | ShopProductCountOutputTypeDefaultArgs<ExtArgs>
@@ -17463,8 +17350,6 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: string
       name: string
-      name_en: string | null
-      name_bn: string | null
       description: string | null
       price: Prisma.Decimal
       stock: number
@@ -17898,8 +17783,6 @@ export namespace Prisma {
   interface ShopProductFieldRefs {
     readonly id: FieldRef<"ShopProduct", 'String'>
     readonly name: FieldRef<"ShopProduct", 'String'>
-    readonly name_en: FieldRef<"ShopProduct", 'String'>
-    readonly name_bn: FieldRef<"ShopProduct", 'String'>
     readonly description: FieldRef<"ShopProduct", 'String'>
     readonly price: FieldRef<"ShopProduct", 'Decimal'>
     readonly stock: FieldRef<"ShopProduct", 'Int'>
@@ -20656,8 +20539,6 @@ export namespace Prisma {
   export type TournamentMinAggregateOutputType = {
     id: string | null
     name: string | null
-    name_en: string | null
-    name_bn: string | null
     description: string | null
     date: Date | null
     location: string | null
@@ -20669,8 +20550,6 @@ export namespace Prisma {
   export type TournamentMaxAggregateOutputType = {
     id: string | null
     name: string | null
-    name_en: string | null
-    name_bn: string | null
     description: string | null
     date: Date | null
     location: string | null
@@ -20682,8 +20561,6 @@ export namespace Prisma {
   export type TournamentCountAggregateOutputType = {
     id: number
     name: number
-    name_en: number
-    name_bn: number
     description: number
     date: number
     location: number
@@ -20697,8 +20574,6 @@ export namespace Prisma {
   export type TournamentMinAggregateInputType = {
     id?: true
     name?: true
-    name_en?: true
-    name_bn?: true
     description?: true
     date?: true
     location?: true
@@ -20710,8 +20585,6 @@ export namespace Prisma {
   export type TournamentMaxAggregateInputType = {
     id?: true
     name?: true
-    name_en?: true
-    name_bn?: true
     description?: true
     date?: true
     location?: true
@@ -20723,8 +20596,6 @@ export namespace Prisma {
   export type TournamentCountAggregateInputType = {
     id?: true
     name?: true
-    name_en?: true
-    name_bn?: true
     description?: true
     date?: true
     location?: true
@@ -20809,8 +20680,6 @@ export namespace Prisma {
   export type TournamentGroupByOutputType = {
     id: string
     name: string
-    name_en: string | null
-    name_bn: string | null
     description: string | null
     date: Date
     location: string | null
@@ -20839,8 +20708,6 @@ export namespace Prisma {
   export type TournamentSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
-    name_en?: boolean
-    name_bn?: boolean
     description?: boolean
     date?: boolean
     location?: boolean
@@ -20855,8 +20722,6 @@ export namespace Prisma {
   export type TournamentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
-    name_en?: boolean
-    name_bn?: boolean
     description?: boolean
     date?: boolean
     location?: boolean
@@ -20868,8 +20733,6 @@ export namespace Prisma {
   export type TournamentSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
-    name_en?: boolean
-    name_bn?: boolean
     description?: boolean
     date?: boolean
     location?: boolean
@@ -20881,8 +20744,6 @@ export namespace Prisma {
   export type TournamentSelectScalar = {
     id?: boolean
     name?: boolean
-    name_en?: boolean
-    name_bn?: boolean
     description?: boolean
     date?: boolean
     location?: boolean
@@ -20891,7 +20752,7 @@ export namespace Prisma {
     updated_at?: boolean
   }
 
-  export type TournamentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "name_en" | "name_bn" | "description" | "date" | "location" | "is_published" | "created_at" | "updated_at", ExtArgs["result"]["tournament"]>
+  export type TournamentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "date" | "location" | "is_published" | "created_at" | "updated_at", ExtArgs["result"]["tournament"]>
   export type TournamentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     participants?: boolean | Tournament$participantsArgs<ExtArgs>
     matches?: boolean | Tournament$matchesArgs<ExtArgs>
@@ -20909,8 +20770,6 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: string
       name: string
-      name_en: string | null
-      name_bn: string | null
       description: string | null
       date: Date
       location: string | null
@@ -21344,8 +21203,6 @@ export namespace Prisma {
   interface TournamentFieldRefs {
     readonly id: FieldRef<"Tournament", 'String'>
     readonly name: FieldRef<"Tournament", 'String'>
-    readonly name_en: FieldRef<"Tournament", 'String'>
-    readonly name_bn: FieldRef<"Tournament", 'String'>
     readonly description: FieldRef<"Tournament", 'String'>
     readonly date: FieldRef<"Tournament", 'DateTime'>
     readonly location: FieldRef<"Tournament", 'String'>
@@ -24231,8 +24088,7 @@ export namespace Prisma {
 
   export const BeltRankScalarFieldEnum: {
     id: 'id',
-    name_en: 'name_en',
-    name_bn: 'name_bn',
+    name: 'name',
     kyu_dan: 'kyu_dan',
     color_hex: 'color_hex',
     order_index: 'order_index',
@@ -24246,8 +24102,6 @@ export namespace Prisma {
   export const DojoScalarFieldEnum: {
     id: 'id',
     name: 'name',
-    name_en: 'name_en',
-    name_bn: 'name_bn',
     address: 'address',
     city: 'city',
     latitude: 'latitude',
@@ -24299,8 +24153,6 @@ export namespace Prisma {
     member_id: 'member_id',
     dojo_id: 'dojo_id',
     bio: 'bio',
-    bio_en: 'bio_en',
-    bio_bn: 'bio_bn',
     is_active: 'is_active',
     created_at: 'created_at',
     updated_at: 'updated_at'
@@ -24369,8 +24221,6 @@ export namespace Prisma {
   export const EventScalarFieldEnum: {
     id: 'id',
     title: 'title',
-    title_en: 'title_en',
-    title_bn: 'title_bn',
     description: 'description',
     event_date: 'event_date',
     location: 'location',
@@ -24412,8 +24262,6 @@ export namespace Prisma {
   export const ShopProductScalarFieldEnum: {
     id: 'id',
     name: 'name',
-    name_en: 'name_en',
-    name_bn: 'name_bn',
     description: 'description',
     price: 'price',
     stock: 'stock',
@@ -24456,8 +24304,6 @@ export namespace Prisma {
   export const TournamentScalarFieldEnum: {
     id: 'id',
     name: 'name',
-    name_en: 'name_en',
-    name_bn: 'name_bn',
     description: 'description',
     date: 'date',
     location: 'location',
@@ -24711,8 +24557,7 @@ export namespace Prisma {
     OR?: BeltRankWhereInput[]
     NOT?: BeltRankWhereInput | BeltRankWhereInput[]
     id?: UuidFilter<"BeltRank"> | string
-    name_en?: StringFilter<"BeltRank"> | string
-    name_bn?: StringNullableFilter<"BeltRank"> | string | null
+    name?: StringFilter<"BeltRank"> | string
     kyu_dan?: StringNullableFilter<"BeltRank"> | string | null
     color_hex?: StringNullableFilter<"BeltRank"> | string | null
     order_index?: IntFilter<"BeltRank"> | number
@@ -24726,8 +24571,7 @@ export namespace Prisma {
 
   export type BeltRankOrderByWithRelationInput = {
     id?: SortOrder
-    name_en?: SortOrder
-    name_bn?: SortOrderInput | SortOrder
+    name?: SortOrder
     kyu_dan?: SortOrderInput | SortOrder
     color_hex?: SortOrderInput | SortOrder
     order_index?: SortOrder
@@ -24741,12 +24585,11 @@ export namespace Prisma {
 
   export type BeltRankWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    name_en?: string
+    name?: string
     order_index?: number
     AND?: BeltRankWhereInput | BeltRankWhereInput[]
     OR?: BeltRankWhereInput[]
     NOT?: BeltRankWhereInput | BeltRankWhereInput[]
-    name_bn?: StringNullableFilter<"BeltRank"> | string | null
     kyu_dan?: StringNullableFilter<"BeltRank"> | string | null
     color_hex?: StringNullableFilter<"BeltRank"> | string | null
     created_at?: DateTimeFilter<"BeltRank"> | Date | string
@@ -24755,12 +24598,11 @@ export namespace Prisma {
     gradings_to?: GradingListRelationFilter
     grading_events?: GradingEventListRelationFilter
     grading_applications?: GradingApplicationListRelationFilter
-  }, "id" | "name_en" | "order_index">
+  }, "id" | "name" | "order_index">
 
   export type BeltRankOrderByWithAggregationInput = {
     id?: SortOrder
-    name_en?: SortOrder
-    name_bn?: SortOrderInput | SortOrder
+    name?: SortOrder
     kyu_dan?: SortOrderInput | SortOrder
     color_hex?: SortOrderInput | SortOrder
     order_index?: SortOrder
@@ -24778,8 +24620,7 @@ export namespace Prisma {
     OR?: BeltRankScalarWhereWithAggregatesInput[]
     NOT?: BeltRankScalarWhereWithAggregatesInput | BeltRankScalarWhereWithAggregatesInput[]
     id?: UuidWithAggregatesFilter<"BeltRank"> | string
-    name_en?: StringWithAggregatesFilter<"BeltRank"> | string
-    name_bn?: StringNullableWithAggregatesFilter<"BeltRank"> | string | null
+    name?: StringWithAggregatesFilter<"BeltRank"> | string
     kyu_dan?: StringNullableWithAggregatesFilter<"BeltRank"> | string | null
     color_hex?: StringNullableWithAggregatesFilter<"BeltRank"> | string | null
     order_index?: IntWithAggregatesFilter<"BeltRank"> | number
@@ -24793,8 +24634,6 @@ export namespace Prisma {
     NOT?: DojoWhereInput | DojoWhereInput[]
     id?: UuidFilter<"Dojo"> | string
     name?: StringFilter<"Dojo"> | string
-    name_en?: StringNullableFilter<"Dojo"> | string | null
-    name_bn?: StringNullableFilter<"Dojo"> | string | null
     address?: StringNullableFilter<"Dojo"> | string | null
     city?: StringNullableFilter<"Dojo"> | string | null
     latitude?: FloatNullableFilter<"Dojo"> | number | null
@@ -24815,8 +24654,6 @@ export namespace Prisma {
   export type DojoOrderByWithRelationInput = {
     id?: SortOrder
     name?: SortOrder
-    name_en?: SortOrderInput | SortOrder
-    name_bn?: SortOrderInput | SortOrder
     address?: SortOrderInput | SortOrder
     city?: SortOrderInput | SortOrder
     latitude?: SortOrderInput | SortOrder
@@ -24840,8 +24677,6 @@ export namespace Prisma {
     OR?: DojoWhereInput[]
     NOT?: DojoWhereInput | DojoWhereInput[]
     name?: StringFilter<"Dojo"> | string
-    name_en?: StringNullableFilter<"Dojo"> | string | null
-    name_bn?: StringNullableFilter<"Dojo"> | string | null
     address?: StringNullableFilter<"Dojo"> | string | null
     city?: StringNullableFilter<"Dojo"> | string | null
     latitude?: FloatNullableFilter<"Dojo"> | number | null
@@ -24862,8 +24697,6 @@ export namespace Prisma {
   export type DojoOrderByWithAggregationInput = {
     id?: SortOrder
     name?: SortOrder
-    name_en?: SortOrderInput | SortOrder
-    name_bn?: SortOrderInput | SortOrder
     address?: SortOrderInput | SortOrder
     city?: SortOrderInput | SortOrder
     latitude?: SortOrderInput | SortOrder
@@ -24888,8 +24721,6 @@ export namespace Prisma {
     NOT?: DojoScalarWhereWithAggregatesInput | DojoScalarWhereWithAggregatesInput[]
     id?: UuidWithAggregatesFilter<"Dojo"> | string
     name?: StringWithAggregatesFilter<"Dojo"> | string
-    name_en?: StringNullableWithAggregatesFilter<"Dojo"> | string | null
-    name_bn?: StringNullableWithAggregatesFilter<"Dojo"> | string | null
     address?: StringNullableWithAggregatesFilter<"Dojo"> | string | null
     city?: StringNullableWithAggregatesFilter<"Dojo"> | string | null
     latitude?: FloatNullableWithAggregatesFilter<"Dojo"> | number | null
@@ -25091,8 +24922,6 @@ export namespace Prisma {
     member_id?: UuidFilter<"Instructor"> | string
     dojo_id?: UuidNullableFilter<"Instructor"> | string | null
     bio?: StringNullableFilter<"Instructor"> | string | null
-    bio_en?: StringNullableFilter<"Instructor"> | string | null
-    bio_bn?: StringNullableFilter<"Instructor"> | string | null
     is_active?: BoolFilter<"Instructor"> | boolean
     created_at?: DateTimeFilter<"Instructor"> | Date | string
     updated_at?: DateTimeFilter<"Instructor"> | Date | string
@@ -25105,8 +24934,6 @@ export namespace Prisma {
     member_id?: SortOrder
     dojo_id?: SortOrderInput | SortOrder
     bio?: SortOrderInput | SortOrder
-    bio_en?: SortOrderInput | SortOrder
-    bio_bn?: SortOrderInput | SortOrder
     is_active?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
@@ -25122,8 +24949,6 @@ export namespace Prisma {
     NOT?: InstructorWhereInput | InstructorWhereInput[]
     dojo_id?: UuidNullableFilter<"Instructor"> | string | null
     bio?: StringNullableFilter<"Instructor"> | string | null
-    bio_en?: StringNullableFilter<"Instructor"> | string | null
-    bio_bn?: StringNullableFilter<"Instructor"> | string | null
     is_active?: BoolFilter<"Instructor"> | boolean
     created_at?: DateTimeFilter<"Instructor"> | Date | string
     updated_at?: DateTimeFilter<"Instructor"> | Date | string
@@ -25136,8 +24961,6 @@ export namespace Prisma {
     member_id?: SortOrder
     dojo_id?: SortOrderInput | SortOrder
     bio?: SortOrderInput | SortOrder
-    bio_en?: SortOrderInput | SortOrder
-    bio_bn?: SortOrderInput | SortOrder
     is_active?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
@@ -25154,8 +24977,6 @@ export namespace Prisma {
     member_id?: UuidWithAggregatesFilter<"Instructor"> | string
     dojo_id?: UuidNullableWithAggregatesFilter<"Instructor"> | string | null
     bio?: StringNullableWithAggregatesFilter<"Instructor"> | string | null
-    bio_en?: StringNullableWithAggregatesFilter<"Instructor"> | string | null
-    bio_bn?: StringNullableWithAggregatesFilter<"Instructor"> | string | null
     is_active?: BoolWithAggregatesFilter<"Instructor"> | boolean
     created_at?: DateTimeWithAggregatesFilter<"Instructor"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"Instructor"> | Date | string
@@ -25478,8 +25299,6 @@ export namespace Prisma {
     NOT?: EventWhereInput | EventWhereInput[]
     id?: UuidFilter<"Event"> | string
     title?: StringFilter<"Event"> | string
-    title_en?: StringNullableFilter<"Event"> | string | null
-    title_bn?: StringNullableFilter<"Event"> | string | null
     description?: StringNullableFilter<"Event"> | string | null
     event_date?: DateTimeFilter<"Event"> | Date | string
     location?: StringNullableFilter<"Event"> | string | null
@@ -25494,8 +25313,6 @@ export namespace Prisma {
   export type EventOrderByWithRelationInput = {
     id?: SortOrder
     title?: SortOrder
-    title_en?: SortOrderInput | SortOrder
-    title_bn?: SortOrderInput | SortOrder
     description?: SortOrderInput | SortOrder
     event_date?: SortOrder
     location?: SortOrderInput | SortOrder
@@ -25513,8 +25330,6 @@ export namespace Prisma {
     OR?: EventWhereInput[]
     NOT?: EventWhereInput | EventWhereInput[]
     title?: StringFilter<"Event"> | string
-    title_en?: StringNullableFilter<"Event"> | string | null
-    title_bn?: StringNullableFilter<"Event"> | string | null
     description?: StringNullableFilter<"Event"> | string | null
     event_date?: DateTimeFilter<"Event"> | Date | string
     location?: StringNullableFilter<"Event"> | string | null
@@ -25529,8 +25344,6 @@ export namespace Prisma {
   export type EventOrderByWithAggregationInput = {
     id?: SortOrder
     title?: SortOrder
-    title_en?: SortOrderInput | SortOrder
-    title_bn?: SortOrderInput | SortOrder
     description?: SortOrderInput | SortOrder
     event_date?: SortOrder
     location?: SortOrderInput | SortOrder
@@ -25552,8 +25365,6 @@ export namespace Prisma {
     NOT?: EventScalarWhereWithAggregatesInput | EventScalarWhereWithAggregatesInput[]
     id?: UuidWithAggregatesFilter<"Event"> | string
     title?: StringWithAggregatesFilter<"Event"> | string
-    title_en?: StringNullableWithAggregatesFilter<"Event"> | string | null
-    title_bn?: StringNullableWithAggregatesFilter<"Event"> | string | null
     description?: StringNullableWithAggregatesFilter<"Event"> | string | null
     event_date?: DateTimeWithAggregatesFilter<"Event"> | Date | string
     location?: StringNullableWithAggregatesFilter<"Event"> | string | null
@@ -25699,8 +25510,6 @@ export namespace Prisma {
     NOT?: ShopProductWhereInput | ShopProductWhereInput[]
     id?: UuidFilter<"ShopProduct"> | string
     name?: StringFilter<"ShopProduct"> | string
-    name_en?: StringNullableFilter<"ShopProduct"> | string | null
-    name_bn?: StringNullableFilter<"ShopProduct"> | string | null
     description?: StringNullableFilter<"ShopProduct"> | string | null
     price?: DecimalFilter<"ShopProduct"> | Decimal | DecimalJsLike | number | string
     stock?: IntFilter<"ShopProduct"> | number
@@ -25714,8 +25523,6 @@ export namespace Prisma {
   export type ShopProductOrderByWithRelationInput = {
     id?: SortOrder
     name?: SortOrder
-    name_en?: SortOrderInput | SortOrder
-    name_bn?: SortOrderInput | SortOrder
     description?: SortOrderInput | SortOrder
     price?: SortOrder
     stock?: SortOrder
@@ -25732,8 +25539,6 @@ export namespace Prisma {
     OR?: ShopProductWhereInput[]
     NOT?: ShopProductWhereInput | ShopProductWhereInput[]
     name?: StringFilter<"ShopProduct"> | string
-    name_en?: StringNullableFilter<"ShopProduct"> | string | null
-    name_bn?: StringNullableFilter<"ShopProduct"> | string | null
     description?: StringNullableFilter<"ShopProduct"> | string | null
     price?: DecimalFilter<"ShopProduct"> | Decimal | DecimalJsLike | number | string
     stock?: IntFilter<"ShopProduct"> | number
@@ -25747,8 +25552,6 @@ export namespace Prisma {
   export type ShopProductOrderByWithAggregationInput = {
     id?: SortOrder
     name?: SortOrder
-    name_en?: SortOrderInput | SortOrder
-    name_bn?: SortOrderInput | SortOrder
     description?: SortOrderInput | SortOrder
     price?: SortOrder
     stock?: SortOrder
@@ -25769,8 +25572,6 @@ export namespace Prisma {
     NOT?: ShopProductScalarWhereWithAggregatesInput | ShopProductScalarWhereWithAggregatesInput[]
     id?: UuidWithAggregatesFilter<"ShopProduct"> | string
     name?: StringWithAggregatesFilter<"ShopProduct"> | string
-    name_en?: StringNullableWithAggregatesFilter<"ShopProduct"> | string | null
-    name_bn?: StringNullableWithAggregatesFilter<"ShopProduct"> | string | null
     description?: StringNullableWithAggregatesFilter<"ShopProduct"> | string | null
     price?: DecimalWithAggregatesFilter<"ShopProduct"> | Decimal | DecimalJsLike | number | string
     stock?: IntWithAggregatesFilter<"ShopProduct"> | number
@@ -25931,8 +25732,6 @@ export namespace Prisma {
     NOT?: TournamentWhereInput | TournamentWhereInput[]
     id?: UuidFilter<"Tournament"> | string
     name?: StringFilter<"Tournament"> | string
-    name_en?: StringNullableFilter<"Tournament"> | string | null
-    name_bn?: StringNullableFilter<"Tournament"> | string | null
     description?: StringNullableFilter<"Tournament"> | string | null
     date?: DateTimeFilter<"Tournament"> | Date | string
     location?: StringNullableFilter<"Tournament"> | string | null
@@ -25946,8 +25745,6 @@ export namespace Prisma {
   export type TournamentOrderByWithRelationInput = {
     id?: SortOrder
     name?: SortOrder
-    name_en?: SortOrderInput | SortOrder
-    name_bn?: SortOrderInput | SortOrder
     description?: SortOrderInput | SortOrder
     date?: SortOrder
     location?: SortOrderInput | SortOrder
@@ -25964,8 +25761,6 @@ export namespace Prisma {
     OR?: TournamentWhereInput[]
     NOT?: TournamentWhereInput | TournamentWhereInput[]
     name?: StringFilter<"Tournament"> | string
-    name_en?: StringNullableFilter<"Tournament"> | string | null
-    name_bn?: StringNullableFilter<"Tournament"> | string | null
     description?: StringNullableFilter<"Tournament"> | string | null
     date?: DateTimeFilter<"Tournament"> | Date | string
     location?: StringNullableFilter<"Tournament"> | string | null
@@ -25979,8 +25774,6 @@ export namespace Prisma {
   export type TournamentOrderByWithAggregationInput = {
     id?: SortOrder
     name?: SortOrder
-    name_en?: SortOrderInput | SortOrder
-    name_bn?: SortOrderInput | SortOrder
     description?: SortOrderInput | SortOrder
     date?: SortOrder
     location?: SortOrderInput | SortOrder
@@ -25998,8 +25791,6 @@ export namespace Prisma {
     NOT?: TournamentScalarWhereWithAggregatesInput | TournamentScalarWhereWithAggregatesInput[]
     id?: UuidWithAggregatesFilter<"Tournament"> | string
     name?: StringWithAggregatesFilter<"Tournament"> | string
-    name_en?: StringNullableWithAggregatesFilter<"Tournament"> | string | null
-    name_bn?: StringNullableWithAggregatesFilter<"Tournament"> | string | null
     description?: StringNullableWithAggregatesFilter<"Tournament"> | string | null
     date?: DateTimeWithAggregatesFilter<"Tournament"> | Date | string
     location?: StringNullableWithAggregatesFilter<"Tournament"> | string | null
@@ -26169,8 +25960,7 @@ export namespace Prisma {
 
   export type BeltRankCreateInput = {
     id?: string
-    name_en: string
-    name_bn?: string | null
+    name: string
     kyu_dan?: string | null
     color_hex?: string | null
     order_index: number
@@ -26184,8 +25974,7 @@ export namespace Prisma {
 
   export type BeltRankUncheckedCreateInput = {
     id?: string
-    name_en: string
-    name_bn?: string | null
+    name: string
     kyu_dan?: string | null
     color_hex?: string | null
     order_index: number
@@ -26199,8 +25988,7 @@ export namespace Prisma {
 
   export type BeltRankUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name_en?: StringFieldUpdateOperationsInput | string
-    name_bn?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
     kyu_dan?: NullableStringFieldUpdateOperationsInput | string | null
     color_hex?: NullableStringFieldUpdateOperationsInput | string | null
     order_index?: IntFieldUpdateOperationsInput | number
@@ -26214,8 +26002,7 @@ export namespace Prisma {
 
   export type BeltRankUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name_en?: StringFieldUpdateOperationsInput | string
-    name_bn?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
     kyu_dan?: NullableStringFieldUpdateOperationsInput | string | null
     color_hex?: NullableStringFieldUpdateOperationsInput | string | null
     order_index?: IntFieldUpdateOperationsInput | number
@@ -26229,8 +26016,7 @@ export namespace Prisma {
 
   export type BeltRankCreateManyInput = {
     id?: string
-    name_en: string
-    name_bn?: string | null
+    name: string
     kyu_dan?: string | null
     color_hex?: string | null
     order_index: number
@@ -26240,8 +26026,7 @@ export namespace Prisma {
 
   export type BeltRankUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name_en?: StringFieldUpdateOperationsInput | string
-    name_bn?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
     kyu_dan?: NullableStringFieldUpdateOperationsInput | string | null
     color_hex?: NullableStringFieldUpdateOperationsInput | string | null
     order_index?: IntFieldUpdateOperationsInput | number
@@ -26251,8 +26036,7 @@ export namespace Prisma {
 
   export type BeltRankUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name_en?: StringFieldUpdateOperationsInput | string
-    name_bn?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
     kyu_dan?: NullableStringFieldUpdateOperationsInput | string | null
     color_hex?: NullableStringFieldUpdateOperationsInput | string | null
     order_index?: IntFieldUpdateOperationsInput | number
@@ -26263,8 +26047,6 @@ export namespace Prisma {
   export type DojoCreateInput = {
     id?: string
     name: string
-    name_en?: string | null
-    name_bn?: string | null
     address?: string | null
     city?: string | null
     latitude?: number | null
@@ -26284,8 +26066,6 @@ export namespace Prisma {
   export type DojoUncheckedCreateInput = {
     id?: string
     name: string
-    name_en?: string | null
-    name_bn?: string | null
     address?: string | null
     city?: string | null
     latitude?: number | null
@@ -26305,8 +26085,6 @@ export namespace Prisma {
   export type DojoUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    name_en?: NullableStringFieldUpdateOperationsInput | string | null
-    name_bn?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     latitude?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -26326,8 +26104,6 @@ export namespace Prisma {
   export type DojoUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    name_en?: NullableStringFieldUpdateOperationsInput | string | null
-    name_bn?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     latitude?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -26347,8 +26123,6 @@ export namespace Prisma {
   export type DojoCreateManyInput = {
     id?: string
     name: string
-    name_en?: string | null
-    name_bn?: string | null
     address?: string | null
     city?: string | null
     latitude?: number | null
@@ -26365,8 +26139,6 @@ export namespace Prisma {
   export type DojoUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    name_en?: NullableStringFieldUpdateOperationsInput | string | null
-    name_bn?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     latitude?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -26382,8 +26154,6 @@ export namespace Prisma {
   export type DojoUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    name_en?: NullableStringFieldUpdateOperationsInput | string | null
-    name_bn?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     latitude?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -26606,8 +26376,6 @@ export namespace Prisma {
   export type InstructorCreateInput = {
     id?: string
     bio?: string | null
-    bio_en?: string | null
-    bio_bn?: string | null
     is_active?: boolean
     created_at?: Date | string
     updated_at?: Date | string
@@ -26620,8 +26388,6 @@ export namespace Prisma {
     member_id: string
     dojo_id?: string | null
     bio?: string | null
-    bio_en?: string | null
-    bio_bn?: string | null
     is_active?: boolean
     created_at?: Date | string
     updated_at?: Date | string
@@ -26630,8 +26396,6 @@ export namespace Prisma {
   export type InstructorUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     bio?: NullableStringFieldUpdateOperationsInput | string | null
-    bio_en?: NullableStringFieldUpdateOperationsInput | string | null
-    bio_bn?: NullableStringFieldUpdateOperationsInput | string | null
     is_active?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -26644,8 +26408,6 @@ export namespace Prisma {
     member_id?: StringFieldUpdateOperationsInput | string
     dojo_id?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
-    bio_en?: NullableStringFieldUpdateOperationsInput | string | null
-    bio_bn?: NullableStringFieldUpdateOperationsInput | string | null
     is_active?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -26656,8 +26418,6 @@ export namespace Prisma {
     member_id: string
     dojo_id?: string | null
     bio?: string | null
-    bio_en?: string | null
-    bio_bn?: string | null
     is_active?: boolean
     created_at?: Date | string
     updated_at?: Date | string
@@ -26666,8 +26426,6 @@ export namespace Prisma {
   export type InstructorUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     bio?: NullableStringFieldUpdateOperationsInput | string | null
-    bio_en?: NullableStringFieldUpdateOperationsInput | string | null
-    bio_bn?: NullableStringFieldUpdateOperationsInput | string | null
     is_active?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -26678,8 +26436,6 @@ export namespace Prisma {
     member_id?: StringFieldUpdateOperationsInput | string
     dojo_id?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
-    bio_en?: NullableStringFieldUpdateOperationsInput | string | null
-    bio_bn?: NullableStringFieldUpdateOperationsInput | string | null
     is_active?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -27001,8 +26757,6 @@ export namespace Prisma {
   export type EventCreateInput = {
     id?: string
     title: string
-    title_en?: string | null
-    title_bn?: string | null
     description?: string | null
     event_date: Date | string
     location?: string | null
@@ -27017,8 +26771,6 @@ export namespace Prisma {
   export type EventUncheckedCreateInput = {
     id?: string
     title: string
-    title_en?: string | null
-    title_bn?: string | null
     description?: string | null
     event_date: Date | string
     location?: string | null
@@ -27033,8 +26785,6 @@ export namespace Prisma {
   export type EventUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
-    title_en?: NullableStringFieldUpdateOperationsInput | string | null
-    title_bn?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     event_date?: DateTimeFieldUpdateOperationsInput | Date | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
@@ -27049,8 +26799,6 @@ export namespace Prisma {
   export type EventUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
-    title_en?: NullableStringFieldUpdateOperationsInput | string | null
-    title_bn?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     event_date?: DateTimeFieldUpdateOperationsInput | Date | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
@@ -27065,8 +26813,6 @@ export namespace Prisma {
   export type EventCreateManyInput = {
     id?: string
     title: string
-    title_en?: string | null
-    title_bn?: string | null
     description?: string | null
     event_date: Date | string
     location?: string | null
@@ -27080,8 +26826,6 @@ export namespace Prisma {
   export type EventUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
-    title_en?: NullableStringFieldUpdateOperationsInput | string | null
-    title_bn?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     event_date?: DateTimeFieldUpdateOperationsInput | Date | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
@@ -27095,8 +26839,6 @@ export namespace Prisma {
   export type EventUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
-    title_en?: NullableStringFieldUpdateOperationsInput | string | null
-    title_bn?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     event_date?: DateTimeFieldUpdateOperationsInput | Date | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
@@ -27240,8 +26982,6 @@ export namespace Prisma {
   export type ShopProductCreateInput = {
     id?: string
     name: string
-    name_en?: string | null
-    name_bn?: string | null
     description?: string | null
     price: Decimal | DecimalJsLike | number | string
     stock?: number
@@ -27255,8 +26995,6 @@ export namespace Prisma {
   export type ShopProductUncheckedCreateInput = {
     id?: string
     name: string
-    name_en?: string | null
-    name_bn?: string | null
     description?: string | null
     price: Decimal | DecimalJsLike | number | string
     stock?: number
@@ -27270,8 +27008,6 @@ export namespace Prisma {
   export type ShopProductUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    name_en?: NullableStringFieldUpdateOperationsInput | string | null
-    name_bn?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     stock?: IntFieldUpdateOperationsInput | number
@@ -27285,8 +27021,6 @@ export namespace Prisma {
   export type ShopProductUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    name_en?: NullableStringFieldUpdateOperationsInput | string | null
-    name_bn?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     stock?: IntFieldUpdateOperationsInput | number
@@ -27300,8 +27034,6 @@ export namespace Prisma {
   export type ShopProductCreateManyInput = {
     id?: string
     name: string
-    name_en?: string | null
-    name_bn?: string | null
     description?: string | null
     price: Decimal | DecimalJsLike | number | string
     stock?: number
@@ -27314,8 +27046,6 @@ export namespace Prisma {
   export type ShopProductUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    name_en?: NullableStringFieldUpdateOperationsInput | string | null
-    name_bn?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     stock?: IntFieldUpdateOperationsInput | number
@@ -27328,8 +27058,6 @@ export namespace Prisma {
   export type ShopProductUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    name_en?: NullableStringFieldUpdateOperationsInput | string | null
-    name_bn?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     stock?: IntFieldUpdateOperationsInput | number
@@ -27490,8 +27218,6 @@ export namespace Prisma {
   export type TournamentCreateInput = {
     id?: string
     name: string
-    name_en?: string | null
-    name_bn?: string | null
     description?: string | null
     date: Date | string
     location?: string | null
@@ -27505,8 +27231,6 @@ export namespace Prisma {
   export type TournamentUncheckedCreateInput = {
     id?: string
     name: string
-    name_en?: string | null
-    name_bn?: string | null
     description?: string | null
     date: Date | string
     location?: string | null
@@ -27520,8 +27244,6 @@ export namespace Prisma {
   export type TournamentUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    name_en?: NullableStringFieldUpdateOperationsInput | string | null
-    name_bn?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
@@ -27535,8 +27257,6 @@ export namespace Prisma {
   export type TournamentUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    name_en?: NullableStringFieldUpdateOperationsInput | string | null
-    name_bn?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
@@ -27550,8 +27270,6 @@ export namespace Prisma {
   export type TournamentCreateManyInput = {
     id?: string
     name: string
-    name_en?: string | null
-    name_bn?: string | null
     description?: string | null
     date: Date | string
     location?: string | null
@@ -27563,8 +27281,6 @@ export namespace Prisma {
   export type TournamentUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    name_en?: NullableStringFieldUpdateOperationsInput | string | null
-    name_bn?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
@@ -27576,8 +27292,6 @@ export namespace Prisma {
   export type TournamentUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    name_en?: NullableStringFieldUpdateOperationsInput | string | null
-    name_bn?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
@@ -27840,8 +27554,7 @@ export namespace Prisma {
 
   export type BeltRankCountOrderByAggregateInput = {
     id?: SortOrder
-    name_en?: SortOrder
-    name_bn?: SortOrder
+    name?: SortOrder
     kyu_dan?: SortOrder
     color_hex?: SortOrder
     order_index?: SortOrder
@@ -27855,8 +27568,7 @@ export namespace Prisma {
 
   export type BeltRankMaxOrderByAggregateInput = {
     id?: SortOrder
-    name_en?: SortOrder
-    name_bn?: SortOrder
+    name?: SortOrder
     kyu_dan?: SortOrder
     color_hex?: SortOrder
     order_index?: SortOrder
@@ -27866,8 +27578,7 @@ export namespace Prisma {
 
   export type BeltRankMinOrderByAggregateInput = {
     id?: SortOrder
-    name_en?: SortOrder
-    name_bn?: SortOrder
+    name?: SortOrder
     kyu_dan?: SortOrder
     color_hex?: SortOrder
     order_index?: SortOrder
@@ -28049,8 +27760,6 @@ export namespace Prisma {
   export type DojoCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
-    name_en?: SortOrder
-    name_bn?: SortOrder
     address?: SortOrder
     city?: SortOrder
     latitude?: SortOrder
@@ -28072,8 +27781,6 @@ export namespace Prisma {
   export type DojoMaxOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
-    name_en?: SortOrder
-    name_bn?: SortOrder
     address?: SortOrder
     city?: SortOrder
     latitude?: SortOrder
@@ -28089,8 +27796,6 @@ export namespace Prisma {
   export type DojoMinOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
-    name_en?: SortOrder
-    name_bn?: SortOrder
     address?: SortOrder
     city?: SortOrder
     latitude?: SortOrder
@@ -28362,8 +28067,6 @@ export namespace Prisma {
     member_id?: SortOrder
     dojo_id?: SortOrder
     bio?: SortOrder
-    bio_en?: SortOrder
-    bio_bn?: SortOrder
     is_active?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
@@ -28374,8 +28077,6 @@ export namespace Prisma {
     member_id?: SortOrder
     dojo_id?: SortOrder
     bio?: SortOrder
-    bio_en?: SortOrder
-    bio_bn?: SortOrder
     is_active?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
@@ -28386,8 +28087,6 @@ export namespace Prisma {
     member_id?: SortOrder
     dojo_id?: SortOrder
     bio?: SortOrder
-    bio_en?: SortOrder
-    bio_bn?: SortOrder
     is_active?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
@@ -28601,8 +28300,6 @@ export namespace Prisma {
   export type EventCountOrderByAggregateInput = {
     id?: SortOrder
     title?: SortOrder
-    title_en?: SortOrder
-    title_bn?: SortOrder
     description?: SortOrder
     event_date?: SortOrder
     location?: SortOrder
@@ -28620,8 +28317,6 @@ export namespace Prisma {
   export type EventMaxOrderByAggregateInput = {
     id?: SortOrder
     title?: SortOrder
-    title_en?: SortOrder
-    title_bn?: SortOrder
     description?: SortOrder
     event_date?: SortOrder
     location?: SortOrder
@@ -28635,8 +28330,6 @@ export namespace Prisma {
   export type EventMinOrderByAggregateInput = {
     id?: SortOrder
     title?: SortOrder
-    title_en?: SortOrder
-    title_bn?: SortOrder
     description?: SortOrder
     event_date?: SortOrder
     location?: SortOrder
@@ -28775,8 +28468,6 @@ export namespace Prisma {
   export type ShopProductCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
-    name_en?: SortOrder
-    name_bn?: SortOrder
     description?: SortOrder
     price?: SortOrder
     stock?: SortOrder
@@ -28794,8 +28485,6 @@ export namespace Prisma {
   export type ShopProductMaxOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
-    name_en?: SortOrder
-    name_bn?: SortOrder
     description?: SortOrder
     price?: SortOrder
     stock?: SortOrder
@@ -28808,8 +28497,6 @@ export namespace Prisma {
   export type ShopProductMinOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
-    name_en?: SortOrder
-    name_bn?: SortOrder
     description?: SortOrder
     price?: SortOrder
     stock?: SortOrder
@@ -28961,8 +28648,6 @@ export namespace Prisma {
   export type TournamentCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
-    name_en?: SortOrder
-    name_bn?: SortOrder
     description?: SortOrder
     date?: SortOrder
     location?: SortOrder
@@ -28974,8 +28659,6 @@ export namespace Prisma {
   export type TournamentMaxOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
-    name_en?: SortOrder
-    name_bn?: SortOrder
     description?: SortOrder
     date?: SortOrder
     location?: SortOrder
@@ -28987,8 +28670,6 @@ export namespace Prisma {
   export type TournamentMinOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
-    name_en?: SortOrder
-    name_bn?: SortOrder
     description?: SortOrder
     date?: SortOrder
     location?: SortOrder
@@ -31437,8 +31118,6 @@ export namespace Prisma {
   export type InstructorCreateWithoutDojoInput = {
     id?: string
     bio?: string | null
-    bio_en?: string | null
-    bio_bn?: string | null
     is_active?: boolean
     created_at?: Date | string
     updated_at?: Date | string
@@ -31449,8 +31128,6 @@ export namespace Prisma {
     id?: string
     member_id: string
     bio?: string | null
-    bio_en?: string | null
-    bio_bn?: string | null
     is_active?: boolean
     created_at?: Date | string
     updated_at?: Date | string
@@ -31617,8 +31294,6 @@ export namespace Prisma {
     member_id?: UuidFilter<"Instructor"> | string
     dojo_id?: UuidNullableFilter<"Instructor"> | string | null
     bio?: StringNullableFilter<"Instructor"> | string | null
-    bio_en?: StringNullableFilter<"Instructor"> | string | null
-    bio_bn?: StringNullableFilter<"Instructor"> | string | null
     is_active?: BoolFilter<"Instructor"> | boolean
     created_at?: DateTimeFilter<"Instructor"> | Date | string
     updated_at?: DateTimeFilter<"Instructor"> | Date | string
@@ -31656,8 +31331,6 @@ export namespace Prisma {
   export type DojoCreateWithoutMembersInput = {
     id?: string
     name: string
-    name_en?: string | null
-    name_bn?: string | null
     address?: string | null
     city?: string | null
     latitude?: number | null
@@ -31676,8 +31349,6 @@ export namespace Prisma {
   export type DojoUncheckedCreateWithoutMembersInput = {
     id?: string
     name: string
-    name_en?: string | null
-    name_bn?: string | null
     address?: string | null
     city?: string | null
     latitude?: number | null
@@ -31701,8 +31372,6 @@ export namespace Prisma {
   export type DojoCreateWithoutHead_instructorInput = {
     id?: string
     name: string
-    name_en?: string | null
-    name_bn?: string | null
     address?: string | null
     city?: string | null
     latitude?: number | null
@@ -31721,8 +31390,6 @@ export namespace Prisma {
   export type DojoUncheckedCreateWithoutHead_instructorInput = {
     id?: string
     name: string
-    name_en?: string | null
-    name_bn?: string | null
     address?: string | null
     city?: string | null
     latitude?: number | null
@@ -31751,8 +31418,6 @@ export namespace Prisma {
   export type InstructorCreateWithoutMemberInput = {
     id?: string
     bio?: string | null
-    bio_en?: string | null
-    bio_bn?: string | null
     is_active?: boolean
     created_at?: Date | string
     updated_at?: Date | string
@@ -31763,8 +31428,6 @@ export namespace Prisma {
     id?: string
     dojo_id?: string | null
     bio?: string | null
-    bio_en?: string | null
-    bio_bn?: string | null
     is_active?: boolean
     created_at?: Date | string
     updated_at?: Date | string
@@ -32018,8 +31681,6 @@ export namespace Prisma {
   export type DojoUpdateWithoutMembersInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    name_en?: NullableStringFieldUpdateOperationsInput | string | null
-    name_bn?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     latitude?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -32038,8 +31699,6 @@ export namespace Prisma {
   export type DojoUncheckedUpdateWithoutMembersInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    name_en?: NullableStringFieldUpdateOperationsInput | string | null
-    name_bn?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     latitude?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -32077,8 +31736,6 @@ export namespace Prisma {
     NOT?: DojoScalarWhereInput | DojoScalarWhereInput[]
     id?: UuidFilter<"Dojo"> | string
     name?: StringFilter<"Dojo"> | string
-    name_en?: StringNullableFilter<"Dojo"> | string | null
-    name_bn?: StringNullableFilter<"Dojo"> | string | null
     address?: StringNullableFilter<"Dojo"> | string | null
     city?: StringNullableFilter<"Dojo"> | string | null
     latitude?: FloatNullableFilter<"Dojo"> | number | null
@@ -32106,8 +31763,6 @@ export namespace Prisma {
   export type InstructorUpdateWithoutMemberInput = {
     id?: StringFieldUpdateOperationsInput | string
     bio?: NullableStringFieldUpdateOperationsInput | string | null
-    bio_en?: NullableStringFieldUpdateOperationsInput | string | null
-    bio_bn?: NullableStringFieldUpdateOperationsInput | string | null
     is_active?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -32118,8 +31773,6 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     dojo_id?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
-    bio_en?: NullableStringFieldUpdateOperationsInput | string | null
-    bio_bn?: NullableStringFieldUpdateOperationsInput | string | null
     is_active?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -32493,8 +32146,6 @@ export namespace Prisma {
   export type DojoCreateWithoutInstructorsInput = {
     id?: string
     name: string
-    name_en?: string | null
-    name_bn?: string | null
     address?: string | null
     city?: string | null
     latitude?: number | null
@@ -32513,8 +32164,6 @@ export namespace Prisma {
   export type DojoUncheckedCreateWithoutInstructorsInput = {
     id?: string
     name: string
-    name_en?: string | null
-    name_bn?: string | null
     address?: string | null
     city?: string | null
     latitude?: number | null
@@ -32612,8 +32261,6 @@ export namespace Prisma {
   export type DojoUpdateWithoutInstructorsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    name_en?: NullableStringFieldUpdateOperationsInput | string | null
-    name_bn?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     latitude?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -32632,8 +32279,6 @@ export namespace Prisma {
   export type DojoUncheckedUpdateWithoutInstructorsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    name_en?: NullableStringFieldUpdateOperationsInput | string | null
-    name_bn?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     latitude?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -32709,8 +32354,6 @@ export namespace Prisma {
   export type DojoCreateWithoutAttendanceInput = {
     id?: string
     name: string
-    name_en?: string | null
-    name_bn?: string | null
     address?: string | null
     city?: string | null
     latitude?: number | null
@@ -32729,8 +32372,6 @@ export namespace Prisma {
   export type DojoUncheckedCreateWithoutAttendanceInput = {
     id?: string
     name: string
-    name_en?: string | null
-    name_bn?: string | null
     address?: string | null
     city?: string | null
     latitude?: number | null
@@ -32828,8 +32469,6 @@ export namespace Prisma {
   export type DojoUpdateWithoutAttendanceInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    name_en?: NullableStringFieldUpdateOperationsInput | string | null
-    name_bn?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     latitude?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -32848,8 +32487,6 @@ export namespace Prisma {
   export type DojoUncheckedUpdateWithoutAttendanceInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    name_en?: NullableStringFieldUpdateOperationsInput | string | null
-    name_bn?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     latitude?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -32867,8 +32504,7 @@ export namespace Prisma {
 
   export type BeltRankCreateWithoutGrading_eventsInput = {
     id?: string
-    name_en: string
-    name_bn?: string | null
+    name: string
     kyu_dan?: string | null
     color_hex?: string | null
     order_index: number
@@ -32881,8 +32517,7 @@ export namespace Prisma {
 
   export type BeltRankUncheckedCreateWithoutGrading_eventsInput = {
     id?: string
-    name_en: string
-    name_bn?: string | null
+    name: string
     kyu_dan?: string | null
     color_hex?: string | null
     order_index: number
@@ -32973,8 +32608,7 @@ export namespace Prisma {
 
   export type BeltRankUpdateWithoutGrading_eventsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name_en?: StringFieldUpdateOperationsInput | string
-    name_bn?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
     kyu_dan?: NullableStringFieldUpdateOperationsInput | string | null
     color_hex?: NullableStringFieldUpdateOperationsInput | string | null
     order_index?: IntFieldUpdateOperationsInput | number
@@ -32987,8 +32621,7 @@ export namespace Prisma {
 
   export type BeltRankUncheckedUpdateWithoutGrading_eventsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name_en?: StringFieldUpdateOperationsInput | string
-    name_bn?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
     kyu_dan?: NullableStringFieldUpdateOperationsInput | string | null
     color_hex?: NullableStringFieldUpdateOperationsInput | string | null
     order_index?: IntFieldUpdateOperationsInput | number
@@ -33121,8 +32754,7 @@ export namespace Prisma {
 
   export type BeltRankCreateWithoutGrading_applicationsInput = {
     id?: string
-    name_en: string
-    name_bn?: string | null
+    name: string
     kyu_dan?: string | null
     color_hex?: string | null
     order_index: number
@@ -33135,8 +32767,7 @@ export namespace Prisma {
 
   export type BeltRankUncheckedCreateWithoutGrading_applicationsInput = {
     id?: string
-    name_en: string
-    name_bn?: string | null
+    name: string
     kyu_dan?: string | null
     color_hex?: string | null
     order_index: number
@@ -33265,8 +32896,7 @@ export namespace Prisma {
 
   export type BeltRankUpdateWithoutGrading_applicationsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name_en?: StringFieldUpdateOperationsInput | string
-    name_bn?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
     kyu_dan?: NullableStringFieldUpdateOperationsInput | string | null
     color_hex?: NullableStringFieldUpdateOperationsInput | string | null
     order_index?: IntFieldUpdateOperationsInput | number
@@ -33279,8 +32909,7 @@ export namespace Prisma {
 
   export type BeltRankUncheckedUpdateWithoutGrading_applicationsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name_en?: StringFieldUpdateOperationsInput | string
-    name_bn?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
     kyu_dan?: NullableStringFieldUpdateOperationsInput | string | null
     color_hex?: NullableStringFieldUpdateOperationsInput | string | null
     order_index?: IntFieldUpdateOperationsInput | number
@@ -33381,8 +33010,7 @@ export namespace Prisma {
 
   export type BeltRankCreateWithoutGradings_fromInput = {
     id?: string
-    name_en: string
-    name_bn?: string | null
+    name: string
     kyu_dan?: string | null
     color_hex?: string | null
     order_index: number
@@ -33395,8 +33023,7 @@ export namespace Prisma {
 
   export type BeltRankUncheckedCreateWithoutGradings_fromInput = {
     id?: string
-    name_en: string
-    name_bn?: string | null
+    name: string
     kyu_dan?: string | null
     color_hex?: string | null
     order_index: number
@@ -33414,8 +33041,7 @@ export namespace Prisma {
 
   export type BeltRankCreateWithoutGradings_toInput = {
     id?: string
-    name_en: string
-    name_bn?: string | null
+    name: string
     kyu_dan?: string | null
     color_hex?: string | null
     order_index: number
@@ -33428,8 +33054,7 @@ export namespace Prisma {
 
   export type BeltRankUncheckedCreateWithoutGradings_toInput = {
     id?: string
-    name_en: string
-    name_bn?: string | null
+    name: string
     kyu_dan?: string | null
     color_hex?: string | null
     order_index: number
@@ -33558,8 +33183,7 @@ export namespace Prisma {
 
   export type BeltRankUpdateWithoutGradings_fromInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name_en?: StringFieldUpdateOperationsInput | string
-    name_bn?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
     kyu_dan?: NullableStringFieldUpdateOperationsInput | string | null
     color_hex?: NullableStringFieldUpdateOperationsInput | string | null
     order_index?: IntFieldUpdateOperationsInput | number
@@ -33572,8 +33196,7 @@ export namespace Prisma {
 
   export type BeltRankUncheckedUpdateWithoutGradings_fromInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name_en?: StringFieldUpdateOperationsInput | string
-    name_bn?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
     kyu_dan?: NullableStringFieldUpdateOperationsInput | string | null
     color_hex?: NullableStringFieldUpdateOperationsInput | string | null
     order_index?: IntFieldUpdateOperationsInput | number
@@ -33597,8 +33220,7 @@ export namespace Prisma {
 
   export type BeltRankUpdateWithoutGradings_toInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name_en?: StringFieldUpdateOperationsInput | string
-    name_bn?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
     kyu_dan?: NullableStringFieldUpdateOperationsInput | string | null
     color_hex?: NullableStringFieldUpdateOperationsInput | string | null
     order_index?: IntFieldUpdateOperationsInput | number
@@ -33611,8 +33233,7 @@ export namespace Prisma {
 
   export type BeltRankUncheckedUpdateWithoutGradings_toInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name_en?: StringFieldUpdateOperationsInput | string
-    name_bn?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
     kyu_dan?: NullableStringFieldUpdateOperationsInput | string | null
     color_hex?: NullableStringFieldUpdateOperationsInput | string | null
     order_index?: IntFieldUpdateOperationsInput | number
@@ -33664,8 +33285,6 @@ export namespace Prisma {
   export type EventCreateWithoutRegistrationsInput = {
     id?: string
     title: string
-    title_en?: string | null
-    title_bn?: string | null
     description?: string | null
     event_date: Date | string
     location?: string | null
@@ -33679,8 +33298,6 @@ export namespace Prisma {
   export type EventUncheckedCreateWithoutRegistrationsInput = {
     id?: string
     title: string
-    title_en?: string | null
-    title_bn?: string | null
     description?: string | null
     event_date: Date | string
     location?: string | null
@@ -33767,8 +33384,6 @@ export namespace Prisma {
   export type EventUpdateWithoutRegistrationsInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
-    title_en?: NullableStringFieldUpdateOperationsInput | string | null
-    title_bn?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     event_date?: DateTimeFieldUpdateOperationsInput | Date | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
@@ -33782,8 +33397,6 @@ export namespace Prisma {
   export type EventUncheckedUpdateWithoutRegistrationsInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
-    title_en?: NullableStringFieldUpdateOperationsInput | string | null
-    title_bn?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     event_date?: DateTimeFieldUpdateOperationsInput | Date | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
@@ -34222,8 +33835,6 @@ export namespace Prisma {
   export type ShopProductCreateWithoutOrder_itemsInput = {
     id?: string
     name: string
-    name_en?: string | null
-    name_bn?: string | null
     description?: string | null
     price: Decimal | DecimalJsLike | number | string
     stock?: number
@@ -34236,8 +33847,6 @@ export namespace Prisma {
   export type ShopProductUncheckedCreateWithoutOrder_itemsInput = {
     id?: string
     name: string
-    name_en?: string | null
-    name_bn?: string | null
     description?: string | null
     price: Decimal | DecimalJsLike | number | string
     stock?: number
@@ -34303,8 +33912,6 @@ export namespace Prisma {
   export type ShopProductUpdateWithoutOrder_itemsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    name_en?: NullableStringFieldUpdateOperationsInput | string | null
-    name_bn?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     stock?: IntFieldUpdateOperationsInput | number
@@ -34317,8 +33924,6 @@ export namespace Prisma {
   export type ShopProductUncheckedUpdateWithoutOrder_itemsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    name_en?: NullableStringFieldUpdateOperationsInput | string | null
-    name_bn?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     stock?: IntFieldUpdateOperationsInput | number
@@ -34442,8 +34047,6 @@ export namespace Prisma {
   export type TournamentCreateWithoutParticipantsInput = {
     id?: string
     name: string
-    name_en?: string | null
-    name_bn?: string | null
     description?: string | null
     date: Date | string
     location?: string | null
@@ -34456,8 +34059,6 @@ export namespace Prisma {
   export type TournamentUncheckedCreateWithoutParticipantsInput = {
     id?: string
     name: string
-    name_en?: string | null
-    name_bn?: string | null
     description?: string | null
     date: Date | string
     location?: string | null
@@ -34639,8 +34240,6 @@ export namespace Prisma {
   export type TournamentUpdateWithoutParticipantsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    name_en?: NullableStringFieldUpdateOperationsInput | string | null
-    name_bn?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
@@ -34653,8 +34252,6 @@ export namespace Prisma {
   export type TournamentUncheckedUpdateWithoutParticipantsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    name_en?: NullableStringFieldUpdateOperationsInput | string | null
-    name_bn?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
@@ -34778,8 +34375,6 @@ export namespace Prisma {
   export type TournamentCreateWithoutMatchesInput = {
     id?: string
     name: string
-    name_en?: string | null
-    name_bn?: string | null
     description?: string | null
     date: Date | string
     location?: string | null
@@ -34792,8 +34387,6 @@ export namespace Prisma {
   export type TournamentUncheckedCreateWithoutMatchesInput = {
     id?: string
     name: string
-    name_en?: string | null
-    name_bn?: string | null
     description?: string | null
     date: Date | string
     location?: string | null
@@ -34903,8 +34496,6 @@ export namespace Prisma {
   export type TournamentUpdateWithoutMatchesInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    name_en?: NullableStringFieldUpdateOperationsInput | string | null
-    name_bn?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
@@ -34917,8 +34508,6 @@ export namespace Prisma {
   export type TournamentUncheckedUpdateWithoutMatchesInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    name_en?: NullableStringFieldUpdateOperationsInput | string | null
-    name_bn?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
@@ -35227,8 +34816,6 @@ export namespace Prisma {
     id?: string
     member_id: string
     bio?: string | null
-    bio_en?: string | null
-    bio_bn?: string | null
     is_active?: boolean
     created_at?: Date | string
     updated_at?: Date | string
@@ -35314,8 +34901,6 @@ export namespace Prisma {
   export type InstructorUpdateWithoutDojoInput = {
     id?: StringFieldUpdateOperationsInput | string
     bio?: NullableStringFieldUpdateOperationsInput | string | null
-    bio_en?: NullableStringFieldUpdateOperationsInput | string | null
-    bio_bn?: NullableStringFieldUpdateOperationsInput | string | null
     is_active?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -35326,8 +34911,6 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     member_id?: StringFieldUpdateOperationsInput | string
     bio?: NullableStringFieldUpdateOperationsInput | string | null
-    bio_en?: NullableStringFieldUpdateOperationsInput | string | null
-    bio_bn?: NullableStringFieldUpdateOperationsInput | string | null
     is_active?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -35337,8 +34920,6 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     member_id?: StringFieldUpdateOperationsInput | string
     bio?: NullableStringFieldUpdateOperationsInput | string | null
-    bio_en?: NullableStringFieldUpdateOperationsInput | string | null
-    bio_bn?: NullableStringFieldUpdateOperationsInput | string | null
     is_active?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -35374,8 +34955,6 @@ export namespace Prisma {
   export type DojoCreateManyHead_instructorInput = {
     id?: string
     name: string
-    name_en?: string | null
-    name_bn?: string | null
     address?: string | null
     city?: string | null
     latitude?: number | null
@@ -35458,8 +35037,6 @@ export namespace Prisma {
   export type DojoUpdateWithoutHead_instructorInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    name_en?: NullableStringFieldUpdateOperationsInput | string | null
-    name_bn?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     latitude?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -35478,8 +35055,6 @@ export namespace Prisma {
   export type DojoUncheckedUpdateWithoutHead_instructorInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    name_en?: NullableStringFieldUpdateOperationsInput | string | null
-    name_bn?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     latitude?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -35498,8 +35073,6 @@ export namespace Prisma {
   export type DojoUncheckedUpdateManyWithoutHead_instructorInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    name_en?: NullableStringFieldUpdateOperationsInput | string | null
-    name_bn?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     latitude?: NullableFloatFieldUpdateOperationsInput | number | null

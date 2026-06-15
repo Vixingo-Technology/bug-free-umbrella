@@ -10,13 +10,6 @@
   --font-serif: var(--font-serif);
   --font-heading: var(--font-heading);
   --font-karate: var(--font-karate);
-  --font-bangla: var(--font-bangla);
-}
-
-html[lang="bn"] {
-  --font-sans: var(--font-bangla) !important;
-  --font-serif: var(--font-bangla) !important;
-  --font-heading: var(--font-bangla) !important;
 }
 
 @layer utilities {

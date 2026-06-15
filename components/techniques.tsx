@@ -2,10 +2,10 @@
 
 import { motion } from "motion/react";
 import Image from "next/image";
-import { useLanguage } from "@/components/language-provider";
+import { siteContent } from "@/lib/i18n/site-content";
 
 export default function Techniques() {
-    const { copy } = useLanguage();
+    const copy = siteContent;
     const pillars = copy.techniques.items;
 
     return (

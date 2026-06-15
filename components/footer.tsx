@@ -8,10 +8,10 @@ import {
     MapPin,
     Phone,
 } from "lucide-react";
-import { useLanguage } from "@/components/language-provider";
+import { siteContent } from "@/lib/i18n/site-content";
 
 export default function Footer() {
-    const { copy } = useLanguage();
+    const copy = siteContent;
 
     return (
         <footer className="bg-bg-charcoal border-t border-zinc-200 pt-20 pb-10 text-sm">
