@@ -1,0 +1,471 @@
+// =============================================================
+// JKA Bangladesh — Prisma Schema
+// PostgreSQL via Supabase · Prisma 7 · driverAdapters preview
+// =============================================================
+
+generator client {
+  provider        = "prisma-client-js"
+  output          = "../prisma/generated/client"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ─────────────────────────────────────────────
+// ENUMS
+// ─────────────────────────────────────────────
+
+enum MemberRole {
+  STUDENT
+  INSTRUCTOR
+  ADMIN
+}
+
+enum GradingResult {
+  PASSED
+  FAILED
+  ABSENT
+}
+
+enum ApplicationStatus {
+  SUBMITTED
+  APPROVED
+  REJECTED
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+}
+
+enum NotificationType {
+  INFO
+  WARNING
+  SUCCESS
+  PAYMENT
+  GRADING
+  EVENT
+  RENEWAL
+}
+
+// ─────────────────────────────────────────────
+// BELT RANKS
+// ─────────────────────────────────────────────
+
+model BeltRank {
+  id          String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name_en     String  @unique
+  name_bn     String?
+  kyu_dan     String?
+  color_hex   String?
+  order_index Int     @unique
+
+  // Relations
+  gradings_from        Grading[]            @relation("GradingFromRank")
+  gradings_to          Grading[]            @relation("GradingToRank")
+  grading_events       GradingEvent[]       @relation("EventTargetRank")
+  grading_applications GradingApplication[] @relation("AppTargetRank")
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("belt_ranks")
+}
+
+// ─────────────────────────────────────────────
+// DOJOS
+// ─────────────────────────────────────────────
+
+model Dojo {
+  id        String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name      String
+  name_en   String?
+  name_bn   String?
+  address   String?
+  city      String?
+  latitude  Float?
+  longitude Float?
+  phone     String?
+  email     String?
+  schedule  Json? // Weekly schedule JSON
+  is_active Boolean @default(true)
+
+  head_instructor_id String? @db.Uuid
+
+  // Relations
+  head_instructor Member?      @relation("DojoHeadInstructor", fields: [head_instructor_id], references: [id])
+  members         Member[]     @relation("DojoMembers")
+  instructors     Instructor[]
+  attendance      Attendance[]
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("dojos")
+}
+
+// ─────────────────────────────────────────────
+// MEMBERS  (mirrors auth.users via id)
+// ─────────────────────────────────────────────
+
+model Member {
+  id            String     @id @db.Uuid // = auth.users.id
+  full_name     String
+  email         String     @unique
+  phone         String?
+  avatar_url    String?
+  role          MemberRole @default(STUDENT)
+  member_number String?    @unique
+  current_rank  String     @default("White Belt")
+  join_date     DateTime   @default(now())
+  expiry_date   DateTime?
+  is_active     Boolean    @default(true)
+  dojo_id       String?    @db.Uuid
+
+  // Relations
+  dojo                 Dojo?                   @relation("DojoMembers", fields: [dojo_id], references: [id])
+  dojo_head_of         Dojo[]                  @relation("DojoHeadInstructor")
+  instructor           Instructor?
+  admin                Admin?
+  gradings             Grading[]
+  grading_applications GradingApplication[]
+  event_registrations  EventRegistration[]
+  notifications        Notification[]
+  orders               ShopOrder[]
+  attendance           Attendance[]
+  tournament_entries   TournamentParticipant[]
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("members")
+}
+
+// ─────────────────────────────────────────────
+// ADMINS  (super-admin elevation)
+// ─────────────────────────────────────────────
+
+model Admin {
+  id        String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  member_id String  @unique @db.Uuid
+  notes     String?
+
+  member Member @relation(fields: [member_id], references: [id], onDelete: Cascade)
+
+  created_at DateTime @default(now())
+
+  @@map("admins")
+}
+
+// ─────────────────────────────────────────────
+// INSTRUCTORS
+// ─────────────────────────────────────────────
+
+model Instructor {
+  id        String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  member_id String  @unique @db.Uuid
+  dojo_id   String? @db.Uuid
+  bio       String?
+  bio_en    String?
+  bio_bn    String?
+  is_active Boolean @default(true)
+
+  member Member @relation(fields: [member_id], references: [id], onDelete: Cascade)
+  dojo   Dojo?  @relation(fields: [dojo_id], references: [id])
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("instructors")
+}
+
+// ─────────────────────────────────────────────
+// ATTENDANCE
+// ─────────────────────────────────────────────
+
+model Attendance {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  member_id String   @db.Uuid
+  dojo_id   String?  @db.Uuid
+  date      DateTime @db.Date
+  present   Boolean  @default(true)
+  notes     String?
+
+  member Member @relation(fields: [member_id], references: [id], onDelete: Cascade)
+  dojo   Dojo?  @relation(fields: [dojo_id], references: [id])
+
+  created_at DateTime @default(now())
+
+  @@unique([member_id, date])
+  @@map("attendance")
+}
+
+// ─────────────────────────────────────────────
+// GRADING EVENTS  (exam sessions)
+// ─────────────────────────────────────────────
+
+model GradingEvent {
+  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name           String
+  event_date     DateTime
+  location       String?
+  target_rank_id String?  @db.Uuid
+  is_open        Boolean  @default(true)
+  notes          String?
+
+  target_rank  BeltRank?            @relation("EventTargetRank", fields: [target_rank_id], references: [id])
+  gradings     Grading[]
+  applications GradingApplication[]
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("grading_events")
+}
+
+// ─────────────────────────────────────────────
+// GRADING APPLICATIONS
+// ─────────────────────────────────────────────
+
+model GradingApplication {
+  id               String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  member_id        String            @db.Uuid
+  grading_event_id String            @db.Uuid
+  target_rank_id   String?           @db.Uuid
+  status           ApplicationStatus @default(SUBMITTED)
+  notes            String?
+  applied_at       DateTime          @default(now())
+
+  member        Member       @relation(fields: [member_id], references: [id], onDelete: Cascade)
+  grading_event GradingEvent @relation(fields: [grading_event_id], references: [id], onDelete: Cascade)
+  target_rank   BeltRank?    @relation("AppTargetRank", fields: [target_rank_id], references: [id])
+
+  @@unique([member_id, grading_event_id])
+  @@map("grading_applications")
+}
+
+// ─────────────────────────────────────────────
+// GRADINGS  (results)
+// ─────────────────────────────────────────────
+
+model Grading {
+  id               String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  member_id        String        @db.Uuid
+  grading_event_id String?       @db.Uuid
+  from_rank_id     String?       @db.Uuid
+  to_rank_id       String?       @db.Uuid
+  result           GradingResult @default(PASSED)
+  certificate_url  String?
+  notes            String?
+
+  member        Member        @relation(fields: [member_id], references: [id], onDelete: Cascade)
+  grading_event GradingEvent? @relation(fields: [grading_event_id], references: [id])
+  from_rank     BeltRank?     @relation("GradingFromRank", fields: [from_rank_id], references: [id])
+  to_rank       BeltRank?     @relation("GradingToRank", fields: [to_rank_id], references: [id])
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("gradings")
+}
+
+// ─────────────────────────────────────────────
+// EVENTS  (public events, managed via CMS)
+// ─────────────────────────────────────────────
+
+model Event {
+  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title        String
+  title_en     String?
+  title_bn     String?
+  description  String?
+  event_date   DateTime
+  location     String?
+  image_url    String?
+  is_published Boolean  @default(false)
+  max_capacity Int?
+
+  registrations EventRegistration[]
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("events")
+}
+
+// ─────────────────────────────────────────────
+// EVENT REGISTRATIONS
+// ─────────────────────────────────────────────
+
+model EventRegistration {
+  id        String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  event_id  String @db.Uuid
+  member_id String @db.Uuid
+
+  event  Event  @relation(fields: [event_id], references: [id], onDelete: Cascade)
+  member Member @relation(fields: [member_id], references: [id], onDelete: Cascade)
+
+  created_at DateTime @default(now())
+
+  @@unique([event_id, member_id])
+  @@map("event_registrations")
+}
+
+// ─────────────────────────────────────────────
+// NOTIFICATIONS
+// ─────────────────────────────────────────────
+
+model Notification {
+  id        String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  member_id String           @db.Uuid
+  title     String
+  message   String
+  type      NotificationType @default(INFO)
+  is_read   Boolean          @default(false)
+  link      String?
+
+  member Member @relation(fields: [member_id], references: [id], onDelete: Cascade)
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("notifications")
+}
+
+// ─────────────────────────────────────────────
+// SHOP PRODUCTS
+// ─────────────────────────────────────────────
+
+model ShopProduct {
+  id          String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name        String
+  name_en     String?
+  name_bn     String?
+  description String?
+  price       Decimal @db.Decimal(10, 2)
+  stock       Int     @default(0)
+  image_url   String?
+  is_active   Boolean @default(true)
+
+  order_items ShopOrderItem[]
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("shop_products")
+}
+
+// ─────────────────────────────────────────────
+// SHOP ORDERS
+// ─────────────────────────────────────────────
+
+model ShopOrder {
+  id             String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  member_id      String        @db.Uuid
+  payment_status PaymentStatus @default(PENDING)
+  payment_method String?
+  total          Decimal       @db.Decimal(10, 2)
+  currency       String        @default("BDT")
+  transaction_id String?       @unique
+  notes          String?
+
+  member      Member          @relation(fields: [member_id], references: [id], onDelete: Cascade)
+  order_items ShopOrderItem[]
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("shop_orders")
+}
+
+// ─────────────────────────────────────────────
+// SHOP ORDER ITEMS  (line items)
+// ─────────────────────────────────────────────
+
+model ShopOrderItem {
+  id         String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  order_id   String  @db.Uuid
+  product_id String  @db.Uuid
+  quantity   Int
+  unit_price Decimal @db.Decimal(10, 2)
+
+  order   ShopOrder   @relation(fields: [order_id], references: [id], onDelete: Cascade)
+  product ShopProduct @relation(fields: [product_id], references: [id])
+
+  @@map("shop_order_items")
+}
+
+// ─────────────────────────────────────────────
+// TOURNAMENTS
+// ─────────────────────────────────────────────
+
+model Tournament {
+  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name         String
+  name_en      String?
+  name_bn      String?
+  description  String?
+  date         DateTime
+  location     String?
+  is_published Boolean  @default(false)
+
+  participants TournamentParticipant[]
+  matches      TournamentMatch[]
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("tournaments")
+}
+
+// ─────────────────────────────────────────────
+// TOURNAMENT PARTICIPANTS
+// ─────────────────────────────────────────────
+
+model TournamentParticipant {
+  id            String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tournament_id String  @db.Uuid
+  member_id     String  @db.Uuid
+  category      String?
+  weight_class  String?
+
+  tournament Tournament @relation(fields: [tournament_id], references: [id], onDelete: Cascade)
+  member     Member     @relation(fields: [member_id], references: [id], onDelete: Cascade)
+
+  matches_as_p1 TournamentMatch[] @relation("MatchParticipant1")
+  matches_as_p2 TournamentMatch[] @relation("MatchParticipant2")
+  matches_won   TournamentMatch[] @relation("MatchWinner")
+
+  created_at DateTime @default(now())
+
+  @@unique([tournament_id, member_id])
+  @@map("tournament_participants")
+}
+
+// ─────────────────────────────────────────────
+// TOURNAMENT MATCHES
+// ─────────────────────────────────────────────
+
+model TournamentMatch {
+  id              String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tournament_id   String  @db.Uuid
+  participant1_id String? @db.Uuid
+  participant2_id String? @db.Uuid
+  winner_id       String? @db.Uuid
+  round           Int?
+  match_order     Int?
+  notes           String?
+
+  tournament   Tournament             @relation(fields: [tournament_id], references: [id], onDelete: Cascade)
+  participant1 TournamentParticipant? @relation("MatchParticipant1", fields: [participant1_id], references: [id])
+  participant2 TournamentParticipant? @relation("MatchParticipant2", fields: [participant2_id], references: [id])
+  winner       TournamentParticipant? @relation("MatchWinner", fields: [winner_id], references: [id])
+
+  created_at DateTime @default(now())
+
+  @@map("tournament_matches")
+}
