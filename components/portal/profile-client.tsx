@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import TiltCard from "@/components/portal/tilt-card";
+import AvatarUploader from "@/components/portal/avatar-uploader";
 import {
     User, Phone, Mail, MapPin, Shield, Loader2,
     CheckCircle2, AlertCircle, Key, Calendar, Award,
@@ -135,11 +136,14 @@ export default function ProfileClient({ member, dojos, userId }: Props) {
             </div>
 
             {/* ── Member summary card ───────────────────────────────────────── */}
-            <TiltCard delay={0.05} className="p-5">
-                <div className="flex items-center gap-4">
-                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-zinc-900 to-zinc-700 flex items-center justify-center text-white text-2xl font-bold flex-shrink-0">
-                        {member?.fullName?.charAt(0)?.toUpperCase() ?? "M"}
-                    </div>
+            <TiltCard delay={0.05} className="p-5" tilt={false} glow={false}>
+                <div className="flex items-center gap-5">
+                    <AvatarUploader
+                        initialUrl={member?.avatarUrl ?? null}
+                        fallbackInitial={member?.fullName?.charAt(0)?.toUpperCase() ?? "M"}
+                        sizeClasses="w-20 h-20"
+                        showHint={false}
+                    />
                     <div className="flex-1 min-w-0">
                         <h2 className="text-lg font-bold text-zinc-900 truncate">{member?.fullName ?? "Member"}</h2>
                         <p className="text-sm text-zinc-500 truncate">{member?.email ?? ""}</p>
@@ -184,7 +188,7 @@ export default function ProfileClient({ member, dojos, userId }: Props) {
             </TiltCard>
 
             {/* ── Edit profile form ─────────────────────────────────────────── */}
-            <TiltCard delay={0.1} className="p-6">
+            <TiltCard delay={0.1} className="p-6" tilt={false} glow={false}>
                 <form onSubmit={handleProfileSubmit} className="space-y-6">
                 {/* Personal */}
                 <div>
@@ -424,7 +428,7 @@ export default function ProfileClient({ member, dojos, userId }: Props) {
             </TiltCard>
 
             {/* ── Change password ───────────────────────────────────────────── */}
-            <TiltCard delay={0.15} className="p-6">
+            <TiltCard delay={0.15} className="p-6" tilt={false} glow={false}>
                 <h2 className="text-sm font-bold text-zinc-900 mb-4 flex items-center gap-2">
                     <Key size={16} className="text-red-500" />
                     Change Password

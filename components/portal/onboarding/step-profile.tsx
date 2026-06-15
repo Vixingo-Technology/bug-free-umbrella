@@ -5,6 +5,7 @@ import { motion } from "motion/react";
 import { User, Phone, MapPin, Heart, AlertCircle, ChevronRight } from "lucide-react";
 import { saveProfileAction } from "@/app/portal/onboarding/actions";
 import { BLOOD_GROUPS } from "@/lib/constants";
+import AvatarUploader from "@/components/portal/avatar-uploader";
 
 export interface ProfileData {
     fullName: string;
@@ -27,6 +28,8 @@ interface Props {
     isUpdateMode?: boolean;
     /** Which required fields are missing — shown as a hint banner. */
     missingFields?: string[];
+    /** Existing avatar URL (if any) — used to seed the uploader preview. */
+    avatarUrl?: string | null;
 }
 
 export default function StepProfile({
@@ -36,6 +39,7 @@ export default function StepProfile({
     onNext,
     isUpdateMode = false,
     missingFields = [],
+    avatarUrl,
 }: Props) {
     const [isPending, startTransition] = useTransition();
     const [error, setError] = useState<string | null>(null);
@@ -115,6 +119,15 @@ export default function StepProfile({
                     {error}
                 </motion.div>
             )}
+
+            {/* Profile photo */}
+            <div className="mb-6 pb-6 border-b border-zinc-100">
+                <AvatarUploader
+                    initialUrl={avatarUrl ?? null}
+                    fallbackInitial={(value.fullName || "M").charAt(0).toUpperCase()}
+                    sizeClasses="w-24 h-24"
+                />
+            </div>
 
             <form onSubmit={handleSubmit} className="space-y-5">
                 {/* Full name */}

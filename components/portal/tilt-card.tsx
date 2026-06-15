@@ -17,17 +17,15 @@ interface Props {
     dark?: boolean;
     /** Optional click handler (e.g. for notification cards). */
     onClick?: () => void;
+    /** Enable 3D tilt on cursor hover. Defaults true. */
+    tilt?: boolean;
 }
 
 /**
- * 3D tilt + glass surface card used across the portal dashboard.
- *
- * - `perspective` lives on the OUTER wrapper so the inner `rotateX`/`rotateY`
- *   actually look 3D (CSS perspective doesn't apply to the same element it's
- *   declared on).
- * - Mouse position is read with motion-values and smoothed with a spring, so
- *   the tilt feels physical without re-renders.
- * - `.red-glow` and `.glass-card` come from globals.css.
+ * Glass-surface card used across the portal. With `tilt` enabled (default) it
+ * rotates with the cursor; with `glow` enabled an outer red halo blooms
+ * behind the card. The halo lives outside the card box (see `.red-glow` in
+ * globals.css) so the card surface itself stays clean.
  */
 export default function TiltCard({
     children,
@@ -37,24 +35,39 @@ export default function TiltCard({
     glow = true,
     dark = false,
     onClick,
+    tilt = true,
 }: Props) {
     const ref = useRef<HTMLDivElement>(null);
     const mx = useMotionValue(0);
     const my = useMotionValue(0);
     const rotateX = useSpring(useTransform(my, [-0.5, 0.5], [7, -7]), { stiffness: 220, damping: 22 });
     const rotateY = useSpring(useTransform(mx, [-0.5, 0.5], [-7, 7]), { stiffness: 220, damping: 22 });
-    const shineX = useTransform(mx, [-0.5, 0.5], ["0%", "100%"]);
-    const shineY = useTransform(my, [-0.5, 0.5], ["0%", "100%"]);
 
     function onMove(e: React.MouseEvent) {
         if (!ref.current) return;
         const r = ref.current.getBoundingClientRect();
-        mx.set((e.clientX - r.left) / r.width - 0.5);
-        my.set((e.clientY - r.top) / r.height - 0.5);
+        const nx = (e.clientX - r.left) / r.width;
+        const ny = (e.clientY - r.top) / r.height;
+        if (tilt) {
+            mx.set(nx - 0.5);
+            my.set(ny - 0.5);
+        }
+        if (glow) {
+            // Glow paints on the OPPOSITE side of the cursor — hovering on the
+            // right lights up the left edge, like a counter-reflection.
+            ref.current.style.setProperty("--gx", `${(1 - nx) * 100}%`);
+            ref.current.style.setProperty("--gy", `${(1 - ny) * 100}%`);
+        }
     }
     function onLeave() {
-        mx.set(0);
-        my.set(0);
+        if (tilt) {
+            mx.set(0);
+            my.set(0);
+        }
+        if (glow && ref.current) {
+            ref.current.style.setProperty("--gx", "50%");
+            ref.current.style.setProperty("--gy", "50%");
+        }
     }
 
     const surface = dark
@@ -67,28 +80,19 @@ export default function TiltCard({
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay, duration: 0.45, ease: [0.2, 0.8, 0.2, 1] }}
-            style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-            onMouseMove={onMove}
-            onMouseLeave={onLeave}
+            style={tilt ? { rotateX, rotateY, transformStyle: "preserve-3d" } : undefined}
+            onMouseMove={tilt || glow ? onMove : undefined}
+            onMouseLeave={tilt || glow ? onLeave : undefined}
             className={`relative h-full overflow-visible rounded-2xl ${surface} ${glow ? "red-glow" : ""} ${className}`}
         >
-            {/* Specular shine that tracks the cursor */}
-            <motion.div
-                aria-hidden
-                style={{
-                    background: `radial-gradient(220px circle at ${shineX} ${shineY}, ${dark ? "rgba(255,255,255,0.08)" : "rgba(255,255,255,0.55)"}, transparent 60%)`,
-                }}
-                className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 transition-opacity duration-300 hover:opacity-100 group-hover:opacity-100"
-            />
-            {/* Content lifted on Z so it parallaxes vs. the surface */}
-            <div style={{ transform: "translateZ(24px)" }} className="relative h-full">
+            <div style={tilt ? { transform: "translateZ(24px)" } : undefined} className="relative h-full z-10">
                 {children}
             </div>
         </motion.div>
     );
 
     const wrapper = (
-        <div style={{ perspective: 1200 }} className="h-full group" onClick={onClick}>
+        <div style={tilt ? { perspective: 1200 } : undefined} className="h-full group" onClick={onClick}>
             {cardInner}
         </div>
     );

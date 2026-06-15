@@ -1,7 +1,11 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "motion/react";
 import TiltCard from "@/components/portal/tilt-card";
+import DigitalCard from "@/components/portal/digital-card";
+import MembershipCardDialog from "@/components/portal/membership-card-dialog";
+import WeeklySchedule from "@/components/dashboard/weekly-schedule";
 import {
   GraduationCap,
   MapPin,
@@ -12,11 +16,14 @@ import {
   CheckCircle2,
   XCircle,
   CreditCard,
+  CalendarDays,
 } from "lucide-react";
 
 interface StudentDashboardProps {
     member: any;
 }
+
+type MembershipStatusLabel = "Active" | "Expired" | "Expiring Soon" | "Pending";
 
 function StatCard({
     icon,
@@ -24,32 +31,52 @@ function StatCard({
     value,
     color,
     delay,
+    href,
 }: {
     icon: React.ReactNode;
     label: string;
     value: string;
     color: string;
     delay: number;
+    href?: string;
 }) {
     return (
-        <TiltCard delay={delay} className="p-6">
+        <TiltCard delay={delay} className="p-6" href={href}>
             <div className="flex items-center gap-4">
                 <div className={`${color} p-3 rounded-xl`}>{icon}</div>
-                <div>
+                <div className="min-w-0">
                     <p className="text-xs font-bold tracking-widest uppercase text-zinc-400">
                         {label}
                     </p>
-                    <p className="text-xl font-bold text-zinc-900 mt-0.5">{value}</p>
+                    <p className="text-xl font-bold text-zinc-900 mt-0.5 truncate">{value}</p>
                 </div>
             </div>
         </TiltCard>
     );
 }
 
+function formatBdt(value: any): string {
+    const n = Number(value ?? 0);
+    if (!Number.isFinite(n)) return "—";
+    return `৳${n.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`;
+}
+
+function deriveMembershipStatus(expiryDate: any): MembershipStatusLabel {
+    if (!expiryDate) return "Active";
+    const expiry = new Date(expiryDate);
+    const daysLeft = Math.ceil((expiry.getTime() - Date.now()) / (1000 * 60 * 60 * 24));
+    if (daysLeft < 0) return "Expired";
+    if (daysLeft <= 30) return "Expiring Soon";
+    return "Active";
+}
+
 export default function StudentDashboard({ member }: StudentDashboardProps) {
     const gradings = member?.gradings ?? [];
     const orders = member?.orders ?? [];
     const dojo = member?.dojo;
+    const [cardOpen, setCardOpen] = useState(false);
+
+    const membershipStatus = deriveMembershipStatus(member?.expiryDate);
 
     return (
         <div className="space-y-8">
@@ -63,7 +90,7 @@ export default function StudentDashboard({ member }: StudentDashboardProps) {
                 </p>
             </div>
 
-            {/* Stats Grid */}
+            {/* Stats Grid — each tile opens its portal page */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <StatCard
                     icon={<GraduationCap size={20} className="text-emerald-600" />}
@@ -71,6 +98,7 @@ export default function StudentDashboard({ member }: StudentDashboardProps) {
                     value={member?.currentRank ?? "White Belt"}
                     color="bg-emerald-50"
                     delay={0}
+                    href="/portal/progress"
                 />
                 <StatCard
                     icon={<MapPin size={20} className="text-blue-600" />}
@@ -78,6 +106,7 @@ export default function StudentDashboard({ member }: StudentDashboardProps) {
                     value={dojo?.name ?? "Not Assigned"}
                     color="bg-blue-50"
                     delay={0.05}
+                    href="/portal/dashboard"
                 />
                 <StatCard
                     icon={<Award size={20} className="text-amber-600" />}
@@ -85,50 +114,48 @@ export default function StudentDashboard({ member }: StudentDashboardProps) {
                     value={`${gradings.length} Completed`}
                     color="bg-amber-50"
                     delay={0.1}
+                    href="/portal/grading"
                 />
                 <StatCard
                     icon={<Calendar size={20} className="text-purple-600" />}
                     label="Membership"
-                    value={member?.expiryDate ? new Date(member.expiryDate).toLocaleDateString("en-GB", { month: "short", year: "numeric" }) : "Active"}
+                    value={
+                        member?.expiryDate
+                            ? new Date(member.expiryDate).toLocaleDateString("en-GB", { month: "short", year: "numeric" })
+                            : "Active"
+                    }
                     color="bg-purple-50"
                     delay={0.15}
+                    href="/portal/renew"
                 />
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {/* Membership Card */}
-                <TiltCard dark delay={0.2} className="p-8">
-                    <div className="absolute top-0 right-0 w-40 h-40 bg-accent-red/10 rounded-full blur-[60px]" />
-                    <div className="absolute bottom-0 left-0 w-32 h-32 bg-accent-gold/10 rounded-full blur-[60px]" />
-
-                    <div className="relative z-10">
-                        <div className="flex items-center justify-between mb-6">
-                            <div>
-                                <p className="text-[10px] tracking-[0.3em] uppercase text-zinc-400 font-bold">
-                                    JKA Bangladesh
-                                </p>
-                                <p className="text-xs text-zinc-500 mt-0.5">Member ID Card</p>
-                            </div>
-                            <div className="w-10 h-10 bg-accent-red/20 rounded-lg flex items-center justify-center">
-                                <Award size={20} className="text-accent-red" />
-                            </div>
-                        </div>
-
-                        <h3 className="text-2xl font-bold mb-1">{member?.fullName ?? "Member"}</h3>
-                        <p className="text-zinc-400 text-sm mb-6">{member?.email}</p>
-
-                        <div className="grid grid-cols-2 gap-4 pt-4 border-t border-zinc-700/50">
-                            <div>
-                                <p className="text-[10px] tracking-widest uppercase text-zinc-500">Rank</p>
-                                <p className="text-sm font-semibold mt-0.5">{member?.currentRank ?? "White Belt"}</p>
-                            </div>
-                            <div>
-                                <p className="text-[10px] tracking-widest uppercase text-zinc-500">Dojo</p>
-                                <p className="text-sm font-semibold mt-0.5">{dojo?.name ?? "—"}</p>
-                            </div>
-                        </div>
-                    </div>
-                </TiltCard>
+                {/* Digital Membership Card — click to open share dialog */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2, duration: 0.45, ease: [0.2, 0.8, 0.2, 1] }}
+                >
+                    <button
+                        type="button"
+                        onClick={() => setCardOpen(true)}
+                        aria-label="Open digital membership card"
+                        className="block w-full h-full text-left rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-red/60"
+                    >
+                        <DigitalCard
+                            interactive
+                            fullName={member?.fullName ?? "Member"}
+                            email={member?.email}
+                            currentRank={member?.currentRank}
+                            dojoName={dojo?.name}
+                            role={member?.role}
+                            membershipStatus={membershipStatus}
+                            memberNumber={member?.memberNumber}
+                            avatarUrl={member?.avatarUrl}
+                        />
+                    </button>
+                </motion.div>
 
                 {/* Dojo Info */}
                 <TiltCard delay={0.25} className="p-8">
@@ -144,16 +171,12 @@ export default function StudentDashboard({ member }: StudentDashboardProps) {
                             </div>
                             <div>
                                 <p className="text-[10px] tracking-widest uppercase text-zinc-400 font-bold">City</p>
-                                <p className="text-zinc-700 mt-0.5">{dojo.city}</p>
+                                <p className="text-zinc-700 mt-0.5">{dojo.city ?? "—"}</p>
                             </div>
-                            {dojo.schedule && (
+                            {dojo.address && (
                                 <div>
-                                    <p className="text-[10px] tracking-widest uppercase text-zinc-400 font-bold">Schedule</p>
-                                    <p className="text-zinc-700 mt-0.5 text-sm">
-                                        {typeof dojo.schedule === "object"
-                                            ? JSON.stringify(dojo.schedule)
-                                            : dojo.schedule}
-                                    </p>
+                                    <p className="text-[10px] tracking-widest uppercase text-zinc-400 font-bold">Address</p>
+                                    <p className="text-zinc-700 mt-0.5 text-sm">{dojo.address}</p>
                                 </div>
                             )}
                         </div>
@@ -167,8 +190,20 @@ export default function StudentDashboard({ member }: StudentDashboardProps) {
                 </TiltCard>
             </div>
 
+            {/* Weekly Schedule — intentionally no hover effect */}
+            <TiltCard delay={0.28} className="p-8" tilt={false} glow={false}>
+                <h2 className="text-lg font-bold text-zinc-900 mb-1 flex items-center gap-2">
+                    <CalendarDays size={18} className="text-accent-red" />
+                    Weekly Schedule
+                </h2>
+                <p className="text-xs text-zinc-500 mb-5">
+                    {dojo?.name ? `Training times at ${dojo.name}` : "Training times will appear once a dojo is assigned."}
+                </p>
+                <WeeklySchedule schedule={dojo?.schedule} />
+            </TiltCard>
+
             {/* Grading History */}
-            <TiltCard delay={0.3} className="p-8">
+            <TiltCard delay={0.3} className="p-8" href="/portal/grading">
                 <h2 className="text-lg font-bold text-zinc-900 mb-6 flex items-center gap-2">
                     <Award size={18} className="text-accent-gold" />
                     Grading History
@@ -200,6 +235,7 @@ export default function StudentDashboard({ member }: StudentDashboardProps) {
                                         href={g.certificateUrl}
                                         target="_blank"
                                         rel="noopener noreferrer"
+                                        onClick={(e) => e.stopPropagation()}
                                         className="text-xs text-accent-red hover:text-accent-gold font-semibold transition-colors"
                                     >
                                         View Certificate
@@ -242,7 +278,7 @@ export default function StudentDashboard({ member }: StudentDashboardProps) {
                                         <td className="py-3 px-2 text-zinc-700">
                                             <span className="inline-flex items-center gap-1">
                                                 <CreditCard size={14} className="text-zinc-400" />
-                                                ৳{Number(o.totalBdt).toLocaleString()}
+                                                {formatBdt(o.total)}
                                             </span>
                                         </td>
                                         <td className="py-3 px-2">
@@ -268,6 +304,20 @@ export default function StudentDashboard({ member }: StudentDashboardProps) {
                     </div>
                 )}
             </TiltCard>
+
+            <MembershipCardDialog
+                open={cardOpen}
+                onClose={() => setCardOpen(false)}
+                memberId={member?.id ?? ""}
+                fullName={member?.fullName ?? "Member"}
+                email={member?.email}
+                currentRank={member?.currentRank}
+                dojoName={dojo?.name}
+                role={member?.role}
+                membershipStatus={membershipStatus}
+                memberNumber={member?.memberNumber}
+                avatarUrl={member?.avatarUrl}
+            />
         </div>
     );
 }

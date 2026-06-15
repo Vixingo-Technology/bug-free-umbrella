@@ -3,10 +3,11 @@
 import { motion } from "motion/react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, Mail, Lock, User, Shield, Loader2 } from "lucide-react";
+import { ArrowLeft, Mail, Lock, User, Shield, Loader2, ChevronDown } from "lucide-react";
 import Logo from "@/assets/jka_logo.svg";
 import { signupAction } from "@/app/actions/auth";
 import { useState, useTransition } from "react";
+import { BELT_RANKS_ORDERED } from "@/lib/constants";
 
 export default function SignupPage() {
     const [error, setError] = useState<string | null>(null);
@@ -136,18 +137,25 @@ export default function SignupPage() {
                         
                         <div className="space-y-1">
                             <label className="text-xs font-bold tracking-widest uppercase text-zinc-600 block pl-1">
-                                Current Rank / Experience (Optional)
+                                Current Rank
                             </label>
                             <div className="relative">
                                 <Shield size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400" />
-                                <input
-                                    type="text"
+                                <select
                                     name="currentRank"
-                                    placeholder="e.g. White Belt, 3 years"
-                                    className="w-full bg-white/50 border border-zinc-200 rounded-xl py-3 pl-11 pr-4 text-sm focus:outline-none focus:border-accent-red focus:ring-1 focus:ring-accent-red transition-all"
+                                    defaultValue="White Belt"
                                     disabled={isPending}
-                                />
+                                    className="w-full bg-white/50 border border-zinc-200 rounded-xl py-3 pl-11 pr-10 text-sm focus:outline-none focus:border-accent-red focus:ring-1 focus:ring-accent-red transition-all appearance-none"
+                                >
+                                    {BELT_RANKS_ORDERED.map((rank) => (
+                                        <option key={rank} value={rank}>{rank}</option>
+                                    ))}
+                                </select>
+                                <ChevronDown size={16} className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-400 pointer-events-none" />
                             </div>
+                            <p className="text-[11px] text-zinc-500 pl-1 pt-1">
+                                If unsure, leave as <span className="font-semibold">White Belt</span> — your instructor can update this later.
+                            </p>
                         </div>
 
                         <button

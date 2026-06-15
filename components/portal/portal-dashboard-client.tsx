@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "motion/react";
 import Link from "next/link";
 import {
@@ -17,6 +18,8 @@ import {
     CalendarDays,
 } from "lucide-react";
 import TiltCard from "./tilt-card";
+import DigitalCard from "./digital-card";
+import MembershipCardDialog from "./membership-card-dialog";
 
 interface Props {
     member: any;
@@ -31,16 +34,6 @@ const statusConfig = {
     Expired:         { color: "text-red-600 bg-red-50 border-red-200",             icon: XCircle,      dot: "bg-red-500" },
     "Expiring Soon": { color: "text-amber-600 bg-amber-50 border-amber-200",       icon: AlertTriangle,dot: "bg-amber-500" },
     Pending:         { color: "text-zinc-600 bg-zinc-50 border-zinc-200",          icon: Clock,        dot: "bg-zinc-400" },
-};
-
-const beltColors: Record<string, string> = {
-    "White Belt": "#FFFFFF",
-    "Yellow Belt": "#FFD700",
-    "Orange Belt": "#FF8C00",
-    "Green Belt": "#228B22",
-    "Blue Belt": "#0000CD",
-    "Brown Belt": "#8B4513",
-    "Black Belt": "#1a1a1a",
 };
 
 function StatCard({ icon: Icon, label, value, sub, href, delay, accentClass }: {
@@ -71,7 +64,7 @@ export default function PortalDashboardClient({ member, membershipStatus, unread
     const statusCfg = statusConfig[membershipStatus];
     const StatusIcon = statusCfg.icon;
 
-    const beltColor = beltColors[member?.currentRank ?? "White Belt"] ?? "#FFFFFF";
+    const [cardOpen, setCardOpen] = useState(false);
 
     const expiryDate = member?.expiryDate
         ? new Date(member.expiryDate).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })
@@ -144,52 +137,33 @@ export default function PortalDashboardClient({ member, membershipStatus, unread
 
             {/* Member card + Recent gradings */}
             <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 auto-rows-fr">
-                {/* Member Card — dark glass with belt accent */}
+                {/* Member Card — dark glass with belt accent. Click to open share dialog. */}
                 <div className="lg:col-span-2">
-                    <TiltCard dark delay={0.2} className="p-6">
-                        <div className="relative h-full flex flex-col">
-                            <div className="absolute -top-2 -right-2 w-40 h-40 rounded-full blur-[60px] opacity-30" style={{ backgroundColor: beltColor }} />
-                            <div className="absolute -bottom-4 -left-4 w-28 h-28 bg-accent-red/20 rounded-full blur-[50px]" />
-
-                            <div className="relative z-10 flex items-center justify-between mb-5">
-                                <div>
-                                    <p className="text-[9px] tracking-[0.3em] uppercase text-zinc-400 font-bold">JKA Bangladesh</p>
-                                    <p className="text-[9px] tracking-widest uppercase text-zinc-500 mt-0.5">Digital Membership</p>
-                                </div>
-                                <div
-                                    className="w-9 h-9 rounded-full border-2 border-white/30 flex-shrink-0 shadow-lg"
-                                    style={{ backgroundColor: beltColor, boxShadow: `0 0 16px ${beltColor}50` }}
-                                />
-                            </div>
-
-                            <div className="relative z-10">
-                                <h3 className="text-lg font-bold leading-tight">{member?.fullName ?? "Member"}</h3>
-                                <p className="text-zinc-400 text-xs mt-0.5 truncate">{member?.email ?? ""}</p>
-                            </div>
-
-                            <div className="relative z-10 mt-auto grid grid-cols-2 gap-3 pt-5 border-t border-zinc-700/50">
-                                <div>
-                                    <p className="text-[9px] tracking-widest uppercase text-zinc-500">Rank</p>
-                                    <p className="text-xs font-semibold mt-0.5">{member?.currentRank ?? "White Belt"}</p>
-                                </div>
-                                <div>
-                                    <p className="text-[9px] tracking-widest uppercase text-zinc-500">Dojo</p>
-                                    <p className="text-xs font-semibold mt-0.5 truncate">{dojo?.name ?? "—"}</p>
-                                </div>
-                                <div>
-                                    <p className="text-[9px] tracking-widest uppercase text-zinc-500">Status</p>
-                                    <div className="flex items-center gap-1 mt-0.5">
-                                        <span className={`w-1.5 h-1.5 rounded-full ${statusCfg.dot}`} />
-                                        <p className="text-xs font-semibold">{membershipStatus}</p>
-                                    </div>
-                                </div>
-                                <div>
-                                    <p className="text-[9px] tracking-widest uppercase text-zinc-500">Role</p>
-                                    <p className="text-xs font-semibold mt-0.5">{member?.role ?? "Student"}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </TiltCard>
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.2, duration: 0.45, ease: [0.2, 0.8, 0.2, 1] }}
+                        className="h-full"
+                    >
+                        <button
+                            type="button"
+                            onClick={() => setCardOpen(true)}
+                            aria-label="Open digital membership card"
+                            className="block w-full h-full text-left rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-red/60"
+                        >
+                            <DigitalCard
+                                interactive
+                                fullName={member?.fullName ?? "Member"}
+                                email={member?.email}
+                                currentRank={member?.currentRank}
+                                dojoName={dojo?.name}
+                                role={member?.role}
+                                membershipStatus={membershipStatus}
+                                memberNumber={member?.memberNumber}
+                                avatarUrl={member?.avatarUrl}
+                            />
+                        </button>
+                    </motion.div>
                 </div>
 
                 {/* Recent Gradings */}
@@ -314,6 +288,20 @@ export default function PortalDashboardClient({ member, membershipStatus, unread
                     </TiltCard>
                 ))}
             </div>
+
+            <MembershipCardDialog
+                open={cardOpen}
+                onClose={() => setCardOpen(false)}
+                memberId={member?.id ?? ""}
+                fullName={member?.fullName ?? "Member"}
+                email={member?.email}
+                currentRank={member?.currentRank}
+                dojoName={dojo?.name}
+                role={member?.role}
+                membershipStatus={membershipStatus}
+                memberNumber={member?.memberNumber}
+                avatarUrl={member?.avatarUrl}
+            />
         </div>
     );
 }

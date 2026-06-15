@@ -138,6 +138,7 @@ export default function OnboardingWizard({
                                 onNext={handleProfileNext}
                                 isUpdateMode={isProfileUpdateMode}
                                 missingFields={missingFields}
+                                avatarUrl={member?.avatarUrl ?? null}
                             />
                         </motion.div>
                     )}
