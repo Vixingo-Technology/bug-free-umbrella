@@ -64,8 +64,8 @@ export async function GET(request: NextRequest) {
     try {
         const meta = user.user_metadata ?? {};
         const fullName: string =
-            meta.full_name ??
-            [meta.first_name, meta.last_name].filter(Boolean).join(" ") ||
+            (meta.full_name ??
+            [meta.first_name, meta.last_name].filter(Boolean).join(" ")) ||
             user.email!;
 
         await prisma.member.upsert({

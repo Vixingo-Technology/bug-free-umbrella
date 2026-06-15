@@ -64,7 +64,7 @@ export default function StepProfile({
     }
 
     return (
-        <div>
+        <div className="bg-white rounded-2xl shadow-sm border border-zinc-200 p-8">
             <div className="mb-8 text-center">
                 <motion.div
                     initial={{ scale: 0.8, opacity: 0 }}
@@ -72,16 +72,16 @@ export default function StepProfile({
                     transition={{ delay: 0.1 }}
                     className={`w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4 ${
                         isUpdateMode
-                            ? "bg-amber-500/20 border border-amber-500/30"
-                            : "bg-red-600/20 border border-red-600/30"
+                            ? "bg-amber-50 border border-amber-200"
+                            : "bg-red-50 border border-red-200"
                     }`}
                 >
-                    <User size={24} className={isUpdateMode ? "text-amber-400" : "text-red-400"} />
+                    <User size={24} className={isUpdateMode ? "text-amber-500" : "text-accent-red"} />
                 </motion.div>
-                <h1 className="text-2xl font-bold text-white">
+                <h1 className="text-2xl font-bold text-zinc-900">
                     {isUpdateMode ? "Profile Update Required" : "Complete Your Profile"}
                 </h1>
-                <p className="text-white/50 text-sm mt-1">
+                <p className="text-zinc-500 text-sm mt-1">
                     {isUpdateMode
                         ? "Please fill in the missing details below to continue using the portal."
                         : "This information is needed to register you as an official JKA member."}
@@ -93,12 +93,12 @@ export default function StepProfile({
                 <motion.div
                     initial={{ opacity: 0, y: -8 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="flex items-start gap-3 bg-amber-500/10 border border-amber-500/30 rounded-xl px-4 py-3 mb-6"
+                    className="flex items-start gap-3 bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 mb-6"
                 >
-                    <AlertCircle size={16} className="text-amber-400 flex-shrink-0 mt-0.5" />
+                    <AlertCircle size={16} className="text-amber-500 flex-shrink-0 mt-0.5" />
                     <div>
-                        <p className="text-amber-300 text-sm font-medium">Required fields missing</p>
-                        <p className="text-amber-400/70 text-xs mt-0.5">
+                        <p className="text-amber-700 text-sm font-medium">Required fields missing</p>
+                        <p className="text-amber-600 text-xs mt-0.5">
                             {missingFields.join(" · ")}
                         </p>
                     </div>
@@ -109,7 +109,7 @@ export default function StepProfile({
                 <motion.div
                     initial={{ opacity: 0, y: -8 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="flex items-center gap-2 bg-red-500/10 border border-red-500/30 rounded-xl px-4 py-3 mb-6 text-red-400 text-sm"
+                    className="flex items-center gap-2 bg-red-50 border border-red-200 rounded-xl px-4 py-3 mb-6 text-red-600 text-sm"
                 >
                     <AlertCircle size={16} className="flex-shrink-0" />
                     {error}
@@ -214,7 +214,7 @@ export default function StepProfile({
 
                 {/* Emergency contact */}
                 <div className="pt-2">
-                    <p className="text-xs font-bold tracking-widest uppercase text-white/30 mb-3">Emergency Contact</p>
+                    <p className="text-xs font-bold tracking-widest uppercase text-zinc-400 mb-3">Emergency Contact</p>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <Field label="Contact Name">
                             <input
@@ -244,8 +244,8 @@ export default function StepProfile({
                     disabled={isPending}
                     className={`w-full mt-2 flex items-center justify-center gap-2 disabled:opacity-60 text-white font-semibold rounded-xl px-6 py-3.5 transition-colors ${
                         isUpdateMode
-                            ? "bg-amber-600 hover:bg-amber-500"
-                            : "bg-red-600 hover:bg-red-500"
+                            ? "bg-amber-500 hover:bg-amber-400"
+                            : "bg-accent-red hover:bg-red-700"
                     }`}
                 >
                     {isPending ? "Saving…" : isUpdateMode ? "Save & Continue to Portal" : "Continue"}
@@ -259,8 +259,8 @@ export default function StepProfile({
 function Field({ label, icon, children }: { label: string; icon?: React.ReactNode; children: React.ReactNode }) {
     return (
         <div>
-            <label className="flex items-center gap-1.5 text-xs font-semibold text-white/50 uppercase tracking-widest mb-2">
-                {icon && <span className="text-white/30">{icon}</span>}
+            <label className="flex items-center gap-1.5 text-xs font-semibold text-zinc-500 uppercase tracking-widest mb-2">
+                {icon && <span className="text-zinc-400">{icon}</span>}
                 {label}
             </label>
             {children}
@@ -269,4 +269,4 @@ function Field({ label, icon, children }: { label: string; icon?: React.ReactNod
 }
 
 const inputCls =
-    "w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/20 text-sm focus:outline-none focus:border-red-500/50 focus:ring-1 focus:ring-red-500/20 transition-all appearance-none";
+    "w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-zinc-900 placeholder-zinc-400 text-sm focus:outline-none focus:border-accent-red focus:ring-1 focus:ring-accent-red/20 transition-all appearance-none";

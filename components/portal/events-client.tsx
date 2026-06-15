@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { motion, AnimatePresence } from "motion/react";
+import TiltCard from "@/components/portal/tilt-card";
 import {
     CalendarDays, MapPin, Users, CheckCircle2,
     AlertCircle, Loader2, Clock, ChevronRight,
@@ -98,12 +99,10 @@ export default function EventsClient({ upcomingEvents, pastEvents, myRegistratio
                             const isFull = ev.maxCapacity && ev._count?.registrations >= ev.maxCapacity;
 
                             return (
-                                <motion.div
+                                <TiltCard
                                     key={ev.id}
-                                    initial={{ opacity: 0, y: 16 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: 0.1 + i * 0.05 }}
-                                    className="bg-white rounded-2xl p-5 border border-zinc-100 shadow-sm hover:shadow-md transition-shadow"
+                                    delay={0.1 + i * 0.05}
+                                    className="p-5"
                                 >
                                     <div className="flex flex-col sm:flex-row sm:items-start gap-4">
                                         {/* Date block */}
@@ -187,16 +186,18 @@ export default function EventsClient({ upcomingEvents, pastEvents, myRegistratio
                                             )}
                                         </div>
                                     </div>
-                                </motion.div>
+                                </TiltCard>
                             );
                         })}
                     </div>
                 ) : (
-                    <div className="bg-white rounded-2xl p-10 border border-zinc-100 shadow-sm flex flex-col items-center justify-center text-center">
-                        <CalendarDays size={36} className="text-zinc-200 mb-3" />
-                        <p className="text-zinc-500 text-sm">No upcoming events at the moment.</p>
-                        <p className="text-zinc-400 text-xs mt-1">Check back soon for tournaments, seminars, and training camps.</p>
-                    </div>
+                    <TiltCard className="p-10">
+                        <div className="flex flex-col items-center justify-center text-center">
+                            <CalendarDays size={36} className="text-zinc-200 mb-3" />
+                            <p className="text-zinc-500 text-sm">No upcoming events at the moment.</p>
+                            <p className="text-zinc-400 text-xs mt-1">Check back soon for tournaments, seminars, and training camps.</p>
+                        </div>
+                    </TiltCard>
                 )}
             </div>
 
@@ -206,12 +207,10 @@ export default function EventsClient({ upcomingEvents, pastEvents, myRegistratio
                     <h2 className="text-xs font-bold tracking-widest uppercase text-zinc-400 mb-3">Past Events</h2>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         {pastEvents.map((ev: any, i: number) => (
-                            <motion.div
+                            <TiltCard
                                 key={ev.id}
-                                initial={{ opacity: 0, y: 12 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.1 + i * 0.04 }}
-                                className="bg-white rounded-xl p-4 border border-zinc-100 opacity-70"
+                                delay={0.1 + i * 0.04}
+                                className="p-4 opacity-70"
                             >
                                 <span className={`text-[9px] font-bold tracking-widest uppercase px-2 py-0.5 rounded-full ${typeColors[ev.eventType] ?? typeColors.OTHER}`}>
                                     {ev.eventType.replace("_", " ")}
@@ -221,7 +220,7 @@ export default function EventsClient({ upcomingEvents, pastEvents, myRegistratio
                                     <CalendarDays size={11} />
                                     {new Date(ev.eventDate).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}
                                 </p>
-                            </motion.div>
+                            </TiltCard>
                         ))}
                     </div>
                 </div>

@@ -55,8 +55,8 @@ export default async function PortalLayout({
             if (!member) {
                 const meta = user.user_metadata ?? {};
                 const fullName: string =
-                    meta.full_name ??
-                    [meta.first_name, meta.last_name].filter(Boolean).join(" ") ||
+                    (meta.full_name ??
+                    [meta.first_name, meta.last_name].filter(Boolean).join(" ")) ||
                     user.email!;
 
                 member = await prisma.member.upsert({

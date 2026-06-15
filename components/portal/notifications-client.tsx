@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { motion } from "motion/react";
+import TiltCard from "@/components/portal/tilt-card";
 import {
     Bell, Info, AlertTriangle, CheckCircle2, Gift,
     ChevronRight, Check,
@@ -71,15 +72,13 @@ export default function NotificationsClient({ notifications, userId }: Props) {
                         const Icon = cfg.icon;
 
                         return (
-                            <motion.div
+                            <TiltCard
                                 key={notif.id}
-                                initial={{ opacity: 0, y: 12 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: i * 0.03 }}
-                                className={`flex items-start gap-4 p-4 rounded-2xl border transition-all cursor-pointer group ${
+                                delay={i * 0.03}
+                                className={`flex items-start gap-4 p-4 cursor-pointer group ${
                                     isRead
-                                        ? "bg-white border-zinc-100 opacity-60"
-                                        : "bg-white border-zinc-200 shadow-sm hover:shadow-md"
+                                        ? "opacity-60"
+                                        : ""
                                 }`}
                                 onClick={() => !isRead && handleMarkRead(notif.id)}
                             >
@@ -117,22 +116,20 @@ export default function NotificationsClient({ notifications, userId }: Props) {
                                         )}
                                     </div>
                                 </div>
-                            </motion.div>
+                            </TiltCard>
                         );
                     })}
                 </div>
             ) : (
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="bg-white rounded-2xl p-12 border border-zinc-100 shadow-sm flex flex-col items-center justify-center text-center"
-                >
-                    <Bell size={40} className="text-zinc-200 mb-4" />
-                    <p className="text-zinc-600 font-semibold">No notifications yet</p>
-                    <p className="text-zinc-400 text-sm mt-2">
-                        Membership reminders, grading results, and event updates will appear here.
-                    </p>
-                </motion.div>
+                <TiltCard className="p-12">
+                    <div className="flex flex-col items-center justify-center text-center">
+                        <Bell size={40} className="text-zinc-200 mb-4" />
+                        <p className="text-zinc-600 font-semibold">No notifications yet</p>
+                        <p className="text-zinc-400 text-sm mt-2">
+                            Membership reminders, grading results, and event updates will appear here.
+                        </p>
+                    </div>
+                </TiltCard>
             )}
         </div>
     );

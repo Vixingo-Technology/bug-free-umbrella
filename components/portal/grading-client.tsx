@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { motion, AnimatePresence } from "motion/react";
+import TiltCard from "@/components/portal/tilt-card";
 import {
     Award, Calendar, MapPin, CheckCircle2, Clock,
     XCircle, ChevronRight, Loader2, AlertCircle, FileText,
@@ -82,12 +83,7 @@ export default function GradingClient({ member, gradingEvents, myApplications, m
             </AnimatePresence>
 
             {/* My Applications */}
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 }}
-                className="bg-white rounded-2xl p-6 border border-zinc-100 shadow-sm"
-            >
+            <TiltCard delay={0.1} className="p-6">
                 <h2 className="text-sm font-bold text-zinc-900 mb-4 flex items-center gap-2">
                     <FileText size={16} className="text-purple-500" />
                     My Applications
@@ -136,15 +132,10 @@ export default function GradingClient({ member, gradingEvents, myApplications, m
                         <p className="text-zinc-500 text-sm">No applications submitted yet.</p>
                     </div>
                 )}
-            </motion.div>
+            </TiltCard>
 
             {/* Upcoming Grading Events */}
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.15 }}
-                className="bg-white rounded-2xl p-6 border border-zinc-100 shadow-sm"
-            >
+            <TiltCard delay={0.15} className="p-6">
                 <h2 className="text-sm font-bold text-zinc-900 mb-4 flex items-center gap-2">
                     <Calendar size={16} className="text-indigo-500" />
                     Upcoming Grading Exams
@@ -250,15 +241,10 @@ export default function GradingClient({ member, gradingEvents, myApplications, m
                         <p className="text-zinc-400 text-xs mt-1">Check back soon or contact your instructor.</p>
                     </div>
                 )}
-            </motion.div>
+            </TiltCard>
 
             {/* Grading Results */}
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
-                className="bg-white rounded-2xl p-6 border border-zinc-100 shadow-sm"
-            >
+            <TiltCard delay={0.2} className="p-6">
                 <h2 className="text-sm font-bold text-zinc-900 mb-4 flex items-center gap-2">
                     <Award size={16} className="text-amber-500" />
                     Grading Results
@@ -315,7 +301,7 @@ export default function GradingClient({ member, gradingEvents, myApplications, m
                         <p className="text-zinc-500 text-sm">No grading results yet.</p>
                     </div>
                 )}
-            </motion.div>
+            </TiltCard>
         </div>
     );
 }

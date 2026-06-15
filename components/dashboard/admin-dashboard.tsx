@@ -1,15 +1,16 @@
 "use client";
 
 import { motion } from "motion/react";
+import TiltCard from "@/components/portal/tilt-card";
 import {
-    Users,
-    MapPin,
-    ShoppingBag,
-    TrendingUp,
-    GraduationCap,
-    Crown,
-    Building2,
-    Swords,
+  Users,
+  MapPin,
+  ShoppingBag,
+  TrendingUp,
+  GraduationCap,
+  Crown,
+  Building2,
+  Swords,
 } from "lucide-react";
 
 interface AdminDashboardProps {
@@ -35,22 +36,18 @@ function StatCard({
     delay: number;
 }) {
     return (
-        <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay, duration: 0.4 }}
-            className={`${gradient} rounded-2xl p-6 text-white shadow-lg hover:shadow-xl transition-shadow`}
-        >
-            <div className="flex items-center justify-between">
+        <TiltCard dark delay={delay} className="p-6">
+            <div className={`${gradient} absolute inset-0 rounded-2xl`} />
+            <div className="relative z-10 flex items-center justify-between">
                 <div>
                     <p className="text-[10px] tracking-[0.3em] uppercase text-white/70 font-bold">
                         {label}
                     </p>
-                    <p className="text-3xl font-bold mt-2">{value}</p>
+                    <p className="text-3xl font-bold mt-2 text-white">{value}</p>
                 </div>
                 <div className="p-3 bg-white/15 rounded-xl backdrop-blur-sm">{icon}</div>
             </div>
-        </motion.div>
+        </TiltCard>
     );
 }
 
@@ -113,12 +110,7 @@ export default function AdminDashboard({
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {/* Dojo Management */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.2, duration: 0.5 }}
-                    className="bg-white rounded-2xl p-8 border border-zinc-100 shadow-sm"
-                >
+                <TiltCard delay={0.2} className="p-8">
                     <h2 className="text-lg font-bold text-zinc-900 mb-6 flex items-center gap-2">
                         <Building2 size={18} className="text-blue-500" />
                         Dojo Management
@@ -152,15 +144,10 @@ export default function AdminDashboard({
                             <p className="text-zinc-500 text-sm">No dojos created yet.</p>
                         </div>
                     )}
-                </motion.div>
+                </TiltCard>
 
                 {/* Recent Members */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.25, duration: 0.5 }}
-                    className="bg-white rounded-2xl p-8 border border-zinc-100 shadow-sm"
-                >
+                <TiltCard delay={0.25} className="p-8">
                     <h2 className="text-lg font-bold text-zinc-900 mb-6 flex items-center gap-2">
                         <Users size={18} className="text-emerald-500" />
                         Recent Members
@@ -202,45 +189,40 @@ export default function AdminDashboard({
                             <p className="text-zinc-500 text-sm">No members registered yet.</p>
                         </div>
                     )}
-                </motion.div>
+                </TiltCard>
             </div>
 
             {/* System-wide Overview Card */}
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3, duration: 0.5 }}
-                className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-zinc-900 via-zinc-800 to-zinc-900 p-8 text-white shadow-xl"
-            >
+            <TiltCard dark delay={0.3} className="p-8">
                 <div className="absolute top-0 right-0 w-64 h-64 bg-accent-red/5 rounded-full blur-[80px]" />
                 <div className="absolute bottom-0 left-0 w-48 h-48 bg-accent-gold/5 rounded-full blur-[60px]" />
 
                 <div className="relative z-10">
                     <div className="flex items-center gap-3 mb-6">
                         <Swords size={20} className="text-accent-gold" />
-                        <h2 className="text-lg font-bold">System Summary</h2>
+                        <h2 className="text-lg font-bold text-white">System Summary</h2>
                     </div>
 
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
                         <div>
                             <p className="text-[10px] tracking-widest uppercase text-zinc-500">Members</p>
-                            <p className="text-2xl font-bold mt-1">{totalMembers}</p>
+                            <p className="text-2xl font-bold mt-1 text-white">{totalMembers}</p>
                         </div>
                         <div>
                             <p className="text-[10px] tracking-widest uppercase text-zinc-500">Dojos</p>
-                            <p className="text-2xl font-bold mt-1">{totalDojos}</p>
+                            <p className="text-2xl font-bold mt-1 text-white">{totalDojos}</p>
                         </div>
                         <div>
                             <p className="text-[10px] tracking-widest uppercase text-zinc-500">Orders</p>
-                            <p className="text-2xl font-bold mt-1">{totalOrders}</p>
+                            <p className="text-2xl font-bold mt-1 text-white">{totalOrders}</p>
                         </div>
                         <div>
                             <p className="text-[10px] tracking-widest uppercase text-zinc-500">Admin</p>
-                            <p className="text-2xl font-bold mt-1">{member?.fullName?.split(" ")[0] ?? "—"}</p>
+                            <p className="text-2xl font-bold mt-1 text-white">{member?.fullName?.split(" ")[0] ?? "—"}</p>
                         </div>
                     </div>
                 </div>
-            </motion.div>
+            </TiltCard>
         </div>
     );
 }

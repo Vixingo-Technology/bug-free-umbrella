@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "motion/react";
+import TiltCard from "./tilt-card";
 import { FileText, Download, ExternalLink, Award, Calendar, CheckCircle2, Info } from "lucide-react";
 
 interface Props {
@@ -60,12 +61,10 @@ export default function CertificatesClient({ member, gradings }: Props) {
                         const textColor = beltTextColor[rankName] ?? "text-white";
 
                         return (
-                            <motion.div
+                            <TiltCard
                                 key={g.id ?? i}
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.1 + i * 0.06 }}
-                                className="rounded-2xl overflow-hidden border border-zinc-100 shadow-sm hover:shadow-md transition-shadow"
+                                delay={0.1 + i * 0.06}
+                                className="overflow-hidden"
                             >
                                 {/* Certificate top banner */}
                                 <div className={`bg-gradient-to-br ${gradient} p-6`}>
@@ -143,23 +142,20 @@ export default function CertificatesClient({ member, gradings }: Props) {
                                         )}
                                     </div>
                                 </div>
-                            </motion.div>
+                            </TiltCard>
                         );
                     })}
                 </div>
             ) : (
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.1 }}
-                    className="bg-white rounded-2xl p-12 border border-zinc-100 shadow-sm flex flex-col items-center justify-center text-center"
-                >
-                    <FileText size={40} className="text-zinc-200 mb-4" />
-                    <p className="text-zinc-600 font-semibold">No certificates yet</p>
-                    <p className="text-zinc-400 text-sm mt-2 max-w-xs">
-                        Certificates are issued after you pass a grading exam. Your instructor will record the result and the certificate will appear here.
-                    </p>
-                </motion.div>
+                <TiltCard delay={0.1} className="p-12">
+                    <div className="flex flex-col items-center justify-center text-center">
+                        <FileText size={40} className="text-zinc-200 mb-4" />
+                        <p className="text-zinc-600 font-semibold">No certificates yet</p>
+                        <p className="text-zinc-400 text-sm mt-2 max-w-xs">
+                            Certificates are issued after you pass a grading exam. Your instructor will record the result and the certificate will appear here.
+                        </p>
+                    </div>
+                </TiltCard>
             )}
         </div>
     );

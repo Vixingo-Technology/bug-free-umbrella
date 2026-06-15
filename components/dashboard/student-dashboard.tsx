@@ -1,16 +1,17 @@
 "use client";
 
 import { motion } from "motion/react";
+import TiltCard from "@/components/portal/tilt-card";
 import {
-    GraduationCap,
-    MapPin,
-    Calendar,
-    Award,
-    ShoppingBag,
-    Clock,
-    CheckCircle2,
-    XCircle,
-    CreditCard,
+  GraduationCap,
+  MapPin,
+  Calendar,
+  Award,
+  ShoppingBag,
+  Clock,
+  CheckCircle2,
+  XCircle,
+  CreditCard,
 } from "lucide-react";
 
 interface StudentDashboardProps {
@@ -31,12 +32,7 @@ function StatCard({
     delay: number;
 }) {
     return (
-        <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay, duration: 0.4 }}
-            className="bg-white rounded-2xl p-6 border border-zinc-100 shadow-sm hover:shadow-md transition-shadow"
-        >
+        <TiltCard delay={delay} className="p-6">
             <div className="flex items-center gap-4">
                 <div className={`${color} p-3 rounded-xl`}>{icon}</div>
                 <div>
@@ -46,7 +42,7 @@ function StatCard({
                     <p className="text-xl font-bold text-zinc-900 mt-0.5">{value}</p>
                 </div>
             </div>
-        </motion.div>
+        </TiltCard>
     );
 }
 
@@ -101,12 +97,7 @@ export default function StudentDashboard({ member }: StudentDashboardProps) {
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {/* Membership Card */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.2, duration: 0.5 }}
-                    className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-zinc-900 via-zinc-800 to-zinc-900 p-8 text-white shadow-xl"
-                >
+                <TiltCard dark delay={0.2} className="p-8">
                     <div className="absolute top-0 right-0 w-40 h-40 bg-accent-red/10 rounded-full blur-[60px]" />
                     <div className="absolute bottom-0 left-0 w-32 h-32 bg-accent-gold/10 rounded-full blur-[60px]" />
 
@@ -137,15 +128,10 @@ export default function StudentDashboard({ member }: StudentDashboardProps) {
                             </div>
                         </div>
                     </div>
-                </motion.div>
+                </TiltCard>
 
                 {/* Dojo Info */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.25, duration: 0.5 }}
-                    className="bg-white rounded-2xl p-8 border border-zinc-100 shadow-sm"
-                >
+                <TiltCard delay={0.25} className="p-8">
                     <h2 className="text-lg font-bold text-zinc-900 mb-4 flex items-center gap-2">
                         <MapPin size={18} className="text-accent-red" />
                         Your Dojo
@@ -178,16 +164,11 @@ export default function StudentDashboard({ member }: StudentDashboardProps) {
                             <p className="text-zinc-400 text-xs mt-1">Contact your instructor to be assigned to a dojo.</p>
                         </div>
                     )}
-                </motion.div>
+                </TiltCard>
             </div>
 
             {/* Grading History */}
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3, duration: 0.5 }}
-                className="bg-white rounded-2xl p-8 border border-zinc-100 shadow-sm"
-            >
+            <TiltCard delay={0.3} className="p-8">
                 <h2 className="text-lg font-bold text-zinc-900 mb-6 flex items-center gap-2">
                     <Award size={18} className="text-accent-gold" />
                     Grading History
@@ -234,15 +215,10 @@ export default function StudentDashboard({ member }: StudentDashboardProps) {
                         <p className="text-zinc-400 text-xs mt-1">Your grading results will appear here after your first exam.</p>
                     </div>
                 )}
-            </motion.div>
+            </TiltCard>
 
             {/* Shop Orders */}
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.35, duration: 0.5 }}
-                className="bg-white rounded-2xl p-8 border border-zinc-100 shadow-sm"
-            >
+            <TiltCard delay={0.35} className="p-8">
                 <h2 className="text-lg font-bold text-zinc-900 mb-6 flex items-center gap-2">
                     <ShoppingBag size={18} className="text-indigo-500" />
                     Recent Orders
@@ -291,7 +267,7 @@ export default function StudentDashboard({ member }: StudentDashboardProps) {
                         <p className="text-zinc-400 text-xs mt-1">Your shop orders will appear here.</p>
                     </div>
                 )}
-            </motion.div>
+            </TiltCard>
         </div>
     );
 }

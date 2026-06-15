@@ -2,6 +2,7 @@
 
 import { useTransition, useState } from "react";
 import { motion } from "motion/react";
+import TiltCard from "@/components/portal/tilt-card";
 import {
     RefreshCw, Calendar, CheckCircle2, AlertTriangle,
     XCircle, Clock, Loader2, Shield, CreditCard,
@@ -126,12 +127,7 @@ export default function RenewClient({ member, membershipFeeBDT, userId }: Props)
             )}
 
             {/* Renewal summary card */}
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 }}
-                className="bg-white rounded-2xl border border-zinc-100 shadow-sm overflow-hidden"
-            >
+            <TiltCard delay={0.1} className="overflow-hidden">
                 <div className="px-6 py-5 border-b border-zinc-100">
                     <h2 className="text-sm font-bold text-zinc-900 flex items-center gap-2">
                         <RefreshCw size={15} className="text-accent-red" />
@@ -183,7 +179,7 @@ export default function RenewClient({ member, membershipFeeBDT, userId }: Props)
                         )}
                     </button>
                 </div>
-            </motion.div>
+            </TiltCard>
 
             <motion.div
                 initial={{ opacity: 0 }}

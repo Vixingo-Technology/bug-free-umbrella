@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { motion, AnimatePresence } from "motion/react";
+import TiltCard from "@/components/portal/tilt-card";
 import {
     User, Phone, Mail, MapPin, Shield, Loader2,
     CheckCircle2, AlertCircle, Key, Calendar, Award,
@@ -134,12 +135,7 @@ export default function ProfileClient({ member, dojos, userId }: Props) {
             </div>
 
             {/* ── Member summary card ───────────────────────────────────────── */}
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.05 }}
-                className="bg-white rounded-2xl p-5 border border-zinc-100 shadow-sm"
-            >
+            <TiltCard delay={0.05} className="p-5">
                 <div className="flex items-center gap-4">
                     <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-zinc-900 to-zinc-700 flex items-center justify-center text-white text-2xl font-bold flex-shrink-0">
                         {member?.fullName?.charAt(0)?.toUpperCase() ?? "M"}
@@ -185,16 +181,11 @@ export default function ProfileClient({ member, dojos, userId }: Props) {
                         </div>
                     )}
                 </div>
-            </motion.div>
+            </TiltCard>
 
             {/* ── Edit profile form ─────────────────────────────────────────── */}
-            <motion.form
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 }}
-                onSubmit={handleProfileSubmit}
-                className="bg-white rounded-2xl p-6 border border-zinc-100 shadow-sm space-y-6"
-            >
+            <TiltCard delay={0.1} className="p-6">
+                <form onSubmit={handleProfileSubmit} className="space-y-6">
                 {/* Personal */}
                 <div>
                     <h2 className="text-sm font-bold text-zinc-900 mb-4 flex items-center gap-2">
@@ -429,15 +420,11 @@ export default function ProfileClient({ member, dojos, userId }: Props) {
                         Save Changes
                     </button>
                 </div>
-            </motion.form>
+                </form>
+            </TiltCard>
 
             {/* ── Change password ───────────────────────────────────────────── */}
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.15 }}
-                className="bg-white rounded-2xl p-6 border border-zinc-100 shadow-sm"
-            >
+            <TiltCard delay={0.15} className="p-6">
                 <h2 className="text-sm font-bold text-zinc-900 mb-4 flex items-center gap-2">
                     <Key size={16} className="text-red-500" />
                     Change Password
@@ -499,7 +486,7 @@ export default function ProfileClient({ member, dojos, userId }: Props) {
                         </button>
                     </div>
                 </form>
-            </motion.div>
+            </TiltCard>
         </div>
     );
 }

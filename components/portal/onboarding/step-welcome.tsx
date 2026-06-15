@@ -58,18 +58,18 @@ export default function StepWelcome({ member, orderId, onBack }: Props) {
         if (!orderId) return;
         setError(null);
         setPendingAction("pay");
-        startTransition(() => payNowAction(orderId));
+        startTransition(async () => { await payNowAction(orderId); });
     }
 
     function handleLater() {
         if (!orderId) return;
         setError(null);
         setPendingAction("later");
-        startTransition(() => payLaterAction(orderId));
+        startTransition(async () => { await payLaterAction(orderId); });
     }
 
     return (
-        <div className="text-center">
+        <div className="bg-white rounded-2xl shadow-sm border border-zinc-200 p-8 text-center">
             {/* Welcome text */}
             <motion.div
                 initial={{ opacity: 0, y: 16 }}
@@ -77,11 +77,11 @@ export default function StepWelcome({ member, orderId, onBack }: Props) {
                 transition={{ delay: 0.15 }}
                 className="mb-8"
             >
-                <p className="text-xs font-bold tracking-[0.3em] uppercase text-red-500 mb-2">Welcome to the Family</p>
-                <h1 className="text-3xl sm:text-4xl font-bold text-white leading-tight">
+                <p className="text-xs font-bold tracking-[0.3em] uppercase text-accent-red mb-2">Welcome to the Family</p>
+                <h1 className="text-3xl sm:text-4xl font-bold text-zinc-900 leading-tight">
                     Your membership card<br />is ready, {memberName.split(" ")[0]}.
                 </h1>
-                <p className="text-white/40 text-sm mt-3">
+                <p className="text-zinc-500 text-sm mt-3">
                     Complete your payment to activate your membership.
                 </p>
             </motion.div>
@@ -104,7 +104,7 @@ export default function StepWelcome({ member, orderId, onBack }: Props) {
                     className="relative cursor-pointer select-none"
                 >
                     {/* Card body */}
-                    <div className="relative w-80 h-48 rounded-[20px] overflow-hidden shadow-[0_30px_80px_rgba(0,0,0,0.7)]">
+                    <div className="relative w-80 h-48 rounded-[20px] overflow-hidden shadow-[0_30px_80px_rgba(0,0,0,0.25)]">
                         {/* Background gradient */}
                         <div className="absolute inset-0 bg-gradient-to-br from-zinc-800 via-zinc-900 to-black" />
 
@@ -180,7 +180,7 @@ export default function StepWelcome({ member, orderId, onBack }: Props) {
 
                     {/* Card reflection / shadow */}
                     <div
-                        className="absolute inset-x-4 -bottom-4 h-8 blur-xl opacity-40 rounded-full"
+                        className="absolute inset-x-4 -bottom-4 h-8 blur-xl opacity-30 rounded-full"
                         style={{ background: `linear-gradient(to right, transparent, ${beltColor}, transparent)` }}
                     />
                 </motion.div>
@@ -191,7 +191,7 @@ export default function StepWelcome({ member, orderId, onBack }: Props) {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.8 }}
-                className="inline-flex items-center gap-1.5 bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-semibold px-3 py-1.5 rounded-full mb-8"
+                className="inline-flex items-center gap-1.5 bg-amber-50 border border-amber-200 text-amber-600 text-xs font-semibold px-3 py-1.5 rounded-full mb-8"
             >
                 <Clock size={12} />
                 Pending activation · ৳{MEMBERSHIP_FEE_BDT.toLocaleString()} / year
@@ -202,7 +202,7 @@ export default function StepWelcome({ member, orderId, onBack }: Props) {
                 <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    className="flex items-center gap-2 bg-red-500/10 border border-red-500/30 rounded-xl px-4 py-3 mb-5 text-red-400 text-sm text-left"
+                    className="flex items-center gap-2 bg-red-50 border border-red-200 rounded-xl px-4 py-3 mb-5 text-red-600 text-sm text-left"
                 >
                     <AlertCircle size={16} className="flex-shrink-0" />
                     {error}
@@ -219,7 +219,7 @@ export default function StepWelcome({ member, orderId, onBack }: Props) {
                 <button
                     onClick={handlePay}
                     disabled={isPending}
-                    className="w-full flex items-center justify-center gap-2.5 bg-red-600 hover:bg-red-500 disabled:opacity-60 text-white font-bold rounded-2xl px-6 py-4 text-base transition-all shadow-[0_8px_30px_rgba(220,38,38,0.4)] hover:shadow-[0_8px_40px_rgba(220,38,38,0.6)] hover:-translate-y-0.5"
+                    className="w-full flex items-center justify-center gap-2.5 bg-accent-red hover:bg-red-700 disabled:opacity-60 text-white font-bold rounded-2xl px-6 py-4 text-base transition-all shadow-[0_8px_30px_rgba(196,30,58,0.25)] hover:shadow-[0_8px_40px_rgba(196,30,58,0.4)] hover:-translate-y-0.5"
                 >
                     <Zap size={18} className={pendingAction === "pay" && isPending ? "animate-pulse" : ""} />
                     {pendingAction === "pay" && isPending ? "Redirecting to payment…" : "Pay Now — Activate Membership"}
@@ -228,7 +228,7 @@ export default function StepWelcome({ member, orderId, onBack }: Props) {
                 <button
                     onClick={handleLater}
                     disabled={isPending}
-                    className="w-full flex items-center justify-center gap-2 bg-white/5 hover:bg-white/8 border border-white/10 hover:border-white/20 disabled:opacity-60 text-white/60 hover:text-white font-semibold rounded-2xl px-6 py-3.5 text-sm transition-all"
+                    className="w-full flex items-center justify-center gap-2 bg-zinc-100 hover:bg-zinc-200 border border-zinc-200 hover:border-zinc-300 disabled:opacity-60 text-zinc-600 hover:text-zinc-900 font-semibold rounded-2xl px-6 py-3.5 text-sm transition-all"
                 >
                     <Clock size={16} className={pendingAction === "later" && isPending ? "animate-pulse" : ""} />
                     {pendingAction === "later" && isPending ? "Saving…" : "Pay Later — I'll activate later"}
@@ -236,7 +236,7 @@ export default function StepWelcome({ member, orderId, onBack }: Props) {
 
                 <button
                     onClick={onBack}
-                    className="w-full flex items-center justify-center gap-1.5 text-white/25 hover:text-white/50 text-xs py-2 transition-colors"
+                    className="w-full flex items-center justify-center gap-1.5 text-zinc-400 hover:text-zinc-600 text-xs py-2 transition-colors"
                 >
                     <ChevronLeft size={13} /> Back to products
                 </button>

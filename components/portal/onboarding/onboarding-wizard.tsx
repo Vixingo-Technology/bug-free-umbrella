@@ -69,16 +69,21 @@ export default function OnboardingWizard({
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-zinc-950 via-zinc-900 to-zinc-950 flex flex-col">
-            {/* Header */}
-            <div className="flex items-center justify-between px-6 py-4 border-b border-white/5">
-                <div className="flex items-center gap-2">
+        <div className="min-h-screen bg-[#F5F5F7] flex flex-col">
+            {/* Header / Navbar */}
+            <header className="bg-white border-b border-zinc-200 px-6 py-3.5 flex items-center justify-between shadow-sm">
+                <div className="flex items-center gap-3">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src="/assets/jka_logo.svg" alt="JKA" className="h-8 w-auto opacity-90" />
-                    <span className="text-white/60 text-sm font-medium tracking-wide">JKA Bangladesh</span>
+                    <img src="/assets/jka_logo.svg" alt="JKA Bangladesh" className="h-9 w-auto" />
+                    <div className="flex flex-col">
+                        <span className="font-karate font-bold text-zinc-900 tracking-[0.4em] text-[11px] leading-tight">
+                            JKA <span className="text-accent-red">BANGLADESH</span>
+                        </span>
+                        <span className="text-[9px] tracking-widest uppercase text-zinc-400 leading-tight">Member Portal</span>
+                    </div>
                 </div>
-                <p className="text-white/40 text-xs">Step {step} of {totalSteps}</p>
-            </div>
+                <p className="text-zinc-400 text-xs font-medium">Step {step} of {totalSteps}</p>
+            </header>
 
             {/* Step indicator */}
             <div className="flex items-center justify-center gap-0 px-6 pt-8 pb-4">
@@ -87,8 +92,8 @@ export default function OnboardingWizard({
                         <div className="flex flex-col items-center gap-1.5">
                             <motion.div
                                 animate={{
-                                    backgroundColor: step > s.number ? "#10b981" : step === s.number ? "#dc2626" : "rgba(255,255,255,0.1)",
-                                    borderColor: step >= s.number ? "transparent" : "rgba(255,255,255,0.15)",
+                                    backgroundColor: step > s.number ? "#10b981" : step === s.number ? "#C41E3A" : "#e4e4e7",
+                                    borderColor: "transparent",
                                 }}
                                 className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold border"
                             >
@@ -97,16 +102,16 @@ export default function OnboardingWizard({
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
                                     </svg>
                                 ) : (
-                                    <span className={step === s.number ? "text-white" : "text-white/30"}>{s.number}</span>
+                                    <span className={step === s.number ? "text-white" : "text-zinc-400"}>{s.number}</span>
                                 )}
                             </motion.div>
-                            <span className={`text-[10px] font-semibold tracking-wider uppercase ${step === s.number ? "text-white/80" : "text-white/25"}`}>
+                            <span className={`text-[10px] font-semibold tracking-wider uppercase ${step === s.number ? "text-zinc-700" : "text-zinc-400"}`}>
                                 {s.label}
                             </span>
                         </div>
                         {i < STEPS.length - 1 && (
                             <motion.div
-                                animate={{ backgroundColor: step > s.number ? "#10b981" : "rgba(255,255,255,0.1)" }}
+                                animate={{ backgroundColor: step > s.number ? "#10b981" : "#e4e4e7" }}
                                 className="w-16 sm:w-24 h-0.5 mx-3 mt-[-14px]"
                             />
                         )}

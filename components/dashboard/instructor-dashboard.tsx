@@ -1,15 +1,16 @@
 "use client";
 
 import { motion } from "motion/react";
+import TiltCard from "@/components/portal/tilt-card";
 import {
-    Users,
-    MapPin,
-    Award,
-    Swords,
-    GraduationCap,
-    CheckCircle2,
-    Clock,
-    XCircle,
+  Users,
+  MapPin,
+  Award,
+  Swords,
+  GraduationCap,
+  CheckCircle2,
+  Clock,
+  XCircle,
 } from "lucide-react";
 
 interface InstructorDashboardProps {
@@ -32,12 +33,7 @@ function StatCard({
     delay: number;
 }) {
     return (
-        <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay, duration: 0.4 }}
-            className="bg-white rounded-2xl p-6 border border-zinc-100 shadow-sm hover:shadow-md transition-shadow"
-        >
+        <TiltCard delay={delay} className="p-6">
             <div className="flex items-center gap-4">
                 <div className={`${color} p-3 rounded-xl`}>{icon}</div>
                 <div>
@@ -47,7 +43,7 @@ function StatCard({
                     <p className="text-xl font-bold text-zinc-900 mt-0.5">{value}</p>
                 </div>
             </div>
-        </motion.div>
+        </TiltCard>
     );
 }
 
@@ -104,12 +100,7 @@ export default function InstructorDashboard({
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {/* Dojo Details Card */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.2, duration: 0.5 }}
-                    className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-blue-600 via-indigo-600 to-blue-700 p-8 text-white shadow-xl"
-                >
+                <TiltCard dark delay={0.2} className="p-8">
                     <div className="absolute top-0 right-0 w-40 h-40 bg-white/5 rounded-full blur-[60px]" />
                     <div className="relative z-10">
                         <p className="text-[10px] tracking-[0.3em] uppercase text-blue-200 font-bold mb-4">
@@ -129,15 +120,10 @@ export default function InstructorDashboard({
                             </div>
                         </div>
                     </div>
-                </motion.div>
+                </TiltCard>
 
                 {/* Grading Activity */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.25, duration: 0.5 }}
-                    className="bg-white rounded-2xl p-8 border border-zinc-100 shadow-sm"
-                >
+                <TiltCard delay={0.25} className="p-8">
                     <h2 className="text-lg font-bold text-zinc-900 mb-4 flex items-center gap-2">
                         <Award size={18} className="text-amber-500" />
                         Recent Gradings
@@ -185,16 +171,11 @@ export default function InstructorDashboard({
                             <p className="text-zinc-500 text-sm">No grading records yet.</p>
                         </div>
                     )}
-                </motion.div>
+                </TiltCard>
             </div>
 
             {/* Student Roster */}
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3, duration: 0.5 }}
-                className="bg-white rounded-2xl p-8 border border-zinc-100 shadow-sm"
-            >
+            <TiltCard delay={0.3} className="p-8">
                 <h2 className="text-lg font-bold text-zinc-900 mb-6 flex items-center gap-2">
                     <Users size={18} className="text-emerald-500" />
                     Student Roster
@@ -242,7 +223,7 @@ export default function InstructorDashboard({
                         <p className="text-zinc-500 text-sm">No students in your dojo yet.</p>
                     </div>
                 )}
-            </motion.div>
+            </TiltCard>
         </div>
     );
 }

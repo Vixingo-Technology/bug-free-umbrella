@@ -15,6 +15,8 @@ interface Props {
     glow?: boolean;
     /** Use the dark glass surface variant. */
     dark?: boolean;
+    /** Optional click handler (e.g. for notification cards). */
+    onClick?: () => void;
 }
 
 /**
@@ -34,6 +36,7 @@ export default function TiltCard({
     delay = 0,
     glow = true,
     dark = false,
+    onClick,
 }: Props) {
     const ref = useRef<HTMLDivElement>(null);
     const mx = useMotionValue(0);
@@ -85,7 +88,7 @@ export default function TiltCard({
     );
 
     const wrapper = (
-        <div style={{ perspective: 1200 }} className="h-full group">
+        <div style={{ perspective: 1200 }} className="h-full group" onClick={onClick}>
             {cardInner}
         </div>
     );

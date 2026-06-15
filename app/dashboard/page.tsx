@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { prisma } from "@/lib/prisma";
+import { serialize } from "@/lib/serialize";
 import StudentDashboard from "@/components/dashboard/student-dashboard";
 import InstructorDashboard from "@/components/dashboard/instructor-dashboard";
 import AdminDashboard from "@/components/dashboard/admin-dashboard";
@@ -95,21 +96,21 @@ export default async function DashboardPage() {
         <DashboardShell displayName={displayName} email={email} role={role}>
             {role === "ADMIN" ? (
                 <AdminDashboard
-                    member={member}
+                    member={serialize(member)}
                     totalMembers={(roleData.totalMembers as number) ?? 0}
                     totalDojos={(roleData.totalDojos as number) ?? 0}
                     totalOrders={(roleData.totalOrders as number) ?? 0}
-                    recentMembers={(roleData.recentMembers as any[]) ?? []}
-                    allDojos={(roleData.allDojos as any[]) ?? []}
+                    recentMembers={serialize((roleData.recentMembers as any[]) ?? [])}
+                    allDojos={serialize((roleData.allDojos as any[]) ?? [])}
                 />
             ) : role === "INSTRUCTOR" ? (
                 <InstructorDashboard
-                    member={member}
-                    dojoMembers={(roleData.dojoMembers as any[]) ?? []}
-                    dojoGradings={(roleData.dojoGradings as any[]) ?? []}
+                    member={serialize(member)}
+                    dojoMembers={serialize((roleData.dojoMembers as any[]) ?? [])}
+                    dojoGradings={serialize((roleData.dojoGradings as any[]) ?? [])}
                 />
             ) : (
-                <StudentDashboard member={member} />
+                <StudentDashboard member={serialize(member)} />
             )}
         </DashboardShell>
     );
