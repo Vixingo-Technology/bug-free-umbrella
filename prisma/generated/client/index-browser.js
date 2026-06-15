@@ -123,11 +123,12 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
 exports.Prisma.BeltRankScalarFieldEnum = {
   id: 'id',
   name: 'name',
-  kyu_dan: 'kyu_dan',
-  color_hex: 'color_hex',
-  order_index: 'order_index',
-  created_at: 'created_at',
-  updated_at: 'updated_at'
+  nameBn: 'nameBn',
+  kyuDan: 'kyuDan',
+  colorHex: 'colorHex',
+  orderIndex: 'orderIndex',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.DojoScalarFieldEnum = {
@@ -140,121 +141,129 @@ exports.Prisma.DojoScalarFieldEnum = {
   phone: 'phone',
   email: 'email',
   schedule: 'schedule',
-  is_active: 'is_active',
-  head_instructor_id: 'head_instructor_id',
-  created_at: 'created_at',
-  updated_at: 'updated_at'
+  isActive: 'isActive',
+  headInstructorId: 'headInstructorId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.MemberScalarFieldEnum = {
   id: 'id',
-  full_name: 'full_name',
+  fullName: 'fullName',
   email: 'email',
   phone: 'phone',
-  avatar_url: 'avatar_url',
+  avatarUrl: 'avatarUrl',
   role: 'role',
-  member_number: 'member_number',
-  current_rank: 'current_rank',
-  join_date: 'join_date',
-  expiry_date: 'expiry_date',
-  is_active: 'is_active',
-  dojo_id: 'dojo_id',
-  created_at: 'created_at',
-  updated_at: 'updated_at'
+  memberNumber: 'memberNumber',
+  currentRank: 'currentRank',
+  joinDate: 'joinDate',
+  expiryDate: 'expiryDate',
+  isActive: 'isActive',
+  dojoId: 'dojoId',
+  onboardingComplete: 'onboardingComplete',
+  membershipStatus: 'membershipStatus',
+  dateOfBirth: 'dateOfBirth',
+  bloodGroup: 'bloodGroup',
+  address: 'address',
+  nationalId: 'nationalId',
+  emergencyContactName: 'emergencyContactName',
+  emergencyContactPhone: 'emergencyContactPhone',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.AdminScalarFieldEnum = {
   id: 'id',
-  member_id: 'member_id',
+  memberId: 'memberId',
   notes: 'notes',
-  created_at: 'created_at'
+  createdAt: 'createdAt'
 };
 
 exports.Prisma.InstructorScalarFieldEnum = {
   id: 'id',
-  member_id: 'member_id',
-  dojo_id: 'dojo_id',
+  memberId: 'memberId',
+  dojoId: 'dojoId',
   bio: 'bio',
-  is_active: 'is_active',
-  created_at: 'created_at',
-  updated_at: 'updated_at'
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.AttendanceScalarFieldEnum = {
   id: 'id',
-  member_id: 'member_id',
-  dojo_id: 'dojo_id',
+  memberId: 'memberId',
+  dojoId: 'dojoId',
   date: 'date',
   present: 'present',
   notes: 'notes',
-  created_at: 'created_at'
+  createdAt: 'createdAt'
 };
 
 exports.Prisma.GradingEventScalarFieldEnum = {
   id: 'id',
   name: 'name',
-  event_date: 'event_date',
+  eventDate: 'eventDate',
   location: 'location',
-  target_rank_id: 'target_rank_id',
-  is_open: 'is_open',
+  targetRankId: 'targetRankId',
+  isOpen: 'isOpen',
   notes: 'notes',
-  created_at: 'created_at',
-  updated_at: 'updated_at'
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.GradingApplicationScalarFieldEnum = {
   id: 'id',
-  member_id: 'member_id',
-  grading_event_id: 'grading_event_id',
-  target_rank_id: 'target_rank_id',
+  memberId: 'memberId',
+  gradingEventId: 'gradingEventId',
+  targetRankId: 'targetRankId',
   status: 'status',
   notes: 'notes',
-  applied_at: 'applied_at'
+  appliedAt: 'appliedAt'
 };
 
 exports.Prisma.GradingScalarFieldEnum = {
   id: 'id',
-  member_id: 'member_id',
-  grading_event_id: 'grading_event_id',
-  from_rank_id: 'from_rank_id',
-  to_rank_id: 'to_rank_id',
+  memberId: 'memberId',
+  gradingEventId: 'gradingEventId',
+  fromRankId: 'fromRankId',
+  toRankId: 'toRankId',
   result: 'result',
-  certificate_url: 'certificate_url',
+  certificateUrl: 'certificateUrl',
   notes: 'notes',
-  created_at: 'created_at',
-  updated_at: 'updated_at'
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.EventScalarFieldEnum = {
   id: 'id',
   title: 'title',
   description: 'description',
-  event_date: 'event_date',
+  eventDate: 'eventDate',
   location: 'location',
-  image_url: 'image_url',
-  is_published: 'is_published',
-  max_capacity: 'max_capacity',
-  created_at: 'created_at',
-  updated_at: 'updated_at'
+  imageUrl: 'imageUrl',
+  isPublished: 'isPublished',
+  maxCapacity: 'maxCapacity',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.EventRegistrationScalarFieldEnum = {
   id: 'id',
-  event_id: 'event_id',
-  member_id: 'member_id',
-  created_at: 'created_at'
+  eventId: 'eventId',
+  memberId: 'memberId',
+  createdAt: 'createdAt'
 };
 
 exports.Prisma.NotificationScalarFieldEnum = {
   id: 'id',
-  member_id: 'member_id',
+  memberId: 'memberId',
   title: 'title',
   message: 'message',
   type: 'type',
-  is_read: 'is_read',
+  isRead: 'isRead',
   link: 'link',
-  created_at: 'created_at',
-  updated_at: 'updated_at'
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.ShopProductScalarFieldEnum = {
@@ -263,31 +272,34 @@ exports.Prisma.ShopProductScalarFieldEnum = {
   description: 'description',
   price: 'price',
   stock: 'stock',
-  image_url: 'image_url',
-  is_active: 'is_active',
-  created_at: 'created_at',
-  updated_at: 'updated_at'
+  imageUrl: 'imageUrl',
+  category: 'category',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.ShopOrderScalarFieldEnum = {
   id: 'id',
-  member_id: 'member_id',
-  payment_status: 'payment_status',
-  payment_method: 'payment_method',
+  memberId: 'memberId',
+  paymentStatus: 'paymentStatus',
+  paymentMethod: 'paymentMethod',
   total: 'total',
   currency: 'currency',
-  transaction_id: 'transaction_id',
+  transactionId: 'transactionId',
+  includesMembership: 'includesMembership',
+  membershipFee: 'membershipFee',
   notes: 'notes',
-  created_at: 'created_at',
-  updated_at: 'updated_at'
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.ShopOrderItemScalarFieldEnum = {
   id: 'id',
-  order_id: 'order_id',
-  product_id: 'product_id',
+  orderId: 'orderId',
+  productId: 'productId',
   quantity: 'quantity',
-  unit_price: 'unit_price'
+  unitPrice: 'unitPrice'
 };
 
 exports.Prisma.TournamentScalarFieldEnum = {
@@ -296,30 +308,30 @@ exports.Prisma.TournamentScalarFieldEnum = {
   description: 'description',
   date: 'date',
   location: 'location',
-  is_published: 'is_published',
-  created_at: 'created_at',
-  updated_at: 'updated_at'
+  isPublished: 'isPublished',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.TournamentParticipantScalarFieldEnum = {
   id: 'id',
-  tournament_id: 'tournament_id',
-  member_id: 'member_id',
+  tournamentId: 'tournamentId',
+  memberId: 'memberId',
   category: 'category',
-  weight_class: 'weight_class',
-  created_at: 'created_at'
+  weightClass: 'weightClass',
+  createdAt: 'createdAt'
 };
 
 exports.Prisma.TournamentMatchScalarFieldEnum = {
   id: 'id',
-  tournament_id: 'tournament_id',
-  participant1_id: 'participant1_id',
-  participant2_id: 'participant2_id',
-  winner_id: 'winner_id',
+  tournamentId: 'tournamentId',
+  participant1Id: 'participant1Id',
+  participant2Id: 'participant2Id',
+  winnerId: 'winnerId',
   round: 'round',
-  match_order: 'match_order',
+  matchOrder: 'matchOrder',
   notes: 'notes',
-  created_at: 'created_at'
+  createdAt: 'createdAt'
 };
 
 exports.Prisma.SortOrder = {
@@ -351,6 +363,13 @@ exports.MemberRole = exports.$Enums.MemberRole = {
   STUDENT: 'STUDENT',
   INSTRUCTOR: 'INSTRUCTOR',
   ADMIN: 'ADMIN'
+};
+
+exports.MembershipStatus = exports.$Enums.MembershipStatus = {
+  PENDING: 'PENDING',
+  ACTIVE: 'ACTIVE',
+  EXPIRED: 'EXPIRED',
+  SUSPENDED: 'SUSPENDED'
 };
 
 exports.ApplicationStatus = exports.$Enums.ApplicationStatus = {

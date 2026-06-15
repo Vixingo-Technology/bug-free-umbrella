@@ -1,6 +1,11 @@
 // =============================================================
 // JKA Bangladesh — Prisma Schema
 // PostgreSQL via Supabase · Prisma 7 · driverAdapters preview
+//
+// Naming convention:
+//   - Prisma fields  → camelCase  (TypeScript client)
+//   - DB columns     → snake_case (via @map)
+//   - DB tables      → snake_case (via @@map)
 // =============================================================
 
 generator client {
@@ -13,14 +18,21 @@ datasource db {
   provider = "postgresql"
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────
 // ENUMS
-// ─────────────────────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────
 
 enum MemberRole {
   STUDENT
   INSTRUCTOR
   ADMIN
+}
+
+enum MembershipStatus {
+  PENDING // Registered but has not paid
+  ACTIVE // Paid and active member
+  EXPIRED // Membership lapsed
+  SUSPENDED // Admin-suspended
 }
 
 enum GradingResult {
@@ -52,286 +64,295 @@ enum NotificationType {
   RENEWAL
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────
 // BELT RANKS
-// ─────────────────────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────
 
 model BeltRank {
-  id          String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name        String  @unique
-  kyu_dan     String?
-  color_hex   String?
-  order_index Int     @unique
+  id         String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name       String  @unique
+  nameBn     String? @map("name_bn")
+  kyuDan     String? @map("kyu_dan")
+  colorHex   String? @map("color_hex")
+  orderIndex Int     @unique @map("order_index")
 
-  // Relations
-  gradings_from        Grading[]            @relation("GradingFromRank")
-  gradings_to          Grading[]            @relation("GradingToRank")
-  grading_events       GradingEvent[]       @relation("EventTargetRank")
-  grading_applications GradingApplication[] @relation("AppTargetRank")
+  gradingsFrom        Grading[]            @relation("GradingFromRank")
+  gradingsTo          Grading[]            @relation("GradingToRank")
+  gradingEvents       GradingEvent[]       @relation("EventTargetRank")
+  gradingApplications GradingApplication[] @relation("AppTargetRank")
 
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("belt_ranks")
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────
 // DOJOS
-// ─────────────────────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────
 
 model Dojo {
-  id        String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name      String
-  address   String?
-  city      String?
-  latitude  Float?
-  longitude Float?
-  phone     String?
-  email     String?
-  schedule  Json? // Weekly schedule JSON
-  is_active Boolean @default(true)
+  id               String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name             String
+  address          String?
+  city             String?
+  latitude         Float?
+  longitude        Float?
+  phone            String?
+  email            String?
+  schedule         Json?
+  isActive         Boolean @default(true) @map("is_active")
+  headInstructorId String? @map("head_instructor_id") @db.Uuid
 
-  head_instructor_id String? @db.Uuid
+  headInstructor Member?      @relation("DojoHeadInstructor", fields: [headInstructorId], references: [id])
+  members        Member[]     @relation("DojoMembers")
+  instructors    Instructor[]
+  attendance     Attendance[]
 
-  // Relations
-  head_instructor Member?      @relation("DojoHeadInstructor", fields: [head_instructor_id], references: [id])
-  members         Member[]     @relation("DojoMembers")
-  instructors     Instructor[]
-  attendance      Attendance[]
-
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("dojos")
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────
 // MEMBERS  (mirrors auth.users via id)
-// ─────────────────────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────
 
 model Member {
-  id            String     @id @db.Uuid // = auth.users.id
-  full_name     String
-  email         String     @unique
-  phone         String?
-  avatar_url    String?
-  role          MemberRole @default(STUDENT)
-  member_number String?    @unique
-  current_rank  String     @default("White Belt")
-  join_date     DateTime   @default(now())
-  expiry_date   DateTime?
-  is_active     Boolean    @default(true)
-  dojo_id       String?    @db.Uuid
+  id           String     @id @db.Uuid // = auth.users.id
+  fullName     String     @map("full_name")
+  email        String     @unique
+  phone        String?
+  avatarUrl    String?    @map("avatar_url")
+  role         MemberRole @default(STUDENT)
+  memberNumber String?    @unique @map("member_number")
+  currentRank  String     @default("White Belt") @map("current_rank")
+  joinDate     DateTime   @default(now()) @map("join_date")
+  expiryDate   DateTime?  @map("expiry_date")
+  isActive     Boolean    @default(true) @map("is_active")
+  dojoId       String?    @map("dojo_id") @db.Uuid
 
-  // Relations
-  dojo                 Dojo?                   @relation("DojoMembers", fields: [dojo_id], references: [id])
-  dojo_head_of         Dojo[]                  @relation("DojoHeadInstructor")
-  instructor           Instructor?
-  admin                Admin?
-  gradings             Grading[]
-  grading_applications GradingApplication[]
-  event_registrations  EventRegistration[]
-  notifications        Notification[]
-  orders               ShopOrder[]
-  attendance           Attendance[]
-  tournament_entries   TournamentParticipant[]
+  // Onboarding & membership status
+  onboardingComplete Boolean          @default(false) @map("onboarding_complete")
+  membershipStatus   MembershipStatus @default(PENDING) @map("membership_status")
 
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  // Extended profile (collected during onboarding)
+  dateOfBirth           DateTime? @map("date_of_birth") @db.Date
+  bloodGroup            String?   @map("blood_group")
+  address               String?
+  nationalId            String?   @map("national_id")
+  emergencyContactName  String?   @map("emergency_contact_name")
+  emergencyContactPhone String?   @map("emergency_contact_phone")
+
+  dojo                Dojo?                   @relation("DojoMembers", fields: [dojoId], references: [id])
+  dojoHeadOf          Dojo[]                  @relation("DojoHeadInstructor")
+  instructor          Instructor?
+  admin               Admin?
+  gradings            Grading[]
+  gradingApplications GradingApplication[]
+  eventRegistrations  EventRegistration[]
+  notifications       Notification[]
+  orders              ShopOrder[]
+  attendance          Attendance[]
+  tournamentEntries   TournamentParticipant[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("members")
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// ADMINS  (super-admin elevation)
-// ─────────────────────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────
+// ADMINS
+// ─────────────────────────────────────────────
 
 model Admin {
-  id        String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  member_id String  @unique @db.Uuid
-  notes     String?
+  id       String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  memberId String  @unique @map("member_id") @db.Uuid
+  notes    String?
 
-  member Member @relation(fields: [member_id], references: [id], onDelete: Cascade)
+  member Member @relation(fields: [memberId], references: [id], onDelete: Cascade)
 
-  created_at DateTime @default(now())
+  createdAt DateTime @default(now()) @map("created_at")
 
   @@map("admins")
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────
 // INSTRUCTORS
-// ─────────────────────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────
 
 model Instructor {
-  id        String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  member_id String  @unique @db.Uuid
-  dojo_id   String? @db.Uuid
-  bio       String?
-  is_active Boolean @default(true)
+  id       String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  memberId String  @unique @map("member_id") @db.Uuid
+  dojoId   String? @map("dojo_id") @db.Uuid
+  bio      String?
+  isActive Boolean @default(true) @map("is_active")
 
-  member Member @relation(fields: [member_id], references: [id], onDelete: Cascade)
-  dojo   Dojo?  @relation(fields: [dojo_id], references: [id])
+  member Member @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  dojo   Dojo?  @relation(fields: [dojoId], references: [id])
 
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("instructors")
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────
 // ATTENDANCE
-// ─────────────────────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────
 
 model Attendance {
-  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  member_id String   @db.Uuid
-  dojo_id   String?  @db.Uuid
-  date      DateTime @db.Date
-  present   Boolean  @default(true)
-  notes     String?
+  id       String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  memberId String   @map("member_id") @db.Uuid
+  dojoId   String?  @map("dojo_id") @db.Uuid
+  date     DateTime @db.Date
+  present  Boolean  @default(true)
+  notes    String?
 
-  member Member @relation(fields: [member_id], references: [id], onDelete: Cascade)
-  dojo   Dojo?  @relation(fields: [dojo_id], references: [id])
+  member Member @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  dojo   Dojo?  @relation(fields: [dojoId], references: [id])
 
-  created_at DateTime @default(now())
+  createdAt DateTime @default(now()) @map("created_at")
 
-  @@unique([member_id, date])
+  @@unique([memberId, date])
   @@map("attendance")
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// GRADING EVENTS  (exam sessions)
-// ─────────────────────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────
+// GRADING EVENTS
+// ─────────────────────────────────────────────
 
 model GradingEvent {
-  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name           String
-  event_date     DateTime
-  location       String?
-  target_rank_id String?  @db.Uuid
-  is_open        Boolean  @default(true)
-  notes          String?
+  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name         String
+  eventDate    DateTime @map("event_date")
+  location     String?
+  targetRankId String?  @map("target_rank_id") @db.Uuid
+  isOpen       Boolean  @default(true) @map("is_open")
+  notes        String?
 
-  target_rank  BeltRank?            @relation("EventTargetRank", fields: [target_rank_id], references: [id])
+  targetRank   BeltRank?            @relation("EventTargetRank", fields: [targetRankId], references: [id])
   gradings     Grading[]
   applications GradingApplication[]
 
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("grading_events")
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────
 // GRADING APPLICATIONS
-// ─────────────────────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────
 
 model GradingApplication {
-  id               String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  member_id        String            @db.Uuid
-  grading_event_id String            @db.Uuid
-  target_rank_id   String?           @db.Uuid
-  status           ApplicationStatus @default(SUBMITTED)
-  notes            String?
-  applied_at       DateTime          @default(now())
+  id             String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  memberId       String            @map("member_id") @db.Uuid
+  gradingEventId String            @map("grading_event_id") @db.Uuid
+  targetRankId   String?           @map("target_rank_id") @db.Uuid
+  status         ApplicationStatus @default(SUBMITTED)
+  notes          String?
+  appliedAt      DateTime          @default(now()) @map("applied_at")
 
-  member        Member       @relation(fields: [member_id], references: [id], onDelete: Cascade)
-  grading_event GradingEvent @relation(fields: [grading_event_id], references: [id], onDelete: Cascade)
-  target_rank   BeltRank?    @relation("AppTargetRank", fields: [target_rank_id], references: [id])
+  member       Member       @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  gradingEvent GradingEvent @relation(fields: [gradingEventId], references: [id], onDelete: Cascade)
+  targetRank   BeltRank?    @relation("AppTargetRank", fields: [targetRankId], references: [id])
 
-  @@unique([member_id, grading_event_id])
+  @@unique([memberId, gradingEventId])
   @@map("grading_applications")
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// GRADINGS  (results)
-// ─────────────────────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────
+// GRADINGS
+// ─────────────────────────────────────────────
 
 model Grading {
-  id               String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  member_id        String        @db.Uuid
-  grading_event_id String?       @db.Uuid
-  from_rank_id     String?       @db.Uuid
-  to_rank_id       String?       @db.Uuid
-  result           GradingResult @default(PASSED)
-  certificate_url  String?
-  notes            String?
+  id             String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  memberId       String        @map("member_id") @db.Uuid
+  gradingEventId String?       @map("grading_event_id") @db.Uuid
+  fromRankId     String?       @map("from_rank_id") @db.Uuid
+  toRankId       String?       @map("to_rank_id") @db.Uuid
+  result         GradingResult @default(PASSED)
+  certificateUrl String?       @map("certificate_url")
+  notes          String?
 
-  member        Member        @relation(fields: [member_id], references: [id], onDelete: Cascade)
-  grading_event GradingEvent? @relation(fields: [grading_event_id], references: [id])
-  from_rank     BeltRank?     @relation("GradingFromRank", fields: [from_rank_id], references: [id])
-  to_rank       BeltRank?     @relation("GradingToRank", fields: [to_rank_id], references: [id])
+  member       Member        @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  gradingEvent GradingEvent? @relation(fields: [gradingEventId], references: [id])
+  fromRank     BeltRank?     @relation("GradingFromRank", fields: [fromRankId], references: [id])
+  toRank       BeltRank?     @relation("GradingToRank", fields: [toRankId], references: [id])
 
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("gradings")
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// EVENTS  (public events, managed via CMS)
-// ─────────────────────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────
+// EVENTS
+// ─────────────────────────────────────────────
 
 model Event {
-  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  title        String
-  description  String?
-  event_date   DateTime
-  location     String?
-  image_url    String?
-  is_published Boolean  @default(false)
-  max_capacity Int?
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title       String
+  description String?
+  eventDate   DateTime @map("event_date")
+  location    String?
+  imageUrl    String?  @map("image_url")
+  isPublished Boolean  @default(false) @map("is_published")
+  maxCapacity Int?     @map("max_capacity")
 
   registrations EventRegistration[]
 
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("events")
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────
 // EVENT REGISTRATIONS
-// ─────────────────────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────
 
 model EventRegistration {
-  id        String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  event_id  String @db.Uuid
-  member_id String @db.Uuid
+  id       String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  eventId  String @map("event_id") @db.Uuid
+  memberId String @map("member_id") @db.Uuid
 
-  event  Event  @relation(fields: [event_id], references: [id], onDelete: Cascade)
-  member Member @relation(fields: [member_id], references: [id], onDelete: Cascade)
+  event  Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  member Member @relation(fields: [memberId], references: [id], onDelete: Cascade)
 
-  created_at DateTime @default(now())
+  createdAt DateTime @default(now()) @map("created_at")
 
-  @@unique([event_id, member_id])
+  @@unique([eventId, memberId])
   @@map("event_registrations")
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────
 // NOTIFICATIONS
-// ─────────────────────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────
 
 model Notification {
-  id        String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  member_id String           @db.Uuid
-  title     String
-  message   String
-  type      NotificationType @default(INFO)
-  is_read   Boolean          @default(false)
-  link      String?
+  id       String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  memberId String           @map("member_id") @db.Uuid
+  title    String
+  message  String
+  type     NotificationType @default(INFO)
+  isRead   Boolean          @default(false) @map("is_read")
+  link     String?
 
-  member Member @relation(fields: [member_id], references: [id], onDelete: Cascade)
+  member Member @relation(fields: [memberId], references: [id], onDelete: Cascade)
 
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("notifications")
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────
 // SHOP PRODUCTS
-// ─────────────────────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────
 
 model ShopProduct {
   id          String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
@@ -339,122 +360,125 @@ model ShopProduct {
   description String?
   price       Decimal @db.Decimal(10, 2)
   stock       Int     @default(0)
-  image_url   String?
-  is_active   Boolean @default(true)
+  imageUrl    String? @map("image_url")
+  category    String? // e.g. "gear", "apparel", "equipment"
+  isActive    Boolean @default(true) @map("is_active")
 
-  order_items ShopOrderItem[]
+  orderItems ShopOrderItem[]
 
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("shop_products")
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────
 // SHOP ORDERS
-// ─────────────────────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────
 
 model ShopOrder {
-  id             String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  member_id      String        @db.Uuid
-  payment_status PaymentStatus @default(PENDING)
-  payment_method String?
-  total          Decimal       @db.Decimal(10, 2)
-  currency       String        @default("BDT")
-  transaction_id String?       @unique
-  notes          String?
+  id                 String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  memberId           String        @map("member_id") @db.Uuid
+  paymentStatus      PaymentStatus @default(PENDING) @map("payment_status")
+  paymentMethod      String?       @map("payment_method")
+  total              Decimal       @db.Decimal(10, 2)
+  currency           String        @default("BDT")
+  transactionId      String?       @unique @map("transaction_id")
+  includesMembership Boolean       @default(false) @map("includes_membership") // onboarding orders include the membership fee
+  membershipFee      Decimal?      @map("membership_fee") @db.Decimal(10, 2)
+  notes              String?
 
-  member      Member          @relation(fields: [member_id], references: [id], onDelete: Cascade)
-  order_items ShopOrderItem[]
+  member     Member          @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  orderItems ShopOrderItem[]
 
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("shop_orders")
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// SHOP ORDER ITEMS  (line items)
-// ─────────────────────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────
+// SHOP ORDER ITEMS
+// ─────────────────────────────────────────────
 
 model ShopOrderItem {
-  id         String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  order_id   String  @db.Uuid
-  product_id String  @db.Uuid
-  quantity   Int
-  unit_price Decimal @db.Decimal(10, 2)
+  id        String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  orderId   String  @map("order_id") @db.Uuid
+  productId String  @map("product_id") @db.Uuid
+  quantity  Int
+  unitPrice Decimal @map("unit_price") @db.Decimal(10, 2)
 
-  order   ShopOrder   @relation(fields: [order_id], references: [id])
-  product ShopProduct @relation(fields: [product_id], references: [id])
+  order   ShopOrder   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product ShopProduct @relation(fields: [productId], references: [id])
 
   @@map("shop_order_items")
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────
 // TOURNAMENTS
-// ─────────────────────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────
 
 model Tournament {
-  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name         String
-  description  String?
-  date         DateTime
-  location     String?
-  is_published Boolean  @default(false)
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name        String
+  description String?
+  date        DateTime
+  location    String?
+  isPublished Boolean  @default(false) @map("is_published")
 
   participants TournamentParticipant[]
   matches      TournamentMatch[]
 
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("tournaments")
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────
 // TOURNAMENT PARTICIPANTS
-// ─────────────────────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────
 
 model TournamentParticipant {
-  id            String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  tournament_id String  @db.Uuid
-  member_id     String  @db.Uuid
-  category      String?
-  weight_class  String?
+  id           String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tournamentId String  @map("tournament_id") @db.Uuid
+  memberId     String  @map("member_id") @db.Uuid
+  category     String?
+  weightClass  String? @map("weight_class")
 
-  tournament Tournament @relation(fields: [tournament_id], references: [id], onDelete: Cascade)
-  member     Member     @relation(fields: [member_id], references: [id], onDelete: Cascade)
+  tournament Tournament @relation(fields: [tournamentId], references: [id], onDelete: Cascade)
+  member     Member     @relation(fields: [memberId], references: [id], onDelete: Cascade)
 
-  matches_as_p1 TournamentMatch[] @relation("MatchParticipant1")
-  matches_as_p2 TournamentMatch[] @relation("MatchParticipant2")
-  matches_won   TournamentMatch[] @relation("MatchWinner")
+  matchesAsP1 TournamentMatch[] @relation("MatchParticipant1")
+  matchesAsP2 TournamentMatch[] @relation("MatchParticipant2")
+  matchesWon  TournamentMatch[] @relation("MatchWinner")
 
-  created_at DateTime @default(now())
+  createdAt DateTime @default(now()) @map("created_at")
 
-  @@unique([tournament_id, member_id])
+  @@unique([tournamentId, memberId])
   @@map("tournament_participants")
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────
 // TOURNAMENT MATCHES
-// ─────────────────────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────
 
 model TournamentMatch {
-  id              String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  tournament_id   String  @db.Uuid
-  participant1_id String? @db.Uuid
-  participant2_id String? @db.Uuid
-  winner_id       String? @db.Uuid
-  round           Int?
-  match_order     Int?
-  notes           String?
+  id             String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tournamentId   String  @map("tournament_id") @db.Uuid
+  participant1Id String? @map("participant1_id") @db.Uuid
+  participant2Id String? @map("participant2_id") @db.Uuid
+  winnerId       String? @map("winner_id") @db.Uuid
+  round          Int?
+  matchOrder     Int?    @map("match_order")
+  notes          String?
 
-  tournament   Tournament             @relation(fields: [tournament_id], references: [id])
-  participant1 TournamentParticipant? @relation("MatchParticipant1", fields: [participant1_id], references: [id])
-  participant2 TournamentParticipant? @relation("MatchParticipant2", fields: [participant2_id], references: [id])
-  winner       TournamentParticipant? @relation("MatchWinner", fields: [winner_id], references: [id])
+  tournament   Tournament             @relation(fields: [tournamentId], references: [id], onDelete: Cascade)
+  participant1 TournamentParticipant? @relation("MatchParticipant1", fields: [participant1Id], references: [id])
+  participant2 TournamentParticipant? @relation("MatchParticipant2", fields: [participant2Id], references: [id])
+  winner       TournamentParticipant? @relation("MatchWinner", fields: [winnerId], references: [id])
 
-  created_at DateTime @default(now())
+  createdAt DateTime @default(now()) @map("created_at")
 
   @@map("tournament_matches")
 }

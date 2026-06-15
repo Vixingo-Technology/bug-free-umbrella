@@ -9,9 +9,18 @@ export async function updateProfileAction(formData: FormData) {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return { error: "Not authenticated." };
 
-    const fullName = (formData.get("fullName") as string)?.trim();
-    const phone    = (formData.get("phone") as string)?.trim() || null;
-    const dojoId   = (formData.get("dojoId") as string) || null;
+    const fullName              = (formData.get("fullName") as string)?.trim();
+    const phone                 = (formData.get("phone") as string)?.trim() || null;
+    const dojoId                = (formData.get("dojoId") as string) || null;
+    const bloodGroup            = (formData.get("bloodGroup") as string) || null;
+    const address               = (formData.get("address") as string)?.trim() || null;
+    const nationalId            = (formData.get("nationalId") as string)?.trim() || null;
+    const emergencyContactName  = (formData.get("emergencyContactName") as string)?.trim() || null;
+    const emergencyContactPhone = (formData.get("emergencyContactPhone") as string)?.trim() || null;
+
+    // dateOfBirth — convert "yyyy-mm-dd" string to Date or null
+    const dobRaw = (formData.get("dateOfBirth") as string)?.trim();
+    const dateOfBirth = dobRaw ? new Date(dobRaw) : null;
 
     if (!fullName) return { error: "Full name is required." };
 
@@ -22,6 +31,12 @@ export async function updateProfileAction(formData: FormData) {
                 fullName,
                 phone,
                 dojoId: dojoId || null,
+                bloodGroup,
+                address,
+                nationalId,
+                emergencyContactName,
+                emergencyContactPhone,
+                dateOfBirth,
             },
         });
 
@@ -38,7 +53,7 @@ export async function changePasswordAction(formData: FormData) {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return { error: "Not authenticated." };
 
-    const newPassword = formData.get("newPassword") as string;
+    const newPassword     = formData.get("newPassword") as string;
     const confirmPassword = formData.get("confirmPassword") as string;
 
     if (!newPassword || newPassword.length < 8) {

@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { prisma } from "@/lib/prisma";
+import { serialize } from "@/lib/serialize";
 import OrdersClient from "@/components/portal/orders-client";
 
 export default async function OrdersPage() {
@@ -24,5 +25,5 @@ export default async function OrdersPage() {
         // DB not configured
     }
 
-    return <OrdersClient orders={orders} />;
+    return <OrdersClient orders={serialize(orders)} />;
 }

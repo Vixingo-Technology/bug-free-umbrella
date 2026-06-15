@@ -92,6 +92,28 @@ export default function PortalDashboardClient({ member, membershipStatus, unread
                 <p className="text-zinc-500 mt-1 text-sm">Here&apos;s your membership overview.</p>
             </div>
 
+            {/* Pending membership activation banner */}
+            {member?.membershipStatus === "PENDING" && (
+                <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="flex items-center gap-4 p-4 rounded-xl border border-amber-300 bg-amber-50"
+                >
+                    <div className="flex-1 min-w-0">
+                        <p className="text-sm font-bold text-amber-800">Your membership is pending activation.</p>
+                        <p className="text-xs text-amber-700 mt-0.5 opacity-80">
+                            Complete your payment to unlock full member benefits.
+                        </p>
+                    </div>
+                    <Link
+                        href="/portal/checkout"
+                        className="flex-shrink-0 flex items-center gap-1.5 bg-amber-500 hover:bg-amber-400 text-white text-xs font-bold tracking-widest uppercase px-4 py-2 rounded-lg transition-colors"
+                    >
+                        Activate Now →
+                    </Link>
+                </motion.div>
+            )}
+
             {/* Expiry warning banner */}
             {(membershipStatus === "Expired" || membershipStatus === "Expiring Soon") && (
                 <motion.div
@@ -109,7 +131,7 @@ export default function PortalDashboardClient({ member, membershipStatus, unread
                         </p>
                     </div>
                     <Link
-                        href="/portal/profile"
+                        href="/portal/renew"
                         className="text-xs font-bold tracking-widest uppercase shrink-0 underline underline-offset-2"
                     >
                         Renew

@@ -38,10 +38,12 @@ export async function signupAction(formData: FormData) {
         return { error: "All required fields must be filled." };
     }
 
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: {
+            // Supabase will redirect to /auth/callback after email confirmation
+            emailRedirectTo: `${process.env.NEXT_PUBLIC_APP_URL ?? process.env.APP_URL ?? ""}/auth/callback`,
             data: {
                 first_name: firstName,
                 last_name: lastName,
@@ -56,7 +58,13 @@ export async function signupAction(formData: FormData) {
         return { error: error.message };
     }
 
-    redirect("/portal");
+    // If Supabase returned a session immediately (email confirmation disabled),
+    // go straight to the portal. Otherwise show the "check your email" screen.
+    if (data.session) {
+        redirect("/portal");
+    }
+
+    redirect("/auth/verify");
 }
 
 export async function signoutAction() {

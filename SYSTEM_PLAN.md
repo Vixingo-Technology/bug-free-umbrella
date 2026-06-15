@@ -10,11 +10,20 @@
 |---|---|
 | Public website (hero, about, events, gallery, branches, CTA) | ✅ Complete |
 | Supabase Auth (email sign-up/login, session middleware) | ✅ Complete |
+| Auth callback route (`/auth/callback`) + email verification flow | ✅ Complete |
 | Prisma schema (17 tables, all relations) | ✅ Created |
-| Portal shell + layout | ✅ Complete |
+| Prisma 7 config (`prisma.config.ts`, schema without URL fields) | ✅ Complete |
+| Portal shell + layout (with onboarding guard + member upsert safety net) | ✅ Complete |
 | Admin/Instructor/Student dashboard shells | ✅ Complete |
 | Portal pages (dashboard, progress, grading, certs, events, notifications, orders, profile) | ✅ Complete |
-| SSLCommerz webhook handler | ✅ Scaffolded |
+| Onboarding wizard (3-step: profile → gear → payment) | ✅ Complete |
+| Checkout + SSLCommerz payment initiation | ✅ Complete |
+| SSLCommerz IPN + success webhook (Prisma, n8n emit) | ✅ Complete |
+| Membership renewal page + actions | ✅ Complete |
+| `lib/n8n.ts` — webhook emitter with typed helpers | ✅ Complete |
+| `lib/cloudinary.ts` — signed upload helper | ✅ Complete |
+| `scripts/seed-belt-ranks.mjs` | ✅ Complete |
+| `scripts/seed-users.mjs` | ✅ Complete |
 | 3D BeltTracker component | ✅ Complete |
 
 ---
@@ -71,13 +80,15 @@ Create this SQL trigger in Supabase SQL Editor so new sign-ups auto-create a `me
 CREATE OR REPLACE FUNCTION public.handle_new_user()
 RETURNS trigger AS $$
 BEGIN
-  INSERT INTO public.members (id, full_name, email, role, current_rank)
+  INSERT INTO public.members (id, full_name, email, role, current_rank, onboarding_complete, membership_status)
   VALUES (
     NEW.id,
     COALESCE(NEW.raw_user_meta_data->>'full_name', NEW.email),
     NEW.email,
     COALESCE(NEW.raw_user_meta_data->>'role', 'STUDENT'),
-    COALESCE(NEW.raw_user_meta_data->>'current_rank', 'White Belt')
+    COALESCE(NEW.raw_user_meta_data->>'current_rank', 'White Belt'),
+    false,
+    'PENDING'
   )
   ON CONFLICT (id) DO NOTHING;
   RETURN NEW;

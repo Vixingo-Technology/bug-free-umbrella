@@ -14,6 +14,7 @@ import {
     Bell,
     ShoppingBag,
     User,
+    RefreshCw,
     LogOut,
     Menu,
     X,
@@ -31,6 +32,7 @@ const navItems = [
     { label: "Events",       href: "/portal/events",       icon: CalendarDays },
     { label: "Notifications",href: "/portal/notifications",icon: Bell },
     { label: "Shop Orders",  href: "/portal/orders",       icon: ShoppingBag },
+    { label: "Renew",        href: "/portal/renew",        icon: RefreshCw },
     { label: "My Profile",   href: "/portal/profile",      icon: User },
 ];
 

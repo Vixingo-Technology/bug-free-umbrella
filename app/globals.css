@@ -32,4 +32,50 @@
   .belt-glow {
     box-shadow: 0 10px 40px rgba(184, 134, 11, 0.15);
   }
+
+  /* Portal — glass-morphic card surface used on dashboard + progress.
+     Pair with `.tilt-3d` for the hover lift. */
+  .glass-card {
+    background: rgba(255, 255, 255, 0.55);
+    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    box-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.9) inset,
+      0 10px 30px -10px rgba(15, 23, 42, 0.10);
+  }
+
+  /* Soft red halo that fades in behind a card on hover. */
+  .red-glow::before {
+    content: "";
+    position: absolute;
+    inset: -20px;
+    border-radius: inherit;
+    background: radial-gradient(60% 60% at 50% 50%, rgba(196, 30, 58, 0.35) 0%, rgba(196, 30, 58, 0) 70%);
+    opacity: 0;
+    transition: opacity 350ms ease;
+    z-index: -1;
+    pointer-events: none;
+    filter: blur(20px);
+  }
+  .red-glow:hover::before {
+    opacity: 1;
+  }
+
+  .tilt-3d {
+    transition: transform 350ms cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 350ms ease;
+    transform-style: preserve-3d;
+    will-change: transform;
+  }
+  .tilt-3d:hover {
+    transform: translateY(-4px) rotateX(4deg) rotateY(-4deg) scale(1.015);
+    box-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.9) inset,
+      0 20px 50px -15px rgba(196, 30, 58, 0.25),
+      0 30px 60px -20px rgba(15, 23, 42, 0.18);
+  }
+}
+
+@keyframes shimmer {
+  100% { transform: translateX(100%); }
 }

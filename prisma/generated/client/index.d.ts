@@ -117,6 +117,16 @@ export namespace $Enums {
 export type MemberRole = (typeof MemberRole)[keyof typeof MemberRole]
 
 
+export const MembershipStatus: {
+  PENDING: 'PENDING',
+  ACTIVE: 'ACTIVE',
+  EXPIRED: 'EXPIRED',
+  SUSPENDED: 'SUSPENDED'
+};
+
+export type MembershipStatus = (typeof MembershipStatus)[keyof typeof MembershipStatus]
+
+
 export const GradingResult: {
   PASSED: 'PASSED',
   FAILED: 'FAILED',
@@ -162,6 +172,10 @@ export type NotificationType = (typeof NotificationType)[keyof typeof Notificati
 export type MemberRole = $Enums.MemberRole
 
 export const MemberRole: typeof $Enums.MemberRole
+
+export type MembershipStatus = $Enums.MembershipStatus
+
+export const MembershipStatus: typeof $Enums.MembershipStatus
 
 export type GradingResult = $Enums.GradingResult
 
@@ -2488,17 +2502,17 @@ export namespace Prisma {
    */
 
   export type BeltRankCountOutputType = {
-    gradings_from: number
-    gradings_to: number
-    grading_events: number
-    grading_applications: number
+    gradingsFrom: number
+    gradingsTo: number
+    gradingEvents: number
+    gradingApplications: number
   }
 
   export type BeltRankCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    gradings_from?: boolean | BeltRankCountOutputTypeCountGradings_fromArgs
-    gradings_to?: boolean | BeltRankCountOutputTypeCountGradings_toArgs
-    grading_events?: boolean | BeltRankCountOutputTypeCountGrading_eventsArgs
-    grading_applications?: boolean | BeltRankCountOutputTypeCountGrading_applicationsArgs
+    gradingsFrom?: boolean | BeltRankCountOutputTypeCountGradingsFromArgs
+    gradingsTo?: boolean | BeltRankCountOutputTypeCountGradingsToArgs
+    gradingEvents?: boolean | BeltRankCountOutputTypeCountGradingEventsArgs
+    gradingApplications?: boolean | BeltRankCountOutputTypeCountGradingApplicationsArgs
   }
 
   // Custom InputTypes
@@ -2515,28 +2529,28 @@ export namespace Prisma {
   /**
    * BeltRankCountOutputType without action
    */
-  export type BeltRankCountOutputTypeCountGradings_fromArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type BeltRankCountOutputTypeCountGradingsFromArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: GradingWhereInput
   }
 
   /**
    * BeltRankCountOutputType without action
    */
-  export type BeltRankCountOutputTypeCountGradings_toArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type BeltRankCountOutputTypeCountGradingsToArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: GradingWhereInput
   }
 
   /**
    * BeltRankCountOutputType without action
    */
-  export type BeltRankCountOutputTypeCountGrading_eventsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type BeltRankCountOutputTypeCountGradingEventsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: GradingEventWhereInput
   }
 
   /**
    * BeltRankCountOutputType without action
    */
-  export type BeltRankCountOutputTypeCountGrading_applicationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type BeltRankCountOutputTypeCountGradingApplicationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: GradingApplicationWhereInput
   }
 
@@ -2595,25 +2609,25 @@ export namespace Prisma {
    */
 
   export type MemberCountOutputType = {
-    dojo_head_of: number
+    dojoHeadOf: number
     gradings: number
-    grading_applications: number
-    event_registrations: number
+    gradingApplications: number
+    eventRegistrations: number
     notifications: number
     orders: number
     attendance: number
-    tournament_entries: number
+    tournamentEntries: number
   }
 
   export type MemberCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    dojo_head_of?: boolean | MemberCountOutputTypeCountDojo_head_ofArgs
+    dojoHeadOf?: boolean | MemberCountOutputTypeCountDojoHeadOfArgs
     gradings?: boolean | MemberCountOutputTypeCountGradingsArgs
-    grading_applications?: boolean | MemberCountOutputTypeCountGrading_applicationsArgs
-    event_registrations?: boolean | MemberCountOutputTypeCountEvent_registrationsArgs
+    gradingApplications?: boolean | MemberCountOutputTypeCountGradingApplicationsArgs
+    eventRegistrations?: boolean | MemberCountOutputTypeCountEventRegistrationsArgs
     notifications?: boolean | MemberCountOutputTypeCountNotificationsArgs
     orders?: boolean | MemberCountOutputTypeCountOrdersArgs
     attendance?: boolean | MemberCountOutputTypeCountAttendanceArgs
-    tournament_entries?: boolean | MemberCountOutputTypeCountTournament_entriesArgs
+    tournamentEntries?: boolean | MemberCountOutputTypeCountTournamentEntriesArgs
   }
 
   // Custom InputTypes
@@ -2630,7 +2644,7 @@ export namespace Prisma {
   /**
    * MemberCountOutputType without action
    */
-  export type MemberCountOutputTypeCountDojo_head_ofArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type MemberCountOutputTypeCountDojoHeadOfArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: DojoWhereInput
   }
 
@@ -2644,14 +2658,14 @@ export namespace Prisma {
   /**
    * MemberCountOutputType without action
    */
-  export type MemberCountOutputTypeCountGrading_applicationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type MemberCountOutputTypeCountGradingApplicationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: GradingApplicationWhereInput
   }
 
   /**
    * MemberCountOutputType without action
    */
-  export type MemberCountOutputTypeCountEvent_registrationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type MemberCountOutputTypeCountEventRegistrationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: EventRegistrationWhereInput
   }
 
@@ -2679,7 +2693,7 @@ export namespace Prisma {
   /**
    * MemberCountOutputType without action
    */
-  export type MemberCountOutputTypeCountTournament_entriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type MemberCountOutputTypeCountTournamentEntriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: TournamentParticipantWhereInput
   }
 
@@ -2760,11 +2774,11 @@ export namespace Prisma {
    */
 
   export type ShopProductCountOutputType = {
-    order_items: number
+    orderItems: number
   }
 
   export type ShopProductCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    order_items?: boolean | ShopProductCountOutputTypeCountOrder_itemsArgs
+    orderItems?: boolean | ShopProductCountOutputTypeCountOrderItemsArgs
   }
 
   // Custom InputTypes
@@ -2781,7 +2795,7 @@ export namespace Prisma {
   /**
    * ShopProductCountOutputType without action
    */
-  export type ShopProductCountOutputTypeCountOrder_itemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ShopProductCountOutputTypeCountOrderItemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ShopOrderItemWhereInput
   }
 
@@ -2791,11 +2805,11 @@ export namespace Prisma {
    */
 
   export type ShopOrderCountOutputType = {
-    order_items: number
+    orderItems: number
   }
 
   export type ShopOrderCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    order_items?: boolean | ShopOrderCountOutputTypeCountOrder_itemsArgs
+    orderItems?: boolean | ShopOrderCountOutputTypeCountOrderItemsArgs
   }
 
   // Custom InputTypes
@@ -2812,7 +2826,7 @@ export namespace Prisma {
   /**
    * ShopOrderCountOutputType without action
    */
-  export type ShopOrderCountOutputTypeCountOrder_itemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ShopOrderCountOutputTypeCountOrderItemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ShopOrderItemWhereInput
   }
 
@@ -2862,15 +2876,15 @@ export namespace Prisma {
    */
 
   export type TournamentParticipantCountOutputType = {
-    matches_as_p1: number
-    matches_as_p2: number
-    matches_won: number
+    matchesAsP1: number
+    matchesAsP2: number
+    matchesWon: number
   }
 
   export type TournamentParticipantCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    matches_as_p1?: boolean | TournamentParticipantCountOutputTypeCountMatches_as_p1Args
-    matches_as_p2?: boolean | TournamentParticipantCountOutputTypeCountMatches_as_p2Args
-    matches_won?: boolean | TournamentParticipantCountOutputTypeCountMatches_wonArgs
+    matchesAsP1?: boolean | TournamentParticipantCountOutputTypeCountMatchesAsP1Args
+    matchesAsP2?: boolean | TournamentParticipantCountOutputTypeCountMatchesAsP2Args
+    matchesWon?: boolean | TournamentParticipantCountOutputTypeCountMatchesWonArgs
   }
 
   // Custom InputTypes
@@ -2887,21 +2901,21 @@ export namespace Prisma {
   /**
    * TournamentParticipantCountOutputType without action
    */
-  export type TournamentParticipantCountOutputTypeCountMatches_as_p1Args<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type TournamentParticipantCountOutputTypeCountMatchesAsP1Args<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: TournamentMatchWhereInput
   }
 
   /**
    * TournamentParticipantCountOutputType without action
    */
-  export type TournamentParticipantCountOutputTypeCountMatches_as_p2Args<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type TournamentParticipantCountOutputTypeCountMatchesAsP2Args<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: TournamentMatchWhereInput
   }
 
   /**
    * TournamentParticipantCountOutputType without action
    */
-  export type TournamentParticipantCountOutputTypeCountMatches_wonArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type TournamentParticipantCountOutputTypeCountMatchesWonArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: TournamentMatchWhereInput
   }
 
@@ -2923,81 +2937,87 @@ export namespace Prisma {
   }
 
   export type BeltRankAvgAggregateOutputType = {
-    order_index: number | null
+    orderIndex: number | null
   }
 
   export type BeltRankSumAggregateOutputType = {
-    order_index: number | null
+    orderIndex: number | null
   }
 
   export type BeltRankMinAggregateOutputType = {
     id: string | null
     name: string | null
-    kyu_dan: string | null
-    color_hex: string | null
-    order_index: number | null
-    created_at: Date | null
-    updated_at: Date | null
+    nameBn: string | null
+    kyuDan: string | null
+    colorHex: string | null
+    orderIndex: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type BeltRankMaxAggregateOutputType = {
     id: string | null
     name: string | null
-    kyu_dan: string | null
-    color_hex: string | null
-    order_index: number | null
-    created_at: Date | null
-    updated_at: Date | null
+    nameBn: string | null
+    kyuDan: string | null
+    colorHex: string | null
+    orderIndex: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type BeltRankCountAggregateOutputType = {
     id: number
     name: number
-    kyu_dan: number
-    color_hex: number
-    order_index: number
-    created_at: number
-    updated_at: number
+    nameBn: number
+    kyuDan: number
+    colorHex: number
+    orderIndex: number
+    createdAt: number
+    updatedAt: number
     _all: number
   }
 
 
   export type BeltRankAvgAggregateInputType = {
-    order_index?: true
+    orderIndex?: true
   }
 
   export type BeltRankSumAggregateInputType = {
-    order_index?: true
+    orderIndex?: true
   }
 
   export type BeltRankMinAggregateInputType = {
     id?: true
     name?: true
-    kyu_dan?: true
-    color_hex?: true
-    order_index?: true
-    created_at?: true
-    updated_at?: true
+    nameBn?: true
+    kyuDan?: true
+    colorHex?: true
+    orderIndex?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type BeltRankMaxAggregateInputType = {
     id?: true
     name?: true
-    kyu_dan?: true
-    color_hex?: true
-    order_index?: true
-    created_at?: true
-    updated_at?: true
+    nameBn?: true
+    kyuDan?: true
+    colorHex?: true
+    orderIndex?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type BeltRankCountAggregateInputType = {
     id?: true
     name?: true
-    kyu_dan?: true
-    color_hex?: true
-    order_index?: true
-    created_at?: true
-    updated_at?: true
+    nameBn?: true
+    kyuDan?: true
+    colorHex?: true
+    orderIndex?: true
+    createdAt?: true
+    updatedAt?: true
     _all?: true
   }
 
@@ -3090,11 +3110,12 @@ export namespace Prisma {
   export type BeltRankGroupByOutputType = {
     id: string
     name: string
-    kyu_dan: string | null
-    color_hex: string | null
-    order_index: number
-    created_at: Date
-    updated_at: Date
+    nameBn: string | null
+    kyuDan: string | null
+    colorHex: string | null
+    orderIndex: number
+    createdAt: Date
+    updatedAt: Date
     _count: BeltRankCountAggregateOutputType | null
     _avg: BeltRankAvgAggregateOutputType | null
     _sum: BeltRankSumAggregateOutputType | null
@@ -3119,54 +3140,58 @@ export namespace Prisma {
   export type BeltRankSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
-    kyu_dan?: boolean
-    color_hex?: boolean
-    order_index?: boolean
-    created_at?: boolean
-    updated_at?: boolean
-    gradings_from?: boolean | BeltRank$gradings_fromArgs<ExtArgs>
-    gradings_to?: boolean | BeltRank$gradings_toArgs<ExtArgs>
-    grading_events?: boolean | BeltRank$grading_eventsArgs<ExtArgs>
-    grading_applications?: boolean | BeltRank$grading_applicationsArgs<ExtArgs>
+    nameBn?: boolean
+    kyuDan?: boolean
+    colorHex?: boolean
+    orderIndex?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    gradingsFrom?: boolean | BeltRank$gradingsFromArgs<ExtArgs>
+    gradingsTo?: boolean | BeltRank$gradingsToArgs<ExtArgs>
+    gradingEvents?: boolean | BeltRank$gradingEventsArgs<ExtArgs>
+    gradingApplications?: boolean | BeltRank$gradingApplicationsArgs<ExtArgs>
     _count?: boolean | BeltRankCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["beltRank"]>
 
   export type BeltRankSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
-    kyu_dan?: boolean
-    color_hex?: boolean
-    order_index?: boolean
-    created_at?: boolean
-    updated_at?: boolean
+    nameBn?: boolean
+    kyuDan?: boolean
+    colorHex?: boolean
+    orderIndex?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
   }, ExtArgs["result"]["beltRank"]>
 
   export type BeltRankSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
-    kyu_dan?: boolean
-    color_hex?: boolean
-    order_index?: boolean
-    created_at?: boolean
-    updated_at?: boolean
+    nameBn?: boolean
+    kyuDan?: boolean
+    colorHex?: boolean
+    orderIndex?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
   }, ExtArgs["result"]["beltRank"]>
 
   export type BeltRankSelectScalar = {
     id?: boolean
     name?: boolean
-    kyu_dan?: boolean
-    color_hex?: boolean
-    order_index?: boolean
-    created_at?: boolean
-    updated_at?: boolean
+    nameBn?: boolean
+    kyuDan?: boolean
+    colorHex?: boolean
+    orderIndex?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
   }
 
-  export type BeltRankOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "kyu_dan" | "color_hex" | "order_index" | "created_at" | "updated_at", ExtArgs["result"]["beltRank"]>
+  export type BeltRankOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "nameBn" | "kyuDan" | "colorHex" | "orderIndex" | "createdAt" | "updatedAt", ExtArgs["result"]["beltRank"]>
   export type BeltRankInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    gradings_from?: boolean | BeltRank$gradings_fromArgs<ExtArgs>
-    gradings_to?: boolean | BeltRank$gradings_toArgs<ExtArgs>
-    grading_events?: boolean | BeltRank$grading_eventsArgs<ExtArgs>
-    grading_applications?: boolean | BeltRank$grading_applicationsArgs<ExtArgs>
+    gradingsFrom?: boolean | BeltRank$gradingsFromArgs<ExtArgs>
+    gradingsTo?: boolean | BeltRank$gradingsToArgs<ExtArgs>
+    gradingEvents?: boolean | BeltRank$gradingEventsArgs<ExtArgs>
+    gradingApplications?: boolean | BeltRank$gradingApplicationsArgs<ExtArgs>
     _count?: boolean | BeltRankCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type BeltRankIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -3175,19 +3200,20 @@ export namespace Prisma {
   export type $BeltRankPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "BeltRank"
     objects: {
-      gradings_from: Prisma.$GradingPayload<ExtArgs>[]
-      gradings_to: Prisma.$GradingPayload<ExtArgs>[]
-      grading_events: Prisma.$GradingEventPayload<ExtArgs>[]
-      grading_applications: Prisma.$GradingApplicationPayload<ExtArgs>[]
+      gradingsFrom: Prisma.$GradingPayload<ExtArgs>[]
+      gradingsTo: Prisma.$GradingPayload<ExtArgs>[]
+      gradingEvents: Prisma.$GradingEventPayload<ExtArgs>[]
+      gradingApplications: Prisma.$GradingApplicationPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       name: string
-      kyu_dan: string | null
-      color_hex: string | null
-      order_index: number
-      created_at: Date
-      updated_at: Date
+      nameBn: string | null
+      kyuDan: string | null
+      colorHex: string | null
+      orderIndex: number
+      createdAt: Date
+      updatedAt: Date
     }, ExtArgs["result"]["beltRank"]>
     composites: {}
   }
@@ -3582,10 +3608,10 @@ export namespace Prisma {
    */
   export interface Prisma__BeltRankClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    gradings_from<T extends BeltRank$gradings_fromArgs<ExtArgs> = {}>(args?: Subset<T, BeltRank$gradings_fromArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GradingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    gradings_to<T extends BeltRank$gradings_toArgs<ExtArgs> = {}>(args?: Subset<T, BeltRank$gradings_toArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GradingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    grading_events<T extends BeltRank$grading_eventsArgs<ExtArgs> = {}>(args?: Subset<T, BeltRank$grading_eventsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GradingEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    grading_applications<T extends BeltRank$grading_applicationsArgs<ExtArgs> = {}>(args?: Subset<T, BeltRank$grading_applicationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GradingApplicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    gradingsFrom<T extends BeltRank$gradingsFromArgs<ExtArgs> = {}>(args?: Subset<T, BeltRank$gradingsFromArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GradingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    gradingsTo<T extends BeltRank$gradingsToArgs<ExtArgs> = {}>(args?: Subset<T, BeltRank$gradingsToArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GradingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    gradingEvents<T extends BeltRank$gradingEventsArgs<ExtArgs> = {}>(args?: Subset<T, BeltRank$gradingEventsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GradingEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    gradingApplications<T extends BeltRank$gradingApplicationsArgs<ExtArgs> = {}>(args?: Subset<T, BeltRank$gradingApplicationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GradingApplicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3617,11 +3643,12 @@ export namespace Prisma {
   interface BeltRankFieldRefs {
     readonly id: FieldRef<"BeltRank", 'String'>
     readonly name: FieldRef<"BeltRank", 'String'>
-    readonly kyu_dan: FieldRef<"BeltRank", 'String'>
-    readonly color_hex: FieldRef<"BeltRank", 'String'>
-    readonly order_index: FieldRef<"BeltRank", 'Int'>
-    readonly created_at: FieldRef<"BeltRank", 'DateTime'>
-    readonly updated_at: FieldRef<"BeltRank", 'DateTime'>
+    readonly nameBn: FieldRef<"BeltRank", 'String'>
+    readonly kyuDan: FieldRef<"BeltRank", 'String'>
+    readonly colorHex: FieldRef<"BeltRank", 'String'>
+    readonly orderIndex: FieldRef<"BeltRank", 'Int'>
+    readonly createdAt: FieldRef<"BeltRank", 'DateTime'>
+    readonly updatedAt: FieldRef<"BeltRank", 'DateTime'>
   }
     
 
@@ -4015,9 +4042,9 @@ export namespace Prisma {
   }
 
   /**
-   * BeltRank.gradings_from
+   * BeltRank.gradingsFrom
    */
-  export type BeltRank$gradings_fromArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type BeltRank$gradingsFromArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Grading
      */
@@ -4039,9 +4066,9 @@ export namespace Prisma {
   }
 
   /**
-   * BeltRank.gradings_to
+   * BeltRank.gradingsTo
    */
-  export type BeltRank$gradings_toArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type BeltRank$gradingsToArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Grading
      */
@@ -4063,9 +4090,9 @@ export namespace Prisma {
   }
 
   /**
-   * BeltRank.grading_events
+   * BeltRank.gradingEvents
    */
-  export type BeltRank$grading_eventsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type BeltRank$gradingEventsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the GradingEvent
      */
@@ -4087,9 +4114,9 @@ export namespace Prisma {
   }
 
   /**
-   * BeltRank.grading_applications
+   * BeltRank.gradingApplications
    */
-  export type BeltRank$grading_applicationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type BeltRank$gradingApplicationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the GradingApplication
      */
@@ -4160,10 +4187,10 @@ export namespace Prisma {
     longitude: number | null
     phone: string | null
     email: string | null
-    is_active: boolean | null
-    head_instructor_id: string | null
-    created_at: Date | null
-    updated_at: Date | null
+    isActive: boolean | null
+    headInstructorId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type DojoMaxAggregateOutputType = {
@@ -4175,10 +4202,10 @@ export namespace Prisma {
     longitude: number | null
     phone: string | null
     email: string | null
-    is_active: boolean | null
-    head_instructor_id: string | null
-    created_at: Date | null
-    updated_at: Date | null
+    isActive: boolean | null
+    headInstructorId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type DojoCountAggregateOutputType = {
@@ -4191,10 +4218,10 @@ export namespace Prisma {
     phone: number
     email: number
     schedule: number
-    is_active: number
-    head_instructor_id: number
-    created_at: number
-    updated_at: number
+    isActive: number
+    headInstructorId: number
+    createdAt: number
+    updatedAt: number
     _all: number
   }
 
@@ -4218,10 +4245,10 @@ export namespace Prisma {
     longitude?: true
     phone?: true
     email?: true
-    is_active?: true
-    head_instructor_id?: true
-    created_at?: true
-    updated_at?: true
+    isActive?: true
+    headInstructorId?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type DojoMaxAggregateInputType = {
@@ -4233,10 +4260,10 @@ export namespace Prisma {
     longitude?: true
     phone?: true
     email?: true
-    is_active?: true
-    head_instructor_id?: true
-    created_at?: true
-    updated_at?: true
+    isActive?: true
+    headInstructorId?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type DojoCountAggregateInputType = {
@@ -4249,10 +4276,10 @@ export namespace Prisma {
     phone?: true
     email?: true
     schedule?: true
-    is_active?: true
-    head_instructor_id?: true
-    created_at?: true
-    updated_at?: true
+    isActive?: true
+    headInstructorId?: true
+    createdAt?: true
+    updatedAt?: true
     _all?: true
   }
 
@@ -4352,10 +4379,10 @@ export namespace Prisma {
     phone: string | null
     email: string | null
     schedule: JsonValue | null
-    is_active: boolean
-    head_instructor_id: string | null
-    created_at: Date
-    updated_at: Date
+    isActive: boolean
+    headInstructorId: string | null
+    createdAt: Date
+    updatedAt: Date
     _count: DojoCountAggregateOutputType | null
     _avg: DojoAvgAggregateOutputType | null
     _sum: DojoSumAggregateOutputType | null
@@ -4387,11 +4414,11 @@ export namespace Prisma {
     phone?: boolean
     email?: boolean
     schedule?: boolean
-    is_active?: boolean
-    head_instructor_id?: boolean
-    created_at?: boolean
-    updated_at?: boolean
-    head_instructor?: boolean | Dojo$head_instructorArgs<ExtArgs>
+    isActive?: boolean
+    headInstructorId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    headInstructor?: boolean | Dojo$headInstructorArgs<ExtArgs>
     members?: boolean | Dojo$membersArgs<ExtArgs>
     instructors?: boolean | Dojo$instructorsArgs<ExtArgs>
     attendance?: boolean | Dojo$attendanceArgs<ExtArgs>
@@ -4408,11 +4435,11 @@ export namespace Prisma {
     phone?: boolean
     email?: boolean
     schedule?: boolean
-    is_active?: boolean
-    head_instructor_id?: boolean
-    created_at?: boolean
-    updated_at?: boolean
-    head_instructor?: boolean | Dojo$head_instructorArgs<ExtArgs>
+    isActive?: boolean
+    headInstructorId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    headInstructor?: boolean | Dojo$headInstructorArgs<ExtArgs>
   }, ExtArgs["result"]["dojo"]>
 
   export type DojoSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -4425,11 +4452,11 @@ export namespace Prisma {
     phone?: boolean
     email?: boolean
     schedule?: boolean
-    is_active?: boolean
-    head_instructor_id?: boolean
-    created_at?: boolean
-    updated_at?: boolean
-    head_instructor?: boolean | Dojo$head_instructorArgs<ExtArgs>
+    isActive?: boolean
+    headInstructorId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    headInstructor?: boolean | Dojo$headInstructorArgs<ExtArgs>
   }, ExtArgs["result"]["dojo"]>
 
   export type DojoSelectScalar = {
@@ -4442,31 +4469,31 @@ export namespace Prisma {
     phone?: boolean
     email?: boolean
     schedule?: boolean
-    is_active?: boolean
-    head_instructor_id?: boolean
-    created_at?: boolean
-    updated_at?: boolean
+    isActive?: boolean
+    headInstructorId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
   }
 
-  export type DojoOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "address" | "city" | "latitude" | "longitude" | "phone" | "email" | "schedule" | "is_active" | "head_instructor_id" | "created_at" | "updated_at", ExtArgs["result"]["dojo"]>
+  export type DojoOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "address" | "city" | "latitude" | "longitude" | "phone" | "email" | "schedule" | "isActive" | "headInstructorId" | "createdAt" | "updatedAt", ExtArgs["result"]["dojo"]>
   export type DojoInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    head_instructor?: boolean | Dojo$head_instructorArgs<ExtArgs>
+    headInstructor?: boolean | Dojo$headInstructorArgs<ExtArgs>
     members?: boolean | Dojo$membersArgs<ExtArgs>
     instructors?: boolean | Dojo$instructorsArgs<ExtArgs>
     attendance?: boolean | Dojo$attendanceArgs<ExtArgs>
     _count?: boolean | DojoCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type DojoIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    head_instructor?: boolean | Dojo$head_instructorArgs<ExtArgs>
+    headInstructor?: boolean | Dojo$headInstructorArgs<ExtArgs>
   }
   export type DojoIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    head_instructor?: boolean | Dojo$head_instructorArgs<ExtArgs>
+    headInstructor?: boolean | Dojo$headInstructorArgs<ExtArgs>
   }
 
   export type $DojoPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Dojo"
     objects: {
-      head_instructor: Prisma.$MemberPayload<ExtArgs> | null
+      headInstructor: Prisma.$MemberPayload<ExtArgs> | null
       members: Prisma.$MemberPayload<ExtArgs>[]
       instructors: Prisma.$InstructorPayload<ExtArgs>[]
       attendance: Prisma.$AttendancePayload<ExtArgs>[]
@@ -4481,10 +4508,10 @@ export namespace Prisma {
       phone: string | null
       email: string | null
       schedule: Prisma.JsonValue | null
-      is_active: boolean
-      head_instructor_id: string | null
-      created_at: Date
-      updated_at: Date
+      isActive: boolean
+      headInstructorId: string | null
+      createdAt: Date
+      updatedAt: Date
     }, ExtArgs["result"]["dojo"]>
     composites: {}
   }
@@ -4879,7 +4906,7 @@ export namespace Prisma {
    */
   export interface Prisma__DojoClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    head_instructor<T extends Dojo$head_instructorArgs<ExtArgs> = {}>(args?: Subset<T, Dojo$head_instructorArgs<ExtArgs>>): Prisma__MemberClient<$Result.GetResult<Prisma.$MemberPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    headInstructor<T extends Dojo$headInstructorArgs<ExtArgs> = {}>(args?: Subset<T, Dojo$headInstructorArgs<ExtArgs>>): Prisma__MemberClient<$Result.GetResult<Prisma.$MemberPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     members<T extends Dojo$membersArgs<ExtArgs> = {}>(args?: Subset<T, Dojo$membersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     instructors<T extends Dojo$instructorsArgs<ExtArgs> = {}>(args?: Subset<T, Dojo$instructorsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InstructorPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     attendance<T extends Dojo$attendanceArgs<ExtArgs> = {}>(args?: Subset<T, Dojo$attendanceArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AttendancePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -4921,10 +4948,10 @@ export namespace Prisma {
     readonly phone: FieldRef<"Dojo", 'String'>
     readonly email: FieldRef<"Dojo", 'String'>
     readonly schedule: FieldRef<"Dojo", 'Json'>
-    readonly is_active: FieldRef<"Dojo", 'Boolean'>
-    readonly head_instructor_id: FieldRef<"Dojo", 'String'>
-    readonly created_at: FieldRef<"Dojo", 'DateTime'>
-    readonly updated_at: FieldRef<"Dojo", 'DateTime'>
+    readonly isActive: FieldRef<"Dojo", 'Boolean'>
+    readonly headInstructorId: FieldRef<"Dojo", 'String'>
+    readonly createdAt: FieldRef<"Dojo", 'DateTime'>
+    readonly updatedAt: FieldRef<"Dojo", 'DateTime'>
   }
     
 
@@ -5326,9 +5353,9 @@ export namespace Prisma {
   }
 
   /**
-   * Dojo.head_instructor
+   * Dojo.headInstructor
    */
-  export type Dojo$head_instructorArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Dojo$headInstructorArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Member
      */
@@ -5447,106 +5474,154 @@ export namespace Prisma {
 
   export type MemberMinAggregateOutputType = {
     id: string | null
-    full_name: string | null
+    fullName: string | null
     email: string | null
     phone: string | null
-    avatar_url: string | null
+    avatarUrl: string | null
     role: $Enums.MemberRole | null
-    member_number: string | null
-    current_rank: string | null
-    join_date: Date | null
-    expiry_date: Date | null
-    is_active: boolean | null
-    dojo_id: string | null
-    created_at: Date | null
-    updated_at: Date | null
+    memberNumber: string | null
+    currentRank: string | null
+    joinDate: Date | null
+    expiryDate: Date | null
+    isActive: boolean | null
+    dojoId: string | null
+    onboardingComplete: boolean | null
+    membershipStatus: $Enums.MembershipStatus | null
+    dateOfBirth: Date | null
+    bloodGroup: string | null
+    address: string | null
+    nationalId: string | null
+    emergencyContactName: string | null
+    emergencyContactPhone: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type MemberMaxAggregateOutputType = {
     id: string | null
-    full_name: string | null
+    fullName: string | null
     email: string | null
     phone: string | null
-    avatar_url: string | null
+    avatarUrl: string | null
     role: $Enums.MemberRole | null
-    member_number: string | null
-    current_rank: string | null
-    join_date: Date | null
-    expiry_date: Date | null
-    is_active: boolean | null
-    dojo_id: string | null
-    created_at: Date | null
-    updated_at: Date | null
+    memberNumber: string | null
+    currentRank: string | null
+    joinDate: Date | null
+    expiryDate: Date | null
+    isActive: boolean | null
+    dojoId: string | null
+    onboardingComplete: boolean | null
+    membershipStatus: $Enums.MembershipStatus | null
+    dateOfBirth: Date | null
+    bloodGroup: string | null
+    address: string | null
+    nationalId: string | null
+    emergencyContactName: string | null
+    emergencyContactPhone: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type MemberCountAggregateOutputType = {
     id: number
-    full_name: number
+    fullName: number
     email: number
     phone: number
-    avatar_url: number
+    avatarUrl: number
     role: number
-    member_number: number
-    current_rank: number
-    join_date: number
-    expiry_date: number
-    is_active: number
-    dojo_id: number
-    created_at: number
-    updated_at: number
+    memberNumber: number
+    currentRank: number
+    joinDate: number
+    expiryDate: number
+    isActive: number
+    dojoId: number
+    onboardingComplete: number
+    membershipStatus: number
+    dateOfBirth: number
+    bloodGroup: number
+    address: number
+    nationalId: number
+    emergencyContactName: number
+    emergencyContactPhone: number
+    createdAt: number
+    updatedAt: number
     _all: number
   }
 
 
   export type MemberMinAggregateInputType = {
     id?: true
-    full_name?: true
+    fullName?: true
     email?: true
     phone?: true
-    avatar_url?: true
+    avatarUrl?: true
     role?: true
-    member_number?: true
-    current_rank?: true
-    join_date?: true
-    expiry_date?: true
-    is_active?: true
-    dojo_id?: true
-    created_at?: true
-    updated_at?: true
+    memberNumber?: true
+    currentRank?: true
+    joinDate?: true
+    expiryDate?: true
+    isActive?: true
+    dojoId?: true
+    onboardingComplete?: true
+    membershipStatus?: true
+    dateOfBirth?: true
+    bloodGroup?: true
+    address?: true
+    nationalId?: true
+    emergencyContactName?: true
+    emergencyContactPhone?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type MemberMaxAggregateInputType = {
     id?: true
-    full_name?: true
+    fullName?: true
     email?: true
     phone?: true
-    avatar_url?: true
+    avatarUrl?: true
     role?: true
-    member_number?: true
-    current_rank?: true
-    join_date?: true
-    expiry_date?: true
-    is_active?: true
-    dojo_id?: true
-    created_at?: true
-    updated_at?: true
+    memberNumber?: true
+    currentRank?: true
+    joinDate?: true
+    expiryDate?: true
+    isActive?: true
+    dojoId?: true
+    onboardingComplete?: true
+    membershipStatus?: true
+    dateOfBirth?: true
+    bloodGroup?: true
+    address?: true
+    nationalId?: true
+    emergencyContactName?: true
+    emergencyContactPhone?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type MemberCountAggregateInputType = {
     id?: true
-    full_name?: true
+    fullName?: true
     email?: true
     phone?: true
-    avatar_url?: true
+    avatarUrl?: true
     role?: true
-    member_number?: true
-    current_rank?: true
-    join_date?: true
-    expiry_date?: true
-    is_active?: true
-    dojo_id?: true
-    created_at?: true
-    updated_at?: true
+    memberNumber?: true
+    currentRank?: true
+    joinDate?: true
+    expiryDate?: true
+    isActive?: true
+    dojoId?: true
+    onboardingComplete?: true
+    membershipStatus?: true
+    dateOfBirth?: true
+    bloodGroup?: true
+    address?: true
+    nationalId?: true
+    emergencyContactName?: true
+    emergencyContactPhone?: true
+    createdAt?: true
+    updatedAt?: true
     _all?: true
   }
 
@@ -5624,19 +5699,27 @@ export namespace Prisma {
 
   export type MemberGroupByOutputType = {
     id: string
-    full_name: string
+    fullName: string
     email: string
     phone: string | null
-    avatar_url: string | null
+    avatarUrl: string | null
     role: $Enums.MemberRole
-    member_number: string | null
-    current_rank: string
-    join_date: Date
-    expiry_date: Date | null
-    is_active: boolean
-    dojo_id: string | null
-    created_at: Date
-    updated_at: Date
+    memberNumber: string | null
+    currentRank: string
+    joinDate: Date
+    expiryDate: Date | null
+    isActive: boolean
+    dojoId: string | null
+    onboardingComplete: boolean
+    membershipStatus: $Enums.MembershipStatus
+    dateOfBirth: Date | null
+    bloodGroup: string | null
+    address: string | null
+    nationalId: string | null
+    emergencyContactName: string | null
+    emergencyContactPhone: string | null
+    createdAt: Date
+    updatedAt: Date
     _count: MemberCountAggregateOutputType | null
     _min: MemberMinAggregateOutputType | null
     _max: MemberMaxAggregateOutputType | null
@@ -5658,99 +5741,131 @@ export namespace Prisma {
 
   export type MemberSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    full_name?: boolean
+    fullName?: boolean
     email?: boolean
     phone?: boolean
-    avatar_url?: boolean
+    avatarUrl?: boolean
     role?: boolean
-    member_number?: boolean
-    current_rank?: boolean
-    join_date?: boolean
-    expiry_date?: boolean
-    is_active?: boolean
-    dojo_id?: boolean
-    created_at?: boolean
-    updated_at?: boolean
+    memberNumber?: boolean
+    currentRank?: boolean
+    joinDate?: boolean
+    expiryDate?: boolean
+    isActive?: boolean
+    dojoId?: boolean
+    onboardingComplete?: boolean
+    membershipStatus?: boolean
+    dateOfBirth?: boolean
+    bloodGroup?: boolean
+    address?: boolean
+    nationalId?: boolean
+    emergencyContactName?: boolean
+    emergencyContactPhone?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
     dojo?: boolean | Member$dojoArgs<ExtArgs>
-    dojo_head_of?: boolean | Member$dojo_head_ofArgs<ExtArgs>
+    dojoHeadOf?: boolean | Member$dojoHeadOfArgs<ExtArgs>
     instructor?: boolean | Member$instructorArgs<ExtArgs>
     admin?: boolean | Member$adminArgs<ExtArgs>
     gradings?: boolean | Member$gradingsArgs<ExtArgs>
-    grading_applications?: boolean | Member$grading_applicationsArgs<ExtArgs>
-    event_registrations?: boolean | Member$event_registrationsArgs<ExtArgs>
+    gradingApplications?: boolean | Member$gradingApplicationsArgs<ExtArgs>
+    eventRegistrations?: boolean | Member$eventRegistrationsArgs<ExtArgs>
     notifications?: boolean | Member$notificationsArgs<ExtArgs>
     orders?: boolean | Member$ordersArgs<ExtArgs>
     attendance?: boolean | Member$attendanceArgs<ExtArgs>
-    tournament_entries?: boolean | Member$tournament_entriesArgs<ExtArgs>
+    tournamentEntries?: boolean | Member$tournamentEntriesArgs<ExtArgs>
     _count?: boolean | MemberCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["member"]>
 
   export type MemberSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    full_name?: boolean
+    fullName?: boolean
     email?: boolean
     phone?: boolean
-    avatar_url?: boolean
+    avatarUrl?: boolean
     role?: boolean
-    member_number?: boolean
-    current_rank?: boolean
-    join_date?: boolean
-    expiry_date?: boolean
-    is_active?: boolean
-    dojo_id?: boolean
-    created_at?: boolean
-    updated_at?: boolean
+    memberNumber?: boolean
+    currentRank?: boolean
+    joinDate?: boolean
+    expiryDate?: boolean
+    isActive?: boolean
+    dojoId?: boolean
+    onboardingComplete?: boolean
+    membershipStatus?: boolean
+    dateOfBirth?: boolean
+    bloodGroup?: boolean
+    address?: boolean
+    nationalId?: boolean
+    emergencyContactName?: boolean
+    emergencyContactPhone?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
     dojo?: boolean | Member$dojoArgs<ExtArgs>
   }, ExtArgs["result"]["member"]>
 
   export type MemberSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    full_name?: boolean
+    fullName?: boolean
     email?: boolean
     phone?: boolean
-    avatar_url?: boolean
+    avatarUrl?: boolean
     role?: boolean
-    member_number?: boolean
-    current_rank?: boolean
-    join_date?: boolean
-    expiry_date?: boolean
-    is_active?: boolean
-    dojo_id?: boolean
-    created_at?: boolean
-    updated_at?: boolean
+    memberNumber?: boolean
+    currentRank?: boolean
+    joinDate?: boolean
+    expiryDate?: boolean
+    isActive?: boolean
+    dojoId?: boolean
+    onboardingComplete?: boolean
+    membershipStatus?: boolean
+    dateOfBirth?: boolean
+    bloodGroup?: boolean
+    address?: boolean
+    nationalId?: boolean
+    emergencyContactName?: boolean
+    emergencyContactPhone?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
     dojo?: boolean | Member$dojoArgs<ExtArgs>
   }, ExtArgs["result"]["member"]>
 
   export type MemberSelectScalar = {
     id?: boolean
-    full_name?: boolean
+    fullName?: boolean
     email?: boolean
     phone?: boolean
-    avatar_url?: boolean
+    avatarUrl?: boolean
     role?: boolean
-    member_number?: boolean
-    current_rank?: boolean
-    join_date?: boolean
-    expiry_date?: boolean
-    is_active?: boolean
-    dojo_id?: boolean
-    created_at?: boolean
-    updated_at?: boolean
+    memberNumber?: boolean
+    currentRank?: boolean
+    joinDate?: boolean
+    expiryDate?: boolean
+    isActive?: boolean
+    dojoId?: boolean
+    onboardingComplete?: boolean
+    membershipStatus?: boolean
+    dateOfBirth?: boolean
+    bloodGroup?: boolean
+    address?: boolean
+    nationalId?: boolean
+    emergencyContactName?: boolean
+    emergencyContactPhone?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
   }
 
-  export type MemberOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "full_name" | "email" | "phone" | "avatar_url" | "role" | "member_number" | "current_rank" | "join_date" | "expiry_date" | "is_active" | "dojo_id" | "created_at" | "updated_at", ExtArgs["result"]["member"]>
+  export type MemberOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "fullName" | "email" | "phone" | "avatarUrl" | "role" | "memberNumber" | "currentRank" | "joinDate" | "expiryDate" | "isActive" | "dojoId" | "onboardingComplete" | "membershipStatus" | "dateOfBirth" | "bloodGroup" | "address" | "nationalId" | "emergencyContactName" | "emergencyContactPhone" | "createdAt" | "updatedAt", ExtArgs["result"]["member"]>
   export type MemberInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     dojo?: boolean | Member$dojoArgs<ExtArgs>
-    dojo_head_of?: boolean | Member$dojo_head_ofArgs<ExtArgs>
+    dojoHeadOf?: boolean | Member$dojoHeadOfArgs<ExtArgs>
     instructor?: boolean | Member$instructorArgs<ExtArgs>
     admin?: boolean | Member$adminArgs<ExtArgs>
     gradings?: boolean | Member$gradingsArgs<ExtArgs>
-    grading_applications?: boolean | Member$grading_applicationsArgs<ExtArgs>
-    event_registrations?: boolean | Member$event_registrationsArgs<ExtArgs>
+    gradingApplications?: boolean | Member$gradingApplicationsArgs<ExtArgs>
+    eventRegistrations?: boolean | Member$eventRegistrationsArgs<ExtArgs>
     notifications?: boolean | Member$notificationsArgs<ExtArgs>
     orders?: boolean | Member$ordersArgs<ExtArgs>
     attendance?: boolean | Member$attendanceArgs<ExtArgs>
-    tournament_entries?: boolean | Member$tournament_entriesArgs<ExtArgs>
+    tournamentEntries?: boolean | Member$tournamentEntriesArgs<ExtArgs>
     _count?: boolean | MemberCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type MemberIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -5764,32 +5879,40 @@ export namespace Prisma {
     name: "Member"
     objects: {
       dojo: Prisma.$DojoPayload<ExtArgs> | null
-      dojo_head_of: Prisma.$DojoPayload<ExtArgs>[]
+      dojoHeadOf: Prisma.$DojoPayload<ExtArgs>[]
       instructor: Prisma.$InstructorPayload<ExtArgs> | null
       admin: Prisma.$AdminPayload<ExtArgs> | null
       gradings: Prisma.$GradingPayload<ExtArgs>[]
-      grading_applications: Prisma.$GradingApplicationPayload<ExtArgs>[]
-      event_registrations: Prisma.$EventRegistrationPayload<ExtArgs>[]
+      gradingApplications: Prisma.$GradingApplicationPayload<ExtArgs>[]
+      eventRegistrations: Prisma.$EventRegistrationPayload<ExtArgs>[]
       notifications: Prisma.$NotificationPayload<ExtArgs>[]
       orders: Prisma.$ShopOrderPayload<ExtArgs>[]
       attendance: Prisma.$AttendancePayload<ExtArgs>[]
-      tournament_entries: Prisma.$TournamentParticipantPayload<ExtArgs>[]
+      tournamentEntries: Prisma.$TournamentParticipantPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      full_name: string
+      fullName: string
       email: string
       phone: string | null
-      avatar_url: string | null
+      avatarUrl: string | null
       role: $Enums.MemberRole
-      member_number: string | null
-      current_rank: string
-      join_date: Date
-      expiry_date: Date | null
-      is_active: boolean
-      dojo_id: string | null
-      created_at: Date
-      updated_at: Date
+      memberNumber: string | null
+      currentRank: string
+      joinDate: Date
+      expiryDate: Date | null
+      isActive: boolean
+      dojoId: string | null
+      onboardingComplete: boolean
+      membershipStatus: $Enums.MembershipStatus
+      dateOfBirth: Date | null
+      bloodGroup: string | null
+      address: string | null
+      nationalId: string | null
+      emergencyContactName: string | null
+      emergencyContactPhone: string | null
+      createdAt: Date
+      updatedAt: Date
     }, ExtArgs["result"]["member"]>
     composites: {}
   }
@@ -6185,16 +6308,16 @@ export namespace Prisma {
   export interface Prisma__MemberClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     dojo<T extends Member$dojoArgs<ExtArgs> = {}>(args?: Subset<T, Member$dojoArgs<ExtArgs>>): Prisma__DojoClient<$Result.GetResult<Prisma.$DojoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    dojo_head_of<T extends Member$dojo_head_ofArgs<ExtArgs> = {}>(args?: Subset<T, Member$dojo_head_ofArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DojoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    dojoHeadOf<T extends Member$dojoHeadOfArgs<ExtArgs> = {}>(args?: Subset<T, Member$dojoHeadOfArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DojoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     instructor<T extends Member$instructorArgs<ExtArgs> = {}>(args?: Subset<T, Member$instructorArgs<ExtArgs>>): Prisma__InstructorClient<$Result.GetResult<Prisma.$InstructorPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     admin<T extends Member$adminArgs<ExtArgs> = {}>(args?: Subset<T, Member$adminArgs<ExtArgs>>): Prisma__AdminClient<$Result.GetResult<Prisma.$AdminPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     gradings<T extends Member$gradingsArgs<ExtArgs> = {}>(args?: Subset<T, Member$gradingsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GradingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    grading_applications<T extends Member$grading_applicationsArgs<ExtArgs> = {}>(args?: Subset<T, Member$grading_applicationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GradingApplicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    event_registrations<T extends Member$event_registrationsArgs<ExtArgs> = {}>(args?: Subset<T, Member$event_registrationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EventRegistrationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    gradingApplications<T extends Member$gradingApplicationsArgs<ExtArgs> = {}>(args?: Subset<T, Member$gradingApplicationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GradingApplicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    eventRegistrations<T extends Member$eventRegistrationsArgs<ExtArgs> = {}>(args?: Subset<T, Member$eventRegistrationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EventRegistrationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     notifications<T extends Member$notificationsArgs<ExtArgs> = {}>(args?: Subset<T, Member$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     orders<T extends Member$ordersArgs<ExtArgs> = {}>(args?: Subset<T, Member$ordersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ShopOrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     attendance<T extends Member$attendanceArgs<ExtArgs> = {}>(args?: Subset<T, Member$attendanceArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AttendancePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    tournament_entries<T extends Member$tournament_entriesArgs<ExtArgs> = {}>(args?: Subset<T, Member$tournament_entriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TournamentParticipantPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    tournamentEntries<T extends Member$tournamentEntriesArgs<ExtArgs> = {}>(args?: Subset<T, Member$tournamentEntriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TournamentParticipantPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -6225,19 +6348,27 @@ export namespace Prisma {
    */
   interface MemberFieldRefs {
     readonly id: FieldRef<"Member", 'String'>
-    readonly full_name: FieldRef<"Member", 'String'>
+    readonly fullName: FieldRef<"Member", 'String'>
     readonly email: FieldRef<"Member", 'String'>
     readonly phone: FieldRef<"Member", 'String'>
-    readonly avatar_url: FieldRef<"Member", 'String'>
+    readonly avatarUrl: FieldRef<"Member", 'String'>
     readonly role: FieldRef<"Member", 'MemberRole'>
-    readonly member_number: FieldRef<"Member", 'String'>
-    readonly current_rank: FieldRef<"Member", 'String'>
-    readonly join_date: FieldRef<"Member", 'DateTime'>
-    readonly expiry_date: FieldRef<"Member", 'DateTime'>
-    readonly is_active: FieldRef<"Member", 'Boolean'>
-    readonly dojo_id: FieldRef<"Member", 'String'>
-    readonly created_at: FieldRef<"Member", 'DateTime'>
-    readonly updated_at: FieldRef<"Member", 'DateTime'>
+    readonly memberNumber: FieldRef<"Member", 'String'>
+    readonly currentRank: FieldRef<"Member", 'String'>
+    readonly joinDate: FieldRef<"Member", 'DateTime'>
+    readonly expiryDate: FieldRef<"Member", 'DateTime'>
+    readonly isActive: FieldRef<"Member", 'Boolean'>
+    readonly dojoId: FieldRef<"Member", 'String'>
+    readonly onboardingComplete: FieldRef<"Member", 'Boolean'>
+    readonly membershipStatus: FieldRef<"Member", 'MembershipStatus'>
+    readonly dateOfBirth: FieldRef<"Member", 'DateTime'>
+    readonly bloodGroup: FieldRef<"Member", 'String'>
+    readonly address: FieldRef<"Member", 'String'>
+    readonly nationalId: FieldRef<"Member", 'String'>
+    readonly emergencyContactName: FieldRef<"Member", 'String'>
+    readonly emergencyContactPhone: FieldRef<"Member", 'String'>
+    readonly createdAt: FieldRef<"Member", 'DateTime'>
+    readonly updatedAt: FieldRef<"Member", 'DateTime'>
   }
     
 
@@ -6658,9 +6789,9 @@ export namespace Prisma {
   }
 
   /**
-   * Member.dojo_head_of
+   * Member.dojoHeadOf
    */
-  export type Member$dojo_head_ofArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Member$dojoHeadOfArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Dojo
      */
@@ -6744,9 +6875,9 @@ export namespace Prisma {
   }
 
   /**
-   * Member.grading_applications
+   * Member.gradingApplications
    */
-  export type Member$grading_applicationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Member$gradingApplicationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the GradingApplication
      */
@@ -6768,9 +6899,9 @@ export namespace Prisma {
   }
 
   /**
-   * Member.event_registrations
+   * Member.eventRegistrations
    */
-  export type Member$event_registrationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Member$eventRegistrationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the EventRegistration
      */
@@ -6864,9 +6995,9 @@ export namespace Prisma {
   }
 
   /**
-   * Member.tournament_entries
+   * Member.tournamentEntries
    */
-  export type Member$tournament_entriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Member$tournamentEntriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the TournamentParticipant
      */
@@ -6918,46 +7049,46 @@ export namespace Prisma {
 
   export type AdminMinAggregateOutputType = {
     id: string | null
-    member_id: string | null
+    memberId: string | null
     notes: string | null
-    created_at: Date | null
+    createdAt: Date | null
   }
 
   export type AdminMaxAggregateOutputType = {
     id: string | null
-    member_id: string | null
+    memberId: string | null
     notes: string | null
-    created_at: Date | null
+    createdAt: Date | null
   }
 
   export type AdminCountAggregateOutputType = {
     id: number
-    member_id: number
+    memberId: number
     notes: number
-    created_at: number
+    createdAt: number
     _all: number
   }
 
 
   export type AdminMinAggregateInputType = {
     id?: true
-    member_id?: true
+    memberId?: true
     notes?: true
-    created_at?: true
+    createdAt?: true
   }
 
   export type AdminMaxAggregateInputType = {
     id?: true
-    member_id?: true
+    memberId?: true
     notes?: true
-    created_at?: true
+    createdAt?: true
   }
 
   export type AdminCountAggregateInputType = {
     id?: true
-    member_id?: true
+    memberId?: true
     notes?: true
-    created_at?: true
+    createdAt?: true
     _all?: true
   }
 
@@ -7035,9 +7166,9 @@ export namespace Prisma {
 
   export type AdminGroupByOutputType = {
     id: string
-    member_id: string
+    memberId: string
     notes: string | null
-    created_at: Date
+    createdAt: Date
     _count: AdminCountAggregateOutputType | null
     _min: AdminMinAggregateOutputType | null
     _max: AdminMaxAggregateOutputType | null
@@ -7059,36 +7190,36 @@ export namespace Prisma {
 
   export type AdminSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    member_id?: boolean
+    memberId?: boolean
     notes?: boolean
-    created_at?: boolean
+    createdAt?: boolean
     member?: boolean | MemberDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["admin"]>
 
   export type AdminSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    member_id?: boolean
+    memberId?: boolean
     notes?: boolean
-    created_at?: boolean
+    createdAt?: boolean
     member?: boolean | MemberDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["admin"]>
 
   export type AdminSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    member_id?: boolean
+    memberId?: boolean
     notes?: boolean
-    created_at?: boolean
+    createdAt?: boolean
     member?: boolean | MemberDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["admin"]>
 
   export type AdminSelectScalar = {
     id?: boolean
-    member_id?: boolean
+    memberId?: boolean
     notes?: boolean
-    created_at?: boolean
+    createdAt?: boolean
   }
 
-  export type AdminOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "member_id" | "notes" | "created_at", ExtArgs["result"]["admin"]>
+  export type AdminOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "memberId" | "notes" | "createdAt", ExtArgs["result"]["admin"]>
   export type AdminInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     member?: boolean | MemberDefaultArgs<ExtArgs>
   }
@@ -7106,9 +7237,9 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      member_id: string
+      memberId: string
       notes: string | null
-      created_at: Date
+      createdAt: Date
     }, ExtArgs["result"]["admin"]>
     composites: {}
   }
@@ -7534,9 +7665,9 @@ export namespace Prisma {
    */
   interface AdminFieldRefs {
     readonly id: FieldRef<"Admin", 'String'>
-    readonly member_id: FieldRef<"Admin", 'String'>
+    readonly memberId: FieldRef<"Admin", 'String'>
     readonly notes: FieldRef<"Admin", 'String'>
-    readonly created_at: FieldRef<"Admin", 'DateTime'>
+    readonly createdAt: FieldRef<"Admin", 'DateTime'>
   }
     
 
@@ -7968,64 +8099,64 @@ export namespace Prisma {
 
   export type InstructorMinAggregateOutputType = {
     id: string | null
-    member_id: string | null
-    dojo_id: string | null
+    memberId: string | null
+    dojoId: string | null
     bio: string | null
-    is_active: boolean | null
-    created_at: Date | null
-    updated_at: Date | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type InstructorMaxAggregateOutputType = {
     id: string | null
-    member_id: string | null
-    dojo_id: string | null
+    memberId: string | null
+    dojoId: string | null
     bio: string | null
-    is_active: boolean | null
-    created_at: Date | null
-    updated_at: Date | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type InstructorCountAggregateOutputType = {
     id: number
-    member_id: number
-    dojo_id: number
+    memberId: number
+    dojoId: number
     bio: number
-    is_active: number
-    created_at: number
-    updated_at: number
+    isActive: number
+    createdAt: number
+    updatedAt: number
     _all: number
   }
 
 
   export type InstructorMinAggregateInputType = {
     id?: true
-    member_id?: true
-    dojo_id?: true
+    memberId?: true
+    dojoId?: true
     bio?: true
-    is_active?: true
-    created_at?: true
-    updated_at?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type InstructorMaxAggregateInputType = {
     id?: true
-    member_id?: true
-    dojo_id?: true
+    memberId?: true
+    dojoId?: true
     bio?: true
-    is_active?: true
-    created_at?: true
-    updated_at?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type InstructorCountAggregateInputType = {
     id?: true
-    member_id?: true
-    dojo_id?: true
+    memberId?: true
+    dojoId?: true
     bio?: true
-    is_active?: true
-    created_at?: true
-    updated_at?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
     _all?: true
   }
 
@@ -8103,12 +8234,12 @@ export namespace Prisma {
 
   export type InstructorGroupByOutputType = {
     id: string
-    member_id: string
-    dojo_id: string | null
+    memberId: string
+    dojoId: string | null
     bio: string | null
-    is_active: boolean
-    created_at: Date
-    updated_at: Date
+    isActive: boolean
+    createdAt: Date
+    updatedAt: Date
     _count: InstructorCountAggregateOutputType | null
     _min: InstructorMinAggregateOutputType | null
     _max: InstructorMaxAggregateOutputType | null
@@ -8130,51 +8261,51 @@ export namespace Prisma {
 
   export type InstructorSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    member_id?: boolean
-    dojo_id?: boolean
+    memberId?: boolean
+    dojoId?: boolean
     bio?: boolean
-    is_active?: boolean
-    created_at?: boolean
-    updated_at?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
     member?: boolean | MemberDefaultArgs<ExtArgs>
     dojo?: boolean | Instructor$dojoArgs<ExtArgs>
   }, ExtArgs["result"]["instructor"]>
 
   export type InstructorSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    member_id?: boolean
-    dojo_id?: boolean
+    memberId?: boolean
+    dojoId?: boolean
     bio?: boolean
-    is_active?: boolean
-    created_at?: boolean
-    updated_at?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
     member?: boolean | MemberDefaultArgs<ExtArgs>
     dojo?: boolean | Instructor$dojoArgs<ExtArgs>
   }, ExtArgs["result"]["instructor"]>
 
   export type InstructorSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    member_id?: boolean
-    dojo_id?: boolean
+    memberId?: boolean
+    dojoId?: boolean
     bio?: boolean
-    is_active?: boolean
-    created_at?: boolean
-    updated_at?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
     member?: boolean | MemberDefaultArgs<ExtArgs>
     dojo?: boolean | Instructor$dojoArgs<ExtArgs>
   }, ExtArgs["result"]["instructor"]>
 
   export type InstructorSelectScalar = {
     id?: boolean
-    member_id?: boolean
-    dojo_id?: boolean
+    memberId?: boolean
+    dojoId?: boolean
     bio?: boolean
-    is_active?: boolean
-    created_at?: boolean
-    updated_at?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
   }
 
-  export type InstructorOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "member_id" | "dojo_id" | "bio" | "is_active" | "created_at" | "updated_at", ExtArgs["result"]["instructor"]>
+  export type InstructorOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "memberId" | "dojoId" | "bio" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["instructor"]>
   export type InstructorInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     member?: boolean | MemberDefaultArgs<ExtArgs>
     dojo?: boolean | Instructor$dojoArgs<ExtArgs>
@@ -8196,12 +8327,12 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      member_id: string
-      dojo_id: string | null
+      memberId: string
+      dojoId: string | null
       bio: string | null
-      is_active: boolean
-      created_at: Date
-      updated_at: Date
+      isActive: boolean
+      createdAt: Date
+      updatedAt: Date
     }, ExtArgs["result"]["instructor"]>
     composites: {}
   }
@@ -8628,12 +8759,12 @@ export namespace Prisma {
    */
   interface InstructorFieldRefs {
     readonly id: FieldRef<"Instructor", 'String'>
-    readonly member_id: FieldRef<"Instructor", 'String'>
-    readonly dojo_id: FieldRef<"Instructor", 'String'>
+    readonly memberId: FieldRef<"Instructor", 'String'>
+    readonly dojoId: FieldRef<"Instructor", 'String'>
     readonly bio: FieldRef<"Instructor", 'String'>
-    readonly is_active: FieldRef<"Instructor", 'Boolean'>
-    readonly created_at: FieldRef<"Instructor", 'DateTime'>
-    readonly updated_at: FieldRef<"Instructor", 'DateTime'>
+    readonly isActive: FieldRef<"Instructor", 'Boolean'>
+    readonly createdAt: FieldRef<"Instructor", 'DateTime'>
+    readonly updatedAt: FieldRef<"Instructor", 'DateTime'>
   }
     
 
@@ -9084,64 +9215,64 @@ export namespace Prisma {
 
   export type AttendanceMinAggregateOutputType = {
     id: string | null
-    member_id: string | null
-    dojo_id: string | null
+    memberId: string | null
+    dojoId: string | null
     date: Date | null
     present: boolean | null
     notes: string | null
-    created_at: Date | null
+    createdAt: Date | null
   }
 
   export type AttendanceMaxAggregateOutputType = {
     id: string | null
-    member_id: string | null
-    dojo_id: string | null
+    memberId: string | null
+    dojoId: string | null
     date: Date | null
     present: boolean | null
     notes: string | null
-    created_at: Date | null
+    createdAt: Date | null
   }
 
   export type AttendanceCountAggregateOutputType = {
     id: number
-    member_id: number
-    dojo_id: number
+    memberId: number
+    dojoId: number
     date: number
     present: number
     notes: number
-    created_at: number
+    createdAt: number
     _all: number
   }
 
 
   export type AttendanceMinAggregateInputType = {
     id?: true
-    member_id?: true
-    dojo_id?: true
+    memberId?: true
+    dojoId?: true
     date?: true
     present?: true
     notes?: true
-    created_at?: true
+    createdAt?: true
   }
 
   export type AttendanceMaxAggregateInputType = {
     id?: true
-    member_id?: true
-    dojo_id?: true
+    memberId?: true
+    dojoId?: true
     date?: true
     present?: true
     notes?: true
-    created_at?: true
+    createdAt?: true
   }
 
   export type AttendanceCountAggregateInputType = {
     id?: true
-    member_id?: true
-    dojo_id?: true
+    memberId?: true
+    dojoId?: true
     date?: true
     present?: true
     notes?: true
-    created_at?: true
+    createdAt?: true
     _all?: true
   }
 
@@ -9219,12 +9350,12 @@ export namespace Prisma {
 
   export type AttendanceGroupByOutputType = {
     id: string
-    member_id: string
-    dojo_id: string | null
+    memberId: string
+    dojoId: string | null
     date: Date
     present: boolean
     notes: string | null
-    created_at: Date
+    createdAt: Date
     _count: AttendanceCountAggregateOutputType | null
     _min: AttendanceMinAggregateOutputType | null
     _max: AttendanceMaxAggregateOutputType | null
@@ -9246,51 +9377,51 @@ export namespace Prisma {
 
   export type AttendanceSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    member_id?: boolean
-    dojo_id?: boolean
+    memberId?: boolean
+    dojoId?: boolean
     date?: boolean
     present?: boolean
     notes?: boolean
-    created_at?: boolean
+    createdAt?: boolean
     member?: boolean | MemberDefaultArgs<ExtArgs>
     dojo?: boolean | Attendance$dojoArgs<ExtArgs>
   }, ExtArgs["result"]["attendance"]>
 
   export type AttendanceSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    member_id?: boolean
-    dojo_id?: boolean
+    memberId?: boolean
+    dojoId?: boolean
     date?: boolean
     present?: boolean
     notes?: boolean
-    created_at?: boolean
+    createdAt?: boolean
     member?: boolean | MemberDefaultArgs<ExtArgs>
     dojo?: boolean | Attendance$dojoArgs<ExtArgs>
   }, ExtArgs["result"]["attendance"]>
 
   export type AttendanceSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    member_id?: boolean
-    dojo_id?: boolean
+    memberId?: boolean
+    dojoId?: boolean
     date?: boolean
     present?: boolean
     notes?: boolean
-    created_at?: boolean
+    createdAt?: boolean
     member?: boolean | MemberDefaultArgs<ExtArgs>
     dojo?: boolean | Attendance$dojoArgs<ExtArgs>
   }, ExtArgs["result"]["attendance"]>
 
   export type AttendanceSelectScalar = {
     id?: boolean
-    member_id?: boolean
-    dojo_id?: boolean
+    memberId?: boolean
+    dojoId?: boolean
     date?: boolean
     present?: boolean
     notes?: boolean
-    created_at?: boolean
+    createdAt?: boolean
   }
 
-  export type AttendanceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "member_id" | "dojo_id" | "date" | "present" | "notes" | "created_at", ExtArgs["result"]["attendance"]>
+  export type AttendanceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "memberId" | "dojoId" | "date" | "present" | "notes" | "createdAt", ExtArgs["result"]["attendance"]>
   export type AttendanceInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     member?: boolean | MemberDefaultArgs<ExtArgs>
     dojo?: boolean | Attendance$dojoArgs<ExtArgs>
@@ -9312,12 +9443,12 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      member_id: string
-      dojo_id: string | null
+      memberId: string
+      dojoId: string | null
       date: Date
       present: boolean
       notes: string | null
-      created_at: Date
+      createdAt: Date
     }, ExtArgs["result"]["attendance"]>
     composites: {}
   }
@@ -9744,12 +9875,12 @@ export namespace Prisma {
    */
   interface AttendanceFieldRefs {
     readonly id: FieldRef<"Attendance", 'String'>
-    readonly member_id: FieldRef<"Attendance", 'String'>
-    readonly dojo_id: FieldRef<"Attendance", 'String'>
+    readonly memberId: FieldRef<"Attendance", 'String'>
+    readonly dojoId: FieldRef<"Attendance", 'String'>
     readonly date: FieldRef<"Attendance", 'DateTime'>
     readonly present: FieldRef<"Attendance", 'Boolean'>
     readonly notes: FieldRef<"Attendance", 'String'>
-    readonly created_at: FieldRef<"Attendance", 'DateTime'>
+    readonly createdAt: FieldRef<"Attendance", 'DateTime'>
   }
     
 
@@ -10201,37 +10332,37 @@ export namespace Prisma {
   export type GradingEventMinAggregateOutputType = {
     id: string | null
     name: string | null
-    event_date: Date | null
+    eventDate: Date | null
     location: string | null
-    target_rank_id: string | null
-    is_open: boolean | null
+    targetRankId: string | null
+    isOpen: boolean | null
     notes: string | null
-    created_at: Date | null
-    updated_at: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type GradingEventMaxAggregateOutputType = {
     id: string | null
     name: string | null
-    event_date: Date | null
+    eventDate: Date | null
     location: string | null
-    target_rank_id: string | null
-    is_open: boolean | null
+    targetRankId: string | null
+    isOpen: boolean | null
     notes: string | null
-    created_at: Date | null
-    updated_at: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type GradingEventCountAggregateOutputType = {
     id: number
     name: number
-    event_date: number
+    eventDate: number
     location: number
-    target_rank_id: number
-    is_open: number
+    targetRankId: number
+    isOpen: number
     notes: number
-    created_at: number
-    updated_at: number
+    createdAt: number
+    updatedAt: number
     _all: number
   }
 
@@ -10239,37 +10370,37 @@ export namespace Prisma {
   export type GradingEventMinAggregateInputType = {
     id?: true
     name?: true
-    event_date?: true
+    eventDate?: true
     location?: true
-    target_rank_id?: true
-    is_open?: true
+    targetRankId?: true
+    isOpen?: true
     notes?: true
-    created_at?: true
-    updated_at?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type GradingEventMaxAggregateInputType = {
     id?: true
     name?: true
-    event_date?: true
+    eventDate?: true
     location?: true
-    target_rank_id?: true
-    is_open?: true
+    targetRankId?: true
+    isOpen?: true
     notes?: true
-    created_at?: true
-    updated_at?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type GradingEventCountAggregateInputType = {
     id?: true
     name?: true
-    event_date?: true
+    eventDate?: true
     location?: true
-    target_rank_id?: true
-    is_open?: true
+    targetRankId?: true
+    isOpen?: true
     notes?: true
-    created_at?: true
-    updated_at?: true
+    createdAt?: true
+    updatedAt?: true
     _all?: true
   }
 
@@ -10348,13 +10479,13 @@ export namespace Prisma {
   export type GradingEventGroupByOutputType = {
     id: string
     name: string
-    event_date: Date
+    eventDate: Date
     location: string | null
-    target_rank_id: string | null
-    is_open: boolean
+    targetRankId: string | null
+    isOpen: boolean
     notes: string | null
-    created_at: Date
-    updated_at: Date
+    createdAt: Date
+    updatedAt: Date
     _count: GradingEventCountAggregateOutputType | null
     _min: GradingEventMinAggregateOutputType | null
     _max: GradingEventMaxAggregateOutputType | null
@@ -10377,14 +10508,14 @@ export namespace Prisma {
   export type GradingEventSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
-    event_date?: boolean
+    eventDate?: boolean
     location?: boolean
-    target_rank_id?: boolean
-    is_open?: boolean
+    targetRankId?: boolean
+    isOpen?: boolean
     notes?: boolean
-    created_at?: boolean
-    updated_at?: boolean
-    target_rank?: boolean | GradingEvent$target_rankArgs<ExtArgs>
+    createdAt?: boolean
+    updatedAt?: boolean
+    targetRank?: boolean | GradingEvent$targetRankArgs<ExtArgs>
     gradings?: boolean | GradingEvent$gradingsArgs<ExtArgs>
     applications?: boolean | GradingEvent$applicationsArgs<ExtArgs>
     _count?: boolean | GradingEventCountOutputTypeDefaultArgs<ExtArgs>
@@ -10393,72 +10524,72 @@ export namespace Prisma {
   export type GradingEventSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
-    event_date?: boolean
+    eventDate?: boolean
     location?: boolean
-    target_rank_id?: boolean
-    is_open?: boolean
+    targetRankId?: boolean
+    isOpen?: boolean
     notes?: boolean
-    created_at?: boolean
-    updated_at?: boolean
-    target_rank?: boolean | GradingEvent$target_rankArgs<ExtArgs>
+    createdAt?: boolean
+    updatedAt?: boolean
+    targetRank?: boolean | GradingEvent$targetRankArgs<ExtArgs>
   }, ExtArgs["result"]["gradingEvent"]>
 
   export type GradingEventSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
-    event_date?: boolean
+    eventDate?: boolean
     location?: boolean
-    target_rank_id?: boolean
-    is_open?: boolean
+    targetRankId?: boolean
+    isOpen?: boolean
     notes?: boolean
-    created_at?: boolean
-    updated_at?: boolean
-    target_rank?: boolean | GradingEvent$target_rankArgs<ExtArgs>
+    createdAt?: boolean
+    updatedAt?: boolean
+    targetRank?: boolean | GradingEvent$targetRankArgs<ExtArgs>
   }, ExtArgs["result"]["gradingEvent"]>
 
   export type GradingEventSelectScalar = {
     id?: boolean
     name?: boolean
-    event_date?: boolean
+    eventDate?: boolean
     location?: boolean
-    target_rank_id?: boolean
-    is_open?: boolean
+    targetRankId?: boolean
+    isOpen?: boolean
     notes?: boolean
-    created_at?: boolean
-    updated_at?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
   }
 
-  export type GradingEventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "event_date" | "location" | "target_rank_id" | "is_open" | "notes" | "created_at" | "updated_at", ExtArgs["result"]["gradingEvent"]>
+  export type GradingEventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "eventDate" | "location" | "targetRankId" | "isOpen" | "notes" | "createdAt" | "updatedAt", ExtArgs["result"]["gradingEvent"]>
   export type GradingEventInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    target_rank?: boolean | GradingEvent$target_rankArgs<ExtArgs>
+    targetRank?: boolean | GradingEvent$targetRankArgs<ExtArgs>
     gradings?: boolean | GradingEvent$gradingsArgs<ExtArgs>
     applications?: boolean | GradingEvent$applicationsArgs<ExtArgs>
     _count?: boolean | GradingEventCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type GradingEventIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    target_rank?: boolean | GradingEvent$target_rankArgs<ExtArgs>
+    targetRank?: boolean | GradingEvent$targetRankArgs<ExtArgs>
   }
   export type GradingEventIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    target_rank?: boolean | GradingEvent$target_rankArgs<ExtArgs>
+    targetRank?: boolean | GradingEvent$targetRankArgs<ExtArgs>
   }
 
   export type $GradingEventPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "GradingEvent"
     objects: {
-      target_rank: Prisma.$BeltRankPayload<ExtArgs> | null
+      targetRank: Prisma.$BeltRankPayload<ExtArgs> | null
       gradings: Prisma.$GradingPayload<ExtArgs>[]
       applications: Prisma.$GradingApplicationPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       name: string
-      event_date: Date
+      eventDate: Date
       location: string | null
-      target_rank_id: string | null
-      is_open: boolean
+      targetRankId: string | null
+      isOpen: boolean
       notes: string | null
-      created_at: Date
-      updated_at: Date
+      createdAt: Date
+      updatedAt: Date
     }, ExtArgs["result"]["gradingEvent"]>
     composites: {}
   }
@@ -10853,7 +10984,7 @@ export namespace Prisma {
    */
   export interface Prisma__GradingEventClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    target_rank<T extends GradingEvent$target_rankArgs<ExtArgs> = {}>(args?: Subset<T, GradingEvent$target_rankArgs<ExtArgs>>): Prisma__BeltRankClient<$Result.GetResult<Prisma.$BeltRankPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    targetRank<T extends GradingEvent$targetRankArgs<ExtArgs> = {}>(args?: Subset<T, GradingEvent$targetRankArgs<ExtArgs>>): Prisma__BeltRankClient<$Result.GetResult<Prisma.$BeltRankPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     gradings<T extends GradingEvent$gradingsArgs<ExtArgs> = {}>(args?: Subset<T, GradingEvent$gradingsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GradingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     applications<T extends GradingEvent$applicationsArgs<ExtArgs> = {}>(args?: Subset<T, GradingEvent$applicationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GradingApplicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
@@ -10887,13 +11018,13 @@ export namespace Prisma {
   interface GradingEventFieldRefs {
     readonly id: FieldRef<"GradingEvent", 'String'>
     readonly name: FieldRef<"GradingEvent", 'String'>
-    readonly event_date: FieldRef<"GradingEvent", 'DateTime'>
+    readonly eventDate: FieldRef<"GradingEvent", 'DateTime'>
     readonly location: FieldRef<"GradingEvent", 'String'>
-    readonly target_rank_id: FieldRef<"GradingEvent", 'String'>
-    readonly is_open: FieldRef<"GradingEvent", 'Boolean'>
+    readonly targetRankId: FieldRef<"GradingEvent", 'String'>
+    readonly isOpen: FieldRef<"GradingEvent", 'Boolean'>
     readonly notes: FieldRef<"GradingEvent", 'String'>
-    readonly created_at: FieldRef<"GradingEvent", 'DateTime'>
-    readonly updated_at: FieldRef<"GradingEvent", 'DateTime'>
+    readonly createdAt: FieldRef<"GradingEvent", 'DateTime'>
+    readonly updatedAt: FieldRef<"GradingEvent", 'DateTime'>
   }
     
 
@@ -11295,9 +11426,9 @@ export namespace Prisma {
   }
 
   /**
-   * GradingEvent.target_rank
+   * GradingEvent.targetRank
    */
-  export type GradingEvent$target_rankArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type GradingEvent$targetRankArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the BeltRank
      */
@@ -11392,64 +11523,64 @@ export namespace Prisma {
 
   export type GradingApplicationMinAggregateOutputType = {
     id: string | null
-    member_id: string | null
-    grading_event_id: string | null
-    target_rank_id: string | null
+    memberId: string | null
+    gradingEventId: string | null
+    targetRankId: string | null
     status: $Enums.ApplicationStatus | null
     notes: string | null
-    applied_at: Date | null
+    appliedAt: Date | null
   }
 
   export type GradingApplicationMaxAggregateOutputType = {
     id: string | null
-    member_id: string | null
-    grading_event_id: string | null
-    target_rank_id: string | null
+    memberId: string | null
+    gradingEventId: string | null
+    targetRankId: string | null
     status: $Enums.ApplicationStatus | null
     notes: string | null
-    applied_at: Date | null
+    appliedAt: Date | null
   }
 
   export type GradingApplicationCountAggregateOutputType = {
     id: number
-    member_id: number
-    grading_event_id: number
-    target_rank_id: number
+    memberId: number
+    gradingEventId: number
+    targetRankId: number
     status: number
     notes: number
-    applied_at: number
+    appliedAt: number
     _all: number
   }
 
 
   export type GradingApplicationMinAggregateInputType = {
     id?: true
-    member_id?: true
-    grading_event_id?: true
-    target_rank_id?: true
+    memberId?: true
+    gradingEventId?: true
+    targetRankId?: true
     status?: true
     notes?: true
-    applied_at?: true
+    appliedAt?: true
   }
 
   export type GradingApplicationMaxAggregateInputType = {
     id?: true
-    member_id?: true
-    grading_event_id?: true
-    target_rank_id?: true
+    memberId?: true
+    gradingEventId?: true
+    targetRankId?: true
     status?: true
     notes?: true
-    applied_at?: true
+    appliedAt?: true
   }
 
   export type GradingApplicationCountAggregateInputType = {
     id?: true
-    member_id?: true
-    grading_event_id?: true
-    target_rank_id?: true
+    memberId?: true
+    gradingEventId?: true
+    targetRankId?: true
     status?: true
     notes?: true
-    applied_at?: true
+    appliedAt?: true
     _all?: true
   }
 
@@ -11527,12 +11658,12 @@ export namespace Prisma {
 
   export type GradingApplicationGroupByOutputType = {
     id: string
-    member_id: string
-    grading_event_id: string
-    target_rank_id: string | null
+    memberId: string
+    gradingEventId: string
+    targetRankId: string | null
     status: $Enums.ApplicationStatus
     notes: string | null
-    applied_at: Date
+    appliedAt: Date
     _count: GradingApplicationCountAggregateOutputType | null
     _min: GradingApplicationMinAggregateOutputType | null
     _max: GradingApplicationMaxAggregateOutputType | null
@@ -11554,85 +11685,85 @@ export namespace Prisma {
 
   export type GradingApplicationSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    member_id?: boolean
-    grading_event_id?: boolean
-    target_rank_id?: boolean
+    memberId?: boolean
+    gradingEventId?: boolean
+    targetRankId?: boolean
     status?: boolean
     notes?: boolean
-    applied_at?: boolean
+    appliedAt?: boolean
     member?: boolean | MemberDefaultArgs<ExtArgs>
-    grading_event?: boolean | GradingEventDefaultArgs<ExtArgs>
-    target_rank?: boolean | GradingApplication$target_rankArgs<ExtArgs>
+    gradingEvent?: boolean | GradingEventDefaultArgs<ExtArgs>
+    targetRank?: boolean | GradingApplication$targetRankArgs<ExtArgs>
   }, ExtArgs["result"]["gradingApplication"]>
 
   export type GradingApplicationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    member_id?: boolean
-    grading_event_id?: boolean
-    target_rank_id?: boolean
+    memberId?: boolean
+    gradingEventId?: boolean
+    targetRankId?: boolean
     status?: boolean
     notes?: boolean
-    applied_at?: boolean
+    appliedAt?: boolean
     member?: boolean | MemberDefaultArgs<ExtArgs>
-    grading_event?: boolean | GradingEventDefaultArgs<ExtArgs>
-    target_rank?: boolean | GradingApplication$target_rankArgs<ExtArgs>
+    gradingEvent?: boolean | GradingEventDefaultArgs<ExtArgs>
+    targetRank?: boolean | GradingApplication$targetRankArgs<ExtArgs>
   }, ExtArgs["result"]["gradingApplication"]>
 
   export type GradingApplicationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    member_id?: boolean
-    grading_event_id?: boolean
-    target_rank_id?: boolean
+    memberId?: boolean
+    gradingEventId?: boolean
+    targetRankId?: boolean
     status?: boolean
     notes?: boolean
-    applied_at?: boolean
+    appliedAt?: boolean
     member?: boolean | MemberDefaultArgs<ExtArgs>
-    grading_event?: boolean | GradingEventDefaultArgs<ExtArgs>
-    target_rank?: boolean | GradingApplication$target_rankArgs<ExtArgs>
+    gradingEvent?: boolean | GradingEventDefaultArgs<ExtArgs>
+    targetRank?: boolean | GradingApplication$targetRankArgs<ExtArgs>
   }, ExtArgs["result"]["gradingApplication"]>
 
   export type GradingApplicationSelectScalar = {
     id?: boolean
-    member_id?: boolean
-    grading_event_id?: boolean
-    target_rank_id?: boolean
+    memberId?: boolean
+    gradingEventId?: boolean
+    targetRankId?: boolean
     status?: boolean
     notes?: boolean
-    applied_at?: boolean
+    appliedAt?: boolean
   }
 
-  export type GradingApplicationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "member_id" | "grading_event_id" | "target_rank_id" | "status" | "notes" | "applied_at", ExtArgs["result"]["gradingApplication"]>
+  export type GradingApplicationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "memberId" | "gradingEventId" | "targetRankId" | "status" | "notes" | "appliedAt", ExtArgs["result"]["gradingApplication"]>
   export type GradingApplicationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     member?: boolean | MemberDefaultArgs<ExtArgs>
-    grading_event?: boolean | GradingEventDefaultArgs<ExtArgs>
-    target_rank?: boolean | GradingApplication$target_rankArgs<ExtArgs>
+    gradingEvent?: boolean | GradingEventDefaultArgs<ExtArgs>
+    targetRank?: boolean | GradingApplication$targetRankArgs<ExtArgs>
   }
   export type GradingApplicationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     member?: boolean | MemberDefaultArgs<ExtArgs>
-    grading_event?: boolean | GradingEventDefaultArgs<ExtArgs>
-    target_rank?: boolean | GradingApplication$target_rankArgs<ExtArgs>
+    gradingEvent?: boolean | GradingEventDefaultArgs<ExtArgs>
+    targetRank?: boolean | GradingApplication$targetRankArgs<ExtArgs>
   }
   export type GradingApplicationIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     member?: boolean | MemberDefaultArgs<ExtArgs>
-    grading_event?: boolean | GradingEventDefaultArgs<ExtArgs>
-    target_rank?: boolean | GradingApplication$target_rankArgs<ExtArgs>
+    gradingEvent?: boolean | GradingEventDefaultArgs<ExtArgs>
+    targetRank?: boolean | GradingApplication$targetRankArgs<ExtArgs>
   }
 
   export type $GradingApplicationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "GradingApplication"
     objects: {
       member: Prisma.$MemberPayload<ExtArgs>
-      grading_event: Prisma.$GradingEventPayload<ExtArgs>
-      target_rank: Prisma.$BeltRankPayload<ExtArgs> | null
+      gradingEvent: Prisma.$GradingEventPayload<ExtArgs>
+      targetRank: Prisma.$BeltRankPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      member_id: string
-      grading_event_id: string
-      target_rank_id: string | null
+      memberId: string
+      gradingEventId: string
+      targetRankId: string | null
       status: $Enums.ApplicationStatus
       notes: string | null
-      applied_at: Date
+      appliedAt: Date
     }, ExtArgs["result"]["gradingApplication"]>
     composites: {}
   }
@@ -12028,8 +12159,8 @@ export namespace Prisma {
   export interface Prisma__GradingApplicationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     member<T extends MemberDefaultArgs<ExtArgs> = {}>(args?: Subset<T, MemberDefaultArgs<ExtArgs>>): Prisma__MemberClient<$Result.GetResult<Prisma.$MemberPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    grading_event<T extends GradingEventDefaultArgs<ExtArgs> = {}>(args?: Subset<T, GradingEventDefaultArgs<ExtArgs>>): Prisma__GradingEventClient<$Result.GetResult<Prisma.$GradingEventPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    target_rank<T extends GradingApplication$target_rankArgs<ExtArgs> = {}>(args?: Subset<T, GradingApplication$target_rankArgs<ExtArgs>>): Prisma__BeltRankClient<$Result.GetResult<Prisma.$BeltRankPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    gradingEvent<T extends GradingEventDefaultArgs<ExtArgs> = {}>(args?: Subset<T, GradingEventDefaultArgs<ExtArgs>>): Prisma__GradingEventClient<$Result.GetResult<Prisma.$GradingEventPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    targetRank<T extends GradingApplication$targetRankArgs<ExtArgs> = {}>(args?: Subset<T, GradingApplication$targetRankArgs<ExtArgs>>): Prisma__BeltRankClient<$Result.GetResult<Prisma.$BeltRankPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -12060,12 +12191,12 @@ export namespace Prisma {
    */
   interface GradingApplicationFieldRefs {
     readonly id: FieldRef<"GradingApplication", 'String'>
-    readonly member_id: FieldRef<"GradingApplication", 'String'>
-    readonly grading_event_id: FieldRef<"GradingApplication", 'String'>
-    readonly target_rank_id: FieldRef<"GradingApplication", 'String'>
+    readonly memberId: FieldRef<"GradingApplication", 'String'>
+    readonly gradingEventId: FieldRef<"GradingApplication", 'String'>
+    readonly targetRankId: FieldRef<"GradingApplication", 'String'>
     readonly status: FieldRef<"GradingApplication", 'ApplicationStatus'>
     readonly notes: FieldRef<"GradingApplication", 'String'>
-    readonly applied_at: FieldRef<"GradingApplication", 'DateTime'>
+    readonly appliedAt: FieldRef<"GradingApplication", 'DateTime'>
   }
     
 
@@ -12467,9 +12598,9 @@ export namespace Prisma {
   }
 
   /**
-   * GradingApplication.target_rank
+   * GradingApplication.targetRank
    */
-  export type GradingApplication$target_rankArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type GradingApplication$targetRankArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the BeltRank
      */
@@ -12516,82 +12647,82 @@ export namespace Prisma {
 
   export type GradingMinAggregateOutputType = {
     id: string | null
-    member_id: string | null
-    grading_event_id: string | null
-    from_rank_id: string | null
-    to_rank_id: string | null
+    memberId: string | null
+    gradingEventId: string | null
+    fromRankId: string | null
+    toRankId: string | null
     result: $Enums.GradingResult | null
-    certificate_url: string | null
+    certificateUrl: string | null
     notes: string | null
-    created_at: Date | null
-    updated_at: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type GradingMaxAggregateOutputType = {
     id: string | null
-    member_id: string | null
-    grading_event_id: string | null
-    from_rank_id: string | null
-    to_rank_id: string | null
+    memberId: string | null
+    gradingEventId: string | null
+    fromRankId: string | null
+    toRankId: string | null
     result: $Enums.GradingResult | null
-    certificate_url: string | null
+    certificateUrl: string | null
     notes: string | null
-    created_at: Date | null
-    updated_at: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type GradingCountAggregateOutputType = {
     id: number
-    member_id: number
-    grading_event_id: number
-    from_rank_id: number
-    to_rank_id: number
+    memberId: number
+    gradingEventId: number
+    fromRankId: number
+    toRankId: number
     result: number
-    certificate_url: number
+    certificateUrl: number
     notes: number
-    created_at: number
-    updated_at: number
+    createdAt: number
+    updatedAt: number
     _all: number
   }
 
 
   export type GradingMinAggregateInputType = {
     id?: true
-    member_id?: true
-    grading_event_id?: true
-    from_rank_id?: true
-    to_rank_id?: true
+    memberId?: true
+    gradingEventId?: true
+    fromRankId?: true
+    toRankId?: true
     result?: true
-    certificate_url?: true
+    certificateUrl?: true
     notes?: true
-    created_at?: true
-    updated_at?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type GradingMaxAggregateInputType = {
     id?: true
-    member_id?: true
-    grading_event_id?: true
-    from_rank_id?: true
-    to_rank_id?: true
+    memberId?: true
+    gradingEventId?: true
+    fromRankId?: true
+    toRankId?: true
     result?: true
-    certificate_url?: true
+    certificateUrl?: true
     notes?: true
-    created_at?: true
-    updated_at?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type GradingCountAggregateInputType = {
     id?: true
-    member_id?: true
-    grading_event_id?: true
-    from_rank_id?: true
-    to_rank_id?: true
+    memberId?: true
+    gradingEventId?: true
+    fromRankId?: true
+    toRankId?: true
     result?: true
-    certificate_url?: true
+    certificateUrl?: true
     notes?: true
-    created_at?: true
-    updated_at?: true
+    createdAt?: true
+    updatedAt?: true
     _all?: true
   }
 
@@ -12669,15 +12800,15 @@ export namespace Prisma {
 
   export type GradingGroupByOutputType = {
     id: string
-    member_id: string
-    grading_event_id: string | null
-    from_rank_id: string | null
-    to_rank_id: string | null
+    memberId: string
+    gradingEventId: string | null
+    fromRankId: string | null
+    toRankId: string | null
     result: $Enums.GradingResult
-    certificate_url: string | null
+    certificateUrl: string | null
     notes: string | null
-    created_at: Date
-    updated_at: Date
+    createdAt: Date
+    updatedAt: Date
     _count: GradingCountAggregateOutputType | null
     _min: GradingMinAggregateOutputType | null
     _max: GradingMaxAggregateOutputType | null
@@ -12699,107 +12830,107 @@ export namespace Prisma {
 
   export type GradingSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    member_id?: boolean
-    grading_event_id?: boolean
-    from_rank_id?: boolean
-    to_rank_id?: boolean
+    memberId?: boolean
+    gradingEventId?: boolean
+    fromRankId?: boolean
+    toRankId?: boolean
     result?: boolean
-    certificate_url?: boolean
+    certificateUrl?: boolean
     notes?: boolean
-    created_at?: boolean
-    updated_at?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
     member?: boolean | MemberDefaultArgs<ExtArgs>
-    grading_event?: boolean | Grading$grading_eventArgs<ExtArgs>
-    from_rank?: boolean | Grading$from_rankArgs<ExtArgs>
-    to_rank?: boolean | Grading$to_rankArgs<ExtArgs>
+    gradingEvent?: boolean | Grading$gradingEventArgs<ExtArgs>
+    fromRank?: boolean | Grading$fromRankArgs<ExtArgs>
+    toRank?: boolean | Grading$toRankArgs<ExtArgs>
   }, ExtArgs["result"]["grading"]>
 
   export type GradingSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    member_id?: boolean
-    grading_event_id?: boolean
-    from_rank_id?: boolean
-    to_rank_id?: boolean
+    memberId?: boolean
+    gradingEventId?: boolean
+    fromRankId?: boolean
+    toRankId?: boolean
     result?: boolean
-    certificate_url?: boolean
+    certificateUrl?: boolean
     notes?: boolean
-    created_at?: boolean
-    updated_at?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
     member?: boolean | MemberDefaultArgs<ExtArgs>
-    grading_event?: boolean | Grading$grading_eventArgs<ExtArgs>
-    from_rank?: boolean | Grading$from_rankArgs<ExtArgs>
-    to_rank?: boolean | Grading$to_rankArgs<ExtArgs>
+    gradingEvent?: boolean | Grading$gradingEventArgs<ExtArgs>
+    fromRank?: boolean | Grading$fromRankArgs<ExtArgs>
+    toRank?: boolean | Grading$toRankArgs<ExtArgs>
   }, ExtArgs["result"]["grading"]>
 
   export type GradingSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    member_id?: boolean
-    grading_event_id?: boolean
-    from_rank_id?: boolean
-    to_rank_id?: boolean
+    memberId?: boolean
+    gradingEventId?: boolean
+    fromRankId?: boolean
+    toRankId?: boolean
     result?: boolean
-    certificate_url?: boolean
+    certificateUrl?: boolean
     notes?: boolean
-    created_at?: boolean
-    updated_at?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
     member?: boolean | MemberDefaultArgs<ExtArgs>
-    grading_event?: boolean | Grading$grading_eventArgs<ExtArgs>
-    from_rank?: boolean | Grading$from_rankArgs<ExtArgs>
-    to_rank?: boolean | Grading$to_rankArgs<ExtArgs>
+    gradingEvent?: boolean | Grading$gradingEventArgs<ExtArgs>
+    fromRank?: boolean | Grading$fromRankArgs<ExtArgs>
+    toRank?: boolean | Grading$toRankArgs<ExtArgs>
   }, ExtArgs["result"]["grading"]>
 
   export type GradingSelectScalar = {
     id?: boolean
-    member_id?: boolean
-    grading_event_id?: boolean
-    from_rank_id?: boolean
-    to_rank_id?: boolean
+    memberId?: boolean
+    gradingEventId?: boolean
+    fromRankId?: boolean
+    toRankId?: boolean
     result?: boolean
-    certificate_url?: boolean
+    certificateUrl?: boolean
     notes?: boolean
-    created_at?: boolean
-    updated_at?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
   }
 
-  export type GradingOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "member_id" | "grading_event_id" | "from_rank_id" | "to_rank_id" | "result" | "certificate_url" | "notes" | "created_at" | "updated_at", ExtArgs["result"]["grading"]>
+  export type GradingOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "memberId" | "gradingEventId" | "fromRankId" | "toRankId" | "result" | "certificateUrl" | "notes" | "createdAt" | "updatedAt", ExtArgs["result"]["grading"]>
   export type GradingInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     member?: boolean | MemberDefaultArgs<ExtArgs>
-    grading_event?: boolean | Grading$grading_eventArgs<ExtArgs>
-    from_rank?: boolean | Grading$from_rankArgs<ExtArgs>
-    to_rank?: boolean | Grading$to_rankArgs<ExtArgs>
+    gradingEvent?: boolean | Grading$gradingEventArgs<ExtArgs>
+    fromRank?: boolean | Grading$fromRankArgs<ExtArgs>
+    toRank?: boolean | Grading$toRankArgs<ExtArgs>
   }
   export type GradingIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     member?: boolean | MemberDefaultArgs<ExtArgs>
-    grading_event?: boolean | Grading$grading_eventArgs<ExtArgs>
-    from_rank?: boolean | Grading$from_rankArgs<ExtArgs>
-    to_rank?: boolean | Grading$to_rankArgs<ExtArgs>
+    gradingEvent?: boolean | Grading$gradingEventArgs<ExtArgs>
+    fromRank?: boolean | Grading$fromRankArgs<ExtArgs>
+    toRank?: boolean | Grading$toRankArgs<ExtArgs>
   }
   export type GradingIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     member?: boolean | MemberDefaultArgs<ExtArgs>
-    grading_event?: boolean | Grading$grading_eventArgs<ExtArgs>
-    from_rank?: boolean | Grading$from_rankArgs<ExtArgs>
-    to_rank?: boolean | Grading$to_rankArgs<ExtArgs>
+    gradingEvent?: boolean | Grading$gradingEventArgs<ExtArgs>
+    fromRank?: boolean | Grading$fromRankArgs<ExtArgs>
+    toRank?: boolean | Grading$toRankArgs<ExtArgs>
   }
 
   export type $GradingPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Grading"
     objects: {
       member: Prisma.$MemberPayload<ExtArgs>
-      grading_event: Prisma.$GradingEventPayload<ExtArgs> | null
-      from_rank: Prisma.$BeltRankPayload<ExtArgs> | null
-      to_rank: Prisma.$BeltRankPayload<ExtArgs> | null
+      gradingEvent: Prisma.$GradingEventPayload<ExtArgs> | null
+      fromRank: Prisma.$BeltRankPayload<ExtArgs> | null
+      toRank: Prisma.$BeltRankPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      member_id: string
-      grading_event_id: string | null
-      from_rank_id: string | null
-      to_rank_id: string | null
+      memberId: string
+      gradingEventId: string | null
+      fromRankId: string | null
+      toRankId: string | null
       result: $Enums.GradingResult
-      certificate_url: string | null
+      certificateUrl: string | null
       notes: string | null
-      created_at: Date
-      updated_at: Date
+      createdAt: Date
+      updatedAt: Date
     }, ExtArgs["result"]["grading"]>
     composites: {}
   }
@@ -13195,9 +13326,9 @@ export namespace Prisma {
   export interface Prisma__GradingClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     member<T extends MemberDefaultArgs<ExtArgs> = {}>(args?: Subset<T, MemberDefaultArgs<ExtArgs>>): Prisma__MemberClient<$Result.GetResult<Prisma.$MemberPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    grading_event<T extends Grading$grading_eventArgs<ExtArgs> = {}>(args?: Subset<T, Grading$grading_eventArgs<ExtArgs>>): Prisma__GradingEventClient<$Result.GetResult<Prisma.$GradingEventPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    from_rank<T extends Grading$from_rankArgs<ExtArgs> = {}>(args?: Subset<T, Grading$from_rankArgs<ExtArgs>>): Prisma__BeltRankClient<$Result.GetResult<Prisma.$BeltRankPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    to_rank<T extends Grading$to_rankArgs<ExtArgs> = {}>(args?: Subset<T, Grading$to_rankArgs<ExtArgs>>): Prisma__BeltRankClient<$Result.GetResult<Prisma.$BeltRankPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    gradingEvent<T extends Grading$gradingEventArgs<ExtArgs> = {}>(args?: Subset<T, Grading$gradingEventArgs<ExtArgs>>): Prisma__GradingEventClient<$Result.GetResult<Prisma.$GradingEventPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    fromRank<T extends Grading$fromRankArgs<ExtArgs> = {}>(args?: Subset<T, Grading$fromRankArgs<ExtArgs>>): Prisma__BeltRankClient<$Result.GetResult<Prisma.$BeltRankPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    toRank<T extends Grading$toRankArgs<ExtArgs> = {}>(args?: Subset<T, Grading$toRankArgs<ExtArgs>>): Prisma__BeltRankClient<$Result.GetResult<Prisma.$BeltRankPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -13228,15 +13359,15 @@ export namespace Prisma {
    */
   interface GradingFieldRefs {
     readonly id: FieldRef<"Grading", 'String'>
-    readonly member_id: FieldRef<"Grading", 'String'>
-    readonly grading_event_id: FieldRef<"Grading", 'String'>
-    readonly from_rank_id: FieldRef<"Grading", 'String'>
-    readonly to_rank_id: FieldRef<"Grading", 'String'>
+    readonly memberId: FieldRef<"Grading", 'String'>
+    readonly gradingEventId: FieldRef<"Grading", 'String'>
+    readonly fromRankId: FieldRef<"Grading", 'String'>
+    readonly toRankId: FieldRef<"Grading", 'String'>
     readonly result: FieldRef<"Grading", 'GradingResult'>
-    readonly certificate_url: FieldRef<"Grading", 'String'>
+    readonly certificateUrl: FieldRef<"Grading", 'String'>
     readonly notes: FieldRef<"Grading", 'String'>
-    readonly created_at: FieldRef<"Grading", 'DateTime'>
-    readonly updated_at: FieldRef<"Grading", 'DateTime'>
+    readonly createdAt: FieldRef<"Grading", 'DateTime'>
+    readonly updatedAt: FieldRef<"Grading", 'DateTime'>
   }
     
 
@@ -13638,9 +13769,9 @@ export namespace Prisma {
   }
 
   /**
-   * Grading.grading_event
+   * Grading.gradingEvent
    */
-  export type Grading$grading_eventArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Grading$gradingEventArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the GradingEvent
      */
@@ -13657,9 +13788,9 @@ export namespace Prisma {
   }
 
   /**
-   * Grading.from_rank
+   * Grading.fromRank
    */
-  export type Grading$from_rankArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Grading$fromRankArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the BeltRank
      */
@@ -13676,9 +13807,9 @@ export namespace Prisma {
   }
 
   /**
-   * Grading.to_rank
+   * Grading.toRank
    */
-  export type Grading$to_rankArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Grading$toRankArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the BeltRank
      */
@@ -13726,99 +13857,99 @@ export namespace Prisma {
   }
 
   export type EventAvgAggregateOutputType = {
-    max_capacity: number | null
+    maxCapacity: number | null
   }
 
   export type EventSumAggregateOutputType = {
-    max_capacity: number | null
+    maxCapacity: number | null
   }
 
   export type EventMinAggregateOutputType = {
     id: string | null
     title: string | null
     description: string | null
-    event_date: Date | null
+    eventDate: Date | null
     location: string | null
-    image_url: string | null
-    is_published: boolean | null
-    max_capacity: number | null
-    created_at: Date | null
-    updated_at: Date | null
+    imageUrl: string | null
+    isPublished: boolean | null
+    maxCapacity: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type EventMaxAggregateOutputType = {
     id: string | null
     title: string | null
     description: string | null
-    event_date: Date | null
+    eventDate: Date | null
     location: string | null
-    image_url: string | null
-    is_published: boolean | null
-    max_capacity: number | null
-    created_at: Date | null
-    updated_at: Date | null
+    imageUrl: string | null
+    isPublished: boolean | null
+    maxCapacity: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type EventCountAggregateOutputType = {
     id: number
     title: number
     description: number
-    event_date: number
+    eventDate: number
     location: number
-    image_url: number
-    is_published: number
-    max_capacity: number
-    created_at: number
-    updated_at: number
+    imageUrl: number
+    isPublished: number
+    maxCapacity: number
+    createdAt: number
+    updatedAt: number
     _all: number
   }
 
 
   export type EventAvgAggregateInputType = {
-    max_capacity?: true
+    maxCapacity?: true
   }
 
   export type EventSumAggregateInputType = {
-    max_capacity?: true
+    maxCapacity?: true
   }
 
   export type EventMinAggregateInputType = {
     id?: true
     title?: true
     description?: true
-    event_date?: true
+    eventDate?: true
     location?: true
-    image_url?: true
-    is_published?: true
-    max_capacity?: true
-    created_at?: true
-    updated_at?: true
+    imageUrl?: true
+    isPublished?: true
+    maxCapacity?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type EventMaxAggregateInputType = {
     id?: true
     title?: true
     description?: true
-    event_date?: true
+    eventDate?: true
     location?: true
-    image_url?: true
-    is_published?: true
-    max_capacity?: true
-    created_at?: true
-    updated_at?: true
+    imageUrl?: true
+    isPublished?: true
+    maxCapacity?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type EventCountAggregateInputType = {
     id?: true
     title?: true
     description?: true
-    event_date?: true
+    eventDate?: true
     location?: true
-    image_url?: true
-    is_published?: true
-    max_capacity?: true
-    created_at?: true
-    updated_at?: true
+    imageUrl?: true
+    isPublished?: true
+    maxCapacity?: true
+    createdAt?: true
+    updatedAt?: true
     _all?: true
   }
 
@@ -13912,13 +14043,13 @@ export namespace Prisma {
     id: string
     title: string
     description: string | null
-    event_date: Date
+    eventDate: Date
     location: string | null
-    image_url: string | null
-    is_published: boolean
-    max_capacity: number | null
-    created_at: Date
-    updated_at: Date
+    imageUrl: string | null
+    isPublished: boolean
+    maxCapacity: number | null
+    createdAt: Date
+    updatedAt: Date
     _count: EventCountAggregateOutputType | null
     _avg: EventAvgAggregateOutputType | null
     _sum: EventSumAggregateOutputType | null
@@ -13944,13 +14075,13 @@ export namespace Prisma {
     id?: boolean
     title?: boolean
     description?: boolean
-    event_date?: boolean
+    eventDate?: boolean
     location?: boolean
-    image_url?: boolean
-    is_published?: boolean
-    max_capacity?: boolean
-    created_at?: boolean
-    updated_at?: boolean
+    imageUrl?: boolean
+    isPublished?: boolean
+    maxCapacity?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
     registrations?: boolean | Event$registrationsArgs<ExtArgs>
     _count?: boolean | EventCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["event"]>
@@ -13959,42 +14090,42 @@ export namespace Prisma {
     id?: boolean
     title?: boolean
     description?: boolean
-    event_date?: boolean
+    eventDate?: boolean
     location?: boolean
-    image_url?: boolean
-    is_published?: boolean
-    max_capacity?: boolean
-    created_at?: boolean
-    updated_at?: boolean
+    imageUrl?: boolean
+    isPublished?: boolean
+    maxCapacity?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
   }, ExtArgs["result"]["event"]>
 
   export type EventSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     title?: boolean
     description?: boolean
-    event_date?: boolean
+    eventDate?: boolean
     location?: boolean
-    image_url?: boolean
-    is_published?: boolean
-    max_capacity?: boolean
-    created_at?: boolean
-    updated_at?: boolean
+    imageUrl?: boolean
+    isPublished?: boolean
+    maxCapacity?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
   }, ExtArgs["result"]["event"]>
 
   export type EventSelectScalar = {
     id?: boolean
     title?: boolean
     description?: boolean
-    event_date?: boolean
+    eventDate?: boolean
     location?: boolean
-    image_url?: boolean
-    is_published?: boolean
-    max_capacity?: boolean
-    created_at?: boolean
-    updated_at?: boolean
+    imageUrl?: boolean
+    isPublished?: boolean
+    maxCapacity?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
   }
 
-  export type EventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "event_date" | "location" | "image_url" | "is_published" | "max_capacity" | "created_at" | "updated_at", ExtArgs["result"]["event"]>
+  export type EventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "eventDate" | "location" | "imageUrl" | "isPublished" | "maxCapacity" | "createdAt" | "updatedAt", ExtArgs["result"]["event"]>
   export type EventInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     registrations?: boolean | Event$registrationsArgs<ExtArgs>
     _count?: boolean | EventCountOutputTypeDefaultArgs<ExtArgs>
@@ -14011,13 +14142,13 @@ export namespace Prisma {
       id: string
       title: string
       description: string | null
-      event_date: Date
+      eventDate: Date
       location: string | null
-      image_url: string | null
-      is_published: boolean
-      max_capacity: number | null
-      created_at: Date
-      updated_at: Date
+      imageUrl: string | null
+      isPublished: boolean
+      maxCapacity: number | null
+      createdAt: Date
+      updatedAt: Date
     }, ExtArgs["result"]["event"]>
     composites: {}
   }
@@ -14445,13 +14576,13 @@ export namespace Prisma {
     readonly id: FieldRef<"Event", 'String'>
     readonly title: FieldRef<"Event", 'String'>
     readonly description: FieldRef<"Event", 'String'>
-    readonly event_date: FieldRef<"Event", 'DateTime'>
+    readonly eventDate: FieldRef<"Event", 'DateTime'>
     readonly location: FieldRef<"Event", 'String'>
-    readonly image_url: FieldRef<"Event", 'String'>
-    readonly is_published: FieldRef<"Event", 'Boolean'>
-    readonly max_capacity: FieldRef<"Event", 'Int'>
-    readonly created_at: FieldRef<"Event", 'DateTime'>
-    readonly updated_at: FieldRef<"Event", 'DateTime'>
+    readonly imageUrl: FieldRef<"Event", 'String'>
+    readonly isPublished: FieldRef<"Event", 'Boolean'>
+    readonly maxCapacity: FieldRef<"Event", 'Int'>
+    readonly createdAt: FieldRef<"Event", 'DateTime'>
+    readonly updatedAt: FieldRef<"Event", 'DateTime'>
   }
     
 
@@ -14899,46 +15030,46 @@ export namespace Prisma {
 
   export type EventRegistrationMinAggregateOutputType = {
     id: string | null
-    event_id: string | null
-    member_id: string | null
-    created_at: Date | null
+    eventId: string | null
+    memberId: string | null
+    createdAt: Date | null
   }
 
   export type EventRegistrationMaxAggregateOutputType = {
     id: string | null
-    event_id: string | null
-    member_id: string | null
-    created_at: Date | null
+    eventId: string | null
+    memberId: string | null
+    createdAt: Date | null
   }
 
   export type EventRegistrationCountAggregateOutputType = {
     id: number
-    event_id: number
-    member_id: number
-    created_at: number
+    eventId: number
+    memberId: number
+    createdAt: number
     _all: number
   }
 
 
   export type EventRegistrationMinAggregateInputType = {
     id?: true
-    event_id?: true
-    member_id?: true
-    created_at?: true
+    eventId?: true
+    memberId?: true
+    createdAt?: true
   }
 
   export type EventRegistrationMaxAggregateInputType = {
     id?: true
-    event_id?: true
-    member_id?: true
-    created_at?: true
+    eventId?: true
+    memberId?: true
+    createdAt?: true
   }
 
   export type EventRegistrationCountAggregateInputType = {
     id?: true
-    event_id?: true
-    member_id?: true
-    created_at?: true
+    eventId?: true
+    memberId?: true
+    createdAt?: true
     _all?: true
   }
 
@@ -15016,9 +15147,9 @@ export namespace Prisma {
 
   export type EventRegistrationGroupByOutputType = {
     id: string
-    event_id: string
-    member_id: string
-    created_at: Date
+    eventId: string
+    memberId: string
+    createdAt: Date
     _count: EventRegistrationCountAggregateOutputType | null
     _min: EventRegistrationMinAggregateOutputType | null
     _max: EventRegistrationMaxAggregateOutputType | null
@@ -15040,39 +15171,39 @@ export namespace Prisma {
 
   export type EventRegistrationSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    event_id?: boolean
-    member_id?: boolean
-    created_at?: boolean
+    eventId?: boolean
+    memberId?: boolean
+    createdAt?: boolean
     event?: boolean | EventDefaultArgs<ExtArgs>
     member?: boolean | MemberDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["eventRegistration"]>
 
   export type EventRegistrationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    event_id?: boolean
-    member_id?: boolean
-    created_at?: boolean
+    eventId?: boolean
+    memberId?: boolean
+    createdAt?: boolean
     event?: boolean | EventDefaultArgs<ExtArgs>
     member?: boolean | MemberDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["eventRegistration"]>
 
   export type EventRegistrationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    event_id?: boolean
-    member_id?: boolean
-    created_at?: boolean
+    eventId?: boolean
+    memberId?: boolean
+    createdAt?: boolean
     event?: boolean | EventDefaultArgs<ExtArgs>
     member?: boolean | MemberDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["eventRegistration"]>
 
   export type EventRegistrationSelectScalar = {
     id?: boolean
-    event_id?: boolean
-    member_id?: boolean
-    created_at?: boolean
+    eventId?: boolean
+    memberId?: boolean
+    createdAt?: boolean
   }
 
-  export type EventRegistrationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "event_id" | "member_id" | "created_at", ExtArgs["result"]["eventRegistration"]>
+  export type EventRegistrationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "eventId" | "memberId" | "createdAt", ExtArgs["result"]["eventRegistration"]>
   export type EventRegistrationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     event?: boolean | EventDefaultArgs<ExtArgs>
     member?: boolean | MemberDefaultArgs<ExtArgs>
@@ -15094,9 +15225,9 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      event_id: string
-      member_id: string
-      created_at: Date
+      eventId: string
+      memberId: string
+      createdAt: Date
     }, ExtArgs["result"]["eventRegistration"]>
     composites: {}
   }
@@ -15523,9 +15654,9 @@ export namespace Prisma {
    */
   interface EventRegistrationFieldRefs {
     readonly id: FieldRef<"EventRegistration", 'String'>
-    readonly event_id: FieldRef<"EventRegistration", 'String'>
-    readonly member_id: FieldRef<"EventRegistration", 'String'>
-    readonly created_at: FieldRef<"EventRegistration", 'DateTime'>
+    readonly eventId: FieldRef<"EventRegistration", 'String'>
+    readonly memberId: FieldRef<"EventRegistration", 'String'>
+    readonly createdAt: FieldRef<"EventRegistration", 'DateTime'>
   }
     
 
@@ -15957,76 +16088,76 @@ export namespace Prisma {
 
   export type NotificationMinAggregateOutputType = {
     id: string | null
-    member_id: string | null
+    memberId: string | null
     title: string | null
     message: string | null
     type: $Enums.NotificationType | null
-    is_read: boolean | null
+    isRead: boolean | null
     link: string | null
-    created_at: Date | null
-    updated_at: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type NotificationMaxAggregateOutputType = {
     id: string | null
-    member_id: string | null
+    memberId: string | null
     title: string | null
     message: string | null
     type: $Enums.NotificationType | null
-    is_read: boolean | null
+    isRead: boolean | null
     link: string | null
-    created_at: Date | null
-    updated_at: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type NotificationCountAggregateOutputType = {
     id: number
-    member_id: number
+    memberId: number
     title: number
     message: number
     type: number
-    is_read: number
+    isRead: number
     link: number
-    created_at: number
-    updated_at: number
+    createdAt: number
+    updatedAt: number
     _all: number
   }
 
 
   export type NotificationMinAggregateInputType = {
     id?: true
-    member_id?: true
+    memberId?: true
     title?: true
     message?: true
     type?: true
-    is_read?: true
+    isRead?: true
     link?: true
-    created_at?: true
-    updated_at?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type NotificationMaxAggregateInputType = {
     id?: true
-    member_id?: true
+    memberId?: true
     title?: true
     message?: true
     type?: true
-    is_read?: true
+    isRead?: true
     link?: true
-    created_at?: true
-    updated_at?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type NotificationCountAggregateInputType = {
     id?: true
-    member_id?: true
+    memberId?: true
     title?: true
     message?: true
     type?: true
-    is_read?: true
+    isRead?: true
     link?: true
-    created_at?: true
-    updated_at?: true
+    createdAt?: true
+    updatedAt?: true
     _all?: true
   }
 
@@ -16104,14 +16235,14 @@ export namespace Prisma {
 
   export type NotificationGroupByOutputType = {
     id: string
-    member_id: string
+    memberId: string
     title: string
     message: string
     type: $Enums.NotificationType
-    is_read: boolean
+    isRead: boolean
     link: string | null
-    created_at: Date
-    updated_at: Date
+    createdAt: Date
+    updatedAt: Date
     _count: NotificationCountAggregateOutputType | null
     _min: NotificationMinAggregateOutputType | null
     _max: NotificationMaxAggregateOutputType | null
@@ -16133,56 +16264,56 @@ export namespace Prisma {
 
   export type NotificationSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    member_id?: boolean
+    memberId?: boolean
     title?: boolean
     message?: boolean
     type?: boolean
-    is_read?: boolean
+    isRead?: boolean
     link?: boolean
-    created_at?: boolean
-    updated_at?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
     member?: boolean | MemberDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["notification"]>
 
   export type NotificationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    member_id?: boolean
+    memberId?: boolean
     title?: boolean
     message?: boolean
     type?: boolean
-    is_read?: boolean
+    isRead?: boolean
     link?: boolean
-    created_at?: boolean
-    updated_at?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
     member?: boolean | MemberDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["notification"]>
 
   export type NotificationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    member_id?: boolean
+    memberId?: boolean
     title?: boolean
     message?: boolean
     type?: boolean
-    is_read?: boolean
+    isRead?: boolean
     link?: boolean
-    created_at?: boolean
-    updated_at?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
     member?: boolean | MemberDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["notification"]>
 
   export type NotificationSelectScalar = {
     id?: boolean
-    member_id?: boolean
+    memberId?: boolean
     title?: boolean
     message?: boolean
     type?: boolean
-    is_read?: boolean
+    isRead?: boolean
     link?: boolean
-    created_at?: boolean
-    updated_at?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
   }
 
-  export type NotificationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "member_id" | "title" | "message" | "type" | "is_read" | "link" | "created_at" | "updated_at", ExtArgs["result"]["notification"]>
+  export type NotificationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "memberId" | "title" | "message" | "type" | "isRead" | "link" | "createdAt" | "updatedAt", ExtArgs["result"]["notification"]>
   export type NotificationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     member?: boolean | MemberDefaultArgs<ExtArgs>
   }
@@ -16200,14 +16331,14 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      member_id: string
+      memberId: string
       title: string
       message: string
       type: $Enums.NotificationType
-      is_read: boolean
+      isRead: boolean
       link: string | null
-      created_at: Date
-      updated_at: Date
+      createdAt: Date
+      updatedAt: Date
     }, ExtArgs["result"]["notification"]>
     composites: {}
   }
@@ -16633,14 +16764,14 @@ export namespace Prisma {
    */
   interface NotificationFieldRefs {
     readonly id: FieldRef<"Notification", 'String'>
-    readonly member_id: FieldRef<"Notification", 'String'>
+    readonly memberId: FieldRef<"Notification", 'String'>
     readonly title: FieldRef<"Notification", 'String'>
     readonly message: FieldRef<"Notification", 'String'>
     readonly type: FieldRef<"Notification", 'NotificationType'>
-    readonly is_read: FieldRef<"Notification", 'Boolean'>
+    readonly isRead: FieldRef<"Notification", 'Boolean'>
     readonly link: FieldRef<"Notification", 'String'>
-    readonly created_at: FieldRef<"Notification", 'DateTime'>
-    readonly updated_at: FieldRef<"Notification", 'DateTime'>
+    readonly createdAt: FieldRef<"Notification", 'DateTime'>
+    readonly updatedAt: FieldRef<"Notification", 'DateTime'>
   }
     
 
@@ -17088,10 +17219,11 @@ export namespace Prisma {
     description: string | null
     price: Decimal | null
     stock: number | null
-    image_url: string | null
-    is_active: boolean | null
-    created_at: Date | null
-    updated_at: Date | null
+    imageUrl: string | null
+    category: string | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type ShopProductMaxAggregateOutputType = {
@@ -17100,10 +17232,11 @@ export namespace Prisma {
     description: string | null
     price: Decimal | null
     stock: number | null
-    image_url: string | null
-    is_active: boolean | null
-    created_at: Date | null
-    updated_at: Date | null
+    imageUrl: string | null
+    category: string | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type ShopProductCountAggregateOutputType = {
@@ -17112,10 +17245,11 @@ export namespace Prisma {
     description: number
     price: number
     stock: number
-    image_url: number
-    is_active: number
-    created_at: number
-    updated_at: number
+    imageUrl: number
+    category: number
+    isActive: number
+    createdAt: number
+    updatedAt: number
     _all: number
   }
 
@@ -17136,10 +17270,11 @@ export namespace Prisma {
     description?: true
     price?: true
     stock?: true
-    image_url?: true
-    is_active?: true
-    created_at?: true
-    updated_at?: true
+    imageUrl?: true
+    category?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type ShopProductMaxAggregateInputType = {
@@ -17148,10 +17283,11 @@ export namespace Prisma {
     description?: true
     price?: true
     stock?: true
-    image_url?: true
-    is_active?: true
-    created_at?: true
-    updated_at?: true
+    imageUrl?: true
+    category?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type ShopProductCountAggregateInputType = {
@@ -17160,10 +17296,11 @@ export namespace Prisma {
     description?: true
     price?: true
     stock?: true
-    image_url?: true
-    is_active?: true
-    created_at?: true
-    updated_at?: true
+    imageUrl?: true
+    category?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
     _all?: true
   }
 
@@ -17259,10 +17396,11 @@ export namespace Prisma {
     description: string | null
     price: Decimal
     stock: number
-    image_url: string | null
-    is_active: boolean
-    created_at: Date
-    updated_at: Date
+    imageUrl: string | null
+    category: string | null
+    isActive: boolean
+    createdAt: Date
+    updatedAt: Date
     _count: ShopProductCountAggregateOutputType | null
     _avg: ShopProductAvgAggregateOutputType | null
     _sum: ShopProductSumAggregateOutputType | null
@@ -17290,11 +17428,12 @@ export namespace Prisma {
     description?: boolean
     price?: boolean
     stock?: boolean
-    image_url?: boolean
-    is_active?: boolean
-    created_at?: boolean
-    updated_at?: boolean
-    order_items?: boolean | ShopProduct$order_itemsArgs<ExtArgs>
+    imageUrl?: boolean
+    category?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    orderItems?: boolean | ShopProduct$orderItemsArgs<ExtArgs>
     _count?: boolean | ShopProductCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["shopProduct"]>
 
@@ -17304,10 +17443,11 @@ export namespace Prisma {
     description?: boolean
     price?: boolean
     stock?: boolean
-    image_url?: boolean
-    is_active?: boolean
-    created_at?: boolean
-    updated_at?: boolean
+    imageUrl?: boolean
+    category?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
   }, ExtArgs["result"]["shopProduct"]>
 
   export type ShopProductSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -17316,10 +17456,11 @@ export namespace Prisma {
     description?: boolean
     price?: boolean
     stock?: boolean
-    image_url?: boolean
-    is_active?: boolean
-    created_at?: boolean
-    updated_at?: boolean
+    imageUrl?: boolean
+    category?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
   }, ExtArgs["result"]["shopProduct"]>
 
   export type ShopProductSelectScalar = {
@@ -17328,15 +17469,16 @@ export namespace Prisma {
     description?: boolean
     price?: boolean
     stock?: boolean
-    image_url?: boolean
-    is_active?: boolean
-    created_at?: boolean
-    updated_at?: boolean
+    imageUrl?: boolean
+    category?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
   }
 
-  export type ShopProductOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "price" | "stock" | "image_url" | "is_active" | "created_at" | "updated_at", ExtArgs["result"]["shopProduct"]>
+  export type ShopProductOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "price" | "stock" | "imageUrl" | "category" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["shopProduct"]>
   export type ShopProductInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    order_items?: boolean | ShopProduct$order_itemsArgs<ExtArgs>
+    orderItems?: boolean | ShopProduct$orderItemsArgs<ExtArgs>
     _count?: boolean | ShopProductCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ShopProductIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -17345,7 +17487,7 @@ export namespace Prisma {
   export type $ShopProductPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "ShopProduct"
     objects: {
-      order_items: Prisma.$ShopOrderItemPayload<ExtArgs>[]
+      orderItems: Prisma.$ShopOrderItemPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -17353,10 +17495,11 @@ export namespace Prisma {
       description: string | null
       price: Prisma.Decimal
       stock: number
-      image_url: string | null
-      is_active: boolean
-      created_at: Date
-      updated_at: Date
+      imageUrl: string | null
+      category: string | null
+      isActive: boolean
+      createdAt: Date
+      updatedAt: Date
     }, ExtArgs["result"]["shopProduct"]>
     composites: {}
   }
@@ -17751,7 +17894,7 @@ export namespace Prisma {
    */
   export interface Prisma__ShopProductClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    order_items<T extends ShopProduct$order_itemsArgs<ExtArgs> = {}>(args?: Subset<T, ShopProduct$order_itemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ShopOrderItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    orderItems<T extends ShopProduct$orderItemsArgs<ExtArgs> = {}>(args?: Subset<T, ShopProduct$orderItemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ShopOrderItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -17786,10 +17929,11 @@ export namespace Prisma {
     readonly description: FieldRef<"ShopProduct", 'String'>
     readonly price: FieldRef<"ShopProduct", 'Decimal'>
     readonly stock: FieldRef<"ShopProduct", 'Int'>
-    readonly image_url: FieldRef<"ShopProduct", 'String'>
-    readonly is_active: FieldRef<"ShopProduct", 'Boolean'>
-    readonly created_at: FieldRef<"ShopProduct", 'DateTime'>
-    readonly updated_at: FieldRef<"ShopProduct", 'DateTime'>
+    readonly imageUrl: FieldRef<"ShopProduct", 'String'>
+    readonly category: FieldRef<"ShopProduct", 'String'>
+    readonly isActive: FieldRef<"ShopProduct", 'Boolean'>
+    readonly createdAt: FieldRef<"ShopProduct", 'DateTime'>
+    readonly updatedAt: FieldRef<"ShopProduct", 'DateTime'>
   }
     
 
@@ -18183,9 +18327,9 @@ export namespace Prisma {
   }
 
   /**
-   * ShopProduct.order_items
+   * ShopProduct.orderItems
    */
-  export type ShopProduct$order_itemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ShopProduct$orderItemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the ShopOrderItem
      */
@@ -18239,98 +18383,114 @@ export namespace Prisma {
 
   export type ShopOrderAvgAggregateOutputType = {
     total: Decimal | null
+    membershipFee: Decimal | null
   }
 
   export type ShopOrderSumAggregateOutputType = {
     total: Decimal | null
+    membershipFee: Decimal | null
   }
 
   export type ShopOrderMinAggregateOutputType = {
     id: string | null
-    member_id: string | null
-    payment_status: $Enums.PaymentStatus | null
-    payment_method: string | null
+    memberId: string | null
+    paymentStatus: $Enums.PaymentStatus | null
+    paymentMethod: string | null
     total: Decimal | null
     currency: string | null
-    transaction_id: string | null
+    transactionId: string | null
+    includesMembership: boolean | null
+    membershipFee: Decimal | null
     notes: string | null
-    created_at: Date | null
-    updated_at: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type ShopOrderMaxAggregateOutputType = {
     id: string | null
-    member_id: string | null
-    payment_status: $Enums.PaymentStatus | null
-    payment_method: string | null
+    memberId: string | null
+    paymentStatus: $Enums.PaymentStatus | null
+    paymentMethod: string | null
     total: Decimal | null
     currency: string | null
-    transaction_id: string | null
+    transactionId: string | null
+    includesMembership: boolean | null
+    membershipFee: Decimal | null
     notes: string | null
-    created_at: Date | null
-    updated_at: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type ShopOrderCountAggregateOutputType = {
     id: number
-    member_id: number
-    payment_status: number
-    payment_method: number
+    memberId: number
+    paymentStatus: number
+    paymentMethod: number
     total: number
     currency: number
-    transaction_id: number
+    transactionId: number
+    includesMembership: number
+    membershipFee: number
     notes: number
-    created_at: number
-    updated_at: number
+    createdAt: number
+    updatedAt: number
     _all: number
   }
 
 
   export type ShopOrderAvgAggregateInputType = {
     total?: true
+    membershipFee?: true
   }
 
   export type ShopOrderSumAggregateInputType = {
     total?: true
+    membershipFee?: true
   }
 
   export type ShopOrderMinAggregateInputType = {
     id?: true
-    member_id?: true
-    payment_status?: true
-    payment_method?: true
+    memberId?: true
+    paymentStatus?: true
+    paymentMethod?: true
     total?: true
     currency?: true
-    transaction_id?: true
+    transactionId?: true
+    includesMembership?: true
+    membershipFee?: true
     notes?: true
-    created_at?: true
-    updated_at?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type ShopOrderMaxAggregateInputType = {
     id?: true
-    member_id?: true
-    payment_status?: true
-    payment_method?: true
+    memberId?: true
+    paymentStatus?: true
+    paymentMethod?: true
     total?: true
     currency?: true
-    transaction_id?: true
+    transactionId?: true
+    includesMembership?: true
+    membershipFee?: true
     notes?: true
-    created_at?: true
-    updated_at?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type ShopOrderCountAggregateInputType = {
     id?: true
-    member_id?: true
-    payment_status?: true
-    payment_method?: true
+    memberId?: true
+    paymentStatus?: true
+    paymentMethod?: true
     total?: true
     currency?: true
-    transaction_id?: true
+    transactionId?: true
+    includesMembership?: true
+    membershipFee?: true
     notes?: true
-    created_at?: true
-    updated_at?: true
+    createdAt?: true
+    updatedAt?: true
     _all?: true
   }
 
@@ -18422,15 +18582,17 @@ export namespace Prisma {
 
   export type ShopOrderGroupByOutputType = {
     id: string
-    member_id: string
-    payment_status: $Enums.PaymentStatus
-    payment_method: string | null
+    memberId: string
+    paymentStatus: $Enums.PaymentStatus
+    paymentMethod: string | null
     total: Decimal
     currency: string
-    transaction_id: string | null
+    transactionId: string | null
+    includesMembership: boolean
+    membershipFee: Decimal | null
     notes: string | null
-    created_at: Date
-    updated_at: Date
+    createdAt: Date
+    updatedAt: Date
     _count: ShopOrderCountAggregateOutputType | null
     _avg: ShopOrderAvgAggregateOutputType | null
     _sum: ShopOrderSumAggregateOutputType | null
@@ -18454,65 +18616,73 @@ export namespace Prisma {
 
   export type ShopOrderSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    member_id?: boolean
-    payment_status?: boolean
-    payment_method?: boolean
+    memberId?: boolean
+    paymentStatus?: boolean
+    paymentMethod?: boolean
     total?: boolean
     currency?: boolean
-    transaction_id?: boolean
+    transactionId?: boolean
+    includesMembership?: boolean
+    membershipFee?: boolean
     notes?: boolean
-    created_at?: boolean
-    updated_at?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
     member?: boolean | MemberDefaultArgs<ExtArgs>
-    order_items?: boolean | ShopOrder$order_itemsArgs<ExtArgs>
+    orderItems?: boolean | ShopOrder$orderItemsArgs<ExtArgs>
     _count?: boolean | ShopOrderCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["shopOrder"]>
 
   export type ShopOrderSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    member_id?: boolean
-    payment_status?: boolean
-    payment_method?: boolean
+    memberId?: boolean
+    paymentStatus?: boolean
+    paymentMethod?: boolean
     total?: boolean
     currency?: boolean
-    transaction_id?: boolean
+    transactionId?: boolean
+    includesMembership?: boolean
+    membershipFee?: boolean
     notes?: boolean
-    created_at?: boolean
-    updated_at?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
     member?: boolean | MemberDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["shopOrder"]>
 
   export type ShopOrderSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    member_id?: boolean
-    payment_status?: boolean
-    payment_method?: boolean
+    memberId?: boolean
+    paymentStatus?: boolean
+    paymentMethod?: boolean
     total?: boolean
     currency?: boolean
-    transaction_id?: boolean
+    transactionId?: boolean
+    includesMembership?: boolean
+    membershipFee?: boolean
     notes?: boolean
-    created_at?: boolean
-    updated_at?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
     member?: boolean | MemberDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["shopOrder"]>
 
   export type ShopOrderSelectScalar = {
     id?: boolean
-    member_id?: boolean
-    payment_status?: boolean
-    payment_method?: boolean
+    memberId?: boolean
+    paymentStatus?: boolean
+    paymentMethod?: boolean
     total?: boolean
     currency?: boolean
-    transaction_id?: boolean
+    transactionId?: boolean
+    includesMembership?: boolean
+    membershipFee?: boolean
     notes?: boolean
-    created_at?: boolean
-    updated_at?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
   }
 
-  export type ShopOrderOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "member_id" | "payment_status" | "payment_method" | "total" | "currency" | "transaction_id" | "notes" | "created_at" | "updated_at", ExtArgs["result"]["shopOrder"]>
+  export type ShopOrderOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "memberId" | "paymentStatus" | "paymentMethod" | "total" | "currency" | "transactionId" | "includesMembership" | "membershipFee" | "notes" | "createdAt" | "updatedAt", ExtArgs["result"]["shopOrder"]>
   export type ShopOrderInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     member?: boolean | MemberDefaultArgs<ExtArgs>
-    order_items?: boolean | ShopOrder$order_itemsArgs<ExtArgs>
+    orderItems?: boolean | ShopOrder$orderItemsArgs<ExtArgs>
     _count?: boolean | ShopOrderCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ShopOrderIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -18526,19 +18696,21 @@ export namespace Prisma {
     name: "ShopOrder"
     objects: {
       member: Prisma.$MemberPayload<ExtArgs>
-      order_items: Prisma.$ShopOrderItemPayload<ExtArgs>[]
+      orderItems: Prisma.$ShopOrderItemPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      member_id: string
-      payment_status: $Enums.PaymentStatus
-      payment_method: string | null
+      memberId: string
+      paymentStatus: $Enums.PaymentStatus
+      paymentMethod: string | null
       total: Prisma.Decimal
       currency: string
-      transaction_id: string | null
+      transactionId: string | null
+      includesMembership: boolean
+      membershipFee: Prisma.Decimal | null
       notes: string | null
-      created_at: Date
-      updated_at: Date
+      createdAt: Date
+      updatedAt: Date
     }, ExtArgs["result"]["shopOrder"]>
     composites: {}
   }
@@ -18934,7 +19106,7 @@ export namespace Prisma {
   export interface Prisma__ShopOrderClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     member<T extends MemberDefaultArgs<ExtArgs> = {}>(args?: Subset<T, MemberDefaultArgs<ExtArgs>>): Prisma__MemberClient<$Result.GetResult<Prisma.$MemberPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    order_items<T extends ShopOrder$order_itemsArgs<ExtArgs> = {}>(args?: Subset<T, ShopOrder$order_itemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ShopOrderItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    orderItems<T extends ShopOrder$orderItemsArgs<ExtArgs> = {}>(args?: Subset<T, ShopOrder$orderItemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ShopOrderItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -18965,15 +19137,17 @@ export namespace Prisma {
    */
   interface ShopOrderFieldRefs {
     readonly id: FieldRef<"ShopOrder", 'String'>
-    readonly member_id: FieldRef<"ShopOrder", 'String'>
-    readonly payment_status: FieldRef<"ShopOrder", 'PaymentStatus'>
-    readonly payment_method: FieldRef<"ShopOrder", 'String'>
+    readonly memberId: FieldRef<"ShopOrder", 'String'>
+    readonly paymentStatus: FieldRef<"ShopOrder", 'PaymentStatus'>
+    readonly paymentMethod: FieldRef<"ShopOrder", 'String'>
     readonly total: FieldRef<"ShopOrder", 'Decimal'>
     readonly currency: FieldRef<"ShopOrder", 'String'>
-    readonly transaction_id: FieldRef<"ShopOrder", 'String'>
+    readonly transactionId: FieldRef<"ShopOrder", 'String'>
+    readonly includesMembership: FieldRef<"ShopOrder", 'Boolean'>
+    readonly membershipFee: FieldRef<"ShopOrder", 'Decimal'>
     readonly notes: FieldRef<"ShopOrder", 'String'>
-    readonly created_at: FieldRef<"ShopOrder", 'DateTime'>
-    readonly updated_at: FieldRef<"ShopOrder", 'DateTime'>
+    readonly createdAt: FieldRef<"ShopOrder", 'DateTime'>
+    readonly updatedAt: FieldRef<"ShopOrder", 'DateTime'>
   }
     
 
@@ -19375,9 +19549,9 @@ export namespace Prisma {
   }
 
   /**
-   * ShopOrder.order_items
+   * ShopOrder.orderItems
    */
-  export type ShopOrder$order_itemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ShopOrder$orderItemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the ShopOrderItem
      */
@@ -19431,72 +19605,72 @@ export namespace Prisma {
 
   export type ShopOrderItemAvgAggregateOutputType = {
     quantity: number | null
-    unit_price: Decimal | null
+    unitPrice: Decimal | null
   }
 
   export type ShopOrderItemSumAggregateOutputType = {
     quantity: number | null
-    unit_price: Decimal | null
+    unitPrice: Decimal | null
   }
 
   export type ShopOrderItemMinAggregateOutputType = {
     id: string | null
-    order_id: string | null
-    product_id: string | null
+    orderId: string | null
+    productId: string | null
     quantity: number | null
-    unit_price: Decimal | null
+    unitPrice: Decimal | null
   }
 
   export type ShopOrderItemMaxAggregateOutputType = {
     id: string | null
-    order_id: string | null
-    product_id: string | null
+    orderId: string | null
+    productId: string | null
     quantity: number | null
-    unit_price: Decimal | null
+    unitPrice: Decimal | null
   }
 
   export type ShopOrderItemCountAggregateOutputType = {
     id: number
-    order_id: number
-    product_id: number
+    orderId: number
+    productId: number
     quantity: number
-    unit_price: number
+    unitPrice: number
     _all: number
   }
 
 
   export type ShopOrderItemAvgAggregateInputType = {
     quantity?: true
-    unit_price?: true
+    unitPrice?: true
   }
 
   export type ShopOrderItemSumAggregateInputType = {
     quantity?: true
-    unit_price?: true
+    unitPrice?: true
   }
 
   export type ShopOrderItemMinAggregateInputType = {
     id?: true
-    order_id?: true
-    product_id?: true
+    orderId?: true
+    productId?: true
     quantity?: true
-    unit_price?: true
+    unitPrice?: true
   }
 
   export type ShopOrderItemMaxAggregateInputType = {
     id?: true
-    order_id?: true
-    product_id?: true
+    orderId?: true
+    productId?: true
     quantity?: true
-    unit_price?: true
+    unitPrice?: true
   }
 
   export type ShopOrderItemCountAggregateInputType = {
     id?: true
-    order_id?: true
-    product_id?: true
+    orderId?: true
+    productId?: true
     quantity?: true
-    unit_price?: true
+    unitPrice?: true
     _all?: true
   }
 
@@ -19588,10 +19762,10 @@ export namespace Prisma {
 
   export type ShopOrderItemGroupByOutputType = {
     id: string
-    order_id: string
-    product_id: string
+    orderId: string
+    productId: string
     quantity: number
-    unit_price: Decimal
+    unitPrice: Decimal
     _count: ShopOrderItemCountAggregateOutputType | null
     _avg: ShopOrderItemAvgAggregateOutputType | null
     _sum: ShopOrderItemSumAggregateOutputType | null
@@ -19615,43 +19789,43 @@ export namespace Prisma {
 
   export type ShopOrderItemSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    order_id?: boolean
-    product_id?: boolean
+    orderId?: boolean
+    productId?: boolean
     quantity?: boolean
-    unit_price?: boolean
+    unitPrice?: boolean
     order?: boolean | ShopOrderDefaultArgs<ExtArgs>
     product?: boolean | ShopProductDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["shopOrderItem"]>
 
   export type ShopOrderItemSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    order_id?: boolean
-    product_id?: boolean
+    orderId?: boolean
+    productId?: boolean
     quantity?: boolean
-    unit_price?: boolean
+    unitPrice?: boolean
     order?: boolean | ShopOrderDefaultArgs<ExtArgs>
     product?: boolean | ShopProductDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["shopOrderItem"]>
 
   export type ShopOrderItemSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    order_id?: boolean
-    product_id?: boolean
+    orderId?: boolean
+    productId?: boolean
     quantity?: boolean
-    unit_price?: boolean
+    unitPrice?: boolean
     order?: boolean | ShopOrderDefaultArgs<ExtArgs>
     product?: boolean | ShopProductDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["shopOrderItem"]>
 
   export type ShopOrderItemSelectScalar = {
     id?: boolean
-    order_id?: boolean
-    product_id?: boolean
+    orderId?: boolean
+    productId?: boolean
     quantity?: boolean
-    unit_price?: boolean
+    unitPrice?: boolean
   }
 
-  export type ShopOrderItemOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "order_id" | "product_id" | "quantity" | "unit_price", ExtArgs["result"]["shopOrderItem"]>
+  export type ShopOrderItemOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "orderId" | "productId" | "quantity" | "unitPrice", ExtArgs["result"]["shopOrderItem"]>
   export type ShopOrderItemInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     order?: boolean | ShopOrderDefaultArgs<ExtArgs>
     product?: boolean | ShopProductDefaultArgs<ExtArgs>
@@ -19673,10 +19847,10 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      order_id: string
-      product_id: string
+      orderId: string
+      productId: string
       quantity: number
-      unit_price: Prisma.Decimal
+      unitPrice: Prisma.Decimal
     }, ExtArgs["result"]["shopOrderItem"]>
     composites: {}
   }
@@ -20103,10 +20277,10 @@ export namespace Prisma {
    */
   interface ShopOrderItemFieldRefs {
     readonly id: FieldRef<"ShopOrderItem", 'String'>
-    readonly order_id: FieldRef<"ShopOrderItem", 'String'>
-    readonly product_id: FieldRef<"ShopOrderItem", 'String'>
+    readonly orderId: FieldRef<"ShopOrderItem", 'String'>
+    readonly productId: FieldRef<"ShopOrderItem", 'String'>
     readonly quantity: FieldRef<"ShopOrderItem", 'Int'>
-    readonly unit_price: FieldRef<"ShopOrderItem", 'Decimal'>
+    readonly unitPrice: FieldRef<"ShopOrderItem", 'Decimal'>
   }
     
 
@@ -20542,9 +20716,9 @@ export namespace Prisma {
     description: string | null
     date: Date | null
     location: string | null
-    is_published: boolean | null
-    created_at: Date | null
-    updated_at: Date | null
+    isPublished: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type TournamentMaxAggregateOutputType = {
@@ -20553,9 +20727,9 @@ export namespace Prisma {
     description: string | null
     date: Date | null
     location: string | null
-    is_published: boolean | null
-    created_at: Date | null
-    updated_at: Date | null
+    isPublished: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type TournamentCountAggregateOutputType = {
@@ -20564,9 +20738,9 @@ export namespace Prisma {
     description: number
     date: number
     location: number
-    is_published: number
-    created_at: number
-    updated_at: number
+    isPublished: number
+    createdAt: number
+    updatedAt: number
     _all: number
   }
 
@@ -20577,9 +20751,9 @@ export namespace Prisma {
     description?: true
     date?: true
     location?: true
-    is_published?: true
-    created_at?: true
-    updated_at?: true
+    isPublished?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type TournamentMaxAggregateInputType = {
@@ -20588,9 +20762,9 @@ export namespace Prisma {
     description?: true
     date?: true
     location?: true
-    is_published?: true
-    created_at?: true
-    updated_at?: true
+    isPublished?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type TournamentCountAggregateInputType = {
@@ -20599,9 +20773,9 @@ export namespace Prisma {
     description?: true
     date?: true
     location?: true
-    is_published?: true
-    created_at?: true
-    updated_at?: true
+    isPublished?: true
+    createdAt?: true
+    updatedAt?: true
     _all?: true
   }
 
@@ -20683,9 +20857,9 @@ export namespace Prisma {
     description: string | null
     date: Date
     location: string | null
-    is_published: boolean
-    created_at: Date
-    updated_at: Date
+    isPublished: boolean
+    createdAt: Date
+    updatedAt: Date
     _count: TournamentCountAggregateOutputType | null
     _min: TournamentMinAggregateOutputType | null
     _max: TournamentMaxAggregateOutputType | null
@@ -20711,9 +20885,9 @@ export namespace Prisma {
     description?: boolean
     date?: boolean
     location?: boolean
-    is_published?: boolean
-    created_at?: boolean
-    updated_at?: boolean
+    isPublished?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
     participants?: boolean | Tournament$participantsArgs<ExtArgs>
     matches?: boolean | Tournament$matchesArgs<ExtArgs>
     _count?: boolean | TournamentCountOutputTypeDefaultArgs<ExtArgs>
@@ -20725,9 +20899,9 @@ export namespace Prisma {
     description?: boolean
     date?: boolean
     location?: boolean
-    is_published?: boolean
-    created_at?: boolean
-    updated_at?: boolean
+    isPublished?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
   }, ExtArgs["result"]["tournament"]>
 
   export type TournamentSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -20736,9 +20910,9 @@ export namespace Prisma {
     description?: boolean
     date?: boolean
     location?: boolean
-    is_published?: boolean
-    created_at?: boolean
-    updated_at?: boolean
+    isPublished?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
   }, ExtArgs["result"]["tournament"]>
 
   export type TournamentSelectScalar = {
@@ -20747,12 +20921,12 @@ export namespace Prisma {
     description?: boolean
     date?: boolean
     location?: boolean
-    is_published?: boolean
-    created_at?: boolean
-    updated_at?: boolean
+    isPublished?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
   }
 
-  export type TournamentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "date" | "location" | "is_published" | "created_at" | "updated_at", ExtArgs["result"]["tournament"]>
+  export type TournamentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "date" | "location" | "isPublished" | "createdAt" | "updatedAt", ExtArgs["result"]["tournament"]>
   export type TournamentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     participants?: boolean | Tournament$participantsArgs<ExtArgs>
     matches?: boolean | Tournament$matchesArgs<ExtArgs>
@@ -20773,9 +20947,9 @@ export namespace Prisma {
       description: string | null
       date: Date
       location: string | null
-      is_published: boolean
-      created_at: Date
-      updated_at: Date
+      isPublished: boolean
+      createdAt: Date
+      updatedAt: Date
     }, ExtArgs["result"]["tournament"]>
     composites: {}
   }
@@ -21206,9 +21380,9 @@ export namespace Prisma {
     readonly description: FieldRef<"Tournament", 'String'>
     readonly date: FieldRef<"Tournament", 'DateTime'>
     readonly location: FieldRef<"Tournament", 'String'>
-    readonly is_published: FieldRef<"Tournament", 'Boolean'>
-    readonly created_at: FieldRef<"Tournament", 'DateTime'>
-    readonly updated_at: FieldRef<"Tournament", 'DateTime'>
+    readonly isPublished: FieldRef<"Tournament", 'Boolean'>
+    readonly createdAt: FieldRef<"Tournament", 'DateTime'>
+    readonly updatedAt: FieldRef<"Tournament", 'DateTime'>
   }
     
 
@@ -21680,58 +21854,58 @@ export namespace Prisma {
 
   export type TournamentParticipantMinAggregateOutputType = {
     id: string | null
-    tournament_id: string | null
-    member_id: string | null
+    tournamentId: string | null
+    memberId: string | null
     category: string | null
-    weight_class: string | null
-    created_at: Date | null
+    weightClass: string | null
+    createdAt: Date | null
   }
 
   export type TournamentParticipantMaxAggregateOutputType = {
     id: string | null
-    tournament_id: string | null
-    member_id: string | null
+    tournamentId: string | null
+    memberId: string | null
     category: string | null
-    weight_class: string | null
-    created_at: Date | null
+    weightClass: string | null
+    createdAt: Date | null
   }
 
   export type TournamentParticipantCountAggregateOutputType = {
     id: number
-    tournament_id: number
-    member_id: number
+    tournamentId: number
+    memberId: number
     category: number
-    weight_class: number
-    created_at: number
+    weightClass: number
+    createdAt: number
     _all: number
   }
 
 
   export type TournamentParticipantMinAggregateInputType = {
     id?: true
-    tournament_id?: true
-    member_id?: true
+    tournamentId?: true
+    memberId?: true
     category?: true
-    weight_class?: true
-    created_at?: true
+    weightClass?: true
+    createdAt?: true
   }
 
   export type TournamentParticipantMaxAggregateInputType = {
     id?: true
-    tournament_id?: true
-    member_id?: true
+    tournamentId?: true
+    memberId?: true
     category?: true
-    weight_class?: true
-    created_at?: true
+    weightClass?: true
+    createdAt?: true
   }
 
   export type TournamentParticipantCountAggregateInputType = {
     id?: true
-    tournament_id?: true
-    member_id?: true
+    tournamentId?: true
+    memberId?: true
     category?: true
-    weight_class?: true
-    created_at?: true
+    weightClass?: true
+    createdAt?: true
     _all?: true
   }
 
@@ -21809,11 +21983,11 @@ export namespace Prisma {
 
   export type TournamentParticipantGroupByOutputType = {
     id: string
-    tournament_id: string
-    member_id: string
+    tournamentId: string
+    memberId: string
     category: string | null
-    weight_class: string | null
-    created_at: Date
+    weightClass: string | null
+    createdAt: Date
     _count: TournamentParticipantCountAggregateOutputType | null
     _min: TournamentParticipantMinAggregateOutputType | null
     _max: TournamentParticipantMaxAggregateOutputType | null
@@ -21835,57 +22009,57 @@ export namespace Prisma {
 
   export type TournamentParticipantSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    tournament_id?: boolean
-    member_id?: boolean
+    tournamentId?: boolean
+    memberId?: boolean
     category?: boolean
-    weight_class?: boolean
-    created_at?: boolean
+    weightClass?: boolean
+    createdAt?: boolean
     tournament?: boolean | TournamentDefaultArgs<ExtArgs>
     member?: boolean | MemberDefaultArgs<ExtArgs>
-    matches_as_p1?: boolean | TournamentParticipant$matches_as_p1Args<ExtArgs>
-    matches_as_p2?: boolean | TournamentParticipant$matches_as_p2Args<ExtArgs>
-    matches_won?: boolean | TournamentParticipant$matches_wonArgs<ExtArgs>
+    matchesAsP1?: boolean | TournamentParticipant$matchesAsP1Args<ExtArgs>
+    matchesAsP2?: boolean | TournamentParticipant$matchesAsP2Args<ExtArgs>
+    matchesWon?: boolean | TournamentParticipant$matchesWonArgs<ExtArgs>
     _count?: boolean | TournamentParticipantCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["tournamentParticipant"]>
 
   export type TournamentParticipantSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    tournament_id?: boolean
-    member_id?: boolean
+    tournamentId?: boolean
+    memberId?: boolean
     category?: boolean
-    weight_class?: boolean
-    created_at?: boolean
+    weightClass?: boolean
+    createdAt?: boolean
     tournament?: boolean | TournamentDefaultArgs<ExtArgs>
     member?: boolean | MemberDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["tournamentParticipant"]>
 
   export type TournamentParticipantSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    tournament_id?: boolean
-    member_id?: boolean
+    tournamentId?: boolean
+    memberId?: boolean
     category?: boolean
-    weight_class?: boolean
-    created_at?: boolean
+    weightClass?: boolean
+    createdAt?: boolean
     tournament?: boolean | TournamentDefaultArgs<ExtArgs>
     member?: boolean | MemberDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["tournamentParticipant"]>
 
   export type TournamentParticipantSelectScalar = {
     id?: boolean
-    tournament_id?: boolean
-    member_id?: boolean
+    tournamentId?: boolean
+    memberId?: boolean
     category?: boolean
-    weight_class?: boolean
-    created_at?: boolean
+    weightClass?: boolean
+    createdAt?: boolean
   }
 
-  export type TournamentParticipantOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tournament_id" | "member_id" | "category" | "weight_class" | "created_at", ExtArgs["result"]["tournamentParticipant"]>
+  export type TournamentParticipantOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tournamentId" | "memberId" | "category" | "weightClass" | "createdAt", ExtArgs["result"]["tournamentParticipant"]>
   export type TournamentParticipantInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     tournament?: boolean | TournamentDefaultArgs<ExtArgs>
     member?: boolean | MemberDefaultArgs<ExtArgs>
-    matches_as_p1?: boolean | TournamentParticipant$matches_as_p1Args<ExtArgs>
-    matches_as_p2?: boolean | TournamentParticipant$matches_as_p2Args<ExtArgs>
-    matches_won?: boolean | TournamentParticipant$matches_wonArgs<ExtArgs>
+    matchesAsP1?: boolean | TournamentParticipant$matchesAsP1Args<ExtArgs>
+    matchesAsP2?: boolean | TournamentParticipant$matchesAsP2Args<ExtArgs>
+    matchesWon?: boolean | TournamentParticipant$matchesWonArgs<ExtArgs>
     _count?: boolean | TournamentParticipantCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type TournamentParticipantIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -21902,17 +22076,17 @@ export namespace Prisma {
     objects: {
       tournament: Prisma.$TournamentPayload<ExtArgs>
       member: Prisma.$MemberPayload<ExtArgs>
-      matches_as_p1: Prisma.$TournamentMatchPayload<ExtArgs>[]
-      matches_as_p2: Prisma.$TournamentMatchPayload<ExtArgs>[]
-      matches_won: Prisma.$TournamentMatchPayload<ExtArgs>[]
+      matchesAsP1: Prisma.$TournamentMatchPayload<ExtArgs>[]
+      matchesAsP2: Prisma.$TournamentMatchPayload<ExtArgs>[]
+      matchesWon: Prisma.$TournamentMatchPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      tournament_id: string
-      member_id: string
+      tournamentId: string
+      memberId: string
       category: string | null
-      weight_class: string | null
-      created_at: Date
+      weightClass: string | null
+      createdAt: Date
     }, ExtArgs["result"]["tournamentParticipant"]>
     composites: {}
   }
@@ -22309,9 +22483,9 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     tournament<T extends TournamentDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TournamentDefaultArgs<ExtArgs>>): Prisma__TournamentClient<$Result.GetResult<Prisma.$TournamentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     member<T extends MemberDefaultArgs<ExtArgs> = {}>(args?: Subset<T, MemberDefaultArgs<ExtArgs>>): Prisma__MemberClient<$Result.GetResult<Prisma.$MemberPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    matches_as_p1<T extends TournamentParticipant$matches_as_p1Args<ExtArgs> = {}>(args?: Subset<T, TournamentParticipant$matches_as_p1Args<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TournamentMatchPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    matches_as_p2<T extends TournamentParticipant$matches_as_p2Args<ExtArgs> = {}>(args?: Subset<T, TournamentParticipant$matches_as_p2Args<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TournamentMatchPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    matches_won<T extends TournamentParticipant$matches_wonArgs<ExtArgs> = {}>(args?: Subset<T, TournamentParticipant$matches_wonArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TournamentMatchPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    matchesAsP1<T extends TournamentParticipant$matchesAsP1Args<ExtArgs> = {}>(args?: Subset<T, TournamentParticipant$matchesAsP1Args<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TournamentMatchPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    matchesAsP2<T extends TournamentParticipant$matchesAsP2Args<ExtArgs> = {}>(args?: Subset<T, TournamentParticipant$matchesAsP2Args<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TournamentMatchPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    matchesWon<T extends TournamentParticipant$matchesWonArgs<ExtArgs> = {}>(args?: Subset<T, TournamentParticipant$matchesWonArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TournamentMatchPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -22342,11 +22516,11 @@ export namespace Prisma {
    */
   interface TournamentParticipantFieldRefs {
     readonly id: FieldRef<"TournamentParticipant", 'String'>
-    readonly tournament_id: FieldRef<"TournamentParticipant", 'String'>
-    readonly member_id: FieldRef<"TournamentParticipant", 'String'>
+    readonly tournamentId: FieldRef<"TournamentParticipant", 'String'>
+    readonly memberId: FieldRef<"TournamentParticipant", 'String'>
     readonly category: FieldRef<"TournamentParticipant", 'String'>
-    readonly weight_class: FieldRef<"TournamentParticipant", 'String'>
-    readonly created_at: FieldRef<"TournamentParticipant", 'DateTime'>
+    readonly weightClass: FieldRef<"TournamentParticipant", 'String'>
+    readonly createdAt: FieldRef<"TournamentParticipant", 'DateTime'>
   }
     
 
@@ -22748,9 +22922,9 @@ export namespace Prisma {
   }
 
   /**
-   * TournamentParticipant.matches_as_p1
+   * TournamentParticipant.matchesAsP1
    */
-  export type TournamentParticipant$matches_as_p1Args<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type TournamentParticipant$matchesAsP1Args<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the TournamentMatch
      */
@@ -22772,9 +22946,9 @@ export namespace Prisma {
   }
 
   /**
-   * TournamentParticipant.matches_as_p2
+   * TournamentParticipant.matchesAsP2
    */
-  export type TournamentParticipant$matches_as_p2Args<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type TournamentParticipant$matchesAsP2Args<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the TournamentMatch
      */
@@ -22796,9 +22970,9 @@ export namespace Prisma {
   }
 
   /**
-   * TournamentParticipant.matches_won
+   * TournamentParticipant.matchesWon
    */
-  export type TournamentParticipant$matches_wonArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type TournamentParticipant$matchesWonArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the TournamentMatch
      */
@@ -22852,96 +23026,96 @@ export namespace Prisma {
 
   export type TournamentMatchAvgAggregateOutputType = {
     round: number | null
-    match_order: number | null
+    matchOrder: number | null
   }
 
   export type TournamentMatchSumAggregateOutputType = {
     round: number | null
-    match_order: number | null
+    matchOrder: number | null
   }
 
   export type TournamentMatchMinAggregateOutputType = {
     id: string | null
-    tournament_id: string | null
-    participant1_id: string | null
-    participant2_id: string | null
-    winner_id: string | null
+    tournamentId: string | null
+    participant1Id: string | null
+    participant2Id: string | null
+    winnerId: string | null
     round: number | null
-    match_order: number | null
+    matchOrder: number | null
     notes: string | null
-    created_at: Date | null
+    createdAt: Date | null
   }
 
   export type TournamentMatchMaxAggregateOutputType = {
     id: string | null
-    tournament_id: string | null
-    participant1_id: string | null
-    participant2_id: string | null
-    winner_id: string | null
+    tournamentId: string | null
+    participant1Id: string | null
+    participant2Id: string | null
+    winnerId: string | null
     round: number | null
-    match_order: number | null
+    matchOrder: number | null
     notes: string | null
-    created_at: Date | null
+    createdAt: Date | null
   }
 
   export type TournamentMatchCountAggregateOutputType = {
     id: number
-    tournament_id: number
-    participant1_id: number
-    participant2_id: number
-    winner_id: number
+    tournamentId: number
+    participant1Id: number
+    participant2Id: number
+    winnerId: number
     round: number
-    match_order: number
+    matchOrder: number
     notes: number
-    created_at: number
+    createdAt: number
     _all: number
   }
 
 
   export type TournamentMatchAvgAggregateInputType = {
     round?: true
-    match_order?: true
+    matchOrder?: true
   }
 
   export type TournamentMatchSumAggregateInputType = {
     round?: true
-    match_order?: true
+    matchOrder?: true
   }
 
   export type TournamentMatchMinAggregateInputType = {
     id?: true
-    tournament_id?: true
-    participant1_id?: true
-    participant2_id?: true
-    winner_id?: true
+    tournamentId?: true
+    participant1Id?: true
+    participant2Id?: true
+    winnerId?: true
     round?: true
-    match_order?: true
+    matchOrder?: true
     notes?: true
-    created_at?: true
+    createdAt?: true
   }
 
   export type TournamentMatchMaxAggregateInputType = {
     id?: true
-    tournament_id?: true
-    participant1_id?: true
-    participant2_id?: true
-    winner_id?: true
+    tournamentId?: true
+    participant1Id?: true
+    participant2Id?: true
+    winnerId?: true
     round?: true
-    match_order?: true
+    matchOrder?: true
     notes?: true
-    created_at?: true
+    createdAt?: true
   }
 
   export type TournamentMatchCountAggregateInputType = {
     id?: true
-    tournament_id?: true
-    participant1_id?: true
-    participant2_id?: true
-    winner_id?: true
+    tournamentId?: true
+    participant1Id?: true
+    participant2Id?: true
+    winnerId?: true
     round?: true
-    match_order?: true
+    matchOrder?: true
     notes?: true
-    created_at?: true
+    createdAt?: true
     _all?: true
   }
 
@@ -23033,14 +23207,14 @@ export namespace Prisma {
 
   export type TournamentMatchGroupByOutputType = {
     id: string
-    tournament_id: string
-    participant1_id: string | null
-    participant2_id: string | null
-    winner_id: string | null
+    tournamentId: string
+    participant1Id: string | null
+    participant2Id: string | null
+    winnerId: string | null
     round: number | null
-    match_order: number | null
+    matchOrder: number | null
     notes: string | null
-    created_at: Date
+    createdAt: Date
     _count: TournamentMatchCountAggregateOutputType | null
     _avg: TournamentMatchAvgAggregateOutputType | null
     _sum: TournamentMatchSumAggregateOutputType | null
@@ -23064,14 +23238,14 @@ export namespace Prisma {
 
   export type TournamentMatchSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    tournament_id?: boolean
-    participant1_id?: boolean
-    participant2_id?: boolean
-    winner_id?: boolean
+    tournamentId?: boolean
+    participant1Id?: boolean
+    participant2Id?: boolean
+    winnerId?: boolean
     round?: boolean
-    match_order?: boolean
+    matchOrder?: boolean
     notes?: boolean
-    created_at?: boolean
+    createdAt?: boolean
     tournament?: boolean | TournamentDefaultArgs<ExtArgs>
     participant1?: boolean | TournamentMatch$participant1Args<ExtArgs>
     participant2?: boolean | TournamentMatch$participant2Args<ExtArgs>
@@ -23080,14 +23254,14 @@ export namespace Prisma {
 
   export type TournamentMatchSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    tournament_id?: boolean
-    participant1_id?: boolean
-    participant2_id?: boolean
-    winner_id?: boolean
+    tournamentId?: boolean
+    participant1Id?: boolean
+    participant2Id?: boolean
+    winnerId?: boolean
     round?: boolean
-    match_order?: boolean
+    matchOrder?: boolean
     notes?: boolean
-    created_at?: boolean
+    createdAt?: boolean
     tournament?: boolean | TournamentDefaultArgs<ExtArgs>
     participant1?: boolean | TournamentMatch$participant1Args<ExtArgs>
     participant2?: boolean | TournamentMatch$participant2Args<ExtArgs>
@@ -23096,14 +23270,14 @@ export namespace Prisma {
 
   export type TournamentMatchSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    tournament_id?: boolean
-    participant1_id?: boolean
-    participant2_id?: boolean
-    winner_id?: boolean
+    tournamentId?: boolean
+    participant1Id?: boolean
+    participant2Id?: boolean
+    winnerId?: boolean
     round?: boolean
-    match_order?: boolean
+    matchOrder?: boolean
     notes?: boolean
-    created_at?: boolean
+    createdAt?: boolean
     tournament?: boolean | TournamentDefaultArgs<ExtArgs>
     participant1?: boolean | TournamentMatch$participant1Args<ExtArgs>
     participant2?: boolean | TournamentMatch$participant2Args<ExtArgs>
@@ -23112,17 +23286,17 @@ export namespace Prisma {
 
   export type TournamentMatchSelectScalar = {
     id?: boolean
-    tournament_id?: boolean
-    participant1_id?: boolean
-    participant2_id?: boolean
-    winner_id?: boolean
+    tournamentId?: boolean
+    participant1Id?: boolean
+    participant2Id?: boolean
+    winnerId?: boolean
     round?: boolean
-    match_order?: boolean
+    matchOrder?: boolean
     notes?: boolean
-    created_at?: boolean
+    createdAt?: boolean
   }
 
-  export type TournamentMatchOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tournament_id" | "participant1_id" | "participant2_id" | "winner_id" | "round" | "match_order" | "notes" | "created_at", ExtArgs["result"]["tournamentMatch"]>
+  export type TournamentMatchOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tournamentId" | "participant1Id" | "participant2Id" | "winnerId" | "round" | "matchOrder" | "notes" | "createdAt", ExtArgs["result"]["tournamentMatch"]>
   export type TournamentMatchInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     tournament?: boolean | TournamentDefaultArgs<ExtArgs>
     participant1?: boolean | TournamentMatch$participant1Args<ExtArgs>
@@ -23152,14 +23326,14 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      tournament_id: string
-      participant1_id: string | null
-      participant2_id: string | null
-      winner_id: string | null
+      tournamentId: string
+      participant1Id: string | null
+      participant2Id: string | null
+      winnerId: string | null
       round: number | null
-      match_order: number | null
+      matchOrder: number | null
       notes: string | null
-      created_at: Date
+      createdAt: Date
     }, ExtArgs["result"]["tournamentMatch"]>
     composites: {}
   }
@@ -23588,14 +23762,14 @@ export namespace Prisma {
    */
   interface TournamentMatchFieldRefs {
     readonly id: FieldRef<"TournamentMatch", 'String'>
-    readonly tournament_id: FieldRef<"TournamentMatch", 'String'>
-    readonly participant1_id: FieldRef<"TournamentMatch", 'String'>
-    readonly participant2_id: FieldRef<"TournamentMatch", 'String'>
-    readonly winner_id: FieldRef<"TournamentMatch", 'String'>
+    readonly tournamentId: FieldRef<"TournamentMatch", 'String'>
+    readonly participant1Id: FieldRef<"TournamentMatch", 'String'>
+    readonly participant2Id: FieldRef<"TournamentMatch", 'String'>
+    readonly winnerId: FieldRef<"TournamentMatch", 'String'>
     readonly round: FieldRef<"TournamentMatch", 'Int'>
-    readonly match_order: FieldRef<"TournamentMatch", 'Int'>
+    readonly matchOrder: FieldRef<"TournamentMatch", 'Int'>
     readonly notes: FieldRef<"TournamentMatch", 'String'>
-    readonly created_at: FieldRef<"TournamentMatch", 'DateTime'>
+    readonly createdAt: FieldRef<"TournamentMatch", 'DateTime'>
   }
     
 
@@ -24089,11 +24263,12 @@ export namespace Prisma {
   export const BeltRankScalarFieldEnum: {
     id: 'id',
     name: 'name',
-    kyu_dan: 'kyu_dan',
-    color_hex: 'color_hex',
-    order_index: 'order_index',
-    created_at: 'created_at',
-    updated_at: 'updated_at'
+    nameBn: 'nameBn',
+    kyuDan: 'kyuDan',
+    colorHex: 'colorHex',
+    orderIndex: 'orderIndex',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
   };
 
   export type BeltRankScalarFieldEnum = (typeof BeltRankScalarFieldEnum)[keyof typeof BeltRankScalarFieldEnum]
@@ -24109,10 +24284,10 @@ export namespace Prisma {
     phone: 'phone',
     email: 'email',
     schedule: 'schedule',
-    is_active: 'is_active',
-    head_instructor_id: 'head_instructor_id',
-    created_at: 'created_at',
-    updated_at: 'updated_at'
+    isActive: 'isActive',
+    headInstructorId: 'headInstructorId',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
   };
 
   export type DojoScalarFieldEnum = (typeof DojoScalarFieldEnum)[keyof typeof DojoScalarFieldEnum]
@@ -24120,19 +24295,27 @@ export namespace Prisma {
 
   export const MemberScalarFieldEnum: {
     id: 'id',
-    full_name: 'full_name',
+    fullName: 'fullName',
     email: 'email',
     phone: 'phone',
-    avatar_url: 'avatar_url',
+    avatarUrl: 'avatarUrl',
     role: 'role',
-    member_number: 'member_number',
-    current_rank: 'current_rank',
-    join_date: 'join_date',
-    expiry_date: 'expiry_date',
-    is_active: 'is_active',
-    dojo_id: 'dojo_id',
-    created_at: 'created_at',
-    updated_at: 'updated_at'
+    memberNumber: 'memberNumber',
+    currentRank: 'currentRank',
+    joinDate: 'joinDate',
+    expiryDate: 'expiryDate',
+    isActive: 'isActive',
+    dojoId: 'dojoId',
+    onboardingComplete: 'onboardingComplete',
+    membershipStatus: 'membershipStatus',
+    dateOfBirth: 'dateOfBirth',
+    bloodGroup: 'bloodGroup',
+    address: 'address',
+    nationalId: 'nationalId',
+    emergencyContactName: 'emergencyContactName',
+    emergencyContactPhone: 'emergencyContactPhone',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
   };
 
   export type MemberScalarFieldEnum = (typeof MemberScalarFieldEnum)[keyof typeof MemberScalarFieldEnum]
@@ -24140,9 +24323,9 @@ export namespace Prisma {
 
   export const AdminScalarFieldEnum: {
     id: 'id',
-    member_id: 'member_id',
+    memberId: 'memberId',
     notes: 'notes',
-    created_at: 'created_at'
+    createdAt: 'createdAt'
   };
 
   export type AdminScalarFieldEnum = (typeof AdminScalarFieldEnum)[keyof typeof AdminScalarFieldEnum]
@@ -24150,12 +24333,12 @@ export namespace Prisma {
 
   export const InstructorScalarFieldEnum: {
     id: 'id',
-    member_id: 'member_id',
-    dojo_id: 'dojo_id',
+    memberId: 'memberId',
+    dojoId: 'dojoId',
     bio: 'bio',
-    is_active: 'is_active',
-    created_at: 'created_at',
-    updated_at: 'updated_at'
+    isActive: 'isActive',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
   };
 
   export type InstructorScalarFieldEnum = (typeof InstructorScalarFieldEnum)[keyof typeof InstructorScalarFieldEnum]
@@ -24163,12 +24346,12 @@ export namespace Prisma {
 
   export const AttendanceScalarFieldEnum: {
     id: 'id',
-    member_id: 'member_id',
-    dojo_id: 'dojo_id',
+    memberId: 'memberId',
+    dojoId: 'dojoId',
     date: 'date',
     present: 'present',
     notes: 'notes',
-    created_at: 'created_at'
+    createdAt: 'createdAt'
   };
 
   export type AttendanceScalarFieldEnum = (typeof AttendanceScalarFieldEnum)[keyof typeof AttendanceScalarFieldEnum]
@@ -24177,13 +24360,13 @@ export namespace Prisma {
   export const GradingEventScalarFieldEnum: {
     id: 'id',
     name: 'name',
-    event_date: 'event_date',
+    eventDate: 'eventDate',
     location: 'location',
-    target_rank_id: 'target_rank_id',
-    is_open: 'is_open',
+    targetRankId: 'targetRankId',
+    isOpen: 'isOpen',
     notes: 'notes',
-    created_at: 'created_at',
-    updated_at: 'updated_at'
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
   };
 
   export type GradingEventScalarFieldEnum = (typeof GradingEventScalarFieldEnum)[keyof typeof GradingEventScalarFieldEnum]
@@ -24191,12 +24374,12 @@ export namespace Prisma {
 
   export const GradingApplicationScalarFieldEnum: {
     id: 'id',
-    member_id: 'member_id',
-    grading_event_id: 'grading_event_id',
-    target_rank_id: 'target_rank_id',
+    memberId: 'memberId',
+    gradingEventId: 'gradingEventId',
+    targetRankId: 'targetRankId',
     status: 'status',
     notes: 'notes',
-    applied_at: 'applied_at'
+    appliedAt: 'appliedAt'
   };
 
   export type GradingApplicationScalarFieldEnum = (typeof GradingApplicationScalarFieldEnum)[keyof typeof GradingApplicationScalarFieldEnum]
@@ -24204,15 +24387,15 @@ export namespace Prisma {
 
   export const GradingScalarFieldEnum: {
     id: 'id',
-    member_id: 'member_id',
-    grading_event_id: 'grading_event_id',
-    from_rank_id: 'from_rank_id',
-    to_rank_id: 'to_rank_id',
+    memberId: 'memberId',
+    gradingEventId: 'gradingEventId',
+    fromRankId: 'fromRankId',
+    toRankId: 'toRankId',
     result: 'result',
-    certificate_url: 'certificate_url',
+    certificateUrl: 'certificateUrl',
     notes: 'notes',
-    created_at: 'created_at',
-    updated_at: 'updated_at'
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
   };
 
   export type GradingScalarFieldEnum = (typeof GradingScalarFieldEnum)[keyof typeof GradingScalarFieldEnum]
@@ -24222,13 +24405,13 @@ export namespace Prisma {
     id: 'id',
     title: 'title',
     description: 'description',
-    event_date: 'event_date',
+    eventDate: 'eventDate',
     location: 'location',
-    image_url: 'image_url',
-    is_published: 'is_published',
-    max_capacity: 'max_capacity',
-    created_at: 'created_at',
-    updated_at: 'updated_at'
+    imageUrl: 'imageUrl',
+    isPublished: 'isPublished',
+    maxCapacity: 'maxCapacity',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
   };
 
   export type EventScalarFieldEnum = (typeof EventScalarFieldEnum)[keyof typeof EventScalarFieldEnum]
@@ -24236,9 +24419,9 @@ export namespace Prisma {
 
   export const EventRegistrationScalarFieldEnum: {
     id: 'id',
-    event_id: 'event_id',
-    member_id: 'member_id',
-    created_at: 'created_at'
+    eventId: 'eventId',
+    memberId: 'memberId',
+    createdAt: 'createdAt'
   };
 
   export type EventRegistrationScalarFieldEnum = (typeof EventRegistrationScalarFieldEnum)[keyof typeof EventRegistrationScalarFieldEnum]
@@ -24246,14 +24429,14 @@ export namespace Prisma {
 
   export const NotificationScalarFieldEnum: {
     id: 'id',
-    member_id: 'member_id',
+    memberId: 'memberId',
     title: 'title',
     message: 'message',
     type: 'type',
-    is_read: 'is_read',
+    isRead: 'isRead',
     link: 'link',
-    created_at: 'created_at',
-    updated_at: 'updated_at'
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
   };
 
   export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
@@ -24265,10 +24448,11 @@ export namespace Prisma {
     description: 'description',
     price: 'price',
     stock: 'stock',
-    image_url: 'image_url',
-    is_active: 'is_active',
-    created_at: 'created_at',
-    updated_at: 'updated_at'
+    imageUrl: 'imageUrl',
+    category: 'category',
+    isActive: 'isActive',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
   };
 
   export type ShopProductScalarFieldEnum = (typeof ShopProductScalarFieldEnum)[keyof typeof ShopProductScalarFieldEnum]
@@ -24276,15 +24460,17 @@ export namespace Prisma {
 
   export const ShopOrderScalarFieldEnum: {
     id: 'id',
-    member_id: 'member_id',
-    payment_status: 'payment_status',
-    payment_method: 'payment_method',
+    memberId: 'memberId',
+    paymentStatus: 'paymentStatus',
+    paymentMethod: 'paymentMethod',
     total: 'total',
     currency: 'currency',
-    transaction_id: 'transaction_id',
+    transactionId: 'transactionId',
+    includesMembership: 'includesMembership',
+    membershipFee: 'membershipFee',
     notes: 'notes',
-    created_at: 'created_at',
-    updated_at: 'updated_at'
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
   };
 
   export type ShopOrderScalarFieldEnum = (typeof ShopOrderScalarFieldEnum)[keyof typeof ShopOrderScalarFieldEnum]
@@ -24292,10 +24478,10 @@ export namespace Prisma {
 
   export const ShopOrderItemScalarFieldEnum: {
     id: 'id',
-    order_id: 'order_id',
-    product_id: 'product_id',
+    orderId: 'orderId',
+    productId: 'productId',
     quantity: 'quantity',
-    unit_price: 'unit_price'
+    unitPrice: 'unitPrice'
   };
 
   export type ShopOrderItemScalarFieldEnum = (typeof ShopOrderItemScalarFieldEnum)[keyof typeof ShopOrderItemScalarFieldEnum]
@@ -24307,9 +24493,9 @@ export namespace Prisma {
     description: 'description',
     date: 'date',
     location: 'location',
-    is_published: 'is_published',
-    created_at: 'created_at',
-    updated_at: 'updated_at'
+    isPublished: 'isPublished',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
   };
 
   export type TournamentScalarFieldEnum = (typeof TournamentScalarFieldEnum)[keyof typeof TournamentScalarFieldEnum]
@@ -24317,11 +24503,11 @@ export namespace Prisma {
 
   export const TournamentParticipantScalarFieldEnum: {
     id: 'id',
-    tournament_id: 'tournament_id',
-    member_id: 'member_id',
+    tournamentId: 'tournamentId',
+    memberId: 'memberId',
     category: 'category',
-    weight_class: 'weight_class',
-    created_at: 'created_at'
+    weightClass: 'weightClass',
+    createdAt: 'createdAt'
   };
 
   export type TournamentParticipantScalarFieldEnum = (typeof TournamentParticipantScalarFieldEnum)[keyof typeof TournamentParticipantScalarFieldEnum]
@@ -24329,14 +24515,14 @@ export namespace Prisma {
 
   export const TournamentMatchScalarFieldEnum: {
     id: 'id',
-    tournament_id: 'tournament_id',
-    participant1_id: 'participant1_id',
-    participant2_id: 'participant2_id',
-    winner_id: 'winner_id',
+    tournamentId: 'tournamentId',
+    participant1Id: 'participant1Id',
+    participant2Id: 'participant2Id',
+    winnerId: 'winnerId',
     round: 'round',
-    match_order: 'match_order',
+    matchOrder: 'matchOrder',
     notes: 'notes',
-    created_at: 'created_at'
+    createdAt: 'createdAt'
   };
 
   export type TournamentMatchScalarFieldEnum = (typeof TournamentMatchScalarFieldEnum)[keyof typeof TournamentMatchScalarFieldEnum]
@@ -24480,6 +24666,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'MembershipStatus'
+   */
+  export type EnumMembershipStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MembershipStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'MembershipStatus[]'
+   */
+  export type ListEnumMembershipStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MembershipStatus[]'>
+    
+
+
+  /**
    * Reference to a field of type 'ApplicationStatus'
    */
   export type EnumApplicationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ApplicationStatus'>
@@ -24558,56 +24758,60 @@ export namespace Prisma {
     NOT?: BeltRankWhereInput | BeltRankWhereInput[]
     id?: UuidFilter<"BeltRank"> | string
     name?: StringFilter<"BeltRank"> | string
-    kyu_dan?: StringNullableFilter<"BeltRank"> | string | null
-    color_hex?: StringNullableFilter<"BeltRank"> | string | null
-    order_index?: IntFilter<"BeltRank"> | number
-    created_at?: DateTimeFilter<"BeltRank"> | Date | string
-    updated_at?: DateTimeFilter<"BeltRank"> | Date | string
-    gradings_from?: GradingListRelationFilter
-    gradings_to?: GradingListRelationFilter
-    grading_events?: GradingEventListRelationFilter
-    grading_applications?: GradingApplicationListRelationFilter
+    nameBn?: StringNullableFilter<"BeltRank"> | string | null
+    kyuDan?: StringNullableFilter<"BeltRank"> | string | null
+    colorHex?: StringNullableFilter<"BeltRank"> | string | null
+    orderIndex?: IntFilter<"BeltRank"> | number
+    createdAt?: DateTimeFilter<"BeltRank"> | Date | string
+    updatedAt?: DateTimeFilter<"BeltRank"> | Date | string
+    gradingsFrom?: GradingListRelationFilter
+    gradingsTo?: GradingListRelationFilter
+    gradingEvents?: GradingEventListRelationFilter
+    gradingApplications?: GradingApplicationListRelationFilter
   }
 
   export type BeltRankOrderByWithRelationInput = {
     id?: SortOrder
     name?: SortOrder
-    kyu_dan?: SortOrderInput | SortOrder
-    color_hex?: SortOrderInput | SortOrder
-    order_index?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
-    gradings_from?: GradingOrderByRelationAggregateInput
-    gradings_to?: GradingOrderByRelationAggregateInput
-    grading_events?: GradingEventOrderByRelationAggregateInput
-    grading_applications?: GradingApplicationOrderByRelationAggregateInput
+    nameBn?: SortOrderInput | SortOrder
+    kyuDan?: SortOrderInput | SortOrder
+    colorHex?: SortOrderInput | SortOrder
+    orderIndex?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    gradingsFrom?: GradingOrderByRelationAggregateInput
+    gradingsTo?: GradingOrderByRelationAggregateInput
+    gradingEvents?: GradingEventOrderByRelationAggregateInput
+    gradingApplications?: GradingApplicationOrderByRelationAggregateInput
   }
 
   export type BeltRankWhereUniqueInput = Prisma.AtLeast<{
     id?: string
     name?: string
-    order_index?: number
+    orderIndex?: number
     AND?: BeltRankWhereInput | BeltRankWhereInput[]
     OR?: BeltRankWhereInput[]
     NOT?: BeltRankWhereInput | BeltRankWhereInput[]
-    kyu_dan?: StringNullableFilter<"BeltRank"> | string | null
-    color_hex?: StringNullableFilter<"BeltRank"> | string | null
-    created_at?: DateTimeFilter<"BeltRank"> | Date | string
-    updated_at?: DateTimeFilter<"BeltRank"> | Date | string
-    gradings_from?: GradingListRelationFilter
-    gradings_to?: GradingListRelationFilter
-    grading_events?: GradingEventListRelationFilter
-    grading_applications?: GradingApplicationListRelationFilter
-  }, "id" | "name" | "order_index">
+    nameBn?: StringNullableFilter<"BeltRank"> | string | null
+    kyuDan?: StringNullableFilter<"BeltRank"> | string | null
+    colorHex?: StringNullableFilter<"BeltRank"> | string | null
+    createdAt?: DateTimeFilter<"BeltRank"> | Date | string
+    updatedAt?: DateTimeFilter<"BeltRank"> | Date | string
+    gradingsFrom?: GradingListRelationFilter
+    gradingsTo?: GradingListRelationFilter
+    gradingEvents?: GradingEventListRelationFilter
+    gradingApplications?: GradingApplicationListRelationFilter
+  }, "id" | "name" | "orderIndex">
 
   export type BeltRankOrderByWithAggregationInput = {
     id?: SortOrder
     name?: SortOrder
-    kyu_dan?: SortOrderInput | SortOrder
-    color_hex?: SortOrderInput | SortOrder
-    order_index?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
+    nameBn?: SortOrderInput | SortOrder
+    kyuDan?: SortOrderInput | SortOrder
+    colorHex?: SortOrderInput | SortOrder
+    orderIndex?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     _count?: BeltRankCountOrderByAggregateInput
     _avg?: BeltRankAvgOrderByAggregateInput
     _max?: BeltRankMaxOrderByAggregateInput
@@ -24621,11 +24825,12 @@ export namespace Prisma {
     NOT?: BeltRankScalarWhereWithAggregatesInput | BeltRankScalarWhereWithAggregatesInput[]
     id?: UuidWithAggregatesFilter<"BeltRank"> | string
     name?: StringWithAggregatesFilter<"BeltRank"> | string
-    kyu_dan?: StringNullableWithAggregatesFilter<"BeltRank"> | string | null
-    color_hex?: StringNullableWithAggregatesFilter<"BeltRank"> | string | null
-    order_index?: IntWithAggregatesFilter<"BeltRank"> | number
-    created_at?: DateTimeWithAggregatesFilter<"BeltRank"> | Date | string
-    updated_at?: DateTimeWithAggregatesFilter<"BeltRank"> | Date | string
+    nameBn?: StringNullableWithAggregatesFilter<"BeltRank"> | string | null
+    kyuDan?: StringNullableWithAggregatesFilter<"BeltRank"> | string | null
+    colorHex?: StringNullableWithAggregatesFilter<"BeltRank"> | string | null
+    orderIndex?: IntWithAggregatesFilter<"BeltRank"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"BeltRank"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"BeltRank"> | Date | string
   }
 
   export type DojoWhereInput = {
@@ -24641,11 +24846,11 @@ export namespace Prisma {
     phone?: StringNullableFilter<"Dojo"> | string | null
     email?: StringNullableFilter<"Dojo"> | string | null
     schedule?: JsonNullableFilter<"Dojo">
-    is_active?: BoolFilter<"Dojo"> | boolean
-    head_instructor_id?: UuidNullableFilter<"Dojo"> | string | null
-    created_at?: DateTimeFilter<"Dojo"> | Date | string
-    updated_at?: DateTimeFilter<"Dojo"> | Date | string
-    head_instructor?: XOR<MemberNullableScalarRelationFilter, MemberWhereInput> | null
+    isActive?: BoolFilter<"Dojo"> | boolean
+    headInstructorId?: UuidNullableFilter<"Dojo"> | string | null
+    createdAt?: DateTimeFilter<"Dojo"> | Date | string
+    updatedAt?: DateTimeFilter<"Dojo"> | Date | string
+    headInstructor?: XOR<MemberNullableScalarRelationFilter, MemberWhereInput> | null
     members?: MemberListRelationFilter
     instructors?: InstructorListRelationFilter
     attendance?: AttendanceListRelationFilter
@@ -24661,11 +24866,11 @@ export namespace Prisma {
     phone?: SortOrderInput | SortOrder
     email?: SortOrderInput | SortOrder
     schedule?: SortOrderInput | SortOrder
-    is_active?: SortOrder
-    head_instructor_id?: SortOrderInput | SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
-    head_instructor?: MemberOrderByWithRelationInput
+    isActive?: SortOrder
+    headInstructorId?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    headInstructor?: MemberOrderByWithRelationInput
     members?: MemberOrderByRelationAggregateInput
     instructors?: InstructorOrderByRelationAggregateInput
     attendance?: AttendanceOrderByRelationAggregateInput
@@ -24684,11 +24889,11 @@ export namespace Prisma {
     phone?: StringNullableFilter<"Dojo"> | string | null
     email?: StringNullableFilter<"Dojo"> | string | null
     schedule?: JsonNullableFilter<"Dojo">
-    is_active?: BoolFilter<"Dojo"> | boolean
-    head_instructor_id?: UuidNullableFilter<"Dojo"> | string | null
-    created_at?: DateTimeFilter<"Dojo"> | Date | string
-    updated_at?: DateTimeFilter<"Dojo"> | Date | string
-    head_instructor?: XOR<MemberNullableScalarRelationFilter, MemberWhereInput> | null
+    isActive?: BoolFilter<"Dojo"> | boolean
+    headInstructorId?: UuidNullableFilter<"Dojo"> | string | null
+    createdAt?: DateTimeFilter<"Dojo"> | Date | string
+    updatedAt?: DateTimeFilter<"Dojo"> | Date | string
+    headInstructor?: XOR<MemberNullableScalarRelationFilter, MemberWhereInput> | null
     members?: MemberListRelationFilter
     instructors?: InstructorListRelationFilter
     attendance?: AttendanceListRelationFilter
@@ -24704,10 +24909,10 @@ export namespace Prisma {
     phone?: SortOrderInput | SortOrder
     email?: SortOrderInput | SortOrder
     schedule?: SortOrderInput | SortOrder
-    is_active?: SortOrder
-    head_instructor_id?: SortOrderInput | SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
+    isActive?: SortOrder
+    headInstructorId?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     _count?: DojoCountOrderByAggregateInput
     _avg?: DojoAvgOrderByAggregateInput
     _max?: DojoMaxOrderByAggregateInput
@@ -24728,10 +24933,10 @@ export namespace Prisma {
     phone?: StringNullableWithAggregatesFilter<"Dojo"> | string | null
     email?: StringNullableWithAggregatesFilter<"Dojo"> | string | null
     schedule?: JsonNullableWithAggregatesFilter<"Dojo">
-    is_active?: BoolWithAggregatesFilter<"Dojo"> | boolean
-    head_instructor_id?: UuidNullableWithAggregatesFilter<"Dojo"> | string | null
-    created_at?: DateTimeWithAggregatesFilter<"Dojo"> | Date | string
-    updated_at?: DateTimeWithAggregatesFilter<"Dojo"> | Date | string
+    isActive?: BoolWithAggregatesFilter<"Dojo"> | boolean
+    headInstructorId?: UuidNullableWithAggregatesFilter<"Dojo"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"Dojo"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Dojo"> | Date | string
   }
 
   export type MemberWhereInput = {
@@ -24739,106 +24944,138 @@ export namespace Prisma {
     OR?: MemberWhereInput[]
     NOT?: MemberWhereInput | MemberWhereInput[]
     id?: UuidFilter<"Member"> | string
-    full_name?: StringFilter<"Member"> | string
+    fullName?: StringFilter<"Member"> | string
     email?: StringFilter<"Member"> | string
     phone?: StringNullableFilter<"Member"> | string | null
-    avatar_url?: StringNullableFilter<"Member"> | string | null
+    avatarUrl?: StringNullableFilter<"Member"> | string | null
     role?: EnumMemberRoleFilter<"Member"> | $Enums.MemberRole
-    member_number?: StringNullableFilter<"Member"> | string | null
-    current_rank?: StringFilter<"Member"> | string
-    join_date?: DateTimeFilter<"Member"> | Date | string
-    expiry_date?: DateTimeNullableFilter<"Member"> | Date | string | null
-    is_active?: BoolFilter<"Member"> | boolean
-    dojo_id?: UuidNullableFilter<"Member"> | string | null
-    created_at?: DateTimeFilter<"Member"> | Date | string
-    updated_at?: DateTimeFilter<"Member"> | Date | string
+    memberNumber?: StringNullableFilter<"Member"> | string | null
+    currentRank?: StringFilter<"Member"> | string
+    joinDate?: DateTimeFilter<"Member"> | Date | string
+    expiryDate?: DateTimeNullableFilter<"Member"> | Date | string | null
+    isActive?: BoolFilter<"Member"> | boolean
+    dojoId?: UuidNullableFilter<"Member"> | string | null
+    onboardingComplete?: BoolFilter<"Member"> | boolean
+    membershipStatus?: EnumMembershipStatusFilter<"Member"> | $Enums.MembershipStatus
+    dateOfBirth?: DateTimeNullableFilter<"Member"> | Date | string | null
+    bloodGroup?: StringNullableFilter<"Member"> | string | null
+    address?: StringNullableFilter<"Member"> | string | null
+    nationalId?: StringNullableFilter<"Member"> | string | null
+    emergencyContactName?: StringNullableFilter<"Member"> | string | null
+    emergencyContactPhone?: StringNullableFilter<"Member"> | string | null
+    createdAt?: DateTimeFilter<"Member"> | Date | string
+    updatedAt?: DateTimeFilter<"Member"> | Date | string
     dojo?: XOR<DojoNullableScalarRelationFilter, DojoWhereInput> | null
-    dojo_head_of?: DojoListRelationFilter
+    dojoHeadOf?: DojoListRelationFilter
     instructor?: XOR<InstructorNullableScalarRelationFilter, InstructorWhereInput> | null
     admin?: XOR<AdminNullableScalarRelationFilter, AdminWhereInput> | null
     gradings?: GradingListRelationFilter
-    grading_applications?: GradingApplicationListRelationFilter
-    event_registrations?: EventRegistrationListRelationFilter
+    gradingApplications?: GradingApplicationListRelationFilter
+    eventRegistrations?: EventRegistrationListRelationFilter
     notifications?: NotificationListRelationFilter
     orders?: ShopOrderListRelationFilter
     attendance?: AttendanceListRelationFilter
-    tournament_entries?: TournamentParticipantListRelationFilter
+    tournamentEntries?: TournamentParticipantListRelationFilter
   }
 
   export type MemberOrderByWithRelationInput = {
     id?: SortOrder
-    full_name?: SortOrder
+    fullName?: SortOrder
     email?: SortOrder
     phone?: SortOrderInput | SortOrder
-    avatar_url?: SortOrderInput | SortOrder
+    avatarUrl?: SortOrderInput | SortOrder
     role?: SortOrder
-    member_number?: SortOrderInput | SortOrder
-    current_rank?: SortOrder
-    join_date?: SortOrder
-    expiry_date?: SortOrderInput | SortOrder
-    is_active?: SortOrder
-    dojo_id?: SortOrderInput | SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
+    memberNumber?: SortOrderInput | SortOrder
+    currentRank?: SortOrder
+    joinDate?: SortOrder
+    expiryDate?: SortOrderInput | SortOrder
+    isActive?: SortOrder
+    dojoId?: SortOrderInput | SortOrder
+    onboardingComplete?: SortOrder
+    membershipStatus?: SortOrder
+    dateOfBirth?: SortOrderInput | SortOrder
+    bloodGroup?: SortOrderInput | SortOrder
+    address?: SortOrderInput | SortOrder
+    nationalId?: SortOrderInput | SortOrder
+    emergencyContactName?: SortOrderInput | SortOrder
+    emergencyContactPhone?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     dojo?: DojoOrderByWithRelationInput
-    dojo_head_of?: DojoOrderByRelationAggregateInput
+    dojoHeadOf?: DojoOrderByRelationAggregateInput
     instructor?: InstructorOrderByWithRelationInput
     admin?: AdminOrderByWithRelationInput
     gradings?: GradingOrderByRelationAggregateInput
-    grading_applications?: GradingApplicationOrderByRelationAggregateInput
-    event_registrations?: EventRegistrationOrderByRelationAggregateInput
+    gradingApplications?: GradingApplicationOrderByRelationAggregateInput
+    eventRegistrations?: EventRegistrationOrderByRelationAggregateInput
     notifications?: NotificationOrderByRelationAggregateInput
     orders?: ShopOrderOrderByRelationAggregateInput
     attendance?: AttendanceOrderByRelationAggregateInput
-    tournament_entries?: TournamentParticipantOrderByRelationAggregateInput
+    tournamentEntries?: TournamentParticipantOrderByRelationAggregateInput
   }
 
   export type MemberWhereUniqueInput = Prisma.AtLeast<{
     id?: string
     email?: string
-    member_number?: string
+    memberNumber?: string
     AND?: MemberWhereInput | MemberWhereInput[]
     OR?: MemberWhereInput[]
     NOT?: MemberWhereInput | MemberWhereInput[]
-    full_name?: StringFilter<"Member"> | string
+    fullName?: StringFilter<"Member"> | string
     phone?: StringNullableFilter<"Member"> | string | null
-    avatar_url?: StringNullableFilter<"Member"> | string | null
+    avatarUrl?: StringNullableFilter<"Member"> | string | null
     role?: EnumMemberRoleFilter<"Member"> | $Enums.MemberRole
-    current_rank?: StringFilter<"Member"> | string
-    join_date?: DateTimeFilter<"Member"> | Date | string
-    expiry_date?: DateTimeNullableFilter<"Member"> | Date | string | null
-    is_active?: BoolFilter<"Member"> | boolean
-    dojo_id?: UuidNullableFilter<"Member"> | string | null
-    created_at?: DateTimeFilter<"Member"> | Date | string
-    updated_at?: DateTimeFilter<"Member"> | Date | string
+    currentRank?: StringFilter<"Member"> | string
+    joinDate?: DateTimeFilter<"Member"> | Date | string
+    expiryDate?: DateTimeNullableFilter<"Member"> | Date | string | null
+    isActive?: BoolFilter<"Member"> | boolean
+    dojoId?: UuidNullableFilter<"Member"> | string | null
+    onboardingComplete?: BoolFilter<"Member"> | boolean
+    membershipStatus?: EnumMembershipStatusFilter<"Member"> | $Enums.MembershipStatus
+    dateOfBirth?: DateTimeNullableFilter<"Member"> | Date | string | null
+    bloodGroup?: StringNullableFilter<"Member"> | string | null
+    address?: StringNullableFilter<"Member"> | string | null
+    nationalId?: StringNullableFilter<"Member"> | string | null
+    emergencyContactName?: StringNullableFilter<"Member"> | string | null
+    emergencyContactPhone?: StringNullableFilter<"Member"> | string | null
+    createdAt?: DateTimeFilter<"Member"> | Date | string
+    updatedAt?: DateTimeFilter<"Member"> | Date | string
     dojo?: XOR<DojoNullableScalarRelationFilter, DojoWhereInput> | null
-    dojo_head_of?: DojoListRelationFilter
+    dojoHeadOf?: DojoListRelationFilter
     instructor?: XOR<InstructorNullableScalarRelationFilter, InstructorWhereInput> | null
     admin?: XOR<AdminNullableScalarRelationFilter, AdminWhereInput> | null
     gradings?: GradingListRelationFilter
-    grading_applications?: GradingApplicationListRelationFilter
-    event_registrations?: EventRegistrationListRelationFilter
+    gradingApplications?: GradingApplicationListRelationFilter
+    eventRegistrations?: EventRegistrationListRelationFilter
     notifications?: NotificationListRelationFilter
     orders?: ShopOrderListRelationFilter
     attendance?: AttendanceListRelationFilter
-    tournament_entries?: TournamentParticipantListRelationFilter
-  }, "id" | "email" | "member_number">
+    tournamentEntries?: TournamentParticipantListRelationFilter
+  }, "id" | "email" | "memberNumber">
 
   export type MemberOrderByWithAggregationInput = {
     id?: SortOrder
-    full_name?: SortOrder
+    fullName?: SortOrder
     email?: SortOrder
     phone?: SortOrderInput | SortOrder
-    avatar_url?: SortOrderInput | SortOrder
+    avatarUrl?: SortOrderInput | SortOrder
     role?: SortOrder
-    member_number?: SortOrderInput | SortOrder
-    current_rank?: SortOrder
-    join_date?: SortOrder
-    expiry_date?: SortOrderInput | SortOrder
-    is_active?: SortOrder
-    dojo_id?: SortOrderInput | SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
+    memberNumber?: SortOrderInput | SortOrder
+    currentRank?: SortOrder
+    joinDate?: SortOrder
+    expiryDate?: SortOrderInput | SortOrder
+    isActive?: SortOrder
+    dojoId?: SortOrderInput | SortOrder
+    onboardingComplete?: SortOrder
+    membershipStatus?: SortOrder
+    dateOfBirth?: SortOrderInput | SortOrder
+    bloodGroup?: SortOrderInput | SortOrder
+    address?: SortOrderInput | SortOrder
+    nationalId?: SortOrderInput | SortOrder
+    emergencyContactName?: SortOrderInput | SortOrder
+    emergencyContactPhone?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     _count?: MemberCountOrderByAggregateInput
     _max?: MemberMaxOrderByAggregateInput
     _min?: MemberMinOrderByAggregateInput
@@ -24849,19 +25086,27 @@ export namespace Prisma {
     OR?: MemberScalarWhereWithAggregatesInput[]
     NOT?: MemberScalarWhereWithAggregatesInput | MemberScalarWhereWithAggregatesInput[]
     id?: UuidWithAggregatesFilter<"Member"> | string
-    full_name?: StringWithAggregatesFilter<"Member"> | string
+    fullName?: StringWithAggregatesFilter<"Member"> | string
     email?: StringWithAggregatesFilter<"Member"> | string
     phone?: StringNullableWithAggregatesFilter<"Member"> | string | null
-    avatar_url?: StringNullableWithAggregatesFilter<"Member"> | string | null
+    avatarUrl?: StringNullableWithAggregatesFilter<"Member"> | string | null
     role?: EnumMemberRoleWithAggregatesFilter<"Member"> | $Enums.MemberRole
-    member_number?: StringNullableWithAggregatesFilter<"Member"> | string | null
-    current_rank?: StringWithAggregatesFilter<"Member"> | string
-    join_date?: DateTimeWithAggregatesFilter<"Member"> | Date | string
-    expiry_date?: DateTimeNullableWithAggregatesFilter<"Member"> | Date | string | null
-    is_active?: BoolWithAggregatesFilter<"Member"> | boolean
-    dojo_id?: UuidNullableWithAggregatesFilter<"Member"> | string | null
-    created_at?: DateTimeWithAggregatesFilter<"Member"> | Date | string
-    updated_at?: DateTimeWithAggregatesFilter<"Member"> | Date | string
+    memberNumber?: StringNullableWithAggregatesFilter<"Member"> | string | null
+    currentRank?: StringWithAggregatesFilter<"Member"> | string
+    joinDate?: DateTimeWithAggregatesFilter<"Member"> | Date | string
+    expiryDate?: DateTimeNullableWithAggregatesFilter<"Member"> | Date | string | null
+    isActive?: BoolWithAggregatesFilter<"Member"> | boolean
+    dojoId?: UuidNullableWithAggregatesFilter<"Member"> | string | null
+    onboardingComplete?: BoolWithAggregatesFilter<"Member"> | boolean
+    membershipStatus?: EnumMembershipStatusWithAggregatesFilter<"Member"> | $Enums.MembershipStatus
+    dateOfBirth?: DateTimeNullableWithAggregatesFilter<"Member"> | Date | string | null
+    bloodGroup?: StringNullableWithAggregatesFilter<"Member"> | string | null
+    address?: StringNullableWithAggregatesFilter<"Member"> | string | null
+    nationalId?: StringNullableWithAggregatesFilter<"Member"> | string | null
+    emergencyContactName?: StringNullableWithAggregatesFilter<"Member"> | string | null
+    emergencyContactPhone?: StringNullableWithAggregatesFilter<"Member"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"Member"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Member"> | Date | string
   }
 
   export type AdminWhereInput = {
@@ -24869,36 +25114,36 @@ export namespace Prisma {
     OR?: AdminWhereInput[]
     NOT?: AdminWhereInput | AdminWhereInput[]
     id?: UuidFilter<"Admin"> | string
-    member_id?: UuidFilter<"Admin"> | string
+    memberId?: UuidFilter<"Admin"> | string
     notes?: StringNullableFilter<"Admin"> | string | null
-    created_at?: DateTimeFilter<"Admin"> | Date | string
+    createdAt?: DateTimeFilter<"Admin"> | Date | string
     member?: XOR<MemberScalarRelationFilter, MemberWhereInput>
   }
 
   export type AdminOrderByWithRelationInput = {
     id?: SortOrder
-    member_id?: SortOrder
+    memberId?: SortOrder
     notes?: SortOrderInput | SortOrder
-    created_at?: SortOrder
+    createdAt?: SortOrder
     member?: MemberOrderByWithRelationInput
   }
 
   export type AdminWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    member_id?: string
+    memberId?: string
     AND?: AdminWhereInput | AdminWhereInput[]
     OR?: AdminWhereInput[]
     NOT?: AdminWhereInput | AdminWhereInput[]
     notes?: StringNullableFilter<"Admin"> | string | null
-    created_at?: DateTimeFilter<"Admin"> | Date | string
+    createdAt?: DateTimeFilter<"Admin"> | Date | string
     member?: XOR<MemberScalarRelationFilter, MemberWhereInput>
-  }, "id" | "member_id">
+  }, "id" | "memberId">
 
   export type AdminOrderByWithAggregationInput = {
     id?: SortOrder
-    member_id?: SortOrder
+    memberId?: SortOrder
     notes?: SortOrderInput | SortOrder
-    created_at?: SortOrder
+    createdAt?: SortOrder
     _count?: AdminCountOrderByAggregateInput
     _max?: AdminMaxOrderByAggregateInput
     _min?: AdminMinOrderByAggregateInput
@@ -24909,9 +25154,9 @@ export namespace Prisma {
     OR?: AdminScalarWhereWithAggregatesInput[]
     NOT?: AdminScalarWhereWithAggregatesInput | AdminScalarWhereWithAggregatesInput[]
     id?: UuidWithAggregatesFilter<"Admin"> | string
-    member_id?: UuidWithAggregatesFilter<"Admin"> | string
+    memberId?: UuidWithAggregatesFilter<"Admin"> | string
     notes?: StringNullableWithAggregatesFilter<"Admin"> | string | null
-    created_at?: DateTimeWithAggregatesFilter<"Admin"> | Date | string
+    createdAt?: DateTimeWithAggregatesFilter<"Admin"> | Date | string
   }
 
   export type InstructorWhereInput = {
@@ -24919,51 +25164,51 @@ export namespace Prisma {
     OR?: InstructorWhereInput[]
     NOT?: InstructorWhereInput | InstructorWhereInput[]
     id?: UuidFilter<"Instructor"> | string
-    member_id?: UuidFilter<"Instructor"> | string
-    dojo_id?: UuidNullableFilter<"Instructor"> | string | null
+    memberId?: UuidFilter<"Instructor"> | string
+    dojoId?: UuidNullableFilter<"Instructor"> | string | null
     bio?: StringNullableFilter<"Instructor"> | string | null
-    is_active?: BoolFilter<"Instructor"> | boolean
-    created_at?: DateTimeFilter<"Instructor"> | Date | string
-    updated_at?: DateTimeFilter<"Instructor"> | Date | string
+    isActive?: BoolFilter<"Instructor"> | boolean
+    createdAt?: DateTimeFilter<"Instructor"> | Date | string
+    updatedAt?: DateTimeFilter<"Instructor"> | Date | string
     member?: XOR<MemberScalarRelationFilter, MemberWhereInput>
     dojo?: XOR<DojoNullableScalarRelationFilter, DojoWhereInput> | null
   }
 
   export type InstructorOrderByWithRelationInput = {
     id?: SortOrder
-    member_id?: SortOrder
-    dojo_id?: SortOrderInput | SortOrder
+    memberId?: SortOrder
+    dojoId?: SortOrderInput | SortOrder
     bio?: SortOrderInput | SortOrder
-    is_active?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     member?: MemberOrderByWithRelationInput
     dojo?: DojoOrderByWithRelationInput
   }
 
   export type InstructorWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    member_id?: string
+    memberId?: string
     AND?: InstructorWhereInput | InstructorWhereInput[]
     OR?: InstructorWhereInput[]
     NOT?: InstructorWhereInput | InstructorWhereInput[]
-    dojo_id?: UuidNullableFilter<"Instructor"> | string | null
+    dojoId?: UuidNullableFilter<"Instructor"> | string | null
     bio?: StringNullableFilter<"Instructor"> | string | null
-    is_active?: BoolFilter<"Instructor"> | boolean
-    created_at?: DateTimeFilter<"Instructor"> | Date | string
-    updated_at?: DateTimeFilter<"Instructor"> | Date | string
+    isActive?: BoolFilter<"Instructor"> | boolean
+    createdAt?: DateTimeFilter<"Instructor"> | Date | string
+    updatedAt?: DateTimeFilter<"Instructor"> | Date | string
     member?: XOR<MemberScalarRelationFilter, MemberWhereInput>
     dojo?: XOR<DojoNullableScalarRelationFilter, DojoWhereInput> | null
-  }, "id" | "member_id">
+  }, "id" | "memberId">
 
   export type InstructorOrderByWithAggregationInput = {
     id?: SortOrder
-    member_id?: SortOrder
-    dojo_id?: SortOrderInput | SortOrder
+    memberId?: SortOrder
+    dojoId?: SortOrderInput | SortOrder
     bio?: SortOrderInput | SortOrder
-    is_active?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     _count?: InstructorCountOrderByAggregateInput
     _max?: InstructorMaxOrderByAggregateInput
     _min?: InstructorMinOrderByAggregateInput
@@ -24974,12 +25219,12 @@ export namespace Prisma {
     OR?: InstructorScalarWhereWithAggregatesInput[]
     NOT?: InstructorScalarWhereWithAggregatesInput | InstructorScalarWhereWithAggregatesInput[]
     id?: UuidWithAggregatesFilter<"Instructor"> | string
-    member_id?: UuidWithAggregatesFilter<"Instructor"> | string
-    dojo_id?: UuidNullableWithAggregatesFilter<"Instructor"> | string | null
+    memberId?: UuidWithAggregatesFilter<"Instructor"> | string
+    dojoId?: UuidNullableWithAggregatesFilter<"Instructor"> | string | null
     bio?: StringNullableWithAggregatesFilter<"Instructor"> | string | null
-    is_active?: BoolWithAggregatesFilter<"Instructor"> | boolean
-    created_at?: DateTimeWithAggregatesFilter<"Instructor"> | Date | string
-    updated_at?: DateTimeWithAggregatesFilter<"Instructor"> | Date | string
+    isActive?: BoolWithAggregatesFilter<"Instructor"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"Instructor"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Instructor"> | Date | string
   }
 
   export type AttendanceWhereInput = {
@@ -24987,52 +25232,52 @@ export namespace Prisma {
     OR?: AttendanceWhereInput[]
     NOT?: AttendanceWhereInput | AttendanceWhereInput[]
     id?: UuidFilter<"Attendance"> | string
-    member_id?: UuidFilter<"Attendance"> | string
-    dojo_id?: UuidNullableFilter<"Attendance"> | string | null
+    memberId?: UuidFilter<"Attendance"> | string
+    dojoId?: UuidNullableFilter<"Attendance"> | string | null
     date?: DateTimeFilter<"Attendance"> | Date | string
     present?: BoolFilter<"Attendance"> | boolean
     notes?: StringNullableFilter<"Attendance"> | string | null
-    created_at?: DateTimeFilter<"Attendance"> | Date | string
+    createdAt?: DateTimeFilter<"Attendance"> | Date | string
     member?: XOR<MemberScalarRelationFilter, MemberWhereInput>
     dojo?: XOR<DojoNullableScalarRelationFilter, DojoWhereInput> | null
   }
 
   export type AttendanceOrderByWithRelationInput = {
     id?: SortOrder
-    member_id?: SortOrder
-    dojo_id?: SortOrderInput | SortOrder
+    memberId?: SortOrder
+    dojoId?: SortOrderInput | SortOrder
     date?: SortOrder
     present?: SortOrder
     notes?: SortOrderInput | SortOrder
-    created_at?: SortOrder
+    createdAt?: SortOrder
     member?: MemberOrderByWithRelationInput
     dojo?: DojoOrderByWithRelationInput
   }
 
   export type AttendanceWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    member_id_date?: AttendanceMember_idDateCompoundUniqueInput
+    memberId_date?: AttendanceMemberIdDateCompoundUniqueInput
     AND?: AttendanceWhereInput | AttendanceWhereInput[]
     OR?: AttendanceWhereInput[]
     NOT?: AttendanceWhereInput | AttendanceWhereInput[]
-    member_id?: UuidFilter<"Attendance"> | string
-    dojo_id?: UuidNullableFilter<"Attendance"> | string | null
+    memberId?: UuidFilter<"Attendance"> | string
+    dojoId?: UuidNullableFilter<"Attendance"> | string | null
     date?: DateTimeFilter<"Attendance"> | Date | string
     present?: BoolFilter<"Attendance"> | boolean
     notes?: StringNullableFilter<"Attendance"> | string | null
-    created_at?: DateTimeFilter<"Attendance"> | Date | string
+    createdAt?: DateTimeFilter<"Attendance"> | Date | string
     member?: XOR<MemberScalarRelationFilter, MemberWhereInput>
     dojo?: XOR<DojoNullableScalarRelationFilter, DojoWhereInput> | null
-  }, "id" | "member_id_date">
+  }, "id" | "memberId_date">
 
   export type AttendanceOrderByWithAggregationInput = {
     id?: SortOrder
-    member_id?: SortOrder
-    dojo_id?: SortOrderInput | SortOrder
+    memberId?: SortOrder
+    dojoId?: SortOrderInput | SortOrder
     date?: SortOrder
     present?: SortOrder
     notes?: SortOrderInput | SortOrder
-    created_at?: SortOrder
+    createdAt?: SortOrder
     _count?: AttendanceCountOrderByAggregateInput
     _max?: AttendanceMaxOrderByAggregateInput
     _min?: AttendanceMinOrderByAggregateInput
@@ -25043,12 +25288,12 @@ export namespace Prisma {
     OR?: AttendanceScalarWhereWithAggregatesInput[]
     NOT?: AttendanceScalarWhereWithAggregatesInput | AttendanceScalarWhereWithAggregatesInput[]
     id?: UuidWithAggregatesFilter<"Attendance"> | string
-    member_id?: UuidWithAggregatesFilter<"Attendance"> | string
-    dojo_id?: UuidNullableWithAggregatesFilter<"Attendance"> | string | null
+    memberId?: UuidWithAggregatesFilter<"Attendance"> | string
+    dojoId?: UuidNullableWithAggregatesFilter<"Attendance"> | string | null
     date?: DateTimeWithAggregatesFilter<"Attendance"> | Date | string
     present?: BoolWithAggregatesFilter<"Attendance"> | boolean
     notes?: StringNullableWithAggregatesFilter<"Attendance"> | string | null
-    created_at?: DateTimeWithAggregatesFilter<"Attendance"> | Date | string
+    createdAt?: DateTimeWithAggregatesFilter<"Attendance"> | Date | string
   }
 
   export type GradingEventWhereInput = {
@@ -25057,14 +25302,14 @@ export namespace Prisma {
     NOT?: GradingEventWhereInput | GradingEventWhereInput[]
     id?: UuidFilter<"GradingEvent"> | string
     name?: StringFilter<"GradingEvent"> | string
-    event_date?: DateTimeFilter<"GradingEvent"> | Date | string
+    eventDate?: DateTimeFilter<"GradingEvent"> | Date | string
     location?: StringNullableFilter<"GradingEvent"> | string | null
-    target_rank_id?: UuidNullableFilter<"GradingEvent"> | string | null
-    is_open?: BoolFilter<"GradingEvent"> | boolean
+    targetRankId?: UuidNullableFilter<"GradingEvent"> | string | null
+    isOpen?: BoolFilter<"GradingEvent"> | boolean
     notes?: StringNullableFilter<"GradingEvent"> | string | null
-    created_at?: DateTimeFilter<"GradingEvent"> | Date | string
-    updated_at?: DateTimeFilter<"GradingEvent"> | Date | string
-    target_rank?: XOR<BeltRankNullableScalarRelationFilter, BeltRankWhereInput> | null
+    createdAt?: DateTimeFilter<"GradingEvent"> | Date | string
+    updatedAt?: DateTimeFilter<"GradingEvent"> | Date | string
+    targetRank?: XOR<BeltRankNullableScalarRelationFilter, BeltRankWhereInput> | null
     gradings?: GradingListRelationFilter
     applications?: GradingApplicationListRelationFilter
   }
@@ -25072,14 +25317,14 @@ export namespace Prisma {
   export type GradingEventOrderByWithRelationInput = {
     id?: SortOrder
     name?: SortOrder
-    event_date?: SortOrder
+    eventDate?: SortOrder
     location?: SortOrderInput | SortOrder
-    target_rank_id?: SortOrderInput | SortOrder
-    is_open?: SortOrder
+    targetRankId?: SortOrderInput | SortOrder
+    isOpen?: SortOrder
     notes?: SortOrderInput | SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
-    target_rank?: BeltRankOrderByWithRelationInput
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    targetRank?: BeltRankOrderByWithRelationInput
     gradings?: GradingOrderByRelationAggregateInput
     applications?: GradingApplicationOrderByRelationAggregateInput
   }
@@ -25090,14 +25335,14 @@ export namespace Prisma {
     OR?: GradingEventWhereInput[]
     NOT?: GradingEventWhereInput | GradingEventWhereInput[]
     name?: StringFilter<"GradingEvent"> | string
-    event_date?: DateTimeFilter<"GradingEvent"> | Date | string
+    eventDate?: DateTimeFilter<"GradingEvent"> | Date | string
     location?: StringNullableFilter<"GradingEvent"> | string | null
-    target_rank_id?: UuidNullableFilter<"GradingEvent"> | string | null
-    is_open?: BoolFilter<"GradingEvent"> | boolean
+    targetRankId?: UuidNullableFilter<"GradingEvent"> | string | null
+    isOpen?: BoolFilter<"GradingEvent"> | boolean
     notes?: StringNullableFilter<"GradingEvent"> | string | null
-    created_at?: DateTimeFilter<"GradingEvent"> | Date | string
-    updated_at?: DateTimeFilter<"GradingEvent"> | Date | string
-    target_rank?: XOR<BeltRankNullableScalarRelationFilter, BeltRankWhereInput> | null
+    createdAt?: DateTimeFilter<"GradingEvent"> | Date | string
+    updatedAt?: DateTimeFilter<"GradingEvent"> | Date | string
+    targetRank?: XOR<BeltRankNullableScalarRelationFilter, BeltRankWhereInput> | null
     gradings?: GradingListRelationFilter
     applications?: GradingApplicationListRelationFilter
   }, "id">
@@ -25105,13 +25350,13 @@ export namespace Prisma {
   export type GradingEventOrderByWithAggregationInput = {
     id?: SortOrder
     name?: SortOrder
-    event_date?: SortOrder
+    eventDate?: SortOrder
     location?: SortOrderInput | SortOrder
-    target_rank_id?: SortOrderInput | SortOrder
-    is_open?: SortOrder
+    targetRankId?: SortOrderInput | SortOrder
+    isOpen?: SortOrder
     notes?: SortOrderInput | SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     _count?: GradingEventCountOrderByAggregateInput
     _max?: GradingEventMaxOrderByAggregateInput
     _min?: GradingEventMinOrderByAggregateInput
@@ -25123,13 +25368,13 @@ export namespace Prisma {
     NOT?: GradingEventScalarWhereWithAggregatesInput | GradingEventScalarWhereWithAggregatesInput[]
     id?: UuidWithAggregatesFilter<"GradingEvent"> | string
     name?: StringWithAggregatesFilter<"GradingEvent"> | string
-    event_date?: DateTimeWithAggregatesFilter<"GradingEvent"> | Date | string
+    eventDate?: DateTimeWithAggregatesFilter<"GradingEvent"> | Date | string
     location?: StringNullableWithAggregatesFilter<"GradingEvent"> | string | null
-    target_rank_id?: UuidNullableWithAggregatesFilter<"GradingEvent"> | string | null
-    is_open?: BoolWithAggregatesFilter<"GradingEvent"> | boolean
+    targetRankId?: UuidNullableWithAggregatesFilter<"GradingEvent"> | string | null
+    isOpen?: BoolWithAggregatesFilter<"GradingEvent"> | boolean
     notes?: StringNullableWithAggregatesFilter<"GradingEvent"> | string | null
-    created_at?: DateTimeWithAggregatesFilter<"GradingEvent"> | Date | string
-    updated_at?: DateTimeWithAggregatesFilter<"GradingEvent"> | Date | string
+    createdAt?: DateTimeWithAggregatesFilter<"GradingEvent"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"GradingEvent"> | Date | string
   }
 
   export type GradingApplicationWhereInput = {
@@ -25137,55 +25382,55 @@ export namespace Prisma {
     OR?: GradingApplicationWhereInput[]
     NOT?: GradingApplicationWhereInput | GradingApplicationWhereInput[]
     id?: UuidFilter<"GradingApplication"> | string
-    member_id?: UuidFilter<"GradingApplication"> | string
-    grading_event_id?: UuidFilter<"GradingApplication"> | string
-    target_rank_id?: UuidNullableFilter<"GradingApplication"> | string | null
+    memberId?: UuidFilter<"GradingApplication"> | string
+    gradingEventId?: UuidFilter<"GradingApplication"> | string
+    targetRankId?: UuidNullableFilter<"GradingApplication"> | string | null
     status?: EnumApplicationStatusFilter<"GradingApplication"> | $Enums.ApplicationStatus
     notes?: StringNullableFilter<"GradingApplication"> | string | null
-    applied_at?: DateTimeFilter<"GradingApplication"> | Date | string
+    appliedAt?: DateTimeFilter<"GradingApplication"> | Date | string
     member?: XOR<MemberScalarRelationFilter, MemberWhereInput>
-    grading_event?: XOR<GradingEventScalarRelationFilter, GradingEventWhereInput>
-    target_rank?: XOR<BeltRankNullableScalarRelationFilter, BeltRankWhereInput> | null
+    gradingEvent?: XOR<GradingEventScalarRelationFilter, GradingEventWhereInput>
+    targetRank?: XOR<BeltRankNullableScalarRelationFilter, BeltRankWhereInput> | null
   }
 
   export type GradingApplicationOrderByWithRelationInput = {
     id?: SortOrder
-    member_id?: SortOrder
-    grading_event_id?: SortOrder
-    target_rank_id?: SortOrderInput | SortOrder
+    memberId?: SortOrder
+    gradingEventId?: SortOrder
+    targetRankId?: SortOrderInput | SortOrder
     status?: SortOrder
     notes?: SortOrderInput | SortOrder
-    applied_at?: SortOrder
+    appliedAt?: SortOrder
     member?: MemberOrderByWithRelationInput
-    grading_event?: GradingEventOrderByWithRelationInput
-    target_rank?: BeltRankOrderByWithRelationInput
+    gradingEvent?: GradingEventOrderByWithRelationInput
+    targetRank?: BeltRankOrderByWithRelationInput
   }
 
   export type GradingApplicationWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    member_id_grading_event_id?: GradingApplicationMember_idGrading_event_idCompoundUniqueInput
+    memberId_gradingEventId?: GradingApplicationMemberIdGradingEventIdCompoundUniqueInput
     AND?: GradingApplicationWhereInput | GradingApplicationWhereInput[]
     OR?: GradingApplicationWhereInput[]
     NOT?: GradingApplicationWhereInput | GradingApplicationWhereInput[]
-    member_id?: UuidFilter<"GradingApplication"> | string
-    grading_event_id?: UuidFilter<"GradingApplication"> | string
-    target_rank_id?: UuidNullableFilter<"GradingApplication"> | string | null
+    memberId?: UuidFilter<"GradingApplication"> | string
+    gradingEventId?: UuidFilter<"GradingApplication"> | string
+    targetRankId?: UuidNullableFilter<"GradingApplication"> | string | null
     status?: EnumApplicationStatusFilter<"GradingApplication"> | $Enums.ApplicationStatus
     notes?: StringNullableFilter<"GradingApplication"> | string | null
-    applied_at?: DateTimeFilter<"GradingApplication"> | Date | string
+    appliedAt?: DateTimeFilter<"GradingApplication"> | Date | string
     member?: XOR<MemberScalarRelationFilter, MemberWhereInput>
-    grading_event?: XOR<GradingEventScalarRelationFilter, GradingEventWhereInput>
-    target_rank?: XOR<BeltRankNullableScalarRelationFilter, BeltRankWhereInput> | null
-  }, "id" | "member_id_grading_event_id">
+    gradingEvent?: XOR<GradingEventScalarRelationFilter, GradingEventWhereInput>
+    targetRank?: XOR<BeltRankNullableScalarRelationFilter, BeltRankWhereInput> | null
+  }, "id" | "memberId_gradingEventId">
 
   export type GradingApplicationOrderByWithAggregationInput = {
     id?: SortOrder
-    member_id?: SortOrder
-    grading_event_id?: SortOrder
-    target_rank_id?: SortOrderInput | SortOrder
+    memberId?: SortOrder
+    gradingEventId?: SortOrder
+    targetRankId?: SortOrderInput | SortOrder
     status?: SortOrder
     notes?: SortOrderInput | SortOrder
-    applied_at?: SortOrder
+    appliedAt?: SortOrder
     _count?: GradingApplicationCountOrderByAggregateInput
     _max?: GradingApplicationMaxOrderByAggregateInput
     _min?: GradingApplicationMinOrderByAggregateInput
@@ -25196,12 +25441,12 @@ export namespace Prisma {
     OR?: GradingApplicationScalarWhereWithAggregatesInput[]
     NOT?: GradingApplicationScalarWhereWithAggregatesInput | GradingApplicationScalarWhereWithAggregatesInput[]
     id?: UuidWithAggregatesFilter<"GradingApplication"> | string
-    member_id?: UuidWithAggregatesFilter<"GradingApplication"> | string
-    grading_event_id?: UuidWithAggregatesFilter<"GradingApplication"> | string
-    target_rank_id?: UuidNullableWithAggregatesFilter<"GradingApplication"> | string | null
+    memberId?: UuidWithAggregatesFilter<"GradingApplication"> | string
+    gradingEventId?: UuidWithAggregatesFilter<"GradingApplication"> | string
+    targetRankId?: UuidNullableWithAggregatesFilter<"GradingApplication"> | string | null
     status?: EnumApplicationStatusWithAggregatesFilter<"GradingApplication"> | $Enums.ApplicationStatus
     notes?: StringNullableWithAggregatesFilter<"GradingApplication"> | string | null
-    applied_at?: DateTimeWithAggregatesFilter<"GradingApplication"> | Date | string
+    appliedAt?: DateTimeWithAggregatesFilter<"GradingApplication"> | Date | string
   }
 
   export type GradingWhereInput = {
@@ -25209,36 +25454,36 @@ export namespace Prisma {
     OR?: GradingWhereInput[]
     NOT?: GradingWhereInput | GradingWhereInput[]
     id?: UuidFilter<"Grading"> | string
-    member_id?: UuidFilter<"Grading"> | string
-    grading_event_id?: UuidNullableFilter<"Grading"> | string | null
-    from_rank_id?: UuidNullableFilter<"Grading"> | string | null
-    to_rank_id?: UuidNullableFilter<"Grading"> | string | null
+    memberId?: UuidFilter<"Grading"> | string
+    gradingEventId?: UuidNullableFilter<"Grading"> | string | null
+    fromRankId?: UuidNullableFilter<"Grading"> | string | null
+    toRankId?: UuidNullableFilter<"Grading"> | string | null
     result?: EnumGradingResultFilter<"Grading"> | $Enums.GradingResult
-    certificate_url?: StringNullableFilter<"Grading"> | string | null
+    certificateUrl?: StringNullableFilter<"Grading"> | string | null
     notes?: StringNullableFilter<"Grading"> | string | null
-    created_at?: DateTimeFilter<"Grading"> | Date | string
-    updated_at?: DateTimeFilter<"Grading"> | Date | string
+    createdAt?: DateTimeFilter<"Grading"> | Date | string
+    updatedAt?: DateTimeFilter<"Grading"> | Date | string
     member?: XOR<MemberScalarRelationFilter, MemberWhereInput>
-    grading_event?: XOR<GradingEventNullableScalarRelationFilter, GradingEventWhereInput> | null
-    from_rank?: XOR<BeltRankNullableScalarRelationFilter, BeltRankWhereInput> | null
-    to_rank?: XOR<BeltRankNullableScalarRelationFilter, BeltRankWhereInput> | null
+    gradingEvent?: XOR<GradingEventNullableScalarRelationFilter, GradingEventWhereInput> | null
+    fromRank?: XOR<BeltRankNullableScalarRelationFilter, BeltRankWhereInput> | null
+    toRank?: XOR<BeltRankNullableScalarRelationFilter, BeltRankWhereInput> | null
   }
 
   export type GradingOrderByWithRelationInput = {
     id?: SortOrder
-    member_id?: SortOrder
-    grading_event_id?: SortOrderInput | SortOrder
-    from_rank_id?: SortOrderInput | SortOrder
-    to_rank_id?: SortOrderInput | SortOrder
+    memberId?: SortOrder
+    gradingEventId?: SortOrderInput | SortOrder
+    fromRankId?: SortOrderInput | SortOrder
+    toRankId?: SortOrderInput | SortOrder
     result?: SortOrder
-    certificate_url?: SortOrderInput | SortOrder
+    certificateUrl?: SortOrderInput | SortOrder
     notes?: SortOrderInput | SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     member?: MemberOrderByWithRelationInput
-    grading_event?: GradingEventOrderByWithRelationInput
-    from_rank?: BeltRankOrderByWithRelationInput
-    to_rank?: BeltRankOrderByWithRelationInput
+    gradingEvent?: GradingEventOrderByWithRelationInput
+    fromRank?: BeltRankOrderByWithRelationInput
+    toRank?: BeltRankOrderByWithRelationInput
   }
 
   export type GradingWhereUniqueInput = Prisma.AtLeast<{
@@ -25246,32 +25491,32 @@ export namespace Prisma {
     AND?: GradingWhereInput | GradingWhereInput[]
     OR?: GradingWhereInput[]
     NOT?: GradingWhereInput | GradingWhereInput[]
-    member_id?: UuidFilter<"Grading"> | string
-    grading_event_id?: UuidNullableFilter<"Grading"> | string | null
-    from_rank_id?: UuidNullableFilter<"Grading"> | string | null
-    to_rank_id?: UuidNullableFilter<"Grading"> | string | null
+    memberId?: UuidFilter<"Grading"> | string
+    gradingEventId?: UuidNullableFilter<"Grading"> | string | null
+    fromRankId?: UuidNullableFilter<"Grading"> | string | null
+    toRankId?: UuidNullableFilter<"Grading"> | string | null
     result?: EnumGradingResultFilter<"Grading"> | $Enums.GradingResult
-    certificate_url?: StringNullableFilter<"Grading"> | string | null
+    certificateUrl?: StringNullableFilter<"Grading"> | string | null
     notes?: StringNullableFilter<"Grading"> | string | null
-    created_at?: DateTimeFilter<"Grading"> | Date | string
-    updated_at?: DateTimeFilter<"Grading"> | Date | string
+    createdAt?: DateTimeFilter<"Grading"> | Date | string
+    updatedAt?: DateTimeFilter<"Grading"> | Date | string
     member?: XOR<MemberScalarRelationFilter, MemberWhereInput>
-    grading_event?: XOR<GradingEventNullableScalarRelationFilter, GradingEventWhereInput> | null
-    from_rank?: XOR<BeltRankNullableScalarRelationFilter, BeltRankWhereInput> | null
-    to_rank?: XOR<BeltRankNullableScalarRelationFilter, BeltRankWhereInput> | null
+    gradingEvent?: XOR<GradingEventNullableScalarRelationFilter, GradingEventWhereInput> | null
+    fromRank?: XOR<BeltRankNullableScalarRelationFilter, BeltRankWhereInput> | null
+    toRank?: XOR<BeltRankNullableScalarRelationFilter, BeltRankWhereInput> | null
   }, "id">
 
   export type GradingOrderByWithAggregationInput = {
     id?: SortOrder
-    member_id?: SortOrder
-    grading_event_id?: SortOrderInput | SortOrder
-    from_rank_id?: SortOrderInput | SortOrder
-    to_rank_id?: SortOrderInput | SortOrder
+    memberId?: SortOrder
+    gradingEventId?: SortOrderInput | SortOrder
+    fromRankId?: SortOrderInput | SortOrder
+    toRankId?: SortOrderInput | SortOrder
     result?: SortOrder
-    certificate_url?: SortOrderInput | SortOrder
+    certificateUrl?: SortOrderInput | SortOrder
     notes?: SortOrderInput | SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     _count?: GradingCountOrderByAggregateInput
     _max?: GradingMaxOrderByAggregateInput
     _min?: GradingMinOrderByAggregateInput
@@ -25282,15 +25527,15 @@ export namespace Prisma {
     OR?: GradingScalarWhereWithAggregatesInput[]
     NOT?: GradingScalarWhereWithAggregatesInput | GradingScalarWhereWithAggregatesInput[]
     id?: UuidWithAggregatesFilter<"Grading"> | string
-    member_id?: UuidWithAggregatesFilter<"Grading"> | string
-    grading_event_id?: UuidNullableWithAggregatesFilter<"Grading"> | string | null
-    from_rank_id?: UuidNullableWithAggregatesFilter<"Grading"> | string | null
-    to_rank_id?: UuidNullableWithAggregatesFilter<"Grading"> | string | null
+    memberId?: UuidWithAggregatesFilter<"Grading"> | string
+    gradingEventId?: UuidNullableWithAggregatesFilter<"Grading"> | string | null
+    fromRankId?: UuidNullableWithAggregatesFilter<"Grading"> | string | null
+    toRankId?: UuidNullableWithAggregatesFilter<"Grading"> | string | null
     result?: EnumGradingResultWithAggregatesFilter<"Grading"> | $Enums.GradingResult
-    certificate_url?: StringNullableWithAggregatesFilter<"Grading"> | string | null
+    certificateUrl?: StringNullableWithAggregatesFilter<"Grading"> | string | null
     notes?: StringNullableWithAggregatesFilter<"Grading"> | string | null
-    created_at?: DateTimeWithAggregatesFilter<"Grading"> | Date | string
-    updated_at?: DateTimeWithAggregatesFilter<"Grading"> | Date | string
+    createdAt?: DateTimeWithAggregatesFilter<"Grading"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Grading"> | Date | string
   }
 
   export type EventWhereInput = {
@@ -25300,13 +25545,13 @@ export namespace Prisma {
     id?: UuidFilter<"Event"> | string
     title?: StringFilter<"Event"> | string
     description?: StringNullableFilter<"Event"> | string | null
-    event_date?: DateTimeFilter<"Event"> | Date | string
+    eventDate?: DateTimeFilter<"Event"> | Date | string
     location?: StringNullableFilter<"Event"> | string | null
-    image_url?: StringNullableFilter<"Event"> | string | null
-    is_published?: BoolFilter<"Event"> | boolean
-    max_capacity?: IntNullableFilter<"Event"> | number | null
-    created_at?: DateTimeFilter<"Event"> | Date | string
-    updated_at?: DateTimeFilter<"Event"> | Date | string
+    imageUrl?: StringNullableFilter<"Event"> | string | null
+    isPublished?: BoolFilter<"Event"> | boolean
+    maxCapacity?: IntNullableFilter<"Event"> | number | null
+    createdAt?: DateTimeFilter<"Event"> | Date | string
+    updatedAt?: DateTimeFilter<"Event"> | Date | string
     registrations?: EventRegistrationListRelationFilter
   }
 
@@ -25314,13 +25559,13 @@ export namespace Prisma {
     id?: SortOrder
     title?: SortOrder
     description?: SortOrderInput | SortOrder
-    event_date?: SortOrder
+    eventDate?: SortOrder
     location?: SortOrderInput | SortOrder
-    image_url?: SortOrderInput | SortOrder
-    is_published?: SortOrder
-    max_capacity?: SortOrderInput | SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
+    imageUrl?: SortOrderInput | SortOrder
+    isPublished?: SortOrder
+    maxCapacity?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     registrations?: EventRegistrationOrderByRelationAggregateInput
   }
 
@@ -25331,13 +25576,13 @@ export namespace Prisma {
     NOT?: EventWhereInput | EventWhereInput[]
     title?: StringFilter<"Event"> | string
     description?: StringNullableFilter<"Event"> | string | null
-    event_date?: DateTimeFilter<"Event"> | Date | string
+    eventDate?: DateTimeFilter<"Event"> | Date | string
     location?: StringNullableFilter<"Event"> | string | null
-    image_url?: StringNullableFilter<"Event"> | string | null
-    is_published?: BoolFilter<"Event"> | boolean
-    max_capacity?: IntNullableFilter<"Event"> | number | null
-    created_at?: DateTimeFilter<"Event"> | Date | string
-    updated_at?: DateTimeFilter<"Event"> | Date | string
+    imageUrl?: StringNullableFilter<"Event"> | string | null
+    isPublished?: BoolFilter<"Event"> | boolean
+    maxCapacity?: IntNullableFilter<"Event"> | number | null
+    createdAt?: DateTimeFilter<"Event"> | Date | string
+    updatedAt?: DateTimeFilter<"Event"> | Date | string
     registrations?: EventRegistrationListRelationFilter
   }, "id">
 
@@ -25345,13 +25590,13 @@ export namespace Prisma {
     id?: SortOrder
     title?: SortOrder
     description?: SortOrderInput | SortOrder
-    event_date?: SortOrder
+    eventDate?: SortOrder
     location?: SortOrderInput | SortOrder
-    image_url?: SortOrderInput | SortOrder
-    is_published?: SortOrder
-    max_capacity?: SortOrderInput | SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
+    imageUrl?: SortOrderInput | SortOrder
+    isPublished?: SortOrder
+    maxCapacity?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     _count?: EventCountOrderByAggregateInput
     _avg?: EventAvgOrderByAggregateInput
     _max?: EventMaxOrderByAggregateInput
@@ -25366,13 +25611,13 @@ export namespace Prisma {
     id?: UuidWithAggregatesFilter<"Event"> | string
     title?: StringWithAggregatesFilter<"Event"> | string
     description?: StringNullableWithAggregatesFilter<"Event"> | string | null
-    event_date?: DateTimeWithAggregatesFilter<"Event"> | Date | string
+    eventDate?: DateTimeWithAggregatesFilter<"Event"> | Date | string
     location?: StringNullableWithAggregatesFilter<"Event"> | string | null
-    image_url?: StringNullableWithAggregatesFilter<"Event"> | string | null
-    is_published?: BoolWithAggregatesFilter<"Event"> | boolean
-    max_capacity?: IntNullableWithAggregatesFilter<"Event"> | number | null
-    created_at?: DateTimeWithAggregatesFilter<"Event"> | Date | string
-    updated_at?: DateTimeWithAggregatesFilter<"Event"> | Date | string
+    imageUrl?: StringNullableWithAggregatesFilter<"Event"> | string | null
+    isPublished?: BoolWithAggregatesFilter<"Event"> | boolean
+    maxCapacity?: IntNullableWithAggregatesFilter<"Event"> | number | null
+    createdAt?: DateTimeWithAggregatesFilter<"Event"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Event"> | Date | string
   }
 
   export type EventRegistrationWhereInput = {
@@ -25380,40 +25625,40 @@ export namespace Prisma {
     OR?: EventRegistrationWhereInput[]
     NOT?: EventRegistrationWhereInput | EventRegistrationWhereInput[]
     id?: UuidFilter<"EventRegistration"> | string
-    event_id?: UuidFilter<"EventRegistration"> | string
-    member_id?: UuidFilter<"EventRegistration"> | string
-    created_at?: DateTimeFilter<"EventRegistration"> | Date | string
+    eventId?: UuidFilter<"EventRegistration"> | string
+    memberId?: UuidFilter<"EventRegistration"> | string
+    createdAt?: DateTimeFilter<"EventRegistration"> | Date | string
     event?: XOR<EventScalarRelationFilter, EventWhereInput>
     member?: XOR<MemberScalarRelationFilter, MemberWhereInput>
   }
 
   export type EventRegistrationOrderByWithRelationInput = {
     id?: SortOrder
-    event_id?: SortOrder
-    member_id?: SortOrder
-    created_at?: SortOrder
+    eventId?: SortOrder
+    memberId?: SortOrder
+    createdAt?: SortOrder
     event?: EventOrderByWithRelationInput
     member?: MemberOrderByWithRelationInput
   }
 
   export type EventRegistrationWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    event_id_member_id?: EventRegistrationEvent_idMember_idCompoundUniqueInput
+    eventId_memberId?: EventRegistrationEventIdMemberIdCompoundUniqueInput
     AND?: EventRegistrationWhereInput | EventRegistrationWhereInput[]
     OR?: EventRegistrationWhereInput[]
     NOT?: EventRegistrationWhereInput | EventRegistrationWhereInput[]
-    event_id?: UuidFilter<"EventRegistration"> | string
-    member_id?: UuidFilter<"EventRegistration"> | string
-    created_at?: DateTimeFilter<"EventRegistration"> | Date | string
+    eventId?: UuidFilter<"EventRegistration"> | string
+    memberId?: UuidFilter<"EventRegistration"> | string
+    createdAt?: DateTimeFilter<"EventRegistration"> | Date | string
     event?: XOR<EventScalarRelationFilter, EventWhereInput>
     member?: XOR<MemberScalarRelationFilter, MemberWhereInput>
-  }, "id" | "event_id_member_id">
+  }, "id" | "eventId_memberId">
 
   export type EventRegistrationOrderByWithAggregationInput = {
     id?: SortOrder
-    event_id?: SortOrder
-    member_id?: SortOrder
-    created_at?: SortOrder
+    eventId?: SortOrder
+    memberId?: SortOrder
+    createdAt?: SortOrder
     _count?: EventRegistrationCountOrderByAggregateInput
     _max?: EventRegistrationMaxOrderByAggregateInput
     _min?: EventRegistrationMinOrderByAggregateInput
@@ -25424,9 +25669,9 @@ export namespace Prisma {
     OR?: EventRegistrationScalarWhereWithAggregatesInput[]
     NOT?: EventRegistrationScalarWhereWithAggregatesInput | EventRegistrationScalarWhereWithAggregatesInput[]
     id?: UuidWithAggregatesFilter<"EventRegistration"> | string
-    event_id?: UuidWithAggregatesFilter<"EventRegistration"> | string
-    member_id?: UuidWithAggregatesFilter<"EventRegistration"> | string
-    created_at?: DateTimeWithAggregatesFilter<"EventRegistration"> | Date | string
+    eventId?: UuidWithAggregatesFilter<"EventRegistration"> | string
+    memberId?: UuidWithAggregatesFilter<"EventRegistration"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"EventRegistration"> | Date | string
   }
 
   export type NotificationWhereInput = {
@@ -25434,27 +25679,27 @@ export namespace Prisma {
     OR?: NotificationWhereInput[]
     NOT?: NotificationWhereInput | NotificationWhereInput[]
     id?: UuidFilter<"Notification"> | string
-    member_id?: UuidFilter<"Notification"> | string
+    memberId?: UuidFilter<"Notification"> | string
     title?: StringFilter<"Notification"> | string
     message?: StringFilter<"Notification"> | string
     type?: EnumNotificationTypeFilter<"Notification"> | $Enums.NotificationType
-    is_read?: BoolFilter<"Notification"> | boolean
+    isRead?: BoolFilter<"Notification"> | boolean
     link?: StringNullableFilter<"Notification"> | string | null
-    created_at?: DateTimeFilter<"Notification"> | Date | string
-    updated_at?: DateTimeFilter<"Notification"> | Date | string
+    createdAt?: DateTimeFilter<"Notification"> | Date | string
+    updatedAt?: DateTimeFilter<"Notification"> | Date | string
     member?: XOR<MemberScalarRelationFilter, MemberWhereInput>
   }
 
   export type NotificationOrderByWithRelationInput = {
     id?: SortOrder
-    member_id?: SortOrder
+    memberId?: SortOrder
     title?: SortOrder
     message?: SortOrder
     type?: SortOrder
-    is_read?: SortOrder
+    isRead?: SortOrder
     link?: SortOrderInput | SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     member?: MemberOrderByWithRelationInput
   }
 
@@ -25463,27 +25708,27 @@ export namespace Prisma {
     AND?: NotificationWhereInput | NotificationWhereInput[]
     OR?: NotificationWhereInput[]
     NOT?: NotificationWhereInput | NotificationWhereInput[]
-    member_id?: UuidFilter<"Notification"> | string
+    memberId?: UuidFilter<"Notification"> | string
     title?: StringFilter<"Notification"> | string
     message?: StringFilter<"Notification"> | string
     type?: EnumNotificationTypeFilter<"Notification"> | $Enums.NotificationType
-    is_read?: BoolFilter<"Notification"> | boolean
+    isRead?: BoolFilter<"Notification"> | boolean
     link?: StringNullableFilter<"Notification"> | string | null
-    created_at?: DateTimeFilter<"Notification"> | Date | string
-    updated_at?: DateTimeFilter<"Notification"> | Date | string
+    createdAt?: DateTimeFilter<"Notification"> | Date | string
+    updatedAt?: DateTimeFilter<"Notification"> | Date | string
     member?: XOR<MemberScalarRelationFilter, MemberWhereInput>
   }, "id">
 
   export type NotificationOrderByWithAggregationInput = {
     id?: SortOrder
-    member_id?: SortOrder
+    memberId?: SortOrder
     title?: SortOrder
     message?: SortOrder
     type?: SortOrder
-    is_read?: SortOrder
+    isRead?: SortOrder
     link?: SortOrderInput | SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     _count?: NotificationCountOrderByAggregateInput
     _max?: NotificationMaxOrderByAggregateInput
     _min?: NotificationMinOrderByAggregateInput
@@ -25494,14 +25739,14 @@ export namespace Prisma {
     OR?: NotificationScalarWhereWithAggregatesInput[]
     NOT?: NotificationScalarWhereWithAggregatesInput | NotificationScalarWhereWithAggregatesInput[]
     id?: UuidWithAggregatesFilter<"Notification"> | string
-    member_id?: UuidWithAggregatesFilter<"Notification"> | string
+    memberId?: UuidWithAggregatesFilter<"Notification"> | string
     title?: StringWithAggregatesFilter<"Notification"> | string
     message?: StringWithAggregatesFilter<"Notification"> | string
     type?: EnumNotificationTypeWithAggregatesFilter<"Notification"> | $Enums.NotificationType
-    is_read?: BoolWithAggregatesFilter<"Notification"> | boolean
+    isRead?: BoolWithAggregatesFilter<"Notification"> | boolean
     link?: StringNullableWithAggregatesFilter<"Notification"> | string | null
-    created_at?: DateTimeWithAggregatesFilter<"Notification"> | Date | string
-    updated_at?: DateTimeWithAggregatesFilter<"Notification"> | Date | string
+    createdAt?: DateTimeWithAggregatesFilter<"Notification"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Notification"> | Date | string
   }
 
   export type ShopProductWhereInput = {
@@ -25513,11 +25758,12 @@ export namespace Prisma {
     description?: StringNullableFilter<"ShopProduct"> | string | null
     price?: DecimalFilter<"ShopProduct"> | Decimal | DecimalJsLike | number | string
     stock?: IntFilter<"ShopProduct"> | number
-    image_url?: StringNullableFilter<"ShopProduct"> | string | null
-    is_active?: BoolFilter<"ShopProduct"> | boolean
-    created_at?: DateTimeFilter<"ShopProduct"> | Date | string
-    updated_at?: DateTimeFilter<"ShopProduct"> | Date | string
-    order_items?: ShopOrderItemListRelationFilter
+    imageUrl?: StringNullableFilter<"ShopProduct"> | string | null
+    category?: StringNullableFilter<"ShopProduct"> | string | null
+    isActive?: BoolFilter<"ShopProduct"> | boolean
+    createdAt?: DateTimeFilter<"ShopProduct"> | Date | string
+    updatedAt?: DateTimeFilter<"ShopProduct"> | Date | string
+    orderItems?: ShopOrderItemListRelationFilter
   }
 
   export type ShopProductOrderByWithRelationInput = {
@@ -25526,11 +25772,12 @@ export namespace Prisma {
     description?: SortOrderInput | SortOrder
     price?: SortOrder
     stock?: SortOrder
-    image_url?: SortOrderInput | SortOrder
-    is_active?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
-    order_items?: ShopOrderItemOrderByRelationAggregateInput
+    imageUrl?: SortOrderInput | SortOrder
+    category?: SortOrderInput | SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    orderItems?: ShopOrderItemOrderByRelationAggregateInput
   }
 
   export type ShopProductWhereUniqueInput = Prisma.AtLeast<{
@@ -25542,11 +25789,12 @@ export namespace Prisma {
     description?: StringNullableFilter<"ShopProduct"> | string | null
     price?: DecimalFilter<"ShopProduct"> | Decimal | DecimalJsLike | number | string
     stock?: IntFilter<"ShopProduct"> | number
-    image_url?: StringNullableFilter<"ShopProduct"> | string | null
-    is_active?: BoolFilter<"ShopProduct"> | boolean
-    created_at?: DateTimeFilter<"ShopProduct"> | Date | string
-    updated_at?: DateTimeFilter<"ShopProduct"> | Date | string
-    order_items?: ShopOrderItemListRelationFilter
+    imageUrl?: StringNullableFilter<"ShopProduct"> | string | null
+    category?: StringNullableFilter<"ShopProduct"> | string | null
+    isActive?: BoolFilter<"ShopProduct"> | boolean
+    createdAt?: DateTimeFilter<"ShopProduct"> | Date | string
+    updatedAt?: DateTimeFilter<"ShopProduct"> | Date | string
+    orderItems?: ShopOrderItemListRelationFilter
   }, "id">
 
   export type ShopProductOrderByWithAggregationInput = {
@@ -25555,10 +25803,11 @@ export namespace Prisma {
     description?: SortOrderInput | SortOrder
     price?: SortOrder
     stock?: SortOrder
-    image_url?: SortOrderInput | SortOrder
-    is_active?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
+    imageUrl?: SortOrderInput | SortOrder
+    category?: SortOrderInput | SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     _count?: ShopProductCountOrderByAggregateInput
     _avg?: ShopProductAvgOrderByAggregateInput
     _max?: ShopProductMaxOrderByAggregateInput
@@ -25575,10 +25824,11 @@ export namespace Prisma {
     description?: StringNullableWithAggregatesFilter<"ShopProduct"> | string | null
     price?: DecimalWithAggregatesFilter<"ShopProduct"> | Decimal | DecimalJsLike | number | string
     stock?: IntWithAggregatesFilter<"ShopProduct"> | number
-    image_url?: StringNullableWithAggregatesFilter<"ShopProduct"> | string | null
-    is_active?: BoolWithAggregatesFilter<"ShopProduct"> | boolean
-    created_at?: DateTimeWithAggregatesFilter<"ShopProduct"> | Date | string
-    updated_at?: DateTimeWithAggregatesFilter<"ShopProduct"> | Date | string
+    imageUrl?: StringNullableWithAggregatesFilter<"ShopProduct"> | string | null
+    category?: StringNullableWithAggregatesFilter<"ShopProduct"> | string | null
+    isActive?: BoolWithAggregatesFilter<"ShopProduct"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"ShopProduct"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"ShopProduct"> | Date | string
   }
 
   export type ShopOrderWhereInput = {
@@ -25586,63 +25836,71 @@ export namespace Prisma {
     OR?: ShopOrderWhereInput[]
     NOT?: ShopOrderWhereInput | ShopOrderWhereInput[]
     id?: UuidFilter<"ShopOrder"> | string
-    member_id?: UuidFilter<"ShopOrder"> | string
-    payment_status?: EnumPaymentStatusFilter<"ShopOrder"> | $Enums.PaymentStatus
-    payment_method?: StringNullableFilter<"ShopOrder"> | string | null
+    memberId?: UuidFilter<"ShopOrder"> | string
+    paymentStatus?: EnumPaymentStatusFilter<"ShopOrder"> | $Enums.PaymentStatus
+    paymentMethod?: StringNullableFilter<"ShopOrder"> | string | null
     total?: DecimalFilter<"ShopOrder"> | Decimal | DecimalJsLike | number | string
     currency?: StringFilter<"ShopOrder"> | string
-    transaction_id?: StringNullableFilter<"ShopOrder"> | string | null
+    transactionId?: StringNullableFilter<"ShopOrder"> | string | null
+    includesMembership?: BoolFilter<"ShopOrder"> | boolean
+    membershipFee?: DecimalNullableFilter<"ShopOrder"> | Decimal | DecimalJsLike | number | string | null
     notes?: StringNullableFilter<"ShopOrder"> | string | null
-    created_at?: DateTimeFilter<"ShopOrder"> | Date | string
-    updated_at?: DateTimeFilter<"ShopOrder"> | Date | string
+    createdAt?: DateTimeFilter<"ShopOrder"> | Date | string
+    updatedAt?: DateTimeFilter<"ShopOrder"> | Date | string
     member?: XOR<MemberScalarRelationFilter, MemberWhereInput>
-    order_items?: ShopOrderItemListRelationFilter
+    orderItems?: ShopOrderItemListRelationFilter
   }
 
   export type ShopOrderOrderByWithRelationInput = {
     id?: SortOrder
-    member_id?: SortOrder
-    payment_status?: SortOrder
-    payment_method?: SortOrderInput | SortOrder
+    memberId?: SortOrder
+    paymentStatus?: SortOrder
+    paymentMethod?: SortOrderInput | SortOrder
     total?: SortOrder
     currency?: SortOrder
-    transaction_id?: SortOrderInput | SortOrder
+    transactionId?: SortOrderInput | SortOrder
+    includesMembership?: SortOrder
+    membershipFee?: SortOrderInput | SortOrder
     notes?: SortOrderInput | SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     member?: MemberOrderByWithRelationInput
-    order_items?: ShopOrderItemOrderByRelationAggregateInput
+    orderItems?: ShopOrderItemOrderByRelationAggregateInput
   }
 
   export type ShopOrderWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    transaction_id?: string
+    transactionId?: string
     AND?: ShopOrderWhereInput | ShopOrderWhereInput[]
     OR?: ShopOrderWhereInput[]
     NOT?: ShopOrderWhereInput | ShopOrderWhereInput[]
-    member_id?: UuidFilter<"ShopOrder"> | string
-    payment_status?: EnumPaymentStatusFilter<"ShopOrder"> | $Enums.PaymentStatus
-    payment_method?: StringNullableFilter<"ShopOrder"> | string | null
+    memberId?: UuidFilter<"ShopOrder"> | string
+    paymentStatus?: EnumPaymentStatusFilter<"ShopOrder"> | $Enums.PaymentStatus
+    paymentMethod?: StringNullableFilter<"ShopOrder"> | string | null
     total?: DecimalFilter<"ShopOrder"> | Decimal | DecimalJsLike | number | string
     currency?: StringFilter<"ShopOrder"> | string
+    includesMembership?: BoolFilter<"ShopOrder"> | boolean
+    membershipFee?: DecimalNullableFilter<"ShopOrder"> | Decimal | DecimalJsLike | number | string | null
     notes?: StringNullableFilter<"ShopOrder"> | string | null
-    created_at?: DateTimeFilter<"ShopOrder"> | Date | string
-    updated_at?: DateTimeFilter<"ShopOrder"> | Date | string
+    createdAt?: DateTimeFilter<"ShopOrder"> | Date | string
+    updatedAt?: DateTimeFilter<"ShopOrder"> | Date | string
     member?: XOR<MemberScalarRelationFilter, MemberWhereInput>
-    order_items?: ShopOrderItemListRelationFilter
-  }, "id" | "transaction_id">
+    orderItems?: ShopOrderItemListRelationFilter
+  }, "id" | "transactionId">
 
   export type ShopOrderOrderByWithAggregationInput = {
     id?: SortOrder
-    member_id?: SortOrder
-    payment_status?: SortOrder
-    payment_method?: SortOrderInput | SortOrder
+    memberId?: SortOrder
+    paymentStatus?: SortOrder
+    paymentMethod?: SortOrderInput | SortOrder
     total?: SortOrder
     currency?: SortOrder
-    transaction_id?: SortOrderInput | SortOrder
+    transactionId?: SortOrderInput | SortOrder
+    includesMembership?: SortOrder
+    membershipFee?: SortOrderInput | SortOrder
     notes?: SortOrderInput | SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     _count?: ShopOrderCountOrderByAggregateInput
     _avg?: ShopOrderAvgOrderByAggregateInput
     _max?: ShopOrderMaxOrderByAggregateInput
@@ -25655,15 +25913,17 @@ export namespace Prisma {
     OR?: ShopOrderScalarWhereWithAggregatesInput[]
     NOT?: ShopOrderScalarWhereWithAggregatesInput | ShopOrderScalarWhereWithAggregatesInput[]
     id?: UuidWithAggregatesFilter<"ShopOrder"> | string
-    member_id?: UuidWithAggregatesFilter<"ShopOrder"> | string
-    payment_status?: EnumPaymentStatusWithAggregatesFilter<"ShopOrder"> | $Enums.PaymentStatus
-    payment_method?: StringNullableWithAggregatesFilter<"ShopOrder"> | string | null
+    memberId?: UuidWithAggregatesFilter<"ShopOrder"> | string
+    paymentStatus?: EnumPaymentStatusWithAggregatesFilter<"ShopOrder"> | $Enums.PaymentStatus
+    paymentMethod?: StringNullableWithAggregatesFilter<"ShopOrder"> | string | null
     total?: DecimalWithAggregatesFilter<"ShopOrder"> | Decimal | DecimalJsLike | number | string
     currency?: StringWithAggregatesFilter<"ShopOrder"> | string
-    transaction_id?: StringNullableWithAggregatesFilter<"ShopOrder"> | string | null
+    transactionId?: StringNullableWithAggregatesFilter<"ShopOrder"> | string | null
+    includesMembership?: BoolWithAggregatesFilter<"ShopOrder"> | boolean
+    membershipFee?: DecimalNullableWithAggregatesFilter<"ShopOrder"> | Decimal | DecimalJsLike | number | string | null
     notes?: StringNullableWithAggregatesFilter<"ShopOrder"> | string | null
-    created_at?: DateTimeWithAggregatesFilter<"ShopOrder"> | Date | string
-    updated_at?: DateTimeWithAggregatesFilter<"ShopOrder"> | Date | string
+    createdAt?: DateTimeWithAggregatesFilter<"ShopOrder"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"ShopOrder"> | Date | string
   }
 
   export type ShopOrderItemWhereInput = {
@@ -25671,20 +25931,20 @@ export namespace Prisma {
     OR?: ShopOrderItemWhereInput[]
     NOT?: ShopOrderItemWhereInput | ShopOrderItemWhereInput[]
     id?: UuidFilter<"ShopOrderItem"> | string
-    order_id?: UuidFilter<"ShopOrderItem"> | string
-    product_id?: UuidFilter<"ShopOrderItem"> | string
+    orderId?: UuidFilter<"ShopOrderItem"> | string
+    productId?: UuidFilter<"ShopOrderItem"> | string
     quantity?: IntFilter<"ShopOrderItem"> | number
-    unit_price?: DecimalFilter<"ShopOrderItem"> | Decimal | DecimalJsLike | number | string
+    unitPrice?: DecimalFilter<"ShopOrderItem"> | Decimal | DecimalJsLike | number | string
     order?: XOR<ShopOrderScalarRelationFilter, ShopOrderWhereInput>
     product?: XOR<ShopProductScalarRelationFilter, ShopProductWhereInput>
   }
 
   export type ShopOrderItemOrderByWithRelationInput = {
     id?: SortOrder
-    order_id?: SortOrder
-    product_id?: SortOrder
+    orderId?: SortOrder
+    productId?: SortOrder
     quantity?: SortOrder
-    unit_price?: SortOrder
+    unitPrice?: SortOrder
     order?: ShopOrderOrderByWithRelationInput
     product?: ShopProductOrderByWithRelationInput
   }
@@ -25694,20 +25954,20 @@ export namespace Prisma {
     AND?: ShopOrderItemWhereInput | ShopOrderItemWhereInput[]
     OR?: ShopOrderItemWhereInput[]
     NOT?: ShopOrderItemWhereInput | ShopOrderItemWhereInput[]
-    order_id?: UuidFilter<"ShopOrderItem"> | string
-    product_id?: UuidFilter<"ShopOrderItem"> | string
+    orderId?: UuidFilter<"ShopOrderItem"> | string
+    productId?: UuidFilter<"ShopOrderItem"> | string
     quantity?: IntFilter<"ShopOrderItem"> | number
-    unit_price?: DecimalFilter<"ShopOrderItem"> | Decimal | DecimalJsLike | number | string
+    unitPrice?: DecimalFilter<"ShopOrderItem"> | Decimal | DecimalJsLike | number | string
     order?: XOR<ShopOrderScalarRelationFilter, ShopOrderWhereInput>
     product?: XOR<ShopProductScalarRelationFilter, ShopProductWhereInput>
   }, "id">
 
   export type ShopOrderItemOrderByWithAggregationInput = {
     id?: SortOrder
-    order_id?: SortOrder
-    product_id?: SortOrder
+    orderId?: SortOrder
+    productId?: SortOrder
     quantity?: SortOrder
-    unit_price?: SortOrder
+    unitPrice?: SortOrder
     _count?: ShopOrderItemCountOrderByAggregateInput
     _avg?: ShopOrderItemAvgOrderByAggregateInput
     _max?: ShopOrderItemMaxOrderByAggregateInput
@@ -25720,10 +25980,10 @@ export namespace Prisma {
     OR?: ShopOrderItemScalarWhereWithAggregatesInput[]
     NOT?: ShopOrderItemScalarWhereWithAggregatesInput | ShopOrderItemScalarWhereWithAggregatesInput[]
     id?: UuidWithAggregatesFilter<"ShopOrderItem"> | string
-    order_id?: UuidWithAggregatesFilter<"ShopOrderItem"> | string
-    product_id?: UuidWithAggregatesFilter<"ShopOrderItem"> | string
+    orderId?: UuidWithAggregatesFilter<"ShopOrderItem"> | string
+    productId?: UuidWithAggregatesFilter<"ShopOrderItem"> | string
     quantity?: IntWithAggregatesFilter<"ShopOrderItem"> | number
-    unit_price?: DecimalWithAggregatesFilter<"ShopOrderItem"> | Decimal | DecimalJsLike | number | string
+    unitPrice?: DecimalWithAggregatesFilter<"ShopOrderItem"> | Decimal | DecimalJsLike | number | string
   }
 
   export type TournamentWhereInput = {
@@ -25735,9 +25995,9 @@ export namespace Prisma {
     description?: StringNullableFilter<"Tournament"> | string | null
     date?: DateTimeFilter<"Tournament"> | Date | string
     location?: StringNullableFilter<"Tournament"> | string | null
-    is_published?: BoolFilter<"Tournament"> | boolean
-    created_at?: DateTimeFilter<"Tournament"> | Date | string
-    updated_at?: DateTimeFilter<"Tournament"> | Date | string
+    isPublished?: BoolFilter<"Tournament"> | boolean
+    createdAt?: DateTimeFilter<"Tournament"> | Date | string
+    updatedAt?: DateTimeFilter<"Tournament"> | Date | string
     participants?: TournamentParticipantListRelationFilter
     matches?: TournamentMatchListRelationFilter
   }
@@ -25748,9 +26008,9 @@ export namespace Prisma {
     description?: SortOrderInput | SortOrder
     date?: SortOrder
     location?: SortOrderInput | SortOrder
-    is_published?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
+    isPublished?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     participants?: TournamentParticipantOrderByRelationAggregateInput
     matches?: TournamentMatchOrderByRelationAggregateInput
   }
@@ -25764,9 +26024,9 @@ export namespace Prisma {
     description?: StringNullableFilter<"Tournament"> | string | null
     date?: DateTimeFilter<"Tournament"> | Date | string
     location?: StringNullableFilter<"Tournament"> | string | null
-    is_published?: BoolFilter<"Tournament"> | boolean
-    created_at?: DateTimeFilter<"Tournament"> | Date | string
-    updated_at?: DateTimeFilter<"Tournament"> | Date | string
+    isPublished?: BoolFilter<"Tournament"> | boolean
+    createdAt?: DateTimeFilter<"Tournament"> | Date | string
+    updatedAt?: DateTimeFilter<"Tournament"> | Date | string
     participants?: TournamentParticipantListRelationFilter
     matches?: TournamentMatchListRelationFilter
   }, "id">
@@ -25777,9 +26037,9 @@ export namespace Prisma {
     description?: SortOrderInput | SortOrder
     date?: SortOrder
     location?: SortOrderInput | SortOrder
-    is_published?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
+    isPublished?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     _count?: TournamentCountOrderByAggregateInput
     _max?: TournamentMaxOrderByAggregateInput
     _min?: TournamentMinOrderByAggregateInput
@@ -25794,9 +26054,9 @@ export namespace Prisma {
     description?: StringNullableWithAggregatesFilter<"Tournament"> | string | null
     date?: DateTimeWithAggregatesFilter<"Tournament"> | Date | string
     location?: StringNullableWithAggregatesFilter<"Tournament"> | string | null
-    is_published?: BoolWithAggregatesFilter<"Tournament"> | boolean
-    created_at?: DateTimeWithAggregatesFilter<"Tournament"> | Date | string
-    updated_at?: DateTimeWithAggregatesFilter<"Tournament"> | Date | string
+    isPublished?: BoolWithAggregatesFilter<"Tournament"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"Tournament"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Tournament"> | Date | string
   }
 
   export type TournamentParticipantWhereInput = {
@@ -25804,57 +26064,57 @@ export namespace Prisma {
     OR?: TournamentParticipantWhereInput[]
     NOT?: TournamentParticipantWhereInput | TournamentParticipantWhereInput[]
     id?: UuidFilter<"TournamentParticipant"> | string
-    tournament_id?: UuidFilter<"TournamentParticipant"> | string
-    member_id?: UuidFilter<"TournamentParticipant"> | string
+    tournamentId?: UuidFilter<"TournamentParticipant"> | string
+    memberId?: UuidFilter<"TournamentParticipant"> | string
     category?: StringNullableFilter<"TournamentParticipant"> | string | null
-    weight_class?: StringNullableFilter<"TournamentParticipant"> | string | null
-    created_at?: DateTimeFilter<"TournamentParticipant"> | Date | string
+    weightClass?: StringNullableFilter<"TournamentParticipant"> | string | null
+    createdAt?: DateTimeFilter<"TournamentParticipant"> | Date | string
     tournament?: XOR<TournamentScalarRelationFilter, TournamentWhereInput>
     member?: XOR<MemberScalarRelationFilter, MemberWhereInput>
-    matches_as_p1?: TournamentMatchListRelationFilter
-    matches_as_p2?: TournamentMatchListRelationFilter
-    matches_won?: TournamentMatchListRelationFilter
+    matchesAsP1?: TournamentMatchListRelationFilter
+    matchesAsP2?: TournamentMatchListRelationFilter
+    matchesWon?: TournamentMatchListRelationFilter
   }
 
   export type TournamentParticipantOrderByWithRelationInput = {
     id?: SortOrder
-    tournament_id?: SortOrder
-    member_id?: SortOrder
+    tournamentId?: SortOrder
+    memberId?: SortOrder
     category?: SortOrderInput | SortOrder
-    weight_class?: SortOrderInput | SortOrder
-    created_at?: SortOrder
+    weightClass?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
     tournament?: TournamentOrderByWithRelationInput
     member?: MemberOrderByWithRelationInput
-    matches_as_p1?: TournamentMatchOrderByRelationAggregateInput
-    matches_as_p2?: TournamentMatchOrderByRelationAggregateInput
-    matches_won?: TournamentMatchOrderByRelationAggregateInput
+    matchesAsP1?: TournamentMatchOrderByRelationAggregateInput
+    matchesAsP2?: TournamentMatchOrderByRelationAggregateInput
+    matchesWon?: TournamentMatchOrderByRelationAggregateInput
   }
 
   export type TournamentParticipantWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    tournament_id_member_id?: TournamentParticipantTournament_idMember_idCompoundUniqueInput
+    tournamentId_memberId?: TournamentParticipantTournamentIdMemberIdCompoundUniqueInput
     AND?: TournamentParticipantWhereInput | TournamentParticipantWhereInput[]
     OR?: TournamentParticipantWhereInput[]
     NOT?: TournamentParticipantWhereInput | TournamentParticipantWhereInput[]
-    tournament_id?: UuidFilter<"TournamentParticipant"> | string
-    member_id?: UuidFilter<"TournamentParticipant"> | string
+    tournamentId?: UuidFilter<"TournamentParticipant"> | string
+    memberId?: UuidFilter<"TournamentParticipant"> | string
     category?: StringNullableFilter<"TournamentParticipant"> | string | null
-    weight_class?: StringNullableFilter<"TournamentParticipant"> | string | null
-    created_at?: DateTimeFilter<"TournamentParticipant"> | Date | string
+    weightClass?: StringNullableFilter<"TournamentParticipant"> | string | null
+    createdAt?: DateTimeFilter<"TournamentParticipant"> | Date | string
     tournament?: XOR<TournamentScalarRelationFilter, TournamentWhereInput>
     member?: XOR<MemberScalarRelationFilter, MemberWhereInput>
-    matches_as_p1?: TournamentMatchListRelationFilter
-    matches_as_p2?: TournamentMatchListRelationFilter
-    matches_won?: TournamentMatchListRelationFilter
-  }, "id" | "tournament_id_member_id">
+    matchesAsP1?: TournamentMatchListRelationFilter
+    matchesAsP2?: TournamentMatchListRelationFilter
+    matchesWon?: TournamentMatchListRelationFilter
+  }, "id" | "tournamentId_memberId">
 
   export type TournamentParticipantOrderByWithAggregationInput = {
     id?: SortOrder
-    tournament_id?: SortOrder
-    member_id?: SortOrder
+    tournamentId?: SortOrder
+    memberId?: SortOrder
     category?: SortOrderInput | SortOrder
-    weight_class?: SortOrderInput | SortOrder
-    created_at?: SortOrder
+    weightClass?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
     _count?: TournamentParticipantCountOrderByAggregateInput
     _max?: TournamentParticipantMaxOrderByAggregateInput
     _min?: TournamentParticipantMinOrderByAggregateInput
@@ -25865,11 +26125,11 @@ export namespace Prisma {
     OR?: TournamentParticipantScalarWhereWithAggregatesInput[]
     NOT?: TournamentParticipantScalarWhereWithAggregatesInput | TournamentParticipantScalarWhereWithAggregatesInput[]
     id?: UuidWithAggregatesFilter<"TournamentParticipant"> | string
-    tournament_id?: UuidWithAggregatesFilter<"TournamentParticipant"> | string
-    member_id?: UuidWithAggregatesFilter<"TournamentParticipant"> | string
+    tournamentId?: UuidWithAggregatesFilter<"TournamentParticipant"> | string
+    memberId?: UuidWithAggregatesFilter<"TournamentParticipant"> | string
     category?: StringNullableWithAggregatesFilter<"TournamentParticipant"> | string | null
-    weight_class?: StringNullableWithAggregatesFilter<"TournamentParticipant"> | string | null
-    created_at?: DateTimeWithAggregatesFilter<"TournamentParticipant"> | Date | string
+    weightClass?: StringNullableWithAggregatesFilter<"TournamentParticipant"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"TournamentParticipant"> | Date | string
   }
 
   export type TournamentMatchWhereInput = {
@@ -25877,14 +26137,14 @@ export namespace Prisma {
     OR?: TournamentMatchWhereInput[]
     NOT?: TournamentMatchWhereInput | TournamentMatchWhereInput[]
     id?: UuidFilter<"TournamentMatch"> | string
-    tournament_id?: UuidFilter<"TournamentMatch"> | string
-    participant1_id?: UuidNullableFilter<"TournamentMatch"> | string | null
-    participant2_id?: UuidNullableFilter<"TournamentMatch"> | string | null
-    winner_id?: UuidNullableFilter<"TournamentMatch"> | string | null
+    tournamentId?: UuidFilter<"TournamentMatch"> | string
+    participant1Id?: UuidNullableFilter<"TournamentMatch"> | string | null
+    participant2Id?: UuidNullableFilter<"TournamentMatch"> | string | null
+    winnerId?: UuidNullableFilter<"TournamentMatch"> | string | null
     round?: IntNullableFilter<"TournamentMatch"> | number | null
-    match_order?: IntNullableFilter<"TournamentMatch"> | number | null
+    matchOrder?: IntNullableFilter<"TournamentMatch"> | number | null
     notes?: StringNullableFilter<"TournamentMatch"> | string | null
-    created_at?: DateTimeFilter<"TournamentMatch"> | Date | string
+    createdAt?: DateTimeFilter<"TournamentMatch"> | Date | string
     tournament?: XOR<TournamentScalarRelationFilter, TournamentWhereInput>
     participant1?: XOR<TournamentParticipantNullableScalarRelationFilter, TournamentParticipantWhereInput> | null
     participant2?: XOR<TournamentParticipantNullableScalarRelationFilter, TournamentParticipantWhereInput> | null
@@ -25893,14 +26153,14 @@ export namespace Prisma {
 
   export type TournamentMatchOrderByWithRelationInput = {
     id?: SortOrder
-    tournament_id?: SortOrder
-    participant1_id?: SortOrderInput | SortOrder
-    participant2_id?: SortOrderInput | SortOrder
-    winner_id?: SortOrderInput | SortOrder
+    tournamentId?: SortOrder
+    participant1Id?: SortOrderInput | SortOrder
+    participant2Id?: SortOrderInput | SortOrder
+    winnerId?: SortOrderInput | SortOrder
     round?: SortOrderInput | SortOrder
-    match_order?: SortOrderInput | SortOrder
+    matchOrder?: SortOrderInput | SortOrder
     notes?: SortOrderInput | SortOrder
-    created_at?: SortOrder
+    createdAt?: SortOrder
     tournament?: TournamentOrderByWithRelationInput
     participant1?: TournamentParticipantOrderByWithRelationInput
     participant2?: TournamentParticipantOrderByWithRelationInput
@@ -25912,14 +26172,14 @@ export namespace Prisma {
     AND?: TournamentMatchWhereInput | TournamentMatchWhereInput[]
     OR?: TournamentMatchWhereInput[]
     NOT?: TournamentMatchWhereInput | TournamentMatchWhereInput[]
-    tournament_id?: UuidFilter<"TournamentMatch"> | string
-    participant1_id?: UuidNullableFilter<"TournamentMatch"> | string | null
-    participant2_id?: UuidNullableFilter<"TournamentMatch"> | string | null
-    winner_id?: UuidNullableFilter<"TournamentMatch"> | string | null
+    tournamentId?: UuidFilter<"TournamentMatch"> | string
+    participant1Id?: UuidNullableFilter<"TournamentMatch"> | string | null
+    participant2Id?: UuidNullableFilter<"TournamentMatch"> | string | null
+    winnerId?: UuidNullableFilter<"TournamentMatch"> | string | null
     round?: IntNullableFilter<"TournamentMatch"> | number | null
-    match_order?: IntNullableFilter<"TournamentMatch"> | number | null
+    matchOrder?: IntNullableFilter<"TournamentMatch"> | number | null
     notes?: StringNullableFilter<"TournamentMatch"> | string | null
-    created_at?: DateTimeFilter<"TournamentMatch"> | Date | string
+    createdAt?: DateTimeFilter<"TournamentMatch"> | Date | string
     tournament?: XOR<TournamentScalarRelationFilter, TournamentWhereInput>
     participant1?: XOR<TournamentParticipantNullableScalarRelationFilter, TournamentParticipantWhereInput> | null
     participant2?: XOR<TournamentParticipantNullableScalarRelationFilter, TournamentParticipantWhereInput> | null
@@ -25928,14 +26188,14 @@ export namespace Prisma {
 
   export type TournamentMatchOrderByWithAggregationInput = {
     id?: SortOrder
-    tournament_id?: SortOrder
-    participant1_id?: SortOrderInput | SortOrder
-    participant2_id?: SortOrderInput | SortOrder
-    winner_id?: SortOrderInput | SortOrder
+    tournamentId?: SortOrder
+    participant1Id?: SortOrderInput | SortOrder
+    participant2Id?: SortOrderInput | SortOrder
+    winnerId?: SortOrderInput | SortOrder
     round?: SortOrderInput | SortOrder
-    match_order?: SortOrderInput | SortOrder
+    matchOrder?: SortOrderInput | SortOrder
     notes?: SortOrderInput | SortOrder
-    created_at?: SortOrder
+    createdAt?: SortOrder
     _count?: TournamentMatchCountOrderByAggregateInput
     _avg?: TournamentMatchAvgOrderByAggregateInput
     _max?: TournamentMatchMaxOrderByAggregateInput
@@ -25948,100 +26208,107 @@ export namespace Prisma {
     OR?: TournamentMatchScalarWhereWithAggregatesInput[]
     NOT?: TournamentMatchScalarWhereWithAggregatesInput | TournamentMatchScalarWhereWithAggregatesInput[]
     id?: UuidWithAggregatesFilter<"TournamentMatch"> | string
-    tournament_id?: UuidWithAggregatesFilter<"TournamentMatch"> | string
-    participant1_id?: UuidNullableWithAggregatesFilter<"TournamentMatch"> | string | null
-    participant2_id?: UuidNullableWithAggregatesFilter<"TournamentMatch"> | string | null
-    winner_id?: UuidNullableWithAggregatesFilter<"TournamentMatch"> | string | null
+    tournamentId?: UuidWithAggregatesFilter<"TournamentMatch"> | string
+    participant1Id?: UuidNullableWithAggregatesFilter<"TournamentMatch"> | string | null
+    participant2Id?: UuidNullableWithAggregatesFilter<"TournamentMatch"> | string | null
+    winnerId?: UuidNullableWithAggregatesFilter<"TournamentMatch"> | string | null
     round?: IntNullableWithAggregatesFilter<"TournamentMatch"> | number | null
-    match_order?: IntNullableWithAggregatesFilter<"TournamentMatch"> | number | null
+    matchOrder?: IntNullableWithAggregatesFilter<"TournamentMatch"> | number | null
     notes?: StringNullableWithAggregatesFilter<"TournamentMatch"> | string | null
-    created_at?: DateTimeWithAggregatesFilter<"TournamentMatch"> | Date | string
+    createdAt?: DateTimeWithAggregatesFilter<"TournamentMatch"> | Date | string
   }
 
   export type BeltRankCreateInput = {
     id?: string
     name: string
-    kyu_dan?: string | null
-    color_hex?: string | null
-    order_index: number
-    created_at?: Date | string
-    updated_at?: Date | string
-    gradings_from?: GradingCreateNestedManyWithoutFrom_rankInput
-    gradings_to?: GradingCreateNestedManyWithoutTo_rankInput
-    grading_events?: GradingEventCreateNestedManyWithoutTarget_rankInput
-    grading_applications?: GradingApplicationCreateNestedManyWithoutTarget_rankInput
+    nameBn?: string | null
+    kyuDan?: string | null
+    colorHex?: string | null
+    orderIndex: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    gradingsFrom?: GradingCreateNestedManyWithoutFromRankInput
+    gradingsTo?: GradingCreateNestedManyWithoutToRankInput
+    gradingEvents?: GradingEventCreateNestedManyWithoutTargetRankInput
+    gradingApplications?: GradingApplicationCreateNestedManyWithoutTargetRankInput
   }
 
   export type BeltRankUncheckedCreateInput = {
     id?: string
     name: string
-    kyu_dan?: string | null
-    color_hex?: string | null
-    order_index: number
-    created_at?: Date | string
-    updated_at?: Date | string
-    gradings_from?: GradingUncheckedCreateNestedManyWithoutFrom_rankInput
-    gradings_to?: GradingUncheckedCreateNestedManyWithoutTo_rankInput
-    grading_events?: GradingEventUncheckedCreateNestedManyWithoutTarget_rankInput
-    grading_applications?: GradingApplicationUncheckedCreateNestedManyWithoutTarget_rankInput
+    nameBn?: string | null
+    kyuDan?: string | null
+    colorHex?: string | null
+    orderIndex: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    gradingsFrom?: GradingUncheckedCreateNestedManyWithoutFromRankInput
+    gradingsTo?: GradingUncheckedCreateNestedManyWithoutToRankInput
+    gradingEvents?: GradingEventUncheckedCreateNestedManyWithoutTargetRankInput
+    gradingApplications?: GradingApplicationUncheckedCreateNestedManyWithoutTargetRankInput
   }
 
   export type BeltRankUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    kyu_dan?: NullableStringFieldUpdateOperationsInput | string | null
-    color_hex?: NullableStringFieldUpdateOperationsInput | string | null
-    order_index?: IntFieldUpdateOperationsInput | number
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    gradings_from?: GradingUpdateManyWithoutFrom_rankNestedInput
-    gradings_to?: GradingUpdateManyWithoutTo_rankNestedInput
-    grading_events?: GradingEventUpdateManyWithoutTarget_rankNestedInput
-    grading_applications?: GradingApplicationUpdateManyWithoutTarget_rankNestedInput
+    nameBn?: NullableStringFieldUpdateOperationsInput | string | null
+    kyuDan?: NullableStringFieldUpdateOperationsInput | string | null
+    colorHex?: NullableStringFieldUpdateOperationsInput | string | null
+    orderIndex?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    gradingsFrom?: GradingUpdateManyWithoutFromRankNestedInput
+    gradingsTo?: GradingUpdateManyWithoutToRankNestedInput
+    gradingEvents?: GradingEventUpdateManyWithoutTargetRankNestedInput
+    gradingApplications?: GradingApplicationUpdateManyWithoutTargetRankNestedInput
   }
 
   export type BeltRankUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    kyu_dan?: NullableStringFieldUpdateOperationsInput | string | null
-    color_hex?: NullableStringFieldUpdateOperationsInput | string | null
-    order_index?: IntFieldUpdateOperationsInput | number
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    gradings_from?: GradingUncheckedUpdateManyWithoutFrom_rankNestedInput
-    gradings_to?: GradingUncheckedUpdateManyWithoutTo_rankNestedInput
-    grading_events?: GradingEventUncheckedUpdateManyWithoutTarget_rankNestedInput
-    grading_applications?: GradingApplicationUncheckedUpdateManyWithoutTarget_rankNestedInput
+    nameBn?: NullableStringFieldUpdateOperationsInput | string | null
+    kyuDan?: NullableStringFieldUpdateOperationsInput | string | null
+    colorHex?: NullableStringFieldUpdateOperationsInput | string | null
+    orderIndex?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    gradingsFrom?: GradingUncheckedUpdateManyWithoutFromRankNestedInput
+    gradingsTo?: GradingUncheckedUpdateManyWithoutToRankNestedInput
+    gradingEvents?: GradingEventUncheckedUpdateManyWithoutTargetRankNestedInput
+    gradingApplications?: GradingApplicationUncheckedUpdateManyWithoutTargetRankNestedInput
   }
 
   export type BeltRankCreateManyInput = {
     id?: string
     name: string
-    kyu_dan?: string | null
-    color_hex?: string | null
-    order_index: number
-    created_at?: Date | string
-    updated_at?: Date | string
+    nameBn?: string | null
+    kyuDan?: string | null
+    colorHex?: string | null
+    orderIndex: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type BeltRankUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    kyu_dan?: NullableStringFieldUpdateOperationsInput | string | null
-    color_hex?: NullableStringFieldUpdateOperationsInput | string | null
-    order_index?: IntFieldUpdateOperationsInput | number
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    nameBn?: NullableStringFieldUpdateOperationsInput | string | null
+    kyuDan?: NullableStringFieldUpdateOperationsInput | string | null
+    colorHex?: NullableStringFieldUpdateOperationsInput | string | null
+    orderIndex?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type BeltRankUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    kyu_dan?: NullableStringFieldUpdateOperationsInput | string | null
-    color_hex?: NullableStringFieldUpdateOperationsInput | string | null
-    order_index?: IntFieldUpdateOperationsInput | number
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    nameBn?: NullableStringFieldUpdateOperationsInput | string | null
+    kyuDan?: NullableStringFieldUpdateOperationsInput | string | null
+    colorHex?: NullableStringFieldUpdateOperationsInput | string | null
+    orderIndex?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type DojoCreateInput = {
@@ -26054,10 +26321,10 @@ export namespace Prisma {
     phone?: string | null
     email?: string | null
     schedule?: NullableJsonNullValueInput | InputJsonValue
-    is_active?: boolean
-    created_at?: Date | string
-    updated_at?: Date | string
-    head_instructor?: MemberCreateNestedOneWithoutDojo_head_ofInput
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    headInstructor?: MemberCreateNestedOneWithoutDojoHeadOfInput
     members?: MemberCreateNestedManyWithoutDojoInput
     instructors?: InstructorCreateNestedManyWithoutDojoInput
     attendance?: AttendanceCreateNestedManyWithoutDojoInput
@@ -26073,10 +26340,10 @@ export namespace Prisma {
     phone?: string | null
     email?: string | null
     schedule?: NullableJsonNullValueInput | InputJsonValue
-    is_active?: boolean
-    head_instructor_id?: string | null
-    created_at?: Date | string
-    updated_at?: Date | string
+    isActive?: boolean
+    headInstructorId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     members?: MemberUncheckedCreateNestedManyWithoutDojoInput
     instructors?: InstructorUncheckedCreateNestedManyWithoutDojoInput
     attendance?: AttendanceUncheckedCreateNestedManyWithoutDojoInput
@@ -26092,10 +26359,10 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     schedule?: NullableJsonNullValueInput | InputJsonValue
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    head_instructor?: MemberUpdateOneWithoutDojo_head_ofNestedInput
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    headInstructor?: MemberUpdateOneWithoutDojoHeadOfNestedInput
     members?: MemberUpdateManyWithoutDojoNestedInput
     instructors?: InstructorUpdateManyWithoutDojoNestedInput
     attendance?: AttendanceUpdateManyWithoutDojoNestedInput
@@ -26111,10 +26378,10 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     schedule?: NullableJsonNullValueInput | InputJsonValue
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    head_instructor_id?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    headInstructorId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: MemberUncheckedUpdateManyWithoutDojoNestedInput
     instructors?: InstructorUncheckedUpdateManyWithoutDojoNestedInput
     attendance?: AttendanceUncheckedUpdateManyWithoutDojoNestedInput
@@ -26130,10 +26397,10 @@ export namespace Prisma {
     phone?: string | null
     email?: string | null
     schedule?: NullableJsonNullValueInput | InputJsonValue
-    is_active?: boolean
-    head_instructor_id?: string | null
-    created_at?: Date | string
-    updated_at?: Date | string
+    isActive?: boolean
+    headInstructorId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type DojoUpdateManyMutationInput = {
@@ -26146,9 +26413,9 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     schedule?: NullableJsonNullValueInput | InputJsonValue
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type DojoUncheckedUpdateManyInput = {
@@ -26161,284 +26428,340 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     schedule?: NullableJsonNullValueInput | InputJsonValue
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    head_instructor_id?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    headInstructorId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type MemberCreateInput = {
     id: string
-    full_name: string
+    fullName: string
     email: string
     phone?: string | null
-    avatar_url?: string | null
+    avatarUrl?: string | null
     role?: $Enums.MemberRole
-    member_number?: string | null
-    current_rank?: string
-    join_date?: Date | string
-    expiry_date?: Date | string | null
-    is_active?: boolean
-    created_at?: Date | string
-    updated_at?: Date | string
+    memberNumber?: string | null
+    currentRank?: string
+    joinDate?: Date | string
+    expiryDate?: Date | string | null
+    isActive?: boolean
+    onboardingComplete?: boolean
+    membershipStatus?: $Enums.MembershipStatus
+    dateOfBirth?: Date | string | null
+    bloodGroup?: string | null
+    address?: string | null
+    nationalId?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     dojo?: DojoCreateNestedOneWithoutMembersInput
-    dojo_head_of?: DojoCreateNestedManyWithoutHead_instructorInput
+    dojoHeadOf?: DojoCreateNestedManyWithoutHeadInstructorInput
     instructor?: InstructorCreateNestedOneWithoutMemberInput
     admin?: AdminCreateNestedOneWithoutMemberInput
     gradings?: GradingCreateNestedManyWithoutMemberInput
-    grading_applications?: GradingApplicationCreateNestedManyWithoutMemberInput
-    event_registrations?: EventRegistrationCreateNestedManyWithoutMemberInput
+    gradingApplications?: GradingApplicationCreateNestedManyWithoutMemberInput
+    eventRegistrations?: EventRegistrationCreateNestedManyWithoutMemberInput
     notifications?: NotificationCreateNestedManyWithoutMemberInput
     orders?: ShopOrderCreateNestedManyWithoutMemberInput
     attendance?: AttendanceCreateNestedManyWithoutMemberInput
-    tournament_entries?: TournamentParticipantCreateNestedManyWithoutMemberInput
+    tournamentEntries?: TournamentParticipantCreateNestedManyWithoutMemberInput
   }
 
   export type MemberUncheckedCreateInput = {
     id: string
-    full_name: string
+    fullName: string
     email: string
     phone?: string | null
-    avatar_url?: string | null
+    avatarUrl?: string | null
     role?: $Enums.MemberRole
-    member_number?: string | null
-    current_rank?: string
-    join_date?: Date | string
-    expiry_date?: Date | string | null
-    is_active?: boolean
-    dojo_id?: string | null
-    created_at?: Date | string
-    updated_at?: Date | string
-    dojo_head_of?: DojoUncheckedCreateNestedManyWithoutHead_instructorInput
+    memberNumber?: string | null
+    currentRank?: string
+    joinDate?: Date | string
+    expiryDate?: Date | string | null
+    isActive?: boolean
+    dojoId?: string | null
+    onboardingComplete?: boolean
+    membershipStatus?: $Enums.MembershipStatus
+    dateOfBirth?: Date | string | null
+    bloodGroup?: string | null
+    address?: string | null
+    nationalId?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    dojoHeadOf?: DojoUncheckedCreateNestedManyWithoutHeadInstructorInput
     instructor?: InstructorUncheckedCreateNestedOneWithoutMemberInput
     admin?: AdminUncheckedCreateNestedOneWithoutMemberInput
     gradings?: GradingUncheckedCreateNestedManyWithoutMemberInput
-    grading_applications?: GradingApplicationUncheckedCreateNestedManyWithoutMemberInput
-    event_registrations?: EventRegistrationUncheckedCreateNestedManyWithoutMemberInput
+    gradingApplications?: GradingApplicationUncheckedCreateNestedManyWithoutMemberInput
+    eventRegistrations?: EventRegistrationUncheckedCreateNestedManyWithoutMemberInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutMemberInput
     orders?: ShopOrderUncheckedCreateNestedManyWithoutMemberInput
     attendance?: AttendanceUncheckedCreateNestedManyWithoutMemberInput
-    tournament_entries?: TournamentParticipantUncheckedCreateNestedManyWithoutMemberInput
+    tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutMemberInput
   }
 
   export type MemberUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    full_name?: StringFieldUpdateOperationsInput | string
+    fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
-    avatar_url?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumMemberRoleFieldUpdateOperationsInput | $Enums.MemberRole
-    member_number?: NullableStringFieldUpdateOperationsInput | string | null
-    current_rank?: StringFieldUpdateOperationsInput | string
-    join_date?: DateTimeFieldUpdateOperationsInput | Date | string
-    expiry_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    currentRank?: StringFieldUpdateOperationsInput | string
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    onboardingComplete?: BoolFieldUpdateOperationsInput | boolean
+    membershipStatus?: EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dojo?: DojoUpdateOneWithoutMembersNestedInput
-    dojo_head_of?: DojoUpdateManyWithoutHead_instructorNestedInput
+    dojoHeadOf?: DojoUpdateManyWithoutHeadInstructorNestedInput
     instructor?: InstructorUpdateOneWithoutMemberNestedInput
     admin?: AdminUpdateOneWithoutMemberNestedInput
     gradings?: GradingUpdateManyWithoutMemberNestedInput
-    grading_applications?: GradingApplicationUpdateManyWithoutMemberNestedInput
-    event_registrations?: EventRegistrationUpdateManyWithoutMemberNestedInput
+    gradingApplications?: GradingApplicationUpdateManyWithoutMemberNestedInput
+    eventRegistrations?: EventRegistrationUpdateManyWithoutMemberNestedInput
     notifications?: NotificationUpdateManyWithoutMemberNestedInput
     orders?: ShopOrderUpdateManyWithoutMemberNestedInput
     attendance?: AttendanceUpdateManyWithoutMemberNestedInput
-    tournament_entries?: TournamentParticipantUpdateManyWithoutMemberNestedInput
+    tournamentEntries?: TournamentParticipantUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    full_name?: StringFieldUpdateOperationsInput | string
+    fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
-    avatar_url?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumMemberRoleFieldUpdateOperationsInput | $Enums.MemberRole
-    member_number?: NullableStringFieldUpdateOperationsInput | string | null
-    current_rank?: StringFieldUpdateOperationsInput | string
-    join_date?: DateTimeFieldUpdateOperationsInput | Date | string
-    expiry_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    dojo_id?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    dojo_head_of?: DojoUncheckedUpdateManyWithoutHead_instructorNestedInput
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    currentRank?: StringFieldUpdateOperationsInput | string
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    dojoId?: NullableStringFieldUpdateOperationsInput | string | null
+    onboardingComplete?: BoolFieldUpdateOperationsInput | boolean
+    membershipStatus?: EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    dojoHeadOf?: DojoUncheckedUpdateManyWithoutHeadInstructorNestedInput
     instructor?: InstructorUncheckedUpdateOneWithoutMemberNestedInput
     admin?: AdminUncheckedUpdateOneWithoutMemberNestedInput
     gradings?: GradingUncheckedUpdateManyWithoutMemberNestedInput
-    grading_applications?: GradingApplicationUncheckedUpdateManyWithoutMemberNestedInput
-    event_registrations?: EventRegistrationUncheckedUpdateManyWithoutMemberNestedInput
+    gradingApplications?: GradingApplicationUncheckedUpdateManyWithoutMemberNestedInput
+    eventRegistrations?: EventRegistrationUncheckedUpdateManyWithoutMemberNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutMemberNestedInput
     orders?: ShopOrderUncheckedUpdateManyWithoutMemberNestedInput
     attendance?: AttendanceUncheckedUpdateManyWithoutMemberNestedInput
-    tournament_entries?: TournamentParticipantUncheckedUpdateManyWithoutMemberNestedInput
+    tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberCreateManyInput = {
     id: string
-    full_name: string
+    fullName: string
     email: string
     phone?: string | null
-    avatar_url?: string | null
+    avatarUrl?: string | null
     role?: $Enums.MemberRole
-    member_number?: string | null
-    current_rank?: string
-    join_date?: Date | string
-    expiry_date?: Date | string | null
-    is_active?: boolean
-    dojo_id?: string | null
-    created_at?: Date | string
-    updated_at?: Date | string
+    memberNumber?: string | null
+    currentRank?: string
+    joinDate?: Date | string
+    expiryDate?: Date | string | null
+    isActive?: boolean
+    dojoId?: string | null
+    onboardingComplete?: boolean
+    membershipStatus?: $Enums.MembershipStatus
+    dateOfBirth?: Date | string | null
+    bloodGroup?: string | null
+    address?: string | null
+    nationalId?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type MemberUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    full_name?: StringFieldUpdateOperationsInput | string
+    fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
-    avatar_url?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumMemberRoleFieldUpdateOperationsInput | $Enums.MemberRole
-    member_number?: NullableStringFieldUpdateOperationsInput | string | null
-    current_rank?: StringFieldUpdateOperationsInput | string
-    join_date?: DateTimeFieldUpdateOperationsInput | Date | string
-    expiry_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    currentRank?: StringFieldUpdateOperationsInput | string
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    onboardingComplete?: BoolFieldUpdateOperationsInput | boolean
+    membershipStatus?: EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type MemberUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    full_name?: StringFieldUpdateOperationsInput | string
+    fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
-    avatar_url?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumMemberRoleFieldUpdateOperationsInput | $Enums.MemberRole
-    member_number?: NullableStringFieldUpdateOperationsInput | string | null
-    current_rank?: StringFieldUpdateOperationsInput | string
-    join_date?: DateTimeFieldUpdateOperationsInput | Date | string
-    expiry_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    dojo_id?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    currentRank?: StringFieldUpdateOperationsInput | string
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    dojoId?: NullableStringFieldUpdateOperationsInput | string | null
+    onboardingComplete?: BoolFieldUpdateOperationsInput | boolean
+    membershipStatus?: EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type AdminCreateInput = {
     id?: string
     notes?: string | null
-    created_at?: Date | string
+    createdAt?: Date | string
     member: MemberCreateNestedOneWithoutAdminInput
   }
 
   export type AdminUncheckedCreateInput = {
     id?: string
-    member_id: string
+    memberId: string
     notes?: string | null
-    created_at?: Date | string
+    createdAt?: Date | string
   }
 
   export type AdminUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     member?: MemberUpdateOneRequiredWithoutAdminNestedInput
   }
 
   export type AdminUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    member_id?: StringFieldUpdateOperationsInput | string
+    memberId?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type AdminCreateManyInput = {
     id?: string
-    member_id: string
+    memberId: string
     notes?: string | null
-    created_at?: Date | string
+    createdAt?: Date | string
   }
 
   export type AdminUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type AdminUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    member_id?: StringFieldUpdateOperationsInput | string
+    memberId?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type InstructorCreateInput = {
     id?: string
     bio?: string | null
-    is_active?: boolean
-    created_at?: Date | string
-    updated_at?: Date | string
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
     member: MemberCreateNestedOneWithoutInstructorInput
     dojo?: DojoCreateNestedOneWithoutInstructorsInput
   }
 
   export type InstructorUncheckedCreateInput = {
     id?: string
-    member_id: string
-    dojo_id?: string | null
+    memberId: string
+    dojoId?: string | null
     bio?: string | null
-    is_active?: boolean
-    created_at?: Date | string
-    updated_at?: Date | string
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type InstructorUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     bio?: NullableStringFieldUpdateOperationsInput | string | null
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     member?: MemberUpdateOneRequiredWithoutInstructorNestedInput
     dojo?: DojoUpdateOneWithoutInstructorsNestedInput
   }
 
   export type InstructorUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    member_id?: StringFieldUpdateOperationsInput | string
-    dojo_id?: NullableStringFieldUpdateOperationsInput | string | null
+    memberId?: StringFieldUpdateOperationsInput | string
+    dojoId?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type InstructorCreateManyInput = {
     id?: string
-    member_id: string
-    dojo_id?: string | null
+    memberId: string
+    dojoId?: string | null
     bio?: string | null
-    is_active?: boolean
-    created_at?: Date | string
-    updated_at?: Date | string
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type InstructorUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     bio?: NullableStringFieldUpdateOperationsInput | string | null
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type InstructorUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    member_id?: StringFieldUpdateOperationsInput | string
-    dojo_id?: NullableStringFieldUpdateOperationsInput | string | null
+    memberId?: StringFieldUpdateOperationsInput | string
+    dojoId?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type AttendanceCreateInput = {
@@ -26446,19 +26769,19 @@ export namespace Prisma {
     date: Date | string
     present?: boolean
     notes?: string | null
-    created_at?: Date | string
+    createdAt?: Date | string
     member: MemberCreateNestedOneWithoutAttendanceInput
     dojo?: DojoCreateNestedOneWithoutAttendanceInput
   }
 
   export type AttendanceUncheckedCreateInput = {
     id?: string
-    member_id: string
-    dojo_id?: string | null
+    memberId: string
+    dojoId?: string | null
     date: Date | string
     present?: boolean
     notes?: string | null
-    created_at?: Date | string
+    createdAt?: Date | string
   }
 
   export type AttendanceUpdateInput = {
@@ -26466,29 +26789,29 @@ export namespace Prisma {
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     present?: BoolFieldUpdateOperationsInput | boolean
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     member?: MemberUpdateOneRequiredWithoutAttendanceNestedInput
     dojo?: DojoUpdateOneWithoutAttendanceNestedInput
   }
 
   export type AttendanceUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    member_id?: StringFieldUpdateOperationsInput | string
-    dojo_id?: NullableStringFieldUpdateOperationsInput | string | null
+    memberId?: StringFieldUpdateOperationsInput | string
+    dojoId?: NullableStringFieldUpdateOperationsInput | string | null
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     present?: BoolFieldUpdateOperationsInput | boolean
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type AttendanceCreateManyInput = {
     id?: string
-    member_id: string
-    dojo_id?: string | null
+    memberId: string
+    dojoId?: string | null
     date: Date | string
     present?: boolean
     notes?: string | null
-    created_at?: Date | string
+    createdAt?: Date | string
   }
 
   export type AttendanceUpdateManyMutationInput = {
@@ -26496,275 +26819,275 @@ export namespace Prisma {
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     present?: BoolFieldUpdateOperationsInput | boolean
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type AttendanceUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    member_id?: StringFieldUpdateOperationsInput | string
-    dojo_id?: NullableStringFieldUpdateOperationsInput | string | null
+    memberId?: StringFieldUpdateOperationsInput | string
+    dojoId?: NullableStringFieldUpdateOperationsInput | string | null
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     present?: BoolFieldUpdateOperationsInput | boolean
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type GradingEventCreateInput = {
     id?: string
     name: string
-    event_date: Date | string
+    eventDate: Date | string
     location?: string | null
-    is_open?: boolean
+    isOpen?: boolean
     notes?: string | null
-    created_at?: Date | string
-    updated_at?: Date | string
-    target_rank?: BeltRankCreateNestedOneWithoutGrading_eventsInput
-    gradings?: GradingCreateNestedManyWithoutGrading_eventInput
-    applications?: GradingApplicationCreateNestedManyWithoutGrading_eventInput
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    targetRank?: BeltRankCreateNestedOneWithoutGradingEventsInput
+    gradings?: GradingCreateNestedManyWithoutGradingEventInput
+    applications?: GradingApplicationCreateNestedManyWithoutGradingEventInput
   }
 
   export type GradingEventUncheckedCreateInput = {
     id?: string
     name: string
-    event_date: Date | string
+    eventDate: Date | string
     location?: string | null
-    target_rank_id?: string | null
-    is_open?: boolean
+    targetRankId?: string | null
+    isOpen?: boolean
     notes?: string | null
-    created_at?: Date | string
-    updated_at?: Date | string
-    gradings?: GradingUncheckedCreateNestedManyWithoutGrading_eventInput
-    applications?: GradingApplicationUncheckedCreateNestedManyWithoutGrading_eventInput
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    gradings?: GradingUncheckedCreateNestedManyWithoutGradingEventInput
+    applications?: GradingApplicationUncheckedCreateNestedManyWithoutGradingEventInput
   }
 
   export type GradingEventUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    event_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    eventDate?: DateTimeFieldUpdateOperationsInput | Date | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
-    is_open?: BoolFieldUpdateOperationsInput | boolean
+    isOpen?: BoolFieldUpdateOperationsInput | boolean
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    target_rank?: BeltRankUpdateOneWithoutGrading_eventsNestedInput
-    gradings?: GradingUpdateManyWithoutGrading_eventNestedInput
-    applications?: GradingApplicationUpdateManyWithoutGrading_eventNestedInput
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    targetRank?: BeltRankUpdateOneWithoutGradingEventsNestedInput
+    gradings?: GradingUpdateManyWithoutGradingEventNestedInput
+    applications?: GradingApplicationUpdateManyWithoutGradingEventNestedInput
   }
 
   export type GradingEventUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    event_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    eventDate?: DateTimeFieldUpdateOperationsInput | Date | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
-    target_rank_id?: NullableStringFieldUpdateOperationsInput | string | null
-    is_open?: BoolFieldUpdateOperationsInput | boolean
+    targetRankId?: NullableStringFieldUpdateOperationsInput | string | null
+    isOpen?: BoolFieldUpdateOperationsInput | boolean
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    gradings?: GradingUncheckedUpdateManyWithoutGrading_eventNestedInput
-    applications?: GradingApplicationUncheckedUpdateManyWithoutGrading_eventNestedInput
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    gradings?: GradingUncheckedUpdateManyWithoutGradingEventNestedInput
+    applications?: GradingApplicationUncheckedUpdateManyWithoutGradingEventNestedInput
   }
 
   export type GradingEventCreateManyInput = {
     id?: string
     name: string
-    event_date: Date | string
+    eventDate: Date | string
     location?: string | null
-    target_rank_id?: string | null
-    is_open?: boolean
+    targetRankId?: string | null
+    isOpen?: boolean
     notes?: string | null
-    created_at?: Date | string
-    updated_at?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type GradingEventUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    event_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    eventDate?: DateTimeFieldUpdateOperationsInput | Date | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
-    is_open?: BoolFieldUpdateOperationsInput | boolean
+    isOpen?: BoolFieldUpdateOperationsInput | boolean
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type GradingEventUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    event_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    eventDate?: DateTimeFieldUpdateOperationsInput | Date | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
-    target_rank_id?: NullableStringFieldUpdateOperationsInput | string | null
-    is_open?: BoolFieldUpdateOperationsInput | boolean
+    targetRankId?: NullableStringFieldUpdateOperationsInput | string | null
+    isOpen?: BoolFieldUpdateOperationsInput | boolean
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type GradingApplicationCreateInput = {
     id?: string
     status?: $Enums.ApplicationStatus
     notes?: string | null
-    applied_at?: Date | string
-    member: MemberCreateNestedOneWithoutGrading_applicationsInput
-    grading_event: GradingEventCreateNestedOneWithoutApplicationsInput
-    target_rank?: BeltRankCreateNestedOneWithoutGrading_applicationsInput
+    appliedAt?: Date | string
+    member: MemberCreateNestedOneWithoutGradingApplicationsInput
+    gradingEvent: GradingEventCreateNestedOneWithoutApplicationsInput
+    targetRank?: BeltRankCreateNestedOneWithoutGradingApplicationsInput
   }
 
   export type GradingApplicationUncheckedCreateInput = {
     id?: string
-    member_id: string
-    grading_event_id: string
-    target_rank_id?: string | null
+    memberId: string
+    gradingEventId: string
+    targetRankId?: string | null
     status?: $Enums.ApplicationStatus
     notes?: string | null
-    applied_at?: Date | string
+    appliedAt?: Date | string
   }
 
   export type GradingApplicationUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     status?: EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    applied_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    member?: MemberUpdateOneRequiredWithoutGrading_applicationsNestedInput
-    grading_event?: GradingEventUpdateOneRequiredWithoutApplicationsNestedInput
-    target_rank?: BeltRankUpdateOneWithoutGrading_applicationsNestedInput
+    appliedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    member?: MemberUpdateOneRequiredWithoutGradingApplicationsNestedInput
+    gradingEvent?: GradingEventUpdateOneRequiredWithoutApplicationsNestedInput
+    targetRank?: BeltRankUpdateOneWithoutGradingApplicationsNestedInput
   }
 
   export type GradingApplicationUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    member_id?: StringFieldUpdateOperationsInput | string
-    grading_event_id?: StringFieldUpdateOperationsInput | string
-    target_rank_id?: NullableStringFieldUpdateOperationsInput | string | null
+    memberId?: StringFieldUpdateOperationsInput | string
+    gradingEventId?: StringFieldUpdateOperationsInput | string
+    targetRankId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    applied_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    appliedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type GradingApplicationCreateManyInput = {
     id?: string
-    member_id: string
-    grading_event_id: string
-    target_rank_id?: string | null
+    memberId: string
+    gradingEventId: string
+    targetRankId?: string | null
     status?: $Enums.ApplicationStatus
     notes?: string | null
-    applied_at?: Date | string
+    appliedAt?: Date | string
   }
 
   export type GradingApplicationUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     status?: EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    applied_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    appliedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type GradingApplicationUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    member_id?: StringFieldUpdateOperationsInput | string
-    grading_event_id?: StringFieldUpdateOperationsInput | string
-    target_rank_id?: NullableStringFieldUpdateOperationsInput | string | null
+    memberId?: StringFieldUpdateOperationsInput | string
+    gradingEventId?: StringFieldUpdateOperationsInput | string
+    targetRankId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    applied_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    appliedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type GradingCreateInput = {
     id?: string
     result?: $Enums.GradingResult
-    certificate_url?: string | null
+    certificateUrl?: string | null
     notes?: string | null
-    created_at?: Date | string
-    updated_at?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
     member: MemberCreateNestedOneWithoutGradingsInput
-    grading_event?: GradingEventCreateNestedOneWithoutGradingsInput
-    from_rank?: BeltRankCreateNestedOneWithoutGradings_fromInput
-    to_rank?: BeltRankCreateNestedOneWithoutGradings_toInput
+    gradingEvent?: GradingEventCreateNestedOneWithoutGradingsInput
+    fromRank?: BeltRankCreateNestedOneWithoutGradingsFromInput
+    toRank?: BeltRankCreateNestedOneWithoutGradingsToInput
   }
 
   export type GradingUncheckedCreateInput = {
     id?: string
-    member_id: string
-    grading_event_id?: string | null
-    from_rank_id?: string | null
-    to_rank_id?: string | null
+    memberId: string
+    gradingEventId?: string | null
+    fromRankId?: string | null
+    toRankId?: string | null
     result?: $Enums.GradingResult
-    certificate_url?: string | null
+    certificateUrl?: string | null
     notes?: string | null
-    created_at?: Date | string
-    updated_at?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type GradingUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     result?: EnumGradingResultFieldUpdateOperationsInput | $Enums.GradingResult
-    certificate_url?: NullableStringFieldUpdateOperationsInput | string | null
+    certificateUrl?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     member?: MemberUpdateOneRequiredWithoutGradingsNestedInput
-    grading_event?: GradingEventUpdateOneWithoutGradingsNestedInput
-    from_rank?: BeltRankUpdateOneWithoutGradings_fromNestedInput
-    to_rank?: BeltRankUpdateOneWithoutGradings_toNestedInput
+    gradingEvent?: GradingEventUpdateOneWithoutGradingsNestedInput
+    fromRank?: BeltRankUpdateOneWithoutGradingsFromNestedInput
+    toRank?: BeltRankUpdateOneWithoutGradingsToNestedInput
   }
 
   export type GradingUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    member_id?: StringFieldUpdateOperationsInput | string
-    grading_event_id?: NullableStringFieldUpdateOperationsInput | string | null
-    from_rank_id?: NullableStringFieldUpdateOperationsInput | string | null
-    to_rank_id?: NullableStringFieldUpdateOperationsInput | string | null
+    memberId?: StringFieldUpdateOperationsInput | string
+    gradingEventId?: NullableStringFieldUpdateOperationsInput | string | null
+    fromRankId?: NullableStringFieldUpdateOperationsInput | string | null
+    toRankId?: NullableStringFieldUpdateOperationsInput | string | null
     result?: EnumGradingResultFieldUpdateOperationsInput | $Enums.GradingResult
-    certificate_url?: NullableStringFieldUpdateOperationsInput | string | null
+    certificateUrl?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type GradingCreateManyInput = {
     id?: string
-    member_id: string
-    grading_event_id?: string | null
-    from_rank_id?: string | null
-    to_rank_id?: string | null
+    memberId: string
+    gradingEventId?: string | null
+    fromRankId?: string | null
+    toRankId?: string | null
     result?: $Enums.GradingResult
-    certificate_url?: string | null
+    certificateUrl?: string | null
     notes?: string | null
-    created_at?: Date | string
-    updated_at?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type GradingUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     result?: EnumGradingResultFieldUpdateOperationsInput | $Enums.GradingResult
-    certificate_url?: NullableStringFieldUpdateOperationsInput | string | null
+    certificateUrl?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type GradingUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    member_id?: StringFieldUpdateOperationsInput | string
-    grading_event_id?: NullableStringFieldUpdateOperationsInput | string | null
-    from_rank_id?: NullableStringFieldUpdateOperationsInput | string | null
-    to_rank_id?: NullableStringFieldUpdateOperationsInput | string | null
+    memberId?: StringFieldUpdateOperationsInput | string
+    gradingEventId?: NullableStringFieldUpdateOperationsInput | string | null
+    fromRankId?: NullableStringFieldUpdateOperationsInput | string | null
+    toRankId?: NullableStringFieldUpdateOperationsInput | string | null
     result?: EnumGradingResultFieldUpdateOperationsInput | $Enums.GradingResult
-    certificate_url?: NullableStringFieldUpdateOperationsInput | string | null
+    certificateUrl?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type EventCreateInput = {
     id?: string
     title: string
     description?: string | null
-    event_date: Date | string
+    eventDate: Date | string
     location?: string | null
-    image_url?: string | null
-    is_published?: boolean
-    max_capacity?: number | null
-    created_at?: Date | string
-    updated_at?: Date | string
+    imageUrl?: string | null
+    isPublished?: boolean
+    maxCapacity?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     registrations?: EventRegistrationCreateNestedManyWithoutEventInput
   }
 
@@ -26772,13 +27095,13 @@ export namespace Prisma {
     id?: string
     title: string
     description?: string | null
-    event_date: Date | string
+    eventDate: Date | string
     location?: string | null
-    image_url?: string | null
-    is_published?: boolean
-    max_capacity?: number | null
-    created_at?: Date | string
-    updated_at?: Date | string
+    imageUrl?: string | null
+    isPublished?: boolean
+    maxCapacity?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     registrations?: EventRegistrationUncheckedCreateNestedManyWithoutEventInput
   }
 
@@ -26786,13 +27109,13 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
-    event_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    eventDate?: DateTimeFieldUpdateOperationsInput | Date | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
-    image_url?: NullableStringFieldUpdateOperationsInput | string | null
-    is_published?: BoolFieldUpdateOperationsInput | boolean
-    max_capacity?: NullableIntFieldUpdateOperationsInput | number | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
+    maxCapacity?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     registrations?: EventRegistrationUpdateManyWithoutEventNestedInput
   }
 
@@ -26800,13 +27123,13 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
-    event_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    eventDate?: DateTimeFieldUpdateOperationsInput | Date | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
-    image_url?: NullableStringFieldUpdateOperationsInput | string | null
-    is_published?: BoolFieldUpdateOperationsInput | boolean
-    max_capacity?: NullableIntFieldUpdateOperationsInput | number | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
+    maxCapacity?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     registrations?: EventRegistrationUncheckedUpdateManyWithoutEventNestedInput
   }
 
@@ -26814,86 +27137,86 @@ export namespace Prisma {
     id?: string
     title: string
     description?: string | null
-    event_date: Date | string
+    eventDate: Date | string
     location?: string | null
-    image_url?: string | null
-    is_published?: boolean
-    max_capacity?: number | null
-    created_at?: Date | string
-    updated_at?: Date | string
+    imageUrl?: string | null
+    isPublished?: boolean
+    maxCapacity?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type EventUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
-    event_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    eventDate?: DateTimeFieldUpdateOperationsInput | Date | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
-    image_url?: NullableStringFieldUpdateOperationsInput | string | null
-    is_published?: BoolFieldUpdateOperationsInput | boolean
-    max_capacity?: NullableIntFieldUpdateOperationsInput | number | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
+    maxCapacity?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type EventUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
-    event_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    eventDate?: DateTimeFieldUpdateOperationsInput | Date | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
-    image_url?: NullableStringFieldUpdateOperationsInput | string | null
-    is_published?: BoolFieldUpdateOperationsInput | boolean
-    max_capacity?: NullableIntFieldUpdateOperationsInput | number | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
+    maxCapacity?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type EventRegistrationCreateInput = {
     id?: string
-    created_at?: Date | string
+    createdAt?: Date | string
     event: EventCreateNestedOneWithoutRegistrationsInput
-    member: MemberCreateNestedOneWithoutEvent_registrationsInput
+    member: MemberCreateNestedOneWithoutEventRegistrationsInput
   }
 
   export type EventRegistrationUncheckedCreateInput = {
     id?: string
-    event_id: string
-    member_id: string
-    created_at?: Date | string
+    eventId: string
+    memberId: string
+    createdAt?: Date | string
   }
 
   export type EventRegistrationUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     event?: EventUpdateOneRequiredWithoutRegistrationsNestedInput
-    member?: MemberUpdateOneRequiredWithoutEvent_registrationsNestedInput
+    member?: MemberUpdateOneRequiredWithoutEventRegistrationsNestedInput
   }
 
   export type EventRegistrationUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    event_id?: StringFieldUpdateOperationsInput | string
-    member_id?: StringFieldUpdateOperationsInput | string
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    eventId?: StringFieldUpdateOperationsInput | string
+    memberId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type EventRegistrationCreateManyInput = {
     id?: string
-    event_id: string
-    member_id: string
-    created_at?: Date | string
+    eventId: string
+    memberId: string
+    createdAt?: Date | string
   }
 
   export type EventRegistrationUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type EventRegistrationUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    event_id?: StringFieldUpdateOperationsInput | string
-    member_id?: StringFieldUpdateOperationsInput | string
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    eventId?: StringFieldUpdateOperationsInput | string
+    memberId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type NotificationCreateInput = {
@@ -26901,23 +27224,23 @@ export namespace Prisma {
     title: string
     message: string
     type?: $Enums.NotificationType
-    is_read?: boolean
+    isRead?: boolean
     link?: string | null
-    created_at?: Date | string
-    updated_at?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
     member: MemberCreateNestedOneWithoutNotificationsInput
   }
 
   export type NotificationUncheckedCreateInput = {
     id?: string
-    member_id: string
+    memberId: string
     title: string
     message: string
     type?: $Enums.NotificationType
-    is_read?: boolean
+    isRead?: boolean
     link?: string | null
-    created_at?: Date | string
-    updated_at?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type NotificationUpdateInput = {
@@ -26925,35 +27248,35 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     message?: StringFieldUpdateOperationsInput | string
     type?: EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType
-    is_read?: BoolFieldUpdateOperationsInput | boolean
+    isRead?: BoolFieldUpdateOperationsInput | boolean
     link?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     member?: MemberUpdateOneRequiredWithoutNotificationsNestedInput
   }
 
   export type NotificationUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    member_id?: StringFieldUpdateOperationsInput | string
+    memberId?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     message?: StringFieldUpdateOperationsInput | string
     type?: EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType
-    is_read?: BoolFieldUpdateOperationsInput | boolean
+    isRead?: BoolFieldUpdateOperationsInput | boolean
     link?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type NotificationCreateManyInput = {
     id?: string
-    member_id: string
+    memberId: string
     title: string
     message: string
     type?: $Enums.NotificationType
-    is_read?: boolean
+    isRead?: boolean
     link?: string | null
-    created_at?: Date | string
-    updated_at?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type NotificationUpdateManyMutationInput = {
@@ -26961,22 +27284,22 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     message?: StringFieldUpdateOperationsInput | string
     type?: EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType
-    is_read?: BoolFieldUpdateOperationsInput | boolean
+    isRead?: BoolFieldUpdateOperationsInput | boolean
     link?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type NotificationUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    member_id?: StringFieldUpdateOperationsInput | string
+    memberId?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     message?: StringFieldUpdateOperationsInput | string
     type?: EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType
-    is_read?: BoolFieldUpdateOperationsInput | boolean
+    isRead?: BoolFieldUpdateOperationsInput | boolean
     link?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ShopProductCreateInput = {
@@ -26985,11 +27308,12 @@ export namespace Prisma {
     description?: string | null
     price: Decimal | DecimalJsLike | number | string
     stock?: number
-    image_url?: string | null
-    is_active?: boolean
-    created_at?: Date | string
-    updated_at?: Date | string
-    order_items?: ShopOrderItemCreateNestedManyWithoutProductInput
+    imageUrl?: string | null
+    category?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    orderItems?: ShopOrderItemCreateNestedManyWithoutProductInput
   }
 
   export type ShopProductUncheckedCreateInput = {
@@ -26998,11 +27322,12 @@ export namespace Prisma {
     description?: string | null
     price: Decimal | DecimalJsLike | number | string
     stock?: number
-    image_url?: string | null
-    is_active?: boolean
-    created_at?: Date | string
-    updated_at?: Date | string
-    order_items?: ShopOrderItemUncheckedCreateNestedManyWithoutProductInput
+    imageUrl?: string | null
+    category?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    orderItems?: ShopOrderItemUncheckedCreateNestedManyWithoutProductInput
   }
 
   export type ShopProductUpdateInput = {
@@ -27011,11 +27336,12 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     stock?: IntFieldUpdateOperationsInput | number
-    image_url?: NullableStringFieldUpdateOperationsInput | string | null
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    order_items?: ShopOrderItemUpdateManyWithoutProductNestedInput
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    orderItems?: ShopOrderItemUpdateManyWithoutProductNestedInput
   }
 
   export type ShopProductUncheckedUpdateInput = {
@@ -27024,11 +27350,12 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     stock?: IntFieldUpdateOperationsInput | number
-    image_url?: NullableStringFieldUpdateOperationsInput | string | null
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    order_items?: ShopOrderItemUncheckedUpdateManyWithoutProductNestedInput
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    orderItems?: ShopOrderItemUncheckedUpdateManyWithoutProductNestedInput
   }
 
   export type ShopProductCreateManyInput = {
@@ -27037,10 +27364,11 @@ export namespace Prisma {
     description?: string | null
     price: Decimal | DecimalJsLike | number | string
     stock?: number
-    image_url?: string | null
-    is_active?: boolean
-    created_at?: Date | string
-    updated_at?: Date | string
+    imageUrl?: string | null
+    category?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type ShopProductUpdateManyMutationInput = {
@@ -27049,10 +27377,11 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     stock?: IntFieldUpdateOperationsInput | number
-    image_url?: NullableStringFieldUpdateOperationsInput | string | null
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ShopProductUncheckedUpdateManyInput = {
@@ -27061,158 +27390,173 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     stock?: IntFieldUpdateOperationsInput | number
-    image_url?: NullableStringFieldUpdateOperationsInput | string | null
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ShopOrderCreateInput = {
     id?: string
-    payment_status?: $Enums.PaymentStatus
-    payment_method?: string | null
+    paymentStatus?: $Enums.PaymentStatus
+    paymentMethod?: string | null
     total: Decimal | DecimalJsLike | number | string
     currency?: string
-    transaction_id?: string | null
+    transactionId?: string | null
+    includesMembership?: boolean
+    membershipFee?: Decimal | DecimalJsLike | number | string | null
     notes?: string | null
-    created_at?: Date | string
-    updated_at?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
     member: MemberCreateNestedOneWithoutOrdersInput
-    order_items?: ShopOrderItemCreateNestedManyWithoutOrderInput
+    orderItems?: ShopOrderItemCreateNestedManyWithoutOrderInput
   }
 
   export type ShopOrderUncheckedCreateInput = {
     id?: string
-    member_id: string
-    payment_status?: $Enums.PaymentStatus
-    payment_method?: string | null
+    memberId: string
+    paymentStatus?: $Enums.PaymentStatus
+    paymentMethod?: string | null
     total: Decimal | DecimalJsLike | number | string
     currency?: string
-    transaction_id?: string | null
+    transactionId?: string | null
+    includesMembership?: boolean
+    membershipFee?: Decimal | DecimalJsLike | number | string | null
     notes?: string | null
-    created_at?: Date | string
-    updated_at?: Date | string
-    order_items?: ShopOrderItemUncheckedCreateNestedManyWithoutOrderInput
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    orderItems?: ShopOrderItemUncheckedCreateNestedManyWithoutOrderInput
   }
 
   export type ShopOrderUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    payment_status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
-    payment_method?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
     total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     currency?: StringFieldUpdateOperationsInput | string
-    transaction_id?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    includesMembership?: BoolFieldUpdateOperationsInput | boolean
+    membershipFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     member?: MemberUpdateOneRequiredWithoutOrdersNestedInput
-    order_items?: ShopOrderItemUpdateManyWithoutOrderNestedInput
+    orderItems?: ShopOrderItemUpdateManyWithoutOrderNestedInput
   }
 
   export type ShopOrderUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    member_id?: StringFieldUpdateOperationsInput | string
-    payment_status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
-    payment_method?: NullableStringFieldUpdateOperationsInput | string | null
+    memberId?: StringFieldUpdateOperationsInput | string
+    paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
     total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     currency?: StringFieldUpdateOperationsInput | string
-    transaction_id?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    includesMembership?: BoolFieldUpdateOperationsInput | boolean
+    membershipFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    order_items?: ShopOrderItemUncheckedUpdateManyWithoutOrderNestedInput
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    orderItems?: ShopOrderItemUncheckedUpdateManyWithoutOrderNestedInput
   }
 
   export type ShopOrderCreateManyInput = {
     id?: string
-    member_id: string
-    payment_status?: $Enums.PaymentStatus
-    payment_method?: string | null
+    memberId: string
+    paymentStatus?: $Enums.PaymentStatus
+    paymentMethod?: string | null
     total: Decimal | DecimalJsLike | number | string
     currency?: string
-    transaction_id?: string | null
+    transactionId?: string | null
+    includesMembership?: boolean
+    membershipFee?: Decimal | DecimalJsLike | number | string | null
     notes?: string | null
-    created_at?: Date | string
-    updated_at?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type ShopOrderUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    payment_status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
-    payment_method?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
     total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     currency?: StringFieldUpdateOperationsInput | string
-    transaction_id?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    includesMembership?: BoolFieldUpdateOperationsInput | boolean
+    membershipFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ShopOrderUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    member_id?: StringFieldUpdateOperationsInput | string
-    payment_status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
-    payment_method?: NullableStringFieldUpdateOperationsInput | string | null
+    memberId?: StringFieldUpdateOperationsInput | string
+    paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
     total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     currency?: StringFieldUpdateOperationsInput | string
-    transaction_id?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    includesMembership?: BoolFieldUpdateOperationsInput | boolean
+    membershipFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ShopOrderItemCreateInput = {
     id?: string
     quantity: number
-    unit_price: Decimal | DecimalJsLike | number | string
-    order: ShopOrderCreateNestedOneWithoutOrder_itemsInput
-    product: ShopProductCreateNestedOneWithoutOrder_itemsInput
+    unitPrice: Decimal | DecimalJsLike | number | string
+    order: ShopOrderCreateNestedOneWithoutOrderItemsInput
+    product: ShopProductCreateNestedOneWithoutOrderItemsInput
   }
 
   export type ShopOrderItemUncheckedCreateInput = {
     id?: string
-    order_id: string
-    product_id: string
+    orderId: string
+    productId: string
     quantity: number
-    unit_price: Decimal | DecimalJsLike | number | string
+    unitPrice: Decimal | DecimalJsLike | number | string
   }
 
   export type ShopOrderItemUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
-    unit_price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    order?: ShopOrderUpdateOneRequiredWithoutOrder_itemsNestedInput
-    product?: ShopProductUpdateOneRequiredWithoutOrder_itemsNestedInput
+    unitPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    order?: ShopOrderUpdateOneRequiredWithoutOrderItemsNestedInput
+    product?: ShopProductUpdateOneRequiredWithoutOrderItemsNestedInput
   }
 
   export type ShopOrderItemUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    order_id?: StringFieldUpdateOperationsInput | string
-    product_id?: StringFieldUpdateOperationsInput | string
+    orderId?: StringFieldUpdateOperationsInput | string
+    productId?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
-    unit_price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    unitPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
   }
 
   export type ShopOrderItemCreateManyInput = {
     id?: string
-    order_id: string
-    product_id: string
+    orderId: string
+    productId: string
     quantity: number
-    unit_price: Decimal | DecimalJsLike | number | string
+    unitPrice: Decimal | DecimalJsLike | number | string
   }
 
   export type ShopOrderItemUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
-    unit_price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    unitPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
   }
 
   export type ShopOrderItemUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    order_id?: StringFieldUpdateOperationsInput | string
-    product_id?: StringFieldUpdateOperationsInput | string
+    orderId?: StringFieldUpdateOperationsInput | string
+    productId?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
-    unit_price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    unitPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
   }
 
   export type TournamentCreateInput = {
@@ -27221,9 +27565,9 @@ export namespace Prisma {
     description?: string | null
     date: Date | string
     location?: string | null
-    is_published?: boolean
-    created_at?: Date | string
-    updated_at?: Date | string
+    isPublished?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
     participants?: TournamentParticipantCreateNestedManyWithoutTournamentInput
     matches?: TournamentMatchCreateNestedManyWithoutTournamentInput
   }
@@ -27234,9 +27578,9 @@ export namespace Prisma {
     description?: string | null
     date: Date | string
     location?: string | null
-    is_published?: boolean
-    created_at?: Date | string
-    updated_at?: Date | string
+    isPublished?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
     participants?: TournamentParticipantUncheckedCreateNestedManyWithoutTournamentInput
     matches?: TournamentMatchUncheckedCreateNestedManyWithoutTournamentInput
   }
@@ -27247,9 +27591,9 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
-    is_published?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     participants?: TournamentParticipantUpdateManyWithoutTournamentNestedInput
     matches?: TournamentMatchUpdateManyWithoutTournamentNestedInput
   }
@@ -27260,9 +27604,9 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
-    is_published?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     participants?: TournamentParticipantUncheckedUpdateManyWithoutTournamentNestedInput
     matches?: TournamentMatchUncheckedUpdateManyWithoutTournamentNestedInput
   }
@@ -27273,9 +27617,9 @@ export namespace Prisma {
     description?: string | null
     date: Date | string
     location?: string | null
-    is_published?: boolean
-    created_at?: Date | string
-    updated_at?: Date | string
+    isPublished?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type TournamentUpdateManyMutationInput = {
@@ -27284,9 +27628,9 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
-    is_published?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type TournamentUncheckedUpdateManyInput = {
@@ -27295,162 +27639,162 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
-    is_published?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type TournamentParticipantCreateInput = {
     id?: string
     category?: string | null
-    weight_class?: string | null
-    created_at?: Date | string
+    weightClass?: string | null
+    createdAt?: Date | string
     tournament: TournamentCreateNestedOneWithoutParticipantsInput
-    member: MemberCreateNestedOneWithoutTournament_entriesInput
-    matches_as_p1?: TournamentMatchCreateNestedManyWithoutParticipant1Input
-    matches_as_p2?: TournamentMatchCreateNestedManyWithoutParticipant2Input
-    matches_won?: TournamentMatchCreateNestedManyWithoutWinnerInput
+    member: MemberCreateNestedOneWithoutTournamentEntriesInput
+    matchesAsP1?: TournamentMatchCreateNestedManyWithoutParticipant1Input
+    matchesAsP2?: TournamentMatchCreateNestedManyWithoutParticipant2Input
+    matchesWon?: TournamentMatchCreateNestedManyWithoutWinnerInput
   }
 
   export type TournamentParticipantUncheckedCreateInput = {
     id?: string
-    tournament_id: string
-    member_id: string
+    tournamentId: string
+    memberId: string
     category?: string | null
-    weight_class?: string | null
-    created_at?: Date | string
-    matches_as_p1?: TournamentMatchUncheckedCreateNestedManyWithoutParticipant1Input
-    matches_as_p2?: TournamentMatchUncheckedCreateNestedManyWithoutParticipant2Input
-    matches_won?: TournamentMatchUncheckedCreateNestedManyWithoutWinnerInput
+    weightClass?: string | null
+    createdAt?: Date | string
+    matchesAsP1?: TournamentMatchUncheckedCreateNestedManyWithoutParticipant1Input
+    matchesAsP2?: TournamentMatchUncheckedCreateNestedManyWithoutParticipant2Input
+    matchesWon?: TournamentMatchUncheckedCreateNestedManyWithoutWinnerInput
   }
 
   export type TournamentParticipantUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     category?: NullableStringFieldUpdateOperationsInput | string | null
-    weight_class?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    weightClass?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tournament?: TournamentUpdateOneRequiredWithoutParticipantsNestedInput
-    member?: MemberUpdateOneRequiredWithoutTournament_entriesNestedInput
-    matches_as_p1?: TournamentMatchUpdateManyWithoutParticipant1NestedInput
-    matches_as_p2?: TournamentMatchUpdateManyWithoutParticipant2NestedInput
-    matches_won?: TournamentMatchUpdateManyWithoutWinnerNestedInput
+    member?: MemberUpdateOneRequiredWithoutTournamentEntriesNestedInput
+    matchesAsP1?: TournamentMatchUpdateManyWithoutParticipant1NestedInput
+    matchesAsP2?: TournamentMatchUpdateManyWithoutParticipant2NestedInput
+    matchesWon?: TournamentMatchUpdateManyWithoutWinnerNestedInput
   }
 
   export type TournamentParticipantUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    tournament_id?: StringFieldUpdateOperationsInput | string
-    member_id?: StringFieldUpdateOperationsInput | string
+    tournamentId?: StringFieldUpdateOperationsInput | string
+    memberId?: StringFieldUpdateOperationsInput | string
     category?: NullableStringFieldUpdateOperationsInput | string | null
-    weight_class?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    matches_as_p1?: TournamentMatchUncheckedUpdateManyWithoutParticipant1NestedInput
-    matches_as_p2?: TournamentMatchUncheckedUpdateManyWithoutParticipant2NestedInput
-    matches_won?: TournamentMatchUncheckedUpdateManyWithoutWinnerNestedInput
+    weightClass?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    matchesAsP1?: TournamentMatchUncheckedUpdateManyWithoutParticipant1NestedInput
+    matchesAsP2?: TournamentMatchUncheckedUpdateManyWithoutParticipant2NestedInput
+    matchesWon?: TournamentMatchUncheckedUpdateManyWithoutWinnerNestedInput
   }
 
   export type TournamentParticipantCreateManyInput = {
     id?: string
-    tournament_id: string
-    member_id: string
+    tournamentId: string
+    memberId: string
     category?: string | null
-    weight_class?: string | null
-    created_at?: Date | string
+    weightClass?: string | null
+    createdAt?: Date | string
   }
 
   export type TournamentParticipantUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     category?: NullableStringFieldUpdateOperationsInput | string | null
-    weight_class?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    weightClass?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type TournamentParticipantUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    tournament_id?: StringFieldUpdateOperationsInput | string
-    member_id?: StringFieldUpdateOperationsInput | string
+    tournamentId?: StringFieldUpdateOperationsInput | string
+    memberId?: StringFieldUpdateOperationsInput | string
     category?: NullableStringFieldUpdateOperationsInput | string | null
-    weight_class?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    weightClass?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type TournamentMatchCreateInput = {
     id?: string
     round?: number | null
-    match_order?: number | null
+    matchOrder?: number | null
     notes?: string | null
-    created_at?: Date | string
+    createdAt?: Date | string
     tournament: TournamentCreateNestedOneWithoutMatchesInput
-    participant1?: TournamentParticipantCreateNestedOneWithoutMatches_as_p1Input
-    participant2?: TournamentParticipantCreateNestedOneWithoutMatches_as_p2Input
-    winner?: TournamentParticipantCreateNestedOneWithoutMatches_wonInput
+    participant1?: TournamentParticipantCreateNestedOneWithoutMatchesAsP1Input
+    participant2?: TournamentParticipantCreateNestedOneWithoutMatchesAsP2Input
+    winner?: TournamentParticipantCreateNestedOneWithoutMatchesWonInput
   }
 
   export type TournamentMatchUncheckedCreateInput = {
     id?: string
-    tournament_id: string
-    participant1_id?: string | null
-    participant2_id?: string | null
-    winner_id?: string | null
+    tournamentId: string
+    participant1Id?: string | null
+    participant2Id?: string | null
+    winnerId?: string | null
     round?: number | null
-    match_order?: number | null
+    matchOrder?: number | null
     notes?: string | null
-    created_at?: Date | string
+    createdAt?: Date | string
   }
 
   export type TournamentMatchUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     round?: NullableIntFieldUpdateOperationsInput | number | null
-    match_order?: NullableIntFieldUpdateOperationsInput | number | null
+    matchOrder?: NullableIntFieldUpdateOperationsInput | number | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tournament?: TournamentUpdateOneRequiredWithoutMatchesNestedInput
-    participant1?: TournamentParticipantUpdateOneWithoutMatches_as_p1NestedInput
-    participant2?: TournamentParticipantUpdateOneWithoutMatches_as_p2NestedInput
-    winner?: TournamentParticipantUpdateOneWithoutMatches_wonNestedInput
+    participant1?: TournamentParticipantUpdateOneWithoutMatchesAsP1NestedInput
+    participant2?: TournamentParticipantUpdateOneWithoutMatchesAsP2NestedInput
+    winner?: TournamentParticipantUpdateOneWithoutMatchesWonNestedInput
   }
 
   export type TournamentMatchUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    tournament_id?: StringFieldUpdateOperationsInput | string
-    participant1_id?: NullableStringFieldUpdateOperationsInput | string | null
-    participant2_id?: NullableStringFieldUpdateOperationsInput | string | null
-    winner_id?: NullableStringFieldUpdateOperationsInput | string | null
+    tournamentId?: StringFieldUpdateOperationsInput | string
+    participant1Id?: NullableStringFieldUpdateOperationsInput | string | null
+    participant2Id?: NullableStringFieldUpdateOperationsInput | string | null
+    winnerId?: NullableStringFieldUpdateOperationsInput | string | null
     round?: NullableIntFieldUpdateOperationsInput | number | null
-    match_order?: NullableIntFieldUpdateOperationsInput | number | null
+    matchOrder?: NullableIntFieldUpdateOperationsInput | number | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type TournamentMatchCreateManyInput = {
     id?: string
-    tournament_id: string
-    participant1_id?: string | null
-    participant2_id?: string | null
-    winner_id?: string | null
+    tournamentId: string
+    participant1Id?: string | null
+    participant2Id?: string | null
+    winnerId?: string | null
     round?: number | null
-    match_order?: number | null
+    matchOrder?: number | null
     notes?: string | null
-    created_at?: Date | string
+    createdAt?: Date | string
   }
 
   export type TournamentMatchUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     round?: NullableIntFieldUpdateOperationsInput | number | null
-    match_order?: NullableIntFieldUpdateOperationsInput | number | null
+    matchOrder?: NullableIntFieldUpdateOperationsInput | number | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type TournamentMatchUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    tournament_id?: StringFieldUpdateOperationsInput | string
-    participant1_id?: NullableStringFieldUpdateOperationsInput | string | null
-    participant2_id?: NullableStringFieldUpdateOperationsInput | string | null
-    winner_id?: NullableStringFieldUpdateOperationsInput | string | null
+    tournamentId?: StringFieldUpdateOperationsInput | string
+    participant1Id?: NullableStringFieldUpdateOperationsInput | string | null
+    participant2Id?: NullableStringFieldUpdateOperationsInput | string | null
+    winnerId?: NullableStringFieldUpdateOperationsInput | string | null
     round?: NullableIntFieldUpdateOperationsInput | number | null
-    match_order?: NullableIntFieldUpdateOperationsInput | number | null
+    matchOrder?: NullableIntFieldUpdateOperationsInput | number | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type UuidFilter<$PrismaModel = never> = {
@@ -27555,39 +27899,42 @@ export namespace Prisma {
   export type BeltRankCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
-    kyu_dan?: SortOrder
-    color_hex?: SortOrder
-    order_index?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
+    nameBn?: SortOrder
+    kyuDan?: SortOrder
+    colorHex?: SortOrder
+    orderIndex?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type BeltRankAvgOrderByAggregateInput = {
-    order_index?: SortOrder
+    orderIndex?: SortOrder
   }
 
   export type BeltRankMaxOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
-    kyu_dan?: SortOrder
-    color_hex?: SortOrder
-    order_index?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
+    nameBn?: SortOrder
+    kyuDan?: SortOrder
+    colorHex?: SortOrder
+    orderIndex?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type BeltRankMinOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
-    kyu_dan?: SortOrder
-    color_hex?: SortOrder
-    order_index?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
+    nameBn?: SortOrder
+    kyuDan?: SortOrder
+    colorHex?: SortOrder
+    orderIndex?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type BeltRankSumOrderByAggregateInput = {
-    order_index?: SortOrder
+    orderIndex?: SortOrder
   }
 
   export type UuidWithAggregatesFilter<$PrismaModel = never> = {
@@ -27767,10 +28114,10 @@ export namespace Prisma {
     phone?: SortOrder
     email?: SortOrder
     schedule?: SortOrder
-    is_active?: SortOrder
-    head_instructor_id?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
+    isActive?: SortOrder
+    headInstructorId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type DojoAvgOrderByAggregateInput = {
@@ -27787,10 +28134,10 @@ export namespace Prisma {
     longitude?: SortOrder
     phone?: SortOrder
     email?: SortOrder
-    is_active?: SortOrder
-    head_instructor_id?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
+    isActive?: SortOrder
+    headInstructorId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type DojoMinOrderByAggregateInput = {
@@ -27802,10 +28149,10 @@ export namespace Prisma {
     longitude?: SortOrder
     phone?: SortOrder
     email?: SortOrder
-    is_active?: SortOrder
-    head_instructor_id?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
+    isActive?: SortOrder
+    headInstructorId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type DojoSumOrderByAggregateInput = {
@@ -27896,6 +28243,13 @@ export namespace Prisma {
     not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
+  export type EnumMembershipStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.MembershipStatus | EnumMembershipStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.MembershipStatus[] | ListEnumMembershipStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MembershipStatus[] | ListEnumMembershipStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumMembershipStatusFilter<$PrismaModel> | $Enums.MembershipStatus
+  }
+
   export type DojoNullableScalarRelationFilter = {
     is?: DojoWhereInput | null
     isNot?: DojoWhereInput | null
@@ -27963,53 +28317,77 @@ export namespace Prisma {
 
   export type MemberCountOrderByAggregateInput = {
     id?: SortOrder
-    full_name?: SortOrder
+    fullName?: SortOrder
     email?: SortOrder
     phone?: SortOrder
-    avatar_url?: SortOrder
+    avatarUrl?: SortOrder
     role?: SortOrder
-    member_number?: SortOrder
-    current_rank?: SortOrder
-    join_date?: SortOrder
-    expiry_date?: SortOrder
-    is_active?: SortOrder
-    dojo_id?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
+    memberNumber?: SortOrder
+    currentRank?: SortOrder
+    joinDate?: SortOrder
+    expiryDate?: SortOrder
+    isActive?: SortOrder
+    dojoId?: SortOrder
+    onboardingComplete?: SortOrder
+    membershipStatus?: SortOrder
+    dateOfBirth?: SortOrder
+    bloodGroup?: SortOrder
+    address?: SortOrder
+    nationalId?: SortOrder
+    emergencyContactName?: SortOrder
+    emergencyContactPhone?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type MemberMaxOrderByAggregateInput = {
     id?: SortOrder
-    full_name?: SortOrder
+    fullName?: SortOrder
     email?: SortOrder
     phone?: SortOrder
-    avatar_url?: SortOrder
+    avatarUrl?: SortOrder
     role?: SortOrder
-    member_number?: SortOrder
-    current_rank?: SortOrder
-    join_date?: SortOrder
-    expiry_date?: SortOrder
-    is_active?: SortOrder
-    dojo_id?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
+    memberNumber?: SortOrder
+    currentRank?: SortOrder
+    joinDate?: SortOrder
+    expiryDate?: SortOrder
+    isActive?: SortOrder
+    dojoId?: SortOrder
+    onboardingComplete?: SortOrder
+    membershipStatus?: SortOrder
+    dateOfBirth?: SortOrder
+    bloodGroup?: SortOrder
+    address?: SortOrder
+    nationalId?: SortOrder
+    emergencyContactName?: SortOrder
+    emergencyContactPhone?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type MemberMinOrderByAggregateInput = {
     id?: SortOrder
-    full_name?: SortOrder
+    fullName?: SortOrder
     email?: SortOrder
     phone?: SortOrder
-    avatar_url?: SortOrder
+    avatarUrl?: SortOrder
     role?: SortOrder
-    member_number?: SortOrder
-    current_rank?: SortOrder
-    join_date?: SortOrder
-    expiry_date?: SortOrder
-    is_active?: SortOrder
-    dojo_id?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
+    memberNumber?: SortOrder
+    currentRank?: SortOrder
+    joinDate?: SortOrder
+    expiryDate?: SortOrder
+    isActive?: SortOrder
+    dojoId?: SortOrder
+    onboardingComplete?: SortOrder
+    membershipStatus?: SortOrder
+    dateOfBirth?: SortOrder
+    bloodGroup?: SortOrder
+    address?: SortOrder
+    nationalId?: SortOrder
+    emergencyContactName?: SortOrder
+    emergencyContactPhone?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type EnumMemberRoleWithAggregatesFilter<$PrismaModel = never> = {
@@ -28036,6 +28414,16 @@ export namespace Prisma {
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
+  export type EnumMembershipStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.MembershipStatus | EnumMembershipStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.MembershipStatus[] | ListEnumMembershipStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MembershipStatus[] | ListEnumMembershipStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumMembershipStatusWithAggregatesFilter<$PrismaModel> | $Enums.MembershipStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumMembershipStatusFilter<$PrismaModel>
+    _max?: NestedEnumMembershipStatusFilter<$PrismaModel>
+  }
+
   export type MemberScalarRelationFilter = {
     is?: MemberWhereInput
     isNot?: MemberWhereInput
@@ -28043,88 +28431,88 @@ export namespace Prisma {
 
   export type AdminCountOrderByAggregateInput = {
     id?: SortOrder
-    member_id?: SortOrder
+    memberId?: SortOrder
     notes?: SortOrder
-    created_at?: SortOrder
+    createdAt?: SortOrder
   }
 
   export type AdminMaxOrderByAggregateInput = {
     id?: SortOrder
-    member_id?: SortOrder
+    memberId?: SortOrder
     notes?: SortOrder
-    created_at?: SortOrder
+    createdAt?: SortOrder
   }
 
   export type AdminMinOrderByAggregateInput = {
     id?: SortOrder
-    member_id?: SortOrder
+    memberId?: SortOrder
     notes?: SortOrder
-    created_at?: SortOrder
+    createdAt?: SortOrder
   }
 
   export type InstructorCountOrderByAggregateInput = {
     id?: SortOrder
-    member_id?: SortOrder
-    dojo_id?: SortOrder
+    memberId?: SortOrder
+    dojoId?: SortOrder
     bio?: SortOrder
-    is_active?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type InstructorMaxOrderByAggregateInput = {
     id?: SortOrder
-    member_id?: SortOrder
-    dojo_id?: SortOrder
+    memberId?: SortOrder
+    dojoId?: SortOrder
     bio?: SortOrder
-    is_active?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type InstructorMinOrderByAggregateInput = {
     id?: SortOrder
-    member_id?: SortOrder
-    dojo_id?: SortOrder
+    memberId?: SortOrder
+    dojoId?: SortOrder
     bio?: SortOrder
-    is_active?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
-  export type AttendanceMember_idDateCompoundUniqueInput = {
-    member_id: string
+  export type AttendanceMemberIdDateCompoundUniqueInput = {
+    memberId: string
     date: Date | string
   }
 
   export type AttendanceCountOrderByAggregateInput = {
     id?: SortOrder
-    member_id?: SortOrder
-    dojo_id?: SortOrder
+    memberId?: SortOrder
+    dojoId?: SortOrder
     date?: SortOrder
     present?: SortOrder
     notes?: SortOrder
-    created_at?: SortOrder
+    createdAt?: SortOrder
   }
 
   export type AttendanceMaxOrderByAggregateInput = {
     id?: SortOrder
-    member_id?: SortOrder
-    dojo_id?: SortOrder
+    memberId?: SortOrder
+    dojoId?: SortOrder
     date?: SortOrder
     present?: SortOrder
     notes?: SortOrder
-    created_at?: SortOrder
+    createdAt?: SortOrder
   }
 
   export type AttendanceMinOrderByAggregateInput = {
     id?: SortOrder
-    member_id?: SortOrder
-    dojo_id?: SortOrder
+    memberId?: SortOrder
+    dojoId?: SortOrder
     date?: SortOrder
     present?: SortOrder
     notes?: SortOrder
-    created_at?: SortOrder
+    createdAt?: SortOrder
   }
 
   export type BeltRankNullableScalarRelationFilter = {
@@ -28135,37 +28523,37 @@ export namespace Prisma {
   export type GradingEventCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
-    event_date?: SortOrder
+    eventDate?: SortOrder
     location?: SortOrder
-    target_rank_id?: SortOrder
-    is_open?: SortOrder
+    targetRankId?: SortOrder
+    isOpen?: SortOrder
     notes?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type GradingEventMaxOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
-    event_date?: SortOrder
+    eventDate?: SortOrder
     location?: SortOrder
-    target_rank_id?: SortOrder
-    is_open?: SortOrder
+    targetRankId?: SortOrder
+    isOpen?: SortOrder
     notes?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type GradingEventMinOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
-    event_date?: SortOrder
+    eventDate?: SortOrder
     location?: SortOrder
-    target_rank_id?: SortOrder
-    is_open?: SortOrder
+    targetRankId?: SortOrder
+    isOpen?: SortOrder
     notes?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type EnumApplicationStatusFilter<$PrismaModel = never> = {
@@ -28180,39 +28568,39 @@ export namespace Prisma {
     isNot?: GradingEventWhereInput
   }
 
-  export type GradingApplicationMember_idGrading_event_idCompoundUniqueInput = {
-    member_id: string
-    grading_event_id: string
+  export type GradingApplicationMemberIdGradingEventIdCompoundUniqueInput = {
+    memberId: string
+    gradingEventId: string
   }
 
   export type GradingApplicationCountOrderByAggregateInput = {
     id?: SortOrder
-    member_id?: SortOrder
-    grading_event_id?: SortOrder
-    target_rank_id?: SortOrder
+    memberId?: SortOrder
+    gradingEventId?: SortOrder
+    targetRankId?: SortOrder
     status?: SortOrder
     notes?: SortOrder
-    applied_at?: SortOrder
+    appliedAt?: SortOrder
   }
 
   export type GradingApplicationMaxOrderByAggregateInput = {
     id?: SortOrder
-    member_id?: SortOrder
-    grading_event_id?: SortOrder
-    target_rank_id?: SortOrder
+    memberId?: SortOrder
+    gradingEventId?: SortOrder
+    targetRankId?: SortOrder
     status?: SortOrder
     notes?: SortOrder
-    applied_at?: SortOrder
+    appliedAt?: SortOrder
   }
 
   export type GradingApplicationMinOrderByAggregateInput = {
     id?: SortOrder
-    member_id?: SortOrder
-    grading_event_id?: SortOrder
-    target_rank_id?: SortOrder
+    memberId?: SortOrder
+    gradingEventId?: SortOrder
+    targetRankId?: SortOrder
     status?: SortOrder
     notes?: SortOrder
-    applied_at?: SortOrder
+    appliedAt?: SortOrder
   }
 
   export type EnumApplicationStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -28239,41 +28627,41 @@ export namespace Prisma {
 
   export type GradingCountOrderByAggregateInput = {
     id?: SortOrder
-    member_id?: SortOrder
-    grading_event_id?: SortOrder
-    from_rank_id?: SortOrder
-    to_rank_id?: SortOrder
+    memberId?: SortOrder
+    gradingEventId?: SortOrder
+    fromRankId?: SortOrder
+    toRankId?: SortOrder
     result?: SortOrder
-    certificate_url?: SortOrder
+    certificateUrl?: SortOrder
     notes?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type GradingMaxOrderByAggregateInput = {
     id?: SortOrder
-    member_id?: SortOrder
-    grading_event_id?: SortOrder
-    from_rank_id?: SortOrder
-    to_rank_id?: SortOrder
+    memberId?: SortOrder
+    gradingEventId?: SortOrder
+    fromRankId?: SortOrder
+    toRankId?: SortOrder
     result?: SortOrder
-    certificate_url?: SortOrder
+    certificateUrl?: SortOrder
     notes?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type GradingMinOrderByAggregateInput = {
     id?: SortOrder
-    member_id?: SortOrder
-    grading_event_id?: SortOrder
-    from_rank_id?: SortOrder
-    to_rank_id?: SortOrder
+    memberId?: SortOrder
+    gradingEventId?: SortOrder
+    fromRankId?: SortOrder
+    toRankId?: SortOrder
     result?: SortOrder
-    certificate_url?: SortOrder
+    certificateUrl?: SortOrder
     notes?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type EnumGradingResultWithAggregatesFilter<$PrismaModel = never> = {
@@ -28301,47 +28689,47 @@ export namespace Prisma {
     id?: SortOrder
     title?: SortOrder
     description?: SortOrder
-    event_date?: SortOrder
+    eventDate?: SortOrder
     location?: SortOrder
-    image_url?: SortOrder
-    is_published?: SortOrder
-    max_capacity?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
+    imageUrl?: SortOrder
+    isPublished?: SortOrder
+    maxCapacity?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type EventAvgOrderByAggregateInput = {
-    max_capacity?: SortOrder
+    maxCapacity?: SortOrder
   }
 
   export type EventMaxOrderByAggregateInput = {
     id?: SortOrder
     title?: SortOrder
     description?: SortOrder
-    event_date?: SortOrder
+    eventDate?: SortOrder
     location?: SortOrder
-    image_url?: SortOrder
-    is_published?: SortOrder
-    max_capacity?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
+    imageUrl?: SortOrder
+    isPublished?: SortOrder
+    maxCapacity?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type EventMinOrderByAggregateInput = {
     id?: SortOrder
     title?: SortOrder
     description?: SortOrder
-    event_date?: SortOrder
+    eventDate?: SortOrder
     location?: SortOrder
-    image_url?: SortOrder
-    is_published?: SortOrder
-    max_capacity?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
+    imageUrl?: SortOrder
+    isPublished?: SortOrder
+    maxCapacity?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type EventSumOrderByAggregateInput = {
-    max_capacity?: SortOrder
+    maxCapacity?: SortOrder
   }
 
   export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -28365,30 +28753,30 @@ export namespace Prisma {
     isNot?: EventWhereInput
   }
 
-  export type EventRegistrationEvent_idMember_idCompoundUniqueInput = {
-    event_id: string
-    member_id: string
+  export type EventRegistrationEventIdMemberIdCompoundUniqueInput = {
+    eventId: string
+    memberId: string
   }
 
   export type EventRegistrationCountOrderByAggregateInput = {
     id?: SortOrder
-    event_id?: SortOrder
-    member_id?: SortOrder
-    created_at?: SortOrder
+    eventId?: SortOrder
+    memberId?: SortOrder
+    createdAt?: SortOrder
   }
 
   export type EventRegistrationMaxOrderByAggregateInput = {
     id?: SortOrder
-    event_id?: SortOrder
-    member_id?: SortOrder
-    created_at?: SortOrder
+    eventId?: SortOrder
+    memberId?: SortOrder
+    createdAt?: SortOrder
   }
 
   export type EventRegistrationMinOrderByAggregateInput = {
     id?: SortOrder
-    event_id?: SortOrder
-    member_id?: SortOrder
-    created_at?: SortOrder
+    eventId?: SortOrder
+    memberId?: SortOrder
+    createdAt?: SortOrder
   }
 
   export type EnumNotificationTypeFilter<$PrismaModel = never> = {
@@ -28400,38 +28788,38 @@ export namespace Prisma {
 
   export type NotificationCountOrderByAggregateInput = {
     id?: SortOrder
-    member_id?: SortOrder
+    memberId?: SortOrder
     title?: SortOrder
     message?: SortOrder
     type?: SortOrder
-    is_read?: SortOrder
+    isRead?: SortOrder
     link?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type NotificationMaxOrderByAggregateInput = {
     id?: SortOrder
-    member_id?: SortOrder
+    memberId?: SortOrder
     title?: SortOrder
     message?: SortOrder
     type?: SortOrder
-    is_read?: SortOrder
+    isRead?: SortOrder
     link?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type NotificationMinOrderByAggregateInput = {
     id?: SortOrder
-    member_id?: SortOrder
+    memberId?: SortOrder
     title?: SortOrder
     message?: SortOrder
     type?: SortOrder
-    is_read?: SortOrder
+    isRead?: SortOrder
     link?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type EnumNotificationTypeWithAggregatesFilter<$PrismaModel = never> = {
@@ -28471,10 +28859,11 @@ export namespace Prisma {
     description?: SortOrder
     price?: SortOrder
     stock?: SortOrder
-    image_url?: SortOrder
-    is_active?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
+    imageUrl?: SortOrder
+    category?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type ShopProductAvgOrderByAggregateInput = {
@@ -28488,10 +28877,11 @@ export namespace Prisma {
     description?: SortOrder
     price?: SortOrder
     stock?: SortOrder
-    image_url?: SortOrder
-    is_active?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
+    imageUrl?: SortOrder
+    category?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type ShopProductMinOrderByAggregateInput = {
@@ -28500,10 +28890,11 @@ export namespace Prisma {
     description?: SortOrder
     price?: SortOrder
     stock?: SortOrder
-    image_url?: SortOrder
-    is_active?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
+    imageUrl?: SortOrder
+    category?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type ShopProductSumOrderByAggregateInput = {
@@ -28534,51 +28925,70 @@ export namespace Prisma {
     not?: NestedEnumPaymentStatusFilter<$PrismaModel> | $Enums.PaymentStatus
   }
 
+  export type DecimalNullableFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalNullableFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
+  }
+
   export type ShopOrderCountOrderByAggregateInput = {
     id?: SortOrder
-    member_id?: SortOrder
-    payment_status?: SortOrder
-    payment_method?: SortOrder
+    memberId?: SortOrder
+    paymentStatus?: SortOrder
+    paymentMethod?: SortOrder
     total?: SortOrder
     currency?: SortOrder
-    transaction_id?: SortOrder
+    transactionId?: SortOrder
+    includesMembership?: SortOrder
+    membershipFee?: SortOrder
     notes?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type ShopOrderAvgOrderByAggregateInput = {
     total?: SortOrder
+    membershipFee?: SortOrder
   }
 
   export type ShopOrderMaxOrderByAggregateInput = {
     id?: SortOrder
-    member_id?: SortOrder
-    payment_status?: SortOrder
-    payment_method?: SortOrder
+    memberId?: SortOrder
+    paymentStatus?: SortOrder
+    paymentMethod?: SortOrder
     total?: SortOrder
     currency?: SortOrder
-    transaction_id?: SortOrder
+    transactionId?: SortOrder
+    includesMembership?: SortOrder
+    membershipFee?: SortOrder
     notes?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type ShopOrderMinOrderByAggregateInput = {
     id?: SortOrder
-    member_id?: SortOrder
-    payment_status?: SortOrder
-    payment_method?: SortOrder
+    memberId?: SortOrder
+    paymentStatus?: SortOrder
+    paymentMethod?: SortOrder
     total?: SortOrder
     currency?: SortOrder
-    transaction_id?: SortOrder
+    transactionId?: SortOrder
+    includesMembership?: SortOrder
+    membershipFee?: SortOrder
     notes?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type ShopOrderSumOrderByAggregateInput = {
     total?: SortOrder
+    membershipFee?: SortOrder
   }
 
   export type EnumPaymentStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -28589,6 +28999,22 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumPaymentStatusFilter<$PrismaModel>
     _max?: NestedEnumPaymentStatusFilter<$PrismaModel>
+  }
+
+  export type DecimalNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalNullableWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedDecimalNullableFilter<$PrismaModel>
+    _sum?: NestedDecimalNullableFilter<$PrismaModel>
+    _min?: NestedDecimalNullableFilter<$PrismaModel>
+    _max?: NestedDecimalNullableFilter<$PrismaModel>
   }
 
   export type ShopOrderScalarRelationFilter = {
@@ -28603,36 +29029,36 @@ export namespace Prisma {
 
   export type ShopOrderItemCountOrderByAggregateInput = {
     id?: SortOrder
-    order_id?: SortOrder
-    product_id?: SortOrder
+    orderId?: SortOrder
+    productId?: SortOrder
     quantity?: SortOrder
-    unit_price?: SortOrder
+    unitPrice?: SortOrder
   }
 
   export type ShopOrderItemAvgOrderByAggregateInput = {
     quantity?: SortOrder
-    unit_price?: SortOrder
+    unitPrice?: SortOrder
   }
 
   export type ShopOrderItemMaxOrderByAggregateInput = {
     id?: SortOrder
-    order_id?: SortOrder
-    product_id?: SortOrder
+    orderId?: SortOrder
+    productId?: SortOrder
     quantity?: SortOrder
-    unit_price?: SortOrder
+    unitPrice?: SortOrder
   }
 
   export type ShopOrderItemMinOrderByAggregateInput = {
     id?: SortOrder
-    order_id?: SortOrder
-    product_id?: SortOrder
+    orderId?: SortOrder
+    productId?: SortOrder
     quantity?: SortOrder
-    unit_price?: SortOrder
+    unitPrice?: SortOrder
   }
 
   export type ShopOrderItemSumOrderByAggregateInput = {
     quantity?: SortOrder
-    unit_price?: SortOrder
+    unitPrice?: SortOrder
   }
 
   export type TournamentMatchListRelationFilter = {
@@ -28651,9 +29077,9 @@ export namespace Prisma {
     description?: SortOrder
     date?: SortOrder
     location?: SortOrder
-    is_published?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
+    isPublished?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type TournamentMaxOrderByAggregateInput = {
@@ -28662,9 +29088,9 @@ export namespace Prisma {
     description?: SortOrder
     date?: SortOrder
     location?: SortOrder
-    is_published?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
+    isPublished?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type TournamentMinOrderByAggregateInput = {
@@ -28673,9 +29099,9 @@ export namespace Prisma {
     description?: SortOrder
     date?: SortOrder
     location?: SortOrder
-    is_published?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
+    isPublished?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type TournamentScalarRelationFilter = {
@@ -28683,36 +29109,36 @@ export namespace Prisma {
     isNot?: TournamentWhereInput
   }
 
-  export type TournamentParticipantTournament_idMember_idCompoundUniqueInput = {
-    tournament_id: string
-    member_id: string
+  export type TournamentParticipantTournamentIdMemberIdCompoundUniqueInput = {
+    tournamentId: string
+    memberId: string
   }
 
   export type TournamentParticipantCountOrderByAggregateInput = {
     id?: SortOrder
-    tournament_id?: SortOrder
-    member_id?: SortOrder
+    tournamentId?: SortOrder
+    memberId?: SortOrder
     category?: SortOrder
-    weight_class?: SortOrder
-    created_at?: SortOrder
+    weightClass?: SortOrder
+    createdAt?: SortOrder
   }
 
   export type TournamentParticipantMaxOrderByAggregateInput = {
     id?: SortOrder
-    tournament_id?: SortOrder
-    member_id?: SortOrder
+    tournamentId?: SortOrder
+    memberId?: SortOrder
     category?: SortOrder
-    weight_class?: SortOrder
-    created_at?: SortOrder
+    weightClass?: SortOrder
+    createdAt?: SortOrder
   }
 
   export type TournamentParticipantMinOrderByAggregateInput = {
     id?: SortOrder
-    tournament_id?: SortOrder
-    member_id?: SortOrder
+    tournamentId?: SortOrder
+    memberId?: SortOrder
     category?: SortOrder
-    weight_class?: SortOrder
-    created_at?: SortOrder
+    weightClass?: SortOrder
+    createdAt?: SortOrder
   }
 
   export type TournamentParticipantNullableScalarRelationFilter = {
@@ -28722,103 +29148,103 @@ export namespace Prisma {
 
   export type TournamentMatchCountOrderByAggregateInput = {
     id?: SortOrder
-    tournament_id?: SortOrder
-    participant1_id?: SortOrder
-    participant2_id?: SortOrder
-    winner_id?: SortOrder
+    tournamentId?: SortOrder
+    participant1Id?: SortOrder
+    participant2Id?: SortOrder
+    winnerId?: SortOrder
     round?: SortOrder
-    match_order?: SortOrder
+    matchOrder?: SortOrder
     notes?: SortOrder
-    created_at?: SortOrder
+    createdAt?: SortOrder
   }
 
   export type TournamentMatchAvgOrderByAggregateInput = {
     round?: SortOrder
-    match_order?: SortOrder
+    matchOrder?: SortOrder
   }
 
   export type TournamentMatchMaxOrderByAggregateInput = {
     id?: SortOrder
-    tournament_id?: SortOrder
-    participant1_id?: SortOrder
-    participant2_id?: SortOrder
-    winner_id?: SortOrder
+    tournamentId?: SortOrder
+    participant1Id?: SortOrder
+    participant2Id?: SortOrder
+    winnerId?: SortOrder
     round?: SortOrder
-    match_order?: SortOrder
+    matchOrder?: SortOrder
     notes?: SortOrder
-    created_at?: SortOrder
+    createdAt?: SortOrder
   }
 
   export type TournamentMatchMinOrderByAggregateInput = {
     id?: SortOrder
-    tournament_id?: SortOrder
-    participant1_id?: SortOrder
-    participant2_id?: SortOrder
-    winner_id?: SortOrder
+    tournamentId?: SortOrder
+    participant1Id?: SortOrder
+    participant2Id?: SortOrder
+    winnerId?: SortOrder
     round?: SortOrder
-    match_order?: SortOrder
+    matchOrder?: SortOrder
     notes?: SortOrder
-    created_at?: SortOrder
+    createdAt?: SortOrder
   }
 
   export type TournamentMatchSumOrderByAggregateInput = {
     round?: SortOrder
-    match_order?: SortOrder
+    matchOrder?: SortOrder
   }
 
-  export type GradingCreateNestedManyWithoutFrom_rankInput = {
-    create?: XOR<GradingCreateWithoutFrom_rankInput, GradingUncheckedCreateWithoutFrom_rankInput> | GradingCreateWithoutFrom_rankInput[] | GradingUncheckedCreateWithoutFrom_rankInput[]
-    connectOrCreate?: GradingCreateOrConnectWithoutFrom_rankInput | GradingCreateOrConnectWithoutFrom_rankInput[]
-    createMany?: GradingCreateManyFrom_rankInputEnvelope
+  export type GradingCreateNestedManyWithoutFromRankInput = {
+    create?: XOR<GradingCreateWithoutFromRankInput, GradingUncheckedCreateWithoutFromRankInput> | GradingCreateWithoutFromRankInput[] | GradingUncheckedCreateWithoutFromRankInput[]
+    connectOrCreate?: GradingCreateOrConnectWithoutFromRankInput | GradingCreateOrConnectWithoutFromRankInput[]
+    createMany?: GradingCreateManyFromRankInputEnvelope
     connect?: GradingWhereUniqueInput | GradingWhereUniqueInput[]
   }
 
-  export type GradingCreateNestedManyWithoutTo_rankInput = {
-    create?: XOR<GradingCreateWithoutTo_rankInput, GradingUncheckedCreateWithoutTo_rankInput> | GradingCreateWithoutTo_rankInput[] | GradingUncheckedCreateWithoutTo_rankInput[]
-    connectOrCreate?: GradingCreateOrConnectWithoutTo_rankInput | GradingCreateOrConnectWithoutTo_rankInput[]
-    createMany?: GradingCreateManyTo_rankInputEnvelope
+  export type GradingCreateNestedManyWithoutToRankInput = {
+    create?: XOR<GradingCreateWithoutToRankInput, GradingUncheckedCreateWithoutToRankInput> | GradingCreateWithoutToRankInput[] | GradingUncheckedCreateWithoutToRankInput[]
+    connectOrCreate?: GradingCreateOrConnectWithoutToRankInput | GradingCreateOrConnectWithoutToRankInput[]
+    createMany?: GradingCreateManyToRankInputEnvelope
     connect?: GradingWhereUniqueInput | GradingWhereUniqueInput[]
   }
 
-  export type GradingEventCreateNestedManyWithoutTarget_rankInput = {
-    create?: XOR<GradingEventCreateWithoutTarget_rankInput, GradingEventUncheckedCreateWithoutTarget_rankInput> | GradingEventCreateWithoutTarget_rankInput[] | GradingEventUncheckedCreateWithoutTarget_rankInput[]
-    connectOrCreate?: GradingEventCreateOrConnectWithoutTarget_rankInput | GradingEventCreateOrConnectWithoutTarget_rankInput[]
-    createMany?: GradingEventCreateManyTarget_rankInputEnvelope
+  export type GradingEventCreateNestedManyWithoutTargetRankInput = {
+    create?: XOR<GradingEventCreateWithoutTargetRankInput, GradingEventUncheckedCreateWithoutTargetRankInput> | GradingEventCreateWithoutTargetRankInput[] | GradingEventUncheckedCreateWithoutTargetRankInput[]
+    connectOrCreate?: GradingEventCreateOrConnectWithoutTargetRankInput | GradingEventCreateOrConnectWithoutTargetRankInput[]
+    createMany?: GradingEventCreateManyTargetRankInputEnvelope
     connect?: GradingEventWhereUniqueInput | GradingEventWhereUniqueInput[]
   }
 
-  export type GradingApplicationCreateNestedManyWithoutTarget_rankInput = {
-    create?: XOR<GradingApplicationCreateWithoutTarget_rankInput, GradingApplicationUncheckedCreateWithoutTarget_rankInput> | GradingApplicationCreateWithoutTarget_rankInput[] | GradingApplicationUncheckedCreateWithoutTarget_rankInput[]
-    connectOrCreate?: GradingApplicationCreateOrConnectWithoutTarget_rankInput | GradingApplicationCreateOrConnectWithoutTarget_rankInput[]
-    createMany?: GradingApplicationCreateManyTarget_rankInputEnvelope
+  export type GradingApplicationCreateNestedManyWithoutTargetRankInput = {
+    create?: XOR<GradingApplicationCreateWithoutTargetRankInput, GradingApplicationUncheckedCreateWithoutTargetRankInput> | GradingApplicationCreateWithoutTargetRankInput[] | GradingApplicationUncheckedCreateWithoutTargetRankInput[]
+    connectOrCreate?: GradingApplicationCreateOrConnectWithoutTargetRankInput | GradingApplicationCreateOrConnectWithoutTargetRankInput[]
+    createMany?: GradingApplicationCreateManyTargetRankInputEnvelope
     connect?: GradingApplicationWhereUniqueInput | GradingApplicationWhereUniqueInput[]
   }
 
-  export type GradingUncheckedCreateNestedManyWithoutFrom_rankInput = {
-    create?: XOR<GradingCreateWithoutFrom_rankInput, GradingUncheckedCreateWithoutFrom_rankInput> | GradingCreateWithoutFrom_rankInput[] | GradingUncheckedCreateWithoutFrom_rankInput[]
-    connectOrCreate?: GradingCreateOrConnectWithoutFrom_rankInput | GradingCreateOrConnectWithoutFrom_rankInput[]
-    createMany?: GradingCreateManyFrom_rankInputEnvelope
+  export type GradingUncheckedCreateNestedManyWithoutFromRankInput = {
+    create?: XOR<GradingCreateWithoutFromRankInput, GradingUncheckedCreateWithoutFromRankInput> | GradingCreateWithoutFromRankInput[] | GradingUncheckedCreateWithoutFromRankInput[]
+    connectOrCreate?: GradingCreateOrConnectWithoutFromRankInput | GradingCreateOrConnectWithoutFromRankInput[]
+    createMany?: GradingCreateManyFromRankInputEnvelope
     connect?: GradingWhereUniqueInput | GradingWhereUniqueInput[]
   }
 
-  export type GradingUncheckedCreateNestedManyWithoutTo_rankInput = {
-    create?: XOR<GradingCreateWithoutTo_rankInput, GradingUncheckedCreateWithoutTo_rankInput> | GradingCreateWithoutTo_rankInput[] | GradingUncheckedCreateWithoutTo_rankInput[]
-    connectOrCreate?: GradingCreateOrConnectWithoutTo_rankInput | GradingCreateOrConnectWithoutTo_rankInput[]
-    createMany?: GradingCreateManyTo_rankInputEnvelope
+  export type GradingUncheckedCreateNestedManyWithoutToRankInput = {
+    create?: XOR<GradingCreateWithoutToRankInput, GradingUncheckedCreateWithoutToRankInput> | GradingCreateWithoutToRankInput[] | GradingUncheckedCreateWithoutToRankInput[]
+    connectOrCreate?: GradingCreateOrConnectWithoutToRankInput | GradingCreateOrConnectWithoutToRankInput[]
+    createMany?: GradingCreateManyToRankInputEnvelope
     connect?: GradingWhereUniqueInput | GradingWhereUniqueInput[]
   }
 
-  export type GradingEventUncheckedCreateNestedManyWithoutTarget_rankInput = {
-    create?: XOR<GradingEventCreateWithoutTarget_rankInput, GradingEventUncheckedCreateWithoutTarget_rankInput> | GradingEventCreateWithoutTarget_rankInput[] | GradingEventUncheckedCreateWithoutTarget_rankInput[]
-    connectOrCreate?: GradingEventCreateOrConnectWithoutTarget_rankInput | GradingEventCreateOrConnectWithoutTarget_rankInput[]
-    createMany?: GradingEventCreateManyTarget_rankInputEnvelope
+  export type GradingEventUncheckedCreateNestedManyWithoutTargetRankInput = {
+    create?: XOR<GradingEventCreateWithoutTargetRankInput, GradingEventUncheckedCreateWithoutTargetRankInput> | GradingEventCreateWithoutTargetRankInput[] | GradingEventUncheckedCreateWithoutTargetRankInput[]
+    connectOrCreate?: GradingEventCreateOrConnectWithoutTargetRankInput | GradingEventCreateOrConnectWithoutTargetRankInput[]
+    createMany?: GradingEventCreateManyTargetRankInputEnvelope
     connect?: GradingEventWhereUniqueInput | GradingEventWhereUniqueInput[]
   }
 
-  export type GradingApplicationUncheckedCreateNestedManyWithoutTarget_rankInput = {
-    create?: XOR<GradingApplicationCreateWithoutTarget_rankInput, GradingApplicationUncheckedCreateWithoutTarget_rankInput> | GradingApplicationCreateWithoutTarget_rankInput[] | GradingApplicationUncheckedCreateWithoutTarget_rankInput[]
-    connectOrCreate?: GradingApplicationCreateOrConnectWithoutTarget_rankInput | GradingApplicationCreateOrConnectWithoutTarget_rankInput[]
-    createMany?: GradingApplicationCreateManyTarget_rankInputEnvelope
+  export type GradingApplicationUncheckedCreateNestedManyWithoutTargetRankInput = {
+    create?: XOR<GradingApplicationCreateWithoutTargetRankInput, GradingApplicationUncheckedCreateWithoutTargetRankInput> | GradingApplicationCreateWithoutTargetRankInput[] | GradingApplicationUncheckedCreateWithoutTargetRankInput[]
+    connectOrCreate?: GradingApplicationCreateOrConnectWithoutTargetRankInput | GradingApplicationCreateOrConnectWithoutTargetRankInput[]
+    createMany?: GradingApplicationCreateManyTargetRankInputEnvelope
     connect?: GradingApplicationWhereUniqueInput | GradingApplicationWhereUniqueInput[]
   }
 
@@ -28842,121 +29268,121 @@ export namespace Prisma {
     set?: Date | string
   }
 
-  export type GradingUpdateManyWithoutFrom_rankNestedInput = {
-    create?: XOR<GradingCreateWithoutFrom_rankInput, GradingUncheckedCreateWithoutFrom_rankInput> | GradingCreateWithoutFrom_rankInput[] | GradingUncheckedCreateWithoutFrom_rankInput[]
-    connectOrCreate?: GradingCreateOrConnectWithoutFrom_rankInput | GradingCreateOrConnectWithoutFrom_rankInput[]
-    upsert?: GradingUpsertWithWhereUniqueWithoutFrom_rankInput | GradingUpsertWithWhereUniqueWithoutFrom_rankInput[]
-    createMany?: GradingCreateManyFrom_rankInputEnvelope
+  export type GradingUpdateManyWithoutFromRankNestedInput = {
+    create?: XOR<GradingCreateWithoutFromRankInput, GradingUncheckedCreateWithoutFromRankInput> | GradingCreateWithoutFromRankInput[] | GradingUncheckedCreateWithoutFromRankInput[]
+    connectOrCreate?: GradingCreateOrConnectWithoutFromRankInput | GradingCreateOrConnectWithoutFromRankInput[]
+    upsert?: GradingUpsertWithWhereUniqueWithoutFromRankInput | GradingUpsertWithWhereUniqueWithoutFromRankInput[]
+    createMany?: GradingCreateManyFromRankInputEnvelope
     set?: GradingWhereUniqueInput | GradingWhereUniqueInput[]
     disconnect?: GradingWhereUniqueInput | GradingWhereUniqueInput[]
     delete?: GradingWhereUniqueInput | GradingWhereUniqueInput[]
     connect?: GradingWhereUniqueInput | GradingWhereUniqueInput[]
-    update?: GradingUpdateWithWhereUniqueWithoutFrom_rankInput | GradingUpdateWithWhereUniqueWithoutFrom_rankInput[]
-    updateMany?: GradingUpdateManyWithWhereWithoutFrom_rankInput | GradingUpdateManyWithWhereWithoutFrom_rankInput[]
+    update?: GradingUpdateWithWhereUniqueWithoutFromRankInput | GradingUpdateWithWhereUniqueWithoutFromRankInput[]
+    updateMany?: GradingUpdateManyWithWhereWithoutFromRankInput | GradingUpdateManyWithWhereWithoutFromRankInput[]
     deleteMany?: GradingScalarWhereInput | GradingScalarWhereInput[]
   }
 
-  export type GradingUpdateManyWithoutTo_rankNestedInput = {
-    create?: XOR<GradingCreateWithoutTo_rankInput, GradingUncheckedCreateWithoutTo_rankInput> | GradingCreateWithoutTo_rankInput[] | GradingUncheckedCreateWithoutTo_rankInput[]
-    connectOrCreate?: GradingCreateOrConnectWithoutTo_rankInput | GradingCreateOrConnectWithoutTo_rankInput[]
-    upsert?: GradingUpsertWithWhereUniqueWithoutTo_rankInput | GradingUpsertWithWhereUniqueWithoutTo_rankInput[]
-    createMany?: GradingCreateManyTo_rankInputEnvelope
+  export type GradingUpdateManyWithoutToRankNestedInput = {
+    create?: XOR<GradingCreateWithoutToRankInput, GradingUncheckedCreateWithoutToRankInput> | GradingCreateWithoutToRankInput[] | GradingUncheckedCreateWithoutToRankInput[]
+    connectOrCreate?: GradingCreateOrConnectWithoutToRankInput | GradingCreateOrConnectWithoutToRankInput[]
+    upsert?: GradingUpsertWithWhereUniqueWithoutToRankInput | GradingUpsertWithWhereUniqueWithoutToRankInput[]
+    createMany?: GradingCreateManyToRankInputEnvelope
     set?: GradingWhereUniqueInput | GradingWhereUniqueInput[]
     disconnect?: GradingWhereUniqueInput | GradingWhereUniqueInput[]
     delete?: GradingWhereUniqueInput | GradingWhereUniqueInput[]
     connect?: GradingWhereUniqueInput | GradingWhereUniqueInput[]
-    update?: GradingUpdateWithWhereUniqueWithoutTo_rankInput | GradingUpdateWithWhereUniqueWithoutTo_rankInput[]
-    updateMany?: GradingUpdateManyWithWhereWithoutTo_rankInput | GradingUpdateManyWithWhereWithoutTo_rankInput[]
+    update?: GradingUpdateWithWhereUniqueWithoutToRankInput | GradingUpdateWithWhereUniqueWithoutToRankInput[]
+    updateMany?: GradingUpdateManyWithWhereWithoutToRankInput | GradingUpdateManyWithWhereWithoutToRankInput[]
     deleteMany?: GradingScalarWhereInput | GradingScalarWhereInput[]
   }
 
-  export type GradingEventUpdateManyWithoutTarget_rankNestedInput = {
-    create?: XOR<GradingEventCreateWithoutTarget_rankInput, GradingEventUncheckedCreateWithoutTarget_rankInput> | GradingEventCreateWithoutTarget_rankInput[] | GradingEventUncheckedCreateWithoutTarget_rankInput[]
-    connectOrCreate?: GradingEventCreateOrConnectWithoutTarget_rankInput | GradingEventCreateOrConnectWithoutTarget_rankInput[]
-    upsert?: GradingEventUpsertWithWhereUniqueWithoutTarget_rankInput | GradingEventUpsertWithWhereUniqueWithoutTarget_rankInput[]
-    createMany?: GradingEventCreateManyTarget_rankInputEnvelope
+  export type GradingEventUpdateManyWithoutTargetRankNestedInput = {
+    create?: XOR<GradingEventCreateWithoutTargetRankInput, GradingEventUncheckedCreateWithoutTargetRankInput> | GradingEventCreateWithoutTargetRankInput[] | GradingEventUncheckedCreateWithoutTargetRankInput[]
+    connectOrCreate?: GradingEventCreateOrConnectWithoutTargetRankInput | GradingEventCreateOrConnectWithoutTargetRankInput[]
+    upsert?: GradingEventUpsertWithWhereUniqueWithoutTargetRankInput | GradingEventUpsertWithWhereUniqueWithoutTargetRankInput[]
+    createMany?: GradingEventCreateManyTargetRankInputEnvelope
     set?: GradingEventWhereUniqueInput | GradingEventWhereUniqueInput[]
     disconnect?: GradingEventWhereUniqueInput | GradingEventWhereUniqueInput[]
     delete?: GradingEventWhereUniqueInput | GradingEventWhereUniqueInput[]
     connect?: GradingEventWhereUniqueInput | GradingEventWhereUniqueInput[]
-    update?: GradingEventUpdateWithWhereUniqueWithoutTarget_rankInput | GradingEventUpdateWithWhereUniqueWithoutTarget_rankInput[]
-    updateMany?: GradingEventUpdateManyWithWhereWithoutTarget_rankInput | GradingEventUpdateManyWithWhereWithoutTarget_rankInput[]
+    update?: GradingEventUpdateWithWhereUniqueWithoutTargetRankInput | GradingEventUpdateWithWhereUniqueWithoutTargetRankInput[]
+    updateMany?: GradingEventUpdateManyWithWhereWithoutTargetRankInput | GradingEventUpdateManyWithWhereWithoutTargetRankInput[]
     deleteMany?: GradingEventScalarWhereInput | GradingEventScalarWhereInput[]
   }
 
-  export type GradingApplicationUpdateManyWithoutTarget_rankNestedInput = {
-    create?: XOR<GradingApplicationCreateWithoutTarget_rankInput, GradingApplicationUncheckedCreateWithoutTarget_rankInput> | GradingApplicationCreateWithoutTarget_rankInput[] | GradingApplicationUncheckedCreateWithoutTarget_rankInput[]
-    connectOrCreate?: GradingApplicationCreateOrConnectWithoutTarget_rankInput | GradingApplicationCreateOrConnectWithoutTarget_rankInput[]
-    upsert?: GradingApplicationUpsertWithWhereUniqueWithoutTarget_rankInput | GradingApplicationUpsertWithWhereUniqueWithoutTarget_rankInput[]
-    createMany?: GradingApplicationCreateManyTarget_rankInputEnvelope
+  export type GradingApplicationUpdateManyWithoutTargetRankNestedInput = {
+    create?: XOR<GradingApplicationCreateWithoutTargetRankInput, GradingApplicationUncheckedCreateWithoutTargetRankInput> | GradingApplicationCreateWithoutTargetRankInput[] | GradingApplicationUncheckedCreateWithoutTargetRankInput[]
+    connectOrCreate?: GradingApplicationCreateOrConnectWithoutTargetRankInput | GradingApplicationCreateOrConnectWithoutTargetRankInput[]
+    upsert?: GradingApplicationUpsertWithWhereUniqueWithoutTargetRankInput | GradingApplicationUpsertWithWhereUniqueWithoutTargetRankInput[]
+    createMany?: GradingApplicationCreateManyTargetRankInputEnvelope
     set?: GradingApplicationWhereUniqueInput | GradingApplicationWhereUniqueInput[]
     disconnect?: GradingApplicationWhereUniqueInput | GradingApplicationWhereUniqueInput[]
     delete?: GradingApplicationWhereUniqueInput | GradingApplicationWhereUniqueInput[]
     connect?: GradingApplicationWhereUniqueInput | GradingApplicationWhereUniqueInput[]
-    update?: GradingApplicationUpdateWithWhereUniqueWithoutTarget_rankInput | GradingApplicationUpdateWithWhereUniqueWithoutTarget_rankInput[]
-    updateMany?: GradingApplicationUpdateManyWithWhereWithoutTarget_rankInput | GradingApplicationUpdateManyWithWhereWithoutTarget_rankInput[]
+    update?: GradingApplicationUpdateWithWhereUniqueWithoutTargetRankInput | GradingApplicationUpdateWithWhereUniqueWithoutTargetRankInput[]
+    updateMany?: GradingApplicationUpdateManyWithWhereWithoutTargetRankInput | GradingApplicationUpdateManyWithWhereWithoutTargetRankInput[]
     deleteMany?: GradingApplicationScalarWhereInput | GradingApplicationScalarWhereInput[]
   }
 
-  export type GradingUncheckedUpdateManyWithoutFrom_rankNestedInput = {
-    create?: XOR<GradingCreateWithoutFrom_rankInput, GradingUncheckedCreateWithoutFrom_rankInput> | GradingCreateWithoutFrom_rankInput[] | GradingUncheckedCreateWithoutFrom_rankInput[]
-    connectOrCreate?: GradingCreateOrConnectWithoutFrom_rankInput | GradingCreateOrConnectWithoutFrom_rankInput[]
-    upsert?: GradingUpsertWithWhereUniqueWithoutFrom_rankInput | GradingUpsertWithWhereUniqueWithoutFrom_rankInput[]
-    createMany?: GradingCreateManyFrom_rankInputEnvelope
+  export type GradingUncheckedUpdateManyWithoutFromRankNestedInput = {
+    create?: XOR<GradingCreateWithoutFromRankInput, GradingUncheckedCreateWithoutFromRankInput> | GradingCreateWithoutFromRankInput[] | GradingUncheckedCreateWithoutFromRankInput[]
+    connectOrCreate?: GradingCreateOrConnectWithoutFromRankInput | GradingCreateOrConnectWithoutFromRankInput[]
+    upsert?: GradingUpsertWithWhereUniqueWithoutFromRankInput | GradingUpsertWithWhereUniqueWithoutFromRankInput[]
+    createMany?: GradingCreateManyFromRankInputEnvelope
     set?: GradingWhereUniqueInput | GradingWhereUniqueInput[]
     disconnect?: GradingWhereUniqueInput | GradingWhereUniqueInput[]
     delete?: GradingWhereUniqueInput | GradingWhereUniqueInput[]
     connect?: GradingWhereUniqueInput | GradingWhereUniqueInput[]
-    update?: GradingUpdateWithWhereUniqueWithoutFrom_rankInput | GradingUpdateWithWhereUniqueWithoutFrom_rankInput[]
-    updateMany?: GradingUpdateManyWithWhereWithoutFrom_rankInput | GradingUpdateManyWithWhereWithoutFrom_rankInput[]
+    update?: GradingUpdateWithWhereUniqueWithoutFromRankInput | GradingUpdateWithWhereUniqueWithoutFromRankInput[]
+    updateMany?: GradingUpdateManyWithWhereWithoutFromRankInput | GradingUpdateManyWithWhereWithoutFromRankInput[]
     deleteMany?: GradingScalarWhereInput | GradingScalarWhereInput[]
   }
 
-  export type GradingUncheckedUpdateManyWithoutTo_rankNestedInput = {
-    create?: XOR<GradingCreateWithoutTo_rankInput, GradingUncheckedCreateWithoutTo_rankInput> | GradingCreateWithoutTo_rankInput[] | GradingUncheckedCreateWithoutTo_rankInput[]
-    connectOrCreate?: GradingCreateOrConnectWithoutTo_rankInput | GradingCreateOrConnectWithoutTo_rankInput[]
-    upsert?: GradingUpsertWithWhereUniqueWithoutTo_rankInput | GradingUpsertWithWhereUniqueWithoutTo_rankInput[]
-    createMany?: GradingCreateManyTo_rankInputEnvelope
+  export type GradingUncheckedUpdateManyWithoutToRankNestedInput = {
+    create?: XOR<GradingCreateWithoutToRankInput, GradingUncheckedCreateWithoutToRankInput> | GradingCreateWithoutToRankInput[] | GradingUncheckedCreateWithoutToRankInput[]
+    connectOrCreate?: GradingCreateOrConnectWithoutToRankInput | GradingCreateOrConnectWithoutToRankInput[]
+    upsert?: GradingUpsertWithWhereUniqueWithoutToRankInput | GradingUpsertWithWhereUniqueWithoutToRankInput[]
+    createMany?: GradingCreateManyToRankInputEnvelope
     set?: GradingWhereUniqueInput | GradingWhereUniqueInput[]
     disconnect?: GradingWhereUniqueInput | GradingWhereUniqueInput[]
     delete?: GradingWhereUniqueInput | GradingWhereUniqueInput[]
     connect?: GradingWhereUniqueInput | GradingWhereUniqueInput[]
-    update?: GradingUpdateWithWhereUniqueWithoutTo_rankInput | GradingUpdateWithWhereUniqueWithoutTo_rankInput[]
-    updateMany?: GradingUpdateManyWithWhereWithoutTo_rankInput | GradingUpdateManyWithWhereWithoutTo_rankInput[]
+    update?: GradingUpdateWithWhereUniqueWithoutToRankInput | GradingUpdateWithWhereUniqueWithoutToRankInput[]
+    updateMany?: GradingUpdateManyWithWhereWithoutToRankInput | GradingUpdateManyWithWhereWithoutToRankInput[]
     deleteMany?: GradingScalarWhereInput | GradingScalarWhereInput[]
   }
 
-  export type GradingEventUncheckedUpdateManyWithoutTarget_rankNestedInput = {
-    create?: XOR<GradingEventCreateWithoutTarget_rankInput, GradingEventUncheckedCreateWithoutTarget_rankInput> | GradingEventCreateWithoutTarget_rankInput[] | GradingEventUncheckedCreateWithoutTarget_rankInput[]
-    connectOrCreate?: GradingEventCreateOrConnectWithoutTarget_rankInput | GradingEventCreateOrConnectWithoutTarget_rankInput[]
-    upsert?: GradingEventUpsertWithWhereUniqueWithoutTarget_rankInput | GradingEventUpsertWithWhereUniqueWithoutTarget_rankInput[]
-    createMany?: GradingEventCreateManyTarget_rankInputEnvelope
+  export type GradingEventUncheckedUpdateManyWithoutTargetRankNestedInput = {
+    create?: XOR<GradingEventCreateWithoutTargetRankInput, GradingEventUncheckedCreateWithoutTargetRankInput> | GradingEventCreateWithoutTargetRankInput[] | GradingEventUncheckedCreateWithoutTargetRankInput[]
+    connectOrCreate?: GradingEventCreateOrConnectWithoutTargetRankInput | GradingEventCreateOrConnectWithoutTargetRankInput[]
+    upsert?: GradingEventUpsertWithWhereUniqueWithoutTargetRankInput | GradingEventUpsertWithWhereUniqueWithoutTargetRankInput[]
+    createMany?: GradingEventCreateManyTargetRankInputEnvelope
     set?: GradingEventWhereUniqueInput | GradingEventWhereUniqueInput[]
     disconnect?: GradingEventWhereUniqueInput | GradingEventWhereUniqueInput[]
     delete?: GradingEventWhereUniqueInput | GradingEventWhereUniqueInput[]
     connect?: GradingEventWhereUniqueInput | GradingEventWhereUniqueInput[]
-    update?: GradingEventUpdateWithWhereUniqueWithoutTarget_rankInput | GradingEventUpdateWithWhereUniqueWithoutTarget_rankInput[]
-    updateMany?: GradingEventUpdateManyWithWhereWithoutTarget_rankInput | GradingEventUpdateManyWithWhereWithoutTarget_rankInput[]
+    update?: GradingEventUpdateWithWhereUniqueWithoutTargetRankInput | GradingEventUpdateWithWhereUniqueWithoutTargetRankInput[]
+    updateMany?: GradingEventUpdateManyWithWhereWithoutTargetRankInput | GradingEventUpdateManyWithWhereWithoutTargetRankInput[]
     deleteMany?: GradingEventScalarWhereInput | GradingEventScalarWhereInput[]
   }
 
-  export type GradingApplicationUncheckedUpdateManyWithoutTarget_rankNestedInput = {
-    create?: XOR<GradingApplicationCreateWithoutTarget_rankInput, GradingApplicationUncheckedCreateWithoutTarget_rankInput> | GradingApplicationCreateWithoutTarget_rankInput[] | GradingApplicationUncheckedCreateWithoutTarget_rankInput[]
-    connectOrCreate?: GradingApplicationCreateOrConnectWithoutTarget_rankInput | GradingApplicationCreateOrConnectWithoutTarget_rankInput[]
-    upsert?: GradingApplicationUpsertWithWhereUniqueWithoutTarget_rankInput | GradingApplicationUpsertWithWhereUniqueWithoutTarget_rankInput[]
-    createMany?: GradingApplicationCreateManyTarget_rankInputEnvelope
+  export type GradingApplicationUncheckedUpdateManyWithoutTargetRankNestedInput = {
+    create?: XOR<GradingApplicationCreateWithoutTargetRankInput, GradingApplicationUncheckedCreateWithoutTargetRankInput> | GradingApplicationCreateWithoutTargetRankInput[] | GradingApplicationUncheckedCreateWithoutTargetRankInput[]
+    connectOrCreate?: GradingApplicationCreateOrConnectWithoutTargetRankInput | GradingApplicationCreateOrConnectWithoutTargetRankInput[]
+    upsert?: GradingApplicationUpsertWithWhereUniqueWithoutTargetRankInput | GradingApplicationUpsertWithWhereUniqueWithoutTargetRankInput[]
+    createMany?: GradingApplicationCreateManyTargetRankInputEnvelope
     set?: GradingApplicationWhereUniqueInput | GradingApplicationWhereUniqueInput[]
     disconnect?: GradingApplicationWhereUniqueInput | GradingApplicationWhereUniqueInput[]
     delete?: GradingApplicationWhereUniqueInput | GradingApplicationWhereUniqueInput[]
     connect?: GradingApplicationWhereUniqueInput | GradingApplicationWhereUniqueInput[]
-    update?: GradingApplicationUpdateWithWhereUniqueWithoutTarget_rankInput | GradingApplicationUpdateWithWhereUniqueWithoutTarget_rankInput[]
-    updateMany?: GradingApplicationUpdateManyWithWhereWithoutTarget_rankInput | GradingApplicationUpdateManyWithWhereWithoutTarget_rankInput[]
+    update?: GradingApplicationUpdateWithWhereUniqueWithoutTargetRankInput | GradingApplicationUpdateWithWhereUniqueWithoutTargetRankInput[]
+    updateMany?: GradingApplicationUpdateManyWithWhereWithoutTargetRankInput | GradingApplicationUpdateManyWithWhereWithoutTargetRankInput[]
     deleteMany?: GradingApplicationScalarWhereInput | GradingApplicationScalarWhereInput[]
   }
 
-  export type MemberCreateNestedOneWithoutDojo_head_ofInput = {
-    create?: XOR<MemberCreateWithoutDojo_head_ofInput, MemberUncheckedCreateWithoutDojo_head_ofInput>
-    connectOrCreate?: MemberCreateOrConnectWithoutDojo_head_ofInput
+  export type MemberCreateNestedOneWithoutDojoHeadOfInput = {
+    create?: XOR<MemberCreateWithoutDojoHeadOfInput, MemberUncheckedCreateWithoutDojoHeadOfInput>
+    connectOrCreate?: MemberCreateOrConnectWithoutDojoHeadOfInput
     connect?: MemberWhereUniqueInput
   }
 
@@ -29014,14 +29440,14 @@ export namespace Prisma {
     set?: boolean
   }
 
-  export type MemberUpdateOneWithoutDojo_head_ofNestedInput = {
-    create?: XOR<MemberCreateWithoutDojo_head_ofInput, MemberUncheckedCreateWithoutDojo_head_ofInput>
-    connectOrCreate?: MemberCreateOrConnectWithoutDojo_head_ofInput
-    upsert?: MemberUpsertWithoutDojo_head_ofInput
+  export type MemberUpdateOneWithoutDojoHeadOfNestedInput = {
+    create?: XOR<MemberCreateWithoutDojoHeadOfInput, MemberUncheckedCreateWithoutDojoHeadOfInput>
+    connectOrCreate?: MemberCreateOrConnectWithoutDojoHeadOfInput
+    upsert?: MemberUpsertWithoutDojoHeadOfInput
     disconnect?: MemberWhereInput | boolean
     delete?: MemberWhereInput | boolean
     connect?: MemberWhereUniqueInput
-    update?: XOR<XOR<MemberUpdateToOneWithWhereWithoutDojo_head_ofInput, MemberUpdateWithoutDojo_head_ofInput>, MemberUncheckedUpdateWithoutDojo_head_ofInput>
+    update?: XOR<XOR<MemberUpdateToOneWithWhereWithoutDojoHeadOfInput, MemberUpdateWithoutDojoHeadOfInput>, MemberUncheckedUpdateWithoutDojoHeadOfInput>
   }
 
   export type MemberUpdateManyWithoutDojoNestedInput = {
@@ -29114,10 +29540,10 @@ export namespace Prisma {
     connect?: DojoWhereUniqueInput
   }
 
-  export type DojoCreateNestedManyWithoutHead_instructorInput = {
-    create?: XOR<DojoCreateWithoutHead_instructorInput, DojoUncheckedCreateWithoutHead_instructorInput> | DojoCreateWithoutHead_instructorInput[] | DojoUncheckedCreateWithoutHead_instructorInput[]
-    connectOrCreate?: DojoCreateOrConnectWithoutHead_instructorInput | DojoCreateOrConnectWithoutHead_instructorInput[]
-    createMany?: DojoCreateManyHead_instructorInputEnvelope
+  export type DojoCreateNestedManyWithoutHeadInstructorInput = {
+    create?: XOR<DojoCreateWithoutHeadInstructorInput, DojoUncheckedCreateWithoutHeadInstructorInput> | DojoCreateWithoutHeadInstructorInput[] | DojoUncheckedCreateWithoutHeadInstructorInput[]
+    connectOrCreate?: DojoCreateOrConnectWithoutHeadInstructorInput | DojoCreateOrConnectWithoutHeadInstructorInput[]
+    createMany?: DojoCreateManyHeadInstructorInputEnvelope
     connect?: DojoWhereUniqueInput | DojoWhereUniqueInput[]
   }
 
@@ -29182,10 +29608,10 @@ export namespace Prisma {
     connect?: TournamentParticipantWhereUniqueInput | TournamentParticipantWhereUniqueInput[]
   }
 
-  export type DojoUncheckedCreateNestedManyWithoutHead_instructorInput = {
-    create?: XOR<DojoCreateWithoutHead_instructorInput, DojoUncheckedCreateWithoutHead_instructorInput> | DojoCreateWithoutHead_instructorInput[] | DojoUncheckedCreateWithoutHead_instructorInput[]
-    connectOrCreate?: DojoCreateOrConnectWithoutHead_instructorInput | DojoCreateOrConnectWithoutHead_instructorInput[]
-    createMany?: DojoCreateManyHead_instructorInputEnvelope
+  export type DojoUncheckedCreateNestedManyWithoutHeadInstructorInput = {
+    create?: XOR<DojoCreateWithoutHeadInstructorInput, DojoUncheckedCreateWithoutHeadInstructorInput> | DojoCreateWithoutHeadInstructorInput[] | DojoUncheckedCreateWithoutHeadInstructorInput[]
+    connectOrCreate?: DojoCreateOrConnectWithoutHeadInstructorInput | DojoCreateOrConnectWithoutHeadInstructorInput[]
+    createMany?: DojoCreateManyHeadInstructorInputEnvelope
     connect?: DojoWhereUniqueInput | DojoWhereUniqueInput[]
   }
 
@@ -29258,6 +29684,10 @@ export namespace Prisma {
     set?: Date | string | null
   }
 
+  export type EnumMembershipStatusFieldUpdateOperationsInput = {
+    set?: $Enums.MembershipStatus
+  }
+
   export type DojoUpdateOneWithoutMembersNestedInput = {
     create?: XOR<DojoCreateWithoutMembersInput, DojoUncheckedCreateWithoutMembersInput>
     connectOrCreate?: DojoCreateOrConnectWithoutMembersInput
@@ -29268,17 +29698,17 @@ export namespace Prisma {
     update?: XOR<XOR<DojoUpdateToOneWithWhereWithoutMembersInput, DojoUpdateWithoutMembersInput>, DojoUncheckedUpdateWithoutMembersInput>
   }
 
-  export type DojoUpdateManyWithoutHead_instructorNestedInput = {
-    create?: XOR<DojoCreateWithoutHead_instructorInput, DojoUncheckedCreateWithoutHead_instructorInput> | DojoCreateWithoutHead_instructorInput[] | DojoUncheckedCreateWithoutHead_instructorInput[]
-    connectOrCreate?: DojoCreateOrConnectWithoutHead_instructorInput | DojoCreateOrConnectWithoutHead_instructorInput[]
-    upsert?: DojoUpsertWithWhereUniqueWithoutHead_instructorInput | DojoUpsertWithWhereUniqueWithoutHead_instructorInput[]
-    createMany?: DojoCreateManyHead_instructorInputEnvelope
+  export type DojoUpdateManyWithoutHeadInstructorNestedInput = {
+    create?: XOR<DojoCreateWithoutHeadInstructorInput, DojoUncheckedCreateWithoutHeadInstructorInput> | DojoCreateWithoutHeadInstructorInput[] | DojoUncheckedCreateWithoutHeadInstructorInput[]
+    connectOrCreate?: DojoCreateOrConnectWithoutHeadInstructorInput | DojoCreateOrConnectWithoutHeadInstructorInput[]
+    upsert?: DojoUpsertWithWhereUniqueWithoutHeadInstructorInput | DojoUpsertWithWhereUniqueWithoutHeadInstructorInput[]
+    createMany?: DojoCreateManyHeadInstructorInputEnvelope
     set?: DojoWhereUniqueInput | DojoWhereUniqueInput[]
     disconnect?: DojoWhereUniqueInput | DojoWhereUniqueInput[]
     delete?: DojoWhereUniqueInput | DojoWhereUniqueInput[]
     connect?: DojoWhereUniqueInput | DojoWhereUniqueInput[]
-    update?: DojoUpdateWithWhereUniqueWithoutHead_instructorInput | DojoUpdateWithWhereUniqueWithoutHead_instructorInput[]
-    updateMany?: DojoUpdateManyWithWhereWithoutHead_instructorInput | DojoUpdateManyWithWhereWithoutHead_instructorInput[]
+    update?: DojoUpdateWithWhereUniqueWithoutHeadInstructorInput | DojoUpdateWithWhereUniqueWithoutHeadInstructorInput[]
+    updateMany?: DojoUpdateManyWithWhereWithoutHeadInstructorInput | DojoUpdateManyWithWhereWithoutHeadInstructorInput[]
     deleteMany?: DojoScalarWhereInput | DojoScalarWhereInput[]
   }
 
@@ -29400,17 +29830,17 @@ export namespace Prisma {
     deleteMany?: TournamentParticipantScalarWhereInput | TournamentParticipantScalarWhereInput[]
   }
 
-  export type DojoUncheckedUpdateManyWithoutHead_instructorNestedInput = {
-    create?: XOR<DojoCreateWithoutHead_instructorInput, DojoUncheckedCreateWithoutHead_instructorInput> | DojoCreateWithoutHead_instructorInput[] | DojoUncheckedCreateWithoutHead_instructorInput[]
-    connectOrCreate?: DojoCreateOrConnectWithoutHead_instructorInput | DojoCreateOrConnectWithoutHead_instructorInput[]
-    upsert?: DojoUpsertWithWhereUniqueWithoutHead_instructorInput | DojoUpsertWithWhereUniqueWithoutHead_instructorInput[]
-    createMany?: DojoCreateManyHead_instructorInputEnvelope
+  export type DojoUncheckedUpdateManyWithoutHeadInstructorNestedInput = {
+    create?: XOR<DojoCreateWithoutHeadInstructorInput, DojoUncheckedCreateWithoutHeadInstructorInput> | DojoCreateWithoutHeadInstructorInput[] | DojoUncheckedCreateWithoutHeadInstructorInput[]
+    connectOrCreate?: DojoCreateOrConnectWithoutHeadInstructorInput | DojoCreateOrConnectWithoutHeadInstructorInput[]
+    upsert?: DojoUpsertWithWhereUniqueWithoutHeadInstructorInput | DojoUpsertWithWhereUniqueWithoutHeadInstructorInput[]
+    createMany?: DojoCreateManyHeadInstructorInputEnvelope
     set?: DojoWhereUniqueInput | DojoWhereUniqueInput[]
     disconnect?: DojoWhereUniqueInput | DojoWhereUniqueInput[]
     delete?: DojoWhereUniqueInput | DojoWhereUniqueInput[]
     connect?: DojoWhereUniqueInput | DojoWhereUniqueInput[]
-    update?: DojoUpdateWithWhereUniqueWithoutHead_instructorInput | DojoUpdateWithWhereUniqueWithoutHead_instructorInput[]
-    updateMany?: DojoUpdateManyWithWhereWithoutHead_instructorInput | DojoUpdateManyWithWhereWithoutHead_instructorInput[]
+    update?: DojoUpdateWithWhereUniqueWithoutHeadInstructorInput | DojoUpdateWithWhereUniqueWithoutHeadInstructorInput[]
+    updateMany?: DojoUpdateManyWithWhereWithoutHeadInstructorInput | DojoUpdateManyWithWhereWithoutHeadInstructorInput[]
     deleteMany?: DojoScalarWhereInput | DojoScalarWhereInput[]
   }
 
@@ -29606,109 +30036,109 @@ export namespace Prisma {
     update?: XOR<XOR<DojoUpdateToOneWithWhereWithoutAttendanceInput, DojoUpdateWithoutAttendanceInput>, DojoUncheckedUpdateWithoutAttendanceInput>
   }
 
-  export type BeltRankCreateNestedOneWithoutGrading_eventsInput = {
-    create?: XOR<BeltRankCreateWithoutGrading_eventsInput, BeltRankUncheckedCreateWithoutGrading_eventsInput>
-    connectOrCreate?: BeltRankCreateOrConnectWithoutGrading_eventsInput
+  export type BeltRankCreateNestedOneWithoutGradingEventsInput = {
+    create?: XOR<BeltRankCreateWithoutGradingEventsInput, BeltRankUncheckedCreateWithoutGradingEventsInput>
+    connectOrCreate?: BeltRankCreateOrConnectWithoutGradingEventsInput
     connect?: BeltRankWhereUniqueInput
   }
 
-  export type GradingCreateNestedManyWithoutGrading_eventInput = {
-    create?: XOR<GradingCreateWithoutGrading_eventInput, GradingUncheckedCreateWithoutGrading_eventInput> | GradingCreateWithoutGrading_eventInput[] | GradingUncheckedCreateWithoutGrading_eventInput[]
-    connectOrCreate?: GradingCreateOrConnectWithoutGrading_eventInput | GradingCreateOrConnectWithoutGrading_eventInput[]
-    createMany?: GradingCreateManyGrading_eventInputEnvelope
+  export type GradingCreateNestedManyWithoutGradingEventInput = {
+    create?: XOR<GradingCreateWithoutGradingEventInput, GradingUncheckedCreateWithoutGradingEventInput> | GradingCreateWithoutGradingEventInput[] | GradingUncheckedCreateWithoutGradingEventInput[]
+    connectOrCreate?: GradingCreateOrConnectWithoutGradingEventInput | GradingCreateOrConnectWithoutGradingEventInput[]
+    createMany?: GradingCreateManyGradingEventInputEnvelope
     connect?: GradingWhereUniqueInput | GradingWhereUniqueInput[]
   }
 
-  export type GradingApplicationCreateNestedManyWithoutGrading_eventInput = {
-    create?: XOR<GradingApplicationCreateWithoutGrading_eventInput, GradingApplicationUncheckedCreateWithoutGrading_eventInput> | GradingApplicationCreateWithoutGrading_eventInput[] | GradingApplicationUncheckedCreateWithoutGrading_eventInput[]
-    connectOrCreate?: GradingApplicationCreateOrConnectWithoutGrading_eventInput | GradingApplicationCreateOrConnectWithoutGrading_eventInput[]
-    createMany?: GradingApplicationCreateManyGrading_eventInputEnvelope
+  export type GradingApplicationCreateNestedManyWithoutGradingEventInput = {
+    create?: XOR<GradingApplicationCreateWithoutGradingEventInput, GradingApplicationUncheckedCreateWithoutGradingEventInput> | GradingApplicationCreateWithoutGradingEventInput[] | GradingApplicationUncheckedCreateWithoutGradingEventInput[]
+    connectOrCreate?: GradingApplicationCreateOrConnectWithoutGradingEventInput | GradingApplicationCreateOrConnectWithoutGradingEventInput[]
+    createMany?: GradingApplicationCreateManyGradingEventInputEnvelope
     connect?: GradingApplicationWhereUniqueInput | GradingApplicationWhereUniqueInput[]
   }
 
-  export type GradingUncheckedCreateNestedManyWithoutGrading_eventInput = {
-    create?: XOR<GradingCreateWithoutGrading_eventInput, GradingUncheckedCreateWithoutGrading_eventInput> | GradingCreateWithoutGrading_eventInput[] | GradingUncheckedCreateWithoutGrading_eventInput[]
-    connectOrCreate?: GradingCreateOrConnectWithoutGrading_eventInput | GradingCreateOrConnectWithoutGrading_eventInput[]
-    createMany?: GradingCreateManyGrading_eventInputEnvelope
+  export type GradingUncheckedCreateNestedManyWithoutGradingEventInput = {
+    create?: XOR<GradingCreateWithoutGradingEventInput, GradingUncheckedCreateWithoutGradingEventInput> | GradingCreateWithoutGradingEventInput[] | GradingUncheckedCreateWithoutGradingEventInput[]
+    connectOrCreate?: GradingCreateOrConnectWithoutGradingEventInput | GradingCreateOrConnectWithoutGradingEventInput[]
+    createMany?: GradingCreateManyGradingEventInputEnvelope
     connect?: GradingWhereUniqueInput | GradingWhereUniqueInput[]
   }
 
-  export type GradingApplicationUncheckedCreateNestedManyWithoutGrading_eventInput = {
-    create?: XOR<GradingApplicationCreateWithoutGrading_eventInput, GradingApplicationUncheckedCreateWithoutGrading_eventInput> | GradingApplicationCreateWithoutGrading_eventInput[] | GradingApplicationUncheckedCreateWithoutGrading_eventInput[]
-    connectOrCreate?: GradingApplicationCreateOrConnectWithoutGrading_eventInput | GradingApplicationCreateOrConnectWithoutGrading_eventInput[]
-    createMany?: GradingApplicationCreateManyGrading_eventInputEnvelope
+  export type GradingApplicationUncheckedCreateNestedManyWithoutGradingEventInput = {
+    create?: XOR<GradingApplicationCreateWithoutGradingEventInput, GradingApplicationUncheckedCreateWithoutGradingEventInput> | GradingApplicationCreateWithoutGradingEventInput[] | GradingApplicationUncheckedCreateWithoutGradingEventInput[]
+    connectOrCreate?: GradingApplicationCreateOrConnectWithoutGradingEventInput | GradingApplicationCreateOrConnectWithoutGradingEventInput[]
+    createMany?: GradingApplicationCreateManyGradingEventInputEnvelope
     connect?: GradingApplicationWhereUniqueInput | GradingApplicationWhereUniqueInput[]
   }
 
-  export type BeltRankUpdateOneWithoutGrading_eventsNestedInput = {
-    create?: XOR<BeltRankCreateWithoutGrading_eventsInput, BeltRankUncheckedCreateWithoutGrading_eventsInput>
-    connectOrCreate?: BeltRankCreateOrConnectWithoutGrading_eventsInput
-    upsert?: BeltRankUpsertWithoutGrading_eventsInput
+  export type BeltRankUpdateOneWithoutGradingEventsNestedInput = {
+    create?: XOR<BeltRankCreateWithoutGradingEventsInput, BeltRankUncheckedCreateWithoutGradingEventsInput>
+    connectOrCreate?: BeltRankCreateOrConnectWithoutGradingEventsInput
+    upsert?: BeltRankUpsertWithoutGradingEventsInput
     disconnect?: BeltRankWhereInput | boolean
     delete?: BeltRankWhereInput | boolean
     connect?: BeltRankWhereUniqueInput
-    update?: XOR<XOR<BeltRankUpdateToOneWithWhereWithoutGrading_eventsInput, BeltRankUpdateWithoutGrading_eventsInput>, BeltRankUncheckedUpdateWithoutGrading_eventsInput>
+    update?: XOR<XOR<BeltRankUpdateToOneWithWhereWithoutGradingEventsInput, BeltRankUpdateWithoutGradingEventsInput>, BeltRankUncheckedUpdateWithoutGradingEventsInput>
   }
 
-  export type GradingUpdateManyWithoutGrading_eventNestedInput = {
-    create?: XOR<GradingCreateWithoutGrading_eventInput, GradingUncheckedCreateWithoutGrading_eventInput> | GradingCreateWithoutGrading_eventInput[] | GradingUncheckedCreateWithoutGrading_eventInput[]
-    connectOrCreate?: GradingCreateOrConnectWithoutGrading_eventInput | GradingCreateOrConnectWithoutGrading_eventInput[]
-    upsert?: GradingUpsertWithWhereUniqueWithoutGrading_eventInput | GradingUpsertWithWhereUniqueWithoutGrading_eventInput[]
-    createMany?: GradingCreateManyGrading_eventInputEnvelope
+  export type GradingUpdateManyWithoutGradingEventNestedInput = {
+    create?: XOR<GradingCreateWithoutGradingEventInput, GradingUncheckedCreateWithoutGradingEventInput> | GradingCreateWithoutGradingEventInput[] | GradingUncheckedCreateWithoutGradingEventInput[]
+    connectOrCreate?: GradingCreateOrConnectWithoutGradingEventInput | GradingCreateOrConnectWithoutGradingEventInput[]
+    upsert?: GradingUpsertWithWhereUniqueWithoutGradingEventInput | GradingUpsertWithWhereUniqueWithoutGradingEventInput[]
+    createMany?: GradingCreateManyGradingEventInputEnvelope
     set?: GradingWhereUniqueInput | GradingWhereUniqueInput[]
     disconnect?: GradingWhereUniqueInput | GradingWhereUniqueInput[]
     delete?: GradingWhereUniqueInput | GradingWhereUniqueInput[]
     connect?: GradingWhereUniqueInput | GradingWhereUniqueInput[]
-    update?: GradingUpdateWithWhereUniqueWithoutGrading_eventInput | GradingUpdateWithWhereUniqueWithoutGrading_eventInput[]
-    updateMany?: GradingUpdateManyWithWhereWithoutGrading_eventInput | GradingUpdateManyWithWhereWithoutGrading_eventInput[]
+    update?: GradingUpdateWithWhereUniqueWithoutGradingEventInput | GradingUpdateWithWhereUniqueWithoutGradingEventInput[]
+    updateMany?: GradingUpdateManyWithWhereWithoutGradingEventInput | GradingUpdateManyWithWhereWithoutGradingEventInput[]
     deleteMany?: GradingScalarWhereInput | GradingScalarWhereInput[]
   }
 
-  export type GradingApplicationUpdateManyWithoutGrading_eventNestedInput = {
-    create?: XOR<GradingApplicationCreateWithoutGrading_eventInput, GradingApplicationUncheckedCreateWithoutGrading_eventInput> | GradingApplicationCreateWithoutGrading_eventInput[] | GradingApplicationUncheckedCreateWithoutGrading_eventInput[]
-    connectOrCreate?: GradingApplicationCreateOrConnectWithoutGrading_eventInput | GradingApplicationCreateOrConnectWithoutGrading_eventInput[]
-    upsert?: GradingApplicationUpsertWithWhereUniqueWithoutGrading_eventInput | GradingApplicationUpsertWithWhereUniqueWithoutGrading_eventInput[]
-    createMany?: GradingApplicationCreateManyGrading_eventInputEnvelope
+  export type GradingApplicationUpdateManyWithoutGradingEventNestedInput = {
+    create?: XOR<GradingApplicationCreateWithoutGradingEventInput, GradingApplicationUncheckedCreateWithoutGradingEventInput> | GradingApplicationCreateWithoutGradingEventInput[] | GradingApplicationUncheckedCreateWithoutGradingEventInput[]
+    connectOrCreate?: GradingApplicationCreateOrConnectWithoutGradingEventInput | GradingApplicationCreateOrConnectWithoutGradingEventInput[]
+    upsert?: GradingApplicationUpsertWithWhereUniqueWithoutGradingEventInput | GradingApplicationUpsertWithWhereUniqueWithoutGradingEventInput[]
+    createMany?: GradingApplicationCreateManyGradingEventInputEnvelope
     set?: GradingApplicationWhereUniqueInput | GradingApplicationWhereUniqueInput[]
     disconnect?: GradingApplicationWhereUniqueInput | GradingApplicationWhereUniqueInput[]
     delete?: GradingApplicationWhereUniqueInput | GradingApplicationWhereUniqueInput[]
     connect?: GradingApplicationWhereUniqueInput | GradingApplicationWhereUniqueInput[]
-    update?: GradingApplicationUpdateWithWhereUniqueWithoutGrading_eventInput | GradingApplicationUpdateWithWhereUniqueWithoutGrading_eventInput[]
-    updateMany?: GradingApplicationUpdateManyWithWhereWithoutGrading_eventInput | GradingApplicationUpdateManyWithWhereWithoutGrading_eventInput[]
+    update?: GradingApplicationUpdateWithWhereUniqueWithoutGradingEventInput | GradingApplicationUpdateWithWhereUniqueWithoutGradingEventInput[]
+    updateMany?: GradingApplicationUpdateManyWithWhereWithoutGradingEventInput | GradingApplicationUpdateManyWithWhereWithoutGradingEventInput[]
     deleteMany?: GradingApplicationScalarWhereInput | GradingApplicationScalarWhereInput[]
   }
 
-  export type GradingUncheckedUpdateManyWithoutGrading_eventNestedInput = {
-    create?: XOR<GradingCreateWithoutGrading_eventInput, GradingUncheckedCreateWithoutGrading_eventInput> | GradingCreateWithoutGrading_eventInput[] | GradingUncheckedCreateWithoutGrading_eventInput[]
-    connectOrCreate?: GradingCreateOrConnectWithoutGrading_eventInput | GradingCreateOrConnectWithoutGrading_eventInput[]
-    upsert?: GradingUpsertWithWhereUniqueWithoutGrading_eventInput | GradingUpsertWithWhereUniqueWithoutGrading_eventInput[]
-    createMany?: GradingCreateManyGrading_eventInputEnvelope
+  export type GradingUncheckedUpdateManyWithoutGradingEventNestedInput = {
+    create?: XOR<GradingCreateWithoutGradingEventInput, GradingUncheckedCreateWithoutGradingEventInput> | GradingCreateWithoutGradingEventInput[] | GradingUncheckedCreateWithoutGradingEventInput[]
+    connectOrCreate?: GradingCreateOrConnectWithoutGradingEventInput | GradingCreateOrConnectWithoutGradingEventInput[]
+    upsert?: GradingUpsertWithWhereUniqueWithoutGradingEventInput | GradingUpsertWithWhereUniqueWithoutGradingEventInput[]
+    createMany?: GradingCreateManyGradingEventInputEnvelope
     set?: GradingWhereUniqueInput | GradingWhereUniqueInput[]
     disconnect?: GradingWhereUniqueInput | GradingWhereUniqueInput[]
     delete?: GradingWhereUniqueInput | GradingWhereUniqueInput[]
     connect?: GradingWhereUniqueInput | GradingWhereUniqueInput[]
-    update?: GradingUpdateWithWhereUniqueWithoutGrading_eventInput | GradingUpdateWithWhereUniqueWithoutGrading_eventInput[]
-    updateMany?: GradingUpdateManyWithWhereWithoutGrading_eventInput | GradingUpdateManyWithWhereWithoutGrading_eventInput[]
+    update?: GradingUpdateWithWhereUniqueWithoutGradingEventInput | GradingUpdateWithWhereUniqueWithoutGradingEventInput[]
+    updateMany?: GradingUpdateManyWithWhereWithoutGradingEventInput | GradingUpdateManyWithWhereWithoutGradingEventInput[]
     deleteMany?: GradingScalarWhereInput | GradingScalarWhereInput[]
   }
 
-  export type GradingApplicationUncheckedUpdateManyWithoutGrading_eventNestedInput = {
-    create?: XOR<GradingApplicationCreateWithoutGrading_eventInput, GradingApplicationUncheckedCreateWithoutGrading_eventInput> | GradingApplicationCreateWithoutGrading_eventInput[] | GradingApplicationUncheckedCreateWithoutGrading_eventInput[]
-    connectOrCreate?: GradingApplicationCreateOrConnectWithoutGrading_eventInput | GradingApplicationCreateOrConnectWithoutGrading_eventInput[]
-    upsert?: GradingApplicationUpsertWithWhereUniqueWithoutGrading_eventInput | GradingApplicationUpsertWithWhereUniqueWithoutGrading_eventInput[]
-    createMany?: GradingApplicationCreateManyGrading_eventInputEnvelope
+  export type GradingApplicationUncheckedUpdateManyWithoutGradingEventNestedInput = {
+    create?: XOR<GradingApplicationCreateWithoutGradingEventInput, GradingApplicationUncheckedCreateWithoutGradingEventInput> | GradingApplicationCreateWithoutGradingEventInput[] | GradingApplicationUncheckedCreateWithoutGradingEventInput[]
+    connectOrCreate?: GradingApplicationCreateOrConnectWithoutGradingEventInput | GradingApplicationCreateOrConnectWithoutGradingEventInput[]
+    upsert?: GradingApplicationUpsertWithWhereUniqueWithoutGradingEventInput | GradingApplicationUpsertWithWhereUniqueWithoutGradingEventInput[]
+    createMany?: GradingApplicationCreateManyGradingEventInputEnvelope
     set?: GradingApplicationWhereUniqueInput | GradingApplicationWhereUniqueInput[]
     disconnect?: GradingApplicationWhereUniqueInput | GradingApplicationWhereUniqueInput[]
     delete?: GradingApplicationWhereUniqueInput | GradingApplicationWhereUniqueInput[]
     connect?: GradingApplicationWhereUniqueInput | GradingApplicationWhereUniqueInput[]
-    update?: GradingApplicationUpdateWithWhereUniqueWithoutGrading_eventInput | GradingApplicationUpdateWithWhereUniqueWithoutGrading_eventInput[]
-    updateMany?: GradingApplicationUpdateManyWithWhereWithoutGrading_eventInput | GradingApplicationUpdateManyWithWhereWithoutGrading_eventInput[]
+    update?: GradingApplicationUpdateWithWhereUniqueWithoutGradingEventInput | GradingApplicationUpdateWithWhereUniqueWithoutGradingEventInput[]
+    updateMany?: GradingApplicationUpdateManyWithWhereWithoutGradingEventInput | GradingApplicationUpdateManyWithWhereWithoutGradingEventInput[]
     deleteMany?: GradingApplicationScalarWhereInput | GradingApplicationScalarWhereInput[]
   }
 
-  export type MemberCreateNestedOneWithoutGrading_applicationsInput = {
-    create?: XOR<MemberCreateWithoutGrading_applicationsInput, MemberUncheckedCreateWithoutGrading_applicationsInput>
-    connectOrCreate?: MemberCreateOrConnectWithoutGrading_applicationsInput
+  export type MemberCreateNestedOneWithoutGradingApplicationsInput = {
+    create?: XOR<MemberCreateWithoutGradingApplicationsInput, MemberUncheckedCreateWithoutGradingApplicationsInput>
+    connectOrCreate?: MemberCreateOrConnectWithoutGradingApplicationsInput
     connect?: MemberWhereUniqueInput
   }
 
@@ -29718,9 +30148,9 @@ export namespace Prisma {
     connect?: GradingEventWhereUniqueInput
   }
 
-  export type BeltRankCreateNestedOneWithoutGrading_applicationsInput = {
-    create?: XOR<BeltRankCreateWithoutGrading_applicationsInput, BeltRankUncheckedCreateWithoutGrading_applicationsInput>
-    connectOrCreate?: BeltRankCreateOrConnectWithoutGrading_applicationsInput
+  export type BeltRankCreateNestedOneWithoutGradingApplicationsInput = {
+    create?: XOR<BeltRankCreateWithoutGradingApplicationsInput, BeltRankUncheckedCreateWithoutGradingApplicationsInput>
+    connectOrCreate?: BeltRankCreateOrConnectWithoutGradingApplicationsInput
     connect?: BeltRankWhereUniqueInput
   }
 
@@ -29728,12 +30158,12 @@ export namespace Prisma {
     set?: $Enums.ApplicationStatus
   }
 
-  export type MemberUpdateOneRequiredWithoutGrading_applicationsNestedInput = {
-    create?: XOR<MemberCreateWithoutGrading_applicationsInput, MemberUncheckedCreateWithoutGrading_applicationsInput>
-    connectOrCreate?: MemberCreateOrConnectWithoutGrading_applicationsInput
-    upsert?: MemberUpsertWithoutGrading_applicationsInput
+  export type MemberUpdateOneRequiredWithoutGradingApplicationsNestedInput = {
+    create?: XOR<MemberCreateWithoutGradingApplicationsInput, MemberUncheckedCreateWithoutGradingApplicationsInput>
+    connectOrCreate?: MemberCreateOrConnectWithoutGradingApplicationsInput
+    upsert?: MemberUpsertWithoutGradingApplicationsInput
     connect?: MemberWhereUniqueInput
-    update?: XOR<XOR<MemberUpdateToOneWithWhereWithoutGrading_applicationsInput, MemberUpdateWithoutGrading_applicationsInput>, MemberUncheckedUpdateWithoutGrading_applicationsInput>
+    update?: XOR<XOR<MemberUpdateToOneWithWhereWithoutGradingApplicationsInput, MemberUpdateWithoutGradingApplicationsInput>, MemberUncheckedUpdateWithoutGradingApplicationsInput>
   }
 
   export type GradingEventUpdateOneRequiredWithoutApplicationsNestedInput = {
@@ -29744,14 +30174,14 @@ export namespace Prisma {
     update?: XOR<XOR<GradingEventUpdateToOneWithWhereWithoutApplicationsInput, GradingEventUpdateWithoutApplicationsInput>, GradingEventUncheckedUpdateWithoutApplicationsInput>
   }
 
-  export type BeltRankUpdateOneWithoutGrading_applicationsNestedInput = {
-    create?: XOR<BeltRankCreateWithoutGrading_applicationsInput, BeltRankUncheckedCreateWithoutGrading_applicationsInput>
-    connectOrCreate?: BeltRankCreateOrConnectWithoutGrading_applicationsInput
-    upsert?: BeltRankUpsertWithoutGrading_applicationsInput
+  export type BeltRankUpdateOneWithoutGradingApplicationsNestedInput = {
+    create?: XOR<BeltRankCreateWithoutGradingApplicationsInput, BeltRankUncheckedCreateWithoutGradingApplicationsInput>
+    connectOrCreate?: BeltRankCreateOrConnectWithoutGradingApplicationsInput
+    upsert?: BeltRankUpsertWithoutGradingApplicationsInput
     disconnect?: BeltRankWhereInput | boolean
     delete?: BeltRankWhereInput | boolean
     connect?: BeltRankWhereUniqueInput
-    update?: XOR<XOR<BeltRankUpdateToOneWithWhereWithoutGrading_applicationsInput, BeltRankUpdateWithoutGrading_applicationsInput>, BeltRankUncheckedUpdateWithoutGrading_applicationsInput>
+    update?: XOR<XOR<BeltRankUpdateToOneWithWhereWithoutGradingApplicationsInput, BeltRankUpdateWithoutGradingApplicationsInput>, BeltRankUncheckedUpdateWithoutGradingApplicationsInput>
   }
 
   export type MemberCreateNestedOneWithoutGradingsInput = {
@@ -29766,15 +30196,15 @@ export namespace Prisma {
     connect?: GradingEventWhereUniqueInput
   }
 
-  export type BeltRankCreateNestedOneWithoutGradings_fromInput = {
-    create?: XOR<BeltRankCreateWithoutGradings_fromInput, BeltRankUncheckedCreateWithoutGradings_fromInput>
-    connectOrCreate?: BeltRankCreateOrConnectWithoutGradings_fromInput
+  export type BeltRankCreateNestedOneWithoutGradingsFromInput = {
+    create?: XOR<BeltRankCreateWithoutGradingsFromInput, BeltRankUncheckedCreateWithoutGradingsFromInput>
+    connectOrCreate?: BeltRankCreateOrConnectWithoutGradingsFromInput
     connect?: BeltRankWhereUniqueInput
   }
 
-  export type BeltRankCreateNestedOneWithoutGradings_toInput = {
-    create?: XOR<BeltRankCreateWithoutGradings_toInput, BeltRankUncheckedCreateWithoutGradings_toInput>
-    connectOrCreate?: BeltRankCreateOrConnectWithoutGradings_toInput
+  export type BeltRankCreateNestedOneWithoutGradingsToInput = {
+    create?: XOR<BeltRankCreateWithoutGradingsToInput, BeltRankUncheckedCreateWithoutGradingsToInput>
+    connectOrCreate?: BeltRankCreateOrConnectWithoutGradingsToInput
     connect?: BeltRankWhereUniqueInput
   }
 
@@ -29800,24 +30230,24 @@ export namespace Prisma {
     update?: XOR<XOR<GradingEventUpdateToOneWithWhereWithoutGradingsInput, GradingEventUpdateWithoutGradingsInput>, GradingEventUncheckedUpdateWithoutGradingsInput>
   }
 
-  export type BeltRankUpdateOneWithoutGradings_fromNestedInput = {
-    create?: XOR<BeltRankCreateWithoutGradings_fromInput, BeltRankUncheckedCreateWithoutGradings_fromInput>
-    connectOrCreate?: BeltRankCreateOrConnectWithoutGradings_fromInput
-    upsert?: BeltRankUpsertWithoutGradings_fromInput
+  export type BeltRankUpdateOneWithoutGradingsFromNestedInput = {
+    create?: XOR<BeltRankCreateWithoutGradingsFromInput, BeltRankUncheckedCreateWithoutGradingsFromInput>
+    connectOrCreate?: BeltRankCreateOrConnectWithoutGradingsFromInput
+    upsert?: BeltRankUpsertWithoutGradingsFromInput
     disconnect?: BeltRankWhereInput | boolean
     delete?: BeltRankWhereInput | boolean
     connect?: BeltRankWhereUniqueInput
-    update?: XOR<XOR<BeltRankUpdateToOneWithWhereWithoutGradings_fromInput, BeltRankUpdateWithoutGradings_fromInput>, BeltRankUncheckedUpdateWithoutGradings_fromInput>
+    update?: XOR<XOR<BeltRankUpdateToOneWithWhereWithoutGradingsFromInput, BeltRankUpdateWithoutGradingsFromInput>, BeltRankUncheckedUpdateWithoutGradingsFromInput>
   }
 
-  export type BeltRankUpdateOneWithoutGradings_toNestedInput = {
-    create?: XOR<BeltRankCreateWithoutGradings_toInput, BeltRankUncheckedCreateWithoutGradings_toInput>
-    connectOrCreate?: BeltRankCreateOrConnectWithoutGradings_toInput
-    upsert?: BeltRankUpsertWithoutGradings_toInput
+  export type BeltRankUpdateOneWithoutGradingsToNestedInput = {
+    create?: XOR<BeltRankCreateWithoutGradingsToInput, BeltRankUncheckedCreateWithoutGradingsToInput>
+    connectOrCreate?: BeltRankCreateOrConnectWithoutGradingsToInput
+    upsert?: BeltRankUpsertWithoutGradingsToInput
     disconnect?: BeltRankWhereInput | boolean
     delete?: BeltRankWhereInput | boolean
     connect?: BeltRankWhereUniqueInput
-    update?: XOR<XOR<BeltRankUpdateToOneWithWhereWithoutGradings_toInput, BeltRankUpdateWithoutGradings_toInput>, BeltRankUncheckedUpdateWithoutGradings_toInput>
+    update?: XOR<XOR<BeltRankUpdateToOneWithWhereWithoutGradingsToInput, BeltRankUpdateWithoutGradingsToInput>, BeltRankUncheckedUpdateWithoutGradingsToInput>
   }
 
   export type EventRegistrationCreateNestedManyWithoutEventInput = {
@@ -29876,9 +30306,9 @@ export namespace Prisma {
     connect?: EventWhereUniqueInput
   }
 
-  export type MemberCreateNestedOneWithoutEvent_registrationsInput = {
-    create?: XOR<MemberCreateWithoutEvent_registrationsInput, MemberUncheckedCreateWithoutEvent_registrationsInput>
-    connectOrCreate?: MemberCreateOrConnectWithoutEvent_registrationsInput
+  export type MemberCreateNestedOneWithoutEventRegistrationsInput = {
+    create?: XOR<MemberCreateWithoutEventRegistrationsInput, MemberUncheckedCreateWithoutEventRegistrationsInput>
+    connectOrCreate?: MemberCreateOrConnectWithoutEventRegistrationsInput
     connect?: MemberWhereUniqueInput
   }
 
@@ -29890,12 +30320,12 @@ export namespace Prisma {
     update?: XOR<XOR<EventUpdateToOneWithWhereWithoutRegistrationsInput, EventUpdateWithoutRegistrationsInput>, EventUncheckedUpdateWithoutRegistrationsInput>
   }
 
-  export type MemberUpdateOneRequiredWithoutEvent_registrationsNestedInput = {
-    create?: XOR<MemberCreateWithoutEvent_registrationsInput, MemberUncheckedCreateWithoutEvent_registrationsInput>
-    connectOrCreate?: MemberCreateOrConnectWithoutEvent_registrationsInput
-    upsert?: MemberUpsertWithoutEvent_registrationsInput
+  export type MemberUpdateOneRequiredWithoutEventRegistrationsNestedInput = {
+    create?: XOR<MemberCreateWithoutEventRegistrationsInput, MemberUncheckedCreateWithoutEventRegistrationsInput>
+    connectOrCreate?: MemberCreateOrConnectWithoutEventRegistrationsInput
+    upsert?: MemberUpsertWithoutEventRegistrationsInput
     connect?: MemberWhereUniqueInput
-    update?: XOR<XOR<MemberUpdateToOneWithWhereWithoutEvent_registrationsInput, MemberUpdateWithoutEvent_registrationsInput>, MemberUncheckedUpdateWithoutEvent_registrationsInput>
+    update?: XOR<XOR<MemberUpdateToOneWithWhereWithoutEventRegistrationsInput, MemberUpdateWithoutEventRegistrationsInput>, MemberUncheckedUpdateWithoutEventRegistrationsInput>
   }
 
   export type MemberCreateNestedOneWithoutNotificationsInput = {
@@ -29990,6 +30420,14 @@ export namespace Prisma {
     set?: $Enums.PaymentStatus
   }
 
+  export type NullableDecimalFieldUpdateOperationsInput = {
+    set?: Decimal | DecimalJsLike | number | string | null
+    increment?: Decimal | DecimalJsLike | number | string
+    decrement?: Decimal | DecimalJsLike | number | string
+    multiply?: Decimal | DecimalJsLike | number | string
+    divide?: Decimal | DecimalJsLike | number | string
+  }
+
   export type MemberUpdateOneRequiredWithoutOrdersNestedInput = {
     create?: XOR<MemberCreateWithoutOrdersInput, MemberUncheckedCreateWithoutOrdersInput>
     connectOrCreate?: MemberCreateOrConnectWithoutOrdersInput
@@ -30026,32 +30464,32 @@ export namespace Prisma {
     deleteMany?: ShopOrderItemScalarWhereInput | ShopOrderItemScalarWhereInput[]
   }
 
-  export type ShopOrderCreateNestedOneWithoutOrder_itemsInput = {
-    create?: XOR<ShopOrderCreateWithoutOrder_itemsInput, ShopOrderUncheckedCreateWithoutOrder_itemsInput>
-    connectOrCreate?: ShopOrderCreateOrConnectWithoutOrder_itemsInput
+  export type ShopOrderCreateNestedOneWithoutOrderItemsInput = {
+    create?: XOR<ShopOrderCreateWithoutOrderItemsInput, ShopOrderUncheckedCreateWithoutOrderItemsInput>
+    connectOrCreate?: ShopOrderCreateOrConnectWithoutOrderItemsInput
     connect?: ShopOrderWhereUniqueInput
   }
 
-  export type ShopProductCreateNestedOneWithoutOrder_itemsInput = {
-    create?: XOR<ShopProductCreateWithoutOrder_itemsInput, ShopProductUncheckedCreateWithoutOrder_itemsInput>
-    connectOrCreate?: ShopProductCreateOrConnectWithoutOrder_itemsInput
+  export type ShopProductCreateNestedOneWithoutOrderItemsInput = {
+    create?: XOR<ShopProductCreateWithoutOrderItemsInput, ShopProductUncheckedCreateWithoutOrderItemsInput>
+    connectOrCreate?: ShopProductCreateOrConnectWithoutOrderItemsInput
     connect?: ShopProductWhereUniqueInput
   }
 
-  export type ShopOrderUpdateOneRequiredWithoutOrder_itemsNestedInput = {
-    create?: XOR<ShopOrderCreateWithoutOrder_itemsInput, ShopOrderUncheckedCreateWithoutOrder_itemsInput>
-    connectOrCreate?: ShopOrderCreateOrConnectWithoutOrder_itemsInput
-    upsert?: ShopOrderUpsertWithoutOrder_itemsInput
+  export type ShopOrderUpdateOneRequiredWithoutOrderItemsNestedInput = {
+    create?: XOR<ShopOrderCreateWithoutOrderItemsInput, ShopOrderUncheckedCreateWithoutOrderItemsInput>
+    connectOrCreate?: ShopOrderCreateOrConnectWithoutOrderItemsInput
+    upsert?: ShopOrderUpsertWithoutOrderItemsInput
     connect?: ShopOrderWhereUniqueInput
-    update?: XOR<XOR<ShopOrderUpdateToOneWithWhereWithoutOrder_itemsInput, ShopOrderUpdateWithoutOrder_itemsInput>, ShopOrderUncheckedUpdateWithoutOrder_itemsInput>
+    update?: XOR<XOR<ShopOrderUpdateToOneWithWhereWithoutOrderItemsInput, ShopOrderUpdateWithoutOrderItemsInput>, ShopOrderUncheckedUpdateWithoutOrderItemsInput>
   }
 
-  export type ShopProductUpdateOneRequiredWithoutOrder_itemsNestedInput = {
-    create?: XOR<ShopProductCreateWithoutOrder_itemsInput, ShopProductUncheckedCreateWithoutOrder_itemsInput>
-    connectOrCreate?: ShopProductCreateOrConnectWithoutOrder_itemsInput
-    upsert?: ShopProductUpsertWithoutOrder_itemsInput
+  export type ShopProductUpdateOneRequiredWithoutOrderItemsNestedInput = {
+    create?: XOR<ShopProductCreateWithoutOrderItemsInput, ShopProductUncheckedCreateWithoutOrderItemsInput>
+    connectOrCreate?: ShopProductCreateOrConnectWithoutOrderItemsInput
+    upsert?: ShopProductUpsertWithoutOrderItemsInput
     connect?: ShopProductWhereUniqueInput
-    update?: XOR<XOR<ShopProductUpdateToOneWithWhereWithoutOrder_itemsInput, ShopProductUpdateWithoutOrder_itemsInput>, ShopProductUncheckedUpdateWithoutOrder_itemsInput>
+    update?: XOR<XOR<ShopProductUpdateToOneWithWhereWithoutOrderItemsInput, ShopProductUpdateWithoutOrderItemsInput>, ShopProductUncheckedUpdateWithoutOrderItemsInput>
   }
 
   export type TournamentParticipantCreateNestedManyWithoutTournamentInput = {
@@ -30144,9 +30582,9 @@ export namespace Prisma {
     connect?: TournamentWhereUniqueInput
   }
 
-  export type MemberCreateNestedOneWithoutTournament_entriesInput = {
-    create?: XOR<MemberCreateWithoutTournament_entriesInput, MemberUncheckedCreateWithoutTournament_entriesInput>
-    connectOrCreate?: MemberCreateOrConnectWithoutTournament_entriesInput
+  export type MemberCreateNestedOneWithoutTournamentEntriesInput = {
+    create?: XOR<MemberCreateWithoutTournamentEntriesInput, MemberUncheckedCreateWithoutTournamentEntriesInput>
+    connectOrCreate?: MemberCreateOrConnectWithoutTournamentEntriesInput
     connect?: MemberWhereUniqueInput
   }
 
@@ -30200,12 +30638,12 @@ export namespace Prisma {
     update?: XOR<XOR<TournamentUpdateToOneWithWhereWithoutParticipantsInput, TournamentUpdateWithoutParticipantsInput>, TournamentUncheckedUpdateWithoutParticipantsInput>
   }
 
-  export type MemberUpdateOneRequiredWithoutTournament_entriesNestedInput = {
-    create?: XOR<MemberCreateWithoutTournament_entriesInput, MemberUncheckedCreateWithoutTournament_entriesInput>
-    connectOrCreate?: MemberCreateOrConnectWithoutTournament_entriesInput
-    upsert?: MemberUpsertWithoutTournament_entriesInput
+  export type MemberUpdateOneRequiredWithoutTournamentEntriesNestedInput = {
+    create?: XOR<MemberCreateWithoutTournamentEntriesInput, MemberUncheckedCreateWithoutTournamentEntriesInput>
+    connectOrCreate?: MemberCreateOrConnectWithoutTournamentEntriesInput
+    upsert?: MemberUpsertWithoutTournamentEntriesInput
     connect?: MemberWhereUniqueInput
-    update?: XOR<XOR<MemberUpdateToOneWithWhereWithoutTournament_entriesInput, MemberUpdateWithoutTournament_entriesInput>, MemberUncheckedUpdateWithoutTournament_entriesInput>
+    update?: XOR<XOR<MemberUpdateToOneWithWhereWithoutTournamentEntriesInput, MemberUpdateWithoutTournamentEntriesInput>, MemberUncheckedUpdateWithoutTournamentEntriesInput>
   }
 
   export type TournamentMatchUpdateManyWithoutParticipant1NestedInput = {
@@ -30298,21 +30736,21 @@ export namespace Prisma {
     connect?: TournamentWhereUniqueInput
   }
 
-  export type TournamentParticipantCreateNestedOneWithoutMatches_as_p1Input = {
-    create?: XOR<TournamentParticipantCreateWithoutMatches_as_p1Input, TournamentParticipantUncheckedCreateWithoutMatches_as_p1Input>
-    connectOrCreate?: TournamentParticipantCreateOrConnectWithoutMatches_as_p1Input
+  export type TournamentParticipantCreateNestedOneWithoutMatchesAsP1Input = {
+    create?: XOR<TournamentParticipantCreateWithoutMatchesAsP1Input, TournamentParticipantUncheckedCreateWithoutMatchesAsP1Input>
+    connectOrCreate?: TournamentParticipantCreateOrConnectWithoutMatchesAsP1Input
     connect?: TournamentParticipantWhereUniqueInput
   }
 
-  export type TournamentParticipantCreateNestedOneWithoutMatches_as_p2Input = {
-    create?: XOR<TournamentParticipantCreateWithoutMatches_as_p2Input, TournamentParticipantUncheckedCreateWithoutMatches_as_p2Input>
-    connectOrCreate?: TournamentParticipantCreateOrConnectWithoutMatches_as_p2Input
+  export type TournamentParticipantCreateNestedOneWithoutMatchesAsP2Input = {
+    create?: XOR<TournamentParticipantCreateWithoutMatchesAsP2Input, TournamentParticipantUncheckedCreateWithoutMatchesAsP2Input>
+    connectOrCreate?: TournamentParticipantCreateOrConnectWithoutMatchesAsP2Input
     connect?: TournamentParticipantWhereUniqueInput
   }
 
-  export type TournamentParticipantCreateNestedOneWithoutMatches_wonInput = {
-    create?: XOR<TournamentParticipantCreateWithoutMatches_wonInput, TournamentParticipantUncheckedCreateWithoutMatches_wonInput>
-    connectOrCreate?: TournamentParticipantCreateOrConnectWithoutMatches_wonInput
+  export type TournamentParticipantCreateNestedOneWithoutMatchesWonInput = {
+    create?: XOR<TournamentParticipantCreateWithoutMatchesWonInput, TournamentParticipantUncheckedCreateWithoutMatchesWonInput>
+    connectOrCreate?: TournamentParticipantCreateOrConnectWithoutMatchesWonInput
     connect?: TournamentParticipantWhereUniqueInput
   }
 
@@ -30324,34 +30762,34 @@ export namespace Prisma {
     update?: XOR<XOR<TournamentUpdateToOneWithWhereWithoutMatchesInput, TournamentUpdateWithoutMatchesInput>, TournamentUncheckedUpdateWithoutMatchesInput>
   }
 
-  export type TournamentParticipantUpdateOneWithoutMatches_as_p1NestedInput = {
-    create?: XOR<TournamentParticipantCreateWithoutMatches_as_p1Input, TournamentParticipantUncheckedCreateWithoutMatches_as_p1Input>
-    connectOrCreate?: TournamentParticipantCreateOrConnectWithoutMatches_as_p1Input
-    upsert?: TournamentParticipantUpsertWithoutMatches_as_p1Input
+  export type TournamentParticipantUpdateOneWithoutMatchesAsP1NestedInput = {
+    create?: XOR<TournamentParticipantCreateWithoutMatchesAsP1Input, TournamentParticipantUncheckedCreateWithoutMatchesAsP1Input>
+    connectOrCreate?: TournamentParticipantCreateOrConnectWithoutMatchesAsP1Input
+    upsert?: TournamentParticipantUpsertWithoutMatchesAsP1Input
     disconnect?: TournamentParticipantWhereInput | boolean
     delete?: TournamentParticipantWhereInput | boolean
     connect?: TournamentParticipantWhereUniqueInput
-    update?: XOR<XOR<TournamentParticipantUpdateToOneWithWhereWithoutMatches_as_p1Input, TournamentParticipantUpdateWithoutMatches_as_p1Input>, TournamentParticipantUncheckedUpdateWithoutMatches_as_p1Input>
+    update?: XOR<XOR<TournamentParticipantUpdateToOneWithWhereWithoutMatchesAsP1Input, TournamentParticipantUpdateWithoutMatchesAsP1Input>, TournamentParticipantUncheckedUpdateWithoutMatchesAsP1Input>
   }
 
-  export type TournamentParticipantUpdateOneWithoutMatches_as_p2NestedInput = {
-    create?: XOR<TournamentParticipantCreateWithoutMatches_as_p2Input, TournamentParticipantUncheckedCreateWithoutMatches_as_p2Input>
-    connectOrCreate?: TournamentParticipantCreateOrConnectWithoutMatches_as_p2Input
-    upsert?: TournamentParticipantUpsertWithoutMatches_as_p2Input
+  export type TournamentParticipantUpdateOneWithoutMatchesAsP2NestedInput = {
+    create?: XOR<TournamentParticipantCreateWithoutMatchesAsP2Input, TournamentParticipantUncheckedCreateWithoutMatchesAsP2Input>
+    connectOrCreate?: TournamentParticipantCreateOrConnectWithoutMatchesAsP2Input
+    upsert?: TournamentParticipantUpsertWithoutMatchesAsP2Input
     disconnect?: TournamentParticipantWhereInput | boolean
     delete?: TournamentParticipantWhereInput | boolean
     connect?: TournamentParticipantWhereUniqueInput
-    update?: XOR<XOR<TournamentParticipantUpdateToOneWithWhereWithoutMatches_as_p2Input, TournamentParticipantUpdateWithoutMatches_as_p2Input>, TournamentParticipantUncheckedUpdateWithoutMatches_as_p2Input>
+    update?: XOR<XOR<TournamentParticipantUpdateToOneWithWhereWithoutMatchesAsP2Input, TournamentParticipantUpdateWithoutMatchesAsP2Input>, TournamentParticipantUncheckedUpdateWithoutMatchesAsP2Input>
   }
 
-  export type TournamentParticipantUpdateOneWithoutMatches_wonNestedInput = {
-    create?: XOR<TournamentParticipantCreateWithoutMatches_wonInput, TournamentParticipantUncheckedCreateWithoutMatches_wonInput>
-    connectOrCreate?: TournamentParticipantCreateOrConnectWithoutMatches_wonInput
-    upsert?: TournamentParticipantUpsertWithoutMatches_wonInput
+  export type TournamentParticipantUpdateOneWithoutMatchesWonNestedInput = {
+    create?: XOR<TournamentParticipantCreateWithoutMatchesWonInput, TournamentParticipantUncheckedCreateWithoutMatchesWonInput>
+    connectOrCreate?: TournamentParticipantCreateOrConnectWithoutMatchesWonInput
+    upsert?: TournamentParticipantUpsertWithoutMatchesWonInput
     disconnect?: TournamentParticipantWhereInput | boolean
     delete?: TournamentParticipantWhereInput | boolean
     connect?: TournamentParticipantWhereUniqueInput
-    update?: XOR<XOR<TournamentParticipantUpdateToOneWithWhereWithoutMatches_wonInput, TournamentParticipantUpdateWithoutMatches_wonInput>, TournamentParticipantUncheckedUpdateWithoutMatches_wonInput>
+    update?: XOR<XOR<TournamentParticipantUpdateToOneWithWhereWithoutMatchesWonInput, TournamentParticipantUpdateWithoutMatchesWonInput>, TournamentParticipantUncheckedUpdateWithoutMatchesWonInput>
   }
 
   export type NestedUuidFilter<$PrismaModel = never> = {
@@ -30621,6 +31059,13 @@ export namespace Prisma {
     not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
+  export type NestedEnumMembershipStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.MembershipStatus | EnumMembershipStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.MembershipStatus[] | ListEnumMembershipStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MembershipStatus[] | ListEnumMembershipStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumMembershipStatusFilter<$PrismaModel> | $Enums.MembershipStatus
+  }
+
   export type NestedEnumMemberRoleWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.MemberRole | EnumMemberRoleFieldRefInput<$PrismaModel>
     in?: $Enums.MemberRole[] | ListEnumMemberRoleFieldRefInput<$PrismaModel>
@@ -30643,6 +31088,16 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedDateTimeNullableFilter<$PrismaModel>
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
+  export type NestedEnumMembershipStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.MembershipStatus | EnumMembershipStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.MembershipStatus[] | ListEnumMembershipStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MembershipStatus[] | ListEnumMembershipStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumMembershipStatusWithAggregatesFilter<$PrismaModel> | $Enums.MembershipStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumMembershipStatusFilter<$PrismaModel>
+    _max?: NestedEnumMembershipStatusFilter<$PrismaModel>
   }
 
   export type NestedEnumApplicationStatusFilter<$PrismaModel = never> = {
@@ -30746,6 +31201,17 @@ export namespace Prisma {
     not?: NestedEnumPaymentStatusFilter<$PrismaModel> | $Enums.PaymentStatus
   }
 
+  export type NestedDecimalNullableFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalNullableFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
+  }
+
   export type NestedEnumPaymentStatusWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.PaymentStatus | EnumPaymentStatusFieldRefInput<$PrismaModel>
     in?: $Enums.PaymentStatus[] | ListEnumPaymentStatusFieldRefInput<$PrismaModel>
@@ -30756,152 +31222,168 @@ export namespace Prisma {
     _max?: NestedEnumPaymentStatusFilter<$PrismaModel>
   }
 
-  export type GradingCreateWithoutFrom_rankInput = {
+  export type NestedDecimalNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalNullableWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedDecimalNullableFilter<$PrismaModel>
+    _sum?: NestedDecimalNullableFilter<$PrismaModel>
+    _min?: NestedDecimalNullableFilter<$PrismaModel>
+    _max?: NestedDecimalNullableFilter<$PrismaModel>
+  }
+
+  export type GradingCreateWithoutFromRankInput = {
     id?: string
     result?: $Enums.GradingResult
-    certificate_url?: string | null
+    certificateUrl?: string | null
     notes?: string | null
-    created_at?: Date | string
-    updated_at?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
     member: MemberCreateNestedOneWithoutGradingsInput
-    grading_event?: GradingEventCreateNestedOneWithoutGradingsInput
-    to_rank?: BeltRankCreateNestedOneWithoutGradings_toInput
+    gradingEvent?: GradingEventCreateNestedOneWithoutGradingsInput
+    toRank?: BeltRankCreateNestedOneWithoutGradingsToInput
   }
 
-  export type GradingUncheckedCreateWithoutFrom_rankInput = {
+  export type GradingUncheckedCreateWithoutFromRankInput = {
     id?: string
-    member_id: string
-    grading_event_id?: string | null
-    to_rank_id?: string | null
+    memberId: string
+    gradingEventId?: string | null
+    toRankId?: string | null
     result?: $Enums.GradingResult
-    certificate_url?: string | null
+    certificateUrl?: string | null
     notes?: string | null
-    created_at?: Date | string
-    updated_at?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
-  export type GradingCreateOrConnectWithoutFrom_rankInput = {
+  export type GradingCreateOrConnectWithoutFromRankInput = {
     where: GradingWhereUniqueInput
-    create: XOR<GradingCreateWithoutFrom_rankInput, GradingUncheckedCreateWithoutFrom_rankInput>
+    create: XOR<GradingCreateWithoutFromRankInput, GradingUncheckedCreateWithoutFromRankInput>
   }
 
-  export type GradingCreateManyFrom_rankInputEnvelope = {
-    data: GradingCreateManyFrom_rankInput | GradingCreateManyFrom_rankInput[]
+  export type GradingCreateManyFromRankInputEnvelope = {
+    data: GradingCreateManyFromRankInput | GradingCreateManyFromRankInput[]
     skipDuplicates?: boolean
   }
 
-  export type GradingCreateWithoutTo_rankInput = {
+  export type GradingCreateWithoutToRankInput = {
     id?: string
     result?: $Enums.GradingResult
-    certificate_url?: string | null
+    certificateUrl?: string | null
     notes?: string | null
-    created_at?: Date | string
-    updated_at?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
     member: MemberCreateNestedOneWithoutGradingsInput
-    grading_event?: GradingEventCreateNestedOneWithoutGradingsInput
-    from_rank?: BeltRankCreateNestedOneWithoutGradings_fromInput
+    gradingEvent?: GradingEventCreateNestedOneWithoutGradingsInput
+    fromRank?: BeltRankCreateNestedOneWithoutGradingsFromInput
   }
 
-  export type GradingUncheckedCreateWithoutTo_rankInput = {
+  export type GradingUncheckedCreateWithoutToRankInput = {
     id?: string
-    member_id: string
-    grading_event_id?: string | null
-    from_rank_id?: string | null
+    memberId: string
+    gradingEventId?: string | null
+    fromRankId?: string | null
     result?: $Enums.GradingResult
-    certificate_url?: string | null
+    certificateUrl?: string | null
     notes?: string | null
-    created_at?: Date | string
-    updated_at?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
-  export type GradingCreateOrConnectWithoutTo_rankInput = {
+  export type GradingCreateOrConnectWithoutToRankInput = {
     where: GradingWhereUniqueInput
-    create: XOR<GradingCreateWithoutTo_rankInput, GradingUncheckedCreateWithoutTo_rankInput>
+    create: XOR<GradingCreateWithoutToRankInput, GradingUncheckedCreateWithoutToRankInput>
   }
 
-  export type GradingCreateManyTo_rankInputEnvelope = {
-    data: GradingCreateManyTo_rankInput | GradingCreateManyTo_rankInput[]
+  export type GradingCreateManyToRankInputEnvelope = {
+    data: GradingCreateManyToRankInput | GradingCreateManyToRankInput[]
     skipDuplicates?: boolean
   }
 
-  export type GradingEventCreateWithoutTarget_rankInput = {
+  export type GradingEventCreateWithoutTargetRankInput = {
     id?: string
     name: string
-    event_date: Date | string
+    eventDate: Date | string
     location?: string | null
-    is_open?: boolean
+    isOpen?: boolean
     notes?: string | null
-    created_at?: Date | string
-    updated_at?: Date | string
-    gradings?: GradingCreateNestedManyWithoutGrading_eventInput
-    applications?: GradingApplicationCreateNestedManyWithoutGrading_eventInput
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    gradings?: GradingCreateNestedManyWithoutGradingEventInput
+    applications?: GradingApplicationCreateNestedManyWithoutGradingEventInput
   }
 
-  export type GradingEventUncheckedCreateWithoutTarget_rankInput = {
+  export type GradingEventUncheckedCreateWithoutTargetRankInput = {
     id?: string
     name: string
-    event_date: Date | string
+    eventDate: Date | string
     location?: string | null
-    is_open?: boolean
+    isOpen?: boolean
     notes?: string | null
-    created_at?: Date | string
-    updated_at?: Date | string
-    gradings?: GradingUncheckedCreateNestedManyWithoutGrading_eventInput
-    applications?: GradingApplicationUncheckedCreateNestedManyWithoutGrading_eventInput
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    gradings?: GradingUncheckedCreateNestedManyWithoutGradingEventInput
+    applications?: GradingApplicationUncheckedCreateNestedManyWithoutGradingEventInput
   }
 
-  export type GradingEventCreateOrConnectWithoutTarget_rankInput = {
+  export type GradingEventCreateOrConnectWithoutTargetRankInput = {
     where: GradingEventWhereUniqueInput
-    create: XOR<GradingEventCreateWithoutTarget_rankInput, GradingEventUncheckedCreateWithoutTarget_rankInput>
+    create: XOR<GradingEventCreateWithoutTargetRankInput, GradingEventUncheckedCreateWithoutTargetRankInput>
   }
 
-  export type GradingEventCreateManyTarget_rankInputEnvelope = {
-    data: GradingEventCreateManyTarget_rankInput | GradingEventCreateManyTarget_rankInput[]
+  export type GradingEventCreateManyTargetRankInputEnvelope = {
+    data: GradingEventCreateManyTargetRankInput | GradingEventCreateManyTargetRankInput[]
     skipDuplicates?: boolean
   }
 
-  export type GradingApplicationCreateWithoutTarget_rankInput = {
+  export type GradingApplicationCreateWithoutTargetRankInput = {
     id?: string
     status?: $Enums.ApplicationStatus
     notes?: string | null
-    applied_at?: Date | string
-    member: MemberCreateNestedOneWithoutGrading_applicationsInput
-    grading_event: GradingEventCreateNestedOneWithoutApplicationsInput
+    appliedAt?: Date | string
+    member: MemberCreateNestedOneWithoutGradingApplicationsInput
+    gradingEvent: GradingEventCreateNestedOneWithoutApplicationsInput
   }
 
-  export type GradingApplicationUncheckedCreateWithoutTarget_rankInput = {
+  export type GradingApplicationUncheckedCreateWithoutTargetRankInput = {
     id?: string
-    member_id: string
-    grading_event_id: string
+    memberId: string
+    gradingEventId: string
     status?: $Enums.ApplicationStatus
     notes?: string | null
-    applied_at?: Date | string
+    appliedAt?: Date | string
   }
 
-  export type GradingApplicationCreateOrConnectWithoutTarget_rankInput = {
+  export type GradingApplicationCreateOrConnectWithoutTargetRankInput = {
     where: GradingApplicationWhereUniqueInput
-    create: XOR<GradingApplicationCreateWithoutTarget_rankInput, GradingApplicationUncheckedCreateWithoutTarget_rankInput>
+    create: XOR<GradingApplicationCreateWithoutTargetRankInput, GradingApplicationUncheckedCreateWithoutTargetRankInput>
   }
 
-  export type GradingApplicationCreateManyTarget_rankInputEnvelope = {
-    data: GradingApplicationCreateManyTarget_rankInput | GradingApplicationCreateManyTarget_rankInput[]
+  export type GradingApplicationCreateManyTargetRankInputEnvelope = {
+    data: GradingApplicationCreateManyTargetRankInput | GradingApplicationCreateManyTargetRankInput[]
     skipDuplicates?: boolean
   }
 
-  export type GradingUpsertWithWhereUniqueWithoutFrom_rankInput = {
+  export type GradingUpsertWithWhereUniqueWithoutFromRankInput = {
     where: GradingWhereUniqueInput
-    update: XOR<GradingUpdateWithoutFrom_rankInput, GradingUncheckedUpdateWithoutFrom_rankInput>
-    create: XOR<GradingCreateWithoutFrom_rankInput, GradingUncheckedCreateWithoutFrom_rankInput>
+    update: XOR<GradingUpdateWithoutFromRankInput, GradingUncheckedUpdateWithoutFromRankInput>
+    create: XOR<GradingCreateWithoutFromRankInput, GradingUncheckedCreateWithoutFromRankInput>
   }
 
-  export type GradingUpdateWithWhereUniqueWithoutFrom_rankInput = {
+  export type GradingUpdateWithWhereUniqueWithoutFromRankInput = {
     where: GradingWhereUniqueInput
-    data: XOR<GradingUpdateWithoutFrom_rankInput, GradingUncheckedUpdateWithoutFrom_rankInput>
+    data: XOR<GradingUpdateWithoutFromRankInput, GradingUncheckedUpdateWithoutFromRankInput>
   }
 
-  export type GradingUpdateManyWithWhereWithoutFrom_rankInput = {
+  export type GradingUpdateManyWithWhereWithoutFromRankInput = {
     where: GradingScalarWhereInput
-    data: XOR<GradingUpdateManyMutationInput, GradingUncheckedUpdateManyWithoutFrom_rankInput>
+    data: XOR<GradingUpdateManyMutationInput, GradingUncheckedUpdateManyWithoutFromRankInput>
   }
 
   export type GradingScalarWhereInput = {
@@ -30909,47 +31391,47 @@ export namespace Prisma {
     OR?: GradingScalarWhereInput[]
     NOT?: GradingScalarWhereInput | GradingScalarWhereInput[]
     id?: UuidFilter<"Grading"> | string
-    member_id?: UuidFilter<"Grading"> | string
-    grading_event_id?: UuidNullableFilter<"Grading"> | string | null
-    from_rank_id?: UuidNullableFilter<"Grading"> | string | null
-    to_rank_id?: UuidNullableFilter<"Grading"> | string | null
+    memberId?: UuidFilter<"Grading"> | string
+    gradingEventId?: UuidNullableFilter<"Grading"> | string | null
+    fromRankId?: UuidNullableFilter<"Grading"> | string | null
+    toRankId?: UuidNullableFilter<"Grading"> | string | null
     result?: EnumGradingResultFilter<"Grading"> | $Enums.GradingResult
-    certificate_url?: StringNullableFilter<"Grading"> | string | null
+    certificateUrl?: StringNullableFilter<"Grading"> | string | null
     notes?: StringNullableFilter<"Grading"> | string | null
-    created_at?: DateTimeFilter<"Grading"> | Date | string
-    updated_at?: DateTimeFilter<"Grading"> | Date | string
+    createdAt?: DateTimeFilter<"Grading"> | Date | string
+    updatedAt?: DateTimeFilter<"Grading"> | Date | string
   }
 
-  export type GradingUpsertWithWhereUniqueWithoutTo_rankInput = {
+  export type GradingUpsertWithWhereUniqueWithoutToRankInput = {
     where: GradingWhereUniqueInput
-    update: XOR<GradingUpdateWithoutTo_rankInput, GradingUncheckedUpdateWithoutTo_rankInput>
-    create: XOR<GradingCreateWithoutTo_rankInput, GradingUncheckedCreateWithoutTo_rankInput>
+    update: XOR<GradingUpdateWithoutToRankInput, GradingUncheckedUpdateWithoutToRankInput>
+    create: XOR<GradingCreateWithoutToRankInput, GradingUncheckedCreateWithoutToRankInput>
   }
 
-  export type GradingUpdateWithWhereUniqueWithoutTo_rankInput = {
+  export type GradingUpdateWithWhereUniqueWithoutToRankInput = {
     where: GradingWhereUniqueInput
-    data: XOR<GradingUpdateWithoutTo_rankInput, GradingUncheckedUpdateWithoutTo_rankInput>
+    data: XOR<GradingUpdateWithoutToRankInput, GradingUncheckedUpdateWithoutToRankInput>
   }
 
-  export type GradingUpdateManyWithWhereWithoutTo_rankInput = {
+  export type GradingUpdateManyWithWhereWithoutToRankInput = {
     where: GradingScalarWhereInput
-    data: XOR<GradingUpdateManyMutationInput, GradingUncheckedUpdateManyWithoutTo_rankInput>
+    data: XOR<GradingUpdateManyMutationInput, GradingUncheckedUpdateManyWithoutToRankInput>
   }
 
-  export type GradingEventUpsertWithWhereUniqueWithoutTarget_rankInput = {
+  export type GradingEventUpsertWithWhereUniqueWithoutTargetRankInput = {
     where: GradingEventWhereUniqueInput
-    update: XOR<GradingEventUpdateWithoutTarget_rankInput, GradingEventUncheckedUpdateWithoutTarget_rankInput>
-    create: XOR<GradingEventCreateWithoutTarget_rankInput, GradingEventUncheckedCreateWithoutTarget_rankInput>
+    update: XOR<GradingEventUpdateWithoutTargetRankInput, GradingEventUncheckedUpdateWithoutTargetRankInput>
+    create: XOR<GradingEventCreateWithoutTargetRankInput, GradingEventUncheckedCreateWithoutTargetRankInput>
   }
 
-  export type GradingEventUpdateWithWhereUniqueWithoutTarget_rankInput = {
+  export type GradingEventUpdateWithWhereUniqueWithoutTargetRankInput = {
     where: GradingEventWhereUniqueInput
-    data: XOR<GradingEventUpdateWithoutTarget_rankInput, GradingEventUncheckedUpdateWithoutTarget_rankInput>
+    data: XOR<GradingEventUpdateWithoutTargetRankInput, GradingEventUncheckedUpdateWithoutTargetRankInput>
   }
 
-  export type GradingEventUpdateManyWithWhereWithoutTarget_rankInput = {
+  export type GradingEventUpdateManyWithWhereWithoutTargetRankInput = {
     where: GradingEventScalarWhereInput
-    data: XOR<GradingEventUpdateManyMutationInput, GradingEventUncheckedUpdateManyWithoutTarget_rankInput>
+    data: XOR<GradingEventUpdateManyMutationInput, GradingEventUncheckedUpdateManyWithoutTargetRankInput>
   }
 
   export type GradingEventScalarWhereInput = {
@@ -30958,29 +31440,29 @@ export namespace Prisma {
     NOT?: GradingEventScalarWhereInput | GradingEventScalarWhereInput[]
     id?: UuidFilter<"GradingEvent"> | string
     name?: StringFilter<"GradingEvent"> | string
-    event_date?: DateTimeFilter<"GradingEvent"> | Date | string
+    eventDate?: DateTimeFilter<"GradingEvent"> | Date | string
     location?: StringNullableFilter<"GradingEvent"> | string | null
-    target_rank_id?: UuidNullableFilter<"GradingEvent"> | string | null
-    is_open?: BoolFilter<"GradingEvent"> | boolean
+    targetRankId?: UuidNullableFilter<"GradingEvent"> | string | null
+    isOpen?: BoolFilter<"GradingEvent"> | boolean
     notes?: StringNullableFilter<"GradingEvent"> | string | null
-    created_at?: DateTimeFilter<"GradingEvent"> | Date | string
-    updated_at?: DateTimeFilter<"GradingEvent"> | Date | string
+    createdAt?: DateTimeFilter<"GradingEvent"> | Date | string
+    updatedAt?: DateTimeFilter<"GradingEvent"> | Date | string
   }
 
-  export type GradingApplicationUpsertWithWhereUniqueWithoutTarget_rankInput = {
+  export type GradingApplicationUpsertWithWhereUniqueWithoutTargetRankInput = {
     where: GradingApplicationWhereUniqueInput
-    update: XOR<GradingApplicationUpdateWithoutTarget_rankInput, GradingApplicationUncheckedUpdateWithoutTarget_rankInput>
-    create: XOR<GradingApplicationCreateWithoutTarget_rankInput, GradingApplicationUncheckedCreateWithoutTarget_rankInput>
+    update: XOR<GradingApplicationUpdateWithoutTargetRankInput, GradingApplicationUncheckedUpdateWithoutTargetRankInput>
+    create: XOR<GradingApplicationCreateWithoutTargetRankInput, GradingApplicationUncheckedCreateWithoutTargetRankInput>
   }
 
-  export type GradingApplicationUpdateWithWhereUniqueWithoutTarget_rankInput = {
+  export type GradingApplicationUpdateWithWhereUniqueWithoutTargetRankInput = {
     where: GradingApplicationWhereUniqueInput
-    data: XOR<GradingApplicationUpdateWithoutTarget_rankInput, GradingApplicationUncheckedUpdateWithoutTarget_rankInput>
+    data: XOR<GradingApplicationUpdateWithoutTargetRankInput, GradingApplicationUncheckedUpdateWithoutTargetRankInput>
   }
 
-  export type GradingApplicationUpdateManyWithWhereWithoutTarget_rankInput = {
+  export type GradingApplicationUpdateManyWithWhereWithoutTargetRankInput = {
     where: GradingApplicationScalarWhereInput
-    data: XOR<GradingApplicationUpdateManyMutationInput, GradingApplicationUncheckedUpdateManyWithoutTarget_rankInput>
+    data: XOR<GradingApplicationUpdateManyMutationInput, GradingApplicationUncheckedUpdateManyWithoutTargetRankInput>
   }
 
   export type GradingApplicationScalarWhereInput = {
@@ -30988,121 +31470,153 @@ export namespace Prisma {
     OR?: GradingApplicationScalarWhereInput[]
     NOT?: GradingApplicationScalarWhereInput | GradingApplicationScalarWhereInput[]
     id?: UuidFilter<"GradingApplication"> | string
-    member_id?: UuidFilter<"GradingApplication"> | string
-    grading_event_id?: UuidFilter<"GradingApplication"> | string
-    target_rank_id?: UuidNullableFilter<"GradingApplication"> | string | null
+    memberId?: UuidFilter<"GradingApplication"> | string
+    gradingEventId?: UuidFilter<"GradingApplication"> | string
+    targetRankId?: UuidNullableFilter<"GradingApplication"> | string | null
     status?: EnumApplicationStatusFilter<"GradingApplication"> | $Enums.ApplicationStatus
     notes?: StringNullableFilter<"GradingApplication"> | string | null
-    applied_at?: DateTimeFilter<"GradingApplication"> | Date | string
+    appliedAt?: DateTimeFilter<"GradingApplication"> | Date | string
   }
 
-  export type MemberCreateWithoutDojo_head_ofInput = {
+  export type MemberCreateWithoutDojoHeadOfInput = {
     id: string
-    full_name: string
+    fullName: string
     email: string
     phone?: string | null
-    avatar_url?: string | null
+    avatarUrl?: string | null
     role?: $Enums.MemberRole
-    member_number?: string | null
-    current_rank?: string
-    join_date?: Date | string
-    expiry_date?: Date | string | null
-    is_active?: boolean
-    created_at?: Date | string
-    updated_at?: Date | string
+    memberNumber?: string | null
+    currentRank?: string
+    joinDate?: Date | string
+    expiryDate?: Date | string | null
+    isActive?: boolean
+    onboardingComplete?: boolean
+    membershipStatus?: $Enums.MembershipStatus
+    dateOfBirth?: Date | string | null
+    bloodGroup?: string | null
+    address?: string | null
+    nationalId?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     dojo?: DojoCreateNestedOneWithoutMembersInput
     instructor?: InstructorCreateNestedOneWithoutMemberInput
     admin?: AdminCreateNestedOneWithoutMemberInput
     gradings?: GradingCreateNestedManyWithoutMemberInput
-    grading_applications?: GradingApplicationCreateNestedManyWithoutMemberInput
-    event_registrations?: EventRegistrationCreateNestedManyWithoutMemberInput
+    gradingApplications?: GradingApplicationCreateNestedManyWithoutMemberInput
+    eventRegistrations?: EventRegistrationCreateNestedManyWithoutMemberInput
     notifications?: NotificationCreateNestedManyWithoutMemberInput
     orders?: ShopOrderCreateNestedManyWithoutMemberInput
     attendance?: AttendanceCreateNestedManyWithoutMemberInput
-    tournament_entries?: TournamentParticipantCreateNestedManyWithoutMemberInput
+    tournamentEntries?: TournamentParticipantCreateNestedManyWithoutMemberInput
   }
 
-  export type MemberUncheckedCreateWithoutDojo_head_ofInput = {
+  export type MemberUncheckedCreateWithoutDojoHeadOfInput = {
     id: string
-    full_name: string
+    fullName: string
     email: string
     phone?: string | null
-    avatar_url?: string | null
+    avatarUrl?: string | null
     role?: $Enums.MemberRole
-    member_number?: string | null
-    current_rank?: string
-    join_date?: Date | string
-    expiry_date?: Date | string | null
-    is_active?: boolean
-    dojo_id?: string | null
-    created_at?: Date | string
-    updated_at?: Date | string
+    memberNumber?: string | null
+    currentRank?: string
+    joinDate?: Date | string
+    expiryDate?: Date | string | null
+    isActive?: boolean
+    dojoId?: string | null
+    onboardingComplete?: boolean
+    membershipStatus?: $Enums.MembershipStatus
+    dateOfBirth?: Date | string | null
+    bloodGroup?: string | null
+    address?: string | null
+    nationalId?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     instructor?: InstructorUncheckedCreateNestedOneWithoutMemberInput
     admin?: AdminUncheckedCreateNestedOneWithoutMemberInput
     gradings?: GradingUncheckedCreateNestedManyWithoutMemberInput
-    grading_applications?: GradingApplicationUncheckedCreateNestedManyWithoutMemberInput
-    event_registrations?: EventRegistrationUncheckedCreateNestedManyWithoutMemberInput
+    gradingApplications?: GradingApplicationUncheckedCreateNestedManyWithoutMemberInput
+    eventRegistrations?: EventRegistrationUncheckedCreateNestedManyWithoutMemberInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutMemberInput
     orders?: ShopOrderUncheckedCreateNestedManyWithoutMemberInput
     attendance?: AttendanceUncheckedCreateNestedManyWithoutMemberInput
-    tournament_entries?: TournamentParticipantUncheckedCreateNestedManyWithoutMemberInput
+    tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutMemberInput
   }
 
-  export type MemberCreateOrConnectWithoutDojo_head_ofInput = {
+  export type MemberCreateOrConnectWithoutDojoHeadOfInput = {
     where: MemberWhereUniqueInput
-    create: XOR<MemberCreateWithoutDojo_head_ofInput, MemberUncheckedCreateWithoutDojo_head_ofInput>
+    create: XOR<MemberCreateWithoutDojoHeadOfInput, MemberUncheckedCreateWithoutDojoHeadOfInput>
   }
 
   export type MemberCreateWithoutDojoInput = {
     id: string
-    full_name: string
+    fullName: string
     email: string
     phone?: string | null
-    avatar_url?: string | null
+    avatarUrl?: string | null
     role?: $Enums.MemberRole
-    member_number?: string | null
-    current_rank?: string
-    join_date?: Date | string
-    expiry_date?: Date | string | null
-    is_active?: boolean
-    created_at?: Date | string
-    updated_at?: Date | string
-    dojo_head_of?: DojoCreateNestedManyWithoutHead_instructorInput
+    memberNumber?: string | null
+    currentRank?: string
+    joinDate?: Date | string
+    expiryDate?: Date | string | null
+    isActive?: boolean
+    onboardingComplete?: boolean
+    membershipStatus?: $Enums.MembershipStatus
+    dateOfBirth?: Date | string | null
+    bloodGroup?: string | null
+    address?: string | null
+    nationalId?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    dojoHeadOf?: DojoCreateNestedManyWithoutHeadInstructorInput
     instructor?: InstructorCreateNestedOneWithoutMemberInput
     admin?: AdminCreateNestedOneWithoutMemberInput
     gradings?: GradingCreateNestedManyWithoutMemberInput
-    grading_applications?: GradingApplicationCreateNestedManyWithoutMemberInput
-    event_registrations?: EventRegistrationCreateNestedManyWithoutMemberInput
+    gradingApplications?: GradingApplicationCreateNestedManyWithoutMemberInput
+    eventRegistrations?: EventRegistrationCreateNestedManyWithoutMemberInput
     notifications?: NotificationCreateNestedManyWithoutMemberInput
     orders?: ShopOrderCreateNestedManyWithoutMemberInput
     attendance?: AttendanceCreateNestedManyWithoutMemberInput
-    tournament_entries?: TournamentParticipantCreateNestedManyWithoutMemberInput
+    tournamentEntries?: TournamentParticipantCreateNestedManyWithoutMemberInput
   }
 
   export type MemberUncheckedCreateWithoutDojoInput = {
     id: string
-    full_name: string
+    fullName: string
     email: string
     phone?: string | null
-    avatar_url?: string | null
+    avatarUrl?: string | null
     role?: $Enums.MemberRole
-    member_number?: string | null
-    current_rank?: string
-    join_date?: Date | string
-    expiry_date?: Date | string | null
-    is_active?: boolean
-    created_at?: Date | string
-    updated_at?: Date | string
-    dojo_head_of?: DojoUncheckedCreateNestedManyWithoutHead_instructorInput
+    memberNumber?: string | null
+    currentRank?: string
+    joinDate?: Date | string
+    expiryDate?: Date | string | null
+    isActive?: boolean
+    onboardingComplete?: boolean
+    membershipStatus?: $Enums.MembershipStatus
+    dateOfBirth?: Date | string | null
+    bloodGroup?: string | null
+    address?: string | null
+    nationalId?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    dojoHeadOf?: DojoUncheckedCreateNestedManyWithoutHeadInstructorInput
     instructor?: InstructorUncheckedCreateNestedOneWithoutMemberInput
     admin?: AdminUncheckedCreateNestedOneWithoutMemberInput
     gradings?: GradingUncheckedCreateNestedManyWithoutMemberInput
-    grading_applications?: GradingApplicationUncheckedCreateNestedManyWithoutMemberInput
-    event_registrations?: EventRegistrationUncheckedCreateNestedManyWithoutMemberInput
+    gradingApplications?: GradingApplicationUncheckedCreateNestedManyWithoutMemberInput
+    eventRegistrations?: EventRegistrationUncheckedCreateNestedManyWithoutMemberInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutMemberInput
     orders?: ShopOrderUncheckedCreateNestedManyWithoutMemberInput
     attendance?: AttendanceUncheckedCreateNestedManyWithoutMemberInput
-    tournament_entries?: TournamentParticipantUncheckedCreateNestedManyWithoutMemberInput
+    tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutMemberInput
   }
 
   export type MemberCreateOrConnectWithoutDojoInput = {
@@ -31118,19 +31632,19 @@ export namespace Prisma {
   export type InstructorCreateWithoutDojoInput = {
     id?: string
     bio?: string | null
-    is_active?: boolean
-    created_at?: Date | string
-    updated_at?: Date | string
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
     member: MemberCreateNestedOneWithoutInstructorInput
   }
 
   export type InstructorUncheckedCreateWithoutDojoInput = {
     id?: string
-    member_id: string
+    memberId: string
     bio?: string | null
-    is_active?: boolean
-    created_at?: Date | string
-    updated_at?: Date | string
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type InstructorCreateOrConnectWithoutDojoInput = {
@@ -31148,17 +31662,17 @@ export namespace Prisma {
     date: Date | string
     present?: boolean
     notes?: string | null
-    created_at?: Date | string
+    createdAt?: Date | string
     member: MemberCreateNestedOneWithoutAttendanceInput
   }
 
   export type AttendanceUncheckedCreateWithoutDojoInput = {
     id?: string
-    member_id: string
+    memberId: string
     date: Date | string
     present?: boolean
     notes?: string | null
-    created_at?: Date | string
+    createdAt?: Date | string
   }
 
   export type AttendanceCreateOrConnectWithoutDojoInput = {
@@ -31171,67 +31685,83 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type MemberUpsertWithoutDojo_head_ofInput = {
-    update: XOR<MemberUpdateWithoutDojo_head_ofInput, MemberUncheckedUpdateWithoutDojo_head_ofInput>
-    create: XOR<MemberCreateWithoutDojo_head_ofInput, MemberUncheckedCreateWithoutDojo_head_ofInput>
+  export type MemberUpsertWithoutDojoHeadOfInput = {
+    update: XOR<MemberUpdateWithoutDojoHeadOfInput, MemberUncheckedUpdateWithoutDojoHeadOfInput>
+    create: XOR<MemberCreateWithoutDojoHeadOfInput, MemberUncheckedCreateWithoutDojoHeadOfInput>
     where?: MemberWhereInput
   }
 
-  export type MemberUpdateToOneWithWhereWithoutDojo_head_ofInput = {
+  export type MemberUpdateToOneWithWhereWithoutDojoHeadOfInput = {
     where?: MemberWhereInput
-    data: XOR<MemberUpdateWithoutDojo_head_ofInput, MemberUncheckedUpdateWithoutDojo_head_ofInput>
+    data: XOR<MemberUpdateWithoutDojoHeadOfInput, MemberUncheckedUpdateWithoutDojoHeadOfInput>
   }
 
-  export type MemberUpdateWithoutDojo_head_ofInput = {
+  export type MemberUpdateWithoutDojoHeadOfInput = {
     id?: StringFieldUpdateOperationsInput | string
-    full_name?: StringFieldUpdateOperationsInput | string
+    fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
-    avatar_url?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumMemberRoleFieldUpdateOperationsInput | $Enums.MemberRole
-    member_number?: NullableStringFieldUpdateOperationsInput | string | null
-    current_rank?: StringFieldUpdateOperationsInput | string
-    join_date?: DateTimeFieldUpdateOperationsInput | Date | string
-    expiry_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    currentRank?: StringFieldUpdateOperationsInput | string
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    onboardingComplete?: BoolFieldUpdateOperationsInput | boolean
+    membershipStatus?: EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dojo?: DojoUpdateOneWithoutMembersNestedInput
     instructor?: InstructorUpdateOneWithoutMemberNestedInput
     admin?: AdminUpdateOneWithoutMemberNestedInput
     gradings?: GradingUpdateManyWithoutMemberNestedInput
-    grading_applications?: GradingApplicationUpdateManyWithoutMemberNestedInput
-    event_registrations?: EventRegistrationUpdateManyWithoutMemberNestedInput
+    gradingApplications?: GradingApplicationUpdateManyWithoutMemberNestedInput
+    eventRegistrations?: EventRegistrationUpdateManyWithoutMemberNestedInput
     notifications?: NotificationUpdateManyWithoutMemberNestedInput
     orders?: ShopOrderUpdateManyWithoutMemberNestedInput
     attendance?: AttendanceUpdateManyWithoutMemberNestedInput
-    tournament_entries?: TournamentParticipantUpdateManyWithoutMemberNestedInput
+    tournamentEntries?: TournamentParticipantUpdateManyWithoutMemberNestedInput
   }
 
-  export type MemberUncheckedUpdateWithoutDojo_head_ofInput = {
+  export type MemberUncheckedUpdateWithoutDojoHeadOfInput = {
     id?: StringFieldUpdateOperationsInput | string
-    full_name?: StringFieldUpdateOperationsInput | string
+    fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
-    avatar_url?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumMemberRoleFieldUpdateOperationsInput | $Enums.MemberRole
-    member_number?: NullableStringFieldUpdateOperationsInput | string | null
-    current_rank?: StringFieldUpdateOperationsInput | string
-    join_date?: DateTimeFieldUpdateOperationsInput | Date | string
-    expiry_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    dojo_id?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    currentRank?: StringFieldUpdateOperationsInput | string
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    dojoId?: NullableStringFieldUpdateOperationsInput | string | null
+    onboardingComplete?: BoolFieldUpdateOperationsInput | boolean
+    membershipStatus?: EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     instructor?: InstructorUncheckedUpdateOneWithoutMemberNestedInput
     admin?: AdminUncheckedUpdateOneWithoutMemberNestedInput
     gradings?: GradingUncheckedUpdateManyWithoutMemberNestedInput
-    grading_applications?: GradingApplicationUncheckedUpdateManyWithoutMemberNestedInput
-    event_registrations?: EventRegistrationUncheckedUpdateManyWithoutMemberNestedInput
+    gradingApplications?: GradingApplicationUncheckedUpdateManyWithoutMemberNestedInput
+    eventRegistrations?: EventRegistrationUncheckedUpdateManyWithoutMemberNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutMemberNestedInput
     orders?: ShopOrderUncheckedUpdateManyWithoutMemberNestedInput
     attendance?: AttendanceUncheckedUpdateManyWithoutMemberNestedInput
-    tournament_entries?: TournamentParticipantUncheckedUpdateManyWithoutMemberNestedInput
+    tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberUpsertWithWhereUniqueWithoutDojoInput = {
@@ -31255,19 +31785,27 @@ export namespace Prisma {
     OR?: MemberScalarWhereInput[]
     NOT?: MemberScalarWhereInput | MemberScalarWhereInput[]
     id?: UuidFilter<"Member"> | string
-    full_name?: StringFilter<"Member"> | string
+    fullName?: StringFilter<"Member"> | string
     email?: StringFilter<"Member"> | string
     phone?: StringNullableFilter<"Member"> | string | null
-    avatar_url?: StringNullableFilter<"Member"> | string | null
+    avatarUrl?: StringNullableFilter<"Member"> | string | null
     role?: EnumMemberRoleFilter<"Member"> | $Enums.MemberRole
-    member_number?: StringNullableFilter<"Member"> | string | null
-    current_rank?: StringFilter<"Member"> | string
-    join_date?: DateTimeFilter<"Member"> | Date | string
-    expiry_date?: DateTimeNullableFilter<"Member"> | Date | string | null
-    is_active?: BoolFilter<"Member"> | boolean
-    dojo_id?: UuidNullableFilter<"Member"> | string | null
-    created_at?: DateTimeFilter<"Member"> | Date | string
-    updated_at?: DateTimeFilter<"Member"> | Date | string
+    memberNumber?: StringNullableFilter<"Member"> | string | null
+    currentRank?: StringFilter<"Member"> | string
+    joinDate?: DateTimeFilter<"Member"> | Date | string
+    expiryDate?: DateTimeNullableFilter<"Member"> | Date | string | null
+    isActive?: BoolFilter<"Member"> | boolean
+    dojoId?: UuidNullableFilter<"Member"> | string | null
+    onboardingComplete?: BoolFilter<"Member"> | boolean
+    membershipStatus?: EnumMembershipStatusFilter<"Member"> | $Enums.MembershipStatus
+    dateOfBirth?: DateTimeNullableFilter<"Member"> | Date | string | null
+    bloodGroup?: StringNullableFilter<"Member"> | string | null
+    address?: StringNullableFilter<"Member"> | string | null
+    nationalId?: StringNullableFilter<"Member"> | string | null
+    emergencyContactName?: StringNullableFilter<"Member"> | string | null
+    emergencyContactPhone?: StringNullableFilter<"Member"> | string | null
+    createdAt?: DateTimeFilter<"Member"> | Date | string
+    updatedAt?: DateTimeFilter<"Member"> | Date | string
   }
 
   export type InstructorUpsertWithWhereUniqueWithoutDojoInput = {
@@ -31291,12 +31829,12 @@ export namespace Prisma {
     OR?: InstructorScalarWhereInput[]
     NOT?: InstructorScalarWhereInput | InstructorScalarWhereInput[]
     id?: UuidFilter<"Instructor"> | string
-    member_id?: UuidFilter<"Instructor"> | string
-    dojo_id?: UuidNullableFilter<"Instructor"> | string | null
+    memberId?: UuidFilter<"Instructor"> | string
+    dojoId?: UuidNullableFilter<"Instructor"> | string | null
     bio?: StringNullableFilter<"Instructor"> | string | null
-    is_active?: BoolFilter<"Instructor"> | boolean
-    created_at?: DateTimeFilter<"Instructor"> | Date | string
-    updated_at?: DateTimeFilter<"Instructor"> | Date | string
+    isActive?: BoolFilter<"Instructor"> | boolean
+    createdAt?: DateTimeFilter<"Instructor"> | Date | string
+    updatedAt?: DateTimeFilter<"Instructor"> | Date | string
   }
 
   export type AttendanceUpsertWithWhereUniqueWithoutDojoInput = {
@@ -31320,12 +31858,12 @@ export namespace Prisma {
     OR?: AttendanceScalarWhereInput[]
     NOT?: AttendanceScalarWhereInput | AttendanceScalarWhereInput[]
     id?: UuidFilter<"Attendance"> | string
-    member_id?: UuidFilter<"Attendance"> | string
-    dojo_id?: UuidNullableFilter<"Attendance"> | string | null
+    memberId?: UuidFilter<"Attendance"> | string
+    dojoId?: UuidNullableFilter<"Attendance"> | string | null
     date?: DateTimeFilter<"Attendance"> | Date | string
     present?: BoolFilter<"Attendance"> | boolean
     notes?: StringNullableFilter<"Attendance"> | string | null
-    created_at?: DateTimeFilter<"Attendance"> | Date | string
+    createdAt?: DateTimeFilter<"Attendance"> | Date | string
   }
 
   export type DojoCreateWithoutMembersInput = {
@@ -31338,10 +31876,10 @@ export namespace Prisma {
     phone?: string | null
     email?: string | null
     schedule?: NullableJsonNullValueInput | InputJsonValue
-    is_active?: boolean
-    created_at?: Date | string
-    updated_at?: Date | string
-    head_instructor?: MemberCreateNestedOneWithoutDojo_head_ofInput
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    headInstructor?: MemberCreateNestedOneWithoutDojoHeadOfInput
     instructors?: InstructorCreateNestedManyWithoutDojoInput
     attendance?: AttendanceCreateNestedManyWithoutDojoInput
   }
@@ -31356,10 +31894,10 @@ export namespace Prisma {
     phone?: string | null
     email?: string | null
     schedule?: NullableJsonNullValueInput | InputJsonValue
-    is_active?: boolean
-    head_instructor_id?: string | null
-    created_at?: Date | string
-    updated_at?: Date | string
+    isActive?: boolean
+    headInstructorId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     instructors?: InstructorUncheckedCreateNestedManyWithoutDojoInput
     attendance?: AttendanceUncheckedCreateNestedManyWithoutDojoInput
   }
@@ -31369,7 +31907,7 @@ export namespace Prisma {
     create: XOR<DojoCreateWithoutMembersInput, DojoUncheckedCreateWithoutMembersInput>
   }
 
-  export type DojoCreateWithoutHead_instructorInput = {
+  export type DojoCreateWithoutHeadInstructorInput = {
     id?: string
     name: string
     address?: string | null
@@ -31379,15 +31917,15 @@ export namespace Prisma {
     phone?: string | null
     email?: string | null
     schedule?: NullableJsonNullValueInput | InputJsonValue
-    is_active?: boolean
-    created_at?: Date | string
-    updated_at?: Date | string
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
     members?: MemberCreateNestedManyWithoutDojoInput
     instructors?: InstructorCreateNestedManyWithoutDojoInput
     attendance?: AttendanceCreateNestedManyWithoutDojoInput
   }
 
-  export type DojoUncheckedCreateWithoutHead_instructorInput = {
+  export type DojoUncheckedCreateWithoutHeadInstructorInput = {
     id?: string
     name: string
     address?: string | null
@@ -31397,40 +31935,40 @@ export namespace Prisma {
     phone?: string | null
     email?: string | null
     schedule?: NullableJsonNullValueInput | InputJsonValue
-    is_active?: boolean
-    created_at?: Date | string
-    updated_at?: Date | string
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
     members?: MemberUncheckedCreateNestedManyWithoutDojoInput
     instructors?: InstructorUncheckedCreateNestedManyWithoutDojoInput
     attendance?: AttendanceUncheckedCreateNestedManyWithoutDojoInput
   }
 
-  export type DojoCreateOrConnectWithoutHead_instructorInput = {
+  export type DojoCreateOrConnectWithoutHeadInstructorInput = {
     where: DojoWhereUniqueInput
-    create: XOR<DojoCreateWithoutHead_instructorInput, DojoUncheckedCreateWithoutHead_instructorInput>
+    create: XOR<DojoCreateWithoutHeadInstructorInput, DojoUncheckedCreateWithoutHeadInstructorInput>
   }
 
-  export type DojoCreateManyHead_instructorInputEnvelope = {
-    data: DojoCreateManyHead_instructorInput | DojoCreateManyHead_instructorInput[]
+  export type DojoCreateManyHeadInstructorInputEnvelope = {
+    data: DojoCreateManyHeadInstructorInput | DojoCreateManyHeadInstructorInput[]
     skipDuplicates?: boolean
   }
 
   export type InstructorCreateWithoutMemberInput = {
     id?: string
     bio?: string | null
-    is_active?: boolean
-    created_at?: Date | string
-    updated_at?: Date | string
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
     dojo?: DojoCreateNestedOneWithoutInstructorsInput
   }
 
   export type InstructorUncheckedCreateWithoutMemberInput = {
     id?: string
-    dojo_id?: string | null
+    dojoId?: string | null
     bio?: string | null
-    is_active?: boolean
-    created_at?: Date | string
-    updated_at?: Date | string
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type InstructorCreateOrConnectWithoutMemberInput = {
@@ -31441,13 +31979,13 @@ export namespace Prisma {
   export type AdminCreateWithoutMemberInput = {
     id?: string
     notes?: string | null
-    created_at?: Date | string
+    createdAt?: Date | string
   }
 
   export type AdminUncheckedCreateWithoutMemberInput = {
     id?: string
     notes?: string | null
-    created_at?: Date | string
+    createdAt?: Date | string
   }
 
   export type AdminCreateOrConnectWithoutMemberInput = {
@@ -31458,25 +31996,25 @@ export namespace Prisma {
   export type GradingCreateWithoutMemberInput = {
     id?: string
     result?: $Enums.GradingResult
-    certificate_url?: string | null
+    certificateUrl?: string | null
     notes?: string | null
-    created_at?: Date | string
-    updated_at?: Date | string
-    grading_event?: GradingEventCreateNestedOneWithoutGradingsInput
-    from_rank?: BeltRankCreateNestedOneWithoutGradings_fromInput
-    to_rank?: BeltRankCreateNestedOneWithoutGradings_toInput
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    gradingEvent?: GradingEventCreateNestedOneWithoutGradingsInput
+    fromRank?: BeltRankCreateNestedOneWithoutGradingsFromInput
+    toRank?: BeltRankCreateNestedOneWithoutGradingsToInput
   }
 
   export type GradingUncheckedCreateWithoutMemberInput = {
     id?: string
-    grading_event_id?: string | null
-    from_rank_id?: string | null
-    to_rank_id?: string | null
+    gradingEventId?: string | null
+    fromRankId?: string | null
+    toRankId?: string | null
     result?: $Enums.GradingResult
-    certificate_url?: string | null
+    certificateUrl?: string | null
     notes?: string | null
-    created_at?: Date | string
-    updated_at?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type GradingCreateOrConnectWithoutMemberInput = {
@@ -31493,18 +32031,18 @@ export namespace Prisma {
     id?: string
     status?: $Enums.ApplicationStatus
     notes?: string | null
-    applied_at?: Date | string
-    grading_event: GradingEventCreateNestedOneWithoutApplicationsInput
-    target_rank?: BeltRankCreateNestedOneWithoutGrading_applicationsInput
+    appliedAt?: Date | string
+    gradingEvent: GradingEventCreateNestedOneWithoutApplicationsInput
+    targetRank?: BeltRankCreateNestedOneWithoutGradingApplicationsInput
   }
 
   export type GradingApplicationUncheckedCreateWithoutMemberInput = {
     id?: string
-    grading_event_id: string
-    target_rank_id?: string | null
+    gradingEventId: string
+    targetRankId?: string | null
     status?: $Enums.ApplicationStatus
     notes?: string | null
-    applied_at?: Date | string
+    appliedAt?: Date | string
   }
 
   export type GradingApplicationCreateOrConnectWithoutMemberInput = {
@@ -31519,14 +32057,14 @@ export namespace Prisma {
 
   export type EventRegistrationCreateWithoutMemberInput = {
     id?: string
-    created_at?: Date | string
+    createdAt?: Date | string
     event: EventCreateNestedOneWithoutRegistrationsInput
   }
 
   export type EventRegistrationUncheckedCreateWithoutMemberInput = {
     id?: string
-    event_id: string
-    created_at?: Date | string
+    eventId: string
+    createdAt?: Date | string
   }
 
   export type EventRegistrationCreateOrConnectWithoutMemberInput = {
@@ -31544,10 +32082,10 @@ export namespace Prisma {
     title: string
     message: string
     type?: $Enums.NotificationType
-    is_read?: boolean
+    isRead?: boolean
     link?: string | null
-    created_at?: Date | string
-    updated_at?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type NotificationUncheckedCreateWithoutMemberInput = {
@@ -31555,10 +32093,10 @@ export namespace Prisma {
     title: string
     message: string
     type?: $Enums.NotificationType
-    is_read?: boolean
+    isRead?: boolean
     link?: string | null
-    created_at?: Date | string
-    updated_at?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type NotificationCreateOrConnectWithoutMemberInput = {
@@ -31573,28 +32111,32 @@ export namespace Prisma {
 
   export type ShopOrderCreateWithoutMemberInput = {
     id?: string
-    payment_status?: $Enums.PaymentStatus
-    payment_method?: string | null
+    paymentStatus?: $Enums.PaymentStatus
+    paymentMethod?: string | null
     total: Decimal | DecimalJsLike | number | string
     currency?: string
-    transaction_id?: string | null
+    transactionId?: string | null
+    includesMembership?: boolean
+    membershipFee?: Decimal | DecimalJsLike | number | string | null
     notes?: string | null
-    created_at?: Date | string
-    updated_at?: Date | string
-    order_items?: ShopOrderItemCreateNestedManyWithoutOrderInput
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    orderItems?: ShopOrderItemCreateNestedManyWithoutOrderInput
   }
 
   export type ShopOrderUncheckedCreateWithoutMemberInput = {
     id?: string
-    payment_status?: $Enums.PaymentStatus
-    payment_method?: string | null
+    paymentStatus?: $Enums.PaymentStatus
+    paymentMethod?: string | null
     total: Decimal | DecimalJsLike | number | string
     currency?: string
-    transaction_id?: string | null
+    transactionId?: string | null
+    includesMembership?: boolean
+    membershipFee?: Decimal | DecimalJsLike | number | string | null
     notes?: string | null
-    created_at?: Date | string
-    updated_at?: Date | string
-    order_items?: ShopOrderItemUncheckedCreateNestedManyWithoutOrderInput
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    orderItems?: ShopOrderItemUncheckedCreateNestedManyWithoutOrderInput
   }
 
   export type ShopOrderCreateOrConnectWithoutMemberInput = {
@@ -31612,17 +32154,17 @@ export namespace Prisma {
     date: Date | string
     present?: boolean
     notes?: string | null
-    created_at?: Date | string
+    createdAt?: Date | string
     dojo?: DojoCreateNestedOneWithoutAttendanceInput
   }
 
   export type AttendanceUncheckedCreateWithoutMemberInput = {
     id?: string
-    dojo_id?: string | null
+    dojoId?: string | null
     date: Date | string
     present?: boolean
     notes?: string | null
-    created_at?: Date | string
+    createdAt?: Date | string
   }
 
   export type AttendanceCreateOrConnectWithoutMemberInput = {
@@ -31638,23 +32180,23 @@ export namespace Prisma {
   export type TournamentParticipantCreateWithoutMemberInput = {
     id?: string
     category?: string | null
-    weight_class?: string | null
-    created_at?: Date | string
+    weightClass?: string | null
+    createdAt?: Date | string
     tournament: TournamentCreateNestedOneWithoutParticipantsInput
-    matches_as_p1?: TournamentMatchCreateNestedManyWithoutParticipant1Input
-    matches_as_p2?: TournamentMatchCreateNestedManyWithoutParticipant2Input
-    matches_won?: TournamentMatchCreateNestedManyWithoutWinnerInput
+    matchesAsP1?: TournamentMatchCreateNestedManyWithoutParticipant1Input
+    matchesAsP2?: TournamentMatchCreateNestedManyWithoutParticipant2Input
+    matchesWon?: TournamentMatchCreateNestedManyWithoutWinnerInput
   }
 
   export type TournamentParticipantUncheckedCreateWithoutMemberInput = {
     id?: string
-    tournament_id: string
+    tournamentId: string
     category?: string | null
-    weight_class?: string | null
-    created_at?: Date | string
-    matches_as_p1?: TournamentMatchUncheckedCreateNestedManyWithoutParticipant1Input
-    matches_as_p2?: TournamentMatchUncheckedCreateNestedManyWithoutParticipant2Input
-    matches_won?: TournamentMatchUncheckedCreateNestedManyWithoutWinnerInput
+    weightClass?: string | null
+    createdAt?: Date | string
+    matchesAsP1?: TournamentMatchUncheckedCreateNestedManyWithoutParticipant1Input
+    matchesAsP2?: TournamentMatchUncheckedCreateNestedManyWithoutParticipant2Input
+    matchesWon?: TournamentMatchUncheckedCreateNestedManyWithoutWinnerInput
   }
 
   export type TournamentParticipantCreateOrConnectWithoutMemberInput = {
@@ -31688,10 +32230,10 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     schedule?: NullableJsonNullValueInput | InputJsonValue
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    head_instructor?: MemberUpdateOneWithoutDojo_head_ofNestedInput
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    headInstructor?: MemberUpdateOneWithoutDojoHeadOfNestedInput
     instructors?: InstructorUpdateManyWithoutDojoNestedInput
     attendance?: AttendanceUpdateManyWithoutDojoNestedInput
   }
@@ -31706,28 +32248,28 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     schedule?: NullableJsonNullValueInput | InputJsonValue
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    head_instructor_id?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    headInstructorId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     instructors?: InstructorUncheckedUpdateManyWithoutDojoNestedInput
     attendance?: AttendanceUncheckedUpdateManyWithoutDojoNestedInput
   }
 
-  export type DojoUpsertWithWhereUniqueWithoutHead_instructorInput = {
+  export type DojoUpsertWithWhereUniqueWithoutHeadInstructorInput = {
     where: DojoWhereUniqueInput
-    update: XOR<DojoUpdateWithoutHead_instructorInput, DojoUncheckedUpdateWithoutHead_instructorInput>
-    create: XOR<DojoCreateWithoutHead_instructorInput, DojoUncheckedCreateWithoutHead_instructorInput>
+    update: XOR<DojoUpdateWithoutHeadInstructorInput, DojoUncheckedUpdateWithoutHeadInstructorInput>
+    create: XOR<DojoCreateWithoutHeadInstructorInput, DojoUncheckedCreateWithoutHeadInstructorInput>
   }
 
-  export type DojoUpdateWithWhereUniqueWithoutHead_instructorInput = {
+  export type DojoUpdateWithWhereUniqueWithoutHeadInstructorInput = {
     where: DojoWhereUniqueInput
-    data: XOR<DojoUpdateWithoutHead_instructorInput, DojoUncheckedUpdateWithoutHead_instructorInput>
+    data: XOR<DojoUpdateWithoutHeadInstructorInput, DojoUncheckedUpdateWithoutHeadInstructorInput>
   }
 
-  export type DojoUpdateManyWithWhereWithoutHead_instructorInput = {
+  export type DojoUpdateManyWithWhereWithoutHeadInstructorInput = {
     where: DojoScalarWhereInput
-    data: XOR<DojoUpdateManyMutationInput, DojoUncheckedUpdateManyWithoutHead_instructorInput>
+    data: XOR<DojoUpdateManyMutationInput, DojoUncheckedUpdateManyWithoutHeadInstructorInput>
   }
 
   export type DojoScalarWhereInput = {
@@ -31743,10 +32285,10 @@ export namespace Prisma {
     phone?: StringNullableFilter<"Dojo"> | string | null
     email?: StringNullableFilter<"Dojo"> | string | null
     schedule?: JsonNullableFilter<"Dojo">
-    is_active?: BoolFilter<"Dojo"> | boolean
-    head_instructor_id?: UuidNullableFilter<"Dojo"> | string | null
-    created_at?: DateTimeFilter<"Dojo"> | Date | string
-    updated_at?: DateTimeFilter<"Dojo"> | Date | string
+    isActive?: BoolFilter<"Dojo"> | boolean
+    headInstructorId?: UuidNullableFilter<"Dojo"> | string | null
+    createdAt?: DateTimeFilter<"Dojo"> | Date | string
+    updatedAt?: DateTimeFilter<"Dojo"> | Date | string
   }
 
   export type InstructorUpsertWithoutMemberInput = {
@@ -31763,19 +32305,19 @@ export namespace Prisma {
   export type InstructorUpdateWithoutMemberInput = {
     id?: StringFieldUpdateOperationsInput | string
     bio?: NullableStringFieldUpdateOperationsInput | string | null
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dojo?: DojoUpdateOneWithoutInstructorsNestedInput
   }
 
   export type InstructorUncheckedUpdateWithoutMemberInput = {
     id?: StringFieldUpdateOperationsInput | string
-    dojo_id?: NullableStringFieldUpdateOperationsInput | string | null
+    dojoId?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type AdminUpsertWithoutMemberInput = {
@@ -31792,13 +32334,13 @@ export namespace Prisma {
   export type AdminUpdateWithoutMemberInput = {
     id?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type AdminUncheckedUpdateWithoutMemberInput = {
     id?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type GradingUpsertWithWhereUniqueWithoutMemberInput = {
@@ -31854,9 +32396,9 @@ export namespace Prisma {
     OR?: EventRegistrationScalarWhereInput[]
     NOT?: EventRegistrationScalarWhereInput | EventRegistrationScalarWhereInput[]
     id?: UuidFilter<"EventRegistration"> | string
-    event_id?: UuidFilter<"EventRegistration"> | string
-    member_id?: UuidFilter<"EventRegistration"> | string
-    created_at?: DateTimeFilter<"EventRegistration"> | Date | string
+    eventId?: UuidFilter<"EventRegistration"> | string
+    memberId?: UuidFilter<"EventRegistration"> | string
+    createdAt?: DateTimeFilter<"EventRegistration"> | Date | string
   }
 
   export type NotificationUpsertWithWhereUniqueWithoutMemberInput = {
@@ -31880,14 +32422,14 @@ export namespace Prisma {
     OR?: NotificationScalarWhereInput[]
     NOT?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
     id?: UuidFilter<"Notification"> | string
-    member_id?: UuidFilter<"Notification"> | string
+    memberId?: UuidFilter<"Notification"> | string
     title?: StringFilter<"Notification"> | string
     message?: StringFilter<"Notification"> | string
     type?: EnumNotificationTypeFilter<"Notification"> | $Enums.NotificationType
-    is_read?: BoolFilter<"Notification"> | boolean
+    isRead?: BoolFilter<"Notification"> | boolean
     link?: StringNullableFilter<"Notification"> | string | null
-    created_at?: DateTimeFilter<"Notification"> | Date | string
-    updated_at?: DateTimeFilter<"Notification"> | Date | string
+    createdAt?: DateTimeFilter<"Notification"> | Date | string
+    updatedAt?: DateTimeFilter<"Notification"> | Date | string
   }
 
   export type ShopOrderUpsertWithWhereUniqueWithoutMemberInput = {
@@ -31911,15 +32453,17 @@ export namespace Prisma {
     OR?: ShopOrderScalarWhereInput[]
     NOT?: ShopOrderScalarWhereInput | ShopOrderScalarWhereInput[]
     id?: UuidFilter<"ShopOrder"> | string
-    member_id?: UuidFilter<"ShopOrder"> | string
-    payment_status?: EnumPaymentStatusFilter<"ShopOrder"> | $Enums.PaymentStatus
-    payment_method?: StringNullableFilter<"ShopOrder"> | string | null
+    memberId?: UuidFilter<"ShopOrder"> | string
+    paymentStatus?: EnumPaymentStatusFilter<"ShopOrder"> | $Enums.PaymentStatus
+    paymentMethod?: StringNullableFilter<"ShopOrder"> | string | null
     total?: DecimalFilter<"ShopOrder"> | Decimal | DecimalJsLike | number | string
     currency?: StringFilter<"ShopOrder"> | string
-    transaction_id?: StringNullableFilter<"ShopOrder"> | string | null
+    transactionId?: StringNullableFilter<"ShopOrder"> | string | null
+    includesMembership?: BoolFilter<"ShopOrder"> | boolean
+    membershipFee?: DecimalNullableFilter<"ShopOrder"> | Decimal | DecimalJsLike | number | string | null
     notes?: StringNullableFilter<"ShopOrder"> | string | null
-    created_at?: DateTimeFilter<"ShopOrder"> | Date | string
-    updated_at?: DateTimeFilter<"ShopOrder"> | Date | string
+    createdAt?: DateTimeFilter<"ShopOrder"> | Date | string
+    updatedAt?: DateTimeFilter<"ShopOrder"> | Date | string
   }
 
   export type AttendanceUpsertWithWhereUniqueWithoutMemberInput = {
@@ -31959,63 +32503,79 @@ export namespace Prisma {
     OR?: TournamentParticipantScalarWhereInput[]
     NOT?: TournamentParticipantScalarWhereInput | TournamentParticipantScalarWhereInput[]
     id?: UuidFilter<"TournamentParticipant"> | string
-    tournament_id?: UuidFilter<"TournamentParticipant"> | string
-    member_id?: UuidFilter<"TournamentParticipant"> | string
+    tournamentId?: UuidFilter<"TournamentParticipant"> | string
+    memberId?: UuidFilter<"TournamentParticipant"> | string
     category?: StringNullableFilter<"TournamentParticipant"> | string | null
-    weight_class?: StringNullableFilter<"TournamentParticipant"> | string | null
-    created_at?: DateTimeFilter<"TournamentParticipant"> | Date | string
+    weightClass?: StringNullableFilter<"TournamentParticipant"> | string | null
+    createdAt?: DateTimeFilter<"TournamentParticipant"> | Date | string
   }
 
   export type MemberCreateWithoutAdminInput = {
     id: string
-    full_name: string
+    fullName: string
     email: string
     phone?: string | null
-    avatar_url?: string | null
+    avatarUrl?: string | null
     role?: $Enums.MemberRole
-    member_number?: string | null
-    current_rank?: string
-    join_date?: Date | string
-    expiry_date?: Date | string | null
-    is_active?: boolean
-    created_at?: Date | string
-    updated_at?: Date | string
+    memberNumber?: string | null
+    currentRank?: string
+    joinDate?: Date | string
+    expiryDate?: Date | string | null
+    isActive?: boolean
+    onboardingComplete?: boolean
+    membershipStatus?: $Enums.MembershipStatus
+    dateOfBirth?: Date | string | null
+    bloodGroup?: string | null
+    address?: string | null
+    nationalId?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     dojo?: DojoCreateNestedOneWithoutMembersInput
-    dojo_head_of?: DojoCreateNestedManyWithoutHead_instructorInput
+    dojoHeadOf?: DojoCreateNestedManyWithoutHeadInstructorInput
     instructor?: InstructorCreateNestedOneWithoutMemberInput
     gradings?: GradingCreateNestedManyWithoutMemberInput
-    grading_applications?: GradingApplicationCreateNestedManyWithoutMemberInput
-    event_registrations?: EventRegistrationCreateNestedManyWithoutMemberInput
+    gradingApplications?: GradingApplicationCreateNestedManyWithoutMemberInput
+    eventRegistrations?: EventRegistrationCreateNestedManyWithoutMemberInput
     notifications?: NotificationCreateNestedManyWithoutMemberInput
     orders?: ShopOrderCreateNestedManyWithoutMemberInput
     attendance?: AttendanceCreateNestedManyWithoutMemberInput
-    tournament_entries?: TournamentParticipantCreateNestedManyWithoutMemberInput
+    tournamentEntries?: TournamentParticipantCreateNestedManyWithoutMemberInput
   }
 
   export type MemberUncheckedCreateWithoutAdminInput = {
     id: string
-    full_name: string
+    fullName: string
     email: string
     phone?: string | null
-    avatar_url?: string | null
+    avatarUrl?: string | null
     role?: $Enums.MemberRole
-    member_number?: string | null
-    current_rank?: string
-    join_date?: Date | string
-    expiry_date?: Date | string | null
-    is_active?: boolean
-    dojo_id?: string | null
-    created_at?: Date | string
-    updated_at?: Date | string
-    dojo_head_of?: DojoUncheckedCreateNestedManyWithoutHead_instructorInput
+    memberNumber?: string | null
+    currentRank?: string
+    joinDate?: Date | string
+    expiryDate?: Date | string | null
+    isActive?: boolean
+    dojoId?: string | null
+    onboardingComplete?: boolean
+    membershipStatus?: $Enums.MembershipStatus
+    dateOfBirth?: Date | string | null
+    bloodGroup?: string | null
+    address?: string | null
+    nationalId?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    dojoHeadOf?: DojoUncheckedCreateNestedManyWithoutHeadInstructorInput
     instructor?: InstructorUncheckedCreateNestedOneWithoutMemberInput
     gradings?: GradingUncheckedCreateNestedManyWithoutMemberInput
-    grading_applications?: GradingApplicationUncheckedCreateNestedManyWithoutMemberInput
-    event_registrations?: EventRegistrationUncheckedCreateNestedManyWithoutMemberInput
+    gradingApplications?: GradingApplicationUncheckedCreateNestedManyWithoutMemberInput
+    eventRegistrations?: EventRegistrationUncheckedCreateNestedManyWithoutMemberInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutMemberInput
     orders?: ShopOrderUncheckedCreateNestedManyWithoutMemberInput
     attendance?: AttendanceUncheckedCreateNestedManyWithoutMemberInput
-    tournament_entries?: TournamentParticipantUncheckedCreateNestedManyWithoutMemberInput
+    tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutMemberInput
   }
 
   export type MemberCreateOrConnectWithoutAdminInput = {
@@ -32036,106 +32596,138 @@ export namespace Prisma {
 
   export type MemberUpdateWithoutAdminInput = {
     id?: StringFieldUpdateOperationsInput | string
-    full_name?: StringFieldUpdateOperationsInput | string
+    fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
-    avatar_url?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumMemberRoleFieldUpdateOperationsInput | $Enums.MemberRole
-    member_number?: NullableStringFieldUpdateOperationsInput | string | null
-    current_rank?: StringFieldUpdateOperationsInput | string
-    join_date?: DateTimeFieldUpdateOperationsInput | Date | string
-    expiry_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    currentRank?: StringFieldUpdateOperationsInput | string
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    onboardingComplete?: BoolFieldUpdateOperationsInput | boolean
+    membershipStatus?: EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dojo?: DojoUpdateOneWithoutMembersNestedInput
-    dojo_head_of?: DojoUpdateManyWithoutHead_instructorNestedInput
+    dojoHeadOf?: DojoUpdateManyWithoutHeadInstructorNestedInput
     instructor?: InstructorUpdateOneWithoutMemberNestedInput
     gradings?: GradingUpdateManyWithoutMemberNestedInput
-    grading_applications?: GradingApplicationUpdateManyWithoutMemberNestedInput
-    event_registrations?: EventRegistrationUpdateManyWithoutMemberNestedInput
+    gradingApplications?: GradingApplicationUpdateManyWithoutMemberNestedInput
+    eventRegistrations?: EventRegistrationUpdateManyWithoutMemberNestedInput
     notifications?: NotificationUpdateManyWithoutMemberNestedInput
     orders?: ShopOrderUpdateManyWithoutMemberNestedInput
     attendance?: AttendanceUpdateManyWithoutMemberNestedInput
-    tournament_entries?: TournamentParticipantUpdateManyWithoutMemberNestedInput
+    tournamentEntries?: TournamentParticipantUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutAdminInput = {
     id?: StringFieldUpdateOperationsInput | string
-    full_name?: StringFieldUpdateOperationsInput | string
+    fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
-    avatar_url?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumMemberRoleFieldUpdateOperationsInput | $Enums.MemberRole
-    member_number?: NullableStringFieldUpdateOperationsInput | string | null
-    current_rank?: StringFieldUpdateOperationsInput | string
-    join_date?: DateTimeFieldUpdateOperationsInput | Date | string
-    expiry_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    dojo_id?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    dojo_head_of?: DojoUncheckedUpdateManyWithoutHead_instructorNestedInput
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    currentRank?: StringFieldUpdateOperationsInput | string
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    dojoId?: NullableStringFieldUpdateOperationsInput | string | null
+    onboardingComplete?: BoolFieldUpdateOperationsInput | boolean
+    membershipStatus?: EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    dojoHeadOf?: DojoUncheckedUpdateManyWithoutHeadInstructorNestedInput
     instructor?: InstructorUncheckedUpdateOneWithoutMemberNestedInput
     gradings?: GradingUncheckedUpdateManyWithoutMemberNestedInput
-    grading_applications?: GradingApplicationUncheckedUpdateManyWithoutMemberNestedInput
-    event_registrations?: EventRegistrationUncheckedUpdateManyWithoutMemberNestedInput
+    gradingApplications?: GradingApplicationUncheckedUpdateManyWithoutMemberNestedInput
+    eventRegistrations?: EventRegistrationUncheckedUpdateManyWithoutMemberNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutMemberNestedInput
     orders?: ShopOrderUncheckedUpdateManyWithoutMemberNestedInput
     attendance?: AttendanceUncheckedUpdateManyWithoutMemberNestedInput
-    tournament_entries?: TournamentParticipantUncheckedUpdateManyWithoutMemberNestedInput
+    tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberCreateWithoutInstructorInput = {
     id: string
-    full_name: string
+    fullName: string
     email: string
     phone?: string | null
-    avatar_url?: string | null
+    avatarUrl?: string | null
     role?: $Enums.MemberRole
-    member_number?: string | null
-    current_rank?: string
-    join_date?: Date | string
-    expiry_date?: Date | string | null
-    is_active?: boolean
-    created_at?: Date | string
-    updated_at?: Date | string
+    memberNumber?: string | null
+    currentRank?: string
+    joinDate?: Date | string
+    expiryDate?: Date | string | null
+    isActive?: boolean
+    onboardingComplete?: boolean
+    membershipStatus?: $Enums.MembershipStatus
+    dateOfBirth?: Date | string | null
+    bloodGroup?: string | null
+    address?: string | null
+    nationalId?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     dojo?: DojoCreateNestedOneWithoutMembersInput
-    dojo_head_of?: DojoCreateNestedManyWithoutHead_instructorInput
+    dojoHeadOf?: DojoCreateNestedManyWithoutHeadInstructorInput
     admin?: AdminCreateNestedOneWithoutMemberInput
     gradings?: GradingCreateNestedManyWithoutMemberInput
-    grading_applications?: GradingApplicationCreateNestedManyWithoutMemberInput
-    event_registrations?: EventRegistrationCreateNestedManyWithoutMemberInput
+    gradingApplications?: GradingApplicationCreateNestedManyWithoutMemberInput
+    eventRegistrations?: EventRegistrationCreateNestedManyWithoutMemberInput
     notifications?: NotificationCreateNestedManyWithoutMemberInput
     orders?: ShopOrderCreateNestedManyWithoutMemberInput
     attendance?: AttendanceCreateNestedManyWithoutMemberInput
-    tournament_entries?: TournamentParticipantCreateNestedManyWithoutMemberInput
+    tournamentEntries?: TournamentParticipantCreateNestedManyWithoutMemberInput
   }
 
   export type MemberUncheckedCreateWithoutInstructorInput = {
     id: string
-    full_name: string
+    fullName: string
     email: string
     phone?: string | null
-    avatar_url?: string | null
+    avatarUrl?: string | null
     role?: $Enums.MemberRole
-    member_number?: string | null
-    current_rank?: string
-    join_date?: Date | string
-    expiry_date?: Date | string | null
-    is_active?: boolean
-    dojo_id?: string | null
-    created_at?: Date | string
-    updated_at?: Date | string
-    dojo_head_of?: DojoUncheckedCreateNestedManyWithoutHead_instructorInput
+    memberNumber?: string | null
+    currentRank?: string
+    joinDate?: Date | string
+    expiryDate?: Date | string | null
+    isActive?: boolean
+    dojoId?: string | null
+    onboardingComplete?: boolean
+    membershipStatus?: $Enums.MembershipStatus
+    dateOfBirth?: Date | string | null
+    bloodGroup?: string | null
+    address?: string | null
+    nationalId?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    dojoHeadOf?: DojoUncheckedCreateNestedManyWithoutHeadInstructorInput
     admin?: AdminUncheckedCreateNestedOneWithoutMemberInput
     gradings?: GradingUncheckedCreateNestedManyWithoutMemberInput
-    grading_applications?: GradingApplicationUncheckedCreateNestedManyWithoutMemberInput
-    event_registrations?: EventRegistrationUncheckedCreateNestedManyWithoutMemberInput
+    gradingApplications?: GradingApplicationUncheckedCreateNestedManyWithoutMemberInput
+    eventRegistrations?: EventRegistrationUncheckedCreateNestedManyWithoutMemberInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutMemberInput
     orders?: ShopOrderUncheckedCreateNestedManyWithoutMemberInput
     attendance?: AttendanceUncheckedCreateNestedManyWithoutMemberInput
-    tournament_entries?: TournamentParticipantUncheckedCreateNestedManyWithoutMemberInput
+    tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutMemberInput
   }
 
   export type MemberCreateOrConnectWithoutInstructorInput = {
@@ -32153,10 +32745,10 @@ export namespace Prisma {
     phone?: string | null
     email?: string | null
     schedule?: NullableJsonNullValueInput | InputJsonValue
-    is_active?: boolean
-    created_at?: Date | string
-    updated_at?: Date | string
-    head_instructor?: MemberCreateNestedOneWithoutDojo_head_ofInput
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    headInstructor?: MemberCreateNestedOneWithoutDojoHeadOfInput
     members?: MemberCreateNestedManyWithoutDojoInput
     attendance?: AttendanceCreateNestedManyWithoutDojoInput
   }
@@ -32171,10 +32763,10 @@ export namespace Prisma {
     phone?: string | null
     email?: string | null
     schedule?: NullableJsonNullValueInput | InputJsonValue
-    is_active?: boolean
-    head_instructor_id?: string | null
-    created_at?: Date | string
-    updated_at?: Date | string
+    isActive?: boolean
+    headInstructorId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     members?: MemberUncheckedCreateNestedManyWithoutDojoInput
     attendance?: AttendanceUncheckedCreateNestedManyWithoutDojoInput
   }
@@ -32197,54 +32789,70 @@ export namespace Prisma {
 
   export type MemberUpdateWithoutInstructorInput = {
     id?: StringFieldUpdateOperationsInput | string
-    full_name?: StringFieldUpdateOperationsInput | string
+    fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
-    avatar_url?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumMemberRoleFieldUpdateOperationsInput | $Enums.MemberRole
-    member_number?: NullableStringFieldUpdateOperationsInput | string | null
-    current_rank?: StringFieldUpdateOperationsInput | string
-    join_date?: DateTimeFieldUpdateOperationsInput | Date | string
-    expiry_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    currentRank?: StringFieldUpdateOperationsInput | string
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    onboardingComplete?: BoolFieldUpdateOperationsInput | boolean
+    membershipStatus?: EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dojo?: DojoUpdateOneWithoutMembersNestedInput
-    dojo_head_of?: DojoUpdateManyWithoutHead_instructorNestedInput
+    dojoHeadOf?: DojoUpdateManyWithoutHeadInstructorNestedInput
     admin?: AdminUpdateOneWithoutMemberNestedInput
     gradings?: GradingUpdateManyWithoutMemberNestedInput
-    grading_applications?: GradingApplicationUpdateManyWithoutMemberNestedInput
-    event_registrations?: EventRegistrationUpdateManyWithoutMemberNestedInput
+    gradingApplications?: GradingApplicationUpdateManyWithoutMemberNestedInput
+    eventRegistrations?: EventRegistrationUpdateManyWithoutMemberNestedInput
     notifications?: NotificationUpdateManyWithoutMemberNestedInput
     orders?: ShopOrderUpdateManyWithoutMemberNestedInput
     attendance?: AttendanceUpdateManyWithoutMemberNestedInput
-    tournament_entries?: TournamentParticipantUpdateManyWithoutMemberNestedInput
+    tournamentEntries?: TournamentParticipantUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutInstructorInput = {
     id?: StringFieldUpdateOperationsInput | string
-    full_name?: StringFieldUpdateOperationsInput | string
+    fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
-    avatar_url?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumMemberRoleFieldUpdateOperationsInput | $Enums.MemberRole
-    member_number?: NullableStringFieldUpdateOperationsInput | string | null
-    current_rank?: StringFieldUpdateOperationsInput | string
-    join_date?: DateTimeFieldUpdateOperationsInput | Date | string
-    expiry_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    dojo_id?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    dojo_head_of?: DojoUncheckedUpdateManyWithoutHead_instructorNestedInput
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    currentRank?: StringFieldUpdateOperationsInput | string
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    dojoId?: NullableStringFieldUpdateOperationsInput | string | null
+    onboardingComplete?: BoolFieldUpdateOperationsInput | boolean
+    membershipStatus?: EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    dojoHeadOf?: DojoUncheckedUpdateManyWithoutHeadInstructorNestedInput
     admin?: AdminUncheckedUpdateOneWithoutMemberNestedInput
     gradings?: GradingUncheckedUpdateManyWithoutMemberNestedInput
-    grading_applications?: GradingApplicationUncheckedUpdateManyWithoutMemberNestedInput
-    event_registrations?: EventRegistrationUncheckedUpdateManyWithoutMemberNestedInput
+    gradingApplications?: GradingApplicationUncheckedUpdateManyWithoutMemberNestedInput
+    eventRegistrations?: EventRegistrationUncheckedUpdateManyWithoutMemberNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutMemberNestedInput
     orders?: ShopOrderUncheckedUpdateManyWithoutMemberNestedInput
     attendance?: AttendanceUncheckedUpdateManyWithoutMemberNestedInput
-    tournament_entries?: TournamentParticipantUncheckedUpdateManyWithoutMemberNestedInput
+    tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutMemberNestedInput
   }
 
   export type DojoUpsertWithoutInstructorsInput = {
@@ -32268,10 +32876,10 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     schedule?: NullableJsonNullValueInput | InputJsonValue
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    head_instructor?: MemberUpdateOneWithoutDojo_head_ofNestedInput
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    headInstructor?: MemberUpdateOneWithoutDojoHeadOfNestedInput
     members?: MemberUpdateManyWithoutDojoNestedInput
     attendance?: AttendanceUpdateManyWithoutDojoNestedInput
   }
@@ -32286,64 +32894,80 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     schedule?: NullableJsonNullValueInput | InputJsonValue
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    head_instructor_id?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    headInstructorId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: MemberUncheckedUpdateManyWithoutDojoNestedInput
     attendance?: AttendanceUncheckedUpdateManyWithoutDojoNestedInput
   }
 
   export type MemberCreateWithoutAttendanceInput = {
     id: string
-    full_name: string
+    fullName: string
     email: string
     phone?: string | null
-    avatar_url?: string | null
+    avatarUrl?: string | null
     role?: $Enums.MemberRole
-    member_number?: string | null
-    current_rank?: string
-    join_date?: Date | string
-    expiry_date?: Date | string | null
-    is_active?: boolean
-    created_at?: Date | string
-    updated_at?: Date | string
+    memberNumber?: string | null
+    currentRank?: string
+    joinDate?: Date | string
+    expiryDate?: Date | string | null
+    isActive?: boolean
+    onboardingComplete?: boolean
+    membershipStatus?: $Enums.MembershipStatus
+    dateOfBirth?: Date | string | null
+    bloodGroup?: string | null
+    address?: string | null
+    nationalId?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     dojo?: DojoCreateNestedOneWithoutMembersInput
-    dojo_head_of?: DojoCreateNestedManyWithoutHead_instructorInput
+    dojoHeadOf?: DojoCreateNestedManyWithoutHeadInstructorInput
     instructor?: InstructorCreateNestedOneWithoutMemberInput
     admin?: AdminCreateNestedOneWithoutMemberInput
     gradings?: GradingCreateNestedManyWithoutMemberInput
-    grading_applications?: GradingApplicationCreateNestedManyWithoutMemberInput
-    event_registrations?: EventRegistrationCreateNestedManyWithoutMemberInput
+    gradingApplications?: GradingApplicationCreateNestedManyWithoutMemberInput
+    eventRegistrations?: EventRegistrationCreateNestedManyWithoutMemberInput
     notifications?: NotificationCreateNestedManyWithoutMemberInput
     orders?: ShopOrderCreateNestedManyWithoutMemberInput
-    tournament_entries?: TournamentParticipantCreateNestedManyWithoutMemberInput
+    tournamentEntries?: TournamentParticipantCreateNestedManyWithoutMemberInput
   }
 
   export type MemberUncheckedCreateWithoutAttendanceInput = {
     id: string
-    full_name: string
+    fullName: string
     email: string
     phone?: string | null
-    avatar_url?: string | null
+    avatarUrl?: string | null
     role?: $Enums.MemberRole
-    member_number?: string | null
-    current_rank?: string
-    join_date?: Date | string
-    expiry_date?: Date | string | null
-    is_active?: boolean
-    dojo_id?: string | null
-    created_at?: Date | string
-    updated_at?: Date | string
-    dojo_head_of?: DojoUncheckedCreateNestedManyWithoutHead_instructorInput
+    memberNumber?: string | null
+    currentRank?: string
+    joinDate?: Date | string
+    expiryDate?: Date | string | null
+    isActive?: boolean
+    dojoId?: string | null
+    onboardingComplete?: boolean
+    membershipStatus?: $Enums.MembershipStatus
+    dateOfBirth?: Date | string | null
+    bloodGroup?: string | null
+    address?: string | null
+    nationalId?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    dojoHeadOf?: DojoUncheckedCreateNestedManyWithoutHeadInstructorInput
     instructor?: InstructorUncheckedCreateNestedOneWithoutMemberInput
     admin?: AdminUncheckedCreateNestedOneWithoutMemberInput
     gradings?: GradingUncheckedCreateNestedManyWithoutMemberInput
-    grading_applications?: GradingApplicationUncheckedCreateNestedManyWithoutMemberInput
-    event_registrations?: EventRegistrationUncheckedCreateNestedManyWithoutMemberInput
+    gradingApplications?: GradingApplicationUncheckedCreateNestedManyWithoutMemberInput
+    eventRegistrations?: EventRegistrationUncheckedCreateNestedManyWithoutMemberInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutMemberInput
     orders?: ShopOrderUncheckedCreateNestedManyWithoutMemberInput
-    tournament_entries?: TournamentParticipantUncheckedCreateNestedManyWithoutMemberInput
+    tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutMemberInput
   }
 
   export type MemberCreateOrConnectWithoutAttendanceInput = {
@@ -32361,10 +32985,10 @@ export namespace Prisma {
     phone?: string | null
     email?: string | null
     schedule?: NullableJsonNullValueInput | InputJsonValue
-    is_active?: boolean
-    created_at?: Date | string
-    updated_at?: Date | string
-    head_instructor?: MemberCreateNestedOneWithoutDojo_head_ofInput
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    headInstructor?: MemberCreateNestedOneWithoutDojoHeadOfInput
     members?: MemberCreateNestedManyWithoutDojoInput
     instructors?: InstructorCreateNestedManyWithoutDojoInput
   }
@@ -32379,10 +33003,10 @@ export namespace Prisma {
     phone?: string | null
     email?: string | null
     schedule?: NullableJsonNullValueInput | InputJsonValue
-    is_active?: boolean
-    head_instructor_id?: string | null
-    created_at?: Date | string
-    updated_at?: Date | string
+    isActive?: boolean
+    headInstructorId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     members?: MemberUncheckedCreateNestedManyWithoutDojoInput
     instructors?: InstructorUncheckedCreateNestedManyWithoutDojoInput
   }
@@ -32405,54 +33029,70 @@ export namespace Prisma {
 
   export type MemberUpdateWithoutAttendanceInput = {
     id?: StringFieldUpdateOperationsInput | string
-    full_name?: StringFieldUpdateOperationsInput | string
+    fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
-    avatar_url?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumMemberRoleFieldUpdateOperationsInput | $Enums.MemberRole
-    member_number?: NullableStringFieldUpdateOperationsInput | string | null
-    current_rank?: StringFieldUpdateOperationsInput | string
-    join_date?: DateTimeFieldUpdateOperationsInput | Date | string
-    expiry_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    currentRank?: StringFieldUpdateOperationsInput | string
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    onboardingComplete?: BoolFieldUpdateOperationsInput | boolean
+    membershipStatus?: EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dojo?: DojoUpdateOneWithoutMembersNestedInput
-    dojo_head_of?: DojoUpdateManyWithoutHead_instructorNestedInput
+    dojoHeadOf?: DojoUpdateManyWithoutHeadInstructorNestedInput
     instructor?: InstructorUpdateOneWithoutMemberNestedInput
     admin?: AdminUpdateOneWithoutMemberNestedInput
     gradings?: GradingUpdateManyWithoutMemberNestedInput
-    grading_applications?: GradingApplicationUpdateManyWithoutMemberNestedInput
-    event_registrations?: EventRegistrationUpdateManyWithoutMemberNestedInput
+    gradingApplications?: GradingApplicationUpdateManyWithoutMemberNestedInput
+    eventRegistrations?: EventRegistrationUpdateManyWithoutMemberNestedInput
     notifications?: NotificationUpdateManyWithoutMemberNestedInput
     orders?: ShopOrderUpdateManyWithoutMemberNestedInput
-    tournament_entries?: TournamentParticipantUpdateManyWithoutMemberNestedInput
+    tournamentEntries?: TournamentParticipantUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutAttendanceInput = {
     id?: StringFieldUpdateOperationsInput | string
-    full_name?: StringFieldUpdateOperationsInput | string
+    fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
-    avatar_url?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumMemberRoleFieldUpdateOperationsInput | $Enums.MemberRole
-    member_number?: NullableStringFieldUpdateOperationsInput | string | null
-    current_rank?: StringFieldUpdateOperationsInput | string
-    join_date?: DateTimeFieldUpdateOperationsInput | Date | string
-    expiry_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    dojo_id?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    dojo_head_of?: DojoUncheckedUpdateManyWithoutHead_instructorNestedInput
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    currentRank?: StringFieldUpdateOperationsInput | string
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    dojoId?: NullableStringFieldUpdateOperationsInput | string | null
+    onboardingComplete?: BoolFieldUpdateOperationsInput | boolean
+    membershipStatus?: EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    dojoHeadOf?: DojoUncheckedUpdateManyWithoutHeadInstructorNestedInput
     instructor?: InstructorUncheckedUpdateOneWithoutMemberNestedInput
     admin?: AdminUncheckedUpdateOneWithoutMemberNestedInput
     gradings?: GradingUncheckedUpdateManyWithoutMemberNestedInput
-    grading_applications?: GradingApplicationUncheckedUpdateManyWithoutMemberNestedInput
-    event_registrations?: EventRegistrationUncheckedUpdateManyWithoutMemberNestedInput
+    gradingApplications?: GradingApplicationUncheckedUpdateManyWithoutMemberNestedInput
+    eventRegistrations?: EventRegistrationUncheckedUpdateManyWithoutMemberNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutMemberNestedInput
     orders?: ShopOrderUncheckedUpdateManyWithoutMemberNestedInput
-    tournament_entries?: TournamentParticipantUncheckedUpdateManyWithoutMemberNestedInput
+    tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutMemberNestedInput
   }
 
   export type DojoUpsertWithoutAttendanceInput = {
@@ -32476,10 +33116,10 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     schedule?: NullableJsonNullValueInput | InputJsonValue
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    head_instructor?: MemberUpdateOneWithoutDojo_head_ofNestedInput
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    headInstructor?: MemberUpdateOneWithoutDojoHeadOfNestedInput
     members?: MemberUpdateManyWithoutDojoNestedInput
     instructors?: InstructorUpdateManyWithoutDojoNestedInput
   }
@@ -32494,257 +33134,277 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     schedule?: NullableJsonNullValueInput | InputJsonValue
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    head_instructor_id?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    headInstructorId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: MemberUncheckedUpdateManyWithoutDojoNestedInput
     instructors?: InstructorUncheckedUpdateManyWithoutDojoNestedInput
   }
 
-  export type BeltRankCreateWithoutGrading_eventsInput = {
+  export type BeltRankCreateWithoutGradingEventsInput = {
     id?: string
     name: string
-    kyu_dan?: string | null
-    color_hex?: string | null
-    order_index: number
-    created_at?: Date | string
-    updated_at?: Date | string
-    gradings_from?: GradingCreateNestedManyWithoutFrom_rankInput
-    gradings_to?: GradingCreateNestedManyWithoutTo_rankInput
-    grading_applications?: GradingApplicationCreateNestedManyWithoutTarget_rankInput
+    nameBn?: string | null
+    kyuDan?: string | null
+    colorHex?: string | null
+    orderIndex: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    gradingsFrom?: GradingCreateNestedManyWithoutFromRankInput
+    gradingsTo?: GradingCreateNestedManyWithoutToRankInput
+    gradingApplications?: GradingApplicationCreateNestedManyWithoutTargetRankInput
   }
 
-  export type BeltRankUncheckedCreateWithoutGrading_eventsInput = {
+  export type BeltRankUncheckedCreateWithoutGradingEventsInput = {
     id?: string
     name: string
-    kyu_dan?: string | null
-    color_hex?: string | null
-    order_index: number
-    created_at?: Date | string
-    updated_at?: Date | string
-    gradings_from?: GradingUncheckedCreateNestedManyWithoutFrom_rankInput
-    gradings_to?: GradingUncheckedCreateNestedManyWithoutTo_rankInput
-    grading_applications?: GradingApplicationUncheckedCreateNestedManyWithoutTarget_rankInput
+    nameBn?: string | null
+    kyuDan?: string | null
+    colorHex?: string | null
+    orderIndex: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    gradingsFrom?: GradingUncheckedCreateNestedManyWithoutFromRankInput
+    gradingsTo?: GradingUncheckedCreateNestedManyWithoutToRankInput
+    gradingApplications?: GradingApplicationUncheckedCreateNestedManyWithoutTargetRankInput
   }
 
-  export type BeltRankCreateOrConnectWithoutGrading_eventsInput = {
+  export type BeltRankCreateOrConnectWithoutGradingEventsInput = {
     where: BeltRankWhereUniqueInput
-    create: XOR<BeltRankCreateWithoutGrading_eventsInput, BeltRankUncheckedCreateWithoutGrading_eventsInput>
+    create: XOR<BeltRankCreateWithoutGradingEventsInput, BeltRankUncheckedCreateWithoutGradingEventsInput>
   }
 
-  export type GradingCreateWithoutGrading_eventInput = {
+  export type GradingCreateWithoutGradingEventInput = {
     id?: string
     result?: $Enums.GradingResult
-    certificate_url?: string | null
+    certificateUrl?: string | null
     notes?: string | null
-    created_at?: Date | string
-    updated_at?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
     member: MemberCreateNestedOneWithoutGradingsInput
-    from_rank?: BeltRankCreateNestedOneWithoutGradings_fromInput
-    to_rank?: BeltRankCreateNestedOneWithoutGradings_toInput
+    fromRank?: BeltRankCreateNestedOneWithoutGradingsFromInput
+    toRank?: BeltRankCreateNestedOneWithoutGradingsToInput
   }
 
-  export type GradingUncheckedCreateWithoutGrading_eventInput = {
+  export type GradingUncheckedCreateWithoutGradingEventInput = {
     id?: string
-    member_id: string
-    from_rank_id?: string | null
-    to_rank_id?: string | null
+    memberId: string
+    fromRankId?: string | null
+    toRankId?: string | null
     result?: $Enums.GradingResult
-    certificate_url?: string | null
+    certificateUrl?: string | null
     notes?: string | null
-    created_at?: Date | string
-    updated_at?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
-  export type GradingCreateOrConnectWithoutGrading_eventInput = {
+  export type GradingCreateOrConnectWithoutGradingEventInput = {
     where: GradingWhereUniqueInput
-    create: XOR<GradingCreateWithoutGrading_eventInput, GradingUncheckedCreateWithoutGrading_eventInput>
+    create: XOR<GradingCreateWithoutGradingEventInput, GradingUncheckedCreateWithoutGradingEventInput>
   }
 
-  export type GradingCreateManyGrading_eventInputEnvelope = {
-    data: GradingCreateManyGrading_eventInput | GradingCreateManyGrading_eventInput[]
+  export type GradingCreateManyGradingEventInputEnvelope = {
+    data: GradingCreateManyGradingEventInput | GradingCreateManyGradingEventInput[]
     skipDuplicates?: boolean
   }
 
-  export type GradingApplicationCreateWithoutGrading_eventInput = {
+  export type GradingApplicationCreateWithoutGradingEventInput = {
     id?: string
     status?: $Enums.ApplicationStatus
     notes?: string | null
-    applied_at?: Date | string
-    member: MemberCreateNestedOneWithoutGrading_applicationsInput
-    target_rank?: BeltRankCreateNestedOneWithoutGrading_applicationsInput
+    appliedAt?: Date | string
+    member: MemberCreateNestedOneWithoutGradingApplicationsInput
+    targetRank?: BeltRankCreateNestedOneWithoutGradingApplicationsInput
   }
 
-  export type GradingApplicationUncheckedCreateWithoutGrading_eventInput = {
+  export type GradingApplicationUncheckedCreateWithoutGradingEventInput = {
     id?: string
-    member_id: string
-    target_rank_id?: string | null
+    memberId: string
+    targetRankId?: string | null
     status?: $Enums.ApplicationStatus
     notes?: string | null
-    applied_at?: Date | string
+    appliedAt?: Date | string
   }
 
-  export type GradingApplicationCreateOrConnectWithoutGrading_eventInput = {
+  export type GradingApplicationCreateOrConnectWithoutGradingEventInput = {
     where: GradingApplicationWhereUniqueInput
-    create: XOR<GradingApplicationCreateWithoutGrading_eventInput, GradingApplicationUncheckedCreateWithoutGrading_eventInput>
+    create: XOR<GradingApplicationCreateWithoutGradingEventInput, GradingApplicationUncheckedCreateWithoutGradingEventInput>
   }
 
-  export type GradingApplicationCreateManyGrading_eventInputEnvelope = {
-    data: GradingApplicationCreateManyGrading_eventInput | GradingApplicationCreateManyGrading_eventInput[]
+  export type GradingApplicationCreateManyGradingEventInputEnvelope = {
+    data: GradingApplicationCreateManyGradingEventInput | GradingApplicationCreateManyGradingEventInput[]
     skipDuplicates?: boolean
   }
 
-  export type BeltRankUpsertWithoutGrading_eventsInput = {
-    update: XOR<BeltRankUpdateWithoutGrading_eventsInput, BeltRankUncheckedUpdateWithoutGrading_eventsInput>
-    create: XOR<BeltRankCreateWithoutGrading_eventsInput, BeltRankUncheckedCreateWithoutGrading_eventsInput>
+  export type BeltRankUpsertWithoutGradingEventsInput = {
+    update: XOR<BeltRankUpdateWithoutGradingEventsInput, BeltRankUncheckedUpdateWithoutGradingEventsInput>
+    create: XOR<BeltRankCreateWithoutGradingEventsInput, BeltRankUncheckedCreateWithoutGradingEventsInput>
     where?: BeltRankWhereInput
   }
 
-  export type BeltRankUpdateToOneWithWhereWithoutGrading_eventsInput = {
+  export type BeltRankUpdateToOneWithWhereWithoutGradingEventsInput = {
     where?: BeltRankWhereInput
-    data: XOR<BeltRankUpdateWithoutGrading_eventsInput, BeltRankUncheckedUpdateWithoutGrading_eventsInput>
+    data: XOR<BeltRankUpdateWithoutGradingEventsInput, BeltRankUncheckedUpdateWithoutGradingEventsInput>
   }
 
-  export type BeltRankUpdateWithoutGrading_eventsInput = {
+  export type BeltRankUpdateWithoutGradingEventsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    kyu_dan?: NullableStringFieldUpdateOperationsInput | string | null
-    color_hex?: NullableStringFieldUpdateOperationsInput | string | null
-    order_index?: IntFieldUpdateOperationsInput | number
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    gradings_from?: GradingUpdateManyWithoutFrom_rankNestedInput
-    gradings_to?: GradingUpdateManyWithoutTo_rankNestedInput
-    grading_applications?: GradingApplicationUpdateManyWithoutTarget_rankNestedInput
+    nameBn?: NullableStringFieldUpdateOperationsInput | string | null
+    kyuDan?: NullableStringFieldUpdateOperationsInput | string | null
+    colorHex?: NullableStringFieldUpdateOperationsInput | string | null
+    orderIndex?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    gradingsFrom?: GradingUpdateManyWithoutFromRankNestedInput
+    gradingsTo?: GradingUpdateManyWithoutToRankNestedInput
+    gradingApplications?: GradingApplicationUpdateManyWithoutTargetRankNestedInput
   }
 
-  export type BeltRankUncheckedUpdateWithoutGrading_eventsInput = {
+  export type BeltRankUncheckedUpdateWithoutGradingEventsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    kyu_dan?: NullableStringFieldUpdateOperationsInput | string | null
-    color_hex?: NullableStringFieldUpdateOperationsInput | string | null
-    order_index?: IntFieldUpdateOperationsInput | number
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    gradings_from?: GradingUncheckedUpdateManyWithoutFrom_rankNestedInput
-    gradings_to?: GradingUncheckedUpdateManyWithoutTo_rankNestedInput
-    grading_applications?: GradingApplicationUncheckedUpdateManyWithoutTarget_rankNestedInput
+    nameBn?: NullableStringFieldUpdateOperationsInput | string | null
+    kyuDan?: NullableStringFieldUpdateOperationsInput | string | null
+    colorHex?: NullableStringFieldUpdateOperationsInput | string | null
+    orderIndex?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    gradingsFrom?: GradingUncheckedUpdateManyWithoutFromRankNestedInput
+    gradingsTo?: GradingUncheckedUpdateManyWithoutToRankNestedInput
+    gradingApplications?: GradingApplicationUncheckedUpdateManyWithoutTargetRankNestedInput
   }
 
-  export type GradingUpsertWithWhereUniqueWithoutGrading_eventInput = {
+  export type GradingUpsertWithWhereUniqueWithoutGradingEventInput = {
     where: GradingWhereUniqueInput
-    update: XOR<GradingUpdateWithoutGrading_eventInput, GradingUncheckedUpdateWithoutGrading_eventInput>
-    create: XOR<GradingCreateWithoutGrading_eventInput, GradingUncheckedCreateWithoutGrading_eventInput>
+    update: XOR<GradingUpdateWithoutGradingEventInput, GradingUncheckedUpdateWithoutGradingEventInput>
+    create: XOR<GradingCreateWithoutGradingEventInput, GradingUncheckedCreateWithoutGradingEventInput>
   }
 
-  export type GradingUpdateWithWhereUniqueWithoutGrading_eventInput = {
+  export type GradingUpdateWithWhereUniqueWithoutGradingEventInput = {
     where: GradingWhereUniqueInput
-    data: XOR<GradingUpdateWithoutGrading_eventInput, GradingUncheckedUpdateWithoutGrading_eventInput>
+    data: XOR<GradingUpdateWithoutGradingEventInput, GradingUncheckedUpdateWithoutGradingEventInput>
   }
 
-  export type GradingUpdateManyWithWhereWithoutGrading_eventInput = {
+  export type GradingUpdateManyWithWhereWithoutGradingEventInput = {
     where: GradingScalarWhereInput
-    data: XOR<GradingUpdateManyMutationInput, GradingUncheckedUpdateManyWithoutGrading_eventInput>
+    data: XOR<GradingUpdateManyMutationInput, GradingUncheckedUpdateManyWithoutGradingEventInput>
   }
 
-  export type GradingApplicationUpsertWithWhereUniqueWithoutGrading_eventInput = {
+  export type GradingApplicationUpsertWithWhereUniqueWithoutGradingEventInput = {
     where: GradingApplicationWhereUniqueInput
-    update: XOR<GradingApplicationUpdateWithoutGrading_eventInput, GradingApplicationUncheckedUpdateWithoutGrading_eventInput>
-    create: XOR<GradingApplicationCreateWithoutGrading_eventInput, GradingApplicationUncheckedCreateWithoutGrading_eventInput>
+    update: XOR<GradingApplicationUpdateWithoutGradingEventInput, GradingApplicationUncheckedUpdateWithoutGradingEventInput>
+    create: XOR<GradingApplicationCreateWithoutGradingEventInput, GradingApplicationUncheckedCreateWithoutGradingEventInput>
   }
 
-  export type GradingApplicationUpdateWithWhereUniqueWithoutGrading_eventInput = {
+  export type GradingApplicationUpdateWithWhereUniqueWithoutGradingEventInput = {
     where: GradingApplicationWhereUniqueInput
-    data: XOR<GradingApplicationUpdateWithoutGrading_eventInput, GradingApplicationUncheckedUpdateWithoutGrading_eventInput>
+    data: XOR<GradingApplicationUpdateWithoutGradingEventInput, GradingApplicationUncheckedUpdateWithoutGradingEventInput>
   }
 
-  export type GradingApplicationUpdateManyWithWhereWithoutGrading_eventInput = {
+  export type GradingApplicationUpdateManyWithWhereWithoutGradingEventInput = {
     where: GradingApplicationScalarWhereInput
-    data: XOR<GradingApplicationUpdateManyMutationInput, GradingApplicationUncheckedUpdateManyWithoutGrading_eventInput>
+    data: XOR<GradingApplicationUpdateManyMutationInput, GradingApplicationUncheckedUpdateManyWithoutGradingEventInput>
   }
 
-  export type MemberCreateWithoutGrading_applicationsInput = {
+  export type MemberCreateWithoutGradingApplicationsInput = {
     id: string
-    full_name: string
+    fullName: string
     email: string
     phone?: string | null
-    avatar_url?: string | null
+    avatarUrl?: string | null
     role?: $Enums.MemberRole
-    member_number?: string | null
-    current_rank?: string
-    join_date?: Date | string
-    expiry_date?: Date | string | null
-    is_active?: boolean
-    created_at?: Date | string
-    updated_at?: Date | string
+    memberNumber?: string | null
+    currentRank?: string
+    joinDate?: Date | string
+    expiryDate?: Date | string | null
+    isActive?: boolean
+    onboardingComplete?: boolean
+    membershipStatus?: $Enums.MembershipStatus
+    dateOfBirth?: Date | string | null
+    bloodGroup?: string | null
+    address?: string | null
+    nationalId?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     dojo?: DojoCreateNestedOneWithoutMembersInput
-    dojo_head_of?: DojoCreateNestedManyWithoutHead_instructorInput
+    dojoHeadOf?: DojoCreateNestedManyWithoutHeadInstructorInput
     instructor?: InstructorCreateNestedOneWithoutMemberInput
     admin?: AdminCreateNestedOneWithoutMemberInput
     gradings?: GradingCreateNestedManyWithoutMemberInput
-    event_registrations?: EventRegistrationCreateNestedManyWithoutMemberInput
+    eventRegistrations?: EventRegistrationCreateNestedManyWithoutMemberInput
     notifications?: NotificationCreateNestedManyWithoutMemberInput
     orders?: ShopOrderCreateNestedManyWithoutMemberInput
     attendance?: AttendanceCreateNestedManyWithoutMemberInput
-    tournament_entries?: TournamentParticipantCreateNestedManyWithoutMemberInput
+    tournamentEntries?: TournamentParticipantCreateNestedManyWithoutMemberInput
   }
 
-  export type MemberUncheckedCreateWithoutGrading_applicationsInput = {
+  export type MemberUncheckedCreateWithoutGradingApplicationsInput = {
     id: string
-    full_name: string
+    fullName: string
     email: string
     phone?: string | null
-    avatar_url?: string | null
+    avatarUrl?: string | null
     role?: $Enums.MemberRole
-    member_number?: string | null
-    current_rank?: string
-    join_date?: Date | string
-    expiry_date?: Date | string | null
-    is_active?: boolean
-    dojo_id?: string | null
-    created_at?: Date | string
-    updated_at?: Date | string
-    dojo_head_of?: DojoUncheckedCreateNestedManyWithoutHead_instructorInput
+    memberNumber?: string | null
+    currentRank?: string
+    joinDate?: Date | string
+    expiryDate?: Date | string | null
+    isActive?: boolean
+    dojoId?: string | null
+    onboardingComplete?: boolean
+    membershipStatus?: $Enums.MembershipStatus
+    dateOfBirth?: Date | string | null
+    bloodGroup?: string | null
+    address?: string | null
+    nationalId?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    dojoHeadOf?: DojoUncheckedCreateNestedManyWithoutHeadInstructorInput
     instructor?: InstructorUncheckedCreateNestedOneWithoutMemberInput
     admin?: AdminUncheckedCreateNestedOneWithoutMemberInput
     gradings?: GradingUncheckedCreateNestedManyWithoutMemberInput
-    event_registrations?: EventRegistrationUncheckedCreateNestedManyWithoutMemberInput
+    eventRegistrations?: EventRegistrationUncheckedCreateNestedManyWithoutMemberInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutMemberInput
     orders?: ShopOrderUncheckedCreateNestedManyWithoutMemberInput
     attendance?: AttendanceUncheckedCreateNestedManyWithoutMemberInput
-    tournament_entries?: TournamentParticipantUncheckedCreateNestedManyWithoutMemberInput
+    tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutMemberInput
   }
 
-  export type MemberCreateOrConnectWithoutGrading_applicationsInput = {
+  export type MemberCreateOrConnectWithoutGradingApplicationsInput = {
     where: MemberWhereUniqueInput
-    create: XOR<MemberCreateWithoutGrading_applicationsInput, MemberUncheckedCreateWithoutGrading_applicationsInput>
+    create: XOR<MemberCreateWithoutGradingApplicationsInput, MemberUncheckedCreateWithoutGradingApplicationsInput>
   }
 
   export type GradingEventCreateWithoutApplicationsInput = {
     id?: string
     name: string
-    event_date: Date | string
+    eventDate: Date | string
     location?: string | null
-    is_open?: boolean
+    isOpen?: boolean
     notes?: string | null
-    created_at?: Date | string
-    updated_at?: Date | string
-    target_rank?: BeltRankCreateNestedOneWithoutGrading_eventsInput
-    gradings?: GradingCreateNestedManyWithoutGrading_eventInput
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    targetRank?: BeltRankCreateNestedOneWithoutGradingEventsInput
+    gradings?: GradingCreateNestedManyWithoutGradingEventInput
   }
 
   export type GradingEventUncheckedCreateWithoutApplicationsInput = {
     id?: string
     name: string
-    event_date: Date | string
+    eventDate: Date | string
     location?: string | null
-    target_rank_id?: string | null
-    is_open?: boolean
+    targetRankId?: string | null
+    isOpen?: boolean
     notes?: string | null
-    created_at?: Date | string
-    updated_at?: Date | string
-    gradings?: GradingUncheckedCreateNestedManyWithoutGrading_eventInput
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    gradings?: GradingUncheckedCreateNestedManyWithoutGradingEventInput
   }
 
   export type GradingEventCreateOrConnectWithoutApplicationsInput = {
@@ -32752,98 +33412,116 @@ export namespace Prisma {
     create: XOR<GradingEventCreateWithoutApplicationsInput, GradingEventUncheckedCreateWithoutApplicationsInput>
   }
 
-  export type BeltRankCreateWithoutGrading_applicationsInput = {
+  export type BeltRankCreateWithoutGradingApplicationsInput = {
     id?: string
     name: string
-    kyu_dan?: string | null
-    color_hex?: string | null
-    order_index: number
-    created_at?: Date | string
-    updated_at?: Date | string
-    gradings_from?: GradingCreateNestedManyWithoutFrom_rankInput
-    gradings_to?: GradingCreateNestedManyWithoutTo_rankInput
-    grading_events?: GradingEventCreateNestedManyWithoutTarget_rankInput
+    nameBn?: string | null
+    kyuDan?: string | null
+    colorHex?: string | null
+    orderIndex: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    gradingsFrom?: GradingCreateNestedManyWithoutFromRankInput
+    gradingsTo?: GradingCreateNestedManyWithoutToRankInput
+    gradingEvents?: GradingEventCreateNestedManyWithoutTargetRankInput
   }
 
-  export type BeltRankUncheckedCreateWithoutGrading_applicationsInput = {
+  export type BeltRankUncheckedCreateWithoutGradingApplicationsInput = {
     id?: string
     name: string
-    kyu_dan?: string | null
-    color_hex?: string | null
-    order_index: number
-    created_at?: Date | string
-    updated_at?: Date | string
-    gradings_from?: GradingUncheckedCreateNestedManyWithoutFrom_rankInput
-    gradings_to?: GradingUncheckedCreateNestedManyWithoutTo_rankInput
-    grading_events?: GradingEventUncheckedCreateNestedManyWithoutTarget_rankInput
+    nameBn?: string | null
+    kyuDan?: string | null
+    colorHex?: string | null
+    orderIndex: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    gradingsFrom?: GradingUncheckedCreateNestedManyWithoutFromRankInput
+    gradingsTo?: GradingUncheckedCreateNestedManyWithoutToRankInput
+    gradingEvents?: GradingEventUncheckedCreateNestedManyWithoutTargetRankInput
   }
 
-  export type BeltRankCreateOrConnectWithoutGrading_applicationsInput = {
+  export type BeltRankCreateOrConnectWithoutGradingApplicationsInput = {
     where: BeltRankWhereUniqueInput
-    create: XOR<BeltRankCreateWithoutGrading_applicationsInput, BeltRankUncheckedCreateWithoutGrading_applicationsInput>
+    create: XOR<BeltRankCreateWithoutGradingApplicationsInput, BeltRankUncheckedCreateWithoutGradingApplicationsInput>
   }
 
-  export type MemberUpsertWithoutGrading_applicationsInput = {
-    update: XOR<MemberUpdateWithoutGrading_applicationsInput, MemberUncheckedUpdateWithoutGrading_applicationsInput>
-    create: XOR<MemberCreateWithoutGrading_applicationsInput, MemberUncheckedCreateWithoutGrading_applicationsInput>
+  export type MemberUpsertWithoutGradingApplicationsInput = {
+    update: XOR<MemberUpdateWithoutGradingApplicationsInput, MemberUncheckedUpdateWithoutGradingApplicationsInput>
+    create: XOR<MemberCreateWithoutGradingApplicationsInput, MemberUncheckedCreateWithoutGradingApplicationsInput>
     where?: MemberWhereInput
   }
 
-  export type MemberUpdateToOneWithWhereWithoutGrading_applicationsInput = {
+  export type MemberUpdateToOneWithWhereWithoutGradingApplicationsInput = {
     where?: MemberWhereInput
-    data: XOR<MemberUpdateWithoutGrading_applicationsInput, MemberUncheckedUpdateWithoutGrading_applicationsInput>
+    data: XOR<MemberUpdateWithoutGradingApplicationsInput, MemberUncheckedUpdateWithoutGradingApplicationsInput>
   }
 
-  export type MemberUpdateWithoutGrading_applicationsInput = {
+  export type MemberUpdateWithoutGradingApplicationsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    full_name?: StringFieldUpdateOperationsInput | string
+    fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
-    avatar_url?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumMemberRoleFieldUpdateOperationsInput | $Enums.MemberRole
-    member_number?: NullableStringFieldUpdateOperationsInput | string | null
-    current_rank?: StringFieldUpdateOperationsInput | string
-    join_date?: DateTimeFieldUpdateOperationsInput | Date | string
-    expiry_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    currentRank?: StringFieldUpdateOperationsInput | string
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    onboardingComplete?: BoolFieldUpdateOperationsInput | boolean
+    membershipStatus?: EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dojo?: DojoUpdateOneWithoutMembersNestedInput
-    dojo_head_of?: DojoUpdateManyWithoutHead_instructorNestedInput
+    dojoHeadOf?: DojoUpdateManyWithoutHeadInstructorNestedInput
     instructor?: InstructorUpdateOneWithoutMemberNestedInput
     admin?: AdminUpdateOneWithoutMemberNestedInput
     gradings?: GradingUpdateManyWithoutMemberNestedInput
-    event_registrations?: EventRegistrationUpdateManyWithoutMemberNestedInput
+    eventRegistrations?: EventRegistrationUpdateManyWithoutMemberNestedInput
     notifications?: NotificationUpdateManyWithoutMemberNestedInput
     orders?: ShopOrderUpdateManyWithoutMemberNestedInput
     attendance?: AttendanceUpdateManyWithoutMemberNestedInput
-    tournament_entries?: TournamentParticipantUpdateManyWithoutMemberNestedInput
+    tournamentEntries?: TournamentParticipantUpdateManyWithoutMemberNestedInput
   }
 
-  export type MemberUncheckedUpdateWithoutGrading_applicationsInput = {
+  export type MemberUncheckedUpdateWithoutGradingApplicationsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    full_name?: StringFieldUpdateOperationsInput | string
+    fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
-    avatar_url?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumMemberRoleFieldUpdateOperationsInput | $Enums.MemberRole
-    member_number?: NullableStringFieldUpdateOperationsInput | string | null
-    current_rank?: StringFieldUpdateOperationsInput | string
-    join_date?: DateTimeFieldUpdateOperationsInput | Date | string
-    expiry_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    dojo_id?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    dojo_head_of?: DojoUncheckedUpdateManyWithoutHead_instructorNestedInput
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    currentRank?: StringFieldUpdateOperationsInput | string
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    dojoId?: NullableStringFieldUpdateOperationsInput | string | null
+    onboardingComplete?: BoolFieldUpdateOperationsInput | boolean
+    membershipStatus?: EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    dojoHeadOf?: DojoUncheckedUpdateManyWithoutHeadInstructorNestedInput
     instructor?: InstructorUncheckedUpdateOneWithoutMemberNestedInput
     admin?: AdminUncheckedUpdateOneWithoutMemberNestedInput
     gradings?: GradingUncheckedUpdateManyWithoutMemberNestedInput
-    event_registrations?: EventRegistrationUncheckedUpdateManyWithoutMemberNestedInput
+    eventRegistrations?: EventRegistrationUncheckedUpdateManyWithoutMemberNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutMemberNestedInput
     orders?: ShopOrderUncheckedUpdateManyWithoutMemberNestedInput
     attendance?: AttendanceUncheckedUpdateManyWithoutMemberNestedInput
-    tournament_entries?: TournamentParticipantUncheckedUpdateManyWithoutMemberNestedInput
+    tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutMemberNestedInput
   }
 
   export type GradingEventUpsertWithoutApplicationsInput = {
@@ -32860,116 +33538,134 @@ export namespace Prisma {
   export type GradingEventUpdateWithoutApplicationsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    event_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    eventDate?: DateTimeFieldUpdateOperationsInput | Date | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
-    is_open?: BoolFieldUpdateOperationsInput | boolean
+    isOpen?: BoolFieldUpdateOperationsInput | boolean
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    target_rank?: BeltRankUpdateOneWithoutGrading_eventsNestedInput
-    gradings?: GradingUpdateManyWithoutGrading_eventNestedInput
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    targetRank?: BeltRankUpdateOneWithoutGradingEventsNestedInput
+    gradings?: GradingUpdateManyWithoutGradingEventNestedInput
   }
 
   export type GradingEventUncheckedUpdateWithoutApplicationsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    event_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    eventDate?: DateTimeFieldUpdateOperationsInput | Date | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
-    target_rank_id?: NullableStringFieldUpdateOperationsInput | string | null
-    is_open?: BoolFieldUpdateOperationsInput | boolean
+    targetRankId?: NullableStringFieldUpdateOperationsInput | string | null
+    isOpen?: BoolFieldUpdateOperationsInput | boolean
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    gradings?: GradingUncheckedUpdateManyWithoutGrading_eventNestedInput
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    gradings?: GradingUncheckedUpdateManyWithoutGradingEventNestedInput
   }
 
-  export type BeltRankUpsertWithoutGrading_applicationsInput = {
-    update: XOR<BeltRankUpdateWithoutGrading_applicationsInput, BeltRankUncheckedUpdateWithoutGrading_applicationsInput>
-    create: XOR<BeltRankCreateWithoutGrading_applicationsInput, BeltRankUncheckedCreateWithoutGrading_applicationsInput>
+  export type BeltRankUpsertWithoutGradingApplicationsInput = {
+    update: XOR<BeltRankUpdateWithoutGradingApplicationsInput, BeltRankUncheckedUpdateWithoutGradingApplicationsInput>
+    create: XOR<BeltRankCreateWithoutGradingApplicationsInput, BeltRankUncheckedCreateWithoutGradingApplicationsInput>
     where?: BeltRankWhereInput
   }
 
-  export type BeltRankUpdateToOneWithWhereWithoutGrading_applicationsInput = {
+  export type BeltRankUpdateToOneWithWhereWithoutGradingApplicationsInput = {
     where?: BeltRankWhereInput
-    data: XOR<BeltRankUpdateWithoutGrading_applicationsInput, BeltRankUncheckedUpdateWithoutGrading_applicationsInput>
+    data: XOR<BeltRankUpdateWithoutGradingApplicationsInput, BeltRankUncheckedUpdateWithoutGradingApplicationsInput>
   }
 
-  export type BeltRankUpdateWithoutGrading_applicationsInput = {
+  export type BeltRankUpdateWithoutGradingApplicationsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    kyu_dan?: NullableStringFieldUpdateOperationsInput | string | null
-    color_hex?: NullableStringFieldUpdateOperationsInput | string | null
-    order_index?: IntFieldUpdateOperationsInput | number
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    gradings_from?: GradingUpdateManyWithoutFrom_rankNestedInput
-    gradings_to?: GradingUpdateManyWithoutTo_rankNestedInput
-    grading_events?: GradingEventUpdateManyWithoutTarget_rankNestedInput
+    nameBn?: NullableStringFieldUpdateOperationsInput | string | null
+    kyuDan?: NullableStringFieldUpdateOperationsInput | string | null
+    colorHex?: NullableStringFieldUpdateOperationsInput | string | null
+    orderIndex?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    gradingsFrom?: GradingUpdateManyWithoutFromRankNestedInput
+    gradingsTo?: GradingUpdateManyWithoutToRankNestedInput
+    gradingEvents?: GradingEventUpdateManyWithoutTargetRankNestedInput
   }
 
-  export type BeltRankUncheckedUpdateWithoutGrading_applicationsInput = {
+  export type BeltRankUncheckedUpdateWithoutGradingApplicationsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    kyu_dan?: NullableStringFieldUpdateOperationsInput | string | null
-    color_hex?: NullableStringFieldUpdateOperationsInput | string | null
-    order_index?: IntFieldUpdateOperationsInput | number
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    gradings_from?: GradingUncheckedUpdateManyWithoutFrom_rankNestedInput
-    gradings_to?: GradingUncheckedUpdateManyWithoutTo_rankNestedInput
-    grading_events?: GradingEventUncheckedUpdateManyWithoutTarget_rankNestedInput
+    nameBn?: NullableStringFieldUpdateOperationsInput | string | null
+    kyuDan?: NullableStringFieldUpdateOperationsInput | string | null
+    colorHex?: NullableStringFieldUpdateOperationsInput | string | null
+    orderIndex?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    gradingsFrom?: GradingUncheckedUpdateManyWithoutFromRankNestedInput
+    gradingsTo?: GradingUncheckedUpdateManyWithoutToRankNestedInput
+    gradingEvents?: GradingEventUncheckedUpdateManyWithoutTargetRankNestedInput
   }
 
   export type MemberCreateWithoutGradingsInput = {
     id: string
-    full_name: string
+    fullName: string
     email: string
     phone?: string | null
-    avatar_url?: string | null
+    avatarUrl?: string | null
     role?: $Enums.MemberRole
-    member_number?: string | null
-    current_rank?: string
-    join_date?: Date | string
-    expiry_date?: Date | string | null
-    is_active?: boolean
-    created_at?: Date | string
-    updated_at?: Date | string
+    memberNumber?: string | null
+    currentRank?: string
+    joinDate?: Date | string
+    expiryDate?: Date | string | null
+    isActive?: boolean
+    onboardingComplete?: boolean
+    membershipStatus?: $Enums.MembershipStatus
+    dateOfBirth?: Date | string | null
+    bloodGroup?: string | null
+    address?: string | null
+    nationalId?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     dojo?: DojoCreateNestedOneWithoutMembersInput
-    dojo_head_of?: DojoCreateNestedManyWithoutHead_instructorInput
+    dojoHeadOf?: DojoCreateNestedManyWithoutHeadInstructorInput
     instructor?: InstructorCreateNestedOneWithoutMemberInput
     admin?: AdminCreateNestedOneWithoutMemberInput
-    grading_applications?: GradingApplicationCreateNestedManyWithoutMemberInput
-    event_registrations?: EventRegistrationCreateNestedManyWithoutMemberInput
+    gradingApplications?: GradingApplicationCreateNestedManyWithoutMemberInput
+    eventRegistrations?: EventRegistrationCreateNestedManyWithoutMemberInput
     notifications?: NotificationCreateNestedManyWithoutMemberInput
     orders?: ShopOrderCreateNestedManyWithoutMemberInput
     attendance?: AttendanceCreateNestedManyWithoutMemberInput
-    tournament_entries?: TournamentParticipantCreateNestedManyWithoutMemberInput
+    tournamentEntries?: TournamentParticipantCreateNestedManyWithoutMemberInput
   }
 
   export type MemberUncheckedCreateWithoutGradingsInput = {
     id: string
-    full_name: string
+    fullName: string
     email: string
     phone?: string | null
-    avatar_url?: string | null
+    avatarUrl?: string | null
     role?: $Enums.MemberRole
-    member_number?: string | null
-    current_rank?: string
-    join_date?: Date | string
-    expiry_date?: Date | string | null
-    is_active?: boolean
-    dojo_id?: string | null
-    created_at?: Date | string
-    updated_at?: Date | string
-    dojo_head_of?: DojoUncheckedCreateNestedManyWithoutHead_instructorInput
+    memberNumber?: string | null
+    currentRank?: string
+    joinDate?: Date | string
+    expiryDate?: Date | string | null
+    isActive?: boolean
+    dojoId?: string | null
+    onboardingComplete?: boolean
+    membershipStatus?: $Enums.MembershipStatus
+    dateOfBirth?: Date | string | null
+    bloodGroup?: string | null
+    address?: string | null
+    nationalId?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    dojoHeadOf?: DojoUncheckedCreateNestedManyWithoutHeadInstructorInput
     instructor?: InstructorUncheckedCreateNestedOneWithoutMemberInput
     admin?: AdminUncheckedCreateNestedOneWithoutMemberInput
-    grading_applications?: GradingApplicationUncheckedCreateNestedManyWithoutMemberInput
-    event_registrations?: EventRegistrationUncheckedCreateNestedManyWithoutMemberInput
+    gradingApplications?: GradingApplicationUncheckedCreateNestedManyWithoutMemberInput
+    eventRegistrations?: EventRegistrationUncheckedCreateNestedManyWithoutMemberInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutMemberInput
     orders?: ShopOrderUncheckedCreateNestedManyWithoutMemberInput
     attendance?: AttendanceUncheckedCreateNestedManyWithoutMemberInput
-    tournament_entries?: TournamentParticipantUncheckedCreateNestedManyWithoutMemberInput
+    tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutMemberInput
   }
 
   export type MemberCreateOrConnectWithoutGradingsInput = {
@@ -32980,27 +33676,27 @@ export namespace Prisma {
   export type GradingEventCreateWithoutGradingsInput = {
     id?: string
     name: string
-    event_date: Date | string
+    eventDate: Date | string
     location?: string | null
-    is_open?: boolean
+    isOpen?: boolean
     notes?: string | null
-    created_at?: Date | string
-    updated_at?: Date | string
-    target_rank?: BeltRankCreateNestedOneWithoutGrading_eventsInput
-    applications?: GradingApplicationCreateNestedManyWithoutGrading_eventInput
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    targetRank?: BeltRankCreateNestedOneWithoutGradingEventsInput
+    applications?: GradingApplicationCreateNestedManyWithoutGradingEventInput
   }
 
   export type GradingEventUncheckedCreateWithoutGradingsInput = {
     id?: string
     name: string
-    event_date: Date | string
+    eventDate: Date | string
     location?: string | null
-    target_rank_id?: string | null
-    is_open?: boolean
+    targetRankId?: string | null
+    isOpen?: boolean
     notes?: string | null
-    created_at?: Date | string
-    updated_at?: Date | string
-    applications?: GradingApplicationUncheckedCreateNestedManyWithoutGrading_eventInput
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    applications?: GradingApplicationUncheckedCreateNestedManyWithoutGradingEventInput
   }
 
   export type GradingEventCreateOrConnectWithoutGradingsInput = {
@@ -33008,66 +33704,70 @@ export namespace Prisma {
     create: XOR<GradingEventCreateWithoutGradingsInput, GradingEventUncheckedCreateWithoutGradingsInput>
   }
 
-  export type BeltRankCreateWithoutGradings_fromInput = {
+  export type BeltRankCreateWithoutGradingsFromInput = {
     id?: string
     name: string
-    kyu_dan?: string | null
-    color_hex?: string | null
-    order_index: number
-    created_at?: Date | string
-    updated_at?: Date | string
-    gradings_to?: GradingCreateNestedManyWithoutTo_rankInput
-    grading_events?: GradingEventCreateNestedManyWithoutTarget_rankInput
-    grading_applications?: GradingApplicationCreateNestedManyWithoutTarget_rankInput
+    nameBn?: string | null
+    kyuDan?: string | null
+    colorHex?: string | null
+    orderIndex: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    gradingsTo?: GradingCreateNestedManyWithoutToRankInput
+    gradingEvents?: GradingEventCreateNestedManyWithoutTargetRankInput
+    gradingApplications?: GradingApplicationCreateNestedManyWithoutTargetRankInput
   }
 
-  export type BeltRankUncheckedCreateWithoutGradings_fromInput = {
+  export type BeltRankUncheckedCreateWithoutGradingsFromInput = {
     id?: string
     name: string
-    kyu_dan?: string | null
-    color_hex?: string | null
-    order_index: number
-    created_at?: Date | string
-    updated_at?: Date | string
-    gradings_to?: GradingUncheckedCreateNestedManyWithoutTo_rankInput
-    grading_events?: GradingEventUncheckedCreateNestedManyWithoutTarget_rankInput
-    grading_applications?: GradingApplicationUncheckedCreateNestedManyWithoutTarget_rankInput
+    nameBn?: string | null
+    kyuDan?: string | null
+    colorHex?: string | null
+    orderIndex: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    gradingsTo?: GradingUncheckedCreateNestedManyWithoutToRankInput
+    gradingEvents?: GradingEventUncheckedCreateNestedManyWithoutTargetRankInput
+    gradingApplications?: GradingApplicationUncheckedCreateNestedManyWithoutTargetRankInput
   }
 
-  export type BeltRankCreateOrConnectWithoutGradings_fromInput = {
+  export type BeltRankCreateOrConnectWithoutGradingsFromInput = {
     where: BeltRankWhereUniqueInput
-    create: XOR<BeltRankCreateWithoutGradings_fromInput, BeltRankUncheckedCreateWithoutGradings_fromInput>
+    create: XOR<BeltRankCreateWithoutGradingsFromInput, BeltRankUncheckedCreateWithoutGradingsFromInput>
   }
 
-  export type BeltRankCreateWithoutGradings_toInput = {
+  export type BeltRankCreateWithoutGradingsToInput = {
     id?: string
     name: string
-    kyu_dan?: string | null
-    color_hex?: string | null
-    order_index: number
-    created_at?: Date | string
-    updated_at?: Date | string
-    gradings_from?: GradingCreateNestedManyWithoutFrom_rankInput
-    grading_events?: GradingEventCreateNestedManyWithoutTarget_rankInput
-    grading_applications?: GradingApplicationCreateNestedManyWithoutTarget_rankInput
+    nameBn?: string | null
+    kyuDan?: string | null
+    colorHex?: string | null
+    orderIndex: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    gradingsFrom?: GradingCreateNestedManyWithoutFromRankInput
+    gradingEvents?: GradingEventCreateNestedManyWithoutTargetRankInput
+    gradingApplications?: GradingApplicationCreateNestedManyWithoutTargetRankInput
   }
 
-  export type BeltRankUncheckedCreateWithoutGradings_toInput = {
+  export type BeltRankUncheckedCreateWithoutGradingsToInput = {
     id?: string
     name: string
-    kyu_dan?: string | null
-    color_hex?: string | null
-    order_index: number
-    created_at?: Date | string
-    updated_at?: Date | string
-    gradings_from?: GradingUncheckedCreateNestedManyWithoutFrom_rankInput
-    grading_events?: GradingEventUncheckedCreateNestedManyWithoutTarget_rankInput
-    grading_applications?: GradingApplicationUncheckedCreateNestedManyWithoutTarget_rankInput
+    nameBn?: string | null
+    kyuDan?: string | null
+    colorHex?: string | null
+    orderIndex: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    gradingsFrom?: GradingUncheckedCreateNestedManyWithoutFromRankInput
+    gradingEvents?: GradingEventUncheckedCreateNestedManyWithoutTargetRankInput
+    gradingApplications?: GradingApplicationUncheckedCreateNestedManyWithoutTargetRankInput
   }
 
-  export type BeltRankCreateOrConnectWithoutGradings_toInput = {
+  export type BeltRankCreateOrConnectWithoutGradingsToInput = {
     where: BeltRankWhereUniqueInput
-    create: XOR<BeltRankCreateWithoutGradings_toInput, BeltRankUncheckedCreateWithoutGradings_toInput>
+    create: XOR<BeltRankCreateWithoutGradingsToInput, BeltRankUncheckedCreateWithoutGradingsToInput>
   }
 
   export type MemberUpsertWithoutGradingsInput = {
@@ -33083,54 +33783,70 @@ export namespace Prisma {
 
   export type MemberUpdateWithoutGradingsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    full_name?: StringFieldUpdateOperationsInput | string
+    fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
-    avatar_url?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumMemberRoleFieldUpdateOperationsInput | $Enums.MemberRole
-    member_number?: NullableStringFieldUpdateOperationsInput | string | null
-    current_rank?: StringFieldUpdateOperationsInput | string
-    join_date?: DateTimeFieldUpdateOperationsInput | Date | string
-    expiry_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    currentRank?: StringFieldUpdateOperationsInput | string
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    onboardingComplete?: BoolFieldUpdateOperationsInput | boolean
+    membershipStatus?: EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dojo?: DojoUpdateOneWithoutMembersNestedInput
-    dojo_head_of?: DojoUpdateManyWithoutHead_instructorNestedInput
+    dojoHeadOf?: DojoUpdateManyWithoutHeadInstructorNestedInput
     instructor?: InstructorUpdateOneWithoutMemberNestedInput
     admin?: AdminUpdateOneWithoutMemberNestedInput
-    grading_applications?: GradingApplicationUpdateManyWithoutMemberNestedInput
-    event_registrations?: EventRegistrationUpdateManyWithoutMemberNestedInput
+    gradingApplications?: GradingApplicationUpdateManyWithoutMemberNestedInput
+    eventRegistrations?: EventRegistrationUpdateManyWithoutMemberNestedInput
     notifications?: NotificationUpdateManyWithoutMemberNestedInput
     orders?: ShopOrderUpdateManyWithoutMemberNestedInput
     attendance?: AttendanceUpdateManyWithoutMemberNestedInput
-    tournament_entries?: TournamentParticipantUpdateManyWithoutMemberNestedInput
+    tournamentEntries?: TournamentParticipantUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutGradingsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    full_name?: StringFieldUpdateOperationsInput | string
+    fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
-    avatar_url?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumMemberRoleFieldUpdateOperationsInput | $Enums.MemberRole
-    member_number?: NullableStringFieldUpdateOperationsInput | string | null
-    current_rank?: StringFieldUpdateOperationsInput | string
-    join_date?: DateTimeFieldUpdateOperationsInput | Date | string
-    expiry_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    dojo_id?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    dojo_head_of?: DojoUncheckedUpdateManyWithoutHead_instructorNestedInput
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    currentRank?: StringFieldUpdateOperationsInput | string
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    dojoId?: NullableStringFieldUpdateOperationsInput | string | null
+    onboardingComplete?: BoolFieldUpdateOperationsInput | boolean
+    membershipStatus?: EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    dojoHeadOf?: DojoUncheckedUpdateManyWithoutHeadInstructorNestedInput
     instructor?: InstructorUncheckedUpdateOneWithoutMemberNestedInput
     admin?: AdminUncheckedUpdateOneWithoutMemberNestedInput
-    grading_applications?: GradingApplicationUncheckedUpdateManyWithoutMemberNestedInput
-    event_registrations?: EventRegistrationUncheckedUpdateManyWithoutMemberNestedInput
+    gradingApplications?: GradingApplicationUncheckedUpdateManyWithoutMemberNestedInput
+    eventRegistrations?: EventRegistrationUncheckedUpdateManyWithoutMemberNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutMemberNestedInput
     orders?: ShopOrderUncheckedUpdateManyWithoutMemberNestedInput
     attendance?: AttendanceUncheckedUpdateManyWithoutMemberNestedInput
-    tournament_entries?: TournamentParticipantUncheckedUpdateManyWithoutMemberNestedInput
+    tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutMemberNestedInput
   }
 
   export type GradingEventUpsertWithoutGradingsInput = {
@@ -33147,113 +33863,117 @@ export namespace Prisma {
   export type GradingEventUpdateWithoutGradingsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    event_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    eventDate?: DateTimeFieldUpdateOperationsInput | Date | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
-    is_open?: BoolFieldUpdateOperationsInput | boolean
+    isOpen?: BoolFieldUpdateOperationsInput | boolean
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    target_rank?: BeltRankUpdateOneWithoutGrading_eventsNestedInput
-    applications?: GradingApplicationUpdateManyWithoutGrading_eventNestedInput
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    targetRank?: BeltRankUpdateOneWithoutGradingEventsNestedInput
+    applications?: GradingApplicationUpdateManyWithoutGradingEventNestedInput
   }
 
   export type GradingEventUncheckedUpdateWithoutGradingsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    event_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    eventDate?: DateTimeFieldUpdateOperationsInput | Date | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
-    target_rank_id?: NullableStringFieldUpdateOperationsInput | string | null
-    is_open?: BoolFieldUpdateOperationsInput | boolean
+    targetRankId?: NullableStringFieldUpdateOperationsInput | string | null
+    isOpen?: BoolFieldUpdateOperationsInput | boolean
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    applications?: GradingApplicationUncheckedUpdateManyWithoutGrading_eventNestedInput
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    applications?: GradingApplicationUncheckedUpdateManyWithoutGradingEventNestedInput
   }
 
-  export type BeltRankUpsertWithoutGradings_fromInput = {
-    update: XOR<BeltRankUpdateWithoutGradings_fromInput, BeltRankUncheckedUpdateWithoutGradings_fromInput>
-    create: XOR<BeltRankCreateWithoutGradings_fromInput, BeltRankUncheckedCreateWithoutGradings_fromInput>
+  export type BeltRankUpsertWithoutGradingsFromInput = {
+    update: XOR<BeltRankUpdateWithoutGradingsFromInput, BeltRankUncheckedUpdateWithoutGradingsFromInput>
+    create: XOR<BeltRankCreateWithoutGradingsFromInput, BeltRankUncheckedCreateWithoutGradingsFromInput>
     where?: BeltRankWhereInput
   }
 
-  export type BeltRankUpdateToOneWithWhereWithoutGradings_fromInput = {
+  export type BeltRankUpdateToOneWithWhereWithoutGradingsFromInput = {
     where?: BeltRankWhereInput
-    data: XOR<BeltRankUpdateWithoutGradings_fromInput, BeltRankUncheckedUpdateWithoutGradings_fromInput>
+    data: XOR<BeltRankUpdateWithoutGradingsFromInput, BeltRankUncheckedUpdateWithoutGradingsFromInput>
   }
 
-  export type BeltRankUpdateWithoutGradings_fromInput = {
+  export type BeltRankUpdateWithoutGradingsFromInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    kyu_dan?: NullableStringFieldUpdateOperationsInput | string | null
-    color_hex?: NullableStringFieldUpdateOperationsInput | string | null
-    order_index?: IntFieldUpdateOperationsInput | number
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    gradings_to?: GradingUpdateManyWithoutTo_rankNestedInput
-    grading_events?: GradingEventUpdateManyWithoutTarget_rankNestedInput
-    grading_applications?: GradingApplicationUpdateManyWithoutTarget_rankNestedInput
+    nameBn?: NullableStringFieldUpdateOperationsInput | string | null
+    kyuDan?: NullableStringFieldUpdateOperationsInput | string | null
+    colorHex?: NullableStringFieldUpdateOperationsInput | string | null
+    orderIndex?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    gradingsTo?: GradingUpdateManyWithoutToRankNestedInput
+    gradingEvents?: GradingEventUpdateManyWithoutTargetRankNestedInput
+    gradingApplications?: GradingApplicationUpdateManyWithoutTargetRankNestedInput
   }
 
-  export type BeltRankUncheckedUpdateWithoutGradings_fromInput = {
+  export type BeltRankUncheckedUpdateWithoutGradingsFromInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    kyu_dan?: NullableStringFieldUpdateOperationsInput | string | null
-    color_hex?: NullableStringFieldUpdateOperationsInput | string | null
-    order_index?: IntFieldUpdateOperationsInput | number
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    gradings_to?: GradingUncheckedUpdateManyWithoutTo_rankNestedInput
-    grading_events?: GradingEventUncheckedUpdateManyWithoutTarget_rankNestedInput
-    grading_applications?: GradingApplicationUncheckedUpdateManyWithoutTarget_rankNestedInput
+    nameBn?: NullableStringFieldUpdateOperationsInput | string | null
+    kyuDan?: NullableStringFieldUpdateOperationsInput | string | null
+    colorHex?: NullableStringFieldUpdateOperationsInput | string | null
+    orderIndex?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    gradingsTo?: GradingUncheckedUpdateManyWithoutToRankNestedInput
+    gradingEvents?: GradingEventUncheckedUpdateManyWithoutTargetRankNestedInput
+    gradingApplications?: GradingApplicationUncheckedUpdateManyWithoutTargetRankNestedInput
   }
 
-  export type BeltRankUpsertWithoutGradings_toInput = {
-    update: XOR<BeltRankUpdateWithoutGradings_toInput, BeltRankUncheckedUpdateWithoutGradings_toInput>
-    create: XOR<BeltRankCreateWithoutGradings_toInput, BeltRankUncheckedCreateWithoutGradings_toInput>
+  export type BeltRankUpsertWithoutGradingsToInput = {
+    update: XOR<BeltRankUpdateWithoutGradingsToInput, BeltRankUncheckedUpdateWithoutGradingsToInput>
+    create: XOR<BeltRankCreateWithoutGradingsToInput, BeltRankUncheckedCreateWithoutGradingsToInput>
     where?: BeltRankWhereInput
   }
 
-  export type BeltRankUpdateToOneWithWhereWithoutGradings_toInput = {
+  export type BeltRankUpdateToOneWithWhereWithoutGradingsToInput = {
     where?: BeltRankWhereInput
-    data: XOR<BeltRankUpdateWithoutGradings_toInput, BeltRankUncheckedUpdateWithoutGradings_toInput>
+    data: XOR<BeltRankUpdateWithoutGradingsToInput, BeltRankUncheckedUpdateWithoutGradingsToInput>
   }
 
-  export type BeltRankUpdateWithoutGradings_toInput = {
+  export type BeltRankUpdateWithoutGradingsToInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    kyu_dan?: NullableStringFieldUpdateOperationsInput | string | null
-    color_hex?: NullableStringFieldUpdateOperationsInput | string | null
-    order_index?: IntFieldUpdateOperationsInput | number
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    gradings_from?: GradingUpdateManyWithoutFrom_rankNestedInput
-    grading_events?: GradingEventUpdateManyWithoutTarget_rankNestedInput
-    grading_applications?: GradingApplicationUpdateManyWithoutTarget_rankNestedInput
+    nameBn?: NullableStringFieldUpdateOperationsInput | string | null
+    kyuDan?: NullableStringFieldUpdateOperationsInput | string | null
+    colorHex?: NullableStringFieldUpdateOperationsInput | string | null
+    orderIndex?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    gradingsFrom?: GradingUpdateManyWithoutFromRankNestedInput
+    gradingEvents?: GradingEventUpdateManyWithoutTargetRankNestedInput
+    gradingApplications?: GradingApplicationUpdateManyWithoutTargetRankNestedInput
   }
 
-  export type BeltRankUncheckedUpdateWithoutGradings_toInput = {
+  export type BeltRankUncheckedUpdateWithoutGradingsToInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    kyu_dan?: NullableStringFieldUpdateOperationsInput | string | null
-    color_hex?: NullableStringFieldUpdateOperationsInput | string | null
-    order_index?: IntFieldUpdateOperationsInput | number
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    gradings_from?: GradingUncheckedUpdateManyWithoutFrom_rankNestedInput
-    grading_events?: GradingEventUncheckedUpdateManyWithoutTarget_rankNestedInput
-    grading_applications?: GradingApplicationUncheckedUpdateManyWithoutTarget_rankNestedInput
+    nameBn?: NullableStringFieldUpdateOperationsInput | string | null
+    kyuDan?: NullableStringFieldUpdateOperationsInput | string | null
+    colorHex?: NullableStringFieldUpdateOperationsInput | string | null
+    orderIndex?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    gradingsFrom?: GradingUncheckedUpdateManyWithoutFromRankNestedInput
+    gradingEvents?: GradingEventUncheckedUpdateManyWithoutTargetRankNestedInput
+    gradingApplications?: GradingApplicationUncheckedUpdateManyWithoutTargetRankNestedInput
   }
 
   export type EventRegistrationCreateWithoutEventInput = {
     id?: string
-    created_at?: Date | string
-    member: MemberCreateNestedOneWithoutEvent_registrationsInput
+    createdAt?: Date | string
+    member: MemberCreateNestedOneWithoutEventRegistrationsInput
   }
 
   export type EventRegistrationUncheckedCreateWithoutEventInput = {
     id?: string
-    member_id: string
-    created_at?: Date | string
+    memberId: string
+    createdAt?: Date | string
   }
 
   export type EventRegistrationCreateOrConnectWithoutEventInput = {
@@ -33286,26 +34006,26 @@ export namespace Prisma {
     id?: string
     title: string
     description?: string | null
-    event_date: Date | string
+    eventDate: Date | string
     location?: string | null
-    image_url?: string | null
-    is_published?: boolean
-    max_capacity?: number | null
-    created_at?: Date | string
-    updated_at?: Date | string
+    imageUrl?: string | null
+    isPublished?: boolean
+    maxCapacity?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type EventUncheckedCreateWithoutRegistrationsInput = {
     id?: string
     title: string
     description?: string | null
-    event_date: Date | string
+    eventDate: Date | string
     location?: string | null
-    image_url?: string | null
-    is_published?: boolean
-    max_capacity?: number | null
-    created_at?: Date | string
-    updated_at?: Date | string
+    imageUrl?: string | null
+    isPublished?: boolean
+    maxCapacity?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type EventCreateOrConnectWithoutRegistrationsInput = {
@@ -33313,61 +34033,77 @@ export namespace Prisma {
     create: XOR<EventCreateWithoutRegistrationsInput, EventUncheckedCreateWithoutRegistrationsInput>
   }
 
-  export type MemberCreateWithoutEvent_registrationsInput = {
+  export type MemberCreateWithoutEventRegistrationsInput = {
     id: string
-    full_name: string
+    fullName: string
     email: string
     phone?: string | null
-    avatar_url?: string | null
+    avatarUrl?: string | null
     role?: $Enums.MemberRole
-    member_number?: string | null
-    current_rank?: string
-    join_date?: Date | string
-    expiry_date?: Date | string | null
-    is_active?: boolean
-    created_at?: Date | string
-    updated_at?: Date | string
+    memberNumber?: string | null
+    currentRank?: string
+    joinDate?: Date | string
+    expiryDate?: Date | string | null
+    isActive?: boolean
+    onboardingComplete?: boolean
+    membershipStatus?: $Enums.MembershipStatus
+    dateOfBirth?: Date | string | null
+    bloodGroup?: string | null
+    address?: string | null
+    nationalId?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     dojo?: DojoCreateNestedOneWithoutMembersInput
-    dojo_head_of?: DojoCreateNestedManyWithoutHead_instructorInput
+    dojoHeadOf?: DojoCreateNestedManyWithoutHeadInstructorInput
     instructor?: InstructorCreateNestedOneWithoutMemberInput
     admin?: AdminCreateNestedOneWithoutMemberInput
     gradings?: GradingCreateNestedManyWithoutMemberInput
-    grading_applications?: GradingApplicationCreateNestedManyWithoutMemberInput
+    gradingApplications?: GradingApplicationCreateNestedManyWithoutMemberInput
     notifications?: NotificationCreateNestedManyWithoutMemberInput
     orders?: ShopOrderCreateNestedManyWithoutMemberInput
     attendance?: AttendanceCreateNestedManyWithoutMemberInput
-    tournament_entries?: TournamentParticipantCreateNestedManyWithoutMemberInput
+    tournamentEntries?: TournamentParticipantCreateNestedManyWithoutMemberInput
   }
 
-  export type MemberUncheckedCreateWithoutEvent_registrationsInput = {
+  export type MemberUncheckedCreateWithoutEventRegistrationsInput = {
     id: string
-    full_name: string
+    fullName: string
     email: string
     phone?: string | null
-    avatar_url?: string | null
+    avatarUrl?: string | null
     role?: $Enums.MemberRole
-    member_number?: string | null
-    current_rank?: string
-    join_date?: Date | string
-    expiry_date?: Date | string | null
-    is_active?: boolean
-    dojo_id?: string | null
-    created_at?: Date | string
-    updated_at?: Date | string
-    dojo_head_of?: DojoUncheckedCreateNestedManyWithoutHead_instructorInput
+    memberNumber?: string | null
+    currentRank?: string
+    joinDate?: Date | string
+    expiryDate?: Date | string | null
+    isActive?: boolean
+    dojoId?: string | null
+    onboardingComplete?: boolean
+    membershipStatus?: $Enums.MembershipStatus
+    dateOfBirth?: Date | string | null
+    bloodGroup?: string | null
+    address?: string | null
+    nationalId?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    dojoHeadOf?: DojoUncheckedCreateNestedManyWithoutHeadInstructorInput
     instructor?: InstructorUncheckedCreateNestedOneWithoutMemberInput
     admin?: AdminUncheckedCreateNestedOneWithoutMemberInput
     gradings?: GradingUncheckedCreateNestedManyWithoutMemberInput
-    grading_applications?: GradingApplicationUncheckedCreateNestedManyWithoutMemberInput
+    gradingApplications?: GradingApplicationUncheckedCreateNestedManyWithoutMemberInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutMemberInput
     orders?: ShopOrderUncheckedCreateNestedManyWithoutMemberInput
     attendance?: AttendanceUncheckedCreateNestedManyWithoutMemberInput
-    tournament_entries?: TournamentParticipantUncheckedCreateNestedManyWithoutMemberInput
+    tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutMemberInput
   }
 
-  export type MemberCreateOrConnectWithoutEvent_registrationsInput = {
+  export type MemberCreateOrConnectWithoutEventRegistrationsInput = {
     where: MemberWhereUniqueInput
-    create: XOR<MemberCreateWithoutEvent_registrationsInput, MemberUncheckedCreateWithoutEvent_registrationsInput>
+    create: XOR<MemberCreateWithoutEventRegistrationsInput, MemberUncheckedCreateWithoutEventRegistrationsInput>
   }
 
   export type EventUpsertWithoutRegistrationsInput = {
@@ -33385,141 +34121,173 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
-    event_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    eventDate?: DateTimeFieldUpdateOperationsInput | Date | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
-    image_url?: NullableStringFieldUpdateOperationsInput | string | null
-    is_published?: BoolFieldUpdateOperationsInput | boolean
-    max_capacity?: NullableIntFieldUpdateOperationsInput | number | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
+    maxCapacity?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type EventUncheckedUpdateWithoutRegistrationsInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
-    event_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    eventDate?: DateTimeFieldUpdateOperationsInput | Date | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
-    image_url?: NullableStringFieldUpdateOperationsInput | string | null
-    is_published?: BoolFieldUpdateOperationsInput | boolean
-    max_capacity?: NullableIntFieldUpdateOperationsInput | number | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
+    maxCapacity?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type MemberUpsertWithoutEvent_registrationsInput = {
-    update: XOR<MemberUpdateWithoutEvent_registrationsInput, MemberUncheckedUpdateWithoutEvent_registrationsInput>
-    create: XOR<MemberCreateWithoutEvent_registrationsInput, MemberUncheckedCreateWithoutEvent_registrationsInput>
+  export type MemberUpsertWithoutEventRegistrationsInput = {
+    update: XOR<MemberUpdateWithoutEventRegistrationsInput, MemberUncheckedUpdateWithoutEventRegistrationsInput>
+    create: XOR<MemberCreateWithoutEventRegistrationsInput, MemberUncheckedCreateWithoutEventRegistrationsInput>
     where?: MemberWhereInput
   }
 
-  export type MemberUpdateToOneWithWhereWithoutEvent_registrationsInput = {
+  export type MemberUpdateToOneWithWhereWithoutEventRegistrationsInput = {
     where?: MemberWhereInput
-    data: XOR<MemberUpdateWithoutEvent_registrationsInput, MemberUncheckedUpdateWithoutEvent_registrationsInput>
+    data: XOR<MemberUpdateWithoutEventRegistrationsInput, MemberUncheckedUpdateWithoutEventRegistrationsInput>
   }
 
-  export type MemberUpdateWithoutEvent_registrationsInput = {
+  export type MemberUpdateWithoutEventRegistrationsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    full_name?: StringFieldUpdateOperationsInput | string
+    fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
-    avatar_url?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumMemberRoleFieldUpdateOperationsInput | $Enums.MemberRole
-    member_number?: NullableStringFieldUpdateOperationsInput | string | null
-    current_rank?: StringFieldUpdateOperationsInput | string
-    join_date?: DateTimeFieldUpdateOperationsInput | Date | string
-    expiry_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    currentRank?: StringFieldUpdateOperationsInput | string
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    onboardingComplete?: BoolFieldUpdateOperationsInput | boolean
+    membershipStatus?: EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dojo?: DojoUpdateOneWithoutMembersNestedInput
-    dojo_head_of?: DojoUpdateManyWithoutHead_instructorNestedInput
+    dojoHeadOf?: DojoUpdateManyWithoutHeadInstructorNestedInput
     instructor?: InstructorUpdateOneWithoutMemberNestedInput
     admin?: AdminUpdateOneWithoutMemberNestedInput
     gradings?: GradingUpdateManyWithoutMemberNestedInput
-    grading_applications?: GradingApplicationUpdateManyWithoutMemberNestedInput
+    gradingApplications?: GradingApplicationUpdateManyWithoutMemberNestedInput
     notifications?: NotificationUpdateManyWithoutMemberNestedInput
     orders?: ShopOrderUpdateManyWithoutMemberNestedInput
     attendance?: AttendanceUpdateManyWithoutMemberNestedInput
-    tournament_entries?: TournamentParticipantUpdateManyWithoutMemberNestedInput
+    tournamentEntries?: TournamentParticipantUpdateManyWithoutMemberNestedInput
   }
 
-  export type MemberUncheckedUpdateWithoutEvent_registrationsInput = {
+  export type MemberUncheckedUpdateWithoutEventRegistrationsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    full_name?: StringFieldUpdateOperationsInput | string
+    fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
-    avatar_url?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumMemberRoleFieldUpdateOperationsInput | $Enums.MemberRole
-    member_number?: NullableStringFieldUpdateOperationsInput | string | null
-    current_rank?: StringFieldUpdateOperationsInput | string
-    join_date?: DateTimeFieldUpdateOperationsInput | Date | string
-    expiry_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    dojo_id?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    dojo_head_of?: DojoUncheckedUpdateManyWithoutHead_instructorNestedInput
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    currentRank?: StringFieldUpdateOperationsInput | string
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    dojoId?: NullableStringFieldUpdateOperationsInput | string | null
+    onboardingComplete?: BoolFieldUpdateOperationsInput | boolean
+    membershipStatus?: EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    dojoHeadOf?: DojoUncheckedUpdateManyWithoutHeadInstructorNestedInput
     instructor?: InstructorUncheckedUpdateOneWithoutMemberNestedInput
     admin?: AdminUncheckedUpdateOneWithoutMemberNestedInput
     gradings?: GradingUncheckedUpdateManyWithoutMemberNestedInput
-    grading_applications?: GradingApplicationUncheckedUpdateManyWithoutMemberNestedInput
+    gradingApplications?: GradingApplicationUncheckedUpdateManyWithoutMemberNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutMemberNestedInput
     orders?: ShopOrderUncheckedUpdateManyWithoutMemberNestedInput
     attendance?: AttendanceUncheckedUpdateManyWithoutMemberNestedInput
-    tournament_entries?: TournamentParticipantUncheckedUpdateManyWithoutMemberNestedInput
+    tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberCreateWithoutNotificationsInput = {
     id: string
-    full_name: string
+    fullName: string
     email: string
     phone?: string | null
-    avatar_url?: string | null
+    avatarUrl?: string | null
     role?: $Enums.MemberRole
-    member_number?: string | null
-    current_rank?: string
-    join_date?: Date | string
-    expiry_date?: Date | string | null
-    is_active?: boolean
-    created_at?: Date | string
-    updated_at?: Date | string
+    memberNumber?: string | null
+    currentRank?: string
+    joinDate?: Date | string
+    expiryDate?: Date | string | null
+    isActive?: boolean
+    onboardingComplete?: boolean
+    membershipStatus?: $Enums.MembershipStatus
+    dateOfBirth?: Date | string | null
+    bloodGroup?: string | null
+    address?: string | null
+    nationalId?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     dojo?: DojoCreateNestedOneWithoutMembersInput
-    dojo_head_of?: DojoCreateNestedManyWithoutHead_instructorInput
+    dojoHeadOf?: DojoCreateNestedManyWithoutHeadInstructorInput
     instructor?: InstructorCreateNestedOneWithoutMemberInput
     admin?: AdminCreateNestedOneWithoutMemberInput
     gradings?: GradingCreateNestedManyWithoutMemberInput
-    grading_applications?: GradingApplicationCreateNestedManyWithoutMemberInput
-    event_registrations?: EventRegistrationCreateNestedManyWithoutMemberInput
+    gradingApplications?: GradingApplicationCreateNestedManyWithoutMemberInput
+    eventRegistrations?: EventRegistrationCreateNestedManyWithoutMemberInput
     orders?: ShopOrderCreateNestedManyWithoutMemberInput
     attendance?: AttendanceCreateNestedManyWithoutMemberInput
-    tournament_entries?: TournamentParticipantCreateNestedManyWithoutMemberInput
+    tournamentEntries?: TournamentParticipantCreateNestedManyWithoutMemberInput
   }
 
   export type MemberUncheckedCreateWithoutNotificationsInput = {
     id: string
-    full_name: string
+    fullName: string
     email: string
     phone?: string | null
-    avatar_url?: string | null
+    avatarUrl?: string | null
     role?: $Enums.MemberRole
-    member_number?: string | null
-    current_rank?: string
-    join_date?: Date | string
-    expiry_date?: Date | string | null
-    is_active?: boolean
-    dojo_id?: string | null
-    created_at?: Date | string
-    updated_at?: Date | string
-    dojo_head_of?: DojoUncheckedCreateNestedManyWithoutHead_instructorInput
+    memberNumber?: string | null
+    currentRank?: string
+    joinDate?: Date | string
+    expiryDate?: Date | string | null
+    isActive?: boolean
+    dojoId?: string | null
+    onboardingComplete?: boolean
+    membershipStatus?: $Enums.MembershipStatus
+    dateOfBirth?: Date | string | null
+    bloodGroup?: string | null
+    address?: string | null
+    nationalId?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    dojoHeadOf?: DojoUncheckedCreateNestedManyWithoutHeadInstructorInput
     instructor?: InstructorUncheckedCreateNestedOneWithoutMemberInput
     admin?: AdminUncheckedCreateNestedOneWithoutMemberInput
     gradings?: GradingUncheckedCreateNestedManyWithoutMemberInput
-    grading_applications?: GradingApplicationUncheckedCreateNestedManyWithoutMemberInput
-    event_registrations?: EventRegistrationUncheckedCreateNestedManyWithoutMemberInput
+    gradingApplications?: GradingApplicationUncheckedCreateNestedManyWithoutMemberInput
+    eventRegistrations?: EventRegistrationUncheckedCreateNestedManyWithoutMemberInput
     orders?: ShopOrderUncheckedCreateNestedManyWithoutMemberInput
     attendance?: AttendanceUncheckedCreateNestedManyWithoutMemberInput
-    tournament_entries?: TournamentParticipantUncheckedCreateNestedManyWithoutMemberInput
+    tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutMemberInput
   }
 
   export type MemberCreateOrConnectWithoutNotificationsInput = {
@@ -33540,68 +34308,84 @@ export namespace Prisma {
 
   export type MemberUpdateWithoutNotificationsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    full_name?: StringFieldUpdateOperationsInput | string
+    fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
-    avatar_url?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumMemberRoleFieldUpdateOperationsInput | $Enums.MemberRole
-    member_number?: NullableStringFieldUpdateOperationsInput | string | null
-    current_rank?: StringFieldUpdateOperationsInput | string
-    join_date?: DateTimeFieldUpdateOperationsInput | Date | string
-    expiry_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    currentRank?: StringFieldUpdateOperationsInput | string
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    onboardingComplete?: BoolFieldUpdateOperationsInput | boolean
+    membershipStatus?: EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dojo?: DojoUpdateOneWithoutMembersNestedInput
-    dojo_head_of?: DojoUpdateManyWithoutHead_instructorNestedInput
+    dojoHeadOf?: DojoUpdateManyWithoutHeadInstructorNestedInput
     instructor?: InstructorUpdateOneWithoutMemberNestedInput
     admin?: AdminUpdateOneWithoutMemberNestedInput
     gradings?: GradingUpdateManyWithoutMemberNestedInput
-    grading_applications?: GradingApplicationUpdateManyWithoutMemberNestedInput
-    event_registrations?: EventRegistrationUpdateManyWithoutMemberNestedInput
+    gradingApplications?: GradingApplicationUpdateManyWithoutMemberNestedInput
+    eventRegistrations?: EventRegistrationUpdateManyWithoutMemberNestedInput
     orders?: ShopOrderUpdateManyWithoutMemberNestedInput
     attendance?: AttendanceUpdateManyWithoutMemberNestedInput
-    tournament_entries?: TournamentParticipantUpdateManyWithoutMemberNestedInput
+    tournamentEntries?: TournamentParticipantUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutNotificationsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    full_name?: StringFieldUpdateOperationsInput | string
+    fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
-    avatar_url?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumMemberRoleFieldUpdateOperationsInput | $Enums.MemberRole
-    member_number?: NullableStringFieldUpdateOperationsInput | string | null
-    current_rank?: StringFieldUpdateOperationsInput | string
-    join_date?: DateTimeFieldUpdateOperationsInput | Date | string
-    expiry_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    dojo_id?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    dojo_head_of?: DojoUncheckedUpdateManyWithoutHead_instructorNestedInput
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    currentRank?: StringFieldUpdateOperationsInput | string
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    dojoId?: NullableStringFieldUpdateOperationsInput | string | null
+    onboardingComplete?: BoolFieldUpdateOperationsInput | boolean
+    membershipStatus?: EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    dojoHeadOf?: DojoUncheckedUpdateManyWithoutHeadInstructorNestedInput
     instructor?: InstructorUncheckedUpdateOneWithoutMemberNestedInput
     admin?: AdminUncheckedUpdateOneWithoutMemberNestedInput
     gradings?: GradingUncheckedUpdateManyWithoutMemberNestedInput
-    grading_applications?: GradingApplicationUncheckedUpdateManyWithoutMemberNestedInput
-    event_registrations?: EventRegistrationUncheckedUpdateManyWithoutMemberNestedInput
+    gradingApplications?: GradingApplicationUncheckedUpdateManyWithoutMemberNestedInput
+    eventRegistrations?: EventRegistrationUncheckedUpdateManyWithoutMemberNestedInput
     orders?: ShopOrderUncheckedUpdateManyWithoutMemberNestedInput
     attendance?: AttendanceUncheckedUpdateManyWithoutMemberNestedInput
-    tournament_entries?: TournamentParticipantUncheckedUpdateManyWithoutMemberNestedInput
+    tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutMemberNestedInput
   }
 
   export type ShopOrderItemCreateWithoutProductInput = {
     id?: string
     quantity: number
-    unit_price: Decimal | DecimalJsLike | number | string
-    order: ShopOrderCreateNestedOneWithoutOrder_itemsInput
+    unitPrice: Decimal | DecimalJsLike | number | string
+    order: ShopOrderCreateNestedOneWithoutOrderItemsInput
   }
 
   export type ShopOrderItemUncheckedCreateWithoutProductInput = {
     id?: string
-    order_id: string
+    orderId: string
     quantity: number
-    unit_price: Decimal | DecimalJsLike | number | string
+    unitPrice: Decimal | DecimalJsLike | number | string
   }
 
   export type ShopOrderItemCreateOrConnectWithoutProductInput = {
@@ -33635,62 +34419,78 @@ export namespace Prisma {
     OR?: ShopOrderItemScalarWhereInput[]
     NOT?: ShopOrderItemScalarWhereInput | ShopOrderItemScalarWhereInput[]
     id?: UuidFilter<"ShopOrderItem"> | string
-    order_id?: UuidFilter<"ShopOrderItem"> | string
-    product_id?: UuidFilter<"ShopOrderItem"> | string
+    orderId?: UuidFilter<"ShopOrderItem"> | string
+    productId?: UuidFilter<"ShopOrderItem"> | string
     quantity?: IntFilter<"ShopOrderItem"> | number
-    unit_price?: DecimalFilter<"ShopOrderItem"> | Decimal | DecimalJsLike | number | string
+    unitPrice?: DecimalFilter<"ShopOrderItem"> | Decimal | DecimalJsLike | number | string
   }
 
   export type MemberCreateWithoutOrdersInput = {
     id: string
-    full_name: string
+    fullName: string
     email: string
     phone?: string | null
-    avatar_url?: string | null
+    avatarUrl?: string | null
     role?: $Enums.MemberRole
-    member_number?: string | null
-    current_rank?: string
-    join_date?: Date | string
-    expiry_date?: Date | string | null
-    is_active?: boolean
-    created_at?: Date | string
-    updated_at?: Date | string
+    memberNumber?: string | null
+    currentRank?: string
+    joinDate?: Date | string
+    expiryDate?: Date | string | null
+    isActive?: boolean
+    onboardingComplete?: boolean
+    membershipStatus?: $Enums.MembershipStatus
+    dateOfBirth?: Date | string | null
+    bloodGroup?: string | null
+    address?: string | null
+    nationalId?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     dojo?: DojoCreateNestedOneWithoutMembersInput
-    dojo_head_of?: DojoCreateNestedManyWithoutHead_instructorInput
+    dojoHeadOf?: DojoCreateNestedManyWithoutHeadInstructorInput
     instructor?: InstructorCreateNestedOneWithoutMemberInput
     admin?: AdminCreateNestedOneWithoutMemberInput
     gradings?: GradingCreateNestedManyWithoutMemberInput
-    grading_applications?: GradingApplicationCreateNestedManyWithoutMemberInput
-    event_registrations?: EventRegistrationCreateNestedManyWithoutMemberInput
+    gradingApplications?: GradingApplicationCreateNestedManyWithoutMemberInput
+    eventRegistrations?: EventRegistrationCreateNestedManyWithoutMemberInput
     notifications?: NotificationCreateNestedManyWithoutMemberInput
     attendance?: AttendanceCreateNestedManyWithoutMemberInput
-    tournament_entries?: TournamentParticipantCreateNestedManyWithoutMemberInput
+    tournamentEntries?: TournamentParticipantCreateNestedManyWithoutMemberInput
   }
 
   export type MemberUncheckedCreateWithoutOrdersInput = {
     id: string
-    full_name: string
+    fullName: string
     email: string
     phone?: string | null
-    avatar_url?: string | null
+    avatarUrl?: string | null
     role?: $Enums.MemberRole
-    member_number?: string | null
-    current_rank?: string
-    join_date?: Date | string
-    expiry_date?: Date | string | null
-    is_active?: boolean
-    dojo_id?: string | null
-    created_at?: Date | string
-    updated_at?: Date | string
-    dojo_head_of?: DojoUncheckedCreateNestedManyWithoutHead_instructorInput
+    memberNumber?: string | null
+    currentRank?: string
+    joinDate?: Date | string
+    expiryDate?: Date | string | null
+    isActive?: boolean
+    dojoId?: string | null
+    onboardingComplete?: boolean
+    membershipStatus?: $Enums.MembershipStatus
+    dateOfBirth?: Date | string | null
+    bloodGroup?: string | null
+    address?: string | null
+    nationalId?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    dojoHeadOf?: DojoUncheckedCreateNestedManyWithoutHeadInstructorInput
     instructor?: InstructorUncheckedCreateNestedOneWithoutMemberInput
     admin?: AdminUncheckedCreateNestedOneWithoutMemberInput
     gradings?: GradingUncheckedCreateNestedManyWithoutMemberInput
-    grading_applications?: GradingApplicationUncheckedCreateNestedManyWithoutMemberInput
-    event_registrations?: EventRegistrationUncheckedCreateNestedManyWithoutMemberInput
+    gradingApplications?: GradingApplicationUncheckedCreateNestedManyWithoutMemberInput
+    eventRegistrations?: EventRegistrationUncheckedCreateNestedManyWithoutMemberInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutMemberInput
     attendance?: AttendanceUncheckedCreateNestedManyWithoutMemberInput
-    tournament_entries?: TournamentParticipantUncheckedCreateNestedManyWithoutMemberInput
+    tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutMemberInput
   }
 
   export type MemberCreateOrConnectWithoutOrdersInput = {
@@ -33701,15 +34501,15 @@ export namespace Prisma {
   export type ShopOrderItemCreateWithoutOrderInput = {
     id?: string
     quantity: number
-    unit_price: Decimal | DecimalJsLike | number | string
-    product: ShopProductCreateNestedOneWithoutOrder_itemsInput
+    unitPrice: Decimal | DecimalJsLike | number | string
+    product: ShopProductCreateNestedOneWithoutOrderItemsInput
   }
 
   export type ShopOrderItemUncheckedCreateWithoutOrderInput = {
     id?: string
-    product_id: string
+    productId: string
     quantity: number
-    unit_price: Decimal | DecimalJsLike | number | string
+    unitPrice: Decimal | DecimalJsLike | number | string
   }
 
   export type ShopOrderItemCreateOrConnectWithoutOrderInput = {
@@ -33735,54 +34535,70 @@ export namespace Prisma {
 
   export type MemberUpdateWithoutOrdersInput = {
     id?: StringFieldUpdateOperationsInput | string
-    full_name?: StringFieldUpdateOperationsInput | string
+    fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
-    avatar_url?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumMemberRoleFieldUpdateOperationsInput | $Enums.MemberRole
-    member_number?: NullableStringFieldUpdateOperationsInput | string | null
-    current_rank?: StringFieldUpdateOperationsInput | string
-    join_date?: DateTimeFieldUpdateOperationsInput | Date | string
-    expiry_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    currentRank?: StringFieldUpdateOperationsInput | string
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    onboardingComplete?: BoolFieldUpdateOperationsInput | boolean
+    membershipStatus?: EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dojo?: DojoUpdateOneWithoutMembersNestedInput
-    dojo_head_of?: DojoUpdateManyWithoutHead_instructorNestedInput
+    dojoHeadOf?: DojoUpdateManyWithoutHeadInstructorNestedInput
     instructor?: InstructorUpdateOneWithoutMemberNestedInput
     admin?: AdminUpdateOneWithoutMemberNestedInput
     gradings?: GradingUpdateManyWithoutMemberNestedInput
-    grading_applications?: GradingApplicationUpdateManyWithoutMemberNestedInput
-    event_registrations?: EventRegistrationUpdateManyWithoutMemberNestedInput
+    gradingApplications?: GradingApplicationUpdateManyWithoutMemberNestedInput
+    eventRegistrations?: EventRegistrationUpdateManyWithoutMemberNestedInput
     notifications?: NotificationUpdateManyWithoutMemberNestedInput
     attendance?: AttendanceUpdateManyWithoutMemberNestedInput
-    tournament_entries?: TournamentParticipantUpdateManyWithoutMemberNestedInput
+    tournamentEntries?: TournamentParticipantUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutOrdersInput = {
     id?: StringFieldUpdateOperationsInput | string
-    full_name?: StringFieldUpdateOperationsInput | string
+    fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
-    avatar_url?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumMemberRoleFieldUpdateOperationsInput | $Enums.MemberRole
-    member_number?: NullableStringFieldUpdateOperationsInput | string | null
-    current_rank?: StringFieldUpdateOperationsInput | string
-    join_date?: DateTimeFieldUpdateOperationsInput | Date | string
-    expiry_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    dojo_id?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    dojo_head_of?: DojoUncheckedUpdateManyWithoutHead_instructorNestedInput
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    currentRank?: StringFieldUpdateOperationsInput | string
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    dojoId?: NullableStringFieldUpdateOperationsInput | string | null
+    onboardingComplete?: BoolFieldUpdateOperationsInput | boolean
+    membershipStatus?: EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    dojoHeadOf?: DojoUncheckedUpdateManyWithoutHeadInstructorNestedInput
     instructor?: InstructorUncheckedUpdateOneWithoutMemberNestedInput
     admin?: AdminUncheckedUpdateOneWithoutMemberNestedInput
     gradings?: GradingUncheckedUpdateManyWithoutMemberNestedInput
-    grading_applications?: GradingApplicationUncheckedUpdateManyWithoutMemberNestedInput
-    event_registrations?: EventRegistrationUncheckedUpdateManyWithoutMemberNestedInput
+    gradingApplications?: GradingApplicationUncheckedUpdateManyWithoutMemberNestedInput
+    eventRegistrations?: EventRegistrationUncheckedUpdateManyWithoutMemberNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutMemberNestedInput
     attendance?: AttendanceUncheckedUpdateManyWithoutMemberNestedInput
-    tournament_entries?: TournamentParticipantUncheckedUpdateManyWithoutMemberNestedInput
+    tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutMemberNestedInput
   }
 
   export type ShopOrderItemUpsertWithWhereUniqueWithoutOrderInput = {
@@ -33801,158 +34617,170 @@ export namespace Prisma {
     data: XOR<ShopOrderItemUpdateManyMutationInput, ShopOrderItemUncheckedUpdateManyWithoutOrderInput>
   }
 
-  export type ShopOrderCreateWithoutOrder_itemsInput = {
+  export type ShopOrderCreateWithoutOrderItemsInput = {
     id?: string
-    payment_status?: $Enums.PaymentStatus
-    payment_method?: string | null
+    paymentStatus?: $Enums.PaymentStatus
+    paymentMethod?: string | null
     total: Decimal | DecimalJsLike | number | string
     currency?: string
-    transaction_id?: string | null
+    transactionId?: string | null
+    includesMembership?: boolean
+    membershipFee?: Decimal | DecimalJsLike | number | string | null
     notes?: string | null
-    created_at?: Date | string
-    updated_at?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
     member: MemberCreateNestedOneWithoutOrdersInput
   }
 
-  export type ShopOrderUncheckedCreateWithoutOrder_itemsInput = {
+  export type ShopOrderUncheckedCreateWithoutOrderItemsInput = {
     id?: string
-    member_id: string
-    payment_status?: $Enums.PaymentStatus
-    payment_method?: string | null
+    memberId: string
+    paymentStatus?: $Enums.PaymentStatus
+    paymentMethod?: string | null
     total: Decimal | DecimalJsLike | number | string
     currency?: string
-    transaction_id?: string | null
+    transactionId?: string | null
+    includesMembership?: boolean
+    membershipFee?: Decimal | DecimalJsLike | number | string | null
     notes?: string | null
-    created_at?: Date | string
-    updated_at?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
-  export type ShopOrderCreateOrConnectWithoutOrder_itemsInput = {
+  export type ShopOrderCreateOrConnectWithoutOrderItemsInput = {
     where: ShopOrderWhereUniqueInput
-    create: XOR<ShopOrderCreateWithoutOrder_itemsInput, ShopOrderUncheckedCreateWithoutOrder_itemsInput>
+    create: XOR<ShopOrderCreateWithoutOrderItemsInput, ShopOrderUncheckedCreateWithoutOrderItemsInput>
   }
 
-  export type ShopProductCreateWithoutOrder_itemsInput = {
+  export type ShopProductCreateWithoutOrderItemsInput = {
     id?: string
     name: string
     description?: string | null
     price: Decimal | DecimalJsLike | number | string
     stock?: number
-    image_url?: string | null
-    is_active?: boolean
-    created_at?: Date | string
-    updated_at?: Date | string
+    imageUrl?: string | null
+    category?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
-  export type ShopProductUncheckedCreateWithoutOrder_itemsInput = {
+  export type ShopProductUncheckedCreateWithoutOrderItemsInput = {
     id?: string
     name: string
     description?: string | null
     price: Decimal | DecimalJsLike | number | string
     stock?: number
-    image_url?: string | null
-    is_active?: boolean
-    created_at?: Date | string
-    updated_at?: Date | string
+    imageUrl?: string | null
+    category?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
-  export type ShopProductCreateOrConnectWithoutOrder_itemsInput = {
+  export type ShopProductCreateOrConnectWithoutOrderItemsInput = {
     where: ShopProductWhereUniqueInput
-    create: XOR<ShopProductCreateWithoutOrder_itemsInput, ShopProductUncheckedCreateWithoutOrder_itemsInput>
+    create: XOR<ShopProductCreateWithoutOrderItemsInput, ShopProductUncheckedCreateWithoutOrderItemsInput>
   }
 
-  export type ShopOrderUpsertWithoutOrder_itemsInput = {
-    update: XOR<ShopOrderUpdateWithoutOrder_itemsInput, ShopOrderUncheckedUpdateWithoutOrder_itemsInput>
-    create: XOR<ShopOrderCreateWithoutOrder_itemsInput, ShopOrderUncheckedCreateWithoutOrder_itemsInput>
+  export type ShopOrderUpsertWithoutOrderItemsInput = {
+    update: XOR<ShopOrderUpdateWithoutOrderItemsInput, ShopOrderUncheckedUpdateWithoutOrderItemsInput>
+    create: XOR<ShopOrderCreateWithoutOrderItemsInput, ShopOrderUncheckedCreateWithoutOrderItemsInput>
     where?: ShopOrderWhereInput
   }
 
-  export type ShopOrderUpdateToOneWithWhereWithoutOrder_itemsInput = {
+  export type ShopOrderUpdateToOneWithWhereWithoutOrderItemsInput = {
     where?: ShopOrderWhereInput
-    data: XOR<ShopOrderUpdateWithoutOrder_itemsInput, ShopOrderUncheckedUpdateWithoutOrder_itemsInput>
+    data: XOR<ShopOrderUpdateWithoutOrderItemsInput, ShopOrderUncheckedUpdateWithoutOrderItemsInput>
   }
 
-  export type ShopOrderUpdateWithoutOrder_itemsInput = {
+  export type ShopOrderUpdateWithoutOrderItemsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    payment_status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
-    payment_method?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
     total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     currency?: StringFieldUpdateOperationsInput | string
-    transaction_id?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    includesMembership?: BoolFieldUpdateOperationsInput | boolean
+    membershipFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     member?: MemberUpdateOneRequiredWithoutOrdersNestedInput
   }
 
-  export type ShopOrderUncheckedUpdateWithoutOrder_itemsInput = {
+  export type ShopOrderUncheckedUpdateWithoutOrderItemsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    member_id?: StringFieldUpdateOperationsInput | string
-    payment_status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
-    payment_method?: NullableStringFieldUpdateOperationsInput | string | null
+    memberId?: StringFieldUpdateOperationsInput | string
+    paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
     total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     currency?: StringFieldUpdateOperationsInput | string
-    transaction_id?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    includesMembership?: BoolFieldUpdateOperationsInput | boolean
+    membershipFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type ShopProductUpsertWithoutOrder_itemsInput = {
-    update: XOR<ShopProductUpdateWithoutOrder_itemsInput, ShopProductUncheckedUpdateWithoutOrder_itemsInput>
-    create: XOR<ShopProductCreateWithoutOrder_itemsInput, ShopProductUncheckedCreateWithoutOrder_itemsInput>
+  export type ShopProductUpsertWithoutOrderItemsInput = {
+    update: XOR<ShopProductUpdateWithoutOrderItemsInput, ShopProductUncheckedUpdateWithoutOrderItemsInput>
+    create: XOR<ShopProductCreateWithoutOrderItemsInput, ShopProductUncheckedCreateWithoutOrderItemsInput>
     where?: ShopProductWhereInput
   }
 
-  export type ShopProductUpdateToOneWithWhereWithoutOrder_itemsInput = {
+  export type ShopProductUpdateToOneWithWhereWithoutOrderItemsInput = {
     where?: ShopProductWhereInput
-    data: XOR<ShopProductUpdateWithoutOrder_itemsInput, ShopProductUncheckedUpdateWithoutOrder_itemsInput>
+    data: XOR<ShopProductUpdateWithoutOrderItemsInput, ShopProductUncheckedUpdateWithoutOrderItemsInput>
   }
 
-  export type ShopProductUpdateWithoutOrder_itemsInput = {
+  export type ShopProductUpdateWithoutOrderItemsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     stock?: IntFieldUpdateOperationsInput | number
-    image_url?: NullableStringFieldUpdateOperationsInput | string | null
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type ShopProductUncheckedUpdateWithoutOrder_itemsInput = {
+  export type ShopProductUncheckedUpdateWithoutOrderItemsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     stock?: IntFieldUpdateOperationsInput | number
-    image_url?: NullableStringFieldUpdateOperationsInput | string | null
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type TournamentParticipantCreateWithoutTournamentInput = {
     id?: string
     category?: string | null
-    weight_class?: string | null
-    created_at?: Date | string
-    member: MemberCreateNestedOneWithoutTournament_entriesInput
-    matches_as_p1?: TournamentMatchCreateNestedManyWithoutParticipant1Input
-    matches_as_p2?: TournamentMatchCreateNestedManyWithoutParticipant2Input
-    matches_won?: TournamentMatchCreateNestedManyWithoutWinnerInput
+    weightClass?: string | null
+    createdAt?: Date | string
+    member: MemberCreateNestedOneWithoutTournamentEntriesInput
+    matchesAsP1?: TournamentMatchCreateNestedManyWithoutParticipant1Input
+    matchesAsP2?: TournamentMatchCreateNestedManyWithoutParticipant2Input
+    matchesWon?: TournamentMatchCreateNestedManyWithoutWinnerInput
   }
 
   export type TournamentParticipantUncheckedCreateWithoutTournamentInput = {
     id?: string
-    member_id: string
+    memberId: string
     category?: string | null
-    weight_class?: string | null
-    created_at?: Date | string
-    matches_as_p1?: TournamentMatchUncheckedCreateNestedManyWithoutParticipant1Input
-    matches_as_p2?: TournamentMatchUncheckedCreateNestedManyWithoutParticipant2Input
-    matches_won?: TournamentMatchUncheckedCreateNestedManyWithoutWinnerInput
+    weightClass?: string | null
+    createdAt?: Date | string
+    matchesAsP1?: TournamentMatchUncheckedCreateNestedManyWithoutParticipant1Input
+    matchesAsP2?: TournamentMatchUncheckedCreateNestedManyWithoutParticipant2Input
+    matchesWon?: TournamentMatchUncheckedCreateNestedManyWithoutWinnerInput
   }
 
   export type TournamentParticipantCreateOrConnectWithoutTournamentInput = {
@@ -33968,23 +34796,23 @@ export namespace Prisma {
   export type TournamentMatchCreateWithoutTournamentInput = {
     id?: string
     round?: number | null
-    match_order?: number | null
+    matchOrder?: number | null
     notes?: string | null
-    created_at?: Date | string
-    participant1?: TournamentParticipantCreateNestedOneWithoutMatches_as_p1Input
-    participant2?: TournamentParticipantCreateNestedOneWithoutMatches_as_p2Input
-    winner?: TournamentParticipantCreateNestedOneWithoutMatches_wonInput
+    createdAt?: Date | string
+    participant1?: TournamentParticipantCreateNestedOneWithoutMatchesAsP1Input
+    participant2?: TournamentParticipantCreateNestedOneWithoutMatchesAsP2Input
+    winner?: TournamentParticipantCreateNestedOneWithoutMatchesWonInput
   }
 
   export type TournamentMatchUncheckedCreateWithoutTournamentInput = {
     id?: string
-    participant1_id?: string | null
-    participant2_id?: string | null
-    winner_id?: string | null
+    participant1Id?: string | null
+    participant2Id?: string | null
+    winnerId?: string | null
     round?: number | null
-    match_order?: number | null
+    matchOrder?: number | null
     notes?: string | null
-    created_at?: Date | string
+    createdAt?: Date | string
   }
 
   export type TournamentMatchCreateOrConnectWithoutTournamentInput = {
@@ -34034,14 +34862,14 @@ export namespace Prisma {
     OR?: TournamentMatchScalarWhereInput[]
     NOT?: TournamentMatchScalarWhereInput | TournamentMatchScalarWhereInput[]
     id?: UuidFilter<"TournamentMatch"> | string
-    tournament_id?: UuidFilter<"TournamentMatch"> | string
-    participant1_id?: UuidNullableFilter<"TournamentMatch"> | string | null
-    participant2_id?: UuidNullableFilter<"TournamentMatch"> | string | null
-    winner_id?: UuidNullableFilter<"TournamentMatch"> | string | null
+    tournamentId?: UuidFilter<"TournamentMatch"> | string
+    participant1Id?: UuidNullableFilter<"TournamentMatch"> | string | null
+    participant2Id?: UuidNullableFilter<"TournamentMatch"> | string | null
+    winnerId?: UuidNullableFilter<"TournamentMatch"> | string | null
     round?: IntNullableFilter<"TournamentMatch"> | number | null
-    match_order?: IntNullableFilter<"TournamentMatch"> | number | null
+    matchOrder?: IntNullableFilter<"TournamentMatch"> | number | null
     notes?: StringNullableFilter<"TournamentMatch"> | string | null
-    created_at?: DateTimeFilter<"TournamentMatch"> | Date | string
+    createdAt?: DateTimeFilter<"TournamentMatch"> | Date | string
   }
 
   export type TournamentCreateWithoutParticipantsInput = {
@@ -34050,9 +34878,9 @@ export namespace Prisma {
     description?: string | null
     date: Date | string
     location?: string | null
-    is_published?: boolean
-    created_at?: Date | string
-    updated_at?: Date | string
+    isPublished?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
     matches?: TournamentMatchCreateNestedManyWithoutTournamentInput
   }
 
@@ -34062,9 +34890,9 @@ export namespace Prisma {
     description?: string | null
     date: Date | string
     location?: string | null
-    is_published?: boolean
-    created_at?: Date | string
-    updated_at?: Date | string
+    isPublished?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
     matches?: TournamentMatchUncheckedCreateNestedManyWithoutTournamentInput
   }
 
@@ -34073,83 +34901,99 @@ export namespace Prisma {
     create: XOR<TournamentCreateWithoutParticipantsInput, TournamentUncheckedCreateWithoutParticipantsInput>
   }
 
-  export type MemberCreateWithoutTournament_entriesInput = {
+  export type MemberCreateWithoutTournamentEntriesInput = {
     id: string
-    full_name: string
+    fullName: string
     email: string
     phone?: string | null
-    avatar_url?: string | null
+    avatarUrl?: string | null
     role?: $Enums.MemberRole
-    member_number?: string | null
-    current_rank?: string
-    join_date?: Date | string
-    expiry_date?: Date | string | null
-    is_active?: boolean
-    created_at?: Date | string
-    updated_at?: Date | string
+    memberNumber?: string | null
+    currentRank?: string
+    joinDate?: Date | string
+    expiryDate?: Date | string | null
+    isActive?: boolean
+    onboardingComplete?: boolean
+    membershipStatus?: $Enums.MembershipStatus
+    dateOfBirth?: Date | string | null
+    bloodGroup?: string | null
+    address?: string | null
+    nationalId?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     dojo?: DojoCreateNestedOneWithoutMembersInput
-    dojo_head_of?: DojoCreateNestedManyWithoutHead_instructorInput
+    dojoHeadOf?: DojoCreateNestedManyWithoutHeadInstructorInput
     instructor?: InstructorCreateNestedOneWithoutMemberInput
     admin?: AdminCreateNestedOneWithoutMemberInput
     gradings?: GradingCreateNestedManyWithoutMemberInput
-    grading_applications?: GradingApplicationCreateNestedManyWithoutMemberInput
-    event_registrations?: EventRegistrationCreateNestedManyWithoutMemberInput
+    gradingApplications?: GradingApplicationCreateNestedManyWithoutMemberInput
+    eventRegistrations?: EventRegistrationCreateNestedManyWithoutMemberInput
     notifications?: NotificationCreateNestedManyWithoutMemberInput
     orders?: ShopOrderCreateNestedManyWithoutMemberInput
     attendance?: AttendanceCreateNestedManyWithoutMemberInput
   }
 
-  export type MemberUncheckedCreateWithoutTournament_entriesInput = {
+  export type MemberUncheckedCreateWithoutTournamentEntriesInput = {
     id: string
-    full_name: string
+    fullName: string
     email: string
     phone?: string | null
-    avatar_url?: string | null
+    avatarUrl?: string | null
     role?: $Enums.MemberRole
-    member_number?: string | null
-    current_rank?: string
-    join_date?: Date | string
-    expiry_date?: Date | string | null
-    is_active?: boolean
-    dojo_id?: string | null
-    created_at?: Date | string
-    updated_at?: Date | string
-    dojo_head_of?: DojoUncheckedCreateNestedManyWithoutHead_instructorInput
+    memberNumber?: string | null
+    currentRank?: string
+    joinDate?: Date | string
+    expiryDate?: Date | string | null
+    isActive?: boolean
+    dojoId?: string | null
+    onboardingComplete?: boolean
+    membershipStatus?: $Enums.MembershipStatus
+    dateOfBirth?: Date | string | null
+    bloodGroup?: string | null
+    address?: string | null
+    nationalId?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    dojoHeadOf?: DojoUncheckedCreateNestedManyWithoutHeadInstructorInput
     instructor?: InstructorUncheckedCreateNestedOneWithoutMemberInput
     admin?: AdminUncheckedCreateNestedOneWithoutMemberInput
     gradings?: GradingUncheckedCreateNestedManyWithoutMemberInput
-    grading_applications?: GradingApplicationUncheckedCreateNestedManyWithoutMemberInput
-    event_registrations?: EventRegistrationUncheckedCreateNestedManyWithoutMemberInput
+    gradingApplications?: GradingApplicationUncheckedCreateNestedManyWithoutMemberInput
+    eventRegistrations?: EventRegistrationUncheckedCreateNestedManyWithoutMemberInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutMemberInput
     orders?: ShopOrderUncheckedCreateNestedManyWithoutMemberInput
     attendance?: AttendanceUncheckedCreateNestedManyWithoutMemberInput
   }
 
-  export type MemberCreateOrConnectWithoutTournament_entriesInput = {
+  export type MemberCreateOrConnectWithoutTournamentEntriesInput = {
     where: MemberWhereUniqueInput
-    create: XOR<MemberCreateWithoutTournament_entriesInput, MemberUncheckedCreateWithoutTournament_entriesInput>
+    create: XOR<MemberCreateWithoutTournamentEntriesInput, MemberUncheckedCreateWithoutTournamentEntriesInput>
   }
 
   export type TournamentMatchCreateWithoutParticipant1Input = {
     id?: string
     round?: number | null
-    match_order?: number | null
+    matchOrder?: number | null
     notes?: string | null
-    created_at?: Date | string
+    createdAt?: Date | string
     tournament: TournamentCreateNestedOneWithoutMatchesInput
-    participant2?: TournamentParticipantCreateNestedOneWithoutMatches_as_p2Input
-    winner?: TournamentParticipantCreateNestedOneWithoutMatches_wonInput
+    participant2?: TournamentParticipantCreateNestedOneWithoutMatchesAsP2Input
+    winner?: TournamentParticipantCreateNestedOneWithoutMatchesWonInput
   }
 
   export type TournamentMatchUncheckedCreateWithoutParticipant1Input = {
     id?: string
-    tournament_id: string
-    participant2_id?: string | null
-    winner_id?: string | null
+    tournamentId: string
+    participant2Id?: string | null
+    winnerId?: string | null
     round?: number | null
-    match_order?: number | null
+    matchOrder?: number | null
     notes?: string | null
-    created_at?: Date | string
+    createdAt?: Date | string
   }
 
   export type TournamentMatchCreateOrConnectWithoutParticipant1Input = {
@@ -34165,23 +35009,23 @@ export namespace Prisma {
   export type TournamentMatchCreateWithoutParticipant2Input = {
     id?: string
     round?: number | null
-    match_order?: number | null
+    matchOrder?: number | null
     notes?: string | null
-    created_at?: Date | string
+    createdAt?: Date | string
     tournament: TournamentCreateNestedOneWithoutMatchesInput
-    participant1?: TournamentParticipantCreateNestedOneWithoutMatches_as_p1Input
-    winner?: TournamentParticipantCreateNestedOneWithoutMatches_wonInput
+    participant1?: TournamentParticipantCreateNestedOneWithoutMatchesAsP1Input
+    winner?: TournamentParticipantCreateNestedOneWithoutMatchesWonInput
   }
 
   export type TournamentMatchUncheckedCreateWithoutParticipant2Input = {
     id?: string
-    tournament_id: string
-    participant1_id?: string | null
-    winner_id?: string | null
+    tournamentId: string
+    participant1Id?: string | null
+    winnerId?: string | null
     round?: number | null
-    match_order?: number | null
+    matchOrder?: number | null
     notes?: string | null
-    created_at?: Date | string
+    createdAt?: Date | string
   }
 
   export type TournamentMatchCreateOrConnectWithoutParticipant2Input = {
@@ -34197,23 +35041,23 @@ export namespace Prisma {
   export type TournamentMatchCreateWithoutWinnerInput = {
     id?: string
     round?: number | null
-    match_order?: number | null
+    matchOrder?: number | null
     notes?: string | null
-    created_at?: Date | string
+    createdAt?: Date | string
     tournament: TournamentCreateNestedOneWithoutMatchesInput
-    participant1?: TournamentParticipantCreateNestedOneWithoutMatches_as_p1Input
-    participant2?: TournamentParticipantCreateNestedOneWithoutMatches_as_p2Input
+    participant1?: TournamentParticipantCreateNestedOneWithoutMatchesAsP1Input
+    participant2?: TournamentParticipantCreateNestedOneWithoutMatchesAsP2Input
   }
 
   export type TournamentMatchUncheckedCreateWithoutWinnerInput = {
     id?: string
-    tournament_id: string
-    participant1_id?: string | null
-    participant2_id?: string | null
+    tournamentId: string
+    participant1Id?: string | null
+    participant2Id?: string | null
     round?: number | null
-    match_order?: number | null
+    matchOrder?: number | null
     notes?: string | null
-    created_at?: Date | string
+    createdAt?: Date | string
   }
 
   export type TournamentMatchCreateOrConnectWithoutWinnerInput = {
@@ -34243,9 +35087,9 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
-    is_published?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     matches?: TournamentMatchUpdateManyWithoutTournamentNestedInput
   }
 
@@ -34255,70 +35099,86 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
-    is_published?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     matches?: TournamentMatchUncheckedUpdateManyWithoutTournamentNestedInput
   }
 
-  export type MemberUpsertWithoutTournament_entriesInput = {
-    update: XOR<MemberUpdateWithoutTournament_entriesInput, MemberUncheckedUpdateWithoutTournament_entriesInput>
-    create: XOR<MemberCreateWithoutTournament_entriesInput, MemberUncheckedCreateWithoutTournament_entriesInput>
+  export type MemberUpsertWithoutTournamentEntriesInput = {
+    update: XOR<MemberUpdateWithoutTournamentEntriesInput, MemberUncheckedUpdateWithoutTournamentEntriesInput>
+    create: XOR<MemberCreateWithoutTournamentEntriesInput, MemberUncheckedCreateWithoutTournamentEntriesInput>
     where?: MemberWhereInput
   }
 
-  export type MemberUpdateToOneWithWhereWithoutTournament_entriesInput = {
+  export type MemberUpdateToOneWithWhereWithoutTournamentEntriesInput = {
     where?: MemberWhereInput
-    data: XOR<MemberUpdateWithoutTournament_entriesInput, MemberUncheckedUpdateWithoutTournament_entriesInput>
+    data: XOR<MemberUpdateWithoutTournamentEntriesInput, MemberUncheckedUpdateWithoutTournamentEntriesInput>
   }
 
-  export type MemberUpdateWithoutTournament_entriesInput = {
+  export type MemberUpdateWithoutTournamentEntriesInput = {
     id?: StringFieldUpdateOperationsInput | string
-    full_name?: StringFieldUpdateOperationsInput | string
+    fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
-    avatar_url?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumMemberRoleFieldUpdateOperationsInput | $Enums.MemberRole
-    member_number?: NullableStringFieldUpdateOperationsInput | string | null
-    current_rank?: StringFieldUpdateOperationsInput | string
-    join_date?: DateTimeFieldUpdateOperationsInput | Date | string
-    expiry_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    currentRank?: StringFieldUpdateOperationsInput | string
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    onboardingComplete?: BoolFieldUpdateOperationsInput | boolean
+    membershipStatus?: EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dojo?: DojoUpdateOneWithoutMembersNestedInput
-    dojo_head_of?: DojoUpdateManyWithoutHead_instructorNestedInput
+    dojoHeadOf?: DojoUpdateManyWithoutHeadInstructorNestedInput
     instructor?: InstructorUpdateOneWithoutMemberNestedInput
     admin?: AdminUpdateOneWithoutMemberNestedInput
     gradings?: GradingUpdateManyWithoutMemberNestedInput
-    grading_applications?: GradingApplicationUpdateManyWithoutMemberNestedInput
-    event_registrations?: EventRegistrationUpdateManyWithoutMemberNestedInput
+    gradingApplications?: GradingApplicationUpdateManyWithoutMemberNestedInput
+    eventRegistrations?: EventRegistrationUpdateManyWithoutMemberNestedInput
     notifications?: NotificationUpdateManyWithoutMemberNestedInput
     orders?: ShopOrderUpdateManyWithoutMemberNestedInput
     attendance?: AttendanceUpdateManyWithoutMemberNestedInput
   }
 
-  export type MemberUncheckedUpdateWithoutTournament_entriesInput = {
+  export type MemberUncheckedUpdateWithoutTournamentEntriesInput = {
     id?: StringFieldUpdateOperationsInput | string
-    full_name?: StringFieldUpdateOperationsInput | string
+    fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
-    avatar_url?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumMemberRoleFieldUpdateOperationsInput | $Enums.MemberRole
-    member_number?: NullableStringFieldUpdateOperationsInput | string | null
-    current_rank?: StringFieldUpdateOperationsInput | string
-    join_date?: DateTimeFieldUpdateOperationsInput | Date | string
-    expiry_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    dojo_id?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    dojo_head_of?: DojoUncheckedUpdateManyWithoutHead_instructorNestedInput
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    currentRank?: StringFieldUpdateOperationsInput | string
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    dojoId?: NullableStringFieldUpdateOperationsInput | string | null
+    onboardingComplete?: BoolFieldUpdateOperationsInput | boolean
+    membershipStatus?: EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    dojoHeadOf?: DojoUncheckedUpdateManyWithoutHeadInstructorNestedInput
     instructor?: InstructorUncheckedUpdateOneWithoutMemberNestedInput
     admin?: AdminUncheckedUpdateOneWithoutMemberNestedInput
     gradings?: GradingUncheckedUpdateManyWithoutMemberNestedInput
-    grading_applications?: GradingApplicationUncheckedUpdateManyWithoutMemberNestedInput
-    event_registrations?: EventRegistrationUncheckedUpdateManyWithoutMemberNestedInput
+    gradingApplications?: GradingApplicationUncheckedUpdateManyWithoutMemberNestedInput
+    eventRegistrations?: EventRegistrationUncheckedUpdateManyWithoutMemberNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutMemberNestedInput
     orders?: ShopOrderUncheckedUpdateManyWithoutMemberNestedInput
     attendance?: AttendanceUncheckedUpdateManyWithoutMemberNestedInput
@@ -34378,9 +35238,9 @@ export namespace Prisma {
     description?: string | null
     date: Date | string
     location?: string | null
-    is_published?: boolean
-    created_at?: Date | string
-    updated_at?: Date | string
+    isPublished?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
     participants?: TournamentParticipantCreateNestedManyWithoutTournamentInput
   }
 
@@ -34390,9 +35250,9 @@ export namespace Prisma {
     description?: string | null
     date: Date | string
     location?: string | null
-    is_published?: boolean
-    created_at?: Date | string
-    updated_at?: Date | string
+    isPublished?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
     participants?: TournamentParticipantUncheckedCreateNestedManyWithoutTournamentInput
   }
 
@@ -34401,85 +35261,85 @@ export namespace Prisma {
     create: XOR<TournamentCreateWithoutMatchesInput, TournamentUncheckedCreateWithoutMatchesInput>
   }
 
-  export type TournamentParticipantCreateWithoutMatches_as_p1Input = {
+  export type TournamentParticipantCreateWithoutMatchesAsP1Input = {
     id?: string
     category?: string | null
-    weight_class?: string | null
-    created_at?: Date | string
+    weightClass?: string | null
+    createdAt?: Date | string
     tournament: TournamentCreateNestedOneWithoutParticipantsInput
-    member: MemberCreateNestedOneWithoutTournament_entriesInput
-    matches_as_p2?: TournamentMatchCreateNestedManyWithoutParticipant2Input
-    matches_won?: TournamentMatchCreateNestedManyWithoutWinnerInput
+    member: MemberCreateNestedOneWithoutTournamentEntriesInput
+    matchesAsP2?: TournamentMatchCreateNestedManyWithoutParticipant2Input
+    matchesWon?: TournamentMatchCreateNestedManyWithoutWinnerInput
   }
 
-  export type TournamentParticipantUncheckedCreateWithoutMatches_as_p1Input = {
+  export type TournamentParticipantUncheckedCreateWithoutMatchesAsP1Input = {
     id?: string
-    tournament_id: string
-    member_id: string
+    tournamentId: string
+    memberId: string
     category?: string | null
-    weight_class?: string | null
-    created_at?: Date | string
-    matches_as_p2?: TournamentMatchUncheckedCreateNestedManyWithoutParticipant2Input
-    matches_won?: TournamentMatchUncheckedCreateNestedManyWithoutWinnerInput
+    weightClass?: string | null
+    createdAt?: Date | string
+    matchesAsP2?: TournamentMatchUncheckedCreateNestedManyWithoutParticipant2Input
+    matchesWon?: TournamentMatchUncheckedCreateNestedManyWithoutWinnerInput
   }
 
-  export type TournamentParticipantCreateOrConnectWithoutMatches_as_p1Input = {
+  export type TournamentParticipantCreateOrConnectWithoutMatchesAsP1Input = {
     where: TournamentParticipantWhereUniqueInput
-    create: XOR<TournamentParticipantCreateWithoutMatches_as_p1Input, TournamentParticipantUncheckedCreateWithoutMatches_as_p1Input>
+    create: XOR<TournamentParticipantCreateWithoutMatchesAsP1Input, TournamentParticipantUncheckedCreateWithoutMatchesAsP1Input>
   }
 
-  export type TournamentParticipantCreateWithoutMatches_as_p2Input = {
+  export type TournamentParticipantCreateWithoutMatchesAsP2Input = {
     id?: string
     category?: string | null
-    weight_class?: string | null
-    created_at?: Date | string
+    weightClass?: string | null
+    createdAt?: Date | string
     tournament: TournamentCreateNestedOneWithoutParticipantsInput
-    member: MemberCreateNestedOneWithoutTournament_entriesInput
-    matches_as_p1?: TournamentMatchCreateNestedManyWithoutParticipant1Input
-    matches_won?: TournamentMatchCreateNestedManyWithoutWinnerInput
+    member: MemberCreateNestedOneWithoutTournamentEntriesInput
+    matchesAsP1?: TournamentMatchCreateNestedManyWithoutParticipant1Input
+    matchesWon?: TournamentMatchCreateNestedManyWithoutWinnerInput
   }
 
-  export type TournamentParticipantUncheckedCreateWithoutMatches_as_p2Input = {
+  export type TournamentParticipantUncheckedCreateWithoutMatchesAsP2Input = {
     id?: string
-    tournament_id: string
-    member_id: string
+    tournamentId: string
+    memberId: string
     category?: string | null
-    weight_class?: string | null
-    created_at?: Date | string
-    matches_as_p1?: TournamentMatchUncheckedCreateNestedManyWithoutParticipant1Input
-    matches_won?: TournamentMatchUncheckedCreateNestedManyWithoutWinnerInput
+    weightClass?: string | null
+    createdAt?: Date | string
+    matchesAsP1?: TournamentMatchUncheckedCreateNestedManyWithoutParticipant1Input
+    matchesWon?: TournamentMatchUncheckedCreateNestedManyWithoutWinnerInput
   }
 
-  export type TournamentParticipantCreateOrConnectWithoutMatches_as_p2Input = {
+  export type TournamentParticipantCreateOrConnectWithoutMatchesAsP2Input = {
     where: TournamentParticipantWhereUniqueInput
-    create: XOR<TournamentParticipantCreateWithoutMatches_as_p2Input, TournamentParticipantUncheckedCreateWithoutMatches_as_p2Input>
+    create: XOR<TournamentParticipantCreateWithoutMatchesAsP2Input, TournamentParticipantUncheckedCreateWithoutMatchesAsP2Input>
   }
 
-  export type TournamentParticipantCreateWithoutMatches_wonInput = {
+  export type TournamentParticipantCreateWithoutMatchesWonInput = {
     id?: string
     category?: string | null
-    weight_class?: string | null
-    created_at?: Date | string
+    weightClass?: string | null
+    createdAt?: Date | string
     tournament: TournamentCreateNestedOneWithoutParticipantsInput
-    member: MemberCreateNestedOneWithoutTournament_entriesInput
-    matches_as_p1?: TournamentMatchCreateNestedManyWithoutParticipant1Input
-    matches_as_p2?: TournamentMatchCreateNestedManyWithoutParticipant2Input
+    member: MemberCreateNestedOneWithoutTournamentEntriesInput
+    matchesAsP1?: TournamentMatchCreateNestedManyWithoutParticipant1Input
+    matchesAsP2?: TournamentMatchCreateNestedManyWithoutParticipant2Input
   }
 
-  export type TournamentParticipantUncheckedCreateWithoutMatches_wonInput = {
+  export type TournamentParticipantUncheckedCreateWithoutMatchesWonInput = {
     id?: string
-    tournament_id: string
-    member_id: string
+    tournamentId: string
+    memberId: string
     category?: string | null
-    weight_class?: string | null
-    created_at?: Date | string
-    matches_as_p1?: TournamentMatchUncheckedCreateNestedManyWithoutParticipant1Input
-    matches_as_p2?: TournamentMatchUncheckedCreateNestedManyWithoutParticipant2Input
+    weightClass?: string | null
+    createdAt?: Date | string
+    matchesAsP1?: TournamentMatchUncheckedCreateNestedManyWithoutParticipant1Input
+    matchesAsP2?: TournamentMatchUncheckedCreateNestedManyWithoutParticipant2Input
   }
 
-  export type TournamentParticipantCreateOrConnectWithoutMatches_wonInput = {
+  export type TournamentParticipantCreateOrConnectWithoutMatchesWonInput = {
     where: TournamentParticipantWhereUniqueInput
-    create: XOR<TournamentParticipantCreateWithoutMatches_wonInput, TournamentParticipantUncheckedCreateWithoutMatches_wonInput>
+    create: XOR<TournamentParticipantCreateWithoutMatchesWonInput, TournamentParticipantUncheckedCreateWithoutMatchesWonInput>
   }
 
   export type TournamentUpsertWithoutMatchesInput = {
@@ -34499,9 +35359,9 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
-    is_published?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     participants?: TournamentParticipantUpdateManyWithoutTournamentNestedInput
   }
 
@@ -34511,418 +35371,450 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
-    is_published?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     participants?: TournamentParticipantUncheckedUpdateManyWithoutTournamentNestedInput
   }
 
-  export type TournamentParticipantUpsertWithoutMatches_as_p1Input = {
-    update: XOR<TournamentParticipantUpdateWithoutMatches_as_p1Input, TournamentParticipantUncheckedUpdateWithoutMatches_as_p1Input>
-    create: XOR<TournamentParticipantCreateWithoutMatches_as_p1Input, TournamentParticipantUncheckedCreateWithoutMatches_as_p1Input>
+  export type TournamentParticipantUpsertWithoutMatchesAsP1Input = {
+    update: XOR<TournamentParticipantUpdateWithoutMatchesAsP1Input, TournamentParticipantUncheckedUpdateWithoutMatchesAsP1Input>
+    create: XOR<TournamentParticipantCreateWithoutMatchesAsP1Input, TournamentParticipantUncheckedCreateWithoutMatchesAsP1Input>
     where?: TournamentParticipantWhereInput
   }
 
-  export type TournamentParticipantUpdateToOneWithWhereWithoutMatches_as_p1Input = {
+  export type TournamentParticipantUpdateToOneWithWhereWithoutMatchesAsP1Input = {
     where?: TournamentParticipantWhereInput
-    data: XOR<TournamentParticipantUpdateWithoutMatches_as_p1Input, TournamentParticipantUncheckedUpdateWithoutMatches_as_p1Input>
+    data: XOR<TournamentParticipantUpdateWithoutMatchesAsP1Input, TournamentParticipantUncheckedUpdateWithoutMatchesAsP1Input>
   }
 
-  export type TournamentParticipantUpdateWithoutMatches_as_p1Input = {
+  export type TournamentParticipantUpdateWithoutMatchesAsP1Input = {
     id?: StringFieldUpdateOperationsInput | string
     category?: NullableStringFieldUpdateOperationsInput | string | null
-    weight_class?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    weightClass?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tournament?: TournamentUpdateOneRequiredWithoutParticipantsNestedInput
-    member?: MemberUpdateOneRequiredWithoutTournament_entriesNestedInput
-    matches_as_p2?: TournamentMatchUpdateManyWithoutParticipant2NestedInput
-    matches_won?: TournamentMatchUpdateManyWithoutWinnerNestedInput
+    member?: MemberUpdateOneRequiredWithoutTournamentEntriesNestedInput
+    matchesAsP2?: TournamentMatchUpdateManyWithoutParticipant2NestedInput
+    matchesWon?: TournamentMatchUpdateManyWithoutWinnerNestedInput
   }
 
-  export type TournamentParticipantUncheckedUpdateWithoutMatches_as_p1Input = {
+  export type TournamentParticipantUncheckedUpdateWithoutMatchesAsP1Input = {
     id?: StringFieldUpdateOperationsInput | string
-    tournament_id?: StringFieldUpdateOperationsInput | string
-    member_id?: StringFieldUpdateOperationsInput | string
+    tournamentId?: StringFieldUpdateOperationsInput | string
+    memberId?: StringFieldUpdateOperationsInput | string
     category?: NullableStringFieldUpdateOperationsInput | string | null
-    weight_class?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    matches_as_p2?: TournamentMatchUncheckedUpdateManyWithoutParticipant2NestedInput
-    matches_won?: TournamentMatchUncheckedUpdateManyWithoutWinnerNestedInput
+    weightClass?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    matchesAsP2?: TournamentMatchUncheckedUpdateManyWithoutParticipant2NestedInput
+    matchesWon?: TournamentMatchUncheckedUpdateManyWithoutWinnerNestedInput
   }
 
-  export type TournamentParticipantUpsertWithoutMatches_as_p2Input = {
-    update: XOR<TournamentParticipantUpdateWithoutMatches_as_p2Input, TournamentParticipantUncheckedUpdateWithoutMatches_as_p2Input>
-    create: XOR<TournamentParticipantCreateWithoutMatches_as_p2Input, TournamentParticipantUncheckedCreateWithoutMatches_as_p2Input>
+  export type TournamentParticipantUpsertWithoutMatchesAsP2Input = {
+    update: XOR<TournamentParticipantUpdateWithoutMatchesAsP2Input, TournamentParticipantUncheckedUpdateWithoutMatchesAsP2Input>
+    create: XOR<TournamentParticipantCreateWithoutMatchesAsP2Input, TournamentParticipantUncheckedCreateWithoutMatchesAsP2Input>
     where?: TournamentParticipantWhereInput
   }
 
-  export type TournamentParticipantUpdateToOneWithWhereWithoutMatches_as_p2Input = {
+  export type TournamentParticipantUpdateToOneWithWhereWithoutMatchesAsP2Input = {
     where?: TournamentParticipantWhereInput
-    data: XOR<TournamentParticipantUpdateWithoutMatches_as_p2Input, TournamentParticipantUncheckedUpdateWithoutMatches_as_p2Input>
+    data: XOR<TournamentParticipantUpdateWithoutMatchesAsP2Input, TournamentParticipantUncheckedUpdateWithoutMatchesAsP2Input>
   }
 
-  export type TournamentParticipantUpdateWithoutMatches_as_p2Input = {
+  export type TournamentParticipantUpdateWithoutMatchesAsP2Input = {
     id?: StringFieldUpdateOperationsInput | string
     category?: NullableStringFieldUpdateOperationsInput | string | null
-    weight_class?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    weightClass?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tournament?: TournamentUpdateOneRequiredWithoutParticipantsNestedInput
-    member?: MemberUpdateOneRequiredWithoutTournament_entriesNestedInput
-    matches_as_p1?: TournamentMatchUpdateManyWithoutParticipant1NestedInput
-    matches_won?: TournamentMatchUpdateManyWithoutWinnerNestedInput
+    member?: MemberUpdateOneRequiredWithoutTournamentEntriesNestedInput
+    matchesAsP1?: TournamentMatchUpdateManyWithoutParticipant1NestedInput
+    matchesWon?: TournamentMatchUpdateManyWithoutWinnerNestedInput
   }
 
-  export type TournamentParticipantUncheckedUpdateWithoutMatches_as_p2Input = {
+  export type TournamentParticipantUncheckedUpdateWithoutMatchesAsP2Input = {
     id?: StringFieldUpdateOperationsInput | string
-    tournament_id?: StringFieldUpdateOperationsInput | string
-    member_id?: StringFieldUpdateOperationsInput | string
+    tournamentId?: StringFieldUpdateOperationsInput | string
+    memberId?: StringFieldUpdateOperationsInput | string
     category?: NullableStringFieldUpdateOperationsInput | string | null
-    weight_class?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    matches_as_p1?: TournamentMatchUncheckedUpdateManyWithoutParticipant1NestedInput
-    matches_won?: TournamentMatchUncheckedUpdateManyWithoutWinnerNestedInput
+    weightClass?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    matchesAsP1?: TournamentMatchUncheckedUpdateManyWithoutParticipant1NestedInput
+    matchesWon?: TournamentMatchUncheckedUpdateManyWithoutWinnerNestedInput
   }
 
-  export type TournamentParticipantUpsertWithoutMatches_wonInput = {
-    update: XOR<TournamentParticipantUpdateWithoutMatches_wonInput, TournamentParticipantUncheckedUpdateWithoutMatches_wonInput>
-    create: XOR<TournamentParticipantCreateWithoutMatches_wonInput, TournamentParticipantUncheckedCreateWithoutMatches_wonInput>
+  export type TournamentParticipantUpsertWithoutMatchesWonInput = {
+    update: XOR<TournamentParticipantUpdateWithoutMatchesWonInput, TournamentParticipantUncheckedUpdateWithoutMatchesWonInput>
+    create: XOR<TournamentParticipantCreateWithoutMatchesWonInput, TournamentParticipantUncheckedCreateWithoutMatchesWonInput>
     where?: TournamentParticipantWhereInput
   }
 
-  export type TournamentParticipantUpdateToOneWithWhereWithoutMatches_wonInput = {
+  export type TournamentParticipantUpdateToOneWithWhereWithoutMatchesWonInput = {
     where?: TournamentParticipantWhereInput
-    data: XOR<TournamentParticipantUpdateWithoutMatches_wonInput, TournamentParticipantUncheckedUpdateWithoutMatches_wonInput>
+    data: XOR<TournamentParticipantUpdateWithoutMatchesWonInput, TournamentParticipantUncheckedUpdateWithoutMatchesWonInput>
   }
 
-  export type TournamentParticipantUpdateWithoutMatches_wonInput = {
+  export type TournamentParticipantUpdateWithoutMatchesWonInput = {
     id?: StringFieldUpdateOperationsInput | string
     category?: NullableStringFieldUpdateOperationsInput | string | null
-    weight_class?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    weightClass?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tournament?: TournamentUpdateOneRequiredWithoutParticipantsNestedInput
-    member?: MemberUpdateOneRequiredWithoutTournament_entriesNestedInput
-    matches_as_p1?: TournamentMatchUpdateManyWithoutParticipant1NestedInput
-    matches_as_p2?: TournamentMatchUpdateManyWithoutParticipant2NestedInput
+    member?: MemberUpdateOneRequiredWithoutTournamentEntriesNestedInput
+    matchesAsP1?: TournamentMatchUpdateManyWithoutParticipant1NestedInput
+    matchesAsP2?: TournamentMatchUpdateManyWithoutParticipant2NestedInput
   }
 
-  export type TournamentParticipantUncheckedUpdateWithoutMatches_wonInput = {
+  export type TournamentParticipantUncheckedUpdateWithoutMatchesWonInput = {
     id?: StringFieldUpdateOperationsInput | string
-    tournament_id?: StringFieldUpdateOperationsInput | string
-    member_id?: StringFieldUpdateOperationsInput | string
+    tournamentId?: StringFieldUpdateOperationsInput | string
+    memberId?: StringFieldUpdateOperationsInput | string
     category?: NullableStringFieldUpdateOperationsInput | string | null
-    weight_class?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    matches_as_p1?: TournamentMatchUncheckedUpdateManyWithoutParticipant1NestedInput
-    matches_as_p2?: TournamentMatchUncheckedUpdateManyWithoutParticipant2NestedInput
+    weightClass?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    matchesAsP1?: TournamentMatchUncheckedUpdateManyWithoutParticipant1NestedInput
+    matchesAsP2?: TournamentMatchUncheckedUpdateManyWithoutParticipant2NestedInput
   }
 
-  export type GradingCreateManyFrom_rankInput = {
+  export type GradingCreateManyFromRankInput = {
     id?: string
-    member_id: string
-    grading_event_id?: string | null
-    to_rank_id?: string | null
+    memberId: string
+    gradingEventId?: string | null
+    toRankId?: string | null
     result?: $Enums.GradingResult
-    certificate_url?: string | null
+    certificateUrl?: string | null
     notes?: string | null
-    created_at?: Date | string
-    updated_at?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
-  export type GradingCreateManyTo_rankInput = {
+  export type GradingCreateManyToRankInput = {
     id?: string
-    member_id: string
-    grading_event_id?: string | null
-    from_rank_id?: string | null
+    memberId: string
+    gradingEventId?: string | null
+    fromRankId?: string | null
     result?: $Enums.GradingResult
-    certificate_url?: string | null
+    certificateUrl?: string | null
     notes?: string | null
-    created_at?: Date | string
-    updated_at?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
-  export type GradingEventCreateManyTarget_rankInput = {
+  export type GradingEventCreateManyTargetRankInput = {
     id?: string
     name: string
-    event_date: Date | string
+    eventDate: Date | string
     location?: string | null
-    is_open?: boolean
+    isOpen?: boolean
     notes?: string | null
-    created_at?: Date | string
-    updated_at?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
-  export type GradingApplicationCreateManyTarget_rankInput = {
+  export type GradingApplicationCreateManyTargetRankInput = {
     id?: string
-    member_id: string
-    grading_event_id: string
+    memberId: string
+    gradingEventId: string
     status?: $Enums.ApplicationStatus
     notes?: string | null
-    applied_at?: Date | string
+    appliedAt?: Date | string
   }
 
-  export type GradingUpdateWithoutFrom_rankInput = {
+  export type GradingUpdateWithoutFromRankInput = {
     id?: StringFieldUpdateOperationsInput | string
     result?: EnumGradingResultFieldUpdateOperationsInput | $Enums.GradingResult
-    certificate_url?: NullableStringFieldUpdateOperationsInput | string | null
+    certificateUrl?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     member?: MemberUpdateOneRequiredWithoutGradingsNestedInput
-    grading_event?: GradingEventUpdateOneWithoutGradingsNestedInput
-    to_rank?: BeltRankUpdateOneWithoutGradings_toNestedInput
+    gradingEvent?: GradingEventUpdateOneWithoutGradingsNestedInput
+    toRank?: BeltRankUpdateOneWithoutGradingsToNestedInput
   }
 
-  export type GradingUncheckedUpdateWithoutFrom_rankInput = {
+  export type GradingUncheckedUpdateWithoutFromRankInput = {
     id?: StringFieldUpdateOperationsInput | string
-    member_id?: StringFieldUpdateOperationsInput | string
-    grading_event_id?: NullableStringFieldUpdateOperationsInput | string | null
-    to_rank_id?: NullableStringFieldUpdateOperationsInput | string | null
+    memberId?: StringFieldUpdateOperationsInput | string
+    gradingEventId?: NullableStringFieldUpdateOperationsInput | string | null
+    toRankId?: NullableStringFieldUpdateOperationsInput | string | null
     result?: EnumGradingResultFieldUpdateOperationsInput | $Enums.GradingResult
-    certificate_url?: NullableStringFieldUpdateOperationsInput | string | null
+    certificateUrl?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type GradingUncheckedUpdateManyWithoutFrom_rankInput = {
+  export type GradingUncheckedUpdateManyWithoutFromRankInput = {
     id?: StringFieldUpdateOperationsInput | string
-    member_id?: StringFieldUpdateOperationsInput | string
-    grading_event_id?: NullableStringFieldUpdateOperationsInput | string | null
-    to_rank_id?: NullableStringFieldUpdateOperationsInput | string | null
+    memberId?: StringFieldUpdateOperationsInput | string
+    gradingEventId?: NullableStringFieldUpdateOperationsInput | string | null
+    toRankId?: NullableStringFieldUpdateOperationsInput | string | null
     result?: EnumGradingResultFieldUpdateOperationsInput | $Enums.GradingResult
-    certificate_url?: NullableStringFieldUpdateOperationsInput | string | null
+    certificateUrl?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type GradingUpdateWithoutTo_rankInput = {
+  export type GradingUpdateWithoutToRankInput = {
     id?: StringFieldUpdateOperationsInput | string
     result?: EnumGradingResultFieldUpdateOperationsInput | $Enums.GradingResult
-    certificate_url?: NullableStringFieldUpdateOperationsInput | string | null
+    certificateUrl?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     member?: MemberUpdateOneRequiredWithoutGradingsNestedInput
-    grading_event?: GradingEventUpdateOneWithoutGradingsNestedInput
-    from_rank?: BeltRankUpdateOneWithoutGradings_fromNestedInput
+    gradingEvent?: GradingEventUpdateOneWithoutGradingsNestedInput
+    fromRank?: BeltRankUpdateOneWithoutGradingsFromNestedInput
   }
 
-  export type GradingUncheckedUpdateWithoutTo_rankInput = {
+  export type GradingUncheckedUpdateWithoutToRankInput = {
     id?: StringFieldUpdateOperationsInput | string
-    member_id?: StringFieldUpdateOperationsInput | string
-    grading_event_id?: NullableStringFieldUpdateOperationsInput | string | null
-    from_rank_id?: NullableStringFieldUpdateOperationsInput | string | null
+    memberId?: StringFieldUpdateOperationsInput | string
+    gradingEventId?: NullableStringFieldUpdateOperationsInput | string | null
+    fromRankId?: NullableStringFieldUpdateOperationsInput | string | null
     result?: EnumGradingResultFieldUpdateOperationsInput | $Enums.GradingResult
-    certificate_url?: NullableStringFieldUpdateOperationsInput | string | null
+    certificateUrl?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type GradingUncheckedUpdateManyWithoutTo_rankInput = {
+  export type GradingUncheckedUpdateManyWithoutToRankInput = {
     id?: StringFieldUpdateOperationsInput | string
-    member_id?: StringFieldUpdateOperationsInput | string
-    grading_event_id?: NullableStringFieldUpdateOperationsInput | string | null
-    from_rank_id?: NullableStringFieldUpdateOperationsInput | string | null
+    memberId?: StringFieldUpdateOperationsInput | string
+    gradingEventId?: NullableStringFieldUpdateOperationsInput | string | null
+    fromRankId?: NullableStringFieldUpdateOperationsInput | string | null
     result?: EnumGradingResultFieldUpdateOperationsInput | $Enums.GradingResult
-    certificate_url?: NullableStringFieldUpdateOperationsInput | string | null
+    certificateUrl?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type GradingEventUpdateWithoutTarget_rankInput = {
+  export type GradingEventUpdateWithoutTargetRankInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    event_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    eventDate?: DateTimeFieldUpdateOperationsInput | Date | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
-    is_open?: BoolFieldUpdateOperationsInput | boolean
+    isOpen?: BoolFieldUpdateOperationsInput | boolean
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    gradings?: GradingUpdateManyWithoutGrading_eventNestedInput
-    applications?: GradingApplicationUpdateManyWithoutGrading_eventNestedInput
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    gradings?: GradingUpdateManyWithoutGradingEventNestedInput
+    applications?: GradingApplicationUpdateManyWithoutGradingEventNestedInput
   }
 
-  export type GradingEventUncheckedUpdateWithoutTarget_rankInput = {
+  export type GradingEventUncheckedUpdateWithoutTargetRankInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    event_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    eventDate?: DateTimeFieldUpdateOperationsInput | Date | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
-    is_open?: BoolFieldUpdateOperationsInput | boolean
+    isOpen?: BoolFieldUpdateOperationsInput | boolean
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    gradings?: GradingUncheckedUpdateManyWithoutGrading_eventNestedInput
-    applications?: GradingApplicationUncheckedUpdateManyWithoutGrading_eventNestedInput
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    gradings?: GradingUncheckedUpdateManyWithoutGradingEventNestedInput
+    applications?: GradingApplicationUncheckedUpdateManyWithoutGradingEventNestedInput
   }
 
-  export type GradingEventUncheckedUpdateManyWithoutTarget_rankInput = {
+  export type GradingEventUncheckedUpdateManyWithoutTargetRankInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    event_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    eventDate?: DateTimeFieldUpdateOperationsInput | Date | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
-    is_open?: BoolFieldUpdateOperationsInput | boolean
+    isOpen?: BoolFieldUpdateOperationsInput | boolean
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type GradingApplicationUpdateWithoutTarget_rankInput = {
+  export type GradingApplicationUpdateWithoutTargetRankInput = {
     id?: StringFieldUpdateOperationsInput | string
     status?: EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    applied_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    member?: MemberUpdateOneRequiredWithoutGrading_applicationsNestedInput
-    grading_event?: GradingEventUpdateOneRequiredWithoutApplicationsNestedInput
+    appliedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    member?: MemberUpdateOneRequiredWithoutGradingApplicationsNestedInput
+    gradingEvent?: GradingEventUpdateOneRequiredWithoutApplicationsNestedInput
   }
 
-  export type GradingApplicationUncheckedUpdateWithoutTarget_rankInput = {
+  export type GradingApplicationUncheckedUpdateWithoutTargetRankInput = {
     id?: StringFieldUpdateOperationsInput | string
-    member_id?: StringFieldUpdateOperationsInput | string
-    grading_event_id?: StringFieldUpdateOperationsInput | string
+    memberId?: StringFieldUpdateOperationsInput | string
+    gradingEventId?: StringFieldUpdateOperationsInput | string
     status?: EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    applied_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    appliedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type GradingApplicationUncheckedUpdateManyWithoutTarget_rankInput = {
+  export type GradingApplicationUncheckedUpdateManyWithoutTargetRankInput = {
     id?: StringFieldUpdateOperationsInput | string
-    member_id?: StringFieldUpdateOperationsInput | string
-    grading_event_id?: StringFieldUpdateOperationsInput | string
+    memberId?: StringFieldUpdateOperationsInput | string
+    gradingEventId?: StringFieldUpdateOperationsInput | string
     status?: EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    applied_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    appliedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type MemberCreateManyDojoInput = {
     id: string
-    full_name: string
+    fullName: string
     email: string
     phone?: string | null
-    avatar_url?: string | null
+    avatarUrl?: string | null
     role?: $Enums.MemberRole
-    member_number?: string | null
-    current_rank?: string
-    join_date?: Date | string
-    expiry_date?: Date | string | null
-    is_active?: boolean
-    created_at?: Date | string
-    updated_at?: Date | string
+    memberNumber?: string | null
+    currentRank?: string
+    joinDate?: Date | string
+    expiryDate?: Date | string | null
+    isActive?: boolean
+    onboardingComplete?: boolean
+    membershipStatus?: $Enums.MembershipStatus
+    dateOfBirth?: Date | string | null
+    bloodGroup?: string | null
+    address?: string | null
+    nationalId?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type InstructorCreateManyDojoInput = {
     id?: string
-    member_id: string
+    memberId: string
     bio?: string | null
-    is_active?: boolean
-    created_at?: Date | string
-    updated_at?: Date | string
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type AttendanceCreateManyDojoInput = {
     id?: string
-    member_id: string
+    memberId: string
     date: Date | string
     present?: boolean
     notes?: string | null
-    created_at?: Date | string
+    createdAt?: Date | string
   }
 
   export type MemberUpdateWithoutDojoInput = {
     id?: StringFieldUpdateOperationsInput | string
-    full_name?: StringFieldUpdateOperationsInput | string
+    fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
-    avatar_url?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumMemberRoleFieldUpdateOperationsInput | $Enums.MemberRole
-    member_number?: NullableStringFieldUpdateOperationsInput | string | null
-    current_rank?: StringFieldUpdateOperationsInput | string
-    join_date?: DateTimeFieldUpdateOperationsInput | Date | string
-    expiry_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    dojo_head_of?: DojoUpdateManyWithoutHead_instructorNestedInput
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    currentRank?: StringFieldUpdateOperationsInput | string
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    onboardingComplete?: BoolFieldUpdateOperationsInput | boolean
+    membershipStatus?: EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    dojoHeadOf?: DojoUpdateManyWithoutHeadInstructorNestedInput
     instructor?: InstructorUpdateOneWithoutMemberNestedInput
     admin?: AdminUpdateOneWithoutMemberNestedInput
     gradings?: GradingUpdateManyWithoutMemberNestedInput
-    grading_applications?: GradingApplicationUpdateManyWithoutMemberNestedInput
-    event_registrations?: EventRegistrationUpdateManyWithoutMemberNestedInput
+    gradingApplications?: GradingApplicationUpdateManyWithoutMemberNestedInput
+    eventRegistrations?: EventRegistrationUpdateManyWithoutMemberNestedInput
     notifications?: NotificationUpdateManyWithoutMemberNestedInput
     orders?: ShopOrderUpdateManyWithoutMemberNestedInput
     attendance?: AttendanceUpdateManyWithoutMemberNestedInput
-    tournament_entries?: TournamentParticipantUpdateManyWithoutMemberNestedInput
+    tournamentEntries?: TournamentParticipantUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutDojoInput = {
     id?: StringFieldUpdateOperationsInput | string
-    full_name?: StringFieldUpdateOperationsInput | string
+    fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
-    avatar_url?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumMemberRoleFieldUpdateOperationsInput | $Enums.MemberRole
-    member_number?: NullableStringFieldUpdateOperationsInput | string | null
-    current_rank?: StringFieldUpdateOperationsInput | string
-    join_date?: DateTimeFieldUpdateOperationsInput | Date | string
-    expiry_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    dojo_head_of?: DojoUncheckedUpdateManyWithoutHead_instructorNestedInput
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    currentRank?: StringFieldUpdateOperationsInput | string
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    onboardingComplete?: BoolFieldUpdateOperationsInput | boolean
+    membershipStatus?: EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    dojoHeadOf?: DojoUncheckedUpdateManyWithoutHeadInstructorNestedInput
     instructor?: InstructorUncheckedUpdateOneWithoutMemberNestedInput
     admin?: AdminUncheckedUpdateOneWithoutMemberNestedInput
     gradings?: GradingUncheckedUpdateManyWithoutMemberNestedInput
-    grading_applications?: GradingApplicationUncheckedUpdateManyWithoutMemberNestedInput
-    event_registrations?: EventRegistrationUncheckedUpdateManyWithoutMemberNestedInput
+    gradingApplications?: GradingApplicationUncheckedUpdateManyWithoutMemberNestedInput
+    eventRegistrations?: EventRegistrationUncheckedUpdateManyWithoutMemberNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutMemberNestedInput
     orders?: ShopOrderUncheckedUpdateManyWithoutMemberNestedInput
     attendance?: AttendanceUncheckedUpdateManyWithoutMemberNestedInput
-    tournament_entries?: TournamentParticipantUncheckedUpdateManyWithoutMemberNestedInput
+    tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberUncheckedUpdateManyWithoutDojoInput = {
     id?: StringFieldUpdateOperationsInput | string
-    full_name?: StringFieldUpdateOperationsInput | string
+    fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
-    avatar_url?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumMemberRoleFieldUpdateOperationsInput | $Enums.MemberRole
-    member_number?: NullableStringFieldUpdateOperationsInput | string | null
-    current_rank?: StringFieldUpdateOperationsInput | string
-    join_date?: DateTimeFieldUpdateOperationsInput | Date | string
-    expiry_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    currentRank?: StringFieldUpdateOperationsInput | string
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    onboardingComplete?: BoolFieldUpdateOperationsInput | boolean
+    membershipStatus?: EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type InstructorUpdateWithoutDojoInput = {
     id?: StringFieldUpdateOperationsInput | string
     bio?: NullableStringFieldUpdateOperationsInput | string | null
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     member?: MemberUpdateOneRequiredWithoutInstructorNestedInput
   }
 
   export type InstructorUncheckedUpdateWithoutDojoInput = {
     id?: StringFieldUpdateOperationsInput | string
-    member_id?: StringFieldUpdateOperationsInput | string
+    memberId?: StringFieldUpdateOperationsInput | string
     bio?: NullableStringFieldUpdateOperationsInput | string | null
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type InstructorUncheckedUpdateManyWithoutDojoInput = {
     id?: StringFieldUpdateOperationsInput | string
-    member_id?: StringFieldUpdateOperationsInput | string
+    memberId?: StringFieldUpdateOperationsInput | string
     bio?: NullableStringFieldUpdateOperationsInput | string | null
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type AttendanceUpdateWithoutDojoInput = {
@@ -34930,29 +35822,29 @@ export namespace Prisma {
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     present?: BoolFieldUpdateOperationsInput | boolean
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     member?: MemberUpdateOneRequiredWithoutAttendanceNestedInput
   }
 
   export type AttendanceUncheckedUpdateWithoutDojoInput = {
     id?: StringFieldUpdateOperationsInput | string
-    member_id?: StringFieldUpdateOperationsInput | string
+    memberId?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     present?: BoolFieldUpdateOperationsInput | boolean
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type AttendanceUncheckedUpdateManyWithoutDojoInput = {
     id?: StringFieldUpdateOperationsInput | string
-    member_id?: StringFieldUpdateOperationsInput | string
+    memberId?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     present?: BoolFieldUpdateOperationsInput | boolean
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type DojoCreateManyHead_instructorInput = {
+  export type DojoCreateManyHeadInstructorInput = {
     id?: string
     name: string
     address?: string | null
@@ -34962,36 +35854,36 @@ export namespace Prisma {
     phone?: string | null
     email?: string | null
     schedule?: NullableJsonNullValueInput | InputJsonValue
-    is_active?: boolean
-    created_at?: Date | string
-    updated_at?: Date | string
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type GradingCreateManyMemberInput = {
     id?: string
-    grading_event_id?: string | null
-    from_rank_id?: string | null
-    to_rank_id?: string | null
+    gradingEventId?: string | null
+    fromRankId?: string | null
+    toRankId?: string | null
     result?: $Enums.GradingResult
-    certificate_url?: string | null
+    certificateUrl?: string | null
     notes?: string | null
-    created_at?: Date | string
-    updated_at?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type GradingApplicationCreateManyMemberInput = {
     id?: string
-    grading_event_id: string
-    target_rank_id?: string | null
+    gradingEventId: string
+    targetRankId?: string | null
     status?: $Enums.ApplicationStatus
     notes?: string | null
-    applied_at?: Date | string
+    appliedAt?: Date | string
   }
 
   export type EventRegistrationCreateManyMemberInput = {
     id?: string
-    event_id: string
-    created_at?: Date | string
+    eventId: string
+    createdAt?: Date | string
   }
 
   export type NotificationCreateManyMemberInput = {
@@ -34999,42 +35891,44 @@ export namespace Prisma {
     title: string
     message: string
     type?: $Enums.NotificationType
-    is_read?: boolean
+    isRead?: boolean
     link?: string | null
-    created_at?: Date | string
-    updated_at?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type ShopOrderCreateManyMemberInput = {
     id?: string
-    payment_status?: $Enums.PaymentStatus
-    payment_method?: string | null
+    paymentStatus?: $Enums.PaymentStatus
+    paymentMethod?: string | null
     total: Decimal | DecimalJsLike | number | string
     currency?: string
-    transaction_id?: string | null
+    transactionId?: string | null
+    includesMembership?: boolean
+    membershipFee?: Decimal | DecimalJsLike | number | string | null
     notes?: string | null
-    created_at?: Date | string
-    updated_at?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type AttendanceCreateManyMemberInput = {
     id?: string
-    dojo_id?: string | null
+    dojoId?: string | null
     date: Date | string
     present?: boolean
     notes?: string | null
-    created_at?: Date | string
+    createdAt?: Date | string
   }
 
   export type TournamentParticipantCreateManyMemberInput = {
     id?: string
-    tournament_id: string
+    tournamentId: string
     category?: string | null
-    weight_class?: string | null
-    created_at?: Date | string
+    weightClass?: string | null
+    createdAt?: Date | string
   }
 
-  export type DojoUpdateWithoutHead_instructorInput = {
+  export type DojoUpdateWithoutHeadInstructorInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     address?: NullableStringFieldUpdateOperationsInput | string | null
@@ -35044,15 +35938,15 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     schedule?: NullableJsonNullValueInput | InputJsonValue
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: MemberUpdateManyWithoutDojoNestedInput
     instructors?: InstructorUpdateManyWithoutDojoNestedInput
     attendance?: AttendanceUpdateManyWithoutDojoNestedInput
   }
 
-  export type DojoUncheckedUpdateWithoutHead_instructorInput = {
+  export type DojoUncheckedUpdateWithoutHeadInstructorInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     address?: NullableStringFieldUpdateOperationsInput | string | null
@@ -35062,15 +35956,15 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     schedule?: NullableJsonNullValueInput | InputJsonValue
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: MemberUncheckedUpdateManyWithoutDojoNestedInput
     instructors?: InstructorUncheckedUpdateManyWithoutDojoNestedInput
     attendance?: AttendanceUncheckedUpdateManyWithoutDojoNestedInput
   }
 
-  export type DojoUncheckedUpdateManyWithoutHead_instructorInput = {
+  export type DojoUncheckedUpdateManyWithoutHeadInstructorInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     address?: NullableStringFieldUpdateOperationsInput | string | null
@@ -35080,90 +35974,90 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     schedule?: NullableJsonNullValueInput | InputJsonValue
-    is_active?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type GradingUpdateWithoutMemberInput = {
     id?: StringFieldUpdateOperationsInput | string
     result?: EnumGradingResultFieldUpdateOperationsInput | $Enums.GradingResult
-    certificate_url?: NullableStringFieldUpdateOperationsInput | string | null
+    certificateUrl?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    grading_event?: GradingEventUpdateOneWithoutGradingsNestedInput
-    from_rank?: BeltRankUpdateOneWithoutGradings_fromNestedInput
-    to_rank?: BeltRankUpdateOneWithoutGradings_toNestedInput
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    gradingEvent?: GradingEventUpdateOneWithoutGradingsNestedInput
+    fromRank?: BeltRankUpdateOneWithoutGradingsFromNestedInput
+    toRank?: BeltRankUpdateOneWithoutGradingsToNestedInput
   }
 
   export type GradingUncheckedUpdateWithoutMemberInput = {
     id?: StringFieldUpdateOperationsInput | string
-    grading_event_id?: NullableStringFieldUpdateOperationsInput | string | null
-    from_rank_id?: NullableStringFieldUpdateOperationsInput | string | null
-    to_rank_id?: NullableStringFieldUpdateOperationsInput | string | null
+    gradingEventId?: NullableStringFieldUpdateOperationsInput | string | null
+    fromRankId?: NullableStringFieldUpdateOperationsInput | string | null
+    toRankId?: NullableStringFieldUpdateOperationsInput | string | null
     result?: EnumGradingResultFieldUpdateOperationsInput | $Enums.GradingResult
-    certificate_url?: NullableStringFieldUpdateOperationsInput | string | null
+    certificateUrl?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type GradingUncheckedUpdateManyWithoutMemberInput = {
     id?: StringFieldUpdateOperationsInput | string
-    grading_event_id?: NullableStringFieldUpdateOperationsInput | string | null
-    from_rank_id?: NullableStringFieldUpdateOperationsInput | string | null
-    to_rank_id?: NullableStringFieldUpdateOperationsInput | string | null
+    gradingEventId?: NullableStringFieldUpdateOperationsInput | string | null
+    fromRankId?: NullableStringFieldUpdateOperationsInput | string | null
+    toRankId?: NullableStringFieldUpdateOperationsInput | string | null
     result?: EnumGradingResultFieldUpdateOperationsInput | $Enums.GradingResult
-    certificate_url?: NullableStringFieldUpdateOperationsInput | string | null
+    certificateUrl?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type GradingApplicationUpdateWithoutMemberInput = {
     id?: StringFieldUpdateOperationsInput | string
     status?: EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    applied_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    grading_event?: GradingEventUpdateOneRequiredWithoutApplicationsNestedInput
-    target_rank?: BeltRankUpdateOneWithoutGrading_applicationsNestedInput
+    appliedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    gradingEvent?: GradingEventUpdateOneRequiredWithoutApplicationsNestedInput
+    targetRank?: BeltRankUpdateOneWithoutGradingApplicationsNestedInput
   }
 
   export type GradingApplicationUncheckedUpdateWithoutMemberInput = {
     id?: StringFieldUpdateOperationsInput | string
-    grading_event_id?: StringFieldUpdateOperationsInput | string
-    target_rank_id?: NullableStringFieldUpdateOperationsInput | string | null
+    gradingEventId?: StringFieldUpdateOperationsInput | string
+    targetRankId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    applied_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    appliedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type GradingApplicationUncheckedUpdateManyWithoutMemberInput = {
     id?: StringFieldUpdateOperationsInput | string
-    grading_event_id?: StringFieldUpdateOperationsInput | string
-    target_rank_id?: NullableStringFieldUpdateOperationsInput | string | null
+    gradingEventId?: StringFieldUpdateOperationsInput | string
+    targetRankId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    applied_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    appliedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type EventRegistrationUpdateWithoutMemberInput = {
     id?: StringFieldUpdateOperationsInput | string
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     event?: EventUpdateOneRequiredWithoutRegistrationsNestedInput
   }
 
   export type EventRegistrationUncheckedUpdateWithoutMemberInput = {
     id?: StringFieldUpdateOperationsInput | string
-    event_id?: StringFieldUpdateOperationsInput | string
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    eventId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type EventRegistrationUncheckedUpdateManyWithoutMemberInput = {
     id?: StringFieldUpdateOperationsInput | string
-    event_id?: StringFieldUpdateOperationsInput | string
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    eventId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type NotificationUpdateWithoutMemberInput = {
@@ -35171,10 +36065,10 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     message?: StringFieldUpdateOperationsInput | string
     type?: EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType
-    is_read?: BoolFieldUpdateOperationsInput | boolean
+    isRead?: BoolFieldUpdateOperationsInput | boolean
     link?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type NotificationUncheckedUpdateWithoutMemberInput = {
@@ -35182,10 +36076,10 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     message?: StringFieldUpdateOperationsInput | string
     type?: EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType
-    is_read?: BoolFieldUpdateOperationsInput | boolean
+    isRead?: BoolFieldUpdateOperationsInput | boolean
     link?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type NotificationUncheckedUpdateManyWithoutMemberInput = {
@@ -35193,48 +36087,54 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     message?: StringFieldUpdateOperationsInput | string
     type?: EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType
-    is_read?: BoolFieldUpdateOperationsInput | boolean
+    isRead?: BoolFieldUpdateOperationsInput | boolean
     link?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ShopOrderUpdateWithoutMemberInput = {
     id?: StringFieldUpdateOperationsInput | string
-    payment_status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
-    payment_method?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
     total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     currency?: StringFieldUpdateOperationsInput | string
-    transaction_id?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    includesMembership?: BoolFieldUpdateOperationsInput | boolean
+    membershipFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    order_items?: ShopOrderItemUpdateManyWithoutOrderNestedInput
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    orderItems?: ShopOrderItemUpdateManyWithoutOrderNestedInput
   }
 
   export type ShopOrderUncheckedUpdateWithoutMemberInput = {
     id?: StringFieldUpdateOperationsInput | string
-    payment_status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
-    payment_method?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
     total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     currency?: StringFieldUpdateOperationsInput | string
-    transaction_id?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    includesMembership?: BoolFieldUpdateOperationsInput | boolean
+    membershipFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    order_items?: ShopOrderItemUncheckedUpdateManyWithoutOrderNestedInput
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    orderItems?: ShopOrderItemUncheckedUpdateManyWithoutOrderNestedInput
   }
 
   export type ShopOrderUncheckedUpdateManyWithoutMemberInput = {
     id?: StringFieldUpdateOperationsInput | string
-    payment_status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
-    payment_method?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
     total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     currency?: StringFieldUpdateOperationsInput | string
-    transaction_id?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    includesMembership?: BoolFieldUpdateOperationsInput | boolean
+    membershipFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type AttendanceUpdateWithoutMemberInput = {
@@ -35242,434 +36142,434 @@ export namespace Prisma {
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     present?: BoolFieldUpdateOperationsInput | boolean
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dojo?: DojoUpdateOneWithoutAttendanceNestedInput
   }
 
   export type AttendanceUncheckedUpdateWithoutMemberInput = {
     id?: StringFieldUpdateOperationsInput | string
-    dojo_id?: NullableStringFieldUpdateOperationsInput | string | null
+    dojoId?: NullableStringFieldUpdateOperationsInput | string | null
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     present?: BoolFieldUpdateOperationsInput | boolean
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type AttendanceUncheckedUpdateManyWithoutMemberInput = {
     id?: StringFieldUpdateOperationsInput | string
-    dojo_id?: NullableStringFieldUpdateOperationsInput | string | null
+    dojoId?: NullableStringFieldUpdateOperationsInput | string | null
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     present?: BoolFieldUpdateOperationsInput | boolean
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type TournamentParticipantUpdateWithoutMemberInput = {
     id?: StringFieldUpdateOperationsInput | string
     category?: NullableStringFieldUpdateOperationsInput | string | null
-    weight_class?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    weightClass?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tournament?: TournamentUpdateOneRequiredWithoutParticipantsNestedInput
-    matches_as_p1?: TournamentMatchUpdateManyWithoutParticipant1NestedInput
-    matches_as_p2?: TournamentMatchUpdateManyWithoutParticipant2NestedInput
-    matches_won?: TournamentMatchUpdateManyWithoutWinnerNestedInput
+    matchesAsP1?: TournamentMatchUpdateManyWithoutParticipant1NestedInput
+    matchesAsP2?: TournamentMatchUpdateManyWithoutParticipant2NestedInput
+    matchesWon?: TournamentMatchUpdateManyWithoutWinnerNestedInput
   }
 
   export type TournamentParticipantUncheckedUpdateWithoutMemberInput = {
     id?: StringFieldUpdateOperationsInput | string
-    tournament_id?: StringFieldUpdateOperationsInput | string
+    tournamentId?: StringFieldUpdateOperationsInput | string
     category?: NullableStringFieldUpdateOperationsInput | string | null
-    weight_class?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    matches_as_p1?: TournamentMatchUncheckedUpdateManyWithoutParticipant1NestedInput
-    matches_as_p2?: TournamentMatchUncheckedUpdateManyWithoutParticipant2NestedInput
-    matches_won?: TournamentMatchUncheckedUpdateManyWithoutWinnerNestedInput
+    weightClass?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    matchesAsP1?: TournamentMatchUncheckedUpdateManyWithoutParticipant1NestedInput
+    matchesAsP2?: TournamentMatchUncheckedUpdateManyWithoutParticipant2NestedInput
+    matchesWon?: TournamentMatchUncheckedUpdateManyWithoutWinnerNestedInput
   }
 
   export type TournamentParticipantUncheckedUpdateManyWithoutMemberInput = {
     id?: StringFieldUpdateOperationsInput | string
-    tournament_id?: StringFieldUpdateOperationsInput | string
+    tournamentId?: StringFieldUpdateOperationsInput | string
     category?: NullableStringFieldUpdateOperationsInput | string | null
-    weight_class?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    weightClass?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type GradingCreateManyGrading_eventInput = {
+  export type GradingCreateManyGradingEventInput = {
     id?: string
-    member_id: string
-    from_rank_id?: string | null
-    to_rank_id?: string | null
+    memberId: string
+    fromRankId?: string | null
+    toRankId?: string | null
     result?: $Enums.GradingResult
-    certificate_url?: string | null
+    certificateUrl?: string | null
     notes?: string | null
-    created_at?: Date | string
-    updated_at?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
-  export type GradingApplicationCreateManyGrading_eventInput = {
+  export type GradingApplicationCreateManyGradingEventInput = {
     id?: string
-    member_id: string
-    target_rank_id?: string | null
+    memberId: string
+    targetRankId?: string | null
     status?: $Enums.ApplicationStatus
     notes?: string | null
-    applied_at?: Date | string
+    appliedAt?: Date | string
   }
 
-  export type GradingUpdateWithoutGrading_eventInput = {
+  export type GradingUpdateWithoutGradingEventInput = {
     id?: StringFieldUpdateOperationsInput | string
     result?: EnumGradingResultFieldUpdateOperationsInput | $Enums.GradingResult
-    certificate_url?: NullableStringFieldUpdateOperationsInput | string | null
+    certificateUrl?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     member?: MemberUpdateOneRequiredWithoutGradingsNestedInput
-    from_rank?: BeltRankUpdateOneWithoutGradings_fromNestedInput
-    to_rank?: BeltRankUpdateOneWithoutGradings_toNestedInput
+    fromRank?: BeltRankUpdateOneWithoutGradingsFromNestedInput
+    toRank?: BeltRankUpdateOneWithoutGradingsToNestedInput
   }
 
-  export type GradingUncheckedUpdateWithoutGrading_eventInput = {
+  export type GradingUncheckedUpdateWithoutGradingEventInput = {
     id?: StringFieldUpdateOperationsInput | string
-    member_id?: StringFieldUpdateOperationsInput | string
-    from_rank_id?: NullableStringFieldUpdateOperationsInput | string | null
-    to_rank_id?: NullableStringFieldUpdateOperationsInput | string | null
+    memberId?: StringFieldUpdateOperationsInput | string
+    fromRankId?: NullableStringFieldUpdateOperationsInput | string | null
+    toRankId?: NullableStringFieldUpdateOperationsInput | string | null
     result?: EnumGradingResultFieldUpdateOperationsInput | $Enums.GradingResult
-    certificate_url?: NullableStringFieldUpdateOperationsInput | string | null
+    certificateUrl?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type GradingUncheckedUpdateManyWithoutGrading_eventInput = {
+  export type GradingUncheckedUpdateManyWithoutGradingEventInput = {
     id?: StringFieldUpdateOperationsInput | string
-    member_id?: StringFieldUpdateOperationsInput | string
-    from_rank_id?: NullableStringFieldUpdateOperationsInput | string | null
-    to_rank_id?: NullableStringFieldUpdateOperationsInput | string | null
+    memberId?: StringFieldUpdateOperationsInput | string
+    fromRankId?: NullableStringFieldUpdateOperationsInput | string | null
+    toRankId?: NullableStringFieldUpdateOperationsInput | string | null
     result?: EnumGradingResultFieldUpdateOperationsInput | $Enums.GradingResult
-    certificate_url?: NullableStringFieldUpdateOperationsInput | string | null
+    certificateUrl?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type GradingApplicationUpdateWithoutGrading_eventInput = {
+  export type GradingApplicationUpdateWithoutGradingEventInput = {
     id?: StringFieldUpdateOperationsInput | string
     status?: EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    applied_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    member?: MemberUpdateOneRequiredWithoutGrading_applicationsNestedInput
-    target_rank?: BeltRankUpdateOneWithoutGrading_applicationsNestedInput
+    appliedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    member?: MemberUpdateOneRequiredWithoutGradingApplicationsNestedInput
+    targetRank?: BeltRankUpdateOneWithoutGradingApplicationsNestedInput
   }
 
-  export type GradingApplicationUncheckedUpdateWithoutGrading_eventInput = {
+  export type GradingApplicationUncheckedUpdateWithoutGradingEventInput = {
     id?: StringFieldUpdateOperationsInput | string
-    member_id?: StringFieldUpdateOperationsInput | string
-    target_rank_id?: NullableStringFieldUpdateOperationsInput | string | null
+    memberId?: StringFieldUpdateOperationsInput | string
+    targetRankId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    applied_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    appliedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type GradingApplicationUncheckedUpdateManyWithoutGrading_eventInput = {
+  export type GradingApplicationUncheckedUpdateManyWithoutGradingEventInput = {
     id?: StringFieldUpdateOperationsInput | string
-    member_id?: StringFieldUpdateOperationsInput | string
-    target_rank_id?: NullableStringFieldUpdateOperationsInput | string | null
+    memberId?: StringFieldUpdateOperationsInput | string
+    targetRankId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    applied_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    appliedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type EventRegistrationCreateManyEventInput = {
     id?: string
-    member_id: string
-    created_at?: Date | string
+    memberId: string
+    createdAt?: Date | string
   }
 
   export type EventRegistrationUpdateWithoutEventInput = {
     id?: StringFieldUpdateOperationsInput | string
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    member?: MemberUpdateOneRequiredWithoutEvent_registrationsNestedInput
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    member?: MemberUpdateOneRequiredWithoutEventRegistrationsNestedInput
   }
 
   export type EventRegistrationUncheckedUpdateWithoutEventInput = {
     id?: StringFieldUpdateOperationsInput | string
-    member_id?: StringFieldUpdateOperationsInput | string
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    memberId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type EventRegistrationUncheckedUpdateManyWithoutEventInput = {
     id?: StringFieldUpdateOperationsInput | string
-    member_id?: StringFieldUpdateOperationsInput | string
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    memberId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ShopOrderItemCreateManyProductInput = {
     id?: string
-    order_id: string
+    orderId: string
     quantity: number
-    unit_price: Decimal | DecimalJsLike | number | string
+    unitPrice: Decimal | DecimalJsLike | number | string
   }
 
   export type ShopOrderItemUpdateWithoutProductInput = {
     id?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
-    unit_price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    order?: ShopOrderUpdateOneRequiredWithoutOrder_itemsNestedInput
+    unitPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    order?: ShopOrderUpdateOneRequiredWithoutOrderItemsNestedInput
   }
 
   export type ShopOrderItemUncheckedUpdateWithoutProductInput = {
     id?: StringFieldUpdateOperationsInput | string
-    order_id?: StringFieldUpdateOperationsInput | string
+    orderId?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
-    unit_price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    unitPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
   }
 
   export type ShopOrderItemUncheckedUpdateManyWithoutProductInput = {
     id?: StringFieldUpdateOperationsInput | string
-    order_id?: StringFieldUpdateOperationsInput | string
+    orderId?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
-    unit_price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    unitPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
   }
 
   export type ShopOrderItemCreateManyOrderInput = {
     id?: string
-    product_id: string
+    productId: string
     quantity: number
-    unit_price: Decimal | DecimalJsLike | number | string
+    unitPrice: Decimal | DecimalJsLike | number | string
   }
 
   export type ShopOrderItemUpdateWithoutOrderInput = {
     id?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
-    unit_price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    product?: ShopProductUpdateOneRequiredWithoutOrder_itemsNestedInput
+    unitPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    product?: ShopProductUpdateOneRequiredWithoutOrderItemsNestedInput
   }
 
   export type ShopOrderItemUncheckedUpdateWithoutOrderInput = {
     id?: StringFieldUpdateOperationsInput | string
-    product_id?: StringFieldUpdateOperationsInput | string
+    productId?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
-    unit_price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    unitPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
   }
 
   export type ShopOrderItemUncheckedUpdateManyWithoutOrderInput = {
     id?: StringFieldUpdateOperationsInput | string
-    product_id?: StringFieldUpdateOperationsInput | string
+    productId?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
-    unit_price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    unitPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
   }
 
   export type TournamentParticipantCreateManyTournamentInput = {
     id?: string
-    member_id: string
+    memberId: string
     category?: string | null
-    weight_class?: string | null
-    created_at?: Date | string
+    weightClass?: string | null
+    createdAt?: Date | string
   }
 
   export type TournamentMatchCreateManyTournamentInput = {
     id?: string
-    participant1_id?: string | null
-    participant2_id?: string | null
-    winner_id?: string | null
+    participant1Id?: string | null
+    participant2Id?: string | null
+    winnerId?: string | null
     round?: number | null
-    match_order?: number | null
+    matchOrder?: number | null
     notes?: string | null
-    created_at?: Date | string
+    createdAt?: Date | string
   }
 
   export type TournamentParticipantUpdateWithoutTournamentInput = {
     id?: StringFieldUpdateOperationsInput | string
     category?: NullableStringFieldUpdateOperationsInput | string | null
-    weight_class?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    member?: MemberUpdateOneRequiredWithoutTournament_entriesNestedInput
-    matches_as_p1?: TournamentMatchUpdateManyWithoutParticipant1NestedInput
-    matches_as_p2?: TournamentMatchUpdateManyWithoutParticipant2NestedInput
-    matches_won?: TournamentMatchUpdateManyWithoutWinnerNestedInput
+    weightClass?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    member?: MemberUpdateOneRequiredWithoutTournamentEntriesNestedInput
+    matchesAsP1?: TournamentMatchUpdateManyWithoutParticipant1NestedInput
+    matchesAsP2?: TournamentMatchUpdateManyWithoutParticipant2NestedInput
+    matchesWon?: TournamentMatchUpdateManyWithoutWinnerNestedInput
   }
 
   export type TournamentParticipantUncheckedUpdateWithoutTournamentInput = {
     id?: StringFieldUpdateOperationsInput | string
-    member_id?: StringFieldUpdateOperationsInput | string
+    memberId?: StringFieldUpdateOperationsInput | string
     category?: NullableStringFieldUpdateOperationsInput | string | null
-    weight_class?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    matches_as_p1?: TournamentMatchUncheckedUpdateManyWithoutParticipant1NestedInput
-    matches_as_p2?: TournamentMatchUncheckedUpdateManyWithoutParticipant2NestedInput
-    matches_won?: TournamentMatchUncheckedUpdateManyWithoutWinnerNestedInput
+    weightClass?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    matchesAsP1?: TournamentMatchUncheckedUpdateManyWithoutParticipant1NestedInput
+    matchesAsP2?: TournamentMatchUncheckedUpdateManyWithoutParticipant2NestedInput
+    matchesWon?: TournamentMatchUncheckedUpdateManyWithoutWinnerNestedInput
   }
 
   export type TournamentParticipantUncheckedUpdateManyWithoutTournamentInput = {
     id?: StringFieldUpdateOperationsInput | string
-    member_id?: StringFieldUpdateOperationsInput | string
+    memberId?: StringFieldUpdateOperationsInput | string
     category?: NullableStringFieldUpdateOperationsInput | string | null
-    weight_class?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    weightClass?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type TournamentMatchUpdateWithoutTournamentInput = {
     id?: StringFieldUpdateOperationsInput | string
     round?: NullableIntFieldUpdateOperationsInput | number | null
-    match_order?: NullableIntFieldUpdateOperationsInput | number | null
+    matchOrder?: NullableIntFieldUpdateOperationsInput | number | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    participant1?: TournamentParticipantUpdateOneWithoutMatches_as_p1NestedInput
-    participant2?: TournamentParticipantUpdateOneWithoutMatches_as_p2NestedInput
-    winner?: TournamentParticipantUpdateOneWithoutMatches_wonNestedInput
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    participant1?: TournamentParticipantUpdateOneWithoutMatchesAsP1NestedInput
+    participant2?: TournamentParticipantUpdateOneWithoutMatchesAsP2NestedInput
+    winner?: TournamentParticipantUpdateOneWithoutMatchesWonNestedInput
   }
 
   export type TournamentMatchUncheckedUpdateWithoutTournamentInput = {
     id?: StringFieldUpdateOperationsInput | string
-    participant1_id?: NullableStringFieldUpdateOperationsInput | string | null
-    participant2_id?: NullableStringFieldUpdateOperationsInput | string | null
-    winner_id?: NullableStringFieldUpdateOperationsInput | string | null
+    participant1Id?: NullableStringFieldUpdateOperationsInput | string | null
+    participant2Id?: NullableStringFieldUpdateOperationsInput | string | null
+    winnerId?: NullableStringFieldUpdateOperationsInput | string | null
     round?: NullableIntFieldUpdateOperationsInput | number | null
-    match_order?: NullableIntFieldUpdateOperationsInput | number | null
+    matchOrder?: NullableIntFieldUpdateOperationsInput | number | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type TournamentMatchUncheckedUpdateManyWithoutTournamentInput = {
     id?: StringFieldUpdateOperationsInput | string
-    participant1_id?: NullableStringFieldUpdateOperationsInput | string | null
-    participant2_id?: NullableStringFieldUpdateOperationsInput | string | null
-    winner_id?: NullableStringFieldUpdateOperationsInput | string | null
+    participant1Id?: NullableStringFieldUpdateOperationsInput | string | null
+    participant2Id?: NullableStringFieldUpdateOperationsInput | string | null
+    winnerId?: NullableStringFieldUpdateOperationsInput | string | null
     round?: NullableIntFieldUpdateOperationsInput | number | null
-    match_order?: NullableIntFieldUpdateOperationsInput | number | null
+    matchOrder?: NullableIntFieldUpdateOperationsInput | number | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type TournamentMatchCreateManyParticipant1Input = {
     id?: string
-    tournament_id: string
-    participant2_id?: string | null
-    winner_id?: string | null
+    tournamentId: string
+    participant2Id?: string | null
+    winnerId?: string | null
     round?: number | null
-    match_order?: number | null
+    matchOrder?: number | null
     notes?: string | null
-    created_at?: Date | string
+    createdAt?: Date | string
   }
 
   export type TournamentMatchCreateManyParticipant2Input = {
     id?: string
-    tournament_id: string
-    participant1_id?: string | null
-    winner_id?: string | null
+    tournamentId: string
+    participant1Id?: string | null
+    winnerId?: string | null
     round?: number | null
-    match_order?: number | null
+    matchOrder?: number | null
     notes?: string | null
-    created_at?: Date | string
+    createdAt?: Date | string
   }
 
   export type TournamentMatchCreateManyWinnerInput = {
     id?: string
-    tournament_id: string
-    participant1_id?: string | null
-    participant2_id?: string | null
+    tournamentId: string
+    participant1Id?: string | null
+    participant2Id?: string | null
     round?: number | null
-    match_order?: number | null
+    matchOrder?: number | null
     notes?: string | null
-    created_at?: Date | string
+    createdAt?: Date | string
   }
 
   export type TournamentMatchUpdateWithoutParticipant1Input = {
     id?: StringFieldUpdateOperationsInput | string
     round?: NullableIntFieldUpdateOperationsInput | number | null
-    match_order?: NullableIntFieldUpdateOperationsInput | number | null
+    matchOrder?: NullableIntFieldUpdateOperationsInput | number | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tournament?: TournamentUpdateOneRequiredWithoutMatchesNestedInput
-    participant2?: TournamentParticipantUpdateOneWithoutMatches_as_p2NestedInput
-    winner?: TournamentParticipantUpdateOneWithoutMatches_wonNestedInput
+    participant2?: TournamentParticipantUpdateOneWithoutMatchesAsP2NestedInput
+    winner?: TournamentParticipantUpdateOneWithoutMatchesWonNestedInput
   }
 
   export type TournamentMatchUncheckedUpdateWithoutParticipant1Input = {
     id?: StringFieldUpdateOperationsInput | string
-    tournament_id?: StringFieldUpdateOperationsInput | string
-    participant2_id?: NullableStringFieldUpdateOperationsInput | string | null
-    winner_id?: NullableStringFieldUpdateOperationsInput | string | null
+    tournamentId?: StringFieldUpdateOperationsInput | string
+    participant2Id?: NullableStringFieldUpdateOperationsInput | string | null
+    winnerId?: NullableStringFieldUpdateOperationsInput | string | null
     round?: NullableIntFieldUpdateOperationsInput | number | null
-    match_order?: NullableIntFieldUpdateOperationsInput | number | null
+    matchOrder?: NullableIntFieldUpdateOperationsInput | number | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type TournamentMatchUncheckedUpdateManyWithoutParticipant1Input = {
     id?: StringFieldUpdateOperationsInput | string
-    tournament_id?: StringFieldUpdateOperationsInput | string
-    participant2_id?: NullableStringFieldUpdateOperationsInput | string | null
-    winner_id?: NullableStringFieldUpdateOperationsInput | string | null
+    tournamentId?: StringFieldUpdateOperationsInput | string
+    participant2Id?: NullableStringFieldUpdateOperationsInput | string | null
+    winnerId?: NullableStringFieldUpdateOperationsInput | string | null
     round?: NullableIntFieldUpdateOperationsInput | number | null
-    match_order?: NullableIntFieldUpdateOperationsInput | number | null
+    matchOrder?: NullableIntFieldUpdateOperationsInput | number | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type TournamentMatchUpdateWithoutParticipant2Input = {
     id?: StringFieldUpdateOperationsInput | string
     round?: NullableIntFieldUpdateOperationsInput | number | null
-    match_order?: NullableIntFieldUpdateOperationsInput | number | null
+    matchOrder?: NullableIntFieldUpdateOperationsInput | number | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tournament?: TournamentUpdateOneRequiredWithoutMatchesNestedInput
-    participant1?: TournamentParticipantUpdateOneWithoutMatches_as_p1NestedInput
-    winner?: TournamentParticipantUpdateOneWithoutMatches_wonNestedInput
+    participant1?: TournamentParticipantUpdateOneWithoutMatchesAsP1NestedInput
+    winner?: TournamentParticipantUpdateOneWithoutMatchesWonNestedInput
   }
 
   export type TournamentMatchUncheckedUpdateWithoutParticipant2Input = {
     id?: StringFieldUpdateOperationsInput | string
-    tournament_id?: StringFieldUpdateOperationsInput | string
-    participant1_id?: NullableStringFieldUpdateOperationsInput | string | null
-    winner_id?: NullableStringFieldUpdateOperationsInput | string | null
+    tournamentId?: StringFieldUpdateOperationsInput | string
+    participant1Id?: NullableStringFieldUpdateOperationsInput | string | null
+    winnerId?: NullableStringFieldUpdateOperationsInput | string | null
     round?: NullableIntFieldUpdateOperationsInput | number | null
-    match_order?: NullableIntFieldUpdateOperationsInput | number | null
+    matchOrder?: NullableIntFieldUpdateOperationsInput | number | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type TournamentMatchUncheckedUpdateManyWithoutParticipant2Input = {
     id?: StringFieldUpdateOperationsInput | string
-    tournament_id?: StringFieldUpdateOperationsInput | string
-    participant1_id?: NullableStringFieldUpdateOperationsInput | string | null
-    winner_id?: NullableStringFieldUpdateOperationsInput | string | null
+    tournamentId?: StringFieldUpdateOperationsInput | string
+    participant1Id?: NullableStringFieldUpdateOperationsInput | string | null
+    winnerId?: NullableStringFieldUpdateOperationsInput | string | null
     round?: NullableIntFieldUpdateOperationsInput | number | null
-    match_order?: NullableIntFieldUpdateOperationsInput | number | null
+    matchOrder?: NullableIntFieldUpdateOperationsInput | number | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type TournamentMatchUpdateWithoutWinnerInput = {
     id?: StringFieldUpdateOperationsInput | string
     round?: NullableIntFieldUpdateOperationsInput | number | null
-    match_order?: NullableIntFieldUpdateOperationsInput | number | null
+    matchOrder?: NullableIntFieldUpdateOperationsInput | number | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tournament?: TournamentUpdateOneRequiredWithoutMatchesNestedInput
-    participant1?: TournamentParticipantUpdateOneWithoutMatches_as_p1NestedInput
-    participant2?: TournamentParticipantUpdateOneWithoutMatches_as_p2NestedInput
+    participant1?: TournamentParticipantUpdateOneWithoutMatchesAsP1NestedInput
+    participant2?: TournamentParticipantUpdateOneWithoutMatchesAsP2NestedInput
   }
 
   export type TournamentMatchUncheckedUpdateWithoutWinnerInput = {
     id?: StringFieldUpdateOperationsInput | string
-    tournament_id?: StringFieldUpdateOperationsInput | string
-    participant1_id?: NullableStringFieldUpdateOperationsInput | string | null
-    participant2_id?: NullableStringFieldUpdateOperationsInput | string | null
+    tournamentId?: StringFieldUpdateOperationsInput | string
+    participant1Id?: NullableStringFieldUpdateOperationsInput | string | null
+    participant2Id?: NullableStringFieldUpdateOperationsInput | string | null
     round?: NullableIntFieldUpdateOperationsInput | number | null
-    match_order?: NullableIntFieldUpdateOperationsInput | number | null
+    matchOrder?: NullableIntFieldUpdateOperationsInput | number | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type TournamentMatchUncheckedUpdateManyWithoutWinnerInput = {
     id?: StringFieldUpdateOperationsInput | string
-    tournament_id?: StringFieldUpdateOperationsInput | string
-    participant1_id?: NullableStringFieldUpdateOperationsInput | string | null
-    participant2_id?: NullableStringFieldUpdateOperationsInput | string | null
+    tournamentId?: StringFieldUpdateOperationsInput | string
+    participant1Id?: NullableStringFieldUpdateOperationsInput | string | null
+    participant2Id?: NullableStringFieldUpdateOperationsInput | string | null
     round?: NullableIntFieldUpdateOperationsInput | number | null
-    match_order?: NullableIntFieldUpdateOperationsInput | number | null
+    matchOrder?: NullableIntFieldUpdateOperationsInput | number | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
 

@@ -2,7 +2,16 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
 export async function updateSession(request: NextRequest) {
-    let supabaseResponse = NextResponse.next({ request });
+    // Create a new headers object with x-pathname
+    const requestHeaders = new Headers(request.headers);
+    const { pathname } = request.nextUrl;
+    requestHeaders.set("x-pathname", pathname);
+
+    let supabaseResponse = NextResponse.next({
+        request: {
+            headers: requestHeaders,
+        },
+    });
 
     const supabase = createServerClient(
         process.env.NEXT_PUBLIC_SUPABASE_URL || "https://placeholder.supabase.co",
@@ -16,7 +25,11 @@ export async function updateSession(request: NextRequest) {
                     cookiesToSet.forEach(({ name, value }) =>
                         request.cookies.set(name, value)
                     );
-                    supabaseResponse = NextResponse.next({ request });
+                    supabaseResponse = NextResponse.next({
+                        request: {
+                            headers: requestHeaders,
+                        },
+                    });
                     cookiesToSet.forEach(({ name, value, options }) =>
                         supabaseResponse.cookies.set(name, value, options)
                     );
@@ -29,8 +42,6 @@ export async function updateSession(request: NextRequest) {
     const {
         data: { user },
     } = await supabase.auth.getUser();
-
-    const { pathname } = request.nextUrl;
 
     // Protected route patterns
     const isProtected =
