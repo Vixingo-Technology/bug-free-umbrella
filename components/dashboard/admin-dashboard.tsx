@@ -26,18 +26,15 @@ function StatCard({
     icon,
     label,
     value,
-    gradient,
     delay,
 }: {
     icon: React.ReactNode;
     label: string;
     value: string;
-    gradient: string;
     delay: number;
 }) {
     return (
         <TiltCard dark delay={delay} className="p-6">
-            <div className={`${gradient} absolute inset-0 rounded-2xl`} />
             <div className="relative z-10 flex items-center justify-between">
                 <div>
                     <p className="text-[10px] tracking-[0.3em] uppercase text-white/70 font-bold">
@@ -82,28 +79,24 @@ export default function AdminDashboard({
                     icon={<Users size={22} />}
                     label="Total Members"
                     value={totalMembers.toLocaleString()}
-                    gradient="bg-gradient-to-br from-emerald-500 to-green-600"
                     delay={0}
                 />
                 <StatCard
                     icon={<Building2 size={22} />}
                     label="Active Dojos"
                     value={totalDojos.toLocaleString()}
-                    gradient="bg-gradient-to-br from-blue-500 to-indigo-600"
                     delay={0.05}
                 />
                 <StatCard
                     icon={<ShoppingBag size={22} />}
                     label="Total Orders"
                     value={totalOrders.toLocaleString()}
-                    gradient="bg-gradient-to-br from-purple-500 to-violet-600"
                     delay={0.1}
                 />
                 <StatCard
                     icon={<TrendingUp size={22} />}
                     label="Your Role"
                     value="Admin"
-                    gradient="bg-gradient-to-br from-amber-500 to-orange-600"
                     delay={0.15}
                 />
             </div>

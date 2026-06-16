@@ -13,19 +13,13 @@ export default function Hero() {
     useEffect(() => {
         if (videoRef.current && videoRef.current.readyState >= 2) {
             setVideoReady(true);
+            return;
         }
+        // Hard timeout so a blocked autoplay (Brave Shields) or stalled
+        // load (Edge on slow networks) never traps the page behind the overlay.
+        const fallback = window.setTimeout(() => setVideoReady(true), 4000);
+        return () => window.clearTimeout(fallback);
     }, []);
-
-    useEffect(() => {
-        if (!videoReady) {
-            document.body.style.overflow = "hidden";
-        } else {
-            document.body.style.overflow = "unset";
-        }
-        return () => {
-            document.body.style.overflow = "unset";
-        };
-    }, [videoReady]);
 
     const { scrollYProgress } = useScroll({
         target: containerRef,
@@ -52,7 +46,12 @@ export default function Hero() {
                         loop
                         muted
                         playsInline
+                        preload="metadata"
                         onLoadedData={() => setVideoReady(true)}
+                        onCanPlay={() => setVideoReady(true)}
+                        onError={() => setVideoReady(true)}
+                        onStalled={() => setVideoReady(true)}
+                        onAbort={() => setVideoReady(true)}
                         className={`absolute inset-0 h-full w-full object-cover pointer-events-none transition-opacity duration-700 saturate-0 contrast-125 brightness-65 ${videoReady ? "opacity-28" : "opacity-0"}`}
                     >
                         <source src="/assets/bg.mp4" type="video/mp4" />
@@ -62,7 +61,7 @@ export default function Hero() {
                     <motion.div
                         initial={{ opacity: 1 }}
                         animate={{ opacity: 1 }}
-                        className="fixed inset-0 z-[9999] h-[100dvh] w-screen flex items-center justify-center bg-bg-deep"
+                        className="absolute inset-0 z-30 flex items-center justify-center bg-bg-deep"
                     >
                         <div className="flex flex-col items-center gap-4 text-center">
                             <div className="relative flex h-24 w-24 items-center justify-center">
@@ -93,7 +92,14 @@ export default function Hero() {
                 ) : null}
                 <div className="absolute inset-0 bg-gradient-to-b from-bg-deep/28 via-bg-deep/70 to-bg-deep z-10" />
                 <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-accent-red/25 via-transparent to-transparent z-10 mix-blend-overlay" />
-                <div className="absolute inset-0 z-10 opacity-5 bg-[url('https://picsum.photos/seed/noise/1000/1000')] bg-repeat mix-blend-overlay" />
+                <div
+                    className="absolute inset-0 z-10 opacity-5 mix-blend-overlay"
+                    style={{
+                        backgroundImage:
+                            "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>\")",
+                        backgroundRepeat: "repeat",
+                    }}
+                />
             </motion.div>
 
 
