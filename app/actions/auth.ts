@@ -72,3 +72,20 @@ export async function signoutAction() {
     await supabase.auth.signOut();
     redirect("/");
 }
+
+export async function forgotPasswordAction(formData: FormData) {
+    const email = (formData.get("email") as string)?.trim().toLowerCase();
+    if (!email) return { error: "Email is required." };
+
+    const supabase = await createClient();
+    const appUrl =
+        process.env.NEXT_PUBLIC_APP_URL ?? process.env.APP_URL ?? "http://localhost:3000";
+
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${appUrl}/auth/callback?next=${encodeURIComponent("/set-password?mode=reset")}`,
+    });
+
+    // Always return ok so the form doesn't leak whether the email exists.
+    if (error) console.error("[forgotPasswordAction]", error.message);
+    return { ok: true };
+}

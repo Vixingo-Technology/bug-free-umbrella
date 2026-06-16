@@ -29,7 +29,7 @@ export async function inviteMemberAction(formData: FormData): Promise<ActionResu
     const admin = createAdminClient();
 
     const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? process.env.APP_URL ?? "http://localhost:3000";
-    const redirectTo = `${appUrl}/auth/callback?next=/portal/set-password`;
+    const redirectTo = `${appUrl}/auth/callback?next=/set-password`;
 
     const { data, error } = await admin.auth.admin.inviteUserByEmail(email, {
         redirectTo,
@@ -126,7 +126,7 @@ export async function resendInviteAction(formData: FormData): Promise<ActionResu
     const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? process.env.APP_URL ?? "http://localhost:3000";
 
     const { error } = await admin.auth.admin.inviteUserByEmail(email, {
-        redirectTo: `${appUrl}/auth/callback?next=/portal/set-password`,
+        redirectTo: `${appUrl}/auth/callback?next=/set-password`,
     });
 
     if (error) return { ok: false, error: error.message };

@@ -7,7 +7,13 @@ import { KeyRound, Eye, EyeOff, AlertCircle, CheckCircle2 } from "lucide-react";
 import Logo from "@/assets/jka_logo.svg";
 import { setPasswordAction } from "@/app/actions/set-password";
 
-export default function SetPasswordClient({ email }: { email: string }) {
+export default function SetPasswordClient({
+    email,
+    mode = "invite",
+}: {
+    email: string;
+    mode?: "invite" | "reset";
+}) {
     const [isPending, startTransition] = useTransition();
     const [password, setPassword] = useState("");
     const [confirm, setConfirm] = useState("");
@@ -29,6 +35,13 @@ export default function SetPasswordClient({ email }: { email: string }) {
             if (res?.error) setError(res.error);
         });
     }
+
+    const heading = mode === "reset" ? "Reset your password" : "Set your password";
+    const subheading =
+        mode === "reset"
+            ? "Choose a new password for "
+            : "Welcome! Set a password for ";
+    const cta = mode === "reset" ? "Save New Password" : "Activate Account";
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-[#fafafa] px-4">
@@ -55,15 +68,27 @@ export default function SetPasswordClient({ email }: { email: string }) {
                             <KeyRound size={20} className="text-accent-red" />
                         </div>
                         <div>
-                            <h1 className="text-xl font-bold text-zinc-900">Set your password</h1>
+                            <h1 className="text-xl font-bold text-zinc-900">{heading}</h1>
                             <p className="text-sm text-zinc-500 mt-1">
-                                Welcome! Set a password for{" "}
-                                <span className="font-semibold text-zinc-700">{email}</span> to finish activating your account.
+                                {subheading}
+                                <span className="font-semibold text-zinc-700">{email}</span>
+                                {mode === "reset" ? "." : " to finish activating your account."}
                             </p>
                         </div>
                     </div>
 
                     <form onSubmit={submit} className="space-y-4">
+                        <div>
+                            <label className="block text-xs font-bold tracking-widest uppercase text-zinc-500 mb-2">Email</label>
+                            <input
+                                type="email"
+                                value={email}
+                                readOnly
+                                disabled
+                                className="w-full px-3 py-2.5 text-sm bg-zinc-100 border border-zinc-200 rounded-xl text-zinc-600 cursor-not-allowed"
+                            />
+                        </div>
+
                         <div>
                             <label className="block text-xs font-bold tracking-widest uppercase text-zinc-500 mb-2">New password</label>
                             <div className="relative">
@@ -129,7 +154,7 @@ export default function SetPasswordClient({ email }: { email: string }) {
                             disabled={isPending || !ready}
                             className="w-full py-3 text-sm font-semibold text-white bg-accent-red hover:bg-accent-red/90 disabled:opacity-50 disabled:cursor-not-allowed rounded-xl transition-colors"
                         >
-                            {isPending ? "Saving…" : "Activate Account"}
+                            {isPending ? "Saving…" : cta}
                         </button>
                     </form>
                 </div>

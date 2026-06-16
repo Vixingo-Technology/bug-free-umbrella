@@ -17,7 +17,6 @@ const ONBOARDING_EXEMPT = [
     "/portal/checkout",
     "/portal/payment-success",
     "/portal/renew",
-    "/portal/set-password",
 ];
 
 // These paths render fullscreen (no sidebar shell)
@@ -25,7 +24,6 @@ const FULLSCREEN_PATHS = [
     "/portal/onboarding",
     "/portal/checkout",
     "/portal/payment-success",
-    "/portal/set-password",
 ];
 
 export default async function PortalLayout({
