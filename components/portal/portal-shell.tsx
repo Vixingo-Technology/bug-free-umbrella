@@ -19,12 +19,16 @@ import {
     Menu,
     X,
     ChevronRight,
+    Users,
+    Package,
+    Building2,
+    ShieldCheck,
 } from "lucide-react";
 import Logo from "@/assets/jka_logo.svg";
 import { signoutAction } from "@/app/actions/auth";
 import { createClient } from "@/lib/supabase/client";
 
-const navItems = [
+const studentNavItems = [
     { label: "Dashboard",    href: "/portal",              icon: LayoutDashboard },
     { label: "My Progress",  href: "/portal/progress",     icon: TrendingUp },
     { label: "Gradings",     href: "/portal/grading",      icon: Award },
@@ -36,15 +40,35 @@ const navItems = [
     { label: "My Profile",   href: "/portal/profile",      icon: User },
 ];
 
+// Admins skip the personal-membership flows (progress, gradings,
+// certificates, renewal, personal shop orders).
+const adminPersonalNavItems = [
+    { label: "Dashboard",    href: "/portal",              icon: LayoutDashboard },
+    { label: "Events",       href: "/portal/events",       icon: CalendarDays },
+    { label: "Notifications",href: "/portal/notifications",icon: Bell },
+    { label: "My Profile",   href: "/portal/profile",      icon: User },
+];
+
+const adminNavItems = [
+    { label: "Members",  href: "/portal/admin/members",  icon: Users },
+    { label: "Products", href: "/portal/admin/products", icon: Package },
+    { label: "Orders",   href: "/portal/admin/orders",   icon: ShoppingBag },
+    { label: "Dojos",    href: "/portal/admin/dojos",    icon: Building2 },
+];
+
 interface PortalShellProps {
     userId: string;
+    initialRole?: "STUDENT" | "INSTRUCTOR" | "ADMIN";
     children: React.ReactNode;
 }
 
-export default function PortalShell({ userId, children }: PortalShellProps) {
+export default function PortalShell({ userId, initialRole = "STUDENT", children }: PortalShellProps) {
     const pathname = usePathname();
     const [sidebarOpen, setSidebarOpen] = useState(false);
-    const [member, setMember] = useState<{ fullName: string; email: string; currentRank: string | null; role: string } | null>(null);
+    const [member, setMember] = useState<{ fullName: string; email: string; currentRank: string | null; role: string } | null>(
+        // Seed with the server-known role so admin nav renders on first paint.
+        { fullName: "", email: "", currentRank: null, role: initialRole }
+    );
     const [unreadCount, setUnreadCount] = useState(0);
 
     useEffect(() => {
@@ -91,6 +115,9 @@ export default function PortalShell({ userId, children }: PortalShellProps) {
         setSidebarOpen(false);
     }, [pathname]);
 
+    const isAdmin = member?.role === "ADMIN";
+    const navItems = isAdmin ? adminPersonalNavItems : studentNavItems;
+
     const SidebarContent = () => (
         <div className="flex flex-col h-full">
             {/* Logo */}
@@ -109,7 +136,7 @@ export default function PortalShell({ userId, children }: PortalShellProps) {
             </div>
 
             {/* Member info */}
-            {member && (
+            {member && member.fullName && (
                 <div className="px-4 py-4 mx-3 mt-4 rounded-xl bg-zinc-50 border border-zinc-100">
                     <div className="flex items-center gap-3">
                         <div className={`w-10 h-10 rounded-full bg-gradient-to-br ${roleColor} flex items-center justify-center text-white font-bold text-sm flex-shrink-0`}>
@@ -126,7 +153,9 @@ export default function PortalShell({ userId, children }: PortalShellProps) {
             {/* Nav */}
             <nav className="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto">
                 {navItems.map(({ label, href, icon: Icon }) => {
-                    const isActive = pathname === href || (href !== "/portal" && pathname.startsWith(href));
+                    const isActive = href === "/portal"
+                        ? pathname === "/portal"
+                        : pathname === href || pathname.startsWith(href + "/");
                     const isNotif = href === "/portal/notifications";
 
                     return (
@@ -150,6 +179,32 @@ export default function PortalShell({ userId, children }: PortalShellProps) {
                         </Link>
                     );
                 })}
+
+                {isAdmin && (
+                    <div className="pt-5 mt-3 border-t border-zinc-100">
+                        <div className="px-3 pb-2 flex items-center gap-1.5 text-[10px] font-bold tracking-widest uppercase text-zinc-400">
+                            <ShieldCheck size={11} /> Administration
+                        </div>
+                        {adminNavItems.map(({ label, href, icon: Icon }) => {
+                            const isActive = pathname === href || pathname.startsWith(href + "/");
+                            return (
+                                <Link
+                                    key={href}
+                                    href={href}
+                                    className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all group relative ${
+                                        isActive
+                                            ? "bg-zinc-900 text-white shadow-sm"
+                                            : "text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900"
+                                    }`}
+                                >
+                                    <Icon size={17} className="flex-shrink-0" />
+                                    <span className="flex-1">{label}</span>
+                                    {isActive && <ChevronRight size={14} className="opacity-60" />}
+                                </Link>
+                            );
+                        })}
+                    </div>
+                )}
             </nav>
 
             {/* Sign out */}
@@ -237,12 +292,12 @@ export default function PortalShell({ userId, children }: PortalShellProps) {
                         <Link href="/" className="hover:text-zinc-900 transition-colors">Home</Link>
                         <ChevronRight size={14} />
                         <span className="text-zinc-900 font-medium">
-                            {navItems.find(n => n.href === pathname || (n.href !== "/portal" && pathname.startsWith(n.href)))?.label ?? "Portal"}
+                            {[...studentNavItems, ...adminPersonalNavItems, ...adminNavItems].find(n => n.href === pathname || (n.href !== "/portal" && pathname.startsWith(n.href)))?.label ?? "Portal"}
                         </span>
                     </div>
 
                     <div className="flex items-center gap-3">
-                        {member && (
+                        {member && member.fullName && (
                             <span className={`bg-gradient-to-r ${roleColor} text-white text-[10px] font-bold tracking-widest uppercase px-3 py-1.5 rounded-full`}>
                                 {member.role}
                             </span>

@@ -1,7 +1,9 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { prisma } from "@/lib/prisma";
+import { serialize } from "@/lib/serialize";
 import PortalDashboardClient from "@/components/portal/portal-dashboard-client";
+import AdminDashboardClient from "@/components/portal/admin/admin-dashboard-client";
 
 export default async function PortalDashboardPage() {
     const supabase = await createClient();
@@ -9,13 +11,33 @@ export default async function PortalDashboardPage() {
 
     if (!user) redirect("/login");
 
+    // Quick role lookup so we can render the right dashboard
+    let role: "ADMIN" | "INSTRUCTOR" | "STUDENT" = "STUDENT";
+    try {
+        const m = await prisma.member.findUnique({
+            where: { id: user.id },
+            select: { role: true },
+        });
+        if (m?.role) role = m.role;
+    } catch {
+        // DB not configured
+    }
+
+    if (role === "ADMIN") {
+        return <AdminPortalDashboard userId={user.id} />;
+    }
+
+    return <StudentPortalDashboard userId={user.id} />;
+}
+
+async function StudentPortalDashboard({ userId }: { userId: string }) {
     let member = null;
     let unreadNotifications = 0;
-    let upcomingEvents: any[] = [];
+    let upcomingEvents: unknown[] = [];
 
     try {
         member = await prisma.member.findUnique({
-            where: { id: user.id },
+            where: { id: userId },
             include: {
                 dojo: true,
                 gradings: {
@@ -27,7 +49,7 @@ export default async function PortalDashboardPage() {
         });
 
         unreadNotifications = await prisma.notification.count({
-            where: { memberId: user.id, isRead: false },
+            where: { memberId: userId, isRead: false },
         });
 
         upcomingEvents = await prisma.event.findMany({
@@ -42,7 +64,6 @@ export default async function PortalDashboardPage() {
         // DB not configured yet
     }
 
-    // Determine membership status
     const today = new Date();
     const expiry = member?.expiryDate ? new Date(member.expiryDate) : null;
     let membershipStatus: "Active" | "Expired" | "Expiring Soon" | "Pending" = "Pending";
@@ -62,7 +83,97 @@ export default async function PortalDashboardPage() {
             membershipStatus={membershipStatus}
             unreadNotifications={unreadNotifications}
             upcomingEvents={upcomingEvents}
-            userId={user.id}
+            userId={userId}
+        />
+    );
+}
+
+async function AdminPortalDashboard({ userId }: { userId: string }) {
+    const since30 = new Date();
+    since30.setDate(since30.getDate() - 30);
+
+    const [
+        member,
+        totalMembers,
+        students,
+        instructors,
+        admins,
+        pendingMembers,
+        suspendedMembers,
+        newMembers30d,
+        totalDojos,
+        activeDojos,
+        totalProducts,
+        activeProducts,
+        pendingOrders,
+        paidOrders,
+        revenueAgg,
+        recentMembers,
+        recentOrders,
+    ] = await Promise.all([
+        prisma.member.findUnique({
+            where: { id: userId },
+            select: { fullName: true, email: true },
+        }),
+        prisma.member.count(),
+        prisma.member.count({ where: { role: "STUDENT" } }),
+        prisma.member.count({ where: { role: "INSTRUCTOR" } }),
+        prisma.member.count({ where: { role: "ADMIN" } }),
+        prisma.member.count({ where: { membershipStatus: "PENDING" } }),
+        prisma.member.count({ where: { membershipStatus: "SUSPENDED" } }),
+        prisma.member.count({ where: { createdAt: { gte: since30 } } }),
+        prisma.dojo.count(),
+        prisma.dojo.count({ where: { isActive: true } }),
+        prisma.shopProduct.count(),
+        prisma.shopProduct.count({ where: { isActive: true } }),
+        prisma.shopOrder.count({ where: { paymentStatus: "PENDING" } }),
+        prisma.shopOrder.count({ where: { paymentStatus: "PAID" } }),
+        prisma.shopOrder.aggregate({
+            where: { paymentStatus: "PAID" },
+            _sum: { total: true },
+        }),
+        prisma.member.findMany({
+            orderBy: { createdAt: "desc" },
+            take: 5,
+            select: {
+                id: true, fullName: true, email: true, role: true,
+                membershipStatus: true, createdAt: true,
+                dojo: { select: { name: true } },
+            },
+        }),
+        prisma.shopOrder.findMany({
+            orderBy: { createdAt: "desc" },
+            take: 5,
+            select: {
+                id: true, paymentStatus: true, total: true, createdAt: true,
+                member: { select: { fullName: true, email: true } },
+            },
+        }),
+    ]);
+
+    const stats = {
+        totalMembers,
+        students,
+        instructors,
+        admins,
+        pendingMembers,
+        suspendedMembers,
+        newMembers30d,
+        totalDojos,
+        activeDojos,
+        totalProducts,
+        activeProducts,
+        pendingOrders,
+        paidOrders,
+        totalRevenue: Number(revenueAgg._sum.total ?? 0),
+    };
+
+    return (
+        <AdminDashboardClient
+            adminName={member?.fullName ?? "Administrator"}
+            stats={stats}
+            recentMembers={serialize(recentMembers) as never}
+            recentOrders={serialize(recentOrders) as never}
         />
     );
 }

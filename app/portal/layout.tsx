@@ -17,6 +17,7 @@ const ONBOARDING_EXEMPT = [
     "/portal/checkout",
     "/portal/payment-success",
     "/portal/renew",
+    "/portal/set-password",
 ];
 
 // These paths render fullscreen (no sidebar shell)
@@ -24,6 +25,7 @@ const FULLSCREEN_PATHS = [
     "/portal/onboarding",
     "/portal/checkout",
     "/portal/payment-success",
+    "/portal/set-password",
 ];
 
 export default async function PortalLayout({
@@ -41,13 +43,17 @@ export default async function PortalLayout({
 
     const isExempt = ONBOARDING_EXEMPT.some((p) => pathname.startsWith(p));
 
+    // Role is also passed to the sidebar so admin links render on the very
+    // first paint (no client-side flash).
+    let role: "STUDENT" | "INSTRUCTOR" | "ADMIN" = "STUDENT";
+
     if (!isExempt) {
         let needsOnboarding = false;
 
         try {
             let member = await prisma.member.findUnique({
                 where: { id: user.id },
-                select: { onboardingComplete: true, phone: true, dojoId: true },
+                select: { onboardingComplete: true, phone: true, dojoId: true, role: true },
             });
 
             // Safety net: create the member row if it doesn't exist yet
@@ -71,11 +77,17 @@ export default async function PortalLayout({
                         membershipStatus: "PENDING",
                     },
                     update: {},
-                    select: { onboardingComplete: true, phone: true, dojoId: true },
+                    select: { onboardingComplete: true, phone: true, dojoId: true, role: true },
                 });
             }
 
-            needsOnboarding = !member.onboardingComplete || !isProfileComplete(member);
+            role = member.role;
+
+            // Onboarding is the student-membership flow (dojo + emergency contact + payment).
+            // Admins and instructors skip it entirely.
+            needsOnboarding =
+                member.role === "STUDENT" &&
+                (!member.onboardingComplete || !isProfileComplete(member));
         } catch {
             // DB not configured — allow through
         }
@@ -83,10 +95,22 @@ export default async function PortalLayout({
         // redirect() must run OUTSIDE the try/catch — it throws NEXT_REDIRECT
         // which the framework needs to catch.
         if (needsOnboarding) redirect("/portal/onboarding");
+    } else {
+        // On exempt paths (onboarding / set-password / etc.) we still want the
+        // sidebar to know the role if it renders.
+        try {
+            const m = await prisma.member.findUnique({
+                where: { id: user.id },
+                select: { role: true },
+            });
+            if (m?.role) role = m.role;
+        } catch {
+            // ignore
+        }
     }
 
     // Onboarding / checkout / success → fullscreen, no sidebar shell
     if (FULLSCREEN_PATHS.some((p) => pathname.startsWith(p))) return <>{children}</>;
 
-    return <PortalShell userId={user.id}>{children}</PortalShell>;
+    return <PortalShell userId={user.id} initialRole={role}>{children}</PortalShell>;
 }
