@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { serialize } from "@/lib/serialize";
 import PortalDashboardClient from "@/components/portal/portal-dashboard-client";
 import AdminDashboardClient from "@/components/portal/admin/admin-dashboard-client";
+import InstructorDashboard from "@/components/dashboard/instructor-dashboard";
 
 export default async function PortalDashboardPage() {
     const supabase = await createClient();
@@ -27,7 +28,49 @@ export default async function PortalDashboardPage() {
         return <AdminPortalDashboard userId={user.id} />;
     }
 
+    if (role === "INSTRUCTOR") {
+        return <InstructorPortalDashboard userId={user.id} />;
+    }
+
     return <StudentPortalDashboard userId={user.id} />;
+}
+
+async function InstructorPortalDashboard({ userId }: { userId: string }) {
+    let member: any = null;
+    let dojoMembers: any[] = [];
+    let dojoGradings: any[] = [];
+
+    try {
+        member = await prisma.member.findUnique({
+            where: { id: userId },
+            include: {
+                dojo: true,
+            },
+        });
+
+        if (member?.dojoId) {
+            dojoMembers = await prisma.member.findMany({
+                where: { dojoId: member.dojoId },
+                take: 50,
+            });
+            dojoGradings = await prisma.grading.findMany({
+                where: { memberId: { in: dojoMembers.map((m: any) => m.id) } },
+                include: { member: true, fromRank: true, toRank: true },
+                orderBy: { id: "desc" },
+                take: 20,
+            });
+        }
+    } catch {
+        // DB not configured
+    }
+
+    return (
+        <InstructorDashboard
+            member={serialize(member)}
+            dojoMembers={serialize(dojoMembers) as never}
+            dojoGradings={serialize(dojoGradings) as never}
+        />
+    );
 }
 
 async function StudentPortalDashboard({ userId }: { userId: string }) {

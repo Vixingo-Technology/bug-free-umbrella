@@ -23,6 +23,7 @@ import {
     Package,
     Building2,
     ShieldCheck,
+    Swords,
 } from "lucide-react";
 import Logo from "@/assets/jka_logo.svg";
 import { signoutAction } from "@/app/actions/auth";
@@ -54,6 +55,15 @@ const adminNavItems = [
     { label: "Products", href: "/portal/admin/products", icon: Package },
     { label: "Orders",   href: "/portal/admin/orders",   icon: ShoppingBag },
     { label: "Dojos",    href: "/portal/admin/dojos",    icon: Building2 },
+];
+
+// Instructors get a focused portal — dashboard surfaces their dojo + roster,
+// plus shared event/notification/profile pages.
+const instructorNavItems = [
+    { label: "Dashboard",     href: "/portal",              icon: LayoutDashboard },
+    { label: "Events",        href: "/portal/events",       icon: CalendarDays },
+    { label: "Notifications", href: "/portal/notifications",icon: Bell },
+    { label: "My Profile",    href: "/portal/profile",      icon: User },
 ];
 
 interface PortalShellProps {
@@ -116,7 +126,17 @@ export default function PortalShell({ userId, initialRole = "STUDENT", children 
     }, [pathname]);
 
     const isAdmin = member?.role === "ADMIN";
-    const navItems = isAdmin ? adminPersonalNavItems : studentNavItems;
+    const isInstructor = member?.role === "INSTRUCTOR";
+    const navItems = isAdmin
+        ? adminPersonalNavItems
+        : isInstructor
+            ? instructorNavItems
+            : studentNavItems;
+    const portalLabel = isAdmin
+        ? "Admin Portal"
+        : isInstructor
+            ? "Instructor Portal"
+            : "Member Portal";
 
     const SidebarContent = () => (
         <div className="flex flex-col h-full">
@@ -129,7 +149,7 @@ export default function PortalShell({ userId, initialRole = "STUDENT", children 
                             JKA <span className="text-accent-red">BD</span>
                         </p>
                         <p className="text-[9px] tracking-widest uppercase text-zinc-400 leading-tight">
-                            Member Portal
+                            {portalLabel}
                         </p>
                     </div>
                 </Link>
@@ -292,7 +312,7 @@ export default function PortalShell({ userId, initialRole = "STUDENT", children 
                         <Link href="/" className="hover:text-zinc-900 transition-colors">Home</Link>
                         <ChevronRight size={14} />
                         <span className="text-zinc-900 font-medium">
-                            {[...studentNavItems, ...adminPersonalNavItems, ...adminNavItems].find(n => n.href === pathname || (n.href !== "/portal" && pathname.startsWith(n.href)))?.label ?? "Portal"}
+                            {[...studentNavItems, ...adminPersonalNavItems, ...adminNavItems, ...instructorNavItems].find(n => n.href === pathname || (n.href !== "/portal" && pathname.startsWith(n.href)))?.label ?? "Portal"}
                         </span>
                     </div>
 

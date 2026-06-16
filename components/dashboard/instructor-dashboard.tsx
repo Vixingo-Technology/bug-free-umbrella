@@ -1,7 +1,10 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "motion/react";
 import TiltCard from "@/components/portal/tilt-card";
+import DigitalCard from "@/components/portal/digital-card";
+import MembershipCardDialog from "@/components/portal/membership-card-dialog";
 import {
   Users,
   MapPin,
@@ -17,6 +20,17 @@ interface InstructorDashboardProps {
     member: any;
     dojoMembers: any[];
     dojoGradings: any[];
+}
+
+type MembershipStatusLabel = "Active" | "Expired" | "Expiring Soon" | "Pending";
+
+function deriveMembershipStatus(expiryDate: any): MembershipStatusLabel {
+    if (!expiryDate) return "Active";
+    const expiry = new Date(expiryDate);
+    const daysLeft = Math.ceil((expiry.getTime() - Date.now()) / (1000 * 60 * 60 * 24));
+    if (daysLeft < 0) return "Expired";
+    if (daysLeft <= 30) return "Expiring Soon";
+    return "Active";
 }
 
 function StatCard({
@@ -53,6 +67,8 @@ export default function InstructorDashboard({
     dojoGradings,
 }: InstructorDashboardProps) {
     const dojo = member?.dojo;
+    const [cardOpen, setCardOpen] = useState(false);
+    const membershipStatus = deriveMembershipStatus(member?.expiryDate);
 
     return (
         <div className="space-y-8">
@@ -99,28 +115,31 @@ export default function InstructorDashboard({
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {/* Dojo Details Card */}
-                <TiltCard dark delay={0.2} className="p-8">
-                    <div className="absolute top-0 right-0 w-40 h-40 bg-white/5 rounded-full blur-[60px]" />
-                    <div className="relative z-10">
-                        <p className="text-[10px] tracking-[0.3em] uppercase text-blue-200 font-bold mb-4">
-                            Dojo Information
-                        </p>
-                        <h3 className="text-2xl font-bold mb-1">{dojo?.name ?? "No Dojo Assigned"}</h3>
-                        <p className="text-blue-200 text-sm mb-6">{dojo?.city ?? "—"}</p>
-
-                        <div className="grid grid-cols-2 gap-4 pt-4 border-t border-blue-500/30">
-                            <div>
-                                <p className="text-[10px] tracking-widest uppercase text-blue-300">Head Instructor</p>
-                                <p className="text-sm font-semibold mt-0.5">{member?.fullName ?? "—"}</p>
-                            </div>
-                            <div>
-                                <p className="text-[10px] tracking-widest uppercase text-blue-300">Active Students</p>
-                                <p className="text-sm font-semibold mt-0.5">{dojoMembers.length}</p>
-                            </div>
-                        </div>
-                    </div>
-                </TiltCard>
+                {/* Digital Membership Card — click to open share dialog */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2, duration: 0.45, ease: [0.2, 0.8, 0.2, 1] }}
+                >
+                    <button
+                        type="button"
+                        onClick={() => setCardOpen(true)}
+                        aria-label="Open digital membership card"
+                        className="block w-full h-full text-left rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-red/60"
+                    >
+                        <DigitalCard
+                            interactive
+                            fullName={member?.fullName ?? "Instructor"}
+                            email={member?.email}
+                            currentRank={member?.currentRank}
+                            dojoName={dojo?.name}
+                            role={member?.role}
+                            membershipStatus={membershipStatus}
+                            memberNumber={member?.memberNumber}
+                            avatarUrl={member?.avatarUrl}
+                        />
+                    </button>
+                </motion.div>
 
                 {/* Grading Activity */}
                 <TiltCard delay={0.25} className="p-8">
@@ -224,6 +243,20 @@ export default function InstructorDashboard({
                     </div>
                 )}
             </TiltCard>
+
+            <MembershipCardDialog
+                open={cardOpen}
+                onClose={() => setCardOpen(false)}
+                memberId={member?.id ?? ""}
+                fullName={member?.fullName ?? "Instructor"}
+                email={member?.email}
+                currentRank={member?.currentRank}
+                dojoName={dojo?.name}
+                role={member?.role}
+                membershipStatus={membershipStatus}
+                memberNumber={member?.memberNumber}
+                avatarUrl={member?.avatarUrl}
+            />
         </div>
     );
 }
