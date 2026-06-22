@@ -230,6 +230,7 @@ export const siteContent = {
             { label: "Three Pillars", href: "/techniques" },
             { label: "Events & Championships", href: "/events" },
             { label: "Find a Dojo", href: "/branches" },
+            { label: "Enlist Your Dojo", href: "/enlist-dojo" },
         ],
         dojoKun: [
             "Seek perfection of character",
