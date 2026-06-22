@@ -1,11 +1,11 @@
 export const siteContent = {
     nav: {
         links: [
-            { name: "About", href: "#about" },
-            { name: "Journey", href: "#journey" },
-            { name: "Techniques", href: "#techniques" },
-            { name: "Events", href: "#events" },
-            { name: "Branches", href: "#branches" },
+            { name: "About", href: "/about" },
+            { name: "Journey", href: "/journey" },
+            { name: "Techniques", href: "/techniques" },
+            { name: "Events", href: "/events" },
+            { name: "Branches", href: "/branches" },
         ],
         membership: "Membership",
     },

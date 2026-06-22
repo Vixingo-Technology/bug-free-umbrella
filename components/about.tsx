@@ -2,6 +2,8 @@
 
 import { motion } from "motion/react";
 import Image from "next/image";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 import { siteContent } from "@/lib/i18n/site-content";
 
 export default function About() {
@@ -89,6 +91,25 @@ export default function About() {
                             {copy.about.paragraphs.map((paragraph) => (
                                 <p key={paragraph}>{paragraph}</p>
                             ))}
+                        </motion.div>
+
+                        <motion.div
+                            initial={{ opacity: 0, y: 30 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.8, delay: 0.4 }}
+                            className="mt-8"
+                        >
+                            <Link
+                                href="/about"
+                                className="group inline-flex items-center gap-2 text-xs tracking-[0.3em] uppercase font-bold text-accent-red hover:text-accent-gold transition-colors"
+                            >
+                                Learn More
+                                <ArrowRight
+                                    size={14}
+                                    className="transition-transform duration-300 group-hover:translate-x-1"
+                                />
+                            </Link>
                         </motion.div>
 
                         <motion.div
