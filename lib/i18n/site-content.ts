@@ -239,7 +239,11 @@ export const siteContent = {
             "Refrain from violent behavior",
         ],
         copyright: "All rights reserved.",
-        policies: ["Privacy Policy", "Terms of Service"],
+        policies: [
+            { label: "Privacy Policy", href: "/privacy-policy" },
+            { label: "Terms & Conditions", href: "/terms-and-conditions" },
+            { label: "Return Policy", href: "/return-policy" },
+        ],
     },
 } as const;
 
