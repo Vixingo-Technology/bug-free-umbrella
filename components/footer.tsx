@@ -138,11 +138,11 @@ export default function Footer() {
                     <div className="flex gap-4">
                         {copy.footer.policies.map((policy) => (
                             <a
-                                key={policy}
-                                href="#"
+                                key={policy.label}
+                                href={policy.href}
                                 className="hover:text-zinc-850 transition-colors"
                             >
-                                {policy}
+                                {policy.label}
                             </a>
                         ))}
                     </div>
