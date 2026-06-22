@@ -56,27 +56,36 @@ export default function Navbar() {
       >
         <div className="max-w-7xl mx-auto px-6 md:px-12 flex justify-between items-center">
           {/* Brand */}
-          <div className="flex items-center gap-3 relative z-50">
+          <Link
+            href="/"
+            aria-label="JKA Bangladesh — Home"
+            className="flex items-center gap-3 relative z-50 group"
+          >
             {/* Logo */}
-            <Image src={Logo} alt="Logo" width={40} height={40} />
+            <Image
+              src={Logo}
+              alt="JKA Bangladesh logo"
+              width={40}
+              height={40}
+            />
             <div className="flex flex-col">
-              <span className="font-karate font-bold text-zinc-900 tracking-[0.4em] text-xs leading-tight">
+              <span className="font-karate font-bold text-zinc-900 tracking-[0.4em] text-xs leading-tight group-hover:text-accent-red transition-colors">
                 JKA{" "}
                 <span className="text-accent-red">BANGLADESH</span>
               </span>
             </div>
-          </div>
+          </Link>
 
           {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-10 text-[10px] tracking-widest uppercase font-bold">
             {navLinks.map((link) => (
-              <a
+              <Link
                 key={link.name}
                 href={link.href}
                 className="text-zinc-800 hover:text-accent-red transition-colors relative group"
               >
                 {link.name}
-              </a>
+              </Link>
             ))}
 
             {/* Auth Links */}
@@ -134,14 +143,14 @@ export default function Navbar() {
       >
         <div className="flex flex-col items-center gap-8">
           {navLinks.map((link) => (
-            <a
+            <Link
               key={link.name}
               href={link.href}
               onClick={() => setMobileMenuOpen(false)}
               className="text-2xl font-serif text-zinc-900 hover:text-accent-red transition-colors"
             >
               {link.name}
-            </a>
+            </Link>
           ))}
 
           {/* Auth Links - Mobile */}

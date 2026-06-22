@@ -8,6 +8,9 @@ import {
     MapPin,
     Phone,
 } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import Logo from "@/assets/jka_logo.svg";
 import { siteContent } from "@/lib/i18n/site-content";
 
 export default function Footer() {
@@ -19,19 +22,26 @@ export default function Footer() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
                     {/* Brand */}
                     <div>
-                        <div className="flex items-center gap-3 mb-6">
-                            <div className="w-10 h-10 rounded-full border-2 border-accent-red flex items-center justify-center relative overflow-hidden bg-white shadow-sm">
-                                <div className="w-5 h-5 bg-accent-red rounded-full"></div>
-                            </div>
+                        <Link
+                            href="/"
+                            aria-label="JKA Bangladesh — Home"
+                            className="flex items-center gap-3 mb-6 group"
+                        >
+                            <Image
+                                src={Logo}
+                                alt="JKA Bangladesh logo"
+                                width={40}
+                                height={40}
+                            />
                             <div className="flex flex-col">
-                                <span className="font-karate font-bold text-zinc-900 tracking-[0.4em] text-xs leading-tight">
+                                <span className="font-karate font-bold text-zinc-900 tracking-[0.4em] text-xs leading-tight group-hover:text-accent-red transition-colors">
                                     JKA{" "}
                                     <span className="text-accent-red">
                                         BANGLADESH
                                     </span>
                                 </span>
                             </div>
-                        </div>
+                        </Link>
                         <p className="text-zinc-600 font-normal leading-relaxed mb-6">
                             {copy.footer.description}
                         </p>
@@ -101,12 +111,12 @@ export default function Footer() {
                         <ul className="space-y-3 text-zinc-600 font-normal">
                             {copy.footer.quickLinks.map((link) => (
                                 <li key={link.label}>
-                                    <a
+                                    <Link
                                         href={link.href}
                                         className="hover:text-accent-red transition-colors"
                                     >
                                         {link.label}
-                                    </a>
+                                    </Link>
                                 </li>
                             ))}
                         </ul>
@@ -137,13 +147,13 @@ export default function Footer() {
                     </p>
                     <div className="flex gap-4">
                         {copy.footer.policies.map((policy) => (
-                            <a
+                            <Link
                                 key={policy.label}
                                 href={policy.href}
                                 className="hover:text-zinc-850 transition-colors"
                             >
                                 {policy.label}
-                            </a>
+                            </Link>
                         ))}
                     </div>
                 </div>

@@ -2,6 +2,7 @@
 
 import { motion, useScroll, useTransform } from "motion/react";
 import { useRef, useState, useEffect } from "react";
+import Link from "next/link";
 import { siteContent } from "@/lib/i18n/site-content";
 
 export default function Hero() {
@@ -155,18 +156,18 @@ export default function Hero() {
                         transition={{ duration: 1, delay: 0.8 }}
                         className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start hover:z-30 relative"
                     >
-                        <a
+                        <Link
                             href="#membership"
                             className="px-8 py-4 bg-accent-red hover:bg-accent-red/90 text-white text-[10px] tracking-widest uppercase font-bold transition-colors shadow-sm"
                         >
                             {copy.hero.primaryCta}
-                        </a>
-                        <a
-                            href="#branches"
+                        </Link>
+                        <Link
+                            href="/branches"
                             className="px-8 py-4 border border-zinc-300 text-zinc-900 text-[10px] tracking-widest uppercase font-bold glass hover:bg-zinc-50 transition-colors"
                         >
                             {copy.hero.secondaryCta}
-                        </a>
+                        </Link>
                     </motion.div>
                 </div>
 

@@ -225,11 +225,11 @@ export const siteContent = {
             dojoKun: "Dojo Kun",
         },
         quickLinks: [
-            { label: "About Us", href: "#about" },
-            { label: "Member Privileges", href: "#benefits" },
-            { label: "Three Pillars", href: "#techniques" },
-            { label: "Events & Championships", href: "#events" },
-            { label: "Find a Dojo", href: "#branches" },
+            { label: "About Us", href: "/about" },
+            { label: "Member Privileges", href: "/about" },
+            { label: "Three Pillars", href: "/techniques" },
+            { label: "Events & Championships", href: "/events" },
+            { label: "Find a Dojo", href: "/branches" },
         ],
         dojoKun: [
             "Seek perfection of character",

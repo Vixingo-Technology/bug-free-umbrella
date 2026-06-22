@@ -3,6 +3,7 @@
 import { motion } from "motion/react";
 import Image from "next/image";
 import { siteContent } from "@/lib/i18n/site-content";
+import Link from "next/link";
 
 export default function CTA() {
     const copy = siteContent;
@@ -44,9 +45,11 @@ export default function CTA() {
                     </p>
 
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
-                        <button className="px-10 py-5 bg-accent-red hover:bg-red-700 text-white font-bold tracking-[0.2em] uppercase text-sm rounded-sm transition-colors shadow-md w-full sm:w-auto">
-                            {copy.cta.primary}
-                        </button>
+                        <Link href="/signup">
+                            <button className="px-10 py-5 bg-accent-red hover:bg-red-700 text-white font-bold tracking-[0.2em] uppercase text-sm rounded-sm transition-colors shadow-md w-full sm:w-auto">
+                                {copy.cta.primary}
+                            </button>
+                        </Link>
                         <button className="px-10 py-5 bg-transparent text-accent-red font-bold tracking-[0.2em] uppercase text-sm border-2 border-accent-red/20 hover:border-accent-red hover:bg-accent-red hover:text-white rounded-sm transition-all duration-350 w-full sm:w-auto">
                             {copy.cta.secondary}
                         </button>
