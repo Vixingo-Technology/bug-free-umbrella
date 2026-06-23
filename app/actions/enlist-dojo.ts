@@ -1,7 +1,18 @@
 "use server";
 
+import { redirect } from "next/navigation";
+import { createClient } from "@/lib/supabase/server";
+import { prisma } from "@/lib/prisma";
+
+export type DojoTrainerInput = {
+    name: string;
+    rank: string;
+    contact: string;
+};
+
 export type DojoEnlistmentInput = {
     dojoName: string;
+    logoUrl?: string;
     email: string;
     phone: string;
     contactName: string;
@@ -9,41 +20,187 @@ export type DojoEnlistmentInput = {
     address: string;
     latitude: string;
     longitude: string;
-    trainers: { name: string; rank: string; contact: string }[];
+    interiorUrls?: string[];
+    trainers: DojoTrainerInput[];
 };
 
+/**
+ * Step 1 — kick off enlistment.
+ * Sends a Supabase email OTP. We do NOT touch the database yet;
+ * the form payload lives in client sessionStorage until payment success.
+ */
 export async function submitDojoEnlistment(
-    input: DojoEnlistmentInput
+    input: Pick<DojoEnlistmentInput, "dojoName" | "email">
 ): Promise<{ error?: string }> {
-    // UI-first stub. Real implementation will:
-    //   1. Insert into a `dojo_applications` table with status PENDING_EMAIL
-    //   2. Trigger Supabase email OTP for `input.email`
-    //   3. Emit a webhook to n8n for staff notification
-    if (!input.email || !input.dojoName) {
-        return { error: "Missing required fields." };
+    if (!input.email?.trim() || !input.email.includes("@")) {
+        return { error: "Please enter a valid email address." };
     }
-    await new Promise((r) => setTimeout(r, 400));
+    if (!input.dojoName?.trim()) {
+        return { error: "Dojo name is required." };
+    }
+
+    const supabase = await createClient();
+    const { error } = await supabase.auth.signInWithOtp({
+        email: input.email,
+        options: {
+            shouldCreateUser: true,
+            data: {
+                pending_dojo_name: input.dojoName,
+                role: "DOJO_OWNER",
+            },
+        },
+    });
+
+    if (error) {
+        return { error: error.message };
+    }
     return {};
 }
 
+/**
+ * Step 2 — verify the 6-digit OTP. Establishes a Supabase session
+ * so subsequent calls (setPassword, commit) run as the dojo owner.
+ */
 export async function verifyDojoOtp(
-    _email: string,
+    email: string,
     code: string
 ): Promise<{ error?: string }> {
-    // UI-first stub. Real implementation will call
-    // supabase.auth.verifyOtp({ email, token: code, type: 'email' }).
     if (!code || code.length < 6) {
         return { error: "Please enter the 6-digit code from your email." };
     }
-    await new Promise((r) => setTimeout(r, 400));
+    const supabase = await createClient();
+    const { error } = await supabase.auth.verifyOtp({
+        email,
+        token: code,
+        type: "email",
+    });
+    if (error) {
+        return { error: error.message };
+    }
     return {};
 }
 
+/**
+ * Step 3 — set the dojo owner's account password.
+ * Must be called while the OTP-verified session is active.
+ */
+export async function setDojoOwnerPassword(
+    password: string,
+    confirm: string
+): Promise<{ error?: string }> {
+    if (!password || password.length < 8) {
+        return { error: "Password must be at least 8 characters." };
+    }
+    if (password !== confirm) {
+        return { error: "Passwords do not match." };
+    }
+    const supabase = await createClient();
+    const {
+        data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) {
+        return {
+            error: "Your verification has expired. Please restart the enlistment.",
+        };
+    }
+    const { error } = await supabase.auth.updateUser({ password });
+    if (error) return { error: error.message };
+    return {};
+}
+
+/**
+ * Resend the OTP email for the current enlistment.
+ */
+export async function resendDojoOtp(
+    email: string
+): Promise<{ error?: string }> {
+    if (!email?.trim() || !email.includes("@")) {
+        return { error: "Missing email address." };
+    }
+    const supabase = await createClient();
+    const { error } = await supabase.auth.signInWithOtp({
+        email,
+        options: { shouldCreateUser: true },
+    });
+    if (error) return { error: error.message };
+    return {};
+}
+
+/**
+ * Step 4 — initiate payment.
+ * Stub: returns success and lets the client redirect into the commit step.
+ * Real implementation will create an SSLCommerz session and return the
+ * gateway redirect URL; the success webhook will call commitDojoEnlistment.
+ */
 export async function initiateDojoEnlistmentPayment(
     _email: string
 ): Promise<{ error?: string; redirectUrl?: string }> {
-    // UI-first stub. Real implementation will create an SSLCommerz
-    // session for the enlistment fee and return the gateway redirect URL.
-    await new Promise((r) => setTimeout(r, 400));
     return {};
+}
+
+/**
+ * Final step — commit the enlistment record to Postgres.
+ * Called after the user "pays" (currently a stub redirect).
+ * Requires an active Supabase session for the dojo owner.
+ */
+export async function commitDojoEnlistment(
+    input: DojoEnlistmentInput
+): Promise<{ error?: string; applicationId?: string }> {
+    const supabase = await createClient();
+    const {
+        data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) {
+        return {
+            error: "Your session has expired. Please restart the enlistment.",
+        };
+    }
+
+    if (
+        !input.dojoName?.trim() ||
+        !input.email?.trim() ||
+        !input.phone?.trim() ||
+        !input.contactName?.trim() ||
+        !input.address?.trim()
+    ) {
+        return { error: "Some required fields are missing." };
+    }
+
+    const lat = input.latitude ? parseFloat(input.latitude) : null;
+    const lng = input.longitude ? parseFloat(input.longitude) : null;
+
+    try {
+        const application = await prisma.dojoApplication.create({
+            data: {
+                userId: user.id,
+                dojoName: input.dojoName.trim(),
+                logoUrl: input.logoUrl ?? null,
+                email: input.email.trim(),
+                phone: input.phone.trim(),
+                contactName: input.contactName.trim(),
+                contactRole: input.contactRole.trim(),
+                address: input.address.trim(),
+                latitude: Number.isFinite(lat) ? lat : null,
+                longitude: Number.isFinite(lng) ? lng : null,
+                interiorUrls: input.interiorUrls ?? [],
+                trainers: input.trainers ?? [],
+                status: "PAID",
+            },
+            select: { id: true },
+        });
+        return { applicationId: application.id };
+    } catch (e) {
+        const message =
+            e instanceof Error ? e.message : "Could not save your enlistment.";
+        return { error: message };
+    }
+}
+
+/**
+ * Sign out and clear the draft cookie — used if the user abandons.
+ */
+export async function abandonDojoEnlistment() {
+    const supabase = await createClient();
+    await supabase.auth.signOut();
+    redirect("/enlist-dojo");
 }

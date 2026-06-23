@@ -27,7 +27,7 @@ export default function BranchesPage() {
                             <p className="text-xs tracking-[0.4em] uppercase text-accent-red font-bold mb-4">
                                 For dojo owners
                             </p>
-                            <h2 className="font-karate text-2xl md:text-3xl font-bold text-zinc-900 uppercase tracking-wider mb-4">
+                            <h2 className="font-karate text-2xl md:text-3xl font-bold text-zinc-900 uppercase tracking-wider leading-[1.15] mb-4">
                                 Run a dojo?{" "}
                                 <span className="text-accent-red italic lowercase font-serif font-normal">
                                     Enlist with us.

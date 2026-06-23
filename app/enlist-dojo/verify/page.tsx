@@ -7,7 +7,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useRef, useState, useTransition } from "react";
 import { ArrowLeft, ArrowRight, Loader2, Mail } from "lucide-react";
 import Logo from "@/assets/jka_logo.svg";
-import { verifyDojoOtp } from "@/app/actions/enlist-dojo";
+import { resendDojoOtp, verifyDojoOtp } from "@/app/actions/enlist-dojo";
 
 const OTP_LENGTH = 6;
 
@@ -19,7 +19,9 @@ export default function EnlistDojoVerifyPage() {
     const [code, setCode] = useState<string[]>(Array(OTP_LENGTH).fill(""));
     const inputsRef = useRef<(HTMLInputElement | null)[]>([]);
     const [error, setError] = useState<string | null>(null);
+    const [notice, setNotice] = useState<string | null>(null);
     const [isPending, startTransition] = useTransition();
+    const [isResending, startResend] = useTransition();
 
     function handleChange(i: number, value: string) {
         const v = value.replace(/\D/g, "").slice(-1);
@@ -57,6 +59,7 @@ export default function EnlistDojoVerifyPage() {
             return;
         }
         setError(null);
+        setNotice(null);
         startTransition(async () => {
             const result = await verifyDojoOtp(email, joined);
             if (result?.error) {
@@ -64,8 +67,22 @@ export default function EnlistDojoVerifyPage() {
                 return;
             }
             router.push(
-                `/enlist-dojo/payment?email=${encodeURIComponent(email)}`
+                `/enlist-dojo/set-password?email=${encodeURIComponent(email)}`
             );
+        });
+    }
+
+    function handleResend() {
+        if (!email) return;
+        setError(null);
+        setNotice(null);
+        startResend(async () => {
+            const result = await resendDojoOtp(email);
+            if (result?.error) {
+                setError(result.error);
+                return;
+            }
+            setNotice("A new code has been sent to your email.");
         });
     }
 
@@ -137,6 +154,11 @@ export default function EnlistDojoVerifyPage() {
                         ))}
                     </div>
 
+                    {notice && (
+                        <div className="bg-emerald-50 border border-emerald-200 text-emerald-700 text-sm rounded-md p-3 mb-4">
+                            {notice}
+                        </div>
+                    )}
                     {error && (
                         <div className="bg-accent-red/10 border border-accent-red/30 text-accent-red text-sm rounded-md p-3 mb-6">
                             {error}
@@ -172,9 +194,11 @@ export default function EnlistDojoVerifyPage() {
                         Didn&apos;t get the code?{" "}
                         <button
                             type="button"
-                            className="text-accent-red font-semibold hover:underline"
+                            onClick={handleResend}
+                            disabled={isResending}
+                            className="text-accent-red font-semibold hover:underline disabled:opacity-50"
                         >
-                            Resend
+                            {isResending ? "Sending…" : "Resend"}
                         </button>
                     </p>
                 </motion.div>

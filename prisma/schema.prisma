@@ -116,6 +116,49 @@ model Dojo {
 }
 
 // ─────────────────────────────────────────────
+// DOJO ENLISTMENT APPLICATIONS
+// Filed by dojo owners via /enlist-dojo. Stored as a separate
+// table from `dojos` so federation staff can review before a
+// public branch listing is created.
+// ─────────────────────────────────────────────
+
+enum DojoApplicationStatus {
+  PENDING_PAYMENT
+  PAID
+  APPROVED
+  REJECTED
+}
+
+model DojoApplication {
+  id     String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId String? @db.Uuid @map("user_id") // Supabase auth.users id of the owner
+
+  dojoName    String  @map("dojo_name")
+  logoUrl     String? @map("logo_url")
+  email       String
+  phone       String
+  contactName String  @map("contact_name")
+  contactRole String  @map("contact_role")
+
+  address   String
+  latitude  Float?
+  longitude Float?
+
+  interiorUrls String[] @default([]) @map("interior_urls")
+  trainers     Json     @default("[]")
+
+  status    DojoApplicationStatus @default(PENDING_PAYMENT)
+  paymentId String?               @map("payment_id")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt      @map("updated_at")
+
+  @@index([userId])
+  @@index([status])
+  @@map("dojo_applications")
+}
+
+// ─────────────────────────────────────────────
 // MEMBERS  (mirrors auth.users via id)
 // ─────────────────────────────────────────────
 

@@ -63,6 +63,7 @@ export async function updateSession(request: NextRequest) {
     const isProtected =
         pathname.startsWith("/dashboard") ||
         pathname.startsWith("/portal") ||
+        pathname.startsWith("/dojo/dashboard") ||
         // locale-prefixed portal routes e.g. /en/portal, /bn/portal
         /^\/(en|bn)\/portal/.test(pathname);
 

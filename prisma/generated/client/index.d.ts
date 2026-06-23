@@ -24,6 +24,11 @@ export type BeltRank = $Result.DefaultSelection<Prisma.$BeltRankPayload>
  */
 export type Dojo = $Result.DefaultSelection<Prisma.$DojoPayload>
 /**
+ * Model DojoApplication
+ * 
+ */
+export type DojoApplication = $Result.DefaultSelection<Prisma.$DojoApplicationPayload>
+/**
  * Model Member
  * 
  */
@@ -167,6 +172,16 @@ export const NotificationType: {
 
 export type NotificationType = (typeof NotificationType)[keyof typeof NotificationType]
 
+
+export const DojoApplicationStatus: {
+  PENDING_PAYMENT: 'PENDING_PAYMENT',
+  PAID: 'PAID',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
+};
+
+export type DojoApplicationStatus = (typeof DojoApplicationStatus)[keyof typeof DojoApplicationStatus]
+
 }
 
 export type MemberRole = $Enums.MemberRole
@@ -192,6 +207,10 @@ export const PaymentStatus: typeof $Enums.PaymentStatus
 export type NotificationType = $Enums.NotificationType
 
 export const NotificationType: typeof $Enums.NotificationType
+
+export type DojoApplicationStatus = $Enums.DojoApplicationStatus
+
+export const DojoApplicationStatus: typeof $Enums.DojoApplicationStatus
 
 /**
  * ##  Prisma Client ʲˢ
@@ -333,6 +352,16 @@ export class PrismaClient<
     * ```
     */
   get dojo(): Prisma.DojoDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.dojoApplication`: Exposes CRUD operations for the **DojoApplication** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more DojoApplications
+    * const dojoApplications = await prisma.dojoApplication.findMany()
+    * ```
+    */
+  get dojoApplication(): Prisma.DojoApplicationDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.member`: Exposes CRUD operations for the **Member** model.
@@ -929,6 +958,7 @@ export namespace Prisma {
   export const ModelName: {
     BeltRank: 'BeltRank',
     Dojo: 'Dojo',
+    DojoApplication: 'DojoApplication',
     Member: 'Member',
     Admin: 'Admin',
     Instructor: 'Instructor',
@@ -960,7 +990,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "beltRank" | "dojo" | "member" | "admin" | "instructor" | "attendance" | "gradingEvent" | "gradingApplication" | "grading" | "event" | "eventRegistration" | "notification" | "shopProduct" | "shopOrder" | "shopOrderItem" | "tournament" | "tournamentParticipant" | "tournamentMatch"
+      modelProps: "beltRank" | "dojo" | "dojoApplication" | "member" | "admin" | "instructor" | "attendance" | "gradingEvent" | "gradingApplication" | "grading" | "event" | "eventRegistration" | "notification" | "shopProduct" | "shopOrder" | "shopOrderItem" | "tournament" | "tournamentParticipant" | "tournamentMatch"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1109,6 +1139,80 @@ export namespace Prisma {
           count: {
             args: Prisma.DojoCountArgs<ExtArgs>
             result: $Utils.Optional<DojoCountAggregateOutputType> | number
+          }
+        }
+      }
+      DojoApplication: {
+        payload: Prisma.$DojoApplicationPayload<ExtArgs>
+        fields: Prisma.DojoApplicationFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.DojoApplicationFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DojoApplicationPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.DojoApplicationFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DojoApplicationPayload>
+          }
+          findFirst: {
+            args: Prisma.DojoApplicationFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DojoApplicationPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.DojoApplicationFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DojoApplicationPayload>
+          }
+          findMany: {
+            args: Prisma.DojoApplicationFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DojoApplicationPayload>[]
+          }
+          create: {
+            args: Prisma.DojoApplicationCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DojoApplicationPayload>
+          }
+          createMany: {
+            args: Prisma.DojoApplicationCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.DojoApplicationCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DojoApplicationPayload>[]
+          }
+          delete: {
+            args: Prisma.DojoApplicationDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DojoApplicationPayload>
+          }
+          update: {
+            args: Prisma.DojoApplicationUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DojoApplicationPayload>
+          }
+          deleteMany: {
+            args: Prisma.DojoApplicationDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.DojoApplicationUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.DojoApplicationUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DojoApplicationPayload>[]
+          }
+          upsert: {
+            args: Prisma.DojoApplicationUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DojoApplicationPayload>
+          }
+          aggregate: {
+            args: Prisma.DojoApplicationAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateDojoApplication>
+          }
+          groupBy: {
+            args: Prisma.DojoApplicationGroupByArgs<ExtArgs>
+            result: $Utils.Optional<DojoApplicationGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.DojoApplicationCountArgs<ExtArgs>
+            result: $Utils.Optional<DojoApplicationCountAggregateOutputType> | number
           }
         }
       }
@@ -2406,6 +2510,7 @@ export namespace Prisma {
   export type GlobalOmitConfig = {
     beltRank?: BeltRankOmit
     dojo?: DojoOmit
+    dojoApplication?: DojoApplicationOmit
     member?: MemberOmit
     admin?: AdminOmit
     instructor?: InstructorOmit
@@ -5459,6 +5564,1192 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: DojoInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model DojoApplication
+   */
+
+  export type AggregateDojoApplication = {
+    _count: DojoApplicationCountAggregateOutputType | null
+    _avg: DojoApplicationAvgAggregateOutputType | null
+    _sum: DojoApplicationSumAggregateOutputType | null
+    _min: DojoApplicationMinAggregateOutputType | null
+    _max: DojoApplicationMaxAggregateOutputType | null
+  }
+
+  export type DojoApplicationAvgAggregateOutputType = {
+    latitude: number | null
+    longitude: number | null
+  }
+
+  export type DojoApplicationSumAggregateOutputType = {
+    latitude: number | null
+    longitude: number | null
+  }
+
+  export type DojoApplicationMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    dojoName: string | null
+    logoUrl: string | null
+    email: string | null
+    phone: string | null
+    contactName: string | null
+    contactRole: string | null
+    address: string | null
+    latitude: number | null
+    longitude: number | null
+    status: $Enums.DojoApplicationStatus | null
+    paymentId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type DojoApplicationMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    dojoName: string | null
+    logoUrl: string | null
+    email: string | null
+    phone: string | null
+    contactName: string | null
+    contactRole: string | null
+    address: string | null
+    latitude: number | null
+    longitude: number | null
+    status: $Enums.DojoApplicationStatus | null
+    paymentId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type DojoApplicationCountAggregateOutputType = {
+    id: number
+    userId: number
+    dojoName: number
+    logoUrl: number
+    email: number
+    phone: number
+    contactName: number
+    contactRole: number
+    address: number
+    latitude: number
+    longitude: number
+    interiorUrls: number
+    trainers: number
+    status: number
+    paymentId: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type DojoApplicationAvgAggregateInputType = {
+    latitude?: true
+    longitude?: true
+  }
+
+  export type DojoApplicationSumAggregateInputType = {
+    latitude?: true
+    longitude?: true
+  }
+
+  export type DojoApplicationMinAggregateInputType = {
+    id?: true
+    userId?: true
+    dojoName?: true
+    logoUrl?: true
+    email?: true
+    phone?: true
+    contactName?: true
+    contactRole?: true
+    address?: true
+    latitude?: true
+    longitude?: true
+    status?: true
+    paymentId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type DojoApplicationMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    dojoName?: true
+    logoUrl?: true
+    email?: true
+    phone?: true
+    contactName?: true
+    contactRole?: true
+    address?: true
+    latitude?: true
+    longitude?: true
+    status?: true
+    paymentId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type DojoApplicationCountAggregateInputType = {
+    id?: true
+    userId?: true
+    dojoName?: true
+    logoUrl?: true
+    email?: true
+    phone?: true
+    contactName?: true
+    contactRole?: true
+    address?: true
+    latitude?: true
+    longitude?: true
+    interiorUrls?: true
+    trainers?: true
+    status?: true
+    paymentId?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type DojoApplicationAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which DojoApplication to aggregate.
+     */
+    where?: DojoApplicationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DojoApplications to fetch.
+     */
+    orderBy?: DojoApplicationOrderByWithRelationInput | DojoApplicationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: DojoApplicationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DojoApplications from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DojoApplications.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned DojoApplications
+    **/
+    _count?: true | DojoApplicationCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: DojoApplicationAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: DojoApplicationSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: DojoApplicationMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: DojoApplicationMaxAggregateInputType
+  }
+
+  export type GetDojoApplicationAggregateType<T extends DojoApplicationAggregateArgs> = {
+        [P in keyof T & keyof AggregateDojoApplication]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateDojoApplication[P]>
+      : GetScalarType<T[P], AggregateDojoApplication[P]>
+  }
+
+
+
+
+  export type DojoApplicationGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DojoApplicationWhereInput
+    orderBy?: DojoApplicationOrderByWithAggregationInput | DojoApplicationOrderByWithAggregationInput[]
+    by: DojoApplicationScalarFieldEnum[] | DojoApplicationScalarFieldEnum
+    having?: DojoApplicationScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: DojoApplicationCountAggregateInputType | true
+    _avg?: DojoApplicationAvgAggregateInputType
+    _sum?: DojoApplicationSumAggregateInputType
+    _min?: DojoApplicationMinAggregateInputType
+    _max?: DojoApplicationMaxAggregateInputType
+  }
+
+  export type DojoApplicationGroupByOutputType = {
+    id: string
+    userId: string | null
+    dojoName: string
+    logoUrl: string | null
+    email: string
+    phone: string
+    contactName: string
+    contactRole: string
+    address: string
+    latitude: number | null
+    longitude: number | null
+    interiorUrls: string[]
+    trainers: JsonValue
+    status: $Enums.DojoApplicationStatus
+    paymentId: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: DojoApplicationCountAggregateOutputType | null
+    _avg: DojoApplicationAvgAggregateOutputType | null
+    _sum: DojoApplicationSumAggregateOutputType | null
+    _min: DojoApplicationMinAggregateOutputType | null
+    _max: DojoApplicationMaxAggregateOutputType | null
+  }
+
+  type GetDojoApplicationGroupByPayload<T extends DojoApplicationGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<DojoApplicationGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof DojoApplicationGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], DojoApplicationGroupByOutputType[P]>
+            : GetScalarType<T[P], DojoApplicationGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type DojoApplicationSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    dojoName?: boolean
+    logoUrl?: boolean
+    email?: boolean
+    phone?: boolean
+    contactName?: boolean
+    contactRole?: boolean
+    address?: boolean
+    latitude?: boolean
+    longitude?: boolean
+    interiorUrls?: boolean
+    trainers?: boolean
+    status?: boolean
+    paymentId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["dojoApplication"]>
+
+  export type DojoApplicationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    dojoName?: boolean
+    logoUrl?: boolean
+    email?: boolean
+    phone?: boolean
+    contactName?: boolean
+    contactRole?: boolean
+    address?: boolean
+    latitude?: boolean
+    longitude?: boolean
+    interiorUrls?: boolean
+    trainers?: boolean
+    status?: boolean
+    paymentId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["dojoApplication"]>
+
+  export type DojoApplicationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    dojoName?: boolean
+    logoUrl?: boolean
+    email?: boolean
+    phone?: boolean
+    contactName?: boolean
+    contactRole?: boolean
+    address?: boolean
+    latitude?: boolean
+    longitude?: boolean
+    interiorUrls?: boolean
+    trainers?: boolean
+    status?: boolean
+    paymentId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["dojoApplication"]>
+
+  export type DojoApplicationSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    dojoName?: boolean
+    logoUrl?: boolean
+    email?: boolean
+    phone?: boolean
+    contactName?: boolean
+    contactRole?: boolean
+    address?: boolean
+    latitude?: boolean
+    longitude?: boolean
+    interiorUrls?: boolean
+    trainers?: boolean
+    status?: boolean
+    paymentId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type DojoApplicationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "dojoName" | "logoUrl" | "email" | "phone" | "contactName" | "contactRole" | "address" | "latitude" | "longitude" | "interiorUrls" | "trainers" | "status" | "paymentId" | "createdAt" | "updatedAt", ExtArgs["result"]["dojoApplication"]>
+
+  export type $DojoApplicationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "DojoApplication"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string | null
+      dojoName: string
+      logoUrl: string | null
+      email: string
+      phone: string
+      contactName: string
+      contactRole: string
+      address: string
+      latitude: number | null
+      longitude: number | null
+      interiorUrls: string[]
+      trainers: Prisma.JsonValue
+      status: $Enums.DojoApplicationStatus
+      paymentId: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["dojoApplication"]>
+    composites: {}
+  }
+
+  type DojoApplicationGetPayload<S extends boolean | null | undefined | DojoApplicationDefaultArgs> = $Result.GetResult<Prisma.$DojoApplicationPayload, S>
+
+  type DojoApplicationCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<DojoApplicationFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: DojoApplicationCountAggregateInputType | true
+    }
+
+  export interface DojoApplicationDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['DojoApplication'], meta: { name: 'DojoApplication' } }
+    /**
+     * Find zero or one DojoApplication that matches the filter.
+     * @param {DojoApplicationFindUniqueArgs} args - Arguments to find a DojoApplication
+     * @example
+     * // Get one DojoApplication
+     * const dojoApplication = await prisma.dojoApplication.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends DojoApplicationFindUniqueArgs>(args: SelectSubset<T, DojoApplicationFindUniqueArgs<ExtArgs>>): Prisma__DojoApplicationClient<$Result.GetResult<Prisma.$DojoApplicationPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one DojoApplication that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {DojoApplicationFindUniqueOrThrowArgs} args - Arguments to find a DojoApplication
+     * @example
+     * // Get one DojoApplication
+     * const dojoApplication = await prisma.dojoApplication.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends DojoApplicationFindUniqueOrThrowArgs>(args: SelectSubset<T, DojoApplicationFindUniqueOrThrowArgs<ExtArgs>>): Prisma__DojoApplicationClient<$Result.GetResult<Prisma.$DojoApplicationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first DojoApplication that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DojoApplicationFindFirstArgs} args - Arguments to find a DojoApplication
+     * @example
+     * // Get one DojoApplication
+     * const dojoApplication = await prisma.dojoApplication.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends DojoApplicationFindFirstArgs>(args?: SelectSubset<T, DojoApplicationFindFirstArgs<ExtArgs>>): Prisma__DojoApplicationClient<$Result.GetResult<Prisma.$DojoApplicationPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first DojoApplication that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DojoApplicationFindFirstOrThrowArgs} args - Arguments to find a DojoApplication
+     * @example
+     * // Get one DojoApplication
+     * const dojoApplication = await prisma.dojoApplication.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends DojoApplicationFindFirstOrThrowArgs>(args?: SelectSubset<T, DojoApplicationFindFirstOrThrowArgs<ExtArgs>>): Prisma__DojoApplicationClient<$Result.GetResult<Prisma.$DojoApplicationPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more DojoApplications that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DojoApplicationFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all DojoApplications
+     * const dojoApplications = await prisma.dojoApplication.findMany()
+     * 
+     * // Get first 10 DojoApplications
+     * const dojoApplications = await prisma.dojoApplication.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const dojoApplicationWithIdOnly = await prisma.dojoApplication.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends DojoApplicationFindManyArgs>(args?: SelectSubset<T, DojoApplicationFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DojoApplicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a DojoApplication.
+     * @param {DojoApplicationCreateArgs} args - Arguments to create a DojoApplication.
+     * @example
+     * // Create one DojoApplication
+     * const DojoApplication = await prisma.dojoApplication.create({
+     *   data: {
+     *     // ... data to create a DojoApplication
+     *   }
+     * })
+     * 
+     */
+    create<T extends DojoApplicationCreateArgs>(args: SelectSubset<T, DojoApplicationCreateArgs<ExtArgs>>): Prisma__DojoApplicationClient<$Result.GetResult<Prisma.$DojoApplicationPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many DojoApplications.
+     * @param {DojoApplicationCreateManyArgs} args - Arguments to create many DojoApplications.
+     * @example
+     * // Create many DojoApplications
+     * const dojoApplication = await prisma.dojoApplication.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends DojoApplicationCreateManyArgs>(args?: SelectSubset<T, DojoApplicationCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many DojoApplications and returns the data saved in the database.
+     * @param {DojoApplicationCreateManyAndReturnArgs} args - Arguments to create many DojoApplications.
+     * @example
+     * // Create many DojoApplications
+     * const dojoApplication = await prisma.dojoApplication.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many DojoApplications and only return the `id`
+     * const dojoApplicationWithIdOnly = await prisma.dojoApplication.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends DojoApplicationCreateManyAndReturnArgs>(args?: SelectSubset<T, DojoApplicationCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DojoApplicationPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a DojoApplication.
+     * @param {DojoApplicationDeleteArgs} args - Arguments to delete one DojoApplication.
+     * @example
+     * // Delete one DojoApplication
+     * const DojoApplication = await prisma.dojoApplication.delete({
+     *   where: {
+     *     // ... filter to delete one DojoApplication
+     *   }
+     * })
+     * 
+     */
+    delete<T extends DojoApplicationDeleteArgs>(args: SelectSubset<T, DojoApplicationDeleteArgs<ExtArgs>>): Prisma__DojoApplicationClient<$Result.GetResult<Prisma.$DojoApplicationPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one DojoApplication.
+     * @param {DojoApplicationUpdateArgs} args - Arguments to update one DojoApplication.
+     * @example
+     * // Update one DojoApplication
+     * const dojoApplication = await prisma.dojoApplication.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends DojoApplicationUpdateArgs>(args: SelectSubset<T, DojoApplicationUpdateArgs<ExtArgs>>): Prisma__DojoApplicationClient<$Result.GetResult<Prisma.$DojoApplicationPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more DojoApplications.
+     * @param {DojoApplicationDeleteManyArgs} args - Arguments to filter DojoApplications to delete.
+     * @example
+     * // Delete a few DojoApplications
+     * const { count } = await prisma.dojoApplication.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends DojoApplicationDeleteManyArgs>(args?: SelectSubset<T, DojoApplicationDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more DojoApplications.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DojoApplicationUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many DojoApplications
+     * const dojoApplication = await prisma.dojoApplication.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends DojoApplicationUpdateManyArgs>(args: SelectSubset<T, DojoApplicationUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more DojoApplications and returns the data updated in the database.
+     * @param {DojoApplicationUpdateManyAndReturnArgs} args - Arguments to update many DojoApplications.
+     * @example
+     * // Update many DojoApplications
+     * const dojoApplication = await prisma.dojoApplication.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more DojoApplications and only return the `id`
+     * const dojoApplicationWithIdOnly = await prisma.dojoApplication.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends DojoApplicationUpdateManyAndReturnArgs>(args: SelectSubset<T, DojoApplicationUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DojoApplicationPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one DojoApplication.
+     * @param {DojoApplicationUpsertArgs} args - Arguments to update or create a DojoApplication.
+     * @example
+     * // Update or create a DojoApplication
+     * const dojoApplication = await prisma.dojoApplication.upsert({
+     *   create: {
+     *     // ... data to create a DojoApplication
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the DojoApplication we want to update
+     *   }
+     * })
+     */
+    upsert<T extends DojoApplicationUpsertArgs>(args: SelectSubset<T, DojoApplicationUpsertArgs<ExtArgs>>): Prisma__DojoApplicationClient<$Result.GetResult<Prisma.$DojoApplicationPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of DojoApplications.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DojoApplicationCountArgs} args - Arguments to filter DojoApplications to count.
+     * @example
+     * // Count the number of DojoApplications
+     * const count = await prisma.dojoApplication.count({
+     *   where: {
+     *     // ... the filter for the DojoApplications we want to count
+     *   }
+     * })
+    **/
+    count<T extends DojoApplicationCountArgs>(
+      args?: Subset<T, DojoApplicationCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], DojoApplicationCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a DojoApplication.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DojoApplicationAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends DojoApplicationAggregateArgs>(args: Subset<T, DojoApplicationAggregateArgs>): Prisma.PrismaPromise<GetDojoApplicationAggregateType<T>>
+
+    /**
+     * Group by DojoApplication.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DojoApplicationGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends DojoApplicationGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: DojoApplicationGroupByArgs['orderBy'] }
+        : { orderBy?: DojoApplicationGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, DojoApplicationGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetDojoApplicationGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the DojoApplication model
+   */
+  readonly fields: DojoApplicationFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for DojoApplication.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__DojoApplicationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the DojoApplication model
+   */
+  interface DojoApplicationFieldRefs {
+    readonly id: FieldRef<"DojoApplication", 'String'>
+    readonly userId: FieldRef<"DojoApplication", 'String'>
+    readonly dojoName: FieldRef<"DojoApplication", 'String'>
+    readonly logoUrl: FieldRef<"DojoApplication", 'String'>
+    readonly email: FieldRef<"DojoApplication", 'String'>
+    readonly phone: FieldRef<"DojoApplication", 'String'>
+    readonly contactName: FieldRef<"DojoApplication", 'String'>
+    readonly contactRole: FieldRef<"DojoApplication", 'String'>
+    readonly address: FieldRef<"DojoApplication", 'String'>
+    readonly latitude: FieldRef<"DojoApplication", 'Float'>
+    readonly longitude: FieldRef<"DojoApplication", 'Float'>
+    readonly interiorUrls: FieldRef<"DojoApplication", 'String[]'>
+    readonly trainers: FieldRef<"DojoApplication", 'Json'>
+    readonly status: FieldRef<"DojoApplication", 'DojoApplicationStatus'>
+    readonly paymentId: FieldRef<"DojoApplication", 'String'>
+    readonly createdAt: FieldRef<"DojoApplication", 'DateTime'>
+    readonly updatedAt: FieldRef<"DojoApplication", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * DojoApplication findUnique
+   */
+  export type DojoApplicationFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DojoApplication
+     */
+    select?: DojoApplicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DojoApplication
+     */
+    omit?: DojoApplicationOmit<ExtArgs> | null
+    /**
+     * Filter, which DojoApplication to fetch.
+     */
+    where: DojoApplicationWhereUniqueInput
+  }
+
+  /**
+   * DojoApplication findUniqueOrThrow
+   */
+  export type DojoApplicationFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DojoApplication
+     */
+    select?: DojoApplicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DojoApplication
+     */
+    omit?: DojoApplicationOmit<ExtArgs> | null
+    /**
+     * Filter, which DojoApplication to fetch.
+     */
+    where: DojoApplicationWhereUniqueInput
+  }
+
+  /**
+   * DojoApplication findFirst
+   */
+  export type DojoApplicationFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DojoApplication
+     */
+    select?: DojoApplicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DojoApplication
+     */
+    omit?: DojoApplicationOmit<ExtArgs> | null
+    /**
+     * Filter, which DojoApplication to fetch.
+     */
+    where?: DojoApplicationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DojoApplications to fetch.
+     */
+    orderBy?: DojoApplicationOrderByWithRelationInput | DojoApplicationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for DojoApplications.
+     */
+    cursor?: DojoApplicationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DojoApplications from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DojoApplications.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DojoApplications.
+     */
+    distinct?: DojoApplicationScalarFieldEnum | DojoApplicationScalarFieldEnum[]
+  }
+
+  /**
+   * DojoApplication findFirstOrThrow
+   */
+  export type DojoApplicationFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DojoApplication
+     */
+    select?: DojoApplicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DojoApplication
+     */
+    omit?: DojoApplicationOmit<ExtArgs> | null
+    /**
+     * Filter, which DojoApplication to fetch.
+     */
+    where?: DojoApplicationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DojoApplications to fetch.
+     */
+    orderBy?: DojoApplicationOrderByWithRelationInput | DojoApplicationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for DojoApplications.
+     */
+    cursor?: DojoApplicationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DojoApplications from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DojoApplications.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DojoApplications.
+     */
+    distinct?: DojoApplicationScalarFieldEnum | DojoApplicationScalarFieldEnum[]
+  }
+
+  /**
+   * DojoApplication findMany
+   */
+  export type DojoApplicationFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DojoApplication
+     */
+    select?: DojoApplicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DojoApplication
+     */
+    omit?: DojoApplicationOmit<ExtArgs> | null
+    /**
+     * Filter, which DojoApplications to fetch.
+     */
+    where?: DojoApplicationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DojoApplications to fetch.
+     */
+    orderBy?: DojoApplicationOrderByWithRelationInput | DojoApplicationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing DojoApplications.
+     */
+    cursor?: DojoApplicationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DojoApplications from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DojoApplications.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DojoApplications.
+     */
+    distinct?: DojoApplicationScalarFieldEnum | DojoApplicationScalarFieldEnum[]
+  }
+
+  /**
+   * DojoApplication create
+   */
+  export type DojoApplicationCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DojoApplication
+     */
+    select?: DojoApplicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DojoApplication
+     */
+    omit?: DojoApplicationOmit<ExtArgs> | null
+    /**
+     * The data needed to create a DojoApplication.
+     */
+    data: XOR<DojoApplicationCreateInput, DojoApplicationUncheckedCreateInput>
+  }
+
+  /**
+   * DojoApplication createMany
+   */
+  export type DojoApplicationCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many DojoApplications.
+     */
+    data: DojoApplicationCreateManyInput | DojoApplicationCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * DojoApplication createManyAndReturn
+   */
+  export type DojoApplicationCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DojoApplication
+     */
+    select?: DojoApplicationSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the DojoApplication
+     */
+    omit?: DojoApplicationOmit<ExtArgs> | null
+    /**
+     * The data used to create many DojoApplications.
+     */
+    data: DojoApplicationCreateManyInput | DojoApplicationCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * DojoApplication update
+   */
+  export type DojoApplicationUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DojoApplication
+     */
+    select?: DojoApplicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DojoApplication
+     */
+    omit?: DojoApplicationOmit<ExtArgs> | null
+    /**
+     * The data needed to update a DojoApplication.
+     */
+    data: XOR<DojoApplicationUpdateInput, DojoApplicationUncheckedUpdateInput>
+    /**
+     * Choose, which DojoApplication to update.
+     */
+    where: DojoApplicationWhereUniqueInput
+  }
+
+  /**
+   * DojoApplication updateMany
+   */
+  export type DojoApplicationUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update DojoApplications.
+     */
+    data: XOR<DojoApplicationUpdateManyMutationInput, DojoApplicationUncheckedUpdateManyInput>
+    /**
+     * Filter which DojoApplications to update
+     */
+    where?: DojoApplicationWhereInput
+    /**
+     * Limit how many DojoApplications to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * DojoApplication updateManyAndReturn
+   */
+  export type DojoApplicationUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DojoApplication
+     */
+    select?: DojoApplicationSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the DojoApplication
+     */
+    omit?: DojoApplicationOmit<ExtArgs> | null
+    /**
+     * The data used to update DojoApplications.
+     */
+    data: XOR<DojoApplicationUpdateManyMutationInput, DojoApplicationUncheckedUpdateManyInput>
+    /**
+     * Filter which DojoApplications to update
+     */
+    where?: DojoApplicationWhereInput
+    /**
+     * Limit how many DojoApplications to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * DojoApplication upsert
+   */
+  export type DojoApplicationUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DojoApplication
+     */
+    select?: DojoApplicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DojoApplication
+     */
+    omit?: DojoApplicationOmit<ExtArgs> | null
+    /**
+     * The filter to search for the DojoApplication to update in case it exists.
+     */
+    where: DojoApplicationWhereUniqueInput
+    /**
+     * In case the DojoApplication found by the `where` argument doesn't exist, create a new DojoApplication with this data.
+     */
+    create: XOR<DojoApplicationCreateInput, DojoApplicationUncheckedCreateInput>
+    /**
+     * In case the DojoApplication was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<DojoApplicationUpdateInput, DojoApplicationUncheckedUpdateInput>
+  }
+
+  /**
+   * DojoApplication delete
+   */
+  export type DojoApplicationDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DojoApplication
+     */
+    select?: DojoApplicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DojoApplication
+     */
+    omit?: DojoApplicationOmit<ExtArgs> | null
+    /**
+     * Filter which DojoApplication to delete.
+     */
+    where: DojoApplicationWhereUniqueInput
+  }
+
+  /**
+   * DojoApplication deleteMany
+   */
+  export type DojoApplicationDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which DojoApplications to delete
+     */
+    where?: DojoApplicationWhereInput
+    /**
+     * Limit how many DojoApplications to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * DojoApplication without action
+   */
+  export type DojoApplicationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DojoApplication
+     */
+    select?: DojoApplicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DojoApplication
+     */
+    omit?: DojoApplicationOmit<ExtArgs> | null
   }
 
 
@@ -24293,6 +25584,29 @@ export namespace Prisma {
   export type DojoScalarFieldEnum = (typeof DojoScalarFieldEnum)[keyof typeof DojoScalarFieldEnum]
 
 
+  export const DojoApplicationScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    dojoName: 'dojoName',
+    logoUrl: 'logoUrl',
+    email: 'email',
+    phone: 'phone',
+    contactName: 'contactName',
+    contactRole: 'contactRole',
+    address: 'address',
+    latitude: 'latitude',
+    longitude: 'longitude',
+    interiorUrls: 'interiorUrls',
+    trainers: 'trainers',
+    status: 'status',
+    paymentId: 'paymentId',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type DojoApplicationScalarFieldEnum = (typeof DojoApplicationScalarFieldEnum)[keyof typeof DojoApplicationScalarFieldEnum]
+
+
   export const MemberScalarFieldEnum: {
     id: 'id',
     fullName: 'fullName',
@@ -24544,6 +25858,13 @@ export namespace Prisma {
   export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
 
 
+  export const JsonNullValueInput: {
+    JsonNull: typeof JsonNull
+  };
+
+  export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
+
+
   export const QueryMode: {
     default: 'default',
     insensitive: 'insensitive'
@@ -24648,6 +25969,20 @@ export namespace Prisma {
    * Reference to a field of type 'Boolean'
    */
   export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+  /**
+   * Reference to a field of type 'DojoApplicationStatus'
+   */
+  export type EnumDojoApplicationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DojoApplicationStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'DojoApplicationStatus[]'
+   */
+  export type ListEnumDojoApplicationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DojoApplicationStatus[]'>
     
 
 
@@ -24937,6 +26272,120 @@ export namespace Prisma {
     headInstructorId?: UuidNullableWithAggregatesFilter<"Dojo"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Dojo"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Dojo"> | Date | string
+  }
+
+  export type DojoApplicationWhereInput = {
+    AND?: DojoApplicationWhereInput | DojoApplicationWhereInput[]
+    OR?: DojoApplicationWhereInput[]
+    NOT?: DojoApplicationWhereInput | DojoApplicationWhereInput[]
+    id?: UuidFilter<"DojoApplication"> | string
+    userId?: UuidNullableFilter<"DojoApplication"> | string | null
+    dojoName?: StringFilter<"DojoApplication"> | string
+    logoUrl?: StringNullableFilter<"DojoApplication"> | string | null
+    email?: StringFilter<"DojoApplication"> | string
+    phone?: StringFilter<"DojoApplication"> | string
+    contactName?: StringFilter<"DojoApplication"> | string
+    contactRole?: StringFilter<"DojoApplication"> | string
+    address?: StringFilter<"DojoApplication"> | string
+    latitude?: FloatNullableFilter<"DojoApplication"> | number | null
+    longitude?: FloatNullableFilter<"DojoApplication"> | number | null
+    interiorUrls?: StringNullableListFilter<"DojoApplication">
+    trainers?: JsonFilter<"DojoApplication">
+    status?: EnumDojoApplicationStatusFilter<"DojoApplication"> | $Enums.DojoApplicationStatus
+    paymentId?: StringNullableFilter<"DojoApplication"> | string | null
+    createdAt?: DateTimeFilter<"DojoApplication"> | Date | string
+    updatedAt?: DateTimeFilter<"DojoApplication"> | Date | string
+  }
+
+  export type DojoApplicationOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrderInput | SortOrder
+    dojoName?: SortOrder
+    logoUrl?: SortOrderInput | SortOrder
+    email?: SortOrder
+    phone?: SortOrder
+    contactName?: SortOrder
+    contactRole?: SortOrder
+    address?: SortOrder
+    latitude?: SortOrderInput | SortOrder
+    longitude?: SortOrderInput | SortOrder
+    interiorUrls?: SortOrder
+    trainers?: SortOrder
+    status?: SortOrder
+    paymentId?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type DojoApplicationWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: DojoApplicationWhereInput | DojoApplicationWhereInput[]
+    OR?: DojoApplicationWhereInput[]
+    NOT?: DojoApplicationWhereInput | DojoApplicationWhereInput[]
+    userId?: UuidNullableFilter<"DojoApplication"> | string | null
+    dojoName?: StringFilter<"DojoApplication"> | string
+    logoUrl?: StringNullableFilter<"DojoApplication"> | string | null
+    email?: StringFilter<"DojoApplication"> | string
+    phone?: StringFilter<"DojoApplication"> | string
+    contactName?: StringFilter<"DojoApplication"> | string
+    contactRole?: StringFilter<"DojoApplication"> | string
+    address?: StringFilter<"DojoApplication"> | string
+    latitude?: FloatNullableFilter<"DojoApplication"> | number | null
+    longitude?: FloatNullableFilter<"DojoApplication"> | number | null
+    interiorUrls?: StringNullableListFilter<"DojoApplication">
+    trainers?: JsonFilter<"DojoApplication">
+    status?: EnumDojoApplicationStatusFilter<"DojoApplication"> | $Enums.DojoApplicationStatus
+    paymentId?: StringNullableFilter<"DojoApplication"> | string | null
+    createdAt?: DateTimeFilter<"DojoApplication"> | Date | string
+    updatedAt?: DateTimeFilter<"DojoApplication"> | Date | string
+  }, "id">
+
+  export type DojoApplicationOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrderInput | SortOrder
+    dojoName?: SortOrder
+    logoUrl?: SortOrderInput | SortOrder
+    email?: SortOrder
+    phone?: SortOrder
+    contactName?: SortOrder
+    contactRole?: SortOrder
+    address?: SortOrder
+    latitude?: SortOrderInput | SortOrder
+    longitude?: SortOrderInput | SortOrder
+    interiorUrls?: SortOrder
+    trainers?: SortOrder
+    status?: SortOrder
+    paymentId?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: DojoApplicationCountOrderByAggregateInput
+    _avg?: DojoApplicationAvgOrderByAggregateInput
+    _max?: DojoApplicationMaxOrderByAggregateInput
+    _min?: DojoApplicationMinOrderByAggregateInput
+    _sum?: DojoApplicationSumOrderByAggregateInput
+  }
+
+  export type DojoApplicationScalarWhereWithAggregatesInput = {
+    AND?: DojoApplicationScalarWhereWithAggregatesInput | DojoApplicationScalarWhereWithAggregatesInput[]
+    OR?: DojoApplicationScalarWhereWithAggregatesInput[]
+    NOT?: DojoApplicationScalarWhereWithAggregatesInput | DojoApplicationScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"DojoApplication"> | string
+    userId?: UuidNullableWithAggregatesFilter<"DojoApplication"> | string | null
+    dojoName?: StringWithAggregatesFilter<"DojoApplication"> | string
+    logoUrl?: StringNullableWithAggregatesFilter<"DojoApplication"> | string | null
+    email?: StringWithAggregatesFilter<"DojoApplication"> | string
+    phone?: StringWithAggregatesFilter<"DojoApplication"> | string
+    contactName?: StringWithAggregatesFilter<"DojoApplication"> | string
+    contactRole?: StringWithAggregatesFilter<"DojoApplication"> | string
+    address?: StringWithAggregatesFilter<"DojoApplication"> | string
+    latitude?: FloatNullableWithAggregatesFilter<"DojoApplication"> | number | null
+    longitude?: FloatNullableWithAggregatesFilter<"DojoApplication"> | number | null
+    interiorUrls?: StringNullableListFilter<"DojoApplication">
+    trainers?: JsonWithAggregatesFilter<"DojoApplication">
+    status?: EnumDojoApplicationStatusWithAggregatesFilter<"DojoApplication"> | $Enums.DojoApplicationStatus
+    paymentId?: StringNullableWithAggregatesFilter<"DojoApplication"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"DojoApplication"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"DojoApplication"> | Date | string
   }
 
   export type MemberWhereInput = {
@@ -26430,6 +27879,146 @@ export namespace Prisma {
     schedule?: NullableJsonNullValueInput | InputJsonValue
     isActive?: BoolFieldUpdateOperationsInput | boolean
     headInstructorId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DojoApplicationCreateInput = {
+    id?: string
+    userId?: string | null
+    dojoName: string
+    logoUrl?: string | null
+    email: string
+    phone: string
+    contactName: string
+    contactRole: string
+    address: string
+    latitude?: number | null
+    longitude?: number | null
+    interiorUrls?: DojoApplicationCreateinteriorUrlsInput | string[]
+    trainers?: JsonNullValueInput | InputJsonValue
+    status?: $Enums.DojoApplicationStatus
+    paymentId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DojoApplicationUncheckedCreateInput = {
+    id?: string
+    userId?: string | null
+    dojoName: string
+    logoUrl?: string | null
+    email: string
+    phone: string
+    contactName: string
+    contactRole: string
+    address: string
+    latitude?: number | null
+    longitude?: number | null
+    interiorUrls?: DojoApplicationCreateinteriorUrlsInput | string[]
+    trainers?: JsonNullValueInput | InputJsonValue
+    status?: $Enums.DojoApplicationStatus
+    paymentId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DojoApplicationUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    dojoName?: StringFieldUpdateOperationsInput | string
+    logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    contactName?: StringFieldUpdateOperationsInput | string
+    contactRole?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
+    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    interiorUrls?: DojoApplicationUpdateinteriorUrlsInput | string[]
+    trainers?: JsonNullValueInput | InputJsonValue
+    status?: EnumDojoApplicationStatusFieldUpdateOperationsInput | $Enums.DojoApplicationStatus
+    paymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DojoApplicationUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    dojoName?: StringFieldUpdateOperationsInput | string
+    logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    contactName?: StringFieldUpdateOperationsInput | string
+    contactRole?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
+    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    interiorUrls?: DojoApplicationUpdateinteriorUrlsInput | string[]
+    trainers?: JsonNullValueInput | InputJsonValue
+    status?: EnumDojoApplicationStatusFieldUpdateOperationsInput | $Enums.DojoApplicationStatus
+    paymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DojoApplicationCreateManyInput = {
+    id?: string
+    userId?: string | null
+    dojoName: string
+    logoUrl?: string | null
+    email: string
+    phone: string
+    contactName: string
+    contactRole: string
+    address: string
+    latitude?: number | null
+    longitude?: number | null
+    interiorUrls?: DojoApplicationCreateinteriorUrlsInput | string[]
+    trainers?: JsonNullValueInput | InputJsonValue
+    status?: $Enums.DojoApplicationStatus
+    paymentId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DojoApplicationUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    dojoName?: StringFieldUpdateOperationsInput | string
+    logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    contactName?: StringFieldUpdateOperationsInput | string
+    contactRole?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
+    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    interiorUrls?: DojoApplicationUpdateinteriorUrlsInput | string[]
+    trainers?: JsonNullValueInput | InputJsonValue
+    status?: EnumDojoApplicationStatusFieldUpdateOperationsInput | $Enums.DojoApplicationStatus
+    paymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DojoApplicationUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    dojoName?: StringFieldUpdateOperationsInput | string
+    logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    contactName?: StringFieldUpdateOperationsInput | string
+    contactRole?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
+    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    interiorUrls?: DojoApplicationUpdateinteriorUrlsInput | string[]
+    trainers?: JsonNullValueInput | InputJsonValue
+    status?: EnumDojoApplicationStatusFieldUpdateOperationsInput | $Enums.DojoApplicationStatus
+    paymentId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -28225,6 +29814,146 @@ export namespace Prisma {
     _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
+  export type StringNullableListFilter<$PrismaModel = never> = {
+    equals?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    has?: string | StringFieldRefInput<$PrismaModel> | null
+    hasEvery?: string[] | ListStringFieldRefInput<$PrismaModel>
+    hasSome?: string[] | ListStringFieldRefInput<$PrismaModel>
+    isEmpty?: boolean
+  }
+  export type JsonFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
+  export type EnumDojoApplicationStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.DojoApplicationStatus | EnumDojoApplicationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.DojoApplicationStatus[] | ListEnumDojoApplicationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.DojoApplicationStatus[] | ListEnumDojoApplicationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumDojoApplicationStatusFilter<$PrismaModel> | $Enums.DojoApplicationStatus
+  }
+
+  export type DojoApplicationCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    dojoName?: SortOrder
+    logoUrl?: SortOrder
+    email?: SortOrder
+    phone?: SortOrder
+    contactName?: SortOrder
+    contactRole?: SortOrder
+    address?: SortOrder
+    latitude?: SortOrder
+    longitude?: SortOrder
+    interiorUrls?: SortOrder
+    trainers?: SortOrder
+    status?: SortOrder
+    paymentId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type DojoApplicationAvgOrderByAggregateInput = {
+    latitude?: SortOrder
+    longitude?: SortOrder
+  }
+
+  export type DojoApplicationMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    dojoName?: SortOrder
+    logoUrl?: SortOrder
+    email?: SortOrder
+    phone?: SortOrder
+    contactName?: SortOrder
+    contactRole?: SortOrder
+    address?: SortOrder
+    latitude?: SortOrder
+    longitude?: SortOrder
+    status?: SortOrder
+    paymentId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type DojoApplicationMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    dojoName?: SortOrder
+    logoUrl?: SortOrder
+    email?: SortOrder
+    phone?: SortOrder
+    contactName?: SortOrder
+    contactRole?: SortOrder
+    address?: SortOrder
+    latitude?: SortOrder
+    longitude?: SortOrder
+    status?: SortOrder
+    paymentId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type DojoApplicationSumOrderByAggregateInput = {
+    latitude?: SortOrder
+    longitude?: SortOrder
+  }
+  export type JsonWithAggregatesFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonWithAggregatesFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonWithAggregatesFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedJsonFilter<$PrismaModel>
+    _max?: NestedJsonFilter<$PrismaModel>
+  }
+
+  export type EnumDojoApplicationStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.DojoApplicationStatus | EnumDojoApplicationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.DojoApplicationStatus[] | ListEnumDojoApplicationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.DojoApplicationStatus[] | ListEnumDojoApplicationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumDojoApplicationStatusWithAggregatesFilter<$PrismaModel> | $Enums.DojoApplicationStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumDojoApplicationStatusFilter<$PrismaModel>
+    _max?: NestedEnumDojoApplicationStatusFilter<$PrismaModel>
+  }
+
   export type EnumMemberRoleFilter<$PrismaModel = never> = {
     equals?: $Enums.MemberRole | EnumMemberRoleFieldRefInput<$PrismaModel>
     in?: $Enums.MemberRole[] | ListEnumMemberRoleFieldRefInput<$PrismaModel>
@@ -29532,6 +31261,19 @@ export namespace Prisma {
     update?: AttendanceUpdateWithWhereUniqueWithoutDojoInput | AttendanceUpdateWithWhereUniqueWithoutDojoInput[]
     updateMany?: AttendanceUpdateManyWithWhereWithoutDojoInput | AttendanceUpdateManyWithWhereWithoutDojoInput[]
     deleteMany?: AttendanceScalarWhereInput | AttendanceScalarWhereInput[]
+  }
+
+  export type DojoApplicationCreateinteriorUrlsInput = {
+    set: string[]
+  }
+
+  export type DojoApplicationUpdateinteriorUrlsInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type EnumDojoApplicationStatusFieldUpdateOperationsInput = {
+    set?: $Enums.DojoApplicationStatus
   }
 
   export type DojoCreateNestedOneWithoutMembersInput = {
@@ -31039,6 +32781,46 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedStringNullableFilter<$PrismaModel>
     _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
+  export type NestedEnumDojoApplicationStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.DojoApplicationStatus | EnumDojoApplicationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.DojoApplicationStatus[] | ListEnumDojoApplicationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.DojoApplicationStatus[] | ListEnumDojoApplicationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumDojoApplicationStatusFilter<$PrismaModel> | $Enums.DojoApplicationStatus
+  }
+  export type NestedJsonFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<NestedJsonFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonFilterBase<$PrismaModel>>, 'path'>>,
+        Required<NestedJsonFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<NestedJsonFilterBase<$PrismaModel>>, 'path'>>
+
+  export type NestedJsonFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
+  export type NestedEnumDojoApplicationStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.DojoApplicationStatus | EnumDojoApplicationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.DojoApplicationStatus[] | ListEnumDojoApplicationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.DojoApplicationStatus[] | ListEnumDojoApplicationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumDojoApplicationStatusWithAggregatesFilter<$PrismaModel> | $Enums.DojoApplicationStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumDojoApplicationStatusFilter<$PrismaModel>
+    _max?: NestedEnumDojoApplicationStatusFilter<$PrismaModel>
   }
 
   export type NestedEnumMemberRoleFilter<$PrismaModel = never> = {

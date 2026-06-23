@@ -147,6 +147,26 @@ exports.Prisma.DojoScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.DojoApplicationScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  dojoName: 'dojoName',
+  logoUrl: 'logoUrl',
+  email: 'email',
+  phone: 'phone',
+  contactName: 'contactName',
+  contactRole: 'contactRole',
+  address: 'address',
+  latitude: 'latitude',
+  longitude: 'longitude',
+  interiorUrls: 'interiorUrls',
+  trainers: 'trainers',
+  status: 'status',
+  paymentId: 'paymentId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.MemberScalarFieldEnum = {
   id: 'id',
   fullName: 'fullName',
@@ -344,6 +364,10 @@ exports.Prisma.NullableJsonNullValueInput = {
   JsonNull: Prisma.JsonNull
 };
 
+exports.Prisma.JsonNullValueInput = {
+  JsonNull: Prisma.JsonNull
+};
+
 exports.Prisma.QueryMode = {
   default: 'default',
   insensitive: 'insensitive'
@@ -359,6 +383,13 @@ exports.Prisma.JsonNullValueFilter = {
   JsonNull: Prisma.JsonNull,
   AnyNull: Prisma.AnyNull
 };
+exports.DojoApplicationStatus = exports.$Enums.DojoApplicationStatus = {
+  PENDING_PAYMENT: 'PENDING_PAYMENT',
+  PAID: 'PAID',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
+};
+
 exports.MemberRole = exports.$Enums.MemberRole = {
   STUDENT: 'STUDENT',
   INSTRUCTOR: 'INSTRUCTOR',
@@ -404,6 +435,7 @@ exports.PaymentStatus = exports.$Enums.PaymentStatus = {
 exports.Prisma.ModelName = {
   BeltRank: 'BeltRank',
   Dojo: 'Dojo',
+  DojoApplication: 'DojoApplication',
   Member: 'Member',
   Admin: 'Admin',
   Instructor: 'Instructor',

@@ -1,10 +1,23 @@
 "use client";
 
 import { motion, AnimatePresence } from "motion/react";
+import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
+
+const DojoLocationPicker = dynamic(
+    () => import("@/components/dojo-location-picker"),
+    {
+        ssr: false,
+        loading: () => (
+            <div className="w-full h-80 rounded-sm border border-zinc-200 bg-zinc-50 flex items-center justify-center text-xs tracking-widest uppercase font-bold text-zinc-400">
+                Loading map…
+            </div>
+        ),
+    }
+);
 import {
     ArrowLeft,
     ArrowRight,
@@ -70,15 +83,48 @@ const initialState: FormState = {
     acceptedTerms: false,
 };
 
+const DRAFT_KEY = "jka.enlistDojo.draft";
+
 export default function EnlistDojoSignupPage() {
     const router = useRouter();
     const [step, setStep] = useState(0);
     const [form, setForm] = useState<FormState>(initialState);
     const [error, setError] = useState<string | null>(null);
     const [isPending, startTransition] = useTransition();
+    const [hydrated, setHydrated] = useState(false);
+
+    // Restore draft from sessionStorage on mount. Client-only, runs once
+    // post-hydration to avoid SSR mismatch — the cascading render is intentional.
+    useEffect(() => {
+        try {
+            const raw = sessionStorage.getItem(DRAFT_KEY);
+            if (raw) {
+                const parsed = JSON.parse(raw) as Partial<FormState>;
+                // eslint-disable-next-line react-hooks/set-state-in-effect
+                setForm((f) => ({ ...f, ...parsed }));
+            }
+        } catch {
+            /* ignore corrupted draft */
+        }
+        setHydrated(true);
+    }, []);
+
+    // Persist draft on every change after hydration.
+    useEffect(() => {
+        if (!hydrated) return;
+        try {
+            sessionStorage.setItem(DRAFT_KEY, JSON.stringify(form));
+        } catch {
+            /* storage full or disabled — ignore */
+        }
+    }, [form, hydrated]);
 
     function update<K extends keyof FormState>(key: K, value: FormState[K]) {
         setForm((f) => ({ ...f, [key]: value }));
+    }
+
+    function setLatLng(lat: string, lng: string) {
+        setForm((f) => ({ ...f, latitude: lat, longitude: lng }));
     }
 
     function updateTrainer(i: number, key: keyof Trainer, value: string) {
@@ -117,6 +163,8 @@ export default function EnlistDojoSignupPage() {
         if (s === 2) {
             if (!form.address.trim())
                 return "Please enter your dojo's address.";
+            if (!form.latitude || !form.longitude)
+                return "Please pin your location on the map.";
         }
         if (s === 4) {
             const valid = form.trainers.some(
@@ -155,18 +203,15 @@ export default function EnlistDojoSignupPage() {
         }
         setError(null);
         startTransition(async () => {
+            // Persist final draft so /verify, /set-password, /payment can read it.
+            try {
+                sessionStorage.setItem(DRAFT_KEY, JSON.stringify(form));
+            } catch {
+                /* ignore */
+            }
             const result = await submitDojoEnlistment({
                 dojoName: form.dojoName,
                 email: form.email,
-                phone: form.phone,
-                contactName: form.contactName,
-                contactRole: form.contactRole,
-                address: form.address,
-                latitude: form.latitude,
-                longitude: form.longitude,
-                trainers: form.trainers.filter(
-                    (t) => t.name.trim() && t.rank.trim()
-                ),
             });
             if (result?.error) {
                 setError(result.error);
@@ -287,6 +332,7 @@ export default function EnlistDojoSignupPage() {
                                 <LocationStep
                                     form={form}
                                     update={update}
+                                    setLatLng={setLatLng}
                                 />
                             )}
                             {step === 3 && (
@@ -517,9 +563,11 @@ function ContactStep({
 function LocationStep({
     form,
     update,
+    setLatLng,
 }: {
     form: FormState;
     update: <K extends keyof FormState>(k: K, v: FormState[K]) => void;
+    setLatLng: (lat: string, lng: string) => void;
 }) {
     return (
         <div className="space-y-6">
@@ -528,7 +576,8 @@ function LocationStep({
                     Where do you train?
                 </h2>
                 <p className="text-zinc-500 text-sm">
-                    Help students find you on the public branch locator.
+                    Drop a pin on the map and confirm your address so students
+                    can find you.
                 </p>
             </div>
 
@@ -540,6 +589,15 @@ function LocationStep({
                     placeholder="House / Road / Area, City, Postal code"
                     rows={3}
                     className={inputClass()}
+                />
+            </div>
+
+            <div>
+                <Label>Pin location on map</Label>
+                <DojoLocationPicker
+                    latitude={form.latitude}
+                    longitude={form.longitude}
+                    onChange={setLatLng}
                 />
             </div>
 
@@ -564,12 +622,6 @@ function LocationStep({
                         className={inputClass()}
                     />
                 </div>
-            </div>
-
-            <div className="bg-zinc-50 border border-zinc-200 rounded-sm p-4 text-xs text-zinc-500">
-                You can grab coordinates from Google Maps — right-click the
-                pin → &ldquo;What&rsquo;s here?&rdquo;. We&apos;ll switch this
-                to an interactive map picker soon.
             </div>
         </div>
     );

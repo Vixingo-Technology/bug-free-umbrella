@@ -143,7 +143,7 @@ export default function EnlistDojoPage() {
                             <p className="text-xs tracking-[0.4em] uppercase text-accent-red font-bold mb-4">
                                 Perks of affiliation
                             </p>
-                            <h2 className="font-karate text-3xl md:text-4xl font-bold text-zinc-900 uppercase tracking-wider mb-6">
+                            <h2 className="font-karate text-3xl md:text-4xl font-bold text-zinc-900 uppercase tracking-wider leading-[1.15] mb-6">
                                 Why affiliate{" "}
                                 <span className="text-accent-red italic lowercase font-serif font-normal">
                                     with us
@@ -196,7 +196,7 @@ export default function EnlistDojoPage() {
                         <p className="text-xs tracking-[0.4em] uppercase text-accent-red font-bold mb-4">
                             Digital Portal
                         </p>
-                        <h2 className="font-karate text-3xl md:text-4xl font-bold text-zinc-900 uppercase tracking-wider mb-6">
+                        <h2 className="font-karate text-3xl md:text-4xl font-bold text-zinc-900 uppercase tracking-wider leading-[1.15] mb-6">
                             Run your dojo from a{" "}
                             <span className="text-accent-red italic lowercase font-serif font-normal">
                                 single dashboard
@@ -234,7 +234,7 @@ export default function EnlistDojoPage() {
                             <p className="text-xs tracking-[0.4em] uppercase text-accent-red font-bold mb-4">
                                 Eligibility
                             </p>
-                            <h2 className="font-karate text-3xl md:text-4xl font-bold text-zinc-900 uppercase tracking-wider mb-6">
+                            <h2 className="font-karate text-3xl md:text-4xl font-bold text-zinc-900 uppercase tracking-wider leading-[1.15] mb-6">
                                 Requirements{" "}
                                 <span className="text-accent-red italic lowercase font-serif font-normal">
                                     to enlist
@@ -267,7 +267,7 @@ export default function EnlistDojoPage() {
                         <p className="text-xs tracking-[0.4em] uppercase text-accent-red font-bold mb-4">
                             Fees
                         </p>
-                        <h2 className="font-karate text-3xl md:text-4xl font-bold text-zinc-900 uppercase tracking-wider mb-6">
+                        <h2 className="font-karate text-3xl md:text-4xl font-bold text-zinc-900 uppercase tracking-wider leading-[1.15] mb-6">
                             Affiliation{" "}
                             <span className="text-accent-red italic lowercase font-serif font-normal">
                                 & dues
@@ -332,7 +332,7 @@ export default function EnlistDojoPage() {
             {/* Final CTA */}
             <section className="py-24 bg-bg-deep">
                 <div className="max-w-4xl mx-auto px-6 lg:px-12 text-center">
-                    <h2 className="font-karate text-3xl md:text-5xl font-bold text-zinc-900 uppercase tracking-wider mb-6">
+                    <h2 className="font-karate text-3xl md:text-5xl font-bold text-zinc-900 uppercase tracking-wider leading-[1.15] mb-6">
                         Ready to{" "}
                         <span className="text-accent-red italic lowercase font-serif font-normal">
                             enlist?

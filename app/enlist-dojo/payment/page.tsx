@@ -15,7 +15,18 @@ import {
     Wallet,
 } from "lucide-react";
 import Logo from "@/assets/jka_logo.svg";
-import { initiateDojoEnlistmentPayment } from "@/app/actions/enlist-dojo";
+import {
+    commitDojoEnlistment,
+    initiateDojoEnlistmentPayment,
+    type DojoEnlistmentInput,
+} from "@/app/actions/enlist-dojo";
+
+const DRAFT_KEY = "jka.enlistDojo.draft";
+
+type DraftShape = DojoEnlistmentInput & {
+    logoName?: string;
+    interiorNames?: string[];
+};
 
 const ENLISTMENT_FEE_BDT = 10000;
 
@@ -42,14 +53,54 @@ export default function EnlistDojoPaymentPage() {
     function handlePay() {
         setError(null);
         startTransition(async () => {
-            const result = await initiateDojoEnlistmentPayment(email);
-            if (result?.error) {
-                setError(result.error);
+            const init = await initiateDojoEnlistmentPayment(email);
+            if (init?.error) {
+                setError(init.error);
                 return;
             }
-            if (result?.redirectUrl) {
-                window.location.href = result.redirectUrl;
+            if (init?.redirectUrl) {
+                window.location.href = init.redirectUrl;
                 return;
+            }
+
+            // Stub gateway success — read the draft from sessionStorage
+            // and commit the enlistment record to Postgres.
+            let draft: DraftShape | null = null;
+            try {
+                const raw = sessionStorage.getItem(DRAFT_KEY);
+                if (raw) draft = JSON.parse(raw) as DraftShape;
+            } catch {
+                /* ignore */
+            }
+            if (!draft) {
+                setError(
+                    "Your enlistment draft was lost. Please restart from the beginning."
+                );
+                return;
+            }
+            const commit = await commitDojoEnlistment({
+                dojoName: draft.dojoName,
+                logoUrl: undefined,
+                email: draft.email,
+                phone: draft.phone,
+                contactName: draft.contactName,
+                contactRole: draft.contactRole,
+                address: draft.address,
+                latitude: draft.latitude,
+                longitude: draft.longitude,
+                interiorUrls: [],
+                trainers: (draft.trainers ?? []).filter(
+                    (t) => t.name?.trim() && t.rank?.trim()
+                ),
+            });
+            if (commit?.error) {
+                setError(commit.error);
+                return;
+            }
+            try {
+                sessionStorage.removeItem(DRAFT_KEY);
+            } catch {
+                /* ignore */
             }
             router.push("/dojo/dashboard?enlistment=success");
         });
@@ -62,7 +113,7 @@ export default function EnlistDojoPaymentPage() {
 
             <div className="w-full max-w-2xl mx-auto px-6 relative z-10">
                 <Link
-                    href={`/enlist-dojo/verify?email=${encodeURIComponent(
+                    href={`/enlist-dojo/set-password?email=${encodeURIComponent(
                         email
                     )}`}
                     className="inline-flex items-center gap-2 text-xs font-bold tracking-widest uppercase text-zinc-500 hover:text-accent-red transition-colors mb-8 group"
