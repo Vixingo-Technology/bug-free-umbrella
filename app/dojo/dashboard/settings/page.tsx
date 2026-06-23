@@ -1,20 +1,53 @@
 import type { Metadata } from "next";
 import { Save } from "lucide-react";
 import DojoPageHeader from "@/components/dojo/page-header";
-import { requireDojoRole } from "@/lib/dojo-roles";
+import { requireDojoRole } from "@/lib/dojo-session";
+import { prisma } from "@/lib/prisma";
 
 export const metadata: Metadata = {
     title: "Dojo settings — Dojo Dashboard",
 };
 
 export default async function SettingsPage() {
-    await requireDojoRole("DOJO_MANAGER");
+    const session = await requireDojoRole("DOJO_MANAGER");
+
+    const dojo = session.dojo
+        ? await prisma.dojo.findUnique({
+              where: { id: session.dojo.id },
+              include: {
+                  headInstructor: {
+                      select: { id: true, fullName: true, currentRank: true },
+                  },
+                  instructors: {
+                      where: { isActive: true },
+                      include: {
+                          member: {
+                              select: {
+                                  id: true,
+                                  fullName: true,
+                                  currentRank: true,
+                              },
+                          },
+                      },
+                  },
+              },
+          })
+        : null;
+
+    const memberCount = dojo
+        ? await prisma.member.count({ where: { dojoId: dojo.id } })
+        : null;
+
     return (
         <>
             <DojoPageHeader
                 eyebrow="Manager"
                 title="Dojo settings"
-                description="Update your dojo's public profile, contact details, and trainer roster."
+                description={
+                    dojo
+                        ? `Editing the public profile of ${dojo.name}.`
+                        : "Sample profile shown until your dojo is approved."
+                }
                 actions={
                     <button
                         type="button"
@@ -28,41 +61,93 @@ export default async function SettingsPage() {
 
             <div className="grid lg:grid-cols-2 gap-6">
                 <Card title="Public profile">
-                    <Field label="Dojo name" defaultValue="Shotokan Dhanmondi Dojo" />
                     <Field
-                        label="Tagline"
-                        defaultValue="Traditional Shotokan since 2019 — all ages welcome"
+                        label="Dojo name"
+                        defaultValue={dojo?.name ?? "Shotokan Dhanmondi Dojo"}
                     />
                     <Field
-                        label="Public phone"
-                        defaultValue="+880 1700 000000"
+                        label="Phone"
+                        defaultValue={dojo?.phone ?? "+880 1700 000000"}
+                    />
+                    <Field
+                        label="Public email"
+                        defaultValue={dojo?.email ?? "dojo@example.com"}
                     />
                 </Card>
 
                 <Card title="Location">
                     <Field
                         label="Address"
-                        defaultValue="House 12, Road 7, Dhanmondi, Dhaka"
+                        defaultValue={
+                            dojo?.address ??
+                            "House 12, Road 7, Dhanmondi, Dhaka"
+                        }
                     />
                     <div className="grid grid-cols-2 gap-3">
-                        <Field label="Latitude" defaultValue="23.7461" />
-                        <Field label="Longitude" defaultValue="90.3742" />
+                        <Field
+                            label="Latitude"
+                            defaultValue={dojo?.latitude?.toString() ?? "23.7461"}
+                        />
+                        <Field
+                            label="Longitude"
+                            defaultValue={dojo?.longitude?.toString() ?? "90.3742"}
+                        />
                     </div>
                 </Card>
 
-                <Card title="Trainers">
-                    <ul className="divide-y divide-zinc-200">
-                        <Trainer name="Sensei Karim Ahmed" rank="4th Dan" role="Head Instructor" />
-                        <Trainer name="Sempai Nadia Hassan" rank="2nd Dan" role="Senior Instructor" />
-                        <Trainer name="Sempai Rifat Islam" rank="1st Dan" role="Assistant Instructor" />
-                    </ul>
+                <Card title="Head instructor">
+                    {dojo?.headInstructor ? (
+                        <ul className="divide-y divide-zinc-200">
+                            <Trainer
+                                name={dojo.headInstructor.fullName}
+                                rank={dojo.headInstructor.currentRank}
+                                role="Head Instructor"
+                            />
+                            {dojo.instructors
+                                .filter(
+                                    (i) =>
+                                        i.member.id !==
+                                        dojo.headInstructor?.id
+                                )
+                                .map((i) => (
+                                    <Trainer
+                                        key={i.id}
+                                        name={i.member.fullName}
+                                        rank={i.member.currentRank}
+                                        role="Instructor"
+                                    />
+                                ))}
+                        </ul>
+                    ) : (
+                        <ul className="divide-y divide-zinc-200">
+                            <Trainer
+                                name="Sensei Karim Ahmed"
+                                rank="4th Dan"
+                                role="Head Instructor"
+                            />
+                            <Trainer
+                                name="Sempai Nadia Hassan"
+                                rank="2nd Dan"
+                                role="Senior Instructor"
+                            />
+                        </ul>
+                    )}
                 </Card>
 
-                <Card title="Branding">
-                    <Field label="Dojo logo URL" defaultValue="(uploaded · jka-cdn/dojos/shotokan-dhanmondi.png)" />
+                <Card title="Activity">
                     <Field
-                        label="Interior photos"
-                        defaultValue="4 photos uploaded"
+                        label="Status"
+                        defaultValue={
+                            dojo?.isActive === false ? "Inactive" : "Active"
+                        }
+                    />
+                    <Field
+                        label="Members enrolled"
+                        defaultValue={
+                            memberCount !== null
+                                ? `${memberCount} members`
+                                : "48 members"
+                        }
                     />
                 </Card>
             </div>

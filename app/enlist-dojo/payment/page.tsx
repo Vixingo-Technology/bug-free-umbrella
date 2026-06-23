@@ -4,7 +4,7 @@ import { motion } from "motion/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState, useTransition } from "react";
+import { Suspense, useState, useTransition } from "react";
 import {
     ArrowLeft,
     ArrowRight,
@@ -42,6 +42,14 @@ const methods = [
 ];
 
 export default function EnlistDojoPaymentPage() {
+    return (
+        <Suspense fallback={null}>
+            <PaymentContent />
+        </Suspense>
+    );
+}
+
+function PaymentContent() {
     const router = useRouter();
     const params = useSearchParams();
     const email = params.get("email") ?? "";

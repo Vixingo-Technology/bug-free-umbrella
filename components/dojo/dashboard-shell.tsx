@@ -20,16 +20,20 @@ import {
     type DojoNavItem,
 } from "@/lib/dojo-nav";
 
+type ShellSession = {
+    userId: string;
+    email: string;
+    fullName: string;
+    role: DojoRole;
+    realRole: DojoRole;
+    isPreviewing: boolean;
+    pendingApproval: boolean;
+    dojoName: string | null;
+};
+
 type Props = {
     children: React.ReactNode;
-    session: {
-        userId: string;
-        email: string;
-        fullName: string;
-        role: DojoRole;
-        realRole: DojoRole;
-        isPreviewing: boolean;
-    };
+    session: ShellSession;
 };
 
 const ROLE_RANK: Record<DojoRole, number> = {
@@ -170,7 +174,7 @@ export default function DojoDashboardShell({ children, session }: Props) {
                         </button>
                         <div className="hidden sm:flex flex-col leading-tight">
                             <span className="text-xs tracking-widest uppercase font-bold text-zinc-400">
-                                Signed in as
+                                {session.dojoName ?? "Awaiting approval"}
                             </span>
                             <span className="text-sm font-semibold text-zinc-900">
                                 {session.fullName}{" "}
@@ -195,6 +199,25 @@ export default function DojoDashboardShell({ children, session }: Props) {
                 </header>
 
                 <main className="flex-1 px-4 sm:px-6 lg:px-10 py-8 max-w-7xl w-full mx-auto">
+                    {session.pendingApproval && (
+                        <div className="mb-6 rounded-sm border border-amber-200 bg-amber-50 text-amber-900 p-4 flex items-start gap-3">
+                            <div className="w-9 h-9 rounded-full bg-amber-500 text-white flex items-center justify-center shrink-0 text-xs font-bold">
+                                !
+                            </div>
+                            <div className="text-sm leading-relaxed">
+                                <p className="font-semibold mb-0.5">
+                                    Your enlistment is awaiting JKA review
+                                </p>
+                                <p>
+                                    Federation staff are verifying your
+                                    application. The dashboard is unlocked
+                                    with sample data until your dojo is
+                                    approved — usually within 1–2 working
+                                    days.
+                                </p>
+                            </div>
+                        </div>
+                    )}
                     {children}
                 </main>
             </div>

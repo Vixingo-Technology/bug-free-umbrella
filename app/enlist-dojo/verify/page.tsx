@@ -4,7 +4,7 @@ import { motion } from "motion/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useRef, useState, useTransition } from "react";
+import { Suspense, useRef, useState, useTransition } from "react";
 import { ArrowLeft, ArrowRight, Loader2, Mail } from "lucide-react";
 import Logo from "@/assets/jka_logo.svg";
 import { resendDojoOtp, verifyDojoOtp } from "@/app/actions/enlist-dojo";
@@ -12,6 +12,14 @@ import { resendDojoOtp, verifyDojoOtp } from "@/app/actions/enlist-dojo";
 const OTP_LENGTH = 6;
 
 export default function EnlistDojoVerifyPage() {
+    return (
+        <Suspense fallback={null}>
+            <VerifyContent />
+        </Suspense>
+    );
+}
+
+function VerifyContent() {
     const router = useRouter();
     const params = useSearchParams();
     const email = params.get("email") ?? "";

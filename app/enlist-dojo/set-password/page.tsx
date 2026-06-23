@@ -4,7 +4,7 @@ import { motion } from "motion/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState, useTransition } from "react";
+import { Suspense, useState, useTransition } from "react";
 import {
     ArrowLeft,
     ArrowRight,
@@ -18,6 +18,14 @@ import Logo from "@/assets/jka_logo.svg";
 import { setDojoOwnerPassword } from "@/app/actions/enlist-dojo";
 
 export default function EnlistDojoSetPasswordPage() {
+    return (
+        <Suspense fallback={null}>
+            <SetPasswordContent />
+        </Suspense>
+    );
+}
+
+function SetPasswordContent() {
     const router = useRouter();
     const params = useSearchParams();
     const email = params.get("email") ?? "";

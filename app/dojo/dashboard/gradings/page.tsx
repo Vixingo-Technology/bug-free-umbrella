@@ -10,7 +10,9 @@ import {
     XCircle,
 } from "lucide-react";
 import DojoPageHeader from "@/components/dojo/page-header";
-import { hasAtLeast, requireDojoRole, ROLE_LABEL } from "@/lib/dojo-roles";
+import { hasAtLeast, ROLE_LABEL } from "@/lib/dojo-roles";
+import { requireDojoRole } from "@/lib/dojo-session";
+import { prisma } from "@/lib/prisma";
 
 export const metadata: Metadata = {
     title: "Belt tests — Dojo Dashboard",
@@ -29,7 +31,7 @@ type Candidate = {
     note?: string;
 };
 
-const CANDIDATES: Candidate[] = [
+const SAMPLE: Candidate[] = [
     {
         id: "1",
         name: "Tahmid Rahman",
@@ -56,17 +58,7 @@ const CANDIDATES: Candidate[] = [
         appliedOn: "Jun 12",
         stage: "QUALIFIED",
         paymentStatus: "DUE",
-        note: "Tested 22 Jun. Strong kihon. Owes ৳ 1,200 in dues.",
-    },
-    {
-        id: "4",
-        name: "Sumaiya Chowdhury",
-        currentRank: "4th Kyu · Purple Stripe",
-        targetRank: "3rd Kyu · Brown",
-        appliedOn: "Jun 12",
-        stage: "QUALIFIED",
-        paymentStatus: "PAID",
-        note: "Tested 22 Jun. Clean Heian Godan.",
+        note: "Tested 22 Jun. Owes ৳ 1,200 in dues.",
     },
     {
         id: "5",
@@ -78,26 +70,20 @@ const CANDIDATES: Candidate[] = [
         paymentStatus: "PAID",
         note: "Verified by Manager. Awaiting Dojo Head submission.",
     },
-    {
-        id: "6",
-        name: "Priya Akter",
-        currentRank: "1st Kyu · Brown",
-        targetRank: "Shodan · Black",
-        appliedOn: "May 28",
-        stage: "SUBMITTED",
-        paymentStatus: "PAID",
-        note: "Sent to JKA HQ on 20 Jun. Certificate ETA 2 weeks.",
-    },
 ];
 
 export default async function GradingsPage() {
     const session = await requireDojoRole("DOJO_INSTRUCTOR");
     const role = session.role;
 
-    const applied = CANDIDATES.filter((c) => c.stage === "APPLIED");
-    const qualified = CANDIDATES.filter((c) => c.stage === "QUALIFIED");
-    const verified = CANDIDATES.filter((c) => c.stage === "VERIFIED");
-    const submitted = CANDIDATES.filter((c) => c.stage === "SUBMITTED");
+    const candidates = session.dojo
+        ? await loadRealCandidates(session.dojo.id)
+        : SAMPLE;
+
+    const applied = candidates.filter((c) => c.stage === "APPLIED");
+    const qualified = candidates.filter((c) => c.stage === "QUALIFIED");
+    const verified = candidates.filter((c) => c.stage === "VERIFIED");
+    const submitted = candidates.filter((c) => c.stage === "SUBMITTED");
 
     return (
         <>
@@ -107,7 +93,7 @@ export default async function GradingsPage() {
                 description={`Track every candidate from application to JKA certificate. You're acting as ${ROLE_LABEL[role]}.`}
                 actions={
                     <span className="text-xs tracking-widest uppercase font-bold text-zinc-500">
-                        {CANDIDATES.length} candidates in pipeline
+                        {candidates.length} candidates in pipeline
                     </span>
                 }
             />
@@ -132,7 +118,10 @@ export default async function GradingsPage() {
                                         <Btn icon={<CalendarPlus size={14} />}>
                                             Schedule test
                                         </Btn>
-                                        <Btn variant="ghost" icon={<XCircle size={14} />}>
+                                        <Btn
+                                            variant="ghost"
+                                            icon={<XCircle size={14} />}
+                                        >
                                             Decline
                                         </Btn>
                                     </div>
@@ -169,7 +158,9 @@ export default async function GradingsPage() {
                                         )}
                                         <Btn
                                             icon={<CheckCircle2 size={14} />}
-                                            disabled={c.paymentStatus !== "PAID"}
+                                            disabled={
+                                                c.paymentStatus !== "PAID"
+                                            }
                                         >
                                             Mark verified
                                         </Btn>
@@ -237,6 +228,36 @@ export default async function GradingsPage() {
             </Stage>
         </>
     );
+}
+
+async function loadRealCandidates(dojoId: string): Promise<Candidate[]> {
+    // Only the "Applied" stage maps cleanly to the current schema. The
+    // qualified/verified/submitted stages need a workflow table — until that
+    // exists they read empty.
+    const apps = await prisma.gradingApplication.findMany({
+        where: {
+            status: "SUBMITTED",
+            member: { dojoId },
+        },
+        orderBy: { appliedAt: "desc" },
+        include: {
+            member: { select: { fullName: true, currentRank: true } },
+            targetRank: { select: { name: true } },
+        },
+    });
+
+    return apps.map((a) => ({
+        id: a.id,
+        name: a.member.fullName,
+        currentRank: a.member.currentRank,
+        targetRank: a.targetRank?.name ?? "—",
+        appliedOn: a.appliedAt.toLocaleDateString(undefined, {
+            day: "numeric",
+            month: "short",
+        }),
+        stage: "APPLIED" as const,
+        paymentStatus: "PAID" as const,
+    }));
 }
 
 function Stage({

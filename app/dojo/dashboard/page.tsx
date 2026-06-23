@@ -12,7 +12,9 @@ import {
     Users,
 } from "lucide-react";
 import DojoPageHeader from "@/components/dojo/page-header";
-import { hasAtLeast, requireDojoRole, ROLE_LABEL } from "@/lib/dojo-roles";
+import { hasAtLeast, ROLE_LABEL } from "@/lib/dojo-roles";
+import { requireDojoRole } from "@/lib/dojo-session";
+import { prisma } from "@/lib/prisma";
 
 export const metadata: Metadata = {
     title: "Dojo Dashboard — JKA Bangladesh",
@@ -22,6 +24,8 @@ type SearchParams = Promise<{
     enlistment?: string;
     denied?: string;
 }>;
+
+const WEEK_MS = 7 * 24 * 60 * 60 * 1000;
 
 export default async function DojoOverviewPage({
     searchParams,
@@ -33,6 +37,8 @@ export default async function DojoOverviewPage({
     const showWelcome = params.enlistment === "success";
     const showDenied = params.denied === "1";
 
+    const stats = await loadStats(session.dojo?.id ?? null);
+
     return (
         <>
             {showWelcome && (
@@ -40,7 +46,7 @@ export default async function DojoOverviewPage({
                     tone="success"
                     icon={<PartyPopper size={20} />}
                     title="Welcome to JKA Bangladesh"
-                    body="Your dojo enlistment is complete. Federation staff will email your official affiliation certificate within two working days."
+                    body="Your dojo enlistment is complete. Federation staff will review your application within two working days."
                 />
             )}
             {showDenied && (
@@ -55,39 +61,49 @@ export default async function DojoOverviewPage({
             <DojoPageHeader
                 eyebrow="Overview"
                 title={`Welcome back, ${firstName(session.fullName)}`}
-                description={`You're signed in as ${ROLE_LABEL[session.role]}. Here is what's happening at your dojo today.`}
+                description={`You're signed in as ${ROLE_LABEL[session.role]}${
+                    session.dojo ? ` at ${session.dojo.name}` : ""
+                }.`}
             />
 
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
                 <StatCard
                     label="Active students"
-                    value="48"
-                    sub="+3 this month"
+                    value={stats.activeStudents.toString()}
+                    sub={
+                        stats.recentJoins > 0
+                            ? `+${stats.recentJoins} this month`
+                            : "All-time roster"
+                    }
                     icon={Users}
                 />
                 <StatCard
                     label="Attendance this week"
-                    value="86%"
-                    sub="across 4 classes"
+                    value={
+                        stats.weeklyAttendanceRate != null
+                            ? `${stats.weeklyAttendanceRate}%`
+                            : "—"
+                    }
+                    sub={`${stats.weeklyCheckins} check-ins`}
                     icon={Activity}
+                />
+                <StatCard
+                    label="Belt tests pending"
+                    value={stats.beltTestsPending.toString()}
+                    sub="In federation pipeline"
+                    icon={GraduationCap}
                 />
                 <StatCard
                     label="Next class"
                     value="Today · 6 PM"
-                    sub="Junior kihon"
+                    sub="Set in Schedule"
                     icon={CalendarClock}
-                />
-                <StatCard
-                    label="Belt tests in queue"
-                    value="7"
-                    sub="3 pending review"
-                    icon={GraduationCap}
                 />
             </div>
 
             <div className="grid lg:grid-cols-3 gap-6">
                 <Card title="Belt test pipeline" className="lg:col-span-2">
-                    <BeltPipelinePreview roleAccess={session.role} />
+                    <BeltPipelinePreview pending={stats.beltTestsPending} />
                 </Card>
                 <Card title="Quick actions">
                     <QuickActions role={session.role} />
@@ -98,19 +114,19 @@ export default async function DojoOverviewPage({
                 <Card title="Financial snapshot" className="mt-6">
                     <div className="grid sm:grid-cols-3 gap-4">
                         <KV
-                            label="Dues collected (Jun)"
-                            value="৳ 1,42,500"
-                            sub="32 of 48 paid"
+                            label="Active members"
+                            value={stats.activeStudents.toString()}
+                            sub={`${stats.expiringSoon} expiring within 30 days`}
                         />
                         <KV
-                            label="Pending renewals"
-                            value="6 members"
-                            sub="3 expired"
+                            label="Expired memberships"
+                            value={stats.expired.toString()}
+                            sub="Renew to keep training"
                         />
                         <KV
-                            label="Shop revenue"
-                            value="৳ 18,300"
-                            sub="this month"
+                            label="Pending grading applications"
+                            value={stats.beltTestsPending.toString()}
+                            sub="From real data"
                         />
                     </div>
                 </Card>
@@ -134,6 +150,89 @@ export default async function DojoOverviewPage({
             )}
         </>
     );
+}
+
+type Stats = {
+    activeStudents: number;
+    recentJoins: number;
+    weeklyAttendanceRate: number | null;
+    weeklyCheckins: number;
+    beltTestsPending: number;
+    expiringSoon: number;
+    expired: number;
+};
+
+async function loadStats(dojoId: string | null): Promise<Stats> {
+    if (!dojoId) {
+        // Sample numbers for the pending-approval state.
+        return {
+            activeStudents: 48,
+            recentJoins: 3,
+            weeklyAttendanceRate: 86,
+            weeklyCheckins: 140,
+            beltTestsPending: 7,
+            expiringSoon: 6,
+            expired: 3,
+        };
+    }
+
+    const weekAgo = new Date(Date.now() - WEEK_MS);
+    const monthAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+    const in30Days = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
+    const today = new Date();
+
+    const [
+        activeStudents,
+        recentJoins,
+        weeklyCheckins,
+        weeklyPresent,
+        beltTestsPending,
+        expiringSoon,
+        expired,
+    ] = await Promise.all([
+        prisma.member.count({
+            where: { dojoId, isActive: true },
+        }),
+        prisma.member.count({
+            where: { dojoId, joinDate: { gte: monthAgo } },
+        }),
+        prisma.attendance.count({
+            where: { dojoId, date: { gte: weekAgo } },
+        }),
+        prisma.attendance.count({
+            where: { dojoId, date: { gte: weekAgo }, present: true },
+        }),
+        prisma.gradingApplication.count({
+            where: {
+                status: "SUBMITTED",
+                member: { dojoId },
+            },
+        }),
+        prisma.member.count({
+            where: {
+                dojoId,
+                expiryDate: { gte: today, lte: in30Days },
+            },
+        }),
+        prisma.member.count({
+            where: { dojoId, expiryDate: { lt: today } },
+        }),
+    ]);
+
+    const rate =
+        weeklyCheckins > 0
+            ? Math.round((weeklyPresent / weeklyCheckins) * 100)
+            : null;
+
+    return {
+        activeStudents,
+        recentJoins,
+        weeklyAttendanceRate: rate,
+        weeklyCheckins,
+        beltTestsPending,
+        expiringSoon,
+        expired,
+    };
 }
 
 function Banner({
@@ -242,29 +341,29 @@ function KV({
     );
 }
 
-function BeltPipelinePreview({ roleAccess }: { roleAccess: string }) {
+function BeltPipelinePreview({ pending }: { pending: number }) {
     const stages = [
         {
             label: "Applied",
-            count: 4,
+            count: pending,
             sub: "Awaiting test schedule",
             actorRole: "Instructor",
         },
         {
             label: "Qualified",
-            count: 3,
+            count: 0,
             sub: "Tested · awaiting Manager review",
             actorRole: "Manager",
         },
         {
             label: "Verified",
-            count: 2,
+            count: 0,
             sub: "Cleared · awaiting Owner sign-off",
             actorRole: "Dojo Head",
         },
         {
             label: "Submitted to JKA",
-            count: 5,
+            count: 0,
             sub: "Awaiting federation certificate",
             actorRole: "Federation",
         },
@@ -299,8 +398,6 @@ function BeltPipelinePreview({ roleAccess }: { roleAccess: string }) {
                 Manage belt tests
                 <ArrowRight size={12} />
             </Link>
-            {/* roleAccess kept for future role-conditional rendering */}
-            <span className="sr-only">{roleAccess}</span>
         </div>
     );
 }

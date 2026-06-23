@@ -72,13 +72,21 @@ export default function DojosAdminClient({
                         {filtered.length} of {dojos.length} dojos
                     </p>
                 </div>
-                <button
-                    onClick={() => setCreating(true)}
-                    className="inline-flex items-center gap-2 bg-accent-red hover:bg-accent-red/90 text-white text-sm font-semibold px-4 py-2.5 rounded-xl shadow-sm transition-all"
-                >
-                    <Plus size={16} />
-                    Add Dojo
-                </button>
+                <div className="flex items-center gap-2">
+                    <a
+                        href="/portal/admin/dojos/applications"
+                        className="inline-flex items-center gap-2 bg-white hover:bg-zinc-50 text-zinc-700 text-sm font-semibold px-4 py-2.5 rounded-xl shadow-sm border border-zinc-200 transition-all"
+                    >
+                        Review applications
+                    </a>
+                    <button
+                        onClick={() => setCreating(true)}
+                        className="inline-flex items-center gap-2 bg-accent-red hover:bg-accent-red/90 text-white text-sm font-semibold px-4 py-2.5 rounded-xl shadow-sm transition-all"
+                    >
+                        <Plus size={16} />
+                        Add Dojo
+                    </button>
+                </div>
             </div>
 
             {/* Filters */}

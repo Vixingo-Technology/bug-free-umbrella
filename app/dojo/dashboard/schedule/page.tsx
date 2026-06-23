@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { CalendarPlus } from "lucide-react";
 import DojoPageHeader from "@/components/dojo/page-header";
-import { requireDojoRole } from "@/lib/dojo-roles";
+import { requireDojoRole } from "@/lib/dojo-session";
 
 export const metadata: Metadata = {
     title: "Schedule — Dojo Dashboard",
