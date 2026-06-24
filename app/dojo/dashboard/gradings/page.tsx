@@ -10,6 +10,7 @@ import {
     XCircle,
 } from "lucide-react";
 import DojoPageHeader from "@/components/dojo/page-header";
+import AppliedStage from "@/components/dojo/gradings/applied-stage";
 import { hasAtLeast, ROLE_LABEL } from "@/lib/dojo-roles";
 import { requireDojoRole } from "@/lib/dojo-session";
 import { prisma } from "@/lib/prisma";
@@ -29,6 +30,7 @@ type Candidate = {
     stage: Stage;
     paymentStatus: "PAID" | "DUE" | "EXPIRED_MEMBERSHIP";
     note?: string;
+    notes: string | null;
 };
 
 const SAMPLE: Candidate[] = [
@@ -40,6 +42,7 @@ const SAMPLE: Candidate[] = [
         appliedOn: "Jun 18",
         stage: "APPLIED",
         paymentStatus: "PAID",
+        notes: null,
     },
     {
         id: "2",
@@ -49,6 +52,7 @@ const SAMPLE: Candidate[] = [
         appliedOn: "Jun 17",
         stage: "APPLIED",
         paymentStatus: "PAID",
+        notes: null,
     },
     {
         id: "3",
@@ -59,6 +63,7 @@ const SAMPLE: Candidate[] = [
         stage: "QUALIFIED",
         paymentStatus: "DUE",
         note: "Tested 22 Jun. Owes ৳ 1,200 in dues.",
+        notes: null,
     },
     {
         id: "5",
@@ -69,6 +74,7 @@ const SAMPLE: Candidate[] = [
         stage: "VERIFIED",
         paymentStatus: "PAID",
         note: "Verified by Manager. Awaiting Dojo Head submission.",
+        notes: null,
     },
 ];
 
@@ -103,35 +109,11 @@ export default async function GradingsPage() {
                 actor="Instructor schedules the test"
                 count={applied.length}
             >
-                {applied.length === 0 ? (
-                    <Empty>No new applications.</Empty>
-                ) : (
-                    <ul className="divide-y divide-zinc-200">
-                        {applied.map((c) => (
-                            <li
-                                key={c.id}
-                                className="py-4 flex flex-col md:flex-row md:items-center md:justify-between gap-3"
-                            >
-                                <CandidateInfo c={c} />
-                                {hasAtLeast(role, "INSTRUCTOR") ? (
-                                    <div className="flex items-center gap-2">
-                                        <Btn icon={<CalendarPlus size={14} />}>
-                                            Schedule test
-                                        </Btn>
-                                        <Btn
-                                            variant="ghost"
-                                            icon={<XCircle size={14} />}
-                                        >
-                                            Decline
-                                        </Btn>
-                                    </div>
-                                ) : (
-                                    <RoleNote requires="Instructor" />
-                                )}
-                            </li>
-                        ))}
-                    </ul>
-                )}
+                <AppliedStage
+                    candidates={applied}
+                    canSchedule={hasAtLeast(role, "INSTRUCTOR")}
+                    dojoAddress={session.dojo?.address ?? null}
+                />
             </Stage>
 
             <Stage
@@ -257,6 +239,7 @@ async function loadRealCandidates(dojoId: string): Promise<Candidate[]> {
         }),
         stage: "APPLIED" as const,
         paymentStatus: "PAID" as const,
+        notes: a.notes,
     }));
 }
 
