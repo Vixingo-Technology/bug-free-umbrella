@@ -1,30 +1,31 @@
 // Shared role constants and predicates. No server-only imports here —
 // this module is imported by client components (e.g. dashboard shell).
+import type { MemberRole } from "@/prisma/generated/client";
 
 export const DOJO_ROLES = [
-    "DOJO_INSTRUCTOR",
+    "INSTRUCTOR",
     "DOJO_MANAGER",
     "DOJO_OWNER",
-] as const;
+] as const satisfies readonly MemberRole[];
 
 export type DojoRole = (typeof DOJO_ROLES)[number];
 
 const ROLE_RANK: Record<DojoRole, number> = {
-    DOJO_INSTRUCTOR: 1,
+    INSTRUCTOR:   1,
     DOJO_MANAGER: 2,
-    DOJO_OWNER: 3,
+    DOJO_OWNER:   3,
 };
 
 export const ROLE_LABEL: Record<DojoRole, string> = {
-    DOJO_INSTRUCTOR: "Instructor",
+    INSTRUCTOR:   "Instructor",
     DOJO_MANAGER: "Manager",
-    DOJO_OWNER: "Dojo Head",
+    DOJO_OWNER:   "Dojo Head",
 };
 
 export const ROLE_BADGE_COLOR: Record<DojoRole, string> = {
-    DOJO_INSTRUCTOR: "bg-emerald-100 text-emerald-700 border-emerald-200",
+    INSTRUCTOR:   "bg-emerald-100 text-emerald-700 border-emerald-200",
     DOJO_MANAGER: "bg-blue-100 text-blue-700 border-blue-200",
-    DOJO_OWNER: "bg-accent-red/10 text-accent-red border-accent-red/30",
+    DOJO_OWNER:   "bg-accent-red/10 text-accent-red border-accent-red/30",
 };
 
 export const PREVIEW_COOKIE = "jka_dojo_preview_role";

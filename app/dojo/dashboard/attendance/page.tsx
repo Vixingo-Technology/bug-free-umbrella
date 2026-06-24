@@ -26,7 +26,7 @@ const SAMPLE: Row[] = [
 ];
 
 export default async function AttendancePage() {
-    const session = await requireDojoRole("DOJO_INSTRUCTOR");
+    const session = await requireDojoRole("INSTRUCTOR");
 
     const rows: Row[] = session.dojo
         ? await loadRealAttendance(session.dojo.id)

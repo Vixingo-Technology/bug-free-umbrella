@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { prisma } from "@/lib/prisma";
 import { serialize } from "@/lib/serialize";
+import type { MemberRole } from "@/prisma/generated/client";
 import PortalDashboardClient from "@/components/portal/portal-dashboard-client";
 import AdminDashboardClient from "@/components/portal/admin/admin-dashboard-client";
 import InstructorDashboard from "@/components/dashboard/instructor-dashboard";
@@ -13,7 +14,7 @@ export default async function PortalDashboardPage() {
     if (!user) redirect("/login");
 
     // Quick role lookup so we can render the right dashboard
-    let role: "ADMIN" | "INSTRUCTOR" | "STUDENT" = "STUDENT";
+    let role: MemberRole = "STUDENT";
     try {
         const m = await prisma.member.findUnique({
             where: { id: user.id },

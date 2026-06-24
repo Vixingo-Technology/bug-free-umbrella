@@ -45,7 +45,7 @@ const SAMPLE_STUDENTS: Student[] = [
 ];
 
 export default async function StudentsPage() {
-    const session = await requireDojoRole("DOJO_INSTRUCTOR");
+    const session = await requireDojoRole("INSTRUCTOR");
 
     const students: Student[] = session.dojo
         ? (

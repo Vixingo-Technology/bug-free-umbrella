@@ -25,6 +25,8 @@ datasource db {
 enum MemberRole {
   STUDENT
   INSTRUCTOR
+  DOJO_MANAGER
+  DOJO_OWNER
   ADMIN
 }
 
@@ -102,11 +104,11 @@ model Dojo {
   email             String?
   schedule          Json?
   isActive          Boolean @default(true) @map("is_active")
-  headInstructorId  String? @db.Uuid       @map("head_instructor_id")
 
-  headInstructor Member?      @relation("DojoHeadInstructor", fields: [headInstructorId], references: [id])
+  // The dojo head is the Member with role = DOJO_OWNER and dojoId = this.id.
+  // A partial unique index `members_one_owner_per_dojo` enforces "at most one
+  // owner per dojo" at the DB level (see scripts/migrations/2026-06-24-...sql).
   members        Member[]     @relation("DojoMembers")
-  instructors    Instructor[]
   attendance     Attendance[]
 
   createdAt DateTime @default(now()) @map("created_at")
@@ -189,9 +191,6 @@ model Member {
   emergencyContactPhone String?         @map("emergency_contact_phone")
 
   dojo                 Dojo?                   @relation("DojoMembers", fields: [dojoId], references: [id])
-  dojoHeadOf           Dojo[]                  @relation("DojoHeadInstructor")
-  instructor           Instructor?
-  admin                Admin?
   gradings             Grading[]
   gradingApplications  GradingApplication[]
   eventRegistrations   EventRegistration[]
@@ -204,42 +203,6 @@ model Member {
   updatedAt DateTime @updatedAt      @map("updated_at")
 
   @@map("members")
-}
-
-// ─────────────────────────────────────────────
-// ADMINS
-// ─────────────────────────────────────────────
-
-model Admin {
-  id       String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  memberId String  @unique @db.Uuid @map("member_id")
-  notes    String?
-
-  member Member @relation(fields: [memberId], references: [id], onDelete: Cascade)
-
-  createdAt DateTime @default(now()) @map("created_at")
-
-  @@map("admins")
-}
-
-// ─────────────────────────────────────────────
-// INSTRUCTORS
-// ─────────────────────────────────────────────
-
-model Instructor {
-  id       String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  memberId String  @unique @db.Uuid @map("member_id")
-  dojoId   String? @db.Uuid         @map("dojo_id")
-  bio      String?
-  isActive Boolean @default(true)   @map("is_active")
-
-  member Member @relation(fields: [memberId], references: [id], onDelete: Cascade)
-  dojo   Dojo?  @relation(fields: [dojoId], references: [id])
-
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt      @map("updated_at")
-
-  @@map("instructors")
 }
 
 // ─────────────────────────────────────────────

@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import type { DojoRole } from "@/lib/dojo-roles";
+import { isDojoRole, type DojoRole } from "@/lib/dojo-roles";
 
 export type ResolvedDojo = {
     id: string;
@@ -11,7 +11,6 @@ export type ResolvedDojo = {
     latitude: number | null;
     longitude: number | null;
     isActive: boolean;
-    headInstructorId: string | null;
 };
 
 export type DojoMembership = {
@@ -20,12 +19,11 @@ export type DojoMembership = {
 };
 
 /**
- * Find the Dojo this Supabase user belongs to and their role inside it.
+ * Resolve the dojo a member belongs to and their role inside it.
  *
- * Resolution order:
- *   1. Member is the head instructor of a Dojo → DOJO_OWNER
- *   2. Member is a registered Instructor with a dojoId → DOJO_INSTRUCTOR
- *   3. Otherwise null (no active membership; e.g. application still pending)
+ * With the unified role system this is a single row read: members.role
+ * tells us the dojo-scoped role (INSTRUCTOR / DOJO_MANAGER / DOJO_OWNER)
+ * and members.dojoId tells us which dojo.
  */
 export async function getCurrentDojoForUser(
     userId: string
@@ -33,32 +31,15 @@ export async function getCurrentDojoForUser(
     const member = await prisma.member.findUnique({
         where: { id: userId },
         select: {
-            id: true,
             role: true,
-            dojoHeadOf: {
-                where: { isActive: true },
-                select: dojoSelect(),
-                take: 1,
-            },
-            instructor: {
-                select: {
-                    dojo: { select: dojoSelect() },
-                },
-            },
+            dojo: { select: dojoSelect() },
         },
     });
 
-    if (!member) return null;
+    if (!member || !member.dojo) return null;
+    if (!isDojoRole(member.role)) return null;
 
-    if (member.dojoHeadOf.length > 0) {
-        return { dojo: member.dojoHeadOf[0], role: "DOJO_OWNER" };
-    }
-
-    if (member.instructor?.dojo) {
-        return { dojo: member.instructor.dojo, role: "DOJO_INSTRUCTOR" };
-    }
-
-    return null;
+    return { dojo: member.dojo, role: member.role };
 }
 
 function dojoSelect() {
@@ -72,6 +53,5 @@ function dojoSelect() {
         latitude: true,
         longitude: true,
         isActive: true,
-        headInstructorId: true,
     } as const;
 }

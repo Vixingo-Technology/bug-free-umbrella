@@ -39,7 +39,7 @@ const SLOTS: Slot[] = [
 ];
 
 export default async function SchedulePage() {
-    await requireDojoRole("DOJO_INSTRUCTOR");
+    await requireDojoRole("INSTRUCTOR");
     return (
         <>
             <DojoPageHeader

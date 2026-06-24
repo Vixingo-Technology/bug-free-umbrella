@@ -68,7 +68,7 @@ const instructorNavItems = [
 
 interface PortalShellProps {
     userId: string;
-    initialRole?: "STUDENT" | "INSTRUCTOR" | "ADMIN";
+    initialRole?: "STUDENT" | "INSTRUCTOR" | "DOJO_MANAGER" | "DOJO_OWNER" | "ADMIN";
     children: React.ReactNode;
 }
 

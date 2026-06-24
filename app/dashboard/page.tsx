@@ -80,12 +80,20 @@ export default async function DashboardPage() {
                 take: 10,
                 include: { dojo: true },
             });
-            const allDojos = await prisma.dojo.findMany({
+            const allDojosRaw = await prisma.dojo.findMany({
                 include: {
-                    headInstructor: true,
                     _count: { select: { members: true } },
+                    members: {
+                        where: { role: "DOJO_OWNER" },
+                        select: { id: true, fullName: true, email: true },
+                        take: 1,
+                    },
                 },
             });
+            const allDojos = allDojosRaw.map((d) => ({
+                ...d,
+                headInstructor: d.members[0] ?? null,
+            }));
             roleData = { totalMembers, totalDojos, totalOrders, recentMembers, allDojos };
         }
     } catch {

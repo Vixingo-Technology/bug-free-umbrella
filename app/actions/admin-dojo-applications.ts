@@ -13,10 +13,10 @@ type Result = { ok: true } | { ok: false; error: string };
  * without touching the DB a second time.
  *
  * Side effects:
- *   - Upserts the applicant's Member row (role INSTRUCTOR; the application's
- *     contact person is treated as the dojo's head instructor).
- *   - Creates the Dojo with headInstructorId = member.id.
- *   - Upserts an Instructor row tying the member to the dojo.
+ *   - Upserts the applicant's Member row with role DOJO_OWNER and dojoId
+ *     pointing at the new Dojo.
+ *   - Creates the Dojo (the partial unique index on members(dojoId) WHERE
+ *     role='DOJO_OWNER' enforces "at most one head per dojo").
  *   - Marks the application APPROVED and stores the new dojo's id.
  */
 export async function approveDojoApplicationAction(
@@ -55,27 +55,8 @@ export async function approveDojoApplicationAction(
 
     try {
         await prisma.$transaction(async (tx) => {
-            // 1. Upsert the head-instructor Member row.
-            const member = await tx.member.upsert({
-                where: { id: application.userId! },
-                update: {
-                    fullName: application.contactName,
-                    email: application.email,
-                    phone: application.phone,
-                    role: "INSTRUCTOR",
-                },
-                create: {
-                    id: application.userId!,
-                    fullName: application.contactName,
-                    email: application.email,
-                    phone: application.phone,
-                    role: "INSTRUCTOR",
-                    isActive: true,
-                    membershipStatus: "ACTIVE",
-                },
-            });
-
-            // 2. Create the Dojo.
+            // 1. Create the Dojo first so we have an id to assign as the
+            //    owner's dojoId in step 2.
             const dojo = await tx.dojo.create({
                 data: {
                     name: application.dojoName,
@@ -86,28 +67,35 @@ export async function approveDojoApplicationAction(
                     latitude: application.latitude,
                     longitude: application.longitude,
                     isActive: true,
-                    headInstructorId: member.id,
                 },
                 select: { id: true },
             });
 
-            // 3. Attach the head instructor to the dojo and create the
-            //    Instructor profile row.
-            await tx.member.update({
-                where: { id: member.id },
-                data: { dojoId: dojo.id },
-            });
-            await tx.instructor.upsert({
-                where: { memberId: member.id },
-                update: { dojoId: dojo.id, isActive: true },
+            // 2. Upsert the applicant as DOJO_OWNER of the new dojo.
+            //    The partial unique index members_one_owner_per_dojo guarantees
+            //    we won't end up with two owners on the same dojo.
+            await tx.member.upsert({
+                where: { id: application.userId! },
+                update: {
+                    fullName: application.contactName,
+                    email: application.email,
+                    phone: application.phone,
+                    role: "DOJO_OWNER",
+                    dojoId: dojo.id,
+                },
                 create: {
-                    memberId: member.id,
+                    id: application.userId!,
+                    fullName: application.contactName,
+                    email: application.email,
+                    phone: application.phone,
+                    role: "DOJO_OWNER",
                     dojoId: dojo.id,
                     isActive: true,
+                    membershipStatus: "ACTIVE",
                 },
             });
 
-            // 4. Mark the application approved with the dojo id.
+            // 3. Mark the application approved with the dojo id.
             await tx.dojoApplication.update({
                 where: { id: application.id },
                 data: {

@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/admin-guard";
+import type { Prisma } from "@/prisma/generated/client";
 
 type ActionResult = { ok: true; id?: string } | { ok: false; error: string };
 
@@ -35,28 +36,62 @@ function buildData(formData: FormData) {
     return { name, address, city, phone, email, latitude, longitude, headInstructorId, isActive, schedule };
 }
 
+/**
+ * Set (or clear) the DOJO_OWNER for a dojo. Demotes any current owner to
+ * INSTRUCTOR before promoting the new one so the partial unique index
+ * `members_one_owner_per_dojo` is never violated.
+ */
+async function setDojoHead(
+    tx: Prisma.TransactionClient,
+    dojoId: string,
+    newOwnerId: string | null
+): Promise<void> {
+    const current = await tx.member.findFirst({
+        where: { dojoId, role: "DOJO_OWNER" },
+        select: { id: true },
+    });
+
+    if (current && current.id !== newOwnerId) {
+        await tx.member.update({
+            where: { id: current.id },
+            data: { role: "INSTRUCTOR" },
+        });
+    }
+
+    if (newOwnerId) {
+        await tx.member.update({
+            where: { id: newOwnerId },
+            data: { role: "DOJO_OWNER", dojoId },
+        });
+    }
+}
+
 export async function createDojoAction(formData: FormData): Promise<ActionResult> {
     await requireAdmin();
     const data = buildData(formData);
     if (!data.name) return { ok: false, error: "Name is required." };
 
-    const dojo = await prisma.dojo.create({
-        data: {
-            name: data.name,
-            address: data.address,
-            city: data.city,
-            phone: data.phone,
-            email: data.email,
-            latitude: data.latitude,
-            longitude: data.longitude,
-            headInstructorId: data.headInstructorId,
-            isActive: data.isActive,
-            schedule: data.schedule as never,
-        },
+    const dojoId = await prisma.$transaction(async (tx) => {
+        const dojo = await tx.dojo.create({
+            data: {
+                name: data.name,
+                address: data.address,
+                city: data.city,
+                phone: data.phone,
+                email: data.email,
+                latitude: data.latitude,
+                longitude: data.longitude,
+                isActive: data.isActive,
+                schedule: data.schedule as never,
+            },
+            select: { id: true },
+        });
+        await setDojoHead(tx, dojo.id, data.headInstructorId);
+        return dojo.id;
     });
 
     revalidatePath("/portal/admin/dojos");
-    return { ok: true, id: dojo.id };
+    return { ok: true, id: dojoId };
 }
 
 export async function updateDojoAction(formData: FormData): Promise<ActionResult> {
@@ -66,20 +101,22 @@ export async function updateDojoAction(formData: FormData): Promise<ActionResult
     const data = buildData(formData);
     if (!data.name) return { ok: false, error: "Name is required." };
 
-    await prisma.dojo.update({
-        where: { id },
-        data: {
-            name: data.name,
-            address: data.address,
-            city: data.city,
-            phone: data.phone,
-            email: data.email,
-            latitude: data.latitude,
-            longitude: data.longitude,
-            headInstructorId: data.headInstructorId,
-            isActive: data.isActive,
-            schedule: data.schedule as never,
-        },
+    await prisma.$transaction(async (tx) => {
+        await tx.dojo.update({
+            where: { id },
+            data: {
+                name: data.name,
+                address: data.address,
+                city: data.city,
+                phone: data.phone,
+                email: data.email,
+                latitude: data.latitude,
+                longitude: data.longitude,
+                isActive: data.isActive,
+                schedule: data.schedule as never,
+            },
+        });
+        await setDojoHead(tx, id, data.headInstructorId);
     });
 
     revalidatePath("/portal/admin/dojos");
@@ -109,10 +146,7 @@ export async function assignDojoInstructorAction(formData: FormData): Promise<Ac
     const headInstructorId = ((formData.get("headInstructorId") as string) ?? "").trim() || null;
     if (!id) return { ok: false, error: "Dojo id is required." };
 
-    await prisma.dojo.update({
-        where: { id },
-        data: { headInstructorId },
-    });
+    await prisma.$transaction((tx) => setDojoHead(tx, id, headInstructorId));
 
     revalidatePath("/portal/admin/dojos");
     return { ok: true };

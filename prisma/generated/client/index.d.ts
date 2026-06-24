@@ -34,16 +34,6 @@ export type DojoApplication = $Result.DefaultSelection<Prisma.$DojoApplicationPa
  */
 export type Member = $Result.DefaultSelection<Prisma.$MemberPayload>
 /**
- * Model Admin
- * 
- */
-export type Admin = $Result.DefaultSelection<Prisma.$AdminPayload>
-/**
- * Model Instructor
- * 
- */
-export type Instructor = $Result.DefaultSelection<Prisma.$InstructorPayload>
-/**
  * Model Attendance
  * 
  */
@@ -116,6 +106,8 @@ export namespace $Enums {
   export const MemberRole: {
   STUDENT: 'STUDENT',
   INSTRUCTOR: 'INSTRUCTOR',
+  DOJO_MANAGER: 'DOJO_MANAGER',
+  DOJO_OWNER: 'DOJO_OWNER',
   ADMIN: 'ADMIN'
 };
 
@@ -372,26 +364,6 @@ export class PrismaClient<
     * ```
     */
   get member(): Prisma.MemberDelegate<ExtArgs, ClientOptions>;
-
-  /**
-   * `prisma.admin`: Exposes CRUD operations for the **Admin** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more Admins
-    * const admins = await prisma.admin.findMany()
-    * ```
-    */
-  get admin(): Prisma.AdminDelegate<ExtArgs, ClientOptions>;
-
-  /**
-   * `prisma.instructor`: Exposes CRUD operations for the **Instructor** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more Instructors
-    * const instructors = await prisma.instructor.findMany()
-    * ```
-    */
-  get instructor(): Prisma.InstructorDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.attendance`: Exposes CRUD operations for the **Attendance** model.
@@ -960,8 +932,6 @@ export namespace Prisma {
     Dojo: 'Dojo',
     DojoApplication: 'DojoApplication',
     Member: 'Member',
-    Admin: 'Admin',
-    Instructor: 'Instructor',
     Attendance: 'Attendance',
     GradingEvent: 'GradingEvent',
     GradingApplication: 'GradingApplication',
@@ -990,7 +960,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "beltRank" | "dojo" | "dojoApplication" | "member" | "admin" | "instructor" | "attendance" | "gradingEvent" | "gradingApplication" | "grading" | "event" | "eventRegistration" | "notification" | "shopProduct" | "shopOrder" | "shopOrderItem" | "tournament" | "tournamentParticipant" | "tournamentMatch"
+      modelProps: "beltRank" | "dojo" | "dojoApplication" | "member" | "attendance" | "gradingEvent" | "gradingApplication" | "grading" | "event" | "eventRegistration" | "notification" | "shopProduct" | "shopOrder" | "shopOrderItem" | "tournament" | "tournamentParticipant" | "tournamentMatch"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1287,154 +1257,6 @@ export namespace Prisma {
           count: {
             args: Prisma.MemberCountArgs<ExtArgs>
             result: $Utils.Optional<MemberCountAggregateOutputType> | number
-          }
-        }
-      }
-      Admin: {
-        payload: Prisma.$AdminPayload<ExtArgs>
-        fields: Prisma.AdminFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.AdminFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AdminPayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.AdminFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AdminPayload>
-          }
-          findFirst: {
-            args: Prisma.AdminFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AdminPayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.AdminFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AdminPayload>
-          }
-          findMany: {
-            args: Prisma.AdminFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AdminPayload>[]
-          }
-          create: {
-            args: Prisma.AdminCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AdminPayload>
-          }
-          createMany: {
-            args: Prisma.AdminCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.AdminCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AdminPayload>[]
-          }
-          delete: {
-            args: Prisma.AdminDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AdminPayload>
-          }
-          update: {
-            args: Prisma.AdminUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AdminPayload>
-          }
-          deleteMany: {
-            args: Prisma.AdminDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.AdminUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateManyAndReturn: {
-            args: Prisma.AdminUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AdminPayload>[]
-          }
-          upsert: {
-            args: Prisma.AdminUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AdminPayload>
-          }
-          aggregate: {
-            args: Prisma.AdminAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateAdmin>
-          }
-          groupBy: {
-            args: Prisma.AdminGroupByArgs<ExtArgs>
-            result: $Utils.Optional<AdminGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.AdminCountArgs<ExtArgs>
-            result: $Utils.Optional<AdminCountAggregateOutputType> | number
-          }
-        }
-      }
-      Instructor: {
-        payload: Prisma.$InstructorPayload<ExtArgs>
-        fields: Prisma.InstructorFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.InstructorFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$InstructorPayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.InstructorFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$InstructorPayload>
-          }
-          findFirst: {
-            args: Prisma.InstructorFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$InstructorPayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.InstructorFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$InstructorPayload>
-          }
-          findMany: {
-            args: Prisma.InstructorFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$InstructorPayload>[]
-          }
-          create: {
-            args: Prisma.InstructorCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$InstructorPayload>
-          }
-          createMany: {
-            args: Prisma.InstructorCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.InstructorCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$InstructorPayload>[]
-          }
-          delete: {
-            args: Prisma.InstructorDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$InstructorPayload>
-          }
-          update: {
-            args: Prisma.InstructorUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$InstructorPayload>
-          }
-          deleteMany: {
-            args: Prisma.InstructorDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.InstructorUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateManyAndReturn: {
-            args: Prisma.InstructorUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$InstructorPayload>[]
-          }
-          upsert: {
-            args: Prisma.InstructorUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$InstructorPayload>
-          }
-          aggregate: {
-            args: Prisma.InstructorAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateInstructor>
-          }
-          groupBy: {
-            args: Prisma.InstructorGroupByArgs<ExtArgs>
-            result: $Utils.Optional<InstructorGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.InstructorCountArgs<ExtArgs>
-            result: $Utils.Optional<InstructorCountAggregateOutputType> | number
           }
         }
       }
@@ -2512,8 +2334,6 @@ export namespace Prisma {
     dojo?: DojoOmit
     dojoApplication?: DojoApplicationOmit
     member?: MemberOmit
-    admin?: AdminOmit
-    instructor?: InstructorOmit
     attendance?: AttendanceOmit
     gradingEvent?: GradingEventOmit
     gradingApplication?: GradingApplicationOmit
@@ -2666,13 +2486,11 @@ export namespace Prisma {
 
   export type DojoCountOutputType = {
     members: number
-    instructors: number
     attendance: number
   }
 
   export type DojoCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     members?: boolean | DojoCountOutputTypeCountMembersArgs
-    instructors?: boolean | DojoCountOutputTypeCountInstructorsArgs
     attendance?: boolean | DojoCountOutputTypeCountAttendanceArgs
   }
 
@@ -2697,13 +2515,6 @@ export namespace Prisma {
   /**
    * DojoCountOutputType without action
    */
-  export type DojoCountOutputTypeCountInstructorsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: InstructorWhereInput
-  }
-
-  /**
-   * DojoCountOutputType without action
-   */
   export type DojoCountOutputTypeCountAttendanceArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: AttendanceWhereInput
   }
@@ -2714,7 +2525,6 @@ export namespace Prisma {
    */
 
   export type MemberCountOutputType = {
-    dojoHeadOf: number
     gradings: number
     gradingApplications: number
     eventRegistrations: number
@@ -2725,7 +2535,6 @@ export namespace Prisma {
   }
 
   export type MemberCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    dojoHeadOf?: boolean | MemberCountOutputTypeCountDojoHeadOfArgs
     gradings?: boolean | MemberCountOutputTypeCountGradingsArgs
     gradingApplications?: boolean | MemberCountOutputTypeCountGradingApplicationsArgs
     eventRegistrations?: boolean | MemberCountOutputTypeCountEventRegistrationsArgs
@@ -2744,13 +2553,6 @@ export namespace Prisma {
      * Select specific fields to fetch from the MemberCountOutputType
      */
     select?: MemberCountOutputTypeSelect<ExtArgs> | null
-  }
-
-  /**
-   * MemberCountOutputType without action
-   */
-  export type MemberCountOutputTypeCountDojoHeadOfArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: DojoWhereInput
   }
 
   /**
@@ -4293,7 +4095,6 @@ export namespace Prisma {
     phone: string | null
     email: string | null
     isActive: boolean | null
-    headInstructorId: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -4308,7 +4109,6 @@ export namespace Prisma {
     phone: string | null
     email: string | null
     isActive: boolean | null
-    headInstructorId: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -4324,7 +4124,6 @@ export namespace Prisma {
     email: number
     schedule: number
     isActive: number
-    headInstructorId: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -4351,7 +4150,6 @@ export namespace Prisma {
     phone?: true
     email?: true
     isActive?: true
-    headInstructorId?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -4366,7 +4164,6 @@ export namespace Prisma {
     phone?: true
     email?: true
     isActive?: true
-    headInstructorId?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -4382,7 +4179,6 @@ export namespace Prisma {
     email?: true
     schedule?: true
     isActive?: true
-    headInstructorId?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -4485,7 +4281,6 @@ export namespace Prisma {
     email: string | null
     schedule: JsonValue | null
     isActive: boolean
-    headInstructorId: string | null
     createdAt: Date
     updatedAt: Date
     _count: DojoCountAggregateOutputType | null
@@ -4520,12 +4315,9 @@ export namespace Prisma {
     email?: boolean
     schedule?: boolean
     isActive?: boolean
-    headInstructorId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    headInstructor?: boolean | Dojo$headInstructorArgs<ExtArgs>
     members?: boolean | Dojo$membersArgs<ExtArgs>
-    instructors?: boolean | Dojo$instructorsArgs<ExtArgs>
     attendance?: boolean | Dojo$attendanceArgs<ExtArgs>
     _count?: boolean | DojoCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["dojo"]>
@@ -4541,10 +4333,8 @@ export namespace Prisma {
     email?: boolean
     schedule?: boolean
     isActive?: boolean
-    headInstructorId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    headInstructor?: boolean | Dojo$headInstructorArgs<ExtArgs>
   }, ExtArgs["result"]["dojo"]>
 
   export type DojoSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -4558,10 +4348,8 @@ export namespace Prisma {
     email?: boolean
     schedule?: boolean
     isActive?: boolean
-    headInstructorId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    headInstructor?: boolean | Dojo$headInstructorArgs<ExtArgs>
   }, ExtArgs["result"]["dojo"]>
 
   export type DojoSelectScalar = {
@@ -4575,32 +4363,23 @@ export namespace Prisma {
     email?: boolean
     schedule?: boolean
     isActive?: boolean
-    headInstructorId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type DojoOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "address" | "city" | "latitude" | "longitude" | "phone" | "email" | "schedule" | "isActive" | "headInstructorId" | "createdAt" | "updatedAt", ExtArgs["result"]["dojo"]>
+  export type DojoOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "address" | "city" | "latitude" | "longitude" | "phone" | "email" | "schedule" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["dojo"]>
   export type DojoInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    headInstructor?: boolean | Dojo$headInstructorArgs<ExtArgs>
     members?: boolean | Dojo$membersArgs<ExtArgs>
-    instructors?: boolean | Dojo$instructorsArgs<ExtArgs>
     attendance?: boolean | Dojo$attendanceArgs<ExtArgs>
     _count?: boolean | DojoCountOutputTypeDefaultArgs<ExtArgs>
   }
-  export type DojoIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    headInstructor?: boolean | Dojo$headInstructorArgs<ExtArgs>
-  }
-  export type DojoIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    headInstructor?: boolean | Dojo$headInstructorArgs<ExtArgs>
-  }
+  export type DojoIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type DojoIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
 
   export type $DojoPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Dojo"
     objects: {
-      headInstructor: Prisma.$MemberPayload<ExtArgs> | null
       members: Prisma.$MemberPayload<ExtArgs>[]
-      instructors: Prisma.$InstructorPayload<ExtArgs>[]
       attendance: Prisma.$AttendancePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -4614,7 +4393,6 @@ export namespace Prisma {
       email: string | null
       schedule: Prisma.JsonValue | null
       isActive: boolean
-      headInstructorId: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["dojo"]>
@@ -5011,9 +4789,7 @@ export namespace Prisma {
    */
   export interface Prisma__DojoClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    headInstructor<T extends Dojo$headInstructorArgs<ExtArgs> = {}>(args?: Subset<T, Dojo$headInstructorArgs<ExtArgs>>): Prisma__MemberClient<$Result.GetResult<Prisma.$MemberPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     members<T extends Dojo$membersArgs<ExtArgs> = {}>(args?: Subset<T, Dojo$membersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    instructors<T extends Dojo$instructorsArgs<ExtArgs> = {}>(args?: Subset<T, Dojo$instructorsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InstructorPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     attendance<T extends Dojo$attendanceArgs<ExtArgs> = {}>(args?: Subset<T, Dojo$attendanceArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AttendancePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -5054,7 +4830,6 @@ export namespace Prisma {
     readonly email: FieldRef<"Dojo", 'String'>
     readonly schedule: FieldRef<"Dojo", 'Json'>
     readonly isActive: FieldRef<"Dojo", 'Boolean'>
-    readonly headInstructorId: FieldRef<"Dojo", 'String'>
     readonly createdAt: FieldRef<"Dojo", 'DateTime'>
     readonly updatedAt: FieldRef<"Dojo", 'DateTime'>
   }
@@ -5311,10 +5086,6 @@ export namespace Prisma {
      */
     data: DojoCreateManyInput | DojoCreateManyInput[]
     skipDuplicates?: boolean
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: DojoIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -5385,10 +5156,6 @@ export namespace Prisma {
      * Limit how many Dojos to update.
      */
     limit?: number
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: DojoIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -5458,25 +5225,6 @@ export namespace Prisma {
   }
 
   /**
-   * Dojo.headInstructor
-   */
-  export type Dojo$headInstructorArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Member
-     */
-    select?: MemberSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Member
-     */
-    omit?: MemberOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: MemberInclude<ExtArgs> | null
-    where?: MemberWhereInput
-  }
-
-  /**
    * Dojo.members
    */
   export type Dojo$membersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -5498,30 +5246,6 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: MemberScalarFieldEnum | MemberScalarFieldEnum[]
-  }
-
-  /**
-   * Dojo.instructors
-   */
-  export type Dojo$instructorsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Instructor
-     */
-    select?: InstructorSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Instructor
-     */
-    omit?: InstructorOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: InstructorInclude<ExtArgs> | null
-    where?: InstructorWhereInput
-    orderBy?: InstructorOrderByWithRelationInput | InstructorOrderByWithRelationInput[]
-    cursor?: InstructorWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: InstructorScalarFieldEnum | InstructorScalarFieldEnum[]
   }
 
   /**
@@ -7054,9 +6778,6 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     dojo?: boolean | Member$dojoArgs<ExtArgs>
-    dojoHeadOf?: boolean | Member$dojoHeadOfArgs<ExtArgs>
-    instructor?: boolean | Member$instructorArgs<ExtArgs>
-    admin?: boolean | Member$adminArgs<ExtArgs>
     gradings?: boolean | Member$gradingsArgs<ExtArgs>
     gradingApplications?: boolean | Member$gradingApplicationsArgs<ExtArgs>
     eventRegistrations?: boolean | Member$eventRegistrationsArgs<ExtArgs>
@@ -7147,9 +6868,6 @@ export namespace Prisma {
   export type MemberOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "fullName" | "email" | "phone" | "avatarUrl" | "role" | "memberNumber" | "currentRank" | "joinDate" | "expiryDate" | "isActive" | "dojoId" | "onboardingComplete" | "membershipStatus" | "dateOfBirth" | "bloodGroup" | "address" | "nationalId" | "emergencyContactName" | "emergencyContactPhone" | "createdAt" | "updatedAt", ExtArgs["result"]["member"]>
   export type MemberInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     dojo?: boolean | Member$dojoArgs<ExtArgs>
-    dojoHeadOf?: boolean | Member$dojoHeadOfArgs<ExtArgs>
-    instructor?: boolean | Member$instructorArgs<ExtArgs>
-    admin?: boolean | Member$adminArgs<ExtArgs>
     gradings?: boolean | Member$gradingsArgs<ExtArgs>
     gradingApplications?: boolean | Member$gradingApplicationsArgs<ExtArgs>
     eventRegistrations?: boolean | Member$eventRegistrationsArgs<ExtArgs>
@@ -7170,9 +6888,6 @@ export namespace Prisma {
     name: "Member"
     objects: {
       dojo: Prisma.$DojoPayload<ExtArgs> | null
-      dojoHeadOf: Prisma.$DojoPayload<ExtArgs>[]
-      instructor: Prisma.$InstructorPayload<ExtArgs> | null
-      admin: Prisma.$AdminPayload<ExtArgs> | null
       gradings: Prisma.$GradingPayload<ExtArgs>[]
       gradingApplications: Prisma.$GradingApplicationPayload<ExtArgs>[]
       eventRegistrations: Prisma.$EventRegistrationPayload<ExtArgs>[]
@@ -7599,9 +7314,6 @@ export namespace Prisma {
   export interface Prisma__MemberClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     dojo<T extends Member$dojoArgs<ExtArgs> = {}>(args?: Subset<T, Member$dojoArgs<ExtArgs>>): Prisma__DojoClient<$Result.GetResult<Prisma.$DojoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    dojoHeadOf<T extends Member$dojoHeadOfArgs<ExtArgs> = {}>(args?: Subset<T, Member$dojoHeadOfArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DojoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    instructor<T extends Member$instructorArgs<ExtArgs> = {}>(args?: Subset<T, Member$instructorArgs<ExtArgs>>): Prisma__InstructorClient<$Result.GetResult<Prisma.$InstructorPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    admin<T extends Member$adminArgs<ExtArgs> = {}>(args?: Subset<T, Member$adminArgs<ExtArgs>>): Prisma__AdminClient<$Result.GetResult<Prisma.$AdminPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     gradings<T extends Member$gradingsArgs<ExtArgs> = {}>(args?: Subset<T, Member$gradingsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GradingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     gradingApplications<T extends Member$gradingApplicationsArgs<ExtArgs> = {}>(args?: Subset<T, Member$gradingApplicationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GradingApplicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     eventRegistrations<T extends Member$eventRegistrationsArgs<ExtArgs> = {}>(args?: Subset<T, Member$eventRegistrationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EventRegistrationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -8080,68 +7792,6 @@ export namespace Prisma {
   }
 
   /**
-   * Member.dojoHeadOf
-   */
-  export type Member$dojoHeadOfArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Dojo
-     */
-    select?: DojoSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Dojo
-     */
-    omit?: DojoOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: DojoInclude<ExtArgs> | null
-    where?: DojoWhereInput
-    orderBy?: DojoOrderByWithRelationInput | DojoOrderByWithRelationInput[]
-    cursor?: DojoWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: DojoScalarFieldEnum | DojoScalarFieldEnum[]
-  }
-
-  /**
-   * Member.instructor
-   */
-  export type Member$instructorArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Instructor
-     */
-    select?: InstructorSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Instructor
-     */
-    omit?: InstructorOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: InstructorInclude<ExtArgs> | null
-    where?: InstructorWhereInput
-  }
-
-  /**
-   * Member.admin
-   */
-  export type Member$adminArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Admin
-     */
-    select?: AdminSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Admin
-     */
-    omit?: AdminOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AdminInclude<ExtArgs> | null
-    where?: AdminWhereInput
-  }
-
-  /**
    * Member.gradings
    */
   export type Member$gradingsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -8325,2172 +7975,6 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: MemberInclude<ExtArgs> | null
-  }
-
-
-  /**
-   * Model Admin
-   */
-
-  export type AggregateAdmin = {
-    _count: AdminCountAggregateOutputType | null
-    _min: AdminMinAggregateOutputType | null
-    _max: AdminMaxAggregateOutputType | null
-  }
-
-  export type AdminMinAggregateOutputType = {
-    id: string | null
-    memberId: string | null
-    notes: string | null
-    createdAt: Date | null
-  }
-
-  export type AdminMaxAggregateOutputType = {
-    id: string | null
-    memberId: string | null
-    notes: string | null
-    createdAt: Date | null
-  }
-
-  export type AdminCountAggregateOutputType = {
-    id: number
-    memberId: number
-    notes: number
-    createdAt: number
-    _all: number
-  }
-
-
-  export type AdminMinAggregateInputType = {
-    id?: true
-    memberId?: true
-    notes?: true
-    createdAt?: true
-  }
-
-  export type AdminMaxAggregateInputType = {
-    id?: true
-    memberId?: true
-    notes?: true
-    createdAt?: true
-  }
-
-  export type AdminCountAggregateInputType = {
-    id?: true
-    memberId?: true
-    notes?: true
-    createdAt?: true
-    _all?: true
-  }
-
-  export type AdminAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which Admin to aggregate.
-     */
-    where?: AdminWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Admins to fetch.
-     */
-    orderBy?: AdminOrderByWithRelationInput | AdminOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: AdminWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Admins from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Admins.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned Admins
-    **/
-    _count?: true | AdminCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: AdminMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: AdminMaxAggregateInputType
-  }
-
-  export type GetAdminAggregateType<T extends AdminAggregateArgs> = {
-        [P in keyof T & keyof AggregateAdmin]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateAdmin[P]>
-      : GetScalarType<T[P], AggregateAdmin[P]>
-  }
-
-
-
-
-  export type AdminGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: AdminWhereInput
-    orderBy?: AdminOrderByWithAggregationInput | AdminOrderByWithAggregationInput[]
-    by: AdminScalarFieldEnum[] | AdminScalarFieldEnum
-    having?: AdminScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: AdminCountAggregateInputType | true
-    _min?: AdminMinAggregateInputType
-    _max?: AdminMaxAggregateInputType
-  }
-
-  export type AdminGroupByOutputType = {
-    id: string
-    memberId: string
-    notes: string | null
-    createdAt: Date
-    _count: AdminCountAggregateOutputType | null
-    _min: AdminMinAggregateOutputType | null
-    _max: AdminMaxAggregateOutputType | null
-  }
-
-  type GetAdminGroupByPayload<T extends AdminGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<AdminGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof AdminGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], AdminGroupByOutputType[P]>
-            : GetScalarType<T[P], AdminGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type AdminSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    memberId?: boolean
-    notes?: boolean
-    createdAt?: boolean
-    member?: boolean | MemberDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["admin"]>
-
-  export type AdminSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    memberId?: boolean
-    notes?: boolean
-    createdAt?: boolean
-    member?: boolean | MemberDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["admin"]>
-
-  export type AdminSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    memberId?: boolean
-    notes?: boolean
-    createdAt?: boolean
-    member?: boolean | MemberDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["admin"]>
-
-  export type AdminSelectScalar = {
-    id?: boolean
-    memberId?: boolean
-    notes?: boolean
-    createdAt?: boolean
-  }
-
-  export type AdminOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "memberId" | "notes" | "createdAt", ExtArgs["result"]["admin"]>
-  export type AdminInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    member?: boolean | MemberDefaultArgs<ExtArgs>
-  }
-  export type AdminIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    member?: boolean | MemberDefaultArgs<ExtArgs>
-  }
-  export type AdminIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    member?: boolean | MemberDefaultArgs<ExtArgs>
-  }
-
-  export type $AdminPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "Admin"
-    objects: {
-      member: Prisma.$MemberPayload<ExtArgs>
-    }
-    scalars: $Extensions.GetPayloadResult<{
-      id: string
-      memberId: string
-      notes: string | null
-      createdAt: Date
-    }, ExtArgs["result"]["admin"]>
-    composites: {}
-  }
-
-  type AdminGetPayload<S extends boolean | null | undefined | AdminDefaultArgs> = $Result.GetResult<Prisma.$AdminPayload, S>
-
-  type AdminCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<AdminFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: AdminCountAggregateInputType | true
-    }
-
-  export interface AdminDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Admin'], meta: { name: 'Admin' } }
-    /**
-     * Find zero or one Admin that matches the filter.
-     * @param {AdminFindUniqueArgs} args - Arguments to find a Admin
-     * @example
-     * // Get one Admin
-     * const admin = await prisma.admin.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUnique<T extends AdminFindUniqueArgs>(args: SelectSubset<T, AdminFindUniqueArgs<ExtArgs>>): Prisma__AdminClient<$Result.GetResult<Prisma.$AdminPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find one Admin that matches the filter or throw an error with `error.code='P2025'`
-     * if no matches were found.
-     * @param {AdminFindUniqueOrThrowArgs} args - Arguments to find a Admin
-     * @example
-     * // Get one Admin
-     * const admin = await prisma.admin.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUniqueOrThrow<T extends AdminFindUniqueOrThrowArgs>(args: SelectSubset<T, AdminFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AdminClient<$Result.GetResult<Prisma.$AdminPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first Admin that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {AdminFindFirstArgs} args - Arguments to find a Admin
-     * @example
-     * // Get one Admin
-     * const admin = await prisma.admin.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirst<T extends AdminFindFirstArgs>(args?: SelectSubset<T, AdminFindFirstArgs<ExtArgs>>): Prisma__AdminClient<$Result.GetResult<Prisma.$AdminPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first Admin that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {AdminFindFirstOrThrowArgs} args - Arguments to find a Admin
-     * @example
-     * // Get one Admin
-     * const admin = await prisma.admin.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirstOrThrow<T extends AdminFindFirstOrThrowArgs>(args?: SelectSubset<T, AdminFindFirstOrThrowArgs<ExtArgs>>): Prisma__AdminClient<$Result.GetResult<Prisma.$AdminPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find zero or more Admins that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {AdminFindManyArgs} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all Admins
-     * const admins = await prisma.admin.findMany()
-     * 
-     * // Get first 10 Admins
-     * const admins = await prisma.admin.findMany({ take: 10 })
-     * 
-     * // Only select the `id`
-     * const adminWithIdOnly = await prisma.admin.findMany({ select: { id: true } })
-     * 
-     */
-    findMany<T extends AdminFindManyArgs>(args?: SelectSubset<T, AdminFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdminPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
-
-    /**
-     * Create a Admin.
-     * @param {AdminCreateArgs} args - Arguments to create a Admin.
-     * @example
-     * // Create one Admin
-     * const Admin = await prisma.admin.create({
-     *   data: {
-     *     // ... data to create a Admin
-     *   }
-     * })
-     * 
-     */
-    create<T extends AdminCreateArgs>(args: SelectSubset<T, AdminCreateArgs<ExtArgs>>): Prisma__AdminClient<$Result.GetResult<Prisma.$AdminPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Create many Admins.
-     * @param {AdminCreateManyArgs} args - Arguments to create many Admins.
-     * @example
-     * // Create many Admins
-     * const admin = await prisma.admin.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *     
-     */
-    createMany<T extends AdminCreateManyArgs>(args?: SelectSubset<T, AdminCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create many Admins and returns the data saved in the database.
-     * @param {AdminCreateManyAndReturnArgs} args - Arguments to create many Admins.
-     * @example
-     * // Create many Admins
-     * const admin = await prisma.admin.createManyAndReturn({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Create many Admins and only return the `id`
-     * const adminWithIdOnly = await prisma.admin.createManyAndReturn({
-     *   select: { id: true },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    createManyAndReturn<T extends AdminCreateManyAndReturnArgs>(args?: SelectSubset<T, AdminCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdminPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Delete a Admin.
-     * @param {AdminDeleteArgs} args - Arguments to delete one Admin.
-     * @example
-     * // Delete one Admin
-     * const Admin = await prisma.admin.delete({
-     *   where: {
-     *     // ... filter to delete one Admin
-     *   }
-     * })
-     * 
-     */
-    delete<T extends AdminDeleteArgs>(args: SelectSubset<T, AdminDeleteArgs<ExtArgs>>): Prisma__AdminClient<$Result.GetResult<Prisma.$AdminPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Update one Admin.
-     * @param {AdminUpdateArgs} args - Arguments to update one Admin.
-     * @example
-     * // Update one Admin
-     * const admin = await prisma.admin.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    update<T extends AdminUpdateArgs>(args: SelectSubset<T, AdminUpdateArgs<ExtArgs>>): Prisma__AdminClient<$Result.GetResult<Prisma.$AdminPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Delete zero or more Admins.
-     * @param {AdminDeleteManyArgs} args - Arguments to filter Admins to delete.
-     * @example
-     * // Delete a few Admins
-     * const { count } = await prisma.admin.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-     */
-    deleteMany<T extends AdminDeleteManyArgs>(args?: SelectSubset<T, AdminDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Admins.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {AdminUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many Admins
-     * const admin = await prisma.admin.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    updateMany<T extends AdminUpdateManyArgs>(args: SelectSubset<T, AdminUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Admins and returns the data updated in the database.
-     * @param {AdminUpdateManyAndReturnArgs} args - Arguments to update many Admins.
-     * @example
-     * // Update many Admins
-     * const admin = await prisma.admin.updateManyAndReturn({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Update zero or more Admins and only return the `id`
-     * const adminWithIdOnly = await prisma.admin.updateManyAndReturn({
-     *   select: { id: true },
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    updateManyAndReturn<T extends AdminUpdateManyAndReturnArgs>(args: SelectSubset<T, AdminUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdminPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Create or update one Admin.
-     * @param {AdminUpsertArgs} args - Arguments to update or create a Admin.
-     * @example
-     * // Update or create a Admin
-     * const admin = await prisma.admin.upsert({
-     *   create: {
-     *     // ... data to create a Admin
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the Admin we want to update
-     *   }
-     * })
-     */
-    upsert<T extends AdminUpsertArgs>(args: SelectSubset<T, AdminUpsertArgs<ExtArgs>>): Prisma__AdminClient<$Result.GetResult<Prisma.$AdminPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-
-    /**
-     * Count the number of Admins.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {AdminCountArgs} args - Arguments to filter Admins to count.
-     * @example
-     * // Count the number of Admins
-     * const count = await prisma.admin.count({
-     *   where: {
-     *     // ... the filter for the Admins we want to count
-     *   }
-     * })
-    **/
-    count<T extends AdminCountArgs>(
-      args?: Subset<T, AdminCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], AdminCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a Admin.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {AdminAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends AdminAggregateArgs>(args: Subset<T, AdminAggregateArgs>): Prisma.PrismaPromise<GetAdminAggregateType<T>>
-
-    /**
-     * Group by Admin.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {AdminGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends AdminGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: AdminGroupByArgs['orderBy'] }
-        : { orderBy?: AdminGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, AdminGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAdminGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the Admin model
-   */
-  readonly fields: AdminFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for Admin.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__AdminClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    member<T extends MemberDefaultArgs<ExtArgs> = {}>(args?: Subset<T, MemberDefaultArgs<ExtArgs>>): Prisma__MemberClient<$Result.GetResult<Prisma.$MemberPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
-  }
-
-
-
-
-  /**
-   * Fields of the Admin model
-   */
-  interface AdminFieldRefs {
-    readonly id: FieldRef<"Admin", 'String'>
-    readonly memberId: FieldRef<"Admin", 'String'>
-    readonly notes: FieldRef<"Admin", 'String'>
-    readonly createdAt: FieldRef<"Admin", 'DateTime'>
-  }
-    
-
-  // Custom InputTypes
-  /**
-   * Admin findUnique
-   */
-  export type AdminFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Admin
-     */
-    select?: AdminSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Admin
-     */
-    omit?: AdminOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AdminInclude<ExtArgs> | null
-    /**
-     * Filter, which Admin to fetch.
-     */
-    where: AdminWhereUniqueInput
-  }
-
-  /**
-   * Admin findUniqueOrThrow
-   */
-  export type AdminFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Admin
-     */
-    select?: AdminSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Admin
-     */
-    omit?: AdminOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AdminInclude<ExtArgs> | null
-    /**
-     * Filter, which Admin to fetch.
-     */
-    where: AdminWhereUniqueInput
-  }
-
-  /**
-   * Admin findFirst
-   */
-  export type AdminFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Admin
-     */
-    select?: AdminSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Admin
-     */
-    omit?: AdminOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AdminInclude<ExtArgs> | null
-    /**
-     * Filter, which Admin to fetch.
-     */
-    where?: AdminWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Admins to fetch.
-     */
-    orderBy?: AdminOrderByWithRelationInput | AdminOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for Admins.
-     */
-    cursor?: AdminWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Admins from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Admins.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Admins.
-     */
-    distinct?: AdminScalarFieldEnum | AdminScalarFieldEnum[]
-  }
-
-  /**
-   * Admin findFirstOrThrow
-   */
-  export type AdminFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Admin
-     */
-    select?: AdminSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Admin
-     */
-    omit?: AdminOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AdminInclude<ExtArgs> | null
-    /**
-     * Filter, which Admin to fetch.
-     */
-    where?: AdminWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Admins to fetch.
-     */
-    orderBy?: AdminOrderByWithRelationInput | AdminOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for Admins.
-     */
-    cursor?: AdminWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Admins from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Admins.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Admins.
-     */
-    distinct?: AdminScalarFieldEnum | AdminScalarFieldEnum[]
-  }
-
-  /**
-   * Admin findMany
-   */
-  export type AdminFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Admin
-     */
-    select?: AdminSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Admin
-     */
-    omit?: AdminOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AdminInclude<ExtArgs> | null
-    /**
-     * Filter, which Admins to fetch.
-     */
-    where?: AdminWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Admins to fetch.
-     */
-    orderBy?: AdminOrderByWithRelationInput | AdminOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing Admins.
-     */
-    cursor?: AdminWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Admins from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Admins.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Admins.
-     */
-    distinct?: AdminScalarFieldEnum | AdminScalarFieldEnum[]
-  }
-
-  /**
-   * Admin create
-   */
-  export type AdminCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Admin
-     */
-    select?: AdminSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Admin
-     */
-    omit?: AdminOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AdminInclude<ExtArgs> | null
-    /**
-     * The data needed to create a Admin.
-     */
-    data: XOR<AdminCreateInput, AdminUncheckedCreateInput>
-  }
-
-  /**
-   * Admin createMany
-   */
-  export type AdminCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many Admins.
-     */
-    data: AdminCreateManyInput | AdminCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * Admin createManyAndReturn
-   */
-  export type AdminCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Admin
-     */
-    select?: AdminSelectCreateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the Admin
-     */
-    omit?: AdminOmit<ExtArgs> | null
-    /**
-     * The data used to create many Admins.
-     */
-    data: AdminCreateManyInput | AdminCreateManyInput[]
-    skipDuplicates?: boolean
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AdminIncludeCreateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * Admin update
-   */
-  export type AdminUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Admin
-     */
-    select?: AdminSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Admin
-     */
-    omit?: AdminOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AdminInclude<ExtArgs> | null
-    /**
-     * The data needed to update a Admin.
-     */
-    data: XOR<AdminUpdateInput, AdminUncheckedUpdateInput>
-    /**
-     * Choose, which Admin to update.
-     */
-    where: AdminWhereUniqueInput
-  }
-
-  /**
-   * Admin updateMany
-   */
-  export type AdminUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update Admins.
-     */
-    data: XOR<AdminUpdateManyMutationInput, AdminUncheckedUpdateManyInput>
-    /**
-     * Filter which Admins to update
-     */
-    where?: AdminWhereInput
-    /**
-     * Limit how many Admins to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * Admin updateManyAndReturn
-   */
-  export type AdminUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Admin
-     */
-    select?: AdminSelectUpdateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the Admin
-     */
-    omit?: AdminOmit<ExtArgs> | null
-    /**
-     * The data used to update Admins.
-     */
-    data: XOR<AdminUpdateManyMutationInput, AdminUncheckedUpdateManyInput>
-    /**
-     * Filter which Admins to update
-     */
-    where?: AdminWhereInput
-    /**
-     * Limit how many Admins to update.
-     */
-    limit?: number
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AdminIncludeUpdateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * Admin upsert
-   */
-  export type AdminUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Admin
-     */
-    select?: AdminSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Admin
-     */
-    omit?: AdminOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AdminInclude<ExtArgs> | null
-    /**
-     * The filter to search for the Admin to update in case it exists.
-     */
-    where: AdminWhereUniqueInput
-    /**
-     * In case the Admin found by the `where` argument doesn't exist, create a new Admin with this data.
-     */
-    create: XOR<AdminCreateInput, AdminUncheckedCreateInput>
-    /**
-     * In case the Admin was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<AdminUpdateInput, AdminUncheckedUpdateInput>
-  }
-
-  /**
-   * Admin delete
-   */
-  export type AdminDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Admin
-     */
-    select?: AdminSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Admin
-     */
-    omit?: AdminOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AdminInclude<ExtArgs> | null
-    /**
-     * Filter which Admin to delete.
-     */
-    where: AdminWhereUniqueInput
-  }
-
-  /**
-   * Admin deleteMany
-   */
-  export type AdminDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which Admins to delete
-     */
-    where?: AdminWhereInput
-    /**
-     * Limit how many Admins to delete.
-     */
-    limit?: number
-  }
-
-  /**
-   * Admin without action
-   */
-  export type AdminDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Admin
-     */
-    select?: AdminSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Admin
-     */
-    omit?: AdminOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AdminInclude<ExtArgs> | null
-  }
-
-
-  /**
-   * Model Instructor
-   */
-
-  export type AggregateInstructor = {
-    _count: InstructorCountAggregateOutputType | null
-    _min: InstructorMinAggregateOutputType | null
-    _max: InstructorMaxAggregateOutputType | null
-  }
-
-  export type InstructorMinAggregateOutputType = {
-    id: string | null
-    memberId: string | null
-    dojoId: string | null
-    bio: string | null
-    isActive: boolean | null
-    createdAt: Date | null
-    updatedAt: Date | null
-  }
-
-  export type InstructorMaxAggregateOutputType = {
-    id: string | null
-    memberId: string | null
-    dojoId: string | null
-    bio: string | null
-    isActive: boolean | null
-    createdAt: Date | null
-    updatedAt: Date | null
-  }
-
-  export type InstructorCountAggregateOutputType = {
-    id: number
-    memberId: number
-    dojoId: number
-    bio: number
-    isActive: number
-    createdAt: number
-    updatedAt: number
-    _all: number
-  }
-
-
-  export type InstructorMinAggregateInputType = {
-    id?: true
-    memberId?: true
-    dojoId?: true
-    bio?: true
-    isActive?: true
-    createdAt?: true
-    updatedAt?: true
-  }
-
-  export type InstructorMaxAggregateInputType = {
-    id?: true
-    memberId?: true
-    dojoId?: true
-    bio?: true
-    isActive?: true
-    createdAt?: true
-    updatedAt?: true
-  }
-
-  export type InstructorCountAggregateInputType = {
-    id?: true
-    memberId?: true
-    dojoId?: true
-    bio?: true
-    isActive?: true
-    createdAt?: true
-    updatedAt?: true
-    _all?: true
-  }
-
-  export type InstructorAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which Instructor to aggregate.
-     */
-    where?: InstructorWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Instructors to fetch.
-     */
-    orderBy?: InstructorOrderByWithRelationInput | InstructorOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: InstructorWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Instructors from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Instructors.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned Instructors
-    **/
-    _count?: true | InstructorCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: InstructorMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: InstructorMaxAggregateInputType
-  }
-
-  export type GetInstructorAggregateType<T extends InstructorAggregateArgs> = {
-        [P in keyof T & keyof AggregateInstructor]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateInstructor[P]>
-      : GetScalarType<T[P], AggregateInstructor[P]>
-  }
-
-
-
-
-  export type InstructorGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: InstructorWhereInput
-    orderBy?: InstructorOrderByWithAggregationInput | InstructorOrderByWithAggregationInput[]
-    by: InstructorScalarFieldEnum[] | InstructorScalarFieldEnum
-    having?: InstructorScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: InstructorCountAggregateInputType | true
-    _min?: InstructorMinAggregateInputType
-    _max?: InstructorMaxAggregateInputType
-  }
-
-  export type InstructorGroupByOutputType = {
-    id: string
-    memberId: string
-    dojoId: string | null
-    bio: string | null
-    isActive: boolean
-    createdAt: Date
-    updatedAt: Date
-    _count: InstructorCountAggregateOutputType | null
-    _min: InstructorMinAggregateOutputType | null
-    _max: InstructorMaxAggregateOutputType | null
-  }
-
-  type GetInstructorGroupByPayload<T extends InstructorGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<InstructorGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof InstructorGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], InstructorGroupByOutputType[P]>
-            : GetScalarType<T[P], InstructorGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type InstructorSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    memberId?: boolean
-    dojoId?: boolean
-    bio?: boolean
-    isActive?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-    member?: boolean | MemberDefaultArgs<ExtArgs>
-    dojo?: boolean | Instructor$dojoArgs<ExtArgs>
-  }, ExtArgs["result"]["instructor"]>
-
-  export type InstructorSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    memberId?: boolean
-    dojoId?: boolean
-    bio?: boolean
-    isActive?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-    member?: boolean | MemberDefaultArgs<ExtArgs>
-    dojo?: boolean | Instructor$dojoArgs<ExtArgs>
-  }, ExtArgs["result"]["instructor"]>
-
-  export type InstructorSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    memberId?: boolean
-    dojoId?: boolean
-    bio?: boolean
-    isActive?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-    member?: boolean | MemberDefaultArgs<ExtArgs>
-    dojo?: boolean | Instructor$dojoArgs<ExtArgs>
-  }, ExtArgs["result"]["instructor"]>
-
-  export type InstructorSelectScalar = {
-    id?: boolean
-    memberId?: boolean
-    dojoId?: boolean
-    bio?: boolean
-    isActive?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-  }
-
-  export type InstructorOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "memberId" | "dojoId" | "bio" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["instructor"]>
-  export type InstructorInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    member?: boolean | MemberDefaultArgs<ExtArgs>
-    dojo?: boolean | Instructor$dojoArgs<ExtArgs>
-  }
-  export type InstructorIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    member?: boolean | MemberDefaultArgs<ExtArgs>
-    dojo?: boolean | Instructor$dojoArgs<ExtArgs>
-  }
-  export type InstructorIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    member?: boolean | MemberDefaultArgs<ExtArgs>
-    dojo?: boolean | Instructor$dojoArgs<ExtArgs>
-  }
-
-  export type $InstructorPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "Instructor"
-    objects: {
-      member: Prisma.$MemberPayload<ExtArgs>
-      dojo: Prisma.$DojoPayload<ExtArgs> | null
-    }
-    scalars: $Extensions.GetPayloadResult<{
-      id: string
-      memberId: string
-      dojoId: string | null
-      bio: string | null
-      isActive: boolean
-      createdAt: Date
-      updatedAt: Date
-    }, ExtArgs["result"]["instructor"]>
-    composites: {}
-  }
-
-  type InstructorGetPayload<S extends boolean | null | undefined | InstructorDefaultArgs> = $Result.GetResult<Prisma.$InstructorPayload, S>
-
-  type InstructorCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<InstructorFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: InstructorCountAggregateInputType | true
-    }
-
-  export interface InstructorDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Instructor'], meta: { name: 'Instructor' } }
-    /**
-     * Find zero or one Instructor that matches the filter.
-     * @param {InstructorFindUniqueArgs} args - Arguments to find a Instructor
-     * @example
-     * // Get one Instructor
-     * const instructor = await prisma.instructor.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUnique<T extends InstructorFindUniqueArgs>(args: SelectSubset<T, InstructorFindUniqueArgs<ExtArgs>>): Prisma__InstructorClient<$Result.GetResult<Prisma.$InstructorPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find one Instructor that matches the filter or throw an error with `error.code='P2025'`
-     * if no matches were found.
-     * @param {InstructorFindUniqueOrThrowArgs} args - Arguments to find a Instructor
-     * @example
-     * // Get one Instructor
-     * const instructor = await prisma.instructor.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUniqueOrThrow<T extends InstructorFindUniqueOrThrowArgs>(args: SelectSubset<T, InstructorFindUniqueOrThrowArgs<ExtArgs>>): Prisma__InstructorClient<$Result.GetResult<Prisma.$InstructorPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first Instructor that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {InstructorFindFirstArgs} args - Arguments to find a Instructor
-     * @example
-     * // Get one Instructor
-     * const instructor = await prisma.instructor.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirst<T extends InstructorFindFirstArgs>(args?: SelectSubset<T, InstructorFindFirstArgs<ExtArgs>>): Prisma__InstructorClient<$Result.GetResult<Prisma.$InstructorPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first Instructor that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {InstructorFindFirstOrThrowArgs} args - Arguments to find a Instructor
-     * @example
-     * // Get one Instructor
-     * const instructor = await prisma.instructor.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirstOrThrow<T extends InstructorFindFirstOrThrowArgs>(args?: SelectSubset<T, InstructorFindFirstOrThrowArgs<ExtArgs>>): Prisma__InstructorClient<$Result.GetResult<Prisma.$InstructorPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find zero or more Instructors that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {InstructorFindManyArgs} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all Instructors
-     * const instructors = await prisma.instructor.findMany()
-     * 
-     * // Get first 10 Instructors
-     * const instructors = await prisma.instructor.findMany({ take: 10 })
-     * 
-     * // Only select the `id`
-     * const instructorWithIdOnly = await prisma.instructor.findMany({ select: { id: true } })
-     * 
-     */
-    findMany<T extends InstructorFindManyArgs>(args?: SelectSubset<T, InstructorFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InstructorPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
-
-    /**
-     * Create a Instructor.
-     * @param {InstructorCreateArgs} args - Arguments to create a Instructor.
-     * @example
-     * // Create one Instructor
-     * const Instructor = await prisma.instructor.create({
-     *   data: {
-     *     // ... data to create a Instructor
-     *   }
-     * })
-     * 
-     */
-    create<T extends InstructorCreateArgs>(args: SelectSubset<T, InstructorCreateArgs<ExtArgs>>): Prisma__InstructorClient<$Result.GetResult<Prisma.$InstructorPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Create many Instructors.
-     * @param {InstructorCreateManyArgs} args - Arguments to create many Instructors.
-     * @example
-     * // Create many Instructors
-     * const instructor = await prisma.instructor.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *     
-     */
-    createMany<T extends InstructorCreateManyArgs>(args?: SelectSubset<T, InstructorCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create many Instructors and returns the data saved in the database.
-     * @param {InstructorCreateManyAndReturnArgs} args - Arguments to create many Instructors.
-     * @example
-     * // Create many Instructors
-     * const instructor = await prisma.instructor.createManyAndReturn({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Create many Instructors and only return the `id`
-     * const instructorWithIdOnly = await prisma.instructor.createManyAndReturn({
-     *   select: { id: true },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    createManyAndReturn<T extends InstructorCreateManyAndReturnArgs>(args?: SelectSubset<T, InstructorCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InstructorPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Delete a Instructor.
-     * @param {InstructorDeleteArgs} args - Arguments to delete one Instructor.
-     * @example
-     * // Delete one Instructor
-     * const Instructor = await prisma.instructor.delete({
-     *   where: {
-     *     // ... filter to delete one Instructor
-     *   }
-     * })
-     * 
-     */
-    delete<T extends InstructorDeleteArgs>(args: SelectSubset<T, InstructorDeleteArgs<ExtArgs>>): Prisma__InstructorClient<$Result.GetResult<Prisma.$InstructorPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Update one Instructor.
-     * @param {InstructorUpdateArgs} args - Arguments to update one Instructor.
-     * @example
-     * // Update one Instructor
-     * const instructor = await prisma.instructor.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    update<T extends InstructorUpdateArgs>(args: SelectSubset<T, InstructorUpdateArgs<ExtArgs>>): Prisma__InstructorClient<$Result.GetResult<Prisma.$InstructorPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Delete zero or more Instructors.
-     * @param {InstructorDeleteManyArgs} args - Arguments to filter Instructors to delete.
-     * @example
-     * // Delete a few Instructors
-     * const { count } = await prisma.instructor.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-     */
-    deleteMany<T extends InstructorDeleteManyArgs>(args?: SelectSubset<T, InstructorDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Instructors.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {InstructorUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many Instructors
-     * const instructor = await prisma.instructor.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    updateMany<T extends InstructorUpdateManyArgs>(args: SelectSubset<T, InstructorUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Instructors and returns the data updated in the database.
-     * @param {InstructorUpdateManyAndReturnArgs} args - Arguments to update many Instructors.
-     * @example
-     * // Update many Instructors
-     * const instructor = await prisma.instructor.updateManyAndReturn({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Update zero or more Instructors and only return the `id`
-     * const instructorWithIdOnly = await prisma.instructor.updateManyAndReturn({
-     *   select: { id: true },
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    updateManyAndReturn<T extends InstructorUpdateManyAndReturnArgs>(args: SelectSubset<T, InstructorUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InstructorPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Create or update one Instructor.
-     * @param {InstructorUpsertArgs} args - Arguments to update or create a Instructor.
-     * @example
-     * // Update or create a Instructor
-     * const instructor = await prisma.instructor.upsert({
-     *   create: {
-     *     // ... data to create a Instructor
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the Instructor we want to update
-     *   }
-     * })
-     */
-    upsert<T extends InstructorUpsertArgs>(args: SelectSubset<T, InstructorUpsertArgs<ExtArgs>>): Prisma__InstructorClient<$Result.GetResult<Prisma.$InstructorPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-
-    /**
-     * Count the number of Instructors.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {InstructorCountArgs} args - Arguments to filter Instructors to count.
-     * @example
-     * // Count the number of Instructors
-     * const count = await prisma.instructor.count({
-     *   where: {
-     *     // ... the filter for the Instructors we want to count
-     *   }
-     * })
-    **/
-    count<T extends InstructorCountArgs>(
-      args?: Subset<T, InstructorCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], InstructorCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a Instructor.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {InstructorAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends InstructorAggregateArgs>(args: Subset<T, InstructorAggregateArgs>): Prisma.PrismaPromise<GetInstructorAggregateType<T>>
-
-    /**
-     * Group by Instructor.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {InstructorGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends InstructorGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: InstructorGroupByArgs['orderBy'] }
-        : { orderBy?: InstructorGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, InstructorGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetInstructorGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the Instructor model
-   */
-  readonly fields: InstructorFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for Instructor.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__InstructorClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    member<T extends MemberDefaultArgs<ExtArgs> = {}>(args?: Subset<T, MemberDefaultArgs<ExtArgs>>): Prisma__MemberClient<$Result.GetResult<Prisma.$MemberPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    dojo<T extends Instructor$dojoArgs<ExtArgs> = {}>(args?: Subset<T, Instructor$dojoArgs<ExtArgs>>): Prisma__DojoClient<$Result.GetResult<Prisma.$DojoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
-  }
-
-
-
-
-  /**
-   * Fields of the Instructor model
-   */
-  interface InstructorFieldRefs {
-    readonly id: FieldRef<"Instructor", 'String'>
-    readonly memberId: FieldRef<"Instructor", 'String'>
-    readonly dojoId: FieldRef<"Instructor", 'String'>
-    readonly bio: FieldRef<"Instructor", 'String'>
-    readonly isActive: FieldRef<"Instructor", 'Boolean'>
-    readonly createdAt: FieldRef<"Instructor", 'DateTime'>
-    readonly updatedAt: FieldRef<"Instructor", 'DateTime'>
-  }
-    
-
-  // Custom InputTypes
-  /**
-   * Instructor findUnique
-   */
-  export type InstructorFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Instructor
-     */
-    select?: InstructorSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Instructor
-     */
-    omit?: InstructorOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: InstructorInclude<ExtArgs> | null
-    /**
-     * Filter, which Instructor to fetch.
-     */
-    where: InstructorWhereUniqueInput
-  }
-
-  /**
-   * Instructor findUniqueOrThrow
-   */
-  export type InstructorFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Instructor
-     */
-    select?: InstructorSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Instructor
-     */
-    omit?: InstructorOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: InstructorInclude<ExtArgs> | null
-    /**
-     * Filter, which Instructor to fetch.
-     */
-    where: InstructorWhereUniqueInput
-  }
-
-  /**
-   * Instructor findFirst
-   */
-  export type InstructorFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Instructor
-     */
-    select?: InstructorSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Instructor
-     */
-    omit?: InstructorOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: InstructorInclude<ExtArgs> | null
-    /**
-     * Filter, which Instructor to fetch.
-     */
-    where?: InstructorWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Instructors to fetch.
-     */
-    orderBy?: InstructorOrderByWithRelationInput | InstructorOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for Instructors.
-     */
-    cursor?: InstructorWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Instructors from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Instructors.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Instructors.
-     */
-    distinct?: InstructorScalarFieldEnum | InstructorScalarFieldEnum[]
-  }
-
-  /**
-   * Instructor findFirstOrThrow
-   */
-  export type InstructorFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Instructor
-     */
-    select?: InstructorSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Instructor
-     */
-    omit?: InstructorOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: InstructorInclude<ExtArgs> | null
-    /**
-     * Filter, which Instructor to fetch.
-     */
-    where?: InstructorWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Instructors to fetch.
-     */
-    orderBy?: InstructorOrderByWithRelationInput | InstructorOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for Instructors.
-     */
-    cursor?: InstructorWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Instructors from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Instructors.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Instructors.
-     */
-    distinct?: InstructorScalarFieldEnum | InstructorScalarFieldEnum[]
-  }
-
-  /**
-   * Instructor findMany
-   */
-  export type InstructorFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Instructor
-     */
-    select?: InstructorSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Instructor
-     */
-    omit?: InstructorOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: InstructorInclude<ExtArgs> | null
-    /**
-     * Filter, which Instructors to fetch.
-     */
-    where?: InstructorWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Instructors to fetch.
-     */
-    orderBy?: InstructorOrderByWithRelationInput | InstructorOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing Instructors.
-     */
-    cursor?: InstructorWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Instructors from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Instructors.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Instructors.
-     */
-    distinct?: InstructorScalarFieldEnum | InstructorScalarFieldEnum[]
-  }
-
-  /**
-   * Instructor create
-   */
-  export type InstructorCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Instructor
-     */
-    select?: InstructorSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Instructor
-     */
-    omit?: InstructorOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: InstructorInclude<ExtArgs> | null
-    /**
-     * The data needed to create a Instructor.
-     */
-    data: XOR<InstructorCreateInput, InstructorUncheckedCreateInput>
-  }
-
-  /**
-   * Instructor createMany
-   */
-  export type InstructorCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many Instructors.
-     */
-    data: InstructorCreateManyInput | InstructorCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * Instructor createManyAndReturn
-   */
-  export type InstructorCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Instructor
-     */
-    select?: InstructorSelectCreateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the Instructor
-     */
-    omit?: InstructorOmit<ExtArgs> | null
-    /**
-     * The data used to create many Instructors.
-     */
-    data: InstructorCreateManyInput | InstructorCreateManyInput[]
-    skipDuplicates?: boolean
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: InstructorIncludeCreateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * Instructor update
-   */
-  export type InstructorUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Instructor
-     */
-    select?: InstructorSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Instructor
-     */
-    omit?: InstructorOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: InstructorInclude<ExtArgs> | null
-    /**
-     * The data needed to update a Instructor.
-     */
-    data: XOR<InstructorUpdateInput, InstructorUncheckedUpdateInput>
-    /**
-     * Choose, which Instructor to update.
-     */
-    where: InstructorWhereUniqueInput
-  }
-
-  /**
-   * Instructor updateMany
-   */
-  export type InstructorUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update Instructors.
-     */
-    data: XOR<InstructorUpdateManyMutationInput, InstructorUncheckedUpdateManyInput>
-    /**
-     * Filter which Instructors to update
-     */
-    where?: InstructorWhereInput
-    /**
-     * Limit how many Instructors to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * Instructor updateManyAndReturn
-   */
-  export type InstructorUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Instructor
-     */
-    select?: InstructorSelectUpdateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the Instructor
-     */
-    omit?: InstructorOmit<ExtArgs> | null
-    /**
-     * The data used to update Instructors.
-     */
-    data: XOR<InstructorUpdateManyMutationInput, InstructorUncheckedUpdateManyInput>
-    /**
-     * Filter which Instructors to update
-     */
-    where?: InstructorWhereInput
-    /**
-     * Limit how many Instructors to update.
-     */
-    limit?: number
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: InstructorIncludeUpdateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * Instructor upsert
-   */
-  export type InstructorUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Instructor
-     */
-    select?: InstructorSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Instructor
-     */
-    omit?: InstructorOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: InstructorInclude<ExtArgs> | null
-    /**
-     * The filter to search for the Instructor to update in case it exists.
-     */
-    where: InstructorWhereUniqueInput
-    /**
-     * In case the Instructor found by the `where` argument doesn't exist, create a new Instructor with this data.
-     */
-    create: XOR<InstructorCreateInput, InstructorUncheckedCreateInput>
-    /**
-     * In case the Instructor was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<InstructorUpdateInput, InstructorUncheckedUpdateInput>
-  }
-
-  /**
-   * Instructor delete
-   */
-  export type InstructorDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Instructor
-     */
-    select?: InstructorSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Instructor
-     */
-    omit?: InstructorOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: InstructorInclude<ExtArgs> | null
-    /**
-     * Filter which Instructor to delete.
-     */
-    where: InstructorWhereUniqueInput
-  }
-
-  /**
-   * Instructor deleteMany
-   */
-  export type InstructorDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which Instructors to delete
-     */
-    where?: InstructorWhereInput
-    /**
-     * Limit how many Instructors to delete.
-     */
-    limit?: number
-  }
-
-  /**
-   * Instructor.dojo
-   */
-  export type Instructor$dojoArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Dojo
-     */
-    select?: DojoSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Dojo
-     */
-    omit?: DojoOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: DojoInclude<ExtArgs> | null
-    where?: DojoWhereInput
-  }
-
-  /**
-   * Instructor without action
-   */
-  export type InstructorDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Instructor
-     */
-    select?: InstructorSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Instructor
-     */
-    omit?: InstructorOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: InstructorInclude<ExtArgs> | null
   }
 
 
@@ -25576,7 +23060,6 @@ export namespace Prisma {
     email: 'email',
     schedule: 'schedule',
     isActive: 'isActive',
-    headInstructorId: 'headInstructorId',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -25633,29 +23116,6 @@ export namespace Prisma {
   };
 
   export type MemberScalarFieldEnum = (typeof MemberScalarFieldEnum)[keyof typeof MemberScalarFieldEnum]
-
-
-  export const AdminScalarFieldEnum: {
-    id: 'id',
-    memberId: 'memberId',
-    notes: 'notes',
-    createdAt: 'createdAt'
-  };
-
-  export type AdminScalarFieldEnum = (typeof AdminScalarFieldEnum)[keyof typeof AdminScalarFieldEnum]
-
-
-  export const InstructorScalarFieldEnum: {
-    id: 'id',
-    memberId: 'memberId',
-    dojoId: 'dojoId',
-    bio: 'bio',
-    isActive: 'isActive',
-    createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
-  };
-
-  export type InstructorScalarFieldEnum = (typeof InstructorScalarFieldEnum)[keyof typeof InstructorScalarFieldEnum]
 
 
   export const AttendanceScalarFieldEnum: {
@@ -26182,12 +23642,9 @@ export namespace Prisma {
     email?: StringNullableFilter<"Dojo"> | string | null
     schedule?: JsonNullableFilter<"Dojo">
     isActive?: BoolFilter<"Dojo"> | boolean
-    headInstructorId?: UuidNullableFilter<"Dojo"> | string | null
     createdAt?: DateTimeFilter<"Dojo"> | Date | string
     updatedAt?: DateTimeFilter<"Dojo"> | Date | string
-    headInstructor?: XOR<MemberNullableScalarRelationFilter, MemberWhereInput> | null
     members?: MemberListRelationFilter
-    instructors?: InstructorListRelationFilter
     attendance?: AttendanceListRelationFilter
   }
 
@@ -26202,12 +23659,9 @@ export namespace Prisma {
     email?: SortOrderInput | SortOrder
     schedule?: SortOrderInput | SortOrder
     isActive?: SortOrder
-    headInstructorId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    headInstructor?: MemberOrderByWithRelationInput
     members?: MemberOrderByRelationAggregateInput
-    instructors?: InstructorOrderByRelationAggregateInput
     attendance?: AttendanceOrderByRelationAggregateInput
   }
 
@@ -26225,12 +23679,9 @@ export namespace Prisma {
     email?: StringNullableFilter<"Dojo"> | string | null
     schedule?: JsonNullableFilter<"Dojo">
     isActive?: BoolFilter<"Dojo"> | boolean
-    headInstructorId?: UuidNullableFilter<"Dojo"> | string | null
     createdAt?: DateTimeFilter<"Dojo"> | Date | string
     updatedAt?: DateTimeFilter<"Dojo"> | Date | string
-    headInstructor?: XOR<MemberNullableScalarRelationFilter, MemberWhereInput> | null
     members?: MemberListRelationFilter
-    instructors?: InstructorListRelationFilter
     attendance?: AttendanceListRelationFilter
   }, "id">
 
@@ -26245,7 +23696,6 @@ export namespace Prisma {
     email?: SortOrderInput | SortOrder
     schedule?: SortOrderInput | SortOrder
     isActive?: SortOrder
-    headInstructorId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: DojoCountOrderByAggregateInput
@@ -26269,7 +23719,6 @@ export namespace Prisma {
     email?: StringNullableWithAggregatesFilter<"Dojo"> | string | null
     schedule?: JsonNullableWithAggregatesFilter<"Dojo">
     isActive?: BoolWithAggregatesFilter<"Dojo"> | boolean
-    headInstructorId?: UuidNullableWithAggregatesFilter<"Dojo"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Dojo"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Dojo"> | Date | string
   }
@@ -26415,9 +23864,6 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Member"> | Date | string
     updatedAt?: DateTimeFilter<"Member"> | Date | string
     dojo?: XOR<DojoNullableScalarRelationFilter, DojoWhereInput> | null
-    dojoHeadOf?: DojoListRelationFilter
-    instructor?: XOR<InstructorNullableScalarRelationFilter, InstructorWhereInput> | null
-    admin?: XOR<AdminNullableScalarRelationFilter, AdminWhereInput> | null
     gradings?: GradingListRelationFilter
     gradingApplications?: GradingApplicationListRelationFilter
     eventRegistrations?: EventRegistrationListRelationFilter
@@ -26451,9 +23897,6 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     dojo?: DojoOrderByWithRelationInput
-    dojoHeadOf?: DojoOrderByRelationAggregateInput
-    instructor?: InstructorOrderByWithRelationInput
-    admin?: AdminOrderByWithRelationInput
     gradings?: GradingOrderByRelationAggregateInput
     gradingApplications?: GradingApplicationOrderByRelationAggregateInput
     eventRegistrations?: EventRegistrationOrderByRelationAggregateInput
@@ -26490,9 +23933,6 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Member"> | Date | string
     updatedAt?: DateTimeFilter<"Member"> | Date | string
     dojo?: XOR<DojoNullableScalarRelationFilter, DojoWhereInput> | null
-    dojoHeadOf?: DojoListRelationFilter
-    instructor?: XOR<InstructorNullableScalarRelationFilter, InstructorWhereInput> | null
-    admin?: XOR<AdminNullableScalarRelationFilter, AdminWhereInput> | null
     gradings?: GradingListRelationFilter
     gradingApplications?: GradingApplicationListRelationFilter
     eventRegistrations?: EventRegistrationListRelationFilter
@@ -26556,124 +23996,6 @@ export namespace Prisma {
     emergencyContactPhone?: StringNullableWithAggregatesFilter<"Member"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Member"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Member"> | Date | string
-  }
-
-  export type AdminWhereInput = {
-    AND?: AdminWhereInput | AdminWhereInput[]
-    OR?: AdminWhereInput[]
-    NOT?: AdminWhereInput | AdminWhereInput[]
-    id?: UuidFilter<"Admin"> | string
-    memberId?: UuidFilter<"Admin"> | string
-    notes?: StringNullableFilter<"Admin"> | string | null
-    createdAt?: DateTimeFilter<"Admin"> | Date | string
-    member?: XOR<MemberScalarRelationFilter, MemberWhereInput>
-  }
-
-  export type AdminOrderByWithRelationInput = {
-    id?: SortOrder
-    memberId?: SortOrder
-    notes?: SortOrderInput | SortOrder
-    createdAt?: SortOrder
-    member?: MemberOrderByWithRelationInput
-  }
-
-  export type AdminWhereUniqueInput = Prisma.AtLeast<{
-    id?: string
-    memberId?: string
-    AND?: AdminWhereInput | AdminWhereInput[]
-    OR?: AdminWhereInput[]
-    NOT?: AdminWhereInput | AdminWhereInput[]
-    notes?: StringNullableFilter<"Admin"> | string | null
-    createdAt?: DateTimeFilter<"Admin"> | Date | string
-    member?: XOR<MemberScalarRelationFilter, MemberWhereInput>
-  }, "id" | "memberId">
-
-  export type AdminOrderByWithAggregationInput = {
-    id?: SortOrder
-    memberId?: SortOrder
-    notes?: SortOrderInput | SortOrder
-    createdAt?: SortOrder
-    _count?: AdminCountOrderByAggregateInput
-    _max?: AdminMaxOrderByAggregateInput
-    _min?: AdminMinOrderByAggregateInput
-  }
-
-  export type AdminScalarWhereWithAggregatesInput = {
-    AND?: AdminScalarWhereWithAggregatesInput | AdminScalarWhereWithAggregatesInput[]
-    OR?: AdminScalarWhereWithAggregatesInput[]
-    NOT?: AdminScalarWhereWithAggregatesInput | AdminScalarWhereWithAggregatesInput[]
-    id?: UuidWithAggregatesFilter<"Admin"> | string
-    memberId?: UuidWithAggregatesFilter<"Admin"> | string
-    notes?: StringNullableWithAggregatesFilter<"Admin"> | string | null
-    createdAt?: DateTimeWithAggregatesFilter<"Admin"> | Date | string
-  }
-
-  export type InstructorWhereInput = {
-    AND?: InstructorWhereInput | InstructorWhereInput[]
-    OR?: InstructorWhereInput[]
-    NOT?: InstructorWhereInput | InstructorWhereInput[]
-    id?: UuidFilter<"Instructor"> | string
-    memberId?: UuidFilter<"Instructor"> | string
-    dojoId?: UuidNullableFilter<"Instructor"> | string | null
-    bio?: StringNullableFilter<"Instructor"> | string | null
-    isActive?: BoolFilter<"Instructor"> | boolean
-    createdAt?: DateTimeFilter<"Instructor"> | Date | string
-    updatedAt?: DateTimeFilter<"Instructor"> | Date | string
-    member?: XOR<MemberScalarRelationFilter, MemberWhereInput>
-    dojo?: XOR<DojoNullableScalarRelationFilter, DojoWhereInput> | null
-  }
-
-  export type InstructorOrderByWithRelationInput = {
-    id?: SortOrder
-    memberId?: SortOrder
-    dojoId?: SortOrderInput | SortOrder
-    bio?: SortOrderInput | SortOrder
-    isActive?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    member?: MemberOrderByWithRelationInput
-    dojo?: DojoOrderByWithRelationInput
-  }
-
-  export type InstructorWhereUniqueInput = Prisma.AtLeast<{
-    id?: string
-    memberId?: string
-    AND?: InstructorWhereInput | InstructorWhereInput[]
-    OR?: InstructorWhereInput[]
-    NOT?: InstructorWhereInput | InstructorWhereInput[]
-    dojoId?: UuidNullableFilter<"Instructor"> | string | null
-    bio?: StringNullableFilter<"Instructor"> | string | null
-    isActive?: BoolFilter<"Instructor"> | boolean
-    createdAt?: DateTimeFilter<"Instructor"> | Date | string
-    updatedAt?: DateTimeFilter<"Instructor"> | Date | string
-    member?: XOR<MemberScalarRelationFilter, MemberWhereInput>
-    dojo?: XOR<DojoNullableScalarRelationFilter, DojoWhereInput> | null
-  }, "id" | "memberId">
-
-  export type InstructorOrderByWithAggregationInput = {
-    id?: SortOrder
-    memberId?: SortOrder
-    dojoId?: SortOrderInput | SortOrder
-    bio?: SortOrderInput | SortOrder
-    isActive?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    _count?: InstructorCountOrderByAggregateInput
-    _max?: InstructorMaxOrderByAggregateInput
-    _min?: InstructorMinOrderByAggregateInput
-  }
-
-  export type InstructorScalarWhereWithAggregatesInput = {
-    AND?: InstructorScalarWhereWithAggregatesInput | InstructorScalarWhereWithAggregatesInput[]
-    OR?: InstructorScalarWhereWithAggregatesInput[]
-    NOT?: InstructorScalarWhereWithAggregatesInput | InstructorScalarWhereWithAggregatesInput[]
-    id?: UuidWithAggregatesFilter<"Instructor"> | string
-    memberId?: UuidWithAggregatesFilter<"Instructor"> | string
-    dojoId?: UuidNullableWithAggregatesFilter<"Instructor"> | string | null
-    bio?: StringNullableWithAggregatesFilter<"Instructor"> | string | null
-    isActive?: BoolWithAggregatesFilter<"Instructor"> | boolean
-    createdAt?: DateTimeWithAggregatesFilter<"Instructor"> | Date | string
-    updatedAt?: DateTimeWithAggregatesFilter<"Instructor"> | Date | string
   }
 
   export type AttendanceWhereInput = {
@@ -27773,9 +25095,7 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
-    headInstructor?: MemberCreateNestedOneWithoutDojoHeadOfInput
     members?: MemberCreateNestedManyWithoutDojoInput
-    instructors?: InstructorCreateNestedManyWithoutDojoInput
     attendance?: AttendanceCreateNestedManyWithoutDojoInput
   }
 
@@ -27790,11 +25110,9 @@ export namespace Prisma {
     email?: string | null
     schedule?: NullableJsonNullValueInput | InputJsonValue
     isActive?: boolean
-    headInstructorId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     members?: MemberUncheckedCreateNestedManyWithoutDojoInput
-    instructors?: InstructorUncheckedCreateNestedManyWithoutDojoInput
     attendance?: AttendanceUncheckedCreateNestedManyWithoutDojoInput
   }
 
@@ -27811,9 +25129,7 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    headInstructor?: MemberUpdateOneWithoutDojoHeadOfNestedInput
     members?: MemberUpdateManyWithoutDojoNestedInput
-    instructors?: InstructorUpdateManyWithoutDojoNestedInput
     attendance?: AttendanceUpdateManyWithoutDojoNestedInput
   }
 
@@ -27828,11 +25144,9 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     schedule?: NullableJsonNullValueInput | InputJsonValue
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    headInstructorId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: MemberUncheckedUpdateManyWithoutDojoNestedInput
-    instructors?: InstructorUncheckedUpdateManyWithoutDojoNestedInput
     attendance?: AttendanceUncheckedUpdateManyWithoutDojoNestedInput
   }
 
@@ -27847,7 +25161,6 @@ export namespace Prisma {
     email?: string | null
     schedule?: NullableJsonNullValueInput | InputJsonValue
     isActive?: boolean
-    headInstructorId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -27878,7 +25191,6 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     schedule?: NullableJsonNullValueInput | InputJsonValue
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    headInstructorId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -28046,9 +25358,6 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     dojo?: DojoCreateNestedOneWithoutMembersInput
-    dojoHeadOf?: DojoCreateNestedManyWithoutHeadInstructorInput
-    instructor?: InstructorCreateNestedOneWithoutMemberInput
-    admin?: AdminCreateNestedOneWithoutMemberInput
     gradings?: GradingCreateNestedManyWithoutMemberInput
     gradingApplications?: GradingApplicationCreateNestedManyWithoutMemberInput
     eventRegistrations?: EventRegistrationCreateNestedManyWithoutMemberInput
@@ -28081,9 +25390,6 @@ export namespace Prisma {
     emergencyContactPhone?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    dojoHeadOf?: DojoUncheckedCreateNestedManyWithoutHeadInstructorInput
-    instructor?: InstructorUncheckedCreateNestedOneWithoutMemberInput
-    admin?: AdminUncheckedCreateNestedOneWithoutMemberInput
     gradings?: GradingUncheckedCreateNestedManyWithoutMemberInput
     gradingApplications?: GradingApplicationUncheckedCreateNestedManyWithoutMemberInput
     eventRegistrations?: EventRegistrationUncheckedCreateNestedManyWithoutMemberInput
@@ -28116,9 +25422,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dojo?: DojoUpdateOneWithoutMembersNestedInput
-    dojoHeadOf?: DojoUpdateManyWithoutHeadInstructorNestedInput
-    instructor?: InstructorUpdateOneWithoutMemberNestedInput
-    admin?: AdminUpdateOneWithoutMemberNestedInput
     gradings?: GradingUpdateManyWithoutMemberNestedInput
     gradingApplications?: GradingApplicationUpdateManyWithoutMemberNestedInput
     eventRegistrations?: EventRegistrationUpdateManyWithoutMemberNestedInput
@@ -28151,9 +25454,6 @@ export namespace Prisma {
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    dojoHeadOf?: DojoUncheckedUpdateManyWithoutHeadInstructorNestedInput
-    instructor?: InstructorUncheckedUpdateOneWithoutMemberNestedInput
-    admin?: AdminUncheckedUpdateOneWithoutMemberNestedInput
     gradings?: GradingUncheckedUpdateManyWithoutMemberNestedInput
     gradingApplications?: GradingApplicationUncheckedUpdateManyWithoutMemberNestedInput
     eventRegistrations?: EventRegistrationUncheckedUpdateManyWithoutMemberNestedInput
@@ -28233,122 +25533,6 @@ export namespace Prisma {
     nationalId?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type AdminCreateInput = {
-    id?: string
-    notes?: string | null
-    createdAt?: Date | string
-    member: MemberCreateNestedOneWithoutAdminInput
-  }
-
-  export type AdminUncheckedCreateInput = {
-    id?: string
-    memberId: string
-    notes?: string | null
-    createdAt?: Date | string
-  }
-
-  export type AdminUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    notes?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    member?: MemberUpdateOneRequiredWithoutAdminNestedInput
-  }
-
-  export type AdminUncheckedUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    memberId?: StringFieldUpdateOperationsInput | string
-    notes?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type AdminCreateManyInput = {
-    id?: string
-    memberId: string
-    notes?: string | null
-    createdAt?: Date | string
-  }
-
-  export type AdminUpdateManyMutationInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    notes?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type AdminUncheckedUpdateManyInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    memberId?: StringFieldUpdateOperationsInput | string
-    notes?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type InstructorCreateInput = {
-    id?: string
-    bio?: string | null
-    isActive?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    member: MemberCreateNestedOneWithoutInstructorInput
-    dojo?: DojoCreateNestedOneWithoutInstructorsInput
-  }
-
-  export type InstructorUncheckedCreateInput = {
-    id?: string
-    memberId: string
-    dojoId?: string | null
-    bio?: string | null
-    isActive?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type InstructorUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    bio?: NullableStringFieldUpdateOperationsInput | string | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    member?: MemberUpdateOneRequiredWithoutInstructorNestedInput
-    dojo?: DojoUpdateOneWithoutInstructorsNestedInput
-  }
-
-  export type InstructorUncheckedUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    memberId?: StringFieldUpdateOperationsInput | string
-    dojoId?: NullableStringFieldUpdateOperationsInput | string | null
-    bio?: NullableStringFieldUpdateOperationsInput | string | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type InstructorCreateManyInput = {
-    id?: string
-    memberId: string
-    dojoId?: string | null
-    bio?: string | null
-    isActive?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type InstructorUpdateManyMutationInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    bio?: NullableStringFieldUpdateOperationsInput | string | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type InstructorUncheckedUpdateManyInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    memberId?: StringFieldUpdateOperationsInput | string
-    dojoId?: NullableStringFieldUpdateOperationsInput | string | null
-    bio?: NullableStringFieldUpdateOperationsInput | string | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -29646,33 +26830,10 @@ export namespace Prisma {
     not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
-  export type UuidNullableFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    mode?: QueryMode
-    not?: NestedUuidNullableFilter<$PrismaModel> | string | null
-  }
-
-  export type MemberNullableScalarRelationFilter = {
-    is?: MemberWhereInput | null
-    isNot?: MemberWhereInput | null
-  }
-
   export type MemberListRelationFilter = {
     every?: MemberWhereInput
     some?: MemberWhereInput
     none?: MemberWhereInput
-  }
-
-  export type InstructorListRelationFilter = {
-    every?: InstructorWhereInput
-    some?: InstructorWhereInput
-    none?: InstructorWhereInput
   }
 
   export type AttendanceListRelationFilter = {
@@ -29682,10 +26843,6 @@ export namespace Prisma {
   }
 
   export type MemberOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type InstructorOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -29704,7 +26861,6 @@ export namespace Prisma {
     email?: SortOrder
     schedule?: SortOrder
     isActive?: SortOrder
-    headInstructorId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -29724,7 +26880,6 @@ export namespace Prisma {
     phone?: SortOrder
     email?: SortOrder
     isActive?: SortOrder
-    headInstructorId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -29739,7 +26894,6 @@ export namespace Prisma {
     phone?: SortOrder
     email?: SortOrder
     isActive?: SortOrder
-    headInstructorId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -29799,7 +26953,7 @@ export namespace Prisma {
     _max?: NestedBoolFilter<$PrismaModel>
   }
 
-  export type UuidNullableWithAggregatesFilter<$PrismaModel = never> = {
+  export type UuidNullableFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
     in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
     notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
@@ -29808,10 +26962,7 @@ export namespace Prisma {
     gt?: string | StringFieldRefInput<$PrismaModel>
     gte?: string | StringFieldRefInput<$PrismaModel>
     mode?: QueryMode
-    not?: NestedUuidNullableWithAggregatesFilter<$PrismaModel> | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedStringNullableFilter<$PrismaModel>
-    _max?: NestedStringNullableFilter<$PrismaModel>
+    not?: NestedUuidNullableFilter<$PrismaModel> | string | null
   }
 
   export type StringNullableListFilter<$PrismaModel = never> = {
@@ -29917,6 +27068,21 @@ export namespace Prisma {
     latitude?: SortOrder
     longitude?: SortOrder
   }
+
+  export type UuidNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedUuidNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
+  }
   export type JsonWithAggregatesFilter<$PrismaModel = never> =
     | PatchUndefined<
         Either<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
@@ -29984,22 +27150,6 @@ export namespace Prisma {
     isNot?: DojoWhereInput | null
   }
 
-  export type DojoListRelationFilter = {
-    every?: DojoWhereInput
-    some?: DojoWhereInput
-    none?: DojoWhereInput
-  }
-
-  export type InstructorNullableScalarRelationFilter = {
-    is?: InstructorWhereInput | null
-    isNot?: InstructorWhereInput | null
-  }
-
-  export type AdminNullableScalarRelationFilter = {
-    is?: AdminWhereInput | null
-    isNot?: AdminWhereInput | null
-  }
-
   export type EventRegistrationListRelationFilter = {
     every?: EventRegistrationWhereInput
     some?: EventRegistrationWhereInput
@@ -30022,10 +27172,6 @@ export namespace Prisma {
     every?: TournamentParticipantWhereInput
     some?: TournamentParticipantWhereInput
     none?: TournamentParticipantWhereInput
-  }
-
-  export type DojoOrderByRelationAggregateInput = {
-    _count?: SortOrder
   }
 
   export type EventRegistrationOrderByRelationAggregateInput = {
@@ -30156,57 +27302,6 @@ export namespace Prisma {
   export type MemberScalarRelationFilter = {
     is?: MemberWhereInput
     isNot?: MemberWhereInput
-  }
-
-  export type AdminCountOrderByAggregateInput = {
-    id?: SortOrder
-    memberId?: SortOrder
-    notes?: SortOrder
-    createdAt?: SortOrder
-  }
-
-  export type AdminMaxOrderByAggregateInput = {
-    id?: SortOrder
-    memberId?: SortOrder
-    notes?: SortOrder
-    createdAt?: SortOrder
-  }
-
-  export type AdminMinOrderByAggregateInput = {
-    id?: SortOrder
-    memberId?: SortOrder
-    notes?: SortOrder
-    createdAt?: SortOrder
-  }
-
-  export type InstructorCountOrderByAggregateInput = {
-    id?: SortOrder
-    memberId?: SortOrder
-    dojoId?: SortOrder
-    bio?: SortOrder
-    isActive?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-  }
-
-  export type InstructorMaxOrderByAggregateInput = {
-    id?: SortOrder
-    memberId?: SortOrder
-    dojoId?: SortOrder
-    bio?: SortOrder
-    isActive?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-  }
-
-  export type InstructorMinOrderByAggregateInput = {
-    id?: SortOrder
-    memberId?: SortOrder
-    dojoId?: SortOrder
-    bio?: SortOrder
-    isActive?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
   }
 
   export type AttendanceMemberIdDateCompoundUniqueInput = {
@@ -31109,24 +28204,11 @@ export namespace Prisma {
     deleteMany?: GradingApplicationScalarWhereInput | GradingApplicationScalarWhereInput[]
   }
 
-  export type MemberCreateNestedOneWithoutDojoHeadOfInput = {
-    create?: XOR<MemberCreateWithoutDojoHeadOfInput, MemberUncheckedCreateWithoutDojoHeadOfInput>
-    connectOrCreate?: MemberCreateOrConnectWithoutDojoHeadOfInput
-    connect?: MemberWhereUniqueInput
-  }
-
   export type MemberCreateNestedManyWithoutDojoInput = {
     create?: XOR<MemberCreateWithoutDojoInput, MemberUncheckedCreateWithoutDojoInput> | MemberCreateWithoutDojoInput[] | MemberUncheckedCreateWithoutDojoInput[]
     connectOrCreate?: MemberCreateOrConnectWithoutDojoInput | MemberCreateOrConnectWithoutDojoInput[]
     createMany?: MemberCreateManyDojoInputEnvelope
     connect?: MemberWhereUniqueInput | MemberWhereUniqueInput[]
-  }
-
-  export type InstructorCreateNestedManyWithoutDojoInput = {
-    create?: XOR<InstructorCreateWithoutDojoInput, InstructorUncheckedCreateWithoutDojoInput> | InstructorCreateWithoutDojoInput[] | InstructorUncheckedCreateWithoutDojoInput[]
-    connectOrCreate?: InstructorCreateOrConnectWithoutDojoInput | InstructorCreateOrConnectWithoutDojoInput[]
-    createMany?: InstructorCreateManyDojoInputEnvelope
-    connect?: InstructorWhereUniqueInput | InstructorWhereUniqueInput[]
   }
 
   export type AttendanceCreateNestedManyWithoutDojoInput = {
@@ -31141,13 +28223,6 @@ export namespace Prisma {
     connectOrCreate?: MemberCreateOrConnectWithoutDojoInput | MemberCreateOrConnectWithoutDojoInput[]
     createMany?: MemberCreateManyDojoInputEnvelope
     connect?: MemberWhereUniqueInput | MemberWhereUniqueInput[]
-  }
-
-  export type InstructorUncheckedCreateNestedManyWithoutDojoInput = {
-    create?: XOR<InstructorCreateWithoutDojoInput, InstructorUncheckedCreateWithoutDojoInput> | InstructorCreateWithoutDojoInput[] | InstructorUncheckedCreateWithoutDojoInput[]
-    connectOrCreate?: InstructorCreateOrConnectWithoutDojoInput | InstructorCreateOrConnectWithoutDojoInput[]
-    createMany?: InstructorCreateManyDojoInputEnvelope
-    connect?: InstructorWhereUniqueInput | InstructorWhereUniqueInput[]
   }
 
   export type AttendanceUncheckedCreateNestedManyWithoutDojoInput = {
@@ -31169,16 +28244,6 @@ export namespace Prisma {
     set?: boolean
   }
 
-  export type MemberUpdateOneWithoutDojoHeadOfNestedInput = {
-    create?: XOR<MemberCreateWithoutDojoHeadOfInput, MemberUncheckedCreateWithoutDojoHeadOfInput>
-    connectOrCreate?: MemberCreateOrConnectWithoutDojoHeadOfInput
-    upsert?: MemberUpsertWithoutDojoHeadOfInput
-    disconnect?: MemberWhereInput | boolean
-    delete?: MemberWhereInput | boolean
-    connect?: MemberWhereUniqueInput
-    update?: XOR<XOR<MemberUpdateToOneWithWhereWithoutDojoHeadOfInput, MemberUpdateWithoutDojoHeadOfInput>, MemberUncheckedUpdateWithoutDojoHeadOfInput>
-  }
-
   export type MemberUpdateManyWithoutDojoNestedInput = {
     create?: XOR<MemberCreateWithoutDojoInput, MemberUncheckedCreateWithoutDojoInput> | MemberCreateWithoutDojoInput[] | MemberUncheckedCreateWithoutDojoInput[]
     connectOrCreate?: MemberCreateOrConnectWithoutDojoInput | MemberCreateOrConnectWithoutDojoInput[]
@@ -31191,20 +28256,6 @@ export namespace Prisma {
     update?: MemberUpdateWithWhereUniqueWithoutDojoInput | MemberUpdateWithWhereUniqueWithoutDojoInput[]
     updateMany?: MemberUpdateManyWithWhereWithoutDojoInput | MemberUpdateManyWithWhereWithoutDojoInput[]
     deleteMany?: MemberScalarWhereInput | MemberScalarWhereInput[]
-  }
-
-  export type InstructorUpdateManyWithoutDojoNestedInput = {
-    create?: XOR<InstructorCreateWithoutDojoInput, InstructorUncheckedCreateWithoutDojoInput> | InstructorCreateWithoutDojoInput[] | InstructorUncheckedCreateWithoutDojoInput[]
-    connectOrCreate?: InstructorCreateOrConnectWithoutDojoInput | InstructorCreateOrConnectWithoutDojoInput[]
-    upsert?: InstructorUpsertWithWhereUniqueWithoutDojoInput | InstructorUpsertWithWhereUniqueWithoutDojoInput[]
-    createMany?: InstructorCreateManyDojoInputEnvelope
-    set?: InstructorWhereUniqueInput | InstructorWhereUniqueInput[]
-    disconnect?: InstructorWhereUniqueInput | InstructorWhereUniqueInput[]
-    delete?: InstructorWhereUniqueInput | InstructorWhereUniqueInput[]
-    connect?: InstructorWhereUniqueInput | InstructorWhereUniqueInput[]
-    update?: InstructorUpdateWithWhereUniqueWithoutDojoInput | InstructorUpdateWithWhereUniqueWithoutDojoInput[]
-    updateMany?: InstructorUpdateManyWithWhereWithoutDojoInput | InstructorUpdateManyWithWhereWithoutDojoInput[]
-    deleteMany?: InstructorScalarWhereInput | InstructorScalarWhereInput[]
   }
 
   export type AttendanceUpdateManyWithoutDojoNestedInput = {
@@ -31233,20 +28284,6 @@ export namespace Prisma {
     update?: MemberUpdateWithWhereUniqueWithoutDojoInput | MemberUpdateWithWhereUniqueWithoutDojoInput[]
     updateMany?: MemberUpdateManyWithWhereWithoutDojoInput | MemberUpdateManyWithWhereWithoutDojoInput[]
     deleteMany?: MemberScalarWhereInput | MemberScalarWhereInput[]
-  }
-
-  export type InstructorUncheckedUpdateManyWithoutDojoNestedInput = {
-    create?: XOR<InstructorCreateWithoutDojoInput, InstructorUncheckedCreateWithoutDojoInput> | InstructorCreateWithoutDojoInput[] | InstructorUncheckedCreateWithoutDojoInput[]
-    connectOrCreate?: InstructorCreateOrConnectWithoutDojoInput | InstructorCreateOrConnectWithoutDojoInput[]
-    upsert?: InstructorUpsertWithWhereUniqueWithoutDojoInput | InstructorUpsertWithWhereUniqueWithoutDojoInput[]
-    createMany?: InstructorCreateManyDojoInputEnvelope
-    set?: InstructorWhereUniqueInput | InstructorWhereUniqueInput[]
-    disconnect?: InstructorWhereUniqueInput | InstructorWhereUniqueInput[]
-    delete?: InstructorWhereUniqueInput | InstructorWhereUniqueInput[]
-    connect?: InstructorWhereUniqueInput | InstructorWhereUniqueInput[]
-    update?: InstructorUpdateWithWhereUniqueWithoutDojoInput | InstructorUpdateWithWhereUniqueWithoutDojoInput[]
-    updateMany?: InstructorUpdateManyWithWhereWithoutDojoInput | InstructorUpdateManyWithWhereWithoutDojoInput[]
-    deleteMany?: InstructorScalarWhereInput | InstructorScalarWhereInput[]
   }
 
   export type AttendanceUncheckedUpdateManyWithoutDojoNestedInput = {
@@ -31280,25 +28317,6 @@ export namespace Prisma {
     create?: XOR<DojoCreateWithoutMembersInput, DojoUncheckedCreateWithoutMembersInput>
     connectOrCreate?: DojoCreateOrConnectWithoutMembersInput
     connect?: DojoWhereUniqueInput
-  }
-
-  export type DojoCreateNestedManyWithoutHeadInstructorInput = {
-    create?: XOR<DojoCreateWithoutHeadInstructorInput, DojoUncheckedCreateWithoutHeadInstructorInput> | DojoCreateWithoutHeadInstructorInput[] | DojoUncheckedCreateWithoutHeadInstructorInput[]
-    connectOrCreate?: DojoCreateOrConnectWithoutHeadInstructorInput | DojoCreateOrConnectWithoutHeadInstructorInput[]
-    createMany?: DojoCreateManyHeadInstructorInputEnvelope
-    connect?: DojoWhereUniqueInput | DojoWhereUniqueInput[]
-  }
-
-  export type InstructorCreateNestedOneWithoutMemberInput = {
-    create?: XOR<InstructorCreateWithoutMemberInput, InstructorUncheckedCreateWithoutMemberInput>
-    connectOrCreate?: InstructorCreateOrConnectWithoutMemberInput
-    connect?: InstructorWhereUniqueInput
-  }
-
-  export type AdminCreateNestedOneWithoutMemberInput = {
-    create?: XOR<AdminCreateWithoutMemberInput, AdminUncheckedCreateWithoutMemberInput>
-    connectOrCreate?: AdminCreateOrConnectWithoutMemberInput
-    connect?: AdminWhereUniqueInput
   }
 
   export type GradingCreateNestedManyWithoutMemberInput = {
@@ -31348,25 +28366,6 @@ export namespace Prisma {
     connectOrCreate?: TournamentParticipantCreateOrConnectWithoutMemberInput | TournamentParticipantCreateOrConnectWithoutMemberInput[]
     createMany?: TournamentParticipantCreateManyMemberInputEnvelope
     connect?: TournamentParticipantWhereUniqueInput | TournamentParticipantWhereUniqueInput[]
-  }
-
-  export type DojoUncheckedCreateNestedManyWithoutHeadInstructorInput = {
-    create?: XOR<DojoCreateWithoutHeadInstructorInput, DojoUncheckedCreateWithoutHeadInstructorInput> | DojoCreateWithoutHeadInstructorInput[] | DojoUncheckedCreateWithoutHeadInstructorInput[]
-    connectOrCreate?: DojoCreateOrConnectWithoutHeadInstructorInput | DojoCreateOrConnectWithoutHeadInstructorInput[]
-    createMany?: DojoCreateManyHeadInstructorInputEnvelope
-    connect?: DojoWhereUniqueInput | DojoWhereUniqueInput[]
-  }
-
-  export type InstructorUncheckedCreateNestedOneWithoutMemberInput = {
-    create?: XOR<InstructorCreateWithoutMemberInput, InstructorUncheckedCreateWithoutMemberInput>
-    connectOrCreate?: InstructorCreateOrConnectWithoutMemberInput
-    connect?: InstructorWhereUniqueInput
-  }
-
-  export type AdminUncheckedCreateNestedOneWithoutMemberInput = {
-    create?: XOR<AdminCreateWithoutMemberInput, AdminUncheckedCreateWithoutMemberInput>
-    connectOrCreate?: AdminCreateOrConnectWithoutMemberInput
-    connect?: AdminWhereUniqueInput
   }
 
   export type GradingUncheckedCreateNestedManyWithoutMemberInput = {
@@ -31438,40 +28437,6 @@ export namespace Prisma {
     delete?: DojoWhereInput | boolean
     connect?: DojoWhereUniqueInput
     update?: XOR<XOR<DojoUpdateToOneWithWhereWithoutMembersInput, DojoUpdateWithoutMembersInput>, DojoUncheckedUpdateWithoutMembersInput>
-  }
-
-  export type DojoUpdateManyWithoutHeadInstructorNestedInput = {
-    create?: XOR<DojoCreateWithoutHeadInstructorInput, DojoUncheckedCreateWithoutHeadInstructorInput> | DojoCreateWithoutHeadInstructorInput[] | DojoUncheckedCreateWithoutHeadInstructorInput[]
-    connectOrCreate?: DojoCreateOrConnectWithoutHeadInstructorInput | DojoCreateOrConnectWithoutHeadInstructorInput[]
-    upsert?: DojoUpsertWithWhereUniqueWithoutHeadInstructorInput | DojoUpsertWithWhereUniqueWithoutHeadInstructorInput[]
-    createMany?: DojoCreateManyHeadInstructorInputEnvelope
-    set?: DojoWhereUniqueInput | DojoWhereUniqueInput[]
-    disconnect?: DojoWhereUniqueInput | DojoWhereUniqueInput[]
-    delete?: DojoWhereUniqueInput | DojoWhereUniqueInput[]
-    connect?: DojoWhereUniqueInput | DojoWhereUniqueInput[]
-    update?: DojoUpdateWithWhereUniqueWithoutHeadInstructorInput | DojoUpdateWithWhereUniqueWithoutHeadInstructorInput[]
-    updateMany?: DojoUpdateManyWithWhereWithoutHeadInstructorInput | DojoUpdateManyWithWhereWithoutHeadInstructorInput[]
-    deleteMany?: DojoScalarWhereInput | DojoScalarWhereInput[]
-  }
-
-  export type InstructorUpdateOneWithoutMemberNestedInput = {
-    create?: XOR<InstructorCreateWithoutMemberInput, InstructorUncheckedCreateWithoutMemberInput>
-    connectOrCreate?: InstructorCreateOrConnectWithoutMemberInput
-    upsert?: InstructorUpsertWithoutMemberInput
-    disconnect?: InstructorWhereInput | boolean
-    delete?: InstructorWhereInput | boolean
-    connect?: InstructorWhereUniqueInput
-    update?: XOR<XOR<InstructorUpdateToOneWithWhereWithoutMemberInput, InstructorUpdateWithoutMemberInput>, InstructorUncheckedUpdateWithoutMemberInput>
-  }
-
-  export type AdminUpdateOneWithoutMemberNestedInput = {
-    create?: XOR<AdminCreateWithoutMemberInput, AdminUncheckedCreateWithoutMemberInput>
-    connectOrCreate?: AdminCreateOrConnectWithoutMemberInput
-    upsert?: AdminUpsertWithoutMemberInput
-    disconnect?: AdminWhereInput | boolean
-    delete?: AdminWhereInput | boolean
-    connect?: AdminWhereUniqueInput
-    update?: XOR<XOR<AdminUpdateToOneWithWhereWithoutMemberInput, AdminUpdateWithoutMemberInput>, AdminUncheckedUpdateWithoutMemberInput>
   }
 
   export type GradingUpdateManyWithoutMemberNestedInput = {
@@ -31572,40 +28537,6 @@ export namespace Prisma {
     deleteMany?: TournamentParticipantScalarWhereInput | TournamentParticipantScalarWhereInput[]
   }
 
-  export type DojoUncheckedUpdateManyWithoutHeadInstructorNestedInput = {
-    create?: XOR<DojoCreateWithoutHeadInstructorInput, DojoUncheckedCreateWithoutHeadInstructorInput> | DojoCreateWithoutHeadInstructorInput[] | DojoUncheckedCreateWithoutHeadInstructorInput[]
-    connectOrCreate?: DojoCreateOrConnectWithoutHeadInstructorInput | DojoCreateOrConnectWithoutHeadInstructorInput[]
-    upsert?: DojoUpsertWithWhereUniqueWithoutHeadInstructorInput | DojoUpsertWithWhereUniqueWithoutHeadInstructorInput[]
-    createMany?: DojoCreateManyHeadInstructorInputEnvelope
-    set?: DojoWhereUniqueInput | DojoWhereUniqueInput[]
-    disconnect?: DojoWhereUniqueInput | DojoWhereUniqueInput[]
-    delete?: DojoWhereUniqueInput | DojoWhereUniqueInput[]
-    connect?: DojoWhereUniqueInput | DojoWhereUniqueInput[]
-    update?: DojoUpdateWithWhereUniqueWithoutHeadInstructorInput | DojoUpdateWithWhereUniqueWithoutHeadInstructorInput[]
-    updateMany?: DojoUpdateManyWithWhereWithoutHeadInstructorInput | DojoUpdateManyWithWhereWithoutHeadInstructorInput[]
-    deleteMany?: DojoScalarWhereInput | DojoScalarWhereInput[]
-  }
-
-  export type InstructorUncheckedUpdateOneWithoutMemberNestedInput = {
-    create?: XOR<InstructorCreateWithoutMemberInput, InstructorUncheckedCreateWithoutMemberInput>
-    connectOrCreate?: InstructorCreateOrConnectWithoutMemberInput
-    upsert?: InstructorUpsertWithoutMemberInput
-    disconnect?: InstructorWhereInput | boolean
-    delete?: InstructorWhereInput | boolean
-    connect?: InstructorWhereUniqueInput
-    update?: XOR<XOR<InstructorUpdateToOneWithWhereWithoutMemberInput, InstructorUpdateWithoutMemberInput>, InstructorUncheckedUpdateWithoutMemberInput>
-  }
-
-  export type AdminUncheckedUpdateOneWithoutMemberNestedInput = {
-    create?: XOR<AdminCreateWithoutMemberInput, AdminUncheckedCreateWithoutMemberInput>
-    connectOrCreate?: AdminCreateOrConnectWithoutMemberInput
-    upsert?: AdminUpsertWithoutMemberInput
-    disconnect?: AdminWhereInput | boolean
-    delete?: AdminWhereInput | boolean
-    connect?: AdminWhereUniqueInput
-    update?: XOR<XOR<AdminUpdateToOneWithWhereWithoutMemberInput, AdminUpdateWithoutMemberInput>, AdminUncheckedUpdateWithoutMemberInput>
-  }
-
   export type GradingUncheckedUpdateManyWithoutMemberNestedInput = {
     create?: XOR<GradingCreateWithoutMemberInput, GradingUncheckedCreateWithoutMemberInput> | GradingCreateWithoutMemberInput[] | GradingUncheckedCreateWithoutMemberInput[]
     connectOrCreate?: GradingCreateOrConnectWithoutMemberInput | GradingCreateOrConnectWithoutMemberInput[]
@@ -31702,50 +28633,6 @@ export namespace Prisma {
     update?: TournamentParticipantUpdateWithWhereUniqueWithoutMemberInput | TournamentParticipantUpdateWithWhereUniqueWithoutMemberInput[]
     updateMany?: TournamentParticipantUpdateManyWithWhereWithoutMemberInput | TournamentParticipantUpdateManyWithWhereWithoutMemberInput[]
     deleteMany?: TournamentParticipantScalarWhereInput | TournamentParticipantScalarWhereInput[]
-  }
-
-  export type MemberCreateNestedOneWithoutAdminInput = {
-    create?: XOR<MemberCreateWithoutAdminInput, MemberUncheckedCreateWithoutAdminInput>
-    connectOrCreate?: MemberCreateOrConnectWithoutAdminInput
-    connect?: MemberWhereUniqueInput
-  }
-
-  export type MemberUpdateOneRequiredWithoutAdminNestedInput = {
-    create?: XOR<MemberCreateWithoutAdminInput, MemberUncheckedCreateWithoutAdminInput>
-    connectOrCreate?: MemberCreateOrConnectWithoutAdminInput
-    upsert?: MemberUpsertWithoutAdminInput
-    connect?: MemberWhereUniqueInput
-    update?: XOR<XOR<MemberUpdateToOneWithWhereWithoutAdminInput, MemberUpdateWithoutAdminInput>, MemberUncheckedUpdateWithoutAdminInput>
-  }
-
-  export type MemberCreateNestedOneWithoutInstructorInput = {
-    create?: XOR<MemberCreateWithoutInstructorInput, MemberUncheckedCreateWithoutInstructorInput>
-    connectOrCreate?: MemberCreateOrConnectWithoutInstructorInput
-    connect?: MemberWhereUniqueInput
-  }
-
-  export type DojoCreateNestedOneWithoutInstructorsInput = {
-    create?: XOR<DojoCreateWithoutInstructorsInput, DojoUncheckedCreateWithoutInstructorsInput>
-    connectOrCreate?: DojoCreateOrConnectWithoutInstructorsInput
-    connect?: DojoWhereUniqueInput
-  }
-
-  export type MemberUpdateOneRequiredWithoutInstructorNestedInput = {
-    create?: XOR<MemberCreateWithoutInstructorInput, MemberUncheckedCreateWithoutInstructorInput>
-    connectOrCreate?: MemberCreateOrConnectWithoutInstructorInput
-    upsert?: MemberUpsertWithoutInstructorInput
-    connect?: MemberWhereUniqueInput
-    update?: XOR<XOR<MemberUpdateToOneWithWhereWithoutInstructorInput, MemberUpdateWithoutInstructorInput>, MemberUncheckedUpdateWithoutInstructorInput>
-  }
-
-  export type DojoUpdateOneWithoutInstructorsNestedInput = {
-    create?: XOR<DojoCreateWithoutInstructorsInput, DojoUncheckedCreateWithoutInstructorsInput>
-    connectOrCreate?: DojoCreateOrConnectWithoutInstructorsInput
-    upsert?: DojoUpsertWithoutInstructorsInput
-    disconnect?: DojoWhereInput | boolean
-    delete?: DojoWhereInput | boolean
-    connect?: DojoWhereUniqueInput
-    update?: XOR<XOR<DojoUpdateToOneWithWhereWithoutInstructorsInput, DojoUpdateWithoutInstructorsInput>, DojoUncheckedUpdateWithoutInstructorsInput>
   }
 
   export type MemberCreateNestedOneWithoutAttendanceInput = {
@@ -32711,17 +29598,6 @@ export namespace Prisma {
     not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
-  export type NestedUuidNullableFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    not?: NestedUuidNullableFilter<$PrismaModel> | string | null
-  }
-
   export type NestedFloatNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | FloatFieldRefInput<$PrismaModel> | null
     in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
@@ -32769,6 +29645,24 @@ export namespace Prisma {
     _max?: NestedBoolFilter<$PrismaModel>
   }
 
+  export type NestedUuidNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedUuidNullableFilter<$PrismaModel> | string | null
+  }
+
+  export type NestedEnumDojoApplicationStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.DojoApplicationStatus | EnumDojoApplicationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.DojoApplicationStatus[] | ListEnumDojoApplicationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.DojoApplicationStatus[] | ListEnumDojoApplicationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumDojoApplicationStatusFilter<$PrismaModel> | $Enums.DojoApplicationStatus
+  }
+
   export type NestedUuidNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
     in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
@@ -32781,13 +29675,6 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedStringNullableFilter<$PrismaModel>
     _max?: NestedStringNullableFilter<$PrismaModel>
-  }
-
-  export type NestedEnumDojoApplicationStatusFilter<$PrismaModel = never> = {
-    equals?: $Enums.DojoApplicationStatus | EnumDojoApplicationStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.DojoApplicationStatus[] | ListEnumDojoApplicationStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.DojoApplicationStatus[] | ListEnumDojoApplicationStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumDojoApplicationStatusFilter<$PrismaModel> | $Enums.DojoApplicationStatus
   }
   export type NestedJsonFilter<$PrismaModel = never> =
     | PatchUndefined<
@@ -33260,79 +30147,6 @@ export namespace Prisma {
     appliedAt?: DateTimeFilter<"GradingApplication"> | Date | string
   }
 
-  export type MemberCreateWithoutDojoHeadOfInput = {
-    id: string
-    fullName: string
-    email: string
-    phone?: string | null
-    avatarUrl?: string | null
-    role?: $Enums.MemberRole
-    memberNumber?: string | null
-    currentRank?: string
-    joinDate?: Date | string
-    expiryDate?: Date | string | null
-    isActive?: boolean
-    onboardingComplete?: boolean
-    membershipStatus?: $Enums.MembershipStatus
-    dateOfBirth?: Date | string | null
-    bloodGroup?: string | null
-    address?: string | null
-    nationalId?: string | null
-    emergencyContactName?: string | null
-    emergencyContactPhone?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    dojo?: DojoCreateNestedOneWithoutMembersInput
-    instructor?: InstructorCreateNestedOneWithoutMemberInput
-    admin?: AdminCreateNestedOneWithoutMemberInput
-    gradings?: GradingCreateNestedManyWithoutMemberInput
-    gradingApplications?: GradingApplicationCreateNestedManyWithoutMemberInput
-    eventRegistrations?: EventRegistrationCreateNestedManyWithoutMemberInput
-    notifications?: NotificationCreateNestedManyWithoutMemberInput
-    orders?: ShopOrderCreateNestedManyWithoutMemberInput
-    attendance?: AttendanceCreateNestedManyWithoutMemberInput
-    tournamentEntries?: TournamentParticipantCreateNestedManyWithoutMemberInput
-  }
-
-  export type MemberUncheckedCreateWithoutDojoHeadOfInput = {
-    id: string
-    fullName: string
-    email: string
-    phone?: string | null
-    avatarUrl?: string | null
-    role?: $Enums.MemberRole
-    memberNumber?: string | null
-    currentRank?: string
-    joinDate?: Date | string
-    expiryDate?: Date | string | null
-    isActive?: boolean
-    dojoId?: string | null
-    onboardingComplete?: boolean
-    membershipStatus?: $Enums.MembershipStatus
-    dateOfBirth?: Date | string | null
-    bloodGroup?: string | null
-    address?: string | null
-    nationalId?: string | null
-    emergencyContactName?: string | null
-    emergencyContactPhone?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    instructor?: InstructorUncheckedCreateNestedOneWithoutMemberInput
-    admin?: AdminUncheckedCreateNestedOneWithoutMemberInput
-    gradings?: GradingUncheckedCreateNestedManyWithoutMemberInput
-    gradingApplications?: GradingApplicationUncheckedCreateNestedManyWithoutMemberInput
-    eventRegistrations?: EventRegistrationUncheckedCreateNestedManyWithoutMemberInput
-    notifications?: NotificationUncheckedCreateNestedManyWithoutMemberInput
-    orders?: ShopOrderUncheckedCreateNestedManyWithoutMemberInput
-    attendance?: AttendanceUncheckedCreateNestedManyWithoutMemberInput
-    tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutMemberInput
-  }
-
-  export type MemberCreateOrConnectWithoutDojoHeadOfInput = {
-    where: MemberWhereUniqueInput
-    create: XOR<MemberCreateWithoutDojoHeadOfInput, MemberUncheckedCreateWithoutDojoHeadOfInput>
-  }
-
   export type MemberCreateWithoutDojoInput = {
     id: string
     fullName: string
@@ -33355,9 +30169,6 @@ export namespace Prisma {
     emergencyContactPhone?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    dojoHeadOf?: DojoCreateNestedManyWithoutHeadInstructorInput
-    instructor?: InstructorCreateNestedOneWithoutMemberInput
-    admin?: AdminCreateNestedOneWithoutMemberInput
     gradings?: GradingCreateNestedManyWithoutMemberInput
     gradingApplications?: GradingApplicationCreateNestedManyWithoutMemberInput
     eventRegistrations?: EventRegistrationCreateNestedManyWithoutMemberInput
@@ -33389,9 +30200,6 @@ export namespace Prisma {
     emergencyContactPhone?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    dojoHeadOf?: DojoUncheckedCreateNestedManyWithoutHeadInstructorInput
-    instructor?: InstructorUncheckedCreateNestedOneWithoutMemberInput
-    admin?: AdminUncheckedCreateNestedOneWithoutMemberInput
     gradings?: GradingUncheckedCreateNestedManyWithoutMemberInput
     gradingApplications?: GradingApplicationUncheckedCreateNestedManyWithoutMemberInput
     eventRegistrations?: EventRegistrationUncheckedCreateNestedManyWithoutMemberInput
@@ -33408,34 +30216,6 @@ export namespace Prisma {
 
   export type MemberCreateManyDojoInputEnvelope = {
     data: MemberCreateManyDojoInput | MemberCreateManyDojoInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type InstructorCreateWithoutDojoInput = {
-    id?: string
-    bio?: string | null
-    isActive?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    member: MemberCreateNestedOneWithoutInstructorInput
-  }
-
-  export type InstructorUncheckedCreateWithoutDojoInput = {
-    id?: string
-    memberId: string
-    bio?: string | null
-    isActive?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type InstructorCreateOrConnectWithoutDojoInput = {
-    where: InstructorWhereUniqueInput
-    create: XOR<InstructorCreateWithoutDojoInput, InstructorUncheckedCreateWithoutDojoInput>
-  }
-
-  export type InstructorCreateManyDojoInputEnvelope = {
-    data: InstructorCreateManyDojoInput | InstructorCreateManyDojoInput[]
     skipDuplicates?: boolean
   }
 
@@ -33465,85 +30245,6 @@ export namespace Prisma {
   export type AttendanceCreateManyDojoInputEnvelope = {
     data: AttendanceCreateManyDojoInput | AttendanceCreateManyDojoInput[]
     skipDuplicates?: boolean
-  }
-
-  export type MemberUpsertWithoutDojoHeadOfInput = {
-    update: XOR<MemberUpdateWithoutDojoHeadOfInput, MemberUncheckedUpdateWithoutDojoHeadOfInput>
-    create: XOR<MemberCreateWithoutDojoHeadOfInput, MemberUncheckedCreateWithoutDojoHeadOfInput>
-    where?: MemberWhereInput
-  }
-
-  export type MemberUpdateToOneWithWhereWithoutDojoHeadOfInput = {
-    where?: MemberWhereInput
-    data: XOR<MemberUpdateWithoutDojoHeadOfInput, MemberUncheckedUpdateWithoutDojoHeadOfInput>
-  }
-
-  export type MemberUpdateWithoutDojoHeadOfInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    fullName?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: EnumMemberRoleFieldUpdateOperationsInput | $Enums.MemberRole
-    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    currentRank?: StringFieldUpdateOperationsInput | string
-    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    onboardingComplete?: BoolFieldUpdateOperationsInput | boolean
-    membershipStatus?: EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
-    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
-    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    dojo?: DojoUpdateOneWithoutMembersNestedInput
-    instructor?: InstructorUpdateOneWithoutMemberNestedInput
-    admin?: AdminUpdateOneWithoutMemberNestedInput
-    gradings?: GradingUpdateManyWithoutMemberNestedInput
-    gradingApplications?: GradingApplicationUpdateManyWithoutMemberNestedInput
-    eventRegistrations?: EventRegistrationUpdateManyWithoutMemberNestedInput
-    notifications?: NotificationUpdateManyWithoutMemberNestedInput
-    orders?: ShopOrderUpdateManyWithoutMemberNestedInput
-    attendance?: AttendanceUpdateManyWithoutMemberNestedInput
-    tournamentEntries?: TournamentParticipantUpdateManyWithoutMemberNestedInput
-  }
-
-  export type MemberUncheckedUpdateWithoutDojoHeadOfInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    fullName?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: EnumMemberRoleFieldUpdateOperationsInput | $Enums.MemberRole
-    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    currentRank?: StringFieldUpdateOperationsInput | string
-    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    dojoId?: NullableStringFieldUpdateOperationsInput | string | null
-    onboardingComplete?: BoolFieldUpdateOperationsInput | boolean
-    membershipStatus?: EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
-    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
-    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    instructor?: InstructorUncheckedUpdateOneWithoutMemberNestedInput
-    admin?: AdminUncheckedUpdateOneWithoutMemberNestedInput
-    gradings?: GradingUncheckedUpdateManyWithoutMemberNestedInput
-    gradingApplications?: GradingApplicationUncheckedUpdateManyWithoutMemberNestedInput
-    eventRegistrations?: EventRegistrationUncheckedUpdateManyWithoutMemberNestedInput
-    notifications?: NotificationUncheckedUpdateManyWithoutMemberNestedInput
-    orders?: ShopOrderUncheckedUpdateManyWithoutMemberNestedInput
-    attendance?: AttendanceUncheckedUpdateManyWithoutMemberNestedInput
-    tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberUpsertWithWhereUniqueWithoutDojoInput = {
@@ -33590,35 +30291,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Member"> | Date | string
   }
 
-  export type InstructorUpsertWithWhereUniqueWithoutDojoInput = {
-    where: InstructorWhereUniqueInput
-    update: XOR<InstructorUpdateWithoutDojoInput, InstructorUncheckedUpdateWithoutDojoInput>
-    create: XOR<InstructorCreateWithoutDojoInput, InstructorUncheckedCreateWithoutDojoInput>
-  }
-
-  export type InstructorUpdateWithWhereUniqueWithoutDojoInput = {
-    where: InstructorWhereUniqueInput
-    data: XOR<InstructorUpdateWithoutDojoInput, InstructorUncheckedUpdateWithoutDojoInput>
-  }
-
-  export type InstructorUpdateManyWithWhereWithoutDojoInput = {
-    where: InstructorScalarWhereInput
-    data: XOR<InstructorUpdateManyMutationInput, InstructorUncheckedUpdateManyWithoutDojoInput>
-  }
-
-  export type InstructorScalarWhereInput = {
-    AND?: InstructorScalarWhereInput | InstructorScalarWhereInput[]
-    OR?: InstructorScalarWhereInput[]
-    NOT?: InstructorScalarWhereInput | InstructorScalarWhereInput[]
-    id?: UuidFilter<"Instructor"> | string
-    memberId?: UuidFilter<"Instructor"> | string
-    dojoId?: UuidNullableFilter<"Instructor"> | string | null
-    bio?: StringNullableFilter<"Instructor"> | string | null
-    isActive?: BoolFilter<"Instructor"> | boolean
-    createdAt?: DateTimeFilter<"Instructor"> | Date | string
-    updatedAt?: DateTimeFilter<"Instructor"> | Date | string
-  }
-
   export type AttendanceUpsertWithWhereUniqueWithoutDojoInput = {
     where: AttendanceWhereUniqueInput
     update: XOR<AttendanceUpdateWithoutDojoInput, AttendanceUncheckedUpdateWithoutDojoInput>
@@ -33661,8 +30333,6 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
-    headInstructor?: MemberCreateNestedOneWithoutDojoHeadOfInput
-    instructors?: InstructorCreateNestedManyWithoutDojoInput
     attendance?: AttendanceCreateNestedManyWithoutDojoInput
   }
 
@@ -33677,102 +30347,14 @@ export namespace Prisma {
     email?: string | null
     schedule?: NullableJsonNullValueInput | InputJsonValue
     isActive?: boolean
-    headInstructorId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    instructors?: InstructorUncheckedCreateNestedManyWithoutDojoInput
     attendance?: AttendanceUncheckedCreateNestedManyWithoutDojoInput
   }
 
   export type DojoCreateOrConnectWithoutMembersInput = {
     where: DojoWhereUniqueInput
     create: XOR<DojoCreateWithoutMembersInput, DojoUncheckedCreateWithoutMembersInput>
-  }
-
-  export type DojoCreateWithoutHeadInstructorInput = {
-    id?: string
-    name: string
-    address?: string | null
-    city?: string | null
-    latitude?: number | null
-    longitude?: number | null
-    phone?: string | null
-    email?: string | null
-    schedule?: NullableJsonNullValueInput | InputJsonValue
-    isActive?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    members?: MemberCreateNestedManyWithoutDojoInput
-    instructors?: InstructorCreateNestedManyWithoutDojoInput
-    attendance?: AttendanceCreateNestedManyWithoutDojoInput
-  }
-
-  export type DojoUncheckedCreateWithoutHeadInstructorInput = {
-    id?: string
-    name: string
-    address?: string | null
-    city?: string | null
-    latitude?: number | null
-    longitude?: number | null
-    phone?: string | null
-    email?: string | null
-    schedule?: NullableJsonNullValueInput | InputJsonValue
-    isActive?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    members?: MemberUncheckedCreateNestedManyWithoutDojoInput
-    instructors?: InstructorUncheckedCreateNestedManyWithoutDojoInput
-    attendance?: AttendanceUncheckedCreateNestedManyWithoutDojoInput
-  }
-
-  export type DojoCreateOrConnectWithoutHeadInstructorInput = {
-    where: DojoWhereUniqueInput
-    create: XOR<DojoCreateWithoutHeadInstructorInput, DojoUncheckedCreateWithoutHeadInstructorInput>
-  }
-
-  export type DojoCreateManyHeadInstructorInputEnvelope = {
-    data: DojoCreateManyHeadInstructorInput | DojoCreateManyHeadInstructorInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type InstructorCreateWithoutMemberInput = {
-    id?: string
-    bio?: string | null
-    isActive?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    dojo?: DojoCreateNestedOneWithoutInstructorsInput
-  }
-
-  export type InstructorUncheckedCreateWithoutMemberInput = {
-    id?: string
-    dojoId?: string | null
-    bio?: string | null
-    isActive?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type InstructorCreateOrConnectWithoutMemberInput = {
-    where: InstructorWhereUniqueInput
-    create: XOR<InstructorCreateWithoutMemberInput, InstructorUncheckedCreateWithoutMemberInput>
-  }
-
-  export type AdminCreateWithoutMemberInput = {
-    id?: string
-    notes?: string | null
-    createdAt?: Date | string
-  }
-
-  export type AdminUncheckedCreateWithoutMemberInput = {
-    id?: string
-    notes?: string | null
-    createdAt?: Date | string
-  }
-
-  export type AdminCreateOrConnectWithoutMemberInput = {
-    where: AdminWhereUniqueInput
-    create: XOR<AdminCreateWithoutMemberInput, AdminUncheckedCreateWithoutMemberInput>
   }
 
   export type GradingCreateWithoutMemberInput = {
@@ -34015,8 +30597,6 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    headInstructor?: MemberUpdateOneWithoutDojoHeadOfNestedInput
-    instructors?: InstructorUpdateManyWithoutDojoNestedInput
     attendance?: AttendanceUpdateManyWithoutDojoNestedInput
   }
 
@@ -34031,98 +30611,9 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     schedule?: NullableJsonNullValueInput | InputJsonValue
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    headInstructorId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    instructors?: InstructorUncheckedUpdateManyWithoutDojoNestedInput
     attendance?: AttendanceUncheckedUpdateManyWithoutDojoNestedInput
-  }
-
-  export type DojoUpsertWithWhereUniqueWithoutHeadInstructorInput = {
-    where: DojoWhereUniqueInput
-    update: XOR<DojoUpdateWithoutHeadInstructorInput, DojoUncheckedUpdateWithoutHeadInstructorInput>
-    create: XOR<DojoCreateWithoutHeadInstructorInput, DojoUncheckedCreateWithoutHeadInstructorInput>
-  }
-
-  export type DojoUpdateWithWhereUniqueWithoutHeadInstructorInput = {
-    where: DojoWhereUniqueInput
-    data: XOR<DojoUpdateWithoutHeadInstructorInput, DojoUncheckedUpdateWithoutHeadInstructorInput>
-  }
-
-  export type DojoUpdateManyWithWhereWithoutHeadInstructorInput = {
-    where: DojoScalarWhereInput
-    data: XOR<DojoUpdateManyMutationInput, DojoUncheckedUpdateManyWithoutHeadInstructorInput>
-  }
-
-  export type DojoScalarWhereInput = {
-    AND?: DojoScalarWhereInput | DojoScalarWhereInput[]
-    OR?: DojoScalarWhereInput[]
-    NOT?: DojoScalarWhereInput | DojoScalarWhereInput[]
-    id?: UuidFilter<"Dojo"> | string
-    name?: StringFilter<"Dojo"> | string
-    address?: StringNullableFilter<"Dojo"> | string | null
-    city?: StringNullableFilter<"Dojo"> | string | null
-    latitude?: FloatNullableFilter<"Dojo"> | number | null
-    longitude?: FloatNullableFilter<"Dojo"> | number | null
-    phone?: StringNullableFilter<"Dojo"> | string | null
-    email?: StringNullableFilter<"Dojo"> | string | null
-    schedule?: JsonNullableFilter<"Dojo">
-    isActive?: BoolFilter<"Dojo"> | boolean
-    headInstructorId?: UuidNullableFilter<"Dojo"> | string | null
-    createdAt?: DateTimeFilter<"Dojo"> | Date | string
-    updatedAt?: DateTimeFilter<"Dojo"> | Date | string
-  }
-
-  export type InstructorUpsertWithoutMemberInput = {
-    update: XOR<InstructorUpdateWithoutMemberInput, InstructorUncheckedUpdateWithoutMemberInput>
-    create: XOR<InstructorCreateWithoutMemberInput, InstructorUncheckedCreateWithoutMemberInput>
-    where?: InstructorWhereInput
-  }
-
-  export type InstructorUpdateToOneWithWhereWithoutMemberInput = {
-    where?: InstructorWhereInput
-    data: XOR<InstructorUpdateWithoutMemberInput, InstructorUncheckedUpdateWithoutMemberInput>
-  }
-
-  export type InstructorUpdateWithoutMemberInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    bio?: NullableStringFieldUpdateOperationsInput | string | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    dojo?: DojoUpdateOneWithoutInstructorsNestedInput
-  }
-
-  export type InstructorUncheckedUpdateWithoutMemberInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    dojoId?: NullableStringFieldUpdateOperationsInput | string | null
-    bio?: NullableStringFieldUpdateOperationsInput | string | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type AdminUpsertWithoutMemberInput = {
-    update: XOR<AdminUpdateWithoutMemberInput, AdminUncheckedUpdateWithoutMemberInput>
-    create: XOR<AdminCreateWithoutMemberInput, AdminUncheckedCreateWithoutMemberInput>
-    where?: AdminWhereInput
-  }
-
-  export type AdminUpdateToOneWithWhereWithoutMemberInput = {
-    where?: AdminWhereInput
-    data: XOR<AdminUpdateWithoutMemberInput, AdminUncheckedUpdateWithoutMemberInput>
-  }
-
-  export type AdminUpdateWithoutMemberInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    notes?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type AdminUncheckedUpdateWithoutMemberInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    notes?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type GradingUpsertWithWhereUniqueWithoutMemberInput = {
@@ -34292,398 +30783,6 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"TournamentParticipant"> | Date | string
   }
 
-  export type MemberCreateWithoutAdminInput = {
-    id: string
-    fullName: string
-    email: string
-    phone?: string | null
-    avatarUrl?: string | null
-    role?: $Enums.MemberRole
-    memberNumber?: string | null
-    currentRank?: string
-    joinDate?: Date | string
-    expiryDate?: Date | string | null
-    isActive?: boolean
-    onboardingComplete?: boolean
-    membershipStatus?: $Enums.MembershipStatus
-    dateOfBirth?: Date | string | null
-    bloodGroup?: string | null
-    address?: string | null
-    nationalId?: string | null
-    emergencyContactName?: string | null
-    emergencyContactPhone?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    dojo?: DojoCreateNestedOneWithoutMembersInput
-    dojoHeadOf?: DojoCreateNestedManyWithoutHeadInstructorInput
-    instructor?: InstructorCreateNestedOneWithoutMemberInput
-    gradings?: GradingCreateNestedManyWithoutMemberInput
-    gradingApplications?: GradingApplicationCreateNestedManyWithoutMemberInput
-    eventRegistrations?: EventRegistrationCreateNestedManyWithoutMemberInput
-    notifications?: NotificationCreateNestedManyWithoutMemberInput
-    orders?: ShopOrderCreateNestedManyWithoutMemberInput
-    attendance?: AttendanceCreateNestedManyWithoutMemberInput
-    tournamentEntries?: TournamentParticipantCreateNestedManyWithoutMemberInput
-  }
-
-  export type MemberUncheckedCreateWithoutAdminInput = {
-    id: string
-    fullName: string
-    email: string
-    phone?: string | null
-    avatarUrl?: string | null
-    role?: $Enums.MemberRole
-    memberNumber?: string | null
-    currentRank?: string
-    joinDate?: Date | string
-    expiryDate?: Date | string | null
-    isActive?: boolean
-    dojoId?: string | null
-    onboardingComplete?: boolean
-    membershipStatus?: $Enums.MembershipStatus
-    dateOfBirth?: Date | string | null
-    bloodGroup?: string | null
-    address?: string | null
-    nationalId?: string | null
-    emergencyContactName?: string | null
-    emergencyContactPhone?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    dojoHeadOf?: DojoUncheckedCreateNestedManyWithoutHeadInstructorInput
-    instructor?: InstructorUncheckedCreateNestedOneWithoutMemberInput
-    gradings?: GradingUncheckedCreateNestedManyWithoutMemberInput
-    gradingApplications?: GradingApplicationUncheckedCreateNestedManyWithoutMemberInput
-    eventRegistrations?: EventRegistrationUncheckedCreateNestedManyWithoutMemberInput
-    notifications?: NotificationUncheckedCreateNestedManyWithoutMemberInput
-    orders?: ShopOrderUncheckedCreateNestedManyWithoutMemberInput
-    attendance?: AttendanceUncheckedCreateNestedManyWithoutMemberInput
-    tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutMemberInput
-  }
-
-  export type MemberCreateOrConnectWithoutAdminInput = {
-    where: MemberWhereUniqueInput
-    create: XOR<MemberCreateWithoutAdminInput, MemberUncheckedCreateWithoutAdminInput>
-  }
-
-  export type MemberUpsertWithoutAdminInput = {
-    update: XOR<MemberUpdateWithoutAdminInput, MemberUncheckedUpdateWithoutAdminInput>
-    create: XOR<MemberCreateWithoutAdminInput, MemberUncheckedCreateWithoutAdminInput>
-    where?: MemberWhereInput
-  }
-
-  export type MemberUpdateToOneWithWhereWithoutAdminInput = {
-    where?: MemberWhereInput
-    data: XOR<MemberUpdateWithoutAdminInput, MemberUncheckedUpdateWithoutAdminInput>
-  }
-
-  export type MemberUpdateWithoutAdminInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    fullName?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: EnumMemberRoleFieldUpdateOperationsInput | $Enums.MemberRole
-    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    currentRank?: StringFieldUpdateOperationsInput | string
-    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    onboardingComplete?: BoolFieldUpdateOperationsInput | boolean
-    membershipStatus?: EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
-    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
-    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    dojo?: DojoUpdateOneWithoutMembersNestedInput
-    dojoHeadOf?: DojoUpdateManyWithoutHeadInstructorNestedInput
-    instructor?: InstructorUpdateOneWithoutMemberNestedInput
-    gradings?: GradingUpdateManyWithoutMemberNestedInput
-    gradingApplications?: GradingApplicationUpdateManyWithoutMemberNestedInput
-    eventRegistrations?: EventRegistrationUpdateManyWithoutMemberNestedInput
-    notifications?: NotificationUpdateManyWithoutMemberNestedInput
-    orders?: ShopOrderUpdateManyWithoutMemberNestedInput
-    attendance?: AttendanceUpdateManyWithoutMemberNestedInput
-    tournamentEntries?: TournamentParticipantUpdateManyWithoutMemberNestedInput
-  }
-
-  export type MemberUncheckedUpdateWithoutAdminInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    fullName?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: EnumMemberRoleFieldUpdateOperationsInput | $Enums.MemberRole
-    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    currentRank?: StringFieldUpdateOperationsInput | string
-    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    dojoId?: NullableStringFieldUpdateOperationsInput | string | null
-    onboardingComplete?: BoolFieldUpdateOperationsInput | boolean
-    membershipStatus?: EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
-    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
-    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    dojoHeadOf?: DojoUncheckedUpdateManyWithoutHeadInstructorNestedInput
-    instructor?: InstructorUncheckedUpdateOneWithoutMemberNestedInput
-    gradings?: GradingUncheckedUpdateManyWithoutMemberNestedInput
-    gradingApplications?: GradingApplicationUncheckedUpdateManyWithoutMemberNestedInput
-    eventRegistrations?: EventRegistrationUncheckedUpdateManyWithoutMemberNestedInput
-    notifications?: NotificationUncheckedUpdateManyWithoutMemberNestedInput
-    orders?: ShopOrderUncheckedUpdateManyWithoutMemberNestedInput
-    attendance?: AttendanceUncheckedUpdateManyWithoutMemberNestedInput
-    tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutMemberNestedInput
-  }
-
-  export type MemberCreateWithoutInstructorInput = {
-    id: string
-    fullName: string
-    email: string
-    phone?: string | null
-    avatarUrl?: string | null
-    role?: $Enums.MemberRole
-    memberNumber?: string | null
-    currentRank?: string
-    joinDate?: Date | string
-    expiryDate?: Date | string | null
-    isActive?: boolean
-    onboardingComplete?: boolean
-    membershipStatus?: $Enums.MembershipStatus
-    dateOfBirth?: Date | string | null
-    bloodGroup?: string | null
-    address?: string | null
-    nationalId?: string | null
-    emergencyContactName?: string | null
-    emergencyContactPhone?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    dojo?: DojoCreateNestedOneWithoutMembersInput
-    dojoHeadOf?: DojoCreateNestedManyWithoutHeadInstructorInput
-    admin?: AdminCreateNestedOneWithoutMemberInput
-    gradings?: GradingCreateNestedManyWithoutMemberInput
-    gradingApplications?: GradingApplicationCreateNestedManyWithoutMemberInput
-    eventRegistrations?: EventRegistrationCreateNestedManyWithoutMemberInput
-    notifications?: NotificationCreateNestedManyWithoutMemberInput
-    orders?: ShopOrderCreateNestedManyWithoutMemberInput
-    attendance?: AttendanceCreateNestedManyWithoutMemberInput
-    tournamentEntries?: TournamentParticipantCreateNestedManyWithoutMemberInput
-  }
-
-  export type MemberUncheckedCreateWithoutInstructorInput = {
-    id: string
-    fullName: string
-    email: string
-    phone?: string | null
-    avatarUrl?: string | null
-    role?: $Enums.MemberRole
-    memberNumber?: string | null
-    currentRank?: string
-    joinDate?: Date | string
-    expiryDate?: Date | string | null
-    isActive?: boolean
-    dojoId?: string | null
-    onboardingComplete?: boolean
-    membershipStatus?: $Enums.MembershipStatus
-    dateOfBirth?: Date | string | null
-    bloodGroup?: string | null
-    address?: string | null
-    nationalId?: string | null
-    emergencyContactName?: string | null
-    emergencyContactPhone?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    dojoHeadOf?: DojoUncheckedCreateNestedManyWithoutHeadInstructorInput
-    admin?: AdminUncheckedCreateNestedOneWithoutMemberInput
-    gradings?: GradingUncheckedCreateNestedManyWithoutMemberInput
-    gradingApplications?: GradingApplicationUncheckedCreateNestedManyWithoutMemberInput
-    eventRegistrations?: EventRegistrationUncheckedCreateNestedManyWithoutMemberInput
-    notifications?: NotificationUncheckedCreateNestedManyWithoutMemberInput
-    orders?: ShopOrderUncheckedCreateNestedManyWithoutMemberInput
-    attendance?: AttendanceUncheckedCreateNestedManyWithoutMemberInput
-    tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutMemberInput
-  }
-
-  export type MemberCreateOrConnectWithoutInstructorInput = {
-    where: MemberWhereUniqueInput
-    create: XOR<MemberCreateWithoutInstructorInput, MemberUncheckedCreateWithoutInstructorInput>
-  }
-
-  export type DojoCreateWithoutInstructorsInput = {
-    id?: string
-    name: string
-    address?: string | null
-    city?: string | null
-    latitude?: number | null
-    longitude?: number | null
-    phone?: string | null
-    email?: string | null
-    schedule?: NullableJsonNullValueInput | InputJsonValue
-    isActive?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    headInstructor?: MemberCreateNestedOneWithoutDojoHeadOfInput
-    members?: MemberCreateNestedManyWithoutDojoInput
-    attendance?: AttendanceCreateNestedManyWithoutDojoInput
-  }
-
-  export type DojoUncheckedCreateWithoutInstructorsInput = {
-    id?: string
-    name: string
-    address?: string | null
-    city?: string | null
-    latitude?: number | null
-    longitude?: number | null
-    phone?: string | null
-    email?: string | null
-    schedule?: NullableJsonNullValueInput | InputJsonValue
-    isActive?: boolean
-    headInstructorId?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    members?: MemberUncheckedCreateNestedManyWithoutDojoInput
-    attendance?: AttendanceUncheckedCreateNestedManyWithoutDojoInput
-  }
-
-  export type DojoCreateOrConnectWithoutInstructorsInput = {
-    where: DojoWhereUniqueInput
-    create: XOR<DojoCreateWithoutInstructorsInput, DojoUncheckedCreateWithoutInstructorsInput>
-  }
-
-  export type MemberUpsertWithoutInstructorInput = {
-    update: XOR<MemberUpdateWithoutInstructorInput, MemberUncheckedUpdateWithoutInstructorInput>
-    create: XOR<MemberCreateWithoutInstructorInput, MemberUncheckedCreateWithoutInstructorInput>
-    where?: MemberWhereInput
-  }
-
-  export type MemberUpdateToOneWithWhereWithoutInstructorInput = {
-    where?: MemberWhereInput
-    data: XOR<MemberUpdateWithoutInstructorInput, MemberUncheckedUpdateWithoutInstructorInput>
-  }
-
-  export type MemberUpdateWithoutInstructorInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    fullName?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: EnumMemberRoleFieldUpdateOperationsInput | $Enums.MemberRole
-    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    currentRank?: StringFieldUpdateOperationsInput | string
-    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    onboardingComplete?: BoolFieldUpdateOperationsInput | boolean
-    membershipStatus?: EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
-    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
-    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    dojo?: DojoUpdateOneWithoutMembersNestedInput
-    dojoHeadOf?: DojoUpdateManyWithoutHeadInstructorNestedInput
-    admin?: AdminUpdateOneWithoutMemberNestedInput
-    gradings?: GradingUpdateManyWithoutMemberNestedInput
-    gradingApplications?: GradingApplicationUpdateManyWithoutMemberNestedInput
-    eventRegistrations?: EventRegistrationUpdateManyWithoutMemberNestedInput
-    notifications?: NotificationUpdateManyWithoutMemberNestedInput
-    orders?: ShopOrderUpdateManyWithoutMemberNestedInput
-    attendance?: AttendanceUpdateManyWithoutMemberNestedInput
-    tournamentEntries?: TournamentParticipantUpdateManyWithoutMemberNestedInput
-  }
-
-  export type MemberUncheckedUpdateWithoutInstructorInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    fullName?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: EnumMemberRoleFieldUpdateOperationsInput | $Enums.MemberRole
-    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    currentRank?: StringFieldUpdateOperationsInput | string
-    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    dojoId?: NullableStringFieldUpdateOperationsInput | string | null
-    onboardingComplete?: BoolFieldUpdateOperationsInput | boolean
-    membershipStatus?: EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
-    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
-    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    dojoHeadOf?: DojoUncheckedUpdateManyWithoutHeadInstructorNestedInput
-    admin?: AdminUncheckedUpdateOneWithoutMemberNestedInput
-    gradings?: GradingUncheckedUpdateManyWithoutMemberNestedInput
-    gradingApplications?: GradingApplicationUncheckedUpdateManyWithoutMemberNestedInput
-    eventRegistrations?: EventRegistrationUncheckedUpdateManyWithoutMemberNestedInput
-    notifications?: NotificationUncheckedUpdateManyWithoutMemberNestedInput
-    orders?: ShopOrderUncheckedUpdateManyWithoutMemberNestedInput
-    attendance?: AttendanceUncheckedUpdateManyWithoutMemberNestedInput
-    tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutMemberNestedInput
-  }
-
-  export type DojoUpsertWithoutInstructorsInput = {
-    update: XOR<DojoUpdateWithoutInstructorsInput, DojoUncheckedUpdateWithoutInstructorsInput>
-    create: XOR<DojoCreateWithoutInstructorsInput, DojoUncheckedCreateWithoutInstructorsInput>
-    where?: DojoWhereInput
-  }
-
-  export type DojoUpdateToOneWithWhereWithoutInstructorsInput = {
-    where?: DojoWhereInput
-    data: XOR<DojoUpdateWithoutInstructorsInput, DojoUncheckedUpdateWithoutInstructorsInput>
-  }
-
-  export type DojoUpdateWithoutInstructorsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    city?: NullableStringFieldUpdateOperationsInput | string | null
-    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
-    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    schedule?: NullableJsonNullValueInput | InputJsonValue
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    headInstructor?: MemberUpdateOneWithoutDojoHeadOfNestedInput
-    members?: MemberUpdateManyWithoutDojoNestedInput
-    attendance?: AttendanceUpdateManyWithoutDojoNestedInput
-  }
-
-  export type DojoUncheckedUpdateWithoutInstructorsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    city?: NullableStringFieldUpdateOperationsInput | string | null
-    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
-    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    schedule?: NullableJsonNullValueInput | InputJsonValue
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    headInstructorId?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    members?: MemberUncheckedUpdateManyWithoutDojoNestedInput
-    attendance?: AttendanceUncheckedUpdateManyWithoutDojoNestedInput
-  }
-
   export type MemberCreateWithoutAttendanceInput = {
     id: string
     fullName: string
@@ -34707,9 +30806,6 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     dojo?: DojoCreateNestedOneWithoutMembersInput
-    dojoHeadOf?: DojoCreateNestedManyWithoutHeadInstructorInput
-    instructor?: InstructorCreateNestedOneWithoutMemberInput
-    admin?: AdminCreateNestedOneWithoutMemberInput
     gradings?: GradingCreateNestedManyWithoutMemberInput
     gradingApplications?: GradingApplicationCreateNestedManyWithoutMemberInput
     eventRegistrations?: EventRegistrationCreateNestedManyWithoutMemberInput
@@ -34741,9 +30837,6 @@ export namespace Prisma {
     emergencyContactPhone?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    dojoHeadOf?: DojoUncheckedCreateNestedManyWithoutHeadInstructorInput
-    instructor?: InstructorUncheckedCreateNestedOneWithoutMemberInput
-    admin?: AdminUncheckedCreateNestedOneWithoutMemberInput
     gradings?: GradingUncheckedCreateNestedManyWithoutMemberInput
     gradingApplications?: GradingApplicationUncheckedCreateNestedManyWithoutMemberInput
     eventRegistrations?: EventRegistrationUncheckedCreateNestedManyWithoutMemberInput
@@ -34770,9 +30863,7 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
-    headInstructor?: MemberCreateNestedOneWithoutDojoHeadOfInput
     members?: MemberCreateNestedManyWithoutDojoInput
-    instructors?: InstructorCreateNestedManyWithoutDojoInput
   }
 
   export type DojoUncheckedCreateWithoutAttendanceInput = {
@@ -34786,11 +30877,9 @@ export namespace Prisma {
     email?: string | null
     schedule?: NullableJsonNullValueInput | InputJsonValue
     isActive?: boolean
-    headInstructorId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     members?: MemberUncheckedCreateNestedManyWithoutDojoInput
-    instructors?: InstructorUncheckedCreateNestedManyWithoutDojoInput
   }
 
   export type DojoCreateOrConnectWithoutAttendanceInput = {
@@ -34832,9 +30921,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dojo?: DojoUpdateOneWithoutMembersNestedInput
-    dojoHeadOf?: DojoUpdateManyWithoutHeadInstructorNestedInput
-    instructor?: InstructorUpdateOneWithoutMemberNestedInput
-    admin?: AdminUpdateOneWithoutMemberNestedInput
     gradings?: GradingUpdateManyWithoutMemberNestedInput
     gradingApplications?: GradingApplicationUpdateManyWithoutMemberNestedInput
     eventRegistrations?: EventRegistrationUpdateManyWithoutMemberNestedInput
@@ -34866,9 +30952,6 @@ export namespace Prisma {
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    dojoHeadOf?: DojoUncheckedUpdateManyWithoutHeadInstructorNestedInput
-    instructor?: InstructorUncheckedUpdateOneWithoutMemberNestedInput
-    admin?: AdminUncheckedUpdateOneWithoutMemberNestedInput
     gradings?: GradingUncheckedUpdateManyWithoutMemberNestedInput
     gradingApplications?: GradingApplicationUncheckedUpdateManyWithoutMemberNestedInput
     eventRegistrations?: EventRegistrationUncheckedUpdateManyWithoutMemberNestedInput
@@ -34901,9 +30984,7 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    headInstructor?: MemberUpdateOneWithoutDojoHeadOfNestedInput
     members?: MemberUpdateManyWithoutDojoNestedInput
-    instructors?: InstructorUpdateManyWithoutDojoNestedInput
   }
 
   export type DojoUncheckedUpdateWithoutAttendanceInput = {
@@ -34917,11 +30998,9 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     schedule?: NullableJsonNullValueInput | InputJsonValue
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    headInstructorId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: MemberUncheckedUpdateManyWithoutDojoNestedInput
-    instructors?: InstructorUncheckedUpdateManyWithoutDojoNestedInput
   }
 
   export type BeltRankCreateWithoutGradingEventsInput = {
@@ -35113,9 +31192,6 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     dojo?: DojoCreateNestedOneWithoutMembersInput
-    dojoHeadOf?: DojoCreateNestedManyWithoutHeadInstructorInput
-    instructor?: InstructorCreateNestedOneWithoutMemberInput
-    admin?: AdminCreateNestedOneWithoutMemberInput
     gradings?: GradingCreateNestedManyWithoutMemberInput
     eventRegistrations?: EventRegistrationCreateNestedManyWithoutMemberInput
     notifications?: NotificationCreateNestedManyWithoutMemberInput
@@ -35147,9 +31223,6 @@ export namespace Prisma {
     emergencyContactPhone?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    dojoHeadOf?: DojoUncheckedCreateNestedManyWithoutHeadInstructorInput
-    instructor?: InstructorUncheckedCreateNestedOneWithoutMemberInput
-    admin?: AdminUncheckedCreateNestedOneWithoutMemberInput
     gradings?: GradingUncheckedCreateNestedManyWithoutMemberInput
     eventRegistrations?: EventRegistrationUncheckedCreateNestedManyWithoutMemberInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutMemberInput
@@ -35261,9 +31334,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dojo?: DojoUpdateOneWithoutMembersNestedInput
-    dojoHeadOf?: DojoUpdateManyWithoutHeadInstructorNestedInput
-    instructor?: InstructorUpdateOneWithoutMemberNestedInput
-    admin?: AdminUpdateOneWithoutMemberNestedInput
     gradings?: GradingUpdateManyWithoutMemberNestedInput
     eventRegistrations?: EventRegistrationUpdateManyWithoutMemberNestedInput
     notifications?: NotificationUpdateManyWithoutMemberNestedInput
@@ -35295,9 +31365,6 @@ export namespace Prisma {
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    dojoHeadOf?: DojoUncheckedUpdateManyWithoutHeadInstructorNestedInput
-    instructor?: InstructorUncheckedUpdateOneWithoutMemberNestedInput
-    admin?: AdminUncheckedUpdateOneWithoutMemberNestedInput
     gradings?: GradingUncheckedUpdateManyWithoutMemberNestedInput
     eventRegistrations?: EventRegistrationUncheckedUpdateManyWithoutMemberNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutMemberNestedInput
@@ -35405,9 +31472,6 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     dojo?: DojoCreateNestedOneWithoutMembersInput
-    dojoHeadOf?: DojoCreateNestedManyWithoutHeadInstructorInput
-    instructor?: InstructorCreateNestedOneWithoutMemberInput
-    admin?: AdminCreateNestedOneWithoutMemberInput
     gradingApplications?: GradingApplicationCreateNestedManyWithoutMemberInput
     eventRegistrations?: EventRegistrationCreateNestedManyWithoutMemberInput
     notifications?: NotificationCreateNestedManyWithoutMemberInput
@@ -35439,9 +31503,6 @@ export namespace Prisma {
     emergencyContactPhone?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    dojoHeadOf?: DojoUncheckedCreateNestedManyWithoutHeadInstructorInput
-    instructor?: InstructorUncheckedCreateNestedOneWithoutMemberInput
-    admin?: AdminUncheckedCreateNestedOneWithoutMemberInput
     gradingApplications?: GradingApplicationUncheckedCreateNestedManyWithoutMemberInput
     eventRegistrations?: EventRegistrationUncheckedCreateNestedManyWithoutMemberInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutMemberInput
@@ -35586,9 +31647,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dojo?: DojoUpdateOneWithoutMembersNestedInput
-    dojoHeadOf?: DojoUpdateManyWithoutHeadInstructorNestedInput
-    instructor?: InstructorUpdateOneWithoutMemberNestedInput
-    admin?: AdminUpdateOneWithoutMemberNestedInput
     gradingApplications?: GradingApplicationUpdateManyWithoutMemberNestedInput
     eventRegistrations?: EventRegistrationUpdateManyWithoutMemberNestedInput
     notifications?: NotificationUpdateManyWithoutMemberNestedInput
@@ -35620,9 +31678,6 @@ export namespace Prisma {
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    dojoHeadOf?: DojoUncheckedUpdateManyWithoutHeadInstructorNestedInput
-    instructor?: InstructorUncheckedUpdateOneWithoutMemberNestedInput
-    admin?: AdminUncheckedUpdateOneWithoutMemberNestedInput
     gradingApplications?: GradingApplicationUncheckedUpdateManyWithoutMemberNestedInput
     eventRegistrations?: EventRegistrationUncheckedUpdateManyWithoutMemberNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutMemberNestedInput
@@ -35838,9 +31893,6 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     dojo?: DojoCreateNestedOneWithoutMembersInput
-    dojoHeadOf?: DojoCreateNestedManyWithoutHeadInstructorInput
-    instructor?: InstructorCreateNestedOneWithoutMemberInput
-    admin?: AdminCreateNestedOneWithoutMemberInput
     gradings?: GradingCreateNestedManyWithoutMemberInput
     gradingApplications?: GradingApplicationCreateNestedManyWithoutMemberInput
     notifications?: NotificationCreateNestedManyWithoutMemberInput
@@ -35872,9 +31924,6 @@ export namespace Prisma {
     emergencyContactPhone?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    dojoHeadOf?: DojoUncheckedCreateNestedManyWithoutHeadInstructorInput
-    instructor?: InstructorUncheckedCreateNestedOneWithoutMemberInput
-    admin?: AdminUncheckedCreateNestedOneWithoutMemberInput
     gradings?: GradingUncheckedCreateNestedManyWithoutMemberInput
     gradingApplications?: GradingApplicationUncheckedCreateNestedManyWithoutMemberInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutMemberInput
@@ -35959,9 +32008,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dojo?: DojoUpdateOneWithoutMembersNestedInput
-    dojoHeadOf?: DojoUpdateManyWithoutHeadInstructorNestedInput
-    instructor?: InstructorUpdateOneWithoutMemberNestedInput
-    admin?: AdminUpdateOneWithoutMemberNestedInput
     gradings?: GradingUpdateManyWithoutMemberNestedInput
     gradingApplications?: GradingApplicationUpdateManyWithoutMemberNestedInput
     notifications?: NotificationUpdateManyWithoutMemberNestedInput
@@ -35993,9 +32039,6 @@ export namespace Prisma {
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    dojoHeadOf?: DojoUncheckedUpdateManyWithoutHeadInstructorNestedInput
-    instructor?: InstructorUncheckedUpdateOneWithoutMemberNestedInput
-    admin?: AdminUncheckedUpdateOneWithoutMemberNestedInput
     gradings?: GradingUncheckedUpdateManyWithoutMemberNestedInput
     gradingApplications?: GradingApplicationUncheckedUpdateManyWithoutMemberNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutMemberNestedInput
@@ -36027,9 +32070,6 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     dojo?: DojoCreateNestedOneWithoutMembersInput
-    dojoHeadOf?: DojoCreateNestedManyWithoutHeadInstructorInput
-    instructor?: InstructorCreateNestedOneWithoutMemberInput
-    admin?: AdminCreateNestedOneWithoutMemberInput
     gradings?: GradingCreateNestedManyWithoutMemberInput
     gradingApplications?: GradingApplicationCreateNestedManyWithoutMemberInput
     eventRegistrations?: EventRegistrationCreateNestedManyWithoutMemberInput
@@ -36061,9 +32101,6 @@ export namespace Prisma {
     emergencyContactPhone?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    dojoHeadOf?: DojoUncheckedCreateNestedManyWithoutHeadInstructorInput
-    instructor?: InstructorUncheckedCreateNestedOneWithoutMemberInput
-    admin?: AdminUncheckedCreateNestedOneWithoutMemberInput
     gradings?: GradingUncheckedCreateNestedManyWithoutMemberInput
     gradingApplications?: GradingApplicationUncheckedCreateNestedManyWithoutMemberInput
     eventRegistrations?: EventRegistrationUncheckedCreateNestedManyWithoutMemberInput
@@ -36111,9 +32148,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dojo?: DojoUpdateOneWithoutMembersNestedInput
-    dojoHeadOf?: DojoUpdateManyWithoutHeadInstructorNestedInput
-    instructor?: InstructorUpdateOneWithoutMemberNestedInput
-    admin?: AdminUpdateOneWithoutMemberNestedInput
     gradings?: GradingUpdateManyWithoutMemberNestedInput
     gradingApplications?: GradingApplicationUpdateManyWithoutMemberNestedInput
     eventRegistrations?: EventRegistrationUpdateManyWithoutMemberNestedInput
@@ -36145,9 +32179,6 @@ export namespace Prisma {
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    dojoHeadOf?: DojoUncheckedUpdateManyWithoutHeadInstructorNestedInput
-    instructor?: InstructorUncheckedUpdateOneWithoutMemberNestedInput
-    admin?: AdminUncheckedUpdateOneWithoutMemberNestedInput
     gradings?: GradingUncheckedUpdateManyWithoutMemberNestedInput
     gradingApplications?: GradingApplicationUncheckedUpdateManyWithoutMemberNestedInput
     eventRegistrations?: EventRegistrationUncheckedUpdateManyWithoutMemberNestedInput
@@ -36230,9 +32261,6 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     dojo?: DojoCreateNestedOneWithoutMembersInput
-    dojoHeadOf?: DojoCreateNestedManyWithoutHeadInstructorInput
-    instructor?: InstructorCreateNestedOneWithoutMemberInput
-    admin?: AdminCreateNestedOneWithoutMemberInput
     gradings?: GradingCreateNestedManyWithoutMemberInput
     gradingApplications?: GradingApplicationCreateNestedManyWithoutMemberInput
     eventRegistrations?: EventRegistrationCreateNestedManyWithoutMemberInput
@@ -36264,9 +32292,6 @@ export namespace Prisma {
     emergencyContactPhone?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    dojoHeadOf?: DojoUncheckedCreateNestedManyWithoutHeadInstructorInput
-    instructor?: InstructorUncheckedCreateNestedOneWithoutMemberInput
-    admin?: AdminUncheckedCreateNestedOneWithoutMemberInput
     gradings?: GradingUncheckedCreateNestedManyWithoutMemberInput
     gradingApplications?: GradingApplicationUncheckedCreateNestedManyWithoutMemberInput
     eventRegistrations?: EventRegistrationUncheckedCreateNestedManyWithoutMemberInput
@@ -36338,9 +32363,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dojo?: DojoUpdateOneWithoutMembersNestedInput
-    dojoHeadOf?: DojoUpdateManyWithoutHeadInstructorNestedInput
-    instructor?: InstructorUpdateOneWithoutMemberNestedInput
-    admin?: AdminUpdateOneWithoutMemberNestedInput
     gradings?: GradingUpdateManyWithoutMemberNestedInput
     gradingApplications?: GradingApplicationUpdateManyWithoutMemberNestedInput
     eventRegistrations?: EventRegistrationUpdateManyWithoutMemberNestedInput
@@ -36372,9 +32394,6 @@ export namespace Prisma {
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    dojoHeadOf?: DojoUncheckedUpdateManyWithoutHeadInstructorNestedInput
-    instructor?: InstructorUncheckedUpdateOneWithoutMemberNestedInput
-    admin?: AdminUncheckedUpdateOneWithoutMemberNestedInput
     gradings?: GradingUncheckedUpdateManyWithoutMemberNestedInput
     gradingApplications?: GradingApplicationUncheckedUpdateManyWithoutMemberNestedInput
     eventRegistrations?: EventRegistrationUncheckedUpdateManyWithoutMemberNestedInput
@@ -36706,9 +32725,6 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     dojo?: DojoCreateNestedOneWithoutMembersInput
-    dojoHeadOf?: DojoCreateNestedManyWithoutHeadInstructorInput
-    instructor?: InstructorCreateNestedOneWithoutMemberInput
-    admin?: AdminCreateNestedOneWithoutMemberInput
     gradings?: GradingCreateNestedManyWithoutMemberInput
     gradingApplications?: GradingApplicationCreateNestedManyWithoutMemberInput
     eventRegistrations?: EventRegistrationCreateNestedManyWithoutMemberInput
@@ -36740,9 +32756,6 @@ export namespace Prisma {
     emergencyContactPhone?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    dojoHeadOf?: DojoUncheckedCreateNestedManyWithoutHeadInstructorInput
-    instructor?: InstructorUncheckedCreateNestedOneWithoutMemberInput
-    admin?: AdminUncheckedCreateNestedOneWithoutMemberInput
     gradings?: GradingUncheckedCreateNestedManyWithoutMemberInput
     gradingApplications?: GradingApplicationUncheckedCreateNestedManyWithoutMemberInput
     eventRegistrations?: EventRegistrationUncheckedCreateNestedManyWithoutMemberInput
@@ -36921,9 +32934,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dojo?: DojoUpdateOneWithoutMembersNestedInput
-    dojoHeadOf?: DojoUpdateManyWithoutHeadInstructorNestedInput
-    instructor?: InstructorUpdateOneWithoutMemberNestedInput
-    admin?: AdminUpdateOneWithoutMemberNestedInput
     gradings?: GradingUpdateManyWithoutMemberNestedInput
     gradingApplications?: GradingApplicationUpdateManyWithoutMemberNestedInput
     eventRegistrations?: EventRegistrationUpdateManyWithoutMemberNestedInput
@@ -36955,9 +32965,6 @@ export namespace Prisma {
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    dojoHeadOf?: DojoUncheckedUpdateManyWithoutHeadInstructorNestedInput
-    instructor?: InstructorUncheckedUpdateOneWithoutMemberNestedInput
-    admin?: AdminUncheckedUpdateOneWithoutMemberNestedInput
     gradings?: GradingUncheckedUpdateManyWithoutMemberNestedInput
     gradingApplications?: GradingApplicationUncheckedUpdateManyWithoutMemberNestedInput
     eventRegistrations?: EventRegistrationUncheckedUpdateManyWithoutMemberNestedInput
@@ -37462,15 +33469,6 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
-  export type InstructorCreateManyDojoInput = {
-    id?: string
-    memberId: string
-    bio?: string | null
-    isActive?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
   export type AttendanceCreateManyDojoInput = {
     id?: string
     memberId: string
@@ -37502,9 +33500,6 @@ export namespace Prisma {
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    dojoHeadOf?: DojoUpdateManyWithoutHeadInstructorNestedInput
-    instructor?: InstructorUpdateOneWithoutMemberNestedInput
-    admin?: AdminUpdateOneWithoutMemberNestedInput
     gradings?: GradingUpdateManyWithoutMemberNestedInput
     gradingApplications?: GradingApplicationUpdateManyWithoutMemberNestedInput
     eventRegistrations?: EventRegistrationUpdateManyWithoutMemberNestedInput
@@ -37536,9 +33531,6 @@ export namespace Prisma {
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    dojoHeadOf?: DojoUncheckedUpdateManyWithoutHeadInstructorNestedInput
-    instructor?: InstructorUncheckedUpdateOneWithoutMemberNestedInput
-    admin?: AdminUncheckedUpdateOneWithoutMemberNestedInput
     gradings?: GradingUncheckedUpdateManyWithoutMemberNestedInput
     gradingApplications?: GradingApplicationUncheckedUpdateManyWithoutMemberNestedInput
     eventRegistrations?: EventRegistrationUncheckedUpdateManyWithoutMemberNestedInput
@@ -37572,33 +33564,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type InstructorUpdateWithoutDojoInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    bio?: NullableStringFieldUpdateOperationsInput | string | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    member?: MemberUpdateOneRequiredWithoutInstructorNestedInput
-  }
-
-  export type InstructorUncheckedUpdateWithoutDojoInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    memberId?: StringFieldUpdateOperationsInput | string
-    bio?: NullableStringFieldUpdateOperationsInput | string | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type InstructorUncheckedUpdateManyWithoutDojoInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    memberId?: StringFieldUpdateOperationsInput | string
-    bio?: NullableStringFieldUpdateOperationsInput | string | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
   export type AttendanceUpdateWithoutDojoInput = {
     id?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -37624,21 +33589,6 @@ export namespace Prisma {
     present?: BoolFieldUpdateOperationsInput | boolean
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type DojoCreateManyHeadInstructorInput = {
-    id?: string
-    name: string
-    address?: string | null
-    city?: string | null
-    latitude?: number | null
-    longitude?: number | null
-    phone?: string | null
-    email?: string | null
-    schedule?: NullableJsonNullValueInput | InputJsonValue
-    isActive?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
   }
 
   export type GradingCreateManyMemberInput = {
@@ -37708,57 +33658,6 @@ export namespace Prisma {
     category?: string | null
     weightClass?: string | null
     createdAt?: Date | string
-  }
-
-  export type DojoUpdateWithoutHeadInstructorInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    city?: NullableStringFieldUpdateOperationsInput | string | null
-    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
-    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    schedule?: NullableJsonNullValueInput | InputJsonValue
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    members?: MemberUpdateManyWithoutDojoNestedInput
-    instructors?: InstructorUpdateManyWithoutDojoNestedInput
-    attendance?: AttendanceUpdateManyWithoutDojoNestedInput
-  }
-
-  export type DojoUncheckedUpdateWithoutHeadInstructorInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    city?: NullableStringFieldUpdateOperationsInput | string | null
-    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
-    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    schedule?: NullableJsonNullValueInput | InputJsonValue
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    members?: MemberUncheckedUpdateManyWithoutDojoNestedInput
-    instructors?: InstructorUncheckedUpdateManyWithoutDojoNestedInput
-    attendance?: AttendanceUncheckedUpdateManyWithoutDojoNestedInput
-  }
-
-  export type DojoUncheckedUpdateManyWithoutHeadInstructorInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    city?: NullableStringFieldUpdateOperationsInput | string | null
-    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
-    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    schedule?: NullableJsonNullValueInput | InputJsonValue
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type GradingUpdateWithoutMemberInput = {

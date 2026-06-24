@@ -37,7 +37,7 @@ type Props = {
 };
 
 const ROLE_RANK: Record<DojoRole, number> = {
-    DOJO_INSTRUCTOR: 1,
+    INSTRUCTOR: 1,
     DOJO_MANAGER: 2,
     DOJO_OWNER: 3,
 };

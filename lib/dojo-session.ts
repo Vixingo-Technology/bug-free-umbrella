@@ -32,12 +32,12 @@ export type DojoSession = {
 /**
  * Resolve the current viewer's dojo, role, and identity.
  *
- * Source of truth (in order):
- *   1. Member row + Dojo relationship (head instructor → DOJO_OWNER;
- *      Instructor with assigned dojoId → DOJO_INSTRUCTOR).
+ * Source of truth:
+ *   1. members.role + members.dojoId — single read, no joins. Roles in
+ *      scope: INSTRUCTOR, DOJO_MANAGER, DOJO_OWNER.
  *   2. Supabase user_metadata.role — used as a *transient* role while an
- *      enlistment application is still pending admin approval. The session is
- *      flagged `pendingApproval: true` in that case.
+ *      enlistment application is still pending admin approval. The session
+ *      is flagged `pendingApproval: true` in that case.
  */
 export async function getDojoSession(): Promise<DojoSession | null> {
     const supabase = await createClient();

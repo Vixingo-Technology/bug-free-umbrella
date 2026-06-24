@@ -32,7 +32,7 @@ export default async function DojoOverviewPage({
 }: {
     searchParams: SearchParams;
 }) {
-    const session = await requireDojoRole("DOJO_INSTRUCTOR");
+    const session = await requireDojoRole("INSTRUCTOR");
     const params = await searchParams;
     const showWelcome = params.enlistment === "success";
     const showDenied = params.denied === "1";
@@ -428,7 +428,7 @@ function QuickActions({ role }: { role: string }) {
         },
     ];
     const rank: Record<string, number> = {
-        DOJO_INSTRUCTOR: 1,
+        INSTRUCTOR: 1,
         DOJO_MANAGER: 2,
         DOJO_OWNER: 3,
     };

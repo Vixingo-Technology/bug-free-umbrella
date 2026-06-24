@@ -11,27 +11,37 @@ export const metadata: Metadata = {
 export default async function SettingsPage() {
     const session = await requireDojoRole("DOJO_MANAGER");
 
-    const dojo = session.dojo
+    const dojoBase = session.dojo
         ? await prisma.dojo.findUnique({
               where: { id: session.dojo.id },
-              include: {
-                  headInstructor: {
-                      select: { id: true, fullName: true, currentRank: true },
-                  },
-                  instructors: {
-                      where: { isActive: true },
-                      include: {
-                          member: {
-                              select: {
-                                  id: true,
-                                  fullName: true,
-                                  currentRank: true,
-                              },
-                          },
-                      },
-                  },
-              },
           })
+        : null;
+
+    const staff = dojoBase
+        ? await prisma.member.findMany({
+              where: {
+                  dojoId: dojoBase.id,
+                  role: { in: ["INSTRUCTOR", "DOJO_MANAGER", "DOJO_OWNER"] },
+              },
+              select: {
+                  id: true,
+                  fullName: true,
+                  currentRank: true,
+                  role: true,
+              },
+              orderBy: { fullName: "asc" },
+          })
+        : [];
+
+    const head = staff.find((m) => m.role === "DOJO_OWNER") ?? null;
+    const dojo = dojoBase
+        ? {
+              ...dojoBase,
+              headInstructor: head,
+              instructors: staff
+                  .filter((m) => m.role !== "DOJO_OWNER")
+                  .map((m) => ({ id: m.id, member: m })),
+          }
         : null;
 
     const memberCount = dojo

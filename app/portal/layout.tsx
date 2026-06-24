@@ -3,6 +3,7 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { prisma } from "@/lib/prisma";
+import type { MemberRole } from "@/prisma/generated/client";
 import PortalShell from "@/components/portal/portal-shell";
 import { isProfileComplete } from "@/lib/profile";
 
@@ -43,7 +44,7 @@ export default async function PortalLayout({
 
     // Role is also passed to the sidebar so admin links render on the very
     // first paint (no client-side flash).
-    let role: "STUDENT" | "INSTRUCTOR" | "ADMIN" = "STUDENT";
+    let role: MemberRole = "STUDENT";
 
     if (!isExempt) {
         let needsOnboarding = false;

@@ -142,7 +142,6 @@ exports.Prisma.DojoScalarFieldEnum = {
   email: 'email',
   schedule: 'schedule',
   isActive: 'isActive',
-  headInstructorId: 'headInstructorId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -188,23 +187,6 @@ exports.Prisma.MemberScalarFieldEnum = {
   nationalId: 'nationalId',
   emergencyContactName: 'emergencyContactName',
   emergencyContactPhone: 'emergencyContactPhone',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-};
-
-exports.Prisma.AdminScalarFieldEnum = {
-  id: 'id',
-  memberId: 'memberId',
-  notes: 'notes',
-  createdAt: 'createdAt'
-};
-
-exports.Prisma.InstructorScalarFieldEnum = {
-  id: 'id',
-  memberId: 'memberId',
-  dojoId: 'dojoId',
-  bio: 'bio',
-  isActive: 'isActive',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -393,6 +375,8 @@ exports.DojoApplicationStatus = exports.$Enums.DojoApplicationStatus = {
 exports.MemberRole = exports.$Enums.MemberRole = {
   STUDENT: 'STUDENT',
   INSTRUCTOR: 'INSTRUCTOR',
+  DOJO_MANAGER: 'DOJO_MANAGER',
+  DOJO_OWNER: 'DOJO_OWNER',
   ADMIN: 'ADMIN'
 };
 
@@ -437,8 +421,6 @@ exports.Prisma.ModelName = {
   Dojo: 'Dojo',
   DojoApplication: 'DojoApplication',
   Member: 'Member',
-  Admin: 'Admin',
-  Instructor: 'Instructor',
   Attendance: 'Attendance',
   GradingEvent: 'GradingEvent',
   GradingApplication: 'GradingApplication',

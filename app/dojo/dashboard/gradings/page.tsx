@@ -73,7 +73,7 @@ const SAMPLE: Candidate[] = [
 ];
 
 export default async function GradingsPage() {
-    const session = await requireDojoRole("DOJO_INSTRUCTOR");
+    const session = await requireDojoRole("INSTRUCTOR");
     const role = session.role;
 
     const candidates = session.dojo
@@ -113,7 +113,7 @@ export default async function GradingsPage() {
                                 className="py-4 flex flex-col md:flex-row md:items-center md:justify-between gap-3"
                             >
                                 <CandidateInfo c={c} />
-                                {hasAtLeast(role, "DOJO_INSTRUCTOR") ? (
+                                {hasAtLeast(role, "INSTRUCTOR") ? (
                                     <div className="flex items-center gap-2">
                                         <Btn icon={<CalendarPlus size={14} />}>
                                             Schedule test
