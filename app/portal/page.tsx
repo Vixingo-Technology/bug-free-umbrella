@@ -77,7 +77,7 @@ async function InstructorPortalDashboard({ userId }: { userId: string }) {
 async function StudentPortalDashboard({ userId }: { userId: string }) {
     let member = null;
     let unreadNotifications = 0;
-    let upcomingEvents: unknown[] = [];
+    let upcomingItems: any[] = [];
 
     try {
         member = await prisma.member.findUnique({
@@ -96,14 +96,46 @@ async function StudentPortalDashboard({ userId }: { userId: string }) {
             where: { memberId: userId, isRead: false },
         });
 
-        upcomingEvents = await prisma.event.findMany({
-            where: {
-                isPublished: true,
-                eventDate: { gte: new Date() },
-            },
-            orderBy: { eventDate: "asc" },
-            take: 3,
-        });
+        const now = new Date();
+
+        const [events, gradingApps] = await Promise.all([
+            prisma.event.findMany({
+                where: { isPublished: true, eventDate: { gte: now } },
+                orderBy: { eventDate: "asc" },
+                take: 5,
+            }),
+            prisma.gradingApplication.findMany({
+                where: {
+                    memberId: userId,
+                    status: "APPROVED",
+                    gradingEvent: { eventDate: { gte: now } },
+                },
+                include: { targetRank: true, gradingEvent: true },
+                orderBy: { gradingEvent: { eventDate: "asc" } },
+                take: 5,
+            }),
+        ]);
+
+        const eventItems = events.map((e: any) => ({
+            kind: "event" as const,
+            id: e.id,
+            title: e.title,
+            date: e.eventDate.toISOString(),
+            location: e.location ?? null,
+        }));
+
+        const gradingItems = gradingApps.map((a: any) => ({
+            kind: "grading" as const,
+            id: a.id,
+            targetRank: a.targetRank?.name ?? "Belt test",
+            date: a.gradingEvent.eventDate.toISOString(),
+            location: a.gradingEvent.location ?? null,
+            eventName: a.gradingEvent.name,
+        }));
+
+        upcomingItems = [...eventItems, ...gradingItems]
+            .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+            .slice(0, 5);
     } catch {
         // DB not configured yet
     }
@@ -126,7 +158,7 @@ async function StudentPortalDashboard({ userId }: { userId: string }) {
             member={member}
             membershipStatus={membershipStatus}
             unreadNotifications={unreadNotifications}
-            upcomingEvents={upcomingEvents}
+            upcomingItems={upcomingItems}
             userId={userId}
         />
     );

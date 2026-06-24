@@ -21,11 +21,15 @@ import TiltCard from "./tilt-card";
 import DigitalCard from "./digital-card";
 import MembershipCardDialog from "./membership-card-dialog";
 
+type UpcomingItem =
+    | { kind: "event";   id: string; title: string;      date: string; location: string | null }
+    | { kind: "grading"; id: string; targetRank: string; date: string; location: string | null; eventName: string };
+
 interface Props {
     member: any;
     membershipStatus: "Active" | "Expired" | "Expiring Soon" | "Pending";
     unreadNotifications: number;
-    upcomingEvents: any[];
+    upcomingItems: UpcomingItem[];
     userId: string;
 }
 
@@ -58,7 +62,7 @@ function StatCard({ icon: Icon, label, value, sub, href, delay, accentClass }: {
     );
 }
 
-export default function PortalDashboardClient({ member, membershipStatus, unreadNotifications, upcomingEvents }: Props) {
+export default function PortalDashboardClient({ member, membershipStatus, unreadNotifications, upcomingItems }: Props) {
     const gradings = member?.gradings ?? [];
     const dojo = member?.dojo;
     const statusCfg = statusConfig[membershipStatus];
@@ -227,45 +231,59 @@ export default function PortalDashboardClient({ member, membershipStatus, unread
                 </div>
             </div>
 
-            {/* Upcoming Events */}
+            {/* Upcoming */}
             <TiltCard delay={0.3} className="p-6">
                 <div className="flex items-center justify-between mb-4">
                     <h2 className="text-sm font-bold text-zinc-900 flex items-center gap-2">
                         <CalendarDays size={16} className="text-indigo-500" />
-                        Upcoming Events
+                        Upcoming
                     </h2>
                     <Link href="/portal/events" className="text-xs text-accent-red font-semibold hover:text-accent-gold transition-colors flex items-center gap-1">
                         View All <ChevronRight size={12} />
                     </Link>
                 </div>
 
-                {upcomingEvents.length > 0 ? (
+                {upcomingItems.length > 0 ? (
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 auto-rows-fr">
-                        {upcomingEvents.map((ev: any) => (
-                            <div key={ev.id} className="p-4 rounded-xl bg-zinc-50/70 backdrop-blur-sm border border-zinc-100 hover:border-accent-red/20 transition-colors flex flex-col">
-                                <span className="text-[9px] font-bold tracking-widest uppercase text-indigo-500 bg-indigo-50 px-2 py-0.5 rounded-full self-start">
-                                    {ev.eventType.replace("_", " ")}
-                                </span>
-                                <p className="text-sm font-semibold text-zinc-900 mt-2 leading-snug">{ev.titleEn}</p>
-                                <div className="mt-auto pt-2">
-                                    <p className="text-xs text-zinc-500 flex items-center gap-1">
-                                        <Calendar size={11} />
-                                        {new Date(ev.eventDate).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })}
-                                    </p>
-                                    {ev.location && (
-                                        <p className="text-xs text-zinc-500 flex items-center gap-1 mt-0.5">
-                                            <MapPin size={11} />
-                                            {ev.location}
+                        {upcomingItems.map((it) => {
+                            const tagColor = it.kind === "grading"
+                                ? "text-accent-red bg-accent-red/10"
+                                : "text-indigo-500 bg-indigo-50";
+                            const tagLabel = it.kind === "grading" ? "Belt test" : "Event";
+                            const title = it.kind === "grading" ? `${it.targetRank} test` : it.title;
+                            const subline = it.kind === "grading" ? it.eventName : null;
+                            const href = it.kind === "grading" ? "/portal/grading" : "/portal/events";
+                            return (
+                                <Link
+                                    key={`${it.kind}-${it.id}`}
+                                    href={href}
+                                    className="p-4 rounded-xl bg-zinc-50/70 backdrop-blur-sm border border-zinc-100 hover:border-accent-red/20 transition-colors flex flex-col"
+                                >
+                                    <span className={`text-[9px] font-bold tracking-widest uppercase px-2 py-0.5 rounded-full self-start ${tagColor}`}>
+                                        {tagLabel}
+                                    </span>
+                                    <p className="text-sm font-semibold text-zinc-900 mt-2 leading-snug">{title}</p>
+                                    {subline && <p className="text-xs text-zinc-500 mt-0.5">{subline}</p>}
+                                    <div className="mt-auto pt-2">
+                                        <p className="text-xs text-zinc-500 flex items-center gap-1">
+                                            <Calendar size={11} />
+                                            {new Date(it.date).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })}
                                         </p>
-                                    )}
-                                </div>
-                            </div>
-                        ))}
+                                        {it.location && (
+                                            <p className="text-xs text-zinc-500 flex items-center gap-1 mt-0.5">
+                                                <MapPin size={11} />
+                                                {it.location}
+                                            </p>
+                                        )}
+                                    </div>
+                                </Link>
+                            );
+                        })}
                     </div>
                 ) : (
                     <div className="flex flex-col items-center justify-center py-8 text-center">
                         <CalendarDays size={30} className="text-zinc-200 mb-2" />
-                        <p className="text-zinc-500 text-sm">No upcoming events.</p>
+                        <p className="text-zinc-500 text-sm">Nothing on the calendar.</p>
                     </div>
                 )}
             </TiltCard>
