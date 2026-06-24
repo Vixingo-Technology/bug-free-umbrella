@@ -1,59 +1,87 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { prisma } from "@/lib/prisma";
+import { serialize } from "@/lib/serialize";
+import { resolveNextRankForMember } from "@/lib/belt-rank";
 import GradingClient from "@/components/portal/grading-client";
 
 export default async function GradingPage() {
-    const supabase = await createClient();
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) redirect("/login");
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) redirect("/login");
 
-    let member = null;
-    let gradingEvents: any[] = [];
-    let myApplications: any[] = [];
-    let myGradings: any[] = [];
+  let member: any = null;
+  let currentRequest: any = null; // pending OR scheduled OR last declined
+  let myGradings: any[] = [];
+  let nextRankName: string | null = null;
+  let blockReason: string | null = null;
 
-    try {
-        member = await prisma.member.findUnique({
-            where: { id: user.id },
-        });
+  try {
+    member = await prisma.member.findUnique({
+      where: { id: user.id },
+      select: {
+        id: true,
+        fullName: true,
+        currentRank: true,
+        membershipStatus: true,
+      },
+    });
 
-        gradingEvents = await prisma.gradingEvent.findMany({
-            where: {
-                eventDate: { gte: new Date() },
-            },
-            include: { targetRank: true },
-            orderBy: { eventDate: "asc" },
-            take: 10,
-        });
+    // The "active" request for display: pending first, otherwise the most
+    // recent scheduled/declined within the last 60 days.
+    const pending = await prisma.gradingApplication.findFirst({
+      where: { memberId: user.id, gradingEventId: null, status: "SUBMITTED" },
+      include: { targetRank: true },
+    });
 
-        myApplications = await prisma.gradingApplication.findMany({
-            where: { memberId: user.id },
-            include: { gradingEvent: true, targetRank: true },
-            orderBy: { appliedAt: "desc" },
-        });
-
-        myGradings = await prisma.grading.findMany({
-            where: { memberId: user.id },
-            include: { fromRank: true, toRank: true, gradingEvent: true },
-            orderBy: { createdAt: "desc" },
-            take: 10,
-        });
-    } catch {
-        // DB not configured
+    if (pending) {
+      currentRequest = { kind: "pending", row: pending };
+    } else {
+      const recent = await prisma.gradingApplication.findFirst({
+        where: { memberId: user.id },
+        orderBy: { appliedAt: "desc" },
+        include: { targetRank: true, gradingEvent: true },
+      });
+      if (recent) {
+        if (recent.status === "APPROVED" && recent.gradingEvent && recent.gradingEvent.eventDate >= new Date()) {
+          currentRequest = { kind: "scheduled", row: recent };
+        } else if (recent.status === "REJECTED" && recent.gradingEventId === null) {
+          currentRequest = { kind: "declined", row: recent };
+        }
+      }
     }
 
-    // IDs the member already applied to
-    const appliedEventIds = myApplications.map((a: any) => a.gradingEventId);
+    myGradings = await prisma.grading.findMany({
+      where: { memberId: user.id },
+      include: { fromRank: true, toRank: true, gradingEvent: true },
+      orderBy: { createdAt: "desc" },
+      take: 10,
+    });
 
-    return (
-        <GradingClient
-            member={member}
-            gradingEvents={gradingEvents}
-            myApplications={myApplications}
-            myGradings={myGradings}
-            appliedEventIds={appliedEventIds}
-            userId={user.id}
-        />
-    );
+    // Compute the next-rank label and any block reason for the request button.
+    if (member?.membershipStatus !== "ACTIVE") {
+      blockReason = "Your membership is not active. Renew to request a belt test.";
+    } else if (!currentRequest || currentRequest.kind !== "pending") {
+      const next = await resolveNextRankForMember(user.id);
+      if (next.ok) {
+        nextRankName = next.nextRank.name;
+      } else if (next.error.kind === "AT_TOP_RANK") {
+        blockReason = "You are at the highest rank in our system 🎉";
+      } else {
+        blockReason = `We could not resolve your current rank ("${next.error.currentRank}"). Please speak with your dojo.`;
+      }
+    }
+  } catch {
+    // DB not configured
+  }
+
+  return (
+    <GradingClient
+      member={serialize(member)}
+      currentRequest={serialize(currentRequest)}
+      myGradings={serialize(myGradings)}
+      nextRankName={nextRankName}
+      blockReason={blockReason}
+    />
+  );
 }
