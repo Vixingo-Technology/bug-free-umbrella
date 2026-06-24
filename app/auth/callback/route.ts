@@ -1,8 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
-import { prisma } from "@/lib/prisma";
-import { emitMemberCreated } from "@/lib/n8n";
+import { provisionMemberFromSupabaseUser } from "@/lib/auth/provision-member";
 
 /**
  * Supabase Auth Callback
@@ -54,56 +53,7 @@ export async function GET(request: NextRequest) {
         return NextResponse.redirect(`${origin}/login?error=auth_callback_failed`);
     }
 
-    const user = data.user;
-
-    // ── Upsert members row ──────────────────────────────────────────────────
-    // The Supabase trigger on auth.users should have already created the row
-    // when the user signed up. This upsert is a safety net for:
-    //   - Environments where the trigger hasn't been applied
-    //   - Race conditions
-    try {
-        const meta = user.user_metadata ?? {};
-        const fullName: string =
-            (meta.full_name ??
-            [meta.first_name, meta.last_name].filter(Boolean).join(" ")) ||
-            user.email!;
-
-        await prisma.member.upsert({
-            where: { id: user.id },
-            create: {
-                id: user.id,
-                email: user.email!,
-                fullName,
-                currentRank: meta.current_rank ?? "White Belt",
-                role: meta.role === "INSTRUCTOR" ? "INSTRUCTOR"
-                    : meta.role === "ADMIN" ? "ADMIN"
-                    : "STUDENT",
-                onboardingComplete: false,
-                membershipStatus: "PENDING",
-            },
-            update: {
-                // Only update email in case it changed (e.g. email change confirmation)
-                email: user.email!,
-            },
-        });
-
-        // Emit welcome webhook to n8n (WhatsApp + email) only on new member creation
-        // Check if row was just created by looking at createdAt ≈ now
-        const freshMember = await prisma.member.findUnique({ where: { id: user.id } });
-        const isNew = freshMember && (Date.now() - freshMember.createdAt.getTime()) < 30_000;
-        if (isNew) {
-            await emitMemberCreated({
-                id: freshMember.id,
-                fullName: freshMember.fullName,
-                email: freshMember.email,
-                phone: freshMember.phone,
-                currentRank: freshMember.currentRank,
-            });
-        }
-    } catch (err) {
-        // Non-fatal — log and continue. Portal layout will handle missing members gracefully.
-        console.error("[auth/callback] Member upsert failed:", err);
-    }
+    await provisionMemberFromSupabaseUser(data.user);
 
     // Redirect to portal (or the `next` param if specified)
     const redirectUrl = next.startsWith("/") ? `${origin}${next}` : origin + "/portal";

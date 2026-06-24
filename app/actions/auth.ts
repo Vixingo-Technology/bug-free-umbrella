@@ -2,6 +2,7 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
+import { provisionMemberFromSupabaseUser } from "@/lib/auth/provision-member";
 
 export async function loginAction(formData: FormData) {
     const supabase = await createClient();
@@ -38,12 +39,12 @@ export async function signupAction(formData: FormData) {
         return { error: "All required fields must be filled." };
     }
 
+    // No emailRedirectTo — Supabase's "Confirm signup" template should render
+    // {{ .Token }} (a 6-digit OTP). The user enters that code on /auth/verify.
     const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: {
-            // Supabase will redirect to /auth/callback after email confirmation
-            emailRedirectTo: `${process.env.NEXT_PUBLIC_APP_URL ?? process.env.APP_URL ?? ""}/auth/callback`,
             data: {
                 first_name: firstName,
                 last_name: lastName,
@@ -59,12 +60,43 @@ export async function signupAction(formData: FormData) {
     }
 
     // If Supabase returned a session immediately (email confirmation disabled),
-    // go straight to the portal. Otherwise show the "check your email" screen.
-    if (data.session) {
+    // provision the member row and skip the OTP step.
+    if (data.session && data.user) {
+        await provisionMemberFromSupabaseUser(data.user);
         redirect("/portal");
     }
 
-    redirect("/auth/verify");
+    redirect(`/auth/verify?email=${encodeURIComponent(email)}`);
+}
+
+export async function verifySignupOtp(email: string, code: string) {
+    if (!email) return { error: "Missing email." };
+    if (!code || code.length < 6) {
+        return { error: "Please enter the 6-digit code from your email." };
+    }
+
+    const supabase = await createClient();
+    const { data, error } = await supabase.auth.verifyOtp({
+        email,
+        token: code,
+        type: "signup",
+    });
+
+    if (error) return { error: error.message };
+    if (!data.user) return { error: "Verification failed. Please try again." };
+
+    await provisionMemberFromSupabaseUser(data.user);
+    redirect("/portal/onboarding");
+}
+
+export async function resendSignupOtp(email: string) {
+    if (!email?.trim() || !email.includes("@")) {
+        return { error: "Missing email address." };
+    }
+    const supabase = await createClient();
+    const { error } = await supabase.auth.resend({ type: "signup", email });
+    if (error) return { error: error.message };
+    return { ok: true };
 }
 
 export async function signoutAction() {
