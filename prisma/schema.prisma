@@ -256,17 +256,24 @@ model GradingEvent {
 model GradingApplication {
   id             String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   memberId       String            @db.Uuid @map("member_id")
-  gradingEventId String            @db.Uuid @map("grading_event_id")
+  gradingEventId String?           @db.Uuid @map("grading_event_id")
   targetRankId   String?           @db.Uuid @map("target_rank_id")
   status         ApplicationStatus @default(SUBMITTED)
   notes          String?
+  declineReason  String?           @map("decline_reason")
   appliedAt      DateTime          @default(now()) @map("applied_at")
 
-  member       Member       @relation(fields: [memberId], references: [id], onDelete: Cascade)
-  gradingEvent GradingEvent @relation(fields: [gradingEventId], references: [id], onDelete: Cascade)
-  targetRank   BeltRank?    @relation("AppTargetRank", fields: [targetRankId], references: [id])
+  member       Member        @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  gradingEvent GradingEvent? @relation(fields: [gradingEventId], references: [id], onDelete: Cascade)
+  targetRank   BeltRank?     @relation("AppTargetRank", fields: [targetRankId], references: [id])
 
-  @@unique([memberId, gradingEventId])
+  // Uniqueness is enforced at the DB level by two partial indexes (see
+  // scripts/migrations/2026-06-24-belt-test-requests.sql):
+  //   - one_pending_request_per_member  (when grading_event_id IS NULL)
+  //   - one_app_per_member_per_event    (when grading_event_id IS NOT NULL)
+
+  @@index([memberId])
+  @@index([gradingEventId])
   @@map("grading_applications")
 }
 

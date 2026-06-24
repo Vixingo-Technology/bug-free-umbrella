@@ -11,9 +11,9 @@ export async function applyForGradingAction(gradingEventId: string, notes?: stri
     if (!user) return { error: "Not authenticated." };
 
     try {
-        // Check if already applied
-        const existing = await prisma.gradingApplication.findUnique({
-            where: { memberId_gradingEventId: { memberId: user.id, gradingEventId } },
+        // Check if already applied for this specific event
+        const existing = await prisma.gradingApplication.findFirst({
+            where: { memberId: user.id, gradingEventId },
         });
 
         if (existing) return { error: "You have already applied for this grading exam." };
