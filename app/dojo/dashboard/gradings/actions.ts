@@ -25,7 +25,7 @@ export async function scheduleExamAction(input: {
 
   const date = new Date(input.eventDate);
   if (Number.isNaN(date.getTime())) return { error: "Invalid date/time." };
-  if (date.getTime() < Date.now()) {
+  if (date.getTime() <= Date.now()) {
     return { error: "Exam date must be in the future." };
   }
 

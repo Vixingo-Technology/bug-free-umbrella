@@ -7,6 +7,9 @@
 
 BEGIN;
 
+-- 0. Defensive: ensure RLS is enabled (no-op if it already is).
+ALTER TABLE grading_applications ENABLE ROW LEVEL SECURITY;
+
 -- 1. Drop the old composite unique that requires both columns to be set.
 ALTER TABLE grading_applications
   DROP CONSTRAINT IF EXISTS grading_applications_member_id_grading_event_id_key;
@@ -55,12 +58,20 @@ CREATE POLICY grading_applications_select ON grading_applications
     OR (SELECT role FROM members WHERE id = auth.uid()) = 'ADMIN'
   );
 
--- INSERT: student may insert their own pending request (no event id yet).
+-- INSERT: student may insert their own pending request (no event id yet),
+-- AND only if their membership is currently ACTIVE. This mirrors the
+-- requestBeltTestAction server-side check so a direct Supabase-client
+-- insert by an expired member is also blocked at the DB level.
 CREATE POLICY grading_applications_insert ON grading_applications
   FOR INSERT WITH CHECK (
     member_id = auth.uid()
     AND grading_event_id IS NULL
     AND status = 'SUBMITTED'
+    AND EXISTS (
+      SELECT 1 FROM members m
+      WHERE m.id = auth.uid()
+        AND m.membership_status = 'ACTIVE'
+    )
   );
 
 -- UPDATE: dojo staff in same dojo, or admin.

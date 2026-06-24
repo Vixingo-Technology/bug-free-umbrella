@@ -71,8 +71,8 @@ export default async function GradingPage() {
         blockReason = `We could not resolve your current rank ("${next.error.currentRank}"). Please speak with your dojo.`;
       }
     }
-  } catch {
-    // DB not configured
+  } catch (err) {
+    console.error("[GradingPage] Failed to load grading data:", err);
   }
 
   return (
