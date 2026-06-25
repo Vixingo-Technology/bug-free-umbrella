@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import { Save } from "lucide-react";
 import DojoPageHeader from "@/components/dojo/page-header";
+import DojoMembershipCard from "@/components/dojo/settings/dojo-membership-card";
 import { requireDojoRole } from "@/lib/dojo-session";
 import { prisma } from "@/lib/prisma";
+import { MEMBERSHIP_FEE_BDT } from "@/lib/constants";
 
 export const metadata: Metadata = {
     title: "Dojo settings — Dojo Dashboard",
@@ -160,6 +162,32 @@ export default async function SettingsPage() {
                         }
                     />
                 </Card>
+
+                <div id="renewal" className="lg:col-span-2 scroll-mt-24">
+                    <Card title="Dojo membership">
+                        {dojo ? (
+                            <DojoMembershipCard
+                                annualFeeBDT={MEMBERSHIP_FEE_BDT}
+                                storedAnnualFee={
+                                    dojoBase?.annualFee != null
+                                        ? dojoBase.annualFee.toString()
+                                        : ""
+                                }
+                                expiryDate={
+                                    dojoBase?.expiryDate
+                                        ? dojoBase.expiryDate.toISOString()
+                                        : null
+                                }
+                                canEdit={true}
+                            />
+                        ) : (
+                            <p className="text-sm text-zinc-500">
+                                Dojo membership renewal becomes available once
+                                your dojo is approved by the federation.
+                            </p>
+                        )}
+                    </Card>
+                </div>
             </div>
         </>
     );

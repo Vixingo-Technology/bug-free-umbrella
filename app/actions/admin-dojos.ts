@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/admin-guard";
+import { emitWebhook } from "@/lib/n8n";
 import type { Prisma } from "@/prisma/generated/client";
 
 type ActionResult = { ok: true; id?: string } | { ok: false; error: string };
@@ -149,5 +150,53 @@ export async function assignDojoInstructorAction(formData: FormData): Promise<Ac
     await prisma.$transaction((tx) => setDojoHead(tx, id, headInstructorId));
 
     revalidatePath("/portal/admin/dojos");
+    return { ok: true };
+}
+
+/**
+ * Fire a `jka.renewal.reminder` n8n webhook so the automation workflow on
+ * Hetzner sends the dojo owner an email (and WhatsApp) reminder to renew.
+ * The actual send is owned by n8n — this server action just hands it the
+ * dojo and recipient context.
+ */
+export async function sendDojoRenewalReminderAction(input: {
+    dojoId: string;
+}): Promise<ActionResult> {
+    await requireAdmin();
+    if (!input.dojoId) return { ok: false, error: "Dojo id is required." };
+
+    const dojo = await prisma.dojo.findUnique({
+        where: { id: input.dojoId },
+        include: {
+            members: {
+                where: { role: "DOJO_OWNER" },
+                select: { id: true, fullName: true, email: true, phone: true },
+                take: 1,
+            },
+        },
+    });
+    if (!dojo) return { ok: false, error: "Dojo not found." };
+
+    const owner = dojo.members[0];
+    const recipient = owner?.email ?? dojo.email;
+    if (!recipient) {
+        return {
+            ok: false,
+            error: "No owner email on file — set a head instructor or a public dojo email first.",
+        };
+    }
+
+    await emitWebhook("jka.renewal.reminder", {
+        kind: "dojo",
+        dojoId: dojo.id,
+        dojoName: dojo.name,
+        recipientEmail: recipient,
+        recipientName: owner?.fullName ?? dojo.name,
+        recipientPhone: owner?.phone ?? null,
+        expiryDate: dojo.expiryDate?.toISOString() ?? null,
+        annualFee: dojo.annualFee != null ? Number(dojo.annualFee) : null,
+        renewUrl: "/dojo/dashboard/settings#renewal",
+    });
+
     return { ok: true };
 }

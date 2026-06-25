@@ -43,16 +43,32 @@ export default async function GradingPage() {
         include: { targetRank: true, gradingEvent: true },
       });
       if (recent) {
-        if (recent.status === "APPROVED" && recent.gradingEvent && recent.gradingEvent.eventDate >= new Date()) {
+        if (
+          recent.status === "APPROVED" &&
+          recent.gradingEvent &&
+          !recent.gradingEvent.cancelledAt &&
+          !recent.gradingEvent.resultsPublishedAt &&
+          recent.gradingEvent.eventDate >= new Date()
+        ) {
           currentRequest = { kind: "scheduled", row: recent };
+        } else if (recent.status === "CANCELLED") {
+          currentRequest = { kind: "cancelled", row: recent };
         } else if (recent.status === "REJECTED" && recent.gradingEventId === null) {
           currentRequest = { kind: "declined", row: recent };
         }
       }
     }
 
+    // History only includes published results (or legacy rows with no event).
+    // Drafts that haven't been published yet must never leak to the member.
     myGradings = await prisma.grading.findMany({
-      where: { memberId: user.id },
+      where: {
+        memberId: user.id,
+        OR: [
+          { gradingEventId: null },
+          { gradingEvent: { resultsPublishedAt: { not: null } } },
+        ],
+      },
       include: { fromRank: true, toRank: true, gradingEvent: true },
       orderBy: { createdAt: "desc" },
       take: 10,

@@ -12,7 +12,7 @@ import {
   withdrawRequestAction,
 } from "@/app/portal/grading/actions";
 
-type RequestKind = "pending" | "scheduled" | "declined";
+type RequestKind = "pending" | "scheduled" | "declined" | "cancelled";
 
 interface Props {
   member: { fullName: string; currentRank: string } | null;
@@ -90,6 +90,17 @@ export default function GradingClient({
             disabled={isPending}
           />
         )}
+        {currentRequest?.kind === "cancelled" && (
+          <CancelledCard
+            row={currentRequest.row}
+            nextRankName={nextRankName}
+            blockReason={blockReason}
+            notes={notes}
+            setNotes={setNotes}
+            onRequest={handleRequest}
+            disabled={isPending}
+          />
+        )}
         {!currentRequest && (
           <NoRequestCard
             nextRankName={nextRankName}
@@ -127,20 +138,28 @@ export default function GradingClient({
         ) : (
           <ul className="divide-y divide-zinc-200 bg-white rounded-sm border border-zinc-200">
             {myGradings.map((g: any) => (
-              <li key={g.id} className="px-4 py-3 flex items-center justify-between gap-3">
-                <div>
-                  <p className="text-sm font-semibold text-zinc-900">
-                    {g.fromRank?.name ?? "—"} → {g.toRank?.name ?? "—"}
-                  </p>
-                  <p className="text-xs text-zinc-500">
-                    {new Date(g.createdAt).toLocaleDateString("en-GB", {
-                      day: "numeric", month: "short", year: "numeric",
-                    })}
-                  </p>
+              <li key={g.id} className="px-4 py-3 space-y-1.5">
+                <div className="flex items-center justify-between gap-3">
+                  <div>
+                    <p className="text-sm font-semibold text-zinc-900">
+                      {g.fromRank?.name ?? "—"} → {g.toRank?.name ?? "—"}
+                    </p>
+                    <p className="text-xs text-zinc-500">
+                      {new Date(g.createdAt).toLocaleDateString("en-GB", {
+                        day: "numeric", month: "short", year: "numeric",
+                      })}
+                      {g.gradingEvent?.name ? ` · ${g.gradingEvent.name}` : ""}
+                    </p>
+                  </div>
+                  <span className={`text-[10px] uppercase tracking-widest font-bold px-2 py-1 rounded-full ${statusColors[g.result] ?? ""}`}>
+                    {g.result}
+                  </span>
                 </div>
-                <span className={`text-[10px] uppercase tracking-widest font-bold px-2 py-1 rounded-full ${statusColors[g.result] ?? ""}`}>
-                  {g.result}
-                </span>
+                {g.notes && (
+                  <p className="text-xs text-zinc-600 italic border-l-2 border-zinc-200 pl-3">
+                    {g.notes}
+                  </p>
+                )}
               </li>
             ))}
           </ul>
@@ -285,6 +304,47 @@ function DeclinedCard({
         {row.declineReason && (
           <p className="text-sm text-zinc-600 italic mt-1">&quot;{row.declineReason}&quot;</p>
         )}
+      </div>
+      <hr className="border-zinc-200" />
+      <NoRequestCard
+        nextRankName={nextRankName}
+        blockReason={blockReason}
+        notes={notes}
+        setNotes={setNotes}
+        onRequest={onRequest}
+        disabled={disabled}
+      />
+    </div>
+  );
+}
+
+function CancelledCard({
+  row, nextRankName, blockReason, notes, setNotes, onRequest, disabled,
+}: {
+  row: any;
+  nextRankName: string | null;
+  blockReason: string | null;
+  notes: string;
+  setNotes: (s: string) => void;
+  onRequest: () => void;
+  disabled: boolean;
+}) {
+  const ev = row.gradingEvent;
+  return (
+    <div className="space-y-4">
+      <span className="inline-flex items-center gap-1.5 text-[10px] tracking-widest uppercase font-bold text-zinc-600 bg-zinc-50 border border-zinc-200 px-2 py-1 rounded-full">
+        <XCircle size={11} /> Cancelled
+      </span>
+      <div>
+        <h2 className="text-base font-bold text-zinc-900">
+          Belt test cancelled{ev?.name ? ` — ${ev.name}` : ""}
+        </h2>
+        {ev?.cancelReason && (
+          <p className="text-sm text-zinc-600 italic mt-1">&quot;{ev.cancelReason}&quot;</p>
+        )}
+        <p className="text-xs text-zinc-500 mt-1">
+          You can request a new belt test below.
+        </p>
       </div>
       <hr className="border-zinc-200" />
       <NoRequestCard

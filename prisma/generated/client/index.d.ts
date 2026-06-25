@@ -136,7 +136,8 @@ export type GradingResult = (typeof GradingResult)[keyof typeof GradingResult]
 export const ApplicationStatus: {
   SUBMITTED: 'SUBMITTED',
   APPROVED: 'APPROVED',
-  REJECTED: 'REJECTED'
+  REJECTED: 'REJECTED',
+  CANCELLED: 'CANCELLED'
 };
 
 export type ApplicationStatus = (typeof ApplicationStatus)[keyof typeof ApplicationStatus]
@@ -2485,11 +2486,13 @@ export namespace Prisma {
    */
 
   export type DojoCountOutputType = {
+    renewalOrders: number
     members: number
     attendance: number
   }
 
   export type DojoCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    renewalOrders?: boolean | DojoCountOutputTypeCountRenewalOrdersArgs
     members?: boolean | DojoCountOutputTypeCountMembersArgs
     attendance?: boolean | DojoCountOutputTypeCountAttendanceArgs
   }
@@ -2503,6 +2506,13 @@ export namespace Prisma {
      * Select specific fields to fetch from the DojoCountOutputType
      */
     select?: DojoCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * DojoCountOutputType without action
+   */
+  export type DojoCountOutputTypeCountRenewalOrdersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ShopOrderWhereInput
   }
 
   /**
@@ -2854,7 +2864,6 @@ export namespace Prisma {
   export type BeltRankMinAggregateOutputType = {
     id: string | null
     name: string | null
-    nameBn: string | null
     kyuDan: string | null
     colorHex: string | null
     orderIndex: number | null
@@ -2865,7 +2874,6 @@ export namespace Prisma {
   export type BeltRankMaxAggregateOutputType = {
     id: string | null
     name: string | null
-    nameBn: string | null
     kyuDan: string | null
     colorHex: string | null
     orderIndex: number | null
@@ -2876,7 +2884,6 @@ export namespace Prisma {
   export type BeltRankCountAggregateOutputType = {
     id: number
     name: number
-    nameBn: number
     kyuDan: number
     colorHex: number
     orderIndex: number
@@ -2897,7 +2904,6 @@ export namespace Prisma {
   export type BeltRankMinAggregateInputType = {
     id?: true
     name?: true
-    nameBn?: true
     kyuDan?: true
     colorHex?: true
     orderIndex?: true
@@ -2908,7 +2914,6 @@ export namespace Prisma {
   export type BeltRankMaxAggregateInputType = {
     id?: true
     name?: true
-    nameBn?: true
     kyuDan?: true
     colorHex?: true
     orderIndex?: true
@@ -2919,7 +2924,6 @@ export namespace Prisma {
   export type BeltRankCountAggregateInputType = {
     id?: true
     name?: true
-    nameBn?: true
     kyuDan?: true
     colorHex?: true
     orderIndex?: true
@@ -3017,7 +3021,6 @@ export namespace Prisma {
   export type BeltRankGroupByOutputType = {
     id: string
     name: string
-    nameBn: string | null
     kyuDan: string | null
     colorHex: string | null
     orderIndex: number
@@ -3047,7 +3050,6 @@ export namespace Prisma {
   export type BeltRankSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
-    nameBn?: boolean
     kyuDan?: boolean
     colorHex?: boolean
     orderIndex?: boolean
@@ -3063,7 +3065,6 @@ export namespace Prisma {
   export type BeltRankSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
-    nameBn?: boolean
     kyuDan?: boolean
     colorHex?: boolean
     orderIndex?: boolean
@@ -3074,7 +3075,6 @@ export namespace Prisma {
   export type BeltRankSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
-    nameBn?: boolean
     kyuDan?: boolean
     colorHex?: boolean
     orderIndex?: boolean
@@ -3085,7 +3085,6 @@ export namespace Prisma {
   export type BeltRankSelectScalar = {
     id?: boolean
     name?: boolean
-    nameBn?: boolean
     kyuDan?: boolean
     colorHex?: boolean
     orderIndex?: boolean
@@ -3093,7 +3092,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type BeltRankOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "nameBn" | "kyuDan" | "colorHex" | "orderIndex" | "createdAt" | "updatedAt", ExtArgs["result"]["beltRank"]>
+  export type BeltRankOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "kyuDan" | "colorHex" | "orderIndex" | "createdAt" | "updatedAt", ExtArgs["result"]["beltRank"]>
   export type BeltRankInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     gradingsFrom?: boolean | BeltRank$gradingsFromArgs<ExtArgs>
     gradingsTo?: boolean | BeltRank$gradingsToArgs<ExtArgs>
@@ -3115,7 +3114,6 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: string
       name: string
-      nameBn: string | null
       kyuDan: string | null
       colorHex: string | null
       orderIndex: number
@@ -3550,7 +3548,6 @@ export namespace Prisma {
   interface BeltRankFieldRefs {
     readonly id: FieldRef<"BeltRank", 'String'>
     readonly name: FieldRef<"BeltRank", 'String'>
-    readonly nameBn: FieldRef<"BeltRank", 'String'>
     readonly kyuDan: FieldRef<"BeltRank", 'String'>
     readonly colorHex: FieldRef<"BeltRank", 'String'>
     readonly orderIndex: FieldRef<"BeltRank", 'Int'>
@@ -4078,11 +4075,13 @@ export namespace Prisma {
   export type DojoAvgAggregateOutputType = {
     latitude: number | null
     longitude: number | null
+    annualFee: Decimal | null
   }
 
   export type DojoSumAggregateOutputType = {
     latitude: number | null
     longitude: number | null
+    annualFee: Decimal | null
   }
 
   export type DojoMinAggregateOutputType = {
@@ -4095,6 +4094,8 @@ export namespace Prisma {
     phone: string | null
     email: string | null
     isActive: boolean | null
+    annualFee: Decimal | null
+    expiryDate: Date | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -4109,6 +4110,8 @@ export namespace Prisma {
     phone: string | null
     email: string | null
     isActive: boolean | null
+    annualFee: Decimal | null
+    expiryDate: Date | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -4124,6 +4127,8 @@ export namespace Prisma {
     email: number
     schedule: number
     isActive: number
+    annualFee: number
+    expiryDate: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -4133,11 +4138,13 @@ export namespace Prisma {
   export type DojoAvgAggregateInputType = {
     latitude?: true
     longitude?: true
+    annualFee?: true
   }
 
   export type DojoSumAggregateInputType = {
     latitude?: true
     longitude?: true
+    annualFee?: true
   }
 
   export type DojoMinAggregateInputType = {
@@ -4150,6 +4157,8 @@ export namespace Prisma {
     phone?: true
     email?: true
     isActive?: true
+    annualFee?: true
+    expiryDate?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -4164,6 +4173,8 @@ export namespace Prisma {
     phone?: true
     email?: true
     isActive?: true
+    annualFee?: true
+    expiryDate?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -4179,6 +4190,8 @@ export namespace Prisma {
     email?: true
     schedule?: true
     isActive?: true
+    annualFee?: true
+    expiryDate?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -4281,6 +4294,8 @@ export namespace Prisma {
     email: string | null
     schedule: JsonValue | null
     isActive: boolean
+    annualFee: Decimal | null
+    expiryDate: Date | null
     createdAt: Date
     updatedAt: Date
     _count: DojoCountAggregateOutputType | null
@@ -4315,8 +4330,11 @@ export namespace Prisma {
     email?: boolean
     schedule?: boolean
     isActive?: boolean
+    annualFee?: boolean
+    expiryDate?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    renewalOrders?: boolean | Dojo$renewalOrdersArgs<ExtArgs>
     members?: boolean | Dojo$membersArgs<ExtArgs>
     attendance?: boolean | Dojo$attendanceArgs<ExtArgs>
     _count?: boolean | DojoCountOutputTypeDefaultArgs<ExtArgs>
@@ -4333,6 +4351,8 @@ export namespace Prisma {
     email?: boolean
     schedule?: boolean
     isActive?: boolean
+    annualFee?: boolean
+    expiryDate?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["dojo"]>
@@ -4348,6 +4368,8 @@ export namespace Prisma {
     email?: boolean
     schedule?: boolean
     isActive?: boolean
+    annualFee?: boolean
+    expiryDate?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["dojo"]>
@@ -4363,12 +4385,15 @@ export namespace Prisma {
     email?: boolean
     schedule?: boolean
     isActive?: boolean
+    annualFee?: boolean
+    expiryDate?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type DojoOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "address" | "city" | "latitude" | "longitude" | "phone" | "email" | "schedule" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["dojo"]>
+  export type DojoOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "address" | "city" | "latitude" | "longitude" | "phone" | "email" | "schedule" | "isActive" | "annualFee" | "expiryDate" | "createdAt" | "updatedAt", ExtArgs["result"]["dojo"]>
   export type DojoInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    renewalOrders?: boolean | Dojo$renewalOrdersArgs<ExtArgs>
     members?: boolean | Dojo$membersArgs<ExtArgs>
     attendance?: boolean | Dojo$attendanceArgs<ExtArgs>
     _count?: boolean | DojoCountOutputTypeDefaultArgs<ExtArgs>
@@ -4379,6 +4404,7 @@ export namespace Prisma {
   export type $DojoPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Dojo"
     objects: {
+      renewalOrders: Prisma.$ShopOrderPayload<ExtArgs>[]
       members: Prisma.$MemberPayload<ExtArgs>[]
       attendance: Prisma.$AttendancePayload<ExtArgs>[]
     }
@@ -4393,6 +4419,8 @@ export namespace Prisma {
       email: string | null
       schedule: Prisma.JsonValue | null
       isActive: boolean
+      annualFee: Prisma.Decimal | null
+      expiryDate: Date | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["dojo"]>
@@ -4789,6 +4817,7 @@ export namespace Prisma {
    */
   export interface Prisma__DojoClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    renewalOrders<T extends Dojo$renewalOrdersArgs<ExtArgs> = {}>(args?: Subset<T, Dojo$renewalOrdersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ShopOrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     members<T extends Dojo$membersArgs<ExtArgs> = {}>(args?: Subset<T, Dojo$membersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     attendance<T extends Dojo$attendanceArgs<ExtArgs> = {}>(args?: Subset<T, Dojo$attendanceArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AttendancePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
@@ -4830,6 +4859,8 @@ export namespace Prisma {
     readonly email: FieldRef<"Dojo", 'String'>
     readonly schedule: FieldRef<"Dojo", 'Json'>
     readonly isActive: FieldRef<"Dojo", 'Boolean'>
+    readonly annualFee: FieldRef<"Dojo", 'Decimal'>
+    readonly expiryDate: FieldRef<"Dojo", 'DateTime'>
     readonly createdAt: FieldRef<"Dojo", 'DateTime'>
     readonly updatedAt: FieldRef<"Dojo", 'DateTime'>
   }
@@ -5222,6 +5253,30 @@ export namespace Prisma {
      * Limit how many Dojos to delete.
      */
     limit?: number
+  }
+
+  /**
+   * Dojo.renewalOrders
+   */
+  export type Dojo$renewalOrdersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShopOrder
+     */
+    select?: ShopOrderSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ShopOrder
+     */
+    omit?: ShopOrderOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShopOrderInclude<ExtArgs> | null
+    where?: ShopOrderWhereInput
+    orderBy?: ShopOrderOrderByWithRelationInput | ShopOrderOrderByWithRelationInput[]
+    cursor?: ShopOrderWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ShopOrderScalarFieldEnum | ShopOrderScalarFieldEnum[]
   }
 
   /**
@@ -9112,6 +9167,9 @@ export namespace Prisma {
     targetRankId: string | null
     isOpen: boolean | null
     notes: string | null
+    cancelledAt: Date | null
+    cancelReason: string | null
+    resultsPublishedAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -9124,6 +9182,9 @@ export namespace Prisma {
     targetRankId: string | null
     isOpen: boolean | null
     notes: string | null
+    cancelledAt: Date | null
+    cancelReason: string | null
+    resultsPublishedAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -9136,6 +9197,9 @@ export namespace Prisma {
     targetRankId: number
     isOpen: number
     notes: number
+    cancelledAt: number
+    cancelReason: number
+    resultsPublishedAt: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -9150,6 +9214,9 @@ export namespace Prisma {
     targetRankId?: true
     isOpen?: true
     notes?: true
+    cancelledAt?: true
+    cancelReason?: true
+    resultsPublishedAt?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -9162,6 +9229,9 @@ export namespace Prisma {
     targetRankId?: true
     isOpen?: true
     notes?: true
+    cancelledAt?: true
+    cancelReason?: true
+    resultsPublishedAt?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -9174,6 +9244,9 @@ export namespace Prisma {
     targetRankId?: true
     isOpen?: true
     notes?: true
+    cancelledAt?: true
+    cancelReason?: true
+    resultsPublishedAt?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -9259,6 +9332,9 @@ export namespace Prisma {
     targetRankId: string | null
     isOpen: boolean
     notes: string | null
+    cancelledAt: Date | null
+    cancelReason: string | null
+    resultsPublishedAt: Date | null
     createdAt: Date
     updatedAt: Date
     _count: GradingEventCountAggregateOutputType | null
@@ -9288,6 +9364,9 @@ export namespace Prisma {
     targetRankId?: boolean
     isOpen?: boolean
     notes?: boolean
+    cancelledAt?: boolean
+    cancelReason?: boolean
+    resultsPublishedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     targetRank?: boolean | GradingEvent$targetRankArgs<ExtArgs>
@@ -9304,6 +9383,9 @@ export namespace Prisma {
     targetRankId?: boolean
     isOpen?: boolean
     notes?: boolean
+    cancelledAt?: boolean
+    cancelReason?: boolean
+    resultsPublishedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     targetRank?: boolean | GradingEvent$targetRankArgs<ExtArgs>
@@ -9317,6 +9399,9 @@ export namespace Prisma {
     targetRankId?: boolean
     isOpen?: boolean
     notes?: boolean
+    cancelledAt?: boolean
+    cancelReason?: boolean
+    resultsPublishedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     targetRank?: boolean | GradingEvent$targetRankArgs<ExtArgs>
@@ -9330,11 +9415,14 @@ export namespace Prisma {
     targetRankId?: boolean
     isOpen?: boolean
     notes?: boolean
+    cancelledAt?: boolean
+    cancelReason?: boolean
+    resultsPublishedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type GradingEventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "eventDate" | "location" | "targetRankId" | "isOpen" | "notes" | "createdAt" | "updatedAt", ExtArgs["result"]["gradingEvent"]>
+  export type GradingEventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "eventDate" | "location" | "targetRankId" | "isOpen" | "notes" | "cancelledAt" | "cancelReason" | "resultsPublishedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["gradingEvent"]>
   export type GradingEventInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     targetRank?: boolean | GradingEvent$targetRankArgs<ExtArgs>
     gradings?: boolean | GradingEvent$gradingsArgs<ExtArgs>
@@ -9363,6 +9451,9 @@ export namespace Prisma {
       targetRankId: string | null
       isOpen: boolean
       notes: string | null
+      cancelledAt: Date | null
+      cancelReason: string | null
+      resultsPublishedAt: Date | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["gradingEvent"]>
@@ -9798,6 +9889,9 @@ export namespace Prisma {
     readonly targetRankId: FieldRef<"GradingEvent", 'String'>
     readonly isOpen: FieldRef<"GradingEvent", 'Boolean'>
     readonly notes: FieldRef<"GradingEvent", 'String'>
+    readonly cancelledAt: FieldRef<"GradingEvent", 'DateTime'>
+    readonly cancelReason: FieldRef<"GradingEvent", 'String'>
+    readonly resultsPublishedAt: FieldRef<"GradingEvent", 'DateTime'>
     readonly createdAt: FieldRef<"GradingEvent", 'DateTime'>
     readonly updatedAt: FieldRef<"GradingEvent", 'DateTime'>
   }
@@ -10303,6 +10397,7 @@ export namespace Prisma {
     targetRankId: string | null
     status: $Enums.ApplicationStatus | null
     notes: string | null
+    declineReason: string | null
     appliedAt: Date | null
   }
 
@@ -10313,6 +10408,7 @@ export namespace Prisma {
     targetRankId: string | null
     status: $Enums.ApplicationStatus | null
     notes: string | null
+    declineReason: string | null
     appliedAt: Date | null
   }
 
@@ -10323,6 +10419,7 @@ export namespace Prisma {
     targetRankId: number
     status: number
     notes: number
+    declineReason: number
     appliedAt: number
     _all: number
   }
@@ -10335,6 +10432,7 @@ export namespace Prisma {
     targetRankId?: true
     status?: true
     notes?: true
+    declineReason?: true
     appliedAt?: true
   }
 
@@ -10345,6 +10443,7 @@ export namespace Prisma {
     targetRankId?: true
     status?: true
     notes?: true
+    declineReason?: true
     appliedAt?: true
   }
 
@@ -10355,6 +10454,7 @@ export namespace Prisma {
     targetRankId?: true
     status?: true
     notes?: true
+    declineReason?: true
     appliedAt?: true
     _all?: true
   }
@@ -10434,10 +10534,11 @@ export namespace Prisma {
   export type GradingApplicationGroupByOutputType = {
     id: string
     memberId: string
-    gradingEventId: string
+    gradingEventId: string | null
     targetRankId: string | null
     status: $Enums.ApplicationStatus
     notes: string | null
+    declineReason: string | null
     appliedAt: Date
     _count: GradingApplicationCountAggregateOutputType | null
     _min: GradingApplicationMinAggregateOutputType | null
@@ -10465,9 +10566,10 @@ export namespace Prisma {
     targetRankId?: boolean
     status?: boolean
     notes?: boolean
+    declineReason?: boolean
     appliedAt?: boolean
     member?: boolean | MemberDefaultArgs<ExtArgs>
-    gradingEvent?: boolean | GradingEventDefaultArgs<ExtArgs>
+    gradingEvent?: boolean | GradingApplication$gradingEventArgs<ExtArgs>
     targetRank?: boolean | GradingApplication$targetRankArgs<ExtArgs>
   }, ExtArgs["result"]["gradingApplication"]>
 
@@ -10478,9 +10580,10 @@ export namespace Prisma {
     targetRankId?: boolean
     status?: boolean
     notes?: boolean
+    declineReason?: boolean
     appliedAt?: boolean
     member?: boolean | MemberDefaultArgs<ExtArgs>
-    gradingEvent?: boolean | GradingEventDefaultArgs<ExtArgs>
+    gradingEvent?: boolean | GradingApplication$gradingEventArgs<ExtArgs>
     targetRank?: boolean | GradingApplication$targetRankArgs<ExtArgs>
   }, ExtArgs["result"]["gradingApplication"]>
 
@@ -10491,9 +10594,10 @@ export namespace Prisma {
     targetRankId?: boolean
     status?: boolean
     notes?: boolean
+    declineReason?: boolean
     appliedAt?: boolean
     member?: boolean | MemberDefaultArgs<ExtArgs>
-    gradingEvent?: boolean | GradingEventDefaultArgs<ExtArgs>
+    gradingEvent?: boolean | GradingApplication$gradingEventArgs<ExtArgs>
     targetRank?: boolean | GradingApplication$targetRankArgs<ExtArgs>
   }, ExtArgs["result"]["gradingApplication"]>
 
@@ -10504,23 +10608,24 @@ export namespace Prisma {
     targetRankId?: boolean
     status?: boolean
     notes?: boolean
+    declineReason?: boolean
     appliedAt?: boolean
   }
 
-  export type GradingApplicationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "memberId" | "gradingEventId" | "targetRankId" | "status" | "notes" | "appliedAt", ExtArgs["result"]["gradingApplication"]>
+  export type GradingApplicationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "memberId" | "gradingEventId" | "targetRankId" | "status" | "notes" | "declineReason" | "appliedAt", ExtArgs["result"]["gradingApplication"]>
   export type GradingApplicationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     member?: boolean | MemberDefaultArgs<ExtArgs>
-    gradingEvent?: boolean | GradingEventDefaultArgs<ExtArgs>
+    gradingEvent?: boolean | GradingApplication$gradingEventArgs<ExtArgs>
     targetRank?: boolean | GradingApplication$targetRankArgs<ExtArgs>
   }
   export type GradingApplicationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     member?: boolean | MemberDefaultArgs<ExtArgs>
-    gradingEvent?: boolean | GradingEventDefaultArgs<ExtArgs>
+    gradingEvent?: boolean | GradingApplication$gradingEventArgs<ExtArgs>
     targetRank?: boolean | GradingApplication$targetRankArgs<ExtArgs>
   }
   export type GradingApplicationIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     member?: boolean | MemberDefaultArgs<ExtArgs>
-    gradingEvent?: boolean | GradingEventDefaultArgs<ExtArgs>
+    gradingEvent?: boolean | GradingApplication$gradingEventArgs<ExtArgs>
     targetRank?: boolean | GradingApplication$targetRankArgs<ExtArgs>
   }
 
@@ -10528,16 +10633,17 @@ export namespace Prisma {
     name: "GradingApplication"
     objects: {
       member: Prisma.$MemberPayload<ExtArgs>
-      gradingEvent: Prisma.$GradingEventPayload<ExtArgs>
+      gradingEvent: Prisma.$GradingEventPayload<ExtArgs> | null
       targetRank: Prisma.$BeltRankPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       memberId: string
-      gradingEventId: string
+      gradingEventId: string | null
       targetRankId: string | null
       status: $Enums.ApplicationStatus
       notes: string | null
+      declineReason: string | null
       appliedAt: Date
     }, ExtArgs["result"]["gradingApplication"]>
     composites: {}
@@ -10934,7 +11040,7 @@ export namespace Prisma {
   export interface Prisma__GradingApplicationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     member<T extends MemberDefaultArgs<ExtArgs> = {}>(args?: Subset<T, MemberDefaultArgs<ExtArgs>>): Prisma__MemberClient<$Result.GetResult<Prisma.$MemberPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    gradingEvent<T extends GradingEventDefaultArgs<ExtArgs> = {}>(args?: Subset<T, GradingEventDefaultArgs<ExtArgs>>): Prisma__GradingEventClient<$Result.GetResult<Prisma.$GradingEventPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    gradingEvent<T extends GradingApplication$gradingEventArgs<ExtArgs> = {}>(args?: Subset<T, GradingApplication$gradingEventArgs<ExtArgs>>): Prisma__GradingEventClient<$Result.GetResult<Prisma.$GradingEventPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     targetRank<T extends GradingApplication$targetRankArgs<ExtArgs> = {}>(args?: Subset<T, GradingApplication$targetRankArgs<ExtArgs>>): Prisma__BeltRankClient<$Result.GetResult<Prisma.$BeltRankPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -10971,6 +11077,7 @@ export namespace Prisma {
     readonly targetRankId: FieldRef<"GradingApplication", 'String'>
     readonly status: FieldRef<"GradingApplication", 'ApplicationStatus'>
     readonly notes: FieldRef<"GradingApplication", 'String'>
+    readonly declineReason: FieldRef<"GradingApplication", 'String'>
     readonly appliedAt: FieldRef<"GradingApplication", 'DateTime'>
   }
     
@@ -11370,6 +11477,25 @@ export namespace Prisma {
      * Limit how many GradingApplications to delete.
      */
     limit?: number
+  }
+
+  /**
+   * GradingApplication.gradingEvent
+   */
+  export type GradingApplication$gradingEventArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GradingEvent
+     */
+    select?: GradingEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GradingEvent
+     */
+    omit?: GradingEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GradingEventInclude<ExtArgs> | null
+    where?: GradingEventWhereInput
   }
 
   /**
@@ -17177,6 +17303,8 @@ export namespace Prisma {
     includesMembership: boolean | null
     membershipFee: Decimal | null
     notes: string | null
+    dojoId: string | null
+    includesDojoRenewal: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -17192,6 +17320,8 @@ export namespace Prisma {
     includesMembership: boolean | null
     membershipFee: Decimal | null
     notes: string | null
+    dojoId: string | null
+    includesDojoRenewal: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -17207,6 +17337,8 @@ export namespace Prisma {
     includesMembership: number
     membershipFee: number
     notes: number
+    dojoId: number
+    includesDojoRenewal: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -17234,6 +17366,8 @@ export namespace Prisma {
     includesMembership?: true
     membershipFee?: true
     notes?: true
+    dojoId?: true
+    includesDojoRenewal?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -17249,6 +17383,8 @@ export namespace Prisma {
     includesMembership?: true
     membershipFee?: true
     notes?: true
+    dojoId?: true
+    includesDojoRenewal?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -17264,6 +17400,8 @@ export namespace Prisma {
     includesMembership?: true
     membershipFee?: true
     notes?: true
+    dojoId?: true
+    includesDojoRenewal?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -17366,6 +17504,8 @@ export namespace Prisma {
     includesMembership: boolean
     membershipFee: Decimal | null
     notes: string | null
+    dojoId: string | null
+    includesDojoRenewal: boolean
     createdAt: Date
     updatedAt: Date
     _count: ShopOrderCountAggregateOutputType | null
@@ -17400,9 +17540,12 @@ export namespace Prisma {
     includesMembership?: boolean
     membershipFee?: boolean
     notes?: boolean
+    dojoId?: boolean
+    includesDojoRenewal?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     member?: boolean | MemberDefaultArgs<ExtArgs>
+    dojo?: boolean | ShopOrder$dojoArgs<ExtArgs>
     orderItems?: boolean | ShopOrder$orderItemsArgs<ExtArgs>
     _count?: boolean | ShopOrderCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["shopOrder"]>
@@ -17418,9 +17561,12 @@ export namespace Prisma {
     includesMembership?: boolean
     membershipFee?: boolean
     notes?: boolean
+    dojoId?: boolean
+    includesDojoRenewal?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     member?: boolean | MemberDefaultArgs<ExtArgs>
+    dojo?: boolean | ShopOrder$dojoArgs<ExtArgs>
   }, ExtArgs["result"]["shopOrder"]>
 
   export type ShopOrderSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -17434,9 +17580,12 @@ export namespace Prisma {
     includesMembership?: boolean
     membershipFee?: boolean
     notes?: boolean
+    dojoId?: boolean
+    includesDojoRenewal?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     member?: boolean | MemberDefaultArgs<ExtArgs>
+    dojo?: boolean | ShopOrder$dojoArgs<ExtArgs>
   }, ExtArgs["result"]["shopOrder"]>
 
   export type ShopOrderSelectScalar = {
@@ -17450,27 +17599,33 @@ export namespace Prisma {
     includesMembership?: boolean
     membershipFee?: boolean
     notes?: boolean
+    dojoId?: boolean
+    includesDojoRenewal?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type ShopOrderOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "memberId" | "paymentStatus" | "paymentMethod" | "total" | "currency" | "transactionId" | "includesMembership" | "membershipFee" | "notes" | "createdAt" | "updatedAt", ExtArgs["result"]["shopOrder"]>
+  export type ShopOrderOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "memberId" | "paymentStatus" | "paymentMethod" | "total" | "currency" | "transactionId" | "includesMembership" | "membershipFee" | "notes" | "dojoId" | "includesDojoRenewal" | "createdAt" | "updatedAt", ExtArgs["result"]["shopOrder"]>
   export type ShopOrderInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     member?: boolean | MemberDefaultArgs<ExtArgs>
+    dojo?: boolean | ShopOrder$dojoArgs<ExtArgs>
     orderItems?: boolean | ShopOrder$orderItemsArgs<ExtArgs>
     _count?: boolean | ShopOrderCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ShopOrderIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     member?: boolean | MemberDefaultArgs<ExtArgs>
+    dojo?: boolean | ShopOrder$dojoArgs<ExtArgs>
   }
   export type ShopOrderIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     member?: boolean | MemberDefaultArgs<ExtArgs>
+    dojo?: boolean | ShopOrder$dojoArgs<ExtArgs>
   }
 
   export type $ShopOrderPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "ShopOrder"
     objects: {
       member: Prisma.$MemberPayload<ExtArgs>
+      dojo: Prisma.$DojoPayload<ExtArgs> | null
       orderItems: Prisma.$ShopOrderItemPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -17484,6 +17639,8 @@ export namespace Prisma {
       includesMembership: boolean
       membershipFee: Prisma.Decimal | null
       notes: string | null
+      dojoId: string | null
+      includesDojoRenewal: boolean
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["shopOrder"]>
@@ -17881,6 +18038,7 @@ export namespace Prisma {
   export interface Prisma__ShopOrderClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     member<T extends MemberDefaultArgs<ExtArgs> = {}>(args?: Subset<T, MemberDefaultArgs<ExtArgs>>): Prisma__MemberClient<$Result.GetResult<Prisma.$MemberPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    dojo<T extends ShopOrder$dojoArgs<ExtArgs> = {}>(args?: Subset<T, ShopOrder$dojoArgs<ExtArgs>>): Prisma__DojoClient<$Result.GetResult<Prisma.$DojoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     orderItems<T extends ShopOrder$orderItemsArgs<ExtArgs> = {}>(args?: Subset<T, ShopOrder$orderItemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ShopOrderItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -17921,6 +18079,8 @@ export namespace Prisma {
     readonly includesMembership: FieldRef<"ShopOrder", 'Boolean'>
     readonly membershipFee: FieldRef<"ShopOrder", 'Decimal'>
     readonly notes: FieldRef<"ShopOrder", 'String'>
+    readonly dojoId: FieldRef<"ShopOrder", 'String'>
+    readonly includesDojoRenewal: FieldRef<"ShopOrder", 'Boolean'>
     readonly createdAt: FieldRef<"ShopOrder", 'DateTime'>
     readonly updatedAt: FieldRef<"ShopOrder", 'DateTime'>
   }
@@ -18321,6 +18481,25 @@ export namespace Prisma {
      * Limit how many ShopOrders to delete.
      */
     limit?: number
+  }
+
+  /**
+   * ShopOrder.dojo
+   */
+  export type ShopOrder$dojoArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Dojo
+     */
+    select?: DojoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Dojo
+     */
+    omit?: DojoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DojoInclude<ExtArgs> | null
+    where?: DojoWhereInput
   }
 
   /**
@@ -23038,7 +23217,6 @@ export namespace Prisma {
   export const BeltRankScalarFieldEnum: {
     id: 'id',
     name: 'name',
-    nameBn: 'nameBn',
     kyuDan: 'kyuDan',
     colorHex: 'colorHex',
     orderIndex: 'orderIndex',
@@ -23060,6 +23238,8 @@ export namespace Prisma {
     email: 'email',
     schedule: 'schedule',
     isActive: 'isActive',
+    annualFee: 'annualFee',
+    expiryDate: 'expiryDate',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -23139,6 +23319,9 @@ export namespace Prisma {
     targetRankId: 'targetRankId',
     isOpen: 'isOpen',
     notes: 'notes',
+    cancelledAt: 'cancelledAt',
+    cancelReason: 'cancelReason',
+    resultsPublishedAt: 'resultsPublishedAt',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -23153,6 +23336,7 @@ export namespace Prisma {
     targetRankId: 'targetRankId',
     status: 'status',
     notes: 'notes',
+    declineReason: 'declineReason',
     appliedAt: 'appliedAt'
   };
 
@@ -23243,6 +23427,8 @@ export namespace Prisma {
     includesMembership: 'includesMembership',
     membershipFee: 'membershipFee',
     notes: 'notes',
+    dojoId: 'dojoId',
+    includesDojoRenewal: 'includesDojoRenewal',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -23433,6 +23619,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Decimal'
+   */
+  export type DecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal'>
+    
+
+
+  /**
+   * Reference to a field of type 'Decimal[]'
+   */
+  export type ListDecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal[]'>
+    
+
+
+  /**
    * Reference to a field of type 'DojoApplicationStatus'
    */
   export type EnumDojoApplicationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DojoApplicationStatus'>
@@ -23517,20 +23717,6 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'Decimal'
-   */
-  export type DecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal'>
-    
-
-
-  /**
-   * Reference to a field of type 'Decimal[]'
-   */
-  export type ListDecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal[]'>
-    
-
-
-  /**
    * Reference to a field of type 'PaymentStatus'
    */
   export type EnumPaymentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PaymentStatus'>
@@ -23553,7 +23739,6 @@ export namespace Prisma {
     NOT?: BeltRankWhereInput | BeltRankWhereInput[]
     id?: UuidFilter<"BeltRank"> | string
     name?: StringFilter<"BeltRank"> | string
-    nameBn?: StringNullableFilter<"BeltRank"> | string | null
     kyuDan?: StringNullableFilter<"BeltRank"> | string | null
     colorHex?: StringNullableFilter<"BeltRank"> | string | null
     orderIndex?: IntFilter<"BeltRank"> | number
@@ -23568,7 +23753,6 @@ export namespace Prisma {
   export type BeltRankOrderByWithRelationInput = {
     id?: SortOrder
     name?: SortOrder
-    nameBn?: SortOrderInput | SortOrder
     kyuDan?: SortOrderInput | SortOrder
     colorHex?: SortOrderInput | SortOrder
     orderIndex?: SortOrder
@@ -23587,7 +23771,6 @@ export namespace Prisma {
     AND?: BeltRankWhereInput | BeltRankWhereInput[]
     OR?: BeltRankWhereInput[]
     NOT?: BeltRankWhereInput | BeltRankWhereInput[]
-    nameBn?: StringNullableFilter<"BeltRank"> | string | null
     kyuDan?: StringNullableFilter<"BeltRank"> | string | null
     colorHex?: StringNullableFilter<"BeltRank"> | string | null
     createdAt?: DateTimeFilter<"BeltRank"> | Date | string
@@ -23601,7 +23784,6 @@ export namespace Prisma {
   export type BeltRankOrderByWithAggregationInput = {
     id?: SortOrder
     name?: SortOrder
-    nameBn?: SortOrderInput | SortOrder
     kyuDan?: SortOrderInput | SortOrder
     colorHex?: SortOrderInput | SortOrder
     orderIndex?: SortOrder
@@ -23620,7 +23802,6 @@ export namespace Prisma {
     NOT?: BeltRankScalarWhereWithAggregatesInput | BeltRankScalarWhereWithAggregatesInput[]
     id?: UuidWithAggregatesFilter<"BeltRank"> | string
     name?: StringWithAggregatesFilter<"BeltRank"> | string
-    nameBn?: StringNullableWithAggregatesFilter<"BeltRank"> | string | null
     kyuDan?: StringNullableWithAggregatesFilter<"BeltRank"> | string | null
     colorHex?: StringNullableWithAggregatesFilter<"BeltRank"> | string | null
     orderIndex?: IntWithAggregatesFilter<"BeltRank"> | number
@@ -23642,8 +23823,11 @@ export namespace Prisma {
     email?: StringNullableFilter<"Dojo"> | string | null
     schedule?: JsonNullableFilter<"Dojo">
     isActive?: BoolFilter<"Dojo"> | boolean
+    annualFee?: DecimalNullableFilter<"Dojo"> | Decimal | DecimalJsLike | number | string | null
+    expiryDate?: DateTimeNullableFilter<"Dojo"> | Date | string | null
     createdAt?: DateTimeFilter<"Dojo"> | Date | string
     updatedAt?: DateTimeFilter<"Dojo"> | Date | string
+    renewalOrders?: ShopOrderListRelationFilter
     members?: MemberListRelationFilter
     attendance?: AttendanceListRelationFilter
   }
@@ -23659,8 +23843,11 @@ export namespace Prisma {
     email?: SortOrderInput | SortOrder
     schedule?: SortOrderInput | SortOrder
     isActive?: SortOrder
+    annualFee?: SortOrderInput | SortOrder
+    expiryDate?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    renewalOrders?: ShopOrderOrderByRelationAggregateInput
     members?: MemberOrderByRelationAggregateInput
     attendance?: AttendanceOrderByRelationAggregateInput
   }
@@ -23679,8 +23866,11 @@ export namespace Prisma {
     email?: StringNullableFilter<"Dojo"> | string | null
     schedule?: JsonNullableFilter<"Dojo">
     isActive?: BoolFilter<"Dojo"> | boolean
+    annualFee?: DecimalNullableFilter<"Dojo"> | Decimal | DecimalJsLike | number | string | null
+    expiryDate?: DateTimeNullableFilter<"Dojo"> | Date | string | null
     createdAt?: DateTimeFilter<"Dojo"> | Date | string
     updatedAt?: DateTimeFilter<"Dojo"> | Date | string
+    renewalOrders?: ShopOrderListRelationFilter
     members?: MemberListRelationFilter
     attendance?: AttendanceListRelationFilter
   }, "id">
@@ -23696,6 +23886,8 @@ export namespace Prisma {
     email?: SortOrderInput | SortOrder
     schedule?: SortOrderInput | SortOrder
     isActive?: SortOrder
+    annualFee?: SortOrderInput | SortOrder
+    expiryDate?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: DojoCountOrderByAggregateInput
@@ -23719,6 +23911,8 @@ export namespace Prisma {
     email?: StringNullableWithAggregatesFilter<"Dojo"> | string | null
     schedule?: JsonNullableWithAggregatesFilter<"Dojo">
     isActive?: BoolWithAggregatesFilter<"Dojo"> | boolean
+    annualFee?: DecimalNullableWithAggregatesFilter<"Dojo"> | Decimal | DecimalJsLike | number | string | null
+    expiryDate?: DateTimeNullableWithAggregatesFilter<"Dojo"> | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Dojo"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Dojo"> | Date | string
   }
@@ -24078,6 +24272,9 @@ export namespace Prisma {
     targetRankId?: UuidNullableFilter<"GradingEvent"> | string | null
     isOpen?: BoolFilter<"GradingEvent"> | boolean
     notes?: StringNullableFilter<"GradingEvent"> | string | null
+    cancelledAt?: DateTimeNullableFilter<"GradingEvent"> | Date | string | null
+    cancelReason?: StringNullableFilter<"GradingEvent"> | string | null
+    resultsPublishedAt?: DateTimeNullableFilter<"GradingEvent"> | Date | string | null
     createdAt?: DateTimeFilter<"GradingEvent"> | Date | string
     updatedAt?: DateTimeFilter<"GradingEvent"> | Date | string
     targetRank?: XOR<BeltRankNullableScalarRelationFilter, BeltRankWhereInput> | null
@@ -24093,6 +24290,9 @@ export namespace Prisma {
     targetRankId?: SortOrderInput | SortOrder
     isOpen?: SortOrder
     notes?: SortOrderInput | SortOrder
+    cancelledAt?: SortOrderInput | SortOrder
+    cancelReason?: SortOrderInput | SortOrder
+    resultsPublishedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     targetRank?: BeltRankOrderByWithRelationInput
@@ -24111,6 +24311,9 @@ export namespace Prisma {
     targetRankId?: UuidNullableFilter<"GradingEvent"> | string | null
     isOpen?: BoolFilter<"GradingEvent"> | boolean
     notes?: StringNullableFilter<"GradingEvent"> | string | null
+    cancelledAt?: DateTimeNullableFilter<"GradingEvent"> | Date | string | null
+    cancelReason?: StringNullableFilter<"GradingEvent"> | string | null
+    resultsPublishedAt?: DateTimeNullableFilter<"GradingEvent"> | Date | string | null
     createdAt?: DateTimeFilter<"GradingEvent"> | Date | string
     updatedAt?: DateTimeFilter<"GradingEvent"> | Date | string
     targetRank?: XOR<BeltRankNullableScalarRelationFilter, BeltRankWhereInput> | null
@@ -24126,6 +24329,9 @@ export namespace Prisma {
     targetRankId?: SortOrderInput | SortOrder
     isOpen?: SortOrder
     notes?: SortOrderInput | SortOrder
+    cancelledAt?: SortOrderInput | SortOrder
+    cancelReason?: SortOrderInput | SortOrder
+    resultsPublishedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: GradingEventCountOrderByAggregateInput
@@ -24144,6 +24350,9 @@ export namespace Prisma {
     targetRankId?: UuidNullableWithAggregatesFilter<"GradingEvent"> | string | null
     isOpen?: BoolWithAggregatesFilter<"GradingEvent"> | boolean
     notes?: StringNullableWithAggregatesFilter<"GradingEvent"> | string | null
+    cancelledAt?: DateTimeNullableWithAggregatesFilter<"GradingEvent"> | Date | string | null
+    cancelReason?: StringNullableWithAggregatesFilter<"GradingEvent"> | string | null
+    resultsPublishedAt?: DateTimeNullableWithAggregatesFilter<"GradingEvent"> | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter<"GradingEvent"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"GradingEvent"> | Date | string
   }
@@ -24154,23 +24363,25 @@ export namespace Prisma {
     NOT?: GradingApplicationWhereInput | GradingApplicationWhereInput[]
     id?: UuidFilter<"GradingApplication"> | string
     memberId?: UuidFilter<"GradingApplication"> | string
-    gradingEventId?: UuidFilter<"GradingApplication"> | string
+    gradingEventId?: UuidNullableFilter<"GradingApplication"> | string | null
     targetRankId?: UuidNullableFilter<"GradingApplication"> | string | null
     status?: EnumApplicationStatusFilter<"GradingApplication"> | $Enums.ApplicationStatus
     notes?: StringNullableFilter<"GradingApplication"> | string | null
+    declineReason?: StringNullableFilter<"GradingApplication"> | string | null
     appliedAt?: DateTimeFilter<"GradingApplication"> | Date | string
     member?: XOR<MemberScalarRelationFilter, MemberWhereInput>
-    gradingEvent?: XOR<GradingEventScalarRelationFilter, GradingEventWhereInput>
+    gradingEvent?: XOR<GradingEventNullableScalarRelationFilter, GradingEventWhereInput> | null
     targetRank?: XOR<BeltRankNullableScalarRelationFilter, BeltRankWhereInput> | null
   }
 
   export type GradingApplicationOrderByWithRelationInput = {
     id?: SortOrder
     memberId?: SortOrder
-    gradingEventId?: SortOrder
+    gradingEventId?: SortOrderInput | SortOrder
     targetRankId?: SortOrderInput | SortOrder
     status?: SortOrder
     notes?: SortOrderInput | SortOrder
+    declineReason?: SortOrderInput | SortOrder
     appliedAt?: SortOrder
     member?: MemberOrderByWithRelationInput
     gradingEvent?: GradingEventOrderByWithRelationInput
@@ -24179,28 +24390,29 @@ export namespace Prisma {
 
   export type GradingApplicationWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    memberId_gradingEventId?: GradingApplicationMemberIdGradingEventIdCompoundUniqueInput
     AND?: GradingApplicationWhereInput | GradingApplicationWhereInput[]
     OR?: GradingApplicationWhereInput[]
     NOT?: GradingApplicationWhereInput | GradingApplicationWhereInput[]
     memberId?: UuidFilter<"GradingApplication"> | string
-    gradingEventId?: UuidFilter<"GradingApplication"> | string
+    gradingEventId?: UuidNullableFilter<"GradingApplication"> | string | null
     targetRankId?: UuidNullableFilter<"GradingApplication"> | string | null
     status?: EnumApplicationStatusFilter<"GradingApplication"> | $Enums.ApplicationStatus
     notes?: StringNullableFilter<"GradingApplication"> | string | null
+    declineReason?: StringNullableFilter<"GradingApplication"> | string | null
     appliedAt?: DateTimeFilter<"GradingApplication"> | Date | string
     member?: XOR<MemberScalarRelationFilter, MemberWhereInput>
-    gradingEvent?: XOR<GradingEventScalarRelationFilter, GradingEventWhereInput>
+    gradingEvent?: XOR<GradingEventNullableScalarRelationFilter, GradingEventWhereInput> | null
     targetRank?: XOR<BeltRankNullableScalarRelationFilter, BeltRankWhereInput> | null
-  }, "id" | "memberId_gradingEventId">
+  }, "id">
 
   export type GradingApplicationOrderByWithAggregationInput = {
     id?: SortOrder
     memberId?: SortOrder
-    gradingEventId?: SortOrder
+    gradingEventId?: SortOrderInput | SortOrder
     targetRankId?: SortOrderInput | SortOrder
     status?: SortOrder
     notes?: SortOrderInput | SortOrder
+    declineReason?: SortOrderInput | SortOrder
     appliedAt?: SortOrder
     _count?: GradingApplicationCountOrderByAggregateInput
     _max?: GradingApplicationMaxOrderByAggregateInput
@@ -24213,10 +24425,11 @@ export namespace Prisma {
     NOT?: GradingApplicationScalarWhereWithAggregatesInput | GradingApplicationScalarWhereWithAggregatesInput[]
     id?: UuidWithAggregatesFilter<"GradingApplication"> | string
     memberId?: UuidWithAggregatesFilter<"GradingApplication"> | string
-    gradingEventId?: UuidWithAggregatesFilter<"GradingApplication"> | string
+    gradingEventId?: UuidNullableWithAggregatesFilter<"GradingApplication"> | string | null
     targetRankId?: UuidNullableWithAggregatesFilter<"GradingApplication"> | string | null
     status?: EnumApplicationStatusWithAggregatesFilter<"GradingApplication"> | $Enums.ApplicationStatus
     notes?: StringNullableWithAggregatesFilter<"GradingApplication"> | string | null
+    declineReason?: StringNullableWithAggregatesFilter<"GradingApplication"> | string | null
     appliedAt?: DateTimeWithAggregatesFilter<"GradingApplication"> | Date | string
   }
 
@@ -24616,9 +24829,12 @@ export namespace Prisma {
     includesMembership?: BoolFilter<"ShopOrder"> | boolean
     membershipFee?: DecimalNullableFilter<"ShopOrder"> | Decimal | DecimalJsLike | number | string | null
     notes?: StringNullableFilter<"ShopOrder"> | string | null
+    dojoId?: UuidNullableFilter<"ShopOrder"> | string | null
+    includesDojoRenewal?: BoolFilter<"ShopOrder"> | boolean
     createdAt?: DateTimeFilter<"ShopOrder"> | Date | string
     updatedAt?: DateTimeFilter<"ShopOrder"> | Date | string
     member?: XOR<MemberScalarRelationFilter, MemberWhereInput>
+    dojo?: XOR<DojoNullableScalarRelationFilter, DojoWhereInput> | null
     orderItems?: ShopOrderItemListRelationFilter
   }
 
@@ -24633,9 +24849,12 @@ export namespace Prisma {
     includesMembership?: SortOrder
     membershipFee?: SortOrderInput | SortOrder
     notes?: SortOrderInput | SortOrder
+    dojoId?: SortOrderInput | SortOrder
+    includesDojoRenewal?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     member?: MemberOrderByWithRelationInput
+    dojo?: DojoOrderByWithRelationInput
     orderItems?: ShopOrderItemOrderByRelationAggregateInput
   }
 
@@ -24653,9 +24872,12 @@ export namespace Prisma {
     includesMembership?: BoolFilter<"ShopOrder"> | boolean
     membershipFee?: DecimalNullableFilter<"ShopOrder"> | Decimal | DecimalJsLike | number | string | null
     notes?: StringNullableFilter<"ShopOrder"> | string | null
+    dojoId?: UuidNullableFilter<"ShopOrder"> | string | null
+    includesDojoRenewal?: BoolFilter<"ShopOrder"> | boolean
     createdAt?: DateTimeFilter<"ShopOrder"> | Date | string
     updatedAt?: DateTimeFilter<"ShopOrder"> | Date | string
     member?: XOR<MemberScalarRelationFilter, MemberWhereInput>
+    dojo?: XOR<DojoNullableScalarRelationFilter, DojoWhereInput> | null
     orderItems?: ShopOrderItemListRelationFilter
   }, "id" | "transactionId">
 
@@ -24670,6 +24892,8 @@ export namespace Prisma {
     includesMembership?: SortOrder
     membershipFee?: SortOrderInput | SortOrder
     notes?: SortOrderInput | SortOrder
+    dojoId?: SortOrderInput | SortOrder
+    includesDojoRenewal?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: ShopOrderCountOrderByAggregateInput
@@ -24693,6 +24917,8 @@ export namespace Prisma {
     includesMembership?: BoolWithAggregatesFilter<"ShopOrder"> | boolean
     membershipFee?: DecimalNullableWithAggregatesFilter<"ShopOrder"> | Decimal | DecimalJsLike | number | string | null
     notes?: StringNullableWithAggregatesFilter<"ShopOrder"> | string | null
+    dojoId?: UuidNullableWithAggregatesFilter<"ShopOrder"> | string | null
+    includesDojoRenewal?: BoolWithAggregatesFilter<"ShopOrder"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"ShopOrder"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"ShopOrder"> | Date | string
   }
@@ -24992,7 +25218,6 @@ export namespace Prisma {
   export type BeltRankCreateInput = {
     id?: string
     name: string
-    nameBn?: string | null
     kyuDan?: string | null
     colorHex?: string | null
     orderIndex: number
@@ -25007,7 +25232,6 @@ export namespace Prisma {
   export type BeltRankUncheckedCreateInput = {
     id?: string
     name: string
-    nameBn?: string | null
     kyuDan?: string | null
     colorHex?: string | null
     orderIndex: number
@@ -25022,7 +25246,6 @@ export namespace Prisma {
   export type BeltRankUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    nameBn?: NullableStringFieldUpdateOperationsInput | string | null
     kyuDan?: NullableStringFieldUpdateOperationsInput | string | null
     colorHex?: NullableStringFieldUpdateOperationsInput | string | null
     orderIndex?: IntFieldUpdateOperationsInput | number
@@ -25037,7 +25260,6 @@ export namespace Prisma {
   export type BeltRankUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    nameBn?: NullableStringFieldUpdateOperationsInput | string | null
     kyuDan?: NullableStringFieldUpdateOperationsInput | string | null
     colorHex?: NullableStringFieldUpdateOperationsInput | string | null
     orderIndex?: IntFieldUpdateOperationsInput | number
@@ -25052,7 +25274,6 @@ export namespace Prisma {
   export type BeltRankCreateManyInput = {
     id?: string
     name: string
-    nameBn?: string | null
     kyuDan?: string | null
     colorHex?: string | null
     orderIndex: number
@@ -25063,7 +25284,6 @@ export namespace Prisma {
   export type BeltRankUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    nameBn?: NullableStringFieldUpdateOperationsInput | string | null
     kyuDan?: NullableStringFieldUpdateOperationsInput | string | null
     colorHex?: NullableStringFieldUpdateOperationsInput | string | null
     orderIndex?: IntFieldUpdateOperationsInput | number
@@ -25074,7 +25294,6 @@ export namespace Prisma {
   export type BeltRankUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    nameBn?: NullableStringFieldUpdateOperationsInput | string | null
     kyuDan?: NullableStringFieldUpdateOperationsInput | string | null
     colorHex?: NullableStringFieldUpdateOperationsInput | string | null
     orderIndex?: IntFieldUpdateOperationsInput | number
@@ -25093,8 +25312,11 @@ export namespace Prisma {
     email?: string | null
     schedule?: NullableJsonNullValueInput | InputJsonValue
     isActive?: boolean
+    annualFee?: Decimal | DecimalJsLike | number | string | null
+    expiryDate?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    renewalOrders?: ShopOrderCreateNestedManyWithoutDojoInput
     members?: MemberCreateNestedManyWithoutDojoInput
     attendance?: AttendanceCreateNestedManyWithoutDojoInput
   }
@@ -25110,8 +25332,11 @@ export namespace Prisma {
     email?: string | null
     schedule?: NullableJsonNullValueInput | InputJsonValue
     isActive?: boolean
+    annualFee?: Decimal | DecimalJsLike | number | string | null
+    expiryDate?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    renewalOrders?: ShopOrderUncheckedCreateNestedManyWithoutDojoInput
     members?: MemberUncheckedCreateNestedManyWithoutDojoInput
     attendance?: AttendanceUncheckedCreateNestedManyWithoutDojoInput
   }
@@ -25127,8 +25352,11 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     schedule?: NullableJsonNullValueInput | InputJsonValue
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    annualFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    renewalOrders?: ShopOrderUpdateManyWithoutDojoNestedInput
     members?: MemberUpdateManyWithoutDojoNestedInput
     attendance?: AttendanceUpdateManyWithoutDojoNestedInput
   }
@@ -25144,8 +25372,11 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     schedule?: NullableJsonNullValueInput | InputJsonValue
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    annualFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    renewalOrders?: ShopOrderUncheckedUpdateManyWithoutDojoNestedInput
     members?: MemberUncheckedUpdateManyWithoutDojoNestedInput
     attendance?: AttendanceUncheckedUpdateManyWithoutDojoNestedInput
   }
@@ -25161,6 +25392,8 @@ export namespace Prisma {
     email?: string | null
     schedule?: NullableJsonNullValueInput | InputJsonValue
     isActive?: boolean
+    annualFee?: Decimal | DecimalJsLike | number | string | null
+    expiryDate?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -25176,6 +25409,8 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     schedule?: NullableJsonNullValueInput | InputJsonValue
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    annualFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -25191,6 +25426,8 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     schedule?: NullableJsonNullValueInput | InputJsonValue
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    annualFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -25612,6 +25849,9 @@ export namespace Prisma {
     location?: string | null
     isOpen?: boolean
     notes?: string | null
+    cancelledAt?: Date | string | null
+    cancelReason?: string | null
+    resultsPublishedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     targetRank?: BeltRankCreateNestedOneWithoutGradingEventsInput
@@ -25627,6 +25867,9 @@ export namespace Prisma {
     targetRankId?: string | null
     isOpen?: boolean
     notes?: string | null
+    cancelledAt?: Date | string | null
+    cancelReason?: string | null
+    resultsPublishedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     gradings?: GradingUncheckedCreateNestedManyWithoutGradingEventInput
@@ -25640,6 +25883,9 @@ export namespace Prisma {
     location?: NullableStringFieldUpdateOperationsInput | string | null
     isOpen?: BoolFieldUpdateOperationsInput | boolean
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    cancelledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
+    resultsPublishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     targetRank?: BeltRankUpdateOneWithoutGradingEventsNestedInput
@@ -25655,6 +25901,9 @@ export namespace Prisma {
     targetRankId?: NullableStringFieldUpdateOperationsInput | string | null
     isOpen?: BoolFieldUpdateOperationsInput | boolean
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    cancelledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
+    resultsPublishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     gradings?: GradingUncheckedUpdateManyWithoutGradingEventNestedInput
@@ -25669,6 +25918,9 @@ export namespace Prisma {
     targetRankId?: string | null
     isOpen?: boolean
     notes?: string | null
+    cancelledAt?: Date | string | null
+    cancelReason?: string | null
+    resultsPublishedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -25680,6 +25932,9 @@ export namespace Prisma {
     location?: NullableStringFieldUpdateOperationsInput | string | null
     isOpen?: BoolFieldUpdateOperationsInput | boolean
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    cancelledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
+    resultsPublishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -25692,6 +25947,9 @@ export namespace Prisma {
     targetRankId?: NullableStringFieldUpdateOperationsInput | string | null
     isOpen?: BoolFieldUpdateOperationsInput | boolean
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    cancelledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
+    resultsPublishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -25700,19 +25958,21 @@ export namespace Prisma {
     id?: string
     status?: $Enums.ApplicationStatus
     notes?: string | null
+    declineReason?: string | null
     appliedAt?: Date | string
     member: MemberCreateNestedOneWithoutGradingApplicationsInput
-    gradingEvent: GradingEventCreateNestedOneWithoutApplicationsInput
+    gradingEvent?: GradingEventCreateNestedOneWithoutApplicationsInput
     targetRank?: BeltRankCreateNestedOneWithoutGradingApplicationsInput
   }
 
   export type GradingApplicationUncheckedCreateInput = {
     id?: string
     memberId: string
-    gradingEventId: string
+    gradingEventId?: string | null
     targetRankId?: string | null
     status?: $Enums.ApplicationStatus
     notes?: string | null
+    declineReason?: string | null
     appliedAt?: Date | string
   }
 
@@ -25720,29 +25980,32 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     status?: EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    declineReason?: NullableStringFieldUpdateOperationsInput | string | null
     appliedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     member?: MemberUpdateOneRequiredWithoutGradingApplicationsNestedInput
-    gradingEvent?: GradingEventUpdateOneRequiredWithoutApplicationsNestedInput
+    gradingEvent?: GradingEventUpdateOneWithoutApplicationsNestedInput
     targetRank?: BeltRankUpdateOneWithoutGradingApplicationsNestedInput
   }
 
   export type GradingApplicationUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     memberId?: StringFieldUpdateOperationsInput | string
-    gradingEventId?: StringFieldUpdateOperationsInput | string
+    gradingEventId?: NullableStringFieldUpdateOperationsInput | string | null
     targetRankId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    declineReason?: NullableStringFieldUpdateOperationsInput | string | null
     appliedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type GradingApplicationCreateManyInput = {
     id?: string
     memberId: string
-    gradingEventId: string
+    gradingEventId?: string | null
     targetRankId?: string | null
     status?: $Enums.ApplicationStatus
     notes?: string | null
+    declineReason?: string | null
     appliedAt?: Date | string
   }
 
@@ -25750,16 +26013,18 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     status?: EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    declineReason?: NullableStringFieldUpdateOperationsInput | string | null
     appliedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type GradingApplicationUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     memberId?: StringFieldUpdateOperationsInput | string
-    gradingEventId?: StringFieldUpdateOperationsInput | string
+    gradingEventId?: NullableStringFieldUpdateOperationsInput | string | null
     targetRankId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    declineReason?: NullableStringFieldUpdateOperationsInput | string | null
     appliedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -26180,9 +26445,11 @@ export namespace Prisma {
     includesMembership?: boolean
     membershipFee?: Decimal | DecimalJsLike | number | string | null
     notes?: string | null
+    includesDojoRenewal?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     member: MemberCreateNestedOneWithoutOrdersInput
+    dojo?: DojoCreateNestedOneWithoutRenewalOrdersInput
     orderItems?: ShopOrderItemCreateNestedManyWithoutOrderInput
   }
 
@@ -26197,6 +26464,8 @@ export namespace Prisma {
     includesMembership?: boolean
     membershipFee?: Decimal | DecimalJsLike | number | string | null
     notes?: string | null
+    dojoId?: string | null
+    includesDojoRenewal?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     orderItems?: ShopOrderItemUncheckedCreateNestedManyWithoutOrderInput
@@ -26212,9 +26481,11 @@ export namespace Prisma {
     includesMembership?: BoolFieldUpdateOperationsInput | boolean
     membershipFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    includesDojoRenewal?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     member?: MemberUpdateOneRequiredWithoutOrdersNestedInput
+    dojo?: DojoUpdateOneWithoutRenewalOrdersNestedInput
     orderItems?: ShopOrderItemUpdateManyWithoutOrderNestedInput
   }
 
@@ -26229,6 +26500,8 @@ export namespace Prisma {
     includesMembership?: BoolFieldUpdateOperationsInput | boolean
     membershipFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    dojoId?: NullableStringFieldUpdateOperationsInput | string | null
+    includesDojoRenewal?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     orderItems?: ShopOrderItemUncheckedUpdateManyWithoutOrderNestedInput
@@ -26245,6 +26518,8 @@ export namespace Prisma {
     includesMembership?: boolean
     membershipFee?: Decimal | DecimalJsLike | number | string | null
     notes?: string | null
+    dojoId?: string | null
+    includesDojoRenewal?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -26259,6 +26534,7 @@ export namespace Prisma {
     includesMembership?: BoolFieldUpdateOperationsInput | boolean
     membershipFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    includesDojoRenewal?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -26274,6 +26550,8 @@ export namespace Prisma {
     includesMembership?: BoolFieldUpdateOperationsInput | boolean
     membershipFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    dojoId?: NullableStringFieldUpdateOperationsInput | string | null
+    includesDojoRenewal?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -26672,7 +26950,6 @@ export namespace Prisma {
   export type BeltRankCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
-    nameBn?: SortOrder
     kyuDan?: SortOrder
     colorHex?: SortOrder
     orderIndex?: SortOrder
@@ -26687,7 +26964,6 @@ export namespace Prisma {
   export type BeltRankMaxOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
-    nameBn?: SortOrder
     kyuDan?: SortOrder
     colorHex?: SortOrder
     orderIndex?: SortOrder
@@ -26698,7 +26974,6 @@ export namespace Prisma {
   export type BeltRankMinOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
-    nameBn?: SortOrder
     kyuDan?: SortOrder
     colorHex?: SortOrder
     orderIndex?: SortOrder
@@ -26830,6 +27105,34 @@ export namespace Prisma {
     not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
+  export type DecimalNullableFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalNullableFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
+  }
+
+  export type DateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
+  export type ShopOrderListRelationFilter = {
+    every?: ShopOrderWhereInput
+    some?: ShopOrderWhereInput
+    none?: ShopOrderWhereInput
+  }
+
   export type MemberListRelationFilter = {
     every?: MemberWhereInput
     some?: MemberWhereInput
@@ -26840,6 +27143,10 @@ export namespace Prisma {
     every?: AttendanceWhereInput
     some?: AttendanceWhereInput
     none?: AttendanceWhereInput
+  }
+
+  export type ShopOrderOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
   export type MemberOrderByRelationAggregateInput = {
@@ -26861,6 +27168,8 @@ export namespace Prisma {
     email?: SortOrder
     schedule?: SortOrder
     isActive?: SortOrder
+    annualFee?: SortOrder
+    expiryDate?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -26868,6 +27177,7 @@ export namespace Prisma {
   export type DojoAvgOrderByAggregateInput = {
     latitude?: SortOrder
     longitude?: SortOrder
+    annualFee?: SortOrder
   }
 
   export type DojoMaxOrderByAggregateInput = {
@@ -26880,6 +27190,8 @@ export namespace Prisma {
     phone?: SortOrder
     email?: SortOrder
     isActive?: SortOrder
+    annualFee?: SortOrder
+    expiryDate?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -26894,6 +27206,8 @@ export namespace Prisma {
     phone?: SortOrder
     email?: SortOrder
     isActive?: SortOrder
+    annualFee?: SortOrder
+    expiryDate?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -26901,6 +27215,7 @@ export namespace Prisma {
   export type DojoSumOrderByAggregateInput = {
     latitude?: SortOrder
     longitude?: SortOrder
+    annualFee?: SortOrder
   }
 
   export type FloatNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -26951,6 +27266,36 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedBoolFilter<$PrismaModel>
     _max?: NestedBoolFilter<$PrismaModel>
+  }
+
+  export type DecimalNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalNullableWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedDecimalNullableFilter<$PrismaModel>
+    _sum?: NestedDecimalNullableFilter<$PrismaModel>
+    _min?: NestedDecimalNullableFilter<$PrismaModel>
+    _max?: NestedDecimalNullableFilter<$PrismaModel>
+  }
+
+  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type UuidNullableFilter<$PrismaModel = never> = {
@@ -27127,17 +27472,6 @@ export namespace Prisma {
     not?: NestedEnumMemberRoleFilter<$PrismaModel> | $Enums.MemberRole
   }
 
-  export type DateTimeNullableFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
-  }
-
   export type EnumMembershipStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.MembershipStatus | EnumMembershipStatusFieldRefInput<$PrismaModel>
     in?: $Enums.MembershipStatus[] | ListEnumMembershipStatusFieldRefInput<$PrismaModel>
@@ -27162,12 +27496,6 @@ export namespace Prisma {
     none?: NotificationWhereInput
   }
 
-  export type ShopOrderListRelationFilter = {
-    every?: ShopOrderWhereInput
-    some?: ShopOrderWhereInput
-    none?: ShopOrderWhereInput
-  }
-
   export type TournamentParticipantListRelationFilter = {
     every?: TournamentParticipantWhereInput
     some?: TournamentParticipantWhereInput
@@ -27179,10 +27507,6 @@ export namespace Prisma {
   }
 
   export type NotificationOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type ShopOrderOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -27275,20 +27599,6 @@ export namespace Prisma {
     _max?: NestedEnumMemberRoleFilter<$PrismaModel>
   }
 
-  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedDateTimeNullableFilter<$PrismaModel>
-    _max?: NestedDateTimeNullableFilter<$PrismaModel>
-  }
-
   export type EnumMembershipStatusWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.MembershipStatus | EnumMembershipStatusFieldRefInput<$PrismaModel>
     in?: $Enums.MembershipStatus[] | ListEnumMembershipStatusFieldRefInput<$PrismaModel>
@@ -27352,6 +27662,9 @@ export namespace Prisma {
     targetRankId?: SortOrder
     isOpen?: SortOrder
     notes?: SortOrder
+    cancelledAt?: SortOrder
+    cancelReason?: SortOrder
+    resultsPublishedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -27364,6 +27677,9 @@ export namespace Prisma {
     targetRankId?: SortOrder
     isOpen?: SortOrder
     notes?: SortOrder
+    cancelledAt?: SortOrder
+    cancelReason?: SortOrder
+    resultsPublishedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -27376,6 +27692,9 @@ export namespace Prisma {
     targetRankId?: SortOrder
     isOpen?: SortOrder
     notes?: SortOrder
+    cancelledAt?: SortOrder
+    cancelReason?: SortOrder
+    resultsPublishedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -27387,14 +27706,9 @@ export namespace Prisma {
     not?: NestedEnumApplicationStatusFilter<$PrismaModel> | $Enums.ApplicationStatus
   }
 
-  export type GradingEventScalarRelationFilter = {
-    is?: GradingEventWhereInput
-    isNot?: GradingEventWhereInput
-  }
-
-  export type GradingApplicationMemberIdGradingEventIdCompoundUniqueInput = {
-    memberId: string
-    gradingEventId: string
+  export type GradingEventNullableScalarRelationFilter = {
+    is?: GradingEventWhereInput | null
+    isNot?: GradingEventWhereInput | null
   }
 
   export type GradingApplicationCountOrderByAggregateInput = {
@@ -27404,6 +27718,7 @@ export namespace Prisma {
     targetRankId?: SortOrder
     status?: SortOrder
     notes?: SortOrder
+    declineReason?: SortOrder
     appliedAt?: SortOrder
   }
 
@@ -27414,6 +27729,7 @@ export namespace Prisma {
     targetRankId?: SortOrder
     status?: SortOrder
     notes?: SortOrder
+    declineReason?: SortOrder
     appliedAt?: SortOrder
   }
 
@@ -27424,6 +27740,7 @@ export namespace Prisma {
     targetRankId?: SortOrder
     status?: SortOrder
     notes?: SortOrder
+    declineReason?: SortOrder
     appliedAt?: SortOrder
   }
 
@@ -27442,11 +27759,6 @@ export namespace Prisma {
     in?: $Enums.GradingResult[] | ListEnumGradingResultFieldRefInput<$PrismaModel>
     notIn?: $Enums.GradingResult[] | ListEnumGradingResultFieldRefInput<$PrismaModel>
     not?: NestedEnumGradingResultFilter<$PrismaModel> | $Enums.GradingResult
-  }
-
-  export type GradingEventNullableScalarRelationFilter = {
-    is?: GradingEventWhereInput | null
-    isNot?: GradingEventWhereInput | null
   }
 
   export type GradingCountOrderByAggregateInput = {
@@ -27749,17 +28061,6 @@ export namespace Prisma {
     not?: NestedEnumPaymentStatusFilter<$PrismaModel> | $Enums.PaymentStatus
   }
 
-  export type DecimalNullableFilter<$PrismaModel = never> = {
-    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
-    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
-    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
-    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    not?: NestedDecimalNullableFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
-  }
-
   export type ShopOrderCountOrderByAggregateInput = {
     id?: SortOrder
     memberId?: SortOrder
@@ -27771,6 +28072,8 @@ export namespace Prisma {
     includesMembership?: SortOrder
     membershipFee?: SortOrder
     notes?: SortOrder
+    dojoId?: SortOrder
+    includesDojoRenewal?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -27791,6 +28094,8 @@ export namespace Prisma {
     includesMembership?: SortOrder
     membershipFee?: SortOrder
     notes?: SortOrder
+    dojoId?: SortOrder
+    includesDojoRenewal?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -27806,6 +28111,8 @@ export namespace Prisma {
     includesMembership?: SortOrder
     membershipFee?: SortOrder
     notes?: SortOrder
+    dojoId?: SortOrder
+    includesDojoRenewal?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -27823,22 +28130,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumPaymentStatusFilter<$PrismaModel>
     _max?: NestedEnumPaymentStatusFilter<$PrismaModel>
-  }
-
-  export type DecimalNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
-    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
-    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
-    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    not?: NestedDecimalNullableWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedDecimalNullableFilter<$PrismaModel>
-    _sum?: NestedDecimalNullableFilter<$PrismaModel>
-    _min?: NestedDecimalNullableFilter<$PrismaModel>
-    _max?: NestedDecimalNullableFilter<$PrismaModel>
   }
 
   export type ShopOrderScalarRelationFilter = {
@@ -28204,6 +28495,13 @@ export namespace Prisma {
     deleteMany?: GradingApplicationScalarWhereInput | GradingApplicationScalarWhereInput[]
   }
 
+  export type ShopOrderCreateNestedManyWithoutDojoInput = {
+    create?: XOR<ShopOrderCreateWithoutDojoInput, ShopOrderUncheckedCreateWithoutDojoInput> | ShopOrderCreateWithoutDojoInput[] | ShopOrderUncheckedCreateWithoutDojoInput[]
+    connectOrCreate?: ShopOrderCreateOrConnectWithoutDojoInput | ShopOrderCreateOrConnectWithoutDojoInput[]
+    createMany?: ShopOrderCreateManyDojoInputEnvelope
+    connect?: ShopOrderWhereUniqueInput | ShopOrderWhereUniqueInput[]
+  }
+
   export type MemberCreateNestedManyWithoutDojoInput = {
     create?: XOR<MemberCreateWithoutDojoInput, MemberUncheckedCreateWithoutDojoInput> | MemberCreateWithoutDojoInput[] | MemberUncheckedCreateWithoutDojoInput[]
     connectOrCreate?: MemberCreateOrConnectWithoutDojoInput | MemberCreateOrConnectWithoutDojoInput[]
@@ -28216,6 +28514,13 @@ export namespace Prisma {
     connectOrCreate?: AttendanceCreateOrConnectWithoutDojoInput | AttendanceCreateOrConnectWithoutDojoInput[]
     createMany?: AttendanceCreateManyDojoInputEnvelope
     connect?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
+  }
+
+  export type ShopOrderUncheckedCreateNestedManyWithoutDojoInput = {
+    create?: XOR<ShopOrderCreateWithoutDojoInput, ShopOrderUncheckedCreateWithoutDojoInput> | ShopOrderCreateWithoutDojoInput[] | ShopOrderUncheckedCreateWithoutDojoInput[]
+    connectOrCreate?: ShopOrderCreateOrConnectWithoutDojoInput | ShopOrderCreateOrConnectWithoutDojoInput[]
+    createMany?: ShopOrderCreateManyDojoInputEnvelope
+    connect?: ShopOrderWhereUniqueInput | ShopOrderWhereUniqueInput[]
   }
 
   export type MemberUncheckedCreateNestedManyWithoutDojoInput = {
@@ -28244,6 +28549,32 @@ export namespace Prisma {
     set?: boolean
   }
 
+  export type NullableDecimalFieldUpdateOperationsInput = {
+    set?: Decimal | DecimalJsLike | number | string | null
+    increment?: Decimal | DecimalJsLike | number | string
+    decrement?: Decimal | DecimalJsLike | number | string
+    multiply?: Decimal | DecimalJsLike | number | string
+    divide?: Decimal | DecimalJsLike | number | string
+  }
+
+  export type NullableDateTimeFieldUpdateOperationsInput = {
+    set?: Date | string | null
+  }
+
+  export type ShopOrderUpdateManyWithoutDojoNestedInput = {
+    create?: XOR<ShopOrderCreateWithoutDojoInput, ShopOrderUncheckedCreateWithoutDojoInput> | ShopOrderCreateWithoutDojoInput[] | ShopOrderUncheckedCreateWithoutDojoInput[]
+    connectOrCreate?: ShopOrderCreateOrConnectWithoutDojoInput | ShopOrderCreateOrConnectWithoutDojoInput[]
+    upsert?: ShopOrderUpsertWithWhereUniqueWithoutDojoInput | ShopOrderUpsertWithWhereUniqueWithoutDojoInput[]
+    createMany?: ShopOrderCreateManyDojoInputEnvelope
+    set?: ShopOrderWhereUniqueInput | ShopOrderWhereUniqueInput[]
+    disconnect?: ShopOrderWhereUniqueInput | ShopOrderWhereUniqueInput[]
+    delete?: ShopOrderWhereUniqueInput | ShopOrderWhereUniqueInput[]
+    connect?: ShopOrderWhereUniqueInput | ShopOrderWhereUniqueInput[]
+    update?: ShopOrderUpdateWithWhereUniqueWithoutDojoInput | ShopOrderUpdateWithWhereUniqueWithoutDojoInput[]
+    updateMany?: ShopOrderUpdateManyWithWhereWithoutDojoInput | ShopOrderUpdateManyWithWhereWithoutDojoInput[]
+    deleteMany?: ShopOrderScalarWhereInput | ShopOrderScalarWhereInput[]
+  }
+
   export type MemberUpdateManyWithoutDojoNestedInput = {
     create?: XOR<MemberCreateWithoutDojoInput, MemberUncheckedCreateWithoutDojoInput> | MemberCreateWithoutDojoInput[] | MemberUncheckedCreateWithoutDojoInput[]
     connectOrCreate?: MemberCreateOrConnectWithoutDojoInput | MemberCreateOrConnectWithoutDojoInput[]
@@ -28270,6 +28601,20 @@ export namespace Prisma {
     update?: AttendanceUpdateWithWhereUniqueWithoutDojoInput | AttendanceUpdateWithWhereUniqueWithoutDojoInput[]
     updateMany?: AttendanceUpdateManyWithWhereWithoutDojoInput | AttendanceUpdateManyWithWhereWithoutDojoInput[]
     deleteMany?: AttendanceScalarWhereInput | AttendanceScalarWhereInput[]
+  }
+
+  export type ShopOrderUncheckedUpdateManyWithoutDojoNestedInput = {
+    create?: XOR<ShopOrderCreateWithoutDojoInput, ShopOrderUncheckedCreateWithoutDojoInput> | ShopOrderCreateWithoutDojoInput[] | ShopOrderUncheckedCreateWithoutDojoInput[]
+    connectOrCreate?: ShopOrderCreateOrConnectWithoutDojoInput | ShopOrderCreateOrConnectWithoutDojoInput[]
+    upsert?: ShopOrderUpsertWithWhereUniqueWithoutDojoInput | ShopOrderUpsertWithWhereUniqueWithoutDojoInput[]
+    createMany?: ShopOrderCreateManyDojoInputEnvelope
+    set?: ShopOrderWhereUniqueInput | ShopOrderWhereUniqueInput[]
+    disconnect?: ShopOrderWhereUniqueInput | ShopOrderWhereUniqueInput[]
+    delete?: ShopOrderWhereUniqueInput | ShopOrderWhereUniqueInput[]
+    connect?: ShopOrderWhereUniqueInput | ShopOrderWhereUniqueInput[]
+    update?: ShopOrderUpdateWithWhereUniqueWithoutDojoInput | ShopOrderUpdateWithWhereUniqueWithoutDojoInput[]
+    updateMany?: ShopOrderUpdateManyWithWhereWithoutDojoInput | ShopOrderUpdateManyWithWhereWithoutDojoInput[]
+    deleteMany?: ShopOrderScalarWhereInput | ShopOrderScalarWhereInput[]
   }
 
   export type MemberUncheckedUpdateManyWithoutDojoNestedInput = {
@@ -28419,10 +28764,6 @@ export namespace Prisma {
 
   export type EnumMemberRoleFieldUpdateOperationsInput = {
     set?: $Enums.MemberRole
-  }
-
-  export type NullableDateTimeFieldUpdateOperationsInput = {
-    set?: Date | string | null
   }
 
   export type EnumMembershipStatusFieldUpdateOperationsInput = {
@@ -28795,10 +29136,12 @@ export namespace Prisma {
     update?: XOR<XOR<MemberUpdateToOneWithWhereWithoutGradingApplicationsInput, MemberUpdateWithoutGradingApplicationsInput>, MemberUncheckedUpdateWithoutGradingApplicationsInput>
   }
 
-  export type GradingEventUpdateOneRequiredWithoutApplicationsNestedInput = {
+  export type GradingEventUpdateOneWithoutApplicationsNestedInput = {
     create?: XOR<GradingEventCreateWithoutApplicationsInput, GradingEventUncheckedCreateWithoutApplicationsInput>
     connectOrCreate?: GradingEventCreateOrConnectWithoutApplicationsInput
     upsert?: GradingEventUpsertWithoutApplicationsInput
+    disconnect?: GradingEventWhereInput | boolean
+    delete?: GradingEventWhereInput | boolean
     connect?: GradingEventWhereUniqueInput
     update?: XOR<XOR<GradingEventUpdateToOneWithWhereWithoutApplicationsInput, GradingEventUpdateWithoutApplicationsInput>, GradingEventUncheckedUpdateWithoutApplicationsInput>
   }
@@ -29031,6 +29374,12 @@ export namespace Prisma {
     connect?: MemberWhereUniqueInput
   }
 
+  export type DojoCreateNestedOneWithoutRenewalOrdersInput = {
+    create?: XOR<DojoCreateWithoutRenewalOrdersInput, DojoUncheckedCreateWithoutRenewalOrdersInput>
+    connectOrCreate?: DojoCreateOrConnectWithoutRenewalOrdersInput
+    connect?: DojoWhereUniqueInput
+  }
+
   export type ShopOrderItemCreateNestedManyWithoutOrderInput = {
     create?: XOR<ShopOrderItemCreateWithoutOrderInput, ShopOrderItemUncheckedCreateWithoutOrderInput> | ShopOrderItemCreateWithoutOrderInput[] | ShopOrderItemUncheckedCreateWithoutOrderInput[]
     connectOrCreate?: ShopOrderItemCreateOrConnectWithoutOrderInput | ShopOrderItemCreateOrConnectWithoutOrderInput[]
@@ -29049,20 +29398,22 @@ export namespace Prisma {
     set?: $Enums.PaymentStatus
   }
 
-  export type NullableDecimalFieldUpdateOperationsInput = {
-    set?: Decimal | DecimalJsLike | number | string | null
-    increment?: Decimal | DecimalJsLike | number | string
-    decrement?: Decimal | DecimalJsLike | number | string
-    multiply?: Decimal | DecimalJsLike | number | string
-    divide?: Decimal | DecimalJsLike | number | string
-  }
-
   export type MemberUpdateOneRequiredWithoutOrdersNestedInput = {
     create?: XOR<MemberCreateWithoutOrdersInput, MemberUncheckedCreateWithoutOrdersInput>
     connectOrCreate?: MemberCreateOrConnectWithoutOrdersInput
     upsert?: MemberUpsertWithoutOrdersInput
     connect?: MemberWhereUniqueInput
     update?: XOR<XOR<MemberUpdateToOneWithWhereWithoutOrdersInput, MemberUpdateWithoutOrdersInput>, MemberUncheckedUpdateWithoutOrdersInput>
+  }
+
+  export type DojoUpdateOneWithoutRenewalOrdersNestedInput = {
+    create?: XOR<DojoCreateWithoutRenewalOrdersInput, DojoUncheckedCreateWithoutRenewalOrdersInput>
+    connectOrCreate?: DojoCreateOrConnectWithoutRenewalOrdersInput
+    upsert?: DojoUpsertWithoutRenewalOrdersInput
+    disconnect?: DojoWhereInput | boolean
+    delete?: DojoWhereInput | boolean
+    connect?: DojoWhereUniqueInput
+    update?: XOR<XOR<DojoUpdateToOneWithWhereWithoutRenewalOrdersInput, DojoUpdateWithoutRenewalOrdersInput>, DojoUncheckedUpdateWithoutRenewalOrdersInput>
   }
 
   export type ShopOrderItemUpdateManyWithoutOrderNestedInput = {
@@ -29598,6 +29949,28 @@ export namespace Prisma {
     not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
+  export type NestedDecimalNullableFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalNullableFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
+  }
+
+  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
   export type NestedFloatNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | FloatFieldRefInput<$PrismaModel> | null
     in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
@@ -29643,6 +30016,36 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedBoolFilter<$PrismaModel>
     _max?: NestedBoolFilter<$PrismaModel>
+  }
+
+  export type NestedDecimalNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalNullableWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedDecimalNullableFilter<$PrismaModel>
+    _sum?: NestedDecimalNullableFilter<$PrismaModel>
+    _min?: NestedDecimalNullableFilter<$PrismaModel>
+    _max?: NestedDecimalNullableFilter<$PrismaModel>
+  }
+
+  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type NestedUuidNullableFilter<$PrismaModel = never> = {
@@ -29717,17 +30120,6 @@ export namespace Prisma {
     not?: NestedEnumMemberRoleFilter<$PrismaModel> | $Enums.MemberRole
   }
 
-  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
-  }
-
   export type NestedEnumMembershipStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.MembershipStatus | EnumMembershipStatusFieldRefInput<$PrismaModel>
     in?: $Enums.MembershipStatus[] | ListEnumMembershipStatusFieldRefInput<$PrismaModel>
@@ -29743,20 +30135,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumMemberRoleFilter<$PrismaModel>
     _max?: NestedEnumMemberRoleFilter<$PrismaModel>
-  }
-
-  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedDateTimeNullableFilter<$PrismaModel>
-    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type NestedEnumMembershipStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -29870,17 +30248,6 @@ export namespace Prisma {
     not?: NestedEnumPaymentStatusFilter<$PrismaModel> | $Enums.PaymentStatus
   }
 
-  export type NestedDecimalNullableFilter<$PrismaModel = never> = {
-    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
-    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
-    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
-    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    not?: NestedDecimalNullableFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
-  }
-
   export type NestedEnumPaymentStatusWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.PaymentStatus | EnumPaymentStatusFieldRefInput<$PrismaModel>
     in?: $Enums.PaymentStatus[] | ListEnumPaymentStatusFieldRefInput<$PrismaModel>
@@ -29889,22 +30256,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumPaymentStatusFilter<$PrismaModel>
     _max?: NestedEnumPaymentStatusFilter<$PrismaModel>
-  }
-
-  export type NestedDecimalNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
-    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
-    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
-    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    not?: NestedDecimalNullableWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedDecimalNullableFilter<$PrismaModel>
-    _sum?: NestedDecimalNullableFilter<$PrismaModel>
-    _min?: NestedDecimalNullableFilter<$PrismaModel>
-    _max?: NestedDecimalNullableFilter<$PrismaModel>
   }
 
   export type GradingCreateWithoutFromRankInput = {
@@ -29982,6 +30333,9 @@ export namespace Prisma {
     location?: string | null
     isOpen?: boolean
     notes?: string | null
+    cancelledAt?: Date | string | null
+    cancelReason?: string | null
+    resultsPublishedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     gradings?: GradingCreateNestedManyWithoutGradingEventInput
@@ -29995,6 +30349,9 @@ export namespace Prisma {
     location?: string | null
     isOpen?: boolean
     notes?: string | null
+    cancelledAt?: Date | string | null
+    cancelReason?: string | null
+    resultsPublishedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     gradings?: GradingUncheckedCreateNestedManyWithoutGradingEventInput
@@ -30015,17 +30372,19 @@ export namespace Prisma {
     id?: string
     status?: $Enums.ApplicationStatus
     notes?: string | null
+    declineReason?: string | null
     appliedAt?: Date | string
     member: MemberCreateNestedOneWithoutGradingApplicationsInput
-    gradingEvent: GradingEventCreateNestedOneWithoutApplicationsInput
+    gradingEvent?: GradingEventCreateNestedOneWithoutApplicationsInput
   }
 
   export type GradingApplicationUncheckedCreateWithoutTargetRankInput = {
     id?: string
     memberId: string
-    gradingEventId: string
+    gradingEventId?: string | null
     status?: $Enums.ApplicationStatus
     notes?: string | null
+    declineReason?: string | null
     appliedAt?: Date | string
   }
 
@@ -30114,6 +30473,9 @@ export namespace Prisma {
     targetRankId?: UuidNullableFilter<"GradingEvent"> | string | null
     isOpen?: BoolFilter<"GradingEvent"> | boolean
     notes?: StringNullableFilter<"GradingEvent"> | string | null
+    cancelledAt?: DateTimeNullableFilter<"GradingEvent"> | Date | string | null
+    cancelReason?: StringNullableFilter<"GradingEvent"> | string | null
+    resultsPublishedAt?: DateTimeNullableFilter<"GradingEvent"> | Date | string | null
     createdAt?: DateTimeFilter<"GradingEvent"> | Date | string
     updatedAt?: DateTimeFilter<"GradingEvent"> | Date | string
   }
@@ -30140,11 +30502,56 @@ export namespace Prisma {
     NOT?: GradingApplicationScalarWhereInput | GradingApplicationScalarWhereInput[]
     id?: UuidFilter<"GradingApplication"> | string
     memberId?: UuidFilter<"GradingApplication"> | string
-    gradingEventId?: UuidFilter<"GradingApplication"> | string
+    gradingEventId?: UuidNullableFilter<"GradingApplication"> | string | null
     targetRankId?: UuidNullableFilter<"GradingApplication"> | string | null
     status?: EnumApplicationStatusFilter<"GradingApplication"> | $Enums.ApplicationStatus
     notes?: StringNullableFilter<"GradingApplication"> | string | null
+    declineReason?: StringNullableFilter<"GradingApplication"> | string | null
     appliedAt?: DateTimeFilter<"GradingApplication"> | Date | string
+  }
+
+  export type ShopOrderCreateWithoutDojoInput = {
+    id?: string
+    paymentStatus?: $Enums.PaymentStatus
+    paymentMethod?: string | null
+    total: Decimal | DecimalJsLike | number | string
+    currency?: string
+    transactionId?: string | null
+    includesMembership?: boolean
+    membershipFee?: Decimal | DecimalJsLike | number | string | null
+    notes?: string | null
+    includesDojoRenewal?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    member: MemberCreateNestedOneWithoutOrdersInput
+    orderItems?: ShopOrderItemCreateNestedManyWithoutOrderInput
+  }
+
+  export type ShopOrderUncheckedCreateWithoutDojoInput = {
+    id?: string
+    memberId: string
+    paymentStatus?: $Enums.PaymentStatus
+    paymentMethod?: string | null
+    total: Decimal | DecimalJsLike | number | string
+    currency?: string
+    transactionId?: string | null
+    includesMembership?: boolean
+    membershipFee?: Decimal | DecimalJsLike | number | string | null
+    notes?: string | null
+    includesDojoRenewal?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    orderItems?: ShopOrderItemUncheckedCreateNestedManyWithoutOrderInput
+  }
+
+  export type ShopOrderCreateOrConnectWithoutDojoInput = {
+    where: ShopOrderWhereUniqueInput
+    create: XOR<ShopOrderCreateWithoutDojoInput, ShopOrderUncheckedCreateWithoutDojoInput>
+  }
+
+  export type ShopOrderCreateManyDojoInputEnvelope = {
+    data: ShopOrderCreateManyDojoInput | ShopOrderCreateManyDojoInput[]
+    skipDuplicates?: boolean
   }
 
   export type MemberCreateWithoutDojoInput = {
@@ -30247,6 +30654,42 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type ShopOrderUpsertWithWhereUniqueWithoutDojoInput = {
+    where: ShopOrderWhereUniqueInput
+    update: XOR<ShopOrderUpdateWithoutDojoInput, ShopOrderUncheckedUpdateWithoutDojoInput>
+    create: XOR<ShopOrderCreateWithoutDojoInput, ShopOrderUncheckedCreateWithoutDojoInput>
+  }
+
+  export type ShopOrderUpdateWithWhereUniqueWithoutDojoInput = {
+    where: ShopOrderWhereUniqueInput
+    data: XOR<ShopOrderUpdateWithoutDojoInput, ShopOrderUncheckedUpdateWithoutDojoInput>
+  }
+
+  export type ShopOrderUpdateManyWithWhereWithoutDojoInput = {
+    where: ShopOrderScalarWhereInput
+    data: XOR<ShopOrderUpdateManyMutationInput, ShopOrderUncheckedUpdateManyWithoutDojoInput>
+  }
+
+  export type ShopOrderScalarWhereInput = {
+    AND?: ShopOrderScalarWhereInput | ShopOrderScalarWhereInput[]
+    OR?: ShopOrderScalarWhereInput[]
+    NOT?: ShopOrderScalarWhereInput | ShopOrderScalarWhereInput[]
+    id?: UuidFilter<"ShopOrder"> | string
+    memberId?: UuidFilter<"ShopOrder"> | string
+    paymentStatus?: EnumPaymentStatusFilter<"ShopOrder"> | $Enums.PaymentStatus
+    paymentMethod?: StringNullableFilter<"ShopOrder"> | string | null
+    total?: DecimalFilter<"ShopOrder"> | Decimal | DecimalJsLike | number | string
+    currency?: StringFilter<"ShopOrder"> | string
+    transactionId?: StringNullableFilter<"ShopOrder"> | string | null
+    includesMembership?: BoolFilter<"ShopOrder"> | boolean
+    membershipFee?: DecimalNullableFilter<"ShopOrder"> | Decimal | DecimalJsLike | number | string | null
+    notes?: StringNullableFilter<"ShopOrder"> | string | null
+    dojoId?: UuidNullableFilter<"ShopOrder"> | string | null
+    includesDojoRenewal?: BoolFilter<"ShopOrder"> | boolean
+    createdAt?: DateTimeFilter<"ShopOrder"> | Date | string
+    updatedAt?: DateTimeFilter<"ShopOrder"> | Date | string
+  }
+
   export type MemberUpsertWithWhereUniqueWithoutDojoInput = {
     where: MemberWhereUniqueInput
     update: XOR<MemberUpdateWithoutDojoInput, MemberUncheckedUpdateWithoutDojoInput>
@@ -30331,8 +30774,11 @@ export namespace Prisma {
     email?: string | null
     schedule?: NullableJsonNullValueInput | InputJsonValue
     isActive?: boolean
+    annualFee?: Decimal | DecimalJsLike | number | string | null
+    expiryDate?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    renewalOrders?: ShopOrderCreateNestedManyWithoutDojoInput
     attendance?: AttendanceCreateNestedManyWithoutDojoInput
   }
 
@@ -30347,8 +30793,11 @@ export namespace Prisma {
     email?: string | null
     schedule?: NullableJsonNullValueInput | InputJsonValue
     isActive?: boolean
+    annualFee?: Decimal | DecimalJsLike | number | string | null
+    expiryDate?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    renewalOrders?: ShopOrderUncheckedCreateNestedManyWithoutDojoInput
     attendance?: AttendanceUncheckedCreateNestedManyWithoutDojoInput
   }
 
@@ -30395,17 +30844,19 @@ export namespace Prisma {
     id?: string
     status?: $Enums.ApplicationStatus
     notes?: string | null
+    declineReason?: string | null
     appliedAt?: Date | string
-    gradingEvent: GradingEventCreateNestedOneWithoutApplicationsInput
+    gradingEvent?: GradingEventCreateNestedOneWithoutApplicationsInput
     targetRank?: BeltRankCreateNestedOneWithoutGradingApplicationsInput
   }
 
   export type GradingApplicationUncheckedCreateWithoutMemberInput = {
     id?: string
-    gradingEventId: string
+    gradingEventId?: string | null
     targetRankId?: string | null
     status?: $Enums.ApplicationStatus
     notes?: string | null
+    declineReason?: string | null
     appliedAt?: Date | string
   }
 
@@ -30483,8 +30934,10 @@ export namespace Prisma {
     includesMembership?: boolean
     membershipFee?: Decimal | DecimalJsLike | number | string | null
     notes?: string | null
+    includesDojoRenewal?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    dojo?: DojoCreateNestedOneWithoutRenewalOrdersInput
     orderItems?: ShopOrderItemCreateNestedManyWithoutOrderInput
   }
 
@@ -30498,6 +30951,8 @@ export namespace Prisma {
     includesMembership?: boolean
     membershipFee?: Decimal | DecimalJsLike | number | string | null
     notes?: string | null
+    dojoId?: string | null
+    includesDojoRenewal?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     orderItems?: ShopOrderItemUncheckedCreateNestedManyWithoutOrderInput
@@ -30595,8 +31050,11 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     schedule?: NullableJsonNullValueInput | InputJsonValue
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    annualFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    renewalOrders?: ShopOrderUpdateManyWithoutDojoNestedInput
     attendance?: AttendanceUpdateManyWithoutDojoNestedInput
   }
 
@@ -30611,8 +31069,11 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     schedule?: NullableJsonNullValueInput | InputJsonValue
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    annualFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    renewalOrders?: ShopOrderUncheckedUpdateManyWithoutDojoNestedInput
     attendance?: AttendanceUncheckedUpdateManyWithoutDojoNestedInput
   }
 
@@ -30719,24 +31180,6 @@ export namespace Prisma {
   export type ShopOrderUpdateManyWithWhereWithoutMemberInput = {
     where: ShopOrderScalarWhereInput
     data: XOR<ShopOrderUpdateManyMutationInput, ShopOrderUncheckedUpdateManyWithoutMemberInput>
-  }
-
-  export type ShopOrderScalarWhereInput = {
-    AND?: ShopOrderScalarWhereInput | ShopOrderScalarWhereInput[]
-    OR?: ShopOrderScalarWhereInput[]
-    NOT?: ShopOrderScalarWhereInput | ShopOrderScalarWhereInput[]
-    id?: UuidFilter<"ShopOrder"> | string
-    memberId?: UuidFilter<"ShopOrder"> | string
-    paymentStatus?: EnumPaymentStatusFilter<"ShopOrder"> | $Enums.PaymentStatus
-    paymentMethod?: StringNullableFilter<"ShopOrder"> | string | null
-    total?: DecimalFilter<"ShopOrder"> | Decimal | DecimalJsLike | number | string
-    currency?: StringFilter<"ShopOrder"> | string
-    transactionId?: StringNullableFilter<"ShopOrder"> | string | null
-    includesMembership?: BoolFilter<"ShopOrder"> | boolean
-    membershipFee?: DecimalNullableFilter<"ShopOrder"> | Decimal | DecimalJsLike | number | string | null
-    notes?: StringNullableFilter<"ShopOrder"> | string | null
-    createdAt?: DateTimeFilter<"ShopOrder"> | Date | string
-    updatedAt?: DateTimeFilter<"ShopOrder"> | Date | string
   }
 
   export type AttendanceUpsertWithWhereUniqueWithoutMemberInput = {
@@ -30861,8 +31304,11 @@ export namespace Prisma {
     email?: string | null
     schedule?: NullableJsonNullValueInput | InputJsonValue
     isActive?: boolean
+    annualFee?: Decimal | DecimalJsLike | number | string | null
+    expiryDate?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    renewalOrders?: ShopOrderCreateNestedManyWithoutDojoInput
     members?: MemberCreateNestedManyWithoutDojoInput
   }
 
@@ -30877,8 +31323,11 @@ export namespace Prisma {
     email?: string | null
     schedule?: NullableJsonNullValueInput | InputJsonValue
     isActive?: boolean
+    annualFee?: Decimal | DecimalJsLike | number | string | null
+    expiryDate?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    renewalOrders?: ShopOrderUncheckedCreateNestedManyWithoutDojoInput
     members?: MemberUncheckedCreateNestedManyWithoutDojoInput
   }
 
@@ -30982,8 +31431,11 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     schedule?: NullableJsonNullValueInput | InputJsonValue
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    annualFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    renewalOrders?: ShopOrderUpdateManyWithoutDojoNestedInput
     members?: MemberUpdateManyWithoutDojoNestedInput
   }
 
@@ -30998,15 +31450,17 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     schedule?: NullableJsonNullValueInput | InputJsonValue
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    annualFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    renewalOrders?: ShopOrderUncheckedUpdateManyWithoutDojoNestedInput
     members?: MemberUncheckedUpdateManyWithoutDojoNestedInput
   }
 
   export type BeltRankCreateWithoutGradingEventsInput = {
     id?: string
     name: string
-    nameBn?: string | null
     kyuDan?: string | null
     colorHex?: string | null
     orderIndex: number
@@ -31020,7 +31474,6 @@ export namespace Prisma {
   export type BeltRankUncheckedCreateWithoutGradingEventsInput = {
     id?: string
     name: string
-    nameBn?: string | null
     kyuDan?: string | null
     colorHex?: string | null
     orderIndex: number
@@ -31074,6 +31527,7 @@ export namespace Prisma {
     id?: string
     status?: $Enums.ApplicationStatus
     notes?: string | null
+    declineReason?: string | null
     appliedAt?: Date | string
     member: MemberCreateNestedOneWithoutGradingApplicationsInput
     targetRank?: BeltRankCreateNestedOneWithoutGradingApplicationsInput
@@ -31085,6 +31539,7 @@ export namespace Prisma {
     targetRankId?: string | null
     status?: $Enums.ApplicationStatus
     notes?: string | null
+    declineReason?: string | null
     appliedAt?: Date | string
   }
 
@@ -31112,7 +31567,6 @@ export namespace Prisma {
   export type BeltRankUpdateWithoutGradingEventsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    nameBn?: NullableStringFieldUpdateOperationsInput | string | null
     kyuDan?: NullableStringFieldUpdateOperationsInput | string | null
     colorHex?: NullableStringFieldUpdateOperationsInput | string | null
     orderIndex?: IntFieldUpdateOperationsInput | number
@@ -31126,7 +31580,6 @@ export namespace Prisma {
   export type BeltRankUncheckedUpdateWithoutGradingEventsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    nameBn?: NullableStringFieldUpdateOperationsInput | string | null
     kyuDan?: NullableStringFieldUpdateOperationsInput | string | null
     colorHex?: NullableStringFieldUpdateOperationsInput | string | null
     orderIndex?: IntFieldUpdateOperationsInput | number
@@ -31243,6 +31696,9 @@ export namespace Prisma {
     location?: string | null
     isOpen?: boolean
     notes?: string | null
+    cancelledAt?: Date | string | null
+    cancelReason?: string | null
+    resultsPublishedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     targetRank?: BeltRankCreateNestedOneWithoutGradingEventsInput
@@ -31257,6 +31713,9 @@ export namespace Prisma {
     targetRankId?: string | null
     isOpen?: boolean
     notes?: string | null
+    cancelledAt?: Date | string | null
+    cancelReason?: string | null
+    resultsPublishedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     gradings?: GradingUncheckedCreateNestedManyWithoutGradingEventInput
@@ -31270,7 +31729,6 @@ export namespace Prisma {
   export type BeltRankCreateWithoutGradingApplicationsInput = {
     id?: string
     name: string
-    nameBn?: string | null
     kyuDan?: string | null
     colorHex?: string | null
     orderIndex: number
@@ -31284,7 +31742,6 @@ export namespace Prisma {
   export type BeltRankUncheckedCreateWithoutGradingApplicationsInput = {
     id?: string
     name: string
-    nameBn?: string | null
     kyuDan?: string | null
     colorHex?: string | null
     orderIndex: number
@@ -31391,6 +31848,9 @@ export namespace Prisma {
     location?: NullableStringFieldUpdateOperationsInput | string | null
     isOpen?: BoolFieldUpdateOperationsInput | boolean
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    cancelledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
+    resultsPublishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     targetRank?: BeltRankUpdateOneWithoutGradingEventsNestedInput
@@ -31405,6 +31865,9 @@ export namespace Prisma {
     targetRankId?: NullableStringFieldUpdateOperationsInput | string | null
     isOpen?: BoolFieldUpdateOperationsInput | boolean
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    cancelledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
+    resultsPublishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     gradings?: GradingUncheckedUpdateManyWithoutGradingEventNestedInput
@@ -31424,7 +31887,6 @@ export namespace Prisma {
   export type BeltRankUpdateWithoutGradingApplicationsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    nameBn?: NullableStringFieldUpdateOperationsInput | string | null
     kyuDan?: NullableStringFieldUpdateOperationsInput | string | null
     colorHex?: NullableStringFieldUpdateOperationsInput | string | null
     orderIndex?: IntFieldUpdateOperationsInput | number
@@ -31438,7 +31900,6 @@ export namespace Prisma {
   export type BeltRankUncheckedUpdateWithoutGradingApplicationsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    nameBn?: NullableStringFieldUpdateOperationsInput | string | null
     kyuDan?: NullableStringFieldUpdateOperationsInput | string | null
     colorHex?: NullableStringFieldUpdateOperationsInput | string | null
     orderIndex?: IntFieldUpdateOperationsInput | number
@@ -31523,6 +31984,9 @@ export namespace Prisma {
     location?: string | null
     isOpen?: boolean
     notes?: string | null
+    cancelledAt?: Date | string | null
+    cancelReason?: string | null
+    resultsPublishedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     targetRank?: BeltRankCreateNestedOneWithoutGradingEventsInput
@@ -31537,6 +32001,9 @@ export namespace Prisma {
     targetRankId?: string | null
     isOpen?: boolean
     notes?: string | null
+    cancelledAt?: Date | string | null
+    cancelReason?: string | null
+    resultsPublishedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     applications?: GradingApplicationUncheckedCreateNestedManyWithoutGradingEventInput
@@ -31550,7 +32017,6 @@ export namespace Prisma {
   export type BeltRankCreateWithoutGradingsFromInput = {
     id?: string
     name: string
-    nameBn?: string | null
     kyuDan?: string | null
     colorHex?: string | null
     orderIndex: number
@@ -31564,7 +32030,6 @@ export namespace Prisma {
   export type BeltRankUncheckedCreateWithoutGradingsFromInput = {
     id?: string
     name: string
-    nameBn?: string | null
     kyuDan?: string | null
     colorHex?: string | null
     orderIndex: number
@@ -31583,7 +32048,6 @@ export namespace Prisma {
   export type BeltRankCreateWithoutGradingsToInput = {
     id?: string
     name: string
-    nameBn?: string | null
     kyuDan?: string | null
     colorHex?: string | null
     orderIndex: number
@@ -31597,7 +32061,6 @@ export namespace Prisma {
   export type BeltRankUncheckedCreateWithoutGradingsToInput = {
     id?: string
     name: string
-    nameBn?: string | null
     kyuDan?: string | null
     colorHex?: string | null
     orderIndex: number
@@ -31704,6 +32167,9 @@ export namespace Prisma {
     location?: NullableStringFieldUpdateOperationsInput | string | null
     isOpen?: BoolFieldUpdateOperationsInput | boolean
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    cancelledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
+    resultsPublishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     targetRank?: BeltRankUpdateOneWithoutGradingEventsNestedInput
@@ -31718,6 +32184,9 @@ export namespace Prisma {
     targetRankId?: NullableStringFieldUpdateOperationsInput | string | null
     isOpen?: BoolFieldUpdateOperationsInput | boolean
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    cancelledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
+    resultsPublishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     applications?: GradingApplicationUncheckedUpdateManyWithoutGradingEventNestedInput
@@ -31737,7 +32206,6 @@ export namespace Prisma {
   export type BeltRankUpdateWithoutGradingsFromInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    nameBn?: NullableStringFieldUpdateOperationsInput | string | null
     kyuDan?: NullableStringFieldUpdateOperationsInput | string | null
     colorHex?: NullableStringFieldUpdateOperationsInput | string | null
     orderIndex?: IntFieldUpdateOperationsInput | number
@@ -31751,7 +32219,6 @@ export namespace Prisma {
   export type BeltRankUncheckedUpdateWithoutGradingsFromInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    nameBn?: NullableStringFieldUpdateOperationsInput | string | null
     kyuDan?: NullableStringFieldUpdateOperationsInput | string | null
     colorHex?: NullableStringFieldUpdateOperationsInput | string | null
     orderIndex?: IntFieldUpdateOperationsInput | number
@@ -31776,7 +32243,6 @@ export namespace Prisma {
   export type BeltRankUpdateWithoutGradingsToInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    nameBn?: NullableStringFieldUpdateOperationsInput | string | null
     kyuDan?: NullableStringFieldUpdateOperationsInput | string | null
     colorHex?: NullableStringFieldUpdateOperationsInput | string | null
     orderIndex?: IntFieldUpdateOperationsInput | number
@@ -31790,7 +32256,6 @@ export namespace Prisma {
   export type BeltRankUncheckedUpdateWithoutGradingsToInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    nameBn?: NullableStringFieldUpdateOperationsInput | string | null
     kyuDan?: NullableStringFieldUpdateOperationsInput | string | null
     colorHex?: NullableStringFieldUpdateOperationsInput | string | null
     orderIndex?: IntFieldUpdateOperationsInput | number
@@ -32305,6 +32770,49 @@ export namespace Prisma {
     create: XOR<MemberCreateWithoutOrdersInput, MemberUncheckedCreateWithoutOrdersInput>
   }
 
+  export type DojoCreateWithoutRenewalOrdersInput = {
+    id?: string
+    name: string
+    address?: string | null
+    city?: string | null
+    latitude?: number | null
+    longitude?: number | null
+    phone?: string | null
+    email?: string | null
+    schedule?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: boolean
+    annualFee?: Decimal | DecimalJsLike | number | string | null
+    expiryDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    members?: MemberCreateNestedManyWithoutDojoInput
+    attendance?: AttendanceCreateNestedManyWithoutDojoInput
+  }
+
+  export type DojoUncheckedCreateWithoutRenewalOrdersInput = {
+    id?: string
+    name: string
+    address?: string | null
+    city?: string | null
+    latitude?: number | null
+    longitude?: number | null
+    phone?: string | null
+    email?: string | null
+    schedule?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: boolean
+    annualFee?: Decimal | DecimalJsLike | number | string | null
+    expiryDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    members?: MemberUncheckedCreateNestedManyWithoutDojoInput
+    attendance?: AttendanceUncheckedCreateNestedManyWithoutDojoInput
+  }
+
+  export type DojoCreateOrConnectWithoutRenewalOrdersInput = {
+    where: DojoWhereUniqueInput
+    create: XOR<DojoCreateWithoutRenewalOrdersInput, DojoUncheckedCreateWithoutRenewalOrdersInput>
+  }
+
   export type ShopOrderItemCreateWithoutOrderInput = {
     id?: string
     quantity: number
@@ -32402,6 +32910,55 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutMemberNestedInput
   }
 
+  export type DojoUpsertWithoutRenewalOrdersInput = {
+    update: XOR<DojoUpdateWithoutRenewalOrdersInput, DojoUncheckedUpdateWithoutRenewalOrdersInput>
+    create: XOR<DojoCreateWithoutRenewalOrdersInput, DojoUncheckedCreateWithoutRenewalOrdersInput>
+    where?: DojoWhereInput
+  }
+
+  export type DojoUpdateToOneWithWhereWithoutRenewalOrdersInput = {
+    where?: DojoWhereInput
+    data: XOR<DojoUpdateWithoutRenewalOrdersInput, DojoUncheckedUpdateWithoutRenewalOrdersInput>
+  }
+
+  export type DojoUpdateWithoutRenewalOrdersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    schedule?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    annualFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    members?: MemberUpdateManyWithoutDojoNestedInput
+    attendance?: AttendanceUpdateManyWithoutDojoNestedInput
+  }
+
+  export type DojoUncheckedUpdateWithoutRenewalOrdersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    schedule?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    annualFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    members?: MemberUncheckedUpdateManyWithoutDojoNestedInput
+    attendance?: AttendanceUncheckedUpdateManyWithoutDojoNestedInput
+  }
+
   export type ShopOrderItemUpsertWithWhereUniqueWithoutOrderInput = {
     where: ShopOrderItemWhereUniqueInput
     update: XOR<ShopOrderItemUpdateWithoutOrderInput, ShopOrderItemUncheckedUpdateWithoutOrderInput>
@@ -32428,9 +32985,11 @@ export namespace Prisma {
     includesMembership?: boolean
     membershipFee?: Decimal | DecimalJsLike | number | string | null
     notes?: string | null
+    includesDojoRenewal?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     member: MemberCreateNestedOneWithoutOrdersInput
+    dojo?: DojoCreateNestedOneWithoutRenewalOrdersInput
   }
 
   export type ShopOrderUncheckedCreateWithoutOrderItemsInput = {
@@ -32444,6 +33003,8 @@ export namespace Prisma {
     includesMembership?: boolean
     membershipFee?: Decimal | DecimalJsLike | number | string | null
     notes?: string | null
+    dojoId?: string | null
+    includesDojoRenewal?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -32505,9 +33066,11 @@ export namespace Prisma {
     includesMembership?: BoolFieldUpdateOperationsInput | boolean
     membershipFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    includesDojoRenewal?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     member?: MemberUpdateOneRequiredWithoutOrdersNestedInput
+    dojo?: DojoUpdateOneWithoutRenewalOrdersNestedInput
   }
 
   export type ShopOrderUncheckedUpdateWithoutOrderItemsInput = {
@@ -32521,6 +33084,8 @@ export namespace Prisma {
     includesMembership?: BoolFieldUpdateOperationsInput | boolean
     membershipFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    dojoId?: NullableStringFieldUpdateOperationsInput | string | null
+    includesDojoRenewal?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -33296,6 +33861,9 @@ export namespace Prisma {
     location?: string | null
     isOpen?: boolean
     notes?: string | null
+    cancelledAt?: Date | string | null
+    cancelReason?: string | null
+    resultsPublishedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -33303,9 +33871,10 @@ export namespace Prisma {
   export type GradingApplicationCreateManyTargetRankInput = {
     id?: string
     memberId: string
-    gradingEventId: string
+    gradingEventId?: string | null
     status?: $Enums.ApplicationStatus
     notes?: string | null
+    declineReason?: string | null
     appliedAt?: Date | string
   }
 
@@ -33388,6 +33957,9 @@ export namespace Prisma {
     location?: NullableStringFieldUpdateOperationsInput | string | null
     isOpen?: BoolFieldUpdateOperationsInput | boolean
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    cancelledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
+    resultsPublishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     gradings?: GradingUpdateManyWithoutGradingEventNestedInput
@@ -33401,6 +33973,9 @@ export namespace Prisma {
     location?: NullableStringFieldUpdateOperationsInput | string | null
     isOpen?: BoolFieldUpdateOperationsInput | boolean
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    cancelledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
+    resultsPublishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     gradings?: GradingUncheckedUpdateManyWithoutGradingEventNestedInput
@@ -33414,6 +33989,9 @@ export namespace Prisma {
     location?: NullableStringFieldUpdateOperationsInput | string | null
     isOpen?: BoolFieldUpdateOperationsInput | boolean
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    cancelledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
+    resultsPublishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -33422,27 +34000,46 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     status?: EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    declineReason?: NullableStringFieldUpdateOperationsInput | string | null
     appliedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     member?: MemberUpdateOneRequiredWithoutGradingApplicationsNestedInput
-    gradingEvent?: GradingEventUpdateOneRequiredWithoutApplicationsNestedInput
+    gradingEvent?: GradingEventUpdateOneWithoutApplicationsNestedInput
   }
 
   export type GradingApplicationUncheckedUpdateWithoutTargetRankInput = {
     id?: StringFieldUpdateOperationsInput | string
     memberId?: StringFieldUpdateOperationsInput | string
-    gradingEventId?: StringFieldUpdateOperationsInput | string
+    gradingEventId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    declineReason?: NullableStringFieldUpdateOperationsInput | string | null
     appliedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type GradingApplicationUncheckedUpdateManyWithoutTargetRankInput = {
     id?: StringFieldUpdateOperationsInput | string
     memberId?: StringFieldUpdateOperationsInput | string
-    gradingEventId?: StringFieldUpdateOperationsInput | string
+    gradingEventId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    declineReason?: NullableStringFieldUpdateOperationsInput | string | null
     appliedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ShopOrderCreateManyDojoInput = {
+    id?: string
+    memberId: string
+    paymentStatus?: $Enums.PaymentStatus
+    paymentMethod?: string | null
+    total: Decimal | DecimalJsLike | number | string
+    currency?: string
+    transactionId?: string | null
+    includesMembership?: boolean
+    membershipFee?: Decimal | DecimalJsLike | number | string | null
+    notes?: string | null
+    includesDojoRenewal?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type MemberCreateManyDojoInput = {
@@ -33476,6 +34073,56 @@ export namespace Prisma {
     present?: boolean
     notes?: string | null
     createdAt?: Date | string
+  }
+
+  export type ShopOrderUpdateWithoutDojoInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: StringFieldUpdateOperationsInput | string
+    transactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    includesMembership?: BoolFieldUpdateOperationsInput | boolean
+    membershipFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    includesDojoRenewal?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    member?: MemberUpdateOneRequiredWithoutOrdersNestedInput
+    orderItems?: ShopOrderItemUpdateManyWithoutOrderNestedInput
+  }
+
+  export type ShopOrderUncheckedUpdateWithoutDojoInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    memberId?: StringFieldUpdateOperationsInput | string
+    paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: StringFieldUpdateOperationsInput | string
+    transactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    includesMembership?: BoolFieldUpdateOperationsInput | boolean
+    membershipFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    includesDojoRenewal?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    orderItems?: ShopOrderItemUncheckedUpdateManyWithoutOrderNestedInput
+  }
+
+  export type ShopOrderUncheckedUpdateManyWithoutDojoInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    memberId?: StringFieldUpdateOperationsInput | string
+    paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: StringFieldUpdateOperationsInput | string
+    transactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    includesMembership?: BoolFieldUpdateOperationsInput | boolean
+    membershipFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    includesDojoRenewal?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type MemberUpdateWithoutDojoInput = {
@@ -33605,10 +34252,11 @@ export namespace Prisma {
 
   export type GradingApplicationCreateManyMemberInput = {
     id?: string
-    gradingEventId: string
+    gradingEventId?: string | null
     targetRankId?: string | null
     status?: $Enums.ApplicationStatus
     notes?: string | null
+    declineReason?: string | null
     appliedAt?: Date | string
   }
 
@@ -33639,6 +34287,8 @@ export namespace Prisma {
     includesMembership?: boolean
     membershipFee?: Decimal | DecimalJsLike | number | string | null
     notes?: string | null
+    dojoId?: string | null
+    includesDojoRenewal?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -33700,26 +34350,29 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     status?: EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    declineReason?: NullableStringFieldUpdateOperationsInput | string | null
     appliedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    gradingEvent?: GradingEventUpdateOneRequiredWithoutApplicationsNestedInput
+    gradingEvent?: GradingEventUpdateOneWithoutApplicationsNestedInput
     targetRank?: BeltRankUpdateOneWithoutGradingApplicationsNestedInput
   }
 
   export type GradingApplicationUncheckedUpdateWithoutMemberInput = {
     id?: StringFieldUpdateOperationsInput | string
-    gradingEventId?: StringFieldUpdateOperationsInput | string
+    gradingEventId?: NullableStringFieldUpdateOperationsInput | string | null
     targetRankId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    declineReason?: NullableStringFieldUpdateOperationsInput | string | null
     appliedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type GradingApplicationUncheckedUpdateManyWithoutMemberInput = {
     id?: StringFieldUpdateOperationsInput | string
-    gradingEventId?: StringFieldUpdateOperationsInput | string
+    gradingEventId?: NullableStringFieldUpdateOperationsInput | string | null
     targetRankId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    declineReason?: NullableStringFieldUpdateOperationsInput | string | null
     appliedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -33784,8 +34437,10 @@ export namespace Prisma {
     includesMembership?: BoolFieldUpdateOperationsInput | boolean
     membershipFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    includesDojoRenewal?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    dojo?: DojoUpdateOneWithoutRenewalOrdersNestedInput
     orderItems?: ShopOrderItemUpdateManyWithoutOrderNestedInput
   }
 
@@ -33799,6 +34454,8 @@ export namespace Prisma {
     includesMembership?: BoolFieldUpdateOperationsInput | boolean
     membershipFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    dojoId?: NullableStringFieldUpdateOperationsInput | string | null
+    includesDojoRenewal?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     orderItems?: ShopOrderItemUncheckedUpdateManyWithoutOrderNestedInput
@@ -33814,6 +34471,8 @@ export namespace Prisma {
     includesMembership?: BoolFieldUpdateOperationsInput | boolean
     membershipFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    dojoId?: NullableStringFieldUpdateOperationsInput | string | null
+    includesDojoRenewal?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -33893,6 +34552,7 @@ export namespace Prisma {
     targetRankId?: string | null
     status?: $Enums.ApplicationStatus
     notes?: string | null
+    declineReason?: string | null
     appliedAt?: Date | string
   }
 
@@ -33936,6 +34596,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     status?: EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    declineReason?: NullableStringFieldUpdateOperationsInput | string | null
     appliedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     member?: MemberUpdateOneRequiredWithoutGradingApplicationsNestedInput
     targetRank?: BeltRankUpdateOneWithoutGradingApplicationsNestedInput
@@ -33947,6 +34608,7 @@ export namespace Prisma {
     targetRankId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    declineReason?: NullableStringFieldUpdateOperationsInput | string | null
     appliedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -33956,6 +34618,7 @@ export namespace Prisma {
     targetRankId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    declineReason?: NullableStringFieldUpdateOperationsInput | string | null
     appliedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 

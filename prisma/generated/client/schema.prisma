@@ -47,6 +47,7 @@ enum ApplicationStatus {
   SUBMITTED
   APPROVED
   REJECTED
+  CANCELLED
 }
 
 enum PaymentStatus {
@@ -73,7 +74,6 @@ enum NotificationType {
 model BeltRank {
   id         String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name       String  @unique
-  nameBn     String? @map("name_bn")
   kyuDan     String? @map("kyu_dan")
   colorHex   String? @map("color_hex")
   orderIndex Int     @unique @map("order_index")
@@ -104,6 +104,13 @@ model Dojo {
   email     String?
   schedule  Json?
   isActive  Boolean @default(true) @map("is_active")
+
+  // Renewal — dojos pay an annual federation fee, mirrors how members renew.
+  annualFee  Decimal?  @map("annual_fee") @db.Decimal(10, 2)
+  expiryDate DateTime? @map("expiry_date")
+
+  // Renewal orders placed by the DOJO_OWNER for this dojo.
+  renewalOrders ShopOrder[] @relation("DojoRenewalOrders")
 
   // The dojo head is the Member with role = DOJO_OWNER and dojoId = this.id.
   // A partial unique index `members_one_owner_per_dojo` enforces "at most one
@@ -239,6 +246,15 @@ model GradingEvent {
   isOpen       Boolean  @default(true) @map("is_open")
   notes        String?
 
+  // Soft-cancel: a cancelled event keeps its row + Grading children for audit,
+  // but applications flip to CANCELLED and no further results may be drafted.
+  cancelledAt  DateTime? @map("cancelled_at")
+  cancelReason String?   @map("cancel_reason")
+
+  // Results lifecycle: Grading rows exist as soon as the dojo drafts them,
+  // but stay hidden from students until resultsPublishedAt is set.
+  resultsPublishedAt DateTime? @map("results_published_at")
+
   targetRank   BeltRank?            @relation("EventTargetRank", fields: [targetRankId], references: [id])
   gradings     Grading[]
   applications GradingApplication[]
@@ -256,17 +272,24 @@ model GradingEvent {
 model GradingApplication {
   id             String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   memberId       String            @map("member_id") @db.Uuid
-  gradingEventId String            @map("grading_event_id") @db.Uuid
+  gradingEventId String?           @map("grading_event_id") @db.Uuid
   targetRankId   String?           @map("target_rank_id") @db.Uuid
   status         ApplicationStatus @default(SUBMITTED)
   notes          String?
+  declineReason  String?           @map("decline_reason")
   appliedAt      DateTime          @default(now()) @map("applied_at")
 
-  member       Member       @relation(fields: [memberId], references: [id], onDelete: Cascade)
-  gradingEvent GradingEvent @relation(fields: [gradingEventId], references: [id], onDelete: Cascade)
-  targetRank   BeltRank?    @relation("AppTargetRank", fields: [targetRankId], references: [id])
+  member       Member        @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  gradingEvent GradingEvent? @relation(fields: [gradingEventId], references: [id], onDelete: Cascade)
+  targetRank   BeltRank?     @relation("AppTargetRank", fields: [targetRankId], references: [id])
 
-  @@unique([memberId, gradingEventId])
+  // Uniqueness is enforced at the DB level by two partial indexes (see
+  // scripts/migrations/2026-06-24-belt-test-requests.sql):
+  //   - one_pending_request_per_member  (when grading_event_id IS NULL)
+  //   - one_app_per_member_per_event    (when grading_event_id IS NOT NULL)
+
+  @@index([memberId])
+  @@index([gradingEventId])
   @@map("grading_applications")
 }
 
@@ -394,7 +417,12 @@ model ShopOrder {
   membershipFee      Decimal?      @map("membership_fee") @db.Decimal(10, 2)
   notes              String?
 
+  // Dojo renewal: when set, this order extends dojo.expiryDate on payment.
+  dojoId              String? @map("dojo_id") @db.Uuid
+  includesDojoRenewal Boolean @default(false) @map("includes_dojo_renewal")
+
   member     Member          @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  dojo       Dojo?           @relation("DojoRenewalOrders", fields: [dojoId], references: [id])
   orderItems ShopOrderItem[]
 
   createdAt DateTime @default(now()) @map("created_at")

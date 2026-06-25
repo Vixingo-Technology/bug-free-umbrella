@@ -123,7 +123,6 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
 exports.Prisma.BeltRankScalarFieldEnum = {
   id: 'id',
   name: 'name',
-  nameBn: 'nameBn',
   kyuDan: 'kyuDan',
   colorHex: 'colorHex',
   orderIndex: 'orderIndex',
@@ -142,6 +141,8 @@ exports.Prisma.DojoScalarFieldEnum = {
   email: 'email',
   schedule: 'schedule',
   isActive: 'isActive',
+  annualFee: 'annualFee',
+  expiryDate: 'expiryDate',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -209,6 +210,9 @@ exports.Prisma.GradingEventScalarFieldEnum = {
   targetRankId: 'targetRankId',
   isOpen: 'isOpen',
   notes: 'notes',
+  cancelledAt: 'cancelledAt',
+  cancelReason: 'cancelReason',
+  resultsPublishedAt: 'resultsPublishedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -220,6 +224,7 @@ exports.Prisma.GradingApplicationScalarFieldEnum = {
   targetRankId: 'targetRankId',
   status: 'status',
   notes: 'notes',
+  declineReason: 'declineReason',
   appliedAt: 'appliedAt'
 };
 
@@ -292,6 +297,8 @@ exports.Prisma.ShopOrderScalarFieldEnum = {
   includesMembership: 'includesMembership',
   membershipFee: 'membershipFee',
   notes: 'notes',
+  dojoId: 'dojoId',
+  includesDojoRenewal: 'includesDojoRenewal',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -390,7 +397,8 @@ exports.MembershipStatus = exports.$Enums.MembershipStatus = {
 exports.ApplicationStatus = exports.$Enums.ApplicationStatus = {
   SUBMITTED: 'SUBMITTED',
   APPROVED: 'APPROVED',
-  REJECTED: 'REJECTED'
+  REJECTED: 'REJECTED',
+  CANCELLED: 'CANCELLED'
 };
 
 exports.GradingResult = exports.$Enums.GradingResult = {

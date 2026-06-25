@@ -10,8 +10,18 @@ import {
     resendInviteAction,
 } from "@/app/actions/admin-members";
 
-type Role = "STUDENT" | "INSTRUCTOR" | "ADMIN";
+type Role = "STUDENT" | "INSTRUCTOR" | "DOJO_MANAGER" | "DOJO_OWNER" | "ADMIN";
 type Status = "PENDING" | "ACTIVE" | "EXPIRED" | "SUSPENDED";
+
+const ROLE_LABELS: Record<Role, string> = {
+    STUDENT: "Student",
+    INSTRUCTOR: "Instructor",
+    DOJO_MANAGER: "Dojo Manager",
+    DOJO_OWNER: "Dojo Owner",
+    ADMIN: "Admin",
+};
+
+const ROLE_VALUES: Role[] = ["STUDENT", "INSTRUCTOR", "DOJO_MANAGER", "DOJO_OWNER", "ADMIN"];
 
 type Member = {
     id: string;
@@ -29,6 +39,8 @@ type Member = {
 
 const roleStyles: Record<Role, string> = {
     ADMIN: "bg-amber-50 text-amber-700 border-amber-200",
+    DOJO_OWNER: "bg-purple-50 text-purple-700 border-purple-200",
+    DOJO_MANAGER: "bg-indigo-50 text-indigo-700 border-indigo-200",
     INSTRUCTOR: "bg-blue-50 text-blue-700 border-blue-200",
     STUDENT: "bg-emerald-50 text-emerald-700 border-emerald-200",
 };
@@ -102,9 +114,7 @@ export default function MembersAdminClient({ members }: { members: Member[] }) {
                     onChange={(v) => setRoleFilter(v as "ALL" | Role)}
                     options={[
                         { v: "ALL", l: "All roles" },
-                        { v: "STUDENT", l: "Students" },
-                        { v: "INSTRUCTOR", l: "Instructors" },
-                        { v: "ADMIN", l: "Admins" },
+                        ...ROLE_VALUES.map((r) => ({ v: r, l: ROLE_LABELS[r] })),
                     ]}
                 />
                 <Select
@@ -215,7 +225,7 @@ function Row({ member, onFlash }: { member: Member; onFlash: (k: "ok" | "err", m
             const res = await updateMemberRoleAction(fd);
             if (res.ok) {
                 setRole(next);
-                onFlash("ok", `Role changed to ${next.toLowerCase()}.`);
+                onFlash("ok", `Role changed to ${ROLE_LABELS[next]}.`);
             } else {
                 onFlash("err", res.error);
             }
@@ -275,11 +285,7 @@ function Row({ member, onFlash }: { member: Member; onFlash: (k: "ok" | "err", m
                 <InlineSelect
                     value={role}
                     onChange={(v) => changeRole(v as Role)}
-                    options={[
-                        { v: "STUDENT", l: "Student" },
-                        { v: "INSTRUCTOR", l: "Instructor" },
-                        { v: "ADMIN", l: "Admin" },
-                    ]}
+                    options={ROLE_VALUES.map((r) => ({ v: r, l: ROLE_LABELS[r] }))}
                     badgeClass={roleStyles[role]}
                 />
             </td>
@@ -428,20 +434,22 @@ function InviteModal({ onClose, onFlash }: { onClose: () => void; onFlash: (k: "
 
                     <div>
                         <label className="block text-xs font-bold tracking-widest uppercase text-zinc-500 mb-2">Role</label>
-                        <div className="grid grid-cols-3 gap-2">
-                            {(["STUDENT", "INSTRUCTOR", "ADMIN"] as const).map((r) => (
+                        <div className="grid grid-cols-2 gap-2">
+                            {ROLE_VALUES.map((r, i) => (
                                 <button
                                     type="button"
                                     key={r}
                                     onClick={() => setRole(r)}
                                     className={`flex flex-col items-center gap-1.5 py-3 rounded-xl border text-xs font-semibold transition-all ${
+                                        i === ROLE_VALUES.length - 1 ? "col-span-2" : ""
+                                    } ${
                                         role === r
                                             ? "border-accent-red bg-accent-red/5 text-accent-red"
                                             : "border-zinc-200 text-zinc-600 hover:border-zinc-300"
                                     }`}
                                 >
                                     <Shield size={14} />
-                                    {r.charAt(0) + r.slice(1).toLowerCase()}
+                                    {ROLE_LABELS[r]}
                                 </button>
                             ))}
                         </div>

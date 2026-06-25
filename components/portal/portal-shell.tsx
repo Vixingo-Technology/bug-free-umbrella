@@ -28,6 +28,7 @@ import {
 import Logo from "@/assets/jka_logo.svg";
 import { signoutAction } from "@/app/actions/auth";
 import { createClient } from "@/lib/supabase/client";
+import { playNotificationChime } from "@/lib/notification-sound";
 
 const studentNavItems = [
     { label: "Dashboard",    href: "/portal",              icon: LayoutDashboard },
@@ -110,7 +111,43 @@ export default function PortalShell({ userId, initialRole = "STUDENT", children 
         }
 
         fetchMember();
+
+        // Realtime: bump badge + chime when a new notification arrives.
+        // Requires the `notifications` table to be in the supabase_realtime
+        // publication — toggle it under Database → Replication in Supabase.
+        const channel = supabase
+            .channel(`notif:${userId}`)
+            .on(
+                "postgres_changes",
+                {
+                    event: "INSERT",
+                    schema: "public",
+                    table: "notifications",
+                    filter: `member_id=eq.${userId}`,
+                },
+                () => {
+                    setUnreadCount((c) => c + 1);
+                    playNotificationChime();
+                }
+            )
+            .subscribe();
+
+        return () => {
+            supabase.removeChannel(channel);
+        };
     }, [userId]);
+
+    // Listen for the notifications page marking things read so the badge clears
+    // without a full refetch. Dispatched by NotificationsClient.
+    useEffect(() => {
+        function onRead(e: Event) {
+            const detail = (e as CustomEvent<{ delta?: number; all?: boolean }>).detail;
+            if (detail?.all) setUnreadCount(0);
+            else if (detail?.delta) setUnreadCount((c) => Math.max(0, c - detail.delta!));
+        }
+        window.addEventListener("jka:notifications-read", onRead);
+        return () => window.removeEventListener("jka:notifications-read", onRead);
+    }, []);
 
     const roleColors: Record<string, string> = {
         ADMIN: "from-amber-500 to-amber-600",

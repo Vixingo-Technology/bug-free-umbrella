@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { emitPaymentSuccess } from "@/lib/n8n";
+import type { Prisma } from "@/prisma/generated/client";
 
 // Called by SSLCommerz after successful payment (success_url).
 // SSLCommerz POSTs form data here; we validate, mark order paid, redirect.
@@ -30,38 +31,63 @@ export async function POST(request: Request) {
             return NextResponse.redirect(new URL(`/portal/checkout?orderId=${orderId}&failed=1`, request.url));
         }
 
-        // Mark order paid + activate membership
+        // Mark order paid + activate membership (member and/or dojo)
         const order = await prisma.shopOrder.findUnique({ where: { id: orderId } });
         if (order && order.paymentStatus !== "PAID") {
             const expiry = new Date();
             expiry.setFullYear(expiry.getFullYear() + 1);
 
-            const [, updatedMember] = await prisma.$transaction([
+            const writes: Prisma.PrismaPromise<unknown>[] = [
                 prisma.shopOrder.update({
                     where: { id: orderId },
                     data: { paymentStatus: "PAID", transactionId: valId },
                 }),
-                prisma.member.update({
-                    where: { id: order.memberId },
-                    data: {
-                        membershipStatus: "ACTIVE",
-                        onboardingComplete: true,
-                        expiryDate: expiry,
-                    },
-                }),
-            ]);
+            ];
 
-            // Fire-and-forget n8n webhook (email + WhatsApp confirmation)
-            await emitPaymentSuccess({
-                memberId: updatedMember.id,
-                memberFullName: updatedMember.fullName,
-                memberEmail: updatedMember.email,
-                orderId,
-                total: Number(order.total),
-                currency: order.currency,
-                includesMembership: order.includesMembership,
-                membershipExpiresAt: expiry.toISOString(),
-            });
+            // Member-level renewal (onboarding fee or /portal/renew) — extends
+            // the buyer's own membership.
+            if (order.includesMembership) {
+                writes.push(
+                    prisma.member.update({
+                        where: { id: order.memberId },
+                        data: {
+                            membershipStatus: "ACTIVE",
+                            onboardingComplete: true,
+                            expiryDate: expiry,
+                        },
+                    }),
+                );
+            }
+
+            // Dojo-level renewal — extends the dojo's federation membership.
+            if (order.includesDojoRenewal && order.dojoId) {
+                writes.push(
+                    prisma.dojo.update({
+                        where: { id: order.dojoId },
+                        data: { expiryDate: expiry, isActive: true },
+                    }),
+                );
+            }
+
+            const results = await prisma.$transaction(writes);
+            const updatedMember = order.includesMembership
+                ? (results[1] as Awaited<ReturnType<typeof prisma.member.update>>)
+                : await prisma.member.findUnique({ where: { id: order.memberId } });
+
+            if (updatedMember) {
+                // Fire-and-forget n8n webhook (email + WhatsApp confirmation)
+                await emitPaymentSuccess({
+                    memberId: updatedMember.id,
+                    memberFullName: updatedMember.fullName,
+                    memberEmail: updatedMember.email,
+                    orderId,
+                    total: Number(order.total),
+                    currency: order.currency,
+                    includesMembership:
+                        order.includesMembership || order.includesDojoRenewal,
+                    membershipExpiresAt: expiry.toISOString(),
+                });
+            }
         }
 
         return NextResponse.redirect(new URL(`/portal/payment-success?orderId=${orderId}`, request.url));

@@ -31,7 +31,9 @@ export default function NotificationsClient({ notifications, userId }: Props) {
     const unread = notifications.filter((n) => !readIds.has(n.id));
 
     function handleMarkRead(id: string) {
+        if (readIds.has(id)) return;
         setReadIds(prev => new Set([...prev, id]));
+        window.dispatchEvent(new CustomEvent("jka:notifications-read", { detail: { delta: 1 } }));
         startTransition(async () => {
             await markNotificationReadAction(id);
         });
@@ -39,6 +41,7 @@ export default function NotificationsClient({ notifications, userId }: Props) {
 
     function handleMarkAllRead() {
         setReadIds(new Set(notifications.map((n) => n.id)));
+        window.dispatchEvent(new CustomEvent("jka:notifications-read", { detail: { all: true } }));
         startTransition(async () => {
             await markAllReadAction();
         });

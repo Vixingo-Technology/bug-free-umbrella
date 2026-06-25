@@ -3,13 +3,16 @@ import Link from "next/link";
 import {
     Activity,
     AlertCircle,
+    AlertTriangle,
     ArrowRight,
     CalendarClock,
+    CreditCard,
     GraduationCap,
     Megaphone,
     PartyPopper,
     ShieldAlert,
     Users,
+    XCircle,
 } from "lucide-react";
 import DojoPageHeader from "@/components/dojo/page-header";
 import { hasAtLeast, ROLE_LABEL } from "@/lib/dojo-roles";
@@ -38,9 +41,13 @@ export default async function DojoOverviewPage({
     const showDenied = params.denied === "1";
 
     const stats = await loadStats(session.dojo?.id ?? null);
+    const renewal = session.dojo
+        ? await loadRenewalStatus(session.dojo.id)
+        : null;
 
     return (
         <>
+            {renewal && <RenewalBanner status={renewal} />}
             {showWelcome && (
                 <Banner
                     tone="success"
@@ -233,6 +240,84 @@ async function loadStats(dojoId: string | null): Promise<Stats> {
         expiringSoon,
         expired,
     };
+}
+
+type RenewalStatus = {
+    state: "EXPIRING" | "EXPIRED";
+    daysLeft: number; // negative when expired
+    expiryLabel: string;
+};
+
+async function loadRenewalStatus(
+    dojoId: string,
+): Promise<RenewalStatus | null> {
+    const dojo = await prisma.dojo.findUnique({
+        where: { id: dojoId },
+        select: { expiryDate: true },
+    });
+    if (!dojo?.expiryDate) return null;
+
+    const ms = dojo.expiryDate.getTime() - Date.now();
+    const daysLeft = Math.ceil(ms / (1000 * 60 * 60 * 24));
+    if (daysLeft > 30) return null;
+
+    const expiryLabel = dojo.expiryDate.toLocaleDateString("en-GB", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+    });
+    return {
+        state: daysLeft < 0 ? "EXPIRED" : "EXPIRING",
+        daysLeft,
+        expiryLabel,
+    };
+}
+
+function RenewalBanner({ status }: { status: RenewalStatus }) {
+    const expired = status.state === "EXPIRED";
+    const palette = expired
+        ? "bg-red-50 border-red-200 text-red-900"
+        : "bg-amber-50 border-amber-200 text-amber-900";
+    const iconBg = expired
+        ? "bg-red-500 text-white"
+        : "bg-amber-500 text-white";
+    const title = expired
+        ? "Dojo membership has expired"
+        : "Dojo membership expiring soon";
+    const body = expired
+        ? `Expired on ${status.expiryLabel} (${Math.abs(status.daysLeft)} day${
+              Math.abs(status.daysLeft) === 1 ? "" : "s"
+          } ago). Renew now to restore your public listing.`
+        : `Expires ${status.expiryLabel} — ${status.daysLeft} day${
+              status.daysLeft === 1 ? "" : "s"
+          } left. Renew now to avoid interruption.`;
+
+    return (
+        <div
+            className={`rounded-sm border p-5 mb-8 flex items-start gap-4 ${palette}`}
+        >
+            <div
+                className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${iconBg}`}
+            >
+                {expired ? <XCircle size={20} /> : <AlertTriangle size={20} />}
+            </div>
+            <div className="flex-1 min-w-0">
+                <h2 className="font-serif text-base font-bold mb-1">{title}</h2>
+                <p className="text-sm leading-relaxed">{body}</p>
+            </div>
+            <Link
+                href="/dojo/dashboard/settings#renewal"
+                className={`inline-flex items-center gap-2 text-xs font-bold tracking-widest uppercase px-3 py-2 rounded-sm shrink-0 transition-colors ${
+                    expired
+                        ? "bg-red-600 hover:bg-red-700 text-white"
+                        : "bg-amber-600 hover:bg-amber-700 text-white"
+                }`}
+            >
+                <CreditCard size={12} />
+                Renew now
+            </Link>
+        </div>
+    );
 }
 
 function Banner({

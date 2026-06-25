@@ -7,7 +7,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 
 type ActionResult = { ok: true } | { ok: false; error: string };
 
-const ROLES = ["STUDENT", "INSTRUCTOR", "ADMIN"] as const;
+const ROLES = ["STUDENT", "INSTRUCTOR", "DOJO_MANAGER", "DOJO_OWNER", "ADMIN"] as const;
 type Role = (typeof ROLES)[number];
 
 const STATUSES = ["PENDING", "ACTIVE", "EXPIRED", "SUSPENDED"] as const;

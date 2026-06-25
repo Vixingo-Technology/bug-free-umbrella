@@ -3,11 +3,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState, useTransition } from "react";
-import { Eye, Home, LogOut, Menu, X } from "lucide-react";
+import { useEffect, useState, useTransition } from "react";
+import { Bell, Eye, Home, LogOut, Menu, X } from "lucide-react";
 import Logo from "@/assets/jka_logo.svg";
 import { signoutAction } from "@/app/actions/auth";
 import { setDojoPreviewRole } from "@/app/actions/dojo-preview";
+import { createClient } from "@/lib/supabase/client";
+import { playNotificationChime } from "@/lib/notification-sound";
 import {
     DOJO_ROLES,
     ROLE_BADGE_COLOR,
@@ -45,12 +47,64 @@ const ROLE_RANK: Record<DojoRole, number> = {
 export default function DojoDashboardShell({ children, session }: Props) {
     const pathname = usePathname();
     const [mobileOpen, setMobileOpen] = useState(false);
+    const [unreadCount, setUnreadCount] = useState(0);
 
     const visibleItems = DOJO_NAV.filter(
         (item) => ROLE_RANK[session.role] >= ROLE_RANK[item.min]
     );
 
     const grouped = groupBy(visibleItems, (i) => i.group);
+
+    useEffect(() => {
+        const supabase = createClient();
+
+        async function fetchUnread() {
+            const { count } = await supabase
+                .from("notifications")
+                .select("*", { count: "exact", head: true })
+                .eq("member_id", session.userId)
+                .eq("is_read", false);
+            setUnreadCount(count ?? 0);
+        }
+
+        fetchUnread();
+
+        // Realtime: bump badge + chime when a new notification arrives.
+        // Requires the `notifications` table to be in supabase_realtime
+        // publication — toggle under Database → Replication in Supabase.
+        const channel = supabase
+            .channel(`dojo-notif:${session.userId}`)
+            .on(
+                "postgres_changes",
+                {
+                    event: "INSERT",
+                    schema: "public",
+                    table: "notifications",
+                    filter: `member_id=eq.${session.userId}`,
+                },
+                () => {
+                    setUnreadCount((c) => c + 1);
+                    playNotificationChime();
+                }
+            )
+            .subscribe();
+
+        return () => {
+            supabase.removeChannel(channel);
+        };
+    }, [session.userId]);
+
+    // Mirror portal-shell: clear the badge when the notifications page marks
+    // items read so the dot disappears without a refetch.
+    useEffect(() => {
+        function onRead(e: Event) {
+            const detail = (e as CustomEvent<{ delta?: number; all?: boolean }>).detail;
+            if (detail?.all) setUnreadCount(0);
+            else if (detail?.delta) setUnreadCount((c) => Math.max(0, c - detail.delta!));
+        }
+        window.addEventListener("jka:notifications-read", onRead);
+        return () => window.removeEventListener("jka:notifications-read", onRead);
+    }, []);
 
     return (
         <div className="min-h-screen bg-[#f8f8f8] flex">
@@ -184,6 +238,22 @@ export default function DojoDashboardShell({ children, session }: Props) {
                             </span>
                         </div>
                         <div className="flex items-center gap-3 ml-auto">
+                            <Link
+                                href="/portal/notifications"
+                                aria-label={
+                                    unreadCount > 0
+                                        ? `${unreadCount} unread notification${unreadCount === 1 ? "" : "s"}`
+                                        : "Notifications"
+                                }
+                                className="relative p-2 rounded-lg text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900 transition-colors"
+                            >
+                                <Bell size={18} />
+                                {unreadCount > 0 && (
+                                    <span className="absolute -top-0.5 -right-0.5 min-w-[16px] h-4 px-1 bg-accent-red text-white text-[9px] font-bold tracking-wider rounded-full flex items-center justify-center">
+                                        {unreadCount > 9 ? "9+" : unreadCount}
+                                    </span>
+                                )}
+                            </Link>
                             <RoleBadge
                                 role={session.role}
                                 preview={session.isPreviewing}

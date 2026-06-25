@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import DojoPageHeader from "@/components/dojo/page-header";
 import AppliedStage from "@/components/dojo/gradings/applied-stage";
+import ScheduledList from "@/components/dojo/gradings/scheduled-list";
 import { hasAtLeast, ROLE_LABEL } from "@/lib/dojo-roles";
 import { requireDojoRole } from "@/lib/dojo-session";
 import { prisma } from "@/lib/prisma";
@@ -115,6 +116,20 @@ export default async function GradingsPage() {
                     dojoAddress={session.dojo?.address ?? null}
                 />
             </Stage>
+
+            {session.dojo && (
+                <section className="bg-white border border-zinc-200 rounded-sm shadow-sm mb-6">
+                    <div className="px-5 py-4 border-b border-zinc-200">
+                        <h2 className="text-sm font-bold text-zinc-900">Scheduled belt tests</h2>
+                        <p className="text-xs text-zinc-500 mt-0.5">
+                            Edit details, cancel, draft results, and publish.
+                        </p>
+                    </div>
+                    <div className="px-5">
+                        <ScheduledList dojoId={session.dojo.id} />
+                    </div>
+                </section>
+            )}
 
             <Stage
                 title="2 · Qualified after test"

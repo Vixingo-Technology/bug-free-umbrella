@@ -5,12 +5,14 @@ import { motion } from "motion/react";
 import {
     Building2, Plus, Search, X, Pencil, Trash2, MapPin, Phone, Mail,
     Users, UserCheck, AlertCircle, CheckCircle2, ChevronDown, Power,
+    Calendar, Send, Loader2,
 } from "lucide-react";
 import {
     createDojoAction,
     updateDojoAction,
     deleteDojoAction,
     assignDojoInstructorAction,
+    sendDojoRenewalReminderAction,
 } from "@/app/actions/admin-dojos";
 
 type Instructor = { id: string; fullName: string; email: string; role: string };
@@ -26,10 +28,25 @@ type Dojo = {
     email: string | null;
     schedule: unknown;
     isActive: boolean;
+    annualFee: number | null;
+    expiryDate: string | null;
     headInstructorId: string | null;
     headInstructor: { id: string; fullName: string; email: string } | null;
     _count: { members: number };
 };
+
+const fmtDate = new Intl.DateTimeFormat("en-GB", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+});
+
+function daysUntil(iso: string | null): number | null {
+    if (!iso) return null;
+    const t = new Date(iso).getTime();
+    if (Number.isNaN(t)) return null;
+    return Math.ceil((t - Date.now()) / (1000 * 60 * 60 * 24));
+}
 
 export default function DojosAdminClient({
     dojos, instructors,
@@ -246,6 +263,8 @@ function DojoCard({
                         <Users size={11} className="text-zinc-400" /> {dojo._count.members} members
                     </p>
                 </div>
+
+                <ExpiryRow dojo={dojo} onFlash={onFlash} />
 
                 <div className="mt-4 pt-4 border-t border-zinc-100">
                     <p className="text-[10px] font-bold tracking-widest uppercase text-zinc-500 mb-2 flex items-center gap-1">
@@ -498,6 +517,86 @@ function Field({ label, children, required }: { label: string; children: React.R
                 {label}{required && <span className="text-accent-red ml-1">*</span>}
             </label>
             {children}
+        </div>
+    );
+}
+
+function ExpiryRow({
+    dojo,
+    onFlash,
+}: {
+    dojo: Dojo;
+    onFlash: (k: "ok" | "err", m: string) => void;
+}) {
+    const [isPending, startTransition] = useTransition();
+    const days = daysUntil(dojo.expiryDate);
+    const expiryLabel = dojo.expiryDate
+        ? fmtDate.format(new Date(dojo.expiryDate))
+        : "Not set";
+
+    let tone: "ok" | "warn" | "danger" | "muted" = "muted";
+    let badge = "No expiry";
+    if (dojo.expiryDate) {
+        if (days !== null && days < 0) {
+            tone = "danger";
+            badge = `Expired ${Math.abs(days)}d ago`;
+        } else if (days !== null && days <= 30) {
+            tone = "warn";
+            badge = `${days}d left`;
+        } else {
+            tone = "ok";
+            badge = days !== null ? `${days}d left` : "Active";
+        }
+    }
+
+    const badgeCls =
+        tone === "ok"
+            ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+            : tone === "warn"
+              ? "bg-amber-50 text-amber-700 border-amber-200"
+              : tone === "danger"
+                ? "bg-red-50 text-red-700 border-red-200"
+                : "bg-zinc-50 text-zinc-500 border-zinc-200";
+
+    function sendReminder() {
+        startTransition(async () => {
+            const res = await sendDojoRenewalReminderAction({ dojoId: dojo.id });
+            if (res.ok) onFlash("ok", "Renewal reminder sent.");
+            else onFlash("err", res.error);
+        });
+    }
+
+    return (
+        <div className="mt-4 pt-4 border-t border-zinc-100">
+            <p className="text-[10px] font-bold tracking-widest uppercase text-zinc-500 mb-2 flex items-center gap-1">
+                <Calendar size={10} /> Membership expires
+            </p>
+            <div className="flex items-center justify-between gap-2">
+                <div className="min-w-0">
+                    <p className="text-sm font-semibold text-zinc-900 truncate">
+                        {expiryLabel}
+                    </p>
+                    <span
+                        className={`inline-block mt-1 text-[10px] font-bold tracking-widest uppercase px-2 py-0.5 rounded-full border ${badgeCls}`}
+                    >
+                        {badge}
+                    </span>
+                </div>
+                <button
+                    type="button"
+                    onClick={sendReminder}
+                    disabled={isPending}
+                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-zinc-700 hover:text-accent-red hover:bg-red-50 border border-zinc-200 hover:border-red-200 px-3 py-2 rounded-lg transition-colors disabled:opacity-50 shrink-0"
+                    title="Email the dojo owner a renewal reminder"
+                >
+                    {isPending ? (
+                        <Loader2 size={12} className="animate-spin" />
+                    ) : (
+                        <Send size={12} />
+                    )}
+                    Send email
+                </button>
+            </div>
         </div>
     );
 }

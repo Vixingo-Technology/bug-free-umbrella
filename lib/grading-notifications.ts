@@ -51,3 +51,52 @@ export function buildDeclinedNotification(args: {
     link: "/portal/grading",
   };
 }
+
+export function buildExamUpdatedNotification(args: {
+  eventName: string;
+  eventDate: Date;
+  location: string | null;
+}): NotificationPayload {
+  const where = args.location ? ` at ${args.location}` : "";
+  return {
+    title: "Belt test details updated",
+    message: `Your ${args.eventName} is now on ${formatDate(args.eventDate)} (${formatTime(args.eventDate)})${where}.`,
+    type: "GRADING",
+    link: "/portal/grading",
+  };
+}
+
+export function buildExamCancelledNotification(args: {
+  eventName: string;
+  reason: string | null;
+}): NotificationPayload {
+  const reason = args.reason?.trim();
+  return {
+    title: "Belt test cancelled",
+    message: reason
+      ? `Your dojo cancelled ${args.eventName}. Reason: ${reason}`
+      : `Your dojo cancelled ${args.eventName}. Please speak with your instructor.`,
+    type: "GRADING",
+    link: "/portal/grading",
+  };
+}
+
+export function buildResultPublishedNotification(args: {
+  passed: boolean;
+  toRankName: string | null;
+}): NotificationPayload {
+  if (args.passed && args.toRankName) {
+    return {
+      title: "Congratulations — you've passed!",
+      message: `Your belt test result is in. You've earned ${args.toRankName}.`,
+      type: "GRADING",
+      link: "/portal/grading",
+    };
+  }
+  return {
+    title: "Your belt test result is ready",
+    message: "Your instructor has published your result and feedback.",
+    type: "GRADING",
+    link: "/portal/grading",
+  };
+}
