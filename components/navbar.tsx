@@ -92,7 +92,7 @@ export default function Navbar() {
             {user ? (
               <>
                 <Link
-                  href="/dashboard"
+                  href="/portal"
                   className="inline-flex items-center gap-1.5 text-accent-red hover:text-accent-gold transition-all duration-300"
                 >
                   <LayoutDashboard size={14} />
@@ -157,7 +157,7 @@ export default function Navbar() {
           {user ? (
             <>
               <Link
-                href="/dashboard"
+                href="/portal"
                 onClick={() => setMobileMenuOpen(false)}
                 className="mt-6 px-8 py-3 bg-accent-red hover:bg-accent-red/90 text-white font-semibold tracking-widest uppercase transition-colors inline-flex items-center gap-2"
               >

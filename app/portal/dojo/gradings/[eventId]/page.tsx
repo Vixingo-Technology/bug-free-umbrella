@@ -10,7 +10,7 @@ export default async function EventDetailPage({
 }) {
   const { eventId } = await params;
   const session = await requireDojoRole("INSTRUCTOR");
-  if (!session.dojo) redirect("/dojo/dashboard");
+  if (!session.dojo) redirect("/portal/dojo");
 
   const event = await prisma.gradingEvent.findFirst({
     where: {

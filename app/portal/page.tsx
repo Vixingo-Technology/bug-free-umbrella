@@ -5,9 +5,20 @@ import { serialize } from "@/lib/serialize";
 import type { MemberRole } from "@/prisma/generated/client";
 import PortalDashboardClient from "@/components/portal/portal-dashboard-client";
 import AdminDashboardClient from "@/components/portal/admin/admin-dashboard-client";
-import InstructorDashboard from "@/components/dashboard/instructor-dashboard";
+import DojoOverview from "@/components/portal/dojo-overview";
+import { getDojoSession } from "@/lib/dojo-session";
+import { isDojoRole } from "@/lib/dojo-roles";
 
-export default async function PortalDashboardPage() {
+type SearchParams = Promise<{
+    enlistment?: string;
+    denied?: string;
+}>;
+
+export default async function PortalDashboardPage({
+    searchParams,
+}: {
+    searchParams: SearchParams;
+}) {
     const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
 
@@ -29,49 +40,24 @@ export default async function PortalDashboardPage() {
         return <AdminPortalDashboard userId={user.id} />;
     }
 
-    if (role === "INSTRUCTOR") {
-        return <InstructorPortalDashboard userId={user.id} />;
+    if (isDojoRole(role)) {
+        const params = await searchParams;
+        const session = await getDojoSession();
+        if (!session) redirect("/login");
+        return (
+            <DojoOverview
+                role={session.role}
+                fullName={session.fullName}
+                dojoId={session.dojo?.id ?? null}
+                dojoName={session.dojo?.name ?? null}
+                pendingApproval={session.pendingApproval}
+                showWelcome={params.enlistment === "success"}
+                showDenied={params.denied === "1"}
+            />
+        );
     }
 
     return <StudentPortalDashboard userId={user.id} />;
-}
-
-async function InstructorPortalDashboard({ userId }: { userId: string }) {
-    let member: any = null;
-    let dojoMembers: any[] = [];
-    let dojoGradings: any[] = [];
-
-    try {
-        member = await prisma.member.findUnique({
-            where: { id: userId },
-            include: {
-                dojo: true,
-            },
-        });
-
-        if (member?.dojoId) {
-            dojoMembers = await prisma.member.findMany({
-                where: { dojoId: member.dojoId },
-                take: 50,
-            });
-            dojoGradings = await prisma.grading.findMany({
-                where: { memberId: { in: dojoMembers.map((m: any) => m.id) } },
-                include: { member: true, fromRank: true, toRank: true },
-                orderBy: { id: "desc" },
-                take: 20,
-            });
-        }
-    } catch {
-        // DB not configured
-    }
-
-    return (
-        <InstructorDashboard
-            member={serialize(member)}
-            dojoMembers={serialize(dojoMembers) as never}
-            dojoGradings={serialize(dojoGradings) as never}
-        />
-    );
 }
 
 async function StudentPortalDashboard({ userId }: { userId: string }) {

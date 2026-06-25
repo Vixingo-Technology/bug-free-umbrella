@@ -36,7 +36,7 @@ export async function saveDojoAnnualFeeAction(input: {
     return { error: "Could not save annual fee. Try again." };
   }
 
-  revalidatePath("/dojo/dashboard/settings");
+  revalidatePath("/portal/dojo/settings");
   return { success: true };
 }
 

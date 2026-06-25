@@ -18,7 +18,7 @@ import {
   cancelScheduledExamAction,
   upsertDraftResultsAction,
   publishResultsAction,
-} from "@/app/dojo/dashboard/gradings/actions";
+} from "@/app/portal/dojo/gradings/actions";
 
 type Event = {
   id: string;
@@ -86,7 +86,7 @@ export default function EventDetailClient({
     <>
       <div className="mb-4">
         <Link
-          href="/dojo/dashboard/gradings"
+          href="/portal/dojo/gradings"
           className="inline-flex items-center gap-1.5 text-[10px] tracking-widest uppercase font-bold text-zinc-500 hover:text-accent-red"
         >
           <ArrowLeft size={12} />

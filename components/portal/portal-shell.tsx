@@ -29,6 +29,14 @@ import Logo from "@/assets/jka_logo.svg";
 import { signoutAction } from "@/app/actions/auth";
 import { createClient } from "@/lib/supabase/client";
 import { playNotificationChime } from "@/lib/notification-sound";
+import { DOJO_NAV, GROUP_LABEL, type DojoNavItem } from "@/lib/dojo-nav";
+import { type DojoRole } from "@/lib/dojo-roles";
+
+const DOJO_ROLE_RANK: Record<DojoRole, number> = {
+    INSTRUCTOR: 1,
+    DOJO_MANAGER: 2,
+    DOJO_OWNER: 3,
+};
 
 const studentNavItems = [
     { label: "Dashboard",    href: "/portal",              icon: LayoutDashboard },
@@ -58,10 +66,9 @@ const adminNavItems = [
     { label: "Dojos",    href: "/portal/admin/dojos",    icon: Building2 },
 ];
 
-// Instructors get a focused portal — dashboard surfaces their dojo + roster,
-// plus shared event/notification/profile pages.
-const instructorNavItems = [
-    { label: "Dashboard",     href: "/portal",              icon: LayoutDashboard },
+// Dojo staff (Instructor / Manager / Dojo Head) share the personal sidebar;
+// their dojo-specific pages are surfaced as a second nav section below.
+const dojoPersonalNavItems = [
     { label: "Events",        href: "/portal/events",       icon: CalendarDays },
     { label: "Notifications", href: "/portal/notifications",icon: Bell },
     { label: "My Profile",    href: "/portal/profile",      icon: User },
@@ -151,6 +158,8 @@ export default function PortalShell({ userId, initialRole = "STUDENT", children 
 
     const roleColors: Record<string, string> = {
         ADMIN: "from-amber-500 to-amber-600",
+        DOJO_OWNER: "from-rose-500 to-red-600",
+        DOJO_MANAGER: "from-blue-500 to-indigo-600",
         INSTRUCTOR: "from-blue-500 to-indigo-600",
         STUDENT: "from-emerald-500 to-green-600",
     };
@@ -163,17 +172,35 @@ export default function PortalShell({ userId, initialRole = "STUDENT", children 
     }, [pathname]);
 
     const isAdmin = member?.role === "ADMIN";
-    const isInstructor = member?.role === "INSTRUCTOR";
+    const isDojoStaff =
+        member?.role === "INSTRUCTOR" ||
+        member?.role === "DOJO_MANAGER" ||
+        member?.role === "DOJO_OWNER";
     const navItems = isAdmin
         ? adminPersonalNavItems
-        : isInstructor
-            ? instructorNavItems
+        : isDojoStaff
+            ? dojoPersonalNavItems
             : studentNavItems;
     const portalLabel = isAdmin
         ? "Admin Portal"
-        : isInstructor
-            ? "Instructor Portal"
+        : isDojoStaff
+            ? "Dojo Console"
             : "Member Portal";
+
+    const dojoNavItems: DojoNavItem[] = isDojoStaff
+        ? DOJO_NAV.filter(
+              (item) =>
+                  DOJO_ROLE_RANK[member!.role as DojoRole] >=
+                  DOJO_ROLE_RANK[item.min]
+          )
+        : [];
+    const groupedDojo = dojoNavItems.reduce<Record<DojoNavItem["group"], DojoNavItem[]>>(
+        (acc, item) => {
+            (acc[item.group] ||= []).push(item);
+            return acc;
+        },
+        {} as Record<DojoNavItem["group"], DojoNavItem[]>,
+    );
 
     const SidebarContent = () => (
         <div className="flex flex-col h-full">
@@ -262,6 +289,35 @@ export default function PortalShell({ userId, initialRole = "STUDENT", children 
                         })}
                     </div>
                 )}
+
+                {isDojoStaff &&
+                    (Object.keys(groupedDojo) as DojoNavItem["group"][]).map((group) => (
+                        <div key={group} className="pt-5 mt-3 border-t border-zinc-100">
+                            <div className="px-3 pb-2 flex items-center gap-1.5 text-[10px] font-bold tracking-widest uppercase text-zinc-400">
+                                <Swords size={11} /> {GROUP_LABEL[group]}
+                            </div>
+                            {groupedDojo[group].map(({ label, href, icon: Icon }) => {
+                                const isActive = href === "/portal"
+                                    ? pathname === "/portal"
+                                    : pathname === href || pathname.startsWith(href + "/");
+                                return (
+                                    <Link
+                                        key={href}
+                                        href={href}
+                                        className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all group relative ${
+                                            isActive
+                                                ? "bg-zinc-900 text-white shadow-sm"
+                                                : "text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900"
+                                        }`}
+                                    >
+                                        <Icon size={17} className="flex-shrink-0" />
+                                        <span className="flex-1">{label}</span>
+                                        {isActive && <ChevronRight size={14} className="opacity-60" />}
+                                    </Link>
+                                );
+                            })}
+                        </div>
+                    ))}
             </nav>
 
             {/* Sign out */}
@@ -349,7 +405,7 @@ export default function PortalShell({ userId, initialRole = "STUDENT", children 
                         <Link href="/" className="hover:text-zinc-900 transition-colors">Home</Link>
                         <ChevronRight size={14} />
                         <span className="text-zinc-900 font-medium">
-                            {[...studentNavItems, ...adminPersonalNavItems, ...adminNavItems, ...instructorNavItems].find(n => n.href === pathname || (n.href !== "/portal" && pathname.startsWith(n.href)))?.label ?? "Portal"}
+                            {[...studentNavItems, ...adminPersonalNavItems, ...adminNavItems, ...dojoPersonalNavItems, ...DOJO_NAV].find(n => n.href === pathname || (n.href !== "/portal" && pathname.startsWith(n.href)))?.label ?? "Portal"}
                         </span>
                     </div>
 

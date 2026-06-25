@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { Loader2, CalendarPlus, X } from "lucide-react";
-import { scheduleExamAction } from "@/app/dojo/dashboard/gradings/actions";
+import { scheduleExamAction } from "@/app/portal/dojo/gradings/actions";
 
 export default function ScheduleDialog({
   selectedIds, dojoAddress, onClose, onScheduled,

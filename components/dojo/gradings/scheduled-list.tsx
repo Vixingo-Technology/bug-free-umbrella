@@ -66,7 +66,7 @@ export default async function ScheduledList({ dojoId }: { dojoId: string }) {
             <div className="flex items-center gap-2 shrink-0">
               <StateBadge state={state} />
               <Link
-                href={`/dojo/dashboard/gradings/${e.id}`}
+                href={`/portal/dojo/gradings/${e.id}`}
                 className="inline-flex items-center gap-1 text-[10px] tracking-widest uppercase font-bold text-zinc-600 hover:text-accent-red px-2 py-2"
               >
                 Open

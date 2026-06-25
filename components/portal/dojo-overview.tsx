@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import {
     Activity,
@@ -15,38 +14,69 @@ import {
     XCircle,
 } from "lucide-react";
 import DojoPageHeader from "@/components/dojo/page-header";
-import { hasAtLeast, ROLE_LABEL } from "@/lib/dojo-roles";
-import { requireDojoRole } from "@/lib/dojo-session";
+import { hasAtLeast, ROLE_LABEL, type DojoRole } from "@/lib/dojo-roles";
 import { prisma } from "@/lib/prisma";
-
-export const metadata: Metadata = {
-    title: "Dojo Dashboard — JKA Bangladesh",
-};
-
-type SearchParams = Promise<{
-    enlistment?: string;
-    denied?: string;
-}>;
 
 const WEEK_MS = 7 * 24 * 60 * 60 * 1000;
 
-export default async function DojoOverviewPage({
-    searchParams,
-}: {
-    searchParams: SearchParams;
-}) {
-    const session = await requireDojoRole("INSTRUCTOR");
-    const params = await searchParams;
-    const showWelcome = params.enlistment === "success";
-    const showDenied = params.denied === "1";
+type Stats = {
+    activeStudents: number;
+    recentJoins: number;
+    weeklyAttendanceRate: number | null;
+    weeklyCheckins: number;
+    beltTestsPending: number;
+    expiringSoon: number;
+    expired: number;
+};
 
-    const stats = await loadStats(session.dojo?.id ?? null);
-    const renewal = session.dojo
-        ? await loadRenewalStatus(session.dojo.id)
-        : null;
+type RenewalStatus = {
+    state: "EXPIRING" | "EXPIRED";
+    daysLeft: number;
+    expiryLabel: string;
+};
+
+type Props = {
+    role: DojoRole;
+    fullName: string;
+    dojoId: string | null;
+    dojoName: string | null;
+    pendingApproval: boolean;
+    showWelcome?: boolean;
+    showDenied?: boolean;
+};
+
+export default async function DojoOverview({
+    role,
+    fullName,
+    dojoId,
+    dojoName,
+    pendingApproval,
+    showWelcome = false,
+    showDenied = false,
+}: Props) {
+    const stats = await loadStats(dojoId);
+    const renewal = dojoId ? await loadRenewalStatus(dojoId) : null;
 
     return (
         <>
+            {pendingApproval && (
+                <div className="mb-6 rounded-sm border border-amber-200 bg-amber-50 text-amber-900 p-4 flex items-start gap-3">
+                    <div className="w-9 h-9 rounded-full bg-amber-500 text-white flex items-center justify-center shrink-0 text-xs font-bold">
+                        !
+                    </div>
+                    <div className="text-sm leading-relaxed">
+                        <p className="font-semibold mb-0.5">
+                            Your enlistment is awaiting JKA review
+                        </p>
+                        <p>
+                            Federation staff are verifying your application.
+                            The dashboard is unlocked with sample data until
+                            your dojo is approved — usually within 1–2 working
+                            days.
+                        </p>
+                    </div>
+                </div>
+            )}
             {renewal && <RenewalBanner status={renewal} />}
             {showWelcome && (
                 <Banner
@@ -61,15 +91,15 @@ export default async function DojoOverviewPage({
                     tone="warn"
                     icon={<ShieldAlert size={20} />}
                     title="That section is above your role"
-                    body={`You're signed in as ${ROLE_LABEL[session.role]}. Ask your Dojo Head if you need elevated access.`}
+                    body={`You're signed in as ${ROLE_LABEL[role]}. Ask your Dojo Head if you need elevated access.`}
                 />
             )}
 
             <DojoPageHeader
                 eyebrow="Overview"
-                title={`Welcome back, ${firstName(session.fullName)}`}
-                description={`You're signed in as ${ROLE_LABEL[session.role]}${
-                    session.dojo ? ` at ${session.dojo.name}` : ""
+                title={`Welcome back, ${firstName(fullName)}`}
+                description={`You're signed in as ${ROLE_LABEL[role]}${
+                    dojoName ? ` at ${dojoName}` : ""
                 }.`}
             />
 
@@ -113,11 +143,11 @@ export default async function DojoOverviewPage({
                     <BeltPipelinePreview pending={stats.beltTestsPending} />
                 </Card>
                 <Card title="Quick actions">
-                    <QuickActions role={session.role} />
+                    <QuickActions role={role} />
                 </Card>
             </div>
 
-            {hasAtLeast(session.role, "DOJO_MANAGER") && (
+            {hasAtLeast(role, "DOJO_MANAGER") && (
                 <Card title="Financial snapshot" className="mt-6">
                     <div className="grid sm:grid-cols-3 gap-4">
                         <KV
@@ -139,7 +169,7 @@ export default async function DojoOverviewPage({
                 </Card>
             )}
 
-            {hasAtLeast(session.role, "DOJO_OWNER") && (
+            {hasAtLeast(role, "DOJO_OWNER") && (
                 <Card title="From federation HQ" className="mt-6">
                     <ul className="divide-y divide-zinc-200">
                         <FedItem
@@ -159,19 +189,8 @@ export default async function DojoOverviewPage({
     );
 }
 
-type Stats = {
-    activeStudents: number;
-    recentJoins: number;
-    weeklyAttendanceRate: number | null;
-    weeklyCheckins: number;
-    beltTestsPending: number;
-    expiringSoon: number;
-    expired: number;
-};
-
 async function loadStats(dojoId: string | null): Promise<Stats> {
     if (!dojoId) {
-        // Sample numbers for the pending-approval state.
         return {
             activeStudents: 48,
             recentJoins: 3,
@@ -197,33 +216,19 @@ async function loadStats(dojoId: string | null): Promise<Stats> {
         expiringSoon,
         expired,
     ] = await Promise.all([
-        prisma.member.count({
-            where: { dojoId, isActive: true },
-        }),
-        prisma.member.count({
-            where: { dojoId, joinDate: { gte: monthAgo } },
-        }),
-        prisma.attendance.count({
-            where: { dojoId, date: { gte: weekAgo } },
-        }),
+        prisma.member.count({ where: { dojoId, isActive: true } }),
+        prisma.member.count({ where: { dojoId, joinDate: { gte: monthAgo } } }),
+        prisma.attendance.count({ where: { dojoId, date: { gte: weekAgo } } }),
         prisma.attendance.count({
             where: { dojoId, date: { gte: weekAgo }, present: true },
         }),
         prisma.gradingApplication.count({
-            where: {
-                status: "SUBMITTED",
-                member: { dojoId },
-            },
+            where: { status: "SUBMITTED", member: { dojoId } },
         }),
         prisma.member.count({
-            where: {
-                dojoId,
-                expiryDate: { gte: today, lte: in30Days },
-            },
+            where: { dojoId, expiryDate: { gte: today, lte: in30Days } },
         }),
-        prisma.member.count({
-            where: { dojoId, expiryDate: { lt: today } },
-        }),
+        prisma.member.count({ where: { dojoId, expiryDate: { lt: today } } }),
     ]);
 
     const rate =
@@ -242,15 +247,7 @@ async function loadStats(dojoId: string | null): Promise<Stats> {
     };
 }
 
-type RenewalStatus = {
-    state: "EXPIRING" | "EXPIRED";
-    daysLeft: number; // negative when expired
-    expiryLabel: string;
-};
-
-async function loadRenewalStatus(
-    dojoId: string,
-): Promise<RenewalStatus | null> {
+async function loadRenewalStatus(dojoId: string): Promise<RenewalStatus | null> {
     const dojo = await prisma.dojo.findUnique({
         where: { id: dojoId },
         select: { expiryDate: true },
@@ -278,9 +275,7 @@ function RenewalBanner({ status }: { status: RenewalStatus }) {
     const palette = expired
         ? "bg-red-50 border-red-200 text-red-900"
         : "bg-amber-50 border-amber-200 text-amber-900";
-    const iconBg = expired
-        ? "bg-red-500 text-white"
-        : "bg-amber-500 text-white";
+    const iconBg = expired ? "bg-red-500 text-white" : "bg-amber-500 text-white";
     const title = expired
         ? "Dojo membership has expired"
         : "Dojo membership expiring soon";
@@ -293,12 +288,8 @@ function RenewalBanner({ status }: { status: RenewalStatus }) {
           } left. Renew now to avoid interruption.`;
 
     return (
-        <div
-            className={`rounded-sm border p-5 mb-8 flex items-start gap-4 ${palette}`}
-        >
-            <div
-                className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${iconBg}`}
-            >
+        <div className={`rounded-sm border p-5 mb-8 flex items-start gap-4 ${palette}`}>
+            <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${iconBg}`}>
                 {expired ? <XCircle size={20} /> : <AlertTriangle size={20} />}
             </div>
             <div className="flex-1 min-w-0">
@@ -306,7 +297,7 @@ function RenewalBanner({ status }: { status: RenewalStatus }) {
                 <p className="text-sm leading-relaxed">{body}</p>
             </div>
             <Link
-                href="/dojo/dashboard/settings#renewal"
+                href="/portal/dojo/settings#renewal"
                 className={`inline-flex items-center gap-2 text-xs font-bold tracking-widest uppercase px-3 py-2 rounded-sm shrink-0 transition-colors ${
                     expired
                         ? "bg-red-600 hover:bg-red-700 text-white"
@@ -338,12 +329,8 @@ function Banner({
     const iconBg =
         tone === "success" ? "bg-accent-red text-white" : "bg-amber-500 text-white";
     return (
-        <div
-            className={`rounded-sm border p-5 mb-8 flex items-start gap-4 ${palette}`}
-        >
-            <div
-                className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${iconBg}`}
-            >
+        <div className={`rounded-sm border p-5 mb-8 flex items-start gap-4 ${palette}`}>
+            <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${iconBg}`}>
                 {icon}
             </div>
             <div>
@@ -373,9 +360,7 @@ function StatCard({
                 </span>
                 <Icon size={16} className="text-accent-red" />
             </div>
-            <div className="font-karate text-2xl font-bold text-zinc-900">
-                {value}
-            </div>
+            <div className="font-karate text-2xl font-bold text-zinc-900">{value}</div>
             <div className="text-xs text-zinc-500 mt-1">{sub}</div>
         </div>
     );
@@ -391,9 +376,7 @@ function Card({
     className?: string;
 }) {
     return (
-        <div
-            className={`bg-white border border-zinc-200 rounded-sm shadow-sm ${className}`}
-        >
+        <div className={`bg-white border border-zinc-200 rounded-sm shadow-sm ${className}`}>
             <div className="px-5 py-4 border-b border-zinc-200">
                 <h3 className="text-xs tracking-widest uppercase font-bold text-zinc-500">
                     {title}
@@ -404,23 +387,13 @@ function Card({
     );
 }
 
-function KV({
-    label,
-    value,
-    sub,
-}: {
-    label: string;
-    value: string;
-    sub: string;
-}) {
+function KV({ label, value, sub }: { label: string; value: string; sub: string }) {
     return (
         <div>
             <p className="text-[10px] tracking-widest uppercase font-bold text-zinc-400 mb-1">
                 {label}
             </p>
-            <p className="font-karate text-xl font-bold text-zinc-900">
-                {value}
-            </p>
+            <p className="font-karate text-xl font-bold text-zinc-900">{value}</p>
             <p className="text-xs text-zinc-500 mt-1">{sub}</p>
         </div>
     );
@@ -428,30 +401,10 @@ function KV({
 
 function BeltPipelinePreview({ pending }: { pending: number }) {
     const stages = [
-        {
-            label: "Applied",
-            count: pending,
-            sub: "Awaiting test schedule",
-            actorRole: "Instructor",
-        },
-        {
-            label: "Qualified",
-            count: 0,
-            sub: "Tested · awaiting Manager review",
-            actorRole: "Manager",
-        },
-        {
-            label: "Verified",
-            count: 0,
-            sub: "Cleared · awaiting Owner sign-off",
-            actorRole: "Dojo Head",
-        },
-        {
-            label: "Submitted to JKA",
-            count: 0,
-            sub: "Awaiting federation certificate",
-            actorRole: "Federation",
-        },
+        { label: "Applied", count: pending, sub: "Awaiting test schedule", actorRole: "Instructor" },
+        { label: "Qualified", count: 0, sub: "Tested · awaiting Manager review", actorRole: "Manager" },
+        { label: "Verified", count: 0, sub: "Cleared · awaiting Owner sign-off", actorRole: "Dojo Head" },
+        { label: "Submitted to JKA", count: 0, sub: "Awaiting federation certificate", actorRole: "Federation" },
     ];
     return (
         <div className="space-y-3">
@@ -477,7 +430,7 @@ function BeltPipelinePreview({ pending }: { pending: number }) {
                 ))}
             </div>
             <Link
-                href="/dojo/dashboard/gradings"
+                href="/portal/dojo/gradings"
                 className="inline-flex items-center gap-2 text-xs font-bold tracking-widest uppercase text-accent-red hover:text-accent-red/80 transition-colors mt-2"
             >
                 Manage belt tests
@@ -489,28 +442,12 @@ function BeltPipelinePreview({ pending }: { pending: number }) {
 
 function QuickActions({ role }: { role: string }) {
     const actions: { href: string; label: string; min: number }[] = [
-        { href: "/dojo/dashboard/students", label: "Add a student", min: 1 },
-        {
-            href: "/dojo/dashboard/attendance",
-            label: "Take attendance",
-            min: 1,
-        },
-        {
-            href: "/dojo/dashboard/gradings",
-            label: "Schedule a belt test",
-            min: 1,
-        },
-        {
-            href: "/dojo/dashboard/renewals",
-            label: "Mark a renewal paid",
-            min: 2,
-        },
-        { href: "/dojo/dashboard/events", label: "Plan an event", min: 3 },
-        {
-            href: "/dojo/dashboard/announcements",
-            label: "Post an announcement",
-            min: 3,
-        },
+        { href: "/portal/dojo/students", label: "Add a student", min: 1 },
+        { href: "/portal/dojo/attendance", label: "Take attendance", min: 1 },
+        { href: "/portal/dojo/gradings", label: "Schedule a belt test", min: 1 },
+        { href: "/portal/dojo/renewals", label: "Mark a renewal paid", min: 2 },
+        { href: "/portal/dojo/events", label: "Plan an event", min: 3 },
+        { href: "/portal/dojo/announcements", label: "Post an announcement", min: 3 },
     ];
     const rank: Record<string, number> = {
         INSTRUCTOR: 1,

@@ -17,7 +17,7 @@ import {
 import {
   createDojoRenewalOrderAction,
   saveDojoAnnualFeeAction,
-} from "@/app/dojo/dashboard/settings/actions";
+} from "@/app/portal/dojo/settings/actions";
 
 export type DojoMembershipCardProps = {
   annualFeeBDT: number;

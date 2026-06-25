@@ -112,7 +112,7 @@ export async function approveDojoApplicationAction(
 
     revalidatePath("/portal/admin/dojos/applications");
     revalidatePath("/portal/admin/dojos");
-    revalidatePath("/dojo/dashboard");
+    revalidatePath("/portal");
     return { ok: true };
 }
 

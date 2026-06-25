@@ -110,7 +110,7 @@ function PaymentContent() {
             } catch {
                 /* ignore */
             }
-            router.push("/dojo/dashboard?enlistment=success");
+            router.push("/portal?enlistment=success");
         });
     }
 

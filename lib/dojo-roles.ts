@@ -28,8 +28,6 @@ export const ROLE_BADGE_COLOR: Record<DojoRole, string> = {
     DOJO_OWNER:   "bg-accent-red/10 text-accent-red border-accent-red/30",
 };
 
-export const PREVIEW_COOKIE = "jka_dojo_preview_role";
-
 export function hasAtLeast(role: DojoRole, min: DojoRole): boolean {
     return ROLE_RANK[role] >= ROLE_RANK[min];
 }

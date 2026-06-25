@@ -3,7 +3,6 @@
 // use lib/dojo-roles for shared constants/types instead.
 import "server-only";
 
-import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import {
@@ -13,7 +12,6 @@ import {
 import {
     hasAtLeast,
     isDojoRole,
-    PREVIEW_COOKIE,
     type DojoRole,
 } from "@/lib/dojo-roles";
 
@@ -22,8 +20,6 @@ export type DojoSession = {
     email: string;
     fullName: string;
     role: DojoRole;
-    realRole: DojoRole;
-    isPreviewing: boolean;
     dojo: ResolvedDojo | null;
     /** True when the user has filed an application but no Dojo exists yet. */
     pendingApproval: boolean;
@@ -50,30 +46,18 @@ export async function getDojoSession(): Promise<DojoSession | null> {
 
     const membership = await getCurrentDojoForUser(user.id);
 
-    let realRole: DojoRole;
+    let role: DojoRole;
     let dojo: ResolvedDojo | null;
     let pendingApproval = false;
 
     if (membership) {
-        realRole = membership.role;
+        role = membership.role;
         dojo = membership.dojo;
     } else {
         const metaRole = meta.role;
-        realRole = isDojoRole(metaRole) ? metaRole : "DOJO_OWNER";
+        role = isDojoRole(metaRole) ? metaRole : "DOJO_OWNER";
         dojo = null;
         pendingApproval = true;
-    }
-
-    let role = realRole;
-    let isPreviewing = false;
-
-    if (hasAtLeast(realRole, "DOJO_OWNER")) {
-        const cookieStore = await cookies();
-        const previewRaw = cookieStore.get(PREVIEW_COOKIE)?.value;
-        if (previewRaw && isDojoRole(previewRaw) && previewRaw !== realRole) {
-            role = previewRaw;
-            isPreviewing = true;
-        }
     }
 
     const fullName =
@@ -87,8 +71,6 @@ export async function getDojoSession(): Promise<DojoSession | null> {
         email: user.email ?? "",
         fullName,
         role,
-        realRole,
-        isPreviewing,
         dojo,
         pendingApproval,
     };
@@ -97,10 +79,10 @@ export async function getDojoSession(): Promise<DojoSession | null> {
 export async function requireDojoRole(min: DojoRole): Promise<DojoSession> {
     const session = await getDojoSession();
     if (!session) {
-        redirect("/login?next=/dojo/dashboard");
+        redirect("/login?next=/portal");
     }
     if (!hasAtLeast(session.role, min)) {
-        redirect("/dojo/dashboard?denied=1");
+        redirect("/portal?denied=1");
     }
     return session;
 }

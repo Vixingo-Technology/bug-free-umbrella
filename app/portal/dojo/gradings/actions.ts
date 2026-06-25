@@ -91,7 +91,7 @@ export async function scheduleExamAction(input: {
       return { eventId: event.id };
     });
 
-    revalidatePath("/dojo/dashboard/gradings");
+    revalidatePath("/portal/dojo/gradings");
     return { success: true, eventId: result.eventId };
   } catch (err: unknown) {
     return { error: err instanceof Error ? err.message : "Failed to schedule exam." };
@@ -142,7 +142,7 @@ export async function declineRequestAction(input: {
     return { error: err instanceof Error ? err.message : "Failed to decline request." };
   }
 
-  revalidatePath("/dojo/dashboard/gradings");
+  revalidatePath("/portal/dojo/gradings");
   return { success: true };
 }
 
@@ -239,8 +239,8 @@ export async function updateScheduledExamAction(input: {
     return { error: err instanceof Error ? err.message : "Failed to update belt test." };
   }
 
-  revalidatePath("/dojo/dashboard/gradings");
-  revalidatePath(`/dojo/dashboard/gradings/${input.eventId}`);
+  revalidatePath("/portal/dojo/gradings");
+  revalidatePath(`/portal/dojo/gradings/${input.eventId}`);
   return { success: true };
 }
 
@@ -294,8 +294,8 @@ export async function cancelScheduledExamAction(input: {
     return { error: err instanceof Error ? err.message : "Failed to cancel belt test." };
   }
 
-  revalidatePath("/dojo/dashboard/gradings");
-  revalidatePath(`/dojo/dashboard/gradings/${input.eventId}`);
+  revalidatePath("/portal/dojo/gradings");
+  revalidatePath(`/portal/dojo/gradings/${input.eventId}`);
   return { success: true };
 }
 
@@ -375,7 +375,7 @@ export async function upsertDraftResultsAction(input: {
     return { error: err instanceof Error ? err.message : "Failed to save draft results." };
   }
 
-  revalidatePath(`/dojo/dashboard/gradings/${input.eventId}`);
+  revalidatePath(`/portal/dojo/gradings/${input.eventId}`);
   return { success: true };
 }
 
@@ -460,8 +460,8 @@ export async function publishResultsAction(input: {
     return { error: err instanceof Error ? err.message : "Failed to publish results." };
   }
 
-  revalidatePath("/dojo/dashboard/gradings");
-  revalidatePath(`/dojo/dashboard/gradings/${input.eventId}`);
+  revalidatePath("/portal/dojo/gradings");
+  revalidatePath(`/portal/dojo/gradings/${input.eventId}`);
   revalidatePath("/portal/grading");
   revalidatePath("/portal");
   return { success: true, published: publishedCount };

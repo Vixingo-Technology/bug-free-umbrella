@@ -195,7 +195,7 @@ export async function sendDojoRenewalReminderAction(input: {
         recipientPhone: owner?.phone ?? null,
         expiryDate: dojo.expiryDate?.toISOString() ?? null,
         annualFee: dojo.annualFee != null ? Number(dojo.annualFee) : null,
-        renewUrl: "/dojo/dashboard/settings#renewal",
+        renewUrl: "/portal/dojo/settings#renewal",
     });
 
     return { ok: true };

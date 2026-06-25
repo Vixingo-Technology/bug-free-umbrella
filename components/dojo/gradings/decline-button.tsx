@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { XCircle, Loader2 } from "lucide-react";
-import { declineRequestAction } from "@/app/dojo/dashboard/gradings/actions";
+import { declineRequestAction } from "@/app/portal/dojo/gradings/actions";
 
 export default function DeclineButton({ applicationId }: { applicationId: string }) {
   const [open, setOpen] = useState(false);
