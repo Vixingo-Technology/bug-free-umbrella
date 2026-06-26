@@ -133,6 +133,9 @@ model Dojo {
   // Required before the dojo can place a certificate order.
   ownerSignatureUrl String? @map("owner_signature_url")
 
+  // Cloudinary URL of the dojo logo (PNG or SVG, transparent background).
+  logoUrl String? @map("logo_url")
+
   // The dojo head is the Member with role = DOJO_OWNER and dojoId = this.id.
   // A partial unique index `members_one_owner_per_dojo` enforces "at most one
   // owner per dojo" at the DB level (see scripts/migrations/2026-06-24-...sql).

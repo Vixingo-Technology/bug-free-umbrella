@@ -95,6 +95,52 @@ async function generateCloudinarySignature(
     return hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
 }
 
+/**
+ * Build a signed Cloudinary delivery URL.
+ *
+ * Required for PDF and ZIP assets when the account's "Restricted media
+ * types" setting blocks anonymous delivery (the default for new accounts).
+ * Signed URLs are cryptographically authenticated against the api_secret
+ * and so are allowed through even when the media type is restricted.
+ *
+ * Format: `https://res.cloudinary.com/{cloud}/{rtype}/{type}/s--{sig}--/{public_id}.{format}`
+ */
+export async function getSignedCloudinaryUrl(opts: {
+    publicId: string;
+    resourceType?: "image" | "video" | "raw";
+    deliveryType?: "upload" | "authenticated" | "private";
+    format?: string;
+}): Promise<string> {
+    const cloudName = process.env.CLOUDINARY_CLOUD_NAME;
+    const apiSecret = process.env.CLOUDINARY_API_SECRET;
+    if (!cloudName || !apiSecret) {
+        throw new Error("Cloudinary environment variables are not configured.");
+    }
+    const resourceType = opts.resourceType ?? "image";
+    const deliveryType = opts.deliveryType ?? "upload";
+    const ext = opts.format ? `.${opts.format}` : "";
+    const publicIdWithExt = `${opts.publicId}${ext}`;
+
+    // Signature input: `{public_id}{.ext}` + api_secret, SHA-1, base64-url,
+    // first 8 characters. Matches the Cloudinary SDK's `cloudinary_url`
+    // signing scheme for URLs without transformations.
+    const encoder = new TextEncoder();
+    const hashBuffer = await crypto.subtle.digest(
+        "SHA-1",
+        encoder.encode(publicIdWithExt + apiSecret),
+    );
+    const bytes = new Uint8Array(hashBuffer);
+    let bin = "";
+    for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+    const sig = btoa(bin)
+        .replace(/\+/g, "-")
+        .replace(/\//g, "_")
+        .replace(/=+$/, "")
+        .slice(0, 8);
+
+    return `https://res.cloudinary.com/${cloudName}/${resourceType}/${deliveryType}/s--${sig}--/${publicIdWithExt}`;
+}
+
 /** Cloudinary folder constants — keeps paths consistent across the app. */
 export const CLOUDINARY_FOLDERS = {
     avatars: "jka/avatars",

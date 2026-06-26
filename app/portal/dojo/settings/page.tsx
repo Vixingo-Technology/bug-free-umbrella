@@ -3,6 +3,7 @@ import { Save } from "lucide-react";
 import DojoPageHeader from "@/components/dojo/page-header";
 import DojoMembershipCard from "@/components/dojo/settings/dojo-membership-card";
 import SignatureUploader from "@/components/dojo/settings/signature-uploader";
+import LogoUploader from "@/components/dojo/settings/logo-uploader";
 import { requireDojoRole } from "@/lib/dojo-session";
 import { prisma } from "@/lib/prisma";
 import { MEMBERSHIP_FEE_BDT } from "@/lib/constants";
@@ -163,6 +164,21 @@ export default async function SettingsPage() {
                         }
                     />
                 </Card>
+
+                <div id="logo" className="lg:col-span-2 scroll-mt-24">
+                    <Card title="Dojo logo">
+                        {dojo ? (
+                            <LogoUploader
+                                currentUrl={dojoBase?.logoUrl ?? null}
+                            />
+                        ) : (
+                            <p className="text-sm text-zinc-500">
+                                Logo upload becomes available once your dojo is
+                                approved.
+                            </p>
+                        )}
+                    </Card>
+                </div>
 
                 <div id="signature" className="lg:col-span-2 scroll-mt-24">
                     <Card title="Owner signature">

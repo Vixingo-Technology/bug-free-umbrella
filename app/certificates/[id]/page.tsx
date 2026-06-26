@@ -2,6 +2,8 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { prisma } from "@/lib/prisma";
 import CertificatePreview from "@/components/certificates/preview";
+import { getSignedCloudinaryUrl, CLOUDINARY_FOLDERS } from "@/lib/cloudinary";
+import { createClient } from "@/lib/supabase/server";
 
 export const dynamic = "force-dynamic";
 
@@ -70,11 +72,41 @@ export default async function CertificatePreviewPage({
 
     if (!req) notFound();
 
+    // Show the "Regenerate" button only for admins. Public visitors who land
+    // here via the QR code just see the certificate.
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    let canRegenerate = false;
+    if (user) {
+        const m = await prisma.member.findUnique({
+            where: { id: user.id },
+            select: { role: true },
+        });
+        canRegenerate = m?.role === "ADMIN";
+    }
+
+    // Cloudinary blocks public delivery of PDFs by default ("Restricted media
+    // types"). Sign the URL so it bypasses that restriction. Public id mirrors
+    // what generate.ts uploads to.
+    let signedUrl: string | null = null;
+    if (req.certificateUrl) {
+        try {
+            signedUrl = await getSignedCloudinaryUrl({
+                publicId: `${CLOUDINARY_FOLDERS.certificates}/cert-${req.id}`,
+                resourceType: "raw",
+                format: "pdf",
+            });
+        } catch (e) {
+            console.warn("[certificate/view] failed to sign URL", e);
+            signedUrl = req.certificateUrl;
+        }
+    }
+
     return (
         <CertificatePreview
             requestId={req.id}
             status={req.status}
-            certificateUrl={req.certificateUrl}
+            certificateUrl={signedUrl}
             memberName={req.memberName}
             memberNumber={req.member?.memberNumber ?? null}
             fatherName={req.fatherName}
@@ -94,6 +126,7 @@ export default async function CertificatePreviewPage({
             }
             ownerSignatureUrl={req.dojo?.ownerSignatureUrl ?? null}
             logoUrl={settings?.certificateLogoUrl ?? null}
+            canRegenerate={canRegenerate}
         />
     );
 }

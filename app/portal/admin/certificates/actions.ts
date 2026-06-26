@@ -5,6 +5,7 @@ import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/admin-guard";
 import { uploadToCloudinary, CLOUDINARY_FOLDERS } from "@/lib/cloudinary";
+import { generateCertificatePdf } from "@/lib/certificates/generate";
 
 const settingsSchema = z.object({
     adminSignerName: z.string().trim().max(200).nullable().optional(),
@@ -70,6 +71,35 @@ export async function saveCertificateSettingsAction(
 
     revalidatePath("/portal/admin/certificates");
     return { success: true };
+}
+
+const regenSchema = z.object({
+    certificateRequestId: z.string().uuid(),
+});
+
+/**
+ * Re-render an already-ISSUED certificate. Used after the template or
+ * generator changes so old PDFs pick up the new design without needing a
+ * brand-new request.
+ */
+export async function regenerateCertificateAction(
+    input: z.infer<typeof regenSchema>,
+): Promise<{ success: true; url: string } | { error: string }> {
+    await requireAdmin();
+    const parsed = regenSchema.safeParse(input);
+    if (!parsed.success) {
+        return { error: parsed.error.issues[0]?.message ?? "Invalid input." };
+    }
+
+    const res = await generateCertificatePdf({
+        certificateRequestId: parsed.data.certificateRequestId,
+        force: true,
+    });
+    if (!res.ok) return { error: res.reason };
+
+    revalidatePath(`/certificates/${parsed.data.certificateRequestId}`);
+    revalidatePath("/portal/admin/certificates");
+    return { success: true, url: res.url };
 }
 
 const priceSchema = z.object({

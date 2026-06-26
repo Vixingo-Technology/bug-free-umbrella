@@ -1,0 +1,83 @@
+{
+  "kyuDigit": {
+    "kind": "text",
+    "cx": 468.2,
+    "y": 157.2,
+    "size": 11
+  },
+  "jpYear": {
+    "kind": "text",
+    "cx": 310.9,
+    "y": 302,
+    "size": 10
+  },
+  "jpMonth": {
+    "kind": "text",
+    "cx": 379.4,
+    "y": 301.9,
+    "size": 9
+  },
+  "jpDay": {
+    "kind": "text",
+    "cx": 446.7,
+    "y": 301.9,
+    "size": 9
+  },
+  "memberName": {
+    "kind": "text",
+    "cx": 202,
+    "y": 404.7,
+    "size": 11,
+    "maxWidth": 286
+  },
+  "certificateNumber": {
+    "kind": "text",
+    "cx": 510.7,
+    "y": 404,
+    "size": 9,
+    "maxWidth": 119
+  },
+  "branch": {
+    "kind": "text",
+    "cx": 203.2,
+    "y": 438.3,
+    "size": 11,
+    "maxWidth": 286
+  },
+  "dateOfAward": {
+    "kind": "text",
+    "cx": 517,
+    "y": 437,
+    "size": 9,
+    "maxWidth": 119
+  },
+  "kyuNo": {
+    "kind": "text",
+    "cx": 335.1,
+    "y": 502,
+    "size": 9,
+    "maxWidth": 119
+  },
+  "ownerSignature": {
+    "kind": "image",
+    "x": 298,
+    "y": 630,
+    "w": 120,
+    "h": 42,
+    "centered": true
+  },
+  "dojoLogo": {
+    "kind": "image",
+    "x": 30,
+    "y": 710,
+    "w": 80,
+    "h": 80
+  },
+  "qrCode": {
+    "kind": "image",
+    "x": 511,
+    "y": 700,
+    "w": 54,
+    "h": 54
+  }
+}

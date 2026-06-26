@@ -86,6 +86,55 @@ export async function saveDojoSignatureAction(input: {
 }
 
 /**
+ * Persist the dojo logo. Accepts a data-URL (PNG or SVG) or null to remove.
+ * SVGs are uploaded with `format: "svg"` so Cloudinary keeps the vector
+ * format instead of rasterising it.
+ */
+export async function saveDojoLogoAction(input: {
+    dataUrl: string | null;
+    mimeType: string | null;
+}): Promise<{ success: true; url: string | null } | { error: string }> {
+    const session = await requireDojoRole("DOJO_MANAGER");
+    if (!session.dojo) return { error: "Your dojo is not set up yet." };
+
+    let nextUrl: string | null = null;
+
+    if (input.dataUrl) {
+        const isSvg = input.mimeType === "image/svg+xml";
+        const isPng = input.mimeType === "image/png";
+        if (!isSvg && !isPng) {
+            return { error: "Logo must be a PNG or SVG file." };
+        }
+
+        try {
+            const uploaded = await uploadToCloudinary(input.dataUrl, {
+                folder: `${CLOUDINARY_FOLDERS.avatars}/dojo-logos`,
+                publicId: `dojo-${session.dojo.id}-logo`,
+                resourceType: "image",
+                ...(isSvg ? { format: "svg" } : {}),
+            });
+            nextUrl = uploaded.url;
+        } catch (e) {
+            console.error("[saveDojoLogo] upload failed", e);
+            return { error: "Could not upload logo. Try again." };
+        }
+    }
+
+    try {
+        await prisma.dojo.update({
+            where: { id: session.dojo.id },
+            data: { logoUrl: nextUrl },
+        });
+    } catch (e) {
+        console.error("[saveDojoLogo] db update failed", e);
+        return { error: "Could not save logo. Try again." };
+    }
+
+    revalidatePath("/portal/dojo/settings");
+    return { success: true, url: nextUrl };
+}
+
+/**
  * Create a renewal ShopOrder for this dojo and redirect to checkout.
  * Mirrors createRenewalOrderAction in app/portal/renew — the SSLCommerz
  * webhook flips paymentStatus to PAID and extends dojo.expiryDate.

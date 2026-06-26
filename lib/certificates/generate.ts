@@ -1,26 +1,54 @@
 import "server-only";
 
-import { PDFDocument, StandardFonts, rgb, type PDFImage } from "pdf-lib";
+import fs from "node:fs/promises";
+import path from "node:path";
+import {
+    PDFDocument,
+    rgb,
+    type PDFImage,
+    type PDFFont,
+    type PDFPage,
+} from "pdf-lib";
+import fontkit from "@pdf-lib/fontkit";
+import QRCode from "qrcode";
 import { prisma } from "@/lib/prisma";
 import { uploadToCloudinary, CLOUDINARY_FOLDERS } from "@/lib/cloudinary";
-
-const A4_LANDSCAPE = { width: 842, height: 595 } as const;
+import { loadCertificateLayout } from "./layout-server";
+import type { TextSpec, ImageSpec } from "./layout";
 
 type GenerateInput = {
     certificateRequestId: string;
+    // When true, ignore the idempotency check and re-render even if the
+    // request is already ISSUED. Used to refresh certificates after a
+    // template change.
+    force?: boolean;
 };
 
-type GenerateResult =
-    | { ok: true; url: string }
-    | { ok: false; reason: string };
+type GenerateResult = { ok: true; url: string } | { ok: false; reason: string };
+
+const TEMPLATE_PATH = path.join(
+    process.cwd(),
+    "public",
+    "assets",
+    "certificate-template.pdf",
+);
+const FONT_PATH = path.join(process.cwd(), "assets", "Shojumaru-Regular.ttf");
+
+// Public base URL used in the QR code. Falls back to the production host if
+// neither APP_URL nor NEXT_PUBLIC_APP_URL is set.
+function getPublicBaseUrl(): string {
+    const raw =
+        process.env.APP_URL ??
+        process.env.NEXT_PUBLIC_APP_URL ??
+        "https://jkabangladesh.com";
+    return raw.replace(/\/+$/, "");
+}
 
 /**
  * Render the certificate PDF for a single CertificateRequest, upload it to
  * Cloudinary, and persist the URL on the request + the underlying Grading.
  *
  * Idempotent: if the request is already ISSUED with a URL, returns it.
- * Caller flips status PAID → GENERATING → ISSUED. Failures land in FAILED
- * with `failureReason` set so the admin can retry.
  */
 export async function generateCertificatePdf(
     input: GenerateInput,
@@ -41,6 +69,7 @@ export async function generateCertificatePdf(
                 select: {
                     name: true,
                     ownerSignatureUrl: true,
+                    logoUrl: true,
                 },
             },
             grading: {
@@ -52,15 +81,10 @@ export async function generateCertificatePdf(
         },
     });
     if (!req) return { ok: false, reason: "Certificate request not found." };
-    if (req.status === "ISSUED" && req.certificateUrl) {
+    if (!input.force && req.status === "ISSUED" && req.certificateUrl) {
         return { ok: true, url: req.certificateUrl };
     }
 
-    const settings = await prisma.systemSettings.findUnique({
-        where: { id: "default" },
-    });
-
-    // Flip to GENERATING so concurrent webhook calls don't double-render.
     await prisma.certificateRequest.update({
         where: { id: req.id },
         data: { status: "GENERATING", failureReason: null },
@@ -68,18 +92,16 @@ export async function generateCertificatePdf(
 
     try {
         const pdfBytes = await renderPdfBytes({
+            certificateId: req.id,
             memberName: req.memberName,
-            memberNumber: req.member.memberNumber ?? "",
-            fatherName: req.fatherName ?? "",
-            motherName: req.motherName ?? "",
+            // Short, human-readable cert number derived from the request UUID.
+            // Stable for the life of the request; safe to print on the PDF.
+            certificateNumber: req.id.slice(0, 8).toUpperCase(),
             rankName: req.rankName,
             issuedDate: new Date(),
-            eventName: req.grading.gradingEvent?.name ?? null,
             dojoName: req.dojo.name,
-            adminSignatureUrl: settings?.adminSignatureUrl ?? null,
-            adminSignerName: settings?.adminSignerName ?? "President, JKA Bangladesh",
-            ownerSignatureUrl: req.dojo.ownerSignatureUrl ?? null,
-            logoUrl: settings?.certificateLogoUrl ?? null,
+            dojoOwnerSignatureUrl: req.dojo.ownerSignatureUrl ?? null,
+            dojoLogoUrl: req.dojo.logoUrl ?? null,
         });
 
         const uploaded = await uploadToCloudinary(Buffer.from(pdfBytes), {
@@ -115,7 +137,9 @@ export async function generateCertificatePdf(
         return { ok: true, url: uploaded.url };
     } catch (err) {
         const reason =
-            err instanceof Error ? err.message : "Unknown PDF generation error.";
+            err instanceof Error
+                ? err.message
+                : "Unknown PDF generation error.";
         await prisma.certificateRequest.update({
             where: { id: req.id },
             data: { status: "FAILED", failureReason: reason },
@@ -125,274 +149,130 @@ export async function generateCertificatePdf(
 }
 
 // ─────────────────────────────────────────────
-// PDF rendering
+// PDF rendering — overlay onto the JKA template
 // ─────────────────────────────────────────────
 
 type RenderInput = {
+    certificateId: string;
     memberName: string;
-    memberNumber: string;
-    fatherName: string;
-    motherName: string;
+    certificateNumber: string;
     rankName: string;
     issuedDate: Date;
-    eventName: string | null;
     dojoName: string;
-    adminSignatureUrl: string | null;
-    adminSignerName: string;
-    ownerSignatureUrl: string | null;
-    logoUrl: string | null;
+    dojoOwnerSignatureUrl: string | null;
+    dojoLogoUrl: string | null;
 };
 
 async function renderPdfBytes(input: RenderInput): Promise<Uint8Array> {
-    const pdf = await PDFDocument.create();
-    const page = pdf.addPage([A4_LANDSCAPE.width, A4_LANDSCAPE.height]);
-    const { width, height } = page.getSize();
+    const [templateBytes, fontBytes, layout] = await Promise.all([
+        fs.readFile(TEMPLATE_PATH),
+        fs.readFile(FONT_PATH),
+        loadCertificateLayout(),
+    ]);
 
-    const helv = await pdf.embedFont(StandardFonts.Helvetica);
-    const helvBold = await pdf.embedFont(StandardFonts.HelveticaBold);
-    const helvOblique = await pdf.embedFont(StandardFonts.HelveticaOblique);
-    const helvBoldOblique = await pdf.embedFont(StandardFonts.HelveticaBoldOblique);
+    const pdf = await PDFDocument.load(templateBytes);
+    pdf.registerFontkit(fontkit);
+    const shojumaru = await pdf.embedFont(fontBytes, { subset: true });
 
-    const accentRed = rgb(0.768, 0.118, 0.227); // #C41E3A
-    const ink = rgb(0.094, 0.094, 0.106); // zinc-900
-    const muted = rgb(0.392, 0.396, 0.435);
+    const page = pdf.getPages()[0];
+    const pageH = page.getHeight();
+    const ink = rgb(0.094, 0.094, 0.106);
+    const kyuDigit = extractKyuDigit(input.rankName);
+    const jp = jpDateParts(input.issuedDate);
 
-    // Outer border
-    page.drawRectangle({
-        x: 24,
-        y: 24,
-        width: width - 48,
-        height: height - 48,
-        borderColor: accentRed,
-        borderWidth: 2,
-    });
-    page.drawRectangle({
-        x: 32,
-        y: 32,
-        width: width - 64,
-        height: height - 64,
-        borderColor: ink,
-        borderWidth: 0.5,
-    });
+    if (kyuDigit) drawText(page, shojumaru, kyuDigit, layout.kyuDigit, pageH, ink);
+    drawText(page, shojumaru, jp.year, layout.jpYear, pageH, ink);
+    drawText(page, shojumaru, jp.month, layout.jpMonth, pageH, ink);
+    drawText(page, shojumaru, jp.day, layout.jpDay, pageH, ink);
+    drawText(page, shojumaru, input.memberName.toUpperCase(), layout.memberName, pageH, ink);
+    drawText(page, shojumaru, input.certificateNumber, layout.certificateNumber, pageH, ink);
+    drawText(page, shojumaru, input.dojoName.toUpperCase(), layout.branch, pageH, ink);
+    drawText(
+        page,
+        shojumaru,
+        formatEnglishDate(input.issuedDate).toUpperCase(),
+        layout.dateOfAward,
+        pageH,
+        ink,
+    );
+    drawText(page, shojumaru, input.rankName.toUpperCase(), layout.kyuNo, pageH, ink);
 
-    // Header
-    const logoImage = await tryFetchImage(pdf, input.logoUrl);
-    if (logoImage) {
-        const targetHeight = 64;
-        const scale = targetHeight / logoImage.image.height;
-        const targetWidth = logoImage.image.width * scale;
-        page.drawImage(logoImage.image, {
-            x: width / 2 - targetWidth / 2,
-            y: height - 110,
-            width: targetWidth,
-            height: targetHeight,
-        });
-    }
+    await drawImageAt(pdf, page, input.dojoOwnerSignatureUrl, layout.ownerSignature, pageH);
+    await drawImageAt(pdf, page, input.dojoLogoUrl, layout.dojoLogo, pageH);
 
-    drawCenteredText(page, "JKA BANGLADESH", {
-        font: helvBold,
-        size: 22,
-        color: ink,
-        y: height - 140,
-        letterSpacing: 6,
+    // QR code — generated on the fly, then placed via the layout spec.
+    const qrUrl = `${getPublicBaseUrl()}/certificates/${input.certificateId}`;
+    const qrPngBytes = await QRCode.toBuffer(qrUrl, {
+        type: "png",
+        width: 400,
+        margin: 1,
+        errorCorrectionLevel: "M",
     });
-
-    drawCenteredText(page, "Japan Karate Association", {
-        font: helvOblique,
-        size: 11,
-        color: muted,
-        y: height - 158,
-    });
-
-    // Title
-    drawCenteredText(page, "CERTIFICATE OF GRADING", {
-        font: helvBold,
-        size: 32,
-        color: accentRed,
-        y: height - 220,
-        letterSpacing: 4,
-    });
-
-    drawCenteredText(page, "This is to certify that", {
-        font: helv,
-        size: 13,
-        color: muted,
-        y: height - 260,
-    });
-
-    // Recipient name
-    drawCenteredText(page, input.memberName.toUpperCase(), {
-        font: helvBoldOblique,
-        size: 28,
-        color: ink,
-        y: height - 305,
-    });
-
-    // Member number + parents
-    const detailY = height - 340;
-    const detailLines = [
-        input.memberNumber
-            ? `JKA Membership No. ${input.memberNumber}`
-            : null,
-        input.fatherName ? `Son / Daughter of ${input.fatherName}` : null,
-        input.motherName ? `and ${input.motherName}` : null,
-    ].filter(Boolean) as string[];
-    detailLines.forEach((line, i) => {
-        drawCenteredText(page, line, {
-            font: helv,
-            size: 11,
-            color: muted,
-            y: detailY - i * 16,
-        });
-    });
-
-    drawCenteredText(page, "has successfully passed the grading examination", {
-        font: helv,
-        size: 12,
-        color: muted,
-        y: detailY - detailLines.length * 16 - 24,
-    });
-
-    drawCenteredText(page, "and is hereby awarded the rank of", {
-        font: helv,
-        size: 12,
-        color: muted,
-        y: detailY - detailLines.length * 16 - 42,
-    });
-
-    drawCenteredText(page, input.rankName.toUpperCase(), {
-        font: helvBold,
-        size: 26,
-        color: accentRed,
-        y: detailY - detailLines.length * 16 - 78,
-        letterSpacing: 3,
-    });
-
-    // Date + event line
-    const issuedLabel = formatIssuedDate(input.issuedDate);
-    const ctxLine = input.eventName
-        ? `Examined at ${input.eventName} · Issued ${issuedLabel}`
-        : `Issued ${issuedLabel}`;
-    drawCenteredText(page, ctxLine, {
-        font: helvOblique,
-        size: 10,
-        color: muted,
-        y: 150,
-    });
-
-    // Signatures
-    const sigY = 90;
-    const adminSigCenter = width * 0.3;
-    const dojoSigCenter = width * 0.7;
-    const sigBoxWidth = 180;
-    const sigBoxHeight = 50;
-
-    await drawSignature(pdf, page, input.adminSignatureUrl, {
-        centerX: adminSigCenter,
-        bottomY: sigY,
-        maxWidth: sigBoxWidth,
-        maxHeight: sigBoxHeight,
-    });
-    await drawSignature(pdf, page, input.ownerSignatureUrl, {
-        centerX: dojoSigCenter,
-        bottomY: sigY,
-        maxWidth: sigBoxWidth,
-        maxHeight: sigBoxHeight,
-    });
-
-    page.drawLine({
-        start: { x: adminSigCenter - sigBoxWidth / 2, y: sigY - 4 },
-        end: { x: adminSigCenter + sigBoxWidth / 2, y: sigY - 4 },
-        thickness: 0.6,
-        color: ink,
-    });
-    page.drawLine({
-        start: { x: dojoSigCenter - sigBoxWidth / 2, y: sigY - 4 },
-        end: { x: dojoSigCenter + sigBoxWidth / 2, y: sigY - 4 },
-        thickness: 0.6,
-        color: ink,
-    });
-
-    drawCenteredText(page, input.adminSignerName, {
-        font: helvBold,
-        size: 10,
-        color: ink,
-        y: sigY - 18,
-        center: adminSigCenter,
-    });
-    drawCenteredText(page, "JKA Bangladesh Federation", {
-        font: helv,
-        size: 9,
-        color: muted,
-        y: sigY - 32,
-        center: adminSigCenter,
-    });
-
-    drawCenteredText(page, input.dojoName, {
-        font: helvBold,
-        size: 10,
-        color: ink,
-        y: sigY - 18,
-        center: dojoSigCenter,
-    });
-    drawCenteredText(page, "Dojo Owner", {
-        font: helv,
-        size: 9,
-        color: muted,
-        y: sigY - 32,
-        center: dojoSigCenter,
-    });
+    const qrImage = await pdf.embedPng(qrPngBytes);
+    placeImage(page, qrImage, layout.qrCode, pageH);
 
     return pdf.save();
 }
 
-function drawCenteredText(
-    page: ReturnType<PDFDocument["addPage"]>,
+// ─────────────────────────────────────────────
+// Drawing helpers
+// ─────────────────────────────────────────────
+
+// Layout `y` is the text baseline measured from the TOP of the page.
+// pdf-lib uses bottom-left origin, so flip with (pageH - y).
+function drawText(
+    page: PDFPage,
+    font: PDFFont,
     text: string,
-    opts: {
-        font: import("pdf-lib").PDFFont;
-        size: number;
-        color: ReturnType<typeof rgb>;
-        y: number;
-        letterSpacing?: number;
-        center?: number;
-    },
+    spec: TextSpec,
+    pageH: number,
+    color: ReturnType<typeof rgb>,
 ) {
-    const { font, size, color, y, letterSpacing = 0 } = opts;
-    const pageWidth = page.getWidth();
-    const centerX = opts.center ?? pageWidth / 2;
-    const textWidth =
-        font.widthOfTextAtSize(text, size) +
-        Math.max(0, text.length - 1) * letterSpacing;
+    if (!text) return;
+    let size = spec.size;
+    let textWidth = font.widthOfTextAtSize(text, size);
+    if (spec.maxWidth && textWidth > spec.maxWidth) {
+        size = size * (spec.maxWidth / textWidth);
+        textWidth = font.widthOfTextAtSize(text, size);
+    }
     page.drawText(text, {
-        x: centerX - textWidth / 2,
-        y,
+        x: spec.cx - textWidth / 2,
+        y: pageH - spec.y,
         size,
         font,
         color,
-        ...(letterSpacing ? { characterSpacing: letterSpacing } : {}),
     });
 }
 
-async function drawSignature(
+// Layout image `y` is the TOP edge of the image (top-left origin).
+// pdf-lib's drawImage uses bottom-left origin, so flip with (pageH - y - h).
+async function drawImageAt(
     pdf: PDFDocument,
-    page: ReturnType<PDFDocument["addPage"]>,
+    page: PDFPage,
     url: string | null,
-    box: { centerX: number; bottomY: number; maxWidth: number; maxHeight: number },
+    spec: ImageSpec,
+    pageH: number,
 ) {
-    const fetched = await tryFetchImage(pdf, url);
-    if (!fetched) return;
-    const { image } = fetched;
-    const scale = Math.min(
-        box.maxWidth / image.width,
-        box.maxHeight / image.height,
-        1,
-    );
-    const w = image.width * scale;
-    const h = image.height * scale;
-    page.drawImage(image, {
-        x: box.centerX - w / 2,
-        y: box.bottomY,
+    const img = await tryFetchImage(pdf, url);
+    if (!img) return;
+    placeImage(page, img, spec, pageH);
+}
+
+function placeImage(
+    page: PDFPage,
+    img: PDFImage,
+    spec: ImageSpec,
+    pageH: number,
+) {
+    const scale = Math.min(spec.w / img.width, spec.h / img.height, 1);
+    const w = img.width * scale;
+    const h = img.height * scale;
+    // `spec.x` is the left edge by default. When `centered` is true (used
+    // for the dojo head signature), treat it as the centre x instead.
+    const left = spec.centered ? spec.x - w / 2 : spec.x;
+    page.drawImage(img, {
+        x: left,
+        y: pageH - spec.y - h,
         width: w,
         height: h,
     });
@@ -401,28 +281,56 @@ async function drawSignature(
 async function tryFetchImage(
     pdf: PDFDocument,
     url: string | null,
-): Promise<{ image: PDFImage } | null> {
+): Promise<PDFImage | null> {
     if (!url) return null;
     try {
         const res = await fetch(url);
         if (!res.ok) return null;
         const buf = new Uint8Array(await res.arrayBuffer());
-        const contentType = (res.headers.get("content-type") ?? "").toLowerCase();
-        const image =
-            contentType.includes("jpeg") || contentType.includes("jpg")
-                ? await pdf.embedJpg(buf)
-                : await pdf.embedPng(buf);
-        return { image };
+        const contentType = (
+            res.headers.get("content-type") ?? ""
+        ).toLowerCase();
+        if (contentType.includes("svg")) {
+            // pdf-lib can't embed SVG directly; skip rather than crash. Dojos
+            // should upload a PNG logo for certificates.
+            console.warn(
+                "[certificate] SVG logo not supported, skipping:",
+                url,
+            );
+            return null;
+        }
+        return contentType.includes("jpeg") || contentType.includes("jpg")
+            ? await pdf.embedJpg(buf)
+            : await pdf.embedPng(buf);
     } catch (e) {
         console.warn("[certificate] failed to embed image", url, e);
         return null;
     }
 }
 
-function formatIssuedDate(d: Date): string {
+// Numeric parts for the `年 月 日` line on the template. Returned as plain
+// digits — the template already has the kanji printed, we just slot the
+// numbers into the gaps before each one.
+function jpDateParts(d: Date): { year: string; month: string; day: string } {
+    return {
+        year: String(d.getFullYear()),
+        month: String(d.getMonth() + 1),
+        day: String(d.getDate()),
+    };
+}
+
+function formatEnglishDate(d: Date): string {
     return new Intl.DateTimeFormat("en-GB", {
         day: "numeric",
         month: "long",
         year: "numeric",
     }).format(d);
+}
+
+// Pulls the leading kyu number out of names like "1st Kyu", "8th Kyu (White)".
+// Returns null for Dan ranks or anything without a digit.
+function extractKyuDigit(rankName: string): string | null {
+    if (!/kyu/i.test(rankName)) return null;
+    const m = rankName.match(/(\d+)/);
+    return m ? m[1] : null;
 }
