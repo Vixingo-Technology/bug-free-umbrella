@@ -2,7 +2,7 @@
 
 import { motion } from "motion/react";
 import TiltCard from "./tilt-card";
-import { FileText, Download, ExternalLink, Award, Calendar, CheckCircle2, Info } from "lucide-react";
+import { FileText, Download, Eye, Award, Calendar, CheckCircle2, Info } from "lucide-react";
 
 interface Props {
     member: any;
@@ -118,20 +118,23 @@ export default function CertificatesClient({ member, gradings }: Props) {
                                     <div className="flex gap-2 pt-2 border-t border-zinc-100">
                                         {g.certificateUrl ? (
                                             <>
+                                                {g.certificateRequests?.[0]?.id && (
+                                                    <a
+                                                        href={`/certificates/${g.certificateRequests[0].id}`}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="flex items-center justify-center gap-2 border border-zinc-200 hover:border-accent-red hover:text-accent-red text-zinc-600 text-xs font-bold px-3 py-2.5 rounded-xl transition-colors"
+                                                        title="Preview certificate"
+                                                    >
+                                                        <Eye size={14} />
+                                                    </a>
+                                                )}
                                                 <a
                                                     href={g.certificateUrl}
                                                     download
                                                     className="flex-1 flex items-center justify-center gap-2 bg-zinc-900 hover:bg-accent-red text-white text-xs font-bold py-2.5 rounded-xl transition-colors"
                                                 >
                                                     <Download size={14} /> Download
-                                                </a>
-                                                <a
-                                                    href={g.certificateUrl}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    className="flex items-center justify-center gap-2 border border-zinc-200 hover:border-zinc-400 text-zinc-600 text-xs font-bold px-3 py-2.5 rounded-xl transition-colors"
-                                                >
-                                                    <ExternalLink size={14} />
                                                 </a>
                                             </>
                                         ) : (

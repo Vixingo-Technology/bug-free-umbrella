@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { Plus, Search } from "lucide-react";
 import DojoPageHeader from "@/components/dojo/page-header";
 import { requireDojoRole } from "@/lib/dojo-session";
@@ -125,33 +126,51 @@ export default async function StudentsPage() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {students.map((s) => (
-                                    <tr
-                                        key={s.id}
-                                        className="border-b border-zinc-100 hover:bg-zinc-50 transition-colors"
-                                    >
-                                        <td className="px-5 py-3 font-semibold text-zinc-900">
-                                            {s.name}
-                                        </td>
-                                        <td className="px-5 py-3 text-zinc-600">
-                                            {s.rank}
-                                        </td>
-                                        <td className="px-5 py-3 text-zinc-500">
-                                            {s.joined}
-                                        </td>
-                                        <td className="px-5 py-3">
-                                            <span
-                                                className={`text-[10px] tracking-widest uppercase font-bold px-2 py-1 rounded-full ${
-                                                    s.status === "Active"
-                                                        ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
-                                                        : "bg-zinc-100 text-zinc-500 border border-zinc-200"
-                                                }`}
-                                            >
-                                                {s.status}
-                                            </span>
-                                        </td>
-                                    </tr>
-                                ))}
+                                {students.map((s) => {
+                                    const isLive = !s.sample && session.dojo;
+                                    const RowTag = isLive ? "tr" : "tr";
+                                    const inner = (
+                                        <>
+                                            <td className="px-5 py-3 font-semibold text-zinc-900">
+                                                {isLive ? (
+                                                    <Link
+                                                        href={`/portal/dojo/students/${s.id}`}
+                                                        className="hover:text-accent-red"
+                                                    >
+                                                        {s.name}
+                                                    </Link>
+                                                ) : (
+                                                    s.name
+                                                )}
+                                            </td>
+                                            <td className="px-5 py-3 text-zinc-600">
+                                                {s.rank}
+                                            </td>
+                                            <td className="px-5 py-3 text-zinc-500">
+                                                {s.joined}
+                                            </td>
+                                            <td className="px-5 py-3">
+                                                <span
+                                                    className={`text-[10px] tracking-widest uppercase font-bold px-2 py-1 rounded-full ${
+                                                        s.status === "Active"
+                                                            ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
+                                                            : "bg-zinc-100 text-zinc-500 border border-zinc-200"
+                                                    }`}
+                                                >
+                                                    {s.status}
+                                                </span>
+                                            </td>
+                                        </>
+                                    );
+                                    return (
+                                        <RowTag
+                                            key={s.id}
+                                            className="border-b border-zinc-100 hover:bg-zinc-50 transition-colors"
+                                        >
+                                            {inner}
+                                        </RowTag>
+                                    );
+                                })}
                             </tbody>
                         </table>
                     </div>

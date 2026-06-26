@@ -65,6 +65,15 @@ enum NotificationType {
   GRADING
   EVENT
   RENEWAL
+  CERTIFICATE
+}
+
+enum CertificateRequestStatus {
+  PENDING_PAYMENT
+  PAID
+  GENERATING
+  ISSUED
+  FAILED
 }
 
 // ─────────────────────────────────────────────
@@ -77,6 +86,10 @@ model BeltRank {
   kyuDan     String? @map("kyu_dan")
   colorHex   String? @map("color_hex")
   orderIndex Int     @unique @map("order_index")
+
+  // Certificate fee for this rank (BDT). Dojo pays this when requesting a
+  // printed certificate. Null/0 means no charge for this rank.
+  certificatePrice Decimal? @db.Decimal(10, 2) @map("certificate_price")
 
   gradingsFrom        Grading[]            @relation("GradingFromRank")
   gradingsTo          Grading[]            @relation("GradingToRank")
@@ -111,6 +124,14 @@ model Dojo {
 
   // Renewal orders placed by the DOJO_OWNER for this dojo.
   renewalOrders ShopOrder[] @relation("DojoRenewalOrders")
+
+  // Certificate orders + cert requests originated by this dojo.
+  certificateOrders   ShopOrder[]          @relation("DojoCertificateOrders")
+  certificateRequests CertificateRequest[]
+
+  // Cloudinary URL of the dojo owner's signature (PNG with transparent bg).
+  // Required before the dojo can place a certificate order.
+  ownerSignatureUrl String? @map("owner_signature_url")
 
   // The dojo head is the Member with role = DOJO_OWNER and dojoId = this.id.
   // A partial unique index `members_one_owner_per_dojo` enforces "at most one
@@ -194,6 +215,8 @@ model Member {
   bloodGroup           String?          @map("blood_group")
   address              String?
   nationalId           String?          @map("national_id")
+  fatherName           String?          @map("father_name")
+  motherName           String?          @map("mother_name")
   emergencyContactName String?          @map("emergency_contact_name")
   emergencyContactPhone String?         @map("emergency_contact_phone")
 
@@ -205,6 +228,7 @@ model Member {
   orders               ShopOrder[]
   attendance           Attendance[]
   tournamentEntries    TournamentParticipant[]
+  certificateRequests  CertificateRequest[]
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt      @map("updated_at")
@@ -312,10 +336,71 @@ model Grading {
   fromRank     BeltRank?     @relation("GradingFromRank", fields: [fromRankId], references: [id])
   toRank       BeltRank?     @relation("GradingToRank", fields: [toRankId], references: [id])
 
+  certificateRequests CertificateRequest[]
+
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt      @map("updated_at")
 
   @@map("gradings")
+}
+
+// ─────────────────────────────────────────────
+// CERTIFICATE REQUESTS
+// Dojo-initiated: dojo selects passed gradings, pays the per-rank fee,
+// and the system renders and stores the PDF certificate.
+// ─────────────────────────────────────────────
+
+model CertificateRequest {
+  id          String                   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  gradingId   String                   @db.Uuid @map("grading_id")
+  memberId    String                   @db.Uuid @map("member_id")
+  dojoId      String                   @db.Uuid @map("dojo_id")
+  orderId     String?                  @db.Uuid @map("order_id")
+  status      CertificateRequestStatus @default(PENDING_PAYMENT)
+  price       Decimal                  @db.Decimal(10, 2)
+  certificateUrl String?               @map("certificate_url")
+  failureReason  String?               @map("failure_reason")
+
+  // Snapshotted at request time so a later rename of the member does not
+  // mutate an already-issued certificate.
+  memberName     String                @map("member_name")
+  fatherName     String?               @map("father_name")
+  motherName     String?               @map("mother_name")
+  rankName       String                @map("rank_name")
+
+  grading Grading   @relation(fields: [gradingId], references: [id], onDelete: Cascade)
+  member  Member    @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  dojo    Dojo      @relation(fields: [dojoId], references: [id])
+  order   ShopOrder? @relation("OrderCertificates", fields: [orderId], references: [id])
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt      @map("updated_at")
+
+  // One issued certificate per grading. PENDING_PAYMENT rows are deduped
+  // at the SQL layer with a partial unique index so retries don't pile up.
+  @@index([gradingId])
+  @@index([dojoId])
+  @@index([orderId])
+  @@index([status])
+  @@map("certificate_requests")
+}
+
+// ─────────────────────────────────────────────
+// SYSTEM SETTINGS — singleton row (id = "default")
+// Stores federation-wide configuration like the admin signature URL.
+// ─────────────────────────────────────────────
+
+model SystemSettings {
+  id                 String  @id @default("default")
+  adminSignatureUrl  String? @map("admin_signature_url")
+  adminSignerName    String? @map("admin_signer_name")
+  adminSignerTitle   String? @map("admin_signer_title")
+  certificateLogoUrl String? @map("certificate_logo_url")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt      @map("updated_at")
+
+  @@map("system_settings")
 }
 
 // ─────────────────────────────────────────────
@@ -421,9 +506,17 @@ model ShopOrder {
   dojoId              String?       @db.Uuid @map("dojo_id")
   includesDojoRenewal Boolean       @default(false) @map("includes_dojo_renewal")
 
-  member     Member          @relation(fields: [memberId], references: [id], onDelete: Cascade)
-  dojo       Dojo?           @relation("DojoRenewalOrders", fields: [dojoId], references: [id])
-  orderItems ShopOrderItem[]
+  // Certificate orders: a dojo bundles N cert requests into one order.
+  // When set, dojoCertOrderId distinguishes from renewal orders that
+  // also reference dojoId.
+  includesCertificates Boolean       @default(false) @map("includes_certificates")
+  certDojoId           String?       @db.Uuid @map("cert_dojo_id")
+
+  member             Member               @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  dojo               Dojo?                @relation("DojoRenewalOrders", fields: [dojoId], references: [id])
+  certDojo           Dojo?                @relation("DojoCertificateOrders", fields: [certDojoId], references: [id])
+  orderItems         ShopOrderItem[]
+  certificateRequests CertificateRequest[] @relation("OrderCertificates")
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt      @map("updated_at")

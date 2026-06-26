@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { prisma } from "@/lib/prisma";
+import { serialize } from "@/lib/serialize";
 import CertificatesClient from "@/components/portal/certificates-client";
 
 export default async function CertificatesPage() {
@@ -16,12 +17,27 @@ export default async function CertificatesPage() {
 
         gradings = await prisma.grading.findMany({
             where: { memberId: user.id, result: "PASSED" },
-            include: { fromRank: true, toRank: true, gradingEvent: true },
+            include: {
+                fromRank: true,
+                toRank: true,
+                gradingEvent: true,
+                certificateRequests: {
+                    where: { status: "ISSUED" },
+                    orderBy: { updatedAt: "desc" },
+                    take: 1,
+                    select: { id: true },
+                },
+            },
             orderBy: { createdAt: "desc" },
         });
     } catch {
         // DB not configured
     }
 
-    return <CertificatesClient member={member} gradings={gradings} />;
+    return (
+        <CertificatesClient
+            member={serialize(member)}
+            gradings={serialize(gradings)}
+        />
+    );
 }

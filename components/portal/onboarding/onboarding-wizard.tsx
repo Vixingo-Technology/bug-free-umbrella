@@ -32,6 +32,8 @@ function initialProfile(member: any): ProfileData {
         bloodGroup: member?.bloodGroup ?? "",
         address: member?.address ?? "",
         nationalId: member?.nationalId ?? "",
+        fatherName: member?.fatherName ?? "",
+        motherName: member?.motherName ?? "",
         emergencyContactName: member?.emergencyContactName ?? "",
         emergencyContactPhone: member?.emergencyContactPhone ?? "",
     };

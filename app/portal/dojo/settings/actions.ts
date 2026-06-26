@@ -6,6 +6,10 @@ import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { requireDojoRole } from "@/lib/dojo-session";
 import { MEMBERSHIP_FEE_BDT } from "@/lib/constants";
+import {
+    uploadToCloudinary,
+    CLOUDINARY_FOLDERS,
+} from "@/lib/cloudinary";
 
 const annualFeeSchema = z.object({
   annualFee: z
@@ -38,6 +42,47 @@ export async function saveDojoAnnualFeeAction(input: {
 
   revalidatePath("/portal/dojo/settings");
   return { success: true };
+}
+
+/**
+ * Persist the dojo owner's signature image. Accepts a data-URL (image upload)
+ * or null (to remove the existing signature). Returns the Cloudinary URL so
+ * the client can swap its preview.
+ */
+export async function saveDojoSignatureAction(input: {
+    dataUrl: string | null;
+}): Promise<{ success: true; url: string | null } | { error: string }> {
+    const session = await requireDojoRole("DOJO_OWNER");
+    if (!session.dojo) return { error: "Your dojo is not set up yet." };
+
+    let nextUrl: string | null = null;
+
+    if (input.dataUrl) {
+        try {
+            const uploaded = await uploadToCloudinary(input.dataUrl, {
+                folder: `${CLOUDINARY_FOLDERS.certificates}/signatures`,
+                publicId: `dojo-${session.dojo.id}-owner`,
+                resourceType: "image",
+            });
+            nextUrl = uploaded.url;
+        } catch (e) {
+            console.error("[saveDojoSignature] upload failed", e);
+            return { error: "Could not upload signature. Try again." };
+        }
+    }
+
+    try {
+        await prisma.dojo.update({
+            where: { id: session.dojo.id },
+            data: { ownerSignatureUrl: nextUrl },
+        });
+    } catch (e) {
+        console.error("[saveDojoSignature] db update failed", e);
+        return { error: "Could not save signature. Try again." };
+    }
+
+    revalidatePath("/portal/dojo/settings");
+    return { success: true, url: nextUrl };
 }
 
 /**

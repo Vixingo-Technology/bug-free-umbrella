@@ -141,10 +141,10 @@ async function StudentPortalDashboard({ userId }: { userId: string }) {
 
     return (
         <PortalDashboardClient
-            member={member}
+            member={serialize(member)}
             membershipStatus={membershipStatus}
             unreadNotifications={unreadNotifications}
-            upcomingItems={upcomingItems}
+            upcomingItems={serialize(upcomingItems)}
             userId={userId}
         />
     );

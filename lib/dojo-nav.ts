@@ -1,5 +1,6 @@
 import type { LucideIcon } from "lucide-react";
 import {
+    Award,
     Calendar,
     CreditCard,
     GraduationCap,
@@ -57,6 +58,13 @@ export const DOJO_NAV: DojoNavItem[] = [
         icon: GraduationCap,
         min: "INSTRUCTOR",
         group: "operations",
+    },
+    {
+        href: "/portal/dojo/certificates",
+        label: "Certificates",
+        icon: Award,
+        min: "DOJO_MANAGER",
+        group: "business",
     },
     {
         href: "/portal/dojo/shop",

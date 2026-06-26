@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
+import { prisma } from "@/lib/prisma";
+import { generateCertificatePdf } from "@/lib/certificates/generate";
 
 // Setup Supabase client only if environment variables are present.
 // Creating the client at import-time with empty values can throw during build.
@@ -26,41 +28,88 @@ export async function POST(request: Request) {
         const validationResponse = await fetch(validationUrl);
         const validationData = await validationResponse.json();
 
-        if (
+        const isValid =
             validationData.status === "VALID" ||
-            validationData.status === "VALIDATED"
-        ) {
-            // 2. Update the order status in Supabase (if configured)
-            if (!supabase) {
-                console.error("Supabase client not configured");
-                return NextResponse.json(
-                    { error: "Supabase not configured" },
-                    { status: 500 },
-                );
-            }
-
-            const { error } = await (supabase as any)
-                .from("shop_orders")
-                .update({ payment_status: "PAID" })
-                .eq("id", tran_id); // Assuming tran_id holds our shop_orders ID
-
-            if (error) {
-                console.error("Supabase update error:", error);
-                throw error;
-            }
-
-            return NextResponse.json(
-                { message: "IPN handled successfully" },
-                { status: 200 },
-            );
-        } else {
+            validationData.status === "VALIDATED";
+        if (!isValid) {
             return NextResponse.json({ error: "Invalid IPN" }, { status: 400 });
         }
+
+        if (!supabase) {
+            console.error("Supabase client not configured");
+            return NextResponse.json(
+                { error: "Supabase not configured" },
+                { status: 500 },
+            );
+        }
+
+        // 2. Mark the order PAID
+        const { error } = await (supabase as any)
+            .from("shop_orders")
+            .update({ payment_status: "PAID" })
+            .eq("id", tran_id);
+        if (error) {
+            console.error("Supabase update error:", error);
+            throw error;
+        }
+
+        // 3. Side-effects per order type. We post-process via Prisma so RLS
+        //    isn't in the way and Decimal/Date types are normalized.
+        try {
+            await handleOrderSideEffects(String(tran_id));
+        } catch (e) {
+            console.error("[sslcommerz] post-paid side effects failed", e);
+            // We still ack the webhook — SSLCommerz only needs the order to
+            // be marked PAID. Failed cert PDFs end up in FAILED status and
+            // can be retried by an admin.
+        }
+
+        return NextResponse.json(
+            { message: "IPN handled successfully" },
+            { status: 200 },
+        );
     } catch (error) {
         console.error("Webhook Error:", error);
         return NextResponse.json(
             { error: "Webhook processing failed" },
             { status: 500 },
         );
+    }
+}
+
+async function handleOrderSideEffects(orderId: string) {
+    const order = await prisma.shopOrder.findUnique({
+        where: { id: orderId },
+        select: {
+            id: true,
+            includesCertificates: true,
+            certificateRequests: { select: { id: true } },
+        },
+    });
+    if (!order) return;
+
+    if (!order.includesCertificates || order.certificateRequests.length === 0) {
+        return;
+    }
+
+    // Flip every PENDING_PAYMENT request on this order to PAID, then render
+    // each PDF. We do this sequentially to avoid hammering Cloudinary in
+    // bursts and to keep memory tight.
+    await prisma.certificateRequest.updateMany({
+        where: { orderId: order.id, status: "PENDING_PAYMENT" },
+        data: { status: "PAID" },
+    });
+
+    for (const r of order.certificateRequests) {
+        const res = await generateCertificatePdf({
+            certificateRequestId: r.id,
+        });
+        if (!res.ok) {
+            console.error(
+                "[certificate] generation failed",
+                r.id,
+                res.reason,
+            );
+        }
     }
 }

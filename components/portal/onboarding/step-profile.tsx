@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { motion } from "motion/react";
-import { User, Phone, MapPin, Heart, AlertCircle, ChevronRight } from "lucide-react";
+import { User, Phone, MapPin, Heart, AlertCircle, ChevronRight, Users } from "lucide-react";
 import { saveProfileAction } from "@/app/portal/onboarding/actions";
 import { BLOOD_GROUPS } from "@/lib/constants";
 import AvatarUploader from "@/components/portal/avatar-uploader";
@@ -15,6 +15,8 @@ export interface ProfileData {
     bloodGroup: string;
     address: string;
     nationalId: string;
+    fatherName: string;
+    motherName: string;
     emergencyContactName: string;
     emergencyContactPhone: string;
 }
@@ -224,6 +226,32 @@ export default function StepProfile({
                         className={inputCls}
                     />
                 </Field>
+
+                {/* Parent names — used on printed certificates. Optional here
+                    so legacy members editing their profile aren't blocked;
+                    the cert-request flow prompts to fill them at that point. */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <Field label="Father's Name" icon={<Users size={15} />}>
+                        <input
+                            name="fatherName"
+                            type="text"
+                            value={value.fatherName}
+                            onChange={(e) => update("fatherName", e.target.value)}
+                            placeholder="As it should appear on the certificate"
+                            className={inputCls}
+                        />
+                    </Field>
+                    <Field label="Mother's Name" icon={<Users size={15} />}>
+                        <input
+                            name="motherName"
+                            type="text"
+                            value={value.motherName}
+                            onChange={(e) => update("motherName", e.target.value)}
+                            placeholder="As it should appear on the certificate"
+                            className={inputCls}
+                        />
+                    </Field>
+                </div>
 
                 {/* Emergency contact */}
                 <div className="pt-2">

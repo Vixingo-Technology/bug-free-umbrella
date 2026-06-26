@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { prisma } from "@/lib/prisma";
+import { serialize } from "@/lib/serialize";
 import ProgressClient from "@/components/portal/progress-client";
 
 export default async function ProgressPage() {
@@ -33,9 +34,9 @@ export default async function ProgressPage() {
 
     return (
         <ProgressClient
-            member={member}
-            allBeltRanks={allBeltRanks}
-            gradings={gradings}
+            member={serialize(member)}
+            allBeltRanks={serialize(allBeltRanks)}
+            gradings={serialize(gradings)}
         />
     );
 }

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Save } from "lucide-react";
 import DojoPageHeader from "@/components/dojo/page-header";
 import DojoMembershipCard from "@/components/dojo/settings/dojo-membership-card";
+import SignatureUploader from "@/components/dojo/settings/signature-uploader";
 import { requireDojoRole } from "@/lib/dojo-session";
 import { prisma } from "@/lib/prisma";
 import { MEMBERSHIP_FEE_BDT } from "@/lib/constants";
@@ -162,6 +163,21 @@ export default async function SettingsPage() {
                         }
                     />
                 </Card>
+
+                <div id="signature" className="lg:col-span-2 scroll-mt-24">
+                    <Card title="Owner signature">
+                        {dojo ? (
+                            <SignatureUploader
+                                currentUrl={dojoBase?.ownerSignatureUrl ?? null}
+                            />
+                        ) : (
+                            <p className="text-sm text-zinc-500">
+                                Signature upload becomes available once your
+                                dojo is approved.
+                            </p>
+                        )}
+                    </Card>
+                </div>
 
                 <div id="renewal" className="lg:col-span-2 scroll-mt-24">
                     <Card title="Dojo membership">

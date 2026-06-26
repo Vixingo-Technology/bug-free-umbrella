@@ -126,6 +126,7 @@ exports.Prisma.BeltRankScalarFieldEnum = {
   kyuDan: 'kyuDan',
   colorHex: 'colorHex',
   orderIndex: 'orderIndex',
+  certificatePrice: 'certificatePrice',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -143,6 +144,7 @@ exports.Prisma.DojoScalarFieldEnum = {
   isActive: 'isActive',
   annualFee: 'annualFee',
   expiryDate: 'expiryDate',
+  ownerSignatureUrl: 'ownerSignatureUrl',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -186,6 +188,8 @@ exports.Prisma.MemberScalarFieldEnum = {
   bloodGroup: 'bloodGroup',
   address: 'address',
   nationalId: 'nationalId',
+  fatherName: 'fatherName',
+  motherName: 'motherName',
   emergencyContactName: 'emergencyContactName',
   emergencyContactPhone: 'emergencyContactPhone',
   createdAt: 'createdAt',
@@ -237,6 +241,34 @@ exports.Prisma.GradingScalarFieldEnum = {
   result: 'result',
   certificateUrl: 'certificateUrl',
   notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.CertificateRequestScalarFieldEnum = {
+  id: 'id',
+  gradingId: 'gradingId',
+  memberId: 'memberId',
+  dojoId: 'dojoId',
+  orderId: 'orderId',
+  status: 'status',
+  price: 'price',
+  certificateUrl: 'certificateUrl',
+  failureReason: 'failureReason',
+  memberName: 'memberName',
+  fatherName: 'fatherName',
+  motherName: 'motherName',
+  rankName: 'rankName',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.SystemSettingsScalarFieldEnum = {
+  id: 'id',
+  adminSignatureUrl: 'adminSignatureUrl',
+  adminSignerName: 'adminSignerName',
+  adminSignerTitle: 'adminSignerTitle',
+  certificateLogoUrl: 'certificateLogoUrl',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -299,6 +331,8 @@ exports.Prisma.ShopOrderScalarFieldEnum = {
   notes: 'notes',
   dojoId: 'dojoId',
   includesDojoRenewal: 'includesDojoRenewal',
+  includesCertificates: 'includesCertificates',
+  certDojoId: 'certDojoId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -407,6 +441,14 @@ exports.GradingResult = exports.$Enums.GradingResult = {
   ABSENT: 'ABSENT'
 };
 
+exports.CertificateRequestStatus = exports.$Enums.CertificateRequestStatus = {
+  PENDING_PAYMENT: 'PENDING_PAYMENT',
+  PAID: 'PAID',
+  GENERATING: 'GENERATING',
+  ISSUED: 'ISSUED',
+  FAILED: 'FAILED'
+};
+
 exports.NotificationType = exports.$Enums.NotificationType = {
   INFO: 'INFO',
   WARNING: 'WARNING',
@@ -414,7 +456,8 @@ exports.NotificationType = exports.$Enums.NotificationType = {
   PAYMENT: 'PAYMENT',
   GRADING: 'GRADING',
   EVENT: 'EVENT',
-  RENEWAL: 'RENEWAL'
+  RENEWAL: 'RENEWAL',
+  CERTIFICATE: 'CERTIFICATE'
 };
 
 exports.PaymentStatus = exports.$Enums.PaymentStatus = {
@@ -433,6 +476,8 @@ exports.Prisma.ModelName = {
   GradingEvent: 'GradingEvent',
   GradingApplication: 'GradingApplication',
   Grading: 'Grading',
+  CertificateRequest: 'CertificateRequest',
+  SystemSettings: 'SystemSettings',
   Event: 'Event',
   EventRegistration: 'EventRegistration',
   Notification: 'Notification',

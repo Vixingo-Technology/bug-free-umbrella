@@ -64,6 +64,7 @@ const adminNavItems = [
     { label: "Products", href: "/portal/admin/products", icon: Package },
     { label: "Orders",   href: "/portal/admin/orders",   icon: ShoppingBag },
     { label: "Dojos",    href: "/portal/admin/dojos",    icon: Building2 },
+    { label: "Certificates", href: "/portal/admin/certificates", icon: Award },
 ];
 
 // Dojo staff (Instructor / Manager / Dojo Head) share the personal sidebar;

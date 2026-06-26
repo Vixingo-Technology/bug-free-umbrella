@@ -54,6 +54,16 @@ export type GradingApplication = $Result.DefaultSelection<Prisma.$GradingApplica
  */
 export type Grading = $Result.DefaultSelection<Prisma.$GradingPayload>
 /**
+ * Model CertificateRequest
+ * 
+ */
+export type CertificateRequest = $Result.DefaultSelection<Prisma.$CertificateRequestPayload>
+/**
+ * Model SystemSettings
+ * 
+ */
+export type SystemSettings = $Result.DefaultSelection<Prisma.$SystemSettingsPayload>
+/**
  * Model Event
  * 
  */
@@ -160,10 +170,22 @@ export const NotificationType: {
   PAYMENT: 'PAYMENT',
   GRADING: 'GRADING',
   EVENT: 'EVENT',
-  RENEWAL: 'RENEWAL'
+  RENEWAL: 'RENEWAL',
+  CERTIFICATE: 'CERTIFICATE'
 };
 
 export type NotificationType = (typeof NotificationType)[keyof typeof NotificationType]
+
+
+export const CertificateRequestStatus: {
+  PENDING_PAYMENT: 'PENDING_PAYMENT',
+  PAID: 'PAID',
+  GENERATING: 'GENERATING',
+  ISSUED: 'ISSUED',
+  FAILED: 'FAILED'
+};
+
+export type CertificateRequestStatus = (typeof CertificateRequestStatus)[keyof typeof CertificateRequestStatus]
 
 
 export const DojoApplicationStatus: {
@@ -200,6 +222,10 @@ export const PaymentStatus: typeof $Enums.PaymentStatus
 export type NotificationType = $Enums.NotificationType
 
 export const NotificationType: typeof $Enums.NotificationType
+
+export type CertificateRequestStatus = $Enums.CertificateRequestStatus
+
+export const CertificateRequestStatus: typeof $Enums.CertificateRequestStatus
 
 export type DojoApplicationStatus = $Enums.DojoApplicationStatus
 
@@ -405,6 +431,26 @@ export class PrismaClient<
     * ```
     */
   get grading(): Prisma.GradingDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.certificateRequest`: Exposes CRUD operations for the **CertificateRequest** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more CertificateRequests
+    * const certificateRequests = await prisma.certificateRequest.findMany()
+    * ```
+    */
+  get certificateRequest(): Prisma.CertificateRequestDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.systemSettings`: Exposes CRUD operations for the **SystemSettings** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more SystemSettings
+    * const systemSettings = await prisma.systemSettings.findMany()
+    * ```
+    */
+  get systemSettings(): Prisma.SystemSettingsDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.event`: Exposes CRUD operations for the **Event** model.
@@ -937,6 +983,8 @@ export namespace Prisma {
     GradingEvent: 'GradingEvent',
     GradingApplication: 'GradingApplication',
     Grading: 'Grading',
+    CertificateRequest: 'CertificateRequest',
+    SystemSettings: 'SystemSettings',
     Event: 'Event',
     EventRegistration: 'EventRegistration',
     Notification: 'Notification',
@@ -961,7 +1009,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "beltRank" | "dojo" | "dojoApplication" | "member" | "attendance" | "gradingEvent" | "gradingApplication" | "grading" | "event" | "eventRegistration" | "notification" | "shopProduct" | "shopOrder" | "shopOrderItem" | "tournament" | "tournamentParticipant" | "tournamentMatch"
+      modelProps: "beltRank" | "dojo" | "dojoApplication" | "member" | "attendance" | "gradingEvent" | "gradingApplication" | "grading" | "certificateRequest" | "systemSettings" | "event" | "eventRegistration" | "notification" | "shopProduct" | "shopOrder" | "shopOrderItem" | "tournament" | "tournamentParticipant" | "tournamentMatch"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1554,6 +1602,154 @@ export namespace Prisma {
           count: {
             args: Prisma.GradingCountArgs<ExtArgs>
             result: $Utils.Optional<GradingCountAggregateOutputType> | number
+          }
+        }
+      }
+      CertificateRequest: {
+        payload: Prisma.$CertificateRequestPayload<ExtArgs>
+        fields: Prisma.CertificateRequestFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.CertificateRequestFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateRequestPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.CertificateRequestFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateRequestPayload>
+          }
+          findFirst: {
+            args: Prisma.CertificateRequestFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateRequestPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.CertificateRequestFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateRequestPayload>
+          }
+          findMany: {
+            args: Prisma.CertificateRequestFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateRequestPayload>[]
+          }
+          create: {
+            args: Prisma.CertificateRequestCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateRequestPayload>
+          }
+          createMany: {
+            args: Prisma.CertificateRequestCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.CertificateRequestCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateRequestPayload>[]
+          }
+          delete: {
+            args: Prisma.CertificateRequestDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateRequestPayload>
+          }
+          update: {
+            args: Prisma.CertificateRequestUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateRequestPayload>
+          }
+          deleteMany: {
+            args: Prisma.CertificateRequestDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.CertificateRequestUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.CertificateRequestUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateRequestPayload>[]
+          }
+          upsert: {
+            args: Prisma.CertificateRequestUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateRequestPayload>
+          }
+          aggregate: {
+            args: Prisma.CertificateRequestAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCertificateRequest>
+          }
+          groupBy: {
+            args: Prisma.CertificateRequestGroupByArgs<ExtArgs>
+            result: $Utils.Optional<CertificateRequestGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.CertificateRequestCountArgs<ExtArgs>
+            result: $Utils.Optional<CertificateRequestCountAggregateOutputType> | number
+          }
+        }
+      }
+      SystemSettings: {
+        payload: Prisma.$SystemSettingsPayload<ExtArgs>
+        fields: Prisma.SystemSettingsFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.SystemSettingsFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SystemSettingsPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.SystemSettingsFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SystemSettingsPayload>
+          }
+          findFirst: {
+            args: Prisma.SystemSettingsFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SystemSettingsPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.SystemSettingsFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SystemSettingsPayload>
+          }
+          findMany: {
+            args: Prisma.SystemSettingsFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SystemSettingsPayload>[]
+          }
+          create: {
+            args: Prisma.SystemSettingsCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SystemSettingsPayload>
+          }
+          createMany: {
+            args: Prisma.SystemSettingsCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.SystemSettingsCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SystemSettingsPayload>[]
+          }
+          delete: {
+            args: Prisma.SystemSettingsDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SystemSettingsPayload>
+          }
+          update: {
+            args: Prisma.SystemSettingsUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SystemSettingsPayload>
+          }
+          deleteMany: {
+            args: Prisma.SystemSettingsDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.SystemSettingsUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.SystemSettingsUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SystemSettingsPayload>[]
+          }
+          upsert: {
+            args: Prisma.SystemSettingsUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SystemSettingsPayload>
+          }
+          aggregate: {
+            args: Prisma.SystemSettingsAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSystemSettings>
+          }
+          groupBy: {
+            args: Prisma.SystemSettingsGroupByArgs<ExtArgs>
+            result: $Utils.Optional<SystemSettingsGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.SystemSettingsCountArgs<ExtArgs>
+            result: $Utils.Optional<SystemSettingsCountAggregateOutputType> | number
           }
         }
       }
@@ -2339,6 +2535,8 @@ export namespace Prisma {
     gradingEvent?: GradingEventOmit
     gradingApplication?: GradingApplicationOmit
     grading?: GradingOmit
+    certificateRequest?: CertificateRequestOmit
+    systemSettings?: SystemSettingsOmit
     event?: EventOmit
     eventRegistration?: EventRegistrationOmit
     notification?: NotificationOmit
@@ -2487,12 +2685,16 @@ export namespace Prisma {
 
   export type DojoCountOutputType = {
     renewalOrders: number
+    certificateOrders: number
+    certificateRequests: number
     members: number
     attendance: number
   }
 
   export type DojoCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     renewalOrders?: boolean | DojoCountOutputTypeCountRenewalOrdersArgs
+    certificateOrders?: boolean | DojoCountOutputTypeCountCertificateOrdersArgs
+    certificateRequests?: boolean | DojoCountOutputTypeCountCertificateRequestsArgs
     members?: boolean | DojoCountOutputTypeCountMembersArgs
     attendance?: boolean | DojoCountOutputTypeCountAttendanceArgs
   }
@@ -2513,6 +2715,20 @@ export namespace Prisma {
    */
   export type DojoCountOutputTypeCountRenewalOrdersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ShopOrderWhereInput
+  }
+
+  /**
+   * DojoCountOutputType without action
+   */
+  export type DojoCountOutputTypeCountCertificateOrdersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ShopOrderWhereInput
+  }
+
+  /**
+   * DojoCountOutputType without action
+   */
+  export type DojoCountOutputTypeCountCertificateRequestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CertificateRequestWhereInput
   }
 
   /**
@@ -2542,6 +2758,7 @@ export namespace Prisma {
     orders: number
     attendance: number
     tournamentEntries: number
+    certificateRequests: number
   }
 
   export type MemberCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2552,6 +2769,7 @@ export namespace Prisma {
     orders?: boolean | MemberCountOutputTypeCountOrdersArgs
     attendance?: boolean | MemberCountOutputTypeCountAttendanceArgs
     tournamentEntries?: boolean | MemberCountOutputTypeCountTournamentEntriesArgs
+    certificateRequests?: boolean | MemberCountOutputTypeCountCertificateRequestsArgs
   }
 
   // Custom InputTypes
@@ -2614,6 +2832,13 @@ export namespace Prisma {
     where?: TournamentParticipantWhereInput
   }
 
+  /**
+   * MemberCountOutputType without action
+   */
+  export type MemberCountOutputTypeCountCertificateRequestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CertificateRequestWhereInput
+  }
+
 
   /**
    * Count Type GradingEventCountOutputType
@@ -2652,6 +2877,37 @@ export namespace Prisma {
    */
   export type GradingEventCountOutputTypeCountApplicationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: GradingApplicationWhereInput
+  }
+
+
+  /**
+   * Count Type GradingCountOutputType
+   */
+
+  export type GradingCountOutputType = {
+    certificateRequests: number
+  }
+
+  export type GradingCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    certificateRequests?: boolean | GradingCountOutputTypeCountCertificateRequestsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * GradingCountOutputType without action
+   */
+  export type GradingCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GradingCountOutputType
+     */
+    select?: GradingCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * GradingCountOutputType without action
+   */
+  export type GradingCountOutputTypeCountCertificateRequestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CertificateRequestWhereInput
   }
 
 
@@ -2723,10 +2979,12 @@ export namespace Prisma {
 
   export type ShopOrderCountOutputType = {
     orderItems: number
+    certificateRequests: number
   }
 
   export type ShopOrderCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     orderItems?: boolean | ShopOrderCountOutputTypeCountOrderItemsArgs
+    certificateRequests?: boolean | ShopOrderCountOutputTypeCountCertificateRequestsArgs
   }
 
   // Custom InputTypes
@@ -2745,6 +3003,13 @@ export namespace Prisma {
    */
   export type ShopOrderCountOutputTypeCountOrderItemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ShopOrderItemWhereInput
+  }
+
+  /**
+   * ShopOrderCountOutputType without action
+   */
+  export type ShopOrderCountOutputTypeCountCertificateRequestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CertificateRequestWhereInput
   }
 
 
@@ -2855,10 +3120,12 @@ export namespace Prisma {
 
   export type BeltRankAvgAggregateOutputType = {
     orderIndex: number | null
+    certificatePrice: Decimal | null
   }
 
   export type BeltRankSumAggregateOutputType = {
     orderIndex: number | null
+    certificatePrice: Decimal | null
   }
 
   export type BeltRankMinAggregateOutputType = {
@@ -2867,6 +3134,7 @@ export namespace Prisma {
     kyuDan: string | null
     colorHex: string | null
     orderIndex: number | null
+    certificatePrice: Decimal | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -2877,6 +3145,7 @@ export namespace Prisma {
     kyuDan: string | null
     colorHex: string | null
     orderIndex: number | null
+    certificatePrice: Decimal | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -2887,6 +3156,7 @@ export namespace Prisma {
     kyuDan: number
     colorHex: number
     orderIndex: number
+    certificatePrice: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -2895,10 +3165,12 @@ export namespace Prisma {
 
   export type BeltRankAvgAggregateInputType = {
     orderIndex?: true
+    certificatePrice?: true
   }
 
   export type BeltRankSumAggregateInputType = {
     orderIndex?: true
+    certificatePrice?: true
   }
 
   export type BeltRankMinAggregateInputType = {
@@ -2907,6 +3179,7 @@ export namespace Prisma {
     kyuDan?: true
     colorHex?: true
     orderIndex?: true
+    certificatePrice?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -2917,6 +3190,7 @@ export namespace Prisma {
     kyuDan?: true
     colorHex?: true
     orderIndex?: true
+    certificatePrice?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -2927,6 +3201,7 @@ export namespace Prisma {
     kyuDan?: true
     colorHex?: true
     orderIndex?: true
+    certificatePrice?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -3024,6 +3299,7 @@ export namespace Prisma {
     kyuDan: string | null
     colorHex: string | null
     orderIndex: number
+    certificatePrice: Decimal | null
     createdAt: Date
     updatedAt: Date
     _count: BeltRankCountAggregateOutputType | null
@@ -3053,6 +3329,7 @@ export namespace Prisma {
     kyuDan?: boolean
     colorHex?: boolean
     orderIndex?: boolean
+    certificatePrice?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     gradingsFrom?: boolean | BeltRank$gradingsFromArgs<ExtArgs>
@@ -3068,6 +3345,7 @@ export namespace Prisma {
     kyuDan?: boolean
     colorHex?: boolean
     orderIndex?: boolean
+    certificatePrice?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["beltRank"]>
@@ -3078,6 +3356,7 @@ export namespace Prisma {
     kyuDan?: boolean
     colorHex?: boolean
     orderIndex?: boolean
+    certificatePrice?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["beltRank"]>
@@ -3088,11 +3367,12 @@ export namespace Prisma {
     kyuDan?: boolean
     colorHex?: boolean
     orderIndex?: boolean
+    certificatePrice?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type BeltRankOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "kyuDan" | "colorHex" | "orderIndex" | "createdAt" | "updatedAt", ExtArgs["result"]["beltRank"]>
+  export type BeltRankOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "kyuDan" | "colorHex" | "orderIndex" | "certificatePrice" | "createdAt" | "updatedAt", ExtArgs["result"]["beltRank"]>
   export type BeltRankInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     gradingsFrom?: boolean | BeltRank$gradingsFromArgs<ExtArgs>
     gradingsTo?: boolean | BeltRank$gradingsToArgs<ExtArgs>
@@ -3117,6 +3397,7 @@ export namespace Prisma {
       kyuDan: string | null
       colorHex: string | null
       orderIndex: number
+      certificatePrice: Prisma.Decimal | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["beltRank"]>
@@ -3551,6 +3832,7 @@ export namespace Prisma {
     readonly kyuDan: FieldRef<"BeltRank", 'String'>
     readonly colorHex: FieldRef<"BeltRank", 'String'>
     readonly orderIndex: FieldRef<"BeltRank", 'Int'>
+    readonly certificatePrice: FieldRef<"BeltRank", 'Decimal'>
     readonly createdAt: FieldRef<"BeltRank", 'DateTime'>
     readonly updatedAt: FieldRef<"BeltRank", 'DateTime'>
   }
@@ -4096,6 +4378,7 @@ export namespace Prisma {
     isActive: boolean | null
     annualFee: Decimal | null
     expiryDate: Date | null
+    ownerSignatureUrl: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -4112,6 +4395,7 @@ export namespace Prisma {
     isActive: boolean | null
     annualFee: Decimal | null
     expiryDate: Date | null
+    ownerSignatureUrl: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -4129,6 +4413,7 @@ export namespace Prisma {
     isActive: number
     annualFee: number
     expiryDate: number
+    ownerSignatureUrl: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -4159,6 +4444,7 @@ export namespace Prisma {
     isActive?: true
     annualFee?: true
     expiryDate?: true
+    ownerSignatureUrl?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -4175,6 +4461,7 @@ export namespace Prisma {
     isActive?: true
     annualFee?: true
     expiryDate?: true
+    ownerSignatureUrl?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -4192,6 +4479,7 @@ export namespace Prisma {
     isActive?: true
     annualFee?: true
     expiryDate?: true
+    ownerSignatureUrl?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -4296,6 +4584,7 @@ export namespace Prisma {
     isActive: boolean
     annualFee: Decimal | null
     expiryDate: Date | null
+    ownerSignatureUrl: string | null
     createdAt: Date
     updatedAt: Date
     _count: DojoCountAggregateOutputType | null
@@ -4332,9 +4621,12 @@ export namespace Prisma {
     isActive?: boolean
     annualFee?: boolean
     expiryDate?: boolean
+    ownerSignatureUrl?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     renewalOrders?: boolean | Dojo$renewalOrdersArgs<ExtArgs>
+    certificateOrders?: boolean | Dojo$certificateOrdersArgs<ExtArgs>
+    certificateRequests?: boolean | Dojo$certificateRequestsArgs<ExtArgs>
     members?: boolean | Dojo$membersArgs<ExtArgs>
     attendance?: boolean | Dojo$attendanceArgs<ExtArgs>
     _count?: boolean | DojoCountOutputTypeDefaultArgs<ExtArgs>
@@ -4353,6 +4645,7 @@ export namespace Prisma {
     isActive?: boolean
     annualFee?: boolean
     expiryDate?: boolean
+    ownerSignatureUrl?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["dojo"]>
@@ -4370,6 +4663,7 @@ export namespace Prisma {
     isActive?: boolean
     annualFee?: boolean
     expiryDate?: boolean
+    ownerSignatureUrl?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["dojo"]>
@@ -4387,13 +4681,16 @@ export namespace Prisma {
     isActive?: boolean
     annualFee?: boolean
     expiryDate?: boolean
+    ownerSignatureUrl?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type DojoOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "address" | "city" | "latitude" | "longitude" | "phone" | "email" | "schedule" | "isActive" | "annualFee" | "expiryDate" | "createdAt" | "updatedAt", ExtArgs["result"]["dojo"]>
+  export type DojoOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "address" | "city" | "latitude" | "longitude" | "phone" | "email" | "schedule" | "isActive" | "annualFee" | "expiryDate" | "ownerSignatureUrl" | "createdAt" | "updatedAt", ExtArgs["result"]["dojo"]>
   export type DojoInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     renewalOrders?: boolean | Dojo$renewalOrdersArgs<ExtArgs>
+    certificateOrders?: boolean | Dojo$certificateOrdersArgs<ExtArgs>
+    certificateRequests?: boolean | Dojo$certificateRequestsArgs<ExtArgs>
     members?: boolean | Dojo$membersArgs<ExtArgs>
     attendance?: boolean | Dojo$attendanceArgs<ExtArgs>
     _count?: boolean | DojoCountOutputTypeDefaultArgs<ExtArgs>
@@ -4405,6 +4702,8 @@ export namespace Prisma {
     name: "Dojo"
     objects: {
       renewalOrders: Prisma.$ShopOrderPayload<ExtArgs>[]
+      certificateOrders: Prisma.$ShopOrderPayload<ExtArgs>[]
+      certificateRequests: Prisma.$CertificateRequestPayload<ExtArgs>[]
       members: Prisma.$MemberPayload<ExtArgs>[]
       attendance: Prisma.$AttendancePayload<ExtArgs>[]
     }
@@ -4421,6 +4720,7 @@ export namespace Prisma {
       isActive: boolean
       annualFee: Prisma.Decimal | null
       expiryDate: Date | null
+      ownerSignatureUrl: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["dojo"]>
@@ -4818,6 +5118,8 @@ export namespace Prisma {
   export interface Prisma__DojoClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     renewalOrders<T extends Dojo$renewalOrdersArgs<ExtArgs> = {}>(args?: Subset<T, Dojo$renewalOrdersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ShopOrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    certificateOrders<T extends Dojo$certificateOrdersArgs<ExtArgs> = {}>(args?: Subset<T, Dojo$certificateOrdersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ShopOrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    certificateRequests<T extends Dojo$certificateRequestsArgs<ExtArgs> = {}>(args?: Subset<T, Dojo$certificateRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificateRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     members<T extends Dojo$membersArgs<ExtArgs> = {}>(args?: Subset<T, Dojo$membersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     attendance<T extends Dojo$attendanceArgs<ExtArgs> = {}>(args?: Subset<T, Dojo$attendanceArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AttendancePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
@@ -4861,6 +5163,7 @@ export namespace Prisma {
     readonly isActive: FieldRef<"Dojo", 'Boolean'>
     readonly annualFee: FieldRef<"Dojo", 'Decimal'>
     readonly expiryDate: FieldRef<"Dojo", 'DateTime'>
+    readonly ownerSignatureUrl: FieldRef<"Dojo", 'String'>
     readonly createdAt: FieldRef<"Dojo", 'DateTime'>
     readonly updatedAt: FieldRef<"Dojo", 'DateTime'>
   }
@@ -5277,6 +5580,54 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: ShopOrderScalarFieldEnum | ShopOrderScalarFieldEnum[]
+  }
+
+  /**
+   * Dojo.certificateOrders
+   */
+  export type Dojo$certificateOrdersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShopOrder
+     */
+    select?: ShopOrderSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ShopOrder
+     */
+    omit?: ShopOrderOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShopOrderInclude<ExtArgs> | null
+    where?: ShopOrderWhereInput
+    orderBy?: ShopOrderOrderByWithRelationInput | ShopOrderOrderByWithRelationInput[]
+    cursor?: ShopOrderWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ShopOrderScalarFieldEnum | ShopOrderScalarFieldEnum[]
+  }
+
+  /**
+   * Dojo.certificateRequests
+   */
+  export type Dojo$certificateRequestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateRequest
+     */
+    select?: CertificateRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CertificateRequest
+     */
+    omit?: CertificateRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificateRequestInclude<ExtArgs> | null
+    where?: CertificateRequestWhereInput
+    orderBy?: CertificateRequestOrderByWithRelationInput | CertificateRequestOrderByWithRelationInput[]
+    cursor?: CertificateRequestWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CertificateRequestScalarFieldEnum | CertificateRequestScalarFieldEnum[]
   }
 
   /**
@@ -6561,6 +6912,8 @@ export namespace Prisma {
     bloodGroup: string | null
     address: string | null
     nationalId: string | null
+    fatherName: string | null
+    motherName: string | null
     emergencyContactName: string | null
     emergencyContactPhone: string | null
     createdAt: Date | null
@@ -6586,6 +6939,8 @@ export namespace Prisma {
     bloodGroup: string | null
     address: string | null
     nationalId: string | null
+    fatherName: string | null
+    motherName: string | null
     emergencyContactName: string | null
     emergencyContactPhone: string | null
     createdAt: Date | null
@@ -6611,6 +6966,8 @@ export namespace Prisma {
     bloodGroup: number
     address: number
     nationalId: number
+    fatherName: number
+    motherName: number
     emergencyContactName: number
     emergencyContactPhone: number
     createdAt: number
@@ -6638,6 +6995,8 @@ export namespace Prisma {
     bloodGroup?: true
     address?: true
     nationalId?: true
+    fatherName?: true
+    motherName?: true
     emergencyContactName?: true
     emergencyContactPhone?: true
     createdAt?: true
@@ -6663,6 +7022,8 @@ export namespace Prisma {
     bloodGroup?: true
     address?: true
     nationalId?: true
+    fatherName?: true
+    motherName?: true
     emergencyContactName?: true
     emergencyContactPhone?: true
     createdAt?: true
@@ -6688,6 +7049,8 @@ export namespace Prisma {
     bloodGroup?: true
     address?: true
     nationalId?: true
+    fatherName?: true
+    motherName?: true
     emergencyContactName?: true
     emergencyContactPhone?: true
     createdAt?: true
@@ -6786,6 +7149,8 @@ export namespace Prisma {
     bloodGroup: string | null
     address: string | null
     nationalId: string | null
+    fatherName: string | null
+    motherName: string | null
     emergencyContactName: string | null
     emergencyContactPhone: string | null
     createdAt: Date
@@ -6828,6 +7193,8 @@ export namespace Prisma {
     bloodGroup?: boolean
     address?: boolean
     nationalId?: boolean
+    fatherName?: boolean
+    motherName?: boolean
     emergencyContactName?: boolean
     emergencyContactPhone?: boolean
     createdAt?: boolean
@@ -6840,6 +7207,7 @@ export namespace Prisma {
     orders?: boolean | Member$ordersArgs<ExtArgs>
     attendance?: boolean | Member$attendanceArgs<ExtArgs>
     tournamentEntries?: boolean | Member$tournamentEntriesArgs<ExtArgs>
+    certificateRequests?: boolean | Member$certificateRequestsArgs<ExtArgs>
     _count?: boolean | MemberCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["member"]>
 
@@ -6862,6 +7230,8 @@ export namespace Prisma {
     bloodGroup?: boolean
     address?: boolean
     nationalId?: boolean
+    fatherName?: boolean
+    motherName?: boolean
     emergencyContactName?: boolean
     emergencyContactPhone?: boolean
     createdAt?: boolean
@@ -6888,6 +7258,8 @@ export namespace Prisma {
     bloodGroup?: boolean
     address?: boolean
     nationalId?: boolean
+    fatherName?: boolean
+    motherName?: boolean
     emergencyContactName?: boolean
     emergencyContactPhone?: boolean
     createdAt?: boolean
@@ -6914,13 +7286,15 @@ export namespace Prisma {
     bloodGroup?: boolean
     address?: boolean
     nationalId?: boolean
+    fatherName?: boolean
+    motherName?: boolean
     emergencyContactName?: boolean
     emergencyContactPhone?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type MemberOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "fullName" | "email" | "phone" | "avatarUrl" | "role" | "memberNumber" | "currentRank" | "joinDate" | "expiryDate" | "isActive" | "dojoId" | "onboardingComplete" | "membershipStatus" | "dateOfBirth" | "bloodGroup" | "address" | "nationalId" | "emergencyContactName" | "emergencyContactPhone" | "createdAt" | "updatedAt", ExtArgs["result"]["member"]>
+  export type MemberOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "fullName" | "email" | "phone" | "avatarUrl" | "role" | "memberNumber" | "currentRank" | "joinDate" | "expiryDate" | "isActive" | "dojoId" | "onboardingComplete" | "membershipStatus" | "dateOfBirth" | "bloodGroup" | "address" | "nationalId" | "fatherName" | "motherName" | "emergencyContactName" | "emergencyContactPhone" | "createdAt" | "updatedAt", ExtArgs["result"]["member"]>
   export type MemberInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     dojo?: boolean | Member$dojoArgs<ExtArgs>
     gradings?: boolean | Member$gradingsArgs<ExtArgs>
@@ -6930,6 +7304,7 @@ export namespace Prisma {
     orders?: boolean | Member$ordersArgs<ExtArgs>
     attendance?: boolean | Member$attendanceArgs<ExtArgs>
     tournamentEntries?: boolean | Member$tournamentEntriesArgs<ExtArgs>
+    certificateRequests?: boolean | Member$certificateRequestsArgs<ExtArgs>
     _count?: boolean | MemberCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type MemberIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6950,6 +7325,7 @@ export namespace Prisma {
       orders: Prisma.$ShopOrderPayload<ExtArgs>[]
       attendance: Prisma.$AttendancePayload<ExtArgs>[]
       tournamentEntries: Prisma.$TournamentParticipantPayload<ExtArgs>[]
+      certificateRequests: Prisma.$CertificateRequestPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -6970,6 +7346,8 @@ export namespace Prisma {
       bloodGroup: string | null
       address: string | null
       nationalId: string | null
+      fatherName: string | null
+      motherName: string | null
       emergencyContactName: string | null
       emergencyContactPhone: string | null
       createdAt: Date
@@ -7376,6 +7754,7 @@ export namespace Prisma {
     orders<T extends Member$ordersArgs<ExtArgs> = {}>(args?: Subset<T, Member$ordersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ShopOrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     attendance<T extends Member$attendanceArgs<ExtArgs> = {}>(args?: Subset<T, Member$attendanceArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AttendancePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     tournamentEntries<T extends Member$tournamentEntriesArgs<ExtArgs> = {}>(args?: Subset<T, Member$tournamentEntriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TournamentParticipantPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    certificateRequests<T extends Member$certificateRequestsArgs<ExtArgs> = {}>(args?: Subset<T, Member$certificateRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificateRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -7423,6 +7802,8 @@ export namespace Prisma {
     readonly bloodGroup: FieldRef<"Member", 'String'>
     readonly address: FieldRef<"Member", 'String'>
     readonly nationalId: FieldRef<"Member", 'String'>
+    readonly fatherName: FieldRef<"Member", 'String'>
+    readonly motherName: FieldRef<"Member", 'String'>
     readonly emergencyContactName: FieldRef<"Member", 'String'>
     readonly emergencyContactPhone: FieldRef<"Member", 'String'>
     readonly createdAt: FieldRef<"Member", 'DateTime'>
@@ -8012,6 +8393,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: TournamentParticipantScalarFieldEnum | TournamentParticipantScalarFieldEnum[]
+  }
+
+  /**
+   * Member.certificateRequests
+   */
+  export type Member$certificateRequestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateRequest
+     */
+    select?: CertificateRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CertificateRequest
+     */
+    omit?: CertificateRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificateRequestInclude<ExtArgs> | null
+    where?: CertificateRequestWhereInput
+    orderBy?: CertificateRequestOrderByWithRelationInput | CertificateRequestOrderByWithRelationInput[]
+    cursor?: CertificateRequestWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CertificateRequestScalarFieldEnum | CertificateRequestScalarFieldEnum[]
   }
 
   /**
@@ -11744,6 +12149,8 @@ export namespace Prisma {
     gradingEvent?: boolean | Grading$gradingEventArgs<ExtArgs>
     fromRank?: boolean | Grading$fromRankArgs<ExtArgs>
     toRank?: boolean | Grading$toRankArgs<ExtArgs>
+    certificateRequests?: boolean | Grading$certificateRequestsArgs<ExtArgs>
+    _count?: boolean | GradingCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["grading"]>
 
   export type GradingSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -11799,6 +12206,8 @@ export namespace Prisma {
     gradingEvent?: boolean | Grading$gradingEventArgs<ExtArgs>
     fromRank?: boolean | Grading$fromRankArgs<ExtArgs>
     toRank?: boolean | Grading$toRankArgs<ExtArgs>
+    certificateRequests?: boolean | Grading$certificateRequestsArgs<ExtArgs>
+    _count?: boolean | GradingCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type GradingIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     member?: boolean | MemberDefaultArgs<ExtArgs>
@@ -11820,6 +12229,7 @@ export namespace Prisma {
       gradingEvent: Prisma.$GradingEventPayload<ExtArgs> | null
       fromRank: Prisma.$BeltRankPayload<ExtArgs> | null
       toRank: Prisma.$BeltRankPayload<ExtArgs> | null
+      certificateRequests: Prisma.$CertificateRequestPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -12230,6 +12640,7 @@ export namespace Prisma {
     gradingEvent<T extends Grading$gradingEventArgs<ExtArgs> = {}>(args?: Subset<T, Grading$gradingEventArgs<ExtArgs>>): Prisma__GradingEventClient<$Result.GetResult<Prisma.$GradingEventPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     fromRank<T extends Grading$fromRankArgs<ExtArgs> = {}>(args?: Subset<T, Grading$fromRankArgs<ExtArgs>>): Prisma__BeltRankClient<$Result.GetResult<Prisma.$BeltRankPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     toRank<T extends Grading$toRankArgs<ExtArgs> = {}>(args?: Subset<T, Grading$toRankArgs<ExtArgs>>): Prisma__BeltRankClient<$Result.GetResult<Prisma.$BeltRankPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    certificateRequests<T extends Grading$certificateRequestsArgs<ExtArgs> = {}>(args?: Subset<T, Grading$certificateRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificateRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -12727,6 +13138,30 @@ export namespace Prisma {
   }
 
   /**
+   * Grading.certificateRequests
+   */
+  export type Grading$certificateRequestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateRequest
+     */
+    select?: CertificateRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CertificateRequest
+     */
+    omit?: CertificateRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificateRequestInclude<ExtArgs> | null
+    where?: CertificateRequestWhereInput
+    orderBy?: CertificateRequestOrderByWithRelationInput | CertificateRequestOrderByWithRelationInput[]
+    cursor?: CertificateRequestWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CertificateRequestScalarFieldEnum | CertificateRequestScalarFieldEnum[]
+  }
+
+  /**
    * Grading without action
    */
   export type GradingDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -12742,6 +13177,2302 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: GradingInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model CertificateRequest
+   */
+
+  export type AggregateCertificateRequest = {
+    _count: CertificateRequestCountAggregateOutputType | null
+    _avg: CertificateRequestAvgAggregateOutputType | null
+    _sum: CertificateRequestSumAggregateOutputType | null
+    _min: CertificateRequestMinAggregateOutputType | null
+    _max: CertificateRequestMaxAggregateOutputType | null
+  }
+
+  export type CertificateRequestAvgAggregateOutputType = {
+    price: Decimal | null
+  }
+
+  export type CertificateRequestSumAggregateOutputType = {
+    price: Decimal | null
+  }
+
+  export type CertificateRequestMinAggregateOutputType = {
+    id: string | null
+    gradingId: string | null
+    memberId: string | null
+    dojoId: string | null
+    orderId: string | null
+    status: $Enums.CertificateRequestStatus | null
+    price: Decimal | null
+    certificateUrl: string | null
+    failureReason: string | null
+    memberName: string | null
+    fatherName: string | null
+    motherName: string | null
+    rankName: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type CertificateRequestMaxAggregateOutputType = {
+    id: string | null
+    gradingId: string | null
+    memberId: string | null
+    dojoId: string | null
+    orderId: string | null
+    status: $Enums.CertificateRequestStatus | null
+    price: Decimal | null
+    certificateUrl: string | null
+    failureReason: string | null
+    memberName: string | null
+    fatherName: string | null
+    motherName: string | null
+    rankName: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type CertificateRequestCountAggregateOutputType = {
+    id: number
+    gradingId: number
+    memberId: number
+    dojoId: number
+    orderId: number
+    status: number
+    price: number
+    certificateUrl: number
+    failureReason: number
+    memberName: number
+    fatherName: number
+    motherName: number
+    rankName: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type CertificateRequestAvgAggregateInputType = {
+    price?: true
+  }
+
+  export type CertificateRequestSumAggregateInputType = {
+    price?: true
+  }
+
+  export type CertificateRequestMinAggregateInputType = {
+    id?: true
+    gradingId?: true
+    memberId?: true
+    dojoId?: true
+    orderId?: true
+    status?: true
+    price?: true
+    certificateUrl?: true
+    failureReason?: true
+    memberName?: true
+    fatherName?: true
+    motherName?: true
+    rankName?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type CertificateRequestMaxAggregateInputType = {
+    id?: true
+    gradingId?: true
+    memberId?: true
+    dojoId?: true
+    orderId?: true
+    status?: true
+    price?: true
+    certificateUrl?: true
+    failureReason?: true
+    memberName?: true
+    fatherName?: true
+    motherName?: true
+    rankName?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type CertificateRequestCountAggregateInputType = {
+    id?: true
+    gradingId?: true
+    memberId?: true
+    dojoId?: true
+    orderId?: true
+    status?: true
+    price?: true
+    certificateUrl?: true
+    failureReason?: true
+    memberName?: true
+    fatherName?: true
+    motherName?: true
+    rankName?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type CertificateRequestAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CertificateRequest to aggregate.
+     */
+    where?: CertificateRequestWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CertificateRequests to fetch.
+     */
+    orderBy?: CertificateRequestOrderByWithRelationInput | CertificateRequestOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: CertificateRequestWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CertificateRequests from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CertificateRequests.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned CertificateRequests
+    **/
+    _count?: true | CertificateRequestCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: CertificateRequestAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: CertificateRequestSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: CertificateRequestMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: CertificateRequestMaxAggregateInputType
+  }
+
+  export type GetCertificateRequestAggregateType<T extends CertificateRequestAggregateArgs> = {
+        [P in keyof T & keyof AggregateCertificateRequest]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateCertificateRequest[P]>
+      : GetScalarType<T[P], AggregateCertificateRequest[P]>
+  }
+
+
+
+
+  export type CertificateRequestGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CertificateRequestWhereInput
+    orderBy?: CertificateRequestOrderByWithAggregationInput | CertificateRequestOrderByWithAggregationInput[]
+    by: CertificateRequestScalarFieldEnum[] | CertificateRequestScalarFieldEnum
+    having?: CertificateRequestScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: CertificateRequestCountAggregateInputType | true
+    _avg?: CertificateRequestAvgAggregateInputType
+    _sum?: CertificateRequestSumAggregateInputType
+    _min?: CertificateRequestMinAggregateInputType
+    _max?: CertificateRequestMaxAggregateInputType
+  }
+
+  export type CertificateRequestGroupByOutputType = {
+    id: string
+    gradingId: string
+    memberId: string
+    dojoId: string
+    orderId: string | null
+    status: $Enums.CertificateRequestStatus
+    price: Decimal
+    certificateUrl: string | null
+    failureReason: string | null
+    memberName: string
+    fatherName: string | null
+    motherName: string | null
+    rankName: string
+    createdAt: Date
+    updatedAt: Date
+    _count: CertificateRequestCountAggregateOutputType | null
+    _avg: CertificateRequestAvgAggregateOutputType | null
+    _sum: CertificateRequestSumAggregateOutputType | null
+    _min: CertificateRequestMinAggregateOutputType | null
+    _max: CertificateRequestMaxAggregateOutputType | null
+  }
+
+  type GetCertificateRequestGroupByPayload<T extends CertificateRequestGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<CertificateRequestGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof CertificateRequestGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], CertificateRequestGroupByOutputType[P]>
+            : GetScalarType<T[P], CertificateRequestGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type CertificateRequestSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    gradingId?: boolean
+    memberId?: boolean
+    dojoId?: boolean
+    orderId?: boolean
+    status?: boolean
+    price?: boolean
+    certificateUrl?: boolean
+    failureReason?: boolean
+    memberName?: boolean
+    fatherName?: boolean
+    motherName?: boolean
+    rankName?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    grading?: boolean | GradingDefaultArgs<ExtArgs>
+    member?: boolean | MemberDefaultArgs<ExtArgs>
+    dojo?: boolean | DojoDefaultArgs<ExtArgs>
+    order?: boolean | CertificateRequest$orderArgs<ExtArgs>
+  }, ExtArgs["result"]["certificateRequest"]>
+
+  export type CertificateRequestSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    gradingId?: boolean
+    memberId?: boolean
+    dojoId?: boolean
+    orderId?: boolean
+    status?: boolean
+    price?: boolean
+    certificateUrl?: boolean
+    failureReason?: boolean
+    memberName?: boolean
+    fatherName?: boolean
+    motherName?: boolean
+    rankName?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    grading?: boolean | GradingDefaultArgs<ExtArgs>
+    member?: boolean | MemberDefaultArgs<ExtArgs>
+    dojo?: boolean | DojoDefaultArgs<ExtArgs>
+    order?: boolean | CertificateRequest$orderArgs<ExtArgs>
+  }, ExtArgs["result"]["certificateRequest"]>
+
+  export type CertificateRequestSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    gradingId?: boolean
+    memberId?: boolean
+    dojoId?: boolean
+    orderId?: boolean
+    status?: boolean
+    price?: boolean
+    certificateUrl?: boolean
+    failureReason?: boolean
+    memberName?: boolean
+    fatherName?: boolean
+    motherName?: boolean
+    rankName?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    grading?: boolean | GradingDefaultArgs<ExtArgs>
+    member?: boolean | MemberDefaultArgs<ExtArgs>
+    dojo?: boolean | DojoDefaultArgs<ExtArgs>
+    order?: boolean | CertificateRequest$orderArgs<ExtArgs>
+  }, ExtArgs["result"]["certificateRequest"]>
+
+  export type CertificateRequestSelectScalar = {
+    id?: boolean
+    gradingId?: boolean
+    memberId?: boolean
+    dojoId?: boolean
+    orderId?: boolean
+    status?: boolean
+    price?: boolean
+    certificateUrl?: boolean
+    failureReason?: boolean
+    memberName?: boolean
+    fatherName?: boolean
+    motherName?: boolean
+    rankName?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type CertificateRequestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "gradingId" | "memberId" | "dojoId" | "orderId" | "status" | "price" | "certificateUrl" | "failureReason" | "memberName" | "fatherName" | "motherName" | "rankName" | "createdAt" | "updatedAt", ExtArgs["result"]["certificateRequest"]>
+  export type CertificateRequestInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    grading?: boolean | GradingDefaultArgs<ExtArgs>
+    member?: boolean | MemberDefaultArgs<ExtArgs>
+    dojo?: boolean | DojoDefaultArgs<ExtArgs>
+    order?: boolean | CertificateRequest$orderArgs<ExtArgs>
+  }
+  export type CertificateRequestIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    grading?: boolean | GradingDefaultArgs<ExtArgs>
+    member?: boolean | MemberDefaultArgs<ExtArgs>
+    dojo?: boolean | DojoDefaultArgs<ExtArgs>
+    order?: boolean | CertificateRequest$orderArgs<ExtArgs>
+  }
+  export type CertificateRequestIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    grading?: boolean | GradingDefaultArgs<ExtArgs>
+    member?: boolean | MemberDefaultArgs<ExtArgs>
+    dojo?: boolean | DojoDefaultArgs<ExtArgs>
+    order?: boolean | CertificateRequest$orderArgs<ExtArgs>
+  }
+
+  export type $CertificateRequestPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "CertificateRequest"
+    objects: {
+      grading: Prisma.$GradingPayload<ExtArgs>
+      member: Prisma.$MemberPayload<ExtArgs>
+      dojo: Prisma.$DojoPayload<ExtArgs>
+      order: Prisma.$ShopOrderPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      gradingId: string
+      memberId: string
+      dojoId: string
+      orderId: string | null
+      status: $Enums.CertificateRequestStatus
+      price: Prisma.Decimal
+      certificateUrl: string | null
+      failureReason: string | null
+      memberName: string
+      fatherName: string | null
+      motherName: string | null
+      rankName: string
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["certificateRequest"]>
+    composites: {}
+  }
+
+  type CertificateRequestGetPayload<S extends boolean | null | undefined | CertificateRequestDefaultArgs> = $Result.GetResult<Prisma.$CertificateRequestPayload, S>
+
+  type CertificateRequestCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<CertificateRequestFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: CertificateRequestCountAggregateInputType | true
+    }
+
+  export interface CertificateRequestDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['CertificateRequest'], meta: { name: 'CertificateRequest' } }
+    /**
+     * Find zero or one CertificateRequest that matches the filter.
+     * @param {CertificateRequestFindUniqueArgs} args - Arguments to find a CertificateRequest
+     * @example
+     * // Get one CertificateRequest
+     * const certificateRequest = await prisma.certificateRequest.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends CertificateRequestFindUniqueArgs>(args: SelectSubset<T, CertificateRequestFindUniqueArgs<ExtArgs>>): Prisma__CertificateRequestClient<$Result.GetResult<Prisma.$CertificateRequestPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one CertificateRequest that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {CertificateRequestFindUniqueOrThrowArgs} args - Arguments to find a CertificateRequest
+     * @example
+     * // Get one CertificateRequest
+     * const certificateRequest = await prisma.certificateRequest.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends CertificateRequestFindUniqueOrThrowArgs>(args: SelectSubset<T, CertificateRequestFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CertificateRequestClient<$Result.GetResult<Prisma.$CertificateRequestPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first CertificateRequest that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CertificateRequestFindFirstArgs} args - Arguments to find a CertificateRequest
+     * @example
+     * // Get one CertificateRequest
+     * const certificateRequest = await prisma.certificateRequest.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends CertificateRequestFindFirstArgs>(args?: SelectSubset<T, CertificateRequestFindFirstArgs<ExtArgs>>): Prisma__CertificateRequestClient<$Result.GetResult<Prisma.$CertificateRequestPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first CertificateRequest that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CertificateRequestFindFirstOrThrowArgs} args - Arguments to find a CertificateRequest
+     * @example
+     * // Get one CertificateRequest
+     * const certificateRequest = await prisma.certificateRequest.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends CertificateRequestFindFirstOrThrowArgs>(args?: SelectSubset<T, CertificateRequestFindFirstOrThrowArgs<ExtArgs>>): Prisma__CertificateRequestClient<$Result.GetResult<Prisma.$CertificateRequestPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more CertificateRequests that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CertificateRequestFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all CertificateRequests
+     * const certificateRequests = await prisma.certificateRequest.findMany()
+     * 
+     * // Get first 10 CertificateRequests
+     * const certificateRequests = await prisma.certificateRequest.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const certificateRequestWithIdOnly = await prisma.certificateRequest.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends CertificateRequestFindManyArgs>(args?: SelectSubset<T, CertificateRequestFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificateRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a CertificateRequest.
+     * @param {CertificateRequestCreateArgs} args - Arguments to create a CertificateRequest.
+     * @example
+     * // Create one CertificateRequest
+     * const CertificateRequest = await prisma.certificateRequest.create({
+     *   data: {
+     *     // ... data to create a CertificateRequest
+     *   }
+     * })
+     * 
+     */
+    create<T extends CertificateRequestCreateArgs>(args: SelectSubset<T, CertificateRequestCreateArgs<ExtArgs>>): Prisma__CertificateRequestClient<$Result.GetResult<Prisma.$CertificateRequestPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many CertificateRequests.
+     * @param {CertificateRequestCreateManyArgs} args - Arguments to create many CertificateRequests.
+     * @example
+     * // Create many CertificateRequests
+     * const certificateRequest = await prisma.certificateRequest.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends CertificateRequestCreateManyArgs>(args?: SelectSubset<T, CertificateRequestCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many CertificateRequests and returns the data saved in the database.
+     * @param {CertificateRequestCreateManyAndReturnArgs} args - Arguments to create many CertificateRequests.
+     * @example
+     * // Create many CertificateRequests
+     * const certificateRequest = await prisma.certificateRequest.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many CertificateRequests and only return the `id`
+     * const certificateRequestWithIdOnly = await prisma.certificateRequest.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends CertificateRequestCreateManyAndReturnArgs>(args?: SelectSubset<T, CertificateRequestCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificateRequestPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a CertificateRequest.
+     * @param {CertificateRequestDeleteArgs} args - Arguments to delete one CertificateRequest.
+     * @example
+     * // Delete one CertificateRequest
+     * const CertificateRequest = await prisma.certificateRequest.delete({
+     *   where: {
+     *     // ... filter to delete one CertificateRequest
+     *   }
+     * })
+     * 
+     */
+    delete<T extends CertificateRequestDeleteArgs>(args: SelectSubset<T, CertificateRequestDeleteArgs<ExtArgs>>): Prisma__CertificateRequestClient<$Result.GetResult<Prisma.$CertificateRequestPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one CertificateRequest.
+     * @param {CertificateRequestUpdateArgs} args - Arguments to update one CertificateRequest.
+     * @example
+     * // Update one CertificateRequest
+     * const certificateRequest = await prisma.certificateRequest.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends CertificateRequestUpdateArgs>(args: SelectSubset<T, CertificateRequestUpdateArgs<ExtArgs>>): Prisma__CertificateRequestClient<$Result.GetResult<Prisma.$CertificateRequestPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more CertificateRequests.
+     * @param {CertificateRequestDeleteManyArgs} args - Arguments to filter CertificateRequests to delete.
+     * @example
+     * // Delete a few CertificateRequests
+     * const { count } = await prisma.certificateRequest.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends CertificateRequestDeleteManyArgs>(args?: SelectSubset<T, CertificateRequestDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CertificateRequests.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CertificateRequestUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many CertificateRequests
+     * const certificateRequest = await prisma.certificateRequest.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends CertificateRequestUpdateManyArgs>(args: SelectSubset<T, CertificateRequestUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CertificateRequests and returns the data updated in the database.
+     * @param {CertificateRequestUpdateManyAndReturnArgs} args - Arguments to update many CertificateRequests.
+     * @example
+     * // Update many CertificateRequests
+     * const certificateRequest = await prisma.certificateRequest.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more CertificateRequests and only return the `id`
+     * const certificateRequestWithIdOnly = await prisma.certificateRequest.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends CertificateRequestUpdateManyAndReturnArgs>(args: SelectSubset<T, CertificateRequestUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificateRequestPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one CertificateRequest.
+     * @param {CertificateRequestUpsertArgs} args - Arguments to update or create a CertificateRequest.
+     * @example
+     * // Update or create a CertificateRequest
+     * const certificateRequest = await prisma.certificateRequest.upsert({
+     *   create: {
+     *     // ... data to create a CertificateRequest
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the CertificateRequest we want to update
+     *   }
+     * })
+     */
+    upsert<T extends CertificateRequestUpsertArgs>(args: SelectSubset<T, CertificateRequestUpsertArgs<ExtArgs>>): Prisma__CertificateRequestClient<$Result.GetResult<Prisma.$CertificateRequestPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of CertificateRequests.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CertificateRequestCountArgs} args - Arguments to filter CertificateRequests to count.
+     * @example
+     * // Count the number of CertificateRequests
+     * const count = await prisma.certificateRequest.count({
+     *   where: {
+     *     // ... the filter for the CertificateRequests we want to count
+     *   }
+     * })
+    **/
+    count<T extends CertificateRequestCountArgs>(
+      args?: Subset<T, CertificateRequestCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], CertificateRequestCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a CertificateRequest.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CertificateRequestAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends CertificateRequestAggregateArgs>(args: Subset<T, CertificateRequestAggregateArgs>): Prisma.PrismaPromise<GetCertificateRequestAggregateType<T>>
+
+    /**
+     * Group by CertificateRequest.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CertificateRequestGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends CertificateRequestGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: CertificateRequestGroupByArgs['orderBy'] }
+        : { orderBy?: CertificateRequestGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, CertificateRequestGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCertificateRequestGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the CertificateRequest model
+   */
+  readonly fields: CertificateRequestFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for CertificateRequest.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__CertificateRequestClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    grading<T extends GradingDefaultArgs<ExtArgs> = {}>(args?: Subset<T, GradingDefaultArgs<ExtArgs>>): Prisma__GradingClient<$Result.GetResult<Prisma.$GradingPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    member<T extends MemberDefaultArgs<ExtArgs> = {}>(args?: Subset<T, MemberDefaultArgs<ExtArgs>>): Prisma__MemberClient<$Result.GetResult<Prisma.$MemberPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    dojo<T extends DojoDefaultArgs<ExtArgs> = {}>(args?: Subset<T, DojoDefaultArgs<ExtArgs>>): Prisma__DojoClient<$Result.GetResult<Prisma.$DojoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    order<T extends CertificateRequest$orderArgs<ExtArgs> = {}>(args?: Subset<T, CertificateRequest$orderArgs<ExtArgs>>): Prisma__ShopOrderClient<$Result.GetResult<Prisma.$ShopOrderPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the CertificateRequest model
+   */
+  interface CertificateRequestFieldRefs {
+    readonly id: FieldRef<"CertificateRequest", 'String'>
+    readonly gradingId: FieldRef<"CertificateRequest", 'String'>
+    readonly memberId: FieldRef<"CertificateRequest", 'String'>
+    readonly dojoId: FieldRef<"CertificateRequest", 'String'>
+    readonly orderId: FieldRef<"CertificateRequest", 'String'>
+    readonly status: FieldRef<"CertificateRequest", 'CertificateRequestStatus'>
+    readonly price: FieldRef<"CertificateRequest", 'Decimal'>
+    readonly certificateUrl: FieldRef<"CertificateRequest", 'String'>
+    readonly failureReason: FieldRef<"CertificateRequest", 'String'>
+    readonly memberName: FieldRef<"CertificateRequest", 'String'>
+    readonly fatherName: FieldRef<"CertificateRequest", 'String'>
+    readonly motherName: FieldRef<"CertificateRequest", 'String'>
+    readonly rankName: FieldRef<"CertificateRequest", 'String'>
+    readonly createdAt: FieldRef<"CertificateRequest", 'DateTime'>
+    readonly updatedAt: FieldRef<"CertificateRequest", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * CertificateRequest findUnique
+   */
+  export type CertificateRequestFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateRequest
+     */
+    select?: CertificateRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CertificateRequest
+     */
+    omit?: CertificateRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificateRequestInclude<ExtArgs> | null
+    /**
+     * Filter, which CertificateRequest to fetch.
+     */
+    where: CertificateRequestWhereUniqueInput
+  }
+
+  /**
+   * CertificateRequest findUniqueOrThrow
+   */
+  export type CertificateRequestFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateRequest
+     */
+    select?: CertificateRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CertificateRequest
+     */
+    omit?: CertificateRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificateRequestInclude<ExtArgs> | null
+    /**
+     * Filter, which CertificateRequest to fetch.
+     */
+    where: CertificateRequestWhereUniqueInput
+  }
+
+  /**
+   * CertificateRequest findFirst
+   */
+  export type CertificateRequestFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateRequest
+     */
+    select?: CertificateRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CertificateRequest
+     */
+    omit?: CertificateRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificateRequestInclude<ExtArgs> | null
+    /**
+     * Filter, which CertificateRequest to fetch.
+     */
+    where?: CertificateRequestWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CertificateRequests to fetch.
+     */
+    orderBy?: CertificateRequestOrderByWithRelationInput | CertificateRequestOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CertificateRequests.
+     */
+    cursor?: CertificateRequestWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CertificateRequests from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CertificateRequests.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CertificateRequests.
+     */
+    distinct?: CertificateRequestScalarFieldEnum | CertificateRequestScalarFieldEnum[]
+  }
+
+  /**
+   * CertificateRequest findFirstOrThrow
+   */
+  export type CertificateRequestFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateRequest
+     */
+    select?: CertificateRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CertificateRequest
+     */
+    omit?: CertificateRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificateRequestInclude<ExtArgs> | null
+    /**
+     * Filter, which CertificateRequest to fetch.
+     */
+    where?: CertificateRequestWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CertificateRequests to fetch.
+     */
+    orderBy?: CertificateRequestOrderByWithRelationInput | CertificateRequestOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CertificateRequests.
+     */
+    cursor?: CertificateRequestWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CertificateRequests from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CertificateRequests.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CertificateRequests.
+     */
+    distinct?: CertificateRequestScalarFieldEnum | CertificateRequestScalarFieldEnum[]
+  }
+
+  /**
+   * CertificateRequest findMany
+   */
+  export type CertificateRequestFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateRequest
+     */
+    select?: CertificateRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CertificateRequest
+     */
+    omit?: CertificateRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificateRequestInclude<ExtArgs> | null
+    /**
+     * Filter, which CertificateRequests to fetch.
+     */
+    where?: CertificateRequestWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CertificateRequests to fetch.
+     */
+    orderBy?: CertificateRequestOrderByWithRelationInput | CertificateRequestOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing CertificateRequests.
+     */
+    cursor?: CertificateRequestWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CertificateRequests from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CertificateRequests.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CertificateRequests.
+     */
+    distinct?: CertificateRequestScalarFieldEnum | CertificateRequestScalarFieldEnum[]
+  }
+
+  /**
+   * CertificateRequest create
+   */
+  export type CertificateRequestCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateRequest
+     */
+    select?: CertificateRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CertificateRequest
+     */
+    omit?: CertificateRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificateRequestInclude<ExtArgs> | null
+    /**
+     * The data needed to create a CertificateRequest.
+     */
+    data: XOR<CertificateRequestCreateInput, CertificateRequestUncheckedCreateInput>
+  }
+
+  /**
+   * CertificateRequest createMany
+   */
+  export type CertificateRequestCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many CertificateRequests.
+     */
+    data: CertificateRequestCreateManyInput | CertificateRequestCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * CertificateRequest createManyAndReturn
+   */
+  export type CertificateRequestCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateRequest
+     */
+    select?: CertificateRequestSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the CertificateRequest
+     */
+    omit?: CertificateRequestOmit<ExtArgs> | null
+    /**
+     * The data used to create many CertificateRequests.
+     */
+    data: CertificateRequestCreateManyInput | CertificateRequestCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificateRequestIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * CertificateRequest update
+   */
+  export type CertificateRequestUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateRequest
+     */
+    select?: CertificateRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CertificateRequest
+     */
+    omit?: CertificateRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificateRequestInclude<ExtArgs> | null
+    /**
+     * The data needed to update a CertificateRequest.
+     */
+    data: XOR<CertificateRequestUpdateInput, CertificateRequestUncheckedUpdateInput>
+    /**
+     * Choose, which CertificateRequest to update.
+     */
+    where: CertificateRequestWhereUniqueInput
+  }
+
+  /**
+   * CertificateRequest updateMany
+   */
+  export type CertificateRequestUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update CertificateRequests.
+     */
+    data: XOR<CertificateRequestUpdateManyMutationInput, CertificateRequestUncheckedUpdateManyInput>
+    /**
+     * Filter which CertificateRequests to update
+     */
+    where?: CertificateRequestWhereInput
+    /**
+     * Limit how many CertificateRequests to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * CertificateRequest updateManyAndReturn
+   */
+  export type CertificateRequestUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateRequest
+     */
+    select?: CertificateRequestSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the CertificateRequest
+     */
+    omit?: CertificateRequestOmit<ExtArgs> | null
+    /**
+     * The data used to update CertificateRequests.
+     */
+    data: XOR<CertificateRequestUpdateManyMutationInput, CertificateRequestUncheckedUpdateManyInput>
+    /**
+     * Filter which CertificateRequests to update
+     */
+    where?: CertificateRequestWhereInput
+    /**
+     * Limit how many CertificateRequests to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificateRequestIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * CertificateRequest upsert
+   */
+  export type CertificateRequestUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateRequest
+     */
+    select?: CertificateRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CertificateRequest
+     */
+    omit?: CertificateRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificateRequestInclude<ExtArgs> | null
+    /**
+     * The filter to search for the CertificateRequest to update in case it exists.
+     */
+    where: CertificateRequestWhereUniqueInput
+    /**
+     * In case the CertificateRequest found by the `where` argument doesn't exist, create a new CertificateRequest with this data.
+     */
+    create: XOR<CertificateRequestCreateInput, CertificateRequestUncheckedCreateInput>
+    /**
+     * In case the CertificateRequest was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<CertificateRequestUpdateInput, CertificateRequestUncheckedUpdateInput>
+  }
+
+  /**
+   * CertificateRequest delete
+   */
+  export type CertificateRequestDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateRequest
+     */
+    select?: CertificateRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CertificateRequest
+     */
+    omit?: CertificateRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificateRequestInclude<ExtArgs> | null
+    /**
+     * Filter which CertificateRequest to delete.
+     */
+    where: CertificateRequestWhereUniqueInput
+  }
+
+  /**
+   * CertificateRequest deleteMany
+   */
+  export type CertificateRequestDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CertificateRequests to delete
+     */
+    where?: CertificateRequestWhereInput
+    /**
+     * Limit how many CertificateRequests to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * CertificateRequest.order
+   */
+  export type CertificateRequest$orderArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShopOrder
+     */
+    select?: ShopOrderSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ShopOrder
+     */
+    omit?: ShopOrderOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShopOrderInclude<ExtArgs> | null
+    where?: ShopOrderWhereInput
+  }
+
+  /**
+   * CertificateRequest without action
+   */
+  export type CertificateRequestDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateRequest
+     */
+    select?: CertificateRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CertificateRequest
+     */
+    omit?: CertificateRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificateRequestInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model SystemSettings
+   */
+
+  export type AggregateSystemSettings = {
+    _count: SystemSettingsCountAggregateOutputType | null
+    _min: SystemSettingsMinAggregateOutputType | null
+    _max: SystemSettingsMaxAggregateOutputType | null
+  }
+
+  export type SystemSettingsMinAggregateOutputType = {
+    id: string | null
+    adminSignatureUrl: string | null
+    adminSignerName: string | null
+    adminSignerTitle: string | null
+    certificateLogoUrl: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type SystemSettingsMaxAggregateOutputType = {
+    id: string | null
+    adminSignatureUrl: string | null
+    adminSignerName: string | null
+    adminSignerTitle: string | null
+    certificateLogoUrl: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type SystemSettingsCountAggregateOutputType = {
+    id: number
+    adminSignatureUrl: number
+    adminSignerName: number
+    adminSignerTitle: number
+    certificateLogoUrl: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type SystemSettingsMinAggregateInputType = {
+    id?: true
+    adminSignatureUrl?: true
+    adminSignerName?: true
+    adminSignerTitle?: true
+    certificateLogoUrl?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type SystemSettingsMaxAggregateInputType = {
+    id?: true
+    adminSignatureUrl?: true
+    adminSignerName?: true
+    adminSignerTitle?: true
+    certificateLogoUrl?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type SystemSettingsCountAggregateInputType = {
+    id?: true
+    adminSignatureUrl?: true
+    adminSignerName?: true
+    adminSignerTitle?: true
+    certificateLogoUrl?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type SystemSettingsAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SystemSettings to aggregate.
+     */
+    where?: SystemSettingsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SystemSettings to fetch.
+     */
+    orderBy?: SystemSettingsOrderByWithRelationInput | SystemSettingsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: SystemSettingsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SystemSettings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SystemSettings.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned SystemSettings
+    **/
+    _count?: true | SystemSettingsCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: SystemSettingsMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: SystemSettingsMaxAggregateInputType
+  }
+
+  export type GetSystemSettingsAggregateType<T extends SystemSettingsAggregateArgs> = {
+        [P in keyof T & keyof AggregateSystemSettings]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSystemSettings[P]>
+      : GetScalarType<T[P], AggregateSystemSettings[P]>
+  }
+
+
+
+
+  export type SystemSettingsGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SystemSettingsWhereInput
+    orderBy?: SystemSettingsOrderByWithAggregationInput | SystemSettingsOrderByWithAggregationInput[]
+    by: SystemSettingsScalarFieldEnum[] | SystemSettingsScalarFieldEnum
+    having?: SystemSettingsScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: SystemSettingsCountAggregateInputType | true
+    _min?: SystemSettingsMinAggregateInputType
+    _max?: SystemSettingsMaxAggregateInputType
+  }
+
+  export type SystemSettingsGroupByOutputType = {
+    id: string
+    adminSignatureUrl: string | null
+    adminSignerName: string | null
+    adminSignerTitle: string | null
+    certificateLogoUrl: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: SystemSettingsCountAggregateOutputType | null
+    _min: SystemSettingsMinAggregateOutputType | null
+    _max: SystemSettingsMaxAggregateOutputType | null
+  }
+
+  type GetSystemSettingsGroupByPayload<T extends SystemSettingsGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SystemSettingsGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof SystemSettingsGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], SystemSettingsGroupByOutputType[P]>
+            : GetScalarType<T[P], SystemSettingsGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type SystemSettingsSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    adminSignatureUrl?: boolean
+    adminSignerName?: boolean
+    adminSignerTitle?: boolean
+    certificateLogoUrl?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["systemSettings"]>
+
+  export type SystemSettingsSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    adminSignatureUrl?: boolean
+    adminSignerName?: boolean
+    adminSignerTitle?: boolean
+    certificateLogoUrl?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["systemSettings"]>
+
+  export type SystemSettingsSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    adminSignatureUrl?: boolean
+    adminSignerName?: boolean
+    adminSignerTitle?: boolean
+    certificateLogoUrl?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["systemSettings"]>
+
+  export type SystemSettingsSelectScalar = {
+    id?: boolean
+    adminSignatureUrl?: boolean
+    adminSignerName?: boolean
+    adminSignerTitle?: boolean
+    certificateLogoUrl?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type SystemSettingsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "adminSignatureUrl" | "adminSignerName" | "adminSignerTitle" | "certificateLogoUrl" | "createdAt" | "updatedAt", ExtArgs["result"]["systemSettings"]>
+
+  export type $SystemSettingsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "SystemSettings"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      adminSignatureUrl: string | null
+      adminSignerName: string | null
+      adminSignerTitle: string | null
+      certificateLogoUrl: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["systemSettings"]>
+    composites: {}
+  }
+
+  type SystemSettingsGetPayload<S extends boolean | null | undefined | SystemSettingsDefaultArgs> = $Result.GetResult<Prisma.$SystemSettingsPayload, S>
+
+  type SystemSettingsCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<SystemSettingsFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: SystemSettingsCountAggregateInputType | true
+    }
+
+  export interface SystemSettingsDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SystemSettings'], meta: { name: 'SystemSettings' } }
+    /**
+     * Find zero or one SystemSettings that matches the filter.
+     * @param {SystemSettingsFindUniqueArgs} args - Arguments to find a SystemSettings
+     * @example
+     * // Get one SystemSettings
+     * const systemSettings = await prisma.systemSettings.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends SystemSettingsFindUniqueArgs>(args: SelectSubset<T, SystemSettingsFindUniqueArgs<ExtArgs>>): Prisma__SystemSettingsClient<$Result.GetResult<Prisma.$SystemSettingsPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one SystemSettings that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {SystemSettingsFindUniqueOrThrowArgs} args - Arguments to find a SystemSettings
+     * @example
+     * // Get one SystemSettings
+     * const systemSettings = await prisma.systemSettings.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends SystemSettingsFindUniqueOrThrowArgs>(args: SelectSubset<T, SystemSettingsFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SystemSettingsClient<$Result.GetResult<Prisma.$SystemSettingsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SystemSettings that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SystemSettingsFindFirstArgs} args - Arguments to find a SystemSettings
+     * @example
+     * // Get one SystemSettings
+     * const systemSettings = await prisma.systemSettings.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends SystemSettingsFindFirstArgs>(args?: SelectSubset<T, SystemSettingsFindFirstArgs<ExtArgs>>): Prisma__SystemSettingsClient<$Result.GetResult<Prisma.$SystemSettingsPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SystemSettings that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SystemSettingsFindFirstOrThrowArgs} args - Arguments to find a SystemSettings
+     * @example
+     * // Get one SystemSettings
+     * const systemSettings = await prisma.systemSettings.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends SystemSettingsFindFirstOrThrowArgs>(args?: SelectSubset<T, SystemSettingsFindFirstOrThrowArgs<ExtArgs>>): Prisma__SystemSettingsClient<$Result.GetResult<Prisma.$SystemSettingsPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more SystemSettings that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SystemSettingsFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all SystemSettings
+     * const systemSettings = await prisma.systemSettings.findMany()
+     * 
+     * // Get first 10 SystemSettings
+     * const systemSettings = await prisma.systemSettings.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const systemSettingsWithIdOnly = await prisma.systemSettings.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends SystemSettingsFindManyArgs>(args?: SelectSubset<T, SystemSettingsFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SystemSettingsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a SystemSettings.
+     * @param {SystemSettingsCreateArgs} args - Arguments to create a SystemSettings.
+     * @example
+     * // Create one SystemSettings
+     * const SystemSettings = await prisma.systemSettings.create({
+     *   data: {
+     *     // ... data to create a SystemSettings
+     *   }
+     * })
+     * 
+     */
+    create<T extends SystemSettingsCreateArgs>(args: SelectSubset<T, SystemSettingsCreateArgs<ExtArgs>>): Prisma__SystemSettingsClient<$Result.GetResult<Prisma.$SystemSettingsPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many SystemSettings.
+     * @param {SystemSettingsCreateManyArgs} args - Arguments to create many SystemSettings.
+     * @example
+     * // Create many SystemSettings
+     * const systemSettings = await prisma.systemSettings.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends SystemSettingsCreateManyArgs>(args?: SelectSubset<T, SystemSettingsCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many SystemSettings and returns the data saved in the database.
+     * @param {SystemSettingsCreateManyAndReturnArgs} args - Arguments to create many SystemSettings.
+     * @example
+     * // Create many SystemSettings
+     * const systemSettings = await prisma.systemSettings.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many SystemSettings and only return the `id`
+     * const systemSettingsWithIdOnly = await prisma.systemSettings.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends SystemSettingsCreateManyAndReturnArgs>(args?: SelectSubset<T, SystemSettingsCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SystemSettingsPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a SystemSettings.
+     * @param {SystemSettingsDeleteArgs} args - Arguments to delete one SystemSettings.
+     * @example
+     * // Delete one SystemSettings
+     * const SystemSettings = await prisma.systemSettings.delete({
+     *   where: {
+     *     // ... filter to delete one SystemSettings
+     *   }
+     * })
+     * 
+     */
+    delete<T extends SystemSettingsDeleteArgs>(args: SelectSubset<T, SystemSettingsDeleteArgs<ExtArgs>>): Prisma__SystemSettingsClient<$Result.GetResult<Prisma.$SystemSettingsPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one SystemSettings.
+     * @param {SystemSettingsUpdateArgs} args - Arguments to update one SystemSettings.
+     * @example
+     * // Update one SystemSettings
+     * const systemSettings = await prisma.systemSettings.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends SystemSettingsUpdateArgs>(args: SelectSubset<T, SystemSettingsUpdateArgs<ExtArgs>>): Prisma__SystemSettingsClient<$Result.GetResult<Prisma.$SystemSettingsPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more SystemSettings.
+     * @param {SystemSettingsDeleteManyArgs} args - Arguments to filter SystemSettings to delete.
+     * @example
+     * // Delete a few SystemSettings
+     * const { count } = await prisma.systemSettings.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends SystemSettingsDeleteManyArgs>(args?: SelectSubset<T, SystemSettingsDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SystemSettings.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SystemSettingsUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many SystemSettings
+     * const systemSettings = await prisma.systemSettings.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends SystemSettingsUpdateManyArgs>(args: SelectSubset<T, SystemSettingsUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SystemSettings and returns the data updated in the database.
+     * @param {SystemSettingsUpdateManyAndReturnArgs} args - Arguments to update many SystemSettings.
+     * @example
+     * // Update many SystemSettings
+     * const systemSettings = await prisma.systemSettings.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more SystemSettings and only return the `id`
+     * const systemSettingsWithIdOnly = await prisma.systemSettings.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends SystemSettingsUpdateManyAndReturnArgs>(args: SelectSubset<T, SystemSettingsUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SystemSettingsPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one SystemSettings.
+     * @param {SystemSettingsUpsertArgs} args - Arguments to update or create a SystemSettings.
+     * @example
+     * // Update or create a SystemSettings
+     * const systemSettings = await prisma.systemSettings.upsert({
+     *   create: {
+     *     // ... data to create a SystemSettings
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the SystemSettings we want to update
+     *   }
+     * })
+     */
+    upsert<T extends SystemSettingsUpsertArgs>(args: SelectSubset<T, SystemSettingsUpsertArgs<ExtArgs>>): Prisma__SystemSettingsClient<$Result.GetResult<Prisma.$SystemSettingsPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of SystemSettings.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SystemSettingsCountArgs} args - Arguments to filter SystemSettings to count.
+     * @example
+     * // Count the number of SystemSettings
+     * const count = await prisma.systemSettings.count({
+     *   where: {
+     *     // ... the filter for the SystemSettings we want to count
+     *   }
+     * })
+    **/
+    count<T extends SystemSettingsCountArgs>(
+      args?: Subset<T, SystemSettingsCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SystemSettingsCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a SystemSettings.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SystemSettingsAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends SystemSettingsAggregateArgs>(args: Subset<T, SystemSettingsAggregateArgs>): Prisma.PrismaPromise<GetSystemSettingsAggregateType<T>>
+
+    /**
+     * Group by SystemSettings.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SystemSettingsGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends SystemSettingsGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SystemSettingsGroupByArgs['orderBy'] }
+        : { orderBy?: SystemSettingsGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, SystemSettingsGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSystemSettingsGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the SystemSettings model
+   */
+  readonly fields: SystemSettingsFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for SystemSettings.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SystemSettingsClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the SystemSettings model
+   */
+  interface SystemSettingsFieldRefs {
+    readonly id: FieldRef<"SystemSettings", 'String'>
+    readonly adminSignatureUrl: FieldRef<"SystemSettings", 'String'>
+    readonly adminSignerName: FieldRef<"SystemSettings", 'String'>
+    readonly adminSignerTitle: FieldRef<"SystemSettings", 'String'>
+    readonly certificateLogoUrl: FieldRef<"SystemSettings", 'String'>
+    readonly createdAt: FieldRef<"SystemSettings", 'DateTime'>
+    readonly updatedAt: FieldRef<"SystemSettings", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * SystemSettings findUnique
+   */
+  export type SystemSettingsFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SystemSettings
+     */
+    select?: SystemSettingsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SystemSettings
+     */
+    omit?: SystemSettingsOmit<ExtArgs> | null
+    /**
+     * Filter, which SystemSettings to fetch.
+     */
+    where: SystemSettingsWhereUniqueInput
+  }
+
+  /**
+   * SystemSettings findUniqueOrThrow
+   */
+  export type SystemSettingsFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SystemSettings
+     */
+    select?: SystemSettingsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SystemSettings
+     */
+    omit?: SystemSettingsOmit<ExtArgs> | null
+    /**
+     * Filter, which SystemSettings to fetch.
+     */
+    where: SystemSettingsWhereUniqueInput
+  }
+
+  /**
+   * SystemSettings findFirst
+   */
+  export type SystemSettingsFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SystemSettings
+     */
+    select?: SystemSettingsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SystemSettings
+     */
+    omit?: SystemSettingsOmit<ExtArgs> | null
+    /**
+     * Filter, which SystemSettings to fetch.
+     */
+    where?: SystemSettingsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SystemSettings to fetch.
+     */
+    orderBy?: SystemSettingsOrderByWithRelationInput | SystemSettingsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SystemSettings.
+     */
+    cursor?: SystemSettingsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SystemSettings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SystemSettings.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SystemSettings.
+     */
+    distinct?: SystemSettingsScalarFieldEnum | SystemSettingsScalarFieldEnum[]
+  }
+
+  /**
+   * SystemSettings findFirstOrThrow
+   */
+  export type SystemSettingsFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SystemSettings
+     */
+    select?: SystemSettingsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SystemSettings
+     */
+    omit?: SystemSettingsOmit<ExtArgs> | null
+    /**
+     * Filter, which SystemSettings to fetch.
+     */
+    where?: SystemSettingsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SystemSettings to fetch.
+     */
+    orderBy?: SystemSettingsOrderByWithRelationInput | SystemSettingsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SystemSettings.
+     */
+    cursor?: SystemSettingsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SystemSettings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SystemSettings.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SystemSettings.
+     */
+    distinct?: SystemSettingsScalarFieldEnum | SystemSettingsScalarFieldEnum[]
+  }
+
+  /**
+   * SystemSettings findMany
+   */
+  export type SystemSettingsFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SystemSettings
+     */
+    select?: SystemSettingsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SystemSettings
+     */
+    omit?: SystemSettingsOmit<ExtArgs> | null
+    /**
+     * Filter, which SystemSettings to fetch.
+     */
+    where?: SystemSettingsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SystemSettings to fetch.
+     */
+    orderBy?: SystemSettingsOrderByWithRelationInput | SystemSettingsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing SystemSettings.
+     */
+    cursor?: SystemSettingsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SystemSettings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SystemSettings.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SystemSettings.
+     */
+    distinct?: SystemSettingsScalarFieldEnum | SystemSettingsScalarFieldEnum[]
+  }
+
+  /**
+   * SystemSettings create
+   */
+  export type SystemSettingsCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SystemSettings
+     */
+    select?: SystemSettingsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SystemSettings
+     */
+    omit?: SystemSettingsOmit<ExtArgs> | null
+    /**
+     * The data needed to create a SystemSettings.
+     */
+    data: XOR<SystemSettingsCreateInput, SystemSettingsUncheckedCreateInput>
+  }
+
+  /**
+   * SystemSettings createMany
+   */
+  export type SystemSettingsCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many SystemSettings.
+     */
+    data: SystemSettingsCreateManyInput | SystemSettingsCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SystemSettings createManyAndReturn
+   */
+  export type SystemSettingsCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SystemSettings
+     */
+    select?: SystemSettingsSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SystemSettings
+     */
+    omit?: SystemSettingsOmit<ExtArgs> | null
+    /**
+     * The data used to create many SystemSettings.
+     */
+    data: SystemSettingsCreateManyInput | SystemSettingsCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SystemSettings update
+   */
+  export type SystemSettingsUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SystemSettings
+     */
+    select?: SystemSettingsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SystemSettings
+     */
+    omit?: SystemSettingsOmit<ExtArgs> | null
+    /**
+     * The data needed to update a SystemSettings.
+     */
+    data: XOR<SystemSettingsUpdateInput, SystemSettingsUncheckedUpdateInput>
+    /**
+     * Choose, which SystemSettings to update.
+     */
+    where: SystemSettingsWhereUniqueInput
+  }
+
+  /**
+   * SystemSettings updateMany
+   */
+  export type SystemSettingsUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update SystemSettings.
+     */
+    data: XOR<SystemSettingsUpdateManyMutationInput, SystemSettingsUncheckedUpdateManyInput>
+    /**
+     * Filter which SystemSettings to update
+     */
+    where?: SystemSettingsWhereInput
+    /**
+     * Limit how many SystemSettings to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * SystemSettings updateManyAndReturn
+   */
+  export type SystemSettingsUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SystemSettings
+     */
+    select?: SystemSettingsSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SystemSettings
+     */
+    omit?: SystemSettingsOmit<ExtArgs> | null
+    /**
+     * The data used to update SystemSettings.
+     */
+    data: XOR<SystemSettingsUpdateManyMutationInput, SystemSettingsUncheckedUpdateManyInput>
+    /**
+     * Filter which SystemSettings to update
+     */
+    where?: SystemSettingsWhereInput
+    /**
+     * Limit how many SystemSettings to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * SystemSettings upsert
+   */
+  export type SystemSettingsUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SystemSettings
+     */
+    select?: SystemSettingsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SystemSettings
+     */
+    omit?: SystemSettingsOmit<ExtArgs> | null
+    /**
+     * The filter to search for the SystemSettings to update in case it exists.
+     */
+    where: SystemSettingsWhereUniqueInput
+    /**
+     * In case the SystemSettings found by the `where` argument doesn't exist, create a new SystemSettings with this data.
+     */
+    create: XOR<SystemSettingsCreateInput, SystemSettingsUncheckedCreateInput>
+    /**
+     * In case the SystemSettings was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SystemSettingsUpdateInput, SystemSettingsUncheckedUpdateInput>
+  }
+
+  /**
+   * SystemSettings delete
+   */
+  export type SystemSettingsDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SystemSettings
+     */
+    select?: SystemSettingsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SystemSettings
+     */
+    omit?: SystemSettingsOmit<ExtArgs> | null
+    /**
+     * Filter which SystemSettings to delete.
+     */
+    where: SystemSettingsWhereUniqueInput
+  }
+
+  /**
+   * SystemSettings deleteMany
+   */
+  export type SystemSettingsDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SystemSettings to delete
+     */
+    where?: SystemSettingsWhereInput
+    /**
+     * Limit how many SystemSettings to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * SystemSettings without action
+   */
+  export type SystemSettingsDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SystemSettings
+     */
+    select?: SystemSettingsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SystemSettings
+     */
+    omit?: SystemSettingsOmit<ExtArgs> | null
   }
 
 
@@ -17305,6 +20036,8 @@ export namespace Prisma {
     notes: string | null
     dojoId: string | null
     includesDojoRenewal: boolean | null
+    includesCertificates: boolean | null
+    certDojoId: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -17322,6 +20055,8 @@ export namespace Prisma {
     notes: string | null
     dojoId: string | null
     includesDojoRenewal: boolean | null
+    includesCertificates: boolean | null
+    certDojoId: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -17339,6 +20074,8 @@ export namespace Prisma {
     notes: number
     dojoId: number
     includesDojoRenewal: number
+    includesCertificates: number
+    certDojoId: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -17368,6 +20105,8 @@ export namespace Prisma {
     notes?: true
     dojoId?: true
     includesDojoRenewal?: true
+    includesCertificates?: true
+    certDojoId?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -17385,6 +20124,8 @@ export namespace Prisma {
     notes?: true
     dojoId?: true
     includesDojoRenewal?: true
+    includesCertificates?: true
+    certDojoId?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -17402,6 +20143,8 @@ export namespace Prisma {
     notes?: true
     dojoId?: true
     includesDojoRenewal?: true
+    includesCertificates?: true
+    certDojoId?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -17506,6 +20249,8 @@ export namespace Prisma {
     notes: string | null
     dojoId: string | null
     includesDojoRenewal: boolean
+    includesCertificates: boolean
+    certDojoId: string | null
     createdAt: Date
     updatedAt: Date
     _count: ShopOrderCountAggregateOutputType | null
@@ -17542,11 +20287,15 @@ export namespace Prisma {
     notes?: boolean
     dojoId?: boolean
     includesDojoRenewal?: boolean
+    includesCertificates?: boolean
+    certDojoId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     member?: boolean | MemberDefaultArgs<ExtArgs>
     dojo?: boolean | ShopOrder$dojoArgs<ExtArgs>
+    certDojo?: boolean | ShopOrder$certDojoArgs<ExtArgs>
     orderItems?: boolean | ShopOrder$orderItemsArgs<ExtArgs>
+    certificateRequests?: boolean | ShopOrder$certificateRequestsArgs<ExtArgs>
     _count?: boolean | ShopOrderCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["shopOrder"]>
 
@@ -17563,10 +20312,13 @@ export namespace Prisma {
     notes?: boolean
     dojoId?: boolean
     includesDojoRenewal?: boolean
+    includesCertificates?: boolean
+    certDojoId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     member?: boolean | MemberDefaultArgs<ExtArgs>
     dojo?: boolean | ShopOrder$dojoArgs<ExtArgs>
+    certDojo?: boolean | ShopOrder$certDojoArgs<ExtArgs>
   }, ExtArgs["result"]["shopOrder"]>
 
   export type ShopOrderSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -17582,10 +20334,13 @@ export namespace Prisma {
     notes?: boolean
     dojoId?: boolean
     includesDojoRenewal?: boolean
+    includesCertificates?: boolean
+    certDojoId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     member?: boolean | MemberDefaultArgs<ExtArgs>
     dojo?: boolean | ShopOrder$dojoArgs<ExtArgs>
+    certDojo?: boolean | ShopOrder$certDojoArgs<ExtArgs>
   }, ExtArgs["result"]["shopOrder"]>
 
   export type ShopOrderSelectScalar = {
@@ -17601,24 +20356,30 @@ export namespace Prisma {
     notes?: boolean
     dojoId?: boolean
     includesDojoRenewal?: boolean
+    includesCertificates?: boolean
+    certDojoId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type ShopOrderOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "memberId" | "paymentStatus" | "paymentMethod" | "total" | "currency" | "transactionId" | "includesMembership" | "membershipFee" | "notes" | "dojoId" | "includesDojoRenewal" | "createdAt" | "updatedAt", ExtArgs["result"]["shopOrder"]>
+  export type ShopOrderOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "memberId" | "paymentStatus" | "paymentMethod" | "total" | "currency" | "transactionId" | "includesMembership" | "membershipFee" | "notes" | "dojoId" | "includesDojoRenewal" | "includesCertificates" | "certDojoId" | "createdAt" | "updatedAt", ExtArgs["result"]["shopOrder"]>
   export type ShopOrderInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     member?: boolean | MemberDefaultArgs<ExtArgs>
     dojo?: boolean | ShopOrder$dojoArgs<ExtArgs>
+    certDojo?: boolean | ShopOrder$certDojoArgs<ExtArgs>
     orderItems?: boolean | ShopOrder$orderItemsArgs<ExtArgs>
+    certificateRequests?: boolean | ShopOrder$certificateRequestsArgs<ExtArgs>
     _count?: boolean | ShopOrderCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ShopOrderIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     member?: boolean | MemberDefaultArgs<ExtArgs>
     dojo?: boolean | ShopOrder$dojoArgs<ExtArgs>
+    certDojo?: boolean | ShopOrder$certDojoArgs<ExtArgs>
   }
   export type ShopOrderIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     member?: boolean | MemberDefaultArgs<ExtArgs>
     dojo?: boolean | ShopOrder$dojoArgs<ExtArgs>
+    certDojo?: boolean | ShopOrder$certDojoArgs<ExtArgs>
   }
 
   export type $ShopOrderPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -17626,7 +20387,9 @@ export namespace Prisma {
     objects: {
       member: Prisma.$MemberPayload<ExtArgs>
       dojo: Prisma.$DojoPayload<ExtArgs> | null
+      certDojo: Prisma.$DojoPayload<ExtArgs> | null
       orderItems: Prisma.$ShopOrderItemPayload<ExtArgs>[]
+      certificateRequests: Prisma.$CertificateRequestPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -17641,6 +20404,8 @@ export namespace Prisma {
       notes: string | null
       dojoId: string | null
       includesDojoRenewal: boolean
+      includesCertificates: boolean
+      certDojoId: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["shopOrder"]>
@@ -18039,7 +20804,9 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     member<T extends MemberDefaultArgs<ExtArgs> = {}>(args?: Subset<T, MemberDefaultArgs<ExtArgs>>): Prisma__MemberClient<$Result.GetResult<Prisma.$MemberPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     dojo<T extends ShopOrder$dojoArgs<ExtArgs> = {}>(args?: Subset<T, ShopOrder$dojoArgs<ExtArgs>>): Prisma__DojoClient<$Result.GetResult<Prisma.$DojoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    certDojo<T extends ShopOrder$certDojoArgs<ExtArgs> = {}>(args?: Subset<T, ShopOrder$certDojoArgs<ExtArgs>>): Prisma__DojoClient<$Result.GetResult<Prisma.$DojoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     orderItems<T extends ShopOrder$orderItemsArgs<ExtArgs> = {}>(args?: Subset<T, ShopOrder$orderItemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ShopOrderItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    certificateRequests<T extends ShopOrder$certificateRequestsArgs<ExtArgs> = {}>(args?: Subset<T, ShopOrder$certificateRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificateRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -18081,6 +20848,8 @@ export namespace Prisma {
     readonly notes: FieldRef<"ShopOrder", 'String'>
     readonly dojoId: FieldRef<"ShopOrder", 'String'>
     readonly includesDojoRenewal: FieldRef<"ShopOrder", 'Boolean'>
+    readonly includesCertificates: FieldRef<"ShopOrder", 'Boolean'>
+    readonly certDojoId: FieldRef<"ShopOrder", 'String'>
     readonly createdAt: FieldRef<"ShopOrder", 'DateTime'>
     readonly updatedAt: FieldRef<"ShopOrder", 'DateTime'>
   }
@@ -18503,6 +21272,25 @@ export namespace Prisma {
   }
 
   /**
+   * ShopOrder.certDojo
+   */
+  export type ShopOrder$certDojoArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Dojo
+     */
+    select?: DojoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Dojo
+     */
+    omit?: DojoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DojoInclude<ExtArgs> | null
+    where?: DojoWhereInput
+  }
+
+  /**
    * ShopOrder.orderItems
    */
   export type ShopOrder$orderItemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -18524,6 +21312,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: ShopOrderItemScalarFieldEnum | ShopOrderItemScalarFieldEnum[]
+  }
+
+  /**
+   * ShopOrder.certificateRequests
+   */
+  export type ShopOrder$certificateRequestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateRequest
+     */
+    select?: CertificateRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CertificateRequest
+     */
+    omit?: CertificateRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificateRequestInclude<ExtArgs> | null
+    where?: CertificateRequestWhereInput
+    orderBy?: CertificateRequestOrderByWithRelationInput | CertificateRequestOrderByWithRelationInput[]
+    cursor?: CertificateRequestWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CertificateRequestScalarFieldEnum | CertificateRequestScalarFieldEnum[]
   }
 
   /**
@@ -23220,6 +26032,7 @@ export namespace Prisma {
     kyuDan: 'kyuDan',
     colorHex: 'colorHex',
     orderIndex: 'orderIndex',
+    certificatePrice: 'certificatePrice',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -23240,6 +26053,7 @@ export namespace Prisma {
     isActive: 'isActive',
     annualFee: 'annualFee',
     expiryDate: 'expiryDate',
+    ownerSignatureUrl: 'ownerSignatureUrl',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -23289,6 +26103,8 @@ export namespace Prisma {
     bloodGroup: 'bloodGroup',
     address: 'address',
     nationalId: 'nationalId',
+    fatherName: 'fatherName',
+    motherName: 'motherName',
     emergencyContactName: 'emergencyContactName',
     emergencyContactPhone: 'emergencyContactPhone',
     createdAt: 'createdAt',
@@ -23357,6 +26173,40 @@ export namespace Prisma {
   };
 
   export type GradingScalarFieldEnum = (typeof GradingScalarFieldEnum)[keyof typeof GradingScalarFieldEnum]
+
+
+  export const CertificateRequestScalarFieldEnum: {
+    id: 'id',
+    gradingId: 'gradingId',
+    memberId: 'memberId',
+    dojoId: 'dojoId',
+    orderId: 'orderId',
+    status: 'status',
+    price: 'price',
+    certificateUrl: 'certificateUrl',
+    failureReason: 'failureReason',
+    memberName: 'memberName',
+    fatherName: 'fatherName',
+    motherName: 'motherName',
+    rankName: 'rankName',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type CertificateRequestScalarFieldEnum = (typeof CertificateRequestScalarFieldEnum)[keyof typeof CertificateRequestScalarFieldEnum]
+
+
+  export const SystemSettingsScalarFieldEnum: {
+    id: 'id',
+    adminSignatureUrl: 'adminSignatureUrl',
+    adminSignerName: 'adminSignerName',
+    adminSignerTitle: 'adminSignerTitle',
+    certificateLogoUrl: 'certificateLogoUrl',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type SystemSettingsScalarFieldEnum = (typeof SystemSettingsScalarFieldEnum)[keyof typeof SystemSettingsScalarFieldEnum]
 
 
   export const EventScalarFieldEnum: {
@@ -23429,6 +26279,8 @@ export namespace Prisma {
     notes: 'notes',
     dojoId: 'dojoId',
     includesDojoRenewal: 'includesDojoRenewal',
+    includesCertificates: 'includesCertificates',
+    certDojoId: 'certDojoId',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -23570,6 +26422,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Decimal'
+   */
+  export type DecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal'>
+    
+
+
+  /**
+   * Reference to a field of type 'Decimal[]'
+   */
+  export type ListDecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal[]'>
+    
+
+
+  /**
    * Reference to a field of type 'DateTime'
    */
   export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
@@ -23615,20 +26481,6 @@ export namespace Prisma {
    * Reference to a field of type 'Boolean'
    */
   export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
-    
-
-
-  /**
-   * Reference to a field of type 'Decimal'
-   */
-  export type DecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal'>
-    
-
-
-  /**
-   * Reference to a field of type 'Decimal[]'
-   */
-  export type ListDecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal[]'>
     
 
 
@@ -23703,6 +26555,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'CertificateRequestStatus'
+   */
+  export type EnumCertificateRequestStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CertificateRequestStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'CertificateRequestStatus[]'
+   */
+  export type ListEnumCertificateRequestStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CertificateRequestStatus[]'>
+    
+
+
+  /**
    * Reference to a field of type 'NotificationType'
    */
   export type EnumNotificationTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NotificationType'>
@@ -23742,6 +26608,7 @@ export namespace Prisma {
     kyuDan?: StringNullableFilter<"BeltRank"> | string | null
     colorHex?: StringNullableFilter<"BeltRank"> | string | null
     orderIndex?: IntFilter<"BeltRank"> | number
+    certificatePrice?: DecimalNullableFilter<"BeltRank"> | Decimal | DecimalJsLike | number | string | null
     createdAt?: DateTimeFilter<"BeltRank"> | Date | string
     updatedAt?: DateTimeFilter<"BeltRank"> | Date | string
     gradingsFrom?: GradingListRelationFilter
@@ -23756,6 +26623,7 @@ export namespace Prisma {
     kyuDan?: SortOrderInput | SortOrder
     colorHex?: SortOrderInput | SortOrder
     orderIndex?: SortOrder
+    certificatePrice?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     gradingsFrom?: GradingOrderByRelationAggregateInput
@@ -23773,6 +26641,7 @@ export namespace Prisma {
     NOT?: BeltRankWhereInput | BeltRankWhereInput[]
     kyuDan?: StringNullableFilter<"BeltRank"> | string | null
     colorHex?: StringNullableFilter<"BeltRank"> | string | null
+    certificatePrice?: DecimalNullableFilter<"BeltRank"> | Decimal | DecimalJsLike | number | string | null
     createdAt?: DateTimeFilter<"BeltRank"> | Date | string
     updatedAt?: DateTimeFilter<"BeltRank"> | Date | string
     gradingsFrom?: GradingListRelationFilter
@@ -23787,6 +26656,7 @@ export namespace Prisma {
     kyuDan?: SortOrderInput | SortOrder
     colorHex?: SortOrderInput | SortOrder
     orderIndex?: SortOrder
+    certificatePrice?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: BeltRankCountOrderByAggregateInput
@@ -23805,6 +26675,7 @@ export namespace Prisma {
     kyuDan?: StringNullableWithAggregatesFilter<"BeltRank"> | string | null
     colorHex?: StringNullableWithAggregatesFilter<"BeltRank"> | string | null
     orderIndex?: IntWithAggregatesFilter<"BeltRank"> | number
+    certificatePrice?: DecimalNullableWithAggregatesFilter<"BeltRank"> | Decimal | DecimalJsLike | number | string | null
     createdAt?: DateTimeWithAggregatesFilter<"BeltRank"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"BeltRank"> | Date | string
   }
@@ -23825,9 +26696,12 @@ export namespace Prisma {
     isActive?: BoolFilter<"Dojo"> | boolean
     annualFee?: DecimalNullableFilter<"Dojo"> | Decimal | DecimalJsLike | number | string | null
     expiryDate?: DateTimeNullableFilter<"Dojo"> | Date | string | null
+    ownerSignatureUrl?: StringNullableFilter<"Dojo"> | string | null
     createdAt?: DateTimeFilter<"Dojo"> | Date | string
     updatedAt?: DateTimeFilter<"Dojo"> | Date | string
     renewalOrders?: ShopOrderListRelationFilter
+    certificateOrders?: ShopOrderListRelationFilter
+    certificateRequests?: CertificateRequestListRelationFilter
     members?: MemberListRelationFilter
     attendance?: AttendanceListRelationFilter
   }
@@ -23845,9 +26719,12 @@ export namespace Prisma {
     isActive?: SortOrder
     annualFee?: SortOrderInput | SortOrder
     expiryDate?: SortOrderInput | SortOrder
+    ownerSignatureUrl?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     renewalOrders?: ShopOrderOrderByRelationAggregateInput
+    certificateOrders?: ShopOrderOrderByRelationAggregateInput
+    certificateRequests?: CertificateRequestOrderByRelationAggregateInput
     members?: MemberOrderByRelationAggregateInput
     attendance?: AttendanceOrderByRelationAggregateInput
   }
@@ -23868,9 +26745,12 @@ export namespace Prisma {
     isActive?: BoolFilter<"Dojo"> | boolean
     annualFee?: DecimalNullableFilter<"Dojo"> | Decimal | DecimalJsLike | number | string | null
     expiryDate?: DateTimeNullableFilter<"Dojo"> | Date | string | null
+    ownerSignatureUrl?: StringNullableFilter<"Dojo"> | string | null
     createdAt?: DateTimeFilter<"Dojo"> | Date | string
     updatedAt?: DateTimeFilter<"Dojo"> | Date | string
     renewalOrders?: ShopOrderListRelationFilter
+    certificateOrders?: ShopOrderListRelationFilter
+    certificateRequests?: CertificateRequestListRelationFilter
     members?: MemberListRelationFilter
     attendance?: AttendanceListRelationFilter
   }, "id">
@@ -23888,6 +26768,7 @@ export namespace Prisma {
     isActive?: SortOrder
     annualFee?: SortOrderInput | SortOrder
     expiryDate?: SortOrderInput | SortOrder
+    ownerSignatureUrl?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: DojoCountOrderByAggregateInput
@@ -23913,6 +26794,7 @@ export namespace Prisma {
     isActive?: BoolWithAggregatesFilter<"Dojo"> | boolean
     annualFee?: DecimalNullableWithAggregatesFilter<"Dojo"> | Decimal | DecimalJsLike | number | string | null
     expiryDate?: DateTimeNullableWithAggregatesFilter<"Dojo"> | Date | string | null
+    ownerSignatureUrl?: StringNullableWithAggregatesFilter<"Dojo"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Dojo"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Dojo"> | Date | string
   }
@@ -24053,6 +26935,8 @@ export namespace Prisma {
     bloodGroup?: StringNullableFilter<"Member"> | string | null
     address?: StringNullableFilter<"Member"> | string | null
     nationalId?: StringNullableFilter<"Member"> | string | null
+    fatherName?: StringNullableFilter<"Member"> | string | null
+    motherName?: StringNullableFilter<"Member"> | string | null
     emergencyContactName?: StringNullableFilter<"Member"> | string | null
     emergencyContactPhone?: StringNullableFilter<"Member"> | string | null
     createdAt?: DateTimeFilter<"Member"> | Date | string
@@ -24065,6 +26949,7 @@ export namespace Prisma {
     orders?: ShopOrderListRelationFilter
     attendance?: AttendanceListRelationFilter
     tournamentEntries?: TournamentParticipantListRelationFilter
+    certificateRequests?: CertificateRequestListRelationFilter
   }
 
   export type MemberOrderByWithRelationInput = {
@@ -24086,6 +26971,8 @@ export namespace Prisma {
     bloodGroup?: SortOrderInput | SortOrder
     address?: SortOrderInput | SortOrder
     nationalId?: SortOrderInput | SortOrder
+    fatherName?: SortOrderInput | SortOrder
+    motherName?: SortOrderInput | SortOrder
     emergencyContactName?: SortOrderInput | SortOrder
     emergencyContactPhone?: SortOrderInput | SortOrder
     createdAt?: SortOrder
@@ -24098,6 +26985,7 @@ export namespace Prisma {
     orders?: ShopOrderOrderByRelationAggregateInput
     attendance?: AttendanceOrderByRelationAggregateInput
     tournamentEntries?: TournamentParticipantOrderByRelationAggregateInput
+    certificateRequests?: CertificateRequestOrderByRelationAggregateInput
   }
 
   export type MemberWhereUniqueInput = Prisma.AtLeast<{
@@ -24122,6 +27010,8 @@ export namespace Prisma {
     bloodGroup?: StringNullableFilter<"Member"> | string | null
     address?: StringNullableFilter<"Member"> | string | null
     nationalId?: StringNullableFilter<"Member"> | string | null
+    fatherName?: StringNullableFilter<"Member"> | string | null
+    motherName?: StringNullableFilter<"Member"> | string | null
     emergencyContactName?: StringNullableFilter<"Member"> | string | null
     emergencyContactPhone?: StringNullableFilter<"Member"> | string | null
     createdAt?: DateTimeFilter<"Member"> | Date | string
@@ -24134,6 +27024,7 @@ export namespace Prisma {
     orders?: ShopOrderListRelationFilter
     attendance?: AttendanceListRelationFilter
     tournamentEntries?: TournamentParticipantListRelationFilter
+    certificateRequests?: CertificateRequestListRelationFilter
   }, "id" | "email" | "memberNumber">
 
   export type MemberOrderByWithAggregationInput = {
@@ -24155,6 +27046,8 @@ export namespace Prisma {
     bloodGroup?: SortOrderInput | SortOrder
     address?: SortOrderInput | SortOrder
     nationalId?: SortOrderInput | SortOrder
+    fatherName?: SortOrderInput | SortOrder
+    motherName?: SortOrderInput | SortOrder
     emergencyContactName?: SortOrderInput | SortOrder
     emergencyContactPhone?: SortOrderInput | SortOrder
     createdAt?: SortOrder
@@ -24186,6 +27079,8 @@ export namespace Prisma {
     bloodGroup?: StringNullableWithAggregatesFilter<"Member"> | string | null
     address?: StringNullableWithAggregatesFilter<"Member"> | string | null
     nationalId?: StringNullableWithAggregatesFilter<"Member"> | string | null
+    fatherName?: StringNullableWithAggregatesFilter<"Member"> | string | null
+    motherName?: StringNullableWithAggregatesFilter<"Member"> | string | null
     emergencyContactName?: StringNullableWithAggregatesFilter<"Member"> | string | null
     emergencyContactPhone?: StringNullableWithAggregatesFilter<"Member"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Member"> | Date | string
@@ -24451,6 +27346,7 @@ export namespace Prisma {
     gradingEvent?: XOR<GradingEventNullableScalarRelationFilter, GradingEventWhereInput> | null
     fromRank?: XOR<BeltRankNullableScalarRelationFilter, BeltRankWhereInput> | null
     toRank?: XOR<BeltRankNullableScalarRelationFilter, BeltRankWhereInput> | null
+    certificateRequests?: CertificateRequestListRelationFilter
   }
 
   export type GradingOrderByWithRelationInput = {
@@ -24468,6 +27364,7 @@ export namespace Prisma {
     gradingEvent?: GradingEventOrderByWithRelationInput
     fromRank?: BeltRankOrderByWithRelationInput
     toRank?: BeltRankOrderByWithRelationInput
+    certificateRequests?: CertificateRequestOrderByRelationAggregateInput
   }
 
   export type GradingWhereUniqueInput = Prisma.AtLeast<{
@@ -24488,6 +27385,7 @@ export namespace Prisma {
     gradingEvent?: XOR<GradingEventNullableScalarRelationFilter, GradingEventWhereInput> | null
     fromRank?: XOR<BeltRankNullableScalarRelationFilter, BeltRankWhereInput> | null
     toRank?: XOR<BeltRankNullableScalarRelationFilter, BeltRankWhereInput> | null
+    certificateRequests?: CertificateRequestListRelationFilter
   }, "id">
 
   export type GradingOrderByWithAggregationInput = {
@@ -24520,6 +27418,184 @@ export namespace Prisma {
     notes?: StringNullableWithAggregatesFilter<"Grading"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Grading"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Grading"> | Date | string
+  }
+
+  export type CertificateRequestWhereInput = {
+    AND?: CertificateRequestWhereInput | CertificateRequestWhereInput[]
+    OR?: CertificateRequestWhereInput[]
+    NOT?: CertificateRequestWhereInput | CertificateRequestWhereInput[]
+    id?: UuidFilter<"CertificateRequest"> | string
+    gradingId?: UuidFilter<"CertificateRequest"> | string
+    memberId?: UuidFilter<"CertificateRequest"> | string
+    dojoId?: UuidFilter<"CertificateRequest"> | string
+    orderId?: UuidNullableFilter<"CertificateRequest"> | string | null
+    status?: EnumCertificateRequestStatusFilter<"CertificateRequest"> | $Enums.CertificateRequestStatus
+    price?: DecimalFilter<"CertificateRequest"> | Decimal | DecimalJsLike | number | string
+    certificateUrl?: StringNullableFilter<"CertificateRequest"> | string | null
+    failureReason?: StringNullableFilter<"CertificateRequest"> | string | null
+    memberName?: StringFilter<"CertificateRequest"> | string
+    fatherName?: StringNullableFilter<"CertificateRequest"> | string | null
+    motherName?: StringNullableFilter<"CertificateRequest"> | string | null
+    rankName?: StringFilter<"CertificateRequest"> | string
+    createdAt?: DateTimeFilter<"CertificateRequest"> | Date | string
+    updatedAt?: DateTimeFilter<"CertificateRequest"> | Date | string
+    grading?: XOR<GradingScalarRelationFilter, GradingWhereInput>
+    member?: XOR<MemberScalarRelationFilter, MemberWhereInput>
+    dojo?: XOR<DojoScalarRelationFilter, DojoWhereInput>
+    order?: XOR<ShopOrderNullableScalarRelationFilter, ShopOrderWhereInput> | null
+  }
+
+  export type CertificateRequestOrderByWithRelationInput = {
+    id?: SortOrder
+    gradingId?: SortOrder
+    memberId?: SortOrder
+    dojoId?: SortOrder
+    orderId?: SortOrderInput | SortOrder
+    status?: SortOrder
+    price?: SortOrder
+    certificateUrl?: SortOrderInput | SortOrder
+    failureReason?: SortOrderInput | SortOrder
+    memberName?: SortOrder
+    fatherName?: SortOrderInput | SortOrder
+    motherName?: SortOrderInput | SortOrder
+    rankName?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    grading?: GradingOrderByWithRelationInput
+    member?: MemberOrderByWithRelationInput
+    dojo?: DojoOrderByWithRelationInput
+    order?: ShopOrderOrderByWithRelationInput
+  }
+
+  export type CertificateRequestWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: CertificateRequestWhereInput | CertificateRequestWhereInput[]
+    OR?: CertificateRequestWhereInput[]
+    NOT?: CertificateRequestWhereInput | CertificateRequestWhereInput[]
+    gradingId?: UuidFilter<"CertificateRequest"> | string
+    memberId?: UuidFilter<"CertificateRequest"> | string
+    dojoId?: UuidFilter<"CertificateRequest"> | string
+    orderId?: UuidNullableFilter<"CertificateRequest"> | string | null
+    status?: EnumCertificateRequestStatusFilter<"CertificateRequest"> | $Enums.CertificateRequestStatus
+    price?: DecimalFilter<"CertificateRequest"> | Decimal | DecimalJsLike | number | string
+    certificateUrl?: StringNullableFilter<"CertificateRequest"> | string | null
+    failureReason?: StringNullableFilter<"CertificateRequest"> | string | null
+    memberName?: StringFilter<"CertificateRequest"> | string
+    fatherName?: StringNullableFilter<"CertificateRequest"> | string | null
+    motherName?: StringNullableFilter<"CertificateRequest"> | string | null
+    rankName?: StringFilter<"CertificateRequest"> | string
+    createdAt?: DateTimeFilter<"CertificateRequest"> | Date | string
+    updatedAt?: DateTimeFilter<"CertificateRequest"> | Date | string
+    grading?: XOR<GradingScalarRelationFilter, GradingWhereInput>
+    member?: XOR<MemberScalarRelationFilter, MemberWhereInput>
+    dojo?: XOR<DojoScalarRelationFilter, DojoWhereInput>
+    order?: XOR<ShopOrderNullableScalarRelationFilter, ShopOrderWhereInput> | null
+  }, "id">
+
+  export type CertificateRequestOrderByWithAggregationInput = {
+    id?: SortOrder
+    gradingId?: SortOrder
+    memberId?: SortOrder
+    dojoId?: SortOrder
+    orderId?: SortOrderInput | SortOrder
+    status?: SortOrder
+    price?: SortOrder
+    certificateUrl?: SortOrderInput | SortOrder
+    failureReason?: SortOrderInput | SortOrder
+    memberName?: SortOrder
+    fatherName?: SortOrderInput | SortOrder
+    motherName?: SortOrderInput | SortOrder
+    rankName?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: CertificateRequestCountOrderByAggregateInput
+    _avg?: CertificateRequestAvgOrderByAggregateInput
+    _max?: CertificateRequestMaxOrderByAggregateInput
+    _min?: CertificateRequestMinOrderByAggregateInput
+    _sum?: CertificateRequestSumOrderByAggregateInput
+  }
+
+  export type CertificateRequestScalarWhereWithAggregatesInput = {
+    AND?: CertificateRequestScalarWhereWithAggregatesInput | CertificateRequestScalarWhereWithAggregatesInput[]
+    OR?: CertificateRequestScalarWhereWithAggregatesInput[]
+    NOT?: CertificateRequestScalarWhereWithAggregatesInput | CertificateRequestScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"CertificateRequest"> | string
+    gradingId?: UuidWithAggregatesFilter<"CertificateRequest"> | string
+    memberId?: UuidWithAggregatesFilter<"CertificateRequest"> | string
+    dojoId?: UuidWithAggregatesFilter<"CertificateRequest"> | string
+    orderId?: UuidNullableWithAggregatesFilter<"CertificateRequest"> | string | null
+    status?: EnumCertificateRequestStatusWithAggregatesFilter<"CertificateRequest"> | $Enums.CertificateRequestStatus
+    price?: DecimalWithAggregatesFilter<"CertificateRequest"> | Decimal | DecimalJsLike | number | string
+    certificateUrl?: StringNullableWithAggregatesFilter<"CertificateRequest"> | string | null
+    failureReason?: StringNullableWithAggregatesFilter<"CertificateRequest"> | string | null
+    memberName?: StringWithAggregatesFilter<"CertificateRequest"> | string
+    fatherName?: StringNullableWithAggregatesFilter<"CertificateRequest"> | string | null
+    motherName?: StringNullableWithAggregatesFilter<"CertificateRequest"> | string | null
+    rankName?: StringWithAggregatesFilter<"CertificateRequest"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"CertificateRequest"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"CertificateRequest"> | Date | string
+  }
+
+  export type SystemSettingsWhereInput = {
+    AND?: SystemSettingsWhereInput | SystemSettingsWhereInput[]
+    OR?: SystemSettingsWhereInput[]
+    NOT?: SystemSettingsWhereInput | SystemSettingsWhereInput[]
+    id?: StringFilter<"SystemSettings"> | string
+    adminSignatureUrl?: StringNullableFilter<"SystemSettings"> | string | null
+    adminSignerName?: StringNullableFilter<"SystemSettings"> | string | null
+    adminSignerTitle?: StringNullableFilter<"SystemSettings"> | string | null
+    certificateLogoUrl?: StringNullableFilter<"SystemSettings"> | string | null
+    createdAt?: DateTimeFilter<"SystemSettings"> | Date | string
+    updatedAt?: DateTimeFilter<"SystemSettings"> | Date | string
+  }
+
+  export type SystemSettingsOrderByWithRelationInput = {
+    id?: SortOrder
+    adminSignatureUrl?: SortOrderInput | SortOrder
+    adminSignerName?: SortOrderInput | SortOrder
+    adminSignerTitle?: SortOrderInput | SortOrder
+    certificateLogoUrl?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SystemSettingsWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: SystemSettingsWhereInput | SystemSettingsWhereInput[]
+    OR?: SystemSettingsWhereInput[]
+    NOT?: SystemSettingsWhereInput | SystemSettingsWhereInput[]
+    adminSignatureUrl?: StringNullableFilter<"SystemSettings"> | string | null
+    adminSignerName?: StringNullableFilter<"SystemSettings"> | string | null
+    adminSignerTitle?: StringNullableFilter<"SystemSettings"> | string | null
+    certificateLogoUrl?: StringNullableFilter<"SystemSettings"> | string | null
+    createdAt?: DateTimeFilter<"SystemSettings"> | Date | string
+    updatedAt?: DateTimeFilter<"SystemSettings"> | Date | string
+  }, "id">
+
+  export type SystemSettingsOrderByWithAggregationInput = {
+    id?: SortOrder
+    adminSignatureUrl?: SortOrderInput | SortOrder
+    adminSignerName?: SortOrderInput | SortOrder
+    adminSignerTitle?: SortOrderInput | SortOrder
+    certificateLogoUrl?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: SystemSettingsCountOrderByAggregateInput
+    _max?: SystemSettingsMaxOrderByAggregateInput
+    _min?: SystemSettingsMinOrderByAggregateInput
+  }
+
+  export type SystemSettingsScalarWhereWithAggregatesInput = {
+    AND?: SystemSettingsScalarWhereWithAggregatesInput | SystemSettingsScalarWhereWithAggregatesInput[]
+    OR?: SystemSettingsScalarWhereWithAggregatesInput[]
+    NOT?: SystemSettingsScalarWhereWithAggregatesInput | SystemSettingsScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"SystemSettings"> | string
+    adminSignatureUrl?: StringNullableWithAggregatesFilter<"SystemSettings"> | string | null
+    adminSignerName?: StringNullableWithAggregatesFilter<"SystemSettings"> | string | null
+    adminSignerTitle?: StringNullableWithAggregatesFilter<"SystemSettings"> | string | null
+    certificateLogoUrl?: StringNullableWithAggregatesFilter<"SystemSettings"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"SystemSettings"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"SystemSettings"> | Date | string
   }
 
   export type EventWhereInput = {
@@ -24831,11 +27907,15 @@ export namespace Prisma {
     notes?: StringNullableFilter<"ShopOrder"> | string | null
     dojoId?: UuidNullableFilter<"ShopOrder"> | string | null
     includesDojoRenewal?: BoolFilter<"ShopOrder"> | boolean
+    includesCertificates?: BoolFilter<"ShopOrder"> | boolean
+    certDojoId?: UuidNullableFilter<"ShopOrder"> | string | null
     createdAt?: DateTimeFilter<"ShopOrder"> | Date | string
     updatedAt?: DateTimeFilter<"ShopOrder"> | Date | string
     member?: XOR<MemberScalarRelationFilter, MemberWhereInput>
     dojo?: XOR<DojoNullableScalarRelationFilter, DojoWhereInput> | null
+    certDojo?: XOR<DojoNullableScalarRelationFilter, DojoWhereInput> | null
     orderItems?: ShopOrderItemListRelationFilter
+    certificateRequests?: CertificateRequestListRelationFilter
   }
 
   export type ShopOrderOrderByWithRelationInput = {
@@ -24851,11 +27931,15 @@ export namespace Prisma {
     notes?: SortOrderInput | SortOrder
     dojoId?: SortOrderInput | SortOrder
     includesDojoRenewal?: SortOrder
+    includesCertificates?: SortOrder
+    certDojoId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     member?: MemberOrderByWithRelationInput
     dojo?: DojoOrderByWithRelationInput
+    certDojo?: DojoOrderByWithRelationInput
     orderItems?: ShopOrderItemOrderByRelationAggregateInput
+    certificateRequests?: CertificateRequestOrderByRelationAggregateInput
   }
 
   export type ShopOrderWhereUniqueInput = Prisma.AtLeast<{
@@ -24874,11 +27958,15 @@ export namespace Prisma {
     notes?: StringNullableFilter<"ShopOrder"> | string | null
     dojoId?: UuidNullableFilter<"ShopOrder"> | string | null
     includesDojoRenewal?: BoolFilter<"ShopOrder"> | boolean
+    includesCertificates?: BoolFilter<"ShopOrder"> | boolean
+    certDojoId?: UuidNullableFilter<"ShopOrder"> | string | null
     createdAt?: DateTimeFilter<"ShopOrder"> | Date | string
     updatedAt?: DateTimeFilter<"ShopOrder"> | Date | string
     member?: XOR<MemberScalarRelationFilter, MemberWhereInput>
     dojo?: XOR<DojoNullableScalarRelationFilter, DojoWhereInput> | null
+    certDojo?: XOR<DojoNullableScalarRelationFilter, DojoWhereInput> | null
     orderItems?: ShopOrderItemListRelationFilter
+    certificateRequests?: CertificateRequestListRelationFilter
   }, "id" | "transactionId">
 
   export type ShopOrderOrderByWithAggregationInput = {
@@ -24894,6 +27982,8 @@ export namespace Prisma {
     notes?: SortOrderInput | SortOrder
     dojoId?: SortOrderInput | SortOrder
     includesDojoRenewal?: SortOrder
+    includesCertificates?: SortOrder
+    certDojoId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: ShopOrderCountOrderByAggregateInput
@@ -24919,6 +28009,8 @@ export namespace Prisma {
     notes?: StringNullableWithAggregatesFilter<"ShopOrder"> | string | null
     dojoId?: UuidNullableWithAggregatesFilter<"ShopOrder"> | string | null
     includesDojoRenewal?: BoolWithAggregatesFilter<"ShopOrder"> | boolean
+    includesCertificates?: BoolWithAggregatesFilter<"ShopOrder"> | boolean
+    certDojoId?: UuidNullableWithAggregatesFilter<"ShopOrder"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"ShopOrder"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"ShopOrder"> | Date | string
   }
@@ -25221,6 +28313,7 @@ export namespace Prisma {
     kyuDan?: string | null
     colorHex?: string | null
     orderIndex: number
+    certificatePrice?: Decimal | DecimalJsLike | number | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     gradingsFrom?: GradingCreateNestedManyWithoutFromRankInput
@@ -25235,6 +28328,7 @@ export namespace Prisma {
     kyuDan?: string | null
     colorHex?: string | null
     orderIndex: number
+    certificatePrice?: Decimal | DecimalJsLike | number | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     gradingsFrom?: GradingUncheckedCreateNestedManyWithoutFromRankInput
@@ -25249,6 +28343,7 @@ export namespace Prisma {
     kyuDan?: NullableStringFieldUpdateOperationsInput | string | null
     colorHex?: NullableStringFieldUpdateOperationsInput | string | null
     orderIndex?: IntFieldUpdateOperationsInput | number
+    certificatePrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     gradingsFrom?: GradingUpdateManyWithoutFromRankNestedInput
@@ -25263,6 +28358,7 @@ export namespace Prisma {
     kyuDan?: NullableStringFieldUpdateOperationsInput | string | null
     colorHex?: NullableStringFieldUpdateOperationsInput | string | null
     orderIndex?: IntFieldUpdateOperationsInput | number
+    certificatePrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     gradingsFrom?: GradingUncheckedUpdateManyWithoutFromRankNestedInput
@@ -25277,6 +28373,7 @@ export namespace Prisma {
     kyuDan?: string | null
     colorHex?: string | null
     orderIndex: number
+    certificatePrice?: Decimal | DecimalJsLike | number | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -25287,6 +28384,7 @@ export namespace Prisma {
     kyuDan?: NullableStringFieldUpdateOperationsInput | string | null
     colorHex?: NullableStringFieldUpdateOperationsInput | string | null
     orderIndex?: IntFieldUpdateOperationsInput | number
+    certificatePrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -25297,6 +28395,7 @@ export namespace Prisma {
     kyuDan?: NullableStringFieldUpdateOperationsInput | string | null
     colorHex?: NullableStringFieldUpdateOperationsInput | string | null
     orderIndex?: IntFieldUpdateOperationsInput | number
+    certificatePrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -25314,9 +28413,12 @@ export namespace Prisma {
     isActive?: boolean
     annualFee?: Decimal | DecimalJsLike | number | string | null
     expiryDate?: Date | string | null
+    ownerSignatureUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     renewalOrders?: ShopOrderCreateNestedManyWithoutDojoInput
+    certificateOrders?: ShopOrderCreateNestedManyWithoutCertDojoInput
+    certificateRequests?: CertificateRequestCreateNestedManyWithoutDojoInput
     members?: MemberCreateNestedManyWithoutDojoInput
     attendance?: AttendanceCreateNestedManyWithoutDojoInput
   }
@@ -25334,9 +28436,12 @@ export namespace Prisma {
     isActive?: boolean
     annualFee?: Decimal | DecimalJsLike | number | string | null
     expiryDate?: Date | string | null
+    ownerSignatureUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     renewalOrders?: ShopOrderUncheckedCreateNestedManyWithoutDojoInput
+    certificateOrders?: ShopOrderUncheckedCreateNestedManyWithoutCertDojoInput
+    certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutDojoInput
     members?: MemberUncheckedCreateNestedManyWithoutDojoInput
     attendance?: AttendanceUncheckedCreateNestedManyWithoutDojoInput
   }
@@ -25354,9 +28459,12 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     annualFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    ownerSignatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     renewalOrders?: ShopOrderUpdateManyWithoutDojoNestedInput
+    certificateOrders?: ShopOrderUpdateManyWithoutCertDojoNestedInput
+    certificateRequests?: CertificateRequestUpdateManyWithoutDojoNestedInput
     members?: MemberUpdateManyWithoutDojoNestedInput
     attendance?: AttendanceUpdateManyWithoutDojoNestedInput
   }
@@ -25374,9 +28482,12 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     annualFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    ownerSignatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     renewalOrders?: ShopOrderUncheckedUpdateManyWithoutDojoNestedInput
+    certificateOrders?: ShopOrderUncheckedUpdateManyWithoutCertDojoNestedInput
+    certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutDojoNestedInput
     members?: MemberUncheckedUpdateManyWithoutDojoNestedInput
     attendance?: AttendanceUncheckedUpdateManyWithoutDojoNestedInput
   }
@@ -25394,6 +28505,7 @@ export namespace Prisma {
     isActive?: boolean
     annualFee?: Decimal | DecimalJsLike | number | string | null
     expiryDate?: Date | string | null
+    ownerSignatureUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -25411,6 +28523,7 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     annualFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    ownerSignatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -25428,6 +28541,7 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     annualFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    ownerSignatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -25590,6 +28704,8 @@ export namespace Prisma {
     bloodGroup?: string | null
     address?: string | null
     nationalId?: string | null
+    fatherName?: string | null
+    motherName?: string | null
     emergencyContactName?: string | null
     emergencyContactPhone?: string | null
     createdAt?: Date | string
@@ -25602,6 +28718,7 @@ export namespace Prisma {
     orders?: ShopOrderCreateNestedManyWithoutMemberInput
     attendance?: AttendanceCreateNestedManyWithoutMemberInput
     tournamentEntries?: TournamentParticipantCreateNestedManyWithoutMemberInput
+    certificateRequests?: CertificateRequestCreateNestedManyWithoutMemberInput
   }
 
   export type MemberUncheckedCreateInput = {
@@ -25623,6 +28740,8 @@ export namespace Prisma {
     bloodGroup?: string | null
     address?: string | null
     nationalId?: string | null
+    fatherName?: string | null
+    motherName?: string | null
     emergencyContactName?: string | null
     emergencyContactPhone?: string | null
     createdAt?: Date | string
@@ -25634,6 +28753,7 @@ export namespace Prisma {
     orders?: ShopOrderUncheckedCreateNestedManyWithoutMemberInput
     attendance?: AttendanceUncheckedCreateNestedManyWithoutMemberInput
     tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutMemberInput
+    certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutMemberInput
   }
 
   export type MemberUpdateInput = {
@@ -25654,6 +28774,8 @@ export namespace Prisma {
     bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -25666,6 +28788,7 @@ export namespace Prisma {
     orders?: ShopOrderUpdateManyWithoutMemberNestedInput
     attendance?: AttendanceUpdateManyWithoutMemberNestedInput
     tournamentEntries?: TournamentParticipantUpdateManyWithoutMemberNestedInput
+    certificateRequests?: CertificateRequestUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberUncheckedUpdateInput = {
@@ -25687,6 +28810,8 @@ export namespace Prisma {
     bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -25698,6 +28823,7 @@ export namespace Prisma {
     orders?: ShopOrderUncheckedUpdateManyWithoutMemberNestedInput
     attendance?: AttendanceUncheckedUpdateManyWithoutMemberNestedInput
     tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutMemberNestedInput
+    certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberCreateManyInput = {
@@ -25719,6 +28845,8 @@ export namespace Prisma {
     bloodGroup?: string | null
     address?: string | null
     nationalId?: string | null
+    fatherName?: string | null
+    motherName?: string | null
     emergencyContactName?: string | null
     emergencyContactPhone?: string | null
     createdAt?: Date | string
@@ -25743,6 +28871,8 @@ export namespace Prisma {
     bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -25768,6 +28898,8 @@ export namespace Prisma {
     bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -26039,6 +29171,7 @@ export namespace Prisma {
     gradingEvent?: GradingEventCreateNestedOneWithoutGradingsInput
     fromRank?: BeltRankCreateNestedOneWithoutGradingsFromInput
     toRank?: BeltRankCreateNestedOneWithoutGradingsToInput
+    certificateRequests?: CertificateRequestCreateNestedManyWithoutGradingInput
   }
 
   export type GradingUncheckedCreateInput = {
@@ -26052,6 +29185,7 @@ export namespace Prisma {
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutGradingInput
   }
 
   export type GradingUpdateInput = {
@@ -26065,6 +29199,7 @@ export namespace Prisma {
     gradingEvent?: GradingEventUpdateOneWithoutGradingsNestedInput
     fromRank?: BeltRankUpdateOneWithoutGradingsFromNestedInput
     toRank?: BeltRankUpdateOneWithoutGradingsToNestedInput
+    certificateRequests?: CertificateRequestUpdateManyWithoutGradingNestedInput
   }
 
   export type GradingUncheckedUpdateInput = {
@@ -26078,6 +29213,7 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutGradingNestedInput
   }
 
   export type GradingCreateManyInput = {
@@ -26111,6 +29247,198 @@ export namespace Prisma {
     result?: EnumGradingResultFieldUpdateOperationsInput | $Enums.GradingResult
     certificateUrl?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CertificateRequestCreateInput = {
+    id?: string
+    status?: $Enums.CertificateRequestStatus
+    price: Decimal | DecimalJsLike | number | string
+    certificateUrl?: string | null
+    failureReason?: string | null
+    memberName: string
+    fatherName?: string | null
+    motherName?: string | null
+    rankName: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    grading: GradingCreateNestedOneWithoutCertificateRequestsInput
+    member: MemberCreateNestedOneWithoutCertificateRequestsInput
+    dojo: DojoCreateNestedOneWithoutCertificateRequestsInput
+    order?: ShopOrderCreateNestedOneWithoutCertificateRequestsInput
+  }
+
+  export type CertificateRequestUncheckedCreateInput = {
+    id?: string
+    gradingId: string
+    memberId: string
+    dojoId: string
+    orderId?: string | null
+    status?: $Enums.CertificateRequestStatus
+    price: Decimal | DecimalJsLike | number | string
+    certificateUrl?: string | null
+    failureReason?: string | null
+    memberName: string
+    fatherName?: string | null
+    motherName?: string | null
+    rankName: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CertificateRequestUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumCertificateRequestStatusFieldUpdateOperationsInput | $Enums.CertificateRequestStatus
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    certificateUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    memberName?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    rankName?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    grading?: GradingUpdateOneRequiredWithoutCertificateRequestsNestedInput
+    member?: MemberUpdateOneRequiredWithoutCertificateRequestsNestedInput
+    dojo?: DojoUpdateOneRequiredWithoutCertificateRequestsNestedInput
+    order?: ShopOrderUpdateOneWithoutCertificateRequestsNestedInput
+  }
+
+  export type CertificateRequestUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    gradingId?: StringFieldUpdateOperationsInput | string
+    memberId?: StringFieldUpdateOperationsInput | string
+    dojoId?: StringFieldUpdateOperationsInput | string
+    orderId?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumCertificateRequestStatusFieldUpdateOperationsInput | $Enums.CertificateRequestStatus
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    certificateUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    memberName?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    rankName?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CertificateRequestCreateManyInput = {
+    id?: string
+    gradingId: string
+    memberId: string
+    dojoId: string
+    orderId?: string | null
+    status?: $Enums.CertificateRequestStatus
+    price: Decimal | DecimalJsLike | number | string
+    certificateUrl?: string | null
+    failureReason?: string | null
+    memberName: string
+    fatherName?: string | null
+    motherName?: string | null
+    rankName: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CertificateRequestUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumCertificateRequestStatusFieldUpdateOperationsInput | $Enums.CertificateRequestStatus
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    certificateUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    memberName?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    rankName?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CertificateRequestUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    gradingId?: StringFieldUpdateOperationsInput | string
+    memberId?: StringFieldUpdateOperationsInput | string
+    dojoId?: StringFieldUpdateOperationsInput | string
+    orderId?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumCertificateRequestStatusFieldUpdateOperationsInput | $Enums.CertificateRequestStatus
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    certificateUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    memberName?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    rankName?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SystemSettingsCreateInput = {
+    id?: string
+    adminSignatureUrl?: string | null
+    adminSignerName?: string | null
+    adminSignerTitle?: string | null
+    certificateLogoUrl?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SystemSettingsUncheckedCreateInput = {
+    id?: string
+    adminSignatureUrl?: string | null
+    adminSignerName?: string | null
+    adminSignerTitle?: string | null
+    certificateLogoUrl?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SystemSettingsUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    adminSignatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    adminSignerName?: NullableStringFieldUpdateOperationsInput | string | null
+    adminSignerTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    certificateLogoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SystemSettingsUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    adminSignatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    adminSignerName?: NullableStringFieldUpdateOperationsInput | string | null
+    adminSignerTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    certificateLogoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SystemSettingsCreateManyInput = {
+    id?: string
+    adminSignatureUrl?: string | null
+    adminSignerName?: string | null
+    adminSignerTitle?: string | null
+    certificateLogoUrl?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SystemSettingsUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    adminSignatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    adminSignerName?: NullableStringFieldUpdateOperationsInput | string | null
+    adminSignerTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    certificateLogoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SystemSettingsUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    adminSignatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    adminSignerName?: NullableStringFieldUpdateOperationsInput | string | null
+    adminSignerTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    certificateLogoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -26446,11 +29774,14 @@ export namespace Prisma {
     membershipFee?: Decimal | DecimalJsLike | number | string | null
     notes?: string | null
     includesDojoRenewal?: boolean
+    includesCertificates?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     member: MemberCreateNestedOneWithoutOrdersInput
     dojo?: DojoCreateNestedOneWithoutRenewalOrdersInput
+    certDojo?: DojoCreateNestedOneWithoutCertificateOrdersInput
     orderItems?: ShopOrderItemCreateNestedManyWithoutOrderInput
+    certificateRequests?: CertificateRequestCreateNestedManyWithoutOrderInput
   }
 
   export type ShopOrderUncheckedCreateInput = {
@@ -26466,9 +29797,12 @@ export namespace Prisma {
     notes?: string | null
     dojoId?: string | null
     includesDojoRenewal?: boolean
+    includesCertificates?: boolean
+    certDojoId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     orderItems?: ShopOrderItemUncheckedCreateNestedManyWithoutOrderInput
+    certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutOrderInput
   }
 
   export type ShopOrderUpdateInput = {
@@ -26482,11 +29816,14 @@ export namespace Prisma {
     membershipFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     includesDojoRenewal?: BoolFieldUpdateOperationsInput | boolean
+    includesCertificates?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     member?: MemberUpdateOneRequiredWithoutOrdersNestedInput
     dojo?: DojoUpdateOneWithoutRenewalOrdersNestedInput
+    certDojo?: DojoUpdateOneWithoutCertificateOrdersNestedInput
     orderItems?: ShopOrderItemUpdateManyWithoutOrderNestedInput
+    certificateRequests?: CertificateRequestUpdateManyWithoutOrderNestedInput
   }
 
   export type ShopOrderUncheckedUpdateInput = {
@@ -26502,9 +29839,12 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     dojoId?: NullableStringFieldUpdateOperationsInput | string | null
     includesDojoRenewal?: BoolFieldUpdateOperationsInput | boolean
+    includesCertificates?: BoolFieldUpdateOperationsInput | boolean
+    certDojoId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     orderItems?: ShopOrderItemUncheckedUpdateManyWithoutOrderNestedInput
+    certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutOrderNestedInput
   }
 
   export type ShopOrderCreateManyInput = {
@@ -26520,6 +29860,8 @@ export namespace Prisma {
     notes?: string | null
     dojoId?: string | null
     includesDojoRenewal?: boolean
+    includesCertificates?: boolean
+    certDojoId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -26535,6 +29877,7 @@ export namespace Prisma {
     membershipFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     includesDojoRenewal?: BoolFieldUpdateOperationsInput | boolean
+    includesCertificates?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -26552,6 +29895,8 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     dojoId?: NullableStringFieldUpdateOperationsInput | string | null
     includesDojoRenewal?: BoolFieldUpdateOperationsInput | boolean
+    includesCertificates?: BoolFieldUpdateOperationsInput | boolean
+    certDojoId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -26901,6 +30246,17 @@ export namespace Prisma {
     not?: NestedIntFilter<$PrismaModel> | number
   }
 
+  export type DecimalNullableFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalNullableFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
+  }
+
   export type DateTimeFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -26953,12 +30309,14 @@ export namespace Prisma {
     kyuDan?: SortOrder
     colorHex?: SortOrder
     orderIndex?: SortOrder
+    certificatePrice?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
 
   export type BeltRankAvgOrderByAggregateInput = {
     orderIndex?: SortOrder
+    certificatePrice?: SortOrder
   }
 
   export type BeltRankMaxOrderByAggregateInput = {
@@ -26967,6 +30325,7 @@ export namespace Prisma {
     kyuDan?: SortOrder
     colorHex?: SortOrder
     orderIndex?: SortOrder
+    certificatePrice?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -26977,12 +30336,14 @@ export namespace Prisma {
     kyuDan?: SortOrder
     colorHex?: SortOrder
     orderIndex?: SortOrder
+    certificatePrice?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
 
   export type BeltRankSumOrderByAggregateInput = {
     orderIndex?: SortOrder
+    certificatePrice?: SortOrder
   }
 
   export type UuidWithAggregatesFilter<$PrismaModel = never> = {
@@ -27052,6 +30413,22 @@ export namespace Prisma {
     _max?: NestedIntFilter<$PrismaModel>
   }
 
+  export type DecimalNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalNullableWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedDecimalNullableFilter<$PrismaModel>
+    _sum?: NestedDecimalNullableFilter<$PrismaModel>
+    _min?: NestedDecimalNullableFilter<$PrismaModel>
+    _max?: NestedDecimalNullableFilter<$PrismaModel>
+  }
+
   export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -27105,17 +30482,6 @@ export namespace Prisma {
     not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
-  export type DecimalNullableFilter<$PrismaModel = never> = {
-    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
-    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
-    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
-    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    not?: NestedDecimalNullableFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
-  }
-
   export type DateTimeNullableFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
@@ -27133,6 +30499,12 @@ export namespace Prisma {
     none?: ShopOrderWhereInput
   }
 
+  export type CertificateRequestListRelationFilter = {
+    every?: CertificateRequestWhereInput
+    some?: CertificateRequestWhereInput
+    none?: CertificateRequestWhereInput
+  }
+
   export type MemberListRelationFilter = {
     every?: MemberWhereInput
     some?: MemberWhereInput
@@ -27146,6 +30518,10 @@ export namespace Prisma {
   }
 
   export type ShopOrderOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type CertificateRequestOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -27170,6 +30546,7 @@ export namespace Prisma {
     isActive?: SortOrder
     annualFee?: SortOrder
     expiryDate?: SortOrder
+    ownerSignatureUrl?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -27192,6 +30569,7 @@ export namespace Prisma {
     isActive?: SortOrder
     annualFee?: SortOrder
     expiryDate?: SortOrder
+    ownerSignatureUrl?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -27208,6 +30586,7 @@ export namespace Prisma {
     isActive?: SortOrder
     annualFee?: SortOrder
     expiryDate?: SortOrder
+    ownerSignatureUrl?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -27266,22 +30645,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedBoolFilter<$PrismaModel>
     _max?: NestedBoolFilter<$PrismaModel>
-  }
-
-  export type DecimalNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
-    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
-    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
-    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    not?: NestedDecimalNullableWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedDecimalNullableFilter<$PrismaModel>
-    _sum?: NestedDecimalNullableFilter<$PrismaModel>
-    _min?: NestedDecimalNullableFilter<$PrismaModel>
-    _max?: NestedDecimalNullableFilter<$PrismaModel>
   }
 
   export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -27533,6 +30896,8 @@ export namespace Prisma {
     bloodGroup?: SortOrder
     address?: SortOrder
     nationalId?: SortOrder
+    fatherName?: SortOrder
+    motherName?: SortOrder
     emergencyContactName?: SortOrder
     emergencyContactPhone?: SortOrder
     createdAt?: SortOrder
@@ -27558,6 +30923,8 @@ export namespace Prisma {
     bloodGroup?: SortOrder
     address?: SortOrder
     nationalId?: SortOrder
+    fatherName?: SortOrder
+    motherName?: SortOrder
     emergencyContactName?: SortOrder
     emergencyContactPhone?: SortOrder
     createdAt?: SortOrder
@@ -27583,6 +30950,8 @@ export namespace Prisma {
     bloodGroup?: SortOrder
     address?: SortOrder
     nationalId?: SortOrder
+    fatherName?: SortOrder
+    motherName?: SortOrder
     emergencyContactName?: SortOrder
     emergencyContactPhone?: SortOrder
     createdAt?: SortOrder
@@ -27810,6 +31179,157 @@ export namespace Prisma {
     _max?: NestedEnumGradingResultFilter<$PrismaModel>
   }
 
+  export type EnumCertificateRequestStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.CertificateRequestStatus | EnumCertificateRequestStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.CertificateRequestStatus[] | ListEnumCertificateRequestStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.CertificateRequestStatus[] | ListEnumCertificateRequestStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumCertificateRequestStatusFilter<$PrismaModel> | $Enums.CertificateRequestStatus
+  }
+
+  export type DecimalFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
+  }
+
+  export type GradingScalarRelationFilter = {
+    is?: GradingWhereInput
+    isNot?: GradingWhereInput
+  }
+
+  export type DojoScalarRelationFilter = {
+    is?: DojoWhereInput
+    isNot?: DojoWhereInput
+  }
+
+  export type ShopOrderNullableScalarRelationFilter = {
+    is?: ShopOrderWhereInput | null
+    isNot?: ShopOrderWhereInput | null
+  }
+
+  export type CertificateRequestCountOrderByAggregateInput = {
+    id?: SortOrder
+    gradingId?: SortOrder
+    memberId?: SortOrder
+    dojoId?: SortOrder
+    orderId?: SortOrder
+    status?: SortOrder
+    price?: SortOrder
+    certificateUrl?: SortOrder
+    failureReason?: SortOrder
+    memberName?: SortOrder
+    fatherName?: SortOrder
+    motherName?: SortOrder
+    rankName?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type CertificateRequestAvgOrderByAggregateInput = {
+    price?: SortOrder
+  }
+
+  export type CertificateRequestMaxOrderByAggregateInput = {
+    id?: SortOrder
+    gradingId?: SortOrder
+    memberId?: SortOrder
+    dojoId?: SortOrder
+    orderId?: SortOrder
+    status?: SortOrder
+    price?: SortOrder
+    certificateUrl?: SortOrder
+    failureReason?: SortOrder
+    memberName?: SortOrder
+    fatherName?: SortOrder
+    motherName?: SortOrder
+    rankName?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type CertificateRequestMinOrderByAggregateInput = {
+    id?: SortOrder
+    gradingId?: SortOrder
+    memberId?: SortOrder
+    dojoId?: SortOrder
+    orderId?: SortOrder
+    status?: SortOrder
+    price?: SortOrder
+    certificateUrl?: SortOrder
+    failureReason?: SortOrder
+    memberName?: SortOrder
+    fatherName?: SortOrder
+    motherName?: SortOrder
+    rankName?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type CertificateRequestSumOrderByAggregateInput = {
+    price?: SortOrder
+  }
+
+  export type EnumCertificateRequestStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.CertificateRequestStatus | EnumCertificateRequestStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.CertificateRequestStatus[] | ListEnumCertificateRequestStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.CertificateRequestStatus[] | ListEnumCertificateRequestStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumCertificateRequestStatusWithAggregatesFilter<$PrismaModel> | $Enums.CertificateRequestStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumCertificateRequestStatusFilter<$PrismaModel>
+    _max?: NestedEnumCertificateRequestStatusFilter<$PrismaModel>
+  }
+
+  export type DecimalWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedDecimalFilter<$PrismaModel>
+    _sum?: NestedDecimalFilter<$PrismaModel>
+    _min?: NestedDecimalFilter<$PrismaModel>
+    _max?: NestedDecimalFilter<$PrismaModel>
+  }
+
+  export type SystemSettingsCountOrderByAggregateInput = {
+    id?: SortOrder
+    adminSignatureUrl?: SortOrder
+    adminSignerName?: SortOrder
+    adminSignerTitle?: SortOrder
+    certificateLogoUrl?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SystemSettingsMaxOrderByAggregateInput = {
+    id?: SortOrder
+    adminSignatureUrl?: SortOrder
+    adminSignerName?: SortOrder
+    adminSignerTitle?: SortOrder
+    certificateLogoUrl?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SystemSettingsMinOrderByAggregateInput = {
+    id?: SortOrder
+    adminSignatureUrl?: SortOrder
+    adminSignerName?: SortOrder
+    adminSignerTitle?: SortOrder
+    certificateLogoUrl?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
   export type IntNullableFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel> | null
     in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
@@ -27968,17 +31488,6 @@ export namespace Prisma {
     _max?: NestedEnumNotificationTypeFilter<$PrismaModel>
   }
 
-  export type DecimalFilter<$PrismaModel = never> = {
-    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
-    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
-    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    not?: NestedDecimalFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
-  }
-
   export type ShopOrderItemListRelationFilter = {
     every?: ShopOrderItemWhereInput
     some?: ShopOrderItemWhereInput
@@ -28038,22 +31547,6 @@ export namespace Prisma {
     stock?: SortOrder
   }
 
-  export type DecimalWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
-    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
-    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    not?: NestedDecimalWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedDecimalFilter<$PrismaModel>
-    _sum?: NestedDecimalFilter<$PrismaModel>
-    _min?: NestedDecimalFilter<$PrismaModel>
-    _max?: NestedDecimalFilter<$PrismaModel>
-  }
-
   export type EnumPaymentStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.PaymentStatus | EnumPaymentStatusFieldRefInput<$PrismaModel>
     in?: $Enums.PaymentStatus[] | ListEnumPaymentStatusFieldRefInput<$PrismaModel>
@@ -28074,6 +31567,8 @@ export namespace Prisma {
     notes?: SortOrder
     dojoId?: SortOrder
     includesDojoRenewal?: SortOrder
+    includesCertificates?: SortOrder
+    certDojoId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -28096,6 +31591,8 @@ export namespace Prisma {
     notes?: SortOrder
     dojoId?: SortOrder
     includesDojoRenewal?: SortOrder
+    includesCertificates?: SortOrder
+    certDojoId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -28113,6 +31610,8 @@ export namespace Prisma {
     notes?: SortOrder
     dojoId?: SortOrder
     includesDojoRenewal?: SortOrder
+    includesCertificates?: SortOrder
+    certDojoId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -28379,6 +31878,14 @@ export namespace Prisma {
     divide?: number
   }
 
+  export type NullableDecimalFieldUpdateOperationsInput = {
+    set?: Decimal | DecimalJsLike | number | string | null
+    increment?: Decimal | DecimalJsLike | number | string
+    decrement?: Decimal | DecimalJsLike | number | string
+    multiply?: Decimal | DecimalJsLike | number | string
+    divide?: Decimal | DecimalJsLike | number | string
+  }
+
   export type DateTimeFieldUpdateOperationsInput = {
     set?: Date | string
   }
@@ -28502,6 +32009,20 @@ export namespace Prisma {
     connect?: ShopOrderWhereUniqueInput | ShopOrderWhereUniqueInput[]
   }
 
+  export type ShopOrderCreateNestedManyWithoutCertDojoInput = {
+    create?: XOR<ShopOrderCreateWithoutCertDojoInput, ShopOrderUncheckedCreateWithoutCertDojoInput> | ShopOrderCreateWithoutCertDojoInput[] | ShopOrderUncheckedCreateWithoutCertDojoInput[]
+    connectOrCreate?: ShopOrderCreateOrConnectWithoutCertDojoInput | ShopOrderCreateOrConnectWithoutCertDojoInput[]
+    createMany?: ShopOrderCreateManyCertDojoInputEnvelope
+    connect?: ShopOrderWhereUniqueInput | ShopOrderWhereUniqueInput[]
+  }
+
+  export type CertificateRequestCreateNestedManyWithoutDojoInput = {
+    create?: XOR<CertificateRequestCreateWithoutDojoInput, CertificateRequestUncheckedCreateWithoutDojoInput> | CertificateRequestCreateWithoutDojoInput[] | CertificateRequestUncheckedCreateWithoutDojoInput[]
+    connectOrCreate?: CertificateRequestCreateOrConnectWithoutDojoInput | CertificateRequestCreateOrConnectWithoutDojoInput[]
+    createMany?: CertificateRequestCreateManyDojoInputEnvelope
+    connect?: CertificateRequestWhereUniqueInput | CertificateRequestWhereUniqueInput[]
+  }
+
   export type MemberCreateNestedManyWithoutDojoInput = {
     create?: XOR<MemberCreateWithoutDojoInput, MemberUncheckedCreateWithoutDojoInput> | MemberCreateWithoutDojoInput[] | MemberUncheckedCreateWithoutDojoInput[]
     connectOrCreate?: MemberCreateOrConnectWithoutDojoInput | MemberCreateOrConnectWithoutDojoInput[]
@@ -28521,6 +32042,20 @@ export namespace Prisma {
     connectOrCreate?: ShopOrderCreateOrConnectWithoutDojoInput | ShopOrderCreateOrConnectWithoutDojoInput[]
     createMany?: ShopOrderCreateManyDojoInputEnvelope
     connect?: ShopOrderWhereUniqueInput | ShopOrderWhereUniqueInput[]
+  }
+
+  export type ShopOrderUncheckedCreateNestedManyWithoutCertDojoInput = {
+    create?: XOR<ShopOrderCreateWithoutCertDojoInput, ShopOrderUncheckedCreateWithoutCertDojoInput> | ShopOrderCreateWithoutCertDojoInput[] | ShopOrderUncheckedCreateWithoutCertDojoInput[]
+    connectOrCreate?: ShopOrderCreateOrConnectWithoutCertDojoInput | ShopOrderCreateOrConnectWithoutCertDojoInput[]
+    createMany?: ShopOrderCreateManyCertDojoInputEnvelope
+    connect?: ShopOrderWhereUniqueInput | ShopOrderWhereUniqueInput[]
+  }
+
+  export type CertificateRequestUncheckedCreateNestedManyWithoutDojoInput = {
+    create?: XOR<CertificateRequestCreateWithoutDojoInput, CertificateRequestUncheckedCreateWithoutDojoInput> | CertificateRequestCreateWithoutDojoInput[] | CertificateRequestUncheckedCreateWithoutDojoInput[]
+    connectOrCreate?: CertificateRequestCreateOrConnectWithoutDojoInput | CertificateRequestCreateOrConnectWithoutDojoInput[]
+    createMany?: CertificateRequestCreateManyDojoInputEnvelope
+    connect?: CertificateRequestWhereUniqueInput | CertificateRequestWhereUniqueInput[]
   }
 
   export type MemberUncheckedCreateNestedManyWithoutDojoInput = {
@@ -28549,14 +32084,6 @@ export namespace Prisma {
     set?: boolean
   }
 
-  export type NullableDecimalFieldUpdateOperationsInput = {
-    set?: Decimal | DecimalJsLike | number | string | null
-    increment?: Decimal | DecimalJsLike | number | string
-    decrement?: Decimal | DecimalJsLike | number | string
-    multiply?: Decimal | DecimalJsLike | number | string
-    divide?: Decimal | DecimalJsLike | number | string
-  }
-
   export type NullableDateTimeFieldUpdateOperationsInput = {
     set?: Date | string | null
   }
@@ -28573,6 +32100,34 @@ export namespace Prisma {
     update?: ShopOrderUpdateWithWhereUniqueWithoutDojoInput | ShopOrderUpdateWithWhereUniqueWithoutDojoInput[]
     updateMany?: ShopOrderUpdateManyWithWhereWithoutDojoInput | ShopOrderUpdateManyWithWhereWithoutDojoInput[]
     deleteMany?: ShopOrderScalarWhereInput | ShopOrderScalarWhereInput[]
+  }
+
+  export type ShopOrderUpdateManyWithoutCertDojoNestedInput = {
+    create?: XOR<ShopOrderCreateWithoutCertDojoInput, ShopOrderUncheckedCreateWithoutCertDojoInput> | ShopOrderCreateWithoutCertDojoInput[] | ShopOrderUncheckedCreateWithoutCertDojoInput[]
+    connectOrCreate?: ShopOrderCreateOrConnectWithoutCertDojoInput | ShopOrderCreateOrConnectWithoutCertDojoInput[]
+    upsert?: ShopOrderUpsertWithWhereUniqueWithoutCertDojoInput | ShopOrderUpsertWithWhereUniqueWithoutCertDojoInput[]
+    createMany?: ShopOrderCreateManyCertDojoInputEnvelope
+    set?: ShopOrderWhereUniqueInput | ShopOrderWhereUniqueInput[]
+    disconnect?: ShopOrderWhereUniqueInput | ShopOrderWhereUniqueInput[]
+    delete?: ShopOrderWhereUniqueInput | ShopOrderWhereUniqueInput[]
+    connect?: ShopOrderWhereUniqueInput | ShopOrderWhereUniqueInput[]
+    update?: ShopOrderUpdateWithWhereUniqueWithoutCertDojoInput | ShopOrderUpdateWithWhereUniqueWithoutCertDojoInput[]
+    updateMany?: ShopOrderUpdateManyWithWhereWithoutCertDojoInput | ShopOrderUpdateManyWithWhereWithoutCertDojoInput[]
+    deleteMany?: ShopOrderScalarWhereInput | ShopOrderScalarWhereInput[]
+  }
+
+  export type CertificateRequestUpdateManyWithoutDojoNestedInput = {
+    create?: XOR<CertificateRequestCreateWithoutDojoInput, CertificateRequestUncheckedCreateWithoutDojoInput> | CertificateRequestCreateWithoutDojoInput[] | CertificateRequestUncheckedCreateWithoutDojoInput[]
+    connectOrCreate?: CertificateRequestCreateOrConnectWithoutDojoInput | CertificateRequestCreateOrConnectWithoutDojoInput[]
+    upsert?: CertificateRequestUpsertWithWhereUniqueWithoutDojoInput | CertificateRequestUpsertWithWhereUniqueWithoutDojoInput[]
+    createMany?: CertificateRequestCreateManyDojoInputEnvelope
+    set?: CertificateRequestWhereUniqueInput | CertificateRequestWhereUniqueInput[]
+    disconnect?: CertificateRequestWhereUniqueInput | CertificateRequestWhereUniqueInput[]
+    delete?: CertificateRequestWhereUniqueInput | CertificateRequestWhereUniqueInput[]
+    connect?: CertificateRequestWhereUniqueInput | CertificateRequestWhereUniqueInput[]
+    update?: CertificateRequestUpdateWithWhereUniqueWithoutDojoInput | CertificateRequestUpdateWithWhereUniqueWithoutDojoInput[]
+    updateMany?: CertificateRequestUpdateManyWithWhereWithoutDojoInput | CertificateRequestUpdateManyWithWhereWithoutDojoInput[]
+    deleteMany?: CertificateRequestScalarWhereInput | CertificateRequestScalarWhereInput[]
   }
 
   export type MemberUpdateManyWithoutDojoNestedInput = {
@@ -28615,6 +32170,34 @@ export namespace Prisma {
     update?: ShopOrderUpdateWithWhereUniqueWithoutDojoInput | ShopOrderUpdateWithWhereUniqueWithoutDojoInput[]
     updateMany?: ShopOrderUpdateManyWithWhereWithoutDojoInput | ShopOrderUpdateManyWithWhereWithoutDojoInput[]
     deleteMany?: ShopOrderScalarWhereInput | ShopOrderScalarWhereInput[]
+  }
+
+  export type ShopOrderUncheckedUpdateManyWithoutCertDojoNestedInput = {
+    create?: XOR<ShopOrderCreateWithoutCertDojoInput, ShopOrderUncheckedCreateWithoutCertDojoInput> | ShopOrderCreateWithoutCertDojoInput[] | ShopOrderUncheckedCreateWithoutCertDojoInput[]
+    connectOrCreate?: ShopOrderCreateOrConnectWithoutCertDojoInput | ShopOrderCreateOrConnectWithoutCertDojoInput[]
+    upsert?: ShopOrderUpsertWithWhereUniqueWithoutCertDojoInput | ShopOrderUpsertWithWhereUniqueWithoutCertDojoInput[]
+    createMany?: ShopOrderCreateManyCertDojoInputEnvelope
+    set?: ShopOrderWhereUniqueInput | ShopOrderWhereUniqueInput[]
+    disconnect?: ShopOrderWhereUniqueInput | ShopOrderWhereUniqueInput[]
+    delete?: ShopOrderWhereUniqueInput | ShopOrderWhereUniqueInput[]
+    connect?: ShopOrderWhereUniqueInput | ShopOrderWhereUniqueInput[]
+    update?: ShopOrderUpdateWithWhereUniqueWithoutCertDojoInput | ShopOrderUpdateWithWhereUniqueWithoutCertDojoInput[]
+    updateMany?: ShopOrderUpdateManyWithWhereWithoutCertDojoInput | ShopOrderUpdateManyWithWhereWithoutCertDojoInput[]
+    deleteMany?: ShopOrderScalarWhereInput | ShopOrderScalarWhereInput[]
+  }
+
+  export type CertificateRequestUncheckedUpdateManyWithoutDojoNestedInput = {
+    create?: XOR<CertificateRequestCreateWithoutDojoInput, CertificateRequestUncheckedCreateWithoutDojoInput> | CertificateRequestCreateWithoutDojoInput[] | CertificateRequestUncheckedCreateWithoutDojoInput[]
+    connectOrCreate?: CertificateRequestCreateOrConnectWithoutDojoInput | CertificateRequestCreateOrConnectWithoutDojoInput[]
+    upsert?: CertificateRequestUpsertWithWhereUniqueWithoutDojoInput | CertificateRequestUpsertWithWhereUniqueWithoutDojoInput[]
+    createMany?: CertificateRequestCreateManyDojoInputEnvelope
+    set?: CertificateRequestWhereUniqueInput | CertificateRequestWhereUniqueInput[]
+    disconnect?: CertificateRequestWhereUniqueInput | CertificateRequestWhereUniqueInput[]
+    delete?: CertificateRequestWhereUniqueInput | CertificateRequestWhereUniqueInput[]
+    connect?: CertificateRequestWhereUniqueInput | CertificateRequestWhereUniqueInput[]
+    update?: CertificateRequestUpdateWithWhereUniqueWithoutDojoInput | CertificateRequestUpdateWithWhereUniqueWithoutDojoInput[]
+    updateMany?: CertificateRequestUpdateManyWithWhereWithoutDojoInput | CertificateRequestUpdateManyWithWhereWithoutDojoInput[]
+    deleteMany?: CertificateRequestScalarWhereInput | CertificateRequestScalarWhereInput[]
   }
 
   export type MemberUncheckedUpdateManyWithoutDojoNestedInput = {
@@ -28713,6 +32296,13 @@ export namespace Prisma {
     connect?: TournamentParticipantWhereUniqueInput | TournamentParticipantWhereUniqueInput[]
   }
 
+  export type CertificateRequestCreateNestedManyWithoutMemberInput = {
+    create?: XOR<CertificateRequestCreateWithoutMemberInput, CertificateRequestUncheckedCreateWithoutMemberInput> | CertificateRequestCreateWithoutMemberInput[] | CertificateRequestUncheckedCreateWithoutMemberInput[]
+    connectOrCreate?: CertificateRequestCreateOrConnectWithoutMemberInput | CertificateRequestCreateOrConnectWithoutMemberInput[]
+    createMany?: CertificateRequestCreateManyMemberInputEnvelope
+    connect?: CertificateRequestWhereUniqueInput | CertificateRequestWhereUniqueInput[]
+  }
+
   export type GradingUncheckedCreateNestedManyWithoutMemberInput = {
     create?: XOR<GradingCreateWithoutMemberInput, GradingUncheckedCreateWithoutMemberInput> | GradingCreateWithoutMemberInput[] | GradingUncheckedCreateWithoutMemberInput[]
     connectOrCreate?: GradingCreateOrConnectWithoutMemberInput | GradingCreateOrConnectWithoutMemberInput[]
@@ -28760,6 +32350,13 @@ export namespace Prisma {
     connectOrCreate?: TournamentParticipantCreateOrConnectWithoutMemberInput | TournamentParticipantCreateOrConnectWithoutMemberInput[]
     createMany?: TournamentParticipantCreateManyMemberInputEnvelope
     connect?: TournamentParticipantWhereUniqueInput | TournamentParticipantWhereUniqueInput[]
+  }
+
+  export type CertificateRequestUncheckedCreateNestedManyWithoutMemberInput = {
+    create?: XOR<CertificateRequestCreateWithoutMemberInput, CertificateRequestUncheckedCreateWithoutMemberInput> | CertificateRequestCreateWithoutMemberInput[] | CertificateRequestUncheckedCreateWithoutMemberInput[]
+    connectOrCreate?: CertificateRequestCreateOrConnectWithoutMemberInput | CertificateRequestCreateOrConnectWithoutMemberInput[]
+    createMany?: CertificateRequestCreateManyMemberInputEnvelope
+    connect?: CertificateRequestWhereUniqueInput | CertificateRequestWhereUniqueInput[]
   }
 
   export type EnumMemberRoleFieldUpdateOperationsInput = {
@@ -28878,6 +32475,20 @@ export namespace Prisma {
     deleteMany?: TournamentParticipantScalarWhereInput | TournamentParticipantScalarWhereInput[]
   }
 
+  export type CertificateRequestUpdateManyWithoutMemberNestedInput = {
+    create?: XOR<CertificateRequestCreateWithoutMemberInput, CertificateRequestUncheckedCreateWithoutMemberInput> | CertificateRequestCreateWithoutMemberInput[] | CertificateRequestUncheckedCreateWithoutMemberInput[]
+    connectOrCreate?: CertificateRequestCreateOrConnectWithoutMemberInput | CertificateRequestCreateOrConnectWithoutMemberInput[]
+    upsert?: CertificateRequestUpsertWithWhereUniqueWithoutMemberInput | CertificateRequestUpsertWithWhereUniqueWithoutMemberInput[]
+    createMany?: CertificateRequestCreateManyMemberInputEnvelope
+    set?: CertificateRequestWhereUniqueInput | CertificateRequestWhereUniqueInput[]
+    disconnect?: CertificateRequestWhereUniqueInput | CertificateRequestWhereUniqueInput[]
+    delete?: CertificateRequestWhereUniqueInput | CertificateRequestWhereUniqueInput[]
+    connect?: CertificateRequestWhereUniqueInput | CertificateRequestWhereUniqueInput[]
+    update?: CertificateRequestUpdateWithWhereUniqueWithoutMemberInput | CertificateRequestUpdateWithWhereUniqueWithoutMemberInput[]
+    updateMany?: CertificateRequestUpdateManyWithWhereWithoutMemberInput | CertificateRequestUpdateManyWithWhereWithoutMemberInput[]
+    deleteMany?: CertificateRequestScalarWhereInput | CertificateRequestScalarWhereInput[]
+  }
+
   export type GradingUncheckedUpdateManyWithoutMemberNestedInput = {
     create?: XOR<GradingCreateWithoutMemberInput, GradingUncheckedCreateWithoutMemberInput> | GradingCreateWithoutMemberInput[] | GradingUncheckedCreateWithoutMemberInput[]
     connectOrCreate?: GradingCreateOrConnectWithoutMemberInput | GradingCreateOrConnectWithoutMemberInput[]
@@ -28974,6 +32585,20 @@ export namespace Prisma {
     update?: TournamentParticipantUpdateWithWhereUniqueWithoutMemberInput | TournamentParticipantUpdateWithWhereUniqueWithoutMemberInput[]
     updateMany?: TournamentParticipantUpdateManyWithWhereWithoutMemberInput | TournamentParticipantUpdateManyWithWhereWithoutMemberInput[]
     deleteMany?: TournamentParticipantScalarWhereInput | TournamentParticipantScalarWhereInput[]
+  }
+
+  export type CertificateRequestUncheckedUpdateManyWithoutMemberNestedInput = {
+    create?: XOR<CertificateRequestCreateWithoutMemberInput, CertificateRequestUncheckedCreateWithoutMemberInput> | CertificateRequestCreateWithoutMemberInput[] | CertificateRequestUncheckedCreateWithoutMemberInput[]
+    connectOrCreate?: CertificateRequestCreateOrConnectWithoutMemberInput | CertificateRequestCreateOrConnectWithoutMemberInput[]
+    upsert?: CertificateRequestUpsertWithWhereUniqueWithoutMemberInput | CertificateRequestUpsertWithWhereUniqueWithoutMemberInput[]
+    createMany?: CertificateRequestCreateManyMemberInputEnvelope
+    set?: CertificateRequestWhereUniqueInput | CertificateRequestWhereUniqueInput[]
+    disconnect?: CertificateRequestWhereUniqueInput | CertificateRequestWhereUniqueInput[]
+    delete?: CertificateRequestWhereUniqueInput | CertificateRequestWhereUniqueInput[]
+    connect?: CertificateRequestWhereUniqueInput | CertificateRequestWhereUniqueInput[]
+    update?: CertificateRequestUpdateWithWhereUniqueWithoutMemberInput | CertificateRequestUpdateWithWhereUniqueWithoutMemberInput[]
+    updateMany?: CertificateRequestUpdateManyWithWhereWithoutMemberInput | CertificateRequestUpdateManyWithWhereWithoutMemberInput[]
+    deleteMany?: CertificateRequestScalarWhereInput | CertificateRequestScalarWhereInput[]
   }
 
   export type MemberCreateNestedOneWithoutAttendanceInput = {
@@ -29180,6 +32805,20 @@ export namespace Prisma {
     connect?: BeltRankWhereUniqueInput
   }
 
+  export type CertificateRequestCreateNestedManyWithoutGradingInput = {
+    create?: XOR<CertificateRequestCreateWithoutGradingInput, CertificateRequestUncheckedCreateWithoutGradingInput> | CertificateRequestCreateWithoutGradingInput[] | CertificateRequestUncheckedCreateWithoutGradingInput[]
+    connectOrCreate?: CertificateRequestCreateOrConnectWithoutGradingInput | CertificateRequestCreateOrConnectWithoutGradingInput[]
+    createMany?: CertificateRequestCreateManyGradingInputEnvelope
+    connect?: CertificateRequestWhereUniqueInput | CertificateRequestWhereUniqueInput[]
+  }
+
+  export type CertificateRequestUncheckedCreateNestedManyWithoutGradingInput = {
+    create?: XOR<CertificateRequestCreateWithoutGradingInput, CertificateRequestUncheckedCreateWithoutGradingInput> | CertificateRequestCreateWithoutGradingInput[] | CertificateRequestUncheckedCreateWithoutGradingInput[]
+    connectOrCreate?: CertificateRequestCreateOrConnectWithoutGradingInput | CertificateRequestCreateOrConnectWithoutGradingInput[]
+    createMany?: CertificateRequestCreateManyGradingInputEnvelope
+    connect?: CertificateRequestWhereUniqueInput | CertificateRequestWhereUniqueInput[]
+  }
+
   export type EnumGradingResultFieldUpdateOperationsInput = {
     set?: $Enums.GradingResult
   }
@@ -29220,6 +32859,104 @@ export namespace Prisma {
     delete?: BeltRankWhereInput | boolean
     connect?: BeltRankWhereUniqueInput
     update?: XOR<XOR<BeltRankUpdateToOneWithWhereWithoutGradingsToInput, BeltRankUpdateWithoutGradingsToInput>, BeltRankUncheckedUpdateWithoutGradingsToInput>
+  }
+
+  export type CertificateRequestUpdateManyWithoutGradingNestedInput = {
+    create?: XOR<CertificateRequestCreateWithoutGradingInput, CertificateRequestUncheckedCreateWithoutGradingInput> | CertificateRequestCreateWithoutGradingInput[] | CertificateRequestUncheckedCreateWithoutGradingInput[]
+    connectOrCreate?: CertificateRequestCreateOrConnectWithoutGradingInput | CertificateRequestCreateOrConnectWithoutGradingInput[]
+    upsert?: CertificateRequestUpsertWithWhereUniqueWithoutGradingInput | CertificateRequestUpsertWithWhereUniqueWithoutGradingInput[]
+    createMany?: CertificateRequestCreateManyGradingInputEnvelope
+    set?: CertificateRequestWhereUniqueInput | CertificateRequestWhereUniqueInput[]
+    disconnect?: CertificateRequestWhereUniqueInput | CertificateRequestWhereUniqueInput[]
+    delete?: CertificateRequestWhereUniqueInput | CertificateRequestWhereUniqueInput[]
+    connect?: CertificateRequestWhereUniqueInput | CertificateRequestWhereUniqueInput[]
+    update?: CertificateRequestUpdateWithWhereUniqueWithoutGradingInput | CertificateRequestUpdateWithWhereUniqueWithoutGradingInput[]
+    updateMany?: CertificateRequestUpdateManyWithWhereWithoutGradingInput | CertificateRequestUpdateManyWithWhereWithoutGradingInput[]
+    deleteMany?: CertificateRequestScalarWhereInput | CertificateRequestScalarWhereInput[]
+  }
+
+  export type CertificateRequestUncheckedUpdateManyWithoutGradingNestedInput = {
+    create?: XOR<CertificateRequestCreateWithoutGradingInput, CertificateRequestUncheckedCreateWithoutGradingInput> | CertificateRequestCreateWithoutGradingInput[] | CertificateRequestUncheckedCreateWithoutGradingInput[]
+    connectOrCreate?: CertificateRequestCreateOrConnectWithoutGradingInput | CertificateRequestCreateOrConnectWithoutGradingInput[]
+    upsert?: CertificateRequestUpsertWithWhereUniqueWithoutGradingInput | CertificateRequestUpsertWithWhereUniqueWithoutGradingInput[]
+    createMany?: CertificateRequestCreateManyGradingInputEnvelope
+    set?: CertificateRequestWhereUniqueInput | CertificateRequestWhereUniqueInput[]
+    disconnect?: CertificateRequestWhereUniqueInput | CertificateRequestWhereUniqueInput[]
+    delete?: CertificateRequestWhereUniqueInput | CertificateRequestWhereUniqueInput[]
+    connect?: CertificateRequestWhereUniqueInput | CertificateRequestWhereUniqueInput[]
+    update?: CertificateRequestUpdateWithWhereUniqueWithoutGradingInput | CertificateRequestUpdateWithWhereUniqueWithoutGradingInput[]
+    updateMany?: CertificateRequestUpdateManyWithWhereWithoutGradingInput | CertificateRequestUpdateManyWithWhereWithoutGradingInput[]
+    deleteMany?: CertificateRequestScalarWhereInput | CertificateRequestScalarWhereInput[]
+  }
+
+  export type GradingCreateNestedOneWithoutCertificateRequestsInput = {
+    create?: XOR<GradingCreateWithoutCertificateRequestsInput, GradingUncheckedCreateWithoutCertificateRequestsInput>
+    connectOrCreate?: GradingCreateOrConnectWithoutCertificateRequestsInput
+    connect?: GradingWhereUniqueInput
+  }
+
+  export type MemberCreateNestedOneWithoutCertificateRequestsInput = {
+    create?: XOR<MemberCreateWithoutCertificateRequestsInput, MemberUncheckedCreateWithoutCertificateRequestsInput>
+    connectOrCreate?: MemberCreateOrConnectWithoutCertificateRequestsInput
+    connect?: MemberWhereUniqueInput
+  }
+
+  export type DojoCreateNestedOneWithoutCertificateRequestsInput = {
+    create?: XOR<DojoCreateWithoutCertificateRequestsInput, DojoUncheckedCreateWithoutCertificateRequestsInput>
+    connectOrCreate?: DojoCreateOrConnectWithoutCertificateRequestsInput
+    connect?: DojoWhereUniqueInput
+  }
+
+  export type ShopOrderCreateNestedOneWithoutCertificateRequestsInput = {
+    create?: XOR<ShopOrderCreateWithoutCertificateRequestsInput, ShopOrderUncheckedCreateWithoutCertificateRequestsInput>
+    connectOrCreate?: ShopOrderCreateOrConnectWithoutCertificateRequestsInput
+    connect?: ShopOrderWhereUniqueInput
+  }
+
+  export type EnumCertificateRequestStatusFieldUpdateOperationsInput = {
+    set?: $Enums.CertificateRequestStatus
+  }
+
+  export type DecimalFieldUpdateOperationsInput = {
+    set?: Decimal | DecimalJsLike | number | string
+    increment?: Decimal | DecimalJsLike | number | string
+    decrement?: Decimal | DecimalJsLike | number | string
+    multiply?: Decimal | DecimalJsLike | number | string
+    divide?: Decimal | DecimalJsLike | number | string
+  }
+
+  export type GradingUpdateOneRequiredWithoutCertificateRequestsNestedInput = {
+    create?: XOR<GradingCreateWithoutCertificateRequestsInput, GradingUncheckedCreateWithoutCertificateRequestsInput>
+    connectOrCreate?: GradingCreateOrConnectWithoutCertificateRequestsInput
+    upsert?: GradingUpsertWithoutCertificateRequestsInput
+    connect?: GradingWhereUniqueInput
+    update?: XOR<XOR<GradingUpdateToOneWithWhereWithoutCertificateRequestsInput, GradingUpdateWithoutCertificateRequestsInput>, GradingUncheckedUpdateWithoutCertificateRequestsInput>
+  }
+
+  export type MemberUpdateOneRequiredWithoutCertificateRequestsNestedInput = {
+    create?: XOR<MemberCreateWithoutCertificateRequestsInput, MemberUncheckedCreateWithoutCertificateRequestsInput>
+    connectOrCreate?: MemberCreateOrConnectWithoutCertificateRequestsInput
+    upsert?: MemberUpsertWithoutCertificateRequestsInput
+    connect?: MemberWhereUniqueInput
+    update?: XOR<XOR<MemberUpdateToOneWithWhereWithoutCertificateRequestsInput, MemberUpdateWithoutCertificateRequestsInput>, MemberUncheckedUpdateWithoutCertificateRequestsInput>
+  }
+
+  export type DojoUpdateOneRequiredWithoutCertificateRequestsNestedInput = {
+    create?: XOR<DojoCreateWithoutCertificateRequestsInput, DojoUncheckedCreateWithoutCertificateRequestsInput>
+    connectOrCreate?: DojoCreateOrConnectWithoutCertificateRequestsInput
+    upsert?: DojoUpsertWithoutCertificateRequestsInput
+    connect?: DojoWhereUniqueInput
+    update?: XOR<XOR<DojoUpdateToOneWithWhereWithoutCertificateRequestsInput, DojoUpdateWithoutCertificateRequestsInput>, DojoUncheckedUpdateWithoutCertificateRequestsInput>
+  }
+
+  export type ShopOrderUpdateOneWithoutCertificateRequestsNestedInput = {
+    create?: XOR<ShopOrderCreateWithoutCertificateRequestsInput, ShopOrderUncheckedCreateWithoutCertificateRequestsInput>
+    connectOrCreate?: ShopOrderCreateOrConnectWithoutCertificateRequestsInput
+    upsert?: ShopOrderUpsertWithoutCertificateRequestsInput
+    disconnect?: ShopOrderWhereInput | boolean
+    delete?: ShopOrderWhereInput | boolean
+    connect?: ShopOrderWhereUniqueInput
+    update?: XOR<XOR<ShopOrderUpdateToOneWithWhereWithoutCertificateRequestsInput, ShopOrderUpdateWithoutCertificateRequestsInput>, ShopOrderUncheckedUpdateWithoutCertificateRequestsInput>
   }
 
   export type EventRegistrationCreateNestedManyWithoutEventInput = {
@@ -29332,14 +33069,6 @@ export namespace Prisma {
     connect?: ShopOrderItemWhereUniqueInput | ShopOrderItemWhereUniqueInput[]
   }
 
-  export type DecimalFieldUpdateOperationsInput = {
-    set?: Decimal | DecimalJsLike | number | string
-    increment?: Decimal | DecimalJsLike | number | string
-    decrement?: Decimal | DecimalJsLike | number | string
-    multiply?: Decimal | DecimalJsLike | number | string
-    divide?: Decimal | DecimalJsLike | number | string
-  }
-
   export type ShopOrderItemUpdateManyWithoutProductNestedInput = {
     create?: XOR<ShopOrderItemCreateWithoutProductInput, ShopOrderItemUncheckedCreateWithoutProductInput> | ShopOrderItemCreateWithoutProductInput[] | ShopOrderItemUncheckedCreateWithoutProductInput[]
     connectOrCreate?: ShopOrderItemCreateOrConnectWithoutProductInput | ShopOrderItemCreateOrConnectWithoutProductInput[]
@@ -29380,6 +33109,12 @@ export namespace Prisma {
     connect?: DojoWhereUniqueInput
   }
 
+  export type DojoCreateNestedOneWithoutCertificateOrdersInput = {
+    create?: XOR<DojoCreateWithoutCertificateOrdersInput, DojoUncheckedCreateWithoutCertificateOrdersInput>
+    connectOrCreate?: DojoCreateOrConnectWithoutCertificateOrdersInput
+    connect?: DojoWhereUniqueInput
+  }
+
   export type ShopOrderItemCreateNestedManyWithoutOrderInput = {
     create?: XOR<ShopOrderItemCreateWithoutOrderInput, ShopOrderItemUncheckedCreateWithoutOrderInput> | ShopOrderItemCreateWithoutOrderInput[] | ShopOrderItemUncheckedCreateWithoutOrderInput[]
     connectOrCreate?: ShopOrderItemCreateOrConnectWithoutOrderInput | ShopOrderItemCreateOrConnectWithoutOrderInput[]
@@ -29387,11 +33122,25 @@ export namespace Prisma {
     connect?: ShopOrderItemWhereUniqueInput | ShopOrderItemWhereUniqueInput[]
   }
 
+  export type CertificateRequestCreateNestedManyWithoutOrderInput = {
+    create?: XOR<CertificateRequestCreateWithoutOrderInput, CertificateRequestUncheckedCreateWithoutOrderInput> | CertificateRequestCreateWithoutOrderInput[] | CertificateRequestUncheckedCreateWithoutOrderInput[]
+    connectOrCreate?: CertificateRequestCreateOrConnectWithoutOrderInput | CertificateRequestCreateOrConnectWithoutOrderInput[]
+    createMany?: CertificateRequestCreateManyOrderInputEnvelope
+    connect?: CertificateRequestWhereUniqueInput | CertificateRequestWhereUniqueInput[]
+  }
+
   export type ShopOrderItemUncheckedCreateNestedManyWithoutOrderInput = {
     create?: XOR<ShopOrderItemCreateWithoutOrderInput, ShopOrderItemUncheckedCreateWithoutOrderInput> | ShopOrderItemCreateWithoutOrderInput[] | ShopOrderItemUncheckedCreateWithoutOrderInput[]
     connectOrCreate?: ShopOrderItemCreateOrConnectWithoutOrderInput | ShopOrderItemCreateOrConnectWithoutOrderInput[]
     createMany?: ShopOrderItemCreateManyOrderInputEnvelope
     connect?: ShopOrderItemWhereUniqueInput | ShopOrderItemWhereUniqueInput[]
+  }
+
+  export type CertificateRequestUncheckedCreateNestedManyWithoutOrderInput = {
+    create?: XOR<CertificateRequestCreateWithoutOrderInput, CertificateRequestUncheckedCreateWithoutOrderInput> | CertificateRequestCreateWithoutOrderInput[] | CertificateRequestUncheckedCreateWithoutOrderInput[]
+    connectOrCreate?: CertificateRequestCreateOrConnectWithoutOrderInput | CertificateRequestCreateOrConnectWithoutOrderInput[]
+    createMany?: CertificateRequestCreateManyOrderInputEnvelope
+    connect?: CertificateRequestWhereUniqueInput | CertificateRequestWhereUniqueInput[]
   }
 
   export type EnumPaymentStatusFieldUpdateOperationsInput = {
@@ -29416,6 +33165,16 @@ export namespace Prisma {
     update?: XOR<XOR<DojoUpdateToOneWithWhereWithoutRenewalOrdersInput, DojoUpdateWithoutRenewalOrdersInput>, DojoUncheckedUpdateWithoutRenewalOrdersInput>
   }
 
+  export type DojoUpdateOneWithoutCertificateOrdersNestedInput = {
+    create?: XOR<DojoCreateWithoutCertificateOrdersInput, DojoUncheckedCreateWithoutCertificateOrdersInput>
+    connectOrCreate?: DojoCreateOrConnectWithoutCertificateOrdersInput
+    upsert?: DojoUpsertWithoutCertificateOrdersInput
+    disconnect?: DojoWhereInput | boolean
+    delete?: DojoWhereInput | boolean
+    connect?: DojoWhereUniqueInput
+    update?: XOR<XOR<DojoUpdateToOneWithWhereWithoutCertificateOrdersInput, DojoUpdateWithoutCertificateOrdersInput>, DojoUncheckedUpdateWithoutCertificateOrdersInput>
+  }
+
   export type ShopOrderItemUpdateManyWithoutOrderNestedInput = {
     create?: XOR<ShopOrderItemCreateWithoutOrderInput, ShopOrderItemUncheckedCreateWithoutOrderInput> | ShopOrderItemCreateWithoutOrderInput[] | ShopOrderItemUncheckedCreateWithoutOrderInput[]
     connectOrCreate?: ShopOrderItemCreateOrConnectWithoutOrderInput | ShopOrderItemCreateOrConnectWithoutOrderInput[]
@@ -29430,6 +33189,20 @@ export namespace Prisma {
     deleteMany?: ShopOrderItemScalarWhereInput | ShopOrderItemScalarWhereInput[]
   }
 
+  export type CertificateRequestUpdateManyWithoutOrderNestedInput = {
+    create?: XOR<CertificateRequestCreateWithoutOrderInput, CertificateRequestUncheckedCreateWithoutOrderInput> | CertificateRequestCreateWithoutOrderInput[] | CertificateRequestUncheckedCreateWithoutOrderInput[]
+    connectOrCreate?: CertificateRequestCreateOrConnectWithoutOrderInput | CertificateRequestCreateOrConnectWithoutOrderInput[]
+    upsert?: CertificateRequestUpsertWithWhereUniqueWithoutOrderInput | CertificateRequestUpsertWithWhereUniqueWithoutOrderInput[]
+    createMany?: CertificateRequestCreateManyOrderInputEnvelope
+    set?: CertificateRequestWhereUniqueInput | CertificateRequestWhereUniqueInput[]
+    disconnect?: CertificateRequestWhereUniqueInput | CertificateRequestWhereUniqueInput[]
+    delete?: CertificateRequestWhereUniqueInput | CertificateRequestWhereUniqueInput[]
+    connect?: CertificateRequestWhereUniqueInput | CertificateRequestWhereUniqueInput[]
+    update?: CertificateRequestUpdateWithWhereUniqueWithoutOrderInput | CertificateRequestUpdateWithWhereUniqueWithoutOrderInput[]
+    updateMany?: CertificateRequestUpdateManyWithWhereWithoutOrderInput | CertificateRequestUpdateManyWithWhereWithoutOrderInput[]
+    deleteMany?: CertificateRequestScalarWhereInput | CertificateRequestScalarWhereInput[]
+  }
+
   export type ShopOrderItemUncheckedUpdateManyWithoutOrderNestedInput = {
     create?: XOR<ShopOrderItemCreateWithoutOrderInput, ShopOrderItemUncheckedCreateWithoutOrderInput> | ShopOrderItemCreateWithoutOrderInput[] | ShopOrderItemUncheckedCreateWithoutOrderInput[]
     connectOrCreate?: ShopOrderItemCreateOrConnectWithoutOrderInput | ShopOrderItemCreateOrConnectWithoutOrderInput[]
@@ -29442,6 +33215,20 @@ export namespace Prisma {
     update?: ShopOrderItemUpdateWithWhereUniqueWithoutOrderInput | ShopOrderItemUpdateWithWhereUniqueWithoutOrderInput[]
     updateMany?: ShopOrderItemUpdateManyWithWhereWithoutOrderInput | ShopOrderItemUpdateManyWithWhereWithoutOrderInput[]
     deleteMany?: ShopOrderItemScalarWhereInput | ShopOrderItemScalarWhereInput[]
+  }
+
+  export type CertificateRequestUncheckedUpdateManyWithoutOrderNestedInput = {
+    create?: XOR<CertificateRequestCreateWithoutOrderInput, CertificateRequestUncheckedCreateWithoutOrderInput> | CertificateRequestCreateWithoutOrderInput[] | CertificateRequestUncheckedCreateWithoutOrderInput[]
+    connectOrCreate?: CertificateRequestCreateOrConnectWithoutOrderInput | CertificateRequestCreateOrConnectWithoutOrderInput[]
+    upsert?: CertificateRequestUpsertWithWhereUniqueWithoutOrderInput | CertificateRequestUpsertWithWhereUniqueWithoutOrderInput[]
+    createMany?: CertificateRequestCreateManyOrderInputEnvelope
+    set?: CertificateRequestWhereUniqueInput | CertificateRequestWhereUniqueInput[]
+    disconnect?: CertificateRequestWhereUniqueInput | CertificateRequestWhereUniqueInput[]
+    delete?: CertificateRequestWhereUniqueInput | CertificateRequestWhereUniqueInput[]
+    connect?: CertificateRequestWhereUniqueInput | CertificateRequestWhereUniqueInput[]
+    update?: CertificateRequestUpdateWithWhereUniqueWithoutOrderInput | CertificateRequestUpdateWithWhereUniqueWithoutOrderInput[]
+    updateMany?: CertificateRequestUpdateManyWithWhereWithoutOrderInput | CertificateRequestUpdateManyWithWhereWithoutOrderInput[]
+    deleteMany?: CertificateRequestScalarWhereInput | CertificateRequestScalarWhereInput[]
   }
 
   export type ShopOrderCreateNestedOneWithoutOrderItemsInput = {
@@ -29822,6 +33609,17 @@ export namespace Prisma {
     not?: NestedIntFilter<$PrismaModel> | number
   }
 
+  export type NestedDecimalNullableFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalNullableFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
+  }
+
   export type NestedDateTimeFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -29919,6 +33717,22 @@ export namespace Prisma {
     not?: NestedFloatFilter<$PrismaModel> | number
   }
 
+  export type NestedDecimalNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalNullableWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedDecimalNullableFilter<$PrismaModel>
+    _sum?: NestedDecimalNullableFilter<$PrismaModel>
+    _min?: NestedDecimalNullableFilter<$PrismaModel>
+    _max?: NestedDecimalNullableFilter<$PrismaModel>
+  }
+
   export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -29947,17 +33761,6 @@ export namespace Prisma {
   export type NestedBoolFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
     not?: NestedBoolFilter<$PrismaModel> | boolean
-  }
-
-  export type NestedDecimalNullableFilter<$PrismaModel = never> = {
-    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
-    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
-    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
-    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    not?: NestedDecimalNullableFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
   }
 
   export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
@@ -30016,22 +33819,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedBoolFilter<$PrismaModel>
     _max?: NestedBoolFilter<$PrismaModel>
-  }
-
-  export type NestedDecimalNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
-    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
-    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
-    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    not?: NestedDecimalNullableWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedDecimalNullableFilter<$PrismaModel>
-    _sum?: NestedDecimalNullableFilter<$PrismaModel>
-    _min?: NestedDecimalNullableFilter<$PrismaModel>
-    _max?: NestedDecimalNullableFilter<$PrismaModel>
   }
 
   export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -30181,6 +33968,50 @@ export namespace Prisma {
     _max?: NestedEnumGradingResultFilter<$PrismaModel>
   }
 
+  export type NestedEnumCertificateRequestStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.CertificateRequestStatus | EnumCertificateRequestStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.CertificateRequestStatus[] | ListEnumCertificateRequestStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.CertificateRequestStatus[] | ListEnumCertificateRequestStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumCertificateRequestStatusFilter<$PrismaModel> | $Enums.CertificateRequestStatus
+  }
+
+  export type NestedDecimalFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
+  }
+
+  export type NestedEnumCertificateRequestStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.CertificateRequestStatus | EnumCertificateRequestStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.CertificateRequestStatus[] | ListEnumCertificateRequestStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.CertificateRequestStatus[] | ListEnumCertificateRequestStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumCertificateRequestStatusWithAggregatesFilter<$PrismaModel> | $Enums.CertificateRequestStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumCertificateRequestStatusFilter<$PrismaModel>
+    _max?: NestedEnumCertificateRequestStatusFilter<$PrismaModel>
+  }
+
+  export type NestedDecimalWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedDecimalFilter<$PrismaModel>
+    _sum?: NestedDecimalFilter<$PrismaModel>
+    _min?: NestedDecimalFilter<$PrismaModel>
+    _max?: NestedDecimalFilter<$PrismaModel>
+  }
+
   export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel> | null
     in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
@@ -30214,33 +34045,6 @@ export namespace Prisma {
     _max?: NestedEnumNotificationTypeFilter<$PrismaModel>
   }
 
-  export type NestedDecimalFilter<$PrismaModel = never> = {
-    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
-    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
-    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    not?: NestedDecimalFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
-  }
-
-  export type NestedDecimalWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
-    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
-    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    not?: NestedDecimalWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedDecimalFilter<$PrismaModel>
-    _sum?: NestedDecimalFilter<$PrismaModel>
-    _min?: NestedDecimalFilter<$PrismaModel>
-    _max?: NestedDecimalFilter<$PrismaModel>
-  }
-
   export type NestedEnumPaymentStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.PaymentStatus | EnumPaymentStatusFieldRefInput<$PrismaModel>
     in?: $Enums.PaymentStatus[] | ListEnumPaymentStatusFieldRefInput<$PrismaModel>
@@ -30268,6 +34072,7 @@ export namespace Prisma {
     member: MemberCreateNestedOneWithoutGradingsInput
     gradingEvent?: GradingEventCreateNestedOneWithoutGradingsInput
     toRank?: BeltRankCreateNestedOneWithoutGradingsToInput
+    certificateRequests?: CertificateRequestCreateNestedManyWithoutGradingInput
   }
 
   export type GradingUncheckedCreateWithoutFromRankInput = {
@@ -30280,6 +34085,7 @@ export namespace Prisma {
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutGradingInput
   }
 
   export type GradingCreateOrConnectWithoutFromRankInput = {
@@ -30302,6 +34108,7 @@ export namespace Prisma {
     member: MemberCreateNestedOneWithoutGradingsInput
     gradingEvent?: GradingEventCreateNestedOneWithoutGradingsInput
     fromRank?: BeltRankCreateNestedOneWithoutGradingsFromInput
+    certificateRequests?: CertificateRequestCreateNestedManyWithoutGradingInput
   }
 
   export type GradingUncheckedCreateWithoutToRankInput = {
@@ -30314,6 +34121,7 @@ export namespace Prisma {
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutGradingInput
   }
 
   export type GradingCreateOrConnectWithoutToRankInput = {
@@ -30521,10 +34329,13 @@ export namespace Prisma {
     membershipFee?: Decimal | DecimalJsLike | number | string | null
     notes?: string | null
     includesDojoRenewal?: boolean
+    includesCertificates?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     member: MemberCreateNestedOneWithoutOrdersInput
+    certDojo?: DojoCreateNestedOneWithoutCertificateOrdersInput
     orderItems?: ShopOrderItemCreateNestedManyWithoutOrderInput
+    certificateRequests?: CertificateRequestCreateNestedManyWithoutOrderInput
   }
 
   export type ShopOrderUncheckedCreateWithoutDojoInput = {
@@ -30539,9 +34350,12 @@ export namespace Prisma {
     membershipFee?: Decimal | DecimalJsLike | number | string | null
     notes?: string | null
     includesDojoRenewal?: boolean
+    includesCertificates?: boolean
+    certDojoId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     orderItems?: ShopOrderItemUncheckedCreateNestedManyWithoutOrderInput
+    certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutOrderInput
   }
 
   export type ShopOrderCreateOrConnectWithoutDojoInput = {
@@ -30551,6 +34365,100 @@ export namespace Prisma {
 
   export type ShopOrderCreateManyDojoInputEnvelope = {
     data: ShopOrderCreateManyDojoInput | ShopOrderCreateManyDojoInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ShopOrderCreateWithoutCertDojoInput = {
+    id?: string
+    paymentStatus?: $Enums.PaymentStatus
+    paymentMethod?: string | null
+    total: Decimal | DecimalJsLike | number | string
+    currency?: string
+    transactionId?: string | null
+    includesMembership?: boolean
+    membershipFee?: Decimal | DecimalJsLike | number | string | null
+    notes?: string | null
+    includesDojoRenewal?: boolean
+    includesCertificates?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    member: MemberCreateNestedOneWithoutOrdersInput
+    dojo?: DojoCreateNestedOneWithoutRenewalOrdersInput
+    orderItems?: ShopOrderItemCreateNestedManyWithoutOrderInput
+    certificateRequests?: CertificateRequestCreateNestedManyWithoutOrderInput
+  }
+
+  export type ShopOrderUncheckedCreateWithoutCertDojoInput = {
+    id?: string
+    memberId: string
+    paymentStatus?: $Enums.PaymentStatus
+    paymentMethod?: string | null
+    total: Decimal | DecimalJsLike | number | string
+    currency?: string
+    transactionId?: string | null
+    includesMembership?: boolean
+    membershipFee?: Decimal | DecimalJsLike | number | string | null
+    notes?: string | null
+    dojoId?: string | null
+    includesDojoRenewal?: boolean
+    includesCertificates?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    orderItems?: ShopOrderItemUncheckedCreateNestedManyWithoutOrderInput
+    certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutOrderInput
+  }
+
+  export type ShopOrderCreateOrConnectWithoutCertDojoInput = {
+    where: ShopOrderWhereUniqueInput
+    create: XOR<ShopOrderCreateWithoutCertDojoInput, ShopOrderUncheckedCreateWithoutCertDojoInput>
+  }
+
+  export type ShopOrderCreateManyCertDojoInputEnvelope = {
+    data: ShopOrderCreateManyCertDojoInput | ShopOrderCreateManyCertDojoInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type CertificateRequestCreateWithoutDojoInput = {
+    id?: string
+    status?: $Enums.CertificateRequestStatus
+    price: Decimal | DecimalJsLike | number | string
+    certificateUrl?: string | null
+    failureReason?: string | null
+    memberName: string
+    fatherName?: string | null
+    motherName?: string | null
+    rankName: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    grading: GradingCreateNestedOneWithoutCertificateRequestsInput
+    member: MemberCreateNestedOneWithoutCertificateRequestsInput
+    order?: ShopOrderCreateNestedOneWithoutCertificateRequestsInput
+  }
+
+  export type CertificateRequestUncheckedCreateWithoutDojoInput = {
+    id?: string
+    gradingId: string
+    memberId: string
+    orderId?: string | null
+    status?: $Enums.CertificateRequestStatus
+    price: Decimal | DecimalJsLike | number | string
+    certificateUrl?: string | null
+    failureReason?: string | null
+    memberName: string
+    fatherName?: string | null
+    motherName?: string | null
+    rankName: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CertificateRequestCreateOrConnectWithoutDojoInput = {
+    where: CertificateRequestWhereUniqueInput
+    create: XOR<CertificateRequestCreateWithoutDojoInput, CertificateRequestUncheckedCreateWithoutDojoInput>
+  }
+
+  export type CertificateRequestCreateManyDojoInputEnvelope = {
+    data: CertificateRequestCreateManyDojoInput | CertificateRequestCreateManyDojoInput[]
     skipDuplicates?: boolean
   }
 
@@ -30572,6 +34480,8 @@ export namespace Prisma {
     bloodGroup?: string | null
     address?: string | null
     nationalId?: string | null
+    fatherName?: string | null
+    motherName?: string | null
     emergencyContactName?: string | null
     emergencyContactPhone?: string | null
     createdAt?: Date | string
@@ -30583,6 +34493,7 @@ export namespace Prisma {
     orders?: ShopOrderCreateNestedManyWithoutMemberInput
     attendance?: AttendanceCreateNestedManyWithoutMemberInput
     tournamentEntries?: TournamentParticipantCreateNestedManyWithoutMemberInput
+    certificateRequests?: CertificateRequestCreateNestedManyWithoutMemberInput
   }
 
   export type MemberUncheckedCreateWithoutDojoInput = {
@@ -30603,6 +34514,8 @@ export namespace Prisma {
     bloodGroup?: string | null
     address?: string | null
     nationalId?: string | null
+    fatherName?: string | null
+    motherName?: string | null
     emergencyContactName?: string | null
     emergencyContactPhone?: string | null
     createdAt?: Date | string
@@ -30614,6 +34527,7 @@ export namespace Prisma {
     orders?: ShopOrderUncheckedCreateNestedManyWithoutMemberInput
     attendance?: AttendanceUncheckedCreateNestedManyWithoutMemberInput
     tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutMemberInput
+    certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutMemberInput
   }
 
   export type MemberCreateOrConnectWithoutDojoInput = {
@@ -30686,8 +34600,63 @@ export namespace Prisma {
     notes?: StringNullableFilter<"ShopOrder"> | string | null
     dojoId?: UuidNullableFilter<"ShopOrder"> | string | null
     includesDojoRenewal?: BoolFilter<"ShopOrder"> | boolean
+    includesCertificates?: BoolFilter<"ShopOrder"> | boolean
+    certDojoId?: UuidNullableFilter<"ShopOrder"> | string | null
     createdAt?: DateTimeFilter<"ShopOrder"> | Date | string
     updatedAt?: DateTimeFilter<"ShopOrder"> | Date | string
+  }
+
+  export type ShopOrderUpsertWithWhereUniqueWithoutCertDojoInput = {
+    where: ShopOrderWhereUniqueInput
+    update: XOR<ShopOrderUpdateWithoutCertDojoInput, ShopOrderUncheckedUpdateWithoutCertDojoInput>
+    create: XOR<ShopOrderCreateWithoutCertDojoInput, ShopOrderUncheckedCreateWithoutCertDojoInput>
+  }
+
+  export type ShopOrderUpdateWithWhereUniqueWithoutCertDojoInput = {
+    where: ShopOrderWhereUniqueInput
+    data: XOR<ShopOrderUpdateWithoutCertDojoInput, ShopOrderUncheckedUpdateWithoutCertDojoInput>
+  }
+
+  export type ShopOrderUpdateManyWithWhereWithoutCertDojoInput = {
+    where: ShopOrderScalarWhereInput
+    data: XOR<ShopOrderUpdateManyMutationInput, ShopOrderUncheckedUpdateManyWithoutCertDojoInput>
+  }
+
+  export type CertificateRequestUpsertWithWhereUniqueWithoutDojoInput = {
+    where: CertificateRequestWhereUniqueInput
+    update: XOR<CertificateRequestUpdateWithoutDojoInput, CertificateRequestUncheckedUpdateWithoutDojoInput>
+    create: XOR<CertificateRequestCreateWithoutDojoInput, CertificateRequestUncheckedCreateWithoutDojoInput>
+  }
+
+  export type CertificateRequestUpdateWithWhereUniqueWithoutDojoInput = {
+    where: CertificateRequestWhereUniqueInput
+    data: XOR<CertificateRequestUpdateWithoutDojoInput, CertificateRequestUncheckedUpdateWithoutDojoInput>
+  }
+
+  export type CertificateRequestUpdateManyWithWhereWithoutDojoInput = {
+    where: CertificateRequestScalarWhereInput
+    data: XOR<CertificateRequestUpdateManyMutationInput, CertificateRequestUncheckedUpdateManyWithoutDojoInput>
+  }
+
+  export type CertificateRequestScalarWhereInput = {
+    AND?: CertificateRequestScalarWhereInput | CertificateRequestScalarWhereInput[]
+    OR?: CertificateRequestScalarWhereInput[]
+    NOT?: CertificateRequestScalarWhereInput | CertificateRequestScalarWhereInput[]
+    id?: UuidFilter<"CertificateRequest"> | string
+    gradingId?: UuidFilter<"CertificateRequest"> | string
+    memberId?: UuidFilter<"CertificateRequest"> | string
+    dojoId?: UuidFilter<"CertificateRequest"> | string
+    orderId?: UuidNullableFilter<"CertificateRequest"> | string | null
+    status?: EnumCertificateRequestStatusFilter<"CertificateRequest"> | $Enums.CertificateRequestStatus
+    price?: DecimalFilter<"CertificateRequest"> | Decimal | DecimalJsLike | number | string
+    certificateUrl?: StringNullableFilter<"CertificateRequest"> | string | null
+    failureReason?: StringNullableFilter<"CertificateRequest"> | string | null
+    memberName?: StringFilter<"CertificateRequest"> | string
+    fatherName?: StringNullableFilter<"CertificateRequest"> | string | null
+    motherName?: StringNullableFilter<"CertificateRequest"> | string | null
+    rankName?: StringFilter<"CertificateRequest"> | string
+    createdAt?: DateTimeFilter<"CertificateRequest"> | Date | string
+    updatedAt?: DateTimeFilter<"CertificateRequest"> | Date | string
   }
 
   export type MemberUpsertWithWhereUniqueWithoutDojoInput = {
@@ -30728,6 +34697,8 @@ export namespace Prisma {
     bloodGroup?: StringNullableFilter<"Member"> | string | null
     address?: StringNullableFilter<"Member"> | string | null
     nationalId?: StringNullableFilter<"Member"> | string | null
+    fatherName?: StringNullableFilter<"Member"> | string | null
+    motherName?: StringNullableFilter<"Member"> | string | null
     emergencyContactName?: StringNullableFilter<"Member"> | string | null
     emergencyContactPhone?: StringNullableFilter<"Member"> | string | null
     createdAt?: DateTimeFilter<"Member"> | Date | string
@@ -30776,9 +34747,12 @@ export namespace Prisma {
     isActive?: boolean
     annualFee?: Decimal | DecimalJsLike | number | string | null
     expiryDate?: Date | string | null
+    ownerSignatureUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     renewalOrders?: ShopOrderCreateNestedManyWithoutDojoInput
+    certificateOrders?: ShopOrderCreateNestedManyWithoutCertDojoInput
+    certificateRequests?: CertificateRequestCreateNestedManyWithoutDojoInput
     attendance?: AttendanceCreateNestedManyWithoutDojoInput
   }
 
@@ -30795,9 +34769,12 @@ export namespace Prisma {
     isActive?: boolean
     annualFee?: Decimal | DecimalJsLike | number | string | null
     expiryDate?: Date | string | null
+    ownerSignatureUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     renewalOrders?: ShopOrderUncheckedCreateNestedManyWithoutDojoInput
+    certificateOrders?: ShopOrderUncheckedCreateNestedManyWithoutCertDojoInput
+    certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutDojoInput
     attendance?: AttendanceUncheckedCreateNestedManyWithoutDojoInput
   }
 
@@ -30816,6 +34793,7 @@ export namespace Prisma {
     gradingEvent?: GradingEventCreateNestedOneWithoutGradingsInput
     fromRank?: BeltRankCreateNestedOneWithoutGradingsFromInput
     toRank?: BeltRankCreateNestedOneWithoutGradingsToInput
+    certificateRequests?: CertificateRequestCreateNestedManyWithoutGradingInput
   }
 
   export type GradingUncheckedCreateWithoutMemberInput = {
@@ -30828,6 +34806,7 @@ export namespace Prisma {
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutGradingInput
   }
 
   export type GradingCreateOrConnectWithoutMemberInput = {
@@ -30935,10 +34914,13 @@ export namespace Prisma {
     membershipFee?: Decimal | DecimalJsLike | number | string | null
     notes?: string | null
     includesDojoRenewal?: boolean
+    includesCertificates?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     dojo?: DojoCreateNestedOneWithoutRenewalOrdersInput
+    certDojo?: DojoCreateNestedOneWithoutCertificateOrdersInput
     orderItems?: ShopOrderItemCreateNestedManyWithoutOrderInput
+    certificateRequests?: CertificateRequestCreateNestedManyWithoutOrderInput
   }
 
   export type ShopOrderUncheckedCreateWithoutMemberInput = {
@@ -30953,9 +34935,12 @@ export namespace Prisma {
     notes?: string | null
     dojoId?: string | null
     includesDojoRenewal?: boolean
+    includesCertificates?: boolean
+    certDojoId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     orderItems?: ShopOrderItemUncheckedCreateNestedManyWithoutOrderInput
+    certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutOrderInput
   }
 
   export type ShopOrderCreateOrConnectWithoutMemberInput = {
@@ -31028,6 +35013,50 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type CertificateRequestCreateWithoutMemberInput = {
+    id?: string
+    status?: $Enums.CertificateRequestStatus
+    price: Decimal | DecimalJsLike | number | string
+    certificateUrl?: string | null
+    failureReason?: string | null
+    memberName: string
+    fatherName?: string | null
+    motherName?: string | null
+    rankName: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    grading: GradingCreateNestedOneWithoutCertificateRequestsInput
+    dojo: DojoCreateNestedOneWithoutCertificateRequestsInput
+    order?: ShopOrderCreateNestedOneWithoutCertificateRequestsInput
+  }
+
+  export type CertificateRequestUncheckedCreateWithoutMemberInput = {
+    id?: string
+    gradingId: string
+    dojoId: string
+    orderId?: string | null
+    status?: $Enums.CertificateRequestStatus
+    price: Decimal | DecimalJsLike | number | string
+    certificateUrl?: string | null
+    failureReason?: string | null
+    memberName: string
+    fatherName?: string | null
+    motherName?: string | null
+    rankName: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CertificateRequestCreateOrConnectWithoutMemberInput = {
+    where: CertificateRequestWhereUniqueInput
+    create: XOR<CertificateRequestCreateWithoutMemberInput, CertificateRequestUncheckedCreateWithoutMemberInput>
+  }
+
+  export type CertificateRequestCreateManyMemberInputEnvelope = {
+    data: CertificateRequestCreateManyMemberInput | CertificateRequestCreateManyMemberInput[]
+    skipDuplicates?: boolean
+  }
+
   export type DojoUpsertWithoutMembersInput = {
     update: XOR<DojoUpdateWithoutMembersInput, DojoUncheckedUpdateWithoutMembersInput>
     create: XOR<DojoCreateWithoutMembersInput, DojoUncheckedCreateWithoutMembersInput>
@@ -31052,9 +35081,12 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     annualFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    ownerSignatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     renewalOrders?: ShopOrderUpdateManyWithoutDojoNestedInput
+    certificateOrders?: ShopOrderUpdateManyWithoutCertDojoNestedInput
+    certificateRequests?: CertificateRequestUpdateManyWithoutDojoNestedInput
     attendance?: AttendanceUpdateManyWithoutDojoNestedInput
   }
 
@@ -31071,9 +35103,12 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     annualFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    ownerSignatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     renewalOrders?: ShopOrderUncheckedUpdateManyWithoutDojoNestedInput
+    certificateOrders?: ShopOrderUncheckedUpdateManyWithoutCertDojoNestedInput
+    certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutDojoNestedInput
     attendance?: AttendanceUncheckedUpdateManyWithoutDojoNestedInput
   }
 
@@ -31226,6 +35261,22 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"TournamentParticipant"> | Date | string
   }
 
+  export type CertificateRequestUpsertWithWhereUniqueWithoutMemberInput = {
+    where: CertificateRequestWhereUniqueInput
+    update: XOR<CertificateRequestUpdateWithoutMemberInput, CertificateRequestUncheckedUpdateWithoutMemberInput>
+    create: XOR<CertificateRequestCreateWithoutMemberInput, CertificateRequestUncheckedCreateWithoutMemberInput>
+  }
+
+  export type CertificateRequestUpdateWithWhereUniqueWithoutMemberInput = {
+    where: CertificateRequestWhereUniqueInput
+    data: XOR<CertificateRequestUpdateWithoutMemberInput, CertificateRequestUncheckedUpdateWithoutMemberInput>
+  }
+
+  export type CertificateRequestUpdateManyWithWhereWithoutMemberInput = {
+    where: CertificateRequestScalarWhereInput
+    data: XOR<CertificateRequestUpdateManyMutationInput, CertificateRequestUncheckedUpdateManyWithoutMemberInput>
+  }
+
   export type MemberCreateWithoutAttendanceInput = {
     id: string
     fullName: string
@@ -31244,6 +35295,8 @@ export namespace Prisma {
     bloodGroup?: string | null
     address?: string | null
     nationalId?: string | null
+    fatherName?: string | null
+    motherName?: string | null
     emergencyContactName?: string | null
     emergencyContactPhone?: string | null
     createdAt?: Date | string
@@ -31255,6 +35308,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutMemberInput
     orders?: ShopOrderCreateNestedManyWithoutMemberInput
     tournamentEntries?: TournamentParticipantCreateNestedManyWithoutMemberInput
+    certificateRequests?: CertificateRequestCreateNestedManyWithoutMemberInput
   }
 
   export type MemberUncheckedCreateWithoutAttendanceInput = {
@@ -31276,6 +35330,8 @@ export namespace Prisma {
     bloodGroup?: string | null
     address?: string | null
     nationalId?: string | null
+    fatherName?: string | null
+    motherName?: string | null
     emergencyContactName?: string | null
     emergencyContactPhone?: string | null
     createdAt?: Date | string
@@ -31286,6 +35342,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutMemberInput
     orders?: ShopOrderUncheckedCreateNestedManyWithoutMemberInput
     tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutMemberInput
+    certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutMemberInput
   }
 
   export type MemberCreateOrConnectWithoutAttendanceInput = {
@@ -31306,9 +35363,12 @@ export namespace Prisma {
     isActive?: boolean
     annualFee?: Decimal | DecimalJsLike | number | string | null
     expiryDate?: Date | string | null
+    ownerSignatureUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     renewalOrders?: ShopOrderCreateNestedManyWithoutDojoInput
+    certificateOrders?: ShopOrderCreateNestedManyWithoutCertDojoInput
+    certificateRequests?: CertificateRequestCreateNestedManyWithoutDojoInput
     members?: MemberCreateNestedManyWithoutDojoInput
   }
 
@@ -31325,9 +35385,12 @@ export namespace Prisma {
     isActive?: boolean
     annualFee?: Decimal | DecimalJsLike | number | string | null
     expiryDate?: Date | string | null
+    ownerSignatureUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     renewalOrders?: ShopOrderUncheckedCreateNestedManyWithoutDojoInput
+    certificateOrders?: ShopOrderUncheckedCreateNestedManyWithoutCertDojoInput
+    certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutDojoInput
     members?: MemberUncheckedCreateNestedManyWithoutDojoInput
   }
 
@@ -31365,6 +35428,8 @@ export namespace Prisma {
     bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -31376,6 +35441,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutMemberNestedInput
     orders?: ShopOrderUpdateManyWithoutMemberNestedInput
     tournamentEntries?: TournamentParticipantUpdateManyWithoutMemberNestedInput
+    certificateRequests?: CertificateRequestUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutAttendanceInput = {
@@ -31397,6 +35463,8 @@ export namespace Prisma {
     bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -31407,6 +35475,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutMemberNestedInput
     orders?: ShopOrderUncheckedUpdateManyWithoutMemberNestedInput
     tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutMemberNestedInput
+    certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutMemberNestedInput
   }
 
   export type DojoUpsertWithoutAttendanceInput = {
@@ -31433,9 +35502,12 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     annualFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    ownerSignatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     renewalOrders?: ShopOrderUpdateManyWithoutDojoNestedInput
+    certificateOrders?: ShopOrderUpdateManyWithoutCertDojoNestedInput
+    certificateRequests?: CertificateRequestUpdateManyWithoutDojoNestedInput
     members?: MemberUpdateManyWithoutDojoNestedInput
   }
 
@@ -31452,9 +35524,12 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     annualFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    ownerSignatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     renewalOrders?: ShopOrderUncheckedUpdateManyWithoutDojoNestedInput
+    certificateOrders?: ShopOrderUncheckedUpdateManyWithoutCertDojoNestedInput
+    certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutDojoNestedInput
     members?: MemberUncheckedUpdateManyWithoutDojoNestedInput
   }
 
@@ -31464,6 +35539,7 @@ export namespace Prisma {
     kyuDan?: string | null
     colorHex?: string | null
     orderIndex: number
+    certificatePrice?: Decimal | DecimalJsLike | number | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     gradingsFrom?: GradingCreateNestedManyWithoutFromRankInput
@@ -31477,6 +35553,7 @@ export namespace Prisma {
     kyuDan?: string | null
     colorHex?: string | null
     orderIndex: number
+    certificatePrice?: Decimal | DecimalJsLike | number | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     gradingsFrom?: GradingUncheckedCreateNestedManyWithoutFromRankInput
@@ -31499,6 +35576,7 @@ export namespace Prisma {
     member: MemberCreateNestedOneWithoutGradingsInput
     fromRank?: BeltRankCreateNestedOneWithoutGradingsFromInput
     toRank?: BeltRankCreateNestedOneWithoutGradingsToInput
+    certificateRequests?: CertificateRequestCreateNestedManyWithoutGradingInput
   }
 
   export type GradingUncheckedCreateWithoutGradingEventInput = {
@@ -31511,6 +35589,7 @@ export namespace Prisma {
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutGradingInput
   }
 
   export type GradingCreateOrConnectWithoutGradingEventInput = {
@@ -31570,6 +35649,7 @@ export namespace Prisma {
     kyuDan?: NullableStringFieldUpdateOperationsInput | string | null
     colorHex?: NullableStringFieldUpdateOperationsInput | string | null
     orderIndex?: IntFieldUpdateOperationsInput | number
+    certificatePrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     gradingsFrom?: GradingUpdateManyWithoutFromRankNestedInput
@@ -31583,6 +35663,7 @@ export namespace Prisma {
     kyuDan?: NullableStringFieldUpdateOperationsInput | string | null
     colorHex?: NullableStringFieldUpdateOperationsInput | string | null
     orderIndex?: IntFieldUpdateOperationsInput | number
+    certificatePrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     gradingsFrom?: GradingUncheckedUpdateManyWithoutFromRankNestedInput
@@ -31640,6 +35721,8 @@ export namespace Prisma {
     bloodGroup?: string | null
     address?: string | null
     nationalId?: string | null
+    fatherName?: string | null
+    motherName?: string | null
     emergencyContactName?: string | null
     emergencyContactPhone?: string | null
     createdAt?: Date | string
@@ -31651,6 +35734,7 @@ export namespace Prisma {
     orders?: ShopOrderCreateNestedManyWithoutMemberInput
     attendance?: AttendanceCreateNestedManyWithoutMemberInput
     tournamentEntries?: TournamentParticipantCreateNestedManyWithoutMemberInput
+    certificateRequests?: CertificateRequestCreateNestedManyWithoutMemberInput
   }
 
   export type MemberUncheckedCreateWithoutGradingApplicationsInput = {
@@ -31672,6 +35756,8 @@ export namespace Prisma {
     bloodGroup?: string | null
     address?: string | null
     nationalId?: string | null
+    fatherName?: string | null
+    motherName?: string | null
     emergencyContactName?: string | null
     emergencyContactPhone?: string | null
     createdAt?: Date | string
@@ -31682,6 +35768,7 @@ export namespace Prisma {
     orders?: ShopOrderUncheckedCreateNestedManyWithoutMemberInput
     attendance?: AttendanceUncheckedCreateNestedManyWithoutMemberInput
     tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutMemberInput
+    certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutMemberInput
   }
 
   export type MemberCreateOrConnectWithoutGradingApplicationsInput = {
@@ -31732,6 +35819,7 @@ export namespace Prisma {
     kyuDan?: string | null
     colorHex?: string | null
     orderIndex: number
+    certificatePrice?: Decimal | DecimalJsLike | number | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     gradingsFrom?: GradingCreateNestedManyWithoutFromRankInput
@@ -31745,6 +35833,7 @@ export namespace Prisma {
     kyuDan?: string | null
     colorHex?: string | null
     orderIndex: number
+    certificatePrice?: Decimal | DecimalJsLike | number | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     gradingsFrom?: GradingUncheckedCreateNestedManyWithoutFromRankInput
@@ -31786,6 +35875,8 @@ export namespace Prisma {
     bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -31797,6 +35888,7 @@ export namespace Prisma {
     orders?: ShopOrderUpdateManyWithoutMemberNestedInput
     attendance?: AttendanceUpdateManyWithoutMemberNestedInput
     tournamentEntries?: TournamentParticipantUpdateManyWithoutMemberNestedInput
+    certificateRequests?: CertificateRequestUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutGradingApplicationsInput = {
@@ -31818,6 +35910,8 @@ export namespace Prisma {
     bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -31828,6 +35922,7 @@ export namespace Prisma {
     orders?: ShopOrderUncheckedUpdateManyWithoutMemberNestedInput
     attendance?: AttendanceUncheckedUpdateManyWithoutMemberNestedInput
     tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutMemberNestedInput
+    certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutMemberNestedInput
   }
 
   export type GradingEventUpsertWithoutApplicationsInput = {
@@ -31890,6 +35985,7 @@ export namespace Prisma {
     kyuDan?: NullableStringFieldUpdateOperationsInput | string | null
     colorHex?: NullableStringFieldUpdateOperationsInput | string | null
     orderIndex?: IntFieldUpdateOperationsInput | number
+    certificatePrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     gradingsFrom?: GradingUpdateManyWithoutFromRankNestedInput
@@ -31903,6 +35999,7 @@ export namespace Prisma {
     kyuDan?: NullableStringFieldUpdateOperationsInput | string | null
     colorHex?: NullableStringFieldUpdateOperationsInput | string | null
     orderIndex?: IntFieldUpdateOperationsInput | number
+    certificatePrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     gradingsFrom?: GradingUncheckedUpdateManyWithoutFromRankNestedInput
@@ -31928,6 +36025,8 @@ export namespace Prisma {
     bloodGroup?: string | null
     address?: string | null
     nationalId?: string | null
+    fatherName?: string | null
+    motherName?: string | null
     emergencyContactName?: string | null
     emergencyContactPhone?: string | null
     createdAt?: Date | string
@@ -31939,6 +36038,7 @@ export namespace Prisma {
     orders?: ShopOrderCreateNestedManyWithoutMemberInput
     attendance?: AttendanceCreateNestedManyWithoutMemberInput
     tournamentEntries?: TournamentParticipantCreateNestedManyWithoutMemberInput
+    certificateRequests?: CertificateRequestCreateNestedManyWithoutMemberInput
   }
 
   export type MemberUncheckedCreateWithoutGradingsInput = {
@@ -31960,6 +36060,8 @@ export namespace Prisma {
     bloodGroup?: string | null
     address?: string | null
     nationalId?: string | null
+    fatherName?: string | null
+    motherName?: string | null
     emergencyContactName?: string | null
     emergencyContactPhone?: string | null
     createdAt?: Date | string
@@ -31970,6 +36072,7 @@ export namespace Prisma {
     orders?: ShopOrderUncheckedCreateNestedManyWithoutMemberInput
     attendance?: AttendanceUncheckedCreateNestedManyWithoutMemberInput
     tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutMemberInput
+    certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutMemberInput
   }
 
   export type MemberCreateOrConnectWithoutGradingsInput = {
@@ -32020,6 +36123,7 @@ export namespace Prisma {
     kyuDan?: string | null
     colorHex?: string | null
     orderIndex: number
+    certificatePrice?: Decimal | DecimalJsLike | number | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     gradingsTo?: GradingCreateNestedManyWithoutToRankInput
@@ -32033,6 +36137,7 @@ export namespace Prisma {
     kyuDan?: string | null
     colorHex?: string | null
     orderIndex: number
+    certificatePrice?: Decimal | DecimalJsLike | number | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     gradingsTo?: GradingUncheckedCreateNestedManyWithoutToRankInput
@@ -32051,6 +36156,7 @@ export namespace Prisma {
     kyuDan?: string | null
     colorHex?: string | null
     orderIndex: number
+    certificatePrice?: Decimal | DecimalJsLike | number | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     gradingsFrom?: GradingCreateNestedManyWithoutFromRankInput
@@ -32064,6 +36170,7 @@ export namespace Prisma {
     kyuDan?: string | null
     colorHex?: string | null
     orderIndex: number
+    certificatePrice?: Decimal | DecimalJsLike | number | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     gradingsFrom?: GradingUncheckedCreateNestedManyWithoutFromRankInput
@@ -32074,6 +36181,50 @@ export namespace Prisma {
   export type BeltRankCreateOrConnectWithoutGradingsToInput = {
     where: BeltRankWhereUniqueInput
     create: XOR<BeltRankCreateWithoutGradingsToInput, BeltRankUncheckedCreateWithoutGradingsToInput>
+  }
+
+  export type CertificateRequestCreateWithoutGradingInput = {
+    id?: string
+    status?: $Enums.CertificateRequestStatus
+    price: Decimal | DecimalJsLike | number | string
+    certificateUrl?: string | null
+    failureReason?: string | null
+    memberName: string
+    fatherName?: string | null
+    motherName?: string | null
+    rankName: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    member: MemberCreateNestedOneWithoutCertificateRequestsInput
+    dojo: DojoCreateNestedOneWithoutCertificateRequestsInput
+    order?: ShopOrderCreateNestedOneWithoutCertificateRequestsInput
+  }
+
+  export type CertificateRequestUncheckedCreateWithoutGradingInput = {
+    id?: string
+    memberId: string
+    dojoId: string
+    orderId?: string | null
+    status?: $Enums.CertificateRequestStatus
+    price: Decimal | DecimalJsLike | number | string
+    certificateUrl?: string | null
+    failureReason?: string | null
+    memberName: string
+    fatherName?: string | null
+    motherName?: string | null
+    rankName: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CertificateRequestCreateOrConnectWithoutGradingInput = {
+    where: CertificateRequestWhereUniqueInput
+    create: XOR<CertificateRequestCreateWithoutGradingInput, CertificateRequestUncheckedCreateWithoutGradingInput>
+  }
+
+  export type CertificateRequestCreateManyGradingInputEnvelope = {
+    data: CertificateRequestCreateManyGradingInput | CertificateRequestCreateManyGradingInput[]
+    skipDuplicates?: boolean
   }
 
   export type MemberUpsertWithoutGradingsInput = {
@@ -32105,6 +36256,8 @@ export namespace Prisma {
     bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -32116,6 +36269,7 @@ export namespace Prisma {
     orders?: ShopOrderUpdateManyWithoutMemberNestedInput
     attendance?: AttendanceUpdateManyWithoutMemberNestedInput
     tournamentEntries?: TournamentParticipantUpdateManyWithoutMemberNestedInput
+    certificateRequests?: CertificateRequestUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutGradingsInput = {
@@ -32137,6 +36291,8 @@ export namespace Prisma {
     bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -32147,6 +36303,7 @@ export namespace Prisma {
     orders?: ShopOrderUncheckedUpdateManyWithoutMemberNestedInput
     attendance?: AttendanceUncheckedUpdateManyWithoutMemberNestedInput
     tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutMemberNestedInput
+    certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutMemberNestedInput
   }
 
   export type GradingEventUpsertWithoutGradingsInput = {
@@ -32209,6 +36366,7 @@ export namespace Prisma {
     kyuDan?: NullableStringFieldUpdateOperationsInput | string | null
     colorHex?: NullableStringFieldUpdateOperationsInput | string | null
     orderIndex?: IntFieldUpdateOperationsInput | number
+    certificatePrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     gradingsTo?: GradingUpdateManyWithoutToRankNestedInput
@@ -32222,6 +36380,7 @@ export namespace Prisma {
     kyuDan?: NullableStringFieldUpdateOperationsInput | string | null
     colorHex?: NullableStringFieldUpdateOperationsInput | string | null
     orderIndex?: IntFieldUpdateOperationsInput | number
+    certificatePrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     gradingsTo?: GradingUncheckedUpdateManyWithoutToRankNestedInput
@@ -32246,6 +36405,7 @@ export namespace Prisma {
     kyuDan?: NullableStringFieldUpdateOperationsInput | string | null
     colorHex?: NullableStringFieldUpdateOperationsInput | string | null
     orderIndex?: IntFieldUpdateOperationsInput | number
+    certificatePrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     gradingsFrom?: GradingUpdateManyWithoutFromRankNestedInput
@@ -32259,11 +36419,448 @@ export namespace Prisma {
     kyuDan?: NullableStringFieldUpdateOperationsInput | string | null
     colorHex?: NullableStringFieldUpdateOperationsInput | string | null
     orderIndex?: IntFieldUpdateOperationsInput | number
+    certificatePrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     gradingsFrom?: GradingUncheckedUpdateManyWithoutFromRankNestedInput
     gradingEvents?: GradingEventUncheckedUpdateManyWithoutTargetRankNestedInput
     gradingApplications?: GradingApplicationUncheckedUpdateManyWithoutTargetRankNestedInput
+  }
+
+  export type CertificateRequestUpsertWithWhereUniqueWithoutGradingInput = {
+    where: CertificateRequestWhereUniqueInput
+    update: XOR<CertificateRequestUpdateWithoutGradingInput, CertificateRequestUncheckedUpdateWithoutGradingInput>
+    create: XOR<CertificateRequestCreateWithoutGradingInput, CertificateRequestUncheckedCreateWithoutGradingInput>
+  }
+
+  export type CertificateRequestUpdateWithWhereUniqueWithoutGradingInput = {
+    where: CertificateRequestWhereUniqueInput
+    data: XOR<CertificateRequestUpdateWithoutGradingInput, CertificateRequestUncheckedUpdateWithoutGradingInput>
+  }
+
+  export type CertificateRequestUpdateManyWithWhereWithoutGradingInput = {
+    where: CertificateRequestScalarWhereInput
+    data: XOR<CertificateRequestUpdateManyMutationInput, CertificateRequestUncheckedUpdateManyWithoutGradingInput>
+  }
+
+  export type GradingCreateWithoutCertificateRequestsInput = {
+    id?: string
+    result?: $Enums.GradingResult
+    certificateUrl?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    member: MemberCreateNestedOneWithoutGradingsInput
+    gradingEvent?: GradingEventCreateNestedOneWithoutGradingsInput
+    fromRank?: BeltRankCreateNestedOneWithoutGradingsFromInput
+    toRank?: BeltRankCreateNestedOneWithoutGradingsToInput
+  }
+
+  export type GradingUncheckedCreateWithoutCertificateRequestsInput = {
+    id?: string
+    memberId: string
+    gradingEventId?: string | null
+    fromRankId?: string | null
+    toRankId?: string | null
+    result?: $Enums.GradingResult
+    certificateUrl?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type GradingCreateOrConnectWithoutCertificateRequestsInput = {
+    where: GradingWhereUniqueInput
+    create: XOR<GradingCreateWithoutCertificateRequestsInput, GradingUncheckedCreateWithoutCertificateRequestsInput>
+  }
+
+  export type MemberCreateWithoutCertificateRequestsInput = {
+    id: string
+    fullName: string
+    email: string
+    phone?: string | null
+    avatarUrl?: string | null
+    role?: $Enums.MemberRole
+    memberNumber?: string | null
+    currentRank?: string
+    joinDate?: Date | string
+    expiryDate?: Date | string | null
+    isActive?: boolean
+    onboardingComplete?: boolean
+    membershipStatus?: $Enums.MembershipStatus
+    dateOfBirth?: Date | string | null
+    bloodGroup?: string | null
+    address?: string | null
+    nationalId?: string | null
+    fatherName?: string | null
+    motherName?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    dojo?: DojoCreateNestedOneWithoutMembersInput
+    gradings?: GradingCreateNestedManyWithoutMemberInput
+    gradingApplications?: GradingApplicationCreateNestedManyWithoutMemberInput
+    eventRegistrations?: EventRegistrationCreateNestedManyWithoutMemberInput
+    notifications?: NotificationCreateNestedManyWithoutMemberInput
+    orders?: ShopOrderCreateNestedManyWithoutMemberInput
+    attendance?: AttendanceCreateNestedManyWithoutMemberInput
+    tournamentEntries?: TournamentParticipantCreateNestedManyWithoutMemberInput
+  }
+
+  export type MemberUncheckedCreateWithoutCertificateRequestsInput = {
+    id: string
+    fullName: string
+    email: string
+    phone?: string | null
+    avatarUrl?: string | null
+    role?: $Enums.MemberRole
+    memberNumber?: string | null
+    currentRank?: string
+    joinDate?: Date | string
+    expiryDate?: Date | string | null
+    isActive?: boolean
+    dojoId?: string | null
+    onboardingComplete?: boolean
+    membershipStatus?: $Enums.MembershipStatus
+    dateOfBirth?: Date | string | null
+    bloodGroup?: string | null
+    address?: string | null
+    nationalId?: string | null
+    fatherName?: string | null
+    motherName?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    gradings?: GradingUncheckedCreateNestedManyWithoutMemberInput
+    gradingApplications?: GradingApplicationUncheckedCreateNestedManyWithoutMemberInput
+    eventRegistrations?: EventRegistrationUncheckedCreateNestedManyWithoutMemberInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutMemberInput
+    orders?: ShopOrderUncheckedCreateNestedManyWithoutMemberInput
+    attendance?: AttendanceUncheckedCreateNestedManyWithoutMemberInput
+    tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutMemberInput
+  }
+
+  export type MemberCreateOrConnectWithoutCertificateRequestsInput = {
+    where: MemberWhereUniqueInput
+    create: XOR<MemberCreateWithoutCertificateRequestsInput, MemberUncheckedCreateWithoutCertificateRequestsInput>
+  }
+
+  export type DojoCreateWithoutCertificateRequestsInput = {
+    id?: string
+    name: string
+    address?: string | null
+    city?: string | null
+    latitude?: number | null
+    longitude?: number | null
+    phone?: string | null
+    email?: string | null
+    schedule?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: boolean
+    annualFee?: Decimal | DecimalJsLike | number | string | null
+    expiryDate?: Date | string | null
+    ownerSignatureUrl?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    renewalOrders?: ShopOrderCreateNestedManyWithoutDojoInput
+    certificateOrders?: ShopOrderCreateNestedManyWithoutCertDojoInput
+    members?: MemberCreateNestedManyWithoutDojoInput
+    attendance?: AttendanceCreateNestedManyWithoutDojoInput
+  }
+
+  export type DojoUncheckedCreateWithoutCertificateRequestsInput = {
+    id?: string
+    name: string
+    address?: string | null
+    city?: string | null
+    latitude?: number | null
+    longitude?: number | null
+    phone?: string | null
+    email?: string | null
+    schedule?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: boolean
+    annualFee?: Decimal | DecimalJsLike | number | string | null
+    expiryDate?: Date | string | null
+    ownerSignatureUrl?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    renewalOrders?: ShopOrderUncheckedCreateNestedManyWithoutDojoInput
+    certificateOrders?: ShopOrderUncheckedCreateNestedManyWithoutCertDojoInput
+    members?: MemberUncheckedCreateNestedManyWithoutDojoInput
+    attendance?: AttendanceUncheckedCreateNestedManyWithoutDojoInput
+  }
+
+  export type DojoCreateOrConnectWithoutCertificateRequestsInput = {
+    where: DojoWhereUniqueInput
+    create: XOR<DojoCreateWithoutCertificateRequestsInput, DojoUncheckedCreateWithoutCertificateRequestsInput>
+  }
+
+  export type ShopOrderCreateWithoutCertificateRequestsInput = {
+    id?: string
+    paymentStatus?: $Enums.PaymentStatus
+    paymentMethod?: string | null
+    total: Decimal | DecimalJsLike | number | string
+    currency?: string
+    transactionId?: string | null
+    includesMembership?: boolean
+    membershipFee?: Decimal | DecimalJsLike | number | string | null
+    notes?: string | null
+    includesDojoRenewal?: boolean
+    includesCertificates?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    member: MemberCreateNestedOneWithoutOrdersInput
+    dojo?: DojoCreateNestedOneWithoutRenewalOrdersInput
+    certDojo?: DojoCreateNestedOneWithoutCertificateOrdersInput
+    orderItems?: ShopOrderItemCreateNestedManyWithoutOrderInput
+  }
+
+  export type ShopOrderUncheckedCreateWithoutCertificateRequestsInput = {
+    id?: string
+    memberId: string
+    paymentStatus?: $Enums.PaymentStatus
+    paymentMethod?: string | null
+    total: Decimal | DecimalJsLike | number | string
+    currency?: string
+    transactionId?: string | null
+    includesMembership?: boolean
+    membershipFee?: Decimal | DecimalJsLike | number | string | null
+    notes?: string | null
+    dojoId?: string | null
+    includesDojoRenewal?: boolean
+    includesCertificates?: boolean
+    certDojoId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    orderItems?: ShopOrderItemUncheckedCreateNestedManyWithoutOrderInput
+  }
+
+  export type ShopOrderCreateOrConnectWithoutCertificateRequestsInput = {
+    where: ShopOrderWhereUniqueInput
+    create: XOR<ShopOrderCreateWithoutCertificateRequestsInput, ShopOrderUncheckedCreateWithoutCertificateRequestsInput>
+  }
+
+  export type GradingUpsertWithoutCertificateRequestsInput = {
+    update: XOR<GradingUpdateWithoutCertificateRequestsInput, GradingUncheckedUpdateWithoutCertificateRequestsInput>
+    create: XOR<GradingCreateWithoutCertificateRequestsInput, GradingUncheckedCreateWithoutCertificateRequestsInput>
+    where?: GradingWhereInput
+  }
+
+  export type GradingUpdateToOneWithWhereWithoutCertificateRequestsInput = {
+    where?: GradingWhereInput
+    data: XOR<GradingUpdateWithoutCertificateRequestsInput, GradingUncheckedUpdateWithoutCertificateRequestsInput>
+  }
+
+  export type GradingUpdateWithoutCertificateRequestsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    result?: EnumGradingResultFieldUpdateOperationsInput | $Enums.GradingResult
+    certificateUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    member?: MemberUpdateOneRequiredWithoutGradingsNestedInput
+    gradingEvent?: GradingEventUpdateOneWithoutGradingsNestedInput
+    fromRank?: BeltRankUpdateOneWithoutGradingsFromNestedInput
+    toRank?: BeltRankUpdateOneWithoutGradingsToNestedInput
+  }
+
+  export type GradingUncheckedUpdateWithoutCertificateRequestsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    memberId?: StringFieldUpdateOperationsInput | string
+    gradingEventId?: NullableStringFieldUpdateOperationsInput | string | null
+    fromRankId?: NullableStringFieldUpdateOperationsInput | string | null
+    toRankId?: NullableStringFieldUpdateOperationsInput | string | null
+    result?: EnumGradingResultFieldUpdateOperationsInput | $Enums.GradingResult
+    certificateUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MemberUpsertWithoutCertificateRequestsInput = {
+    update: XOR<MemberUpdateWithoutCertificateRequestsInput, MemberUncheckedUpdateWithoutCertificateRequestsInput>
+    create: XOR<MemberCreateWithoutCertificateRequestsInput, MemberUncheckedCreateWithoutCertificateRequestsInput>
+    where?: MemberWhereInput
+  }
+
+  export type MemberUpdateToOneWithWhereWithoutCertificateRequestsInput = {
+    where?: MemberWhereInput
+    data: XOR<MemberUpdateWithoutCertificateRequestsInput, MemberUncheckedUpdateWithoutCertificateRequestsInput>
+  }
+
+  export type MemberUpdateWithoutCertificateRequestsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fullName?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumMemberRoleFieldUpdateOperationsInput | $Enums.MemberRole
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    currentRank?: StringFieldUpdateOperationsInput | string
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    onboardingComplete?: BoolFieldUpdateOperationsInput | boolean
+    membershipStatus?: EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    dojo?: DojoUpdateOneWithoutMembersNestedInput
+    gradings?: GradingUpdateManyWithoutMemberNestedInput
+    gradingApplications?: GradingApplicationUpdateManyWithoutMemberNestedInput
+    eventRegistrations?: EventRegistrationUpdateManyWithoutMemberNestedInput
+    notifications?: NotificationUpdateManyWithoutMemberNestedInput
+    orders?: ShopOrderUpdateManyWithoutMemberNestedInput
+    attendance?: AttendanceUpdateManyWithoutMemberNestedInput
+    tournamentEntries?: TournamentParticipantUpdateManyWithoutMemberNestedInput
+  }
+
+  export type MemberUncheckedUpdateWithoutCertificateRequestsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fullName?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumMemberRoleFieldUpdateOperationsInput | $Enums.MemberRole
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    currentRank?: StringFieldUpdateOperationsInput | string
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    dojoId?: NullableStringFieldUpdateOperationsInput | string | null
+    onboardingComplete?: BoolFieldUpdateOperationsInput | boolean
+    membershipStatus?: EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    gradings?: GradingUncheckedUpdateManyWithoutMemberNestedInput
+    gradingApplications?: GradingApplicationUncheckedUpdateManyWithoutMemberNestedInput
+    eventRegistrations?: EventRegistrationUncheckedUpdateManyWithoutMemberNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutMemberNestedInput
+    orders?: ShopOrderUncheckedUpdateManyWithoutMemberNestedInput
+    attendance?: AttendanceUncheckedUpdateManyWithoutMemberNestedInput
+    tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutMemberNestedInput
+  }
+
+  export type DojoUpsertWithoutCertificateRequestsInput = {
+    update: XOR<DojoUpdateWithoutCertificateRequestsInput, DojoUncheckedUpdateWithoutCertificateRequestsInput>
+    create: XOR<DojoCreateWithoutCertificateRequestsInput, DojoUncheckedCreateWithoutCertificateRequestsInput>
+    where?: DojoWhereInput
+  }
+
+  export type DojoUpdateToOneWithWhereWithoutCertificateRequestsInput = {
+    where?: DojoWhereInput
+    data: XOR<DojoUpdateWithoutCertificateRequestsInput, DojoUncheckedUpdateWithoutCertificateRequestsInput>
+  }
+
+  export type DojoUpdateWithoutCertificateRequestsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    schedule?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    annualFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    ownerSignatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    renewalOrders?: ShopOrderUpdateManyWithoutDojoNestedInput
+    certificateOrders?: ShopOrderUpdateManyWithoutCertDojoNestedInput
+    members?: MemberUpdateManyWithoutDojoNestedInput
+    attendance?: AttendanceUpdateManyWithoutDojoNestedInput
+  }
+
+  export type DojoUncheckedUpdateWithoutCertificateRequestsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    schedule?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    annualFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    ownerSignatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    renewalOrders?: ShopOrderUncheckedUpdateManyWithoutDojoNestedInput
+    certificateOrders?: ShopOrderUncheckedUpdateManyWithoutCertDojoNestedInput
+    members?: MemberUncheckedUpdateManyWithoutDojoNestedInput
+    attendance?: AttendanceUncheckedUpdateManyWithoutDojoNestedInput
+  }
+
+  export type ShopOrderUpsertWithoutCertificateRequestsInput = {
+    update: XOR<ShopOrderUpdateWithoutCertificateRequestsInput, ShopOrderUncheckedUpdateWithoutCertificateRequestsInput>
+    create: XOR<ShopOrderCreateWithoutCertificateRequestsInput, ShopOrderUncheckedCreateWithoutCertificateRequestsInput>
+    where?: ShopOrderWhereInput
+  }
+
+  export type ShopOrderUpdateToOneWithWhereWithoutCertificateRequestsInput = {
+    where?: ShopOrderWhereInput
+    data: XOR<ShopOrderUpdateWithoutCertificateRequestsInput, ShopOrderUncheckedUpdateWithoutCertificateRequestsInput>
+  }
+
+  export type ShopOrderUpdateWithoutCertificateRequestsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: StringFieldUpdateOperationsInput | string
+    transactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    includesMembership?: BoolFieldUpdateOperationsInput | boolean
+    membershipFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    includesDojoRenewal?: BoolFieldUpdateOperationsInput | boolean
+    includesCertificates?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    member?: MemberUpdateOneRequiredWithoutOrdersNestedInput
+    dojo?: DojoUpdateOneWithoutRenewalOrdersNestedInput
+    certDojo?: DojoUpdateOneWithoutCertificateOrdersNestedInput
+    orderItems?: ShopOrderItemUpdateManyWithoutOrderNestedInput
+  }
+
+  export type ShopOrderUncheckedUpdateWithoutCertificateRequestsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    memberId?: StringFieldUpdateOperationsInput | string
+    paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: StringFieldUpdateOperationsInput | string
+    transactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    includesMembership?: BoolFieldUpdateOperationsInput | boolean
+    membershipFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    dojoId?: NullableStringFieldUpdateOperationsInput | string | null
+    includesDojoRenewal?: BoolFieldUpdateOperationsInput | boolean
+    includesCertificates?: BoolFieldUpdateOperationsInput | boolean
+    certDojoId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    orderItems?: ShopOrderItemUncheckedUpdateManyWithoutOrderNestedInput
   }
 
   export type EventRegistrationCreateWithoutEventInput = {
@@ -32353,6 +36950,8 @@ export namespace Prisma {
     bloodGroup?: string | null
     address?: string | null
     nationalId?: string | null
+    fatherName?: string | null
+    motherName?: string | null
     emergencyContactName?: string | null
     emergencyContactPhone?: string | null
     createdAt?: Date | string
@@ -32364,6 +36963,7 @@ export namespace Prisma {
     orders?: ShopOrderCreateNestedManyWithoutMemberInput
     attendance?: AttendanceCreateNestedManyWithoutMemberInput
     tournamentEntries?: TournamentParticipantCreateNestedManyWithoutMemberInput
+    certificateRequests?: CertificateRequestCreateNestedManyWithoutMemberInput
   }
 
   export type MemberUncheckedCreateWithoutEventRegistrationsInput = {
@@ -32385,6 +36985,8 @@ export namespace Prisma {
     bloodGroup?: string | null
     address?: string | null
     nationalId?: string | null
+    fatherName?: string | null
+    motherName?: string | null
     emergencyContactName?: string | null
     emergencyContactPhone?: string | null
     createdAt?: Date | string
@@ -32395,6 +36997,7 @@ export namespace Prisma {
     orders?: ShopOrderUncheckedCreateNestedManyWithoutMemberInput
     attendance?: AttendanceUncheckedCreateNestedManyWithoutMemberInput
     tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutMemberInput
+    certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutMemberInput
   }
 
   export type MemberCreateOrConnectWithoutEventRegistrationsInput = {
@@ -32468,6 +37071,8 @@ export namespace Prisma {
     bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -32479,6 +37084,7 @@ export namespace Prisma {
     orders?: ShopOrderUpdateManyWithoutMemberNestedInput
     attendance?: AttendanceUpdateManyWithoutMemberNestedInput
     tournamentEntries?: TournamentParticipantUpdateManyWithoutMemberNestedInput
+    certificateRequests?: CertificateRequestUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutEventRegistrationsInput = {
@@ -32500,6 +37106,8 @@ export namespace Prisma {
     bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -32510,6 +37118,7 @@ export namespace Prisma {
     orders?: ShopOrderUncheckedUpdateManyWithoutMemberNestedInput
     attendance?: AttendanceUncheckedUpdateManyWithoutMemberNestedInput
     tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutMemberNestedInput
+    certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberCreateWithoutNotificationsInput = {
@@ -32530,6 +37139,8 @@ export namespace Prisma {
     bloodGroup?: string | null
     address?: string | null
     nationalId?: string | null
+    fatherName?: string | null
+    motherName?: string | null
     emergencyContactName?: string | null
     emergencyContactPhone?: string | null
     createdAt?: Date | string
@@ -32541,6 +37152,7 @@ export namespace Prisma {
     orders?: ShopOrderCreateNestedManyWithoutMemberInput
     attendance?: AttendanceCreateNestedManyWithoutMemberInput
     tournamentEntries?: TournamentParticipantCreateNestedManyWithoutMemberInput
+    certificateRequests?: CertificateRequestCreateNestedManyWithoutMemberInput
   }
 
   export type MemberUncheckedCreateWithoutNotificationsInput = {
@@ -32562,6 +37174,8 @@ export namespace Prisma {
     bloodGroup?: string | null
     address?: string | null
     nationalId?: string | null
+    fatherName?: string | null
+    motherName?: string | null
     emergencyContactName?: string | null
     emergencyContactPhone?: string | null
     createdAt?: Date | string
@@ -32572,6 +37186,7 @@ export namespace Prisma {
     orders?: ShopOrderUncheckedCreateNestedManyWithoutMemberInput
     attendance?: AttendanceUncheckedCreateNestedManyWithoutMemberInput
     tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutMemberInput
+    certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutMemberInput
   }
 
   export type MemberCreateOrConnectWithoutNotificationsInput = {
@@ -32608,6 +37223,8 @@ export namespace Prisma {
     bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -32619,6 +37236,7 @@ export namespace Prisma {
     orders?: ShopOrderUpdateManyWithoutMemberNestedInput
     attendance?: AttendanceUpdateManyWithoutMemberNestedInput
     tournamentEntries?: TournamentParticipantUpdateManyWithoutMemberNestedInput
+    certificateRequests?: CertificateRequestUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutNotificationsInput = {
@@ -32640,6 +37258,8 @@ export namespace Prisma {
     bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -32650,6 +37270,7 @@ export namespace Prisma {
     orders?: ShopOrderUncheckedUpdateManyWithoutMemberNestedInput
     attendance?: AttendanceUncheckedUpdateManyWithoutMemberNestedInput
     tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutMemberNestedInput
+    certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutMemberNestedInput
   }
 
   export type ShopOrderItemCreateWithoutProductInput = {
@@ -32721,6 +37342,8 @@ export namespace Prisma {
     bloodGroup?: string | null
     address?: string | null
     nationalId?: string | null
+    fatherName?: string | null
+    motherName?: string | null
     emergencyContactName?: string | null
     emergencyContactPhone?: string | null
     createdAt?: Date | string
@@ -32732,6 +37355,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutMemberInput
     attendance?: AttendanceCreateNestedManyWithoutMemberInput
     tournamentEntries?: TournamentParticipantCreateNestedManyWithoutMemberInput
+    certificateRequests?: CertificateRequestCreateNestedManyWithoutMemberInput
   }
 
   export type MemberUncheckedCreateWithoutOrdersInput = {
@@ -32753,6 +37377,8 @@ export namespace Prisma {
     bloodGroup?: string | null
     address?: string | null
     nationalId?: string | null
+    fatherName?: string | null
+    motherName?: string | null
     emergencyContactName?: string | null
     emergencyContactPhone?: string | null
     createdAt?: Date | string
@@ -32763,6 +37389,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutMemberInput
     attendance?: AttendanceUncheckedCreateNestedManyWithoutMemberInput
     tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutMemberInput
+    certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutMemberInput
   }
 
   export type MemberCreateOrConnectWithoutOrdersInput = {
@@ -32783,8 +37410,11 @@ export namespace Prisma {
     isActive?: boolean
     annualFee?: Decimal | DecimalJsLike | number | string | null
     expiryDate?: Date | string | null
+    ownerSignatureUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    certificateOrders?: ShopOrderCreateNestedManyWithoutCertDojoInput
+    certificateRequests?: CertificateRequestCreateNestedManyWithoutDojoInput
     members?: MemberCreateNestedManyWithoutDojoInput
     attendance?: AttendanceCreateNestedManyWithoutDojoInput
   }
@@ -32802,8 +37432,11 @@ export namespace Prisma {
     isActive?: boolean
     annualFee?: Decimal | DecimalJsLike | number | string | null
     expiryDate?: Date | string | null
+    ownerSignatureUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    certificateOrders?: ShopOrderUncheckedCreateNestedManyWithoutCertDojoInput
+    certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutDojoInput
     members?: MemberUncheckedCreateNestedManyWithoutDojoInput
     attendance?: AttendanceUncheckedCreateNestedManyWithoutDojoInput
   }
@@ -32811,6 +37444,55 @@ export namespace Prisma {
   export type DojoCreateOrConnectWithoutRenewalOrdersInput = {
     where: DojoWhereUniqueInput
     create: XOR<DojoCreateWithoutRenewalOrdersInput, DojoUncheckedCreateWithoutRenewalOrdersInput>
+  }
+
+  export type DojoCreateWithoutCertificateOrdersInput = {
+    id?: string
+    name: string
+    address?: string | null
+    city?: string | null
+    latitude?: number | null
+    longitude?: number | null
+    phone?: string | null
+    email?: string | null
+    schedule?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: boolean
+    annualFee?: Decimal | DecimalJsLike | number | string | null
+    expiryDate?: Date | string | null
+    ownerSignatureUrl?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    renewalOrders?: ShopOrderCreateNestedManyWithoutDojoInput
+    certificateRequests?: CertificateRequestCreateNestedManyWithoutDojoInput
+    members?: MemberCreateNestedManyWithoutDojoInput
+    attendance?: AttendanceCreateNestedManyWithoutDojoInput
+  }
+
+  export type DojoUncheckedCreateWithoutCertificateOrdersInput = {
+    id?: string
+    name: string
+    address?: string | null
+    city?: string | null
+    latitude?: number | null
+    longitude?: number | null
+    phone?: string | null
+    email?: string | null
+    schedule?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: boolean
+    annualFee?: Decimal | DecimalJsLike | number | string | null
+    expiryDate?: Date | string | null
+    ownerSignatureUrl?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    renewalOrders?: ShopOrderUncheckedCreateNestedManyWithoutDojoInput
+    certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutDojoInput
+    members?: MemberUncheckedCreateNestedManyWithoutDojoInput
+    attendance?: AttendanceUncheckedCreateNestedManyWithoutDojoInput
+  }
+
+  export type DojoCreateOrConnectWithoutCertificateOrdersInput = {
+    where: DojoWhereUniqueInput
+    create: XOR<DojoCreateWithoutCertificateOrdersInput, DojoUncheckedCreateWithoutCertificateOrdersInput>
   }
 
   export type ShopOrderItemCreateWithoutOrderInput = {
@@ -32834,6 +37516,50 @@ export namespace Prisma {
 
   export type ShopOrderItemCreateManyOrderInputEnvelope = {
     data: ShopOrderItemCreateManyOrderInput | ShopOrderItemCreateManyOrderInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type CertificateRequestCreateWithoutOrderInput = {
+    id?: string
+    status?: $Enums.CertificateRequestStatus
+    price: Decimal | DecimalJsLike | number | string
+    certificateUrl?: string | null
+    failureReason?: string | null
+    memberName: string
+    fatherName?: string | null
+    motherName?: string | null
+    rankName: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    grading: GradingCreateNestedOneWithoutCertificateRequestsInput
+    member: MemberCreateNestedOneWithoutCertificateRequestsInput
+    dojo: DojoCreateNestedOneWithoutCertificateRequestsInput
+  }
+
+  export type CertificateRequestUncheckedCreateWithoutOrderInput = {
+    id?: string
+    gradingId: string
+    memberId: string
+    dojoId: string
+    status?: $Enums.CertificateRequestStatus
+    price: Decimal | DecimalJsLike | number | string
+    certificateUrl?: string | null
+    failureReason?: string | null
+    memberName: string
+    fatherName?: string | null
+    motherName?: string | null
+    rankName: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CertificateRequestCreateOrConnectWithoutOrderInput = {
+    where: CertificateRequestWhereUniqueInput
+    create: XOR<CertificateRequestCreateWithoutOrderInput, CertificateRequestUncheckedCreateWithoutOrderInput>
+  }
+
+  export type CertificateRequestCreateManyOrderInputEnvelope = {
+    data: CertificateRequestCreateManyOrderInput | CertificateRequestCreateManyOrderInput[]
     skipDuplicates?: boolean
   }
 
@@ -32866,6 +37592,8 @@ export namespace Prisma {
     bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -32877,6 +37605,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutMemberNestedInput
     attendance?: AttendanceUpdateManyWithoutMemberNestedInput
     tournamentEntries?: TournamentParticipantUpdateManyWithoutMemberNestedInput
+    certificateRequests?: CertificateRequestUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutOrdersInput = {
@@ -32898,6 +37627,8 @@ export namespace Prisma {
     bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -32908,6 +37639,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutMemberNestedInput
     attendance?: AttendanceUncheckedUpdateManyWithoutMemberNestedInput
     tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutMemberNestedInput
+    certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutMemberNestedInput
   }
 
   export type DojoUpsertWithoutRenewalOrdersInput = {
@@ -32934,8 +37666,11 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     annualFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    ownerSignatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    certificateOrders?: ShopOrderUpdateManyWithoutCertDojoNestedInput
+    certificateRequests?: CertificateRequestUpdateManyWithoutDojoNestedInput
     members?: MemberUpdateManyWithoutDojoNestedInput
     attendance?: AttendanceUpdateManyWithoutDojoNestedInput
   }
@@ -32953,8 +37688,66 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     annualFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    ownerSignatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    certificateOrders?: ShopOrderUncheckedUpdateManyWithoutCertDojoNestedInput
+    certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutDojoNestedInput
+    members?: MemberUncheckedUpdateManyWithoutDojoNestedInput
+    attendance?: AttendanceUncheckedUpdateManyWithoutDojoNestedInput
+  }
+
+  export type DojoUpsertWithoutCertificateOrdersInput = {
+    update: XOR<DojoUpdateWithoutCertificateOrdersInput, DojoUncheckedUpdateWithoutCertificateOrdersInput>
+    create: XOR<DojoCreateWithoutCertificateOrdersInput, DojoUncheckedCreateWithoutCertificateOrdersInput>
+    where?: DojoWhereInput
+  }
+
+  export type DojoUpdateToOneWithWhereWithoutCertificateOrdersInput = {
+    where?: DojoWhereInput
+    data: XOR<DojoUpdateWithoutCertificateOrdersInput, DojoUncheckedUpdateWithoutCertificateOrdersInput>
+  }
+
+  export type DojoUpdateWithoutCertificateOrdersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    schedule?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    annualFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    ownerSignatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    renewalOrders?: ShopOrderUpdateManyWithoutDojoNestedInput
+    certificateRequests?: CertificateRequestUpdateManyWithoutDojoNestedInput
+    members?: MemberUpdateManyWithoutDojoNestedInput
+    attendance?: AttendanceUpdateManyWithoutDojoNestedInput
+  }
+
+  export type DojoUncheckedUpdateWithoutCertificateOrdersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    schedule?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    annualFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    ownerSignatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    renewalOrders?: ShopOrderUncheckedUpdateManyWithoutDojoNestedInput
+    certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutDojoNestedInput
     members?: MemberUncheckedUpdateManyWithoutDojoNestedInput
     attendance?: AttendanceUncheckedUpdateManyWithoutDojoNestedInput
   }
@@ -32975,6 +37768,22 @@ export namespace Prisma {
     data: XOR<ShopOrderItemUpdateManyMutationInput, ShopOrderItemUncheckedUpdateManyWithoutOrderInput>
   }
 
+  export type CertificateRequestUpsertWithWhereUniqueWithoutOrderInput = {
+    where: CertificateRequestWhereUniqueInput
+    update: XOR<CertificateRequestUpdateWithoutOrderInput, CertificateRequestUncheckedUpdateWithoutOrderInput>
+    create: XOR<CertificateRequestCreateWithoutOrderInput, CertificateRequestUncheckedCreateWithoutOrderInput>
+  }
+
+  export type CertificateRequestUpdateWithWhereUniqueWithoutOrderInput = {
+    where: CertificateRequestWhereUniqueInput
+    data: XOR<CertificateRequestUpdateWithoutOrderInput, CertificateRequestUncheckedUpdateWithoutOrderInput>
+  }
+
+  export type CertificateRequestUpdateManyWithWhereWithoutOrderInput = {
+    where: CertificateRequestScalarWhereInput
+    data: XOR<CertificateRequestUpdateManyMutationInput, CertificateRequestUncheckedUpdateManyWithoutOrderInput>
+  }
+
   export type ShopOrderCreateWithoutOrderItemsInput = {
     id?: string
     paymentStatus?: $Enums.PaymentStatus
@@ -32986,10 +37795,13 @@ export namespace Prisma {
     membershipFee?: Decimal | DecimalJsLike | number | string | null
     notes?: string | null
     includesDojoRenewal?: boolean
+    includesCertificates?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     member: MemberCreateNestedOneWithoutOrdersInput
     dojo?: DojoCreateNestedOneWithoutRenewalOrdersInput
+    certDojo?: DojoCreateNestedOneWithoutCertificateOrdersInput
+    certificateRequests?: CertificateRequestCreateNestedManyWithoutOrderInput
   }
 
   export type ShopOrderUncheckedCreateWithoutOrderItemsInput = {
@@ -33005,8 +37817,11 @@ export namespace Prisma {
     notes?: string | null
     dojoId?: string | null
     includesDojoRenewal?: boolean
+    includesCertificates?: boolean
+    certDojoId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutOrderInput
   }
 
   export type ShopOrderCreateOrConnectWithoutOrderItemsInput = {
@@ -33067,10 +37882,13 @@ export namespace Prisma {
     membershipFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     includesDojoRenewal?: BoolFieldUpdateOperationsInput | boolean
+    includesCertificates?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     member?: MemberUpdateOneRequiredWithoutOrdersNestedInput
     dojo?: DojoUpdateOneWithoutRenewalOrdersNestedInput
+    certDojo?: DojoUpdateOneWithoutCertificateOrdersNestedInput
+    certificateRequests?: CertificateRequestUpdateManyWithoutOrderNestedInput
   }
 
   export type ShopOrderUncheckedUpdateWithoutOrderItemsInput = {
@@ -33086,8 +37904,11 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     dojoId?: NullableStringFieldUpdateOperationsInput | string | null
     includesDojoRenewal?: BoolFieldUpdateOperationsInput | boolean
+    includesCertificates?: BoolFieldUpdateOperationsInput | boolean
+    certDojoId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutOrderNestedInput
   }
 
   export type ShopProductUpsertWithoutOrderItemsInput = {
@@ -33285,6 +38106,8 @@ export namespace Prisma {
     bloodGroup?: string | null
     address?: string | null
     nationalId?: string | null
+    fatherName?: string | null
+    motherName?: string | null
     emergencyContactName?: string | null
     emergencyContactPhone?: string | null
     createdAt?: Date | string
@@ -33296,6 +38119,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutMemberInput
     orders?: ShopOrderCreateNestedManyWithoutMemberInput
     attendance?: AttendanceCreateNestedManyWithoutMemberInput
+    certificateRequests?: CertificateRequestCreateNestedManyWithoutMemberInput
   }
 
   export type MemberUncheckedCreateWithoutTournamentEntriesInput = {
@@ -33317,6 +38141,8 @@ export namespace Prisma {
     bloodGroup?: string | null
     address?: string | null
     nationalId?: string | null
+    fatherName?: string | null
+    motherName?: string | null
     emergencyContactName?: string | null
     emergencyContactPhone?: string | null
     createdAt?: Date | string
@@ -33327,6 +38153,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutMemberInput
     orders?: ShopOrderUncheckedCreateNestedManyWithoutMemberInput
     attendance?: AttendanceUncheckedCreateNestedManyWithoutMemberInput
+    certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutMemberInput
   }
 
   export type MemberCreateOrConnectWithoutTournamentEntriesInput = {
@@ -33494,6 +38321,8 @@ export namespace Prisma {
     bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -33505,6 +38334,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutMemberNestedInput
     orders?: ShopOrderUpdateManyWithoutMemberNestedInput
     attendance?: AttendanceUpdateManyWithoutMemberNestedInput
+    certificateRequests?: CertificateRequestUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutTournamentEntriesInput = {
@@ -33526,6 +38356,8 @@ export namespace Prisma {
     bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -33536,6 +38368,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutMemberNestedInput
     orders?: ShopOrderUncheckedUpdateManyWithoutMemberNestedInput
     attendance?: AttendanceUncheckedUpdateManyWithoutMemberNestedInput
+    certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutMemberNestedInput
   }
 
   export type TournamentMatchUpsertWithWhereUniqueWithoutParticipant1Input = {
@@ -33888,6 +38721,7 @@ export namespace Prisma {
     member?: MemberUpdateOneRequiredWithoutGradingsNestedInput
     gradingEvent?: GradingEventUpdateOneWithoutGradingsNestedInput
     toRank?: BeltRankUpdateOneWithoutGradingsToNestedInput
+    certificateRequests?: CertificateRequestUpdateManyWithoutGradingNestedInput
   }
 
   export type GradingUncheckedUpdateWithoutFromRankInput = {
@@ -33900,6 +38734,7 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutGradingNestedInput
   }
 
   export type GradingUncheckedUpdateManyWithoutFromRankInput = {
@@ -33924,6 +38759,7 @@ export namespace Prisma {
     member?: MemberUpdateOneRequiredWithoutGradingsNestedInput
     gradingEvent?: GradingEventUpdateOneWithoutGradingsNestedInput
     fromRank?: BeltRankUpdateOneWithoutGradingsFromNestedInput
+    certificateRequests?: CertificateRequestUpdateManyWithoutGradingNestedInput
   }
 
   export type GradingUncheckedUpdateWithoutToRankInput = {
@@ -33936,6 +38772,7 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutGradingNestedInput
   }
 
   export type GradingUncheckedUpdateManyWithoutToRankInput = {
@@ -34038,6 +38875,43 @@ export namespace Prisma {
     membershipFee?: Decimal | DecimalJsLike | number | string | null
     notes?: string | null
     includesDojoRenewal?: boolean
+    includesCertificates?: boolean
+    certDojoId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ShopOrderCreateManyCertDojoInput = {
+    id?: string
+    memberId: string
+    paymentStatus?: $Enums.PaymentStatus
+    paymentMethod?: string | null
+    total: Decimal | DecimalJsLike | number | string
+    currency?: string
+    transactionId?: string | null
+    includesMembership?: boolean
+    membershipFee?: Decimal | DecimalJsLike | number | string | null
+    notes?: string | null
+    dojoId?: string | null
+    includesDojoRenewal?: boolean
+    includesCertificates?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CertificateRequestCreateManyDojoInput = {
+    id?: string
+    gradingId: string
+    memberId: string
+    orderId?: string | null
+    status?: $Enums.CertificateRequestStatus
+    price: Decimal | DecimalJsLike | number | string
+    certificateUrl?: string | null
+    failureReason?: string | null
+    memberName: string
+    fatherName?: string | null
+    motherName?: string | null
+    rankName: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -34060,6 +38934,8 @@ export namespace Prisma {
     bloodGroup?: string | null
     address?: string | null
     nationalId?: string | null
+    fatherName?: string | null
+    motherName?: string | null
     emergencyContactName?: string | null
     emergencyContactPhone?: string | null
     createdAt?: Date | string
@@ -34086,10 +38962,13 @@ export namespace Prisma {
     membershipFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     includesDojoRenewal?: BoolFieldUpdateOperationsInput | boolean
+    includesCertificates?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     member?: MemberUpdateOneRequiredWithoutOrdersNestedInput
+    certDojo?: DojoUpdateOneWithoutCertificateOrdersNestedInput
     orderItems?: ShopOrderItemUpdateManyWithoutOrderNestedInput
+    certificateRequests?: CertificateRequestUpdateManyWithoutOrderNestedInput
   }
 
   export type ShopOrderUncheckedUpdateWithoutDojoInput = {
@@ -34104,9 +38983,12 @@ export namespace Prisma {
     membershipFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     includesDojoRenewal?: BoolFieldUpdateOperationsInput | boolean
+    includesCertificates?: BoolFieldUpdateOperationsInput | boolean
+    certDojoId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     orderItems?: ShopOrderItemUncheckedUpdateManyWithoutOrderNestedInput
+    certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutOrderNestedInput
   }
 
   export type ShopOrderUncheckedUpdateManyWithoutDojoInput = {
@@ -34121,6 +39003,117 @@ export namespace Prisma {
     membershipFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     includesDojoRenewal?: BoolFieldUpdateOperationsInput | boolean
+    includesCertificates?: BoolFieldUpdateOperationsInput | boolean
+    certDojoId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ShopOrderUpdateWithoutCertDojoInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: StringFieldUpdateOperationsInput | string
+    transactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    includesMembership?: BoolFieldUpdateOperationsInput | boolean
+    membershipFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    includesDojoRenewal?: BoolFieldUpdateOperationsInput | boolean
+    includesCertificates?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    member?: MemberUpdateOneRequiredWithoutOrdersNestedInput
+    dojo?: DojoUpdateOneWithoutRenewalOrdersNestedInput
+    orderItems?: ShopOrderItemUpdateManyWithoutOrderNestedInput
+    certificateRequests?: CertificateRequestUpdateManyWithoutOrderNestedInput
+  }
+
+  export type ShopOrderUncheckedUpdateWithoutCertDojoInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    memberId?: StringFieldUpdateOperationsInput | string
+    paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: StringFieldUpdateOperationsInput | string
+    transactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    includesMembership?: BoolFieldUpdateOperationsInput | boolean
+    membershipFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    dojoId?: NullableStringFieldUpdateOperationsInput | string | null
+    includesDojoRenewal?: BoolFieldUpdateOperationsInput | boolean
+    includesCertificates?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    orderItems?: ShopOrderItemUncheckedUpdateManyWithoutOrderNestedInput
+    certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutOrderNestedInput
+  }
+
+  export type ShopOrderUncheckedUpdateManyWithoutCertDojoInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    memberId?: StringFieldUpdateOperationsInput | string
+    paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: StringFieldUpdateOperationsInput | string
+    transactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    includesMembership?: BoolFieldUpdateOperationsInput | boolean
+    membershipFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    dojoId?: NullableStringFieldUpdateOperationsInput | string | null
+    includesDojoRenewal?: BoolFieldUpdateOperationsInput | boolean
+    includesCertificates?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CertificateRequestUpdateWithoutDojoInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumCertificateRequestStatusFieldUpdateOperationsInput | $Enums.CertificateRequestStatus
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    certificateUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    memberName?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    rankName?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    grading?: GradingUpdateOneRequiredWithoutCertificateRequestsNestedInput
+    member?: MemberUpdateOneRequiredWithoutCertificateRequestsNestedInput
+    order?: ShopOrderUpdateOneWithoutCertificateRequestsNestedInput
+  }
+
+  export type CertificateRequestUncheckedUpdateWithoutDojoInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    gradingId?: StringFieldUpdateOperationsInput | string
+    memberId?: StringFieldUpdateOperationsInput | string
+    orderId?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumCertificateRequestStatusFieldUpdateOperationsInput | $Enums.CertificateRequestStatus
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    certificateUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    memberName?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    rankName?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CertificateRequestUncheckedUpdateManyWithoutDojoInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    gradingId?: StringFieldUpdateOperationsInput | string
+    memberId?: StringFieldUpdateOperationsInput | string
+    orderId?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumCertificateRequestStatusFieldUpdateOperationsInput | $Enums.CertificateRequestStatus
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    certificateUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    memberName?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    rankName?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -34143,6 +39136,8 @@ export namespace Prisma {
     bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -34154,6 +39149,7 @@ export namespace Prisma {
     orders?: ShopOrderUpdateManyWithoutMemberNestedInput
     attendance?: AttendanceUpdateManyWithoutMemberNestedInput
     tournamentEntries?: TournamentParticipantUpdateManyWithoutMemberNestedInput
+    certificateRequests?: CertificateRequestUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutDojoInput = {
@@ -34174,6 +39170,8 @@ export namespace Prisma {
     bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -34185,6 +39183,7 @@ export namespace Prisma {
     orders?: ShopOrderUncheckedUpdateManyWithoutMemberNestedInput
     attendance?: AttendanceUncheckedUpdateManyWithoutMemberNestedInput
     tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutMemberNestedInput
+    certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberUncheckedUpdateManyWithoutDojoInput = {
@@ -34205,6 +39204,8 @@ export namespace Prisma {
     bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -34289,6 +39290,8 @@ export namespace Prisma {
     notes?: string | null
     dojoId?: string | null
     includesDojoRenewal?: boolean
+    includesCertificates?: boolean
+    certDojoId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -34310,6 +39313,23 @@ export namespace Prisma {
     createdAt?: Date | string
   }
 
+  export type CertificateRequestCreateManyMemberInput = {
+    id?: string
+    gradingId: string
+    dojoId: string
+    orderId?: string | null
+    status?: $Enums.CertificateRequestStatus
+    price: Decimal | DecimalJsLike | number | string
+    certificateUrl?: string | null
+    failureReason?: string | null
+    memberName: string
+    fatherName?: string | null
+    motherName?: string | null
+    rankName: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type GradingUpdateWithoutMemberInput = {
     id?: StringFieldUpdateOperationsInput | string
     result?: EnumGradingResultFieldUpdateOperationsInput | $Enums.GradingResult
@@ -34320,6 +39340,7 @@ export namespace Prisma {
     gradingEvent?: GradingEventUpdateOneWithoutGradingsNestedInput
     fromRank?: BeltRankUpdateOneWithoutGradingsFromNestedInput
     toRank?: BeltRankUpdateOneWithoutGradingsToNestedInput
+    certificateRequests?: CertificateRequestUpdateManyWithoutGradingNestedInput
   }
 
   export type GradingUncheckedUpdateWithoutMemberInput = {
@@ -34332,6 +39353,7 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutGradingNestedInput
   }
 
   export type GradingUncheckedUpdateManyWithoutMemberInput = {
@@ -34438,10 +39460,13 @@ export namespace Prisma {
     membershipFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     includesDojoRenewal?: BoolFieldUpdateOperationsInput | boolean
+    includesCertificates?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dojo?: DojoUpdateOneWithoutRenewalOrdersNestedInput
+    certDojo?: DojoUpdateOneWithoutCertificateOrdersNestedInput
     orderItems?: ShopOrderItemUpdateManyWithoutOrderNestedInput
+    certificateRequests?: CertificateRequestUpdateManyWithoutOrderNestedInput
   }
 
   export type ShopOrderUncheckedUpdateWithoutMemberInput = {
@@ -34456,9 +39481,12 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     dojoId?: NullableStringFieldUpdateOperationsInput | string | null
     includesDojoRenewal?: BoolFieldUpdateOperationsInput | boolean
+    includesCertificates?: BoolFieldUpdateOperationsInput | boolean
+    certDojoId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     orderItems?: ShopOrderItemUncheckedUpdateManyWithoutOrderNestedInput
+    certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutOrderNestedInput
   }
 
   export type ShopOrderUncheckedUpdateManyWithoutMemberInput = {
@@ -34473,6 +39501,8 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     dojoId?: NullableStringFieldUpdateOperationsInput | string | null
     includesDojoRenewal?: BoolFieldUpdateOperationsInput | boolean
+    includesCertificates?: BoolFieldUpdateOperationsInput | boolean
+    certDojoId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -34534,6 +39564,57 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type CertificateRequestUpdateWithoutMemberInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumCertificateRequestStatusFieldUpdateOperationsInput | $Enums.CertificateRequestStatus
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    certificateUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    memberName?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    rankName?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    grading?: GradingUpdateOneRequiredWithoutCertificateRequestsNestedInput
+    dojo?: DojoUpdateOneRequiredWithoutCertificateRequestsNestedInput
+    order?: ShopOrderUpdateOneWithoutCertificateRequestsNestedInput
+  }
+
+  export type CertificateRequestUncheckedUpdateWithoutMemberInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    gradingId?: StringFieldUpdateOperationsInput | string
+    dojoId?: StringFieldUpdateOperationsInput | string
+    orderId?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumCertificateRequestStatusFieldUpdateOperationsInput | $Enums.CertificateRequestStatus
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    certificateUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    memberName?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    rankName?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CertificateRequestUncheckedUpdateManyWithoutMemberInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    gradingId?: StringFieldUpdateOperationsInput | string
+    dojoId?: StringFieldUpdateOperationsInput | string
+    orderId?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumCertificateRequestStatusFieldUpdateOperationsInput | $Enums.CertificateRequestStatus
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    certificateUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    memberName?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    rankName?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type GradingCreateManyGradingEventInput = {
     id?: string
     memberId: string
@@ -34566,6 +39647,7 @@ export namespace Prisma {
     member?: MemberUpdateOneRequiredWithoutGradingsNestedInput
     fromRank?: BeltRankUpdateOneWithoutGradingsFromNestedInput
     toRank?: BeltRankUpdateOneWithoutGradingsToNestedInput
+    certificateRequests?: CertificateRequestUpdateManyWithoutGradingNestedInput
   }
 
   export type GradingUncheckedUpdateWithoutGradingEventInput = {
@@ -34578,6 +39660,7 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutGradingNestedInput
   }
 
   export type GradingUncheckedUpdateManyWithoutGradingEventInput = {
@@ -34620,6 +39703,74 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     declineReason?: NullableStringFieldUpdateOperationsInput | string | null
     appliedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CertificateRequestCreateManyGradingInput = {
+    id?: string
+    memberId: string
+    dojoId: string
+    orderId?: string | null
+    status?: $Enums.CertificateRequestStatus
+    price: Decimal | DecimalJsLike | number | string
+    certificateUrl?: string | null
+    failureReason?: string | null
+    memberName: string
+    fatherName?: string | null
+    motherName?: string | null
+    rankName: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CertificateRequestUpdateWithoutGradingInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumCertificateRequestStatusFieldUpdateOperationsInput | $Enums.CertificateRequestStatus
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    certificateUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    memberName?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    rankName?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    member?: MemberUpdateOneRequiredWithoutCertificateRequestsNestedInput
+    dojo?: DojoUpdateOneRequiredWithoutCertificateRequestsNestedInput
+    order?: ShopOrderUpdateOneWithoutCertificateRequestsNestedInput
+  }
+
+  export type CertificateRequestUncheckedUpdateWithoutGradingInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    memberId?: StringFieldUpdateOperationsInput | string
+    dojoId?: StringFieldUpdateOperationsInput | string
+    orderId?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumCertificateRequestStatusFieldUpdateOperationsInput | $Enums.CertificateRequestStatus
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    certificateUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    memberName?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    rankName?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CertificateRequestUncheckedUpdateManyWithoutGradingInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    memberId?: StringFieldUpdateOperationsInput | string
+    dojoId?: StringFieldUpdateOperationsInput | string
+    orderId?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumCertificateRequestStatusFieldUpdateOperationsInput | $Enums.CertificateRequestStatus
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    certificateUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    memberName?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    rankName?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type EventRegistrationCreateManyEventInput = {
@@ -34681,6 +39832,23 @@ export namespace Prisma {
     unitPrice: Decimal | DecimalJsLike | number | string
   }
 
+  export type CertificateRequestCreateManyOrderInput = {
+    id?: string
+    gradingId: string
+    memberId: string
+    dojoId: string
+    status?: $Enums.CertificateRequestStatus
+    price: Decimal | DecimalJsLike | number | string
+    certificateUrl?: string | null
+    failureReason?: string | null
+    memberName: string
+    fatherName?: string | null
+    motherName?: string | null
+    rankName: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type ShopOrderItemUpdateWithoutOrderInput = {
     id?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
@@ -34700,6 +39868,57 @@ export namespace Prisma {
     productId?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
     unitPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+  }
+
+  export type CertificateRequestUpdateWithoutOrderInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumCertificateRequestStatusFieldUpdateOperationsInput | $Enums.CertificateRequestStatus
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    certificateUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    memberName?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    rankName?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    grading?: GradingUpdateOneRequiredWithoutCertificateRequestsNestedInput
+    member?: MemberUpdateOneRequiredWithoutCertificateRequestsNestedInput
+    dojo?: DojoUpdateOneRequiredWithoutCertificateRequestsNestedInput
+  }
+
+  export type CertificateRequestUncheckedUpdateWithoutOrderInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    gradingId?: StringFieldUpdateOperationsInput | string
+    memberId?: StringFieldUpdateOperationsInput | string
+    dojoId?: StringFieldUpdateOperationsInput | string
+    status?: EnumCertificateRequestStatusFieldUpdateOperationsInput | $Enums.CertificateRequestStatus
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    certificateUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    memberName?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    rankName?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CertificateRequestUncheckedUpdateManyWithoutOrderInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    gradingId?: StringFieldUpdateOperationsInput | string
+    memberId?: StringFieldUpdateOperationsInput | string
+    dojoId?: StringFieldUpdateOperationsInput | string
+    status?: EnumCertificateRequestStatusFieldUpdateOperationsInput | $Enums.CertificateRequestStatus
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    certificateUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    memberName?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    rankName?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type TournamentParticipantCreateManyTournamentInput = {
