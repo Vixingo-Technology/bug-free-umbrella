@@ -57,7 +57,7 @@ export default function DigitalCard({
 
     return (
         <div
-            className={`relative h-full overflow-hidden rounded-2xl p-6 bg-gradient-to-br from-zinc-900 via-zinc-800 to-zinc-900 border border-white/10 text-white ${interactive ? "transition-transform duration-300 hover:scale-[1.01] cursor-pointer" : ""}`}
+            className={`relative h-[260px] w-full overflow-hidden rounded-2xl p-6 bg-gradient-to-br from-zinc-900 via-zinc-800 to-zinc-900 border border-white/10 text-white ${interactive ? "transition-transform duration-300 hover:scale-[1.01] cursor-pointer" : ""}`}
         >
             <div className="absolute -top-2 -right-2 w-40 h-40 rounded-full blur-[60px] opacity-30" style={{ backgroundColor: beltColor }} />
             <div className="absolute -bottom-4 -left-4 w-28 h-28 bg-accent-red/20 rounded-full blur-[50px]" />

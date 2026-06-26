@@ -26,6 +26,12 @@ const nextConfig: NextConfig = {
     ],
   },
   output: 'standalone',
+  outputFileTracingIncludes: {
+    '/**/*': [
+      './assets/certificate-template.pdf',
+      './assets/Shojumaru-Regular.ttf',
+    ],
+  },
   transpilePackages: ['motion'],
   webpack: (config, {dev}) => {
     // HMR is disabled in AI Studio via DISABLE_HMR env var.

@@ -28,7 +28,6 @@ type GenerateResult = { ok: true; url: string } | { ok: false; reason: string };
 
 const TEMPLATE_PATH = path.join(
     process.cwd(),
-    "public",
     "assets",
     "certificate-template.pdf",
 );
