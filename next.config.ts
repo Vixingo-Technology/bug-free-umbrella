@@ -28,7 +28,7 @@ const nextConfig: NextConfig = {
   output: 'standalone',
   outputFileTracingIncludes: {
     '/**/*': [
-      './assets/certificate-template.pdf',
+      './assets/cer-template.pdf',
       './assets/Shojumaru-Regular.ttf',
     ],
   },

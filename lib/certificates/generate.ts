@@ -29,7 +29,7 @@ type GenerateResult = { ok: true; url: string } | { ok: false; reason: string };
 const TEMPLATE_PATH = path.join(
     process.cwd(),
     "assets",
-    "certificate-template.pdf",
+    "cer-template.pdf",
 );
 const FONT_PATH = path.join(process.cwd(), "assets", "Shojumaru-Regular.ttf");
 
