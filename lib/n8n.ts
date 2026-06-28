@@ -101,3 +101,33 @@ export async function emitGradingResult(payload: {
 }) {
     await emitWebhook("jka.grading.result", payload);
 }
+
+/**
+ * Emitted when someone registers for an event. n8n is expected to email the
+ * participant their participation card (link to participationCardUrl) and,
+ * if configured, send a WhatsApp message too.
+ *
+ * The participation card page renders the QR — the email itself only needs
+ * to include the link and the basic event details; the participant opens
+ * the card on their phone to scan at the door.
+ */
+export async function emitEventRegistered(payload: {
+    registrationId: string;
+    qrToken: string;
+    participationCardUrl: string;
+    checkInUrl: string;
+    participantName: string;
+    participantEmail: string;
+    participantPhone?: string | null;
+    memberId?: string | null;
+    isGuest: boolean;
+    event: {
+        id: string;
+        title: string;
+        eventDate: string; // ISO
+        location?: string | null;
+        dojoName?: string | null;
+    };
+}) {
+    await emitWebhook("jka.event.registered", payload);
+}

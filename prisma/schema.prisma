@@ -249,6 +249,7 @@ model Member {
   certificateRequests  CertificateRequest[]
   eventsPosted         Event[]                 @relation("EventsPosted")
   announcementsPosted  Announcement[]          @relation("AnnouncementsPosted")
+  eventCheckIns        EventRegistration[]     @relation("EventCheckIns")
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt      @map("updated_at")
@@ -494,16 +495,35 @@ model Announcement {
 // ─────────────────────────────────────────────
 
 model EventRegistration {
-  id       String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  eventId  String @db.Uuid @map("event_id")
-  memberId String @db.Uuid @map("member_id")
+  id      String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  eventId String  @db.Uuid @map("event_id")
 
-  event  Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
-  member Member @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  // memberId is set when a signed-in member registers; null for public/guest
+  // registrations, in which case the guest_* fields capture the participant.
+  memberId    String? @db.Uuid @map("member_id")
+  guestName   String? @map("guest_name")
+  guestEmail  String? @map("guest_email")
+  guestPhone  String? @map("guest_phone")
+
+  // Random URL-safe token embedded in the participant's QR code. Opening
+  // /check-in/[qrToken] as an authorised admin / dojo owner marks them present.
+  qrToken String @unique @map("qr_token")
+
+  // Check-in state. Set the moment an authority opens the QR URL.
+  checkedInAt   DateTime? @map("checked_in_at")
+  checkedInById String?   @db.Uuid @map("checked_in_by_id")
+
+  event       Event   @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  member      Member? @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  checkedInBy Member? @relation("EventCheckIns", fields: [checkedInById], references: [id])
 
   createdAt DateTime @default(now()) @map("created_at")
 
-  @@unique([eventId, memberId])
+  // Uniqueness is enforced at the DB level via two partial indexes:
+  //   one_registration_per_member_per_event  (when member_id IS NOT NULL)
+  //   one_guest_registration_per_event       (when member_id IS NULL,
+  //                                           keyed on guest_email)
+  @@index([eventId, checkedInAt])
   @@map("event_registrations")
 }
 

@@ -1,0 +1,218 @@
+import type { Metadata } from "next";
+import Link from "next/link";
+import Image from "next/image";
+import { notFound } from "next/navigation";
+import { Calendar, MapPin, CheckCircle2, ArrowLeft } from "lucide-react";
+import QRCode from "qrcode";
+import Logo from "@/assets/jka_logo.svg";
+import PrintButton from "@/components/print-button";
+import { prisma } from "@/lib/prisma";
+
+type Props = { params: Promise<{ token: string }> };
+
+export const metadata: Metadata = {
+    title: "Participation Card — JKA Bangladesh",
+};
+
+export const dynamic = "force-dynamic";
+
+function formatDate(d: Date): string {
+    return d.toLocaleString("en-GB", {
+        weekday: "long",
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+        hour: "numeric",
+        minute: "2-digit",
+    });
+}
+
+function formatCheckedInAt(d: Date): string {
+    return d.toLocaleString("en-GB", {
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+        hour: "numeric",
+        minute: "2-digit",
+    });
+}
+
+export default async function ParticipationCardPage({ params }: Props) {
+    const { token } = await params;
+
+    const registration = await prisma.eventRegistration.findUnique({
+        where: { qrToken: token },
+        include: {
+            event: {
+                include: {
+                    dojo: { select: { name: true } },
+                },
+            },
+            member: { select: { fullName: true, email: true, phone: true, memberNumber: true } },
+        },
+    });
+
+    if (!registration) notFound();
+
+    const participantName =
+        registration.member?.fullName ?? registration.guestName ?? "Participant";
+    const participantEmail =
+        registration.member?.email ?? registration.guestEmail ?? "";
+    const participantPhone =
+        registration.member?.phone ?? registration.guestPhone ?? "";
+
+    const appUrl =
+        process.env.NEXT_PUBLIC_APP_URL ??
+        process.env.APP_URL ??
+        "http://localhost:3000";
+    const checkInUrl = `${appUrl}/check-in/${token}`;
+
+    // Generate the QR as an inline SVG string — keeps the page server-rendered
+    // and avoids a client-side QR library.
+    const qrSvg = await QRCode.toString(checkInUrl, {
+        type: "svg",
+        errorCorrectionLevel: "M",
+        margin: 1,
+        width: 260,
+    });
+
+    const checkedIn = !!registration.checkedInAt;
+
+    return (
+        <main className="min-h-screen bg-bg-deep w-full overflow-hidden print:bg-white print:min-h-0">
+            <section className="py-12 md:py-20 print:py-0">
+                <div className="max-w-2xl mx-auto px-6 lg:px-12 print:px-0 print:max-w-none">
+                    <Link
+                        href={`/events/${registration.event.id}`}
+                        className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-zinc-500 hover:text-accent-red transition-colors mb-8 print:hidden"
+                    >
+                        <ArrowLeft size={14} />
+                        Back to event
+                    </Link>
+
+                    <div className="bg-white border-2 border-zinc-900 shadow-xl rounded-sm overflow-hidden print:shadow-none print:border print:rounded-none">
+                        {/* Header strip */}
+                        <div className="bg-white border-b border-zinc-200 px-6 py-4 flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                                <Image
+                                    src={Logo}
+                                    alt="JKA Bangladesh logo"
+                                    width={40}
+                                    height={40}
+                                />
+                                <div>
+                                    <p className="text-[10px] tracking-[0.3em] uppercase font-bold text-zinc-500">
+                                        JKA Bangladesh
+                                    </p>
+                                    <p className="text-xs font-bold tracking-widest uppercase text-zinc-900">
+                                        Participation Card
+                                    </p>
+                                </div>
+                            </div>
+                            {checkedIn && (
+                                <span className="inline-flex items-center gap-1.5 text-[10px] tracking-widest uppercase font-bold px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
+                                    <CheckCircle2 size={12} />
+                                    Checked in
+                                </span>
+                            )}
+                        </div>
+
+                        {/* Body */}
+                        <div className="p-6 md:p-8 grid md:grid-cols-[1fr_auto] gap-8 items-start">
+                            <div className="min-w-0">
+                                <p className="text-[10px] tracking-widest uppercase font-bold text-accent-red mb-2">
+                                    Event
+                                </p>
+                                <h2 className="font-karate text-xl md:text-2xl text-zinc-900 uppercase tracking-wider font-bold leading-tight mb-4">
+                                    {registration.event.title}
+                                </h2>
+
+                                <ul className="space-y-2 text-xs text-zinc-600 mb-6">
+                                    <li className="flex items-center gap-2">
+                                        <Calendar
+                                            size={12}
+                                            className="text-accent-red shrink-0"
+                                        />
+                                        {formatDate(registration.event.eventDate)}
+                                    </li>
+                                    {registration.event.location && (
+                                        <li className="flex items-center gap-2">
+                                            <MapPin
+                                                size={12}
+                                                className="text-accent-red shrink-0"
+                                            />
+                                            {registration.event.location}
+                                        </li>
+                                    )}
+                                    {registration.event.dojo?.name && (
+                                        <li className="text-[10px] tracking-widest uppercase font-bold text-zinc-400">
+                                            {registration.event.dojo.name}
+                                        </li>
+                                    )}
+                                </ul>
+
+                                <div className="border-t border-zinc-200 pt-4">
+                                    <p className="text-[10px] tracking-widest uppercase font-bold text-zinc-400 mb-1">
+                                        Participant
+                                    </p>
+                                    <p className="text-base font-bold text-zinc-900 mb-1">
+                                        {participantName}
+                                    </p>
+                                    {participantEmail && (
+                                        <p className="text-xs text-zinc-500">
+                                            {participantEmail}
+                                        </p>
+                                    )}
+                                    {participantPhone && (
+                                        <p className="text-xs text-zinc-500">
+                                            {participantPhone}
+                                        </p>
+                                    )}
+                                    {registration.member?.memberNumber && (
+                                        <p className="text-[10px] tracking-widest uppercase font-bold text-zinc-400 mt-1">
+                                            Member #{registration.member.memberNumber}
+                                        </p>
+                                    )}
+                                </div>
+                            </div>
+
+                            <div className="flex flex-col items-center md:items-end">
+                                <div
+                                    className="bg-white p-3 border border-zinc-200 rounded-sm"
+                                    dangerouslySetInnerHTML={{ __html: qrSvg }}
+                                />
+                                <p className="text-[10px] tracking-widest uppercase font-bold text-zinc-400 mt-3 text-center md:text-right">
+                                    Show this at the door
+                                </p>
+                                <p className="text-[10px] font-mono text-zinc-400 mt-1 select-all break-all max-w-[180px] text-center md:text-right">
+                                    {token}
+                                </p>
+                            </div>
+                        </div>
+
+                        {checkedIn && registration.checkedInAt && (
+                            <div className="px-6 md:px-8 py-3 bg-emerald-50 border-t border-emerald-200 text-xs text-emerald-700 font-semibold flex items-center gap-2">
+                                <CheckCircle2 size={14} />
+                                Checked in {formatCheckedInAt(registration.checkedInAt)}
+                            </div>
+                        )}
+                    </div>
+
+                    <div className="mt-8 grid sm:grid-cols-2 gap-3 print:hidden">
+                        <PrintButton />
+                        <Link
+                            href={`/events/${registration.event.id}`}
+                            className="inline-flex items-center justify-center gap-2 border border-zinc-300 text-zinc-700 hover:border-accent-red hover:text-accent-red px-4 py-2.5 text-xs font-bold tracking-widest uppercase rounded-sm transition-colors"
+                        >
+                            Back to event
+                        </Link>
+                    </div>
+
+                    <p className="text-xs text-zinc-500 mt-6 text-center print:hidden">
+                        Save this page — the URL is your private link to this card.
+                    </p>
+                </div>
+            </section>
+        </main>
+    );
+}

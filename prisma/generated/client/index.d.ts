@@ -2897,6 +2897,7 @@ export namespace Prisma {
     certificateRequests: number
     eventsPosted: number
     announcementsPosted: number
+    eventCheckIns: number
   }
 
   export type MemberCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2910,6 +2911,7 @@ export namespace Prisma {
     certificateRequests?: boolean | MemberCountOutputTypeCountCertificateRequestsArgs
     eventsPosted?: boolean | MemberCountOutputTypeCountEventsPostedArgs
     announcementsPosted?: boolean | MemberCountOutputTypeCountAnnouncementsPostedArgs
+    eventCheckIns?: boolean | MemberCountOutputTypeCountEventCheckInsArgs
   }
 
   // Custom InputTypes
@@ -2991,6 +2993,13 @@ export namespace Prisma {
    */
   export type MemberCountOutputTypeCountAnnouncementsPostedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: AnnouncementWhereInput
+  }
+
+  /**
+   * MemberCountOutputType without action
+   */
+  export type MemberCountOutputTypeCountEventCheckInsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EventRegistrationWhereInput
   }
 
 
@@ -7433,6 +7442,7 @@ export namespace Prisma {
     certificateRequests?: boolean | Member$certificateRequestsArgs<ExtArgs>
     eventsPosted?: boolean | Member$eventsPostedArgs<ExtArgs>
     announcementsPosted?: boolean | Member$announcementsPostedArgs<ExtArgs>
+    eventCheckIns?: boolean | Member$eventCheckInsArgs<ExtArgs>
     _count?: boolean | MemberCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["member"]>
 
@@ -7532,6 +7542,7 @@ export namespace Prisma {
     certificateRequests?: boolean | Member$certificateRequestsArgs<ExtArgs>
     eventsPosted?: boolean | Member$eventsPostedArgs<ExtArgs>
     announcementsPosted?: boolean | Member$announcementsPostedArgs<ExtArgs>
+    eventCheckIns?: boolean | Member$eventCheckInsArgs<ExtArgs>
     _count?: boolean | MemberCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type MemberIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -7555,6 +7566,7 @@ export namespace Prisma {
       certificateRequests: Prisma.$CertificateRequestPayload<ExtArgs>[]
       eventsPosted: Prisma.$EventPayload<ExtArgs>[]
       announcementsPosted: Prisma.$AnnouncementPayload<ExtArgs>[]
+      eventCheckIns: Prisma.$EventRegistrationPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -7986,6 +7998,7 @@ export namespace Prisma {
     certificateRequests<T extends Member$certificateRequestsArgs<ExtArgs> = {}>(args?: Subset<T, Member$certificateRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificateRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     eventsPosted<T extends Member$eventsPostedArgs<ExtArgs> = {}>(args?: Subset<T, Member$eventsPostedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     announcementsPosted<T extends Member$announcementsPostedArgs<ExtArgs> = {}>(args?: Subset<T, Member$announcementsPostedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AnnouncementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    eventCheckIns<T extends Member$eventCheckInsArgs<ExtArgs> = {}>(args?: Subset<T, Member$eventCheckInsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EventRegistrationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -8696,6 +8709,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: AnnouncementScalarFieldEnum | AnnouncementScalarFieldEnum[]
+  }
+
+  /**
+   * Member.eventCheckIns
+   */
+  export type Member$eventCheckInsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EventRegistration
+     */
+    select?: EventRegistrationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EventRegistration
+     */
+    omit?: EventRegistrationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventRegistrationInclude<ExtArgs> | null
+    where?: EventRegistrationWhereInput
+    orderBy?: EventRegistrationOrderByWithRelationInput | EventRegistrationOrderByWithRelationInput[]
+    cursor?: EventRegistrationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: EventRegistrationScalarFieldEnum | EventRegistrationScalarFieldEnum[]
   }
 
   /**
@@ -18272,6 +18309,12 @@ export namespace Prisma {
     id: string | null
     eventId: string | null
     memberId: string | null
+    guestName: string | null
+    guestEmail: string | null
+    guestPhone: string | null
+    qrToken: string | null
+    checkedInAt: Date | null
+    checkedInById: string | null
     createdAt: Date | null
   }
 
@@ -18279,6 +18322,12 @@ export namespace Prisma {
     id: string | null
     eventId: string | null
     memberId: string | null
+    guestName: string | null
+    guestEmail: string | null
+    guestPhone: string | null
+    qrToken: string | null
+    checkedInAt: Date | null
+    checkedInById: string | null
     createdAt: Date | null
   }
 
@@ -18286,6 +18335,12 @@ export namespace Prisma {
     id: number
     eventId: number
     memberId: number
+    guestName: number
+    guestEmail: number
+    guestPhone: number
+    qrToken: number
+    checkedInAt: number
+    checkedInById: number
     createdAt: number
     _all: number
   }
@@ -18295,6 +18350,12 @@ export namespace Prisma {
     id?: true
     eventId?: true
     memberId?: true
+    guestName?: true
+    guestEmail?: true
+    guestPhone?: true
+    qrToken?: true
+    checkedInAt?: true
+    checkedInById?: true
     createdAt?: true
   }
 
@@ -18302,6 +18363,12 @@ export namespace Prisma {
     id?: true
     eventId?: true
     memberId?: true
+    guestName?: true
+    guestEmail?: true
+    guestPhone?: true
+    qrToken?: true
+    checkedInAt?: true
+    checkedInById?: true
     createdAt?: true
   }
 
@@ -18309,6 +18376,12 @@ export namespace Prisma {
     id?: true
     eventId?: true
     memberId?: true
+    guestName?: true
+    guestEmail?: true
+    guestPhone?: true
+    qrToken?: true
+    checkedInAt?: true
+    checkedInById?: true
     createdAt?: true
     _all?: true
   }
@@ -18388,7 +18461,13 @@ export namespace Prisma {
   export type EventRegistrationGroupByOutputType = {
     id: string
     eventId: string
-    memberId: string
+    memberId: string | null
+    guestName: string | null
+    guestEmail: string | null
+    guestPhone: string | null
+    qrToken: string
+    checkedInAt: Date | null
+    checkedInById: string | null
     createdAt: Date
     _count: EventRegistrationCountAggregateOutputType | null
     _min: EventRegistrationMinAggregateOutputType | null
@@ -18413,60 +18492,97 @@ export namespace Prisma {
     id?: boolean
     eventId?: boolean
     memberId?: boolean
+    guestName?: boolean
+    guestEmail?: boolean
+    guestPhone?: boolean
+    qrToken?: boolean
+    checkedInAt?: boolean
+    checkedInById?: boolean
     createdAt?: boolean
     event?: boolean | EventDefaultArgs<ExtArgs>
-    member?: boolean | MemberDefaultArgs<ExtArgs>
+    member?: boolean | EventRegistration$memberArgs<ExtArgs>
+    checkedInBy?: boolean | EventRegistration$checkedInByArgs<ExtArgs>
   }, ExtArgs["result"]["eventRegistration"]>
 
   export type EventRegistrationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     eventId?: boolean
     memberId?: boolean
+    guestName?: boolean
+    guestEmail?: boolean
+    guestPhone?: boolean
+    qrToken?: boolean
+    checkedInAt?: boolean
+    checkedInById?: boolean
     createdAt?: boolean
     event?: boolean | EventDefaultArgs<ExtArgs>
-    member?: boolean | MemberDefaultArgs<ExtArgs>
+    member?: boolean | EventRegistration$memberArgs<ExtArgs>
+    checkedInBy?: boolean | EventRegistration$checkedInByArgs<ExtArgs>
   }, ExtArgs["result"]["eventRegistration"]>
 
   export type EventRegistrationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     eventId?: boolean
     memberId?: boolean
+    guestName?: boolean
+    guestEmail?: boolean
+    guestPhone?: boolean
+    qrToken?: boolean
+    checkedInAt?: boolean
+    checkedInById?: boolean
     createdAt?: boolean
     event?: boolean | EventDefaultArgs<ExtArgs>
-    member?: boolean | MemberDefaultArgs<ExtArgs>
+    member?: boolean | EventRegistration$memberArgs<ExtArgs>
+    checkedInBy?: boolean | EventRegistration$checkedInByArgs<ExtArgs>
   }, ExtArgs["result"]["eventRegistration"]>
 
   export type EventRegistrationSelectScalar = {
     id?: boolean
     eventId?: boolean
     memberId?: boolean
+    guestName?: boolean
+    guestEmail?: boolean
+    guestPhone?: boolean
+    qrToken?: boolean
+    checkedInAt?: boolean
+    checkedInById?: boolean
     createdAt?: boolean
   }
 
-  export type EventRegistrationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "eventId" | "memberId" | "createdAt", ExtArgs["result"]["eventRegistration"]>
+  export type EventRegistrationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "eventId" | "memberId" | "guestName" | "guestEmail" | "guestPhone" | "qrToken" | "checkedInAt" | "checkedInById" | "createdAt", ExtArgs["result"]["eventRegistration"]>
   export type EventRegistrationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     event?: boolean | EventDefaultArgs<ExtArgs>
-    member?: boolean | MemberDefaultArgs<ExtArgs>
+    member?: boolean | EventRegistration$memberArgs<ExtArgs>
+    checkedInBy?: boolean | EventRegistration$checkedInByArgs<ExtArgs>
   }
   export type EventRegistrationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     event?: boolean | EventDefaultArgs<ExtArgs>
-    member?: boolean | MemberDefaultArgs<ExtArgs>
+    member?: boolean | EventRegistration$memberArgs<ExtArgs>
+    checkedInBy?: boolean | EventRegistration$checkedInByArgs<ExtArgs>
   }
   export type EventRegistrationIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     event?: boolean | EventDefaultArgs<ExtArgs>
-    member?: boolean | MemberDefaultArgs<ExtArgs>
+    member?: boolean | EventRegistration$memberArgs<ExtArgs>
+    checkedInBy?: boolean | EventRegistration$checkedInByArgs<ExtArgs>
   }
 
   export type $EventRegistrationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "EventRegistration"
     objects: {
       event: Prisma.$EventPayload<ExtArgs>
-      member: Prisma.$MemberPayload<ExtArgs>
+      member: Prisma.$MemberPayload<ExtArgs> | null
+      checkedInBy: Prisma.$MemberPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       eventId: string
-      memberId: string
+      memberId: string | null
+      guestName: string | null
+      guestEmail: string | null
+      guestPhone: string | null
+      qrToken: string
+      checkedInAt: Date | null
+      checkedInById: string | null
       createdAt: Date
     }, ExtArgs["result"]["eventRegistration"]>
     composites: {}
@@ -18863,7 +18979,8 @@ export namespace Prisma {
   export interface Prisma__EventRegistrationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     event<T extends EventDefaultArgs<ExtArgs> = {}>(args?: Subset<T, EventDefaultArgs<ExtArgs>>): Prisma__EventClient<$Result.GetResult<Prisma.$EventPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    member<T extends MemberDefaultArgs<ExtArgs> = {}>(args?: Subset<T, MemberDefaultArgs<ExtArgs>>): Prisma__MemberClient<$Result.GetResult<Prisma.$MemberPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    member<T extends EventRegistration$memberArgs<ExtArgs> = {}>(args?: Subset<T, EventRegistration$memberArgs<ExtArgs>>): Prisma__MemberClient<$Result.GetResult<Prisma.$MemberPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    checkedInBy<T extends EventRegistration$checkedInByArgs<ExtArgs> = {}>(args?: Subset<T, EventRegistration$checkedInByArgs<ExtArgs>>): Prisma__MemberClient<$Result.GetResult<Prisma.$MemberPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -18896,6 +19013,12 @@ export namespace Prisma {
     readonly id: FieldRef<"EventRegistration", 'String'>
     readonly eventId: FieldRef<"EventRegistration", 'String'>
     readonly memberId: FieldRef<"EventRegistration", 'String'>
+    readonly guestName: FieldRef<"EventRegistration", 'String'>
+    readonly guestEmail: FieldRef<"EventRegistration", 'String'>
+    readonly guestPhone: FieldRef<"EventRegistration", 'String'>
+    readonly qrToken: FieldRef<"EventRegistration", 'String'>
+    readonly checkedInAt: FieldRef<"EventRegistration", 'DateTime'>
+    readonly checkedInById: FieldRef<"EventRegistration", 'String'>
     readonly createdAt: FieldRef<"EventRegistration", 'DateTime'>
   }
     
@@ -19295,6 +19418,44 @@ export namespace Prisma {
      * Limit how many EventRegistrations to delete.
      */
     limit?: number
+  }
+
+  /**
+   * EventRegistration.member
+   */
+  export type EventRegistration$memberArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Member
+     */
+    select?: MemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Member
+     */
+    omit?: MemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MemberInclude<ExtArgs> | null
+    where?: MemberWhereInput
+  }
+
+  /**
+   * EventRegistration.checkedInBy
+   */
+  export type EventRegistration$checkedInByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Member
+     */
+    select?: MemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Member
+     */
+    omit?: MemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MemberInclude<ExtArgs> | null
+    where?: MemberWhereInput
   }
 
   /**
@@ -27861,6 +28022,12 @@ export namespace Prisma {
     id: 'id',
     eventId: 'eventId',
     memberId: 'memberId',
+    guestName: 'guestName',
+    guestEmail: 'guestEmail',
+    guestPhone: 'guestPhone',
+    qrToken: 'qrToken',
+    checkedInAt: 'checkedInAt',
+    checkedInById: 'checkedInById',
     createdAt: 'createdAt'
   };
 
@@ -28623,6 +28790,7 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestListRelationFilter
     eventsPosted?: EventListRelationFilter
     announcementsPosted?: AnnouncementListRelationFilter
+    eventCheckIns?: EventRegistrationListRelationFilter
   }
 
   export type MemberOrderByWithRelationInput = {
@@ -28661,6 +28829,7 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestOrderByRelationAggregateInput
     eventsPosted?: EventOrderByRelationAggregateInput
     announcementsPosted?: AnnouncementOrderByRelationAggregateInput
+    eventCheckIns?: EventRegistrationOrderByRelationAggregateInput
   }
 
   export type MemberWhereUniqueInput = Prisma.AtLeast<{
@@ -28702,6 +28871,7 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestListRelationFilter
     eventsPosted?: EventListRelationFilter
     announcementsPosted?: AnnouncementListRelationFilter
+    eventCheckIns?: EventRegistrationListRelationFilter
   }, "id" | "email" | "memberNumber">
 
   export type MemberOrderByWithAggregationInput = {
@@ -29487,38 +29657,64 @@ export namespace Prisma {
     NOT?: EventRegistrationWhereInput | EventRegistrationWhereInput[]
     id?: UuidFilter<"EventRegistration"> | string
     eventId?: UuidFilter<"EventRegistration"> | string
-    memberId?: UuidFilter<"EventRegistration"> | string
+    memberId?: UuidNullableFilter<"EventRegistration"> | string | null
+    guestName?: StringNullableFilter<"EventRegistration"> | string | null
+    guestEmail?: StringNullableFilter<"EventRegistration"> | string | null
+    guestPhone?: StringNullableFilter<"EventRegistration"> | string | null
+    qrToken?: StringFilter<"EventRegistration"> | string
+    checkedInAt?: DateTimeNullableFilter<"EventRegistration"> | Date | string | null
+    checkedInById?: UuidNullableFilter<"EventRegistration"> | string | null
     createdAt?: DateTimeFilter<"EventRegistration"> | Date | string
     event?: XOR<EventScalarRelationFilter, EventWhereInput>
-    member?: XOR<MemberScalarRelationFilter, MemberWhereInput>
+    member?: XOR<MemberNullableScalarRelationFilter, MemberWhereInput> | null
+    checkedInBy?: XOR<MemberNullableScalarRelationFilter, MemberWhereInput> | null
   }
 
   export type EventRegistrationOrderByWithRelationInput = {
     id?: SortOrder
     eventId?: SortOrder
-    memberId?: SortOrder
+    memberId?: SortOrderInput | SortOrder
+    guestName?: SortOrderInput | SortOrder
+    guestEmail?: SortOrderInput | SortOrder
+    guestPhone?: SortOrderInput | SortOrder
+    qrToken?: SortOrder
+    checkedInAt?: SortOrderInput | SortOrder
+    checkedInById?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     event?: EventOrderByWithRelationInput
     member?: MemberOrderByWithRelationInput
+    checkedInBy?: MemberOrderByWithRelationInput
   }
 
   export type EventRegistrationWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    eventId_memberId?: EventRegistrationEventIdMemberIdCompoundUniqueInput
+    qrToken?: string
     AND?: EventRegistrationWhereInput | EventRegistrationWhereInput[]
     OR?: EventRegistrationWhereInput[]
     NOT?: EventRegistrationWhereInput | EventRegistrationWhereInput[]
     eventId?: UuidFilter<"EventRegistration"> | string
-    memberId?: UuidFilter<"EventRegistration"> | string
+    memberId?: UuidNullableFilter<"EventRegistration"> | string | null
+    guestName?: StringNullableFilter<"EventRegistration"> | string | null
+    guestEmail?: StringNullableFilter<"EventRegistration"> | string | null
+    guestPhone?: StringNullableFilter<"EventRegistration"> | string | null
+    checkedInAt?: DateTimeNullableFilter<"EventRegistration"> | Date | string | null
+    checkedInById?: UuidNullableFilter<"EventRegistration"> | string | null
     createdAt?: DateTimeFilter<"EventRegistration"> | Date | string
     event?: XOR<EventScalarRelationFilter, EventWhereInput>
-    member?: XOR<MemberScalarRelationFilter, MemberWhereInput>
-  }, "id" | "eventId_memberId">
+    member?: XOR<MemberNullableScalarRelationFilter, MemberWhereInput> | null
+    checkedInBy?: XOR<MemberNullableScalarRelationFilter, MemberWhereInput> | null
+  }, "id" | "qrToken">
 
   export type EventRegistrationOrderByWithAggregationInput = {
     id?: SortOrder
     eventId?: SortOrder
-    memberId?: SortOrder
+    memberId?: SortOrderInput | SortOrder
+    guestName?: SortOrderInput | SortOrder
+    guestEmail?: SortOrderInput | SortOrder
+    guestPhone?: SortOrderInput | SortOrder
+    qrToken?: SortOrder
+    checkedInAt?: SortOrderInput | SortOrder
+    checkedInById?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     _count?: EventRegistrationCountOrderByAggregateInput
     _max?: EventRegistrationMaxOrderByAggregateInput
@@ -29531,7 +29727,13 @@ export namespace Prisma {
     NOT?: EventRegistrationScalarWhereWithAggregatesInput | EventRegistrationScalarWhereWithAggregatesInput[]
     id?: UuidWithAggregatesFilter<"EventRegistration"> | string
     eventId?: UuidWithAggregatesFilter<"EventRegistration"> | string
-    memberId?: UuidWithAggregatesFilter<"EventRegistration"> | string
+    memberId?: UuidNullableWithAggregatesFilter<"EventRegistration"> | string | null
+    guestName?: StringNullableWithAggregatesFilter<"EventRegistration"> | string | null
+    guestEmail?: StringNullableWithAggregatesFilter<"EventRegistration"> | string | null
+    guestPhone?: StringNullableWithAggregatesFilter<"EventRegistration"> | string | null
+    qrToken?: StringWithAggregatesFilter<"EventRegistration"> | string
+    checkedInAt?: DateTimeNullableWithAggregatesFilter<"EventRegistration"> | Date | string | null
+    checkedInById?: UuidNullableWithAggregatesFilter<"EventRegistration"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"EventRegistration"> | Date | string
   }
 
@@ -30537,6 +30739,7 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestCreateNestedManyWithoutMemberInput
     eventsPosted?: EventCreateNestedManyWithoutPostedByInput
     announcementsPosted?: AnnouncementCreateNestedManyWithoutPostedByInput
+    eventCheckIns?: EventRegistrationCreateNestedManyWithoutCheckedInByInput
   }
 
   export type MemberUncheckedCreateInput = {
@@ -30574,6 +30777,7 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutMemberInput
     eventsPosted?: EventUncheckedCreateNestedManyWithoutPostedByInput
     announcementsPosted?: AnnouncementUncheckedCreateNestedManyWithoutPostedByInput
+    eventCheckIns?: EventRegistrationUncheckedCreateNestedManyWithoutCheckedInByInput
   }
 
   export type MemberUpdateInput = {
@@ -30611,6 +30815,7 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestUpdateManyWithoutMemberNestedInput
     eventsPosted?: EventUpdateManyWithoutPostedByNestedInput
     announcementsPosted?: AnnouncementUpdateManyWithoutPostedByNestedInput
+    eventCheckIns?: EventRegistrationUpdateManyWithoutCheckedInByNestedInput
   }
 
   export type MemberUncheckedUpdateInput = {
@@ -30648,6 +30853,7 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutMemberNestedInput
     eventsPosted?: EventUncheckedUpdateManyWithoutPostedByNestedInput
     announcementsPosted?: AnnouncementUncheckedUpdateManyWithoutPostedByNestedInput
+    eventCheckIns?: EventRegistrationUncheckedUpdateManyWithoutCheckedInByNestedInput
   }
 
   export type MemberCreateManyInput = {
@@ -31500,48 +31706,89 @@ export namespace Prisma {
 
   export type EventRegistrationCreateInput = {
     id?: string
+    guestName?: string | null
+    guestEmail?: string | null
+    guestPhone?: string | null
+    qrToken: string
+    checkedInAt?: Date | string | null
     createdAt?: Date | string
     event: EventCreateNestedOneWithoutRegistrationsInput
-    member: MemberCreateNestedOneWithoutEventRegistrationsInput
+    member?: MemberCreateNestedOneWithoutEventRegistrationsInput
+    checkedInBy?: MemberCreateNestedOneWithoutEventCheckInsInput
   }
 
   export type EventRegistrationUncheckedCreateInput = {
     id?: string
     eventId: string
-    memberId: string
+    memberId?: string | null
+    guestName?: string | null
+    guestEmail?: string | null
+    guestPhone?: string | null
+    qrToken: string
+    checkedInAt?: Date | string | null
+    checkedInById?: string | null
     createdAt?: Date | string
   }
 
   export type EventRegistrationUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    guestName?: NullableStringFieldUpdateOperationsInput | string | null
+    guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    guestPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    qrToken?: StringFieldUpdateOperationsInput | string
+    checkedInAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     event?: EventUpdateOneRequiredWithoutRegistrationsNestedInput
-    member?: MemberUpdateOneRequiredWithoutEventRegistrationsNestedInput
+    member?: MemberUpdateOneWithoutEventRegistrationsNestedInput
+    checkedInBy?: MemberUpdateOneWithoutEventCheckInsNestedInput
   }
 
   export type EventRegistrationUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     eventId?: StringFieldUpdateOperationsInput | string
-    memberId?: StringFieldUpdateOperationsInput | string
+    memberId?: NullableStringFieldUpdateOperationsInput | string | null
+    guestName?: NullableStringFieldUpdateOperationsInput | string | null
+    guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    guestPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    qrToken?: StringFieldUpdateOperationsInput | string
+    checkedInAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    checkedInById?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type EventRegistrationCreateManyInput = {
     id?: string
     eventId: string
-    memberId: string
+    memberId?: string | null
+    guestName?: string | null
+    guestEmail?: string | null
+    guestPhone?: string | null
+    qrToken: string
+    checkedInAt?: Date | string | null
+    checkedInById?: string | null
     createdAt?: Date | string
   }
 
   export type EventRegistrationUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
+    guestName?: NullableStringFieldUpdateOperationsInput | string | null
+    guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    guestPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    qrToken?: StringFieldUpdateOperationsInput | string
+    checkedInAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type EventRegistrationUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     eventId?: StringFieldUpdateOperationsInput | string
-    memberId?: StringFieldUpdateOperationsInput | string
+    memberId?: NullableStringFieldUpdateOperationsInput | string | null
+    guestName?: NullableStringFieldUpdateOperationsInput | string | null
+    guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    guestPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    qrToken?: StringFieldUpdateOperationsInput | string
+    checkedInAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    checkedInById?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -33491,15 +33738,16 @@ export namespace Prisma {
     isNot?: EventWhereInput
   }
 
-  export type EventRegistrationEventIdMemberIdCompoundUniqueInput = {
-    eventId: string
-    memberId: string
-  }
-
   export type EventRegistrationCountOrderByAggregateInput = {
     id?: SortOrder
     eventId?: SortOrder
     memberId?: SortOrder
+    guestName?: SortOrder
+    guestEmail?: SortOrder
+    guestPhone?: SortOrder
+    qrToken?: SortOrder
+    checkedInAt?: SortOrder
+    checkedInById?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -33507,6 +33755,12 @@ export namespace Prisma {
     id?: SortOrder
     eventId?: SortOrder
     memberId?: SortOrder
+    guestName?: SortOrder
+    guestEmail?: SortOrder
+    guestPhone?: SortOrder
+    qrToken?: SortOrder
+    checkedInAt?: SortOrder
+    checkedInById?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -33514,6 +33768,12 @@ export namespace Prisma {
     id?: SortOrder
     eventId?: SortOrder
     memberId?: SortOrder
+    guestName?: SortOrder
+    guestEmail?: SortOrder
+    guestPhone?: SortOrder
+    qrToken?: SortOrder
+    checkedInAt?: SortOrder
+    checkedInById?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -34483,6 +34743,13 @@ export namespace Prisma {
     connect?: AnnouncementWhereUniqueInput | AnnouncementWhereUniqueInput[]
   }
 
+  export type EventRegistrationCreateNestedManyWithoutCheckedInByInput = {
+    create?: XOR<EventRegistrationCreateWithoutCheckedInByInput, EventRegistrationUncheckedCreateWithoutCheckedInByInput> | EventRegistrationCreateWithoutCheckedInByInput[] | EventRegistrationUncheckedCreateWithoutCheckedInByInput[]
+    connectOrCreate?: EventRegistrationCreateOrConnectWithoutCheckedInByInput | EventRegistrationCreateOrConnectWithoutCheckedInByInput[]
+    createMany?: EventRegistrationCreateManyCheckedInByInputEnvelope
+    connect?: EventRegistrationWhereUniqueInput | EventRegistrationWhereUniqueInput[]
+  }
+
   export type GradingUncheckedCreateNestedManyWithoutMemberInput = {
     create?: XOR<GradingCreateWithoutMemberInput, GradingUncheckedCreateWithoutMemberInput> | GradingCreateWithoutMemberInput[] | GradingUncheckedCreateWithoutMemberInput[]
     connectOrCreate?: GradingCreateOrConnectWithoutMemberInput | GradingCreateOrConnectWithoutMemberInput[]
@@ -34551,6 +34818,13 @@ export namespace Prisma {
     connectOrCreate?: AnnouncementCreateOrConnectWithoutPostedByInput | AnnouncementCreateOrConnectWithoutPostedByInput[]
     createMany?: AnnouncementCreateManyPostedByInputEnvelope
     connect?: AnnouncementWhereUniqueInput | AnnouncementWhereUniqueInput[]
+  }
+
+  export type EventRegistrationUncheckedCreateNestedManyWithoutCheckedInByInput = {
+    create?: XOR<EventRegistrationCreateWithoutCheckedInByInput, EventRegistrationUncheckedCreateWithoutCheckedInByInput> | EventRegistrationCreateWithoutCheckedInByInput[] | EventRegistrationUncheckedCreateWithoutCheckedInByInput[]
+    connectOrCreate?: EventRegistrationCreateOrConnectWithoutCheckedInByInput | EventRegistrationCreateOrConnectWithoutCheckedInByInput[]
+    createMany?: EventRegistrationCreateManyCheckedInByInputEnvelope
+    connect?: EventRegistrationWhereUniqueInput | EventRegistrationWhereUniqueInput[]
   }
 
   export type EnumMemberRoleFieldUpdateOperationsInput = {
@@ -34711,6 +34985,20 @@ export namespace Prisma {
     deleteMany?: AnnouncementScalarWhereInput | AnnouncementScalarWhereInput[]
   }
 
+  export type EventRegistrationUpdateManyWithoutCheckedInByNestedInput = {
+    create?: XOR<EventRegistrationCreateWithoutCheckedInByInput, EventRegistrationUncheckedCreateWithoutCheckedInByInput> | EventRegistrationCreateWithoutCheckedInByInput[] | EventRegistrationUncheckedCreateWithoutCheckedInByInput[]
+    connectOrCreate?: EventRegistrationCreateOrConnectWithoutCheckedInByInput | EventRegistrationCreateOrConnectWithoutCheckedInByInput[]
+    upsert?: EventRegistrationUpsertWithWhereUniqueWithoutCheckedInByInput | EventRegistrationUpsertWithWhereUniqueWithoutCheckedInByInput[]
+    createMany?: EventRegistrationCreateManyCheckedInByInputEnvelope
+    set?: EventRegistrationWhereUniqueInput | EventRegistrationWhereUniqueInput[]
+    disconnect?: EventRegistrationWhereUniqueInput | EventRegistrationWhereUniqueInput[]
+    delete?: EventRegistrationWhereUniqueInput | EventRegistrationWhereUniqueInput[]
+    connect?: EventRegistrationWhereUniqueInput | EventRegistrationWhereUniqueInput[]
+    update?: EventRegistrationUpdateWithWhereUniqueWithoutCheckedInByInput | EventRegistrationUpdateWithWhereUniqueWithoutCheckedInByInput[]
+    updateMany?: EventRegistrationUpdateManyWithWhereWithoutCheckedInByInput | EventRegistrationUpdateManyWithWhereWithoutCheckedInByInput[]
+    deleteMany?: EventRegistrationScalarWhereInput | EventRegistrationScalarWhereInput[]
+  }
+
   export type GradingUncheckedUpdateManyWithoutMemberNestedInput = {
     create?: XOR<GradingCreateWithoutMemberInput, GradingUncheckedCreateWithoutMemberInput> | GradingCreateWithoutMemberInput[] | GradingUncheckedCreateWithoutMemberInput[]
     connectOrCreate?: GradingCreateOrConnectWithoutMemberInput | GradingCreateOrConnectWithoutMemberInput[]
@@ -34849,6 +35137,20 @@ export namespace Prisma {
     update?: AnnouncementUpdateWithWhereUniqueWithoutPostedByInput | AnnouncementUpdateWithWhereUniqueWithoutPostedByInput[]
     updateMany?: AnnouncementUpdateManyWithWhereWithoutPostedByInput | AnnouncementUpdateManyWithWhereWithoutPostedByInput[]
     deleteMany?: AnnouncementScalarWhereInput | AnnouncementScalarWhereInput[]
+  }
+
+  export type EventRegistrationUncheckedUpdateManyWithoutCheckedInByNestedInput = {
+    create?: XOR<EventRegistrationCreateWithoutCheckedInByInput, EventRegistrationUncheckedCreateWithoutCheckedInByInput> | EventRegistrationCreateWithoutCheckedInByInput[] | EventRegistrationUncheckedCreateWithoutCheckedInByInput[]
+    connectOrCreate?: EventRegistrationCreateOrConnectWithoutCheckedInByInput | EventRegistrationCreateOrConnectWithoutCheckedInByInput[]
+    upsert?: EventRegistrationUpsertWithWhereUniqueWithoutCheckedInByInput | EventRegistrationUpsertWithWhereUniqueWithoutCheckedInByInput[]
+    createMany?: EventRegistrationCreateManyCheckedInByInputEnvelope
+    set?: EventRegistrationWhereUniqueInput | EventRegistrationWhereUniqueInput[]
+    disconnect?: EventRegistrationWhereUniqueInput | EventRegistrationWhereUniqueInput[]
+    delete?: EventRegistrationWhereUniqueInput | EventRegistrationWhereUniqueInput[]
+    connect?: EventRegistrationWhereUniqueInput | EventRegistrationWhereUniqueInput[]
+    update?: EventRegistrationUpdateWithWhereUniqueWithoutCheckedInByInput | EventRegistrationUpdateWithWhereUniqueWithoutCheckedInByInput[]
+    updateMany?: EventRegistrationUpdateManyWithWhereWithoutCheckedInByInput | EventRegistrationUpdateManyWithWhereWithoutCheckedInByInput[]
+    deleteMany?: EventRegistrationScalarWhereInput | EventRegistrationScalarWhereInput[]
   }
 
   export type MemberCreateNestedOneWithoutAttendanceInput = {
@@ -35343,6 +35645,12 @@ export namespace Prisma {
     connect?: MemberWhereUniqueInput
   }
 
+  export type MemberCreateNestedOneWithoutEventCheckInsInput = {
+    create?: XOR<MemberCreateWithoutEventCheckInsInput, MemberUncheckedCreateWithoutEventCheckInsInput>
+    connectOrCreate?: MemberCreateOrConnectWithoutEventCheckInsInput
+    connect?: MemberWhereUniqueInput
+  }
+
   export type EventUpdateOneRequiredWithoutRegistrationsNestedInput = {
     create?: XOR<EventCreateWithoutRegistrationsInput, EventUncheckedCreateWithoutRegistrationsInput>
     connectOrCreate?: EventCreateOrConnectWithoutRegistrationsInput
@@ -35351,12 +35659,24 @@ export namespace Prisma {
     update?: XOR<XOR<EventUpdateToOneWithWhereWithoutRegistrationsInput, EventUpdateWithoutRegistrationsInput>, EventUncheckedUpdateWithoutRegistrationsInput>
   }
 
-  export type MemberUpdateOneRequiredWithoutEventRegistrationsNestedInput = {
+  export type MemberUpdateOneWithoutEventRegistrationsNestedInput = {
     create?: XOR<MemberCreateWithoutEventRegistrationsInput, MemberUncheckedCreateWithoutEventRegistrationsInput>
     connectOrCreate?: MemberCreateOrConnectWithoutEventRegistrationsInput
     upsert?: MemberUpsertWithoutEventRegistrationsInput
+    disconnect?: MemberWhereInput | boolean
+    delete?: MemberWhereInput | boolean
     connect?: MemberWhereUniqueInput
     update?: XOR<XOR<MemberUpdateToOneWithWhereWithoutEventRegistrationsInput, MemberUpdateWithoutEventRegistrationsInput>, MemberUncheckedUpdateWithoutEventRegistrationsInput>
+  }
+
+  export type MemberUpdateOneWithoutEventCheckInsNestedInput = {
+    create?: XOR<MemberCreateWithoutEventCheckInsInput, MemberUncheckedCreateWithoutEventCheckInsInput>
+    connectOrCreate?: MemberCreateOrConnectWithoutEventCheckInsInput
+    upsert?: MemberUpsertWithoutEventCheckInsInput
+    disconnect?: MemberWhereInput | boolean
+    delete?: MemberWhereInput | boolean
+    connect?: MemberWhereUniqueInput
+    update?: XOR<XOR<MemberUpdateToOneWithWhereWithoutEventCheckInsInput, MemberUpdateWithoutEventCheckInsInput>, MemberUncheckedUpdateWithoutEventCheckInsInput>
   }
 
   export type MemberCreateNestedOneWithoutNotificationsInput = {
@@ -36852,6 +37172,7 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestCreateNestedManyWithoutMemberInput
     eventsPosted?: EventCreateNestedManyWithoutPostedByInput
     announcementsPosted?: AnnouncementCreateNestedManyWithoutPostedByInput
+    eventCheckIns?: EventRegistrationCreateNestedManyWithoutCheckedInByInput
   }
 
   export type MemberUncheckedCreateWithoutDojoInput = {
@@ -36888,6 +37209,7 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutMemberInput
     eventsPosted?: EventUncheckedCreateNestedManyWithoutPostedByInput
     announcementsPosted?: AnnouncementUncheckedCreateNestedManyWithoutPostedByInput
+    eventCheckIns?: EventRegistrationUncheckedCreateNestedManyWithoutCheckedInByInput
   }
 
   export type MemberCreateOrConnectWithoutDojoInput = {
@@ -37372,13 +37694,25 @@ export namespace Prisma {
 
   export type EventRegistrationCreateWithoutMemberInput = {
     id?: string
+    guestName?: string | null
+    guestEmail?: string | null
+    guestPhone?: string | null
+    qrToken: string
+    checkedInAt?: Date | string | null
     createdAt?: Date | string
     event: EventCreateNestedOneWithoutRegistrationsInput
+    checkedInBy?: MemberCreateNestedOneWithoutEventCheckInsInput
   }
 
   export type EventRegistrationUncheckedCreateWithoutMemberInput = {
     id?: string
     eventId: string
+    guestName?: string | null
+    guestEmail?: string | null
+    guestPhone?: string | null
+    qrToken: string
+    checkedInAt?: Date | string | null
+    checkedInById?: string | null
     createdAt?: Date | string
   }
 
@@ -37662,6 +37996,40 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type EventRegistrationCreateWithoutCheckedInByInput = {
+    id?: string
+    guestName?: string | null
+    guestEmail?: string | null
+    guestPhone?: string | null
+    qrToken: string
+    checkedInAt?: Date | string | null
+    createdAt?: Date | string
+    event: EventCreateNestedOneWithoutRegistrationsInput
+    member?: MemberCreateNestedOneWithoutEventRegistrationsInput
+  }
+
+  export type EventRegistrationUncheckedCreateWithoutCheckedInByInput = {
+    id?: string
+    eventId: string
+    memberId?: string | null
+    guestName?: string | null
+    guestEmail?: string | null
+    guestPhone?: string | null
+    qrToken: string
+    checkedInAt?: Date | string | null
+    createdAt?: Date | string
+  }
+
+  export type EventRegistrationCreateOrConnectWithoutCheckedInByInput = {
+    where: EventRegistrationWhereUniqueInput
+    create: XOR<EventRegistrationCreateWithoutCheckedInByInput, EventRegistrationUncheckedCreateWithoutCheckedInByInput>
+  }
+
+  export type EventRegistrationCreateManyCheckedInByInputEnvelope = {
+    data: EventRegistrationCreateManyCheckedInByInput | EventRegistrationCreateManyCheckedInByInput[]
+    skipDuplicates?: boolean
+  }
+
   export type DojoUpsertWithoutMembersInput = {
     update: XOR<DojoUpdateWithoutMembersInput, DojoUncheckedUpdateWithoutMembersInput>
     create: XOR<DojoCreateWithoutMembersInput, DojoUncheckedCreateWithoutMembersInput>
@@ -37777,7 +38145,13 @@ export namespace Prisma {
     NOT?: EventRegistrationScalarWhereInput | EventRegistrationScalarWhereInput[]
     id?: UuidFilter<"EventRegistration"> | string
     eventId?: UuidFilter<"EventRegistration"> | string
-    memberId?: UuidFilter<"EventRegistration"> | string
+    memberId?: UuidNullableFilter<"EventRegistration"> | string | null
+    guestName?: StringNullableFilter<"EventRegistration"> | string | null
+    guestEmail?: StringNullableFilter<"EventRegistration"> | string | null
+    guestPhone?: StringNullableFilter<"EventRegistration"> | string | null
+    qrToken?: StringFilter<"EventRegistration"> | string
+    checkedInAt?: DateTimeNullableFilter<"EventRegistration"> | Date | string | null
+    checkedInById?: UuidNullableFilter<"EventRegistration"> | string | null
     createdAt?: DateTimeFilter<"EventRegistration"> | Date | string
   }
 
@@ -37920,6 +38294,22 @@ export namespace Prisma {
     data: XOR<AnnouncementUpdateManyMutationInput, AnnouncementUncheckedUpdateManyWithoutPostedByInput>
   }
 
+  export type EventRegistrationUpsertWithWhereUniqueWithoutCheckedInByInput = {
+    where: EventRegistrationWhereUniqueInput
+    update: XOR<EventRegistrationUpdateWithoutCheckedInByInput, EventRegistrationUncheckedUpdateWithoutCheckedInByInput>
+    create: XOR<EventRegistrationCreateWithoutCheckedInByInput, EventRegistrationUncheckedCreateWithoutCheckedInByInput>
+  }
+
+  export type EventRegistrationUpdateWithWhereUniqueWithoutCheckedInByInput = {
+    where: EventRegistrationWhereUniqueInput
+    data: XOR<EventRegistrationUpdateWithoutCheckedInByInput, EventRegistrationUncheckedUpdateWithoutCheckedInByInput>
+  }
+
+  export type EventRegistrationUpdateManyWithWhereWithoutCheckedInByInput = {
+    where: EventRegistrationScalarWhereInput
+    data: XOR<EventRegistrationUpdateManyMutationInput, EventRegistrationUncheckedUpdateManyWithoutCheckedInByInput>
+  }
+
   export type MemberCreateWithoutAttendanceInput = {
     id: string
     fullName: string
@@ -37954,6 +38344,7 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestCreateNestedManyWithoutMemberInput
     eventsPosted?: EventCreateNestedManyWithoutPostedByInput
     announcementsPosted?: AnnouncementCreateNestedManyWithoutPostedByInput
+    eventCheckIns?: EventRegistrationCreateNestedManyWithoutCheckedInByInput
   }
 
   export type MemberUncheckedCreateWithoutAttendanceInput = {
@@ -37990,6 +38381,7 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutMemberInput
     eventsPosted?: EventUncheckedCreateNestedManyWithoutPostedByInput
     announcementsPosted?: AnnouncementUncheckedCreateNestedManyWithoutPostedByInput
+    eventCheckIns?: EventRegistrationUncheckedCreateNestedManyWithoutCheckedInByInput
   }
 
   export type MemberCreateOrConnectWithoutAttendanceInput = {
@@ -38097,6 +38489,7 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestUpdateManyWithoutMemberNestedInput
     eventsPosted?: EventUpdateManyWithoutPostedByNestedInput
     announcementsPosted?: AnnouncementUpdateManyWithoutPostedByNestedInput
+    eventCheckIns?: EventRegistrationUpdateManyWithoutCheckedInByNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutAttendanceInput = {
@@ -38133,6 +38526,7 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutMemberNestedInput
     eventsPosted?: EventUncheckedUpdateManyWithoutPostedByNestedInput
     announcementsPosted?: AnnouncementUncheckedUpdateManyWithoutPostedByNestedInput
+    eventCheckIns?: EventRegistrationUncheckedUpdateManyWithoutCheckedInByNestedInput
   }
 
   export type DojoUpsertWithoutAttendanceInput = {
@@ -38400,6 +38794,7 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestCreateNestedManyWithoutMemberInput
     eventsPosted?: EventCreateNestedManyWithoutPostedByInput
     announcementsPosted?: AnnouncementCreateNestedManyWithoutPostedByInput
+    eventCheckIns?: EventRegistrationCreateNestedManyWithoutCheckedInByInput
   }
 
   export type MemberUncheckedCreateWithoutGradingApplicationsInput = {
@@ -38436,6 +38831,7 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutMemberInput
     eventsPosted?: EventUncheckedCreateNestedManyWithoutPostedByInput
     announcementsPosted?: AnnouncementUncheckedCreateNestedManyWithoutPostedByInput
+    eventCheckIns?: EventRegistrationUncheckedCreateNestedManyWithoutCheckedInByInput
   }
 
   export type MemberCreateOrConnectWithoutGradingApplicationsInput = {
@@ -38558,6 +38954,7 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestUpdateManyWithoutMemberNestedInput
     eventsPosted?: EventUpdateManyWithoutPostedByNestedInput
     announcementsPosted?: AnnouncementUpdateManyWithoutPostedByNestedInput
+    eventCheckIns?: EventRegistrationUpdateManyWithoutCheckedInByNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutGradingApplicationsInput = {
@@ -38594,6 +38991,7 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutMemberNestedInput
     eventsPosted?: EventUncheckedUpdateManyWithoutPostedByNestedInput
     announcementsPosted?: AnnouncementUncheckedUpdateManyWithoutPostedByNestedInput
+    eventCheckIns?: EventRegistrationUncheckedUpdateManyWithoutCheckedInByNestedInput
   }
 
   export type GradingEventUpsertWithoutApplicationsInput = {
@@ -38712,6 +39110,7 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestCreateNestedManyWithoutMemberInput
     eventsPosted?: EventCreateNestedManyWithoutPostedByInput
     announcementsPosted?: AnnouncementCreateNestedManyWithoutPostedByInput
+    eventCheckIns?: EventRegistrationCreateNestedManyWithoutCheckedInByInput
   }
 
   export type MemberUncheckedCreateWithoutGradingsInput = {
@@ -38748,6 +39147,7 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutMemberInput
     eventsPosted?: EventUncheckedCreateNestedManyWithoutPostedByInput
     announcementsPosted?: AnnouncementUncheckedCreateNestedManyWithoutPostedByInput
+    eventCheckIns?: EventRegistrationUncheckedCreateNestedManyWithoutCheckedInByInput
   }
 
   export type MemberCreateOrConnectWithoutGradingsInput = {
@@ -38947,6 +39347,7 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestUpdateManyWithoutMemberNestedInput
     eventsPosted?: EventUpdateManyWithoutPostedByNestedInput
     announcementsPosted?: AnnouncementUpdateManyWithoutPostedByNestedInput
+    eventCheckIns?: EventRegistrationUpdateManyWithoutCheckedInByNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutGradingsInput = {
@@ -38983,6 +39384,7 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutMemberNestedInput
     eventsPosted?: EventUncheckedUpdateManyWithoutPostedByNestedInput
     announcementsPosted?: AnnouncementUncheckedUpdateManyWithoutPostedByNestedInput
+    eventCheckIns?: EventRegistrationUncheckedUpdateManyWithoutCheckedInByNestedInput
   }
 
   export type GradingEventUpsertWithoutGradingsInput = {
@@ -39187,6 +39589,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantCreateNestedManyWithoutMemberInput
     eventsPosted?: EventCreateNestedManyWithoutPostedByInput
     announcementsPosted?: AnnouncementCreateNestedManyWithoutPostedByInput
+    eventCheckIns?: EventRegistrationCreateNestedManyWithoutCheckedInByInput
   }
 
   export type MemberUncheckedCreateWithoutCertificateRequestsInput = {
@@ -39223,6 +39626,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutMemberInput
     eventsPosted?: EventUncheckedCreateNestedManyWithoutPostedByInput
     announcementsPosted?: AnnouncementUncheckedCreateNestedManyWithoutPostedByInput
+    eventCheckIns?: EventRegistrationUncheckedCreateNestedManyWithoutCheckedInByInput
   }
 
   export type MemberCreateOrConnectWithoutCertificateRequestsInput = {
@@ -39412,6 +39816,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUpdateManyWithoutMemberNestedInput
     eventsPosted?: EventUpdateManyWithoutPostedByNestedInput
     announcementsPosted?: AnnouncementUpdateManyWithoutPostedByNestedInput
+    eventCheckIns?: EventRegistrationUpdateManyWithoutCheckedInByNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutCertificateRequestsInput = {
@@ -39448,6 +39853,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutMemberNestedInput
     eventsPosted?: EventUncheckedUpdateManyWithoutPostedByNestedInput
     announcementsPosted?: AnnouncementUncheckedUpdateManyWithoutPostedByNestedInput
+    eventCheckIns?: EventRegistrationUncheckedUpdateManyWithoutCheckedInByNestedInput
   }
 
   export type DojoUpsertWithoutCertificateRequestsInput = {
@@ -39564,13 +39970,25 @@ export namespace Prisma {
 
   export type EventRegistrationCreateWithoutEventInput = {
     id?: string
+    guestName?: string | null
+    guestEmail?: string | null
+    guestPhone?: string | null
+    qrToken: string
+    checkedInAt?: Date | string | null
     createdAt?: Date | string
-    member: MemberCreateNestedOneWithoutEventRegistrationsInput
+    member?: MemberCreateNestedOneWithoutEventRegistrationsInput
+    checkedInBy?: MemberCreateNestedOneWithoutEventCheckInsInput
   }
 
   export type EventRegistrationUncheckedCreateWithoutEventInput = {
     id?: string
-    memberId: string
+    memberId?: string | null
+    guestName?: string | null
+    guestEmail?: string | null
+    guestPhone?: string | null
+    qrToken: string
+    checkedInAt?: Date | string | null
+    checkedInById?: string | null
     createdAt?: Date | string
   }
 
@@ -39618,6 +40036,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantCreateNestedManyWithoutMemberInput
     certificateRequests?: CertificateRequestCreateNestedManyWithoutMemberInput
     announcementsPosted?: AnnouncementCreateNestedManyWithoutPostedByInput
+    eventCheckIns?: EventRegistrationCreateNestedManyWithoutCheckedInByInput
   }
 
   export type MemberUncheckedCreateWithoutEventsPostedInput = {
@@ -39654,6 +40073,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutMemberInput
     certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutMemberInput
     announcementsPosted?: AnnouncementUncheckedCreateNestedManyWithoutPostedByInput
+    eventCheckIns?: EventRegistrationUncheckedCreateNestedManyWithoutCheckedInByInput
   }
 
   export type MemberCreateOrConnectWithoutEventsPostedInput = {
@@ -39777,6 +40197,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUpdateManyWithoutMemberNestedInput
     certificateRequests?: CertificateRequestUpdateManyWithoutMemberNestedInput
     announcementsPosted?: AnnouncementUpdateManyWithoutPostedByNestedInput
+    eventCheckIns?: EventRegistrationUpdateManyWithoutCheckedInByNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutEventsPostedInput = {
@@ -39813,6 +40234,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutMemberNestedInput
     certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutMemberNestedInput
     announcementsPosted?: AnnouncementUncheckedUpdateManyWithoutPostedByNestedInput
+    eventCheckIns?: EventRegistrationUncheckedUpdateManyWithoutCheckedInByNestedInput
   }
 
   export type DojoUpsertWithoutEventsInput = {
@@ -39910,6 +40332,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantCreateNestedManyWithoutMemberInput
     certificateRequests?: CertificateRequestCreateNestedManyWithoutMemberInput
     eventsPosted?: EventCreateNestedManyWithoutPostedByInput
+    eventCheckIns?: EventRegistrationCreateNestedManyWithoutCheckedInByInput
   }
 
   export type MemberUncheckedCreateWithoutAnnouncementsPostedInput = {
@@ -39946,6 +40369,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutMemberInput
     certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutMemberInput
     eventsPosted?: EventUncheckedCreateNestedManyWithoutPostedByInput
+    eventCheckIns?: EventRegistrationUncheckedCreateNestedManyWithoutCheckedInByInput
   }
 
   export type MemberCreateOrConnectWithoutAnnouncementsPostedInput = {
@@ -40053,6 +40477,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUpdateManyWithoutMemberNestedInput
     certificateRequests?: CertificateRequestUpdateManyWithoutMemberNestedInput
     eventsPosted?: EventUpdateManyWithoutPostedByNestedInput
+    eventCheckIns?: EventRegistrationUpdateManyWithoutCheckedInByNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutAnnouncementsPostedInput = {
@@ -40089,6 +40514,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutMemberNestedInput
     certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutMemberNestedInput
     eventsPosted?: EventUncheckedUpdateManyWithoutPostedByNestedInput
+    eventCheckIns?: EventRegistrationUncheckedUpdateManyWithoutCheckedInByNestedInput
   }
 
   export type DojoUpsertWithoutAnnouncementsInput = {
@@ -40227,6 +40653,7 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestCreateNestedManyWithoutMemberInput
     eventsPosted?: EventCreateNestedManyWithoutPostedByInput
     announcementsPosted?: AnnouncementCreateNestedManyWithoutPostedByInput
+    eventCheckIns?: EventRegistrationCreateNestedManyWithoutCheckedInByInput
   }
 
   export type MemberUncheckedCreateWithoutEventRegistrationsInput = {
@@ -40263,11 +40690,91 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutMemberInput
     eventsPosted?: EventUncheckedCreateNestedManyWithoutPostedByInput
     announcementsPosted?: AnnouncementUncheckedCreateNestedManyWithoutPostedByInput
+    eventCheckIns?: EventRegistrationUncheckedCreateNestedManyWithoutCheckedInByInput
   }
 
   export type MemberCreateOrConnectWithoutEventRegistrationsInput = {
     where: MemberWhereUniqueInput
     create: XOR<MemberCreateWithoutEventRegistrationsInput, MemberUncheckedCreateWithoutEventRegistrationsInput>
+  }
+
+  export type MemberCreateWithoutEventCheckInsInput = {
+    id: string
+    fullName: string
+    email: string
+    phone?: string | null
+    avatarUrl?: string | null
+    role?: $Enums.MemberRole
+    memberNumber?: string | null
+    currentRank?: string
+    joinDate?: Date | string
+    expiryDate?: Date | string | null
+    isActive?: boolean
+    onboardingComplete?: boolean
+    membershipStatus?: $Enums.MembershipStatus
+    dateOfBirth?: Date | string | null
+    bloodGroup?: string | null
+    address?: string | null
+    nationalId?: string | null
+    fatherName?: string | null
+    motherName?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    dojo?: DojoCreateNestedOneWithoutMembersInput
+    gradings?: GradingCreateNestedManyWithoutMemberInput
+    gradingApplications?: GradingApplicationCreateNestedManyWithoutMemberInput
+    eventRegistrations?: EventRegistrationCreateNestedManyWithoutMemberInput
+    notifications?: NotificationCreateNestedManyWithoutMemberInput
+    orders?: ShopOrderCreateNestedManyWithoutMemberInput
+    attendance?: AttendanceCreateNestedManyWithoutMemberInput
+    tournamentEntries?: TournamentParticipantCreateNestedManyWithoutMemberInput
+    certificateRequests?: CertificateRequestCreateNestedManyWithoutMemberInput
+    eventsPosted?: EventCreateNestedManyWithoutPostedByInput
+    announcementsPosted?: AnnouncementCreateNestedManyWithoutPostedByInput
+  }
+
+  export type MemberUncheckedCreateWithoutEventCheckInsInput = {
+    id: string
+    fullName: string
+    email: string
+    phone?: string | null
+    avatarUrl?: string | null
+    role?: $Enums.MemberRole
+    memberNumber?: string | null
+    currentRank?: string
+    joinDate?: Date | string
+    expiryDate?: Date | string | null
+    isActive?: boolean
+    dojoId?: string | null
+    onboardingComplete?: boolean
+    membershipStatus?: $Enums.MembershipStatus
+    dateOfBirth?: Date | string | null
+    bloodGroup?: string | null
+    address?: string | null
+    nationalId?: string | null
+    fatherName?: string | null
+    motherName?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    gradings?: GradingUncheckedCreateNestedManyWithoutMemberInput
+    gradingApplications?: GradingApplicationUncheckedCreateNestedManyWithoutMemberInput
+    eventRegistrations?: EventRegistrationUncheckedCreateNestedManyWithoutMemberInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutMemberInput
+    orders?: ShopOrderUncheckedCreateNestedManyWithoutMemberInput
+    attendance?: AttendanceUncheckedCreateNestedManyWithoutMemberInput
+    tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutMemberInput
+    certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutMemberInput
+    eventsPosted?: EventUncheckedCreateNestedManyWithoutPostedByInput
+    announcementsPosted?: AnnouncementUncheckedCreateNestedManyWithoutPostedByInput
+  }
+
+  export type MemberCreateOrConnectWithoutEventCheckInsInput = {
+    where: MemberWhereUniqueInput
+    create: XOR<MemberCreateWithoutEventCheckInsInput, MemberUncheckedCreateWithoutEventCheckInsInput>
   }
 
   export type EventUpsertWithoutRegistrationsInput = {
@@ -40362,6 +40869,7 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestUpdateManyWithoutMemberNestedInput
     eventsPosted?: EventUpdateManyWithoutPostedByNestedInput
     announcementsPosted?: AnnouncementUpdateManyWithoutPostedByNestedInput
+    eventCheckIns?: EventRegistrationUpdateManyWithoutCheckedInByNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutEventRegistrationsInput = {
@@ -40391,6 +40899,92 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     gradings?: GradingUncheckedUpdateManyWithoutMemberNestedInput
     gradingApplications?: GradingApplicationUncheckedUpdateManyWithoutMemberNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutMemberNestedInput
+    orders?: ShopOrderUncheckedUpdateManyWithoutMemberNestedInput
+    attendance?: AttendanceUncheckedUpdateManyWithoutMemberNestedInput
+    tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutMemberNestedInput
+    certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutMemberNestedInput
+    eventsPosted?: EventUncheckedUpdateManyWithoutPostedByNestedInput
+    announcementsPosted?: AnnouncementUncheckedUpdateManyWithoutPostedByNestedInput
+    eventCheckIns?: EventRegistrationUncheckedUpdateManyWithoutCheckedInByNestedInput
+  }
+
+  export type MemberUpsertWithoutEventCheckInsInput = {
+    update: XOR<MemberUpdateWithoutEventCheckInsInput, MemberUncheckedUpdateWithoutEventCheckInsInput>
+    create: XOR<MemberCreateWithoutEventCheckInsInput, MemberUncheckedCreateWithoutEventCheckInsInput>
+    where?: MemberWhereInput
+  }
+
+  export type MemberUpdateToOneWithWhereWithoutEventCheckInsInput = {
+    where?: MemberWhereInput
+    data: XOR<MemberUpdateWithoutEventCheckInsInput, MemberUncheckedUpdateWithoutEventCheckInsInput>
+  }
+
+  export type MemberUpdateWithoutEventCheckInsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fullName?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumMemberRoleFieldUpdateOperationsInput | $Enums.MemberRole
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    currentRank?: StringFieldUpdateOperationsInput | string
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    onboardingComplete?: BoolFieldUpdateOperationsInput | boolean
+    membershipStatus?: EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    dojo?: DojoUpdateOneWithoutMembersNestedInput
+    gradings?: GradingUpdateManyWithoutMemberNestedInput
+    gradingApplications?: GradingApplicationUpdateManyWithoutMemberNestedInput
+    eventRegistrations?: EventRegistrationUpdateManyWithoutMemberNestedInput
+    notifications?: NotificationUpdateManyWithoutMemberNestedInput
+    orders?: ShopOrderUpdateManyWithoutMemberNestedInput
+    attendance?: AttendanceUpdateManyWithoutMemberNestedInput
+    tournamentEntries?: TournamentParticipantUpdateManyWithoutMemberNestedInput
+    certificateRequests?: CertificateRequestUpdateManyWithoutMemberNestedInput
+    eventsPosted?: EventUpdateManyWithoutPostedByNestedInput
+    announcementsPosted?: AnnouncementUpdateManyWithoutPostedByNestedInput
+  }
+
+  export type MemberUncheckedUpdateWithoutEventCheckInsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fullName?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumMemberRoleFieldUpdateOperationsInput | $Enums.MemberRole
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    currentRank?: StringFieldUpdateOperationsInput | string
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    dojoId?: NullableStringFieldUpdateOperationsInput | string | null
+    onboardingComplete?: BoolFieldUpdateOperationsInput | boolean
+    membershipStatus?: EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    gradings?: GradingUncheckedUpdateManyWithoutMemberNestedInput
+    gradingApplications?: GradingApplicationUncheckedUpdateManyWithoutMemberNestedInput
+    eventRegistrations?: EventRegistrationUncheckedUpdateManyWithoutMemberNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutMemberNestedInput
     orders?: ShopOrderUncheckedUpdateManyWithoutMemberNestedInput
     attendance?: AttendanceUncheckedUpdateManyWithoutMemberNestedInput
@@ -40434,6 +41028,7 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestCreateNestedManyWithoutMemberInput
     eventsPosted?: EventCreateNestedManyWithoutPostedByInput
     announcementsPosted?: AnnouncementCreateNestedManyWithoutPostedByInput
+    eventCheckIns?: EventRegistrationCreateNestedManyWithoutCheckedInByInput
   }
 
   export type MemberUncheckedCreateWithoutNotificationsInput = {
@@ -40470,6 +41065,7 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutMemberInput
     eventsPosted?: EventUncheckedCreateNestedManyWithoutPostedByInput
     announcementsPosted?: AnnouncementUncheckedCreateNestedManyWithoutPostedByInput
+    eventCheckIns?: EventRegistrationUncheckedCreateNestedManyWithoutCheckedInByInput
   }
 
   export type MemberCreateOrConnectWithoutNotificationsInput = {
@@ -40522,6 +41118,7 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestUpdateManyWithoutMemberNestedInput
     eventsPosted?: EventUpdateManyWithoutPostedByNestedInput
     announcementsPosted?: AnnouncementUpdateManyWithoutPostedByNestedInput
+    eventCheckIns?: EventRegistrationUpdateManyWithoutCheckedInByNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutNotificationsInput = {
@@ -40558,6 +41155,7 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutMemberNestedInput
     eventsPosted?: EventUncheckedUpdateManyWithoutPostedByNestedInput
     announcementsPosted?: AnnouncementUncheckedUpdateManyWithoutPostedByNestedInput
+    eventCheckIns?: EventRegistrationUncheckedUpdateManyWithoutCheckedInByNestedInput
   }
 
   export type ShopOrderItemCreateWithoutProductInput = {
@@ -40645,6 +41243,7 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestCreateNestedManyWithoutMemberInput
     eventsPosted?: EventCreateNestedManyWithoutPostedByInput
     announcementsPosted?: AnnouncementCreateNestedManyWithoutPostedByInput
+    eventCheckIns?: EventRegistrationCreateNestedManyWithoutCheckedInByInput
   }
 
   export type MemberUncheckedCreateWithoutOrdersInput = {
@@ -40681,6 +41280,7 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutMemberInput
     eventsPosted?: EventUncheckedCreateNestedManyWithoutPostedByInput
     announcementsPosted?: AnnouncementUncheckedCreateNestedManyWithoutPostedByInput
+    eventCheckIns?: EventRegistrationUncheckedCreateNestedManyWithoutCheckedInByInput
   }
 
   export type MemberCreateOrConnectWithoutOrdersInput = {
@@ -40911,6 +41511,7 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestUpdateManyWithoutMemberNestedInput
     eventsPosted?: EventUpdateManyWithoutPostedByNestedInput
     announcementsPosted?: AnnouncementUpdateManyWithoutPostedByNestedInput
+    eventCheckIns?: EventRegistrationUpdateManyWithoutCheckedInByNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutOrdersInput = {
@@ -40947,6 +41548,7 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutMemberNestedInput
     eventsPosted?: EventUncheckedUpdateManyWithoutPostedByNestedInput
     announcementsPosted?: AnnouncementUncheckedUpdateManyWithoutPostedByNestedInput
+    eventCheckIns?: EventRegistrationUncheckedUpdateManyWithoutCheckedInByNestedInput
   }
 
   export type DojoUpsertWithoutRenewalOrdersInput = {
@@ -41441,6 +42043,7 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestCreateNestedManyWithoutMemberInput
     eventsPosted?: EventCreateNestedManyWithoutPostedByInput
     announcementsPosted?: AnnouncementCreateNestedManyWithoutPostedByInput
+    eventCheckIns?: EventRegistrationCreateNestedManyWithoutCheckedInByInput
   }
 
   export type MemberUncheckedCreateWithoutTournamentEntriesInput = {
@@ -41477,6 +42080,7 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutMemberInput
     eventsPosted?: EventUncheckedCreateNestedManyWithoutPostedByInput
     announcementsPosted?: AnnouncementUncheckedCreateNestedManyWithoutPostedByInput
+    eventCheckIns?: EventRegistrationUncheckedCreateNestedManyWithoutCheckedInByInput
   }
 
   export type MemberCreateOrConnectWithoutTournamentEntriesInput = {
@@ -41660,6 +42264,7 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestUpdateManyWithoutMemberNestedInput
     eventsPosted?: EventUpdateManyWithoutPostedByNestedInput
     announcementsPosted?: AnnouncementUpdateManyWithoutPostedByNestedInput
+    eventCheckIns?: EventRegistrationUpdateManyWithoutCheckedInByNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutTournamentEntriesInput = {
@@ -41696,6 +42301,7 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutMemberNestedInput
     eventsPosted?: EventUncheckedUpdateManyWithoutPostedByNestedInput
     announcementsPosted?: AnnouncementUncheckedUpdateManyWithoutPostedByNestedInput
+    eventCheckIns?: EventRegistrationUncheckedUpdateManyWithoutCheckedInByNestedInput
   }
 
   export type TournamentMatchUpsertWithWhereUniqueWithoutParticipant1Input = {
@@ -42510,6 +43116,7 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestUpdateManyWithoutMemberNestedInput
     eventsPosted?: EventUpdateManyWithoutPostedByNestedInput
     announcementsPosted?: AnnouncementUpdateManyWithoutPostedByNestedInput
+    eventCheckIns?: EventRegistrationUpdateManyWithoutCheckedInByNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutDojoInput = {
@@ -42546,6 +43153,7 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutMemberNestedInput
     eventsPosted?: EventUncheckedUpdateManyWithoutPostedByNestedInput
     announcementsPosted?: AnnouncementUncheckedUpdateManyWithoutPostedByNestedInput
+    eventCheckIns?: EventRegistrationUncheckedUpdateManyWithoutCheckedInByNestedInput
   }
 
   export type MemberUncheckedUpdateManyWithoutDojoInput = {
@@ -42721,6 +43329,12 @@ export namespace Prisma {
   export type EventRegistrationCreateManyMemberInput = {
     id?: string
     eventId: string
+    guestName?: string | null
+    guestEmail?: string | null
+    guestPhone?: string | null
+    qrToken: string
+    checkedInAt?: Date | string | null
+    checkedInById?: string | null
     createdAt?: Date | string
   }
 
@@ -42818,6 +43432,18 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
+  export type EventRegistrationCreateManyCheckedInByInput = {
+    id?: string
+    eventId: string
+    memberId?: string | null
+    guestName?: string | null
+    guestEmail?: string | null
+    guestPhone?: string | null
+    qrToken: string
+    checkedInAt?: Date | string | null
+    createdAt?: Date | string
+  }
+
   export type GradingUpdateWithoutMemberInput = {
     id?: StringFieldUpdateOperationsInput | string
     result?: EnumGradingResultFieldUpdateOperationsInput | $Enums.GradingResult
@@ -42888,19 +43514,37 @@ export namespace Prisma {
 
   export type EventRegistrationUpdateWithoutMemberInput = {
     id?: StringFieldUpdateOperationsInput | string
+    guestName?: NullableStringFieldUpdateOperationsInput | string | null
+    guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    guestPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    qrToken?: StringFieldUpdateOperationsInput | string
+    checkedInAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     event?: EventUpdateOneRequiredWithoutRegistrationsNestedInput
+    checkedInBy?: MemberUpdateOneWithoutEventCheckInsNestedInput
   }
 
   export type EventRegistrationUncheckedUpdateWithoutMemberInput = {
     id?: StringFieldUpdateOperationsInput | string
     eventId?: StringFieldUpdateOperationsInput | string
+    guestName?: NullableStringFieldUpdateOperationsInput | string | null
+    guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    guestPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    qrToken?: StringFieldUpdateOperationsInput | string
+    checkedInAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    checkedInById?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type EventRegistrationUncheckedUpdateManyWithoutMemberInput = {
     id?: StringFieldUpdateOperationsInput | string
     eventId?: StringFieldUpdateOperationsInput | string
+    guestName?: NullableStringFieldUpdateOperationsInput | string | null
+    guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    guestPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    qrToken?: StringFieldUpdateOperationsInput | string
+    checkedInAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    checkedInById?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -43198,6 +43842,42 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type EventRegistrationUpdateWithoutCheckedInByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    guestName?: NullableStringFieldUpdateOperationsInput | string | null
+    guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    guestPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    qrToken?: StringFieldUpdateOperationsInput | string
+    checkedInAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    event?: EventUpdateOneRequiredWithoutRegistrationsNestedInput
+    member?: MemberUpdateOneWithoutEventRegistrationsNestedInput
+  }
+
+  export type EventRegistrationUncheckedUpdateWithoutCheckedInByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    eventId?: StringFieldUpdateOperationsInput | string
+    memberId?: NullableStringFieldUpdateOperationsInput | string | null
+    guestName?: NullableStringFieldUpdateOperationsInput | string | null
+    guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    guestPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    qrToken?: StringFieldUpdateOperationsInput | string
+    checkedInAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type EventRegistrationUncheckedUpdateManyWithoutCheckedInByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    eventId?: StringFieldUpdateOperationsInput | string
+    memberId?: NullableStringFieldUpdateOperationsInput | string | null
+    guestName?: NullableStringFieldUpdateOperationsInput | string | null
+    guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    guestPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    qrToken?: StringFieldUpdateOperationsInput | string
+    checkedInAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type GradingCreateManyGradingEventInput = {
     id?: string
     memberId: string
@@ -43358,25 +44038,49 @@ export namespace Prisma {
 
   export type EventRegistrationCreateManyEventInput = {
     id?: string
-    memberId: string
+    memberId?: string | null
+    guestName?: string | null
+    guestEmail?: string | null
+    guestPhone?: string | null
+    qrToken: string
+    checkedInAt?: Date | string | null
+    checkedInById?: string | null
     createdAt?: Date | string
   }
 
   export type EventRegistrationUpdateWithoutEventInput = {
     id?: StringFieldUpdateOperationsInput | string
+    guestName?: NullableStringFieldUpdateOperationsInput | string | null
+    guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    guestPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    qrToken?: StringFieldUpdateOperationsInput | string
+    checkedInAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    member?: MemberUpdateOneRequiredWithoutEventRegistrationsNestedInput
+    member?: MemberUpdateOneWithoutEventRegistrationsNestedInput
+    checkedInBy?: MemberUpdateOneWithoutEventCheckInsNestedInput
   }
 
   export type EventRegistrationUncheckedUpdateWithoutEventInput = {
     id?: StringFieldUpdateOperationsInput | string
-    memberId?: StringFieldUpdateOperationsInput | string
+    memberId?: NullableStringFieldUpdateOperationsInput | string | null
+    guestName?: NullableStringFieldUpdateOperationsInput | string | null
+    guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    guestPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    qrToken?: StringFieldUpdateOperationsInput | string
+    checkedInAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    checkedInById?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type EventRegistrationUncheckedUpdateManyWithoutEventInput = {
     id?: StringFieldUpdateOperationsInput | string
-    memberId?: StringFieldUpdateOperationsInput | string
+    memberId?: NullableStringFieldUpdateOperationsInput | string | null
+    guestName?: NullableStringFieldUpdateOperationsInput | string | null
+    guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    guestPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    qrToken?: StringFieldUpdateOperationsInput | string
+    checkedInAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    checkedInById?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 

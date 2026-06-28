@@ -116,3 +116,14 @@
 @keyframes shimmer {
   100% { transform: translateX(100%); }
 }
+
+/* Participation card — keep print output minimal: A4 margins, no extra UI. */
+@media print {
+  @page { margin: 12mm; }
+  body { background: white !important; }
+  /* Preserve backgrounds and brand colors — browsers strip these by default. */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+}

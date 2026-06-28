@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { MapPin, Users } from "lucide-react";
+import Link from "next/link";
+import { MapPin, Users, ArrowRight } from "lucide-react";
 import DojoPageHeader from "@/components/dojo/page-header";
 import EventForm from "@/components/dojo/events/event-form";
 import DeleteEventButton from "@/components/dojo/events/delete-button";
@@ -133,6 +134,13 @@ export default async function EventsPage({
                                         : ""}
                                 </li>
                             </ul>
+                            <Link
+                                href={`/portal/dojo/events/${e.id}/participants`}
+                                className="mt-4 inline-flex items-center gap-1.5 text-[10px] tracking-widest uppercase font-bold text-accent-red hover:underline"
+                            >
+                                View participants
+                                <ArrowRight size={10} />
+                            </Link>
                         </div>
                     ))}
                 </div>

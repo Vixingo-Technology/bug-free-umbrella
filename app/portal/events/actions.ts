@@ -1,8 +1,17 @@
 "use server";
 
+import { randomBytes } from "node:crypto";
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { prisma } from "@/lib/prisma";
+
+function urlSafeToken(bytes = 18): string {
+    return randomBytes(bytes)
+        .toString("base64")
+        .replace(/\+/g, "-")
+        .replace(/\//g, "_")
+        .replace(/=+$/g, "");
+}
 
 export async function registerForEventAction(eventId: string) {
     const supabase = await createClient();
@@ -10,8 +19,8 @@ export async function registerForEventAction(eventId: string) {
     if (!user) return { error: "Not authenticated." };
 
     try {
-        const existing = await prisma.eventRegistration.findUnique({
-            where: { eventId_memberId: { eventId, memberId: user.id } },
+        const existing = await prisma.eventRegistration.findFirst({
+            where: { eventId, memberId: user.id },
         });
         if (existing) return { error: "You are already registered for this event." };
 
@@ -23,13 +32,14 @@ export async function registerForEventAction(eventId: string) {
         }
 
         await prisma.eventRegistration.create({
-            data: { eventId, memberId: user.id },
+            data: { eventId, memberId: user.id, qrToken: urlSafeToken() },
         });
 
         revalidatePath("/portal/events");
         return { success: true };
-    } catch (err: any) {
-        return { error: err?.message ?? "Registration failed." };
+    } catch (err: unknown) {
+        const message = err instanceof Error ? err.message : "Registration failed.";
+        return { error: message };
     }
 }
 
@@ -44,7 +54,8 @@ export async function cancelEventRegistrationAction(eventId: string) {
         });
         revalidatePath("/portal/events");
         return { success: true };
-    } catch (err: any) {
-        return { error: err?.message ?? "Cancellation failed." };
+    } catch (err: unknown) {
+        const message = err instanceof Error ? err.message : "Cancellation failed.";
+        return { error: message };
     }
 }

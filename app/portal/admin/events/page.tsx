@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { MapPin, Users } from "lucide-react";
+import Link from "next/link";
+import { MapPin, Users, ArrowRight } from "lucide-react";
 import EventForm from "@/components/dojo/events/event-form";
 import DeleteEventButton from "@/components/dojo/events/delete-button";
 import PostedNewTabs, { type TabValue } from "@/components/portal/posted-new-tabs";
@@ -151,6 +152,13 @@ export default async function AdminEventsPage({
                                         : ""}
                                 </li>
                             </ul>
+                            <Link
+                                href={`/portal/admin/events/${e.id}/participants`}
+                                className="mt-4 inline-flex items-center gap-1.5 text-[10px] tracking-widest uppercase font-bold text-accent-red hover:underline"
+                            >
+                                View participants
+                                <ArrowRight size={10} />
+                            </Link>
                         </div>
                     ))}
                 </div>

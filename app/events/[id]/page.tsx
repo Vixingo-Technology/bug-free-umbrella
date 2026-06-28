@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, Calendar, MapPin, Users } from "lucide-react";
+import { ArrowLeft, Calendar, MapPin, Users, UserPlus } from "lucide-react";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import AttachmentViewer from "@/components/attachment-viewer";
@@ -53,6 +53,11 @@ export default async function EventDetailPage({ params }: Props) {
     });
 
     if (!e || !e.isPublished) notFound();
+
+    // eslint-disable-next-line react-hooks/purity -- server component re-renders per request (force-dynamic)
+    const isPast = e.eventDate.getTime() < Date.now();
+    const isFull =
+        e.maxCapacity !== null && e._count.registrations >= e.maxCapacity;
 
     return (
         <main className="min-h-screen bg-bg-deep w-full overflow-hidden">
@@ -157,6 +162,36 @@ export default async function EventDetailPage({ params }: Props) {
                                 type={e.attachmentType}
                                 title={e.title}
                             />
+                        </div>
+                    )}
+
+                    {isPast ? (
+                        <div className="mt-12 bg-zinc-100 border border-zinc-200 rounded-sm p-6 text-center text-sm text-zinc-500">
+                            This event has already taken place.
+                        </div>
+                    ) : (
+                        <div className="mt-12 bg-white border border-zinc-200 rounded-sm shadow-sm p-6 md:p-8 flex flex-col md:flex-row md:items-center justify-between gap-6">
+                            <div>
+                                <h3 className="font-serif font-bold text-lg text-zinc-900 mb-1">
+                                    Join this event
+                                </h3>
+                                <p className="text-sm text-zinc-600">
+                                    Register in under a minute. You&apos;ll get a participation card with a QR code to show at the door.
+                                </p>
+                            </div>
+                            {isFull ? (
+                                <span className="inline-flex items-center justify-center px-6 py-3 text-xs font-bold tracking-widest uppercase border border-zinc-200 bg-zinc-50 text-zinc-400 rounded-sm">
+                                    Fully booked
+                                </span>
+                            ) : (
+                                <Link
+                                    href={`/events/${e.id}/register`}
+                                    className="inline-flex items-center justify-center gap-2 bg-accent-red text-white px-8 py-3 text-xs font-bold tracking-widest uppercase hover:bg-accent-red/90 transition-colors rounded-sm shrink-0"
+                                >
+                                    <UserPlus size={14} />
+                                    Register now
+                                </Link>
+                            )}
                         </div>
                     )}
                 </div>

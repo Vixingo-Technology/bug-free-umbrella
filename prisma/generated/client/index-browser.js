@@ -311,6 +311,12 @@ exports.Prisma.EventRegistrationScalarFieldEnum = {
   id: 'id',
   eventId: 'eventId',
   memberId: 'memberId',
+  guestName: 'guestName',
+  guestEmail: 'guestEmail',
+  guestPhone: 'guestPhone',
+  qrToken: 'qrToken',
+  checkedInAt: 'checkedInAt',
+  checkedInById: 'checkedInById',
   createdAt: 'createdAt'
 };
 
