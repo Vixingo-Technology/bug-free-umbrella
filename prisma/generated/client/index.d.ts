@@ -69,6 +69,11 @@ export type SystemSettings = $Result.DefaultSelection<Prisma.$SystemSettingsPayl
  */
 export type Event = $Result.DefaultSelection<Prisma.$EventPayload>
 /**
+ * Model Announcement
+ * 
+ */
+export type Announcement = $Result.DefaultSelection<Prisma.$AnnouncementPayload>
+/**
  * Model EventRegistration
  * 
  */
@@ -188,6 +193,25 @@ export const CertificateRequestStatus: {
 export type CertificateRequestStatus = (typeof CertificateRequestStatus)[keyof typeof CertificateRequestStatus]
 
 
+export const EventCategory: {
+  BELT_TEST: 'BELT_TEST',
+  TOURNAMENT: 'TOURNAMENT',
+  SEMINAR: 'SEMINAR',
+  TRAINING_CAMP: 'TRAINING_CAMP',
+  OTHER: 'OTHER'
+};
+
+export type EventCategory = (typeof EventCategory)[keyof typeof EventCategory]
+
+
+export const AttachmentType: {
+  IMAGE: 'IMAGE',
+  PDF: 'PDF'
+};
+
+export type AttachmentType = (typeof AttachmentType)[keyof typeof AttachmentType]
+
+
 export const DojoApplicationStatus: {
   PENDING_PAYMENT: 'PENDING_PAYMENT',
   PAID: 'PAID',
@@ -226,6 +250,14 @@ export const NotificationType: typeof $Enums.NotificationType
 export type CertificateRequestStatus = $Enums.CertificateRequestStatus
 
 export const CertificateRequestStatus: typeof $Enums.CertificateRequestStatus
+
+export type EventCategory = $Enums.EventCategory
+
+export const EventCategory: typeof $Enums.EventCategory
+
+export type AttachmentType = $Enums.AttachmentType
+
+export const AttachmentType: typeof $Enums.AttachmentType
 
 export type DojoApplicationStatus = $Enums.DojoApplicationStatus
 
@@ -461,6 +493,16 @@ export class PrismaClient<
     * ```
     */
   get event(): Prisma.EventDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.announcement`: Exposes CRUD operations for the **Announcement** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Announcements
+    * const announcements = await prisma.announcement.findMany()
+    * ```
+    */
+  get announcement(): Prisma.AnnouncementDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.eventRegistration`: Exposes CRUD operations for the **EventRegistration** model.
@@ -986,6 +1028,7 @@ export namespace Prisma {
     CertificateRequest: 'CertificateRequest',
     SystemSettings: 'SystemSettings',
     Event: 'Event',
+    Announcement: 'Announcement',
     EventRegistration: 'EventRegistration',
     Notification: 'Notification',
     ShopProduct: 'ShopProduct',
@@ -1009,7 +1052,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "beltRank" | "dojo" | "dojoApplication" | "member" | "attendance" | "gradingEvent" | "gradingApplication" | "grading" | "certificateRequest" | "systemSettings" | "event" | "eventRegistration" | "notification" | "shopProduct" | "shopOrder" | "shopOrderItem" | "tournament" | "tournamentParticipant" | "tournamentMatch"
+      modelProps: "beltRank" | "dojo" | "dojoApplication" | "member" | "attendance" | "gradingEvent" | "gradingApplication" | "grading" | "certificateRequest" | "systemSettings" | "event" | "announcement" | "eventRegistration" | "notification" | "shopProduct" | "shopOrder" | "shopOrderItem" | "tournament" | "tournamentParticipant" | "tournamentMatch"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1827,6 +1870,80 @@ export namespace Prisma {
           }
         }
       }
+      Announcement: {
+        payload: Prisma.$AnnouncementPayload<ExtArgs>
+        fields: Prisma.AnnouncementFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.AnnouncementFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AnnouncementPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.AnnouncementFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AnnouncementPayload>
+          }
+          findFirst: {
+            args: Prisma.AnnouncementFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AnnouncementPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.AnnouncementFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AnnouncementPayload>
+          }
+          findMany: {
+            args: Prisma.AnnouncementFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AnnouncementPayload>[]
+          }
+          create: {
+            args: Prisma.AnnouncementCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AnnouncementPayload>
+          }
+          createMany: {
+            args: Prisma.AnnouncementCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.AnnouncementCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AnnouncementPayload>[]
+          }
+          delete: {
+            args: Prisma.AnnouncementDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AnnouncementPayload>
+          }
+          update: {
+            args: Prisma.AnnouncementUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AnnouncementPayload>
+          }
+          deleteMany: {
+            args: Prisma.AnnouncementDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.AnnouncementUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.AnnouncementUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AnnouncementPayload>[]
+          }
+          upsert: {
+            args: Prisma.AnnouncementUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AnnouncementPayload>
+          }
+          aggregate: {
+            args: Prisma.AnnouncementAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateAnnouncement>
+          }
+          groupBy: {
+            args: Prisma.AnnouncementGroupByArgs<ExtArgs>
+            result: $Utils.Optional<AnnouncementGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.AnnouncementCountArgs<ExtArgs>
+            result: $Utils.Optional<AnnouncementCountAggregateOutputType> | number
+          }
+        }
+      }
       EventRegistration: {
         payload: Prisma.$EventRegistrationPayload<ExtArgs>
         fields: Prisma.EventRegistrationFieldRefs
@@ -2538,6 +2655,7 @@ export namespace Prisma {
     certificateRequest?: CertificateRequestOmit
     systemSettings?: SystemSettingsOmit
     event?: EventOmit
+    announcement?: AnnouncementOmit
     eventRegistration?: EventRegistrationOmit
     notification?: NotificationOmit
     shopProduct?: ShopProductOmit
@@ -2689,6 +2807,8 @@ export namespace Prisma {
     certificateRequests: number
     members: number
     attendance: number
+    events: number
+    announcements: number
   }
 
   export type DojoCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2697,6 +2817,8 @@ export namespace Prisma {
     certificateRequests?: boolean | DojoCountOutputTypeCountCertificateRequestsArgs
     members?: boolean | DojoCountOutputTypeCountMembersArgs
     attendance?: boolean | DojoCountOutputTypeCountAttendanceArgs
+    events?: boolean | DojoCountOutputTypeCountEventsArgs
+    announcements?: boolean | DojoCountOutputTypeCountAnnouncementsArgs
   }
 
   // Custom InputTypes
@@ -2745,6 +2867,20 @@ export namespace Prisma {
     where?: AttendanceWhereInput
   }
 
+  /**
+   * DojoCountOutputType without action
+   */
+  export type DojoCountOutputTypeCountEventsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EventWhereInput
+  }
+
+  /**
+   * DojoCountOutputType without action
+   */
+  export type DojoCountOutputTypeCountAnnouncementsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AnnouncementWhereInput
+  }
+
 
   /**
    * Count Type MemberCountOutputType
@@ -2759,6 +2895,8 @@ export namespace Prisma {
     attendance: number
     tournamentEntries: number
     certificateRequests: number
+    eventsPosted: number
+    announcementsPosted: number
   }
 
   export type MemberCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2770,6 +2908,8 @@ export namespace Prisma {
     attendance?: boolean | MemberCountOutputTypeCountAttendanceArgs
     tournamentEntries?: boolean | MemberCountOutputTypeCountTournamentEntriesArgs
     certificateRequests?: boolean | MemberCountOutputTypeCountCertificateRequestsArgs
+    eventsPosted?: boolean | MemberCountOutputTypeCountEventsPostedArgs
+    announcementsPosted?: boolean | MemberCountOutputTypeCountAnnouncementsPostedArgs
   }
 
   // Custom InputTypes
@@ -2837,6 +2977,20 @@ export namespace Prisma {
    */
   export type MemberCountOutputTypeCountCertificateRequestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: CertificateRequestWhereInput
+  }
+
+  /**
+   * MemberCountOutputType without action
+   */
+  export type MemberCountOutputTypeCountEventsPostedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EventWhereInput
+  }
+
+  /**
+   * MemberCountOutputType without action
+   */
+  export type MemberCountOutputTypeCountAnnouncementsPostedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AnnouncementWhereInput
   }
 
 
@@ -4637,6 +4791,8 @@ export namespace Prisma {
     certificateRequests?: boolean | Dojo$certificateRequestsArgs<ExtArgs>
     members?: boolean | Dojo$membersArgs<ExtArgs>
     attendance?: boolean | Dojo$attendanceArgs<ExtArgs>
+    events?: boolean | Dojo$eventsArgs<ExtArgs>
+    announcements?: boolean | Dojo$announcementsArgs<ExtArgs>
     _count?: boolean | DojoCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["dojo"]>
 
@@ -4704,6 +4860,8 @@ export namespace Prisma {
     certificateRequests?: boolean | Dojo$certificateRequestsArgs<ExtArgs>
     members?: boolean | Dojo$membersArgs<ExtArgs>
     attendance?: boolean | Dojo$attendanceArgs<ExtArgs>
+    events?: boolean | Dojo$eventsArgs<ExtArgs>
+    announcements?: boolean | Dojo$announcementsArgs<ExtArgs>
     _count?: boolean | DojoCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type DojoIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -4717,6 +4875,8 @@ export namespace Prisma {
       certificateRequests: Prisma.$CertificateRequestPayload<ExtArgs>[]
       members: Prisma.$MemberPayload<ExtArgs>[]
       attendance: Prisma.$AttendancePayload<ExtArgs>[]
+      events: Prisma.$EventPayload<ExtArgs>[]
+      announcements: Prisma.$AnnouncementPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -5134,6 +5294,8 @@ export namespace Prisma {
     certificateRequests<T extends Dojo$certificateRequestsArgs<ExtArgs> = {}>(args?: Subset<T, Dojo$certificateRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificateRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     members<T extends Dojo$membersArgs<ExtArgs> = {}>(args?: Subset<T, Dojo$membersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     attendance<T extends Dojo$attendanceArgs<ExtArgs> = {}>(args?: Subset<T, Dojo$attendanceArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AttendancePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    events<T extends Dojo$eventsArgs<ExtArgs> = {}>(args?: Subset<T, Dojo$eventsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    announcements<T extends Dojo$announcementsArgs<ExtArgs> = {}>(args?: Subset<T, Dojo$announcementsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AnnouncementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5689,6 +5851,54 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: AttendanceScalarFieldEnum | AttendanceScalarFieldEnum[]
+  }
+
+  /**
+   * Dojo.events
+   */
+  export type Dojo$eventsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Event
+     */
+    select?: EventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Event
+     */
+    omit?: EventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventInclude<ExtArgs> | null
+    where?: EventWhereInput
+    orderBy?: EventOrderByWithRelationInput | EventOrderByWithRelationInput[]
+    cursor?: EventWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: EventScalarFieldEnum | EventScalarFieldEnum[]
+  }
+
+  /**
+   * Dojo.announcements
+   */
+  export type Dojo$announcementsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Announcement
+     */
+    select?: AnnouncementSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Announcement
+     */
+    omit?: AnnouncementOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AnnouncementInclude<ExtArgs> | null
+    where?: AnnouncementWhereInput
+    orderBy?: AnnouncementOrderByWithRelationInput | AnnouncementOrderByWithRelationInput[]
+    cursor?: AnnouncementWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: AnnouncementScalarFieldEnum | AnnouncementScalarFieldEnum[]
   }
 
   /**
@@ -7221,6 +7431,8 @@ export namespace Prisma {
     attendance?: boolean | Member$attendanceArgs<ExtArgs>
     tournamentEntries?: boolean | Member$tournamentEntriesArgs<ExtArgs>
     certificateRequests?: boolean | Member$certificateRequestsArgs<ExtArgs>
+    eventsPosted?: boolean | Member$eventsPostedArgs<ExtArgs>
+    announcementsPosted?: boolean | Member$announcementsPostedArgs<ExtArgs>
     _count?: boolean | MemberCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["member"]>
 
@@ -7318,6 +7530,8 @@ export namespace Prisma {
     attendance?: boolean | Member$attendanceArgs<ExtArgs>
     tournamentEntries?: boolean | Member$tournamentEntriesArgs<ExtArgs>
     certificateRequests?: boolean | Member$certificateRequestsArgs<ExtArgs>
+    eventsPosted?: boolean | Member$eventsPostedArgs<ExtArgs>
+    announcementsPosted?: boolean | Member$announcementsPostedArgs<ExtArgs>
     _count?: boolean | MemberCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type MemberIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -7339,6 +7553,8 @@ export namespace Prisma {
       attendance: Prisma.$AttendancePayload<ExtArgs>[]
       tournamentEntries: Prisma.$TournamentParticipantPayload<ExtArgs>[]
       certificateRequests: Prisma.$CertificateRequestPayload<ExtArgs>[]
+      eventsPosted: Prisma.$EventPayload<ExtArgs>[]
+      announcementsPosted: Prisma.$AnnouncementPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -7768,6 +7984,8 @@ export namespace Prisma {
     attendance<T extends Member$attendanceArgs<ExtArgs> = {}>(args?: Subset<T, Member$attendanceArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AttendancePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     tournamentEntries<T extends Member$tournamentEntriesArgs<ExtArgs> = {}>(args?: Subset<T, Member$tournamentEntriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TournamentParticipantPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     certificateRequests<T extends Member$certificateRequestsArgs<ExtArgs> = {}>(args?: Subset<T, Member$certificateRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificateRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    eventsPosted<T extends Member$eventsPostedArgs<ExtArgs> = {}>(args?: Subset<T, Member$eventsPostedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    announcementsPosted<T extends Member$announcementsPostedArgs<ExtArgs> = {}>(args?: Subset<T, Member$announcementsPostedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AnnouncementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -8430,6 +8648,54 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: CertificateRequestScalarFieldEnum | CertificateRequestScalarFieldEnum[]
+  }
+
+  /**
+   * Member.eventsPosted
+   */
+  export type Member$eventsPostedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Event
+     */
+    select?: EventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Event
+     */
+    omit?: EventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventInclude<ExtArgs> | null
+    where?: EventWhereInput
+    orderBy?: EventOrderByWithRelationInput | EventOrderByWithRelationInput[]
+    cursor?: EventWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: EventScalarFieldEnum | EventScalarFieldEnum[]
+  }
+
+  /**
+   * Member.announcementsPosted
+   */
+  export type Member$announcementsPostedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Announcement
+     */
+    select?: AnnouncementSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Announcement
+     */
+    omit?: AnnouncementOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AnnouncementInclude<ExtArgs> | null
+    where?: AnnouncementWhereInput
+    orderBy?: AnnouncementOrderByWithRelationInput | AnnouncementOrderByWithRelationInput[]
+    cursor?: AnnouncementWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: AnnouncementScalarFieldEnum | AnnouncementScalarFieldEnum[]
   }
 
   /**
@@ -15518,6 +15784,11 @@ export namespace Prisma {
     imageUrl: string | null
     isPublished: boolean | null
     maxCapacity: number | null
+    category: $Enums.EventCategory | null
+    attachmentUrl: string | null
+    attachmentType: $Enums.AttachmentType | null
+    postedById: string | null
+    dojoId: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -15531,6 +15802,11 @@ export namespace Prisma {
     imageUrl: string | null
     isPublished: boolean | null
     maxCapacity: number | null
+    category: $Enums.EventCategory | null
+    attachmentUrl: string | null
+    attachmentType: $Enums.AttachmentType | null
+    postedById: string | null
+    dojoId: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -15544,6 +15820,11 @@ export namespace Prisma {
     imageUrl: number
     isPublished: number
     maxCapacity: number
+    category: number
+    attachmentUrl: number
+    attachmentType: number
+    postedById: number
+    dojoId: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -15567,6 +15848,11 @@ export namespace Prisma {
     imageUrl?: true
     isPublished?: true
     maxCapacity?: true
+    category?: true
+    attachmentUrl?: true
+    attachmentType?: true
+    postedById?: true
+    dojoId?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -15580,6 +15866,11 @@ export namespace Prisma {
     imageUrl?: true
     isPublished?: true
     maxCapacity?: true
+    category?: true
+    attachmentUrl?: true
+    attachmentType?: true
+    postedById?: true
+    dojoId?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -15593,6 +15884,11 @@ export namespace Prisma {
     imageUrl?: true
     isPublished?: true
     maxCapacity?: true
+    category?: true
+    attachmentUrl?: true
+    attachmentType?: true
+    postedById?: true
+    dojoId?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -15693,6 +15989,11 @@ export namespace Prisma {
     imageUrl: string | null
     isPublished: boolean
     maxCapacity: number | null
+    category: $Enums.EventCategory
+    attachmentUrl: string | null
+    attachmentType: $Enums.AttachmentType | null
+    postedById: string | null
+    dojoId: string | null
     createdAt: Date
     updatedAt: Date
     _count: EventCountAggregateOutputType | null
@@ -15725,9 +16026,16 @@ export namespace Prisma {
     imageUrl?: boolean
     isPublished?: boolean
     maxCapacity?: boolean
+    category?: boolean
+    attachmentUrl?: boolean
+    attachmentType?: boolean
+    postedById?: boolean
+    dojoId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     registrations?: boolean | Event$registrationsArgs<ExtArgs>
+    postedBy?: boolean | Event$postedByArgs<ExtArgs>
+    dojo?: boolean | Event$dojoArgs<ExtArgs>
     _count?: boolean | EventCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["event"]>
 
@@ -15740,8 +16048,15 @@ export namespace Prisma {
     imageUrl?: boolean
     isPublished?: boolean
     maxCapacity?: boolean
+    category?: boolean
+    attachmentUrl?: boolean
+    attachmentType?: boolean
+    postedById?: boolean
+    dojoId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    postedBy?: boolean | Event$postedByArgs<ExtArgs>
+    dojo?: boolean | Event$dojoArgs<ExtArgs>
   }, ExtArgs["result"]["event"]>
 
   export type EventSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -15753,8 +16068,15 @@ export namespace Prisma {
     imageUrl?: boolean
     isPublished?: boolean
     maxCapacity?: boolean
+    category?: boolean
+    attachmentUrl?: boolean
+    attachmentType?: boolean
+    postedById?: boolean
+    dojoId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    postedBy?: boolean | Event$postedByArgs<ExtArgs>
+    dojo?: boolean | Event$dojoArgs<ExtArgs>
   }, ExtArgs["result"]["event"]>
 
   export type EventSelectScalar = {
@@ -15766,22 +16088,37 @@ export namespace Prisma {
     imageUrl?: boolean
     isPublished?: boolean
     maxCapacity?: boolean
+    category?: boolean
+    attachmentUrl?: boolean
+    attachmentType?: boolean
+    postedById?: boolean
+    dojoId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type EventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "eventDate" | "location" | "imageUrl" | "isPublished" | "maxCapacity" | "createdAt" | "updatedAt", ExtArgs["result"]["event"]>
+  export type EventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "eventDate" | "location" | "imageUrl" | "isPublished" | "maxCapacity" | "category" | "attachmentUrl" | "attachmentType" | "postedById" | "dojoId" | "createdAt" | "updatedAt", ExtArgs["result"]["event"]>
   export type EventInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     registrations?: boolean | Event$registrationsArgs<ExtArgs>
+    postedBy?: boolean | Event$postedByArgs<ExtArgs>
+    dojo?: boolean | Event$dojoArgs<ExtArgs>
     _count?: boolean | EventCountOutputTypeDefaultArgs<ExtArgs>
   }
-  export type EventIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
-  export type EventIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type EventIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    postedBy?: boolean | Event$postedByArgs<ExtArgs>
+    dojo?: boolean | Event$dojoArgs<ExtArgs>
+  }
+  export type EventIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    postedBy?: boolean | Event$postedByArgs<ExtArgs>
+    dojo?: boolean | Event$dojoArgs<ExtArgs>
+  }
 
   export type $EventPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Event"
     objects: {
       registrations: Prisma.$EventRegistrationPayload<ExtArgs>[]
+      postedBy: Prisma.$MemberPayload<ExtArgs> | null
+      dojo: Prisma.$DojoPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -15792,6 +16129,11 @@ export namespace Prisma {
       imageUrl: string | null
       isPublished: boolean
       maxCapacity: number | null
+      category: $Enums.EventCategory
+      attachmentUrl: string | null
+      attachmentType: $Enums.AttachmentType | null
+      postedById: string | null
+      dojoId: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["event"]>
@@ -16189,6 +16531,8 @@ export namespace Prisma {
   export interface Prisma__EventClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     registrations<T extends Event$registrationsArgs<ExtArgs> = {}>(args?: Subset<T, Event$registrationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EventRegistrationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    postedBy<T extends Event$postedByArgs<ExtArgs> = {}>(args?: Subset<T, Event$postedByArgs<ExtArgs>>): Prisma__MemberClient<$Result.GetResult<Prisma.$MemberPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    dojo<T extends Event$dojoArgs<ExtArgs> = {}>(args?: Subset<T, Event$dojoArgs<ExtArgs>>): Prisma__DojoClient<$Result.GetResult<Prisma.$DojoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -16226,6 +16570,11 @@ export namespace Prisma {
     readonly imageUrl: FieldRef<"Event", 'String'>
     readonly isPublished: FieldRef<"Event", 'Boolean'>
     readonly maxCapacity: FieldRef<"Event", 'Int'>
+    readonly category: FieldRef<"Event", 'EventCategory'>
+    readonly attachmentUrl: FieldRef<"Event", 'String'>
+    readonly attachmentType: FieldRef<"Event", 'AttachmentType'>
+    readonly postedById: FieldRef<"Event", 'String'>
+    readonly dojoId: FieldRef<"Event", 'String'>
     readonly createdAt: FieldRef<"Event", 'DateTime'>
     readonly updatedAt: FieldRef<"Event", 'DateTime'>
   }
@@ -16482,6 +16831,10 @@ export namespace Prisma {
      */
     data: EventCreateManyInput | EventCreateManyInput[]
     skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -16552,6 +16905,10 @@ export namespace Prisma {
      * Limit how many Events to update.
      */
     limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -16645,6 +17002,44 @@ export namespace Prisma {
   }
 
   /**
+   * Event.postedBy
+   */
+  export type Event$postedByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Member
+     */
+    select?: MemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Member
+     */
+    omit?: MemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MemberInclude<ExtArgs> | null
+    where?: MemberWhereInput
+  }
+
+  /**
+   * Event.dojo
+   */
+  export type Event$dojoArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Dojo
+     */
+    select?: DojoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Dojo
+     */
+    omit?: DojoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DojoInclude<ExtArgs> | null
+    where?: DojoWhereInput
+  }
+
+  /**
    * Event without action
    */
   export type EventDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -16660,6 +17055,1206 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: EventInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Announcement
+   */
+
+  export type AggregateAnnouncement = {
+    _count: AnnouncementCountAggregateOutputType | null
+    _min: AnnouncementMinAggregateOutputType | null
+    _max: AnnouncementMaxAggregateOutputType | null
+  }
+
+  export type AnnouncementMinAggregateOutputType = {
+    id: string | null
+    title: string | null
+    body: string | null
+    link: string | null
+    isPublished: boolean | null
+    publishedAt: Date | null
+    attachmentUrl: string | null
+    attachmentType: $Enums.AttachmentType | null
+    postedById: string | null
+    dojoId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type AnnouncementMaxAggregateOutputType = {
+    id: string | null
+    title: string | null
+    body: string | null
+    link: string | null
+    isPublished: boolean | null
+    publishedAt: Date | null
+    attachmentUrl: string | null
+    attachmentType: $Enums.AttachmentType | null
+    postedById: string | null
+    dojoId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type AnnouncementCountAggregateOutputType = {
+    id: number
+    title: number
+    body: number
+    link: number
+    isPublished: number
+    publishedAt: number
+    attachmentUrl: number
+    attachmentType: number
+    postedById: number
+    dojoId: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type AnnouncementMinAggregateInputType = {
+    id?: true
+    title?: true
+    body?: true
+    link?: true
+    isPublished?: true
+    publishedAt?: true
+    attachmentUrl?: true
+    attachmentType?: true
+    postedById?: true
+    dojoId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type AnnouncementMaxAggregateInputType = {
+    id?: true
+    title?: true
+    body?: true
+    link?: true
+    isPublished?: true
+    publishedAt?: true
+    attachmentUrl?: true
+    attachmentType?: true
+    postedById?: true
+    dojoId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type AnnouncementCountAggregateInputType = {
+    id?: true
+    title?: true
+    body?: true
+    link?: true
+    isPublished?: true
+    publishedAt?: true
+    attachmentUrl?: true
+    attachmentType?: true
+    postedById?: true
+    dojoId?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type AnnouncementAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Announcement to aggregate.
+     */
+    where?: AnnouncementWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Announcements to fetch.
+     */
+    orderBy?: AnnouncementOrderByWithRelationInput | AnnouncementOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: AnnouncementWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Announcements from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Announcements.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Announcements
+    **/
+    _count?: true | AnnouncementCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: AnnouncementMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: AnnouncementMaxAggregateInputType
+  }
+
+  export type GetAnnouncementAggregateType<T extends AnnouncementAggregateArgs> = {
+        [P in keyof T & keyof AggregateAnnouncement]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateAnnouncement[P]>
+      : GetScalarType<T[P], AggregateAnnouncement[P]>
+  }
+
+
+
+
+  export type AnnouncementGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AnnouncementWhereInput
+    orderBy?: AnnouncementOrderByWithAggregationInput | AnnouncementOrderByWithAggregationInput[]
+    by: AnnouncementScalarFieldEnum[] | AnnouncementScalarFieldEnum
+    having?: AnnouncementScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: AnnouncementCountAggregateInputType | true
+    _min?: AnnouncementMinAggregateInputType
+    _max?: AnnouncementMaxAggregateInputType
+  }
+
+  export type AnnouncementGroupByOutputType = {
+    id: string
+    title: string
+    body: string | null
+    link: string | null
+    isPublished: boolean
+    publishedAt: Date
+    attachmentUrl: string | null
+    attachmentType: $Enums.AttachmentType | null
+    postedById: string | null
+    dojoId: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: AnnouncementCountAggregateOutputType | null
+    _min: AnnouncementMinAggregateOutputType | null
+    _max: AnnouncementMaxAggregateOutputType | null
+  }
+
+  type GetAnnouncementGroupByPayload<T extends AnnouncementGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<AnnouncementGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof AnnouncementGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], AnnouncementGroupByOutputType[P]>
+            : GetScalarType<T[P], AnnouncementGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type AnnouncementSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    title?: boolean
+    body?: boolean
+    link?: boolean
+    isPublished?: boolean
+    publishedAt?: boolean
+    attachmentUrl?: boolean
+    attachmentType?: boolean
+    postedById?: boolean
+    dojoId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    postedBy?: boolean | Announcement$postedByArgs<ExtArgs>
+    dojo?: boolean | Announcement$dojoArgs<ExtArgs>
+  }, ExtArgs["result"]["announcement"]>
+
+  export type AnnouncementSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    title?: boolean
+    body?: boolean
+    link?: boolean
+    isPublished?: boolean
+    publishedAt?: boolean
+    attachmentUrl?: boolean
+    attachmentType?: boolean
+    postedById?: boolean
+    dojoId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    postedBy?: boolean | Announcement$postedByArgs<ExtArgs>
+    dojo?: boolean | Announcement$dojoArgs<ExtArgs>
+  }, ExtArgs["result"]["announcement"]>
+
+  export type AnnouncementSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    title?: boolean
+    body?: boolean
+    link?: boolean
+    isPublished?: boolean
+    publishedAt?: boolean
+    attachmentUrl?: boolean
+    attachmentType?: boolean
+    postedById?: boolean
+    dojoId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    postedBy?: boolean | Announcement$postedByArgs<ExtArgs>
+    dojo?: boolean | Announcement$dojoArgs<ExtArgs>
+  }, ExtArgs["result"]["announcement"]>
+
+  export type AnnouncementSelectScalar = {
+    id?: boolean
+    title?: boolean
+    body?: boolean
+    link?: boolean
+    isPublished?: boolean
+    publishedAt?: boolean
+    attachmentUrl?: boolean
+    attachmentType?: boolean
+    postedById?: boolean
+    dojoId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type AnnouncementOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "body" | "link" | "isPublished" | "publishedAt" | "attachmentUrl" | "attachmentType" | "postedById" | "dojoId" | "createdAt" | "updatedAt", ExtArgs["result"]["announcement"]>
+  export type AnnouncementInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    postedBy?: boolean | Announcement$postedByArgs<ExtArgs>
+    dojo?: boolean | Announcement$dojoArgs<ExtArgs>
+  }
+  export type AnnouncementIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    postedBy?: boolean | Announcement$postedByArgs<ExtArgs>
+    dojo?: boolean | Announcement$dojoArgs<ExtArgs>
+  }
+  export type AnnouncementIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    postedBy?: boolean | Announcement$postedByArgs<ExtArgs>
+    dojo?: boolean | Announcement$dojoArgs<ExtArgs>
+  }
+
+  export type $AnnouncementPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Announcement"
+    objects: {
+      postedBy: Prisma.$MemberPayload<ExtArgs> | null
+      dojo: Prisma.$DojoPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      title: string
+      body: string | null
+      link: string | null
+      isPublished: boolean
+      publishedAt: Date
+      attachmentUrl: string | null
+      attachmentType: $Enums.AttachmentType | null
+      postedById: string | null
+      dojoId: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["announcement"]>
+    composites: {}
+  }
+
+  type AnnouncementGetPayload<S extends boolean | null | undefined | AnnouncementDefaultArgs> = $Result.GetResult<Prisma.$AnnouncementPayload, S>
+
+  type AnnouncementCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<AnnouncementFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: AnnouncementCountAggregateInputType | true
+    }
+
+  export interface AnnouncementDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Announcement'], meta: { name: 'Announcement' } }
+    /**
+     * Find zero or one Announcement that matches the filter.
+     * @param {AnnouncementFindUniqueArgs} args - Arguments to find a Announcement
+     * @example
+     * // Get one Announcement
+     * const announcement = await prisma.announcement.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends AnnouncementFindUniqueArgs>(args: SelectSubset<T, AnnouncementFindUniqueArgs<ExtArgs>>): Prisma__AnnouncementClient<$Result.GetResult<Prisma.$AnnouncementPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Announcement that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {AnnouncementFindUniqueOrThrowArgs} args - Arguments to find a Announcement
+     * @example
+     * // Get one Announcement
+     * const announcement = await prisma.announcement.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends AnnouncementFindUniqueOrThrowArgs>(args: SelectSubset<T, AnnouncementFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AnnouncementClient<$Result.GetResult<Prisma.$AnnouncementPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Announcement that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AnnouncementFindFirstArgs} args - Arguments to find a Announcement
+     * @example
+     * // Get one Announcement
+     * const announcement = await prisma.announcement.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends AnnouncementFindFirstArgs>(args?: SelectSubset<T, AnnouncementFindFirstArgs<ExtArgs>>): Prisma__AnnouncementClient<$Result.GetResult<Prisma.$AnnouncementPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Announcement that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AnnouncementFindFirstOrThrowArgs} args - Arguments to find a Announcement
+     * @example
+     * // Get one Announcement
+     * const announcement = await prisma.announcement.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends AnnouncementFindFirstOrThrowArgs>(args?: SelectSubset<T, AnnouncementFindFirstOrThrowArgs<ExtArgs>>): Prisma__AnnouncementClient<$Result.GetResult<Prisma.$AnnouncementPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Announcements that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AnnouncementFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Announcements
+     * const announcements = await prisma.announcement.findMany()
+     * 
+     * // Get first 10 Announcements
+     * const announcements = await prisma.announcement.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const announcementWithIdOnly = await prisma.announcement.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends AnnouncementFindManyArgs>(args?: SelectSubset<T, AnnouncementFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AnnouncementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Announcement.
+     * @param {AnnouncementCreateArgs} args - Arguments to create a Announcement.
+     * @example
+     * // Create one Announcement
+     * const Announcement = await prisma.announcement.create({
+     *   data: {
+     *     // ... data to create a Announcement
+     *   }
+     * })
+     * 
+     */
+    create<T extends AnnouncementCreateArgs>(args: SelectSubset<T, AnnouncementCreateArgs<ExtArgs>>): Prisma__AnnouncementClient<$Result.GetResult<Prisma.$AnnouncementPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Announcements.
+     * @param {AnnouncementCreateManyArgs} args - Arguments to create many Announcements.
+     * @example
+     * // Create many Announcements
+     * const announcement = await prisma.announcement.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends AnnouncementCreateManyArgs>(args?: SelectSubset<T, AnnouncementCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Announcements and returns the data saved in the database.
+     * @param {AnnouncementCreateManyAndReturnArgs} args - Arguments to create many Announcements.
+     * @example
+     * // Create many Announcements
+     * const announcement = await prisma.announcement.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Announcements and only return the `id`
+     * const announcementWithIdOnly = await prisma.announcement.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends AnnouncementCreateManyAndReturnArgs>(args?: SelectSubset<T, AnnouncementCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AnnouncementPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Announcement.
+     * @param {AnnouncementDeleteArgs} args - Arguments to delete one Announcement.
+     * @example
+     * // Delete one Announcement
+     * const Announcement = await prisma.announcement.delete({
+     *   where: {
+     *     // ... filter to delete one Announcement
+     *   }
+     * })
+     * 
+     */
+    delete<T extends AnnouncementDeleteArgs>(args: SelectSubset<T, AnnouncementDeleteArgs<ExtArgs>>): Prisma__AnnouncementClient<$Result.GetResult<Prisma.$AnnouncementPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Announcement.
+     * @param {AnnouncementUpdateArgs} args - Arguments to update one Announcement.
+     * @example
+     * // Update one Announcement
+     * const announcement = await prisma.announcement.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends AnnouncementUpdateArgs>(args: SelectSubset<T, AnnouncementUpdateArgs<ExtArgs>>): Prisma__AnnouncementClient<$Result.GetResult<Prisma.$AnnouncementPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Announcements.
+     * @param {AnnouncementDeleteManyArgs} args - Arguments to filter Announcements to delete.
+     * @example
+     * // Delete a few Announcements
+     * const { count } = await prisma.announcement.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends AnnouncementDeleteManyArgs>(args?: SelectSubset<T, AnnouncementDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Announcements.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AnnouncementUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Announcements
+     * const announcement = await prisma.announcement.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends AnnouncementUpdateManyArgs>(args: SelectSubset<T, AnnouncementUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Announcements and returns the data updated in the database.
+     * @param {AnnouncementUpdateManyAndReturnArgs} args - Arguments to update many Announcements.
+     * @example
+     * // Update many Announcements
+     * const announcement = await prisma.announcement.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Announcements and only return the `id`
+     * const announcementWithIdOnly = await prisma.announcement.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends AnnouncementUpdateManyAndReturnArgs>(args: SelectSubset<T, AnnouncementUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AnnouncementPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Announcement.
+     * @param {AnnouncementUpsertArgs} args - Arguments to update or create a Announcement.
+     * @example
+     * // Update or create a Announcement
+     * const announcement = await prisma.announcement.upsert({
+     *   create: {
+     *     // ... data to create a Announcement
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Announcement we want to update
+     *   }
+     * })
+     */
+    upsert<T extends AnnouncementUpsertArgs>(args: SelectSubset<T, AnnouncementUpsertArgs<ExtArgs>>): Prisma__AnnouncementClient<$Result.GetResult<Prisma.$AnnouncementPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Announcements.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AnnouncementCountArgs} args - Arguments to filter Announcements to count.
+     * @example
+     * // Count the number of Announcements
+     * const count = await prisma.announcement.count({
+     *   where: {
+     *     // ... the filter for the Announcements we want to count
+     *   }
+     * })
+    **/
+    count<T extends AnnouncementCountArgs>(
+      args?: Subset<T, AnnouncementCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], AnnouncementCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Announcement.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AnnouncementAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends AnnouncementAggregateArgs>(args: Subset<T, AnnouncementAggregateArgs>): Prisma.PrismaPromise<GetAnnouncementAggregateType<T>>
+
+    /**
+     * Group by Announcement.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AnnouncementGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends AnnouncementGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: AnnouncementGroupByArgs['orderBy'] }
+        : { orderBy?: AnnouncementGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, AnnouncementGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAnnouncementGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Announcement model
+   */
+  readonly fields: AnnouncementFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Announcement.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__AnnouncementClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    postedBy<T extends Announcement$postedByArgs<ExtArgs> = {}>(args?: Subset<T, Announcement$postedByArgs<ExtArgs>>): Prisma__MemberClient<$Result.GetResult<Prisma.$MemberPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    dojo<T extends Announcement$dojoArgs<ExtArgs> = {}>(args?: Subset<T, Announcement$dojoArgs<ExtArgs>>): Prisma__DojoClient<$Result.GetResult<Prisma.$DojoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Announcement model
+   */
+  interface AnnouncementFieldRefs {
+    readonly id: FieldRef<"Announcement", 'String'>
+    readonly title: FieldRef<"Announcement", 'String'>
+    readonly body: FieldRef<"Announcement", 'String'>
+    readonly link: FieldRef<"Announcement", 'String'>
+    readonly isPublished: FieldRef<"Announcement", 'Boolean'>
+    readonly publishedAt: FieldRef<"Announcement", 'DateTime'>
+    readonly attachmentUrl: FieldRef<"Announcement", 'String'>
+    readonly attachmentType: FieldRef<"Announcement", 'AttachmentType'>
+    readonly postedById: FieldRef<"Announcement", 'String'>
+    readonly dojoId: FieldRef<"Announcement", 'String'>
+    readonly createdAt: FieldRef<"Announcement", 'DateTime'>
+    readonly updatedAt: FieldRef<"Announcement", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Announcement findUnique
+   */
+  export type AnnouncementFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Announcement
+     */
+    select?: AnnouncementSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Announcement
+     */
+    omit?: AnnouncementOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AnnouncementInclude<ExtArgs> | null
+    /**
+     * Filter, which Announcement to fetch.
+     */
+    where: AnnouncementWhereUniqueInput
+  }
+
+  /**
+   * Announcement findUniqueOrThrow
+   */
+  export type AnnouncementFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Announcement
+     */
+    select?: AnnouncementSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Announcement
+     */
+    omit?: AnnouncementOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AnnouncementInclude<ExtArgs> | null
+    /**
+     * Filter, which Announcement to fetch.
+     */
+    where: AnnouncementWhereUniqueInput
+  }
+
+  /**
+   * Announcement findFirst
+   */
+  export type AnnouncementFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Announcement
+     */
+    select?: AnnouncementSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Announcement
+     */
+    omit?: AnnouncementOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AnnouncementInclude<ExtArgs> | null
+    /**
+     * Filter, which Announcement to fetch.
+     */
+    where?: AnnouncementWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Announcements to fetch.
+     */
+    orderBy?: AnnouncementOrderByWithRelationInput | AnnouncementOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Announcements.
+     */
+    cursor?: AnnouncementWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Announcements from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Announcements.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Announcements.
+     */
+    distinct?: AnnouncementScalarFieldEnum | AnnouncementScalarFieldEnum[]
+  }
+
+  /**
+   * Announcement findFirstOrThrow
+   */
+  export type AnnouncementFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Announcement
+     */
+    select?: AnnouncementSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Announcement
+     */
+    omit?: AnnouncementOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AnnouncementInclude<ExtArgs> | null
+    /**
+     * Filter, which Announcement to fetch.
+     */
+    where?: AnnouncementWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Announcements to fetch.
+     */
+    orderBy?: AnnouncementOrderByWithRelationInput | AnnouncementOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Announcements.
+     */
+    cursor?: AnnouncementWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Announcements from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Announcements.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Announcements.
+     */
+    distinct?: AnnouncementScalarFieldEnum | AnnouncementScalarFieldEnum[]
+  }
+
+  /**
+   * Announcement findMany
+   */
+  export type AnnouncementFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Announcement
+     */
+    select?: AnnouncementSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Announcement
+     */
+    omit?: AnnouncementOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AnnouncementInclude<ExtArgs> | null
+    /**
+     * Filter, which Announcements to fetch.
+     */
+    where?: AnnouncementWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Announcements to fetch.
+     */
+    orderBy?: AnnouncementOrderByWithRelationInput | AnnouncementOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Announcements.
+     */
+    cursor?: AnnouncementWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Announcements from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Announcements.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Announcements.
+     */
+    distinct?: AnnouncementScalarFieldEnum | AnnouncementScalarFieldEnum[]
+  }
+
+  /**
+   * Announcement create
+   */
+  export type AnnouncementCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Announcement
+     */
+    select?: AnnouncementSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Announcement
+     */
+    omit?: AnnouncementOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AnnouncementInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Announcement.
+     */
+    data: XOR<AnnouncementCreateInput, AnnouncementUncheckedCreateInput>
+  }
+
+  /**
+   * Announcement createMany
+   */
+  export type AnnouncementCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Announcements.
+     */
+    data: AnnouncementCreateManyInput | AnnouncementCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Announcement createManyAndReturn
+   */
+  export type AnnouncementCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Announcement
+     */
+    select?: AnnouncementSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Announcement
+     */
+    omit?: AnnouncementOmit<ExtArgs> | null
+    /**
+     * The data used to create many Announcements.
+     */
+    data: AnnouncementCreateManyInput | AnnouncementCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AnnouncementIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Announcement update
+   */
+  export type AnnouncementUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Announcement
+     */
+    select?: AnnouncementSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Announcement
+     */
+    omit?: AnnouncementOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AnnouncementInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Announcement.
+     */
+    data: XOR<AnnouncementUpdateInput, AnnouncementUncheckedUpdateInput>
+    /**
+     * Choose, which Announcement to update.
+     */
+    where: AnnouncementWhereUniqueInput
+  }
+
+  /**
+   * Announcement updateMany
+   */
+  export type AnnouncementUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Announcements.
+     */
+    data: XOR<AnnouncementUpdateManyMutationInput, AnnouncementUncheckedUpdateManyInput>
+    /**
+     * Filter which Announcements to update
+     */
+    where?: AnnouncementWhereInput
+    /**
+     * Limit how many Announcements to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Announcement updateManyAndReturn
+   */
+  export type AnnouncementUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Announcement
+     */
+    select?: AnnouncementSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Announcement
+     */
+    omit?: AnnouncementOmit<ExtArgs> | null
+    /**
+     * The data used to update Announcements.
+     */
+    data: XOR<AnnouncementUpdateManyMutationInput, AnnouncementUncheckedUpdateManyInput>
+    /**
+     * Filter which Announcements to update
+     */
+    where?: AnnouncementWhereInput
+    /**
+     * Limit how many Announcements to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AnnouncementIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Announcement upsert
+   */
+  export type AnnouncementUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Announcement
+     */
+    select?: AnnouncementSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Announcement
+     */
+    omit?: AnnouncementOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AnnouncementInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Announcement to update in case it exists.
+     */
+    where: AnnouncementWhereUniqueInput
+    /**
+     * In case the Announcement found by the `where` argument doesn't exist, create a new Announcement with this data.
+     */
+    create: XOR<AnnouncementCreateInput, AnnouncementUncheckedCreateInput>
+    /**
+     * In case the Announcement was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<AnnouncementUpdateInput, AnnouncementUncheckedUpdateInput>
+  }
+
+  /**
+   * Announcement delete
+   */
+  export type AnnouncementDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Announcement
+     */
+    select?: AnnouncementSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Announcement
+     */
+    omit?: AnnouncementOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AnnouncementInclude<ExtArgs> | null
+    /**
+     * Filter which Announcement to delete.
+     */
+    where: AnnouncementWhereUniqueInput
+  }
+
+  /**
+   * Announcement deleteMany
+   */
+  export type AnnouncementDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Announcements to delete
+     */
+    where?: AnnouncementWhereInput
+    /**
+     * Limit how many Announcements to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Announcement.postedBy
+   */
+  export type Announcement$postedByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Member
+     */
+    select?: MemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Member
+     */
+    omit?: MemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MemberInclude<ExtArgs> | null
+    where?: MemberWhereInput
+  }
+
+  /**
+   * Announcement.dojo
+   */
+  export type Announcement$dojoArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Dojo
+     */
+    select?: DojoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Dojo
+     */
+    omit?: DojoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DojoInclude<ExtArgs> | null
+    where?: DojoWhereInput
+  }
+
+  /**
+   * Announcement without action
+   */
+  export type AnnouncementDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Announcement
+     */
+    select?: AnnouncementSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Announcement
+     */
+    omit?: AnnouncementOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AnnouncementInclude<ExtArgs> | null
   }
 
 
@@ -26232,11 +27827,34 @@ export namespace Prisma {
     imageUrl: 'imageUrl',
     isPublished: 'isPublished',
     maxCapacity: 'maxCapacity',
+    category: 'category',
+    attachmentUrl: 'attachmentUrl',
+    attachmentType: 'attachmentType',
+    postedById: 'postedById',
+    dojoId: 'dojoId',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
 
   export type EventScalarFieldEnum = (typeof EventScalarFieldEnum)[keyof typeof EventScalarFieldEnum]
+
+
+  export const AnnouncementScalarFieldEnum: {
+    id: 'id',
+    title: 'title',
+    body: 'body',
+    link: 'link',
+    isPublished: 'isPublished',
+    publishedAt: 'publishedAt',
+    attachmentUrl: 'attachmentUrl',
+    attachmentType: 'attachmentType',
+    postedById: 'postedById',
+    dojoId: 'dojoId',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type AnnouncementScalarFieldEnum = (typeof AnnouncementScalarFieldEnum)[keyof typeof AnnouncementScalarFieldEnum]
 
 
   export const EventRegistrationScalarFieldEnum: {
@@ -26583,6 +28201,34 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'EventCategory'
+   */
+  export type EnumEventCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EventCategory'>
+    
+
+
+  /**
+   * Reference to a field of type 'EventCategory[]'
+   */
+  export type ListEnumEventCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EventCategory[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'AttachmentType'
+   */
+  export type EnumAttachmentTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AttachmentType'>
+    
+
+
+  /**
+   * Reference to a field of type 'AttachmentType[]'
+   */
+  export type ListEnumAttachmentTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AttachmentType[]'>
+    
+
+
+  /**
    * Reference to a field of type 'NotificationType'
    */
   export type EnumNotificationTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NotificationType'>
@@ -26719,6 +28365,8 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestListRelationFilter
     members?: MemberListRelationFilter
     attendance?: AttendanceListRelationFilter
+    events?: EventListRelationFilter
+    announcements?: AnnouncementListRelationFilter
   }
 
   export type DojoOrderByWithRelationInput = {
@@ -26743,6 +28391,8 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestOrderByRelationAggregateInput
     members?: MemberOrderByRelationAggregateInput
     attendance?: AttendanceOrderByRelationAggregateInput
+    events?: EventOrderByRelationAggregateInput
+    announcements?: AnnouncementOrderByRelationAggregateInput
   }
 
   export type DojoWhereUniqueInput = Prisma.AtLeast<{
@@ -26770,6 +28420,8 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestListRelationFilter
     members?: MemberListRelationFilter
     attendance?: AttendanceListRelationFilter
+    events?: EventListRelationFilter
+    announcements?: AnnouncementListRelationFilter
   }, "id">
 
   export type DojoOrderByWithAggregationInput = {
@@ -26969,6 +28621,8 @@ export namespace Prisma {
     attendance?: AttendanceListRelationFilter
     tournamentEntries?: TournamentParticipantListRelationFilter
     certificateRequests?: CertificateRequestListRelationFilter
+    eventsPosted?: EventListRelationFilter
+    announcementsPosted?: AnnouncementListRelationFilter
   }
 
   export type MemberOrderByWithRelationInput = {
@@ -27005,6 +28659,8 @@ export namespace Prisma {
     attendance?: AttendanceOrderByRelationAggregateInput
     tournamentEntries?: TournamentParticipantOrderByRelationAggregateInput
     certificateRequests?: CertificateRequestOrderByRelationAggregateInput
+    eventsPosted?: EventOrderByRelationAggregateInput
+    announcementsPosted?: AnnouncementOrderByRelationAggregateInput
   }
 
   export type MemberWhereUniqueInput = Prisma.AtLeast<{
@@ -27044,6 +28700,8 @@ export namespace Prisma {
     attendance?: AttendanceListRelationFilter
     tournamentEntries?: TournamentParticipantListRelationFilter
     certificateRequests?: CertificateRequestListRelationFilter
+    eventsPosted?: EventListRelationFilter
+    announcementsPosted?: AnnouncementListRelationFilter
   }, "id" | "email" | "memberNumber">
 
   export type MemberOrderByWithAggregationInput = {
@@ -27629,9 +29287,16 @@ export namespace Prisma {
     imageUrl?: StringNullableFilter<"Event"> | string | null
     isPublished?: BoolFilter<"Event"> | boolean
     maxCapacity?: IntNullableFilter<"Event"> | number | null
+    category?: EnumEventCategoryFilter<"Event"> | $Enums.EventCategory
+    attachmentUrl?: StringNullableFilter<"Event"> | string | null
+    attachmentType?: EnumAttachmentTypeNullableFilter<"Event"> | $Enums.AttachmentType | null
+    postedById?: UuidNullableFilter<"Event"> | string | null
+    dojoId?: UuidNullableFilter<"Event"> | string | null
     createdAt?: DateTimeFilter<"Event"> | Date | string
     updatedAt?: DateTimeFilter<"Event"> | Date | string
     registrations?: EventRegistrationListRelationFilter
+    postedBy?: XOR<MemberNullableScalarRelationFilter, MemberWhereInput> | null
+    dojo?: XOR<DojoNullableScalarRelationFilter, DojoWhereInput> | null
   }
 
   export type EventOrderByWithRelationInput = {
@@ -27643,9 +29308,16 @@ export namespace Prisma {
     imageUrl?: SortOrderInput | SortOrder
     isPublished?: SortOrder
     maxCapacity?: SortOrderInput | SortOrder
+    category?: SortOrder
+    attachmentUrl?: SortOrderInput | SortOrder
+    attachmentType?: SortOrderInput | SortOrder
+    postedById?: SortOrderInput | SortOrder
+    dojoId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     registrations?: EventRegistrationOrderByRelationAggregateInput
+    postedBy?: MemberOrderByWithRelationInput
+    dojo?: DojoOrderByWithRelationInput
   }
 
   export type EventWhereUniqueInput = Prisma.AtLeast<{
@@ -27660,9 +29332,16 @@ export namespace Prisma {
     imageUrl?: StringNullableFilter<"Event"> | string | null
     isPublished?: BoolFilter<"Event"> | boolean
     maxCapacity?: IntNullableFilter<"Event"> | number | null
+    category?: EnumEventCategoryFilter<"Event"> | $Enums.EventCategory
+    attachmentUrl?: StringNullableFilter<"Event"> | string | null
+    attachmentType?: EnumAttachmentTypeNullableFilter<"Event"> | $Enums.AttachmentType | null
+    postedById?: UuidNullableFilter<"Event"> | string | null
+    dojoId?: UuidNullableFilter<"Event"> | string | null
     createdAt?: DateTimeFilter<"Event"> | Date | string
     updatedAt?: DateTimeFilter<"Event"> | Date | string
     registrations?: EventRegistrationListRelationFilter
+    postedBy?: XOR<MemberNullableScalarRelationFilter, MemberWhereInput> | null
+    dojo?: XOR<DojoNullableScalarRelationFilter, DojoWhereInput> | null
   }, "id">
 
   export type EventOrderByWithAggregationInput = {
@@ -27674,6 +29353,11 @@ export namespace Prisma {
     imageUrl?: SortOrderInput | SortOrder
     isPublished?: SortOrder
     maxCapacity?: SortOrderInput | SortOrder
+    category?: SortOrder
+    attachmentUrl?: SortOrderInput | SortOrder
+    attachmentType?: SortOrderInput | SortOrder
+    postedById?: SortOrderInput | SortOrder
+    dojoId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: EventCountOrderByAggregateInput
@@ -27695,8 +29379,106 @@ export namespace Prisma {
     imageUrl?: StringNullableWithAggregatesFilter<"Event"> | string | null
     isPublished?: BoolWithAggregatesFilter<"Event"> | boolean
     maxCapacity?: IntNullableWithAggregatesFilter<"Event"> | number | null
+    category?: EnumEventCategoryWithAggregatesFilter<"Event"> | $Enums.EventCategory
+    attachmentUrl?: StringNullableWithAggregatesFilter<"Event"> | string | null
+    attachmentType?: EnumAttachmentTypeNullableWithAggregatesFilter<"Event"> | $Enums.AttachmentType | null
+    postedById?: UuidNullableWithAggregatesFilter<"Event"> | string | null
+    dojoId?: UuidNullableWithAggregatesFilter<"Event"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Event"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Event"> | Date | string
+  }
+
+  export type AnnouncementWhereInput = {
+    AND?: AnnouncementWhereInput | AnnouncementWhereInput[]
+    OR?: AnnouncementWhereInput[]
+    NOT?: AnnouncementWhereInput | AnnouncementWhereInput[]
+    id?: UuidFilter<"Announcement"> | string
+    title?: StringFilter<"Announcement"> | string
+    body?: StringNullableFilter<"Announcement"> | string | null
+    link?: StringNullableFilter<"Announcement"> | string | null
+    isPublished?: BoolFilter<"Announcement"> | boolean
+    publishedAt?: DateTimeFilter<"Announcement"> | Date | string
+    attachmentUrl?: StringNullableFilter<"Announcement"> | string | null
+    attachmentType?: EnumAttachmentTypeNullableFilter<"Announcement"> | $Enums.AttachmentType | null
+    postedById?: UuidNullableFilter<"Announcement"> | string | null
+    dojoId?: UuidNullableFilter<"Announcement"> | string | null
+    createdAt?: DateTimeFilter<"Announcement"> | Date | string
+    updatedAt?: DateTimeFilter<"Announcement"> | Date | string
+    postedBy?: XOR<MemberNullableScalarRelationFilter, MemberWhereInput> | null
+    dojo?: XOR<DojoNullableScalarRelationFilter, DojoWhereInput> | null
+  }
+
+  export type AnnouncementOrderByWithRelationInput = {
+    id?: SortOrder
+    title?: SortOrder
+    body?: SortOrderInput | SortOrder
+    link?: SortOrderInput | SortOrder
+    isPublished?: SortOrder
+    publishedAt?: SortOrder
+    attachmentUrl?: SortOrderInput | SortOrder
+    attachmentType?: SortOrderInput | SortOrder
+    postedById?: SortOrderInput | SortOrder
+    dojoId?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    postedBy?: MemberOrderByWithRelationInput
+    dojo?: DojoOrderByWithRelationInput
+  }
+
+  export type AnnouncementWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: AnnouncementWhereInput | AnnouncementWhereInput[]
+    OR?: AnnouncementWhereInput[]
+    NOT?: AnnouncementWhereInput | AnnouncementWhereInput[]
+    title?: StringFilter<"Announcement"> | string
+    body?: StringNullableFilter<"Announcement"> | string | null
+    link?: StringNullableFilter<"Announcement"> | string | null
+    isPublished?: BoolFilter<"Announcement"> | boolean
+    publishedAt?: DateTimeFilter<"Announcement"> | Date | string
+    attachmentUrl?: StringNullableFilter<"Announcement"> | string | null
+    attachmentType?: EnumAttachmentTypeNullableFilter<"Announcement"> | $Enums.AttachmentType | null
+    postedById?: UuidNullableFilter<"Announcement"> | string | null
+    dojoId?: UuidNullableFilter<"Announcement"> | string | null
+    createdAt?: DateTimeFilter<"Announcement"> | Date | string
+    updatedAt?: DateTimeFilter<"Announcement"> | Date | string
+    postedBy?: XOR<MemberNullableScalarRelationFilter, MemberWhereInput> | null
+    dojo?: XOR<DojoNullableScalarRelationFilter, DojoWhereInput> | null
+  }, "id">
+
+  export type AnnouncementOrderByWithAggregationInput = {
+    id?: SortOrder
+    title?: SortOrder
+    body?: SortOrderInput | SortOrder
+    link?: SortOrderInput | SortOrder
+    isPublished?: SortOrder
+    publishedAt?: SortOrder
+    attachmentUrl?: SortOrderInput | SortOrder
+    attachmentType?: SortOrderInput | SortOrder
+    postedById?: SortOrderInput | SortOrder
+    dojoId?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: AnnouncementCountOrderByAggregateInput
+    _max?: AnnouncementMaxOrderByAggregateInput
+    _min?: AnnouncementMinOrderByAggregateInput
+  }
+
+  export type AnnouncementScalarWhereWithAggregatesInput = {
+    AND?: AnnouncementScalarWhereWithAggregatesInput | AnnouncementScalarWhereWithAggregatesInput[]
+    OR?: AnnouncementScalarWhereWithAggregatesInput[]
+    NOT?: AnnouncementScalarWhereWithAggregatesInput | AnnouncementScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"Announcement"> | string
+    title?: StringWithAggregatesFilter<"Announcement"> | string
+    body?: StringNullableWithAggregatesFilter<"Announcement"> | string | null
+    link?: StringNullableWithAggregatesFilter<"Announcement"> | string | null
+    isPublished?: BoolWithAggregatesFilter<"Announcement"> | boolean
+    publishedAt?: DateTimeWithAggregatesFilter<"Announcement"> | Date | string
+    attachmentUrl?: StringNullableWithAggregatesFilter<"Announcement"> | string | null
+    attachmentType?: EnumAttachmentTypeNullableWithAggregatesFilter<"Announcement"> | $Enums.AttachmentType | null
+    postedById?: UuidNullableWithAggregatesFilter<"Announcement"> | string | null
+    dojoId?: UuidNullableWithAggregatesFilter<"Announcement"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"Announcement"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Announcement"> | Date | string
   }
 
   export type EventRegistrationWhereInput = {
@@ -28441,6 +30223,8 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestCreateNestedManyWithoutDojoInput
     members?: MemberCreateNestedManyWithoutDojoInput
     attendance?: AttendanceCreateNestedManyWithoutDojoInput
+    events?: EventCreateNestedManyWithoutDojoInput
+    announcements?: AnnouncementCreateNestedManyWithoutDojoInput
   }
 
   export type DojoUncheckedCreateInput = {
@@ -28465,6 +30249,8 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutDojoInput
     members?: MemberUncheckedCreateNestedManyWithoutDojoInput
     attendance?: AttendanceUncheckedCreateNestedManyWithoutDojoInput
+    events?: EventUncheckedCreateNestedManyWithoutDojoInput
+    announcements?: AnnouncementUncheckedCreateNestedManyWithoutDojoInput
   }
 
   export type DojoUpdateInput = {
@@ -28489,6 +30275,8 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestUpdateManyWithoutDojoNestedInput
     members?: MemberUpdateManyWithoutDojoNestedInput
     attendance?: AttendanceUpdateManyWithoutDojoNestedInput
+    events?: EventUpdateManyWithoutDojoNestedInput
+    announcements?: AnnouncementUpdateManyWithoutDojoNestedInput
   }
 
   export type DojoUncheckedUpdateInput = {
@@ -28513,6 +30301,8 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutDojoNestedInput
     members?: MemberUncheckedUpdateManyWithoutDojoNestedInput
     attendance?: AttendanceUncheckedUpdateManyWithoutDojoNestedInput
+    events?: EventUncheckedUpdateManyWithoutDojoNestedInput
+    announcements?: AnnouncementUncheckedUpdateManyWithoutDojoNestedInput
   }
 
   export type DojoCreateManyInput = {
@@ -28745,6 +30535,8 @@ export namespace Prisma {
     attendance?: AttendanceCreateNestedManyWithoutMemberInput
     tournamentEntries?: TournamentParticipantCreateNestedManyWithoutMemberInput
     certificateRequests?: CertificateRequestCreateNestedManyWithoutMemberInput
+    eventsPosted?: EventCreateNestedManyWithoutPostedByInput
+    announcementsPosted?: AnnouncementCreateNestedManyWithoutPostedByInput
   }
 
   export type MemberUncheckedCreateInput = {
@@ -28780,6 +30572,8 @@ export namespace Prisma {
     attendance?: AttendanceUncheckedCreateNestedManyWithoutMemberInput
     tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutMemberInput
     certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutMemberInput
+    eventsPosted?: EventUncheckedCreateNestedManyWithoutPostedByInput
+    announcementsPosted?: AnnouncementUncheckedCreateNestedManyWithoutPostedByInput
   }
 
   export type MemberUpdateInput = {
@@ -28815,6 +30609,8 @@ export namespace Prisma {
     attendance?: AttendanceUpdateManyWithoutMemberNestedInput
     tournamentEntries?: TournamentParticipantUpdateManyWithoutMemberNestedInput
     certificateRequests?: CertificateRequestUpdateManyWithoutMemberNestedInput
+    eventsPosted?: EventUpdateManyWithoutPostedByNestedInput
+    announcementsPosted?: AnnouncementUpdateManyWithoutPostedByNestedInput
   }
 
   export type MemberUncheckedUpdateInput = {
@@ -28850,6 +30646,8 @@ export namespace Prisma {
     attendance?: AttendanceUncheckedUpdateManyWithoutMemberNestedInput
     tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutMemberNestedInput
     certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutMemberNestedInput
+    eventsPosted?: EventUncheckedUpdateManyWithoutPostedByNestedInput
+    announcementsPosted?: AnnouncementUncheckedUpdateManyWithoutPostedByNestedInput
   }
 
   export type MemberCreateManyInput = {
@@ -29478,9 +31276,14 @@ export namespace Prisma {
     imageUrl?: string | null
     isPublished?: boolean
     maxCapacity?: number | null
+    category?: $Enums.EventCategory
+    attachmentUrl?: string | null
+    attachmentType?: $Enums.AttachmentType | null
     createdAt?: Date | string
     updatedAt?: Date | string
     registrations?: EventRegistrationCreateNestedManyWithoutEventInput
+    postedBy?: MemberCreateNestedOneWithoutEventsPostedInput
+    dojo?: DojoCreateNestedOneWithoutEventsInput
   }
 
   export type EventUncheckedCreateInput = {
@@ -29492,6 +31295,11 @@ export namespace Prisma {
     imageUrl?: string | null
     isPublished?: boolean
     maxCapacity?: number | null
+    category?: $Enums.EventCategory
+    attachmentUrl?: string | null
+    attachmentType?: $Enums.AttachmentType | null
+    postedById?: string | null
+    dojoId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     registrations?: EventRegistrationUncheckedCreateNestedManyWithoutEventInput
@@ -29506,9 +31314,14 @@ export namespace Prisma {
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     maxCapacity?: NullableIntFieldUpdateOperationsInput | number | null
+    category?: EnumEventCategoryFieldUpdateOperationsInput | $Enums.EventCategory
+    attachmentUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    attachmentType?: NullableEnumAttachmentTypeFieldUpdateOperationsInput | $Enums.AttachmentType | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     registrations?: EventRegistrationUpdateManyWithoutEventNestedInput
+    postedBy?: MemberUpdateOneWithoutEventsPostedNestedInput
+    dojo?: DojoUpdateOneWithoutEventsNestedInput
   }
 
   export type EventUncheckedUpdateInput = {
@@ -29520,6 +31333,11 @@ export namespace Prisma {
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     maxCapacity?: NullableIntFieldUpdateOperationsInput | number | null
+    category?: EnumEventCategoryFieldUpdateOperationsInput | $Enums.EventCategory
+    attachmentUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    attachmentType?: NullableEnumAttachmentTypeFieldUpdateOperationsInput | $Enums.AttachmentType | null
+    postedById?: NullableStringFieldUpdateOperationsInput | string | null
+    dojoId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     registrations?: EventRegistrationUncheckedUpdateManyWithoutEventNestedInput
@@ -29534,6 +31352,11 @@ export namespace Prisma {
     imageUrl?: string | null
     isPublished?: boolean
     maxCapacity?: number | null
+    category?: $Enums.EventCategory
+    attachmentUrl?: string | null
+    attachmentType?: $Enums.AttachmentType | null
+    postedById?: string | null
+    dojoId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -29547,6 +31370,9 @@ export namespace Prisma {
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     maxCapacity?: NullableIntFieldUpdateOperationsInput | number | null
+    category?: EnumEventCategoryFieldUpdateOperationsInput | $Enums.EventCategory
+    attachmentUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    attachmentType?: NullableEnumAttachmentTypeFieldUpdateOperationsInput | $Enums.AttachmentType | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -29560,6 +31386,114 @@ export namespace Prisma {
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     maxCapacity?: NullableIntFieldUpdateOperationsInput | number | null
+    category?: EnumEventCategoryFieldUpdateOperationsInput | $Enums.EventCategory
+    attachmentUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    attachmentType?: NullableEnumAttachmentTypeFieldUpdateOperationsInput | $Enums.AttachmentType | null
+    postedById?: NullableStringFieldUpdateOperationsInput | string | null
+    dojoId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AnnouncementCreateInput = {
+    id?: string
+    title: string
+    body?: string | null
+    link?: string | null
+    isPublished?: boolean
+    publishedAt?: Date | string
+    attachmentUrl?: string | null
+    attachmentType?: $Enums.AttachmentType | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    postedBy?: MemberCreateNestedOneWithoutAnnouncementsPostedInput
+    dojo?: DojoCreateNestedOneWithoutAnnouncementsInput
+  }
+
+  export type AnnouncementUncheckedCreateInput = {
+    id?: string
+    title: string
+    body?: string | null
+    link?: string | null
+    isPublished?: boolean
+    publishedAt?: Date | string
+    attachmentUrl?: string | null
+    attachmentType?: $Enums.AttachmentType | null
+    postedById?: string | null
+    dojoId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AnnouncementUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    body?: NullableStringFieldUpdateOperationsInput | string | null
+    link?: NullableStringFieldUpdateOperationsInput | string | null
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
+    publishedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    attachmentUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    attachmentType?: NullableEnumAttachmentTypeFieldUpdateOperationsInput | $Enums.AttachmentType | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    postedBy?: MemberUpdateOneWithoutAnnouncementsPostedNestedInput
+    dojo?: DojoUpdateOneWithoutAnnouncementsNestedInput
+  }
+
+  export type AnnouncementUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    body?: NullableStringFieldUpdateOperationsInput | string | null
+    link?: NullableStringFieldUpdateOperationsInput | string | null
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
+    publishedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    attachmentUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    attachmentType?: NullableEnumAttachmentTypeFieldUpdateOperationsInput | $Enums.AttachmentType | null
+    postedById?: NullableStringFieldUpdateOperationsInput | string | null
+    dojoId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AnnouncementCreateManyInput = {
+    id?: string
+    title: string
+    body?: string | null
+    link?: string | null
+    isPublished?: boolean
+    publishedAt?: Date | string
+    attachmentUrl?: string | null
+    attachmentType?: $Enums.AttachmentType | null
+    postedById?: string | null
+    dojoId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AnnouncementUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    body?: NullableStringFieldUpdateOperationsInput | string | null
+    link?: NullableStringFieldUpdateOperationsInput | string | null
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
+    publishedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    attachmentUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    attachmentType?: NullableEnumAttachmentTypeFieldUpdateOperationsInput | $Enums.AttachmentType | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AnnouncementUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    body?: NullableStringFieldUpdateOperationsInput | string | null
+    link?: NullableStringFieldUpdateOperationsInput | string | null
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
+    publishedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    attachmentUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    attachmentType?: NullableEnumAttachmentTypeFieldUpdateOperationsInput | $Enums.AttachmentType | null
+    postedById?: NullableStringFieldUpdateOperationsInput | string | null
+    dojoId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -30543,6 +32477,18 @@ export namespace Prisma {
     none?: AttendanceWhereInput
   }
 
+  export type EventListRelationFilter = {
+    every?: EventWhereInput
+    some?: EventWhereInput
+    none?: EventWhereInput
+  }
+
+  export type AnnouncementListRelationFilter = {
+    every?: AnnouncementWhereInput
+    some?: AnnouncementWhereInput
+    none?: AnnouncementWhereInput
+  }
+
   export type ShopOrderOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -30556,6 +32502,14 @@ export namespace Prisma {
   }
 
   export type AttendanceOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type EventOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type AnnouncementOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -31370,6 +33324,25 @@ export namespace Prisma {
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
+  export type EnumEventCategoryFilter<$PrismaModel = never> = {
+    equals?: $Enums.EventCategory | EnumEventCategoryFieldRefInput<$PrismaModel>
+    in?: $Enums.EventCategory[] | ListEnumEventCategoryFieldRefInput<$PrismaModel>
+    notIn?: $Enums.EventCategory[] | ListEnumEventCategoryFieldRefInput<$PrismaModel>
+    not?: NestedEnumEventCategoryFilter<$PrismaModel> | $Enums.EventCategory
+  }
+
+  export type EnumAttachmentTypeNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.AttachmentType | EnumAttachmentTypeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.AttachmentType[] | ListEnumAttachmentTypeFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.AttachmentType[] | ListEnumAttachmentTypeFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumAttachmentTypeNullableFilter<$PrismaModel> | $Enums.AttachmentType | null
+  }
+
+  export type MemberNullableScalarRelationFilter = {
+    is?: MemberWhereInput | null
+    isNot?: MemberWhereInput | null
+  }
+
   export type EventCountOrderByAggregateInput = {
     id?: SortOrder
     title?: SortOrder
@@ -31379,6 +33352,11 @@ export namespace Prisma {
     imageUrl?: SortOrder
     isPublished?: SortOrder
     maxCapacity?: SortOrder
+    category?: SortOrder
+    attachmentUrl?: SortOrder
+    attachmentType?: SortOrder
+    postedById?: SortOrder
+    dojoId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -31396,6 +33374,11 @@ export namespace Prisma {
     imageUrl?: SortOrder
     isPublished?: SortOrder
     maxCapacity?: SortOrder
+    category?: SortOrder
+    attachmentUrl?: SortOrder
+    attachmentType?: SortOrder
+    postedById?: SortOrder
+    dojoId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -31409,6 +33392,11 @@ export namespace Prisma {
     imageUrl?: SortOrder
     isPublished?: SortOrder
     maxCapacity?: SortOrder
+    category?: SortOrder
+    attachmentUrl?: SortOrder
+    attachmentType?: SortOrder
+    postedById?: SortOrder
+    dojoId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -31431,6 +33419,71 @@ export namespace Prisma {
     _sum?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedIntNullableFilter<$PrismaModel>
     _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type EnumEventCategoryWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.EventCategory | EnumEventCategoryFieldRefInput<$PrismaModel>
+    in?: $Enums.EventCategory[] | ListEnumEventCategoryFieldRefInput<$PrismaModel>
+    notIn?: $Enums.EventCategory[] | ListEnumEventCategoryFieldRefInput<$PrismaModel>
+    not?: NestedEnumEventCategoryWithAggregatesFilter<$PrismaModel> | $Enums.EventCategory
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumEventCategoryFilter<$PrismaModel>
+    _max?: NestedEnumEventCategoryFilter<$PrismaModel>
+  }
+
+  export type EnumAttachmentTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.AttachmentType | EnumAttachmentTypeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.AttachmentType[] | ListEnumAttachmentTypeFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.AttachmentType[] | ListEnumAttachmentTypeFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumAttachmentTypeNullableWithAggregatesFilter<$PrismaModel> | $Enums.AttachmentType | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumAttachmentTypeNullableFilter<$PrismaModel>
+    _max?: NestedEnumAttachmentTypeNullableFilter<$PrismaModel>
+  }
+
+  export type AnnouncementCountOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    body?: SortOrder
+    link?: SortOrder
+    isPublished?: SortOrder
+    publishedAt?: SortOrder
+    attachmentUrl?: SortOrder
+    attachmentType?: SortOrder
+    postedById?: SortOrder
+    dojoId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AnnouncementMaxOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    body?: SortOrder
+    link?: SortOrder
+    isPublished?: SortOrder
+    publishedAt?: SortOrder
+    attachmentUrl?: SortOrder
+    attachmentType?: SortOrder
+    postedById?: SortOrder
+    dojoId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AnnouncementMinOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    body?: SortOrder
+    link?: SortOrder
+    isPublished?: SortOrder
+    publishedAt?: SortOrder
+    attachmentUrl?: SortOrder
+    attachmentType?: SortOrder
+    postedById?: SortOrder
+    dojoId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type EventScalarRelationFilter = {
@@ -32066,6 +34119,20 @@ export namespace Prisma {
     connect?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
   }
 
+  export type EventCreateNestedManyWithoutDojoInput = {
+    create?: XOR<EventCreateWithoutDojoInput, EventUncheckedCreateWithoutDojoInput> | EventCreateWithoutDojoInput[] | EventUncheckedCreateWithoutDojoInput[]
+    connectOrCreate?: EventCreateOrConnectWithoutDojoInput | EventCreateOrConnectWithoutDojoInput[]
+    createMany?: EventCreateManyDojoInputEnvelope
+    connect?: EventWhereUniqueInput | EventWhereUniqueInput[]
+  }
+
+  export type AnnouncementCreateNestedManyWithoutDojoInput = {
+    create?: XOR<AnnouncementCreateWithoutDojoInput, AnnouncementUncheckedCreateWithoutDojoInput> | AnnouncementCreateWithoutDojoInput[] | AnnouncementUncheckedCreateWithoutDojoInput[]
+    connectOrCreate?: AnnouncementCreateOrConnectWithoutDojoInput | AnnouncementCreateOrConnectWithoutDojoInput[]
+    createMany?: AnnouncementCreateManyDojoInputEnvelope
+    connect?: AnnouncementWhereUniqueInput | AnnouncementWhereUniqueInput[]
+  }
+
   export type ShopOrderUncheckedCreateNestedManyWithoutDojoInput = {
     create?: XOR<ShopOrderCreateWithoutDojoInput, ShopOrderUncheckedCreateWithoutDojoInput> | ShopOrderCreateWithoutDojoInput[] | ShopOrderUncheckedCreateWithoutDojoInput[]
     connectOrCreate?: ShopOrderCreateOrConnectWithoutDojoInput | ShopOrderCreateOrConnectWithoutDojoInput[]
@@ -32099,6 +34166,20 @@ export namespace Prisma {
     connectOrCreate?: AttendanceCreateOrConnectWithoutDojoInput | AttendanceCreateOrConnectWithoutDojoInput[]
     createMany?: AttendanceCreateManyDojoInputEnvelope
     connect?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
+  }
+
+  export type EventUncheckedCreateNestedManyWithoutDojoInput = {
+    create?: XOR<EventCreateWithoutDojoInput, EventUncheckedCreateWithoutDojoInput> | EventCreateWithoutDojoInput[] | EventUncheckedCreateWithoutDojoInput[]
+    connectOrCreate?: EventCreateOrConnectWithoutDojoInput | EventCreateOrConnectWithoutDojoInput[]
+    createMany?: EventCreateManyDojoInputEnvelope
+    connect?: EventWhereUniqueInput | EventWhereUniqueInput[]
+  }
+
+  export type AnnouncementUncheckedCreateNestedManyWithoutDojoInput = {
+    create?: XOR<AnnouncementCreateWithoutDojoInput, AnnouncementUncheckedCreateWithoutDojoInput> | AnnouncementCreateWithoutDojoInput[] | AnnouncementUncheckedCreateWithoutDojoInput[]
+    connectOrCreate?: AnnouncementCreateOrConnectWithoutDojoInput | AnnouncementCreateOrConnectWithoutDojoInput[]
+    createMany?: AnnouncementCreateManyDojoInputEnvelope
+    connect?: AnnouncementWhereUniqueInput | AnnouncementWhereUniqueInput[]
   }
 
   export type NullableFloatFieldUpdateOperationsInput = {
@@ -32187,6 +34268,34 @@ export namespace Prisma {
     deleteMany?: AttendanceScalarWhereInput | AttendanceScalarWhereInput[]
   }
 
+  export type EventUpdateManyWithoutDojoNestedInput = {
+    create?: XOR<EventCreateWithoutDojoInput, EventUncheckedCreateWithoutDojoInput> | EventCreateWithoutDojoInput[] | EventUncheckedCreateWithoutDojoInput[]
+    connectOrCreate?: EventCreateOrConnectWithoutDojoInput | EventCreateOrConnectWithoutDojoInput[]
+    upsert?: EventUpsertWithWhereUniqueWithoutDojoInput | EventUpsertWithWhereUniqueWithoutDojoInput[]
+    createMany?: EventCreateManyDojoInputEnvelope
+    set?: EventWhereUniqueInput | EventWhereUniqueInput[]
+    disconnect?: EventWhereUniqueInput | EventWhereUniqueInput[]
+    delete?: EventWhereUniqueInput | EventWhereUniqueInput[]
+    connect?: EventWhereUniqueInput | EventWhereUniqueInput[]
+    update?: EventUpdateWithWhereUniqueWithoutDojoInput | EventUpdateWithWhereUniqueWithoutDojoInput[]
+    updateMany?: EventUpdateManyWithWhereWithoutDojoInput | EventUpdateManyWithWhereWithoutDojoInput[]
+    deleteMany?: EventScalarWhereInput | EventScalarWhereInput[]
+  }
+
+  export type AnnouncementUpdateManyWithoutDojoNestedInput = {
+    create?: XOR<AnnouncementCreateWithoutDojoInput, AnnouncementUncheckedCreateWithoutDojoInput> | AnnouncementCreateWithoutDojoInput[] | AnnouncementUncheckedCreateWithoutDojoInput[]
+    connectOrCreate?: AnnouncementCreateOrConnectWithoutDojoInput | AnnouncementCreateOrConnectWithoutDojoInput[]
+    upsert?: AnnouncementUpsertWithWhereUniqueWithoutDojoInput | AnnouncementUpsertWithWhereUniqueWithoutDojoInput[]
+    createMany?: AnnouncementCreateManyDojoInputEnvelope
+    set?: AnnouncementWhereUniqueInput | AnnouncementWhereUniqueInput[]
+    disconnect?: AnnouncementWhereUniqueInput | AnnouncementWhereUniqueInput[]
+    delete?: AnnouncementWhereUniqueInput | AnnouncementWhereUniqueInput[]
+    connect?: AnnouncementWhereUniqueInput | AnnouncementWhereUniqueInput[]
+    update?: AnnouncementUpdateWithWhereUniqueWithoutDojoInput | AnnouncementUpdateWithWhereUniqueWithoutDojoInput[]
+    updateMany?: AnnouncementUpdateManyWithWhereWithoutDojoInput | AnnouncementUpdateManyWithWhereWithoutDojoInput[]
+    deleteMany?: AnnouncementScalarWhereInput | AnnouncementScalarWhereInput[]
+  }
+
   export type ShopOrderUncheckedUpdateManyWithoutDojoNestedInput = {
     create?: XOR<ShopOrderCreateWithoutDojoInput, ShopOrderUncheckedCreateWithoutDojoInput> | ShopOrderCreateWithoutDojoInput[] | ShopOrderUncheckedCreateWithoutDojoInput[]
     connectOrCreate?: ShopOrderCreateOrConnectWithoutDojoInput | ShopOrderCreateOrConnectWithoutDojoInput[]
@@ -32255,6 +34364,34 @@ export namespace Prisma {
     update?: AttendanceUpdateWithWhereUniqueWithoutDojoInput | AttendanceUpdateWithWhereUniqueWithoutDojoInput[]
     updateMany?: AttendanceUpdateManyWithWhereWithoutDojoInput | AttendanceUpdateManyWithWhereWithoutDojoInput[]
     deleteMany?: AttendanceScalarWhereInput | AttendanceScalarWhereInput[]
+  }
+
+  export type EventUncheckedUpdateManyWithoutDojoNestedInput = {
+    create?: XOR<EventCreateWithoutDojoInput, EventUncheckedCreateWithoutDojoInput> | EventCreateWithoutDojoInput[] | EventUncheckedCreateWithoutDojoInput[]
+    connectOrCreate?: EventCreateOrConnectWithoutDojoInput | EventCreateOrConnectWithoutDojoInput[]
+    upsert?: EventUpsertWithWhereUniqueWithoutDojoInput | EventUpsertWithWhereUniqueWithoutDojoInput[]
+    createMany?: EventCreateManyDojoInputEnvelope
+    set?: EventWhereUniqueInput | EventWhereUniqueInput[]
+    disconnect?: EventWhereUniqueInput | EventWhereUniqueInput[]
+    delete?: EventWhereUniqueInput | EventWhereUniqueInput[]
+    connect?: EventWhereUniqueInput | EventWhereUniqueInput[]
+    update?: EventUpdateWithWhereUniqueWithoutDojoInput | EventUpdateWithWhereUniqueWithoutDojoInput[]
+    updateMany?: EventUpdateManyWithWhereWithoutDojoInput | EventUpdateManyWithWhereWithoutDojoInput[]
+    deleteMany?: EventScalarWhereInput | EventScalarWhereInput[]
+  }
+
+  export type AnnouncementUncheckedUpdateManyWithoutDojoNestedInput = {
+    create?: XOR<AnnouncementCreateWithoutDojoInput, AnnouncementUncheckedCreateWithoutDojoInput> | AnnouncementCreateWithoutDojoInput[] | AnnouncementUncheckedCreateWithoutDojoInput[]
+    connectOrCreate?: AnnouncementCreateOrConnectWithoutDojoInput | AnnouncementCreateOrConnectWithoutDojoInput[]
+    upsert?: AnnouncementUpsertWithWhereUniqueWithoutDojoInput | AnnouncementUpsertWithWhereUniqueWithoutDojoInput[]
+    createMany?: AnnouncementCreateManyDojoInputEnvelope
+    set?: AnnouncementWhereUniqueInput | AnnouncementWhereUniqueInput[]
+    disconnect?: AnnouncementWhereUniqueInput | AnnouncementWhereUniqueInput[]
+    delete?: AnnouncementWhereUniqueInput | AnnouncementWhereUniqueInput[]
+    connect?: AnnouncementWhereUniqueInput | AnnouncementWhereUniqueInput[]
+    update?: AnnouncementUpdateWithWhereUniqueWithoutDojoInput | AnnouncementUpdateWithWhereUniqueWithoutDojoInput[]
+    updateMany?: AnnouncementUpdateManyWithWhereWithoutDojoInput | AnnouncementUpdateManyWithWhereWithoutDojoInput[]
+    deleteMany?: AnnouncementScalarWhereInput | AnnouncementScalarWhereInput[]
   }
 
   export type DojoApplicationCreateinteriorUrlsInput = {
@@ -32332,6 +34469,20 @@ export namespace Prisma {
     connect?: CertificateRequestWhereUniqueInput | CertificateRequestWhereUniqueInput[]
   }
 
+  export type EventCreateNestedManyWithoutPostedByInput = {
+    create?: XOR<EventCreateWithoutPostedByInput, EventUncheckedCreateWithoutPostedByInput> | EventCreateWithoutPostedByInput[] | EventUncheckedCreateWithoutPostedByInput[]
+    connectOrCreate?: EventCreateOrConnectWithoutPostedByInput | EventCreateOrConnectWithoutPostedByInput[]
+    createMany?: EventCreateManyPostedByInputEnvelope
+    connect?: EventWhereUniqueInput | EventWhereUniqueInput[]
+  }
+
+  export type AnnouncementCreateNestedManyWithoutPostedByInput = {
+    create?: XOR<AnnouncementCreateWithoutPostedByInput, AnnouncementUncheckedCreateWithoutPostedByInput> | AnnouncementCreateWithoutPostedByInput[] | AnnouncementUncheckedCreateWithoutPostedByInput[]
+    connectOrCreate?: AnnouncementCreateOrConnectWithoutPostedByInput | AnnouncementCreateOrConnectWithoutPostedByInput[]
+    createMany?: AnnouncementCreateManyPostedByInputEnvelope
+    connect?: AnnouncementWhereUniqueInput | AnnouncementWhereUniqueInput[]
+  }
+
   export type GradingUncheckedCreateNestedManyWithoutMemberInput = {
     create?: XOR<GradingCreateWithoutMemberInput, GradingUncheckedCreateWithoutMemberInput> | GradingCreateWithoutMemberInput[] | GradingUncheckedCreateWithoutMemberInput[]
     connectOrCreate?: GradingCreateOrConnectWithoutMemberInput | GradingCreateOrConnectWithoutMemberInput[]
@@ -32386,6 +34537,20 @@ export namespace Prisma {
     connectOrCreate?: CertificateRequestCreateOrConnectWithoutMemberInput | CertificateRequestCreateOrConnectWithoutMemberInput[]
     createMany?: CertificateRequestCreateManyMemberInputEnvelope
     connect?: CertificateRequestWhereUniqueInput | CertificateRequestWhereUniqueInput[]
+  }
+
+  export type EventUncheckedCreateNestedManyWithoutPostedByInput = {
+    create?: XOR<EventCreateWithoutPostedByInput, EventUncheckedCreateWithoutPostedByInput> | EventCreateWithoutPostedByInput[] | EventUncheckedCreateWithoutPostedByInput[]
+    connectOrCreate?: EventCreateOrConnectWithoutPostedByInput | EventCreateOrConnectWithoutPostedByInput[]
+    createMany?: EventCreateManyPostedByInputEnvelope
+    connect?: EventWhereUniqueInput | EventWhereUniqueInput[]
+  }
+
+  export type AnnouncementUncheckedCreateNestedManyWithoutPostedByInput = {
+    create?: XOR<AnnouncementCreateWithoutPostedByInput, AnnouncementUncheckedCreateWithoutPostedByInput> | AnnouncementCreateWithoutPostedByInput[] | AnnouncementUncheckedCreateWithoutPostedByInput[]
+    connectOrCreate?: AnnouncementCreateOrConnectWithoutPostedByInput | AnnouncementCreateOrConnectWithoutPostedByInput[]
+    createMany?: AnnouncementCreateManyPostedByInputEnvelope
+    connect?: AnnouncementWhereUniqueInput | AnnouncementWhereUniqueInput[]
   }
 
   export type EnumMemberRoleFieldUpdateOperationsInput = {
@@ -32518,6 +34683,34 @@ export namespace Prisma {
     deleteMany?: CertificateRequestScalarWhereInput | CertificateRequestScalarWhereInput[]
   }
 
+  export type EventUpdateManyWithoutPostedByNestedInput = {
+    create?: XOR<EventCreateWithoutPostedByInput, EventUncheckedCreateWithoutPostedByInput> | EventCreateWithoutPostedByInput[] | EventUncheckedCreateWithoutPostedByInput[]
+    connectOrCreate?: EventCreateOrConnectWithoutPostedByInput | EventCreateOrConnectWithoutPostedByInput[]
+    upsert?: EventUpsertWithWhereUniqueWithoutPostedByInput | EventUpsertWithWhereUniqueWithoutPostedByInput[]
+    createMany?: EventCreateManyPostedByInputEnvelope
+    set?: EventWhereUniqueInput | EventWhereUniqueInput[]
+    disconnect?: EventWhereUniqueInput | EventWhereUniqueInput[]
+    delete?: EventWhereUniqueInput | EventWhereUniqueInput[]
+    connect?: EventWhereUniqueInput | EventWhereUniqueInput[]
+    update?: EventUpdateWithWhereUniqueWithoutPostedByInput | EventUpdateWithWhereUniqueWithoutPostedByInput[]
+    updateMany?: EventUpdateManyWithWhereWithoutPostedByInput | EventUpdateManyWithWhereWithoutPostedByInput[]
+    deleteMany?: EventScalarWhereInput | EventScalarWhereInput[]
+  }
+
+  export type AnnouncementUpdateManyWithoutPostedByNestedInput = {
+    create?: XOR<AnnouncementCreateWithoutPostedByInput, AnnouncementUncheckedCreateWithoutPostedByInput> | AnnouncementCreateWithoutPostedByInput[] | AnnouncementUncheckedCreateWithoutPostedByInput[]
+    connectOrCreate?: AnnouncementCreateOrConnectWithoutPostedByInput | AnnouncementCreateOrConnectWithoutPostedByInput[]
+    upsert?: AnnouncementUpsertWithWhereUniqueWithoutPostedByInput | AnnouncementUpsertWithWhereUniqueWithoutPostedByInput[]
+    createMany?: AnnouncementCreateManyPostedByInputEnvelope
+    set?: AnnouncementWhereUniqueInput | AnnouncementWhereUniqueInput[]
+    disconnect?: AnnouncementWhereUniqueInput | AnnouncementWhereUniqueInput[]
+    delete?: AnnouncementWhereUniqueInput | AnnouncementWhereUniqueInput[]
+    connect?: AnnouncementWhereUniqueInput | AnnouncementWhereUniqueInput[]
+    update?: AnnouncementUpdateWithWhereUniqueWithoutPostedByInput | AnnouncementUpdateWithWhereUniqueWithoutPostedByInput[]
+    updateMany?: AnnouncementUpdateManyWithWhereWithoutPostedByInput | AnnouncementUpdateManyWithWhereWithoutPostedByInput[]
+    deleteMany?: AnnouncementScalarWhereInput | AnnouncementScalarWhereInput[]
+  }
+
   export type GradingUncheckedUpdateManyWithoutMemberNestedInput = {
     create?: XOR<GradingCreateWithoutMemberInput, GradingUncheckedCreateWithoutMemberInput> | GradingCreateWithoutMemberInput[] | GradingUncheckedCreateWithoutMemberInput[]
     connectOrCreate?: GradingCreateOrConnectWithoutMemberInput | GradingCreateOrConnectWithoutMemberInput[]
@@ -32628,6 +34821,34 @@ export namespace Prisma {
     update?: CertificateRequestUpdateWithWhereUniqueWithoutMemberInput | CertificateRequestUpdateWithWhereUniqueWithoutMemberInput[]
     updateMany?: CertificateRequestUpdateManyWithWhereWithoutMemberInput | CertificateRequestUpdateManyWithWhereWithoutMemberInput[]
     deleteMany?: CertificateRequestScalarWhereInput | CertificateRequestScalarWhereInput[]
+  }
+
+  export type EventUncheckedUpdateManyWithoutPostedByNestedInput = {
+    create?: XOR<EventCreateWithoutPostedByInput, EventUncheckedCreateWithoutPostedByInput> | EventCreateWithoutPostedByInput[] | EventUncheckedCreateWithoutPostedByInput[]
+    connectOrCreate?: EventCreateOrConnectWithoutPostedByInput | EventCreateOrConnectWithoutPostedByInput[]
+    upsert?: EventUpsertWithWhereUniqueWithoutPostedByInput | EventUpsertWithWhereUniqueWithoutPostedByInput[]
+    createMany?: EventCreateManyPostedByInputEnvelope
+    set?: EventWhereUniqueInput | EventWhereUniqueInput[]
+    disconnect?: EventWhereUniqueInput | EventWhereUniqueInput[]
+    delete?: EventWhereUniqueInput | EventWhereUniqueInput[]
+    connect?: EventWhereUniqueInput | EventWhereUniqueInput[]
+    update?: EventUpdateWithWhereUniqueWithoutPostedByInput | EventUpdateWithWhereUniqueWithoutPostedByInput[]
+    updateMany?: EventUpdateManyWithWhereWithoutPostedByInput | EventUpdateManyWithWhereWithoutPostedByInput[]
+    deleteMany?: EventScalarWhereInput | EventScalarWhereInput[]
+  }
+
+  export type AnnouncementUncheckedUpdateManyWithoutPostedByNestedInput = {
+    create?: XOR<AnnouncementCreateWithoutPostedByInput, AnnouncementUncheckedCreateWithoutPostedByInput> | AnnouncementCreateWithoutPostedByInput[] | AnnouncementUncheckedCreateWithoutPostedByInput[]
+    connectOrCreate?: AnnouncementCreateOrConnectWithoutPostedByInput | AnnouncementCreateOrConnectWithoutPostedByInput[]
+    upsert?: AnnouncementUpsertWithWhereUniqueWithoutPostedByInput | AnnouncementUpsertWithWhereUniqueWithoutPostedByInput[]
+    createMany?: AnnouncementCreateManyPostedByInputEnvelope
+    set?: AnnouncementWhereUniqueInput | AnnouncementWhereUniqueInput[]
+    disconnect?: AnnouncementWhereUniqueInput | AnnouncementWhereUniqueInput[]
+    delete?: AnnouncementWhereUniqueInput | AnnouncementWhereUniqueInput[]
+    connect?: AnnouncementWhereUniqueInput | AnnouncementWhereUniqueInput[]
+    update?: AnnouncementUpdateWithWhereUniqueWithoutPostedByInput | AnnouncementUpdateWithWhereUniqueWithoutPostedByInput[]
+    updateMany?: AnnouncementUpdateManyWithWhereWithoutPostedByInput | AnnouncementUpdateManyWithWhereWithoutPostedByInput[]
+    deleteMany?: AnnouncementScalarWhereInput | AnnouncementScalarWhereInput[]
   }
 
   export type MemberCreateNestedOneWithoutAttendanceInput = {
@@ -32995,6 +35216,18 @@ export namespace Prisma {
     connect?: EventRegistrationWhereUniqueInput | EventRegistrationWhereUniqueInput[]
   }
 
+  export type MemberCreateNestedOneWithoutEventsPostedInput = {
+    create?: XOR<MemberCreateWithoutEventsPostedInput, MemberUncheckedCreateWithoutEventsPostedInput>
+    connectOrCreate?: MemberCreateOrConnectWithoutEventsPostedInput
+    connect?: MemberWhereUniqueInput
+  }
+
+  export type DojoCreateNestedOneWithoutEventsInput = {
+    create?: XOR<DojoCreateWithoutEventsInput, DojoUncheckedCreateWithoutEventsInput>
+    connectOrCreate?: DojoCreateOrConnectWithoutEventsInput
+    connect?: DojoWhereUniqueInput
+  }
+
   export type EventRegistrationUncheckedCreateNestedManyWithoutEventInput = {
     create?: XOR<EventRegistrationCreateWithoutEventInput, EventRegistrationUncheckedCreateWithoutEventInput> | EventRegistrationCreateWithoutEventInput[] | EventRegistrationUncheckedCreateWithoutEventInput[]
     connectOrCreate?: EventRegistrationCreateOrConnectWithoutEventInput | EventRegistrationCreateOrConnectWithoutEventInput[]
@@ -33008,6 +35241,14 @@ export namespace Prisma {
     decrement?: number
     multiply?: number
     divide?: number
+  }
+
+  export type EnumEventCategoryFieldUpdateOperationsInput = {
+    set?: $Enums.EventCategory
+  }
+
+  export type NullableEnumAttachmentTypeFieldUpdateOperationsInput = {
+    set?: $Enums.AttachmentType | null
   }
 
   export type EventRegistrationUpdateManyWithoutEventNestedInput = {
@@ -33024,6 +35265,26 @@ export namespace Prisma {
     deleteMany?: EventRegistrationScalarWhereInput | EventRegistrationScalarWhereInput[]
   }
 
+  export type MemberUpdateOneWithoutEventsPostedNestedInput = {
+    create?: XOR<MemberCreateWithoutEventsPostedInput, MemberUncheckedCreateWithoutEventsPostedInput>
+    connectOrCreate?: MemberCreateOrConnectWithoutEventsPostedInput
+    upsert?: MemberUpsertWithoutEventsPostedInput
+    disconnect?: MemberWhereInput | boolean
+    delete?: MemberWhereInput | boolean
+    connect?: MemberWhereUniqueInput
+    update?: XOR<XOR<MemberUpdateToOneWithWhereWithoutEventsPostedInput, MemberUpdateWithoutEventsPostedInput>, MemberUncheckedUpdateWithoutEventsPostedInput>
+  }
+
+  export type DojoUpdateOneWithoutEventsNestedInput = {
+    create?: XOR<DojoCreateWithoutEventsInput, DojoUncheckedCreateWithoutEventsInput>
+    connectOrCreate?: DojoCreateOrConnectWithoutEventsInput
+    upsert?: DojoUpsertWithoutEventsInput
+    disconnect?: DojoWhereInput | boolean
+    delete?: DojoWhereInput | boolean
+    connect?: DojoWhereUniqueInput
+    update?: XOR<XOR<DojoUpdateToOneWithWhereWithoutEventsInput, DojoUpdateWithoutEventsInput>, DojoUncheckedUpdateWithoutEventsInput>
+  }
+
   export type EventRegistrationUncheckedUpdateManyWithoutEventNestedInput = {
     create?: XOR<EventRegistrationCreateWithoutEventInput, EventRegistrationUncheckedCreateWithoutEventInput> | EventRegistrationCreateWithoutEventInput[] | EventRegistrationUncheckedCreateWithoutEventInput[]
     connectOrCreate?: EventRegistrationCreateOrConnectWithoutEventInput | EventRegistrationCreateOrConnectWithoutEventInput[]
@@ -33036,6 +35297,38 @@ export namespace Prisma {
     update?: EventRegistrationUpdateWithWhereUniqueWithoutEventInput | EventRegistrationUpdateWithWhereUniqueWithoutEventInput[]
     updateMany?: EventRegistrationUpdateManyWithWhereWithoutEventInput | EventRegistrationUpdateManyWithWhereWithoutEventInput[]
     deleteMany?: EventRegistrationScalarWhereInput | EventRegistrationScalarWhereInput[]
+  }
+
+  export type MemberCreateNestedOneWithoutAnnouncementsPostedInput = {
+    create?: XOR<MemberCreateWithoutAnnouncementsPostedInput, MemberUncheckedCreateWithoutAnnouncementsPostedInput>
+    connectOrCreate?: MemberCreateOrConnectWithoutAnnouncementsPostedInput
+    connect?: MemberWhereUniqueInput
+  }
+
+  export type DojoCreateNestedOneWithoutAnnouncementsInput = {
+    create?: XOR<DojoCreateWithoutAnnouncementsInput, DojoUncheckedCreateWithoutAnnouncementsInput>
+    connectOrCreate?: DojoCreateOrConnectWithoutAnnouncementsInput
+    connect?: DojoWhereUniqueInput
+  }
+
+  export type MemberUpdateOneWithoutAnnouncementsPostedNestedInput = {
+    create?: XOR<MemberCreateWithoutAnnouncementsPostedInput, MemberUncheckedCreateWithoutAnnouncementsPostedInput>
+    connectOrCreate?: MemberCreateOrConnectWithoutAnnouncementsPostedInput
+    upsert?: MemberUpsertWithoutAnnouncementsPostedInput
+    disconnect?: MemberWhereInput | boolean
+    delete?: MemberWhereInput | boolean
+    connect?: MemberWhereUniqueInput
+    update?: XOR<XOR<MemberUpdateToOneWithWhereWithoutAnnouncementsPostedInput, MemberUpdateWithoutAnnouncementsPostedInput>, MemberUncheckedUpdateWithoutAnnouncementsPostedInput>
+  }
+
+  export type DojoUpdateOneWithoutAnnouncementsNestedInput = {
+    create?: XOR<DojoCreateWithoutAnnouncementsInput, DojoUncheckedCreateWithoutAnnouncementsInput>
+    connectOrCreate?: DojoCreateOrConnectWithoutAnnouncementsInput
+    upsert?: DojoUpsertWithoutAnnouncementsInput
+    disconnect?: DojoWhereInput | boolean
+    delete?: DojoWhereInput | boolean
+    connect?: DojoWhereUniqueInput
+    update?: XOR<XOR<DojoUpdateToOneWithWhereWithoutAnnouncementsInput, DojoUpdateWithoutAnnouncementsInput>, DojoUncheckedUpdateWithoutAnnouncementsInput>
   }
 
   export type EventCreateNestedOneWithoutRegistrationsInput = {
@@ -34041,6 +36334,20 @@ export namespace Prisma {
     _max?: NestedDecimalFilter<$PrismaModel>
   }
 
+  export type NestedEnumEventCategoryFilter<$PrismaModel = never> = {
+    equals?: $Enums.EventCategory | EnumEventCategoryFieldRefInput<$PrismaModel>
+    in?: $Enums.EventCategory[] | ListEnumEventCategoryFieldRefInput<$PrismaModel>
+    notIn?: $Enums.EventCategory[] | ListEnumEventCategoryFieldRefInput<$PrismaModel>
+    not?: NestedEnumEventCategoryFilter<$PrismaModel> | $Enums.EventCategory
+  }
+
+  export type NestedEnumAttachmentTypeNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.AttachmentType | EnumAttachmentTypeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.AttachmentType[] | ListEnumAttachmentTypeFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.AttachmentType[] | ListEnumAttachmentTypeFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumAttachmentTypeNullableFilter<$PrismaModel> | $Enums.AttachmentType | null
+  }
+
   export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel> | null
     in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
@@ -34055,6 +36362,26 @@ export namespace Prisma {
     _sum?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedIntNullableFilter<$PrismaModel>
     _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type NestedEnumEventCategoryWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.EventCategory | EnumEventCategoryFieldRefInput<$PrismaModel>
+    in?: $Enums.EventCategory[] | ListEnumEventCategoryFieldRefInput<$PrismaModel>
+    notIn?: $Enums.EventCategory[] | ListEnumEventCategoryFieldRefInput<$PrismaModel>
+    not?: NestedEnumEventCategoryWithAggregatesFilter<$PrismaModel> | $Enums.EventCategory
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumEventCategoryFilter<$PrismaModel>
+    _max?: NestedEnumEventCategoryFilter<$PrismaModel>
+  }
+
+  export type NestedEnumAttachmentTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.AttachmentType | EnumAttachmentTypeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.AttachmentType[] | ListEnumAttachmentTypeFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.AttachmentType[] | ListEnumAttachmentTypeFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumAttachmentTypeNullableWithAggregatesFilter<$PrismaModel> | $Enums.AttachmentType | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumAttachmentTypeNullableFilter<$PrismaModel>
+    _max?: NestedEnumAttachmentTypeNullableFilter<$PrismaModel>
   }
 
   export type NestedEnumNotificationTypeFilter<$PrismaModel = never> = {
@@ -34523,6 +36850,8 @@ export namespace Prisma {
     attendance?: AttendanceCreateNestedManyWithoutMemberInput
     tournamentEntries?: TournamentParticipantCreateNestedManyWithoutMemberInput
     certificateRequests?: CertificateRequestCreateNestedManyWithoutMemberInput
+    eventsPosted?: EventCreateNestedManyWithoutPostedByInput
+    announcementsPosted?: AnnouncementCreateNestedManyWithoutPostedByInput
   }
 
   export type MemberUncheckedCreateWithoutDojoInput = {
@@ -34557,6 +36886,8 @@ export namespace Prisma {
     attendance?: AttendanceUncheckedCreateNestedManyWithoutMemberInput
     tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutMemberInput
     certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutMemberInput
+    eventsPosted?: EventUncheckedCreateNestedManyWithoutPostedByInput
+    announcementsPosted?: AnnouncementUncheckedCreateNestedManyWithoutPostedByInput
   }
 
   export type MemberCreateOrConnectWithoutDojoInput = {
@@ -34594,6 +36925,90 @@ export namespace Prisma {
 
   export type AttendanceCreateManyDojoInputEnvelope = {
     data: AttendanceCreateManyDojoInput | AttendanceCreateManyDojoInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type EventCreateWithoutDojoInput = {
+    id?: string
+    title: string
+    description?: string | null
+    eventDate: Date | string
+    location?: string | null
+    imageUrl?: string | null
+    isPublished?: boolean
+    maxCapacity?: number | null
+    category?: $Enums.EventCategory
+    attachmentUrl?: string | null
+    attachmentType?: $Enums.AttachmentType | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    registrations?: EventRegistrationCreateNestedManyWithoutEventInput
+    postedBy?: MemberCreateNestedOneWithoutEventsPostedInput
+  }
+
+  export type EventUncheckedCreateWithoutDojoInput = {
+    id?: string
+    title: string
+    description?: string | null
+    eventDate: Date | string
+    location?: string | null
+    imageUrl?: string | null
+    isPublished?: boolean
+    maxCapacity?: number | null
+    category?: $Enums.EventCategory
+    attachmentUrl?: string | null
+    attachmentType?: $Enums.AttachmentType | null
+    postedById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    registrations?: EventRegistrationUncheckedCreateNestedManyWithoutEventInput
+  }
+
+  export type EventCreateOrConnectWithoutDojoInput = {
+    where: EventWhereUniqueInput
+    create: XOR<EventCreateWithoutDojoInput, EventUncheckedCreateWithoutDojoInput>
+  }
+
+  export type EventCreateManyDojoInputEnvelope = {
+    data: EventCreateManyDojoInput | EventCreateManyDojoInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type AnnouncementCreateWithoutDojoInput = {
+    id?: string
+    title: string
+    body?: string | null
+    link?: string | null
+    isPublished?: boolean
+    publishedAt?: Date | string
+    attachmentUrl?: string | null
+    attachmentType?: $Enums.AttachmentType | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    postedBy?: MemberCreateNestedOneWithoutAnnouncementsPostedInput
+  }
+
+  export type AnnouncementUncheckedCreateWithoutDojoInput = {
+    id?: string
+    title: string
+    body?: string | null
+    link?: string | null
+    isPublished?: boolean
+    publishedAt?: Date | string
+    attachmentUrl?: string | null
+    attachmentType?: $Enums.AttachmentType | null
+    postedById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AnnouncementCreateOrConnectWithoutDojoInput = {
+    where: AnnouncementWhereUniqueInput
+    create: XOR<AnnouncementCreateWithoutDojoInput, AnnouncementUncheckedCreateWithoutDojoInput>
+  }
+
+  export type AnnouncementCreateManyDojoInputEnvelope = {
+    data: AnnouncementCreateManyDojoInput | AnnouncementCreateManyDojoInput[]
     skipDuplicates?: boolean
   }
 
@@ -34763,6 +37178,77 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Attendance"> | Date | string
   }
 
+  export type EventUpsertWithWhereUniqueWithoutDojoInput = {
+    where: EventWhereUniqueInput
+    update: XOR<EventUpdateWithoutDojoInput, EventUncheckedUpdateWithoutDojoInput>
+    create: XOR<EventCreateWithoutDojoInput, EventUncheckedCreateWithoutDojoInput>
+  }
+
+  export type EventUpdateWithWhereUniqueWithoutDojoInput = {
+    where: EventWhereUniqueInput
+    data: XOR<EventUpdateWithoutDojoInput, EventUncheckedUpdateWithoutDojoInput>
+  }
+
+  export type EventUpdateManyWithWhereWithoutDojoInput = {
+    where: EventScalarWhereInput
+    data: XOR<EventUpdateManyMutationInput, EventUncheckedUpdateManyWithoutDojoInput>
+  }
+
+  export type EventScalarWhereInput = {
+    AND?: EventScalarWhereInput | EventScalarWhereInput[]
+    OR?: EventScalarWhereInput[]
+    NOT?: EventScalarWhereInput | EventScalarWhereInput[]
+    id?: UuidFilter<"Event"> | string
+    title?: StringFilter<"Event"> | string
+    description?: StringNullableFilter<"Event"> | string | null
+    eventDate?: DateTimeFilter<"Event"> | Date | string
+    location?: StringNullableFilter<"Event"> | string | null
+    imageUrl?: StringNullableFilter<"Event"> | string | null
+    isPublished?: BoolFilter<"Event"> | boolean
+    maxCapacity?: IntNullableFilter<"Event"> | number | null
+    category?: EnumEventCategoryFilter<"Event"> | $Enums.EventCategory
+    attachmentUrl?: StringNullableFilter<"Event"> | string | null
+    attachmentType?: EnumAttachmentTypeNullableFilter<"Event"> | $Enums.AttachmentType | null
+    postedById?: UuidNullableFilter<"Event"> | string | null
+    dojoId?: UuidNullableFilter<"Event"> | string | null
+    createdAt?: DateTimeFilter<"Event"> | Date | string
+    updatedAt?: DateTimeFilter<"Event"> | Date | string
+  }
+
+  export type AnnouncementUpsertWithWhereUniqueWithoutDojoInput = {
+    where: AnnouncementWhereUniqueInput
+    update: XOR<AnnouncementUpdateWithoutDojoInput, AnnouncementUncheckedUpdateWithoutDojoInput>
+    create: XOR<AnnouncementCreateWithoutDojoInput, AnnouncementUncheckedCreateWithoutDojoInput>
+  }
+
+  export type AnnouncementUpdateWithWhereUniqueWithoutDojoInput = {
+    where: AnnouncementWhereUniqueInput
+    data: XOR<AnnouncementUpdateWithoutDojoInput, AnnouncementUncheckedUpdateWithoutDojoInput>
+  }
+
+  export type AnnouncementUpdateManyWithWhereWithoutDojoInput = {
+    where: AnnouncementScalarWhereInput
+    data: XOR<AnnouncementUpdateManyMutationInput, AnnouncementUncheckedUpdateManyWithoutDojoInput>
+  }
+
+  export type AnnouncementScalarWhereInput = {
+    AND?: AnnouncementScalarWhereInput | AnnouncementScalarWhereInput[]
+    OR?: AnnouncementScalarWhereInput[]
+    NOT?: AnnouncementScalarWhereInput | AnnouncementScalarWhereInput[]
+    id?: UuidFilter<"Announcement"> | string
+    title?: StringFilter<"Announcement"> | string
+    body?: StringNullableFilter<"Announcement"> | string | null
+    link?: StringNullableFilter<"Announcement"> | string | null
+    isPublished?: BoolFilter<"Announcement"> | boolean
+    publishedAt?: DateTimeFilter<"Announcement"> | Date | string
+    attachmentUrl?: StringNullableFilter<"Announcement"> | string | null
+    attachmentType?: EnumAttachmentTypeNullableFilter<"Announcement"> | $Enums.AttachmentType | null
+    postedById?: UuidNullableFilter<"Announcement"> | string | null
+    dojoId?: UuidNullableFilter<"Announcement"> | string | null
+    createdAt?: DateTimeFilter<"Announcement"> | Date | string
+    updatedAt?: DateTimeFilter<"Announcement"> | Date | string
+  }
+
   export type DojoCreateWithoutMembersInput = {
     id?: string
     name: string
@@ -34784,6 +37270,8 @@ export namespace Prisma {
     certificateOrders?: ShopOrderCreateNestedManyWithoutCertDojoInput
     certificateRequests?: CertificateRequestCreateNestedManyWithoutDojoInput
     attendance?: AttendanceCreateNestedManyWithoutDojoInput
+    events?: EventCreateNestedManyWithoutDojoInput
+    announcements?: AnnouncementCreateNestedManyWithoutDojoInput
   }
 
   export type DojoUncheckedCreateWithoutMembersInput = {
@@ -34807,6 +37295,8 @@ export namespace Prisma {
     certificateOrders?: ShopOrderUncheckedCreateNestedManyWithoutCertDojoInput
     certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutDojoInput
     attendance?: AttendanceUncheckedCreateNestedManyWithoutDojoInput
+    events?: EventUncheckedCreateNestedManyWithoutDojoInput
+    announcements?: AnnouncementUncheckedCreateNestedManyWithoutDojoInput
   }
 
   export type DojoCreateOrConnectWithoutMembersInput = {
@@ -35088,6 +37578,90 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type EventCreateWithoutPostedByInput = {
+    id?: string
+    title: string
+    description?: string | null
+    eventDate: Date | string
+    location?: string | null
+    imageUrl?: string | null
+    isPublished?: boolean
+    maxCapacity?: number | null
+    category?: $Enums.EventCategory
+    attachmentUrl?: string | null
+    attachmentType?: $Enums.AttachmentType | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    registrations?: EventRegistrationCreateNestedManyWithoutEventInput
+    dojo?: DojoCreateNestedOneWithoutEventsInput
+  }
+
+  export type EventUncheckedCreateWithoutPostedByInput = {
+    id?: string
+    title: string
+    description?: string | null
+    eventDate: Date | string
+    location?: string | null
+    imageUrl?: string | null
+    isPublished?: boolean
+    maxCapacity?: number | null
+    category?: $Enums.EventCategory
+    attachmentUrl?: string | null
+    attachmentType?: $Enums.AttachmentType | null
+    dojoId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    registrations?: EventRegistrationUncheckedCreateNestedManyWithoutEventInput
+  }
+
+  export type EventCreateOrConnectWithoutPostedByInput = {
+    where: EventWhereUniqueInput
+    create: XOR<EventCreateWithoutPostedByInput, EventUncheckedCreateWithoutPostedByInput>
+  }
+
+  export type EventCreateManyPostedByInputEnvelope = {
+    data: EventCreateManyPostedByInput | EventCreateManyPostedByInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type AnnouncementCreateWithoutPostedByInput = {
+    id?: string
+    title: string
+    body?: string | null
+    link?: string | null
+    isPublished?: boolean
+    publishedAt?: Date | string
+    attachmentUrl?: string | null
+    attachmentType?: $Enums.AttachmentType | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    dojo?: DojoCreateNestedOneWithoutAnnouncementsInput
+  }
+
+  export type AnnouncementUncheckedCreateWithoutPostedByInput = {
+    id?: string
+    title: string
+    body?: string | null
+    link?: string | null
+    isPublished?: boolean
+    publishedAt?: Date | string
+    attachmentUrl?: string | null
+    attachmentType?: $Enums.AttachmentType | null
+    dojoId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AnnouncementCreateOrConnectWithoutPostedByInput = {
+    where: AnnouncementWhereUniqueInput
+    create: XOR<AnnouncementCreateWithoutPostedByInput, AnnouncementUncheckedCreateWithoutPostedByInput>
+  }
+
+  export type AnnouncementCreateManyPostedByInputEnvelope = {
+    data: AnnouncementCreateManyPostedByInput | AnnouncementCreateManyPostedByInput[]
+    skipDuplicates?: boolean
+  }
+
   export type DojoUpsertWithoutMembersInput = {
     update: XOR<DojoUpdateWithoutMembersInput, DojoUncheckedUpdateWithoutMembersInput>
     create: XOR<DojoCreateWithoutMembersInput, DojoUncheckedCreateWithoutMembersInput>
@@ -35120,6 +37694,8 @@ export namespace Prisma {
     certificateOrders?: ShopOrderUpdateManyWithoutCertDojoNestedInput
     certificateRequests?: CertificateRequestUpdateManyWithoutDojoNestedInput
     attendance?: AttendanceUpdateManyWithoutDojoNestedInput
+    events?: EventUpdateManyWithoutDojoNestedInput
+    announcements?: AnnouncementUpdateManyWithoutDojoNestedInput
   }
 
   export type DojoUncheckedUpdateWithoutMembersInput = {
@@ -35143,6 +37719,8 @@ export namespace Prisma {
     certificateOrders?: ShopOrderUncheckedUpdateManyWithoutCertDojoNestedInput
     certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutDojoNestedInput
     attendance?: AttendanceUncheckedUpdateManyWithoutDojoNestedInput
+    events?: EventUncheckedUpdateManyWithoutDojoNestedInput
+    announcements?: AnnouncementUncheckedUpdateManyWithoutDojoNestedInput
   }
 
   export type GradingUpsertWithWhereUniqueWithoutMemberInput = {
@@ -35310,6 +37888,38 @@ export namespace Prisma {
     data: XOR<CertificateRequestUpdateManyMutationInput, CertificateRequestUncheckedUpdateManyWithoutMemberInput>
   }
 
+  export type EventUpsertWithWhereUniqueWithoutPostedByInput = {
+    where: EventWhereUniqueInput
+    update: XOR<EventUpdateWithoutPostedByInput, EventUncheckedUpdateWithoutPostedByInput>
+    create: XOR<EventCreateWithoutPostedByInput, EventUncheckedCreateWithoutPostedByInput>
+  }
+
+  export type EventUpdateWithWhereUniqueWithoutPostedByInput = {
+    where: EventWhereUniqueInput
+    data: XOR<EventUpdateWithoutPostedByInput, EventUncheckedUpdateWithoutPostedByInput>
+  }
+
+  export type EventUpdateManyWithWhereWithoutPostedByInput = {
+    where: EventScalarWhereInput
+    data: XOR<EventUpdateManyMutationInput, EventUncheckedUpdateManyWithoutPostedByInput>
+  }
+
+  export type AnnouncementUpsertWithWhereUniqueWithoutPostedByInput = {
+    where: AnnouncementWhereUniqueInput
+    update: XOR<AnnouncementUpdateWithoutPostedByInput, AnnouncementUncheckedUpdateWithoutPostedByInput>
+    create: XOR<AnnouncementCreateWithoutPostedByInput, AnnouncementUncheckedCreateWithoutPostedByInput>
+  }
+
+  export type AnnouncementUpdateWithWhereUniqueWithoutPostedByInput = {
+    where: AnnouncementWhereUniqueInput
+    data: XOR<AnnouncementUpdateWithoutPostedByInput, AnnouncementUncheckedUpdateWithoutPostedByInput>
+  }
+
+  export type AnnouncementUpdateManyWithWhereWithoutPostedByInput = {
+    where: AnnouncementScalarWhereInput
+    data: XOR<AnnouncementUpdateManyMutationInput, AnnouncementUncheckedUpdateManyWithoutPostedByInput>
+  }
+
   export type MemberCreateWithoutAttendanceInput = {
     id: string
     fullName: string
@@ -35342,6 +37952,8 @@ export namespace Prisma {
     orders?: ShopOrderCreateNestedManyWithoutMemberInput
     tournamentEntries?: TournamentParticipantCreateNestedManyWithoutMemberInput
     certificateRequests?: CertificateRequestCreateNestedManyWithoutMemberInput
+    eventsPosted?: EventCreateNestedManyWithoutPostedByInput
+    announcementsPosted?: AnnouncementCreateNestedManyWithoutPostedByInput
   }
 
   export type MemberUncheckedCreateWithoutAttendanceInput = {
@@ -35376,6 +37988,8 @@ export namespace Prisma {
     orders?: ShopOrderUncheckedCreateNestedManyWithoutMemberInput
     tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutMemberInput
     certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutMemberInput
+    eventsPosted?: EventUncheckedCreateNestedManyWithoutPostedByInput
+    announcementsPosted?: AnnouncementUncheckedCreateNestedManyWithoutPostedByInput
   }
 
   export type MemberCreateOrConnectWithoutAttendanceInput = {
@@ -35404,6 +38018,8 @@ export namespace Prisma {
     certificateOrders?: ShopOrderCreateNestedManyWithoutCertDojoInput
     certificateRequests?: CertificateRequestCreateNestedManyWithoutDojoInput
     members?: MemberCreateNestedManyWithoutDojoInput
+    events?: EventCreateNestedManyWithoutDojoInput
+    announcements?: AnnouncementCreateNestedManyWithoutDojoInput
   }
 
   export type DojoUncheckedCreateWithoutAttendanceInput = {
@@ -35427,6 +38043,8 @@ export namespace Prisma {
     certificateOrders?: ShopOrderUncheckedCreateNestedManyWithoutCertDojoInput
     certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutDojoInput
     members?: MemberUncheckedCreateNestedManyWithoutDojoInput
+    events?: EventUncheckedCreateNestedManyWithoutDojoInput
+    announcements?: AnnouncementUncheckedCreateNestedManyWithoutDojoInput
   }
 
   export type DojoCreateOrConnectWithoutAttendanceInput = {
@@ -35477,6 +38095,8 @@ export namespace Prisma {
     orders?: ShopOrderUpdateManyWithoutMemberNestedInput
     tournamentEntries?: TournamentParticipantUpdateManyWithoutMemberNestedInput
     certificateRequests?: CertificateRequestUpdateManyWithoutMemberNestedInput
+    eventsPosted?: EventUpdateManyWithoutPostedByNestedInput
+    announcementsPosted?: AnnouncementUpdateManyWithoutPostedByNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutAttendanceInput = {
@@ -35511,6 +38131,8 @@ export namespace Prisma {
     orders?: ShopOrderUncheckedUpdateManyWithoutMemberNestedInput
     tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutMemberNestedInput
     certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutMemberNestedInput
+    eventsPosted?: EventUncheckedUpdateManyWithoutPostedByNestedInput
+    announcementsPosted?: AnnouncementUncheckedUpdateManyWithoutPostedByNestedInput
   }
 
   export type DojoUpsertWithoutAttendanceInput = {
@@ -35545,6 +38167,8 @@ export namespace Prisma {
     certificateOrders?: ShopOrderUpdateManyWithoutCertDojoNestedInput
     certificateRequests?: CertificateRequestUpdateManyWithoutDojoNestedInput
     members?: MemberUpdateManyWithoutDojoNestedInput
+    events?: EventUpdateManyWithoutDojoNestedInput
+    announcements?: AnnouncementUpdateManyWithoutDojoNestedInput
   }
 
   export type DojoUncheckedUpdateWithoutAttendanceInput = {
@@ -35568,6 +38192,8 @@ export namespace Prisma {
     certificateOrders?: ShopOrderUncheckedUpdateManyWithoutCertDojoNestedInput
     certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutDojoNestedInput
     members?: MemberUncheckedUpdateManyWithoutDojoNestedInput
+    events?: EventUncheckedUpdateManyWithoutDojoNestedInput
+    announcements?: AnnouncementUncheckedUpdateManyWithoutDojoNestedInput
   }
 
   export type BeltRankCreateWithoutGradingEventsInput = {
@@ -35772,6 +38398,8 @@ export namespace Prisma {
     attendance?: AttendanceCreateNestedManyWithoutMemberInput
     tournamentEntries?: TournamentParticipantCreateNestedManyWithoutMemberInput
     certificateRequests?: CertificateRequestCreateNestedManyWithoutMemberInput
+    eventsPosted?: EventCreateNestedManyWithoutPostedByInput
+    announcementsPosted?: AnnouncementCreateNestedManyWithoutPostedByInput
   }
 
   export type MemberUncheckedCreateWithoutGradingApplicationsInput = {
@@ -35806,6 +38434,8 @@ export namespace Prisma {
     attendance?: AttendanceUncheckedCreateNestedManyWithoutMemberInput
     tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutMemberInput
     certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutMemberInput
+    eventsPosted?: EventUncheckedCreateNestedManyWithoutPostedByInput
+    announcementsPosted?: AnnouncementUncheckedCreateNestedManyWithoutPostedByInput
   }
 
   export type MemberCreateOrConnectWithoutGradingApplicationsInput = {
@@ -35926,6 +38556,8 @@ export namespace Prisma {
     attendance?: AttendanceUpdateManyWithoutMemberNestedInput
     tournamentEntries?: TournamentParticipantUpdateManyWithoutMemberNestedInput
     certificateRequests?: CertificateRequestUpdateManyWithoutMemberNestedInput
+    eventsPosted?: EventUpdateManyWithoutPostedByNestedInput
+    announcementsPosted?: AnnouncementUpdateManyWithoutPostedByNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutGradingApplicationsInput = {
@@ -35960,6 +38592,8 @@ export namespace Prisma {
     attendance?: AttendanceUncheckedUpdateManyWithoutMemberNestedInput
     tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutMemberNestedInput
     certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutMemberNestedInput
+    eventsPosted?: EventUncheckedUpdateManyWithoutPostedByNestedInput
+    announcementsPosted?: AnnouncementUncheckedUpdateManyWithoutPostedByNestedInput
   }
 
   export type GradingEventUpsertWithoutApplicationsInput = {
@@ -36076,6 +38710,8 @@ export namespace Prisma {
     attendance?: AttendanceCreateNestedManyWithoutMemberInput
     tournamentEntries?: TournamentParticipantCreateNestedManyWithoutMemberInput
     certificateRequests?: CertificateRequestCreateNestedManyWithoutMemberInput
+    eventsPosted?: EventCreateNestedManyWithoutPostedByInput
+    announcementsPosted?: AnnouncementCreateNestedManyWithoutPostedByInput
   }
 
   export type MemberUncheckedCreateWithoutGradingsInput = {
@@ -36110,6 +38746,8 @@ export namespace Prisma {
     attendance?: AttendanceUncheckedCreateNestedManyWithoutMemberInput
     tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutMemberInput
     certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutMemberInput
+    eventsPosted?: EventUncheckedCreateNestedManyWithoutPostedByInput
+    announcementsPosted?: AnnouncementUncheckedCreateNestedManyWithoutPostedByInput
   }
 
   export type MemberCreateOrConnectWithoutGradingsInput = {
@@ -36307,6 +38945,8 @@ export namespace Prisma {
     attendance?: AttendanceUpdateManyWithoutMemberNestedInput
     tournamentEntries?: TournamentParticipantUpdateManyWithoutMemberNestedInput
     certificateRequests?: CertificateRequestUpdateManyWithoutMemberNestedInput
+    eventsPosted?: EventUpdateManyWithoutPostedByNestedInput
+    announcementsPosted?: AnnouncementUpdateManyWithoutPostedByNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutGradingsInput = {
@@ -36341,6 +38981,8 @@ export namespace Prisma {
     attendance?: AttendanceUncheckedUpdateManyWithoutMemberNestedInput
     tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutMemberNestedInput
     certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutMemberNestedInput
+    eventsPosted?: EventUncheckedUpdateManyWithoutPostedByNestedInput
+    announcementsPosted?: AnnouncementUncheckedUpdateManyWithoutPostedByNestedInput
   }
 
   export type GradingEventUpsertWithoutGradingsInput = {
@@ -36543,6 +39185,8 @@ export namespace Prisma {
     orders?: ShopOrderCreateNestedManyWithoutMemberInput
     attendance?: AttendanceCreateNestedManyWithoutMemberInput
     tournamentEntries?: TournamentParticipantCreateNestedManyWithoutMemberInput
+    eventsPosted?: EventCreateNestedManyWithoutPostedByInput
+    announcementsPosted?: AnnouncementCreateNestedManyWithoutPostedByInput
   }
 
   export type MemberUncheckedCreateWithoutCertificateRequestsInput = {
@@ -36577,6 +39221,8 @@ export namespace Prisma {
     orders?: ShopOrderUncheckedCreateNestedManyWithoutMemberInput
     attendance?: AttendanceUncheckedCreateNestedManyWithoutMemberInput
     tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutMemberInput
+    eventsPosted?: EventUncheckedCreateNestedManyWithoutPostedByInput
+    announcementsPosted?: AnnouncementUncheckedCreateNestedManyWithoutPostedByInput
   }
 
   export type MemberCreateOrConnectWithoutCertificateRequestsInput = {
@@ -36605,6 +39251,8 @@ export namespace Prisma {
     certificateOrders?: ShopOrderCreateNestedManyWithoutCertDojoInput
     members?: MemberCreateNestedManyWithoutDojoInput
     attendance?: AttendanceCreateNestedManyWithoutDojoInput
+    events?: EventCreateNestedManyWithoutDojoInput
+    announcements?: AnnouncementCreateNestedManyWithoutDojoInput
   }
 
   export type DojoUncheckedCreateWithoutCertificateRequestsInput = {
@@ -36628,6 +39276,8 @@ export namespace Prisma {
     certificateOrders?: ShopOrderUncheckedCreateNestedManyWithoutCertDojoInput
     members?: MemberUncheckedCreateNestedManyWithoutDojoInput
     attendance?: AttendanceUncheckedCreateNestedManyWithoutDojoInput
+    events?: EventUncheckedCreateNestedManyWithoutDojoInput
+    announcements?: AnnouncementUncheckedCreateNestedManyWithoutDojoInput
   }
 
   export type DojoCreateOrConnectWithoutCertificateRequestsInput = {
@@ -36760,6 +39410,8 @@ export namespace Prisma {
     orders?: ShopOrderUpdateManyWithoutMemberNestedInput
     attendance?: AttendanceUpdateManyWithoutMemberNestedInput
     tournamentEntries?: TournamentParticipantUpdateManyWithoutMemberNestedInput
+    eventsPosted?: EventUpdateManyWithoutPostedByNestedInput
+    announcementsPosted?: AnnouncementUpdateManyWithoutPostedByNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutCertificateRequestsInput = {
@@ -36794,6 +39446,8 @@ export namespace Prisma {
     orders?: ShopOrderUncheckedUpdateManyWithoutMemberNestedInput
     attendance?: AttendanceUncheckedUpdateManyWithoutMemberNestedInput
     tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutMemberNestedInput
+    eventsPosted?: EventUncheckedUpdateManyWithoutPostedByNestedInput
+    announcementsPosted?: AnnouncementUncheckedUpdateManyWithoutPostedByNestedInput
   }
 
   export type DojoUpsertWithoutCertificateRequestsInput = {
@@ -36828,6 +39482,8 @@ export namespace Prisma {
     certificateOrders?: ShopOrderUpdateManyWithoutCertDojoNestedInput
     members?: MemberUpdateManyWithoutDojoNestedInput
     attendance?: AttendanceUpdateManyWithoutDojoNestedInput
+    events?: EventUpdateManyWithoutDojoNestedInput
+    announcements?: AnnouncementUpdateManyWithoutDojoNestedInput
   }
 
   export type DojoUncheckedUpdateWithoutCertificateRequestsInput = {
@@ -36851,6 +39507,8 @@ export namespace Prisma {
     certificateOrders?: ShopOrderUncheckedUpdateManyWithoutCertDojoNestedInput
     members?: MemberUncheckedUpdateManyWithoutDojoNestedInput
     attendance?: AttendanceUncheckedUpdateManyWithoutDojoNestedInput
+    events?: EventUncheckedUpdateManyWithoutDojoNestedInput
+    announcements?: AnnouncementUncheckedUpdateManyWithoutDojoNestedInput
   }
 
   export type ShopOrderUpsertWithoutCertificateRequestsInput = {
@@ -36926,6 +39584,138 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type MemberCreateWithoutEventsPostedInput = {
+    id: string
+    fullName: string
+    email: string
+    phone?: string | null
+    avatarUrl?: string | null
+    role?: $Enums.MemberRole
+    memberNumber?: string | null
+    currentRank?: string
+    joinDate?: Date | string
+    expiryDate?: Date | string | null
+    isActive?: boolean
+    onboardingComplete?: boolean
+    membershipStatus?: $Enums.MembershipStatus
+    dateOfBirth?: Date | string | null
+    bloodGroup?: string | null
+    address?: string | null
+    nationalId?: string | null
+    fatherName?: string | null
+    motherName?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    dojo?: DojoCreateNestedOneWithoutMembersInput
+    gradings?: GradingCreateNestedManyWithoutMemberInput
+    gradingApplications?: GradingApplicationCreateNestedManyWithoutMemberInput
+    eventRegistrations?: EventRegistrationCreateNestedManyWithoutMemberInput
+    notifications?: NotificationCreateNestedManyWithoutMemberInput
+    orders?: ShopOrderCreateNestedManyWithoutMemberInput
+    attendance?: AttendanceCreateNestedManyWithoutMemberInput
+    tournamentEntries?: TournamentParticipantCreateNestedManyWithoutMemberInput
+    certificateRequests?: CertificateRequestCreateNestedManyWithoutMemberInput
+    announcementsPosted?: AnnouncementCreateNestedManyWithoutPostedByInput
+  }
+
+  export type MemberUncheckedCreateWithoutEventsPostedInput = {
+    id: string
+    fullName: string
+    email: string
+    phone?: string | null
+    avatarUrl?: string | null
+    role?: $Enums.MemberRole
+    memberNumber?: string | null
+    currentRank?: string
+    joinDate?: Date | string
+    expiryDate?: Date | string | null
+    isActive?: boolean
+    dojoId?: string | null
+    onboardingComplete?: boolean
+    membershipStatus?: $Enums.MembershipStatus
+    dateOfBirth?: Date | string | null
+    bloodGroup?: string | null
+    address?: string | null
+    nationalId?: string | null
+    fatherName?: string | null
+    motherName?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    gradings?: GradingUncheckedCreateNestedManyWithoutMemberInput
+    gradingApplications?: GradingApplicationUncheckedCreateNestedManyWithoutMemberInput
+    eventRegistrations?: EventRegistrationUncheckedCreateNestedManyWithoutMemberInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutMemberInput
+    orders?: ShopOrderUncheckedCreateNestedManyWithoutMemberInput
+    attendance?: AttendanceUncheckedCreateNestedManyWithoutMemberInput
+    tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutMemberInput
+    certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutMemberInput
+    announcementsPosted?: AnnouncementUncheckedCreateNestedManyWithoutPostedByInput
+  }
+
+  export type MemberCreateOrConnectWithoutEventsPostedInput = {
+    where: MemberWhereUniqueInput
+    create: XOR<MemberCreateWithoutEventsPostedInput, MemberUncheckedCreateWithoutEventsPostedInput>
+  }
+
+  export type DojoCreateWithoutEventsInput = {
+    id?: string
+    name: string
+    address?: string | null
+    city?: string | null
+    latitude?: number | null
+    longitude?: number | null
+    phone?: string | null
+    email?: string | null
+    schedule?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: boolean
+    annualFee?: Decimal | DecimalJsLike | number | string | null
+    expiryDate?: Date | string | null
+    ownerSignatureUrl?: string | null
+    logoUrl?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    renewalOrders?: ShopOrderCreateNestedManyWithoutDojoInput
+    certificateOrders?: ShopOrderCreateNestedManyWithoutCertDojoInput
+    certificateRequests?: CertificateRequestCreateNestedManyWithoutDojoInput
+    members?: MemberCreateNestedManyWithoutDojoInput
+    attendance?: AttendanceCreateNestedManyWithoutDojoInput
+    announcements?: AnnouncementCreateNestedManyWithoutDojoInput
+  }
+
+  export type DojoUncheckedCreateWithoutEventsInput = {
+    id?: string
+    name: string
+    address?: string | null
+    city?: string | null
+    latitude?: number | null
+    longitude?: number | null
+    phone?: string | null
+    email?: string | null
+    schedule?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: boolean
+    annualFee?: Decimal | DecimalJsLike | number | string | null
+    expiryDate?: Date | string | null
+    ownerSignatureUrl?: string | null
+    logoUrl?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    renewalOrders?: ShopOrderUncheckedCreateNestedManyWithoutDojoInput
+    certificateOrders?: ShopOrderUncheckedCreateNestedManyWithoutCertDojoInput
+    certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutDojoInput
+    members?: MemberUncheckedCreateNestedManyWithoutDojoInput
+    attendance?: AttendanceUncheckedCreateNestedManyWithoutDojoInput
+    announcements?: AnnouncementUncheckedCreateNestedManyWithoutDojoInput
+  }
+
+  export type DojoCreateOrConnectWithoutEventsInput = {
+    where: DojoWhereUniqueInput
+    create: XOR<DojoCreateWithoutEventsInput, DojoUncheckedCreateWithoutEventsInput>
+  }
+
   export type EventRegistrationUpsertWithWhereUniqueWithoutEventInput = {
     where: EventRegistrationWhereUniqueInput
     update: XOR<EventRegistrationUpdateWithoutEventInput, EventRegistrationUncheckedUpdateWithoutEventInput>
@@ -36942,6 +39732,426 @@ export namespace Prisma {
     data: XOR<EventRegistrationUpdateManyMutationInput, EventRegistrationUncheckedUpdateManyWithoutEventInput>
   }
 
+  export type MemberUpsertWithoutEventsPostedInput = {
+    update: XOR<MemberUpdateWithoutEventsPostedInput, MemberUncheckedUpdateWithoutEventsPostedInput>
+    create: XOR<MemberCreateWithoutEventsPostedInput, MemberUncheckedCreateWithoutEventsPostedInput>
+    where?: MemberWhereInput
+  }
+
+  export type MemberUpdateToOneWithWhereWithoutEventsPostedInput = {
+    where?: MemberWhereInput
+    data: XOR<MemberUpdateWithoutEventsPostedInput, MemberUncheckedUpdateWithoutEventsPostedInput>
+  }
+
+  export type MemberUpdateWithoutEventsPostedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fullName?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumMemberRoleFieldUpdateOperationsInput | $Enums.MemberRole
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    currentRank?: StringFieldUpdateOperationsInput | string
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    onboardingComplete?: BoolFieldUpdateOperationsInput | boolean
+    membershipStatus?: EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    dojo?: DojoUpdateOneWithoutMembersNestedInput
+    gradings?: GradingUpdateManyWithoutMemberNestedInput
+    gradingApplications?: GradingApplicationUpdateManyWithoutMemberNestedInput
+    eventRegistrations?: EventRegistrationUpdateManyWithoutMemberNestedInput
+    notifications?: NotificationUpdateManyWithoutMemberNestedInput
+    orders?: ShopOrderUpdateManyWithoutMemberNestedInput
+    attendance?: AttendanceUpdateManyWithoutMemberNestedInput
+    tournamentEntries?: TournamentParticipantUpdateManyWithoutMemberNestedInput
+    certificateRequests?: CertificateRequestUpdateManyWithoutMemberNestedInput
+    announcementsPosted?: AnnouncementUpdateManyWithoutPostedByNestedInput
+  }
+
+  export type MemberUncheckedUpdateWithoutEventsPostedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fullName?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumMemberRoleFieldUpdateOperationsInput | $Enums.MemberRole
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    currentRank?: StringFieldUpdateOperationsInput | string
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    dojoId?: NullableStringFieldUpdateOperationsInput | string | null
+    onboardingComplete?: BoolFieldUpdateOperationsInput | boolean
+    membershipStatus?: EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    gradings?: GradingUncheckedUpdateManyWithoutMemberNestedInput
+    gradingApplications?: GradingApplicationUncheckedUpdateManyWithoutMemberNestedInput
+    eventRegistrations?: EventRegistrationUncheckedUpdateManyWithoutMemberNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutMemberNestedInput
+    orders?: ShopOrderUncheckedUpdateManyWithoutMemberNestedInput
+    attendance?: AttendanceUncheckedUpdateManyWithoutMemberNestedInput
+    tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutMemberNestedInput
+    certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutMemberNestedInput
+    announcementsPosted?: AnnouncementUncheckedUpdateManyWithoutPostedByNestedInput
+  }
+
+  export type DojoUpsertWithoutEventsInput = {
+    update: XOR<DojoUpdateWithoutEventsInput, DojoUncheckedUpdateWithoutEventsInput>
+    create: XOR<DojoCreateWithoutEventsInput, DojoUncheckedCreateWithoutEventsInput>
+    where?: DojoWhereInput
+  }
+
+  export type DojoUpdateToOneWithWhereWithoutEventsInput = {
+    where?: DojoWhereInput
+    data: XOR<DojoUpdateWithoutEventsInput, DojoUncheckedUpdateWithoutEventsInput>
+  }
+
+  export type DojoUpdateWithoutEventsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    schedule?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    annualFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    ownerSignatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    renewalOrders?: ShopOrderUpdateManyWithoutDojoNestedInput
+    certificateOrders?: ShopOrderUpdateManyWithoutCertDojoNestedInput
+    certificateRequests?: CertificateRequestUpdateManyWithoutDojoNestedInput
+    members?: MemberUpdateManyWithoutDojoNestedInput
+    attendance?: AttendanceUpdateManyWithoutDojoNestedInput
+    announcements?: AnnouncementUpdateManyWithoutDojoNestedInput
+  }
+
+  export type DojoUncheckedUpdateWithoutEventsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    schedule?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    annualFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    ownerSignatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    renewalOrders?: ShopOrderUncheckedUpdateManyWithoutDojoNestedInput
+    certificateOrders?: ShopOrderUncheckedUpdateManyWithoutCertDojoNestedInput
+    certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutDojoNestedInput
+    members?: MemberUncheckedUpdateManyWithoutDojoNestedInput
+    attendance?: AttendanceUncheckedUpdateManyWithoutDojoNestedInput
+    announcements?: AnnouncementUncheckedUpdateManyWithoutDojoNestedInput
+  }
+
+  export type MemberCreateWithoutAnnouncementsPostedInput = {
+    id: string
+    fullName: string
+    email: string
+    phone?: string | null
+    avatarUrl?: string | null
+    role?: $Enums.MemberRole
+    memberNumber?: string | null
+    currentRank?: string
+    joinDate?: Date | string
+    expiryDate?: Date | string | null
+    isActive?: boolean
+    onboardingComplete?: boolean
+    membershipStatus?: $Enums.MembershipStatus
+    dateOfBirth?: Date | string | null
+    bloodGroup?: string | null
+    address?: string | null
+    nationalId?: string | null
+    fatherName?: string | null
+    motherName?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    dojo?: DojoCreateNestedOneWithoutMembersInput
+    gradings?: GradingCreateNestedManyWithoutMemberInput
+    gradingApplications?: GradingApplicationCreateNestedManyWithoutMemberInput
+    eventRegistrations?: EventRegistrationCreateNestedManyWithoutMemberInput
+    notifications?: NotificationCreateNestedManyWithoutMemberInput
+    orders?: ShopOrderCreateNestedManyWithoutMemberInput
+    attendance?: AttendanceCreateNestedManyWithoutMemberInput
+    tournamentEntries?: TournamentParticipantCreateNestedManyWithoutMemberInput
+    certificateRequests?: CertificateRequestCreateNestedManyWithoutMemberInput
+    eventsPosted?: EventCreateNestedManyWithoutPostedByInput
+  }
+
+  export type MemberUncheckedCreateWithoutAnnouncementsPostedInput = {
+    id: string
+    fullName: string
+    email: string
+    phone?: string | null
+    avatarUrl?: string | null
+    role?: $Enums.MemberRole
+    memberNumber?: string | null
+    currentRank?: string
+    joinDate?: Date | string
+    expiryDate?: Date | string | null
+    isActive?: boolean
+    dojoId?: string | null
+    onboardingComplete?: boolean
+    membershipStatus?: $Enums.MembershipStatus
+    dateOfBirth?: Date | string | null
+    bloodGroup?: string | null
+    address?: string | null
+    nationalId?: string | null
+    fatherName?: string | null
+    motherName?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    gradings?: GradingUncheckedCreateNestedManyWithoutMemberInput
+    gradingApplications?: GradingApplicationUncheckedCreateNestedManyWithoutMemberInput
+    eventRegistrations?: EventRegistrationUncheckedCreateNestedManyWithoutMemberInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutMemberInput
+    orders?: ShopOrderUncheckedCreateNestedManyWithoutMemberInput
+    attendance?: AttendanceUncheckedCreateNestedManyWithoutMemberInput
+    tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutMemberInput
+    certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutMemberInput
+    eventsPosted?: EventUncheckedCreateNestedManyWithoutPostedByInput
+  }
+
+  export type MemberCreateOrConnectWithoutAnnouncementsPostedInput = {
+    where: MemberWhereUniqueInput
+    create: XOR<MemberCreateWithoutAnnouncementsPostedInput, MemberUncheckedCreateWithoutAnnouncementsPostedInput>
+  }
+
+  export type DojoCreateWithoutAnnouncementsInput = {
+    id?: string
+    name: string
+    address?: string | null
+    city?: string | null
+    latitude?: number | null
+    longitude?: number | null
+    phone?: string | null
+    email?: string | null
+    schedule?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: boolean
+    annualFee?: Decimal | DecimalJsLike | number | string | null
+    expiryDate?: Date | string | null
+    ownerSignatureUrl?: string | null
+    logoUrl?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    renewalOrders?: ShopOrderCreateNestedManyWithoutDojoInput
+    certificateOrders?: ShopOrderCreateNestedManyWithoutCertDojoInput
+    certificateRequests?: CertificateRequestCreateNestedManyWithoutDojoInput
+    members?: MemberCreateNestedManyWithoutDojoInput
+    attendance?: AttendanceCreateNestedManyWithoutDojoInput
+    events?: EventCreateNestedManyWithoutDojoInput
+  }
+
+  export type DojoUncheckedCreateWithoutAnnouncementsInput = {
+    id?: string
+    name: string
+    address?: string | null
+    city?: string | null
+    latitude?: number | null
+    longitude?: number | null
+    phone?: string | null
+    email?: string | null
+    schedule?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: boolean
+    annualFee?: Decimal | DecimalJsLike | number | string | null
+    expiryDate?: Date | string | null
+    ownerSignatureUrl?: string | null
+    logoUrl?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    renewalOrders?: ShopOrderUncheckedCreateNestedManyWithoutDojoInput
+    certificateOrders?: ShopOrderUncheckedCreateNestedManyWithoutCertDojoInput
+    certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutDojoInput
+    members?: MemberUncheckedCreateNestedManyWithoutDojoInput
+    attendance?: AttendanceUncheckedCreateNestedManyWithoutDojoInput
+    events?: EventUncheckedCreateNestedManyWithoutDojoInput
+  }
+
+  export type DojoCreateOrConnectWithoutAnnouncementsInput = {
+    where: DojoWhereUniqueInput
+    create: XOR<DojoCreateWithoutAnnouncementsInput, DojoUncheckedCreateWithoutAnnouncementsInput>
+  }
+
+  export type MemberUpsertWithoutAnnouncementsPostedInput = {
+    update: XOR<MemberUpdateWithoutAnnouncementsPostedInput, MemberUncheckedUpdateWithoutAnnouncementsPostedInput>
+    create: XOR<MemberCreateWithoutAnnouncementsPostedInput, MemberUncheckedCreateWithoutAnnouncementsPostedInput>
+    where?: MemberWhereInput
+  }
+
+  export type MemberUpdateToOneWithWhereWithoutAnnouncementsPostedInput = {
+    where?: MemberWhereInput
+    data: XOR<MemberUpdateWithoutAnnouncementsPostedInput, MemberUncheckedUpdateWithoutAnnouncementsPostedInput>
+  }
+
+  export type MemberUpdateWithoutAnnouncementsPostedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fullName?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumMemberRoleFieldUpdateOperationsInput | $Enums.MemberRole
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    currentRank?: StringFieldUpdateOperationsInput | string
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    onboardingComplete?: BoolFieldUpdateOperationsInput | boolean
+    membershipStatus?: EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    dojo?: DojoUpdateOneWithoutMembersNestedInput
+    gradings?: GradingUpdateManyWithoutMemberNestedInput
+    gradingApplications?: GradingApplicationUpdateManyWithoutMemberNestedInput
+    eventRegistrations?: EventRegistrationUpdateManyWithoutMemberNestedInput
+    notifications?: NotificationUpdateManyWithoutMemberNestedInput
+    orders?: ShopOrderUpdateManyWithoutMemberNestedInput
+    attendance?: AttendanceUpdateManyWithoutMemberNestedInput
+    tournamentEntries?: TournamentParticipantUpdateManyWithoutMemberNestedInput
+    certificateRequests?: CertificateRequestUpdateManyWithoutMemberNestedInput
+    eventsPosted?: EventUpdateManyWithoutPostedByNestedInput
+  }
+
+  export type MemberUncheckedUpdateWithoutAnnouncementsPostedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fullName?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumMemberRoleFieldUpdateOperationsInput | $Enums.MemberRole
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    currentRank?: StringFieldUpdateOperationsInput | string
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    dojoId?: NullableStringFieldUpdateOperationsInput | string | null
+    onboardingComplete?: BoolFieldUpdateOperationsInput | boolean
+    membershipStatus?: EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    gradings?: GradingUncheckedUpdateManyWithoutMemberNestedInput
+    gradingApplications?: GradingApplicationUncheckedUpdateManyWithoutMemberNestedInput
+    eventRegistrations?: EventRegistrationUncheckedUpdateManyWithoutMemberNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutMemberNestedInput
+    orders?: ShopOrderUncheckedUpdateManyWithoutMemberNestedInput
+    attendance?: AttendanceUncheckedUpdateManyWithoutMemberNestedInput
+    tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutMemberNestedInput
+    certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutMemberNestedInput
+    eventsPosted?: EventUncheckedUpdateManyWithoutPostedByNestedInput
+  }
+
+  export type DojoUpsertWithoutAnnouncementsInput = {
+    update: XOR<DojoUpdateWithoutAnnouncementsInput, DojoUncheckedUpdateWithoutAnnouncementsInput>
+    create: XOR<DojoCreateWithoutAnnouncementsInput, DojoUncheckedCreateWithoutAnnouncementsInput>
+    where?: DojoWhereInput
+  }
+
+  export type DojoUpdateToOneWithWhereWithoutAnnouncementsInput = {
+    where?: DojoWhereInput
+    data: XOR<DojoUpdateWithoutAnnouncementsInput, DojoUncheckedUpdateWithoutAnnouncementsInput>
+  }
+
+  export type DojoUpdateWithoutAnnouncementsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    schedule?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    annualFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    ownerSignatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    renewalOrders?: ShopOrderUpdateManyWithoutDojoNestedInput
+    certificateOrders?: ShopOrderUpdateManyWithoutCertDojoNestedInput
+    certificateRequests?: CertificateRequestUpdateManyWithoutDojoNestedInput
+    members?: MemberUpdateManyWithoutDojoNestedInput
+    attendance?: AttendanceUpdateManyWithoutDojoNestedInput
+    events?: EventUpdateManyWithoutDojoNestedInput
+  }
+
+  export type DojoUncheckedUpdateWithoutAnnouncementsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    schedule?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    annualFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    ownerSignatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    renewalOrders?: ShopOrderUncheckedUpdateManyWithoutDojoNestedInput
+    certificateOrders?: ShopOrderUncheckedUpdateManyWithoutCertDojoNestedInput
+    certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutDojoNestedInput
+    members?: MemberUncheckedUpdateManyWithoutDojoNestedInput
+    attendance?: AttendanceUncheckedUpdateManyWithoutDojoNestedInput
+    events?: EventUncheckedUpdateManyWithoutDojoNestedInput
+  }
+
   export type EventCreateWithoutRegistrationsInput = {
     id?: string
     title: string
@@ -36951,8 +40161,13 @@ export namespace Prisma {
     imageUrl?: string | null
     isPublished?: boolean
     maxCapacity?: number | null
+    category?: $Enums.EventCategory
+    attachmentUrl?: string | null
+    attachmentType?: $Enums.AttachmentType | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    postedBy?: MemberCreateNestedOneWithoutEventsPostedInput
+    dojo?: DojoCreateNestedOneWithoutEventsInput
   }
 
   export type EventUncheckedCreateWithoutRegistrationsInput = {
@@ -36964,6 +40179,11 @@ export namespace Prisma {
     imageUrl?: string | null
     isPublished?: boolean
     maxCapacity?: number | null
+    category?: $Enums.EventCategory
+    attachmentUrl?: string | null
+    attachmentType?: $Enums.AttachmentType | null
+    postedById?: string | null
+    dojoId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -37005,6 +40225,8 @@ export namespace Prisma {
     attendance?: AttendanceCreateNestedManyWithoutMemberInput
     tournamentEntries?: TournamentParticipantCreateNestedManyWithoutMemberInput
     certificateRequests?: CertificateRequestCreateNestedManyWithoutMemberInput
+    eventsPosted?: EventCreateNestedManyWithoutPostedByInput
+    announcementsPosted?: AnnouncementCreateNestedManyWithoutPostedByInput
   }
 
   export type MemberUncheckedCreateWithoutEventRegistrationsInput = {
@@ -37039,6 +40261,8 @@ export namespace Prisma {
     attendance?: AttendanceUncheckedCreateNestedManyWithoutMemberInput
     tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutMemberInput
     certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutMemberInput
+    eventsPosted?: EventUncheckedCreateNestedManyWithoutPostedByInput
+    announcementsPosted?: AnnouncementUncheckedCreateNestedManyWithoutPostedByInput
   }
 
   export type MemberCreateOrConnectWithoutEventRegistrationsInput = {
@@ -37066,8 +40290,13 @@ export namespace Prisma {
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     maxCapacity?: NullableIntFieldUpdateOperationsInput | number | null
+    category?: EnumEventCategoryFieldUpdateOperationsInput | $Enums.EventCategory
+    attachmentUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    attachmentType?: NullableEnumAttachmentTypeFieldUpdateOperationsInput | $Enums.AttachmentType | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    postedBy?: MemberUpdateOneWithoutEventsPostedNestedInput
+    dojo?: DojoUpdateOneWithoutEventsNestedInput
   }
 
   export type EventUncheckedUpdateWithoutRegistrationsInput = {
@@ -37079,6 +40308,11 @@ export namespace Prisma {
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     maxCapacity?: NullableIntFieldUpdateOperationsInput | number | null
+    category?: EnumEventCategoryFieldUpdateOperationsInput | $Enums.EventCategory
+    attachmentUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    attachmentType?: NullableEnumAttachmentTypeFieldUpdateOperationsInput | $Enums.AttachmentType | null
+    postedById?: NullableStringFieldUpdateOperationsInput | string | null
+    dojoId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -37126,6 +40360,8 @@ export namespace Prisma {
     attendance?: AttendanceUpdateManyWithoutMemberNestedInput
     tournamentEntries?: TournamentParticipantUpdateManyWithoutMemberNestedInput
     certificateRequests?: CertificateRequestUpdateManyWithoutMemberNestedInput
+    eventsPosted?: EventUpdateManyWithoutPostedByNestedInput
+    announcementsPosted?: AnnouncementUpdateManyWithoutPostedByNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutEventRegistrationsInput = {
@@ -37160,6 +40396,8 @@ export namespace Prisma {
     attendance?: AttendanceUncheckedUpdateManyWithoutMemberNestedInput
     tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutMemberNestedInput
     certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutMemberNestedInput
+    eventsPosted?: EventUncheckedUpdateManyWithoutPostedByNestedInput
+    announcementsPosted?: AnnouncementUncheckedUpdateManyWithoutPostedByNestedInput
   }
 
   export type MemberCreateWithoutNotificationsInput = {
@@ -37194,6 +40432,8 @@ export namespace Prisma {
     attendance?: AttendanceCreateNestedManyWithoutMemberInput
     tournamentEntries?: TournamentParticipantCreateNestedManyWithoutMemberInput
     certificateRequests?: CertificateRequestCreateNestedManyWithoutMemberInput
+    eventsPosted?: EventCreateNestedManyWithoutPostedByInput
+    announcementsPosted?: AnnouncementCreateNestedManyWithoutPostedByInput
   }
 
   export type MemberUncheckedCreateWithoutNotificationsInput = {
@@ -37228,6 +40468,8 @@ export namespace Prisma {
     attendance?: AttendanceUncheckedCreateNestedManyWithoutMemberInput
     tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutMemberInput
     certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutMemberInput
+    eventsPosted?: EventUncheckedCreateNestedManyWithoutPostedByInput
+    announcementsPosted?: AnnouncementUncheckedCreateNestedManyWithoutPostedByInput
   }
 
   export type MemberCreateOrConnectWithoutNotificationsInput = {
@@ -37278,6 +40520,8 @@ export namespace Prisma {
     attendance?: AttendanceUpdateManyWithoutMemberNestedInput
     tournamentEntries?: TournamentParticipantUpdateManyWithoutMemberNestedInput
     certificateRequests?: CertificateRequestUpdateManyWithoutMemberNestedInput
+    eventsPosted?: EventUpdateManyWithoutPostedByNestedInput
+    announcementsPosted?: AnnouncementUpdateManyWithoutPostedByNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutNotificationsInput = {
@@ -37312,6 +40556,8 @@ export namespace Prisma {
     attendance?: AttendanceUncheckedUpdateManyWithoutMemberNestedInput
     tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutMemberNestedInput
     certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutMemberNestedInput
+    eventsPosted?: EventUncheckedUpdateManyWithoutPostedByNestedInput
+    announcementsPosted?: AnnouncementUncheckedUpdateManyWithoutPostedByNestedInput
   }
 
   export type ShopOrderItemCreateWithoutProductInput = {
@@ -37397,6 +40643,8 @@ export namespace Prisma {
     attendance?: AttendanceCreateNestedManyWithoutMemberInput
     tournamentEntries?: TournamentParticipantCreateNestedManyWithoutMemberInput
     certificateRequests?: CertificateRequestCreateNestedManyWithoutMemberInput
+    eventsPosted?: EventCreateNestedManyWithoutPostedByInput
+    announcementsPosted?: AnnouncementCreateNestedManyWithoutPostedByInput
   }
 
   export type MemberUncheckedCreateWithoutOrdersInput = {
@@ -37431,6 +40679,8 @@ export namespace Prisma {
     attendance?: AttendanceUncheckedCreateNestedManyWithoutMemberInput
     tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutMemberInput
     certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutMemberInput
+    eventsPosted?: EventUncheckedCreateNestedManyWithoutPostedByInput
+    announcementsPosted?: AnnouncementUncheckedCreateNestedManyWithoutPostedByInput
   }
 
   export type MemberCreateOrConnectWithoutOrdersInput = {
@@ -37459,6 +40709,8 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestCreateNestedManyWithoutDojoInput
     members?: MemberCreateNestedManyWithoutDojoInput
     attendance?: AttendanceCreateNestedManyWithoutDojoInput
+    events?: EventCreateNestedManyWithoutDojoInput
+    announcements?: AnnouncementCreateNestedManyWithoutDojoInput
   }
 
   export type DojoUncheckedCreateWithoutRenewalOrdersInput = {
@@ -37482,6 +40734,8 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutDojoInput
     members?: MemberUncheckedCreateNestedManyWithoutDojoInput
     attendance?: AttendanceUncheckedCreateNestedManyWithoutDojoInput
+    events?: EventUncheckedCreateNestedManyWithoutDojoInput
+    announcements?: AnnouncementUncheckedCreateNestedManyWithoutDojoInput
   }
 
   export type DojoCreateOrConnectWithoutRenewalOrdersInput = {
@@ -37510,6 +40764,8 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestCreateNestedManyWithoutDojoInput
     members?: MemberCreateNestedManyWithoutDojoInput
     attendance?: AttendanceCreateNestedManyWithoutDojoInput
+    events?: EventCreateNestedManyWithoutDojoInput
+    announcements?: AnnouncementCreateNestedManyWithoutDojoInput
   }
 
   export type DojoUncheckedCreateWithoutCertificateOrdersInput = {
@@ -37533,6 +40789,8 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutDojoInput
     members?: MemberUncheckedCreateNestedManyWithoutDojoInput
     attendance?: AttendanceUncheckedCreateNestedManyWithoutDojoInput
+    events?: EventUncheckedCreateNestedManyWithoutDojoInput
+    announcements?: AnnouncementUncheckedCreateNestedManyWithoutDojoInput
   }
 
   export type DojoCreateOrConnectWithoutCertificateOrdersInput = {
@@ -37651,6 +40909,8 @@ export namespace Prisma {
     attendance?: AttendanceUpdateManyWithoutMemberNestedInput
     tournamentEntries?: TournamentParticipantUpdateManyWithoutMemberNestedInput
     certificateRequests?: CertificateRequestUpdateManyWithoutMemberNestedInput
+    eventsPosted?: EventUpdateManyWithoutPostedByNestedInput
+    announcementsPosted?: AnnouncementUpdateManyWithoutPostedByNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutOrdersInput = {
@@ -37685,6 +40945,8 @@ export namespace Prisma {
     attendance?: AttendanceUncheckedUpdateManyWithoutMemberNestedInput
     tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutMemberNestedInput
     certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutMemberNestedInput
+    eventsPosted?: EventUncheckedUpdateManyWithoutPostedByNestedInput
+    announcementsPosted?: AnnouncementUncheckedUpdateManyWithoutPostedByNestedInput
   }
 
   export type DojoUpsertWithoutRenewalOrdersInput = {
@@ -37719,6 +40981,8 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestUpdateManyWithoutDojoNestedInput
     members?: MemberUpdateManyWithoutDojoNestedInput
     attendance?: AttendanceUpdateManyWithoutDojoNestedInput
+    events?: EventUpdateManyWithoutDojoNestedInput
+    announcements?: AnnouncementUpdateManyWithoutDojoNestedInput
   }
 
   export type DojoUncheckedUpdateWithoutRenewalOrdersInput = {
@@ -37742,6 +41006,8 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutDojoNestedInput
     members?: MemberUncheckedUpdateManyWithoutDojoNestedInput
     attendance?: AttendanceUncheckedUpdateManyWithoutDojoNestedInput
+    events?: EventUncheckedUpdateManyWithoutDojoNestedInput
+    announcements?: AnnouncementUncheckedUpdateManyWithoutDojoNestedInput
   }
 
   export type DojoUpsertWithoutCertificateOrdersInput = {
@@ -37776,6 +41042,8 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestUpdateManyWithoutDojoNestedInput
     members?: MemberUpdateManyWithoutDojoNestedInput
     attendance?: AttendanceUpdateManyWithoutDojoNestedInput
+    events?: EventUpdateManyWithoutDojoNestedInput
+    announcements?: AnnouncementUpdateManyWithoutDojoNestedInput
   }
 
   export type DojoUncheckedUpdateWithoutCertificateOrdersInput = {
@@ -37799,6 +41067,8 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutDojoNestedInput
     members?: MemberUncheckedUpdateManyWithoutDojoNestedInput
     attendance?: AttendanceUncheckedUpdateManyWithoutDojoNestedInput
+    events?: EventUncheckedUpdateManyWithoutDojoNestedInput
+    announcements?: AnnouncementUncheckedUpdateManyWithoutDojoNestedInput
   }
 
   export type ShopOrderItemUpsertWithWhereUniqueWithoutOrderInput = {
@@ -38169,6 +41439,8 @@ export namespace Prisma {
     orders?: ShopOrderCreateNestedManyWithoutMemberInput
     attendance?: AttendanceCreateNestedManyWithoutMemberInput
     certificateRequests?: CertificateRequestCreateNestedManyWithoutMemberInput
+    eventsPosted?: EventCreateNestedManyWithoutPostedByInput
+    announcementsPosted?: AnnouncementCreateNestedManyWithoutPostedByInput
   }
 
   export type MemberUncheckedCreateWithoutTournamentEntriesInput = {
@@ -38203,6 +41475,8 @@ export namespace Prisma {
     orders?: ShopOrderUncheckedCreateNestedManyWithoutMemberInput
     attendance?: AttendanceUncheckedCreateNestedManyWithoutMemberInput
     certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutMemberInput
+    eventsPosted?: EventUncheckedCreateNestedManyWithoutPostedByInput
+    announcementsPosted?: AnnouncementUncheckedCreateNestedManyWithoutPostedByInput
   }
 
   export type MemberCreateOrConnectWithoutTournamentEntriesInput = {
@@ -38384,6 +41658,8 @@ export namespace Prisma {
     orders?: ShopOrderUpdateManyWithoutMemberNestedInput
     attendance?: AttendanceUpdateManyWithoutMemberNestedInput
     certificateRequests?: CertificateRequestUpdateManyWithoutMemberNestedInput
+    eventsPosted?: EventUpdateManyWithoutPostedByNestedInput
+    announcementsPosted?: AnnouncementUpdateManyWithoutPostedByNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutTournamentEntriesInput = {
@@ -38418,6 +41694,8 @@ export namespace Prisma {
     orders?: ShopOrderUncheckedUpdateManyWithoutMemberNestedInput
     attendance?: AttendanceUncheckedUpdateManyWithoutMemberNestedInput
     certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutMemberNestedInput
+    eventsPosted?: EventUncheckedUpdateManyWithoutPostedByNestedInput
+    announcementsPosted?: AnnouncementUncheckedUpdateManyWithoutPostedByNestedInput
   }
 
   export type TournamentMatchUpsertWithWhereUniqueWithoutParticipant1Input = {
@@ -39000,6 +42278,37 @@ export namespace Prisma {
     createdAt?: Date | string
   }
 
+  export type EventCreateManyDojoInput = {
+    id?: string
+    title: string
+    description?: string | null
+    eventDate: Date | string
+    location?: string | null
+    imageUrl?: string | null
+    isPublished?: boolean
+    maxCapacity?: number | null
+    category?: $Enums.EventCategory
+    attachmentUrl?: string | null
+    attachmentType?: $Enums.AttachmentType | null
+    postedById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AnnouncementCreateManyDojoInput = {
+    id?: string
+    title: string
+    body?: string | null
+    link?: string | null
+    isPublished?: boolean
+    publishedAt?: Date | string
+    attachmentUrl?: string | null
+    attachmentType?: $Enums.AttachmentType | null
+    postedById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type ShopOrderUpdateWithoutDojoInput = {
     id?: StringFieldUpdateOperationsInput | string
     paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
@@ -39199,6 +42508,8 @@ export namespace Prisma {
     attendance?: AttendanceUpdateManyWithoutMemberNestedInput
     tournamentEntries?: TournamentParticipantUpdateManyWithoutMemberNestedInput
     certificateRequests?: CertificateRequestUpdateManyWithoutMemberNestedInput
+    eventsPosted?: EventUpdateManyWithoutPostedByNestedInput
+    announcementsPosted?: AnnouncementUpdateManyWithoutPostedByNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutDojoInput = {
@@ -39233,6 +42544,8 @@ export namespace Prisma {
     attendance?: AttendanceUncheckedUpdateManyWithoutMemberNestedInput
     tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutMemberNestedInput
     certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutMemberNestedInput
+    eventsPosted?: EventUncheckedUpdateManyWithoutPostedByNestedInput
+    announcementsPosted?: AnnouncementUncheckedUpdateManyWithoutPostedByNestedInput
   }
 
   export type MemberUncheckedUpdateManyWithoutDojoInput = {
@@ -39286,6 +42599,101 @@ export namespace Prisma {
     present?: BoolFieldUpdateOperationsInput | boolean
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type EventUpdateWithoutDojoInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    eventDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
+    maxCapacity?: NullableIntFieldUpdateOperationsInput | number | null
+    category?: EnumEventCategoryFieldUpdateOperationsInput | $Enums.EventCategory
+    attachmentUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    attachmentType?: NullableEnumAttachmentTypeFieldUpdateOperationsInput | $Enums.AttachmentType | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    registrations?: EventRegistrationUpdateManyWithoutEventNestedInput
+    postedBy?: MemberUpdateOneWithoutEventsPostedNestedInput
+  }
+
+  export type EventUncheckedUpdateWithoutDojoInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    eventDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
+    maxCapacity?: NullableIntFieldUpdateOperationsInput | number | null
+    category?: EnumEventCategoryFieldUpdateOperationsInput | $Enums.EventCategory
+    attachmentUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    attachmentType?: NullableEnumAttachmentTypeFieldUpdateOperationsInput | $Enums.AttachmentType | null
+    postedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    registrations?: EventRegistrationUncheckedUpdateManyWithoutEventNestedInput
+  }
+
+  export type EventUncheckedUpdateManyWithoutDojoInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    eventDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
+    maxCapacity?: NullableIntFieldUpdateOperationsInput | number | null
+    category?: EnumEventCategoryFieldUpdateOperationsInput | $Enums.EventCategory
+    attachmentUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    attachmentType?: NullableEnumAttachmentTypeFieldUpdateOperationsInput | $Enums.AttachmentType | null
+    postedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AnnouncementUpdateWithoutDojoInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    body?: NullableStringFieldUpdateOperationsInput | string | null
+    link?: NullableStringFieldUpdateOperationsInput | string | null
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
+    publishedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    attachmentUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    attachmentType?: NullableEnumAttachmentTypeFieldUpdateOperationsInput | $Enums.AttachmentType | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    postedBy?: MemberUpdateOneWithoutAnnouncementsPostedNestedInput
+  }
+
+  export type AnnouncementUncheckedUpdateWithoutDojoInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    body?: NullableStringFieldUpdateOperationsInput | string | null
+    link?: NullableStringFieldUpdateOperationsInput | string | null
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
+    publishedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    attachmentUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    attachmentType?: NullableEnumAttachmentTypeFieldUpdateOperationsInput | $Enums.AttachmentType | null
+    postedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AnnouncementUncheckedUpdateManyWithoutDojoInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    body?: NullableStringFieldUpdateOperationsInput | string | null
+    link?: NullableStringFieldUpdateOperationsInput | string | null
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
+    publishedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    attachmentUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    attachmentType?: NullableEnumAttachmentTypeFieldUpdateOperationsInput | $Enums.AttachmentType | null
+    postedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type GradingCreateManyMemberInput = {
@@ -39375,6 +42783,37 @@ export namespace Prisma {
     fatherName?: string | null
     motherName?: string | null
     rankName: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type EventCreateManyPostedByInput = {
+    id?: string
+    title: string
+    description?: string | null
+    eventDate: Date | string
+    location?: string | null
+    imageUrl?: string | null
+    isPublished?: boolean
+    maxCapacity?: number | null
+    category?: $Enums.EventCategory
+    attachmentUrl?: string | null
+    attachmentType?: $Enums.AttachmentType | null
+    dojoId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AnnouncementCreateManyPostedByInput = {
+    id?: string
+    title: string
+    body?: string | null
+    link?: string | null
+    isPublished?: boolean
+    publishedAt?: Date | string
+    attachmentUrl?: string | null
+    attachmentType?: $Enums.AttachmentType | null
+    dojoId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -39660,6 +43099,101 @@ export namespace Prisma {
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
     motherName?: NullableStringFieldUpdateOperationsInput | string | null
     rankName?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type EventUpdateWithoutPostedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    eventDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
+    maxCapacity?: NullableIntFieldUpdateOperationsInput | number | null
+    category?: EnumEventCategoryFieldUpdateOperationsInput | $Enums.EventCategory
+    attachmentUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    attachmentType?: NullableEnumAttachmentTypeFieldUpdateOperationsInput | $Enums.AttachmentType | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    registrations?: EventRegistrationUpdateManyWithoutEventNestedInput
+    dojo?: DojoUpdateOneWithoutEventsNestedInput
+  }
+
+  export type EventUncheckedUpdateWithoutPostedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    eventDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
+    maxCapacity?: NullableIntFieldUpdateOperationsInput | number | null
+    category?: EnumEventCategoryFieldUpdateOperationsInput | $Enums.EventCategory
+    attachmentUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    attachmentType?: NullableEnumAttachmentTypeFieldUpdateOperationsInput | $Enums.AttachmentType | null
+    dojoId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    registrations?: EventRegistrationUncheckedUpdateManyWithoutEventNestedInput
+  }
+
+  export type EventUncheckedUpdateManyWithoutPostedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    eventDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
+    maxCapacity?: NullableIntFieldUpdateOperationsInput | number | null
+    category?: EnumEventCategoryFieldUpdateOperationsInput | $Enums.EventCategory
+    attachmentUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    attachmentType?: NullableEnumAttachmentTypeFieldUpdateOperationsInput | $Enums.AttachmentType | null
+    dojoId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AnnouncementUpdateWithoutPostedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    body?: NullableStringFieldUpdateOperationsInput | string | null
+    link?: NullableStringFieldUpdateOperationsInput | string | null
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
+    publishedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    attachmentUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    attachmentType?: NullableEnumAttachmentTypeFieldUpdateOperationsInput | $Enums.AttachmentType | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    dojo?: DojoUpdateOneWithoutAnnouncementsNestedInput
+  }
+
+  export type AnnouncementUncheckedUpdateWithoutPostedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    body?: NullableStringFieldUpdateOperationsInput | string | null
+    link?: NullableStringFieldUpdateOperationsInput | string | null
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
+    publishedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    attachmentUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    attachmentType?: NullableEnumAttachmentTypeFieldUpdateOperationsInput | $Enums.AttachmentType | null
+    dojoId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AnnouncementUncheckedUpdateManyWithoutPostedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    body?: NullableStringFieldUpdateOperationsInput | string | null
+    link?: NullableStringFieldUpdateOperationsInput | string | null
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
+    publishedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    attachmentUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    attachmentType?: NullableEnumAttachmentTypeFieldUpdateOperationsInput | $Enums.AttachmentType | null
+    dojoId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

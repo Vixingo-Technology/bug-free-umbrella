@@ -1,71 +1,81 @@
 import type { Metadata } from "next";
-import DojoPageHeader from "@/components/dojo/page-header";
 import AnnouncementForm from "@/components/dojo/announcements/announcement-form";
 import DeleteAnnouncementButton from "@/components/dojo/announcements/delete-button";
 import PostedNewTabs, { type TabValue } from "@/components/portal/posted-new-tabs";
 import Pager from "@/components/portal/pager";
-import { requireDojoRole } from "@/lib/dojo-session";
+import { requireAdmin } from "@/lib/admin-guard";
 import { prisma } from "@/lib/prisma";
 
 export const metadata: Metadata = {
-    title: "Announcements — Dojo Dashboard",
+    title: "Announcements — Admin",
 };
 
 export const dynamic = "force-dynamic";
 
-const BASE = "/portal/dojo/announcements";
-const PAGE_SIZE = 8;
+const BASE = "/portal/admin/announcements";
+const PAGE_SIZE = 10;
 
 function formatPostedAt(date: Date): string {
     const diff = Date.now() - date.getTime();
     const minutes = Math.round(diff / 60_000);
-    if (minutes < 60) return `Posted ${minutes}m ago`;
+    if (minutes < 60) return `${minutes}m ago`;
     const hours = Math.round(minutes / 60);
-    if (hours < 24) return `Posted ${hours}h ago`;
+    if (hours < 24) return `${hours}h ago`;
     const days = Math.round(hours / 24);
-    if (days < 7) return `Posted ${days}d ago`;
-    return `Posted ${date.toLocaleDateString("en-GB", { day: "numeric", month: "short" })}`;
+    if (days < 7) return `${days}d ago`;
+    return date.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
 }
 
-export default async function AnnouncementsPage({
+export default async function AdminAnnouncementsPage({
     searchParams,
 }: {
     searchParams: Promise<{ tab?: string; page?: string }>;
 }) {
-    const session = await requireDojoRole("DOJO_OWNER");
+    await requireAdmin();
     const sp = await searchParams;
     const tab: TabValue = sp.tab === "new" ? "new" : "posted";
     const page = Math.max(1, Number.parseInt(sp.page ?? "1", 10) || 1);
 
-    const where = session.dojo ? { dojoId: session.dojo.id } : { id: "__none__" };
-    const total = await prisma.announcement.count({ where });
+    const total = await prisma.announcement.count();
     const pageCount = Math.max(1, Math.ceil(total / PAGE_SIZE));
     const safePage = Math.min(page, pageCount);
 
     const posts =
         tab === "posted"
             ? await prisma.announcement.findMany({
-                  where,
                   orderBy: { publishedAt: "desc" },
                   take: PAGE_SIZE,
                   skip: (safePage - 1) * PAGE_SIZE,
+                  include: {
+                      dojo: { select: { id: true, name: true } },
+                      postedBy: { select: { fullName: true } },
+                  },
               })
             : [];
 
     return (
         <>
-            <DojoPageHeader
-                eyebrow="Dojo Head"
-                title="Announcements"
-                description="Post a message to your dojo. Published announcements appear on your dojo page and the federation landing page."
-            />
+            <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-10">
+                <div>
+                    <p className="text-[10px] tracking-[0.4em] uppercase text-accent-red font-bold mb-3">
+                        Federation
+                    </p>
+                    <h1 className="font-karate text-3xl md:text-4xl font-bold text-zinc-900 uppercase tracking-wider leading-[1.15]">
+                        Announcements
+                    </h1>
+                    <p className="text-zinc-600 mt-3 max-w-2xl leading-relaxed">
+                        Federation-wide notices appear on the landing page and to every member. Dojo-scoped posts are listed here too for moderation.
+                    </p>
+                </div>
+            </div>
 
             <PostedNewTabs current={tab} basePath={BASE} postedCount={total} />
 
             {tab === "new" ? (
                 <div className="max-w-2xl">
                     <AnnouncementForm
-                        eyebrow="New dojo announcement"
+                        eyebrow="New federation-wide post"
+                        submitLabel="Publish to landing page"
                         redirectAfter={BASE}
                     />
                 </div>
@@ -73,12 +83,12 @@ export default async function AnnouncementsPage({
                 <div className="bg-white border border-zinc-200 rounded-sm shadow-sm">
                     <div className="px-5 py-4 border-b border-zinc-200">
                         <h3 className="text-xs tracking-widest uppercase font-bold text-zinc-500">
-                            Recent posts
+                            All announcements
                         </h3>
                     </div>
                     {posts.length === 0 ? (
                         <p className="p-8 text-sm text-zinc-500 text-center">
-                            No announcements yet. Switch to <b>New</b> to publish your first.
+                            No announcements yet. Switch to <b>New</b> to publish the first.
                         </p>
                     ) : (
                         <ul className="divide-y divide-zinc-200">
@@ -86,6 +96,22 @@ export default async function AnnouncementsPage({
                                 <li key={p.id} className="p-5">
                                     <div className="flex items-start justify-between gap-4">
                                         <div className="flex-1">
+                                            <div className="flex items-center gap-2 mb-2">
+                                                <span
+                                                    className={`text-[10px] tracking-widest uppercase font-bold px-2 py-0.5 rounded-full border ${
+                                                        p.dojoId
+                                                            ? "bg-blue-50 text-blue-700 border-blue-200"
+                                                            : "bg-accent-red/10 text-accent-red border-accent-red/20"
+                                                    }`}
+                                                >
+                                                    {p.dojo?.name ?? "Federation"}
+                                                </span>
+                                                {!p.isPublished && (
+                                                    <span className="text-[10px] tracking-widest uppercase font-bold px-2 py-0.5 rounded-full bg-zinc-100 text-zinc-500 border border-zinc-200">
+                                                        Hidden
+                                                    </span>
+                                                )}
+                                            </div>
                                             <h4 className="font-serif font-bold text-zinc-900 mb-2">
                                                 {p.title}
                                             </h4>
@@ -95,8 +121,10 @@ export default async function AnnouncementsPage({
                                                 </p>
                                             )}
                                             <p className="text-[10px] tracking-widest uppercase font-bold text-zinc-400">
-                                                {formatPostedAt(p.publishedAt)} ·{" "}
-                                                {p.isPublished ? "Published" : "Hidden"}
+                                                {formatPostedAt(p.publishedAt)}
+                                                {p.postedBy?.fullName
+                                                    ? ` · ${p.postedBy.fullName}`
+                                                    : ""}
                                             </p>
                                         </div>
                                         <DeleteAnnouncementButton id={p.id} />

@@ -283,6 +283,26 @@ exports.Prisma.EventScalarFieldEnum = {
   imageUrl: 'imageUrl',
   isPublished: 'isPublished',
   maxCapacity: 'maxCapacity',
+  category: 'category',
+  attachmentUrl: 'attachmentUrl',
+  attachmentType: 'attachmentType',
+  postedById: 'postedById',
+  dojoId: 'dojoId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.AnnouncementScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  body: 'body',
+  link: 'link',
+  isPublished: 'isPublished',
+  publishedAt: 'publishedAt',
+  attachmentUrl: 'attachmentUrl',
+  attachmentType: 'attachmentType',
+  postedById: 'postedById',
+  dojoId: 'dojoId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -450,6 +470,19 @@ exports.CertificateRequestStatus = exports.$Enums.CertificateRequestStatus = {
   FAILED: 'FAILED'
 };
 
+exports.EventCategory = exports.$Enums.EventCategory = {
+  BELT_TEST: 'BELT_TEST',
+  TOURNAMENT: 'TOURNAMENT',
+  SEMINAR: 'SEMINAR',
+  TRAINING_CAMP: 'TRAINING_CAMP',
+  OTHER: 'OTHER'
+};
+
+exports.AttachmentType = exports.$Enums.AttachmentType = {
+  IMAGE: 'IMAGE',
+  PDF: 'PDF'
+};
+
 exports.NotificationType = exports.$Enums.NotificationType = {
   INFO: 'INFO',
   WARNING: 'WARNING',
@@ -480,6 +513,7 @@ exports.Prisma.ModelName = {
   CertificateRequest: 'CertificateRequest',
   SystemSettings: 'SystemSettings',
   Event: 'Event',
+  Announcement: 'Announcement',
   EventRegistration: 'EventRegistration',
   Notification: 'Notification',
   ShopProduct: 'ShopProduct',

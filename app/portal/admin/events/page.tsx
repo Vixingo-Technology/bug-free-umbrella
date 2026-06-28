@@ -1,21 +1,20 @@
 import type { Metadata } from "next";
 import { MapPin, Users } from "lucide-react";
-import DojoPageHeader from "@/components/dojo/page-header";
 import EventForm from "@/components/dojo/events/event-form";
 import DeleteEventButton from "@/components/dojo/events/delete-button";
 import PostedNewTabs, { type TabValue } from "@/components/portal/posted-new-tabs";
 import Pager from "@/components/portal/pager";
-import { requireDojoRole } from "@/lib/dojo-session";
+import { requireAdmin } from "@/lib/admin-guard";
 import { prisma } from "@/lib/prisma";
 
 export const metadata: Metadata = {
-    title: "Events — Dojo Dashboard",
+    title: "Events — Admin",
 };
 
 export const dynamic = "force-dynamic";
 
-const BASE = "/portal/dojo/events";
-const PAGE_SIZE = 8;
+const BASE = "/portal/admin/events";
+const PAGE_SIZE = 10;
 
 const CATEGORY_LABEL: Record<string, string> = {
     BELT_TEST: "Belt Test",
@@ -30,57 +29,67 @@ function formatDate(d: Date): string {
         weekday: "short",
         day: "numeric",
         month: "short",
-        hour: "numeric",
-        minute: "2-digit",
+        year: "numeric",
     });
 }
 
-export default async function EventsPage({
+export default async function AdminEventsPage({
     searchParams,
 }: {
     searchParams: Promise<{ tab?: string; page?: string }>;
 }) {
-    const session = await requireDojoRole("DOJO_OWNER");
+    await requireAdmin();
     const sp = await searchParams;
     const tab: TabValue = sp.tab === "new" ? "new" : "posted";
     const page = Math.max(1, Number.parseInt(sp.page ?? "1", 10) || 1);
 
-    const where = session.dojo ? { dojoId: session.dojo.id } : { id: "__none__" };
-    const total = await prisma.event.count({ where });
+    const total = await prisma.event.count();
     const pageCount = Math.max(1, Math.ceil(total / PAGE_SIZE));
     const safePage = Math.min(page, pageCount);
 
     const events =
         tab === "posted"
             ? await prisma.event.findMany({
-                  where,
                   orderBy: { eventDate: "desc" },
-                  include: { _count: { select: { registrations: true } } },
                   take: PAGE_SIZE,
                   skip: (safePage - 1) * PAGE_SIZE,
+                  include: {
+                      dojo: { select: { id: true, name: true } },
+                      postedBy: { select: { fullName: true } },
+                      _count: { select: { registrations: true } },
+                  },
               })
             : [];
 
     return (
         <>
-            <DojoPageHeader
-                eyebrow="Dojo Head"
-                title="Events"
-                description="Plan dojo-specific belt tests, tournaments, seminars and gatherings. Published events appear on the federation landing page."
-            />
+            <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-10">
+                <div>
+                    <p className="text-[10px] tracking-[0.4em] uppercase text-accent-red font-bold mb-3">
+                        Federation
+                    </p>
+                    <h1 className="font-karate text-3xl md:text-4xl font-bold text-zinc-900 uppercase tracking-wider leading-[1.15]">
+                        Events
+                    </h1>
+                    <p className="text-zinc-600 mt-3 max-w-2xl leading-relaxed">
+                        Belt tests, tournaments, seminars, and training camps. Federation-wide events sit alongside dojo-scoped events here for moderation.
+                    </p>
+                </div>
+            </div>
 
             <PostedNewTabs current={tab} basePath={BASE} postedCount={total} />
 
             {tab === "new" ? (
                 <div className="max-w-2xl">
                     <EventForm
-                        eyebrow="New dojo event"
+                        eyebrow="New federation event"
+                        submitLabel="Publish to landing page"
                         redirectAfter={BASE}
                     />
                 </div>
             ) : events.length === 0 ? (
                 <div className="bg-white border border-zinc-200 rounded-sm shadow-sm p-8 text-sm text-zinc-500 text-center">
-                    No events yet. Switch to <b>New</b> to create your first.
+                    No events yet. Switch to <b>New</b> to create the first.
                 </div>
             ) : (
                 <div className="grid md:grid-cols-2 gap-5">
@@ -95,9 +104,18 @@ export default async function EventsPage({
                                 </h3>
                                 <DeleteEventButton id={e.id} />
                             </div>
-                            <div className="flex items-center gap-2 mb-3">
+                            <div className="flex flex-wrap items-center gap-2 mb-3">
                                 <span className="text-[10px] tracking-widest uppercase font-bold px-2 py-1 rounded-full border border-accent-red/20 bg-accent-red/5 text-accent-red">
                                     {CATEGORY_LABEL[e.category] ?? e.category}
+                                </span>
+                                <span
+                                    className={`text-[10px] tracking-widest uppercase font-bold px-2 py-1 rounded-full border ${
+                                        e.dojoId
+                                            ? "bg-blue-50 text-blue-700 border-blue-200"
+                                            : "bg-accent-red/10 text-accent-red border-accent-red/20"
+                                    }`}
+                                >
+                                    {e.dojo?.name ?? "Federation"}
                                 </span>
                                 <span
                                     className={`text-[10px] tracking-widest uppercase font-bold px-2 py-1 rounded-full border ${

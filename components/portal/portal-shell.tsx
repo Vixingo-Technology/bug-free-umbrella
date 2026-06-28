@@ -24,6 +24,7 @@ import {
     Building2,
     ShieldCheck,
     Swords,
+    Megaphone,
 } from "lucide-react";
 import Logo from "@/assets/jka_logo.svg";
 import { signoutAction } from "@/app/actions/auth";
@@ -61,6 +62,8 @@ const adminPersonalNavItems = [
 
 const adminNavItems = [
     { label: "Members",  href: "/portal/admin/members",  icon: Users },
+    { label: "Announcements", href: "/portal/admin/announcements", icon: Megaphone },
+    { label: "Events",   href: "/portal/admin/events",   icon: CalendarDays },
     { label: "Products", href: "/portal/admin/products", icon: Package },
     { label: "Orders",   href: "/portal/admin/orders",   icon: ShoppingBag },
     { label: "Dojos",    href: "/portal/admin/dojos",    icon: Building2 },

@@ -76,6 +76,19 @@ enum CertificateRequestStatus {
   FAILED
 }
 
+enum EventCategory {
+  BELT_TEST
+  TOURNAMENT
+  SEMINAR
+  TRAINING_CAMP
+  OTHER
+}
+
+enum AttachmentType {
+  IMAGE
+  PDF
+}
+
 // ─────────────────────────────────────────────
 // BELT RANKS
 // ─────────────────────────────────────────────
@@ -139,8 +152,10 @@ model Dojo {
   // The dojo head is the Member with role = DOJO_OWNER and dojoId = this.id.
   // A partial unique index `members_one_owner_per_dojo` enforces "at most one
   // owner per dojo" at the DB level (see scripts/migrations/2026-06-24-...sql).
-  members    Member[]     @relation("DojoMembers")
-  attendance Attendance[]
+  members       Member[]       @relation("DojoMembers")
+  attendance    Attendance[]
+  events        Event[]        @relation("DojoEvents")
+  announcements Announcement[] @relation("DojoAnnouncements")
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -232,6 +247,8 @@ model Member {
   attendance          Attendance[]
   tournamentEntries   TournamentParticipant[]
   certificateRequests CertificateRequest[]
+  eventsPosted        Event[]                 @relation("EventsPosted")
+  announcementsPosted Announcement[]          @relation("AnnouncementsPosted")
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -411,21 +428,65 @@ model SystemSettings {
 // ─────────────────────────────────────────────
 
 model Event {
-  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id          String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   title       String
   description String?
-  eventDate   DateTime @map("event_date")
+  eventDate   DateTime      @map("event_date")
   location    String?
-  imageUrl    String?  @map("image_url")
-  isPublished Boolean  @default(false) @map("is_published")
-  maxCapacity Int?     @map("max_capacity")
+  imageUrl    String?       @map("image_url")
+  isPublished Boolean       @default(false) @map("is_published")
+  maxCapacity Int?          @map("max_capacity")
+  category    EventCategory @default(OTHER)
+
+  // Optional attachment (PDF brochure or image flyer) shown on the detail page.
+  attachmentUrl  String?         @map("attachment_url")
+  attachmentType AttachmentType? @map("attachment_type")
+
+  // Who posted this event. Either ADMIN (federation-wide) or DOJO_OWNER (dojo-scoped).
+  postedById String? @map("posted_by_id") @db.Uuid
+  dojoId     String? @map("dojo_id") @db.Uuid
 
   registrations EventRegistration[]
+  postedBy      Member?             @relation("EventsPosted", fields: [postedById], references: [id])
+  dojo          Dojo?               @relation("DojoEvents", fields: [dojoId], references: [id])
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
+  @@index([isPublished, eventDate])
+  @@index([category])
   @@map("events")
+}
+
+// ─────────────────────────────────────────────
+// ANNOUNCEMENTS
+// Short text posts shown on the landing page Announcements tab.
+// Only ADMIN (federation-wide) and DOJO_OWNER (dojo-scoped) can post.
+// ─────────────────────────────────────────────
+
+model Announcement {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title       String
+  body        String?
+  link        String?
+  isPublished Boolean  @default(true) @map("is_published")
+  publishedAt DateTime @default(now()) @map("published_at")
+
+  // Optional attachment (PDF or image) shown on the detail page.
+  attachmentUrl  String?         @map("attachment_url")
+  attachmentType AttachmentType? @map("attachment_type")
+
+  postedById String? @map("posted_by_id") @db.Uuid
+  dojoId     String? @map("dojo_id") @db.Uuid
+
+  postedBy Member? @relation("AnnouncementsPosted", fields: [postedById], references: [id])
+  dojo     Dojo?   @relation("DojoAnnouncements", fields: [dojoId], references: [id])
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([isPublished, publishedAt])
+  @@map("announcements")
 }
 
 // ─────────────────────────────────────────────

@@ -26,6 +26,13 @@ const nextConfig: NextConfig = {
     ],
   },
   output: 'standalone',
+  experimental: {
+    serverActions: {
+      // Attachments on announcements/events can be up to 15 MB (PDF brochures,
+      // image flyers). Default is 1 MB which rejects most real-world uploads.
+      bodySizeLimit: '20mb',
+    },
+  },
   outputFileTracingIncludes: {
     '/**/*': [
       './assets/cer-template.pdf',
