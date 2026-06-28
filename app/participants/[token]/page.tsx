@@ -2,13 +2,24 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { Calendar, MapPin, CheckCircle2, ArrowLeft } from "lucide-react";
+import {
+    Calendar,
+    MapPin,
+    CheckCircle2,
+    ArrowLeft,
+    AlertCircle,
+} from "lucide-react";
 import QRCode from "qrcode";
 import Logo from "@/assets/jka_logo.svg";
 import PrintButton from "@/components/print-button";
 import { prisma } from "@/lib/prisma";
+import { createClient } from "@/lib/supabase/server";
+import { checkInFromCardAction } from "@/app/actions/event-registration";
 
-type Props = { params: Promise<{ token: string }> };
+type Props = {
+    params: Promise<{ token: string }>;
+    searchParams: Promise<{ checked?: string; error?: string }>;
+};
 
 export const metadata: Metadata = {
     title: "Participation Card — JKA Bangladesh",
@@ -37,8 +48,12 @@ function formatCheckedInAt(d: Date): string {
     });
 }
 
-export default async function ParticipationCardPage({ params }: Props) {
+export default async function ParticipationCardPage({
+    params,
+    searchParams,
+}: Props) {
     const { token } = await params;
+    const { checked, error } = await searchParams;
 
     const registration = await prisma.eventRegistration.findUnique({
         where: { qrToken: token },
@@ -65,11 +80,13 @@ export default async function ParticipationCardPage({ params }: Props) {
         process.env.NEXT_PUBLIC_APP_URL ??
         process.env.APP_URL ??
         "http://localhost:3000";
-    const checkInUrl = `${appUrl}/check-in/${token}`;
+    // Scanning the QR lands on this very page so the door staff sees the
+    // participant's details and a check-in button if they have authority.
+    const cardUrl = `${appUrl}/participants/${token}`;
 
     // Generate the QR as an inline SVG string — keeps the page server-rendered
     // and avoids a client-side QR library.
-    const qrSvg = await QRCode.toString(checkInUrl, {
+    const qrSvg = await QRCode.toString(cardUrl, {
         type: "svg",
         errorCorrectionLevel: "M",
         margin: 1,
@@ -77,6 +94,31 @@ export default async function ParticipationCardPage({ params }: Props) {
     });
 
     const checkedIn = !!registration.checkedInAt;
+
+    // Does the current viewer have authority to check this participant in?
+    const supabase = await createClient();
+    const {
+        data: { user },
+    } = await supabase.auth.getUser();
+
+    let canCheckIn = false;
+    if (user) {
+        const me = await prisma.member.findUnique({
+            where: { id: user.id },
+            select: { role: true, dojoId: true },
+        });
+        if (me) {
+            if (me.role === "ADMIN") {
+                canCheckIn = true;
+            } else if (me.role === "DOJO_OWNER" || me.role === "DOJO_MANAGER") {
+                const ownsByDojo =
+                    !!registration.event.dojoId &&
+                    registration.event.dojoId === me.dojoId;
+                const ownsByPost = registration.event.postedById === user.id;
+                canCheckIn = ownsByDojo || ownsByPost;
+            }
+        }
+    }
 
     return (
         <main className="min-h-screen bg-bg-deep w-full overflow-hidden print:bg-white print:min-h-0">
@@ -197,6 +239,54 @@ export default async function ParticipationCardPage({ params }: Props) {
                             </div>
                         )}
                     </div>
+
+                    {canCheckIn && (
+                        <div className="mt-6 bg-white border border-zinc-200 rounded-sm shadow-sm p-5 print:hidden">
+                            <p className="text-[10px] tracking-widest uppercase font-bold text-zinc-400 mb-3">
+                                Authority controls
+                            </p>
+
+                            {error && (
+                                <div className="mb-3 flex items-center gap-2 text-xs font-semibold text-red-700 bg-red-50 border border-red-200 px-3 py-2 rounded-sm">
+                                    <AlertCircle size={14} className="shrink-0" />
+                                    {error}
+                                </div>
+                            )}
+                            {checked === "1" && (
+                                <div className="mb-3 flex items-center gap-2 text-xs font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-3 py-2 rounded-sm">
+                                    <CheckCircle2 size={14} className="shrink-0" />
+                                    Marked as checked in.
+                                </div>
+                            )}
+                            {checked === "already" && (
+                                <div className="mb-3 flex items-center gap-2 text-xs font-semibold text-amber-700 bg-amber-50 border border-amber-200 px-3 py-2 rounded-sm">
+                                    <CheckCircle2 size={14} className="shrink-0" />
+                                    This participant was already checked in.
+                                </div>
+                            )}
+
+                            {checkedIn ? (
+                                <p className="text-sm text-zinc-600">
+                                    {participantName} is already marked present
+                                    {registration.checkedInAt
+                                        ? ` (${formatCheckedInAt(registration.checkedInAt)})`
+                                        : ""}
+                                    .
+                                </p>
+                            ) : (
+                                <form action={checkInFromCardAction}>
+                                    <input type="hidden" name="token" value={token} />
+                                    <button
+                                        type="submit"
+                                        className="w-full inline-flex items-center justify-center gap-2 bg-accent-red text-white px-4 py-3 text-xs font-bold tracking-widest uppercase hover:bg-accent-red/90 transition-colors rounded-sm"
+                                    >
+                                        <CheckCircle2 size={14} />
+                                        Mark as checked in
+                                    </button>
+                                </form>
+                            )}
+                        </div>
+                    )}
 
                     <div className="mt-8 grid sm:grid-cols-2 gap-3 print:hidden">
                         <PrintButton />

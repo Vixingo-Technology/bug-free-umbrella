@@ -187,8 +187,9 @@ export async function registerForEventAndRedirect(
 }
 
 /**
- * Mark a participant present. Only ADMIN and DOJO_OWNER (of the event's dojo,
- * or who posted the event) may call this. Returns details for the success page.
+ * Mark a participant present. ADMIN, DOJO_OWNER, and DOJO_MANAGER may call
+ * this — the latter two only for events at their own dojo (or events they
+ * posted personally). Returns details for the success page.
  */
 export async function checkInParticipantAction(
     token: string,
@@ -206,8 +207,15 @@ export async function checkInParticipantAction(
         select: { role: true, dojoId: true },
     });
     if (!me) return { ok: false, error: "Account not found." };
-    if (me.role !== "ADMIN" && me.role !== "DOJO_OWNER") {
-        return { ok: false, error: "Only admins and dojo owners can check in." };
+    if (
+        me.role !== "ADMIN" &&
+        me.role !== "DOJO_OWNER" &&
+        me.role !== "DOJO_MANAGER"
+    ) {
+        return {
+            ok: false,
+            error: "Only admins, dojo owners, and managers can check in.",
+        };
     }
 
     const registration = await prisma.eventRegistration.findUnique({
@@ -228,9 +236,9 @@ export async function checkInParticipantAction(
         return { ok: false, error: "Invalid or unknown check-in code." };
     }
 
-    // Authorisation: ADMIN can always check in. DOJO_OWNER can check in for
-    // events at their own dojo or events they posted personally.
-    if (me.role === "DOJO_OWNER") {
+    // ADMIN can always check in. Dojo-scoped roles can check in for events
+    // at their own dojo or events they posted personally.
+    if (me.role === "DOJO_OWNER" || me.role === "DOJO_MANAGER") {
         const eventDojoId = registration.event.dojoId;
         const eventPostedById = registration.event.postedById;
         const isAllowed =
@@ -266,6 +274,7 @@ export async function checkInParticipantAction(
 
     revalidatePath(`/portal/admin/events/${registration.event.id}/participants`);
     revalidatePath(`/portal/dojo/events/${registration.event.id}/participants`);
+    revalidatePath(`/participants/${token}`);
 
     return {
         ok: true,
@@ -275,4 +284,28 @@ export async function checkInParticipantAction(
         eventTitle: registration.event.title,
         eventId: registration.event.id,
     };
+}
+
+/**
+ * Form-action wrapper around checkInParticipantAction. Posted from the
+ * participation card's "Mark as checked in" button. Always redirects back
+ * to the same card so the result is reflected in the rendered page.
+ */
+export async function checkInFromCardAction(formData: FormData): Promise<void> {
+    const token = ((formData.get("token") as string) ?? "").trim();
+    if (!token) redirect("/");
+
+    const result = await checkInParticipantAction(token);
+    revalidatePath(`/participants/${token}`);
+
+    if (!result.ok) {
+        redirect(
+            `/participants/${encodeURIComponent(token)}?error=${encodeURIComponent(result.error)}`,
+        );
+    }
+    redirect(
+        `/participants/${encodeURIComponent(token)}?checked=${
+            result.alreadyCheckedIn ? "already" : "1"
+        }`,
+    );
 }
