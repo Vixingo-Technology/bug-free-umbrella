@@ -152,10 +152,12 @@ model Dojo {
   // The dojo head is the Member with role = DOJO_OWNER and dojoId = this.id.
   // A partial unique index `members_one_owner_per_dojo` enforces "at most one
   // owner per dojo" at the DB level (see scripts/migrations/2026-06-24-...sql).
-  members       Member[]       @relation("DojoMembers")
-  attendance    Attendance[]
-  events        Event[]        @relation("DojoEvents")
-  announcements Announcement[] @relation("DojoAnnouncements")
+  members        Member[]            @relation("DojoMembers")
+  attendance     Attendance[]
+  events         Event[]             @relation("DojoEvents")
+  announcements  Announcement[]      @relation("DojoAnnouncements")
+  inventoryItems DojoInventoryItem[] @relation("DojoInventoryItems")
+  sales          DojoSale[]          @relation("DojoSales")
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -250,6 +252,8 @@ model Member {
   eventsPosted        Event[]                 @relation("EventsPosted")
   announcementsPosted Announcement[]          @relation("AnnouncementsPosted")
   eventCheckIns       EventRegistration[]     @relation("EventCheckIns")
+  dojoSalesAsBuyer    DojoSale[]              @relation("DojoSaleBuyer")
+  dojoSalesSold       DojoSale[]              @relation("DojoSaleSeller")
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -562,12 +566,94 @@ model ShopProduct {
   category    String? // e.g. "gear", "apparel", "equipment"
   isActive    Boolean @default(true) @map("is_active")
 
-  orderItems ShopOrderItem[]
+  orderItems    ShopOrderItem[]
+  dojoInventory DojoInventoryItem[] @relation("InventoryProduct")
+  dojoSaleItems DojoSaleItem[]      @relation("SaleItemProduct")
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("shop_products")
+}
+
+// ─────────────────────────────────────────────
+// DOJO INVENTORY
+// Per-dojo stock of JKA admin-uploaded products. A dojo "stocks" a product
+// by receiving N units from the federation; quantityOnHand decrements as
+// the dojo sells items to its members via DojoSale.
+// ─────────────────────────────────────────────
+
+model DojoInventoryItem {
+  id             String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  dojoId         String  @map("dojo_id") @db.Uuid
+  productId      String  @map("product_id") @db.Uuid
+  quantityOnHand Int     @default(0) @map("quantity_on_hand")
+  // Selling price the dojo charges members. Defaults to the JKA price at
+  // stock-in time but is editable per dojo.
+  unitPrice      Decimal @map("unit_price") @db.Decimal(10, 2)
+
+  dojo    Dojo        @relation("DojoInventoryItems", fields: [dojoId], references: [id], onDelete: Cascade)
+  product ShopProduct @relation("InventoryProduct", fields: [productId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@unique([dojoId, productId])
+  @@index([dojoId])
+  @@map("dojo_inventory_items")
+}
+
+// ─────────────────────────────────────────────
+// DOJO SALES (member receipts)
+// Created when a dojo gives items to a student / member. Decrements the
+// matching DojoInventoryItem rows in the same transaction. Receipt no.
+// is a printable per-dojo counter generated at create-time.
+// ─────────────────────────────────────────────
+
+model DojoSale {
+  id            String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  dojoId        String  @map("dojo_id") @db.Uuid
+  receiptNo     String  @map("receipt_no")
+  // Buyer — either a registered member or a guest captured by name.
+  memberId      String? @map("member_id") @db.Uuid
+  buyerName     String  @map("buyer_name")
+  // Whoever rang up the sale (instructor / manager / owner).
+  soldByUserId  String? @map("sold_by_user_id") @db.Uuid
+  soldByName    String? @map("sold_by_name")
+  subtotal      Decimal @db.Decimal(10, 2)
+  discount      Decimal @default(0) @db.Decimal(10, 2)
+  total         Decimal @db.Decimal(10, 2)
+  paymentMethod String? @map("payment_method")
+  notes         String?
+
+  dojo   Dojo           @relation("DojoSales", fields: [dojoId], references: [id], onDelete: Cascade)
+  member Member?        @relation("DojoSaleBuyer", fields: [memberId], references: [id], onDelete: SetNull)
+  soldBy Member?        @relation("DojoSaleSeller", fields: [soldByUserId], references: [id], onDelete: SetNull)
+  items  DojoSaleItem[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@unique([dojoId, receiptNo])
+  @@index([dojoId, createdAt])
+  @@index([memberId])
+  @@map("dojo_sales")
+}
+
+model DojoSaleItem {
+  id          String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  saleId      String  @map("sale_id") @db.Uuid
+  productId   String  @map("product_id") @db.Uuid
+  // Snapshotted at sale time so renaming the product doesn't mutate history.
+  productName String  @map("product_name")
+  quantity    Int
+  unitPrice   Decimal @map("unit_price") @db.Decimal(10, 2)
+  lineTotal   Decimal @map("line_total") @db.Decimal(10, 2)
+
+  sale    DojoSale    @relation(fields: [saleId], references: [id], onDelete: Cascade)
+  product ShopProduct @relation("SaleItemProduct", fields: [productId], references: [id])
+
+  @@index([saleId])
+  @@map("dojo_sale_items")
 }
 
 // ─────────────────────────────────────────────

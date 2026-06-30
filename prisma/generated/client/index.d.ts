@@ -89,6 +89,21 @@ export type Notification = $Result.DefaultSelection<Prisma.$NotificationPayload>
  */
 export type ShopProduct = $Result.DefaultSelection<Prisma.$ShopProductPayload>
 /**
+ * Model DojoInventoryItem
+ * 
+ */
+export type DojoInventoryItem = $Result.DefaultSelection<Prisma.$DojoInventoryItemPayload>
+/**
+ * Model DojoSale
+ * 
+ */
+export type DojoSale = $Result.DefaultSelection<Prisma.$DojoSalePayload>
+/**
+ * Model DojoSaleItem
+ * 
+ */
+export type DojoSaleItem = $Result.DefaultSelection<Prisma.$DojoSaleItemPayload>
+/**
  * Model ShopOrder
  * 
  */
@@ -533,6 +548,36 @@ export class PrismaClient<
     * ```
     */
   get shopProduct(): Prisma.ShopProductDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.dojoInventoryItem`: Exposes CRUD operations for the **DojoInventoryItem** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more DojoInventoryItems
+    * const dojoInventoryItems = await prisma.dojoInventoryItem.findMany()
+    * ```
+    */
+  get dojoInventoryItem(): Prisma.DojoInventoryItemDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.dojoSale`: Exposes CRUD operations for the **DojoSale** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more DojoSales
+    * const dojoSales = await prisma.dojoSale.findMany()
+    * ```
+    */
+  get dojoSale(): Prisma.DojoSaleDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.dojoSaleItem`: Exposes CRUD operations for the **DojoSaleItem** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more DojoSaleItems
+    * const dojoSaleItems = await prisma.dojoSaleItem.findMany()
+    * ```
+    */
+  get dojoSaleItem(): Prisma.DojoSaleItemDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.shopOrder`: Exposes CRUD operations for the **ShopOrder** model.
@@ -1032,6 +1077,9 @@ export namespace Prisma {
     EventRegistration: 'EventRegistration',
     Notification: 'Notification',
     ShopProduct: 'ShopProduct',
+    DojoInventoryItem: 'DojoInventoryItem',
+    DojoSale: 'DojoSale',
+    DojoSaleItem: 'DojoSaleItem',
     ShopOrder: 'ShopOrder',
     ShopOrderItem: 'ShopOrderItem',
     Tournament: 'Tournament',
@@ -1052,7 +1100,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "beltRank" | "dojo" | "dojoApplication" | "member" | "attendance" | "gradingEvent" | "gradingApplication" | "grading" | "certificateRequest" | "systemSettings" | "event" | "announcement" | "eventRegistration" | "notification" | "shopProduct" | "shopOrder" | "shopOrderItem" | "tournament" | "tournamentParticipant" | "tournamentMatch"
+      modelProps: "beltRank" | "dojo" | "dojoApplication" | "member" | "attendance" | "gradingEvent" | "gradingApplication" | "grading" | "certificateRequest" | "systemSettings" | "event" | "announcement" | "eventRegistration" | "notification" | "shopProduct" | "dojoInventoryItem" | "dojoSale" | "dojoSaleItem" | "shopOrder" | "shopOrderItem" | "tournament" | "tournamentParticipant" | "tournamentMatch"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2166,6 +2214,228 @@ export namespace Prisma {
           }
         }
       }
+      DojoInventoryItem: {
+        payload: Prisma.$DojoInventoryItemPayload<ExtArgs>
+        fields: Prisma.DojoInventoryItemFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.DojoInventoryItemFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DojoInventoryItemPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.DojoInventoryItemFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DojoInventoryItemPayload>
+          }
+          findFirst: {
+            args: Prisma.DojoInventoryItemFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DojoInventoryItemPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.DojoInventoryItemFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DojoInventoryItemPayload>
+          }
+          findMany: {
+            args: Prisma.DojoInventoryItemFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DojoInventoryItemPayload>[]
+          }
+          create: {
+            args: Prisma.DojoInventoryItemCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DojoInventoryItemPayload>
+          }
+          createMany: {
+            args: Prisma.DojoInventoryItemCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.DojoInventoryItemCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DojoInventoryItemPayload>[]
+          }
+          delete: {
+            args: Prisma.DojoInventoryItemDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DojoInventoryItemPayload>
+          }
+          update: {
+            args: Prisma.DojoInventoryItemUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DojoInventoryItemPayload>
+          }
+          deleteMany: {
+            args: Prisma.DojoInventoryItemDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.DojoInventoryItemUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.DojoInventoryItemUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DojoInventoryItemPayload>[]
+          }
+          upsert: {
+            args: Prisma.DojoInventoryItemUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DojoInventoryItemPayload>
+          }
+          aggregate: {
+            args: Prisma.DojoInventoryItemAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateDojoInventoryItem>
+          }
+          groupBy: {
+            args: Prisma.DojoInventoryItemGroupByArgs<ExtArgs>
+            result: $Utils.Optional<DojoInventoryItemGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.DojoInventoryItemCountArgs<ExtArgs>
+            result: $Utils.Optional<DojoInventoryItemCountAggregateOutputType> | number
+          }
+        }
+      }
+      DojoSale: {
+        payload: Prisma.$DojoSalePayload<ExtArgs>
+        fields: Prisma.DojoSaleFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.DojoSaleFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DojoSalePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.DojoSaleFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DojoSalePayload>
+          }
+          findFirst: {
+            args: Prisma.DojoSaleFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DojoSalePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.DojoSaleFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DojoSalePayload>
+          }
+          findMany: {
+            args: Prisma.DojoSaleFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DojoSalePayload>[]
+          }
+          create: {
+            args: Prisma.DojoSaleCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DojoSalePayload>
+          }
+          createMany: {
+            args: Prisma.DojoSaleCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.DojoSaleCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DojoSalePayload>[]
+          }
+          delete: {
+            args: Prisma.DojoSaleDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DojoSalePayload>
+          }
+          update: {
+            args: Prisma.DojoSaleUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DojoSalePayload>
+          }
+          deleteMany: {
+            args: Prisma.DojoSaleDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.DojoSaleUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.DojoSaleUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DojoSalePayload>[]
+          }
+          upsert: {
+            args: Prisma.DojoSaleUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DojoSalePayload>
+          }
+          aggregate: {
+            args: Prisma.DojoSaleAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateDojoSale>
+          }
+          groupBy: {
+            args: Prisma.DojoSaleGroupByArgs<ExtArgs>
+            result: $Utils.Optional<DojoSaleGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.DojoSaleCountArgs<ExtArgs>
+            result: $Utils.Optional<DojoSaleCountAggregateOutputType> | number
+          }
+        }
+      }
+      DojoSaleItem: {
+        payload: Prisma.$DojoSaleItemPayload<ExtArgs>
+        fields: Prisma.DojoSaleItemFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.DojoSaleItemFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DojoSaleItemPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.DojoSaleItemFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DojoSaleItemPayload>
+          }
+          findFirst: {
+            args: Prisma.DojoSaleItemFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DojoSaleItemPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.DojoSaleItemFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DojoSaleItemPayload>
+          }
+          findMany: {
+            args: Prisma.DojoSaleItemFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DojoSaleItemPayload>[]
+          }
+          create: {
+            args: Prisma.DojoSaleItemCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DojoSaleItemPayload>
+          }
+          createMany: {
+            args: Prisma.DojoSaleItemCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.DojoSaleItemCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DojoSaleItemPayload>[]
+          }
+          delete: {
+            args: Prisma.DojoSaleItemDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DojoSaleItemPayload>
+          }
+          update: {
+            args: Prisma.DojoSaleItemUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DojoSaleItemPayload>
+          }
+          deleteMany: {
+            args: Prisma.DojoSaleItemDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.DojoSaleItemUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.DojoSaleItemUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DojoSaleItemPayload>[]
+          }
+          upsert: {
+            args: Prisma.DojoSaleItemUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DojoSaleItemPayload>
+          }
+          aggregate: {
+            args: Prisma.DojoSaleItemAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateDojoSaleItem>
+          }
+          groupBy: {
+            args: Prisma.DojoSaleItemGroupByArgs<ExtArgs>
+            result: $Utils.Optional<DojoSaleItemGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.DojoSaleItemCountArgs<ExtArgs>
+            result: $Utils.Optional<DojoSaleItemCountAggregateOutputType> | number
+          }
+        }
+      }
       ShopOrder: {
         payload: Prisma.$ShopOrderPayload<ExtArgs>
         fields: Prisma.ShopOrderFieldRefs
@@ -2659,6 +2929,9 @@ export namespace Prisma {
     eventRegistration?: EventRegistrationOmit
     notification?: NotificationOmit
     shopProduct?: ShopProductOmit
+    dojoInventoryItem?: DojoInventoryItemOmit
+    dojoSale?: DojoSaleOmit
+    dojoSaleItem?: DojoSaleItemOmit
     shopOrder?: ShopOrderOmit
     shopOrderItem?: ShopOrderItemOmit
     tournament?: TournamentOmit
@@ -2809,6 +3082,8 @@ export namespace Prisma {
     attendance: number
     events: number
     announcements: number
+    inventoryItems: number
+    sales: number
   }
 
   export type DojoCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2819,6 +3094,8 @@ export namespace Prisma {
     attendance?: boolean | DojoCountOutputTypeCountAttendanceArgs
     events?: boolean | DojoCountOutputTypeCountEventsArgs
     announcements?: boolean | DojoCountOutputTypeCountAnnouncementsArgs
+    inventoryItems?: boolean | DojoCountOutputTypeCountInventoryItemsArgs
+    sales?: boolean | DojoCountOutputTypeCountSalesArgs
   }
 
   // Custom InputTypes
@@ -2881,6 +3158,20 @@ export namespace Prisma {
     where?: AnnouncementWhereInput
   }
 
+  /**
+   * DojoCountOutputType without action
+   */
+  export type DojoCountOutputTypeCountInventoryItemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DojoInventoryItemWhereInput
+  }
+
+  /**
+   * DojoCountOutputType without action
+   */
+  export type DojoCountOutputTypeCountSalesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DojoSaleWhereInput
+  }
+
 
   /**
    * Count Type MemberCountOutputType
@@ -2898,6 +3189,8 @@ export namespace Prisma {
     eventsPosted: number
     announcementsPosted: number
     eventCheckIns: number
+    dojoSalesAsBuyer: number
+    dojoSalesSold: number
   }
 
   export type MemberCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2912,6 +3205,8 @@ export namespace Prisma {
     eventsPosted?: boolean | MemberCountOutputTypeCountEventsPostedArgs
     announcementsPosted?: boolean | MemberCountOutputTypeCountAnnouncementsPostedArgs
     eventCheckIns?: boolean | MemberCountOutputTypeCountEventCheckInsArgs
+    dojoSalesAsBuyer?: boolean | MemberCountOutputTypeCountDojoSalesAsBuyerArgs
+    dojoSalesSold?: boolean | MemberCountOutputTypeCountDojoSalesSoldArgs
   }
 
   // Custom InputTypes
@@ -3000,6 +3295,20 @@ export namespace Prisma {
    */
   export type MemberCountOutputTypeCountEventCheckInsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: EventRegistrationWhereInput
+  }
+
+  /**
+   * MemberCountOutputType without action
+   */
+  export type MemberCountOutputTypeCountDojoSalesAsBuyerArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DojoSaleWhereInput
+  }
+
+  /**
+   * MemberCountOutputType without action
+   */
+  export type MemberCountOutputTypeCountDojoSalesSoldArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DojoSaleWhereInput
   }
 
 
@@ -3111,10 +3420,14 @@ export namespace Prisma {
 
   export type ShopProductCountOutputType = {
     orderItems: number
+    dojoInventory: number
+    dojoSaleItems: number
   }
 
   export type ShopProductCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     orderItems?: boolean | ShopProductCountOutputTypeCountOrderItemsArgs
+    dojoInventory?: boolean | ShopProductCountOutputTypeCountDojoInventoryArgs
+    dojoSaleItems?: boolean | ShopProductCountOutputTypeCountDojoSaleItemsArgs
   }
 
   // Custom InputTypes
@@ -3133,6 +3446,51 @@ export namespace Prisma {
    */
   export type ShopProductCountOutputTypeCountOrderItemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ShopOrderItemWhereInput
+  }
+
+  /**
+   * ShopProductCountOutputType without action
+   */
+  export type ShopProductCountOutputTypeCountDojoInventoryArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DojoInventoryItemWhereInput
+  }
+
+  /**
+   * ShopProductCountOutputType without action
+   */
+  export type ShopProductCountOutputTypeCountDojoSaleItemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DojoSaleItemWhereInput
+  }
+
+
+  /**
+   * Count Type DojoSaleCountOutputType
+   */
+
+  export type DojoSaleCountOutputType = {
+    items: number
+  }
+
+  export type DojoSaleCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    items?: boolean | DojoSaleCountOutputTypeCountItemsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * DojoSaleCountOutputType without action
+   */
+  export type DojoSaleCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DojoSaleCountOutputType
+     */
+    select?: DojoSaleCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * DojoSaleCountOutputType without action
+   */
+  export type DojoSaleCountOutputTypeCountItemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DojoSaleItemWhereInput
   }
 
 
@@ -4802,6 +5160,8 @@ export namespace Prisma {
     attendance?: boolean | Dojo$attendanceArgs<ExtArgs>
     events?: boolean | Dojo$eventsArgs<ExtArgs>
     announcements?: boolean | Dojo$announcementsArgs<ExtArgs>
+    inventoryItems?: boolean | Dojo$inventoryItemsArgs<ExtArgs>
+    sales?: boolean | Dojo$salesArgs<ExtArgs>
     _count?: boolean | DojoCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["dojo"]>
 
@@ -4871,6 +5231,8 @@ export namespace Prisma {
     attendance?: boolean | Dojo$attendanceArgs<ExtArgs>
     events?: boolean | Dojo$eventsArgs<ExtArgs>
     announcements?: boolean | Dojo$announcementsArgs<ExtArgs>
+    inventoryItems?: boolean | Dojo$inventoryItemsArgs<ExtArgs>
+    sales?: boolean | Dojo$salesArgs<ExtArgs>
     _count?: boolean | DojoCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type DojoIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -4886,6 +5248,8 @@ export namespace Prisma {
       attendance: Prisma.$AttendancePayload<ExtArgs>[]
       events: Prisma.$EventPayload<ExtArgs>[]
       announcements: Prisma.$AnnouncementPayload<ExtArgs>[]
+      inventoryItems: Prisma.$DojoInventoryItemPayload<ExtArgs>[]
+      sales: Prisma.$DojoSalePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -5305,6 +5669,8 @@ export namespace Prisma {
     attendance<T extends Dojo$attendanceArgs<ExtArgs> = {}>(args?: Subset<T, Dojo$attendanceArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AttendancePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     events<T extends Dojo$eventsArgs<ExtArgs> = {}>(args?: Subset<T, Dojo$eventsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     announcements<T extends Dojo$announcementsArgs<ExtArgs> = {}>(args?: Subset<T, Dojo$announcementsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AnnouncementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    inventoryItems<T extends Dojo$inventoryItemsArgs<ExtArgs> = {}>(args?: Subset<T, Dojo$inventoryItemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DojoInventoryItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    sales<T extends Dojo$salesArgs<ExtArgs> = {}>(args?: Subset<T, Dojo$salesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DojoSalePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5908,6 +6274,54 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: AnnouncementScalarFieldEnum | AnnouncementScalarFieldEnum[]
+  }
+
+  /**
+   * Dojo.inventoryItems
+   */
+  export type Dojo$inventoryItemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DojoInventoryItem
+     */
+    select?: DojoInventoryItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DojoInventoryItem
+     */
+    omit?: DojoInventoryItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DojoInventoryItemInclude<ExtArgs> | null
+    where?: DojoInventoryItemWhereInput
+    orderBy?: DojoInventoryItemOrderByWithRelationInput | DojoInventoryItemOrderByWithRelationInput[]
+    cursor?: DojoInventoryItemWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: DojoInventoryItemScalarFieldEnum | DojoInventoryItemScalarFieldEnum[]
+  }
+
+  /**
+   * Dojo.sales
+   */
+  export type Dojo$salesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DojoSale
+     */
+    select?: DojoSaleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DojoSale
+     */
+    omit?: DojoSaleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DojoSaleInclude<ExtArgs> | null
+    where?: DojoSaleWhereInput
+    orderBy?: DojoSaleOrderByWithRelationInput | DojoSaleOrderByWithRelationInput[]
+    cursor?: DojoSaleWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: DojoSaleScalarFieldEnum | DojoSaleScalarFieldEnum[]
   }
 
   /**
@@ -7443,6 +7857,8 @@ export namespace Prisma {
     eventsPosted?: boolean | Member$eventsPostedArgs<ExtArgs>
     announcementsPosted?: boolean | Member$announcementsPostedArgs<ExtArgs>
     eventCheckIns?: boolean | Member$eventCheckInsArgs<ExtArgs>
+    dojoSalesAsBuyer?: boolean | Member$dojoSalesAsBuyerArgs<ExtArgs>
+    dojoSalesSold?: boolean | Member$dojoSalesSoldArgs<ExtArgs>
     _count?: boolean | MemberCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["member"]>
 
@@ -7543,6 +7959,8 @@ export namespace Prisma {
     eventsPosted?: boolean | Member$eventsPostedArgs<ExtArgs>
     announcementsPosted?: boolean | Member$announcementsPostedArgs<ExtArgs>
     eventCheckIns?: boolean | Member$eventCheckInsArgs<ExtArgs>
+    dojoSalesAsBuyer?: boolean | Member$dojoSalesAsBuyerArgs<ExtArgs>
+    dojoSalesSold?: boolean | Member$dojoSalesSoldArgs<ExtArgs>
     _count?: boolean | MemberCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type MemberIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -7567,6 +7985,8 @@ export namespace Prisma {
       eventsPosted: Prisma.$EventPayload<ExtArgs>[]
       announcementsPosted: Prisma.$AnnouncementPayload<ExtArgs>[]
       eventCheckIns: Prisma.$EventRegistrationPayload<ExtArgs>[]
+      dojoSalesAsBuyer: Prisma.$DojoSalePayload<ExtArgs>[]
+      dojoSalesSold: Prisma.$DojoSalePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -7999,6 +8419,8 @@ export namespace Prisma {
     eventsPosted<T extends Member$eventsPostedArgs<ExtArgs> = {}>(args?: Subset<T, Member$eventsPostedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     announcementsPosted<T extends Member$announcementsPostedArgs<ExtArgs> = {}>(args?: Subset<T, Member$announcementsPostedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AnnouncementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     eventCheckIns<T extends Member$eventCheckInsArgs<ExtArgs> = {}>(args?: Subset<T, Member$eventCheckInsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EventRegistrationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    dojoSalesAsBuyer<T extends Member$dojoSalesAsBuyerArgs<ExtArgs> = {}>(args?: Subset<T, Member$dojoSalesAsBuyerArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DojoSalePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    dojoSalesSold<T extends Member$dojoSalesSoldArgs<ExtArgs> = {}>(args?: Subset<T, Member$dojoSalesSoldArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DojoSalePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -8733,6 +9155,54 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: EventRegistrationScalarFieldEnum | EventRegistrationScalarFieldEnum[]
+  }
+
+  /**
+   * Member.dojoSalesAsBuyer
+   */
+  export type Member$dojoSalesAsBuyerArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DojoSale
+     */
+    select?: DojoSaleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DojoSale
+     */
+    omit?: DojoSaleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DojoSaleInclude<ExtArgs> | null
+    where?: DojoSaleWhereInput
+    orderBy?: DojoSaleOrderByWithRelationInput | DojoSaleOrderByWithRelationInput[]
+    cursor?: DojoSaleWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: DojoSaleScalarFieldEnum | DojoSaleScalarFieldEnum[]
+  }
+
+  /**
+   * Member.dojoSalesSold
+   */
+  export type Member$dojoSalesSoldArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DojoSale
+     */
+    select?: DojoSaleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DojoSale
+     */
+    omit?: DojoSaleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DojoSaleInclude<ExtArgs> | null
+    where?: DojoSaleWhereInput
+    orderBy?: DojoSaleOrderByWithRelationInput | DojoSaleOrderByWithRelationInput[]
+    cursor?: DojoSaleWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: DojoSaleScalarFieldEnum | DojoSaleScalarFieldEnum[]
   }
 
   /**
@@ -20835,6 +21305,8 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     orderItems?: boolean | ShopProduct$orderItemsArgs<ExtArgs>
+    dojoInventory?: boolean | ShopProduct$dojoInventoryArgs<ExtArgs>
+    dojoSaleItems?: boolean | ShopProduct$dojoSaleItemsArgs<ExtArgs>
     _count?: boolean | ShopProductCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["shopProduct"]>
 
@@ -20880,6 +21352,8 @@ export namespace Prisma {
   export type ShopProductOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "price" | "stock" | "imageUrl" | "category" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["shopProduct"]>
   export type ShopProductInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     orderItems?: boolean | ShopProduct$orderItemsArgs<ExtArgs>
+    dojoInventory?: boolean | ShopProduct$dojoInventoryArgs<ExtArgs>
+    dojoSaleItems?: boolean | ShopProduct$dojoSaleItemsArgs<ExtArgs>
     _count?: boolean | ShopProductCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ShopProductIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -20889,6 +21363,8 @@ export namespace Prisma {
     name: "ShopProduct"
     objects: {
       orderItems: Prisma.$ShopOrderItemPayload<ExtArgs>[]
+      dojoInventory: Prisma.$DojoInventoryItemPayload<ExtArgs>[]
+      dojoSaleItems: Prisma.$DojoSaleItemPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -21296,6 +21772,8 @@ export namespace Prisma {
   export interface Prisma__ShopProductClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     orderItems<T extends ShopProduct$orderItemsArgs<ExtArgs> = {}>(args?: Subset<T, ShopProduct$orderItemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ShopOrderItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    dojoInventory<T extends ShopProduct$dojoInventoryArgs<ExtArgs> = {}>(args?: Subset<T, ShopProduct$dojoInventoryArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DojoInventoryItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    dojoSaleItems<T extends ShopProduct$dojoSaleItemsArgs<ExtArgs> = {}>(args?: Subset<T, ShopProduct$dojoSaleItemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DojoSaleItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -21752,6 +22230,54 @@ export namespace Prisma {
   }
 
   /**
+   * ShopProduct.dojoInventory
+   */
+  export type ShopProduct$dojoInventoryArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DojoInventoryItem
+     */
+    select?: DojoInventoryItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DojoInventoryItem
+     */
+    omit?: DojoInventoryItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DojoInventoryItemInclude<ExtArgs> | null
+    where?: DojoInventoryItemWhereInput
+    orderBy?: DojoInventoryItemOrderByWithRelationInput | DojoInventoryItemOrderByWithRelationInput[]
+    cursor?: DojoInventoryItemWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: DojoInventoryItemScalarFieldEnum | DojoInventoryItemScalarFieldEnum[]
+  }
+
+  /**
+   * ShopProduct.dojoSaleItems
+   */
+  export type ShopProduct$dojoSaleItemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DojoSaleItem
+     */
+    select?: DojoSaleItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DojoSaleItem
+     */
+    omit?: DojoSaleItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DojoSaleItemInclude<ExtArgs> | null
+    where?: DojoSaleItemWhereInput
+    orderBy?: DojoSaleItemOrderByWithRelationInput | DojoSaleItemOrderByWithRelationInput[]
+    cursor?: DojoSaleItemWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: DojoSaleItemScalarFieldEnum | DojoSaleItemScalarFieldEnum[]
+  }
+
+  /**
    * ShopProduct without action
    */
   export type ShopProductDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -21767,6 +22293,3573 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: ShopProductInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model DojoInventoryItem
+   */
+
+  export type AggregateDojoInventoryItem = {
+    _count: DojoInventoryItemCountAggregateOutputType | null
+    _avg: DojoInventoryItemAvgAggregateOutputType | null
+    _sum: DojoInventoryItemSumAggregateOutputType | null
+    _min: DojoInventoryItemMinAggregateOutputType | null
+    _max: DojoInventoryItemMaxAggregateOutputType | null
+  }
+
+  export type DojoInventoryItemAvgAggregateOutputType = {
+    quantityOnHand: number | null
+    unitPrice: Decimal | null
+  }
+
+  export type DojoInventoryItemSumAggregateOutputType = {
+    quantityOnHand: number | null
+    unitPrice: Decimal | null
+  }
+
+  export type DojoInventoryItemMinAggregateOutputType = {
+    id: string | null
+    dojoId: string | null
+    productId: string | null
+    quantityOnHand: number | null
+    unitPrice: Decimal | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type DojoInventoryItemMaxAggregateOutputType = {
+    id: string | null
+    dojoId: string | null
+    productId: string | null
+    quantityOnHand: number | null
+    unitPrice: Decimal | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type DojoInventoryItemCountAggregateOutputType = {
+    id: number
+    dojoId: number
+    productId: number
+    quantityOnHand: number
+    unitPrice: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type DojoInventoryItemAvgAggregateInputType = {
+    quantityOnHand?: true
+    unitPrice?: true
+  }
+
+  export type DojoInventoryItemSumAggregateInputType = {
+    quantityOnHand?: true
+    unitPrice?: true
+  }
+
+  export type DojoInventoryItemMinAggregateInputType = {
+    id?: true
+    dojoId?: true
+    productId?: true
+    quantityOnHand?: true
+    unitPrice?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type DojoInventoryItemMaxAggregateInputType = {
+    id?: true
+    dojoId?: true
+    productId?: true
+    quantityOnHand?: true
+    unitPrice?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type DojoInventoryItemCountAggregateInputType = {
+    id?: true
+    dojoId?: true
+    productId?: true
+    quantityOnHand?: true
+    unitPrice?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type DojoInventoryItemAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which DojoInventoryItem to aggregate.
+     */
+    where?: DojoInventoryItemWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DojoInventoryItems to fetch.
+     */
+    orderBy?: DojoInventoryItemOrderByWithRelationInput | DojoInventoryItemOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: DojoInventoryItemWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DojoInventoryItems from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DojoInventoryItems.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned DojoInventoryItems
+    **/
+    _count?: true | DojoInventoryItemCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: DojoInventoryItemAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: DojoInventoryItemSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: DojoInventoryItemMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: DojoInventoryItemMaxAggregateInputType
+  }
+
+  export type GetDojoInventoryItemAggregateType<T extends DojoInventoryItemAggregateArgs> = {
+        [P in keyof T & keyof AggregateDojoInventoryItem]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateDojoInventoryItem[P]>
+      : GetScalarType<T[P], AggregateDojoInventoryItem[P]>
+  }
+
+
+
+
+  export type DojoInventoryItemGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DojoInventoryItemWhereInput
+    orderBy?: DojoInventoryItemOrderByWithAggregationInput | DojoInventoryItemOrderByWithAggregationInput[]
+    by: DojoInventoryItemScalarFieldEnum[] | DojoInventoryItemScalarFieldEnum
+    having?: DojoInventoryItemScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: DojoInventoryItemCountAggregateInputType | true
+    _avg?: DojoInventoryItemAvgAggregateInputType
+    _sum?: DojoInventoryItemSumAggregateInputType
+    _min?: DojoInventoryItemMinAggregateInputType
+    _max?: DojoInventoryItemMaxAggregateInputType
+  }
+
+  export type DojoInventoryItemGroupByOutputType = {
+    id: string
+    dojoId: string
+    productId: string
+    quantityOnHand: number
+    unitPrice: Decimal
+    createdAt: Date
+    updatedAt: Date
+    _count: DojoInventoryItemCountAggregateOutputType | null
+    _avg: DojoInventoryItemAvgAggregateOutputType | null
+    _sum: DojoInventoryItemSumAggregateOutputType | null
+    _min: DojoInventoryItemMinAggregateOutputType | null
+    _max: DojoInventoryItemMaxAggregateOutputType | null
+  }
+
+  type GetDojoInventoryItemGroupByPayload<T extends DojoInventoryItemGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<DojoInventoryItemGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof DojoInventoryItemGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], DojoInventoryItemGroupByOutputType[P]>
+            : GetScalarType<T[P], DojoInventoryItemGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type DojoInventoryItemSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    dojoId?: boolean
+    productId?: boolean
+    quantityOnHand?: boolean
+    unitPrice?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    dojo?: boolean | DojoDefaultArgs<ExtArgs>
+    product?: boolean | ShopProductDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["dojoInventoryItem"]>
+
+  export type DojoInventoryItemSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    dojoId?: boolean
+    productId?: boolean
+    quantityOnHand?: boolean
+    unitPrice?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    dojo?: boolean | DojoDefaultArgs<ExtArgs>
+    product?: boolean | ShopProductDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["dojoInventoryItem"]>
+
+  export type DojoInventoryItemSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    dojoId?: boolean
+    productId?: boolean
+    quantityOnHand?: boolean
+    unitPrice?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    dojo?: boolean | DojoDefaultArgs<ExtArgs>
+    product?: boolean | ShopProductDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["dojoInventoryItem"]>
+
+  export type DojoInventoryItemSelectScalar = {
+    id?: boolean
+    dojoId?: boolean
+    productId?: boolean
+    quantityOnHand?: boolean
+    unitPrice?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type DojoInventoryItemOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "dojoId" | "productId" | "quantityOnHand" | "unitPrice" | "createdAt" | "updatedAt", ExtArgs["result"]["dojoInventoryItem"]>
+  export type DojoInventoryItemInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    dojo?: boolean | DojoDefaultArgs<ExtArgs>
+    product?: boolean | ShopProductDefaultArgs<ExtArgs>
+  }
+  export type DojoInventoryItemIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    dojo?: boolean | DojoDefaultArgs<ExtArgs>
+    product?: boolean | ShopProductDefaultArgs<ExtArgs>
+  }
+  export type DojoInventoryItemIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    dojo?: boolean | DojoDefaultArgs<ExtArgs>
+    product?: boolean | ShopProductDefaultArgs<ExtArgs>
+  }
+
+  export type $DojoInventoryItemPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "DojoInventoryItem"
+    objects: {
+      dojo: Prisma.$DojoPayload<ExtArgs>
+      product: Prisma.$ShopProductPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      dojoId: string
+      productId: string
+      quantityOnHand: number
+      unitPrice: Prisma.Decimal
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["dojoInventoryItem"]>
+    composites: {}
+  }
+
+  type DojoInventoryItemGetPayload<S extends boolean | null | undefined | DojoInventoryItemDefaultArgs> = $Result.GetResult<Prisma.$DojoInventoryItemPayload, S>
+
+  type DojoInventoryItemCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<DojoInventoryItemFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: DojoInventoryItemCountAggregateInputType | true
+    }
+
+  export interface DojoInventoryItemDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['DojoInventoryItem'], meta: { name: 'DojoInventoryItem' } }
+    /**
+     * Find zero or one DojoInventoryItem that matches the filter.
+     * @param {DojoInventoryItemFindUniqueArgs} args - Arguments to find a DojoInventoryItem
+     * @example
+     * // Get one DojoInventoryItem
+     * const dojoInventoryItem = await prisma.dojoInventoryItem.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends DojoInventoryItemFindUniqueArgs>(args: SelectSubset<T, DojoInventoryItemFindUniqueArgs<ExtArgs>>): Prisma__DojoInventoryItemClient<$Result.GetResult<Prisma.$DojoInventoryItemPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one DojoInventoryItem that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {DojoInventoryItemFindUniqueOrThrowArgs} args - Arguments to find a DojoInventoryItem
+     * @example
+     * // Get one DojoInventoryItem
+     * const dojoInventoryItem = await prisma.dojoInventoryItem.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends DojoInventoryItemFindUniqueOrThrowArgs>(args: SelectSubset<T, DojoInventoryItemFindUniqueOrThrowArgs<ExtArgs>>): Prisma__DojoInventoryItemClient<$Result.GetResult<Prisma.$DojoInventoryItemPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first DojoInventoryItem that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DojoInventoryItemFindFirstArgs} args - Arguments to find a DojoInventoryItem
+     * @example
+     * // Get one DojoInventoryItem
+     * const dojoInventoryItem = await prisma.dojoInventoryItem.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends DojoInventoryItemFindFirstArgs>(args?: SelectSubset<T, DojoInventoryItemFindFirstArgs<ExtArgs>>): Prisma__DojoInventoryItemClient<$Result.GetResult<Prisma.$DojoInventoryItemPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first DojoInventoryItem that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DojoInventoryItemFindFirstOrThrowArgs} args - Arguments to find a DojoInventoryItem
+     * @example
+     * // Get one DojoInventoryItem
+     * const dojoInventoryItem = await prisma.dojoInventoryItem.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends DojoInventoryItemFindFirstOrThrowArgs>(args?: SelectSubset<T, DojoInventoryItemFindFirstOrThrowArgs<ExtArgs>>): Prisma__DojoInventoryItemClient<$Result.GetResult<Prisma.$DojoInventoryItemPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more DojoInventoryItems that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DojoInventoryItemFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all DojoInventoryItems
+     * const dojoInventoryItems = await prisma.dojoInventoryItem.findMany()
+     * 
+     * // Get first 10 DojoInventoryItems
+     * const dojoInventoryItems = await prisma.dojoInventoryItem.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const dojoInventoryItemWithIdOnly = await prisma.dojoInventoryItem.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends DojoInventoryItemFindManyArgs>(args?: SelectSubset<T, DojoInventoryItemFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DojoInventoryItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a DojoInventoryItem.
+     * @param {DojoInventoryItemCreateArgs} args - Arguments to create a DojoInventoryItem.
+     * @example
+     * // Create one DojoInventoryItem
+     * const DojoInventoryItem = await prisma.dojoInventoryItem.create({
+     *   data: {
+     *     // ... data to create a DojoInventoryItem
+     *   }
+     * })
+     * 
+     */
+    create<T extends DojoInventoryItemCreateArgs>(args: SelectSubset<T, DojoInventoryItemCreateArgs<ExtArgs>>): Prisma__DojoInventoryItemClient<$Result.GetResult<Prisma.$DojoInventoryItemPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many DojoInventoryItems.
+     * @param {DojoInventoryItemCreateManyArgs} args - Arguments to create many DojoInventoryItems.
+     * @example
+     * // Create many DojoInventoryItems
+     * const dojoInventoryItem = await prisma.dojoInventoryItem.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends DojoInventoryItemCreateManyArgs>(args?: SelectSubset<T, DojoInventoryItemCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many DojoInventoryItems and returns the data saved in the database.
+     * @param {DojoInventoryItemCreateManyAndReturnArgs} args - Arguments to create many DojoInventoryItems.
+     * @example
+     * // Create many DojoInventoryItems
+     * const dojoInventoryItem = await prisma.dojoInventoryItem.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many DojoInventoryItems and only return the `id`
+     * const dojoInventoryItemWithIdOnly = await prisma.dojoInventoryItem.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends DojoInventoryItemCreateManyAndReturnArgs>(args?: SelectSubset<T, DojoInventoryItemCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DojoInventoryItemPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a DojoInventoryItem.
+     * @param {DojoInventoryItemDeleteArgs} args - Arguments to delete one DojoInventoryItem.
+     * @example
+     * // Delete one DojoInventoryItem
+     * const DojoInventoryItem = await prisma.dojoInventoryItem.delete({
+     *   where: {
+     *     // ... filter to delete one DojoInventoryItem
+     *   }
+     * })
+     * 
+     */
+    delete<T extends DojoInventoryItemDeleteArgs>(args: SelectSubset<T, DojoInventoryItemDeleteArgs<ExtArgs>>): Prisma__DojoInventoryItemClient<$Result.GetResult<Prisma.$DojoInventoryItemPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one DojoInventoryItem.
+     * @param {DojoInventoryItemUpdateArgs} args - Arguments to update one DojoInventoryItem.
+     * @example
+     * // Update one DojoInventoryItem
+     * const dojoInventoryItem = await prisma.dojoInventoryItem.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends DojoInventoryItemUpdateArgs>(args: SelectSubset<T, DojoInventoryItemUpdateArgs<ExtArgs>>): Prisma__DojoInventoryItemClient<$Result.GetResult<Prisma.$DojoInventoryItemPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more DojoInventoryItems.
+     * @param {DojoInventoryItemDeleteManyArgs} args - Arguments to filter DojoInventoryItems to delete.
+     * @example
+     * // Delete a few DojoInventoryItems
+     * const { count } = await prisma.dojoInventoryItem.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends DojoInventoryItemDeleteManyArgs>(args?: SelectSubset<T, DojoInventoryItemDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more DojoInventoryItems.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DojoInventoryItemUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many DojoInventoryItems
+     * const dojoInventoryItem = await prisma.dojoInventoryItem.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends DojoInventoryItemUpdateManyArgs>(args: SelectSubset<T, DojoInventoryItemUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more DojoInventoryItems and returns the data updated in the database.
+     * @param {DojoInventoryItemUpdateManyAndReturnArgs} args - Arguments to update many DojoInventoryItems.
+     * @example
+     * // Update many DojoInventoryItems
+     * const dojoInventoryItem = await prisma.dojoInventoryItem.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more DojoInventoryItems and only return the `id`
+     * const dojoInventoryItemWithIdOnly = await prisma.dojoInventoryItem.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends DojoInventoryItemUpdateManyAndReturnArgs>(args: SelectSubset<T, DojoInventoryItemUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DojoInventoryItemPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one DojoInventoryItem.
+     * @param {DojoInventoryItemUpsertArgs} args - Arguments to update or create a DojoInventoryItem.
+     * @example
+     * // Update or create a DojoInventoryItem
+     * const dojoInventoryItem = await prisma.dojoInventoryItem.upsert({
+     *   create: {
+     *     // ... data to create a DojoInventoryItem
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the DojoInventoryItem we want to update
+     *   }
+     * })
+     */
+    upsert<T extends DojoInventoryItemUpsertArgs>(args: SelectSubset<T, DojoInventoryItemUpsertArgs<ExtArgs>>): Prisma__DojoInventoryItemClient<$Result.GetResult<Prisma.$DojoInventoryItemPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of DojoInventoryItems.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DojoInventoryItemCountArgs} args - Arguments to filter DojoInventoryItems to count.
+     * @example
+     * // Count the number of DojoInventoryItems
+     * const count = await prisma.dojoInventoryItem.count({
+     *   where: {
+     *     // ... the filter for the DojoInventoryItems we want to count
+     *   }
+     * })
+    **/
+    count<T extends DojoInventoryItemCountArgs>(
+      args?: Subset<T, DojoInventoryItemCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], DojoInventoryItemCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a DojoInventoryItem.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DojoInventoryItemAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends DojoInventoryItemAggregateArgs>(args: Subset<T, DojoInventoryItemAggregateArgs>): Prisma.PrismaPromise<GetDojoInventoryItemAggregateType<T>>
+
+    /**
+     * Group by DojoInventoryItem.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DojoInventoryItemGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends DojoInventoryItemGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: DojoInventoryItemGroupByArgs['orderBy'] }
+        : { orderBy?: DojoInventoryItemGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, DojoInventoryItemGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetDojoInventoryItemGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the DojoInventoryItem model
+   */
+  readonly fields: DojoInventoryItemFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for DojoInventoryItem.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__DojoInventoryItemClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    dojo<T extends DojoDefaultArgs<ExtArgs> = {}>(args?: Subset<T, DojoDefaultArgs<ExtArgs>>): Prisma__DojoClient<$Result.GetResult<Prisma.$DojoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    product<T extends ShopProductDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ShopProductDefaultArgs<ExtArgs>>): Prisma__ShopProductClient<$Result.GetResult<Prisma.$ShopProductPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the DojoInventoryItem model
+   */
+  interface DojoInventoryItemFieldRefs {
+    readonly id: FieldRef<"DojoInventoryItem", 'String'>
+    readonly dojoId: FieldRef<"DojoInventoryItem", 'String'>
+    readonly productId: FieldRef<"DojoInventoryItem", 'String'>
+    readonly quantityOnHand: FieldRef<"DojoInventoryItem", 'Int'>
+    readonly unitPrice: FieldRef<"DojoInventoryItem", 'Decimal'>
+    readonly createdAt: FieldRef<"DojoInventoryItem", 'DateTime'>
+    readonly updatedAt: FieldRef<"DojoInventoryItem", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * DojoInventoryItem findUnique
+   */
+  export type DojoInventoryItemFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DojoInventoryItem
+     */
+    select?: DojoInventoryItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DojoInventoryItem
+     */
+    omit?: DojoInventoryItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DojoInventoryItemInclude<ExtArgs> | null
+    /**
+     * Filter, which DojoInventoryItem to fetch.
+     */
+    where: DojoInventoryItemWhereUniqueInput
+  }
+
+  /**
+   * DojoInventoryItem findUniqueOrThrow
+   */
+  export type DojoInventoryItemFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DojoInventoryItem
+     */
+    select?: DojoInventoryItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DojoInventoryItem
+     */
+    omit?: DojoInventoryItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DojoInventoryItemInclude<ExtArgs> | null
+    /**
+     * Filter, which DojoInventoryItem to fetch.
+     */
+    where: DojoInventoryItemWhereUniqueInput
+  }
+
+  /**
+   * DojoInventoryItem findFirst
+   */
+  export type DojoInventoryItemFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DojoInventoryItem
+     */
+    select?: DojoInventoryItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DojoInventoryItem
+     */
+    omit?: DojoInventoryItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DojoInventoryItemInclude<ExtArgs> | null
+    /**
+     * Filter, which DojoInventoryItem to fetch.
+     */
+    where?: DojoInventoryItemWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DojoInventoryItems to fetch.
+     */
+    orderBy?: DojoInventoryItemOrderByWithRelationInput | DojoInventoryItemOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for DojoInventoryItems.
+     */
+    cursor?: DojoInventoryItemWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DojoInventoryItems from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DojoInventoryItems.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DojoInventoryItems.
+     */
+    distinct?: DojoInventoryItemScalarFieldEnum | DojoInventoryItemScalarFieldEnum[]
+  }
+
+  /**
+   * DojoInventoryItem findFirstOrThrow
+   */
+  export type DojoInventoryItemFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DojoInventoryItem
+     */
+    select?: DojoInventoryItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DojoInventoryItem
+     */
+    omit?: DojoInventoryItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DojoInventoryItemInclude<ExtArgs> | null
+    /**
+     * Filter, which DojoInventoryItem to fetch.
+     */
+    where?: DojoInventoryItemWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DojoInventoryItems to fetch.
+     */
+    orderBy?: DojoInventoryItemOrderByWithRelationInput | DojoInventoryItemOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for DojoInventoryItems.
+     */
+    cursor?: DojoInventoryItemWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DojoInventoryItems from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DojoInventoryItems.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DojoInventoryItems.
+     */
+    distinct?: DojoInventoryItemScalarFieldEnum | DojoInventoryItemScalarFieldEnum[]
+  }
+
+  /**
+   * DojoInventoryItem findMany
+   */
+  export type DojoInventoryItemFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DojoInventoryItem
+     */
+    select?: DojoInventoryItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DojoInventoryItem
+     */
+    omit?: DojoInventoryItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DojoInventoryItemInclude<ExtArgs> | null
+    /**
+     * Filter, which DojoInventoryItems to fetch.
+     */
+    where?: DojoInventoryItemWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DojoInventoryItems to fetch.
+     */
+    orderBy?: DojoInventoryItemOrderByWithRelationInput | DojoInventoryItemOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing DojoInventoryItems.
+     */
+    cursor?: DojoInventoryItemWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DojoInventoryItems from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DojoInventoryItems.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DojoInventoryItems.
+     */
+    distinct?: DojoInventoryItemScalarFieldEnum | DojoInventoryItemScalarFieldEnum[]
+  }
+
+  /**
+   * DojoInventoryItem create
+   */
+  export type DojoInventoryItemCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DojoInventoryItem
+     */
+    select?: DojoInventoryItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DojoInventoryItem
+     */
+    omit?: DojoInventoryItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DojoInventoryItemInclude<ExtArgs> | null
+    /**
+     * The data needed to create a DojoInventoryItem.
+     */
+    data: XOR<DojoInventoryItemCreateInput, DojoInventoryItemUncheckedCreateInput>
+  }
+
+  /**
+   * DojoInventoryItem createMany
+   */
+  export type DojoInventoryItemCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many DojoInventoryItems.
+     */
+    data: DojoInventoryItemCreateManyInput | DojoInventoryItemCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * DojoInventoryItem createManyAndReturn
+   */
+  export type DojoInventoryItemCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DojoInventoryItem
+     */
+    select?: DojoInventoryItemSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the DojoInventoryItem
+     */
+    omit?: DojoInventoryItemOmit<ExtArgs> | null
+    /**
+     * The data used to create many DojoInventoryItems.
+     */
+    data: DojoInventoryItemCreateManyInput | DojoInventoryItemCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DojoInventoryItemIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * DojoInventoryItem update
+   */
+  export type DojoInventoryItemUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DojoInventoryItem
+     */
+    select?: DojoInventoryItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DojoInventoryItem
+     */
+    omit?: DojoInventoryItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DojoInventoryItemInclude<ExtArgs> | null
+    /**
+     * The data needed to update a DojoInventoryItem.
+     */
+    data: XOR<DojoInventoryItemUpdateInput, DojoInventoryItemUncheckedUpdateInput>
+    /**
+     * Choose, which DojoInventoryItem to update.
+     */
+    where: DojoInventoryItemWhereUniqueInput
+  }
+
+  /**
+   * DojoInventoryItem updateMany
+   */
+  export type DojoInventoryItemUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update DojoInventoryItems.
+     */
+    data: XOR<DojoInventoryItemUpdateManyMutationInput, DojoInventoryItemUncheckedUpdateManyInput>
+    /**
+     * Filter which DojoInventoryItems to update
+     */
+    where?: DojoInventoryItemWhereInput
+    /**
+     * Limit how many DojoInventoryItems to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * DojoInventoryItem updateManyAndReturn
+   */
+  export type DojoInventoryItemUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DojoInventoryItem
+     */
+    select?: DojoInventoryItemSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the DojoInventoryItem
+     */
+    omit?: DojoInventoryItemOmit<ExtArgs> | null
+    /**
+     * The data used to update DojoInventoryItems.
+     */
+    data: XOR<DojoInventoryItemUpdateManyMutationInput, DojoInventoryItemUncheckedUpdateManyInput>
+    /**
+     * Filter which DojoInventoryItems to update
+     */
+    where?: DojoInventoryItemWhereInput
+    /**
+     * Limit how many DojoInventoryItems to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DojoInventoryItemIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * DojoInventoryItem upsert
+   */
+  export type DojoInventoryItemUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DojoInventoryItem
+     */
+    select?: DojoInventoryItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DojoInventoryItem
+     */
+    omit?: DojoInventoryItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DojoInventoryItemInclude<ExtArgs> | null
+    /**
+     * The filter to search for the DojoInventoryItem to update in case it exists.
+     */
+    where: DojoInventoryItemWhereUniqueInput
+    /**
+     * In case the DojoInventoryItem found by the `where` argument doesn't exist, create a new DojoInventoryItem with this data.
+     */
+    create: XOR<DojoInventoryItemCreateInput, DojoInventoryItemUncheckedCreateInput>
+    /**
+     * In case the DojoInventoryItem was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<DojoInventoryItemUpdateInput, DojoInventoryItemUncheckedUpdateInput>
+  }
+
+  /**
+   * DojoInventoryItem delete
+   */
+  export type DojoInventoryItemDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DojoInventoryItem
+     */
+    select?: DojoInventoryItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DojoInventoryItem
+     */
+    omit?: DojoInventoryItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DojoInventoryItemInclude<ExtArgs> | null
+    /**
+     * Filter which DojoInventoryItem to delete.
+     */
+    where: DojoInventoryItemWhereUniqueInput
+  }
+
+  /**
+   * DojoInventoryItem deleteMany
+   */
+  export type DojoInventoryItemDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which DojoInventoryItems to delete
+     */
+    where?: DojoInventoryItemWhereInput
+    /**
+     * Limit how many DojoInventoryItems to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * DojoInventoryItem without action
+   */
+  export type DojoInventoryItemDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DojoInventoryItem
+     */
+    select?: DojoInventoryItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DojoInventoryItem
+     */
+    omit?: DojoInventoryItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DojoInventoryItemInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model DojoSale
+   */
+
+  export type AggregateDojoSale = {
+    _count: DojoSaleCountAggregateOutputType | null
+    _avg: DojoSaleAvgAggregateOutputType | null
+    _sum: DojoSaleSumAggregateOutputType | null
+    _min: DojoSaleMinAggregateOutputType | null
+    _max: DojoSaleMaxAggregateOutputType | null
+  }
+
+  export type DojoSaleAvgAggregateOutputType = {
+    subtotal: Decimal | null
+    discount: Decimal | null
+    total: Decimal | null
+  }
+
+  export type DojoSaleSumAggregateOutputType = {
+    subtotal: Decimal | null
+    discount: Decimal | null
+    total: Decimal | null
+  }
+
+  export type DojoSaleMinAggregateOutputType = {
+    id: string | null
+    dojoId: string | null
+    receiptNo: string | null
+    memberId: string | null
+    buyerName: string | null
+    soldByUserId: string | null
+    soldByName: string | null
+    subtotal: Decimal | null
+    discount: Decimal | null
+    total: Decimal | null
+    paymentMethod: string | null
+    notes: string | null
+    createdAt: Date | null
+  }
+
+  export type DojoSaleMaxAggregateOutputType = {
+    id: string | null
+    dojoId: string | null
+    receiptNo: string | null
+    memberId: string | null
+    buyerName: string | null
+    soldByUserId: string | null
+    soldByName: string | null
+    subtotal: Decimal | null
+    discount: Decimal | null
+    total: Decimal | null
+    paymentMethod: string | null
+    notes: string | null
+    createdAt: Date | null
+  }
+
+  export type DojoSaleCountAggregateOutputType = {
+    id: number
+    dojoId: number
+    receiptNo: number
+    memberId: number
+    buyerName: number
+    soldByUserId: number
+    soldByName: number
+    subtotal: number
+    discount: number
+    total: number
+    paymentMethod: number
+    notes: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type DojoSaleAvgAggregateInputType = {
+    subtotal?: true
+    discount?: true
+    total?: true
+  }
+
+  export type DojoSaleSumAggregateInputType = {
+    subtotal?: true
+    discount?: true
+    total?: true
+  }
+
+  export type DojoSaleMinAggregateInputType = {
+    id?: true
+    dojoId?: true
+    receiptNo?: true
+    memberId?: true
+    buyerName?: true
+    soldByUserId?: true
+    soldByName?: true
+    subtotal?: true
+    discount?: true
+    total?: true
+    paymentMethod?: true
+    notes?: true
+    createdAt?: true
+  }
+
+  export type DojoSaleMaxAggregateInputType = {
+    id?: true
+    dojoId?: true
+    receiptNo?: true
+    memberId?: true
+    buyerName?: true
+    soldByUserId?: true
+    soldByName?: true
+    subtotal?: true
+    discount?: true
+    total?: true
+    paymentMethod?: true
+    notes?: true
+    createdAt?: true
+  }
+
+  export type DojoSaleCountAggregateInputType = {
+    id?: true
+    dojoId?: true
+    receiptNo?: true
+    memberId?: true
+    buyerName?: true
+    soldByUserId?: true
+    soldByName?: true
+    subtotal?: true
+    discount?: true
+    total?: true
+    paymentMethod?: true
+    notes?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type DojoSaleAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which DojoSale to aggregate.
+     */
+    where?: DojoSaleWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DojoSales to fetch.
+     */
+    orderBy?: DojoSaleOrderByWithRelationInput | DojoSaleOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: DojoSaleWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DojoSales from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DojoSales.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned DojoSales
+    **/
+    _count?: true | DojoSaleCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: DojoSaleAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: DojoSaleSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: DojoSaleMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: DojoSaleMaxAggregateInputType
+  }
+
+  export type GetDojoSaleAggregateType<T extends DojoSaleAggregateArgs> = {
+        [P in keyof T & keyof AggregateDojoSale]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateDojoSale[P]>
+      : GetScalarType<T[P], AggregateDojoSale[P]>
+  }
+
+
+
+
+  export type DojoSaleGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DojoSaleWhereInput
+    orderBy?: DojoSaleOrderByWithAggregationInput | DojoSaleOrderByWithAggregationInput[]
+    by: DojoSaleScalarFieldEnum[] | DojoSaleScalarFieldEnum
+    having?: DojoSaleScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: DojoSaleCountAggregateInputType | true
+    _avg?: DojoSaleAvgAggregateInputType
+    _sum?: DojoSaleSumAggregateInputType
+    _min?: DojoSaleMinAggregateInputType
+    _max?: DojoSaleMaxAggregateInputType
+  }
+
+  export type DojoSaleGroupByOutputType = {
+    id: string
+    dojoId: string
+    receiptNo: string
+    memberId: string | null
+    buyerName: string
+    soldByUserId: string | null
+    soldByName: string | null
+    subtotal: Decimal
+    discount: Decimal
+    total: Decimal
+    paymentMethod: string | null
+    notes: string | null
+    createdAt: Date
+    _count: DojoSaleCountAggregateOutputType | null
+    _avg: DojoSaleAvgAggregateOutputType | null
+    _sum: DojoSaleSumAggregateOutputType | null
+    _min: DojoSaleMinAggregateOutputType | null
+    _max: DojoSaleMaxAggregateOutputType | null
+  }
+
+  type GetDojoSaleGroupByPayload<T extends DojoSaleGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<DojoSaleGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof DojoSaleGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], DojoSaleGroupByOutputType[P]>
+            : GetScalarType<T[P], DojoSaleGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type DojoSaleSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    dojoId?: boolean
+    receiptNo?: boolean
+    memberId?: boolean
+    buyerName?: boolean
+    soldByUserId?: boolean
+    soldByName?: boolean
+    subtotal?: boolean
+    discount?: boolean
+    total?: boolean
+    paymentMethod?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    dojo?: boolean | DojoDefaultArgs<ExtArgs>
+    member?: boolean | DojoSale$memberArgs<ExtArgs>
+    soldBy?: boolean | DojoSale$soldByArgs<ExtArgs>
+    items?: boolean | DojoSale$itemsArgs<ExtArgs>
+    _count?: boolean | DojoSaleCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["dojoSale"]>
+
+  export type DojoSaleSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    dojoId?: boolean
+    receiptNo?: boolean
+    memberId?: boolean
+    buyerName?: boolean
+    soldByUserId?: boolean
+    soldByName?: boolean
+    subtotal?: boolean
+    discount?: boolean
+    total?: boolean
+    paymentMethod?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    dojo?: boolean | DojoDefaultArgs<ExtArgs>
+    member?: boolean | DojoSale$memberArgs<ExtArgs>
+    soldBy?: boolean | DojoSale$soldByArgs<ExtArgs>
+  }, ExtArgs["result"]["dojoSale"]>
+
+  export type DojoSaleSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    dojoId?: boolean
+    receiptNo?: boolean
+    memberId?: boolean
+    buyerName?: boolean
+    soldByUserId?: boolean
+    soldByName?: boolean
+    subtotal?: boolean
+    discount?: boolean
+    total?: boolean
+    paymentMethod?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    dojo?: boolean | DojoDefaultArgs<ExtArgs>
+    member?: boolean | DojoSale$memberArgs<ExtArgs>
+    soldBy?: boolean | DojoSale$soldByArgs<ExtArgs>
+  }, ExtArgs["result"]["dojoSale"]>
+
+  export type DojoSaleSelectScalar = {
+    id?: boolean
+    dojoId?: boolean
+    receiptNo?: boolean
+    memberId?: boolean
+    buyerName?: boolean
+    soldByUserId?: boolean
+    soldByName?: boolean
+    subtotal?: boolean
+    discount?: boolean
+    total?: boolean
+    paymentMethod?: boolean
+    notes?: boolean
+    createdAt?: boolean
+  }
+
+  export type DojoSaleOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "dojoId" | "receiptNo" | "memberId" | "buyerName" | "soldByUserId" | "soldByName" | "subtotal" | "discount" | "total" | "paymentMethod" | "notes" | "createdAt", ExtArgs["result"]["dojoSale"]>
+  export type DojoSaleInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    dojo?: boolean | DojoDefaultArgs<ExtArgs>
+    member?: boolean | DojoSale$memberArgs<ExtArgs>
+    soldBy?: boolean | DojoSale$soldByArgs<ExtArgs>
+    items?: boolean | DojoSale$itemsArgs<ExtArgs>
+    _count?: boolean | DojoSaleCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type DojoSaleIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    dojo?: boolean | DojoDefaultArgs<ExtArgs>
+    member?: boolean | DojoSale$memberArgs<ExtArgs>
+    soldBy?: boolean | DojoSale$soldByArgs<ExtArgs>
+  }
+  export type DojoSaleIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    dojo?: boolean | DojoDefaultArgs<ExtArgs>
+    member?: boolean | DojoSale$memberArgs<ExtArgs>
+    soldBy?: boolean | DojoSale$soldByArgs<ExtArgs>
+  }
+
+  export type $DojoSalePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "DojoSale"
+    objects: {
+      dojo: Prisma.$DojoPayload<ExtArgs>
+      member: Prisma.$MemberPayload<ExtArgs> | null
+      soldBy: Prisma.$MemberPayload<ExtArgs> | null
+      items: Prisma.$DojoSaleItemPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      dojoId: string
+      receiptNo: string
+      memberId: string | null
+      buyerName: string
+      soldByUserId: string | null
+      soldByName: string | null
+      subtotal: Prisma.Decimal
+      discount: Prisma.Decimal
+      total: Prisma.Decimal
+      paymentMethod: string | null
+      notes: string | null
+      createdAt: Date
+    }, ExtArgs["result"]["dojoSale"]>
+    composites: {}
+  }
+
+  type DojoSaleGetPayload<S extends boolean | null | undefined | DojoSaleDefaultArgs> = $Result.GetResult<Prisma.$DojoSalePayload, S>
+
+  type DojoSaleCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<DojoSaleFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: DojoSaleCountAggregateInputType | true
+    }
+
+  export interface DojoSaleDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['DojoSale'], meta: { name: 'DojoSale' } }
+    /**
+     * Find zero or one DojoSale that matches the filter.
+     * @param {DojoSaleFindUniqueArgs} args - Arguments to find a DojoSale
+     * @example
+     * // Get one DojoSale
+     * const dojoSale = await prisma.dojoSale.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends DojoSaleFindUniqueArgs>(args: SelectSubset<T, DojoSaleFindUniqueArgs<ExtArgs>>): Prisma__DojoSaleClient<$Result.GetResult<Prisma.$DojoSalePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one DojoSale that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {DojoSaleFindUniqueOrThrowArgs} args - Arguments to find a DojoSale
+     * @example
+     * // Get one DojoSale
+     * const dojoSale = await prisma.dojoSale.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends DojoSaleFindUniqueOrThrowArgs>(args: SelectSubset<T, DojoSaleFindUniqueOrThrowArgs<ExtArgs>>): Prisma__DojoSaleClient<$Result.GetResult<Prisma.$DojoSalePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first DojoSale that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DojoSaleFindFirstArgs} args - Arguments to find a DojoSale
+     * @example
+     * // Get one DojoSale
+     * const dojoSale = await prisma.dojoSale.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends DojoSaleFindFirstArgs>(args?: SelectSubset<T, DojoSaleFindFirstArgs<ExtArgs>>): Prisma__DojoSaleClient<$Result.GetResult<Prisma.$DojoSalePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first DojoSale that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DojoSaleFindFirstOrThrowArgs} args - Arguments to find a DojoSale
+     * @example
+     * // Get one DojoSale
+     * const dojoSale = await prisma.dojoSale.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends DojoSaleFindFirstOrThrowArgs>(args?: SelectSubset<T, DojoSaleFindFirstOrThrowArgs<ExtArgs>>): Prisma__DojoSaleClient<$Result.GetResult<Prisma.$DojoSalePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more DojoSales that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DojoSaleFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all DojoSales
+     * const dojoSales = await prisma.dojoSale.findMany()
+     * 
+     * // Get first 10 DojoSales
+     * const dojoSales = await prisma.dojoSale.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const dojoSaleWithIdOnly = await prisma.dojoSale.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends DojoSaleFindManyArgs>(args?: SelectSubset<T, DojoSaleFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DojoSalePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a DojoSale.
+     * @param {DojoSaleCreateArgs} args - Arguments to create a DojoSale.
+     * @example
+     * // Create one DojoSale
+     * const DojoSale = await prisma.dojoSale.create({
+     *   data: {
+     *     // ... data to create a DojoSale
+     *   }
+     * })
+     * 
+     */
+    create<T extends DojoSaleCreateArgs>(args: SelectSubset<T, DojoSaleCreateArgs<ExtArgs>>): Prisma__DojoSaleClient<$Result.GetResult<Prisma.$DojoSalePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many DojoSales.
+     * @param {DojoSaleCreateManyArgs} args - Arguments to create many DojoSales.
+     * @example
+     * // Create many DojoSales
+     * const dojoSale = await prisma.dojoSale.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends DojoSaleCreateManyArgs>(args?: SelectSubset<T, DojoSaleCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many DojoSales and returns the data saved in the database.
+     * @param {DojoSaleCreateManyAndReturnArgs} args - Arguments to create many DojoSales.
+     * @example
+     * // Create many DojoSales
+     * const dojoSale = await prisma.dojoSale.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many DojoSales and only return the `id`
+     * const dojoSaleWithIdOnly = await prisma.dojoSale.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends DojoSaleCreateManyAndReturnArgs>(args?: SelectSubset<T, DojoSaleCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DojoSalePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a DojoSale.
+     * @param {DojoSaleDeleteArgs} args - Arguments to delete one DojoSale.
+     * @example
+     * // Delete one DojoSale
+     * const DojoSale = await prisma.dojoSale.delete({
+     *   where: {
+     *     // ... filter to delete one DojoSale
+     *   }
+     * })
+     * 
+     */
+    delete<T extends DojoSaleDeleteArgs>(args: SelectSubset<T, DojoSaleDeleteArgs<ExtArgs>>): Prisma__DojoSaleClient<$Result.GetResult<Prisma.$DojoSalePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one DojoSale.
+     * @param {DojoSaleUpdateArgs} args - Arguments to update one DojoSale.
+     * @example
+     * // Update one DojoSale
+     * const dojoSale = await prisma.dojoSale.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends DojoSaleUpdateArgs>(args: SelectSubset<T, DojoSaleUpdateArgs<ExtArgs>>): Prisma__DojoSaleClient<$Result.GetResult<Prisma.$DojoSalePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more DojoSales.
+     * @param {DojoSaleDeleteManyArgs} args - Arguments to filter DojoSales to delete.
+     * @example
+     * // Delete a few DojoSales
+     * const { count } = await prisma.dojoSale.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends DojoSaleDeleteManyArgs>(args?: SelectSubset<T, DojoSaleDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more DojoSales.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DojoSaleUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many DojoSales
+     * const dojoSale = await prisma.dojoSale.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends DojoSaleUpdateManyArgs>(args: SelectSubset<T, DojoSaleUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more DojoSales and returns the data updated in the database.
+     * @param {DojoSaleUpdateManyAndReturnArgs} args - Arguments to update many DojoSales.
+     * @example
+     * // Update many DojoSales
+     * const dojoSale = await prisma.dojoSale.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more DojoSales and only return the `id`
+     * const dojoSaleWithIdOnly = await prisma.dojoSale.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends DojoSaleUpdateManyAndReturnArgs>(args: SelectSubset<T, DojoSaleUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DojoSalePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one DojoSale.
+     * @param {DojoSaleUpsertArgs} args - Arguments to update or create a DojoSale.
+     * @example
+     * // Update or create a DojoSale
+     * const dojoSale = await prisma.dojoSale.upsert({
+     *   create: {
+     *     // ... data to create a DojoSale
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the DojoSale we want to update
+     *   }
+     * })
+     */
+    upsert<T extends DojoSaleUpsertArgs>(args: SelectSubset<T, DojoSaleUpsertArgs<ExtArgs>>): Prisma__DojoSaleClient<$Result.GetResult<Prisma.$DojoSalePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of DojoSales.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DojoSaleCountArgs} args - Arguments to filter DojoSales to count.
+     * @example
+     * // Count the number of DojoSales
+     * const count = await prisma.dojoSale.count({
+     *   where: {
+     *     // ... the filter for the DojoSales we want to count
+     *   }
+     * })
+    **/
+    count<T extends DojoSaleCountArgs>(
+      args?: Subset<T, DojoSaleCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], DojoSaleCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a DojoSale.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DojoSaleAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends DojoSaleAggregateArgs>(args: Subset<T, DojoSaleAggregateArgs>): Prisma.PrismaPromise<GetDojoSaleAggregateType<T>>
+
+    /**
+     * Group by DojoSale.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DojoSaleGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends DojoSaleGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: DojoSaleGroupByArgs['orderBy'] }
+        : { orderBy?: DojoSaleGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, DojoSaleGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetDojoSaleGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the DojoSale model
+   */
+  readonly fields: DojoSaleFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for DojoSale.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__DojoSaleClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    dojo<T extends DojoDefaultArgs<ExtArgs> = {}>(args?: Subset<T, DojoDefaultArgs<ExtArgs>>): Prisma__DojoClient<$Result.GetResult<Prisma.$DojoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    member<T extends DojoSale$memberArgs<ExtArgs> = {}>(args?: Subset<T, DojoSale$memberArgs<ExtArgs>>): Prisma__MemberClient<$Result.GetResult<Prisma.$MemberPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    soldBy<T extends DojoSale$soldByArgs<ExtArgs> = {}>(args?: Subset<T, DojoSale$soldByArgs<ExtArgs>>): Prisma__MemberClient<$Result.GetResult<Prisma.$MemberPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    items<T extends DojoSale$itemsArgs<ExtArgs> = {}>(args?: Subset<T, DojoSale$itemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DojoSaleItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the DojoSale model
+   */
+  interface DojoSaleFieldRefs {
+    readonly id: FieldRef<"DojoSale", 'String'>
+    readonly dojoId: FieldRef<"DojoSale", 'String'>
+    readonly receiptNo: FieldRef<"DojoSale", 'String'>
+    readonly memberId: FieldRef<"DojoSale", 'String'>
+    readonly buyerName: FieldRef<"DojoSale", 'String'>
+    readonly soldByUserId: FieldRef<"DojoSale", 'String'>
+    readonly soldByName: FieldRef<"DojoSale", 'String'>
+    readonly subtotal: FieldRef<"DojoSale", 'Decimal'>
+    readonly discount: FieldRef<"DojoSale", 'Decimal'>
+    readonly total: FieldRef<"DojoSale", 'Decimal'>
+    readonly paymentMethod: FieldRef<"DojoSale", 'String'>
+    readonly notes: FieldRef<"DojoSale", 'String'>
+    readonly createdAt: FieldRef<"DojoSale", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * DojoSale findUnique
+   */
+  export type DojoSaleFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DojoSale
+     */
+    select?: DojoSaleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DojoSale
+     */
+    omit?: DojoSaleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DojoSaleInclude<ExtArgs> | null
+    /**
+     * Filter, which DojoSale to fetch.
+     */
+    where: DojoSaleWhereUniqueInput
+  }
+
+  /**
+   * DojoSale findUniqueOrThrow
+   */
+  export type DojoSaleFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DojoSale
+     */
+    select?: DojoSaleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DojoSale
+     */
+    omit?: DojoSaleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DojoSaleInclude<ExtArgs> | null
+    /**
+     * Filter, which DojoSale to fetch.
+     */
+    where: DojoSaleWhereUniqueInput
+  }
+
+  /**
+   * DojoSale findFirst
+   */
+  export type DojoSaleFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DojoSale
+     */
+    select?: DojoSaleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DojoSale
+     */
+    omit?: DojoSaleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DojoSaleInclude<ExtArgs> | null
+    /**
+     * Filter, which DojoSale to fetch.
+     */
+    where?: DojoSaleWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DojoSales to fetch.
+     */
+    orderBy?: DojoSaleOrderByWithRelationInput | DojoSaleOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for DojoSales.
+     */
+    cursor?: DojoSaleWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DojoSales from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DojoSales.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DojoSales.
+     */
+    distinct?: DojoSaleScalarFieldEnum | DojoSaleScalarFieldEnum[]
+  }
+
+  /**
+   * DojoSale findFirstOrThrow
+   */
+  export type DojoSaleFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DojoSale
+     */
+    select?: DojoSaleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DojoSale
+     */
+    omit?: DojoSaleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DojoSaleInclude<ExtArgs> | null
+    /**
+     * Filter, which DojoSale to fetch.
+     */
+    where?: DojoSaleWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DojoSales to fetch.
+     */
+    orderBy?: DojoSaleOrderByWithRelationInput | DojoSaleOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for DojoSales.
+     */
+    cursor?: DojoSaleWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DojoSales from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DojoSales.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DojoSales.
+     */
+    distinct?: DojoSaleScalarFieldEnum | DojoSaleScalarFieldEnum[]
+  }
+
+  /**
+   * DojoSale findMany
+   */
+  export type DojoSaleFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DojoSale
+     */
+    select?: DojoSaleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DojoSale
+     */
+    omit?: DojoSaleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DojoSaleInclude<ExtArgs> | null
+    /**
+     * Filter, which DojoSales to fetch.
+     */
+    where?: DojoSaleWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DojoSales to fetch.
+     */
+    orderBy?: DojoSaleOrderByWithRelationInput | DojoSaleOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing DojoSales.
+     */
+    cursor?: DojoSaleWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DojoSales from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DojoSales.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DojoSales.
+     */
+    distinct?: DojoSaleScalarFieldEnum | DojoSaleScalarFieldEnum[]
+  }
+
+  /**
+   * DojoSale create
+   */
+  export type DojoSaleCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DojoSale
+     */
+    select?: DojoSaleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DojoSale
+     */
+    omit?: DojoSaleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DojoSaleInclude<ExtArgs> | null
+    /**
+     * The data needed to create a DojoSale.
+     */
+    data: XOR<DojoSaleCreateInput, DojoSaleUncheckedCreateInput>
+  }
+
+  /**
+   * DojoSale createMany
+   */
+  export type DojoSaleCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many DojoSales.
+     */
+    data: DojoSaleCreateManyInput | DojoSaleCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * DojoSale createManyAndReturn
+   */
+  export type DojoSaleCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DojoSale
+     */
+    select?: DojoSaleSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the DojoSale
+     */
+    omit?: DojoSaleOmit<ExtArgs> | null
+    /**
+     * The data used to create many DojoSales.
+     */
+    data: DojoSaleCreateManyInput | DojoSaleCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DojoSaleIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * DojoSale update
+   */
+  export type DojoSaleUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DojoSale
+     */
+    select?: DojoSaleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DojoSale
+     */
+    omit?: DojoSaleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DojoSaleInclude<ExtArgs> | null
+    /**
+     * The data needed to update a DojoSale.
+     */
+    data: XOR<DojoSaleUpdateInput, DojoSaleUncheckedUpdateInput>
+    /**
+     * Choose, which DojoSale to update.
+     */
+    where: DojoSaleWhereUniqueInput
+  }
+
+  /**
+   * DojoSale updateMany
+   */
+  export type DojoSaleUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update DojoSales.
+     */
+    data: XOR<DojoSaleUpdateManyMutationInput, DojoSaleUncheckedUpdateManyInput>
+    /**
+     * Filter which DojoSales to update
+     */
+    where?: DojoSaleWhereInput
+    /**
+     * Limit how many DojoSales to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * DojoSale updateManyAndReturn
+   */
+  export type DojoSaleUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DojoSale
+     */
+    select?: DojoSaleSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the DojoSale
+     */
+    omit?: DojoSaleOmit<ExtArgs> | null
+    /**
+     * The data used to update DojoSales.
+     */
+    data: XOR<DojoSaleUpdateManyMutationInput, DojoSaleUncheckedUpdateManyInput>
+    /**
+     * Filter which DojoSales to update
+     */
+    where?: DojoSaleWhereInput
+    /**
+     * Limit how many DojoSales to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DojoSaleIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * DojoSale upsert
+   */
+  export type DojoSaleUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DojoSale
+     */
+    select?: DojoSaleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DojoSale
+     */
+    omit?: DojoSaleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DojoSaleInclude<ExtArgs> | null
+    /**
+     * The filter to search for the DojoSale to update in case it exists.
+     */
+    where: DojoSaleWhereUniqueInput
+    /**
+     * In case the DojoSale found by the `where` argument doesn't exist, create a new DojoSale with this data.
+     */
+    create: XOR<DojoSaleCreateInput, DojoSaleUncheckedCreateInput>
+    /**
+     * In case the DojoSale was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<DojoSaleUpdateInput, DojoSaleUncheckedUpdateInput>
+  }
+
+  /**
+   * DojoSale delete
+   */
+  export type DojoSaleDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DojoSale
+     */
+    select?: DojoSaleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DojoSale
+     */
+    omit?: DojoSaleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DojoSaleInclude<ExtArgs> | null
+    /**
+     * Filter which DojoSale to delete.
+     */
+    where: DojoSaleWhereUniqueInput
+  }
+
+  /**
+   * DojoSale deleteMany
+   */
+  export type DojoSaleDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which DojoSales to delete
+     */
+    where?: DojoSaleWhereInput
+    /**
+     * Limit how many DojoSales to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * DojoSale.member
+   */
+  export type DojoSale$memberArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Member
+     */
+    select?: MemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Member
+     */
+    omit?: MemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MemberInclude<ExtArgs> | null
+    where?: MemberWhereInput
+  }
+
+  /**
+   * DojoSale.soldBy
+   */
+  export type DojoSale$soldByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Member
+     */
+    select?: MemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Member
+     */
+    omit?: MemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MemberInclude<ExtArgs> | null
+    where?: MemberWhereInput
+  }
+
+  /**
+   * DojoSale.items
+   */
+  export type DojoSale$itemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DojoSaleItem
+     */
+    select?: DojoSaleItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DojoSaleItem
+     */
+    omit?: DojoSaleItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DojoSaleItemInclude<ExtArgs> | null
+    where?: DojoSaleItemWhereInput
+    orderBy?: DojoSaleItemOrderByWithRelationInput | DojoSaleItemOrderByWithRelationInput[]
+    cursor?: DojoSaleItemWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: DojoSaleItemScalarFieldEnum | DojoSaleItemScalarFieldEnum[]
+  }
+
+  /**
+   * DojoSale without action
+   */
+  export type DojoSaleDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DojoSale
+     */
+    select?: DojoSaleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DojoSale
+     */
+    omit?: DojoSaleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DojoSaleInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model DojoSaleItem
+   */
+
+  export type AggregateDojoSaleItem = {
+    _count: DojoSaleItemCountAggregateOutputType | null
+    _avg: DojoSaleItemAvgAggregateOutputType | null
+    _sum: DojoSaleItemSumAggregateOutputType | null
+    _min: DojoSaleItemMinAggregateOutputType | null
+    _max: DojoSaleItemMaxAggregateOutputType | null
+  }
+
+  export type DojoSaleItemAvgAggregateOutputType = {
+    quantity: number | null
+    unitPrice: Decimal | null
+    lineTotal: Decimal | null
+  }
+
+  export type DojoSaleItemSumAggregateOutputType = {
+    quantity: number | null
+    unitPrice: Decimal | null
+    lineTotal: Decimal | null
+  }
+
+  export type DojoSaleItemMinAggregateOutputType = {
+    id: string | null
+    saleId: string | null
+    productId: string | null
+    productName: string | null
+    quantity: number | null
+    unitPrice: Decimal | null
+    lineTotal: Decimal | null
+  }
+
+  export type DojoSaleItemMaxAggregateOutputType = {
+    id: string | null
+    saleId: string | null
+    productId: string | null
+    productName: string | null
+    quantity: number | null
+    unitPrice: Decimal | null
+    lineTotal: Decimal | null
+  }
+
+  export type DojoSaleItemCountAggregateOutputType = {
+    id: number
+    saleId: number
+    productId: number
+    productName: number
+    quantity: number
+    unitPrice: number
+    lineTotal: number
+    _all: number
+  }
+
+
+  export type DojoSaleItemAvgAggregateInputType = {
+    quantity?: true
+    unitPrice?: true
+    lineTotal?: true
+  }
+
+  export type DojoSaleItemSumAggregateInputType = {
+    quantity?: true
+    unitPrice?: true
+    lineTotal?: true
+  }
+
+  export type DojoSaleItemMinAggregateInputType = {
+    id?: true
+    saleId?: true
+    productId?: true
+    productName?: true
+    quantity?: true
+    unitPrice?: true
+    lineTotal?: true
+  }
+
+  export type DojoSaleItemMaxAggregateInputType = {
+    id?: true
+    saleId?: true
+    productId?: true
+    productName?: true
+    quantity?: true
+    unitPrice?: true
+    lineTotal?: true
+  }
+
+  export type DojoSaleItemCountAggregateInputType = {
+    id?: true
+    saleId?: true
+    productId?: true
+    productName?: true
+    quantity?: true
+    unitPrice?: true
+    lineTotal?: true
+    _all?: true
+  }
+
+  export type DojoSaleItemAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which DojoSaleItem to aggregate.
+     */
+    where?: DojoSaleItemWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DojoSaleItems to fetch.
+     */
+    orderBy?: DojoSaleItemOrderByWithRelationInput | DojoSaleItemOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: DojoSaleItemWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DojoSaleItems from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DojoSaleItems.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned DojoSaleItems
+    **/
+    _count?: true | DojoSaleItemCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: DojoSaleItemAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: DojoSaleItemSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: DojoSaleItemMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: DojoSaleItemMaxAggregateInputType
+  }
+
+  export type GetDojoSaleItemAggregateType<T extends DojoSaleItemAggregateArgs> = {
+        [P in keyof T & keyof AggregateDojoSaleItem]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateDojoSaleItem[P]>
+      : GetScalarType<T[P], AggregateDojoSaleItem[P]>
+  }
+
+
+
+
+  export type DojoSaleItemGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DojoSaleItemWhereInput
+    orderBy?: DojoSaleItemOrderByWithAggregationInput | DojoSaleItemOrderByWithAggregationInput[]
+    by: DojoSaleItemScalarFieldEnum[] | DojoSaleItemScalarFieldEnum
+    having?: DojoSaleItemScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: DojoSaleItemCountAggregateInputType | true
+    _avg?: DojoSaleItemAvgAggregateInputType
+    _sum?: DojoSaleItemSumAggregateInputType
+    _min?: DojoSaleItemMinAggregateInputType
+    _max?: DojoSaleItemMaxAggregateInputType
+  }
+
+  export type DojoSaleItemGroupByOutputType = {
+    id: string
+    saleId: string
+    productId: string
+    productName: string
+    quantity: number
+    unitPrice: Decimal
+    lineTotal: Decimal
+    _count: DojoSaleItemCountAggregateOutputType | null
+    _avg: DojoSaleItemAvgAggregateOutputType | null
+    _sum: DojoSaleItemSumAggregateOutputType | null
+    _min: DojoSaleItemMinAggregateOutputType | null
+    _max: DojoSaleItemMaxAggregateOutputType | null
+  }
+
+  type GetDojoSaleItemGroupByPayload<T extends DojoSaleItemGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<DojoSaleItemGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof DojoSaleItemGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], DojoSaleItemGroupByOutputType[P]>
+            : GetScalarType<T[P], DojoSaleItemGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type DojoSaleItemSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    saleId?: boolean
+    productId?: boolean
+    productName?: boolean
+    quantity?: boolean
+    unitPrice?: boolean
+    lineTotal?: boolean
+    sale?: boolean | DojoSaleDefaultArgs<ExtArgs>
+    product?: boolean | ShopProductDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["dojoSaleItem"]>
+
+  export type DojoSaleItemSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    saleId?: boolean
+    productId?: boolean
+    productName?: boolean
+    quantity?: boolean
+    unitPrice?: boolean
+    lineTotal?: boolean
+    sale?: boolean | DojoSaleDefaultArgs<ExtArgs>
+    product?: boolean | ShopProductDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["dojoSaleItem"]>
+
+  export type DojoSaleItemSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    saleId?: boolean
+    productId?: boolean
+    productName?: boolean
+    quantity?: boolean
+    unitPrice?: boolean
+    lineTotal?: boolean
+    sale?: boolean | DojoSaleDefaultArgs<ExtArgs>
+    product?: boolean | ShopProductDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["dojoSaleItem"]>
+
+  export type DojoSaleItemSelectScalar = {
+    id?: boolean
+    saleId?: boolean
+    productId?: boolean
+    productName?: boolean
+    quantity?: boolean
+    unitPrice?: boolean
+    lineTotal?: boolean
+  }
+
+  export type DojoSaleItemOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "saleId" | "productId" | "productName" | "quantity" | "unitPrice" | "lineTotal", ExtArgs["result"]["dojoSaleItem"]>
+  export type DojoSaleItemInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    sale?: boolean | DojoSaleDefaultArgs<ExtArgs>
+    product?: boolean | ShopProductDefaultArgs<ExtArgs>
+  }
+  export type DojoSaleItemIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    sale?: boolean | DojoSaleDefaultArgs<ExtArgs>
+    product?: boolean | ShopProductDefaultArgs<ExtArgs>
+  }
+  export type DojoSaleItemIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    sale?: boolean | DojoSaleDefaultArgs<ExtArgs>
+    product?: boolean | ShopProductDefaultArgs<ExtArgs>
+  }
+
+  export type $DojoSaleItemPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "DojoSaleItem"
+    objects: {
+      sale: Prisma.$DojoSalePayload<ExtArgs>
+      product: Prisma.$ShopProductPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      saleId: string
+      productId: string
+      productName: string
+      quantity: number
+      unitPrice: Prisma.Decimal
+      lineTotal: Prisma.Decimal
+    }, ExtArgs["result"]["dojoSaleItem"]>
+    composites: {}
+  }
+
+  type DojoSaleItemGetPayload<S extends boolean | null | undefined | DojoSaleItemDefaultArgs> = $Result.GetResult<Prisma.$DojoSaleItemPayload, S>
+
+  type DojoSaleItemCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<DojoSaleItemFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: DojoSaleItemCountAggregateInputType | true
+    }
+
+  export interface DojoSaleItemDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['DojoSaleItem'], meta: { name: 'DojoSaleItem' } }
+    /**
+     * Find zero or one DojoSaleItem that matches the filter.
+     * @param {DojoSaleItemFindUniqueArgs} args - Arguments to find a DojoSaleItem
+     * @example
+     * // Get one DojoSaleItem
+     * const dojoSaleItem = await prisma.dojoSaleItem.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends DojoSaleItemFindUniqueArgs>(args: SelectSubset<T, DojoSaleItemFindUniqueArgs<ExtArgs>>): Prisma__DojoSaleItemClient<$Result.GetResult<Prisma.$DojoSaleItemPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one DojoSaleItem that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {DojoSaleItemFindUniqueOrThrowArgs} args - Arguments to find a DojoSaleItem
+     * @example
+     * // Get one DojoSaleItem
+     * const dojoSaleItem = await prisma.dojoSaleItem.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends DojoSaleItemFindUniqueOrThrowArgs>(args: SelectSubset<T, DojoSaleItemFindUniqueOrThrowArgs<ExtArgs>>): Prisma__DojoSaleItemClient<$Result.GetResult<Prisma.$DojoSaleItemPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first DojoSaleItem that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DojoSaleItemFindFirstArgs} args - Arguments to find a DojoSaleItem
+     * @example
+     * // Get one DojoSaleItem
+     * const dojoSaleItem = await prisma.dojoSaleItem.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends DojoSaleItemFindFirstArgs>(args?: SelectSubset<T, DojoSaleItemFindFirstArgs<ExtArgs>>): Prisma__DojoSaleItemClient<$Result.GetResult<Prisma.$DojoSaleItemPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first DojoSaleItem that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DojoSaleItemFindFirstOrThrowArgs} args - Arguments to find a DojoSaleItem
+     * @example
+     * // Get one DojoSaleItem
+     * const dojoSaleItem = await prisma.dojoSaleItem.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends DojoSaleItemFindFirstOrThrowArgs>(args?: SelectSubset<T, DojoSaleItemFindFirstOrThrowArgs<ExtArgs>>): Prisma__DojoSaleItemClient<$Result.GetResult<Prisma.$DojoSaleItemPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more DojoSaleItems that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DojoSaleItemFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all DojoSaleItems
+     * const dojoSaleItems = await prisma.dojoSaleItem.findMany()
+     * 
+     * // Get first 10 DojoSaleItems
+     * const dojoSaleItems = await prisma.dojoSaleItem.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const dojoSaleItemWithIdOnly = await prisma.dojoSaleItem.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends DojoSaleItemFindManyArgs>(args?: SelectSubset<T, DojoSaleItemFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DojoSaleItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a DojoSaleItem.
+     * @param {DojoSaleItemCreateArgs} args - Arguments to create a DojoSaleItem.
+     * @example
+     * // Create one DojoSaleItem
+     * const DojoSaleItem = await prisma.dojoSaleItem.create({
+     *   data: {
+     *     // ... data to create a DojoSaleItem
+     *   }
+     * })
+     * 
+     */
+    create<T extends DojoSaleItemCreateArgs>(args: SelectSubset<T, DojoSaleItemCreateArgs<ExtArgs>>): Prisma__DojoSaleItemClient<$Result.GetResult<Prisma.$DojoSaleItemPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many DojoSaleItems.
+     * @param {DojoSaleItemCreateManyArgs} args - Arguments to create many DojoSaleItems.
+     * @example
+     * // Create many DojoSaleItems
+     * const dojoSaleItem = await prisma.dojoSaleItem.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends DojoSaleItemCreateManyArgs>(args?: SelectSubset<T, DojoSaleItemCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many DojoSaleItems and returns the data saved in the database.
+     * @param {DojoSaleItemCreateManyAndReturnArgs} args - Arguments to create many DojoSaleItems.
+     * @example
+     * // Create many DojoSaleItems
+     * const dojoSaleItem = await prisma.dojoSaleItem.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many DojoSaleItems and only return the `id`
+     * const dojoSaleItemWithIdOnly = await prisma.dojoSaleItem.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends DojoSaleItemCreateManyAndReturnArgs>(args?: SelectSubset<T, DojoSaleItemCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DojoSaleItemPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a DojoSaleItem.
+     * @param {DojoSaleItemDeleteArgs} args - Arguments to delete one DojoSaleItem.
+     * @example
+     * // Delete one DojoSaleItem
+     * const DojoSaleItem = await prisma.dojoSaleItem.delete({
+     *   where: {
+     *     // ... filter to delete one DojoSaleItem
+     *   }
+     * })
+     * 
+     */
+    delete<T extends DojoSaleItemDeleteArgs>(args: SelectSubset<T, DojoSaleItemDeleteArgs<ExtArgs>>): Prisma__DojoSaleItemClient<$Result.GetResult<Prisma.$DojoSaleItemPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one DojoSaleItem.
+     * @param {DojoSaleItemUpdateArgs} args - Arguments to update one DojoSaleItem.
+     * @example
+     * // Update one DojoSaleItem
+     * const dojoSaleItem = await prisma.dojoSaleItem.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends DojoSaleItemUpdateArgs>(args: SelectSubset<T, DojoSaleItemUpdateArgs<ExtArgs>>): Prisma__DojoSaleItemClient<$Result.GetResult<Prisma.$DojoSaleItemPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more DojoSaleItems.
+     * @param {DojoSaleItemDeleteManyArgs} args - Arguments to filter DojoSaleItems to delete.
+     * @example
+     * // Delete a few DojoSaleItems
+     * const { count } = await prisma.dojoSaleItem.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends DojoSaleItemDeleteManyArgs>(args?: SelectSubset<T, DojoSaleItemDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more DojoSaleItems.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DojoSaleItemUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many DojoSaleItems
+     * const dojoSaleItem = await prisma.dojoSaleItem.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends DojoSaleItemUpdateManyArgs>(args: SelectSubset<T, DojoSaleItemUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more DojoSaleItems and returns the data updated in the database.
+     * @param {DojoSaleItemUpdateManyAndReturnArgs} args - Arguments to update many DojoSaleItems.
+     * @example
+     * // Update many DojoSaleItems
+     * const dojoSaleItem = await prisma.dojoSaleItem.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more DojoSaleItems and only return the `id`
+     * const dojoSaleItemWithIdOnly = await prisma.dojoSaleItem.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends DojoSaleItemUpdateManyAndReturnArgs>(args: SelectSubset<T, DojoSaleItemUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DojoSaleItemPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one DojoSaleItem.
+     * @param {DojoSaleItemUpsertArgs} args - Arguments to update or create a DojoSaleItem.
+     * @example
+     * // Update or create a DojoSaleItem
+     * const dojoSaleItem = await prisma.dojoSaleItem.upsert({
+     *   create: {
+     *     // ... data to create a DojoSaleItem
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the DojoSaleItem we want to update
+     *   }
+     * })
+     */
+    upsert<T extends DojoSaleItemUpsertArgs>(args: SelectSubset<T, DojoSaleItemUpsertArgs<ExtArgs>>): Prisma__DojoSaleItemClient<$Result.GetResult<Prisma.$DojoSaleItemPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of DojoSaleItems.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DojoSaleItemCountArgs} args - Arguments to filter DojoSaleItems to count.
+     * @example
+     * // Count the number of DojoSaleItems
+     * const count = await prisma.dojoSaleItem.count({
+     *   where: {
+     *     // ... the filter for the DojoSaleItems we want to count
+     *   }
+     * })
+    **/
+    count<T extends DojoSaleItemCountArgs>(
+      args?: Subset<T, DojoSaleItemCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], DojoSaleItemCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a DojoSaleItem.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DojoSaleItemAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends DojoSaleItemAggregateArgs>(args: Subset<T, DojoSaleItemAggregateArgs>): Prisma.PrismaPromise<GetDojoSaleItemAggregateType<T>>
+
+    /**
+     * Group by DojoSaleItem.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DojoSaleItemGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends DojoSaleItemGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: DojoSaleItemGroupByArgs['orderBy'] }
+        : { orderBy?: DojoSaleItemGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, DojoSaleItemGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetDojoSaleItemGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the DojoSaleItem model
+   */
+  readonly fields: DojoSaleItemFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for DojoSaleItem.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__DojoSaleItemClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    sale<T extends DojoSaleDefaultArgs<ExtArgs> = {}>(args?: Subset<T, DojoSaleDefaultArgs<ExtArgs>>): Prisma__DojoSaleClient<$Result.GetResult<Prisma.$DojoSalePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    product<T extends ShopProductDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ShopProductDefaultArgs<ExtArgs>>): Prisma__ShopProductClient<$Result.GetResult<Prisma.$ShopProductPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the DojoSaleItem model
+   */
+  interface DojoSaleItemFieldRefs {
+    readonly id: FieldRef<"DojoSaleItem", 'String'>
+    readonly saleId: FieldRef<"DojoSaleItem", 'String'>
+    readonly productId: FieldRef<"DojoSaleItem", 'String'>
+    readonly productName: FieldRef<"DojoSaleItem", 'String'>
+    readonly quantity: FieldRef<"DojoSaleItem", 'Int'>
+    readonly unitPrice: FieldRef<"DojoSaleItem", 'Decimal'>
+    readonly lineTotal: FieldRef<"DojoSaleItem", 'Decimal'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * DojoSaleItem findUnique
+   */
+  export type DojoSaleItemFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DojoSaleItem
+     */
+    select?: DojoSaleItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DojoSaleItem
+     */
+    omit?: DojoSaleItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DojoSaleItemInclude<ExtArgs> | null
+    /**
+     * Filter, which DojoSaleItem to fetch.
+     */
+    where: DojoSaleItemWhereUniqueInput
+  }
+
+  /**
+   * DojoSaleItem findUniqueOrThrow
+   */
+  export type DojoSaleItemFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DojoSaleItem
+     */
+    select?: DojoSaleItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DojoSaleItem
+     */
+    omit?: DojoSaleItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DojoSaleItemInclude<ExtArgs> | null
+    /**
+     * Filter, which DojoSaleItem to fetch.
+     */
+    where: DojoSaleItemWhereUniqueInput
+  }
+
+  /**
+   * DojoSaleItem findFirst
+   */
+  export type DojoSaleItemFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DojoSaleItem
+     */
+    select?: DojoSaleItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DojoSaleItem
+     */
+    omit?: DojoSaleItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DojoSaleItemInclude<ExtArgs> | null
+    /**
+     * Filter, which DojoSaleItem to fetch.
+     */
+    where?: DojoSaleItemWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DojoSaleItems to fetch.
+     */
+    orderBy?: DojoSaleItemOrderByWithRelationInput | DojoSaleItemOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for DojoSaleItems.
+     */
+    cursor?: DojoSaleItemWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DojoSaleItems from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DojoSaleItems.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DojoSaleItems.
+     */
+    distinct?: DojoSaleItemScalarFieldEnum | DojoSaleItemScalarFieldEnum[]
+  }
+
+  /**
+   * DojoSaleItem findFirstOrThrow
+   */
+  export type DojoSaleItemFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DojoSaleItem
+     */
+    select?: DojoSaleItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DojoSaleItem
+     */
+    omit?: DojoSaleItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DojoSaleItemInclude<ExtArgs> | null
+    /**
+     * Filter, which DojoSaleItem to fetch.
+     */
+    where?: DojoSaleItemWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DojoSaleItems to fetch.
+     */
+    orderBy?: DojoSaleItemOrderByWithRelationInput | DojoSaleItemOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for DojoSaleItems.
+     */
+    cursor?: DojoSaleItemWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DojoSaleItems from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DojoSaleItems.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DojoSaleItems.
+     */
+    distinct?: DojoSaleItemScalarFieldEnum | DojoSaleItemScalarFieldEnum[]
+  }
+
+  /**
+   * DojoSaleItem findMany
+   */
+  export type DojoSaleItemFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DojoSaleItem
+     */
+    select?: DojoSaleItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DojoSaleItem
+     */
+    omit?: DojoSaleItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DojoSaleItemInclude<ExtArgs> | null
+    /**
+     * Filter, which DojoSaleItems to fetch.
+     */
+    where?: DojoSaleItemWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DojoSaleItems to fetch.
+     */
+    orderBy?: DojoSaleItemOrderByWithRelationInput | DojoSaleItemOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing DojoSaleItems.
+     */
+    cursor?: DojoSaleItemWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DojoSaleItems from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DojoSaleItems.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DojoSaleItems.
+     */
+    distinct?: DojoSaleItemScalarFieldEnum | DojoSaleItemScalarFieldEnum[]
+  }
+
+  /**
+   * DojoSaleItem create
+   */
+  export type DojoSaleItemCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DojoSaleItem
+     */
+    select?: DojoSaleItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DojoSaleItem
+     */
+    omit?: DojoSaleItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DojoSaleItemInclude<ExtArgs> | null
+    /**
+     * The data needed to create a DojoSaleItem.
+     */
+    data: XOR<DojoSaleItemCreateInput, DojoSaleItemUncheckedCreateInput>
+  }
+
+  /**
+   * DojoSaleItem createMany
+   */
+  export type DojoSaleItemCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many DojoSaleItems.
+     */
+    data: DojoSaleItemCreateManyInput | DojoSaleItemCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * DojoSaleItem createManyAndReturn
+   */
+  export type DojoSaleItemCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DojoSaleItem
+     */
+    select?: DojoSaleItemSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the DojoSaleItem
+     */
+    omit?: DojoSaleItemOmit<ExtArgs> | null
+    /**
+     * The data used to create many DojoSaleItems.
+     */
+    data: DojoSaleItemCreateManyInput | DojoSaleItemCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DojoSaleItemIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * DojoSaleItem update
+   */
+  export type DojoSaleItemUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DojoSaleItem
+     */
+    select?: DojoSaleItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DojoSaleItem
+     */
+    omit?: DojoSaleItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DojoSaleItemInclude<ExtArgs> | null
+    /**
+     * The data needed to update a DojoSaleItem.
+     */
+    data: XOR<DojoSaleItemUpdateInput, DojoSaleItemUncheckedUpdateInput>
+    /**
+     * Choose, which DojoSaleItem to update.
+     */
+    where: DojoSaleItemWhereUniqueInput
+  }
+
+  /**
+   * DojoSaleItem updateMany
+   */
+  export type DojoSaleItemUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update DojoSaleItems.
+     */
+    data: XOR<DojoSaleItemUpdateManyMutationInput, DojoSaleItemUncheckedUpdateManyInput>
+    /**
+     * Filter which DojoSaleItems to update
+     */
+    where?: DojoSaleItemWhereInput
+    /**
+     * Limit how many DojoSaleItems to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * DojoSaleItem updateManyAndReturn
+   */
+  export type DojoSaleItemUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DojoSaleItem
+     */
+    select?: DojoSaleItemSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the DojoSaleItem
+     */
+    omit?: DojoSaleItemOmit<ExtArgs> | null
+    /**
+     * The data used to update DojoSaleItems.
+     */
+    data: XOR<DojoSaleItemUpdateManyMutationInput, DojoSaleItemUncheckedUpdateManyInput>
+    /**
+     * Filter which DojoSaleItems to update
+     */
+    where?: DojoSaleItemWhereInput
+    /**
+     * Limit how many DojoSaleItems to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DojoSaleItemIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * DojoSaleItem upsert
+   */
+  export type DojoSaleItemUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DojoSaleItem
+     */
+    select?: DojoSaleItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DojoSaleItem
+     */
+    omit?: DojoSaleItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DojoSaleItemInclude<ExtArgs> | null
+    /**
+     * The filter to search for the DojoSaleItem to update in case it exists.
+     */
+    where: DojoSaleItemWhereUniqueInput
+    /**
+     * In case the DojoSaleItem found by the `where` argument doesn't exist, create a new DojoSaleItem with this data.
+     */
+    create: XOR<DojoSaleItemCreateInput, DojoSaleItemUncheckedCreateInput>
+    /**
+     * In case the DojoSaleItem was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<DojoSaleItemUpdateInput, DojoSaleItemUncheckedUpdateInput>
+  }
+
+  /**
+   * DojoSaleItem delete
+   */
+  export type DojoSaleItemDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DojoSaleItem
+     */
+    select?: DojoSaleItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DojoSaleItem
+     */
+    omit?: DojoSaleItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DojoSaleItemInclude<ExtArgs> | null
+    /**
+     * Filter which DojoSaleItem to delete.
+     */
+    where: DojoSaleItemWhereUniqueInput
+  }
+
+  /**
+   * DojoSaleItem deleteMany
+   */
+  export type DojoSaleItemDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which DojoSaleItems to delete
+     */
+    where?: DojoSaleItemWhereInput
+    /**
+     * Limit how many DojoSaleItems to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * DojoSaleItem without action
+   */
+  export type DojoSaleItemDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DojoSaleItem
+     */
+    select?: DojoSaleItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DojoSaleItem
+     */
+    omit?: DojoSaleItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DojoSaleItemInclude<ExtArgs> | null
   }
 
 
@@ -28065,6 +32158,51 @@ export namespace Prisma {
   export type ShopProductScalarFieldEnum = (typeof ShopProductScalarFieldEnum)[keyof typeof ShopProductScalarFieldEnum]
 
 
+  export const DojoInventoryItemScalarFieldEnum: {
+    id: 'id',
+    dojoId: 'dojoId',
+    productId: 'productId',
+    quantityOnHand: 'quantityOnHand',
+    unitPrice: 'unitPrice',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type DojoInventoryItemScalarFieldEnum = (typeof DojoInventoryItemScalarFieldEnum)[keyof typeof DojoInventoryItemScalarFieldEnum]
+
+
+  export const DojoSaleScalarFieldEnum: {
+    id: 'id',
+    dojoId: 'dojoId',
+    receiptNo: 'receiptNo',
+    memberId: 'memberId',
+    buyerName: 'buyerName',
+    soldByUserId: 'soldByUserId',
+    soldByName: 'soldByName',
+    subtotal: 'subtotal',
+    discount: 'discount',
+    total: 'total',
+    paymentMethod: 'paymentMethod',
+    notes: 'notes',
+    createdAt: 'createdAt'
+  };
+
+  export type DojoSaleScalarFieldEnum = (typeof DojoSaleScalarFieldEnum)[keyof typeof DojoSaleScalarFieldEnum]
+
+
+  export const DojoSaleItemScalarFieldEnum: {
+    id: 'id',
+    saleId: 'saleId',
+    productId: 'productId',
+    productName: 'productName',
+    quantity: 'quantity',
+    unitPrice: 'unitPrice',
+    lineTotal: 'lineTotal'
+  };
+
+  export type DojoSaleItemScalarFieldEnum = (typeof DojoSaleItemScalarFieldEnum)[keyof typeof DojoSaleItemScalarFieldEnum]
+
+
   export const ShopOrderScalarFieldEnum: {
     id: 'id',
     memberId: 'memberId',
@@ -28534,6 +32672,8 @@ export namespace Prisma {
     attendance?: AttendanceListRelationFilter
     events?: EventListRelationFilter
     announcements?: AnnouncementListRelationFilter
+    inventoryItems?: DojoInventoryItemListRelationFilter
+    sales?: DojoSaleListRelationFilter
   }
 
   export type DojoOrderByWithRelationInput = {
@@ -28560,6 +32700,8 @@ export namespace Prisma {
     attendance?: AttendanceOrderByRelationAggregateInput
     events?: EventOrderByRelationAggregateInput
     announcements?: AnnouncementOrderByRelationAggregateInput
+    inventoryItems?: DojoInventoryItemOrderByRelationAggregateInput
+    sales?: DojoSaleOrderByRelationAggregateInput
   }
 
   export type DojoWhereUniqueInput = Prisma.AtLeast<{
@@ -28589,6 +32731,8 @@ export namespace Prisma {
     attendance?: AttendanceListRelationFilter
     events?: EventListRelationFilter
     announcements?: AnnouncementListRelationFilter
+    inventoryItems?: DojoInventoryItemListRelationFilter
+    sales?: DojoSaleListRelationFilter
   }, "id">
 
   export type DojoOrderByWithAggregationInput = {
@@ -28791,6 +32935,8 @@ export namespace Prisma {
     eventsPosted?: EventListRelationFilter
     announcementsPosted?: AnnouncementListRelationFilter
     eventCheckIns?: EventRegistrationListRelationFilter
+    dojoSalesAsBuyer?: DojoSaleListRelationFilter
+    dojoSalesSold?: DojoSaleListRelationFilter
   }
 
   export type MemberOrderByWithRelationInput = {
@@ -28830,6 +32976,8 @@ export namespace Prisma {
     eventsPosted?: EventOrderByRelationAggregateInput
     announcementsPosted?: AnnouncementOrderByRelationAggregateInput
     eventCheckIns?: EventRegistrationOrderByRelationAggregateInput
+    dojoSalesAsBuyer?: DojoSaleOrderByRelationAggregateInput
+    dojoSalesSold?: DojoSaleOrderByRelationAggregateInput
   }
 
   export type MemberWhereUniqueInput = Prisma.AtLeast<{
@@ -28872,6 +33020,8 @@ export namespace Prisma {
     eventsPosted?: EventListRelationFilter
     announcementsPosted?: AnnouncementListRelationFilter
     eventCheckIns?: EventRegistrationListRelationFilter
+    dojoSalesAsBuyer?: DojoSaleListRelationFilter
+    dojoSalesSold?: DojoSaleListRelationFilter
   }, "id" | "email" | "memberNumber">
 
   export type MemberOrderByWithAggregationInput = {
@@ -29827,6 +33977,8 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"ShopProduct"> | Date | string
     updatedAt?: DateTimeFilter<"ShopProduct"> | Date | string
     orderItems?: ShopOrderItemListRelationFilter
+    dojoInventory?: DojoInventoryItemListRelationFilter
+    dojoSaleItems?: DojoSaleItemListRelationFilter
   }
 
   export type ShopProductOrderByWithRelationInput = {
@@ -29841,6 +33993,8 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     orderItems?: ShopOrderItemOrderByRelationAggregateInput
+    dojoInventory?: DojoInventoryItemOrderByRelationAggregateInput
+    dojoSaleItems?: DojoSaleItemOrderByRelationAggregateInput
   }
 
   export type ShopProductWhereUniqueInput = Prisma.AtLeast<{
@@ -29858,6 +34012,8 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"ShopProduct"> | Date | string
     updatedAt?: DateTimeFilter<"ShopProduct"> | Date | string
     orderItems?: ShopOrderItemListRelationFilter
+    dojoInventory?: DojoInventoryItemListRelationFilter
+    dojoSaleItems?: DojoSaleItemListRelationFilter
   }, "id">
 
   export type ShopProductOrderByWithAggregationInput = {
@@ -29892,6 +34048,254 @@ export namespace Prisma {
     isActive?: BoolWithAggregatesFilter<"ShopProduct"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"ShopProduct"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"ShopProduct"> | Date | string
+  }
+
+  export type DojoInventoryItemWhereInput = {
+    AND?: DojoInventoryItemWhereInput | DojoInventoryItemWhereInput[]
+    OR?: DojoInventoryItemWhereInput[]
+    NOT?: DojoInventoryItemWhereInput | DojoInventoryItemWhereInput[]
+    id?: UuidFilter<"DojoInventoryItem"> | string
+    dojoId?: UuidFilter<"DojoInventoryItem"> | string
+    productId?: UuidFilter<"DojoInventoryItem"> | string
+    quantityOnHand?: IntFilter<"DojoInventoryItem"> | number
+    unitPrice?: DecimalFilter<"DojoInventoryItem"> | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFilter<"DojoInventoryItem"> | Date | string
+    updatedAt?: DateTimeFilter<"DojoInventoryItem"> | Date | string
+    dojo?: XOR<DojoScalarRelationFilter, DojoWhereInput>
+    product?: XOR<ShopProductScalarRelationFilter, ShopProductWhereInput>
+  }
+
+  export type DojoInventoryItemOrderByWithRelationInput = {
+    id?: SortOrder
+    dojoId?: SortOrder
+    productId?: SortOrder
+    quantityOnHand?: SortOrder
+    unitPrice?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    dojo?: DojoOrderByWithRelationInput
+    product?: ShopProductOrderByWithRelationInput
+  }
+
+  export type DojoInventoryItemWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    dojoId_productId?: DojoInventoryItemDojoIdProductIdCompoundUniqueInput
+    AND?: DojoInventoryItemWhereInput | DojoInventoryItemWhereInput[]
+    OR?: DojoInventoryItemWhereInput[]
+    NOT?: DojoInventoryItemWhereInput | DojoInventoryItemWhereInput[]
+    dojoId?: UuidFilter<"DojoInventoryItem"> | string
+    productId?: UuidFilter<"DojoInventoryItem"> | string
+    quantityOnHand?: IntFilter<"DojoInventoryItem"> | number
+    unitPrice?: DecimalFilter<"DojoInventoryItem"> | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFilter<"DojoInventoryItem"> | Date | string
+    updatedAt?: DateTimeFilter<"DojoInventoryItem"> | Date | string
+    dojo?: XOR<DojoScalarRelationFilter, DojoWhereInput>
+    product?: XOR<ShopProductScalarRelationFilter, ShopProductWhereInput>
+  }, "id" | "dojoId_productId">
+
+  export type DojoInventoryItemOrderByWithAggregationInput = {
+    id?: SortOrder
+    dojoId?: SortOrder
+    productId?: SortOrder
+    quantityOnHand?: SortOrder
+    unitPrice?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: DojoInventoryItemCountOrderByAggregateInput
+    _avg?: DojoInventoryItemAvgOrderByAggregateInput
+    _max?: DojoInventoryItemMaxOrderByAggregateInput
+    _min?: DojoInventoryItemMinOrderByAggregateInput
+    _sum?: DojoInventoryItemSumOrderByAggregateInput
+  }
+
+  export type DojoInventoryItemScalarWhereWithAggregatesInput = {
+    AND?: DojoInventoryItemScalarWhereWithAggregatesInput | DojoInventoryItemScalarWhereWithAggregatesInput[]
+    OR?: DojoInventoryItemScalarWhereWithAggregatesInput[]
+    NOT?: DojoInventoryItemScalarWhereWithAggregatesInput | DojoInventoryItemScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"DojoInventoryItem"> | string
+    dojoId?: UuidWithAggregatesFilter<"DojoInventoryItem"> | string
+    productId?: UuidWithAggregatesFilter<"DojoInventoryItem"> | string
+    quantityOnHand?: IntWithAggregatesFilter<"DojoInventoryItem"> | number
+    unitPrice?: DecimalWithAggregatesFilter<"DojoInventoryItem"> | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeWithAggregatesFilter<"DojoInventoryItem"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"DojoInventoryItem"> | Date | string
+  }
+
+  export type DojoSaleWhereInput = {
+    AND?: DojoSaleWhereInput | DojoSaleWhereInput[]
+    OR?: DojoSaleWhereInput[]
+    NOT?: DojoSaleWhereInput | DojoSaleWhereInput[]
+    id?: UuidFilter<"DojoSale"> | string
+    dojoId?: UuidFilter<"DojoSale"> | string
+    receiptNo?: StringFilter<"DojoSale"> | string
+    memberId?: UuidNullableFilter<"DojoSale"> | string | null
+    buyerName?: StringFilter<"DojoSale"> | string
+    soldByUserId?: UuidNullableFilter<"DojoSale"> | string | null
+    soldByName?: StringNullableFilter<"DojoSale"> | string | null
+    subtotal?: DecimalFilter<"DojoSale"> | Decimal | DecimalJsLike | number | string
+    discount?: DecimalFilter<"DojoSale"> | Decimal | DecimalJsLike | number | string
+    total?: DecimalFilter<"DojoSale"> | Decimal | DecimalJsLike | number | string
+    paymentMethod?: StringNullableFilter<"DojoSale"> | string | null
+    notes?: StringNullableFilter<"DojoSale"> | string | null
+    createdAt?: DateTimeFilter<"DojoSale"> | Date | string
+    dojo?: XOR<DojoScalarRelationFilter, DojoWhereInput>
+    member?: XOR<MemberNullableScalarRelationFilter, MemberWhereInput> | null
+    soldBy?: XOR<MemberNullableScalarRelationFilter, MemberWhereInput> | null
+    items?: DojoSaleItemListRelationFilter
+  }
+
+  export type DojoSaleOrderByWithRelationInput = {
+    id?: SortOrder
+    dojoId?: SortOrder
+    receiptNo?: SortOrder
+    memberId?: SortOrderInput | SortOrder
+    buyerName?: SortOrder
+    soldByUserId?: SortOrderInput | SortOrder
+    soldByName?: SortOrderInput | SortOrder
+    subtotal?: SortOrder
+    discount?: SortOrder
+    total?: SortOrder
+    paymentMethod?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    dojo?: DojoOrderByWithRelationInput
+    member?: MemberOrderByWithRelationInput
+    soldBy?: MemberOrderByWithRelationInput
+    items?: DojoSaleItemOrderByRelationAggregateInput
+  }
+
+  export type DojoSaleWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    dojoId_receiptNo?: DojoSaleDojoIdReceiptNoCompoundUniqueInput
+    AND?: DojoSaleWhereInput | DojoSaleWhereInput[]
+    OR?: DojoSaleWhereInput[]
+    NOT?: DojoSaleWhereInput | DojoSaleWhereInput[]
+    dojoId?: UuidFilter<"DojoSale"> | string
+    receiptNo?: StringFilter<"DojoSale"> | string
+    memberId?: UuidNullableFilter<"DojoSale"> | string | null
+    buyerName?: StringFilter<"DojoSale"> | string
+    soldByUserId?: UuidNullableFilter<"DojoSale"> | string | null
+    soldByName?: StringNullableFilter<"DojoSale"> | string | null
+    subtotal?: DecimalFilter<"DojoSale"> | Decimal | DecimalJsLike | number | string
+    discount?: DecimalFilter<"DojoSale"> | Decimal | DecimalJsLike | number | string
+    total?: DecimalFilter<"DojoSale"> | Decimal | DecimalJsLike | number | string
+    paymentMethod?: StringNullableFilter<"DojoSale"> | string | null
+    notes?: StringNullableFilter<"DojoSale"> | string | null
+    createdAt?: DateTimeFilter<"DojoSale"> | Date | string
+    dojo?: XOR<DojoScalarRelationFilter, DojoWhereInput>
+    member?: XOR<MemberNullableScalarRelationFilter, MemberWhereInput> | null
+    soldBy?: XOR<MemberNullableScalarRelationFilter, MemberWhereInput> | null
+    items?: DojoSaleItemListRelationFilter
+  }, "id" | "dojoId_receiptNo">
+
+  export type DojoSaleOrderByWithAggregationInput = {
+    id?: SortOrder
+    dojoId?: SortOrder
+    receiptNo?: SortOrder
+    memberId?: SortOrderInput | SortOrder
+    buyerName?: SortOrder
+    soldByUserId?: SortOrderInput | SortOrder
+    soldByName?: SortOrderInput | SortOrder
+    subtotal?: SortOrder
+    discount?: SortOrder
+    total?: SortOrder
+    paymentMethod?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    _count?: DojoSaleCountOrderByAggregateInput
+    _avg?: DojoSaleAvgOrderByAggregateInput
+    _max?: DojoSaleMaxOrderByAggregateInput
+    _min?: DojoSaleMinOrderByAggregateInput
+    _sum?: DojoSaleSumOrderByAggregateInput
+  }
+
+  export type DojoSaleScalarWhereWithAggregatesInput = {
+    AND?: DojoSaleScalarWhereWithAggregatesInput | DojoSaleScalarWhereWithAggregatesInput[]
+    OR?: DojoSaleScalarWhereWithAggregatesInput[]
+    NOT?: DojoSaleScalarWhereWithAggregatesInput | DojoSaleScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"DojoSale"> | string
+    dojoId?: UuidWithAggregatesFilter<"DojoSale"> | string
+    receiptNo?: StringWithAggregatesFilter<"DojoSale"> | string
+    memberId?: UuidNullableWithAggregatesFilter<"DojoSale"> | string | null
+    buyerName?: StringWithAggregatesFilter<"DojoSale"> | string
+    soldByUserId?: UuidNullableWithAggregatesFilter<"DojoSale"> | string | null
+    soldByName?: StringNullableWithAggregatesFilter<"DojoSale"> | string | null
+    subtotal?: DecimalWithAggregatesFilter<"DojoSale"> | Decimal | DecimalJsLike | number | string
+    discount?: DecimalWithAggregatesFilter<"DojoSale"> | Decimal | DecimalJsLike | number | string
+    total?: DecimalWithAggregatesFilter<"DojoSale"> | Decimal | DecimalJsLike | number | string
+    paymentMethod?: StringNullableWithAggregatesFilter<"DojoSale"> | string | null
+    notes?: StringNullableWithAggregatesFilter<"DojoSale"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"DojoSale"> | Date | string
+  }
+
+  export type DojoSaleItemWhereInput = {
+    AND?: DojoSaleItemWhereInput | DojoSaleItemWhereInput[]
+    OR?: DojoSaleItemWhereInput[]
+    NOT?: DojoSaleItemWhereInput | DojoSaleItemWhereInput[]
+    id?: UuidFilter<"DojoSaleItem"> | string
+    saleId?: UuidFilter<"DojoSaleItem"> | string
+    productId?: UuidFilter<"DojoSaleItem"> | string
+    productName?: StringFilter<"DojoSaleItem"> | string
+    quantity?: IntFilter<"DojoSaleItem"> | number
+    unitPrice?: DecimalFilter<"DojoSaleItem"> | Decimal | DecimalJsLike | number | string
+    lineTotal?: DecimalFilter<"DojoSaleItem"> | Decimal | DecimalJsLike | number | string
+    sale?: XOR<DojoSaleScalarRelationFilter, DojoSaleWhereInput>
+    product?: XOR<ShopProductScalarRelationFilter, ShopProductWhereInput>
+  }
+
+  export type DojoSaleItemOrderByWithRelationInput = {
+    id?: SortOrder
+    saleId?: SortOrder
+    productId?: SortOrder
+    productName?: SortOrder
+    quantity?: SortOrder
+    unitPrice?: SortOrder
+    lineTotal?: SortOrder
+    sale?: DojoSaleOrderByWithRelationInput
+    product?: ShopProductOrderByWithRelationInput
+  }
+
+  export type DojoSaleItemWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: DojoSaleItemWhereInput | DojoSaleItemWhereInput[]
+    OR?: DojoSaleItemWhereInput[]
+    NOT?: DojoSaleItemWhereInput | DojoSaleItemWhereInput[]
+    saleId?: UuidFilter<"DojoSaleItem"> | string
+    productId?: UuidFilter<"DojoSaleItem"> | string
+    productName?: StringFilter<"DojoSaleItem"> | string
+    quantity?: IntFilter<"DojoSaleItem"> | number
+    unitPrice?: DecimalFilter<"DojoSaleItem"> | Decimal | DecimalJsLike | number | string
+    lineTotal?: DecimalFilter<"DojoSaleItem"> | Decimal | DecimalJsLike | number | string
+    sale?: XOR<DojoSaleScalarRelationFilter, DojoSaleWhereInput>
+    product?: XOR<ShopProductScalarRelationFilter, ShopProductWhereInput>
+  }, "id">
+
+  export type DojoSaleItemOrderByWithAggregationInput = {
+    id?: SortOrder
+    saleId?: SortOrder
+    productId?: SortOrder
+    productName?: SortOrder
+    quantity?: SortOrder
+    unitPrice?: SortOrder
+    lineTotal?: SortOrder
+    _count?: DojoSaleItemCountOrderByAggregateInput
+    _avg?: DojoSaleItemAvgOrderByAggregateInput
+    _max?: DojoSaleItemMaxOrderByAggregateInput
+    _min?: DojoSaleItemMinOrderByAggregateInput
+    _sum?: DojoSaleItemSumOrderByAggregateInput
+  }
+
+  export type DojoSaleItemScalarWhereWithAggregatesInput = {
+    AND?: DojoSaleItemScalarWhereWithAggregatesInput | DojoSaleItemScalarWhereWithAggregatesInput[]
+    OR?: DojoSaleItemScalarWhereWithAggregatesInput[]
+    NOT?: DojoSaleItemScalarWhereWithAggregatesInput | DojoSaleItemScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"DojoSaleItem"> | string
+    saleId?: UuidWithAggregatesFilter<"DojoSaleItem"> | string
+    productId?: UuidWithAggregatesFilter<"DojoSaleItem"> | string
+    productName?: StringWithAggregatesFilter<"DojoSaleItem"> | string
+    quantity?: IntWithAggregatesFilter<"DojoSaleItem"> | number
+    unitPrice?: DecimalWithAggregatesFilter<"DojoSaleItem"> | Decimal | DecimalJsLike | number | string
+    lineTotal?: DecimalWithAggregatesFilter<"DojoSaleItem"> | Decimal | DecimalJsLike | number | string
   }
 
   export type ShopOrderWhereInput = {
@@ -30427,6 +34831,8 @@ export namespace Prisma {
     attendance?: AttendanceCreateNestedManyWithoutDojoInput
     events?: EventCreateNestedManyWithoutDojoInput
     announcements?: AnnouncementCreateNestedManyWithoutDojoInput
+    inventoryItems?: DojoInventoryItemCreateNestedManyWithoutDojoInput
+    sales?: DojoSaleCreateNestedManyWithoutDojoInput
   }
 
   export type DojoUncheckedCreateInput = {
@@ -30453,6 +34859,8 @@ export namespace Prisma {
     attendance?: AttendanceUncheckedCreateNestedManyWithoutDojoInput
     events?: EventUncheckedCreateNestedManyWithoutDojoInput
     announcements?: AnnouncementUncheckedCreateNestedManyWithoutDojoInput
+    inventoryItems?: DojoInventoryItemUncheckedCreateNestedManyWithoutDojoInput
+    sales?: DojoSaleUncheckedCreateNestedManyWithoutDojoInput
   }
 
   export type DojoUpdateInput = {
@@ -30479,6 +34887,8 @@ export namespace Prisma {
     attendance?: AttendanceUpdateManyWithoutDojoNestedInput
     events?: EventUpdateManyWithoutDojoNestedInput
     announcements?: AnnouncementUpdateManyWithoutDojoNestedInput
+    inventoryItems?: DojoInventoryItemUpdateManyWithoutDojoNestedInput
+    sales?: DojoSaleUpdateManyWithoutDojoNestedInput
   }
 
   export type DojoUncheckedUpdateInput = {
@@ -30505,6 +34915,8 @@ export namespace Prisma {
     attendance?: AttendanceUncheckedUpdateManyWithoutDojoNestedInput
     events?: EventUncheckedUpdateManyWithoutDojoNestedInput
     announcements?: AnnouncementUncheckedUpdateManyWithoutDojoNestedInput
+    inventoryItems?: DojoInventoryItemUncheckedUpdateManyWithoutDojoNestedInput
+    sales?: DojoSaleUncheckedUpdateManyWithoutDojoNestedInput
   }
 
   export type DojoCreateManyInput = {
@@ -30740,6 +35152,8 @@ export namespace Prisma {
     eventsPosted?: EventCreateNestedManyWithoutPostedByInput
     announcementsPosted?: AnnouncementCreateNestedManyWithoutPostedByInput
     eventCheckIns?: EventRegistrationCreateNestedManyWithoutCheckedInByInput
+    dojoSalesAsBuyer?: DojoSaleCreateNestedManyWithoutMemberInput
+    dojoSalesSold?: DojoSaleCreateNestedManyWithoutSoldByInput
   }
 
   export type MemberUncheckedCreateInput = {
@@ -30778,6 +35192,8 @@ export namespace Prisma {
     eventsPosted?: EventUncheckedCreateNestedManyWithoutPostedByInput
     announcementsPosted?: AnnouncementUncheckedCreateNestedManyWithoutPostedByInput
     eventCheckIns?: EventRegistrationUncheckedCreateNestedManyWithoutCheckedInByInput
+    dojoSalesAsBuyer?: DojoSaleUncheckedCreateNestedManyWithoutMemberInput
+    dojoSalesSold?: DojoSaleUncheckedCreateNestedManyWithoutSoldByInput
   }
 
   export type MemberUpdateInput = {
@@ -30816,6 +35232,8 @@ export namespace Prisma {
     eventsPosted?: EventUpdateManyWithoutPostedByNestedInput
     announcementsPosted?: AnnouncementUpdateManyWithoutPostedByNestedInput
     eventCheckIns?: EventRegistrationUpdateManyWithoutCheckedInByNestedInput
+    dojoSalesAsBuyer?: DojoSaleUpdateManyWithoutMemberNestedInput
+    dojoSalesSold?: DojoSaleUpdateManyWithoutSoldByNestedInput
   }
 
   export type MemberUncheckedUpdateInput = {
@@ -30854,6 +35272,8 @@ export namespace Prisma {
     eventsPosted?: EventUncheckedUpdateManyWithoutPostedByNestedInput
     announcementsPosted?: AnnouncementUncheckedUpdateManyWithoutPostedByNestedInput
     eventCheckIns?: EventRegistrationUncheckedUpdateManyWithoutCheckedInByNestedInput
+    dojoSalesAsBuyer?: DojoSaleUncheckedUpdateManyWithoutMemberNestedInput
+    dojoSalesSold?: DojoSaleUncheckedUpdateManyWithoutSoldByNestedInput
   }
 
   export type MemberCreateManyInput = {
@@ -31887,6 +36307,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     orderItems?: ShopOrderItemCreateNestedManyWithoutProductInput
+    dojoInventory?: DojoInventoryItemCreateNestedManyWithoutProductInput
+    dojoSaleItems?: DojoSaleItemCreateNestedManyWithoutProductInput
   }
 
   export type ShopProductUncheckedCreateInput = {
@@ -31901,6 +36323,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     orderItems?: ShopOrderItemUncheckedCreateNestedManyWithoutProductInput
+    dojoInventory?: DojoInventoryItemUncheckedCreateNestedManyWithoutProductInput
+    dojoSaleItems?: DojoSaleItemUncheckedCreateNestedManyWithoutProductInput
   }
 
   export type ShopProductUpdateInput = {
@@ -31915,6 +36339,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     orderItems?: ShopOrderItemUpdateManyWithoutProductNestedInput
+    dojoInventory?: DojoInventoryItemUpdateManyWithoutProductNestedInput
+    dojoSaleItems?: DojoSaleItemUpdateManyWithoutProductNestedInput
   }
 
   export type ShopProductUncheckedUpdateInput = {
@@ -31929,6 +36355,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     orderItems?: ShopOrderItemUncheckedUpdateManyWithoutProductNestedInput
+    dojoInventory?: DojoInventoryItemUncheckedUpdateManyWithoutProductNestedInput
+    dojoSaleItems?: DojoSaleItemUncheckedUpdateManyWithoutProductNestedInput
   }
 
   export type ShopProductCreateManyInput = {
@@ -31968,6 +36396,255 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DojoInventoryItemCreateInput = {
+    id?: string
+    quantityOnHand?: number
+    unitPrice: Decimal | DecimalJsLike | number | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    dojo: DojoCreateNestedOneWithoutInventoryItemsInput
+    product: ShopProductCreateNestedOneWithoutDojoInventoryInput
+  }
+
+  export type DojoInventoryItemUncheckedCreateInput = {
+    id?: string
+    dojoId: string
+    productId: string
+    quantityOnHand?: number
+    unitPrice: Decimal | DecimalJsLike | number | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DojoInventoryItemUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    quantityOnHand?: IntFieldUpdateOperationsInput | number
+    unitPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    dojo?: DojoUpdateOneRequiredWithoutInventoryItemsNestedInput
+    product?: ShopProductUpdateOneRequiredWithoutDojoInventoryNestedInput
+  }
+
+  export type DojoInventoryItemUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    dojoId?: StringFieldUpdateOperationsInput | string
+    productId?: StringFieldUpdateOperationsInput | string
+    quantityOnHand?: IntFieldUpdateOperationsInput | number
+    unitPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DojoInventoryItemCreateManyInput = {
+    id?: string
+    dojoId: string
+    productId: string
+    quantityOnHand?: number
+    unitPrice: Decimal | DecimalJsLike | number | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DojoInventoryItemUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    quantityOnHand?: IntFieldUpdateOperationsInput | number
+    unitPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DojoInventoryItemUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    dojoId?: StringFieldUpdateOperationsInput | string
+    productId?: StringFieldUpdateOperationsInput | string
+    quantityOnHand?: IntFieldUpdateOperationsInput | number
+    unitPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DojoSaleCreateInput = {
+    id?: string
+    receiptNo: string
+    buyerName: string
+    soldByName?: string | null
+    subtotal: Decimal | DecimalJsLike | number | string
+    discount?: Decimal | DecimalJsLike | number | string
+    total: Decimal | DecimalJsLike | number | string
+    paymentMethod?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    dojo: DojoCreateNestedOneWithoutSalesInput
+    member?: MemberCreateNestedOneWithoutDojoSalesAsBuyerInput
+    soldBy?: MemberCreateNestedOneWithoutDojoSalesSoldInput
+    items?: DojoSaleItemCreateNestedManyWithoutSaleInput
+  }
+
+  export type DojoSaleUncheckedCreateInput = {
+    id?: string
+    dojoId: string
+    receiptNo: string
+    memberId?: string | null
+    buyerName: string
+    soldByUserId?: string | null
+    soldByName?: string | null
+    subtotal: Decimal | DecimalJsLike | number | string
+    discount?: Decimal | DecimalJsLike | number | string
+    total: Decimal | DecimalJsLike | number | string
+    paymentMethod?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    items?: DojoSaleItemUncheckedCreateNestedManyWithoutSaleInput
+  }
+
+  export type DojoSaleUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    receiptNo?: StringFieldUpdateOperationsInput | string
+    buyerName?: StringFieldUpdateOperationsInput | string
+    soldByName?: NullableStringFieldUpdateOperationsInput | string | null
+    subtotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    dojo?: DojoUpdateOneRequiredWithoutSalesNestedInput
+    member?: MemberUpdateOneWithoutDojoSalesAsBuyerNestedInput
+    soldBy?: MemberUpdateOneWithoutDojoSalesSoldNestedInput
+    items?: DojoSaleItemUpdateManyWithoutSaleNestedInput
+  }
+
+  export type DojoSaleUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    dojoId?: StringFieldUpdateOperationsInput | string
+    receiptNo?: StringFieldUpdateOperationsInput | string
+    memberId?: NullableStringFieldUpdateOperationsInput | string | null
+    buyerName?: StringFieldUpdateOperationsInput | string
+    soldByUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    soldByName?: NullableStringFieldUpdateOperationsInput | string | null
+    subtotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    items?: DojoSaleItemUncheckedUpdateManyWithoutSaleNestedInput
+  }
+
+  export type DojoSaleCreateManyInput = {
+    id?: string
+    dojoId: string
+    receiptNo: string
+    memberId?: string | null
+    buyerName: string
+    soldByUserId?: string | null
+    soldByName?: string | null
+    subtotal: Decimal | DecimalJsLike | number | string
+    discount?: Decimal | DecimalJsLike | number | string
+    total: Decimal | DecimalJsLike | number | string
+    paymentMethod?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+  }
+
+  export type DojoSaleUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    receiptNo?: StringFieldUpdateOperationsInput | string
+    buyerName?: StringFieldUpdateOperationsInput | string
+    soldByName?: NullableStringFieldUpdateOperationsInput | string | null
+    subtotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DojoSaleUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    dojoId?: StringFieldUpdateOperationsInput | string
+    receiptNo?: StringFieldUpdateOperationsInput | string
+    memberId?: NullableStringFieldUpdateOperationsInput | string | null
+    buyerName?: StringFieldUpdateOperationsInput | string
+    soldByUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    soldByName?: NullableStringFieldUpdateOperationsInput | string | null
+    subtotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DojoSaleItemCreateInput = {
+    id?: string
+    productName: string
+    quantity: number
+    unitPrice: Decimal | DecimalJsLike | number | string
+    lineTotal: Decimal | DecimalJsLike | number | string
+    sale: DojoSaleCreateNestedOneWithoutItemsInput
+    product: ShopProductCreateNestedOneWithoutDojoSaleItemsInput
+  }
+
+  export type DojoSaleItemUncheckedCreateInput = {
+    id?: string
+    saleId: string
+    productId: string
+    productName: string
+    quantity: number
+    unitPrice: Decimal | DecimalJsLike | number | string
+    lineTotal: Decimal | DecimalJsLike | number | string
+  }
+
+  export type DojoSaleItemUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    productName?: StringFieldUpdateOperationsInput | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    unitPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    lineTotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    sale?: DojoSaleUpdateOneRequiredWithoutItemsNestedInput
+    product?: ShopProductUpdateOneRequiredWithoutDojoSaleItemsNestedInput
+  }
+
+  export type DojoSaleItemUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    saleId?: StringFieldUpdateOperationsInput | string
+    productId?: StringFieldUpdateOperationsInput | string
+    productName?: StringFieldUpdateOperationsInput | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    unitPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    lineTotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+  }
+
+  export type DojoSaleItemCreateManyInput = {
+    id?: string
+    saleId: string
+    productId: string
+    productName: string
+    quantity: number
+    unitPrice: Decimal | DecimalJsLike | number | string
+    lineTotal: Decimal | DecimalJsLike | number | string
+  }
+
+  export type DojoSaleItemUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    productName?: StringFieldUpdateOperationsInput | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    unitPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    lineTotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+  }
+
+  export type DojoSaleItemUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    saleId?: StringFieldUpdateOperationsInput | string
+    productId?: StringFieldUpdateOperationsInput | string
+    productName?: StringFieldUpdateOperationsInput | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    unitPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    lineTotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
   }
 
   export type ShopOrderCreateInput = {
@@ -32736,6 +37413,18 @@ export namespace Prisma {
     none?: AnnouncementWhereInput
   }
 
+  export type DojoInventoryItemListRelationFilter = {
+    every?: DojoInventoryItemWhereInput
+    some?: DojoInventoryItemWhereInput
+    none?: DojoInventoryItemWhereInput
+  }
+
+  export type DojoSaleListRelationFilter = {
+    every?: DojoSaleWhereInput
+    some?: DojoSaleWhereInput
+    none?: DojoSaleWhereInput
+  }
+
   export type ShopOrderOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -32757,6 +37446,14 @@ export namespace Prisma {
   }
 
   export type AnnouncementOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type DojoInventoryItemOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type DojoSaleOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -33836,7 +38533,17 @@ export namespace Prisma {
     none?: ShopOrderItemWhereInput
   }
 
+  export type DojoSaleItemListRelationFilter = {
+    every?: DojoSaleItemWhereInput
+    some?: DojoSaleItemWhereInput
+    none?: DojoSaleItemWhereInput
+  }
+
   export type ShopOrderItemOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type DojoSaleItemOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -33887,6 +38594,168 @@ export namespace Prisma {
   export type ShopProductSumOrderByAggregateInput = {
     price?: SortOrder
     stock?: SortOrder
+  }
+
+  export type ShopProductScalarRelationFilter = {
+    is?: ShopProductWhereInput
+    isNot?: ShopProductWhereInput
+  }
+
+  export type DojoInventoryItemDojoIdProductIdCompoundUniqueInput = {
+    dojoId: string
+    productId: string
+  }
+
+  export type DojoInventoryItemCountOrderByAggregateInput = {
+    id?: SortOrder
+    dojoId?: SortOrder
+    productId?: SortOrder
+    quantityOnHand?: SortOrder
+    unitPrice?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type DojoInventoryItemAvgOrderByAggregateInput = {
+    quantityOnHand?: SortOrder
+    unitPrice?: SortOrder
+  }
+
+  export type DojoInventoryItemMaxOrderByAggregateInput = {
+    id?: SortOrder
+    dojoId?: SortOrder
+    productId?: SortOrder
+    quantityOnHand?: SortOrder
+    unitPrice?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type DojoInventoryItemMinOrderByAggregateInput = {
+    id?: SortOrder
+    dojoId?: SortOrder
+    productId?: SortOrder
+    quantityOnHand?: SortOrder
+    unitPrice?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type DojoInventoryItemSumOrderByAggregateInput = {
+    quantityOnHand?: SortOrder
+    unitPrice?: SortOrder
+  }
+
+  export type DojoSaleDojoIdReceiptNoCompoundUniqueInput = {
+    dojoId: string
+    receiptNo: string
+  }
+
+  export type DojoSaleCountOrderByAggregateInput = {
+    id?: SortOrder
+    dojoId?: SortOrder
+    receiptNo?: SortOrder
+    memberId?: SortOrder
+    buyerName?: SortOrder
+    soldByUserId?: SortOrder
+    soldByName?: SortOrder
+    subtotal?: SortOrder
+    discount?: SortOrder
+    total?: SortOrder
+    paymentMethod?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type DojoSaleAvgOrderByAggregateInput = {
+    subtotal?: SortOrder
+    discount?: SortOrder
+    total?: SortOrder
+  }
+
+  export type DojoSaleMaxOrderByAggregateInput = {
+    id?: SortOrder
+    dojoId?: SortOrder
+    receiptNo?: SortOrder
+    memberId?: SortOrder
+    buyerName?: SortOrder
+    soldByUserId?: SortOrder
+    soldByName?: SortOrder
+    subtotal?: SortOrder
+    discount?: SortOrder
+    total?: SortOrder
+    paymentMethod?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type DojoSaleMinOrderByAggregateInput = {
+    id?: SortOrder
+    dojoId?: SortOrder
+    receiptNo?: SortOrder
+    memberId?: SortOrder
+    buyerName?: SortOrder
+    soldByUserId?: SortOrder
+    soldByName?: SortOrder
+    subtotal?: SortOrder
+    discount?: SortOrder
+    total?: SortOrder
+    paymentMethod?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type DojoSaleSumOrderByAggregateInput = {
+    subtotal?: SortOrder
+    discount?: SortOrder
+    total?: SortOrder
+  }
+
+  export type DojoSaleScalarRelationFilter = {
+    is?: DojoSaleWhereInput
+    isNot?: DojoSaleWhereInput
+  }
+
+  export type DojoSaleItemCountOrderByAggregateInput = {
+    id?: SortOrder
+    saleId?: SortOrder
+    productId?: SortOrder
+    productName?: SortOrder
+    quantity?: SortOrder
+    unitPrice?: SortOrder
+    lineTotal?: SortOrder
+  }
+
+  export type DojoSaleItemAvgOrderByAggregateInput = {
+    quantity?: SortOrder
+    unitPrice?: SortOrder
+    lineTotal?: SortOrder
+  }
+
+  export type DojoSaleItemMaxOrderByAggregateInput = {
+    id?: SortOrder
+    saleId?: SortOrder
+    productId?: SortOrder
+    productName?: SortOrder
+    quantity?: SortOrder
+    unitPrice?: SortOrder
+    lineTotal?: SortOrder
+  }
+
+  export type DojoSaleItemMinOrderByAggregateInput = {
+    id?: SortOrder
+    saleId?: SortOrder
+    productId?: SortOrder
+    productName?: SortOrder
+    quantity?: SortOrder
+    unitPrice?: SortOrder
+    lineTotal?: SortOrder
+  }
+
+  export type DojoSaleItemSumOrderByAggregateInput = {
+    quantity?: SortOrder
+    unitPrice?: SortOrder
+    lineTotal?: SortOrder
   }
 
   export type EnumPaymentStatusFilter<$PrismaModel = never> = {
@@ -33976,11 +38845,6 @@ export namespace Prisma {
   export type ShopOrderScalarRelationFilter = {
     is?: ShopOrderWhereInput
     isNot?: ShopOrderWhereInput
-  }
-
-  export type ShopProductScalarRelationFilter = {
-    is?: ShopProductWhereInput
-    isNot?: ShopProductWhereInput
   }
 
   export type ShopOrderItemCountOrderByAggregateInput = {
@@ -34393,6 +39257,20 @@ export namespace Prisma {
     connect?: AnnouncementWhereUniqueInput | AnnouncementWhereUniqueInput[]
   }
 
+  export type DojoInventoryItemCreateNestedManyWithoutDojoInput = {
+    create?: XOR<DojoInventoryItemCreateWithoutDojoInput, DojoInventoryItemUncheckedCreateWithoutDojoInput> | DojoInventoryItemCreateWithoutDojoInput[] | DojoInventoryItemUncheckedCreateWithoutDojoInput[]
+    connectOrCreate?: DojoInventoryItemCreateOrConnectWithoutDojoInput | DojoInventoryItemCreateOrConnectWithoutDojoInput[]
+    createMany?: DojoInventoryItemCreateManyDojoInputEnvelope
+    connect?: DojoInventoryItemWhereUniqueInput | DojoInventoryItemWhereUniqueInput[]
+  }
+
+  export type DojoSaleCreateNestedManyWithoutDojoInput = {
+    create?: XOR<DojoSaleCreateWithoutDojoInput, DojoSaleUncheckedCreateWithoutDojoInput> | DojoSaleCreateWithoutDojoInput[] | DojoSaleUncheckedCreateWithoutDojoInput[]
+    connectOrCreate?: DojoSaleCreateOrConnectWithoutDojoInput | DojoSaleCreateOrConnectWithoutDojoInput[]
+    createMany?: DojoSaleCreateManyDojoInputEnvelope
+    connect?: DojoSaleWhereUniqueInput | DojoSaleWhereUniqueInput[]
+  }
+
   export type ShopOrderUncheckedCreateNestedManyWithoutDojoInput = {
     create?: XOR<ShopOrderCreateWithoutDojoInput, ShopOrderUncheckedCreateWithoutDojoInput> | ShopOrderCreateWithoutDojoInput[] | ShopOrderUncheckedCreateWithoutDojoInput[]
     connectOrCreate?: ShopOrderCreateOrConnectWithoutDojoInput | ShopOrderCreateOrConnectWithoutDojoInput[]
@@ -34440,6 +39318,20 @@ export namespace Prisma {
     connectOrCreate?: AnnouncementCreateOrConnectWithoutDojoInput | AnnouncementCreateOrConnectWithoutDojoInput[]
     createMany?: AnnouncementCreateManyDojoInputEnvelope
     connect?: AnnouncementWhereUniqueInput | AnnouncementWhereUniqueInput[]
+  }
+
+  export type DojoInventoryItemUncheckedCreateNestedManyWithoutDojoInput = {
+    create?: XOR<DojoInventoryItemCreateWithoutDojoInput, DojoInventoryItemUncheckedCreateWithoutDojoInput> | DojoInventoryItemCreateWithoutDojoInput[] | DojoInventoryItemUncheckedCreateWithoutDojoInput[]
+    connectOrCreate?: DojoInventoryItemCreateOrConnectWithoutDojoInput | DojoInventoryItemCreateOrConnectWithoutDojoInput[]
+    createMany?: DojoInventoryItemCreateManyDojoInputEnvelope
+    connect?: DojoInventoryItemWhereUniqueInput | DojoInventoryItemWhereUniqueInput[]
+  }
+
+  export type DojoSaleUncheckedCreateNestedManyWithoutDojoInput = {
+    create?: XOR<DojoSaleCreateWithoutDojoInput, DojoSaleUncheckedCreateWithoutDojoInput> | DojoSaleCreateWithoutDojoInput[] | DojoSaleUncheckedCreateWithoutDojoInput[]
+    connectOrCreate?: DojoSaleCreateOrConnectWithoutDojoInput | DojoSaleCreateOrConnectWithoutDojoInput[]
+    createMany?: DojoSaleCreateManyDojoInputEnvelope
+    connect?: DojoSaleWhereUniqueInput | DojoSaleWhereUniqueInput[]
   }
 
   export type NullableFloatFieldUpdateOperationsInput = {
@@ -34556,6 +39448,34 @@ export namespace Prisma {
     deleteMany?: AnnouncementScalarWhereInput | AnnouncementScalarWhereInput[]
   }
 
+  export type DojoInventoryItemUpdateManyWithoutDojoNestedInput = {
+    create?: XOR<DojoInventoryItemCreateWithoutDojoInput, DojoInventoryItemUncheckedCreateWithoutDojoInput> | DojoInventoryItemCreateWithoutDojoInput[] | DojoInventoryItemUncheckedCreateWithoutDojoInput[]
+    connectOrCreate?: DojoInventoryItemCreateOrConnectWithoutDojoInput | DojoInventoryItemCreateOrConnectWithoutDojoInput[]
+    upsert?: DojoInventoryItemUpsertWithWhereUniqueWithoutDojoInput | DojoInventoryItemUpsertWithWhereUniqueWithoutDojoInput[]
+    createMany?: DojoInventoryItemCreateManyDojoInputEnvelope
+    set?: DojoInventoryItemWhereUniqueInput | DojoInventoryItemWhereUniqueInput[]
+    disconnect?: DojoInventoryItemWhereUniqueInput | DojoInventoryItemWhereUniqueInput[]
+    delete?: DojoInventoryItemWhereUniqueInput | DojoInventoryItemWhereUniqueInput[]
+    connect?: DojoInventoryItemWhereUniqueInput | DojoInventoryItemWhereUniqueInput[]
+    update?: DojoInventoryItemUpdateWithWhereUniqueWithoutDojoInput | DojoInventoryItemUpdateWithWhereUniqueWithoutDojoInput[]
+    updateMany?: DojoInventoryItemUpdateManyWithWhereWithoutDojoInput | DojoInventoryItemUpdateManyWithWhereWithoutDojoInput[]
+    deleteMany?: DojoInventoryItemScalarWhereInput | DojoInventoryItemScalarWhereInput[]
+  }
+
+  export type DojoSaleUpdateManyWithoutDojoNestedInput = {
+    create?: XOR<DojoSaleCreateWithoutDojoInput, DojoSaleUncheckedCreateWithoutDojoInput> | DojoSaleCreateWithoutDojoInput[] | DojoSaleUncheckedCreateWithoutDojoInput[]
+    connectOrCreate?: DojoSaleCreateOrConnectWithoutDojoInput | DojoSaleCreateOrConnectWithoutDojoInput[]
+    upsert?: DojoSaleUpsertWithWhereUniqueWithoutDojoInput | DojoSaleUpsertWithWhereUniqueWithoutDojoInput[]
+    createMany?: DojoSaleCreateManyDojoInputEnvelope
+    set?: DojoSaleWhereUniqueInput | DojoSaleWhereUniqueInput[]
+    disconnect?: DojoSaleWhereUniqueInput | DojoSaleWhereUniqueInput[]
+    delete?: DojoSaleWhereUniqueInput | DojoSaleWhereUniqueInput[]
+    connect?: DojoSaleWhereUniqueInput | DojoSaleWhereUniqueInput[]
+    update?: DojoSaleUpdateWithWhereUniqueWithoutDojoInput | DojoSaleUpdateWithWhereUniqueWithoutDojoInput[]
+    updateMany?: DojoSaleUpdateManyWithWhereWithoutDojoInput | DojoSaleUpdateManyWithWhereWithoutDojoInput[]
+    deleteMany?: DojoSaleScalarWhereInput | DojoSaleScalarWhereInput[]
+  }
+
   export type ShopOrderUncheckedUpdateManyWithoutDojoNestedInput = {
     create?: XOR<ShopOrderCreateWithoutDojoInput, ShopOrderUncheckedCreateWithoutDojoInput> | ShopOrderCreateWithoutDojoInput[] | ShopOrderUncheckedCreateWithoutDojoInput[]
     connectOrCreate?: ShopOrderCreateOrConnectWithoutDojoInput | ShopOrderCreateOrConnectWithoutDojoInput[]
@@ -34654,6 +39574,34 @@ export namespace Prisma {
     deleteMany?: AnnouncementScalarWhereInput | AnnouncementScalarWhereInput[]
   }
 
+  export type DojoInventoryItemUncheckedUpdateManyWithoutDojoNestedInput = {
+    create?: XOR<DojoInventoryItemCreateWithoutDojoInput, DojoInventoryItemUncheckedCreateWithoutDojoInput> | DojoInventoryItemCreateWithoutDojoInput[] | DojoInventoryItemUncheckedCreateWithoutDojoInput[]
+    connectOrCreate?: DojoInventoryItemCreateOrConnectWithoutDojoInput | DojoInventoryItemCreateOrConnectWithoutDojoInput[]
+    upsert?: DojoInventoryItemUpsertWithWhereUniqueWithoutDojoInput | DojoInventoryItemUpsertWithWhereUniqueWithoutDojoInput[]
+    createMany?: DojoInventoryItemCreateManyDojoInputEnvelope
+    set?: DojoInventoryItemWhereUniqueInput | DojoInventoryItemWhereUniqueInput[]
+    disconnect?: DojoInventoryItemWhereUniqueInput | DojoInventoryItemWhereUniqueInput[]
+    delete?: DojoInventoryItemWhereUniqueInput | DojoInventoryItemWhereUniqueInput[]
+    connect?: DojoInventoryItemWhereUniqueInput | DojoInventoryItemWhereUniqueInput[]
+    update?: DojoInventoryItemUpdateWithWhereUniqueWithoutDojoInput | DojoInventoryItemUpdateWithWhereUniqueWithoutDojoInput[]
+    updateMany?: DojoInventoryItemUpdateManyWithWhereWithoutDojoInput | DojoInventoryItemUpdateManyWithWhereWithoutDojoInput[]
+    deleteMany?: DojoInventoryItemScalarWhereInput | DojoInventoryItemScalarWhereInput[]
+  }
+
+  export type DojoSaleUncheckedUpdateManyWithoutDojoNestedInput = {
+    create?: XOR<DojoSaleCreateWithoutDojoInput, DojoSaleUncheckedCreateWithoutDojoInput> | DojoSaleCreateWithoutDojoInput[] | DojoSaleUncheckedCreateWithoutDojoInput[]
+    connectOrCreate?: DojoSaleCreateOrConnectWithoutDojoInput | DojoSaleCreateOrConnectWithoutDojoInput[]
+    upsert?: DojoSaleUpsertWithWhereUniqueWithoutDojoInput | DojoSaleUpsertWithWhereUniqueWithoutDojoInput[]
+    createMany?: DojoSaleCreateManyDojoInputEnvelope
+    set?: DojoSaleWhereUniqueInput | DojoSaleWhereUniqueInput[]
+    disconnect?: DojoSaleWhereUniqueInput | DojoSaleWhereUniqueInput[]
+    delete?: DojoSaleWhereUniqueInput | DojoSaleWhereUniqueInput[]
+    connect?: DojoSaleWhereUniqueInput | DojoSaleWhereUniqueInput[]
+    update?: DojoSaleUpdateWithWhereUniqueWithoutDojoInput | DojoSaleUpdateWithWhereUniqueWithoutDojoInput[]
+    updateMany?: DojoSaleUpdateManyWithWhereWithoutDojoInput | DojoSaleUpdateManyWithWhereWithoutDojoInput[]
+    deleteMany?: DojoSaleScalarWhereInput | DojoSaleScalarWhereInput[]
+  }
+
   export type DojoApplicationCreateinteriorUrlsInput = {
     set: string[]
   }
@@ -34750,6 +39698,20 @@ export namespace Prisma {
     connect?: EventRegistrationWhereUniqueInput | EventRegistrationWhereUniqueInput[]
   }
 
+  export type DojoSaleCreateNestedManyWithoutMemberInput = {
+    create?: XOR<DojoSaleCreateWithoutMemberInput, DojoSaleUncheckedCreateWithoutMemberInput> | DojoSaleCreateWithoutMemberInput[] | DojoSaleUncheckedCreateWithoutMemberInput[]
+    connectOrCreate?: DojoSaleCreateOrConnectWithoutMemberInput | DojoSaleCreateOrConnectWithoutMemberInput[]
+    createMany?: DojoSaleCreateManyMemberInputEnvelope
+    connect?: DojoSaleWhereUniqueInput | DojoSaleWhereUniqueInput[]
+  }
+
+  export type DojoSaleCreateNestedManyWithoutSoldByInput = {
+    create?: XOR<DojoSaleCreateWithoutSoldByInput, DojoSaleUncheckedCreateWithoutSoldByInput> | DojoSaleCreateWithoutSoldByInput[] | DojoSaleUncheckedCreateWithoutSoldByInput[]
+    connectOrCreate?: DojoSaleCreateOrConnectWithoutSoldByInput | DojoSaleCreateOrConnectWithoutSoldByInput[]
+    createMany?: DojoSaleCreateManySoldByInputEnvelope
+    connect?: DojoSaleWhereUniqueInput | DojoSaleWhereUniqueInput[]
+  }
+
   export type GradingUncheckedCreateNestedManyWithoutMemberInput = {
     create?: XOR<GradingCreateWithoutMemberInput, GradingUncheckedCreateWithoutMemberInput> | GradingCreateWithoutMemberInput[] | GradingUncheckedCreateWithoutMemberInput[]
     connectOrCreate?: GradingCreateOrConnectWithoutMemberInput | GradingCreateOrConnectWithoutMemberInput[]
@@ -34825,6 +39787,20 @@ export namespace Prisma {
     connectOrCreate?: EventRegistrationCreateOrConnectWithoutCheckedInByInput | EventRegistrationCreateOrConnectWithoutCheckedInByInput[]
     createMany?: EventRegistrationCreateManyCheckedInByInputEnvelope
     connect?: EventRegistrationWhereUniqueInput | EventRegistrationWhereUniqueInput[]
+  }
+
+  export type DojoSaleUncheckedCreateNestedManyWithoutMemberInput = {
+    create?: XOR<DojoSaleCreateWithoutMemberInput, DojoSaleUncheckedCreateWithoutMemberInput> | DojoSaleCreateWithoutMemberInput[] | DojoSaleUncheckedCreateWithoutMemberInput[]
+    connectOrCreate?: DojoSaleCreateOrConnectWithoutMemberInput | DojoSaleCreateOrConnectWithoutMemberInput[]
+    createMany?: DojoSaleCreateManyMemberInputEnvelope
+    connect?: DojoSaleWhereUniqueInput | DojoSaleWhereUniqueInput[]
+  }
+
+  export type DojoSaleUncheckedCreateNestedManyWithoutSoldByInput = {
+    create?: XOR<DojoSaleCreateWithoutSoldByInput, DojoSaleUncheckedCreateWithoutSoldByInput> | DojoSaleCreateWithoutSoldByInput[] | DojoSaleUncheckedCreateWithoutSoldByInput[]
+    connectOrCreate?: DojoSaleCreateOrConnectWithoutSoldByInput | DojoSaleCreateOrConnectWithoutSoldByInput[]
+    createMany?: DojoSaleCreateManySoldByInputEnvelope
+    connect?: DojoSaleWhereUniqueInput | DojoSaleWhereUniqueInput[]
   }
 
   export type EnumMemberRoleFieldUpdateOperationsInput = {
@@ -34999,6 +39975,34 @@ export namespace Prisma {
     deleteMany?: EventRegistrationScalarWhereInput | EventRegistrationScalarWhereInput[]
   }
 
+  export type DojoSaleUpdateManyWithoutMemberNestedInput = {
+    create?: XOR<DojoSaleCreateWithoutMemberInput, DojoSaleUncheckedCreateWithoutMemberInput> | DojoSaleCreateWithoutMemberInput[] | DojoSaleUncheckedCreateWithoutMemberInput[]
+    connectOrCreate?: DojoSaleCreateOrConnectWithoutMemberInput | DojoSaleCreateOrConnectWithoutMemberInput[]
+    upsert?: DojoSaleUpsertWithWhereUniqueWithoutMemberInput | DojoSaleUpsertWithWhereUniqueWithoutMemberInput[]
+    createMany?: DojoSaleCreateManyMemberInputEnvelope
+    set?: DojoSaleWhereUniqueInput | DojoSaleWhereUniqueInput[]
+    disconnect?: DojoSaleWhereUniqueInput | DojoSaleWhereUniqueInput[]
+    delete?: DojoSaleWhereUniqueInput | DojoSaleWhereUniqueInput[]
+    connect?: DojoSaleWhereUniqueInput | DojoSaleWhereUniqueInput[]
+    update?: DojoSaleUpdateWithWhereUniqueWithoutMemberInput | DojoSaleUpdateWithWhereUniqueWithoutMemberInput[]
+    updateMany?: DojoSaleUpdateManyWithWhereWithoutMemberInput | DojoSaleUpdateManyWithWhereWithoutMemberInput[]
+    deleteMany?: DojoSaleScalarWhereInput | DojoSaleScalarWhereInput[]
+  }
+
+  export type DojoSaleUpdateManyWithoutSoldByNestedInput = {
+    create?: XOR<DojoSaleCreateWithoutSoldByInput, DojoSaleUncheckedCreateWithoutSoldByInput> | DojoSaleCreateWithoutSoldByInput[] | DojoSaleUncheckedCreateWithoutSoldByInput[]
+    connectOrCreate?: DojoSaleCreateOrConnectWithoutSoldByInput | DojoSaleCreateOrConnectWithoutSoldByInput[]
+    upsert?: DojoSaleUpsertWithWhereUniqueWithoutSoldByInput | DojoSaleUpsertWithWhereUniqueWithoutSoldByInput[]
+    createMany?: DojoSaleCreateManySoldByInputEnvelope
+    set?: DojoSaleWhereUniqueInput | DojoSaleWhereUniqueInput[]
+    disconnect?: DojoSaleWhereUniqueInput | DojoSaleWhereUniqueInput[]
+    delete?: DojoSaleWhereUniqueInput | DojoSaleWhereUniqueInput[]
+    connect?: DojoSaleWhereUniqueInput | DojoSaleWhereUniqueInput[]
+    update?: DojoSaleUpdateWithWhereUniqueWithoutSoldByInput | DojoSaleUpdateWithWhereUniqueWithoutSoldByInput[]
+    updateMany?: DojoSaleUpdateManyWithWhereWithoutSoldByInput | DojoSaleUpdateManyWithWhereWithoutSoldByInput[]
+    deleteMany?: DojoSaleScalarWhereInput | DojoSaleScalarWhereInput[]
+  }
+
   export type GradingUncheckedUpdateManyWithoutMemberNestedInput = {
     create?: XOR<GradingCreateWithoutMemberInput, GradingUncheckedCreateWithoutMemberInput> | GradingCreateWithoutMemberInput[] | GradingUncheckedCreateWithoutMemberInput[]
     connectOrCreate?: GradingCreateOrConnectWithoutMemberInput | GradingCreateOrConnectWithoutMemberInput[]
@@ -35151,6 +40155,34 @@ export namespace Prisma {
     update?: EventRegistrationUpdateWithWhereUniqueWithoutCheckedInByInput | EventRegistrationUpdateWithWhereUniqueWithoutCheckedInByInput[]
     updateMany?: EventRegistrationUpdateManyWithWhereWithoutCheckedInByInput | EventRegistrationUpdateManyWithWhereWithoutCheckedInByInput[]
     deleteMany?: EventRegistrationScalarWhereInput | EventRegistrationScalarWhereInput[]
+  }
+
+  export type DojoSaleUncheckedUpdateManyWithoutMemberNestedInput = {
+    create?: XOR<DojoSaleCreateWithoutMemberInput, DojoSaleUncheckedCreateWithoutMemberInput> | DojoSaleCreateWithoutMemberInput[] | DojoSaleUncheckedCreateWithoutMemberInput[]
+    connectOrCreate?: DojoSaleCreateOrConnectWithoutMemberInput | DojoSaleCreateOrConnectWithoutMemberInput[]
+    upsert?: DojoSaleUpsertWithWhereUniqueWithoutMemberInput | DojoSaleUpsertWithWhereUniqueWithoutMemberInput[]
+    createMany?: DojoSaleCreateManyMemberInputEnvelope
+    set?: DojoSaleWhereUniqueInput | DojoSaleWhereUniqueInput[]
+    disconnect?: DojoSaleWhereUniqueInput | DojoSaleWhereUniqueInput[]
+    delete?: DojoSaleWhereUniqueInput | DojoSaleWhereUniqueInput[]
+    connect?: DojoSaleWhereUniqueInput | DojoSaleWhereUniqueInput[]
+    update?: DojoSaleUpdateWithWhereUniqueWithoutMemberInput | DojoSaleUpdateWithWhereUniqueWithoutMemberInput[]
+    updateMany?: DojoSaleUpdateManyWithWhereWithoutMemberInput | DojoSaleUpdateManyWithWhereWithoutMemberInput[]
+    deleteMany?: DojoSaleScalarWhereInput | DojoSaleScalarWhereInput[]
+  }
+
+  export type DojoSaleUncheckedUpdateManyWithoutSoldByNestedInput = {
+    create?: XOR<DojoSaleCreateWithoutSoldByInput, DojoSaleUncheckedCreateWithoutSoldByInput> | DojoSaleCreateWithoutSoldByInput[] | DojoSaleUncheckedCreateWithoutSoldByInput[]
+    connectOrCreate?: DojoSaleCreateOrConnectWithoutSoldByInput | DojoSaleCreateOrConnectWithoutSoldByInput[]
+    upsert?: DojoSaleUpsertWithWhereUniqueWithoutSoldByInput | DojoSaleUpsertWithWhereUniqueWithoutSoldByInput[]
+    createMany?: DojoSaleCreateManySoldByInputEnvelope
+    set?: DojoSaleWhereUniqueInput | DojoSaleWhereUniqueInput[]
+    disconnect?: DojoSaleWhereUniqueInput | DojoSaleWhereUniqueInput[]
+    delete?: DojoSaleWhereUniqueInput | DojoSaleWhereUniqueInput[]
+    connect?: DojoSaleWhereUniqueInput | DojoSaleWhereUniqueInput[]
+    update?: DojoSaleUpdateWithWhereUniqueWithoutSoldByInput | DojoSaleUpdateWithWhereUniqueWithoutSoldByInput[]
+    updateMany?: DojoSaleUpdateManyWithWhereWithoutSoldByInput | DojoSaleUpdateManyWithWhereWithoutSoldByInput[]
+    deleteMany?: DojoSaleScalarWhereInput | DojoSaleScalarWhereInput[]
   }
 
   export type MemberCreateNestedOneWithoutAttendanceInput = {
@@ -35704,11 +40736,39 @@ export namespace Prisma {
     connect?: ShopOrderItemWhereUniqueInput | ShopOrderItemWhereUniqueInput[]
   }
 
+  export type DojoInventoryItemCreateNestedManyWithoutProductInput = {
+    create?: XOR<DojoInventoryItemCreateWithoutProductInput, DojoInventoryItemUncheckedCreateWithoutProductInput> | DojoInventoryItemCreateWithoutProductInput[] | DojoInventoryItemUncheckedCreateWithoutProductInput[]
+    connectOrCreate?: DojoInventoryItemCreateOrConnectWithoutProductInput | DojoInventoryItemCreateOrConnectWithoutProductInput[]
+    createMany?: DojoInventoryItemCreateManyProductInputEnvelope
+    connect?: DojoInventoryItemWhereUniqueInput | DojoInventoryItemWhereUniqueInput[]
+  }
+
+  export type DojoSaleItemCreateNestedManyWithoutProductInput = {
+    create?: XOR<DojoSaleItemCreateWithoutProductInput, DojoSaleItemUncheckedCreateWithoutProductInput> | DojoSaleItemCreateWithoutProductInput[] | DojoSaleItemUncheckedCreateWithoutProductInput[]
+    connectOrCreate?: DojoSaleItemCreateOrConnectWithoutProductInput | DojoSaleItemCreateOrConnectWithoutProductInput[]
+    createMany?: DojoSaleItemCreateManyProductInputEnvelope
+    connect?: DojoSaleItemWhereUniqueInput | DojoSaleItemWhereUniqueInput[]
+  }
+
   export type ShopOrderItemUncheckedCreateNestedManyWithoutProductInput = {
     create?: XOR<ShopOrderItemCreateWithoutProductInput, ShopOrderItemUncheckedCreateWithoutProductInput> | ShopOrderItemCreateWithoutProductInput[] | ShopOrderItemUncheckedCreateWithoutProductInput[]
     connectOrCreate?: ShopOrderItemCreateOrConnectWithoutProductInput | ShopOrderItemCreateOrConnectWithoutProductInput[]
     createMany?: ShopOrderItemCreateManyProductInputEnvelope
     connect?: ShopOrderItemWhereUniqueInput | ShopOrderItemWhereUniqueInput[]
+  }
+
+  export type DojoInventoryItemUncheckedCreateNestedManyWithoutProductInput = {
+    create?: XOR<DojoInventoryItemCreateWithoutProductInput, DojoInventoryItemUncheckedCreateWithoutProductInput> | DojoInventoryItemCreateWithoutProductInput[] | DojoInventoryItemUncheckedCreateWithoutProductInput[]
+    connectOrCreate?: DojoInventoryItemCreateOrConnectWithoutProductInput | DojoInventoryItemCreateOrConnectWithoutProductInput[]
+    createMany?: DojoInventoryItemCreateManyProductInputEnvelope
+    connect?: DojoInventoryItemWhereUniqueInput | DojoInventoryItemWhereUniqueInput[]
+  }
+
+  export type DojoSaleItemUncheckedCreateNestedManyWithoutProductInput = {
+    create?: XOR<DojoSaleItemCreateWithoutProductInput, DojoSaleItemUncheckedCreateWithoutProductInput> | DojoSaleItemCreateWithoutProductInput[] | DojoSaleItemUncheckedCreateWithoutProductInput[]
+    connectOrCreate?: DojoSaleItemCreateOrConnectWithoutProductInput | DojoSaleItemCreateOrConnectWithoutProductInput[]
+    createMany?: DojoSaleItemCreateManyProductInputEnvelope
+    connect?: DojoSaleItemWhereUniqueInput | DojoSaleItemWhereUniqueInput[]
   }
 
   export type ShopOrderItemUpdateManyWithoutProductNestedInput = {
@@ -35725,6 +40785,34 @@ export namespace Prisma {
     deleteMany?: ShopOrderItemScalarWhereInput | ShopOrderItemScalarWhereInput[]
   }
 
+  export type DojoInventoryItemUpdateManyWithoutProductNestedInput = {
+    create?: XOR<DojoInventoryItemCreateWithoutProductInput, DojoInventoryItemUncheckedCreateWithoutProductInput> | DojoInventoryItemCreateWithoutProductInput[] | DojoInventoryItemUncheckedCreateWithoutProductInput[]
+    connectOrCreate?: DojoInventoryItemCreateOrConnectWithoutProductInput | DojoInventoryItemCreateOrConnectWithoutProductInput[]
+    upsert?: DojoInventoryItemUpsertWithWhereUniqueWithoutProductInput | DojoInventoryItemUpsertWithWhereUniqueWithoutProductInput[]
+    createMany?: DojoInventoryItemCreateManyProductInputEnvelope
+    set?: DojoInventoryItemWhereUniqueInput | DojoInventoryItemWhereUniqueInput[]
+    disconnect?: DojoInventoryItemWhereUniqueInput | DojoInventoryItemWhereUniqueInput[]
+    delete?: DojoInventoryItemWhereUniqueInput | DojoInventoryItemWhereUniqueInput[]
+    connect?: DojoInventoryItemWhereUniqueInput | DojoInventoryItemWhereUniqueInput[]
+    update?: DojoInventoryItemUpdateWithWhereUniqueWithoutProductInput | DojoInventoryItemUpdateWithWhereUniqueWithoutProductInput[]
+    updateMany?: DojoInventoryItemUpdateManyWithWhereWithoutProductInput | DojoInventoryItemUpdateManyWithWhereWithoutProductInput[]
+    deleteMany?: DojoInventoryItemScalarWhereInput | DojoInventoryItemScalarWhereInput[]
+  }
+
+  export type DojoSaleItemUpdateManyWithoutProductNestedInput = {
+    create?: XOR<DojoSaleItemCreateWithoutProductInput, DojoSaleItemUncheckedCreateWithoutProductInput> | DojoSaleItemCreateWithoutProductInput[] | DojoSaleItemUncheckedCreateWithoutProductInput[]
+    connectOrCreate?: DojoSaleItemCreateOrConnectWithoutProductInput | DojoSaleItemCreateOrConnectWithoutProductInput[]
+    upsert?: DojoSaleItemUpsertWithWhereUniqueWithoutProductInput | DojoSaleItemUpsertWithWhereUniqueWithoutProductInput[]
+    createMany?: DojoSaleItemCreateManyProductInputEnvelope
+    set?: DojoSaleItemWhereUniqueInput | DojoSaleItemWhereUniqueInput[]
+    disconnect?: DojoSaleItemWhereUniqueInput | DojoSaleItemWhereUniqueInput[]
+    delete?: DojoSaleItemWhereUniqueInput | DojoSaleItemWhereUniqueInput[]
+    connect?: DojoSaleItemWhereUniqueInput | DojoSaleItemWhereUniqueInput[]
+    update?: DojoSaleItemUpdateWithWhereUniqueWithoutProductInput | DojoSaleItemUpdateWithWhereUniqueWithoutProductInput[]
+    updateMany?: DojoSaleItemUpdateManyWithWhereWithoutProductInput | DojoSaleItemUpdateManyWithWhereWithoutProductInput[]
+    deleteMany?: DojoSaleItemScalarWhereInput | DojoSaleItemScalarWhereInput[]
+  }
+
   export type ShopOrderItemUncheckedUpdateManyWithoutProductNestedInput = {
     create?: XOR<ShopOrderItemCreateWithoutProductInput, ShopOrderItemUncheckedCreateWithoutProductInput> | ShopOrderItemCreateWithoutProductInput[] | ShopOrderItemUncheckedCreateWithoutProductInput[]
     connectOrCreate?: ShopOrderItemCreateOrConnectWithoutProductInput | ShopOrderItemCreateOrConnectWithoutProductInput[]
@@ -35737,6 +40825,178 @@ export namespace Prisma {
     update?: ShopOrderItemUpdateWithWhereUniqueWithoutProductInput | ShopOrderItemUpdateWithWhereUniqueWithoutProductInput[]
     updateMany?: ShopOrderItemUpdateManyWithWhereWithoutProductInput | ShopOrderItemUpdateManyWithWhereWithoutProductInput[]
     deleteMany?: ShopOrderItemScalarWhereInput | ShopOrderItemScalarWhereInput[]
+  }
+
+  export type DojoInventoryItemUncheckedUpdateManyWithoutProductNestedInput = {
+    create?: XOR<DojoInventoryItemCreateWithoutProductInput, DojoInventoryItemUncheckedCreateWithoutProductInput> | DojoInventoryItemCreateWithoutProductInput[] | DojoInventoryItemUncheckedCreateWithoutProductInput[]
+    connectOrCreate?: DojoInventoryItemCreateOrConnectWithoutProductInput | DojoInventoryItemCreateOrConnectWithoutProductInput[]
+    upsert?: DojoInventoryItemUpsertWithWhereUniqueWithoutProductInput | DojoInventoryItemUpsertWithWhereUniqueWithoutProductInput[]
+    createMany?: DojoInventoryItemCreateManyProductInputEnvelope
+    set?: DojoInventoryItemWhereUniqueInput | DojoInventoryItemWhereUniqueInput[]
+    disconnect?: DojoInventoryItemWhereUniqueInput | DojoInventoryItemWhereUniqueInput[]
+    delete?: DojoInventoryItemWhereUniqueInput | DojoInventoryItemWhereUniqueInput[]
+    connect?: DojoInventoryItemWhereUniqueInput | DojoInventoryItemWhereUniqueInput[]
+    update?: DojoInventoryItemUpdateWithWhereUniqueWithoutProductInput | DojoInventoryItemUpdateWithWhereUniqueWithoutProductInput[]
+    updateMany?: DojoInventoryItemUpdateManyWithWhereWithoutProductInput | DojoInventoryItemUpdateManyWithWhereWithoutProductInput[]
+    deleteMany?: DojoInventoryItemScalarWhereInput | DojoInventoryItemScalarWhereInput[]
+  }
+
+  export type DojoSaleItemUncheckedUpdateManyWithoutProductNestedInput = {
+    create?: XOR<DojoSaleItemCreateWithoutProductInput, DojoSaleItemUncheckedCreateWithoutProductInput> | DojoSaleItemCreateWithoutProductInput[] | DojoSaleItemUncheckedCreateWithoutProductInput[]
+    connectOrCreate?: DojoSaleItemCreateOrConnectWithoutProductInput | DojoSaleItemCreateOrConnectWithoutProductInput[]
+    upsert?: DojoSaleItemUpsertWithWhereUniqueWithoutProductInput | DojoSaleItemUpsertWithWhereUniqueWithoutProductInput[]
+    createMany?: DojoSaleItemCreateManyProductInputEnvelope
+    set?: DojoSaleItemWhereUniqueInput | DojoSaleItemWhereUniqueInput[]
+    disconnect?: DojoSaleItemWhereUniqueInput | DojoSaleItemWhereUniqueInput[]
+    delete?: DojoSaleItemWhereUniqueInput | DojoSaleItemWhereUniqueInput[]
+    connect?: DojoSaleItemWhereUniqueInput | DojoSaleItemWhereUniqueInput[]
+    update?: DojoSaleItemUpdateWithWhereUniqueWithoutProductInput | DojoSaleItemUpdateWithWhereUniqueWithoutProductInput[]
+    updateMany?: DojoSaleItemUpdateManyWithWhereWithoutProductInput | DojoSaleItemUpdateManyWithWhereWithoutProductInput[]
+    deleteMany?: DojoSaleItemScalarWhereInput | DojoSaleItemScalarWhereInput[]
+  }
+
+  export type DojoCreateNestedOneWithoutInventoryItemsInput = {
+    create?: XOR<DojoCreateWithoutInventoryItemsInput, DojoUncheckedCreateWithoutInventoryItemsInput>
+    connectOrCreate?: DojoCreateOrConnectWithoutInventoryItemsInput
+    connect?: DojoWhereUniqueInput
+  }
+
+  export type ShopProductCreateNestedOneWithoutDojoInventoryInput = {
+    create?: XOR<ShopProductCreateWithoutDojoInventoryInput, ShopProductUncheckedCreateWithoutDojoInventoryInput>
+    connectOrCreate?: ShopProductCreateOrConnectWithoutDojoInventoryInput
+    connect?: ShopProductWhereUniqueInput
+  }
+
+  export type DojoUpdateOneRequiredWithoutInventoryItemsNestedInput = {
+    create?: XOR<DojoCreateWithoutInventoryItemsInput, DojoUncheckedCreateWithoutInventoryItemsInput>
+    connectOrCreate?: DojoCreateOrConnectWithoutInventoryItemsInput
+    upsert?: DojoUpsertWithoutInventoryItemsInput
+    connect?: DojoWhereUniqueInput
+    update?: XOR<XOR<DojoUpdateToOneWithWhereWithoutInventoryItemsInput, DojoUpdateWithoutInventoryItemsInput>, DojoUncheckedUpdateWithoutInventoryItemsInput>
+  }
+
+  export type ShopProductUpdateOneRequiredWithoutDojoInventoryNestedInput = {
+    create?: XOR<ShopProductCreateWithoutDojoInventoryInput, ShopProductUncheckedCreateWithoutDojoInventoryInput>
+    connectOrCreate?: ShopProductCreateOrConnectWithoutDojoInventoryInput
+    upsert?: ShopProductUpsertWithoutDojoInventoryInput
+    connect?: ShopProductWhereUniqueInput
+    update?: XOR<XOR<ShopProductUpdateToOneWithWhereWithoutDojoInventoryInput, ShopProductUpdateWithoutDojoInventoryInput>, ShopProductUncheckedUpdateWithoutDojoInventoryInput>
+  }
+
+  export type DojoCreateNestedOneWithoutSalesInput = {
+    create?: XOR<DojoCreateWithoutSalesInput, DojoUncheckedCreateWithoutSalesInput>
+    connectOrCreate?: DojoCreateOrConnectWithoutSalesInput
+    connect?: DojoWhereUniqueInput
+  }
+
+  export type MemberCreateNestedOneWithoutDojoSalesAsBuyerInput = {
+    create?: XOR<MemberCreateWithoutDojoSalesAsBuyerInput, MemberUncheckedCreateWithoutDojoSalesAsBuyerInput>
+    connectOrCreate?: MemberCreateOrConnectWithoutDojoSalesAsBuyerInput
+    connect?: MemberWhereUniqueInput
+  }
+
+  export type MemberCreateNestedOneWithoutDojoSalesSoldInput = {
+    create?: XOR<MemberCreateWithoutDojoSalesSoldInput, MemberUncheckedCreateWithoutDojoSalesSoldInput>
+    connectOrCreate?: MemberCreateOrConnectWithoutDojoSalesSoldInput
+    connect?: MemberWhereUniqueInput
+  }
+
+  export type DojoSaleItemCreateNestedManyWithoutSaleInput = {
+    create?: XOR<DojoSaleItemCreateWithoutSaleInput, DojoSaleItemUncheckedCreateWithoutSaleInput> | DojoSaleItemCreateWithoutSaleInput[] | DojoSaleItemUncheckedCreateWithoutSaleInput[]
+    connectOrCreate?: DojoSaleItemCreateOrConnectWithoutSaleInput | DojoSaleItemCreateOrConnectWithoutSaleInput[]
+    createMany?: DojoSaleItemCreateManySaleInputEnvelope
+    connect?: DojoSaleItemWhereUniqueInput | DojoSaleItemWhereUniqueInput[]
+  }
+
+  export type DojoSaleItemUncheckedCreateNestedManyWithoutSaleInput = {
+    create?: XOR<DojoSaleItemCreateWithoutSaleInput, DojoSaleItemUncheckedCreateWithoutSaleInput> | DojoSaleItemCreateWithoutSaleInput[] | DojoSaleItemUncheckedCreateWithoutSaleInput[]
+    connectOrCreate?: DojoSaleItemCreateOrConnectWithoutSaleInput | DojoSaleItemCreateOrConnectWithoutSaleInput[]
+    createMany?: DojoSaleItemCreateManySaleInputEnvelope
+    connect?: DojoSaleItemWhereUniqueInput | DojoSaleItemWhereUniqueInput[]
+  }
+
+  export type DojoUpdateOneRequiredWithoutSalesNestedInput = {
+    create?: XOR<DojoCreateWithoutSalesInput, DojoUncheckedCreateWithoutSalesInput>
+    connectOrCreate?: DojoCreateOrConnectWithoutSalesInput
+    upsert?: DojoUpsertWithoutSalesInput
+    connect?: DojoWhereUniqueInput
+    update?: XOR<XOR<DojoUpdateToOneWithWhereWithoutSalesInput, DojoUpdateWithoutSalesInput>, DojoUncheckedUpdateWithoutSalesInput>
+  }
+
+  export type MemberUpdateOneWithoutDojoSalesAsBuyerNestedInput = {
+    create?: XOR<MemberCreateWithoutDojoSalesAsBuyerInput, MemberUncheckedCreateWithoutDojoSalesAsBuyerInput>
+    connectOrCreate?: MemberCreateOrConnectWithoutDojoSalesAsBuyerInput
+    upsert?: MemberUpsertWithoutDojoSalesAsBuyerInput
+    disconnect?: MemberWhereInput | boolean
+    delete?: MemberWhereInput | boolean
+    connect?: MemberWhereUniqueInput
+    update?: XOR<XOR<MemberUpdateToOneWithWhereWithoutDojoSalesAsBuyerInput, MemberUpdateWithoutDojoSalesAsBuyerInput>, MemberUncheckedUpdateWithoutDojoSalesAsBuyerInput>
+  }
+
+  export type MemberUpdateOneWithoutDojoSalesSoldNestedInput = {
+    create?: XOR<MemberCreateWithoutDojoSalesSoldInput, MemberUncheckedCreateWithoutDojoSalesSoldInput>
+    connectOrCreate?: MemberCreateOrConnectWithoutDojoSalesSoldInput
+    upsert?: MemberUpsertWithoutDojoSalesSoldInput
+    disconnect?: MemberWhereInput | boolean
+    delete?: MemberWhereInput | boolean
+    connect?: MemberWhereUniqueInput
+    update?: XOR<XOR<MemberUpdateToOneWithWhereWithoutDojoSalesSoldInput, MemberUpdateWithoutDojoSalesSoldInput>, MemberUncheckedUpdateWithoutDojoSalesSoldInput>
+  }
+
+  export type DojoSaleItemUpdateManyWithoutSaleNestedInput = {
+    create?: XOR<DojoSaleItemCreateWithoutSaleInput, DojoSaleItemUncheckedCreateWithoutSaleInput> | DojoSaleItemCreateWithoutSaleInput[] | DojoSaleItemUncheckedCreateWithoutSaleInput[]
+    connectOrCreate?: DojoSaleItemCreateOrConnectWithoutSaleInput | DojoSaleItemCreateOrConnectWithoutSaleInput[]
+    upsert?: DojoSaleItemUpsertWithWhereUniqueWithoutSaleInput | DojoSaleItemUpsertWithWhereUniqueWithoutSaleInput[]
+    createMany?: DojoSaleItemCreateManySaleInputEnvelope
+    set?: DojoSaleItemWhereUniqueInput | DojoSaleItemWhereUniqueInput[]
+    disconnect?: DojoSaleItemWhereUniqueInput | DojoSaleItemWhereUniqueInput[]
+    delete?: DojoSaleItemWhereUniqueInput | DojoSaleItemWhereUniqueInput[]
+    connect?: DojoSaleItemWhereUniqueInput | DojoSaleItemWhereUniqueInput[]
+    update?: DojoSaleItemUpdateWithWhereUniqueWithoutSaleInput | DojoSaleItemUpdateWithWhereUniqueWithoutSaleInput[]
+    updateMany?: DojoSaleItemUpdateManyWithWhereWithoutSaleInput | DojoSaleItemUpdateManyWithWhereWithoutSaleInput[]
+    deleteMany?: DojoSaleItemScalarWhereInput | DojoSaleItemScalarWhereInput[]
+  }
+
+  export type DojoSaleItemUncheckedUpdateManyWithoutSaleNestedInput = {
+    create?: XOR<DojoSaleItemCreateWithoutSaleInput, DojoSaleItemUncheckedCreateWithoutSaleInput> | DojoSaleItemCreateWithoutSaleInput[] | DojoSaleItemUncheckedCreateWithoutSaleInput[]
+    connectOrCreate?: DojoSaleItemCreateOrConnectWithoutSaleInput | DojoSaleItemCreateOrConnectWithoutSaleInput[]
+    upsert?: DojoSaleItemUpsertWithWhereUniqueWithoutSaleInput | DojoSaleItemUpsertWithWhereUniqueWithoutSaleInput[]
+    createMany?: DojoSaleItemCreateManySaleInputEnvelope
+    set?: DojoSaleItemWhereUniqueInput | DojoSaleItemWhereUniqueInput[]
+    disconnect?: DojoSaleItemWhereUniqueInput | DojoSaleItemWhereUniqueInput[]
+    delete?: DojoSaleItemWhereUniqueInput | DojoSaleItemWhereUniqueInput[]
+    connect?: DojoSaleItemWhereUniqueInput | DojoSaleItemWhereUniqueInput[]
+    update?: DojoSaleItemUpdateWithWhereUniqueWithoutSaleInput | DojoSaleItemUpdateWithWhereUniqueWithoutSaleInput[]
+    updateMany?: DojoSaleItemUpdateManyWithWhereWithoutSaleInput | DojoSaleItemUpdateManyWithWhereWithoutSaleInput[]
+    deleteMany?: DojoSaleItemScalarWhereInput | DojoSaleItemScalarWhereInput[]
+  }
+
+  export type DojoSaleCreateNestedOneWithoutItemsInput = {
+    create?: XOR<DojoSaleCreateWithoutItemsInput, DojoSaleUncheckedCreateWithoutItemsInput>
+    connectOrCreate?: DojoSaleCreateOrConnectWithoutItemsInput
+    connect?: DojoSaleWhereUniqueInput
+  }
+
+  export type ShopProductCreateNestedOneWithoutDojoSaleItemsInput = {
+    create?: XOR<ShopProductCreateWithoutDojoSaleItemsInput, ShopProductUncheckedCreateWithoutDojoSaleItemsInput>
+    connectOrCreate?: ShopProductCreateOrConnectWithoutDojoSaleItemsInput
+    connect?: ShopProductWhereUniqueInput
+  }
+
+  export type DojoSaleUpdateOneRequiredWithoutItemsNestedInput = {
+    create?: XOR<DojoSaleCreateWithoutItemsInput, DojoSaleUncheckedCreateWithoutItemsInput>
+    connectOrCreate?: DojoSaleCreateOrConnectWithoutItemsInput
+    upsert?: DojoSaleUpsertWithoutItemsInput
+    connect?: DojoSaleWhereUniqueInput
+    update?: XOR<XOR<DojoSaleUpdateToOneWithWhereWithoutItemsInput, DojoSaleUpdateWithoutItemsInput>, DojoSaleUncheckedUpdateWithoutItemsInput>
+  }
+
+  export type ShopProductUpdateOneRequiredWithoutDojoSaleItemsNestedInput = {
+    create?: XOR<ShopProductCreateWithoutDojoSaleItemsInput, ShopProductUncheckedCreateWithoutDojoSaleItemsInput>
+    connectOrCreate?: ShopProductCreateOrConnectWithoutDojoSaleItemsInput
+    upsert?: ShopProductUpsertWithoutDojoSaleItemsInput
+    connect?: ShopProductWhereUniqueInput
+    update?: XOR<XOR<ShopProductUpdateToOneWithWhereWithoutDojoSaleItemsInput, ShopProductUpdateWithoutDojoSaleItemsInput>, ShopProductUncheckedUpdateWithoutDojoSaleItemsInput>
   }
 
   export type MemberCreateNestedOneWithoutOrdersInput = {
@@ -37173,6 +42433,8 @@ export namespace Prisma {
     eventsPosted?: EventCreateNestedManyWithoutPostedByInput
     announcementsPosted?: AnnouncementCreateNestedManyWithoutPostedByInput
     eventCheckIns?: EventRegistrationCreateNestedManyWithoutCheckedInByInput
+    dojoSalesAsBuyer?: DojoSaleCreateNestedManyWithoutMemberInput
+    dojoSalesSold?: DojoSaleCreateNestedManyWithoutSoldByInput
   }
 
   export type MemberUncheckedCreateWithoutDojoInput = {
@@ -37210,6 +42472,8 @@ export namespace Prisma {
     eventsPosted?: EventUncheckedCreateNestedManyWithoutPostedByInput
     announcementsPosted?: AnnouncementUncheckedCreateNestedManyWithoutPostedByInput
     eventCheckIns?: EventRegistrationUncheckedCreateNestedManyWithoutCheckedInByInput
+    dojoSalesAsBuyer?: DojoSaleUncheckedCreateNestedManyWithoutMemberInput
+    dojoSalesSold?: DojoSaleUncheckedCreateNestedManyWithoutSoldByInput
   }
 
   export type MemberCreateOrConnectWithoutDojoInput = {
@@ -37331,6 +42595,76 @@ export namespace Prisma {
 
   export type AnnouncementCreateManyDojoInputEnvelope = {
     data: AnnouncementCreateManyDojoInput | AnnouncementCreateManyDojoInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type DojoInventoryItemCreateWithoutDojoInput = {
+    id?: string
+    quantityOnHand?: number
+    unitPrice: Decimal | DecimalJsLike | number | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    product: ShopProductCreateNestedOneWithoutDojoInventoryInput
+  }
+
+  export type DojoInventoryItemUncheckedCreateWithoutDojoInput = {
+    id?: string
+    productId: string
+    quantityOnHand?: number
+    unitPrice: Decimal | DecimalJsLike | number | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DojoInventoryItemCreateOrConnectWithoutDojoInput = {
+    where: DojoInventoryItemWhereUniqueInput
+    create: XOR<DojoInventoryItemCreateWithoutDojoInput, DojoInventoryItemUncheckedCreateWithoutDojoInput>
+  }
+
+  export type DojoInventoryItemCreateManyDojoInputEnvelope = {
+    data: DojoInventoryItemCreateManyDojoInput | DojoInventoryItemCreateManyDojoInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type DojoSaleCreateWithoutDojoInput = {
+    id?: string
+    receiptNo: string
+    buyerName: string
+    soldByName?: string | null
+    subtotal: Decimal | DecimalJsLike | number | string
+    discount?: Decimal | DecimalJsLike | number | string
+    total: Decimal | DecimalJsLike | number | string
+    paymentMethod?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    member?: MemberCreateNestedOneWithoutDojoSalesAsBuyerInput
+    soldBy?: MemberCreateNestedOneWithoutDojoSalesSoldInput
+    items?: DojoSaleItemCreateNestedManyWithoutSaleInput
+  }
+
+  export type DojoSaleUncheckedCreateWithoutDojoInput = {
+    id?: string
+    receiptNo: string
+    memberId?: string | null
+    buyerName: string
+    soldByUserId?: string | null
+    soldByName?: string | null
+    subtotal: Decimal | DecimalJsLike | number | string
+    discount?: Decimal | DecimalJsLike | number | string
+    total: Decimal | DecimalJsLike | number | string
+    paymentMethod?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    items?: DojoSaleItemUncheckedCreateNestedManyWithoutSaleInput
+  }
+
+  export type DojoSaleCreateOrConnectWithoutDojoInput = {
+    where: DojoSaleWhereUniqueInput
+    create: XOR<DojoSaleCreateWithoutDojoInput, DojoSaleUncheckedCreateWithoutDojoInput>
+  }
+
+  export type DojoSaleCreateManyDojoInputEnvelope = {
+    data: DojoSaleCreateManyDojoInput | DojoSaleCreateManyDojoInput[]
     skipDuplicates?: boolean
   }
 
@@ -37571,6 +42905,70 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Announcement"> | Date | string
   }
 
+  export type DojoInventoryItemUpsertWithWhereUniqueWithoutDojoInput = {
+    where: DojoInventoryItemWhereUniqueInput
+    update: XOR<DojoInventoryItemUpdateWithoutDojoInput, DojoInventoryItemUncheckedUpdateWithoutDojoInput>
+    create: XOR<DojoInventoryItemCreateWithoutDojoInput, DojoInventoryItemUncheckedCreateWithoutDojoInput>
+  }
+
+  export type DojoInventoryItemUpdateWithWhereUniqueWithoutDojoInput = {
+    where: DojoInventoryItemWhereUniqueInput
+    data: XOR<DojoInventoryItemUpdateWithoutDojoInput, DojoInventoryItemUncheckedUpdateWithoutDojoInput>
+  }
+
+  export type DojoInventoryItemUpdateManyWithWhereWithoutDojoInput = {
+    where: DojoInventoryItemScalarWhereInput
+    data: XOR<DojoInventoryItemUpdateManyMutationInput, DojoInventoryItemUncheckedUpdateManyWithoutDojoInput>
+  }
+
+  export type DojoInventoryItemScalarWhereInput = {
+    AND?: DojoInventoryItemScalarWhereInput | DojoInventoryItemScalarWhereInput[]
+    OR?: DojoInventoryItemScalarWhereInput[]
+    NOT?: DojoInventoryItemScalarWhereInput | DojoInventoryItemScalarWhereInput[]
+    id?: UuidFilter<"DojoInventoryItem"> | string
+    dojoId?: UuidFilter<"DojoInventoryItem"> | string
+    productId?: UuidFilter<"DojoInventoryItem"> | string
+    quantityOnHand?: IntFilter<"DojoInventoryItem"> | number
+    unitPrice?: DecimalFilter<"DojoInventoryItem"> | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFilter<"DojoInventoryItem"> | Date | string
+    updatedAt?: DateTimeFilter<"DojoInventoryItem"> | Date | string
+  }
+
+  export type DojoSaleUpsertWithWhereUniqueWithoutDojoInput = {
+    where: DojoSaleWhereUniqueInput
+    update: XOR<DojoSaleUpdateWithoutDojoInput, DojoSaleUncheckedUpdateWithoutDojoInput>
+    create: XOR<DojoSaleCreateWithoutDojoInput, DojoSaleUncheckedCreateWithoutDojoInput>
+  }
+
+  export type DojoSaleUpdateWithWhereUniqueWithoutDojoInput = {
+    where: DojoSaleWhereUniqueInput
+    data: XOR<DojoSaleUpdateWithoutDojoInput, DojoSaleUncheckedUpdateWithoutDojoInput>
+  }
+
+  export type DojoSaleUpdateManyWithWhereWithoutDojoInput = {
+    where: DojoSaleScalarWhereInput
+    data: XOR<DojoSaleUpdateManyMutationInput, DojoSaleUncheckedUpdateManyWithoutDojoInput>
+  }
+
+  export type DojoSaleScalarWhereInput = {
+    AND?: DojoSaleScalarWhereInput | DojoSaleScalarWhereInput[]
+    OR?: DojoSaleScalarWhereInput[]
+    NOT?: DojoSaleScalarWhereInput | DojoSaleScalarWhereInput[]
+    id?: UuidFilter<"DojoSale"> | string
+    dojoId?: UuidFilter<"DojoSale"> | string
+    receiptNo?: StringFilter<"DojoSale"> | string
+    memberId?: UuidNullableFilter<"DojoSale"> | string | null
+    buyerName?: StringFilter<"DojoSale"> | string
+    soldByUserId?: UuidNullableFilter<"DojoSale"> | string | null
+    soldByName?: StringNullableFilter<"DojoSale"> | string | null
+    subtotal?: DecimalFilter<"DojoSale"> | Decimal | DecimalJsLike | number | string
+    discount?: DecimalFilter<"DojoSale"> | Decimal | DecimalJsLike | number | string
+    total?: DecimalFilter<"DojoSale"> | Decimal | DecimalJsLike | number | string
+    paymentMethod?: StringNullableFilter<"DojoSale"> | string | null
+    notes?: StringNullableFilter<"DojoSale"> | string | null
+    createdAt?: DateTimeFilter<"DojoSale"> | Date | string
+  }
+
   export type DojoCreateWithoutMembersInput = {
     id?: string
     name: string
@@ -37594,6 +42992,8 @@ export namespace Prisma {
     attendance?: AttendanceCreateNestedManyWithoutDojoInput
     events?: EventCreateNestedManyWithoutDojoInput
     announcements?: AnnouncementCreateNestedManyWithoutDojoInput
+    inventoryItems?: DojoInventoryItemCreateNestedManyWithoutDojoInput
+    sales?: DojoSaleCreateNestedManyWithoutDojoInput
   }
 
   export type DojoUncheckedCreateWithoutMembersInput = {
@@ -37619,6 +43019,8 @@ export namespace Prisma {
     attendance?: AttendanceUncheckedCreateNestedManyWithoutDojoInput
     events?: EventUncheckedCreateNestedManyWithoutDojoInput
     announcements?: AnnouncementUncheckedCreateNestedManyWithoutDojoInput
+    inventoryItems?: DojoInventoryItemUncheckedCreateNestedManyWithoutDojoInput
+    sales?: DojoSaleUncheckedCreateNestedManyWithoutDojoInput
   }
 
   export type DojoCreateOrConnectWithoutMembersInput = {
@@ -38030,6 +43432,90 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type DojoSaleCreateWithoutMemberInput = {
+    id?: string
+    receiptNo: string
+    buyerName: string
+    soldByName?: string | null
+    subtotal: Decimal | DecimalJsLike | number | string
+    discount?: Decimal | DecimalJsLike | number | string
+    total: Decimal | DecimalJsLike | number | string
+    paymentMethod?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    dojo: DojoCreateNestedOneWithoutSalesInput
+    soldBy?: MemberCreateNestedOneWithoutDojoSalesSoldInput
+    items?: DojoSaleItemCreateNestedManyWithoutSaleInput
+  }
+
+  export type DojoSaleUncheckedCreateWithoutMemberInput = {
+    id?: string
+    dojoId: string
+    receiptNo: string
+    buyerName: string
+    soldByUserId?: string | null
+    soldByName?: string | null
+    subtotal: Decimal | DecimalJsLike | number | string
+    discount?: Decimal | DecimalJsLike | number | string
+    total: Decimal | DecimalJsLike | number | string
+    paymentMethod?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    items?: DojoSaleItemUncheckedCreateNestedManyWithoutSaleInput
+  }
+
+  export type DojoSaleCreateOrConnectWithoutMemberInput = {
+    where: DojoSaleWhereUniqueInput
+    create: XOR<DojoSaleCreateWithoutMemberInput, DojoSaleUncheckedCreateWithoutMemberInput>
+  }
+
+  export type DojoSaleCreateManyMemberInputEnvelope = {
+    data: DojoSaleCreateManyMemberInput | DojoSaleCreateManyMemberInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type DojoSaleCreateWithoutSoldByInput = {
+    id?: string
+    receiptNo: string
+    buyerName: string
+    soldByName?: string | null
+    subtotal: Decimal | DecimalJsLike | number | string
+    discount?: Decimal | DecimalJsLike | number | string
+    total: Decimal | DecimalJsLike | number | string
+    paymentMethod?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    dojo: DojoCreateNestedOneWithoutSalesInput
+    member?: MemberCreateNestedOneWithoutDojoSalesAsBuyerInput
+    items?: DojoSaleItemCreateNestedManyWithoutSaleInput
+  }
+
+  export type DojoSaleUncheckedCreateWithoutSoldByInput = {
+    id?: string
+    dojoId: string
+    receiptNo: string
+    memberId?: string | null
+    buyerName: string
+    soldByName?: string | null
+    subtotal: Decimal | DecimalJsLike | number | string
+    discount?: Decimal | DecimalJsLike | number | string
+    total: Decimal | DecimalJsLike | number | string
+    paymentMethod?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    items?: DojoSaleItemUncheckedCreateNestedManyWithoutSaleInput
+  }
+
+  export type DojoSaleCreateOrConnectWithoutSoldByInput = {
+    where: DojoSaleWhereUniqueInput
+    create: XOR<DojoSaleCreateWithoutSoldByInput, DojoSaleUncheckedCreateWithoutSoldByInput>
+  }
+
+  export type DojoSaleCreateManySoldByInputEnvelope = {
+    data: DojoSaleCreateManySoldByInput | DojoSaleCreateManySoldByInput[]
+    skipDuplicates?: boolean
+  }
+
   export type DojoUpsertWithoutMembersInput = {
     update: XOR<DojoUpdateWithoutMembersInput, DojoUncheckedUpdateWithoutMembersInput>
     create: XOR<DojoCreateWithoutMembersInput, DojoUncheckedCreateWithoutMembersInput>
@@ -38064,6 +43550,8 @@ export namespace Prisma {
     attendance?: AttendanceUpdateManyWithoutDojoNestedInput
     events?: EventUpdateManyWithoutDojoNestedInput
     announcements?: AnnouncementUpdateManyWithoutDojoNestedInput
+    inventoryItems?: DojoInventoryItemUpdateManyWithoutDojoNestedInput
+    sales?: DojoSaleUpdateManyWithoutDojoNestedInput
   }
 
   export type DojoUncheckedUpdateWithoutMembersInput = {
@@ -38089,6 +43577,8 @@ export namespace Prisma {
     attendance?: AttendanceUncheckedUpdateManyWithoutDojoNestedInput
     events?: EventUncheckedUpdateManyWithoutDojoNestedInput
     announcements?: AnnouncementUncheckedUpdateManyWithoutDojoNestedInput
+    inventoryItems?: DojoInventoryItemUncheckedUpdateManyWithoutDojoNestedInput
+    sales?: DojoSaleUncheckedUpdateManyWithoutDojoNestedInput
   }
 
   export type GradingUpsertWithWhereUniqueWithoutMemberInput = {
@@ -38310,6 +43800,38 @@ export namespace Prisma {
     data: XOR<EventRegistrationUpdateManyMutationInput, EventRegistrationUncheckedUpdateManyWithoutCheckedInByInput>
   }
 
+  export type DojoSaleUpsertWithWhereUniqueWithoutMemberInput = {
+    where: DojoSaleWhereUniqueInput
+    update: XOR<DojoSaleUpdateWithoutMemberInput, DojoSaleUncheckedUpdateWithoutMemberInput>
+    create: XOR<DojoSaleCreateWithoutMemberInput, DojoSaleUncheckedCreateWithoutMemberInput>
+  }
+
+  export type DojoSaleUpdateWithWhereUniqueWithoutMemberInput = {
+    where: DojoSaleWhereUniqueInput
+    data: XOR<DojoSaleUpdateWithoutMemberInput, DojoSaleUncheckedUpdateWithoutMemberInput>
+  }
+
+  export type DojoSaleUpdateManyWithWhereWithoutMemberInput = {
+    where: DojoSaleScalarWhereInput
+    data: XOR<DojoSaleUpdateManyMutationInput, DojoSaleUncheckedUpdateManyWithoutMemberInput>
+  }
+
+  export type DojoSaleUpsertWithWhereUniqueWithoutSoldByInput = {
+    where: DojoSaleWhereUniqueInput
+    update: XOR<DojoSaleUpdateWithoutSoldByInput, DojoSaleUncheckedUpdateWithoutSoldByInput>
+    create: XOR<DojoSaleCreateWithoutSoldByInput, DojoSaleUncheckedCreateWithoutSoldByInput>
+  }
+
+  export type DojoSaleUpdateWithWhereUniqueWithoutSoldByInput = {
+    where: DojoSaleWhereUniqueInput
+    data: XOR<DojoSaleUpdateWithoutSoldByInput, DojoSaleUncheckedUpdateWithoutSoldByInput>
+  }
+
+  export type DojoSaleUpdateManyWithWhereWithoutSoldByInput = {
+    where: DojoSaleScalarWhereInput
+    data: XOR<DojoSaleUpdateManyMutationInput, DojoSaleUncheckedUpdateManyWithoutSoldByInput>
+  }
+
   export type MemberCreateWithoutAttendanceInput = {
     id: string
     fullName: string
@@ -38345,6 +43867,8 @@ export namespace Prisma {
     eventsPosted?: EventCreateNestedManyWithoutPostedByInput
     announcementsPosted?: AnnouncementCreateNestedManyWithoutPostedByInput
     eventCheckIns?: EventRegistrationCreateNestedManyWithoutCheckedInByInput
+    dojoSalesAsBuyer?: DojoSaleCreateNestedManyWithoutMemberInput
+    dojoSalesSold?: DojoSaleCreateNestedManyWithoutSoldByInput
   }
 
   export type MemberUncheckedCreateWithoutAttendanceInput = {
@@ -38382,6 +43906,8 @@ export namespace Prisma {
     eventsPosted?: EventUncheckedCreateNestedManyWithoutPostedByInput
     announcementsPosted?: AnnouncementUncheckedCreateNestedManyWithoutPostedByInput
     eventCheckIns?: EventRegistrationUncheckedCreateNestedManyWithoutCheckedInByInput
+    dojoSalesAsBuyer?: DojoSaleUncheckedCreateNestedManyWithoutMemberInput
+    dojoSalesSold?: DojoSaleUncheckedCreateNestedManyWithoutSoldByInput
   }
 
   export type MemberCreateOrConnectWithoutAttendanceInput = {
@@ -38412,6 +43938,8 @@ export namespace Prisma {
     members?: MemberCreateNestedManyWithoutDojoInput
     events?: EventCreateNestedManyWithoutDojoInput
     announcements?: AnnouncementCreateNestedManyWithoutDojoInput
+    inventoryItems?: DojoInventoryItemCreateNestedManyWithoutDojoInput
+    sales?: DojoSaleCreateNestedManyWithoutDojoInput
   }
 
   export type DojoUncheckedCreateWithoutAttendanceInput = {
@@ -38437,6 +43965,8 @@ export namespace Prisma {
     members?: MemberUncheckedCreateNestedManyWithoutDojoInput
     events?: EventUncheckedCreateNestedManyWithoutDojoInput
     announcements?: AnnouncementUncheckedCreateNestedManyWithoutDojoInput
+    inventoryItems?: DojoInventoryItemUncheckedCreateNestedManyWithoutDojoInput
+    sales?: DojoSaleUncheckedCreateNestedManyWithoutDojoInput
   }
 
   export type DojoCreateOrConnectWithoutAttendanceInput = {
@@ -38490,6 +44020,8 @@ export namespace Prisma {
     eventsPosted?: EventUpdateManyWithoutPostedByNestedInput
     announcementsPosted?: AnnouncementUpdateManyWithoutPostedByNestedInput
     eventCheckIns?: EventRegistrationUpdateManyWithoutCheckedInByNestedInput
+    dojoSalesAsBuyer?: DojoSaleUpdateManyWithoutMemberNestedInput
+    dojoSalesSold?: DojoSaleUpdateManyWithoutSoldByNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutAttendanceInput = {
@@ -38527,6 +44059,8 @@ export namespace Prisma {
     eventsPosted?: EventUncheckedUpdateManyWithoutPostedByNestedInput
     announcementsPosted?: AnnouncementUncheckedUpdateManyWithoutPostedByNestedInput
     eventCheckIns?: EventRegistrationUncheckedUpdateManyWithoutCheckedInByNestedInput
+    dojoSalesAsBuyer?: DojoSaleUncheckedUpdateManyWithoutMemberNestedInput
+    dojoSalesSold?: DojoSaleUncheckedUpdateManyWithoutSoldByNestedInput
   }
 
   export type DojoUpsertWithoutAttendanceInput = {
@@ -38563,6 +44097,8 @@ export namespace Prisma {
     members?: MemberUpdateManyWithoutDojoNestedInput
     events?: EventUpdateManyWithoutDojoNestedInput
     announcements?: AnnouncementUpdateManyWithoutDojoNestedInput
+    inventoryItems?: DojoInventoryItemUpdateManyWithoutDojoNestedInput
+    sales?: DojoSaleUpdateManyWithoutDojoNestedInput
   }
 
   export type DojoUncheckedUpdateWithoutAttendanceInput = {
@@ -38588,6 +44124,8 @@ export namespace Prisma {
     members?: MemberUncheckedUpdateManyWithoutDojoNestedInput
     events?: EventUncheckedUpdateManyWithoutDojoNestedInput
     announcements?: AnnouncementUncheckedUpdateManyWithoutDojoNestedInput
+    inventoryItems?: DojoInventoryItemUncheckedUpdateManyWithoutDojoNestedInput
+    sales?: DojoSaleUncheckedUpdateManyWithoutDojoNestedInput
   }
 
   export type BeltRankCreateWithoutGradingEventsInput = {
@@ -38795,6 +44333,8 @@ export namespace Prisma {
     eventsPosted?: EventCreateNestedManyWithoutPostedByInput
     announcementsPosted?: AnnouncementCreateNestedManyWithoutPostedByInput
     eventCheckIns?: EventRegistrationCreateNestedManyWithoutCheckedInByInput
+    dojoSalesAsBuyer?: DojoSaleCreateNestedManyWithoutMemberInput
+    dojoSalesSold?: DojoSaleCreateNestedManyWithoutSoldByInput
   }
 
   export type MemberUncheckedCreateWithoutGradingApplicationsInput = {
@@ -38832,6 +44372,8 @@ export namespace Prisma {
     eventsPosted?: EventUncheckedCreateNestedManyWithoutPostedByInput
     announcementsPosted?: AnnouncementUncheckedCreateNestedManyWithoutPostedByInput
     eventCheckIns?: EventRegistrationUncheckedCreateNestedManyWithoutCheckedInByInput
+    dojoSalesAsBuyer?: DojoSaleUncheckedCreateNestedManyWithoutMemberInput
+    dojoSalesSold?: DojoSaleUncheckedCreateNestedManyWithoutSoldByInput
   }
 
   export type MemberCreateOrConnectWithoutGradingApplicationsInput = {
@@ -38955,6 +44497,8 @@ export namespace Prisma {
     eventsPosted?: EventUpdateManyWithoutPostedByNestedInput
     announcementsPosted?: AnnouncementUpdateManyWithoutPostedByNestedInput
     eventCheckIns?: EventRegistrationUpdateManyWithoutCheckedInByNestedInput
+    dojoSalesAsBuyer?: DojoSaleUpdateManyWithoutMemberNestedInput
+    dojoSalesSold?: DojoSaleUpdateManyWithoutSoldByNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutGradingApplicationsInput = {
@@ -38992,6 +44536,8 @@ export namespace Prisma {
     eventsPosted?: EventUncheckedUpdateManyWithoutPostedByNestedInput
     announcementsPosted?: AnnouncementUncheckedUpdateManyWithoutPostedByNestedInput
     eventCheckIns?: EventRegistrationUncheckedUpdateManyWithoutCheckedInByNestedInput
+    dojoSalesAsBuyer?: DojoSaleUncheckedUpdateManyWithoutMemberNestedInput
+    dojoSalesSold?: DojoSaleUncheckedUpdateManyWithoutSoldByNestedInput
   }
 
   export type GradingEventUpsertWithoutApplicationsInput = {
@@ -39111,6 +44657,8 @@ export namespace Prisma {
     eventsPosted?: EventCreateNestedManyWithoutPostedByInput
     announcementsPosted?: AnnouncementCreateNestedManyWithoutPostedByInput
     eventCheckIns?: EventRegistrationCreateNestedManyWithoutCheckedInByInput
+    dojoSalesAsBuyer?: DojoSaleCreateNestedManyWithoutMemberInput
+    dojoSalesSold?: DojoSaleCreateNestedManyWithoutSoldByInput
   }
 
   export type MemberUncheckedCreateWithoutGradingsInput = {
@@ -39148,6 +44696,8 @@ export namespace Prisma {
     eventsPosted?: EventUncheckedCreateNestedManyWithoutPostedByInput
     announcementsPosted?: AnnouncementUncheckedCreateNestedManyWithoutPostedByInput
     eventCheckIns?: EventRegistrationUncheckedCreateNestedManyWithoutCheckedInByInput
+    dojoSalesAsBuyer?: DojoSaleUncheckedCreateNestedManyWithoutMemberInput
+    dojoSalesSold?: DojoSaleUncheckedCreateNestedManyWithoutSoldByInput
   }
 
   export type MemberCreateOrConnectWithoutGradingsInput = {
@@ -39348,6 +44898,8 @@ export namespace Prisma {
     eventsPosted?: EventUpdateManyWithoutPostedByNestedInput
     announcementsPosted?: AnnouncementUpdateManyWithoutPostedByNestedInput
     eventCheckIns?: EventRegistrationUpdateManyWithoutCheckedInByNestedInput
+    dojoSalesAsBuyer?: DojoSaleUpdateManyWithoutMemberNestedInput
+    dojoSalesSold?: DojoSaleUpdateManyWithoutSoldByNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutGradingsInput = {
@@ -39385,6 +44937,8 @@ export namespace Prisma {
     eventsPosted?: EventUncheckedUpdateManyWithoutPostedByNestedInput
     announcementsPosted?: AnnouncementUncheckedUpdateManyWithoutPostedByNestedInput
     eventCheckIns?: EventRegistrationUncheckedUpdateManyWithoutCheckedInByNestedInput
+    dojoSalesAsBuyer?: DojoSaleUncheckedUpdateManyWithoutMemberNestedInput
+    dojoSalesSold?: DojoSaleUncheckedUpdateManyWithoutSoldByNestedInput
   }
 
   export type GradingEventUpsertWithoutGradingsInput = {
@@ -39590,6 +45144,8 @@ export namespace Prisma {
     eventsPosted?: EventCreateNestedManyWithoutPostedByInput
     announcementsPosted?: AnnouncementCreateNestedManyWithoutPostedByInput
     eventCheckIns?: EventRegistrationCreateNestedManyWithoutCheckedInByInput
+    dojoSalesAsBuyer?: DojoSaleCreateNestedManyWithoutMemberInput
+    dojoSalesSold?: DojoSaleCreateNestedManyWithoutSoldByInput
   }
 
   export type MemberUncheckedCreateWithoutCertificateRequestsInput = {
@@ -39627,6 +45183,8 @@ export namespace Prisma {
     eventsPosted?: EventUncheckedCreateNestedManyWithoutPostedByInput
     announcementsPosted?: AnnouncementUncheckedCreateNestedManyWithoutPostedByInput
     eventCheckIns?: EventRegistrationUncheckedCreateNestedManyWithoutCheckedInByInput
+    dojoSalesAsBuyer?: DojoSaleUncheckedCreateNestedManyWithoutMemberInput
+    dojoSalesSold?: DojoSaleUncheckedCreateNestedManyWithoutSoldByInput
   }
 
   export type MemberCreateOrConnectWithoutCertificateRequestsInput = {
@@ -39657,6 +45215,8 @@ export namespace Prisma {
     attendance?: AttendanceCreateNestedManyWithoutDojoInput
     events?: EventCreateNestedManyWithoutDojoInput
     announcements?: AnnouncementCreateNestedManyWithoutDojoInput
+    inventoryItems?: DojoInventoryItemCreateNestedManyWithoutDojoInput
+    sales?: DojoSaleCreateNestedManyWithoutDojoInput
   }
 
   export type DojoUncheckedCreateWithoutCertificateRequestsInput = {
@@ -39682,6 +45242,8 @@ export namespace Prisma {
     attendance?: AttendanceUncheckedCreateNestedManyWithoutDojoInput
     events?: EventUncheckedCreateNestedManyWithoutDojoInput
     announcements?: AnnouncementUncheckedCreateNestedManyWithoutDojoInput
+    inventoryItems?: DojoInventoryItemUncheckedCreateNestedManyWithoutDojoInput
+    sales?: DojoSaleUncheckedCreateNestedManyWithoutDojoInput
   }
 
   export type DojoCreateOrConnectWithoutCertificateRequestsInput = {
@@ -39817,6 +45379,8 @@ export namespace Prisma {
     eventsPosted?: EventUpdateManyWithoutPostedByNestedInput
     announcementsPosted?: AnnouncementUpdateManyWithoutPostedByNestedInput
     eventCheckIns?: EventRegistrationUpdateManyWithoutCheckedInByNestedInput
+    dojoSalesAsBuyer?: DojoSaleUpdateManyWithoutMemberNestedInput
+    dojoSalesSold?: DojoSaleUpdateManyWithoutSoldByNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutCertificateRequestsInput = {
@@ -39854,6 +45418,8 @@ export namespace Prisma {
     eventsPosted?: EventUncheckedUpdateManyWithoutPostedByNestedInput
     announcementsPosted?: AnnouncementUncheckedUpdateManyWithoutPostedByNestedInput
     eventCheckIns?: EventRegistrationUncheckedUpdateManyWithoutCheckedInByNestedInput
+    dojoSalesAsBuyer?: DojoSaleUncheckedUpdateManyWithoutMemberNestedInput
+    dojoSalesSold?: DojoSaleUncheckedUpdateManyWithoutSoldByNestedInput
   }
 
   export type DojoUpsertWithoutCertificateRequestsInput = {
@@ -39890,6 +45456,8 @@ export namespace Prisma {
     attendance?: AttendanceUpdateManyWithoutDojoNestedInput
     events?: EventUpdateManyWithoutDojoNestedInput
     announcements?: AnnouncementUpdateManyWithoutDojoNestedInput
+    inventoryItems?: DojoInventoryItemUpdateManyWithoutDojoNestedInput
+    sales?: DojoSaleUpdateManyWithoutDojoNestedInput
   }
 
   export type DojoUncheckedUpdateWithoutCertificateRequestsInput = {
@@ -39915,6 +45483,8 @@ export namespace Prisma {
     attendance?: AttendanceUncheckedUpdateManyWithoutDojoNestedInput
     events?: EventUncheckedUpdateManyWithoutDojoNestedInput
     announcements?: AnnouncementUncheckedUpdateManyWithoutDojoNestedInput
+    inventoryItems?: DojoInventoryItemUncheckedUpdateManyWithoutDojoNestedInput
+    sales?: DojoSaleUncheckedUpdateManyWithoutDojoNestedInput
   }
 
   export type ShopOrderUpsertWithoutCertificateRequestsInput = {
@@ -40037,6 +45607,8 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestCreateNestedManyWithoutMemberInput
     announcementsPosted?: AnnouncementCreateNestedManyWithoutPostedByInput
     eventCheckIns?: EventRegistrationCreateNestedManyWithoutCheckedInByInput
+    dojoSalesAsBuyer?: DojoSaleCreateNestedManyWithoutMemberInput
+    dojoSalesSold?: DojoSaleCreateNestedManyWithoutSoldByInput
   }
 
   export type MemberUncheckedCreateWithoutEventsPostedInput = {
@@ -40074,6 +45646,8 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutMemberInput
     announcementsPosted?: AnnouncementUncheckedCreateNestedManyWithoutPostedByInput
     eventCheckIns?: EventRegistrationUncheckedCreateNestedManyWithoutCheckedInByInput
+    dojoSalesAsBuyer?: DojoSaleUncheckedCreateNestedManyWithoutMemberInput
+    dojoSalesSold?: DojoSaleUncheckedCreateNestedManyWithoutSoldByInput
   }
 
   export type MemberCreateOrConnectWithoutEventsPostedInput = {
@@ -40104,6 +45678,8 @@ export namespace Prisma {
     members?: MemberCreateNestedManyWithoutDojoInput
     attendance?: AttendanceCreateNestedManyWithoutDojoInput
     announcements?: AnnouncementCreateNestedManyWithoutDojoInput
+    inventoryItems?: DojoInventoryItemCreateNestedManyWithoutDojoInput
+    sales?: DojoSaleCreateNestedManyWithoutDojoInput
   }
 
   export type DojoUncheckedCreateWithoutEventsInput = {
@@ -40129,6 +45705,8 @@ export namespace Prisma {
     members?: MemberUncheckedCreateNestedManyWithoutDojoInput
     attendance?: AttendanceUncheckedCreateNestedManyWithoutDojoInput
     announcements?: AnnouncementUncheckedCreateNestedManyWithoutDojoInput
+    inventoryItems?: DojoInventoryItemUncheckedCreateNestedManyWithoutDojoInput
+    sales?: DojoSaleUncheckedCreateNestedManyWithoutDojoInput
   }
 
   export type DojoCreateOrConnectWithoutEventsInput = {
@@ -40198,6 +45776,8 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestUpdateManyWithoutMemberNestedInput
     announcementsPosted?: AnnouncementUpdateManyWithoutPostedByNestedInput
     eventCheckIns?: EventRegistrationUpdateManyWithoutCheckedInByNestedInput
+    dojoSalesAsBuyer?: DojoSaleUpdateManyWithoutMemberNestedInput
+    dojoSalesSold?: DojoSaleUpdateManyWithoutSoldByNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutEventsPostedInput = {
@@ -40235,6 +45815,8 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutMemberNestedInput
     announcementsPosted?: AnnouncementUncheckedUpdateManyWithoutPostedByNestedInput
     eventCheckIns?: EventRegistrationUncheckedUpdateManyWithoutCheckedInByNestedInput
+    dojoSalesAsBuyer?: DojoSaleUncheckedUpdateManyWithoutMemberNestedInput
+    dojoSalesSold?: DojoSaleUncheckedUpdateManyWithoutSoldByNestedInput
   }
 
   export type DojoUpsertWithoutEventsInput = {
@@ -40271,6 +45853,8 @@ export namespace Prisma {
     members?: MemberUpdateManyWithoutDojoNestedInput
     attendance?: AttendanceUpdateManyWithoutDojoNestedInput
     announcements?: AnnouncementUpdateManyWithoutDojoNestedInput
+    inventoryItems?: DojoInventoryItemUpdateManyWithoutDojoNestedInput
+    sales?: DojoSaleUpdateManyWithoutDojoNestedInput
   }
 
   export type DojoUncheckedUpdateWithoutEventsInput = {
@@ -40296,6 +45880,8 @@ export namespace Prisma {
     members?: MemberUncheckedUpdateManyWithoutDojoNestedInput
     attendance?: AttendanceUncheckedUpdateManyWithoutDojoNestedInput
     announcements?: AnnouncementUncheckedUpdateManyWithoutDojoNestedInput
+    inventoryItems?: DojoInventoryItemUncheckedUpdateManyWithoutDojoNestedInput
+    sales?: DojoSaleUncheckedUpdateManyWithoutDojoNestedInput
   }
 
   export type MemberCreateWithoutAnnouncementsPostedInput = {
@@ -40333,6 +45919,8 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestCreateNestedManyWithoutMemberInput
     eventsPosted?: EventCreateNestedManyWithoutPostedByInput
     eventCheckIns?: EventRegistrationCreateNestedManyWithoutCheckedInByInput
+    dojoSalesAsBuyer?: DojoSaleCreateNestedManyWithoutMemberInput
+    dojoSalesSold?: DojoSaleCreateNestedManyWithoutSoldByInput
   }
 
   export type MemberUncheckedCreateWithoutAnnouncementsPostedInput = {
@@ -40370,6 +45958,8 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutMemberInput
     eventsPosted?: EventUncheckedCreateNestedManyWithoutPostedByInput
     eventCheckIns?: EventRegistrationUncheckedCreateNestedManyWithoutCheckedInByInput
+    dojoSalesAsBuyer?: DojoSaleUncheckedCreateNestedManyWithoutMemberInput
+    dojoSalesSold?: DojoSaleUncheckedCreateNestedManyWithoutSoldByInput
   }
 
   export type MemberCreateOrConnectWithoutAnnouncementsPostedInput = {
@@ -40400,6 +45990,8 @@ export namespace Prisma {
     members?: MemberCreateNestedManyWithoutDojoInput
     attendance?: AttendanceCreateNestedManyWithoutDojoInput
     events?: EventCreateNestedManyWithoutDojoInput
+    inventoryItems?: DojoInventoryItemCreateNestedManyWithoutDojoInput
+    sales?: DojoSaleCreateNestedManyWithoutDojoInput
   }
 
   export type DojoUncheckedCreateWithoutAnnouncementsInput = {
@@ -40425,6 +46017,8 @@ export namespace Prisma {
     members?: MemberUncheckedCreateNestedManyWithoutDojoInput
     attendance?: AttendanceUncheckedCreateNestedManyWithoutDojoInput
     events?: EventUncheckedCreateNestedManyWithoutDojoInput
+    inventoryItems?: DojoInventoryItemUncheckedCreateNestedManyWithoutDojoInput
+    sales?: DojoSaleUncheckedCreateNestedManyWithoutDojoInput
   }
 
   export type DojoCreateOrConnectWithoutAnnouncementsInput = {
@@ -40478,6 +46072,8 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestUpdateManyWithoutMemberNestedInput
     eventsPosted?: EventUpdateManyWithoutPostedByNestedInput
     eventCheckIns?: EventRegistrationUpdateManyWithoutCheckedInByNestedInput
+    dojoSalesAsBuyer?: DojoSaleUpdateManyWithoutMemberNestedInput
+    dojoSalesSold?: DojoSaleUpdateManyWithoutSoldByNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutAnnouncementsPostedInput = {
@@ -40515,6 +46111,8 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutMemberNestedInput
     eventsPosted?: EventUncheckedUpdateManyWithoutPostedByNestedInput
     eventCheckIns?: EventRegistrationUncheckedUpdateManyWithoutCheckedInByNestedInput
+    dojoSalesAsBuyer?: DojoSaleUncheckedUpdateManyWithoutMemberNestedInput
+    dojoSalesSold?: DojoSaleUncheckedUpdateManyWithoutSoldByNestedInput
   }
 
   export type DojoUpsertWithoutAnnouncementsInput = {
@@ -40551,6 +46149,8 @@ export namespace Prisma {
     members?: MemberUpdateManyWithoutDojoNestedInput
     attendance?: AttendanceUpdateManyWithoutDojoNestedInput
     events?: EventUpdateManyWithoutDojoNestedInput
+    inventoryItems?: DojoInventoryItemUpdateManyWithoutDojoNestedInput
+    sales?: DojoSaleUpdateManyWithoutDojoNestedInput
   }
 
   export type DojoUncheckedUpdateWithoutAnnouncementsInput = {
@@ -40576,6 +46176,8 @@ export namespace Prisma {
     members?: MemberUncheckedUpdateManyWithoutDojoNestedInput
     attendance?: AttendanceUncheckedUpdateManyWithoutDojoNestedInput
     events?: EventUncheckedUpdateManyWithoutDojoNestedInput
+    inventoryItems?: DojoInventoryItemUncheckedUpdateManyWithoutDojoNestedInput
+    sales?: DojoSaleUncheckedUpdateManyWithoutDojoNestedInput
   }
 
   export type EventCreateWithoutRegistrationsInput = {
@@ -40654,6 +46256,8 @@ export namespace Prisma {
     eventsPosted?: EventCreateNestedManyWithoutPostedByInput
     announcementsPosted?: AnnouncementCreateNestedManyWithoutPostedByInput
     eventCheckIns?: EventRegistrationCreateNestedManyWithoutCheckedInByInput
+    dojoSalesAsBuyer?: DojoSaleCreateNestedManyWithoutMemberInput
+    dojoSalesSold?: DojoSaleCreateNestedManyWithoutSoldByInput
   }
 
   export type MemberUncheckedCreateWithoutEventRegistrationsInput = {
@@ -40691,6 +46295,8 @@ export namespace Prisma {
     eventsPosted?: EventUncheckedCreateNestedManyWithoutPostedByInput
     announcementsPosted?: AnnouncementUncheckedCreateNestedManyWithoutPostedByInput
     eventCheckIns?: EventRegistrationUncheckedCreateNestedManyWithoutCheckedInByInput
+    dojoSalesAsBuyer?: DojoSaleUncheckedCreateNestedManyWithoutMemberInput
+    dojoSalesSold?: DojoSaleUncheckedCreateNestedManyWithoutSoldByInput
   }
 
   export type MemberCreateOrConnectWithoutEventRegistrationsInput = {
@@ -40733,6 +46339,8 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestCreateNestedManyWithoutMemberInput
     eventsPosted?: EventCreateNestedManyWithoutPostedByInput
     announcementsPosted?: AnnouncementCreateNestedManyWithoutPostedByInput
+    dojoSalesAsBuyer?: DojoSaleCreateNestedManyWithoutMemberInput
+    dojoSalesSold?: DojoSaleCreateNestedManyWithoutSoldByInput
   }
 
   export type MemberUncheckedCreateWithoutEventCheckInsInput = {
@@ -40770,6 +46378,8 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutMemberInput
     eventsPosted?: EventUncheckedCreateNestedManyWithoutPostedByInput
     announcementsPosted?: AnnouncementUncheckedCreateNestedManyWithoutPostedByInput
+    dojoSalesAsBuyer?: DojoSaleUncheckedCreateNestedManyWithoutMemberInput
+    dojoSalesSold?: DojoSaleUncheckedCreateNestedManyWithoutSoldByInput
   }
 
   export type MemberCreateOrConnectWithoutEventCheckInsInput = {
@@ -40870,6 +46480,8 @@ export namespace Prisma {
     eventsPosted?: EventUpdateManyWithoutPostedByNestedInput
     announcementsPosted?: AnnouncementUpdateManyWithoutPostedByNestedInput
     eventCheckIns?: EventRegistrationUpdateManyWithoutCheckedInByNestedInput
+    dojoSalesAsBuyer?: DojoSaleUpdateManyWithoutMemberNestedInput
+    dojoSalesSold?: DojoSaleUpdateManyWithoutSoldByNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutEventRegistrationsInput = {
@@ -40907,6 +46519,8 @@ export namespace Prisma {
     eventsPosted?: EventUncheckedUpdateManyWithoutPostedByNestedInput
     announcementsPosted?: AnnouncementUncheckedUpdateManyWithoutPostedByNestedInput
     eventCheckIns?: EventRegistrationUncheckedUpdateManyWithoutCheckedInByNestedInput
+    dojoSalesAsBuyer?: DojoSaleUncheckedUpdateManyWithoutMemberNestedInput
+    dojoSalesSold?: DojoSaleUncheckedUpdateManyWithoutSoldByNestedInput
   }
 
   export type MemberUpsertWithoutEventCheckInsInput = {
@@ -40955,6 +46569,8 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestUpdateManyWithoutMemberNestedInput
     eventsPosted?: EventUpdateManyWithoutPostedByNestedInput
     announcementsPosted?: AnnouncementUpdateManyWithoutPostedByNestedInput
+    dojoSalesAsBuyer?: DojoSaleUpdateManyWithoutMemberNestedInput
+    dojoSalesSold?: DojoSaleUpdateManyWithoutSoldByNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutEventCheckInsInput = {
@@ -40992,6 +46608,8 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutMemberNestedInput
     eventsPosted?: EventUncheckedUpdateManyWithoutPostedByNestedInput
     announcementsPosted?: AnnouncementUncheckedUpdateManyWithoutPostedByNestedInput
+    dojoSalesAsBuyer?: DojoSaleUncheckedUpdateManyWithoutMemberNestedInput
+    dojoSalesSold?: DojoSaleUncheckedUpdateManyWithoutSoldByNestedInput
   }
 
   export type MemberCreateWithoutNotificationsInput = {
@@ -41029,6 +46647,8 @@ export namespace Prisma {
     eventsPosted?: EventCreateNestedManyWithoutPostedByInput
     announcementsPosted?: AnnouncementCreateNestedManyWithoutPostedByInput
     eventCheckIns?: EventRegistrationCreateNestedManyWithoutCheckedInByInput
+    dojoSalesAsBuyer?: DojoSaleCreateNestedManyWithoutMemberInput
+    dojoSalesSold?: DojoSaleCreateNestedManyWithoutSoldByInput
   }
 
   export type MemberUncheckedCreateWithoutNotificationsInput = {
@@ -41066,6 +46686,8 @@ export namespace Prisma {
     eventsPosted?: EventUncheckedCreateNestedManyWithoutPostedByInput
     announcementsPosted?: AnnouncementUncheckedCreateNestedManyWithoutPostedByInput
     eventCheckIns?: EventRegistrationUncheckedCreateNestedManyWithoutCheckedInByInput
+    dojoSalesAsBuyer?: DojoSaleUncheckedCreateNestedManyWithoutMemberInput
+    dojoSalesSold?: DojoSaleUncheckedCreateNestedManyWithoutSoldByInput
   }
 
   export type MemberCreateOrConnectWithoutNotificationsInput = {
@@ -41119,6 +46741,8 @@ export namespace Prisma {
     eventsPosted?: EventUpdateManyWithoutPostedByNestedInput
     announcementsPosted?: AnnouncementUpdateManyWithoutPostedByNestedInput
     eventCheckIns?: EventRegistrationUpdateManyWithoutCheckedInByNestedInput
+    dojoSalesAsBuyer?: DojoSaleUpdateManyWithoutMemberNestedInput
+    dojoSalesSold?: DojoSaleUpdateManyWithoutSoldByNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutNotificationsInput = {
@@ -41156,6 +46780,8 @@ export namespace Prisma {
     eventsPosted?: EventUncheckedUpdateManyWithoutPostedByNestedInput
     announcementsPosted?: AnnouncementUncheckedUpdateManyWithoutPostedByNestedInput
     eventCheckIns?: EventRegistrationUncheckedUpdateManyWithoutCheckedInByNestedInput
+    dojoSalesAsBuyer?: DojoSaleUncheckedUpdateManyWithoutMemberNestedInput
+    dojoSalesSold?: DojoSaleUncheckedUpdateManyWithoutSoldByNestedInput
   }
 
   export type ShopOrderItemCreateWithoutProductInput = {
@@ -41179,6 +46805,62 @@ export namespace Prisma {
 
   export type ShopOrderItemCreateManyProductInputEnvelope = {
     data: ShopOrderItemCreateManyProductInput | ShopOrderItemCreateManyProductInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type DojoInventoryItemCreateWithoutProductInput = {
+    id?: string
+    quantityOnHand?: number
+    unitPrice: Decimal | DecimalJsLike | number | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    dojo: DojoCreateNestedOneWithoutInventoryItemsInput
+  }
+
+  export type DojoInventoryItemUncheckedCreateWithoutProductInput = {
+    id?: string
+    dojoId: string
+    quantityOnHand?: number
+    unitPrice: Decimal | DecimalJsLike | number | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DojoInventoryItemCreateOrConnectWithoutProductInput = {
+    where: DojoInventoryItemWhereUniqueInput
+    create: XOR<DojoInventoryItemCreateWithoutProductInput, DojoInventoryItemUncheckedCreateWithoutProductInput>
+  }
+
+  export type DojoInventoryItemCreateManyProductInputEnvelope = {
+    data: DojoInventoryItemCreateManyProductInput | DojoInventoryItemCreateManyProductInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type DojoSaleItemCreateWithoutProductInput = {
+    id?: string
+    productName: string
+    quantity: number
+    unitPrice: Decimal | DecimalJsLike | number | string
+    lineTotal: Decimal | DecimalJsLike | number | string
+    sale: DojoSaleCreateNestedOneWithoutItemsInput
+  }
+
+  export type DojoSaleItemUncheckedCreateWithoutProductInput = {
+    id?: string
+    saleId: string
+    productName: string
+    quantity: number
+    unitPrice: Decimal | DecimalJsLike | number | string
+    lineTotal: Decimal | DecimalJsLike | number | string
+  }
+
+  export type DojoSaleItemCreateOrConnectWithoutProductInput = {
+    where: DojoSaleItemWhereUniqueInput
+    create: XOR<DojoSaleItemCreateWithoutProductInput, DojoSaleItemUncheckedCreateWithoutProductInput>
+  }
+
+  export type DojoSaleItemCreateManyProductInputEnvelope = {
+    data: DojoSaleItemCreateManyProductInput | DojoSaleItemCreateManyProductInput[]
     skipDuplicates?: boolean
   }
 
@@ -41207,6 +46889,919 @@ export namespace Prisma {
     productId?: UuidFilter<"ShopOrderItem"> | string
     quantity?: IntFilter<"ShopOrderItem"> | number
     unitPrice?: DecimalFilter<"ShopOrderItem"> | Decimal | DecimalJsLike | number | string
+  }
+
+  export type DojoInventoryItemUpsertWithWhereUniqueWithoutProductInput = {
+    where: DojoInventoryItemWhereUniqueInput
+    update: XOR<DojoInventoryItemUpdateWithoutProductInput, DojoInventoryItemUncheckedUpdateWithoutProductInput>
+    create: XOR<DojoInventoryItemCreateWithoutProductInput, DojoInventoryItemUncheckedCreateWithoutProductInput>
+  }
+
+  export type DojoInventoryItemUpdateWithWhereUniqueWithoutProductInput = {
+    where: DojoInventoryItemWhereUniqueInput
+    data: XOR<DojoInventoryItemUpdateWithoutProductInput, DojoInventoryItemUncheckedUpdateWithoutProductInput>
+  }
+
+  export type DojoInventoryItemUpdateManyWithWhereWithoutProductInput = {
+    where: DojoInventoryItemScalarWhereInput
+    data: XOR<DojoInventoryItemUpdateManyMutationInput, DojoInventoryItemUncheckedUpdateManyWithoutProductInput>
+  }
+
+  export type DojoSaleItemUpsertWithWhereUniqueWithoutProductInput = {
+    where: DojoSaleItemWhereUniqueInput
+    update: XOR<DojoSaleItemUpdateWithoutProductInput, DojoSaleItemUncheckedUpdateWithoutProductInput>
+    create: XOR<DojoSaleItemCreateWithoutProductInput, DojoSaleItemUncheckedCreateWithoutProductInput>
+  }
+
+  export type DojoSaleItemUpdateWithWhereUniqueWithoutProductInput = {
+    where: DojoSaleItemWhereUniqueInput
+    data: XOR<DojoSaleItemUpdateWithoutProductInput, DojoSaleItemUncheckedUpdateWithoutProductInput>
+  }
+
+  export type DojoSaleItemUpdateManyWithWhereWithoutProductInput = {
+    where: DojoSaleItemScalarWhereInput
+    data: XOR<DojoSaleItemUpdateManyMutationInput, DojoSaleItemUncheckedUpdateManyWithoutProductInput>
+  }
+
+  export type DojoSaleItemScalarWhereInput = {
+    AND?: DojoSaleItemScalarWhereInput | DojoSaleItemScalarWhereInput[]
+    OR?: DojoSaleItemScalarWhereInput[]
+    NOT?: DojoSaleItemScalarWhereInput | DojoSaleItemScalarWhereInput[]
+    id?: UuidFilter<"DojoSaleItem"> | string
+    saleId?: UuidFilter<"DojoSaleItem"> | string
+    productId?: UuidFilter<"DojoSaleItem"> | string
+    productName?: StringFilter<"DojoSaleItem"> | string
+    quantity?: IntFilter<"DojoSaleItem"> | number
+    unitPrice?: DecimalFilter<"DojoSaleItem"> | Decimal | DecimalJsLike | number | string
+    lineTotal?: DecimalFilter<"DojoSaleItem"> | Decimal | DecimalJsLike | number | string
+  }
+
+  export type DojoCreateWithoutInventoryItemsInput = {
+    id?: string
+    name: string
+    address?: string | null
+    city?: string | null
+    latitude?: number | null
+    longitude?: number | null
+    phone?: string | null
+    email?: string | null
+    schedule?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: boolean
+    annualFee?: Decimal | DecimalJsLike | number | string | null
+    expiryDate?: Date | string | null
+    ownerSignatureUrl?: string | null
+    logoUrl?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    renewalOrders?: ShopOrderCreateNestedManyWithoutDojoInput
+    certificateOrders?: ShopOrderCreateNestedManyWithoutCertDojoInput
+    certificateRequests?: CertificateRequestCreateNestedManyWithoutDojoInput
+    members?: MemberCreateNestedManyWithoutDojoInput
+    attendance?: AttendanceCreateNestedManyWithoutDojoInput
+    events?: EventCreateNestedManyWithoutDojoInput
+    announcements?: AnnouncementCreateNestedManyWithoutDojoInput
+    sales?: DojoSaleCreateNestedManyWithoutDojoInput
+  }
+
+  export type DojoUncheckedCreateWithoutInventoryItemsInput = {
+    id?: string
+    name: string
+    address?: string | null
+    city?: string | null
+    latitude?: number | null
+    longitude?: number | null
+    phone?: string | null
+    email?: string | null
+    schedule?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: boolean
+    annualFee?: Decimal | DecimalJsLike | number | string | null
+    expiryDate?: Date | string | null
+    ownerSignatureUrl?: string | null
+    logoUrl?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    renewalOrders?: ShopOrderUncheckedCreateNestedManyWithoutDojoInput
+    certificateOrders?: ShopOrderUncheckedCreateNestedManyWithoutCertDojoInput
+    certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutDojoInput
+    members?: MemberUncheckedCreateNestedManyWithoutDojoInput
+    attendance?: AttendanceUncheckedCreateNestedManyWithoutDojoInput
+    events?: EventUncheckedCreateNestedManyWithoutDojoInput
+    announcements?: AnnouncementUncheckedCreateNestedManyWithoutDojoInput
+    sales?: DojoSaleUncheckedCreateNestedManyWithoutDojoInput
+  }
+
+  export type DojoCreateOrConnectWithoutInventoryItemsInput = {
+    where: DojoWhereUniqueInput
+    create: XOR<DojoCreateWithoutInventoryItemsInput, DojoUncheckedCreateWithoutInventoryItemsInput>
+  }
+
+  export type ShopProductCreateWithoutDojoInventoryInput = {
+    id?: string
+    name: string
+    description?: string | null
+    price: Decimal | DecimalJsLike | number | string
+    stock?: number
+    imageUrl?: string | null
+    category?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    orderItems?: ShopOrderItemCreateNestedManyWithoutProductInput
+    dojoSaleItems?: DojoSaleItemCreateNestedManyWithoutProductInput
+  }
+
+  export type ShopProductUncheckedCreateWithoutDojoInventoryInput = {
+    id?: string
+    name: string
+    description?: string | null
+    price: Decimal | DecimalJsLike | number | string
+    stock?: number
+    imageUrl?: string | null
+    category?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    orderItems?: ShopOrderItemUncheckedCreateNestedManyWithoutProductInput
+    dojoSaleItems?: DojoSaleItemUncheckedCreateNestedManyWithoutProductInput
+  }
+
+  export type ShopProductCreateOrConnectWithoutDojoInventoryInput = {
+    where: ShopProductWhereUniqueInput
+    create: XOR<ShopProductCreateWithoutDojoInventoryInput, ShopProductUncheckedCreateWithoutDojoInventoryInput>
+  }
+
+  export type DojoUpsertWithoutInventoryItemsInput = {
+    update: XOR<DojoUpdateWithoutInventoryItemsInput, DojoUncheckedUpdateWithoutInventoryItemsInput>
+    create: XOR<DojoCreateWithoutInventoryItemsInput, DojoUncheckedCreateWithoutInventoryItemsInput>
+    where?: DojoWhereInput
+  }
+
+  export type DojoUpdateToOneWithWhereWithoutInventoryItemsInput = {
+    where?: DojoWhereInput
+    data: XOR<DojoUpdateWithoutInventoryItemsInput, DojoUncheckedUpdateWithoutInventoryItemsInput>
+  }
+
+  export type DojoUpdateWithoutInventoryItemsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    schedule?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    annualFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    ownerSignatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    renewalOrders?: ShopOrderUpdateManyWithoutDojoNestedInput
+    certificateOrders?: ShopOrderUpdateManyWithoutCertDojoNestedInput
+    certificateRequests?: CertificateRequestUpdateManyWithoutDojoNestedInput
+    members?: MemberUpdateManyWithoutDojoNestedInput
+    attendance?: AttendanceUpdateManyWithoutDojoNestedInput
+    events?: EventUpdateManyWithoutDojoNestedInput
+    announcements?: AnnouncementUpdateManyWithoutDojoNestedInput
+    sales?: DojoSaleUpdateManyWithoutDojoNestedInput
+  }
+
+  export type DojoUncheckedUpdateWithoutInventoryItemsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    schedule?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    annualFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    ownerSignatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    renewalOrders?: ShopOrderUncheckedUpdateManyWithoutDojoNestedInput
+    certificateOrders?: ShopOrderUncheckedUpdateManyWithoutCertDojoNestedInput
+    certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutDojoNestedInput
+    members?: MemberUncheckedUpdateManyWithoutDojoNestedInput
+    attendance?: AttendanceUncheckedUpdateManyWithoutDojoNestedInput
+    events?: EventUncheckedUpdateManyWithoutDojoNestedInput
+    announcements?: AnnouncementUncheckedUpdateManyWithoutDojoNestedInput
+    sales?: DojoSaleUncheckedUpdateManyWithoutDojoNestedInput
+  }
+
+  export type ShopProductUpsertWithoutDojoInventoryInput = {
+    update: XOR<ShopProductUpdateWithoutDojoInventoryInput, ShopProductUncheckedUpdateWithoutDojoInventoryInput>
+    create: XOR<ShopProductCreateWithoutDojoInventoryInput, ShopProductUncheckedCreateWithoutDojoInventoryInput>
+    where?: ShopProductWhereInput
+  }
+
+  export type ShopProductUpdateToOneWithWhereWithoutDojoInventoryInput = {
+    where?: ShopProductWhereInput
+    data: XOR<ShopProductUpdateWithoutDojoInventoryInput, ShopProductUncheckedUpdateWithoutDojoInventoryInput>
+  }
+
+  export type ShopProductUpdateWithoutDojoInventoryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    stock?: IntFieldUpdateOperationsInput | number
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    orderItems?: ShopOrderItemUpdateManyWithoutProductNestedInput
+    dojoSaleItems?: DojoSaleItemUpdateManyWithoutProductNestedInput
+  }
+
+  export type ShopProductUncheckedUpdateWithoutDojoInventoryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    stock?: IntFieldUpdateOperationsInput | number
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    orderItems?: ShopOrderItemUncheckedUpdateManyWithoutProductNestedInput
+    dojoSaleItems?: DojoSaleItemUncheckedUpdateManyWithoutProductNestedInput
+  }
+
+  export type DojoCreateWithoutSalesInput = {
+    id?: string
+    name: string
+    address?: string | null
+    city?: string | null
+    latitude?: number | null
+    longitude?: number | null
+    phone?: string | null
+    email?: string | null
+    schedule?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: boolean
+    annualFee?: Decimal | DecimalJsLike | number | string | null
+    expiryDate?: Date | string | null
+    ownerSignatureUrl?: string | null
+    logoUrl?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    renewalOrders?: ShopOrderCreateNestedManyWithoutDojoInput
+    certificateOrders?: ShopOrderCreateNestedManyWithoutCertDojoInput
+    certificateRequests?: CertificateRequestCreateNestedManyWithoutDojoInput
+    members?: MemberCreateNestedManyWithoutDojoInput
+    attendance?: AttendanceCreateNestedManyWithoutDojoInput
+    events?: EventCreateNestedManyWithoutDojoInput
+    announcements?: AnnouncementCreateNestedManyWithoutDojoInput
+    inventoryItems?: DojoInventoryItemCreateNestedManyWithoutDojoInput
+  }
+
+  export type DojoUncheckedCreateWithoutSalesInput = {
+    id?: string
+    name: string
+    address?: string | null
+    city?: string | null
+    latitude?: number | null
+    longitude?: number | null
+    phone?: string | null
+    email?: string | null
+    schedule?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: boolean
+    annualFee?: Decimal | DecimalJsLike | number | string | null
+    expiryDate?: Date | string | null
+    ownerSignatureUrl?: string | null
+    logoUrl?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    renewalOrders?: ShopOrderUncheckedCreateNestedManyWithoutDojoInput
+    certificateOrders?: ShopOrderUncheckedCreateNestedManyWithoutCertDojoInput
+    certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutDojoInput
+    members?: MemberUncheckedCreateNestedManyWithoutDojoInput
+    attendance?: AttendanceUncheckedCreateNestedManyWithoutDojoInput
+    events?: EventUncheckedCreateNestedManyWithoutDojoInput
+    announcements?: AnnouncementUncheckedCreateNestedManyWithoutDojoInput
+    inventoryItems?: DojoInventoryItemUncheckedCreateNestedManyWithoutDojoInput
+  }
+
+  export type DojoCreateOrConnectWithoutSalesInput = {
+    where: DojoWhereUniqueInput
+    create: XOR<DojoCreateWithoutSalesInput, DojoUncheckedCreateWithoutSalesInput>
+  }
+
+  export type MemberCreateWithoutDojoSalesAsBuyerInput = {
+    id: string
+    fullName: string
+    email: string
+    phone?: string | null
+    avatarUrl?: string | null
+    role?: $Enums.MemberRole
+    memberNumber?: string | null
+    currentRank?: string
+    joinDate?: Date | string
+    expiryDate?: Date | string | null
+    isActive?: boolean
+    onboardingComplete?: boolean
+    membershipStatus?: $Enums.MembershipStatus
+    dateOfBirth?: Date | string | null
+    bloodGroup?: string | null
+    address?: string | null
+    nationalId?: string | null
+    fatherName?: string | null
+    motherName?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    dojo?: DojoCreateNestedOneWithoutMembersInput
+    gradings?: GradingCreateNestedManyWithoutMemberInput
+    gradingApplications?: GradingApplicationCreateNestedManyWithoutMemberInput
+    eventRegistrations?: EventRegistrationCreateNestedManyWithoutMemberInput
+    notifications?: NotificationCreateNestedManyWithoutMemberInput
+    orders?: ShopOrderCreateNestedManyWithoutMemberInput
+    attendance?: AttendanceCreateNestedManyWithoutMemberInput
+    tournamentEntries?: TournamentParticipantCreateNestedManyWithoutMemberInput
+    certificateRequests?: CertificateRequestCreateNestedManyWithoutMemberInput
+    eventsPosted?: EventCreateNestedManyWithoutPostedByInput
+    announcementsPosted?: AnnouncementCreateNestedManyWithoutPostedByInput
+    eventCheckIns?: EventRegistrationCreateNestedManyWithoutCheckedInByInput
+    dojoSalesSold?: DojoSaleCreateNestedManyWithoutSoldByInput
+  }
+
+  export type MemberUncheckedCreateWithoutDojoSalesAsBuyerInput = {
+    id: string
+    fullName: string
+    email: string
+    phone?: string | null
+    avatarUrl?: string | null
+    role?: $Enums.MemberRole
+    memberNumber?: string | null
+    currentRank?: string
+    joinDate?: Date | string
+    expiryDate?: Date | string | null
+    isActive?: boolean
+    dojoId?: string | null
+    onboardingComplete?: boolean
+    membershipStatus?: $Enums.MembershipStatus
+    dateOfBirth?: Date | string | null
+    bloodGroup?: string | null
+    address?: string | null
+    nationalId?: string | null
+    fatherName?: string | null
+    motherName?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    gradings?: GradingUncheckedCreateNestedManyWithoutMemberInput
+    gradingApplications?: GradingApplicationUncheckedCreateNestedManyWithoutMemberInput
+    eventRegistrations?: EventRegistrationUncheckedCreateNestedManyWithoutMemberInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutMemberInput
+    orders?: ShopOrderUncheckedCreateNestedManyWithoutMemberInput
+    attendance?: AttendanceUncheckedCreateNestedManyWithoutMemberInput
+    tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutMemberInput
+    certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutMemberInput
+    eventsPosted?: EventUncheckedCreateNestedManyWithoutPostedByInput
+    announcementsPosted?: AnnouncementUncheckedCreateNestedManyWithoutPostedByInput
+    eventCheckIns?: EventRegistrationUncheckedCreateNestedManyWithoutCheckedInByInput
+    dojoSalesSold?: DojoSaleUncheckedCreateNestedManyWithoutSoldByInput
+  }
+
+  export type MemberCreateOrConnectWithoutDojoSalesAsBuyerInput = {
+    where: MemberWhereUniqueInput
+    create: XOR<MemberCreateWithoutDojoSalesAsBuyerInput, MemberUncheckedCreateWithoutDojoSalesAsBuyerInput>
+  }
+
+  export type MemberCreateWithoutDojoSalesSoldInput = {
+    id: string
+    fullName: string
+    email: string
+    phone?: string | null
+    avatarUrl?: string | null
+    role?: $Enums.MemberRole
+    memberNumber?: string | null
+    currentRank?: string
+    joinDate?: Date | string
+    expiryDate?: Date | string | null
+    isActive?: boolean
+    onboardingComplete?: boolean
+    membershipStatus?: $Enums.MembershipStatus
+    dateOfBirth?: Date | string | null
+    bloodGroup?: string | null
+    address?: string | null
+    nationalId?: string | null
+    fatherName?: string | null
+    motherName?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    dojo?: DojoCreateNestedOneWithoutMembersInput
+    gradings?: GradingCreateNestedManyWithoutMemberInput
+    gradingApplications?: GradingApplicationCreateNestedManyWithoutMemberInput
+    eventRegistrations?: EventRegistrationCreateNestedManyWithoutMemberInput
+    notifications?: NotificationCreateNestedManyWithoutMemberInput
+    orders?: ShopOrderCreateNestedManyWithoutMemberInput
+    attendance?: AttendanceCreateNestedManyWithoutMemberInput
+    tournamentEntries?: TournamentParticipantCreateNestedManyWithoutMemberInput
+    certificateRequests?: CertificateRequestCreateNestedManyWithoutMemberInput
+    eventsPosted?: EventCreateNestedManyWithoutPostedByInput
+    announcementsPosted?: AnnouncementCreateNestedManyWithoutPostedByInput
+    eventCheckIns?: EventRegistrationCreateNestedManyWithoutCheckedInByInput
+    dojoSalesAsBuyer?: DojoSaleCreateNestedManyWithoutMemberInput
+  }
+
+  export type MemberUncheckedCreateWithoutDojoSalesSoldInput = {
+    id: string
+    fullName: string
+    email: string
+    phone?: string | null
+    avatarUrl?: string | null
+    role?: $Enums.MemberRole
+    memberNumber?: string | null
+    currentRank?: string
+    joinDate?: Date | string
+    expiryDate?: Date | string | null
+    isActive?: boolean
+    dojoId?: string | null
+    onboardingComplete?: boolean
+    membershipStatus?: $Enums.MembershipStatus
+    dateOfBirth?: Date | string | null
+    bloodGroup?: string | null
+    address?: string | null
+    nationalId?: string | null
+    fatherName?: string | null
+    motherName?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    gradings?: GradingUncheckedCreateNestedManyWithoutMemberInput
+    gradingApplications?: GradingApplicationUncheckedCreateNestedManyWithoutMemberInput
+    eventRegistrations?: EventRegistrationUncheckedCreateNestedManyWithoutMemberInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutMemberInput
+    orders?: ShopOrderUncheckedCreateNestedManyWithoutMemberInput
+    attendance?: AttendanceUncheckedCreateNestedManyWithoutMemberInput
+    tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutMemberInput
+    certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutMemberInput
+    eventsPosted?: EventUncheckedCreateNestedManyWithoutPostedByInput
+    announcementsPosted?: AnnouncementUncheckedCreateNestedManyWithoutPostedByInput
+    eventCheckIns?: EventRegistrationUncheckedCreateNestedManyWithoutCheckedInByInput
+    dojoSalesAsBuyer?: DojoSaleUncheckedCreateNestedManyWithoutMemberInput
+  }
+
+  export type MemberCreateOrConnectWithoutDojoSalesSoldInput = {
+    where: MemberWhereUniqueInput
+    create: XOR<MemberCreateWithoutDojoSalesSoldInput, MemberUncheckedCreateWithoutDojoSalesSoldInput>
+  }
+
+  export type DojoSaleItemCreateWithoutSaleInput = {
+    id?: string
+    productName: string
+    quantity: number
+    unitPrice: Decimal | DecimalJsLike | number | string
+    lineTotal: Decimal | DecimalJsLike | number | string
+    product: ShopProductCreateNestedOneWithoutDojoSaleItemsInput
+  }
+
+  export type DojoSaleItemUncheckedCreateWithoutSaleInput = {
+    id?: string
+    productId: string
+    productName: string
+    quantity: number
+    unitPrice: Decimal | DecimalJsLike | number | string
+    lineTotal: Decimal | DecimalJsLike | number | string
+  }
+
+  export type DojoSaleItemCreateOrConnectWithoutSaleInput = {
+    where: DojoSaleItemWhereUniqueInput
+    create: XOR<DojoSaleItemCreateWithoutSaleInput, DojoSaleItemUncheckedCreateWithoutSaleInput>
+  }
+
+  export type DojoSaleItemCreateManySaleInputEnvelope = {
+    data: DojoSaleItemCreateManySaleInput | DojoSaleItemCreateManySaleInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type DojoUpsertWithoutSalesInput = {
+    update: XOR<DojoUpdateWithoutSalesInput, DojoUncheckedUpdateWithoutSalesInput>
+    create: XOR<DojoCreateWithoutSalesInput, DojoUncheckedCreateWithoutSalesInput>
+    where?: DojoWhereInput
+  }
+
+  export type DojoUpdateToOneWithWhereWithoutSalesInput = {
+    where?: DojoWhereInput
+    data: XOR<DojoUpdateWithoutSalesInput, DojoUncheckedUpdateWithoutSalesInput>
+  }
+
+  export type DojoUpdateWithoutSalesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    schedule?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    annualFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    ownerSignatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    renewalOrders?: ShopOrderUpdateManyWithoutDojoNestedInput
+    certificateOrders?: ShopOrderUpdateManyWithoutCertDojoNestedInput
+    certificateRequests?: CertificateRequestUpdateManyWithoutDojoNestedInput
+    members?: MemberUpdateManyWithoutDojoNestedInput
+    attendance?: AttendanceUpdateManyWithoutDojoNestedInput
+    events?: EventUpdateManyWithoutDojoNestedInput
+    announcements?: AnnouncementUpdateManyWithoutDojoNestedInput
+    inventoryItems?: DojoInventoryItemUpdateManyWithoutDojoNestedInput
+  }
+
+  export type DojoUncheckedUpdateWithoutSalesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    schedule?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    annualFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    ownerSignatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    renewalOrders?: ShopOrderUncheckedUpdateManyWithoutDojoNestedInput
+    certificateOrders?: ShopOrderUncheckedUpdateManyWithoutCertDojoNestedInput
+    certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutDojoNestedInput
+    members?: MemberUncheckedUpdateManyWithoutDojoNestedInput
+    attendance?: AttendanceUncheckedUpdateManyWithoutDojoNestedInput
+    events?: EventUncheckedUpdateManyWithoutDojoNestedInput
+    announcements?: AnnouncementUncheckedUpdateManyWithoutDojoNestedInput
+    inventoryItems?: DojoInventoryItemUncheckedUpdateManyWithoutDojoNestedInput
+  }
+
+  export type MemberUpsertWithoutDojoSalesAsBuyerInput = {
+    update: XOR<MemberUpdateWithoutDojoSalesAsBuyerInput, MemberUncheckedUpdateWithoutDojoSalesAsBuyerInput>
+    create: XOR<MemberCreateWithoutDojoSalesAsBuyerInput, MemberUncheckedCreateWithoutDojoSalesAsBuyerInput>
+    where?: MemberWhereInput
+  }
+
+  export type MemberUpdateToOneWithWhereWithoutDojoSalesAsBuyerInput = {
+    where?: MemberWhereInput
+    data: XOR<MemberUpdateWithoutDojoSalesAsBuyerInput, MemberUncheckedUpdateWithoutDojoSalesAsBuyerInput>
+  }
+
+  export type MemberUpdateWithoutDojoSalesAsBuyerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fullName?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumMemberRoleFieldUpdateOperationsInput | $Enums.MemberRole
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    currentRank?: StringFieldUpdateOperationsInput | string
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    onboardingComplete?: BoolFieldUpdateOperationsInput | boolean
+    membershipStatus?: EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    dojo?: DojoUpdateOneWithoutMembersNestedInput
+    gradings?: GradingUpdateManyWithoutMemberNestedInput
+    gradingApplications?: GradingApplicationUpdateManyWithoutMemberNestedInput
+    eventRegistrations?: EventRegistrationUpdateManyWithoutMemberNestedInput
+    notifications?: NotificationUpdateManyWithoutMemberNestedInput
+    orders?: ShopOrderUpdateManyWithoutMemberNestedInput
+    attendance?: AttendanceUpdateManyWithoutMemberNestedInput
+    tournamentEntries?: TournamentParticipantUpdateManyWithoutMemberNestedInput
+    certificateRequests?: CertificateRequestUpdateManyWithoutMemberNestedInput
+    eventsPosted?: EventUpdateManyWithoutPostedByNestedInput
+    announcementsPosted?: AnnouncementUpdateManyWithoutPostedByNestedInput
+    eventCheckIns?: EventRegistrationUpdateManyWithoutCheckedInByNestedInput
+    dojoSalesSold?: DojoSaleUpdateManyWithoutSoldByNestedInput
+  }
+
+  export type MemberUncheckedUpdateWithoutDojoSalesAsBuyerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fullName?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumMemberRoleFieldUpdateOperationsInput | $Enums.MemberRole
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    currentRank?: StringFieldUpdateOperationsInput | string
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    dojoId?: NullableStringFieldUpdateOperationsInput | string | null
+    onboardingComplete?: BoolFieldUpdateOperationsInput | boolean
+    membershipStatus?: EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    gradings?: GradingUncheckedUpdateManyWithoutMemberNestedInput
+    gradingApplications?: GradingApplicationUncheckedUpdateManyWithoutMemberNestedInput
+    eventRegistrations?: EventRegistrationUncheckedUpdateManyWithoutMemberNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutMemberNestedInput
+    orders?: ShopOrderUncheckedUpdateManyWithoutMemberNestedInput
+    attendance?: AttendanceUncheckedUpdateManyWithoutMemberNestedInput
+    tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutMemberNestedInput
+    certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutMemberNestedInput
+    eventsPosted?: EventUncheckedUpdateManyWithoutPostedByNestedInput
+    announcementsPosted?: AnnouncementUncheckedUpdateManyWithoutPostedByNestedInput
+    eventCheckIns?: EventRegistrationUncheckedUpdateManyWithoutCheckedInByNestedInput
+    dojoSalesSold?: DojoSaleUncheckedUpdateManyWithoutSoldByNestedInput
+  }
+
+  export type MemberUpsertWithoutDojoSalesSoldInput = {
+    update: XOR<MemberUpdateWithoutDojoSalesSoldInput, MemberUncheckedUpdateWithoutDojoSalesSoldInput>
+    create: XOR<MemberCreateWithoutDojoSalesSoldInput, MemberUncheckedCreateWithoutDojoSalesSoldInput>
+    where?: MemberWhereInput
+  }
+
+  export type MemberUpdateToOneWithWhereWithoutDojoSalesSoldInput = {
+    where?: MemberWhereInput
+    data: XOR<MemberUpdateWithoutDojoSalesSoldInput, MemberUncheckedUpdateWithoutDojoSalesSoldInput>
+  }
+
+  export type MemberUpdateWithoutDojoSalesSoldInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fullName?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumMemberRoleFieldUpdateOperationsInput | $Enums.MemberRole
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    currentRank?: StringFieldUpdateOperationsInput | string
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    onboardingComplete?: BoolFieldUpdateOperationsInput | boolean
+    membershipStatus?: EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    dojo?: DojoUpdateOneWithoutMembersNestedInput
+    gradings?: GradingUpdateManyWithoutMemberNestedInput
+    gradingApplications?: GradingApplicationUpdateManyWithoutMemberNestedInput
+    eventRegistrations?: EventRegistrationUpdateManyWithoutMemberNestedInput
+    notifications?: NotificationUpdateManyWithoutMemberNestedInput
+    orders?: ShopOrderUpdateManyWithoutMemberNestedInput
+    attendance?: AttendanceUpdateManyWithoutMemberNestedInput
+    tournamentEntries?: TournamentParticipantUpdateManyWithoutMemberNestedInput
+    certificateRequests?: CertificateRequestUpdateManyWithoutMemberNestedInput
+    eventsPosted?: EventUpdateManyWithoutPostedByNestedInput
+    announcementsPosted?: AnnouncementUpdateManyWithoutPostedByNestedInput
+    eventCheckIns?: EventRegistrationUpdateManyWithoutCheckedInByNestedInput
+    dojoSalesAsBuyer?: DojoSaleUpdateManyWithoutMemberNestedInput
+  }
+
+  export type MemberUncheckedUpdateWithoutDojoSalesSoldInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fullName?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumMemberRoleFieldUpdateOperationsInput | $Enums.MemberRole
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    currentRank?: StringFieldUpdateOperationsInput | string
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    dojoId?: NullableStringFieldUpdateOperationsInput | string | null
+    onboardingComplete?: BoolFieldUpdateOperationsInput | boolean
+    membershipStatus?: EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    gradings?: GradingUncheckedUpdateManyWithoutMemberNestedInput
+    gradingApplications?: GradingApplicationUncheckedUpdateManyWithoutMemberNestedInput
+    eventRegistrations?: EventRegistrationUncheckedUpdateManyWithoutMemberNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutMemberNestedInput
+    orders?: ShopOrderUncheckedUpdateManyWithoutMemberNestedInput
+    attendance?: AttendanceUncheckedUpdateManyWithoutMemberNestedInput
+    tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutMemberNestedInput
+    certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutMemberNestedInput
+    eventsPosted?: EventUncheckedUpdateManyWithoutPostedByNestedInput
+    announcementsPosted?: AnnouncementUncheckedUpdateManyWithoutPostedByNestedInput
+    eventCheckIns?: EventRegistrationUncheckedUpdateManyWithoutCheckedInByNestedInput
+    dojoSalesAsBuyer?: DojoSaleUncheckedUpdateManyWithoutMemberNestedInput
+  }
+
+  export type DojoSaleItemUpsertWithWhereUniqueWithoutSaleInput = {
+    where: DojoSaleItemWhereUniqueInput
+    update: XOR<DojoSaleItemUpdateWithoutSaleInput, DojoSaleItemUncheckedUpdateWithoutSaleInput>
+    create: XOR<DojoSaleItemCreateWithoutSaleInput, DojoSaleItemUncheckedCreateWithoutSaleInput>
+  }
+
+  export type DojoSaleItemUpdateWithWhereUniqueWithoutSaleInput = {
+    where: DojoSaleItemWhereUniqueInput
+    data: XOR<DojoSaleItemUpdateWithoutSaleInput, DojoSaleItemUncheckedUpdateWithoutSaleInput>
+  }
+
+  export type DojoSaleItemUpdateManyWithWhereWithoutSaleInput = {
+    where: DojoSaleItemScalarWhereInput
+    data: XOR<DojoSaleItemUpdateManyMutationInput, DojoSaleItemUncheckedUpdateManyWithoutSaleInput>
+  }
+
+  export type DojoSaleCreateWithoutItemsInput = {
+    id?: string
+    receiptNo: string
+    buyerName: string
+    soldByName?: string | null
+    subtotal: Decimal | DecimalJsLike | number | string
+    discount?: Decimal | DecimalJsLike | number | string
+    total: Decimal | DecimalJsLike | number | string
+    paymentMethod?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    dojo: DojoCreateNestedOneWithoutSalesInput
+    member?: MemberCreateNestedOneWithoutDojoSalesAsBuyerInput
+    soldBy?: MemberCreateNestedOneWithoutDojoSalesSoldInput
+  }
+
+  export type DojoSaleUncheckedCreateWithoutItemsInput = {
+    id?: string
+    dojoId: string
+    receiptNo: string
+    memberId?: string | null
+    buyerName: string
+    soldByUserId?: string | null
+    soldByName?: string | null
+    subtotal: Decimal | DecimalJsLike | number | string
+    discount?: Decimal | DecimalJsLike | number | string
+    total: Decimal | DecimalJsLike | number | string
+    paymentMethod?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+  }
+
+  export type DojoSaleCreateOrConnectWithoutItemsInput = {
+    where: DojoSaleWhereUniqueInput
+    create: XOR<DojoSaleCreateWithoutItemsInput, DojoSaleUncheckedCreateWithoutItemsInput>
+  }
+
+  export type ShopProductCreateWithoutDojoSaleItemsInput = {
+    id?: string
+    name: string
+    description?: string | null
+    price: Decimal | DecimalJsLike | number | string
+    stock?: number
+    imageUrl?: string | null
+    category?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    orderItems?: ShopOrderItemCreateNestedManyWithoutProductInput
+    dojoInventory?: DojoInventoryItemCreateNestedManyWithoutProductInput
+  }
+
+  export type ShopProductUncheckedCreateWithoutDojoSaleItemsInput = {
+    id?: string
+    name: string
+    description?: string | null
+    price: Decimal | DecimalJsLike | number | string
+    stock?: number
+    imageUrl?: string | null
+    category?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    orderItems?: ShopOrderItemUncheckedCreateNestedManyWithoutProductInput
+    dojoInventory?: DojoInventoryItemUncheckedCreateNestedManyWithoutProductInput
+  }
+
+  export type ShopProductCreateOrConnectWithoutDojoSaleItemsInput = {
+    where: ShopProductWhereUniqueInput
+    create: XOR<ShopProductCreateWithoutDojoSaleItemsInput, ShopProductUncheckedCreateWithoutDojoSaleItemsInput>
+  }
+
+  export type DojoSaleUpsertWithoutItemsInput = {
+    update: XOR<DojoSaleUpdateWithoutItemsInput, DojoSaleUncheckedUpdateWithoutItemsInput>
+    create: XOR<DojoSaleCreateWithoutItemsInput, DojoSaleUncheckedCreateWithoutItemsInput>
+    where?: DojoSaleWhereInput
+  }
+
+  export type DojoSaleUpdateToOneWithWhereWithoutItemsInput = {
+    where?: DojoSaleWhereInput
+    data: XOR<DojoSaleUpdateWithoutItemsInput, DojoSaleUncheckedUpdateWithoutItemsInput>
+  }
+
+  export type DojoSaleUpdateWithoutItemsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    receiptNo?: StringFieldUpdateOperationsInput | string
+    buyerName?: StringFieldUpdateOperationsInput | string
+    soldByName?: NullableStringFieldUpdateOperationsInput | string | null
+    subtotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    dojo?: DojoUpdateOneRequiredWithoutSalesNestedInput
+    member?: MemberUpdateOneWithoutDojoSalesAsBuyerNestedInput
+    soldBy?: MemberUpdateOneWithoutDojoSalesSoldNestedInput
+  }
+
+  export type DojoSaleUncheckedUpdateWithoutItemsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    dojoId?: StringFieldUpdateOperationsInput | string
+    receiptNo?: StringFieldUpdateOperationsInput | string
+    memberId?: NullableStringFieldUpdateOperationsInput | string | null
+    buyerName?: StringFieldUpdateOperationsInput | string
+    soldByUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    soldByName?: NullableStringFieldUpdateOperationsInput | string | null
+    subtotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ShopProductUpsertWithoutDojoSaleItemsInput = {
+    update: XOR<ShopProductUpdateWithoutDojoSaleItemsInput, ShopProductUncheckedUpdateWithoutDojoSaleItemsInput>
+    create: XOR<ShopProductCreateWithoutDojoSaleItemsInput, ShopProductUncheckedCreateWithoutDojoSaleItemsInput>
+    where?: ShopProductWhereInput
+  }
+
+  export type ShopProductUpdateToOneWithWhereWithoutDojoSaleItemsInput = {
+    where?: ShopProductWhereInput
+    data: XOR<ShopProductUpdateWithoutDojoSaleItemsInput, ShopProductUncheckedUpdateWithoutDojoSaleItemsInput>
+  }
+
+  export type ShopProductUpdateWithoutDojoSaleItemsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    stock?: IntFieldUpdateOperationsInput | number
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    orderItems?: ShopOrderItemUpdateManyWithoutProductNestedInput
+    dojoInventory?: DojoInventoryItemUpdateManyWithoutProductNestedInput
+  }
+
+  export type ShopProductUncheckedUpdateWithoutDojoSaleItemsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    stock?: IntFieldUpdateOperationsInput | number
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    orderItems?: ShopOrderItemUncheckedUpdateManyWithoutProductNestedInput
+    dojoInventory?: DojoInventoryItemUncheckedUpdateManyWithoutProductNestedInput
   }
 
   export type MemberCreateWithoutOrdersInput = {
@@ -41244,6 +47839,8 @@ export namespace Prisma {
     eventsPosted?: EventCreateNestedManyWithoutPostedByInput
     announcementsPosted?: AnnouncementCreateNestedManyWithoutPostedByInput
     eventCheckIns?: EventRegistrationCreateNestedManyWithoutCheckedInByInput
+    dojoSalesAsBuyer?: DojoSaleCreateNestedManyWithoutMemberInput
+    dojoSalesSold?: DojoSaleCreateNestedManyWithoutSoldByInput
   }
 
   export type MemberUncheckedCreateWithoutOrdersInput = {
@@ -41281,6 +47878,8 @@ export namespace Prisma {
     eventsPosted?: EventUncheckedCreateNestedManyWithoutPostedByInput
     announcementsPosted?: AnnouncementUncheckedCreateNestedManyWithoutPostedByInput
     eventCheckIns?: EventRegistrationUncheckedCreateNestedManyWithoutCheckedInByInput
+    dojoSalesAsBuyer?: DojoSaleUncheckedCreateNestedManyWithoutMemberInput
+    dojoSalesSold?: DojoSaleUncheckedCreateNestedManyWithoutSoldByInput
   }
 
   export type MemberCreateOrConnectWithoutOrdersInput = {
@@ -41311,6 +47910,8 @@ export namespace Prisma {
     attendance?: AttendanceCreateNestedManyWithoutDojoInput
     events?: EventCreateNestedManyWithoutDojoInput
     announcements?: AnnouncementCreateNestedManyWithoutDojoInput
+    inventoryItems?: DojoInventoryItemCreateNestedManyWithoutDojoInput
+    sales?: DojoSaleCreateNestedManyWithoutDojoInput
   }
 
   export type DojoUncheckedCreateWithoutRenewalOrdersInput = {
@@ -41336,6 +47937,8 @@ export namespace Prisma {
     attendance?: AttendanceUncheckedCreateNestedManyWithoutDojoInput
     events?: EventUncheckedCreateNestedManyWithoutDojoInput
     announcements?: AnnouncementUncheckedCreateNestedManyWithoutDojoInput
+    inventoryItems?: DojoInventoryItemUncheckedCreateNestedManyWithoutDojoInput
+    sales?: DojoSaleUncheckedCreateNestedManyWithoutDojoInput
   }
 
   export type DojoCreateOrConnectWithoutRenewalOrdersInput = {
@@ -41366,6 +47969,8 @@ export namespace Prisma {
     attendance?: AttendanceCreateNestedManyWithoutDojoInput
     events?: EventCreateNestedManyWithoutDojoInput
     announcements?: AnnouncementCreateNestedManyWithoutDojoInput
+    inventoryItems?: DojoInventoryItemCreateNestedManyWithoutDojoInput
+    sales?: DojoSaleCreateNestedManyWithoutDojoInput
   }
 
   export type DojoUncheckedCreateWithoutCertificateOrdersInput = {
@@ -41391,6 +47996,8 @@ export namespace Prisma {
     attendance?: AttendanceUncheckedCreateNestedManyWithoutDojoInput
     events?: EventUncheckedCreateNestedManyWithoutDojoInput
     announcements?: AnnouncementUncheckedCreateNestedManyWithoutDojoInput
+    inventoryItems?: DojoInventoryItemUncheckedCreateNestedManyWithoutDojoInput
+    sales?: DojoSaleUncheckedCreateNestedManyWithoutDojoInput
   }
 
   export type DojoCreateOrConnectWithoutCertificateOrdersInput = {
@@ -41512,6 +48119,8 @@ export namespace Prisma {
     eventsPosted?: EventUpdateManyWithoutPostedByNestedInput
     announcementsPosted?: AnnouncementUpdateManyWithoutPostedByNestedInput
     eventCheckIns?: EventRegistrationUpdateManyWithoutCheckedInByNestedInput
+    dojoSalesAsBuyer?: DojoSaleUpdateManyWithoutMemberNestedInput
+    dojoSalesSold?: DojoSaleUpdateManyWithoutSoldByNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutOrdersInput = {
@@ -41549,6 +48158,8 @@ export namespace Prisma {
     eventsPosted?: EventUncheckedUpdateManyWithoutPostedByNestedInput
     announcementsPosted?: AnnouncementUncheckedUpdateManyWithoutPostedByNestedInput
     eventCheckIns?: EventRegistrationUncheckedUpdateManyWithoutCheckedInByNestedInput
+    dojoSalesAsBuyer?: DojoSaleUncheckedUpdateManyWithoutMemberNestedInput
+    dojoSalesSold?: DojoSaleUncheckedUpdateManyWithoutSoldByNestedInput
   }
 
   export type DojoUpsertWithoutRenewalOrdersInput = {
@@ -41585,6 +48196,8 @@ export namespace Prisma {
     attendance?: AttendanceUpdateManyWithoutDojoNestedInput
     events?: EventUpdateManyWithoutDojoNestedInput
     announcements?: AnnouncementUpdateManyWithoutDojoNestedInput
+    inventoryItems?: DojoInventoryItemUpdateManyWithoutDojoNestedInput
+    sales?: DojoSaleUpdateManyWithoutDojoNestedInput
   }
 
   export type DojoUncheckedUpdateWithoutRenewalOrdersInput = {
@@ -41610,6 +48223,8 @@ export namespace Prisma {
     attendance?: AttendanceUncheckedUpdateManyWithoutDojoNestedInput
     events?: EventUncheckedUpdateManyWithoutDojoNestedInput
     announcements?: AnnouncementUncheckedUpdateManyWithoutDojoNestedInput
+    inventoryItems?: DojoInventoryItemUncheckedUpdateManyWithoutDojoNestedInput
+    sales?: DojoSaleUncheckedUpdateManyWithoutDojoNestedInput
   }
 
   export type DojoUpsertWithoutCertificateOrdersInput = {
@@ -41646,6 +48261,8 @@ export namespace Prisma {
     attendance?: AttendanceUpdateManyWithoutDojoNestedInput
     events?: EventUpdateManyWithoutDojoNestedInput
     announcements?: AnnouncementUpdateManyWithoutDojoNestedInput
+    inventoryItems?: DojoInventoryItemUpdateManyWithoutDojoNestedInput
+    sales?: DojoSaleUpdateManyWithoutDojoNestedInput
   }
 
   export type DojoUncheckedUpdateWithoutCertificateOrdersInput = {
@@ -41671,6 +48288,8 @@ export namespace Prisma {
     attendance?: AttendanceUncheckedUpdateManyWithoutDojoNestedInput
     events?: EventUncheckedUpdateManyWithoutDojoNestedInput
     announcements?: AnnouncementUncheckedUpdateManyWithoutDojoNestedInput
+    inventoryItems?: DojoInventoryItemUncheckedUpdateManyWithoutDojoNestedInput
+    sales?: DojoSaleUncheckedUpdateManyWithoutDojoNestedInput
   }
 
   export type ShopOrderItemUpsertWithWhereUniqueWithoutOrderInput = {
@@ -41761,6 +48380,8 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    dojoInventory?: DojoInventoryItemCreateNestedManyWithoutProductInput
+    dojoSaleItems?: DojoSaleItemCreateNestedManyWithoutProductInput
   }
 
   export type ShopProductUncheckedCreateWithoutOrderItemsInput = {
@@ -41774,6 +48395,8 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    dojoInventory?: DojoInventoryItemUncheckedCreateNestedManyWithoutProductInput
+    dojoSaleItems?: DojoSaleItemUncheckedCreateNestedManyWithoutProductInput
   }
 
   export type ShopProductCreateOrConnectWithoutOrderItemsInput = {
@@ -41854,6 +48477,8 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    dojoInventory?: DojoInventoryItemUpdateManyWithoutProductNestedInput
+    dojoSaleItems?: DojoSaleItemUpdateManyWithoutProductNestedInput
   }
 
   export type ShopProductUncheckedUpdateWithoutOrderItemsInput = {
@@ -41867,6 +48492,8 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    dojoInventory?: DojoInventoryItemUncheckedUpdateManyWithoutProductNestedInput
+    dojoSaleItems?: DojoSaleItemUncheckedUpdateManyWithoutProductNestedInput
   }
 
   export type TournamentParticipantCreateWithoutTournamentInput = {
@@ -42044,6 +48671,8 @@ export namespace Prisma {
     eventsPosted?: EventCreateNestedManyWithoutPostedByInput
     announcementsPosted?: AnnouncementCreateNestedManyWithoutPostedByInput
     eventCheckIns?: EventRegistrationCreateNestedManyWithoutCheckedInByInput
+    dojoSalesAsBuyer?: DojoSaleCreateNestedManyWithoutMemberInput
+    dojoSalesSold?: DojoSaleCreateNestedManyWithoutSoldByInput
   }
 
   export type MemberUncheckedCreateWithoutTournamentEntriesInput = {
@@ -42081,6 +48710,8 @@ export namespace Prisma {
     eventsPosted?: EventUncheckedCreateNestedManyWithoutPostedByInput
     announcementsPosted?: AnnouncementUncheckedCreateNestedManyWithoutPostedByInput
     eventCheckIns?: EventRegistrationUncheckedCreateNestedManyWithoutCheckedInByInput
+    dojoSalesAsBuyer?: DojoSaleUncheckedCreateNestedManyWithoutMemberInput
+    dojoSalesSold?: DojoSaleUncheckedCreateNestedManyWithoutSoldByInput
   }
 
   export type MemberCreateOrConnectWithoutTournamentEntriesInput = {
@@ -42265,6 +48896,8 @@ export namespace Prisma {
     eventsPosted?: EventUpdateManyWithoutPostedByNestedInput
     announcementsPosted?: AnnouncementUpdateManyWithoutPostedByNestedInput
     eventCheckIns?: EventRegistrationUpdateManyWithoutCheckedInByNestedInput
+    dojoSalesAsBuyer?: DojoSaleUpdateManyWithoutMemberNestedInput
+    dojoSalesSold?: DojoSaleUpdateManyWithoutSoldByNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutTournamentEntriesInput = {
@@ -42302,6 +48935,8 @@ export namespace Prisma {
     eventsPosted?: EventUncheckedUpdateManyWithoutPostedByNestedInput
     announcementsPosted?: AnnouncementUncheckedUpdateManyWithoutPostedByNestedInput
     eventCheckIns?: EventRegistrationUncheckedUpdateManyWithoutCheckedInByNestedInput
+    dojoSalesAsBuyer?: DojoSaleUncheckedUpdateManyWithoutMemberNestedInput
+    dojoSalesSold?: DojoSaleUncheckedUpdateManyWithoutSoldByNestedInput
   }
 
   export type TournamentMatchUpsertWithWhereUniqueWithoutParticipant1Input = {
@@ -42915,6 +49550,30 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
+  export type DojoInventoryItemCreateManyDojoInput = {
+    id?: string
+    productId: string
+    quantityOnHand?: number
+    unitPrice: Decimal | DecimalJsLike | number | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DojoSaleCreateManyDojoInput = {
+    id?: string
+    receiptNo: string
+    memberId?: string | null
+    buyerName: string
+    soldByUserId?: string | null
+    soldByName?: string | null
+    subtotal: Decimal | DecimalJsLike | number | string
+    discount?: Decimal | DecimalJsLike | number | string
+    total: Decimal | DecimalJsLike | number | string
+    paymentMethod?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+  }
+
   export type ShopOrderUpdateWithoutDojoInput = {
     id?: StringFieldUpdateOperationsInput | string
     paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
@@ -43117,6 +49776,8 @@ export namespace Prisma {
     eventsPosted?: EventUpdateManyWithoutPostedByNestedInput
     announcementsPosted?: AnnouncementUpdateManyWithoutPostedByNestedInput
     eventCheckIns?: EventRegistrationUpdateManyWithoutCheckedInByNestedInput
+    dojoSalesAsBuyer?: DojoSaleUpdateManyWithoutMemberNestedInput
+    dojoSalesSold?: DojoSaleUpdateManyWithoutSoldByNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutDojoInput = {
@@ -43154,6 +49815,8 @@ export namespace Prisma {
     eventsPosted?: EventUncheckedUpdateManyWithoutPostedByNestedInput
     announcementsPosted?: AnnouncementUncheckedUpdateManyWithoutPostedByNestedInput
     eventCheckIns?: EventRegistrationUncheckedUpdateManyWithoutCheckedInByNestedInput
+    dojoSalesAsBuyer?: DojoSaleUncheckedUpdateManyWithoutMemberNestedInput
+    dojoSalesSold?: DojoSaleUncheckedUpdateManyWithoutSoldByNestedInput
   }
 
   export type MemberUncheckedUpdateManyWithoutDojoInput = {
@@ -43304,6 +49967,80 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type DojoInventoryItemUpdateWithoutDojoInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    quantityOnHand?: IntFieldUpdateOperationsInput | number
+    unitPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    product?: ShopProductUpdateOneRequiredWithoutDojoInventoryNestedInput
+  }
+
+  export type DojoInventoryItemUncheckedUpdateWithoutDojoInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    productId?: StringFieldUpdateOperationsInput | string
+    quantityOnHand?: IntFieldUpdateOperationsInput | number
+    unitPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DojoInventoryItemUncheckedUpdateManyWithoutDojoInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    productId?: StringFieldUpdateOperationsInput | string
+    quantityOnHand?: IntFieldUpdateOperationsInput | number
+    unitPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DojoSaleUpdateWithoutDojoInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    receiptNo?: StringFieldUpdateOperationsInput | string
+    buyerName?: StringFieldUpdateOperationsInput | string
+    soldByName?: NullableStringFieldUpdateOperationsInput | string | null
+    subtotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    member?: MemberUpdateOneWithoutDojoSalesAsBuyerNestedInput
+    soldBy?: MemberUpdateOneWithoutDojoSalesSoldNestedInput
+    items?: DojoSaleItemUpdateManyWithoutSaleNestedInput
+  }
+
+  export type DojoSaleUncheckedUpdateWithoutDojoInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    receiptNo?: StringFieldUpdateOperationsInput | string
+    memberId?: NullableStringFieldUpdateOperationsInput | string | null
+    buyerName?: StringFieldUpdateOperationsInput | string
+    soldByUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    soldByName?: NullableStringFieldUpdateOperationsInput | string | null
+    subtotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    items?: DojoSaleItemUncheckedUpdateManyWithoutSaleNestedInput
+  }
+
+  export type DojoSaleUncheckedUpdateManyWithoutDojoInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    receiptNo?: StringFieldUpdateOperationsInput | string
+    memberId?: NullableStringFieldUpdateOperationsInput | string | null
+    buyerName?: StringFieldUpdateOperationsInput | string
+    soldByUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    soldByName?: NullableStringFieldUpdateOperationsInput | string | null
+    subtotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type GradingCreateManyMemberInput = {
     id?: string
     gradingEventId?: string | null
@@ -43441,6 +50178,36 @@ export namespace Prisma {
     guestPhone?: string | null
     qrToken: string
     checkedInAt?: Date | string | null
+    createdAt?: Date | string
+  }
+
+  export type DojoSaleCreateManyMemberInput = {
+    id?: string
+    dojoId: string
+    receiptNo: string
+    buyerName: string
+    soldByUserId?: string | null
+    soldByName?: string | null
+    subtotal: Decimal | DecimalJsLike | number | string
+    discount?: Decimal | DecimalJsLike | number | string
+    total: Decimal | DecimalJsLike | number | string
+    paymentMethod?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+  }
+
+  export type DojoSaleCreateManySoldByInput = {
+    id?: string
+    dojoId: string
+    receiptNo: string
+    memberId?: string | null
+    buyerName: string
+    soldByName?: string | null
+    subtotal: Decimal | DecimalJsLike | number | string
+    discount?: Decimal | DecimalJsLike | number | string
+    total: Decimal | DecimalJsLike | number | string
+    paymentMethod?: string | null
+    notes?: string | null
     createdAt?: Date | string
   }
 
@@ -43878,6 +50645,100 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type DojoSaleUpdateWithoutMemberInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    receiptNo?: StringFieldUpdateOperationsInput | string
+    buyerName?: StringFieldUpdateOperationsInput | string
+    soldByName?: NullableStringFieldUpdateOperationsInput | string | null
+    subtotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    dojo?: DojoUpdateOneRequiredWithoutSalesNestedInput
+    soldBy?: MemberUpdateOneWithoutDojoSalesSoldNestedInput
+    items?: DojoSaleItemUpdateManyWithoutSaleNestedInput
+  }
+
+  export type DojoSaleUncheckedUpdateWithoutMemberInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    dojoId?: StringFieldUpdateOperationsInput | string
+    receiptNo?: StringFieldUpdateOperationsInput | string
+    buyerName?: StringFieldUpdateOperationsInput | string
+    soldByUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    soldByName?: NullableStringFieldUpdateOperationsInput | string | null
+    subtotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    items?: DojoSaleItemUncheckedUpdateManyWithoutSaleNestedInput
+  }
+
+  export type DojoSaleUncheckedUpdateManyWithoutMemberInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    dojoId?: StringFieldUpdateOperationsInput | string
+    receiptNo?: StringFieldUpdateOperationsInput | string
+    buyerName?: StringFieldUpdateOperationsInput | string
+    soldByUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    soldByName?: NullableStringFieldUpdateOperationsInput | string | null
+    subtotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DojoSaleUpdateWithoutSoldByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    receiptNo?: StringFieldUpdateOperationsInput | string
+    buyerName?: StringFieldUpdateOperationsInput | string
+    soldByName?: NullableStringFieldUpdateOperationsInput | string | null
+    subtotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    dojo?: DojoUpdateOneRequiredWithoutSalesNestedInput
+    member?: MemberUpdateOneWithoutDojoSalesAsBuyerNestedInput
+    items?: DojoSaleItemUpdateManyWithoutSaleNestedInput
+  }
+
+  export type DojoSaleUncheckedUpdateWithoutSoldByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    dojoId?: StringFieldUpdateOperationsInput | string
+    receiptNo?: StringFieldUpdateOperationsInput | string
+    memberId?: NullableStringFieldUpdateOperationsInput | string | null
+    buyerName?: StringFieldUpdateOperationsInput | string
+    soldByName?: NullableStringFieldUpdateOperationsInput | string | null
+    subtotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    items?: DojoSaleItemUncheckedUpdateManyWithoutSaleNestedInput
+  }
+
+  export type DojoSaleUncheckedUpdateManyWithoutSoldByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    dojoId?: StringFieldUpdateOperationsInput | string
+    receiptNo?: StringFieldUpdateOperationsInput | string
+    memberId?: NullableStringFieldUpdateOperationsInput | string | null
+    buyerName?: StringFieldUpdateOperationsInput | string
+    soldByName?: NullableStringFieldUpdateOperationsInput | string | null
+    subtotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type GradingCreateManyGradingEventInput = {
     id?: string
     memberId: string
@@ -44091,6 +50952,24 @@ export namespace Prisma {
     unitPrice: Decimal | DecimalJsLike | number | string
   }
 
+  export type DojoInventoryItemCreateManyProductInput = {
+    id?: string
+    dojoId: string
+    quantityOnHand?: number
+    unitPrice: Decimal | DecimalJsLike | number | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DojoSaleItemCreateManyProductInput = {
+    id?: string
+    saleId: string
+    productName: string
+    quantity: number
+    unitPrice: Decimal | DecimalJsLike | number | string
+    lineTotal: Decimal | DecimalJsLike | number | string
+  }
+
   export type ShopOrderItemUpdateWithoutProductInput = {
     id?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
@@ -44110,6 +50989,96 @@ export namespace Prisma {
     orderId?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
     unitPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+  }
+
+  export type DojoInventoryItemUpdateWithoutProductInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    quantityOnHand?: IntFieldUpdateOperationsInput | number
+    unitPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    dojo?: DojoUpdateOneRequiredWithoutInventoryItemsNestedInput
+  }
+
+  export type DojoInventoryItemUncheckedUpdateWithoutProductInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    dojoId?: StringFieldUpdateOperationsInput | string
+    quantityOnHand?: IntFieldUpdateOperationsInput | number
+    unitPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DojoInventoryItemUncheckedUpdateManyWithoutProductInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    dojoId?: StringFieldUpdateOperationsInput | string
+    quantityOnHand?: IntFieldUpdateOperationsInput | number
+    unitPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DojoSaleItemUpdateWithoutProductInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    productName?: StringFieldUpdateOperationsInput | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    unitPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    lineTotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    sale?: DojoSaleUpdateOneRequiredWithoutItemsNestedInput
+  }
+
+  export type DojoSaleItemUncheckedUpdateWithoutProductInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    saleId?: StringFieldUpdateOperationsInput | string
+    productName?: StringFieldUpdateOperationsInput | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    unitPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    lineTotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+  }
+
+  export type DojoSaleItemUncheckedUpdateManyWithoutProductInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    saleId?: StringFieldUpdateOperationsInput | string
+    productName?: StringFieldUpdateOperationsInput | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    unitPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    lineTotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+  }
+
+  export type DojoSaleItemCreateManySaleInput = {
+    id?: string
+    productId: string
+    productName: string
+    quantity: number
+    unitPrice: Decimal | DecimalJsLike | number | string
+    lineTotal: Decimal | DecimalJsLike | number | string
+  }
+
+  export type DojoSaleItemUpdateWithoutSaleInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    productName?: StringFieldUpdateOperationsInput | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    unitPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    lineTotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    product?: ShopProductUpdateOneRequiredWithoutDojoSaleItemsNestedInput
+  }
+
+  export type DojoSaleItemUncheckedUpdateWithoutSaleInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    productId?: StringFieldUpdateOperationsInput | string
+    productName?: StringFieldUpdateOperationsInput | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    unitPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    lineTotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+  }
+
+  export type DojoSaleItemUncheckedUpdateManyWithoutSaleInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    productId?: StringFieldUpdateOperationsInput | string
+    productName?: StringFieldUpdateOperationsInput | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    unitPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    lineTotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
   }
 
   export type ShopOrderItemCreateManyOrderInput = {

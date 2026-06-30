@@ -345,6 +345,42 @@ exports.Prisma.ShopProductScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.DojoInventoryItemScalarFieldEnum = {
+  id: 'id',
+  dojoId: 'dojoId',
+  productId: 'productId',
+  quantityOnHand: 'quantityOnHand',
+  unitPrice: 'unitPrice',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.DojoSaleScalarFieldEnum = {
+  id: 'id',
+  dojoId: 'dojoId',
+  receiptNo: 'receiptNo',
+  memberId: 'memberId',
+  buyerName: 'buyerName',
+  soldByUserId: 'soldByUserId',
+  soldByName: 'soldByName',
+  subtotal: 'subtotal',
+  discount: 'discount',
+  total: 'total',
+  paymentMethod: 'paymentMethod',
+  notes: 'notes',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.DojoSaleItemScalarFieldEnum = {
+  id: 'id',
+  saleId: 'saleId',
+  productId: 'productId',
+  productName: 'productName',
+  quantity: 'quantity',
+  unitPrice: 'unitPrice',
+  lineTotal: 'lineTotal'
+};
+
 exports.Prisma.ShopOrderScalarFieldEnum = {
   id: 'id',
   memberId: 'memberId',
@@ -523,6 +559,9 @@ exports.Prisma.ModelName = {
   EventRegistration: 'EventRegistration',
   Notification: 'Notification',
   ShopProduct: 'ShopProduct',
+  DojoInventoryItem: 'DojoInventoryItem',
+  DojoSale: 'DojoSale',
+  DojoSaleItem: 'DojoSaleItem',
   ShopOrder: 'ShopOrder',
   ShopOrderItem: 'ShopOrderItem',
   Tournament: 'Tournament',
