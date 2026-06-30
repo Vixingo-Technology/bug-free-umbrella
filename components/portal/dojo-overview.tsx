@@ -456,7 +456,7 @@ function QuickActions({ role }: { role: string }) {
         { href: "/portal/dojo/students", label: "Add a student", min: 1 },
         { href: "/portal/dojo/attendance", label: "Take attendance", min: 1 },
         { href: "/portal/dojo/gradings", label: "Schedule a belt test", min: 1 },
-        { href: "/portal/dojo/renewals", label: "Mark a renewal paid", min: 2 },
+        { href: "/portal/dojo/renewals", label: "Renew dojo membership", min: 2 },
         { href: "/portal/dojo/events", label: "Plan an event", min: 3 },
         { href: "/portal/dojo/announcements", label: "Post an announcement", min: 3 },
     ];
