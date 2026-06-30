@@ -32,6 +32,7 @@ import { createClient } from "@/lib/supabase/client";
 import { playNotificationChime } from "@/lib/notification-sound";
 import { DOJO_NAV, GROUP_LABEL, type DojoNavItem } from "@/lib/dojo-nav";
 import { type DojoRole } from "@/lib/dojo-roles";
+import NotificationBell from "@/components/portal/notification-bell";
 
 const DOJO_ROLE_RANK: Record<DojoRole, number> = {
     INSTRUCTOR: 1,
@@ -136,9 +137,16 @@ export default function PortalShell({ userId, initialRole = "STUDENT", children 
                     table: "notifications",
                     filter: `member_id=eq.${userId}`,
                 },
-                () => {
+                (payload) => {
                     setUnreadCount((c) => c + 1);
                     playNotificationChime();
+                    // Let the bell dropdown refresh + pulse without re-reading
+                    // its own subscription. payload.new is the inserted row.
+                    window.dispatchEvent(
+                        new CustomEvent("jka:notification-arrived", {
+                            detail: { row: (payload as { new?: unknown }).new ?? null },
+                        })
+                    );
                 }
             )
             .subscribe();
@@ -395,12 +403,13 @@ export default function PortalShell({ userId, initialRole = "STUDENT", children 
                         </span>
                     </Link>
 
-                    <Link href="/portal/notifications" className="relative p-2 rounded-lg text-zinc-600 hover:bg-zinc-100 transition-colors">
-                        <Bell size={20} />
-                        {unreadCount > 0 && (
-                            <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-accent-red rounded-full" />
-                        )}
-                    </Link>
+                    <NotificationBell
+                        userId={userId}
+                        unreadCount={unreadCount}
+                        onUnreadChange={setUnreadCount}
+                        align="right"
+                        iconSize={20}
+                    />
                 </header>
 
                 {/* Desktop topbar */}
@@ -419,12 +428,13 @@ export default function PortalShell({ userId, initialRole = "STUDENT", children 
                                 {member.role}
                             </span>
                         )}
-                        <Link href="/portal/notifications" className="relative p-2 rounded-lg text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900 transition-colors">
-                            <Bell size={18} />
-                            {unreadCount > 0 && (
-                                <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-accent-red rounded-full" />
-                            )}
-                        </Link>
+                        <NotificationBell
+                            userId={userId}
+                            unreadCount={unreadCount}
+                            onUnreadChange={setUnreadCount}
+                            align="right"
+                            iconSize={18}
+                        />
                     </div>
                 </header>
 

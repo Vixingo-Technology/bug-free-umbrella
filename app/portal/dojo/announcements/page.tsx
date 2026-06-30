@@ -37,15 +37,16 @@ export default async function AnnouncementsPage({
     const tab: TabValue = sp.tab === "new" ? "new" : "posted";
     const page = Math.max(1, Number.parseInt(sp.page ?? "1", 10) || 1);
 
-    const where = session.dojo ? { dojoId: session.dojo.id } : { id: "__none__" };
-    const total = await prisma.announcement.count({ where });
+    const total = session.dojo
+        ? await prisma.announcement.count({ where: { dojoId: session.dojo.id } })
+        : 0;
     const pageCount = Math.max(1, Math.ceil(total / PAGE_SIZE));
     const safePage = Math.min(page, pageCount);
 
     const posts =
-        tab === "posted"
+        tab === "posted" && session.dojo
             ? await prisma.announcement.findMany({
-                  where,
+                  where: { dojoId: session.dojo.id },
                   orderBy: { publishedAt: "desc" },
                   take: PAGE_SIZE,
                   skip: (safePage - 1) * PAGE_SIZE,

@@ -14,6 +14,7 @@ import {
     XCircle,
 } from "lucide-react";
 import DojoPageHeader from "@/components/dojo/page-header";
+import DojoSetupChecklist from "@/components/portal/dojo-setup-checklist";
 import { hasAtLeast, ROLE_LABEL, type DojoRole } from "@/lib/dojo-roles";
 import { prisma } from "@/lib/prisma";
 
@@ -36,6 +37,7 @@ type RenewalStatus = {
 };
 
 type Props = {
+    userId: string;
     role: DojoRole;
     fullName: string;
     dojoId: string | null;
@@ -46,6 +48,7 @@ type Props = {
 };
 
 export default async function DojoOverview({
+    userId,
     role,
     fullName,
     dojoId,
@@ -92,6 +95,14 @@ export default async function DojoOverview({
                     icon={<ShieldAlert size={20} />}
                     title="That section is above your role"
                     body={`You're signed in as ${ROLE_LABEL[role]}. Ask your Dojo Head if you need elevated access.`}
+                />
+            )}
+
+            {role === "DOJO_OWNER" && (
+                <DojoSetupChecklist
+                    userId={userId}
+                    dojoId={dojoId}
+                    pendingApproval={pendingApproval}
                 />
             )}
 

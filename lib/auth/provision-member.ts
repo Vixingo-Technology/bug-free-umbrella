@@ -15,6 +15,19 @@ export async function provisionMemberFromSupabaseUser(user: User): Promise<void>
             [meta.first_name, meta.last_name].filter(Boolean).join(" ")) ||
             user.email!;
 
+        // Roles set during invite flows live in user_metadata.role.
+        // Honour every possible MemberRole value so dojo-invited staff don't
+        // collapse back into STUDENT when the auth callback upserts them.
+        const role =
+            meta.role === "ADMIN" ? "ADMIN"
+            : meta.role === "DOJO_OWNER" ? "DOJO_OWNER"
+            : meta.role === "DOJO_MANAGER" ? "DOJO_MANAGER"
+            : meta.role === "INSTRUCTOR" ? "INSTRUCTOR"
+            : "STUDENT";
+
+        const dojoId =
+            typeof meta.dojo_id === "string" && meta.dojo_id ? meta.dojo_id : null;
+
         await prisma.member.upsert({
             where: { id: user.id },
             create: {
@@ -22,9 +35,8 @@ export async function provisionMemberFromSupabaseUser(user: User): Promise<void>
                 email: user.email!,
                 fullName,
                 currentRank: meta.current_rank ?? "White Belt",
-                role: meta.role === "INSTRUCTOR" ? "INSTRUCTOR"
-                    : meta.role === "ADMIN" ? "ADMIN"
-                    : "STUDENT",
+                role,
+                dojoId,
                 onboardingComplete: false,
                 membershipStatus: "PENDING",
             },

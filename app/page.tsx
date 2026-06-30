@@ -12,20 +12,20 @@ import CTA from "@/components/cta";
 import Footer from "@/components/footer";
 
 export default function Home() {
-  return (
-    <main className="min-h-screen bg-bg-deep w-full overflow-hidden">
-      <Navbar />
-      <Hero />
-      <About />
-      <Benefits />
-      <Journey />
-      <Techniques />
-      <Events />
-      <Branches />
-      <Gallery />
-      <Testimonials />
-      <CTA />
-      <Footer />
-    </main>
-  );
+    return (
+        <main className="min-h-screen bg-bg-deep w-full overflow-hidden">
+            <Navbar />
+            <Hero />
+            <About />
+            <Events />
+            <Benefits />
+            <Journey />
+            <Techniques />
+            <Branches />
+            <Gallery />
+            <Testimonials />
+            <CTA />
+            <Footer />
+        </main>
+    );
 }

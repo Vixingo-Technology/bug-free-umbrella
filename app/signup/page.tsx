@@ -1,187 +1,197 @@
-"use client";
-
-import { motion } from "motion/react";
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, Mail, Lock, User, Shield, Loader2, ChevronDown } from "lucide-react";
+import {
+    ArrowLeft,
+    ArrowRight,
+    Building2,
+    CheckCircle2,
+    Mail,
+    UserRound,
+} from "lucide-react";
 import Logo from "@/assets/jka_logo.svg";
-import { signupAction } from "@/app/actions/auth";
-import { useState, useTransition } from "react";
-import { BELT_RANKS_ORDERED } from "@/lib/constants";
 
-export default function SignupPage() {
-    const [error, setError] = useState<string | null>(null);
-    const [isPending, startTransition] = useTransition();
+export const metadata: Metadata = {
+    title: "Join JKA Bangladesh",
+    description:
+        "Pick how you want to join JKA Bangladesh — as a student training at an affiliated dojo, or as a Dojo Head opening a new branch.",
+};
 
-    async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-        e.preventDefault();
-        setError(null);
-        const formData = new FormData(e.currentTarget);
+type ChoiceProps = {
+    href: string;
+    title: string;
+    eyebrow: string;
+    body: string;
+    bullets: string[];
+    icon: React.ReactNode;
+    cta: string;
+};
 
-        startTransition(async () => {
-            const result = await signupAction(formData);
-            if (result?.error) {
-                setError(result.error);
-            }
-        });
-    }
+const CHOICES: ChoiceProps[] = [
+    {
+        href: "/signup/student",
+        eyebrow: "Train at a dojo",
+        title: "I'm joining as a student",
+        body: "Apply to train at an affiliated JKA branch. Track your belt progress, certificates, and grading applications from your member portal.",
+        bullets: [
+            "Personal training journal & rank history",
+            "Apply for federation-recognised gradings",
+            "Register for tournaments and seminars",
+        ],
+        icon: <UserRound size={22} />,
+        cta: "Continue as student",
+    },
+    {
+        href: "/enlist-dojo",
+        eyebrow: "Open a dojo",
+        title: "I'm opening or affiliating a dojo",
+        body: "Enlist your dojo with the federation. Get listed in the public locator, host certified gradings, and manage your roster from the Dojo Dashboard.",
+        bullets: [
+            "Official JKA-Bangladesh recognition",
+            "Manage students, attendance & gradings",
+            "Invite instructors and managers to your dojo",
+        ],
+        icon: <Building2 size={22} />,
+        cta: "Enlist a dojo",
+    },
+];
 
+export default function SignupChooserPage() {
     return (
         <div className="min-h-screen flex items-center justify-center bg-bg-charcoal relative overflow-hidden py-12">
-            {/* Background elements */}
             <div className="absolute top-[-20%] left-[-10%] w-[80%] h-[80%] rounded-full bg-accent-gold/5 blur-[120px] pointer-events-none" />
             <div className="absolute bottom-[-20%] right-[-10%] w-[60%] h-[60%] rounded-full bg-accent-red/5 blur-[100px] pointer-events-none" />
 
-            <div className="w-full max-w-lg p-6 relative z-10">
+            <div className="w-full max-w-4xl p-6 relative z-10">
                 <Link
                     href="/"
                     className="inline-flex items-center gap-2 text-xs font-bold tracking-widest uppercase text-zinc-500 hover:text-accent-red transition-colors mb-8 group"
                 >
-                    <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
-                    Back to Home
+                    <ArrowLeft
+                        size={16}
+                        className="group-hover:-translate-x-1 transition-transform"
+                    />
+                    Back to home
                 </Link>
 
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6 }}
-                    className="glass p-10 rounded-2xl shadow-xl w-full"
-                >
-                    <div className="flex flex-col items-center mb-8">
-                        <Image src={Logo} alt="JKA Logo" width={60} height={60} className="mb-4" />
-                        <h1 className="font-serif text-3xl font-bold text-zinc-900 mb-2 text-center">Join JKA Bangladesh</h1>
-                        <p className="text-zinc-500 text-sm text-center">
-                            Begin your journey in the highest tradition of Shotokan Karate. Apply for membership below.
+                <div className="flex flex-col items-center text-center mb-10">
+                    <Image
+                        src={Logo}
+                        alt="JKA Bangladesh"
+                        width={56}
+                        height={56}
+                        className="mb-5"
+                    />
+                    <p className="text-[10px] tracking-[0.3em] uppercase text-accent-red font-bold mb-3">
+                        Join JKA Bangladesh
+                    </p>
+                    <h1 className="font-serif text-3xl md:text-4xl font-bold text-zinc-900 mb-3 leading-tight max-w-2xl">
+                        How would you like to join?
+                    </h1>
+                    <p className="text-zinc-500 text-sm md:text-base leading-relaxed max-w-xl">
+                        Pick the path that fits you. You can always switch
+                        later, and Dojo Heads can invite their team after they
+                        enlist.
+                    </p>
+                </div>
+
+                <div className="grid md:grid-cols-2 gap-5">
+                    {CHOICES.map((c) => (
+                        <Choice key={c.href} {...c} />
+                    ))}
+                </div>
+
+                <div className="mt-10 bg-white border border-zinc-200 rounded-sm px-5 py-4 flex items-start gap-4">
+                    <div className="w-9 h-9 rounded-full bg-zinc-100 flex items-center justify-center text-zinc-500 shrink-0">
+                        <Mail size={16} />
+                    </div>
+                    <div className="flex-1 text-sm text-zinc-700 leading-relaxed">
+                        <p className="font-semibold text-zinc-900 mb-0.5">
+                            Got an invite from your dojo?
+                        </p>
+                        <p className="text-zinc-600">
+                            Check your inbox for the activation link from JKA
+                            Bangladesh. Already activated?{" "}
+                            <Link
+                                href="/login"
+                                className="text-accent-red font-semibold hover:text-accent-gold transition-colors"
+                            >
+                                Sign in here
+                            </Link>
+                            .
                         </p>
                     </div>
+                </div>
 
-                    {error && (
-                        <motion.div
-                            initial={{ opacity: 0, y: -10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            className="mb-6 p-4 rounded-xl bg-red-50 border border-red-200 text-red-700 text-sm font-medium text-center"
-                        >
-                            {error}
-                        </motion.div>
-                    )}
-
-                    <form onSubmit={handleSubmit} className="space-y-5">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                            <div className="space-y-1">
-                                <label className="text-xs font-bold tracking-widest uppercase text-zinc-600 block pl-1">
-                                    First Name
-                                </label>
-                                <div className="relative">
-                                    <User size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400" />
-                                    <input
-                                        type="text"
-                                        name="firstName"
-                                        placeholder="John"
-                                        className="w-full bg-white/50 border border-zinc-200 rounded-xl py-3 pl-11 pr-4 text-sm focus:outline-none focus:border-accent-red focus:ring-1 focus:ring-accent-red transition-all"
-                                        required
-                                        disabled={isPending}
-                                    />
-                                </div>
-                            </div>
-                            <div className="space-y-1">
-                                <label className="text-xs font-bold tracking-widest uppercase text-zinc-600 block pl-1">
-                                    Last Name
-                                </label>
-                                <div className="relative">
-                                    <User size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400" />
-                                    <input
-                                        type="text"
-                                        name="lastName"
-                                        placeholder="Doe"
-                                        className="w-full bg-white/50 border border-zinc-200 rounded-xl py-3 pl-11 pr-4 text-sm focus:outline-none focus:border-accent-red focus:ring-1 focus:ring-accent-red transition-all"
-                                        required
-                                        disabled={isPending}
-                                    />
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="space-y-1">
-                            <label className="text-xs font-bold tracking-widest uppercase text-zinc-600 block pl-1">
-                                Email Address
-                            </label>
-                            <div className="relative">
-                                <Mail size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400" />
-                                <input
-                                    type="email"
-                                    name="email"
-                                    placeholder="john.doe@example.com"
-                                    className="w-full bg-white/50 border border-zinc-200 rounded-xl py-3 pl-11 pr-4 text-sm focus:outline-none focus:border-accent-red focus:ring-1 focus:ring-accent-red transition-all"
-                                    required
-                                    disabled={isPending}
-                                />
-                            </div>
-                        </div>
-
-                        <div className="space-y-1">
-                            <label className="text-xs font-bold tracking-widest uppercase text-zinc-600 block pl-1">
-                                Password
-                            </label>
-                            <div className="relative">
-                                <Lock size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400" />
-                                <input
-                                    type="password"
-                                    name="password"
-                                    placeholder="Create a strong password"
-                                    className="w-full bg-white/50 border border-zinc-200 rounded-xl py-3 pl-11 pr-4 text-sm focus:outline-none focus:border-accent-red focus:ring-1 focus:ring-accent-red transition-all"
-                                    required
-                                    disabled={isPending}
-                                />
-                            </div>
-                        </div>
-                        
-                        <div className="space-y-1">
-                            <label className="text-xs font-bold tracking-widest uppercase text-zinc-600 block pl-1">
-                                Current Rank
-                            </label>
-                            <div className="relative">
-                                <Shield size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400" />
-                                <select
-                                    name="currentRank"
-                                    defaultValue="White Belt"
-                                    disabled={isPending}
-                                    className="w-full bg-white/50 border border-zinc-200 rounded-xl py-3 pl-11 pr-10 text-sm focus:outline-none focus:border-accent-red focus:ring-1 focus:ring-accent-red transition-all appearance-none"
-                                >
-                                    {BELT_RANKS_ORDERED.map((rank) => (
-                                        <option key={rank} value={rank}>{rank}</option>
-                                    ))}
-                                </select>
-                                <ChevronDown size={16} className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-400 pointer-events-none" />
-                            </div>
-                            <p className="text-[11px] text-zinc-500 pl-1 pt-1">
-                                If unsure, leave as <span className="font-semibold">White Belt</span> — your instructor can update this later.
-                            </p>
-                        </div>
-
-                        <button
-                            type="submit"
-                            disabled={isPending}
-                            className="w-full bg-accent-red hover:bg-zinc-900 text-white font-bold tracking-widest uppercase text-sm py-4 rounded-xl transition-colors mt-4 shadow-lg shadow-accent-red/20 disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                        >
-                            {isPending ? (
-                                <>
-                                    <Loader2 size={18} className="animate-spin" />
-                                    Creating Account...
-                                </>
-                            ) : (
-                                "Submit Application"
-                            )}
-                        </button>
-                    </form>
-
-                    <div className="mt-8 text-center text-sm text-zinc-600">
-                        Already a member?{" "}
-                        <Link href="/login" className="text-accent-red font-semibold hover:text-accent-gold transition-colors">
-                            Sign In
-                        </Link>
-                    </div>
-                </motion.div>
+                <p className="text-center text-xs text-zinc-500 mt-8">
+                    Already a member?{" "}
+                    <Link
+                        href="/login"
+                        className="text-accent-red font-semibold hover:text-accent-gold transition-colors"
+                    >
+                        Sign in
+                    </Link>
+                </p>
             </div>
         </div>
+    );
+}
+
+function Choice({
+    href,
+    title,
+    eyebrow,
+    body,
+    bullets,
+    icon,
+    cta,
+}: ChoiceProps) {
+    return (
+        <Link
+            href={href}
+            className="group block bg-white border border-zinc-200 rounded-sm p-7 shadow-sm hover:border-accent-red hover:shadow-md transition-all relative"
+        >
+            <div className="flex items-start justify-between gap-4 mb-5">
+                <div className="w-12 h-12 rounded-sm bg-accent-red/10 flex items-center justify-center text-accent-red shrink-0">
+                    {icon}
+                </div>
+                <ArrowRight
+                    size={18}
+                    className="text-zinc-300 group-hover:text-accent-red group-hover:translate-x-1 transition-all"
+                    aria-hidden
+                />
+            </div>
+            <p className="text-[10px] tracking-[0.3em] uppercase text-accent-red font-bold mb-2">
+                {eyebrow}
+            </p>
+            <h2 className="font-serif text-xl font-bold text-zinc-900 mb-2 leading-snug">
+                {title}
+            </h2>
+            <p className="text-zinc-600 text-sm leading-relaxed mb-5">
+                {body}
+            </p>
+            <ul className="space-y-2 mb-6">
+                {bullets.map((b) => (
+                    <li
+                        key={b}
+                        className="flex items-start gap-2 text-zinc-700 text-sm"
+                    >
+                        <CheckCircle2
+                            size={14}
+                            className="text-emerald-600 shrink-0 mt-0.5"
+                            aria-hidden
+                        />
+                        <span>{b}</span>
+                    </li>
+                ))}
+            </ul>
+            <span className="inline-flex items-center gap-2 text-xs font-bold tracking-widest uppercase text-accent-red">
+                {cta}
+                <ArrowRight
+                    size={12}
+                    className="group-hover:translate-x-1 transition-transform"
+                />
+            </span>
+        </Link>
     );
 }

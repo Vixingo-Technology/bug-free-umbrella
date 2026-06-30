@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/admin-guard";
+import { notifyMembers } from "@/lib/notify";
 
 type Result = { ok: true } | { ok: false; error: string };
 
@@ -110,6 +111,15 @@ export async function approveDojoApplicationAction(
         return { ok: false, error: message };
     }
 
+    if (application.userId) {
+        await notifyMembers([application.userId], {
+            title: "Your dojo is approved",
+            message: `${application.dojoName} is now active in the federation. Open your dojo console to get started.`,
+            type: "SUCCESS",
+            link: "/portal",
+        });
+    }
+
     revalidatePath("/portal/admin/dojos/applications");
     revalidatePath("/portal/admin/dojos");
     revalidatePath("/portal");
@@ -128,7 +138,7 @@ export async function rejectDojoApplicationAction(
 
     const application = await prisma.dojoApplication.findUnique({
         where: { id: applicationId },
-        select: { status: true },
+        select: { status: true, userId: true, dojoName: true },
     });
     if (!application) {
         return { ok: false, error: "Application not found." };
@@ -148,6 +158,15 @@ export async function rejectDojoApplicationAction(
     } catch (e) {
         const message = e instanceof Error ? e.message : "Rejection failed.";
         return { ok: false, error: message };
+    }
+
+    if (application.userId) {
+        await notifyMembers([application.userId], {
+            title: "Dojo enlistment not approved",
+            message: `Your application for ${application.dojoName} was not approved at this time. Please contact the federation for details.`,
+            type: "WARNING",
+            link: null,
+        });
     }
 
     revalidatePath("/portal/admin/dojos/applications");

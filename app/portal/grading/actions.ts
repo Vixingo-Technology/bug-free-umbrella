@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { prisma } from "@/lib/prisma";
 import { resolveNextRankForMember } from "@/lib/belt-rank";
+import { notifyDojoStaff } from "@/lib/notify";
 
 const NOTES_MAX = 500;
 
@@ -23,6 +24,8 @@ export async function requestBeltTestAction(
     where: { id: user.id },
     select: {
       id: true,
+      fullName: true,
+      dojoId: true,
       membershipStatus: true,
       expiryDate: true,
     },
@@ -64,6 +67,15 @@ export async function requestBeltTestAction(
         notes: trimmedNotes || null,
       },
     });
+
+    if (member.dojoId) {
+      await notifyDojoStaff(member.dojoId, {
+        title: "New belt-test request",
+        message: `${member.fullName} requested a ${nextRank.nextRank.name} test.`,
+        type: "GRADING",
+        link: "/portal/dojo/gradings",
+      });
+    }
   } catch (err: unknown) {
     return { error: err instanceof Error ? err.message : "Failed to submit request." };
   }
@@ -80,19 +92,29 @@ export async function withdrawRequestAction(
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return { error: "Not authenticated." };
 
-  // deleteMany with the full predicate enforces the "only your own pending"
-  // contract even if RLS were misconfigured. Returns count = 0 on no-op.
-  const result = await prisma.gradingApplication.deleteMany({
+  // Load before deleting so we can notify the dojo staff after.
+  const app = await prisma.gradingApplication.findFirst({
     where: {
       id: applicationId,
       memberId: user.id,
       gradingEventId: null,
       status: "SUBMITTED",
     },
+    include: { member: { select: { fullName: true, dojoId: true } } },
   });
-
-  if (result.count === 0) {
+  if (!app) {
     return { error: "Request not found, or it has already been scheduled." };
+  }
+
+  await prisma.gradingApplication.delete({ where: { id: app.id } });
+
+  if (app.member.dojoId) {
+    await notifyDojoStaff(app.member.dojoId, {
+      title: "Belt-test request withdrawn",
+      message: `${app.member.fullName} withdrew their pending request.`,
+      type: "GRADING",
+      link: "/portal/dojo/gradings",
+    });
   }
 
   revalidatePath("/portal/grading");

@@ -46,6 +46,7 @@ export default async function PortalDashboardPage({
         if (!session) redirect("/login");
         return (
             <DojoOverview
+                userId={session.userId}
                 role={session.role}
                 fullName={session.fullName}
                 dojoId={session.dojo?.id ?? null}

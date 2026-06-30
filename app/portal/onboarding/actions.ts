@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { prisma } from "@/lib/prisma";
 import { MEMBERSHIP_FEE_BDT, MEMBERSHIP_DURATION_YEARS } from "@/lib/constants";
+import { notifyAdmins, notifyDojoStaff } from "@/lib/notify";
 
 // ─── Step 1: Save profile ────────────────────────────────────────────────────
 
@@ -123,13 +124,31 @@ export async function payLaterAction(orderId: string) {
     if (!user) return { error: "Not authenticated." };
 
     try {
-        await prisma.member.update({
+        const member = await prisma.member.update({
             where: { id: user.id },
             data: {
                 onboardingComplete: true,
                 membershipStatus: "PENDING",
             },
+            select: { fullName: true, dojoId: true },
         });
+
+        // Heads-up to admins + the student's dojo: a new member is waiting
+        // to settle their membership fee.
+        await notifyAdmins({
+            title: "Pending membership",
+            message: `${member.fullName} completed sign-up and is waiting to pay the membership fee.`,
+            type: "INFO",
+            link: "/portal/admin/members",
+        });
+        if (member.dojoId) {
+            await notifyDojoStaff(member.dojoId, {
+                title: "New member at your dojo",
+                message: `${member.fullName} has joined and is waiting to pay the membership fee.`,
+                type: "INFO",
+                link: "/portal/dojo/students",
+            });
+        }
 
         revalidatePath("/portal");
     } catch (err: any) {

@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { prisma } from "@/lib/prisma";
+import { notifyAdmins } from "@/lib/notify";
 
 export type DojoTrainerInput = {
     name: string;
@@ -170,6 +171,26 @@ export async function commitDojoEnlistment(
     const lng = input.longitude ? parseFloat(input.longitude) : null;
 
     try {
+        // Ensure a Member row exists for the dojo owner with the right role.
+        // Without this the /portal layout's safety-net creates one with the
+        // STUDENT default and bounces the user into the student onboarding flow.
+        await prisma.member.upsert({
+            where: { id: user.id },
+            create: {
+                id: user.id,
+                email: input.email.trim(),
+                fullName: input.contactName.trim(),
+                phone: input.phone.trim(),
+                role: "DOJO_OWNER",
+                onboardingComplete: true,
+                membershipStatus: "PENDING",
+            },
+            update: {
+                role: "DOJO_OWNER",
+                onboardingComplete: true,
+            },
+        });
+
         const application = await prisma.dojoApplication.create({
             data: {
                 userId: user.id,
@@ -188,6 +209,14 @@ export async function commitDojoEnlistment(
             },
             select: { id: true },
         });
+
+        await notifyAdmins({
+            title: "New dojo enlistment",
+            message: `${input.dojoName.trim()} — submitted by ${input.contactName.trim()}. Review and approve.`,
+            type: "INFO",
+            link: "/portal/admin/dojos/applications",
+        });
+
         return { applicationId: application.id };
     } catch (e) {
         const message =

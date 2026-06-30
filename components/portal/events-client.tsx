@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "motion/react";
 import TiltCard from "@/components/portal/tilt-card";
 import {
     CalendarDays, MapPin, Users, CheckCircle2,
-    AlertCircle, Loader2, Clock, ChevronRight,
+    AlertCircle, Loader2, ChevronRight,
 } from "lucide-react";
 import { registerForEventAction, cancelEventRegistrationAction } from "@/app/portal/events/actions";
 
@@ -20,7 +20,7 @@ const typeColors: Record<string, string> = {
     TOURNAMENT:    "bg-red-50 text-red-600",
     SEMINAR:       "bg-purple-50 text-purple-600",
     TRAINING_CAMP: "bg-blue-50 text-blue-600",
-    GRADING:       "bg-amber-50 text-amber-600",
+    BELT_TEST:     "bg-amber-50 text-amber-600",
     OTHER:         "bg-zinc-100 text-zinc-600",
 };
 
@@ -94,9 +94,8 @@ export default function EventsClient({ upcomingEvents, pastEvents, myRegistratio
                         {upcomingEvents.map((ev: any, i: number) => {
                             const isRegistered = registrations.has(ev.id);
                             const isLoading = loadingId === ev.id && isPending;
-                            const deadline = ev.registrationDeadline ? new Date(ev.registrationDeadline) : null;
-                            const registrationClosed = deadline ? deadline < new Date() : false;
                             const isFull = ev.maxCapacity && ev._count?.registrations >= ev.maxCapacity;
+                            const category = ev.category ?? "OTHER";
 
                             return (
                                 <TiltCard
@@ -118,8 +117,8 @@ export default function EventsClient({ upcomingEvents, pastEvents, myRegistratio
                                         {/* Info */}
                                         <div className="flex-1 min-w-0">
                                             <div className="flex items-start gap-2 flex-wrap">
-                                                <span className={`text-[9px] font-bold tracking-widest uppercase px-2 py-0.5 rounded-full ${typeColors[ev.eventType] ?? typeColors.OTHER}`}>
-                                                    {ev.eventType.replace("_", " ")}
+                                                <span className={`text-[9px] font-bold tracking-widest uppercase px-2 py-0.5 rounded-full ${typeColors[category] ?? typeColors.OTHER}`}>
+                                                    {category.replace("_", " ")}
                                                 </span>
                                                 {isRegistered && (
                                                     <span className="text-[9px] font-bold tracking-widest uppercase px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-600 flex items-center gap-1">
@@ -127,9 +126,9 @@ export default function EventsClient({ upcomingEvents, pastEvents, myRegistratio
                                                     </span>
                                                 )}
                                             </div>
-                                            <h3 className="text-base font-bold text-zinc-900 mt-1.5">{ev.titleEn}</h3>
-                                            {ev.descriptionEn && (
-                                                <p className="text-xs text-zinc-500 mt-1 line-clamp-2">{ev.descriptionEn}</p>
+                                            <h3 className="text-base font-bold text-zinc-900 mt-1.5">{ev.title}</h3>
+                                            {ev.description && (
+                                                <p className="text-xs text-zinc-500 mt-1 line-clamp-2">{ev.description}</p>
                                             )}
                                             <div className="flex items-center gap-4 mt-2 flex-wrap text-xs text-zinc-500">
                                                 {ev.location && (
@@ -143,46 +142,34 @@ export default function EventsClient({ upcomingEvents, pastEvents, myRegistratio
                                                         {ev._count?.registrations ?? 0} / {ev.maxCapacity}
                                                     </span>
                                                 )}
-                                                {deadline && !registrationClosed && (
-                                                    <span className="flex items-center gap-1 text-amber-600 font-medium">
-                                                        <Clock size={11} />
-                                                        Register by {deadline.toLocaleDateString("en-GB", { day: "numeric", month: "short" })}
-                                                    </span>
-                                                )}
                                             </div>
                                         </div>
 
                                         {/* Action */}
                                         <div className="flex-shrink-0 self-center sm:self-start sm:mt-1">
-                                            {ev.registrationOpen ? (
-                                                isRegistered ? (
-                                                    <button
-                                                        onClick={() => handleCancel(ev.id)}
-                                                        disabled={isLoading}
-                                                        className="text-sm font-bold text-zinc-500 hover:text-red-600 border border-zinc-200 hover:border-red-200 px-4 py-2 rounded-xl transition-all flex items-center gap-1.5 disabled:opacity-50"
-                                                    >
-                                                        {isLoading ? <Loader2 size={14} className="animate-spin" /> : null}
-                                                        Cancel
-                                                    </button>
-                                                ) : registrationClosed || isFull ? (
-                                                    <span className="text-xs font-bold text-zinc-400 border border-zinc-100 px-4 py-2 rounded-xl">
-                                                        {isFull ? "Full" : "Closed"}
-                                                    </span>
-                                                ) : (
-                                                    <button
-                                                        onClick={() => handleRegister(ev.id)}
-                                                        disabled={isLoading}
-                                                        className="text-sm font-bold text-white bg-zinc-900 hover:bg-accent-red px-4 py-2 rounded-xl transition-colors flex items-center gap-1.5 disabled:opacity-50"
-                                                    >
-                                                        {isLoading ? <Loader2 size={14} className="animate-spin" /> : null}
-                                                        Register
-                                                        {!isLoading && <ChevronRight size={14} />}
-                                                    </button>
-                                                )
-                                            ) : (
+                                            {isRegistered ? (
+                                                <button
+                                                    onClick={() => handleCancel(ev.id)}
+                                                    disabled={isLoading}
+                                                    className="text-sm font-bold text-zinc-500 hover:text-red-600 border border-zinc-200 hover:border-red-200 px-4 py-2 rounded-xl transition-all flex items-center gap-1.5 disabled:opacity-50"
+                                                >
+                                                    {isLoading ? <Loader2 size={14} className="animate-spin" /> : null}
+                                                    Cancel
+                                                </button>
+                                            ) : isFull ? (
                                                 <span className="text-xs font-bold text-zinc-400 border border-zinc-100 px-4 py-2 rounded-xl">
-                                                    Coming Soon
+                                                    Full
                                                 </span>
+                                            ) : (
+                                                <button
+                                                    onClick={() => handleRegister(ev.id)}
+                                                    disabled={isLoading}
+                                                    className="text-sm font-bold text-white bg-zinc-900 hover:bg-accent-red px-4 py-2 rounded-xl transition-colors flex items-center gap-1.5 disabled:opacity-50"
+                                                >
+                                                    {isLoading ? <Loader2 size={14} className="animate-spin" /> : null}
+                                                    Register
+                                                    {!isLoading && <ChevronRight size={14} />}
+                                                </button>
                                             )}
                                         </div>
                                     </div>
@@ -206,22 +193,25 @@ export default function EventsClient({ upcomingEvents, pastEvents, myRegistratio
                 <div>
                     <h2 className="text-xs font-bold tracking-widest uppercase text-zinc-400 mb-3">Past Events</h2>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        {pastEvents.map((ev: any, i: number) => (
+                        {pastEvents.map((ev: any, i: number) => {
+                            const category = ev.category ?? "OTHER";
+                            return (
                             <TiltCard
                                 key={ev.id}
                                 delay={0.1 + i * 0.04}
                                 className="p-4 opacity-70"
                             >
-                                <span className={`text-[9px] font-bold tracking-widest uppercase px-2 py-0.5 rounded-full ${typeColors[ev.eventType] ?? typeColors.OTHER}`}>
-                                    {ev.eventType.replace("_", " ")}
+                                <span className={`text-[9px] font-bold tracking-widest uppercase px-2 py-0.5 rounded-full ${typeColors[category] ?? typeColors.OTHER}`}>
+                                    {category.replace("_", " ")}
                                 </span>
-                                <p className="text-sm font-semibold text-zinc-800 mt-2">{ev.titleEn}</p>
+                                <p className="text-sm font-semibold text-zinc-800 mt-2">{ev.title}</p>
                                 <p className="text-xs text-zinc-500 mt-1 flex items-center gap-1">
                                     <CalendarDays size={11} />
                                     {new Date(ev.eventDate).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}
                                 </p>
                             </TiltCard>
-                        ))}
+                            );
+                        })}
                     </div>
                 </div>
             )}

@@ -26,35 +26,35 @@
   "memberName": {
     "kind": "text",
     "cx": 202,
-    "y": 404.7,
+    "y": 387.6,
     "size": 11,
     "maxWidth": 286
   },
   "certificateNumber": {
     "kind": "text",
-    "cx": 510.7,
-    "y": 404,
+    "cx": 457.7,
+    "y": 387,
     "size": 9,
     "maxWidth": 119
   },
   "branch": {
     "kind": "text",
     "cx": 203.2,
-    "y": 438.3,
+    "y": 420.4,
     "size": 11,
     "maxWidth": 286
   },
   "dateOfAward": {
     "kind": "text",
-    "cx": 517,
-    "y": 437,
+    "cx": 459.1,
+    "y": 420.3,
     "size": 9,
     "maxWidth": 119
   },
   "kyuNo": {
     "kind": "text",
-    "cx": 335.1,
-    "y": 502,
+    "cx": 300.8,
+    "y": 482,
     "size": 9,
     "maxWidth": 119
   },
@@ -68,8 +68,8 @@
   },
   "dojoLogo": {
     "kind": "image",
-    "x": 30,
-    "y": 710,
+    "x": 31.4,
+    "y": 687.9,
     "w": 80,
     "h": 80
   },

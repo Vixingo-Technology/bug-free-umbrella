@@ -103,7 +103,7 @@ function VerifyContent() {
 
             <div className="w-full max-w-md mx-auto px-6 relative z-10">
                 <Link
-                    href="/signup"
+                    href="/signup/student"
                     className="inline-flex items-center gap-2 text-xs font-bold tracking-widest uppercase text-zinc-500 hover:text-accent-red transition-colors mb-8 group"
                 >
                     <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />

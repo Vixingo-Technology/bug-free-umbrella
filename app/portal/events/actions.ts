@@ -4,6 +4,7 @@ import { randomBytes } from "node:crypto";
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { prisma } from "@/lib/prisma";
+import { notifyMembers } from "@/lib/notify";
 
 function urlSafeToken(bytes = 18): string {
     return randomBytes(bytes)
@@ -34,6 +35,15 @@ export async function registerForEventAction(eventId: string) {
         await prisma.eventRegistration.create({
             data: { eventId, memberId: user.id, qrToken: urlSafeToken() },
         });
+
+        if (event) {
+            await notifyMembers([user.id], {
+                title: "You're registered",
+                message: `You're confirmed for "${event.title}". We'll remind you before it starts.`,
+                type: "EVENT",
+                link: "/portal/events",
+            });
+        }
 
         revalidatePath("/portal/events");
         return { success: true };

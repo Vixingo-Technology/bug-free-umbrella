@@ -155,7 +155,6 @@ export async function registerForEventAction(
         registrationId: reg.id,
         qrToken: reg.qrToken,
         participationCardUrl: `${appUrl}/participants/${reg.qrToken}`,
-        checkInUrl: `${appUrl}/check-in/${reg.qrToken}`,
         participantName: memberFullName ?? guestName ?? "Participant",
         participantEmail: memberEmail ?? guestEmail ?? "",
         participantPhone: memberPhone ?? guestPhone ?? null,

@@ -63,7 +63,11 @@ function PaymentContent() {
         startTransition(async () => {
             const init = await initiateDojoEnlistmentPayment(email);
             if (init?.error) {
-                setError(init.error);
+                router.push(
+                    `/enlist-dojo/success?status=failed&reason=${encodeURIComponent(
+                        init.error
+                    )}`
+                );
                 return;
             }
             if (init?.redirectUrl) {
@@ -101,8 +105,13 @@ function PaymentContent() {
                     (t) => t.name?.trim() && t.rank?.trim()
                 ),
             });
-            if (commit?.error) {
-                setError(commit.error);
+            if (commit?.error || !commit?.applicationId) {
+                router.push(
+                    `/enlist-dojo/success?status=failed&reason=${encodeURIComponent(
+                        commit?.error ??
+                            "We couldn't save your enlistment after payment."
+                    )}`
+                );
                 return;
             }
             try {
@@ -110,7 +119,11 @@ function PaymentContent() {
             } catch {
                 /* ignore */
             }
-            router.push("/portal?enlistment=success");
+            router.push(
+                `/enlist-dojo/success?applicationId=${encodeURIComponent(
+                    commit.applicationId
+                )}`
+            );
         });
     }
 

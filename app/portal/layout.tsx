@@ -64,6 +64,17 @@ export default async function PortalLayout({
                     [meta.first_name, meta.last_name].filter(Boolean).join(" ")) ||
                     user.email!;
 
+                // Honour the role hint placed into auth metadata by the dojo
+                // enlistment flow — otherwise dojo owners get filed as STUDENT
+                // and pushed into the student onboarding redirect.
+                const metaRole: MemberRole =
+                    meta.role === "DOJO_OWNER" ||
+                    meta.role === "DOJO_MANAGER" ||
+                    meta.role === "INSTRUCTOR" ||
+                    meta.role === "ADMIN"
+                        ? meta.role
+                        : "STUDENT";
+
                 member = await prisma.member.upsert({
                     where: { id: user.id },
                     create: {
@@ -71,8 +82,8 @@ export default async function PortalLayout({
                         email: user.email!,
                         fullName,
                         currentRank: meta.current_rank ?? "White Belt",
-                        role: "STUDENT",
-                        onboardingComplete: false,
+                        role: metaRole,
+                        onboardingComplete: metaRole !== "STUDENT",
                         membershipStatus: "PENDING",
                     },
                     update: {},

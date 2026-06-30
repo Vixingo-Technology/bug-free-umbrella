@@ -46,15 +46,16 @@ export default async function EventsPage({
     const tab: TabValue = sp.tab === "new" ? "new" : "posted";
     const page = Math.max(1, Number.parseInt(sp.page ?? "1", 10) || 1);
 
-    const where = session.dojo ? { dojoId: session.dojo.id } : { id: "__none__" };
-    const total = await prisma.event.count({ where });
+    const total = session.dojo
+        ? await prisma.event.count({ where: { dojoId: session.dojo.id } })
+        : 0;
     const pageCount = Math.max(1, Math.ceil(total / PAGE_SIZE));
     const safePage = Math.min(page, pageCount);
 
     const events =
-        tab === "posted"
+        tab === "posted" && session.dojo
             ? await prisma.event.findMany({
-                  where,
+                  where: { dojoId: session.dojo.id },
                   orderBy: { eventDate: "desc" },
                   include: { _count: { select: { registrations: true } } },
                   take: PAGE_SIZE,

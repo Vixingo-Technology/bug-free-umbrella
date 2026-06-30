@@ -115,7 +115,6 @@ export async function emitEventRegistered(payload: {
     registrationId: string;
     qrToken: string;
     participationCardUrl: string;
-    checkInUrl: string;
     participantName: string;
     participantEmail: string;
     participantPhone?: string | null;

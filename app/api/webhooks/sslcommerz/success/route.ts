@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { emitPaymentSuccess } from "@/lib/n8n";
 import type { Prisma } from "@/prisma/generated/client";
+import { notifyAdmins, notifyMembers } from "@/lib/notify";
 
 // Called by SSLCommerz after successful payment (success_url).
 // SSLCommerz POSTs form data here; we validate, mark order paid, redirect.
@@ -86,6 +87,22 @@ export async function POST(request: Request) {
                     includesMembership:
                         order.includesMembership || order.includesDojoRenewal,
                     membershipExpiresAt: expiry.toISOString(),
+                });
+
+                // In-app receipt for the member.
+                await notifyMembers([updatedMember.id], {
+                    title: "Payment received",
+                    message: `Your payment of ${order.currency} ${Number(order.total).toLocaleString()} was successful. Thank you!`,
+                    type: "PAYMENT",
+                    link: "/portal/orders",
+                });
+
+                // Back-office heads-up.
+                await notifyAdmins({
+                    title: "New paid order",
+                    message: `${updatedMember.fullName} paid ${order.currency} ${Number(order.total).toLocaleString()}${order.includesMembership ? " (incl. membership)" : ""}.`,
+                    type: "PAYMENT",
+                    link: "/portal/admin/orders",
                 });
             }
         }
