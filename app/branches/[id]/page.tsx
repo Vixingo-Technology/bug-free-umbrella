@@ -11,10 +11,14 @@ import {
     Trophy,
     Users,
 } from "lucide-react";
+import * as Icons from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import DojoMap from "@/components/branches/dojo-map-wrapper";
 import { prisma } from "@/lib/prisma";
+import { TIER_RANK, TIER_STYLES } from "@/lib/achievements/catalog";
+import type { AchievementTier } from "@/prisma/generated/client";
 
 export const dynamic = "force-dynamic";
 
@@ -52,33 +56,112 @@ export default async function DojoDetailPage({
 
     let dojo: any = null;
     try {
-        dojo = await prisma.dojo.findUnique({
+        const d = await prisma.dojo.findUnique({
             where: { id },
             include: {
-                members: {
-                    where: { isActive: true },
-                    orderBy: [{ role: "asc" }, { fullName: "asc" }],
-                    select: {
-                        id: true,
-                        fullName: true,
-                        avatarUrl: true,
-                        role: true,
-                        currentRank: true,
-                        memberNumber: true,
+                students: {
+                    where: { user: { isActive: true } },
+                    include: {
+                        user: { select: { id: true, fullName: true, avatarUrl: true, roleId: true } },
+                        achievements: {
+                            select: {
+                                unlockedAt: true,
+                                achievement: {
+                                    select: { slug: true, name: true, icon: true, tier: true },
+                                },
+                            },
+                        },
                     },
+                },
+                instructors: {
+                    include: { user: { select: { id: true, fullName: true, avatarUrl: true, roleId: true, student: { select: { currentRank: true, memberNumber: true } } } } },
+                },
+                managers: {
+                    include: { user: { select: { id: true, fullName: true, avatarUrl: true, roleId: true, student: { select: { currentRank: true, memberNumber: true } } } } },
+                },
+                owner: {
+                    include: { user: { select: { id: true, fullName: true, avatarUrl: true, roleId: true, student: { select: { currentRank: true, memberNumber: true } } } } },
                 },
             },
         });
+        if (d) {
+            const students = d.students.map((s) => ({
+                id: s.id,
+                fullName: s.user.fullName,
+                avatarUrl: s.user.avatarUrl,
+                role: s.user.roleId,
+                currentRank: s.currentRank,
+                memberNumber: s.memberNumber,
+                achievements: s.achievements,
+            }));
+            const staff = [
+                ...(d.owner ? [{
+                    id: d.owner.id,
+                    fullName: d.owner.user.fullName,
+                    avatarUrl: d.owner.user.avatarUrl,
+                    role: "DOJO_OWNER" as const,
+                    currentRank: d.owner.user.student?.currentRank ?? "—",
+                    memberNumber: d.owner.user.student?.memberNumber ?? null,
+                    achievements: [] as never[],
+                }] : []),
+                ...d.managers.map((m) => ({
+                    id: m.id,
+                    fullName: m.user.fullName,
+                    avatarUrl: m.user.avatarUrl,
+                    role: "DOJO_MANAGER" as const,
+                    currentRank: m.user.student?.currentRank ?? "—",
+                    memberNumber: m.user.student?.memberNumber ?? null,
+                    achievements: [] as never[],
+                })),
+                ...d.instructors.map((i) => ({
+                    id: i.id,
+                    fullName: i.user.fullName,
+                    avatarUrl: i.user.avatarUrl,
+                    role: "INSTRUCTOR" as const,
+                    currentRank: i.user.student?.currentRank ?? "—",
+                    memberNumber: i.user.student?.memberNumber ?? null,
+                    achievements: [] as never[],
+                })),
+            ];
+            dojo = { ...d, members: [...staff, ...students] };
+        }
     } catch {
         notFound();
     }
 
     if (!dojo || !dojo.isActive) notFound();
 
-    const instructors = dojo.members.filter((m: any) =>
+    // Decorate each member with their top achievement (highest tier, then
+    // most recent unlock) so we can sort + render the badge row.
+    const decorated = dojo.members.map((m: any) => {
+        const sorted = [...m.achievements].sort((a: any, b: any) => {
+            const tierDelta =
+                TIER_RANK[b.achievement.tier as AchievementTier] -
+                TIER_RANK[a.achievement.tier as AchievementTier];
+            if (tierDelta !== 0) return tierDelta;
+            return new Date(b.unlockedAt).getTime() - new Date(a.unlockedAt).getTime();
+        });
+        return {
+            ...m,
+            topAchievement: sorted[0] ?? null,
+            topTierRank: sorted[0] ? TIER_RANK[sorted[0].achievement.tier as AchievementTier] : 0,
+            achievementCount: m.achievements.length,
+        };
+    });
+
+    const instructors = decorated.filter((m: any) =>
         ["INSTRUCTOR", "DOJO_MANAGER", "DOJO_OWNER"].includes(m.role),
     );
-    const students = dojo.members.filter((m: any) => m.role === "STUDENT");
+    // Sort students by top-achievement tier (desc), then by total count,
+    // then alphabetically. Top achievers float to the top of the list.
+    const students = decorated
+        .filter((m: any) => m.role === "STUDENT")
+        .sort((a: any, b: any) => {
+            if (b.topTierRank !== a.topTierRank) return b.topTierRank - a.topTierRank;
+            if (b.achievementCount !== a.achievementCount)
+                return b.achievementCount - a.achievementCount;
+            return a.fullName.localeCompare(b.fullName);
+        });
 
     const schedule: Schedule = Array.isArray(dojo.schedule)
         ? (dojo.schedule as Schedule)
@@ -215,8 +298,15 @@ export default async function DojoDetailPage({
                             )}
                         </Card>
 
-                        {/* Students */}
-                        <Card title="Students" count={students.length}>
+                        {/* Students — sorted by top achievement tier */}
+                        <Card
+                            title={
+                                students.some((s: any) => s.topAchievement)
+                                    ? "Students — Top Achievers First"
+                                    : "Students"
+                            }
+                            count={students.length}
+                        >
                             {students.length === 0 ? (
                                 <p className="text-sm text-zinc-500">
                                     No students listed yet.
@@ -398,11 +488,29 @@ function MemberRow({ member }: { member: any }) {
 
 function StudentCard({ member }: { member: any }) {
     const initial = member.fullName.charAt(0).toUpperCase();
+    const top = member.topAchievement;
+    const tierStyle: (typeof TIER_STYLES)[AchievementTier] | null = top
+        ? TIER_STYLES[top.achievement.tier as AchievementTier]
+        : null;
+    const TopIcon: LucideIcon | null = top
+        ? (Icons as unknown as Record<string, LucideIcon>)[top.achievement.icon] ?? Icons.Award
+        : null;
+
     return (
         <Link
             href={`/members/${member.id}`}
-            className="group flex flex-col items-center text-center p-3 border border-zinc-200 rounded-sm hover:border-accent-red hover:shadow-sm transition-all bg-white"
+            className={`group relative flex flex-col items-center text-center p-3 border rounded-sm hover:shadow-sm transition-all bg-white ${
+                tierStyle ? `${tierStyle.ring} ${tierStyle.glow ?? ""}` : "border-zinc-200 hover:border-accent-red"
+            }`}
         >
+            {top && tierStyle && TopIcon && (
+                <span
+                    className={`absolute -top-2 -right-2 w-7 h-7 rounded-full border-2 border-white shadow-md flex items-center justify-center ${tierStyle.bg} ${tierStyle.ring}`}
+                    title={`${top.achievement.name} · ${tierStyle.label}`}
+                >
+                    <TopIcon size={13} className={tierStyle.text} />
+                </span>
+            )}
             <div className="w-14 h-14 rounded-full bg-zinc-200 overflow-hidden">
                 {member.avatarUrl ? (
                     // eslint-disable-next-line @next/next/no-img-element
@@ -423,6 +531,19 @@ function StudentCard({ member }: { member: any }) {
             <p className="text-[10px] text-zinc-500 mt-0.5 truncate w-full">
                 {member.currentRank}
             </p>
+            {top && tierStyle && (
+                <span
+                    className={`mt-2 text-[9px] font-bold tracking-widest uppercase px-1.5 py-0.5 rounded ${tierStyle.chip} truncate max-w-full`}
+                    title={top.achievement.name}
+                >
+                    {top.achievement.name}
+                </span>
+            )}
+            {member.achievementCount > 1 && (
+                <span className="mt-1 text-[9px] font-mono text-zinc-400">
+                    +{member.achievementCount - 1} more
+                </span>
+            )}
         </Link>
     );
 }

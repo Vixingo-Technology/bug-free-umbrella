@@ -11,13 +11,23 @@ export default async function RenewPage() {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) redirect("/login");
 
-    let member = null;
+    let member: any = null;
 
     try {
-        member = await prisma.member.findUnique({
+        const student = await prisma.student.findUnique({
             where: { id: user.id },
-            include: { dojo: true },
+            include: { dojo: true, user: true },
         });
+        if (student) {
+            member = {
+                ...student,
+                fullName: student.user.fullName,
+                email: student.user.email,
+                phone: student.user.phone,
+                avatarUrl: student.user.avatarUrl,
+                role: student.user.roleId,
+            };
+        }
     } catch {
         // DB not configured
     }

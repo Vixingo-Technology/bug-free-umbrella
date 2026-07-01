@@ -74,23 +74,34 @@ export default async function EventParticipantsList({
     const pageCount = Math.max(1, Math.ceil(total / PAGE_SIZE));
     const safePage = Math.min(Math.max(1, page), pageCount);
 
-    const participants = await prisma.eventRegistration.findMany({
+    const participantsRaw = await prisma.eventRegistration.findMany({
         where: { eventId },
         orderBy: [{ checkedInAt: "asc" }, { createdAt: "asc" }],
         take: PAGE_SIZE,
         skip: (safePage - 1) * PAGE_SIZE,
         include: {
-            member: {
+            user: {
                 select: {
                     fullName: true,
                     email: true,
                     phone: true,
-                    memberNumber: true,
+                    student: { select: { memberNumber: true } },
                 },
             },
             checkedInBy: { select: { fullName: true } },
         },
     });
+    const participants = participantsRaw.map((p) => ({
+        ...p,
+        member: p.user
+            ? {
+                fullName: p.user.fullName,
+                email: p.user.email,
+                phone: p.user.phone,
+                memberNumber: p.user.student?.memberNumber ?? null,
+            }
+            : null,
+    }));
 
     const capacityLabel = event.maxCapacity
         ? `${total} / ${event.maxCapacity}`

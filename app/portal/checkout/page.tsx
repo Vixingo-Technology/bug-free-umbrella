@@ -21,14 +21,22 @@ export default async function CheckoutPage({
     let member = null;
 
     try {
-        member = await prisma.member.findUnique({
+        const u = await prisma.user.findUnique({
             where: { id: user.id },
-            include: { dojo: true },
+            include: { student: { include: { dojo: true } } },
         });
+        if (u) {
+            member = {
+                ...u,
+                ...(u.student ?? {}),
+                role: u.roleId,
+                dojo: u.student?.dojo ?? null,
+            };
+        }
 
         if (orderId) {
             order = await prisma.shopOrder.findUnique({
-                where: { id: orderId, memberId: user.id },
+                where: { id: orderId, userId: user.id },
                 include: {
                     orderItems: {
                         include: { product: true },
@@ -41,7 +49,7 @@ export default async function CheckoutPage({
         if (!order) {
             order = await prisma.shopOrder.findFirst({
                 where: {
-                    memberId: user.id,
+                    userId: user.id,
                     paymentStatus: "PENDING",
                     includesMembership: true,
                 },
@@ -53,7 +61,8 @@ export default async function CheckoutPage({
         }
 
         if (!order) redirect("/portal");
-    } catch {
+    } catch (err: any) {
+        if (err?.digest?.startsWith("NEXT_REDIRECT")) throw err;
         redirect("/portal");
     }
 

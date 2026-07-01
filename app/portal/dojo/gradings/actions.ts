@@ -43,7 +43,7 @@ export async function scheduleExamAction(input: {
           id: { in: input.applicationIds },
           gradingEventId: null,
           status: "SUBMITTED",
-          member: { dojoId },
+          student: { dojoId },
         },
         include: { targetRank: true },
       });
@@ -79,7 +79,7 @@ export async function scheduleExamAction(input: {
             eventName: event.name,
           });
           return {
-            memberId: a.memberId,
+            userId: a.studentId,
             title: payload.title,
             message: payload.message,
             type: payload.type,
@@ -115,7 +115,7 @@ export async function declineRequestAction(input: {
           id: input.applicationId,
           gradingEventId: null,
           status: "SUBMITTED",
-          member: { dojoId },
+          student: { dojoId },
         },
       });
       if (!app) {
@@ -130,7 +130,7 @@ export async function declineRequestAction(input: {
       const payload = buildDeclinedNotification({ reason });
       await tx.notification.create({
         data: {
-          memberId: app.memberId,
+          userId: app.studentId,
           title: payload.title,
           message: payload.message,
           type: payload.type,
@@ -158,9 +158,9 @@ async function loadEditableEvent(eventId: string, dojoId: string) {
   const event = await prisma.gradingEvent.findFirst({
     where: {
       id: eventId,
-      applications: { some: { member: { dojoId } } },
+      applications: { some: { student: { dojoId } } },
     },
-    include: { applications: { include: { member: true, targetRank: true } } },
+    include: { applications: { include: { student: { include: { user: true } }, targetRank: true } } },
   });
   if (!event) throw new Error("Belt test not found in your dojo.");
   if (event.cancelledAt) throw new Error("This belt test has been cancelled.");
@@ -183,7 +183,7 @@ export async function updateScheduledExamAction(input: {
       const event = await tx.gradingEvent.findFirst({
         where: {
           id: input.eventId,
-          applications: { some: { member: { dojoId: session.dojo!.id } } },
+          applications: { some: { student: { dojoId: session.dojo!.id } } },
         },
         include: { applications: true },
       });
@@ -214,18 +214,18 @@ export async function updateScheduledExamAction(input: {
 
       // Only notify if something the student cares about changed.
       if (dateChanged || locChanged) {
-        const memberIds = event.applications
+        const studentIds = event.applications
           .filter((a) => a.status === "APPROVED")
-          .map((a) => a.memberId);
-        if (memberIds.length) {
+          .map((a) => a.studentId);
+        if (studentIds.length) {
           const payload = buildExamUpdatedNotification({
             eventName: newName,
             eventDate: newDate,
             location: newLocation,
           });
           await tx.notification.createMany({
-            data: memberIds.map((memberId) => ({
-              memberId,
+            data: studentIds.map((userId) => ({
+              userId,
               title: payload.title,
               message: payload.message,
               type: payload.type,
@@ -258,7 +258,7 @@ export async function cancelScheduledExamAction(input: {
       const event = await tx.gradingEvent.findFirst({
         where: {
           id: input.eventId,
-          applications: { some: { member: { dojoId: session.dojo!.id } } },
+          applications: { some: { student: { dojoId: session.dojo!.id } } },
         },
         include: { applications: true },
       });
@@ -281,7 +281,7 @@ export async function cancelScheduledExamAction(input: {
         const payload = buildExamCancelledNotification({ eventName: event.name, reason });
         await tx.notification.createMany({
           data: approved.map((a) => ({
-            memberId: a.memberId,
+            userId: a.studentId,
             title: payload.title,
             message: payload.message,
             type: payload.type,
@@ -304,7 +304,7 @@ export async function cancelScheduledExamAction(input: {
 // ─────────────────────────────────────────────────────────────────────────────
 
 export type DraftResultRow = {
-  memberId: string;
+  studentId: string;
   result: GradingResult; // PASSED | FAILED | ABSENT
   reviewNotes?: string | null;
 };
@@ -327,24 +327,24 @@ export async function upsertDraftResultsAction(input: {
     await prisma.$transaction(async (tx) => {
       const event = await loadEditableEvent(input.eventId, session.dojo!.id);
 
-      // Build a lookup of (memberId → application) so we can resolve targetRankId
-      // and the member's current rank for a fromRank snapshot.
-      const appByMember = new Map(event.applications.map((a) => [a.memberId, a]));
+      // Build a lookup of (studentId → application) so we can resolve targetRankId
+      // and the student's current rank for a fromRank snapshot.
+      const appByStudent = new Map(event.applications.map((a) => [a.studentId, a]));
 
       for (const row of input.rows) {
-        const app = appByMember.get(row.memberId);
+        const app = appByStudent.get(row.studentId);
         if (!app) throw new Error("One or more candidates are not enrolled in this belt test.");
 
         const fromRank = await tx.beltRank.findUnique({
-          where: { name: app.member.currentRank },
+          where: { name: app.student.currentRank },
         });
 
         const toRankId =
           row.result === "PASSED" ? app.targetRankId : fromRank?.id ?? null;
 
-        // One Grading per (member, event). Find existing draft if any.
+        // One Grading per (student, event). Find existing draft if any.
         const existing = await tx.grading.findFirst({
-          where: { memberId: row.memberId, gradingEventId: event.id },
+          where: { studentId: row.studentId, gradingEventId: event.id },
         });
 
         if (existing) {
@@ -360,7 +360,7 @@ export async function upsertDraftResultsAction(input: {
         } else {
           await tx.grading.create({
             data: {
-              memberId: row.memberId,
+              studentId: row.studentId,
               gradingEventId: event.id,
               result: row.result,
               fromRankId: fromRank?.id ?? null,
@@ -406,21 +406,19 @@ export async function publishResultsAction(input: {
       }
 
       // Each enrolled (APPROVED) application must have a graded row.
-      const approvedMemberIds = new Set(
-        event.applications.filter((a) => a.status === "APPROVED").map((a) => a.memberId)
+      const approvedStudentIds = new Set(
+        event.applications.filter((a) => a.status === "APPROVED").map((a) => a.studentId)
       );
-      const gradedMemberIds = new Set(gradings.map((g) => g.memberId));
-      for (const id of approvedMemberIds) {
-        if (!gradedMemberIds.has(id)) {
+      const gradedStudentIds = new Set(gradings.map((g) => g.studentId));
+      for (const id of approvedStudentIds) {
+        if (!gradedStudentIds.has(id)) {
           throw new Error("Some candidates have no draft result. Fill in everyone before publishing.");
         }
       }
 
       // Apply rank changes for PASSED + build the in-app notification fan-out.
-      // The student sees the result via the realtime-subscribed badge + sound
-      // in the portal navbar; no external email/WhatsApp side effects yet.
       const notifData: Array<{
-        memberId: string;
+        userId: string;
         title: string;
         message: string;
         type: "GRADING";
@@ -429,8 +427,8 @@ export async function publishResultsAction(input: {
 
       for (const g of gradings) {
         if (g.result === "PASSED" && g.toRank?.name) {
-          await tx.member.update({
-            where: { id: g.memberId },
+          await tx.student.update({
+            where: { id: g.studentId },
             data: { currentRank: g.toRank.name },
           });
         }
@@ -439,7 +437,7 @@ export async function publishResultsAction(input: {
           toRankName: g.toRank?.name ?? null,
         });
         notifData.push({
-          memberId: g.memberId,
+          userId: g.studentId,
           title: payload.title,
           message: payload.message,
           type: payload.type,

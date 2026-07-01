@@ -20,26 +20,26 @@ export async function requestBeltTestAction(
     return { error: `Notes must be ${NOTES_MAX} characters or fewer.` };
   }
 
-  const member = await prisma.member.findUnique({
+  const student = await prisma.student.findUnique({
     where: { id: user.id },
     select: {
       id: true,
-      fullName: true,
       dojoId: true,
       membershipStatus: true,
       expiryDate: true,
+      user: { select: { fullName: true } },
     },
   });
-  if (!member) return { error: "Could not load your profile." };
+  if (!student) return { error: "Could not load your profile." };
 
   // Eligibility: membership must be ACTIVE.
-  if (member.membershipStatus !== "ACTIVE") {
+  if (student.membershipStatus !== "ACTIVE") {
     return { error: "Your membership is not active. Please renew before requesting a belt test." };
   }
 
   // Eligibility: no existing pending request.
   const existingPending = await prisma.gradingApplication.findFirst({
-    where: { memberId: user.id, gradingEventId: null, status: "SUBMITTED" },
+    where: { studentId: user.id, gradingEventId: null, status: "SUBMITTED" },
     select: { id: true },
   });
   if (existingPending) {
@@ -60,7 +60,7 @@ export async function requestBeltTestAction(
   try {
     await prisma.gradingApplication.create({
       data: {
-        memberId: user.id,
+        studentId: user.id,
         gradingEventId: null,
         targetRankId: nextRank.nextRank.id,
         status: "SUBMITTED",
@@ -68,10 +68,10 @@ export async function requestBeltTestAction(
       },
     });
 
-    if (member.dojoId) {
-      await notifyDojoStaff(member.dojoId, {
+    if (student.dojoId) {
+      await notifyDojoStaff(student.dojoId, {
         title: "New belt-test request",
-        message: `${member.fullName} requested a ${nextRank.nextRank.name} test.`,
+        message: `${student.user.fullName} requested a ${nextRank.nextRank.name} test.`,
         type: "GRADING",
         link: "/portal/dojo/gradings",
       });
@@ -96,11 +96,11 @@ export async function withdrawRequestAction(
   const app = await prisma.gradingApplication.findFirst({
     where: {
       id: applicationId,
-      memberId: user.id,
+      studentId: user.id,
       gradingEventId: null,
       status: "SUBMITTED",
     },
-    include: { member: { select: { fullName: true, dojoId: true } } },
+    include: { student: { select: { dojoId: true, user: { select: { fullName: true } } } } },
   });
   if (!app) {
     return { error: "Request not found, or it has already been scheduled." };
@@ -108,10 +108,10 @@ export async function withdrawRequestAction(
 
   await prisma.gradingApplication.delete({ where: { id: app.id } });
 
-  if (app.member.dojoId) {
-    await notifyDojoStaff(app.member.dojoId, {
+  if (app.student.dojoId) {
+    await notifyDojoStaff(app.student.dojoId, {
       title: "Belt-test request withdrawn",
-      message: `${app.member.fullName} withdrew their pending request.`,
+      message: `${app.student.user.fullName} withdrew their pending request.`,
       type: "GRADING",
       link: "/portal/dojo/gradings",
     });

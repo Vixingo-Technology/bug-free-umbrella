@@ -14,17 +14,27 @@ export default async function ProgressPage() {
     let gradings: any[] = [];
 
     try {
-        member = await prisma.member.findUnique({
+        const student = await prisma.student.findUnique({
             where: { id: user.id },
-            include: { dojo: true },
+            include: { dojo: true, user: true },
         });
+        if (student) {
+            member = {
+                ...student,
+                fullName: student.user.fullName,
+                email: student.user.email,
+                phone: student.user.phone,
+                avatarUrl: student.user.avatarUrl,
+                role: student.user.roleId,
+            };
+        }
 
         allBeltRanks = await prisma.beltRank.findMany({
             orderBy: { orderIndex: "asc" },
         });
 
         gradings = await prisma.grading.findMany({
-            where: { memberId: user.id },
+            where: { studentId: user.id },
             include: { fromRank: true, toRank: true, gradingEvent: true },
             orderBy: { createdAt: "desc" },
         });

@@ -25,20 +25,24 @@ export async function updateProfileAction(formData: FormData) {
     if (!fullName) return { error: "Full name is required." };
 
     try {
-        await prisma.member.update({
-            where: { id: user.id },
-            data: {
-                fullName,
-                phone,
-                dojoId: dojoId || null,
-                bloodGroup,
-                address,
-                nationalId,
-                emergencyContactName,
-                emergencyContactPhone,
-                dateOfBirth,
-            },
-        });
+        await prisma.$transaction([
+            prisma.user.update({
+                where: { id: user.id },
+                data: { fullName, phone },
+            }),
+            prisma.student.update({
+                where: { id: user.id },
+                data: {
+                    dojoId: dojoId || null,
+                    bloodGroup,
+                    address,
+                    nationalId,
+                    emergencyContactName,
+                    emergencyContactPhone,
+                    dateOfBirth,
+                },
+            }),
+        ]);
 
         revalidatePath("/portal/profile");
         revalidatePath("/portal");

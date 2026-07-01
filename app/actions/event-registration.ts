@@ -71,7 +71,7 @@ export async function registerForEventAction(
         data: { user },
     } = await supabase.auth.getUser();
 
-    let memberId: string | null = null;
+    let userId: string | null = null;
     let guestName: string | null = null;
     let guestEmail: string | null = null;
     let guestPhone: string | null = null;
@@ -81,22 +81,22 @@ export async function registerForEventAction(
     let memberPhone: string | null = null;
 
     if (user) {
-        // Signed-in members never need to supply name/email — those come from
-        // the members table. They get the strict "one registration per member
+        // Signed-in users never need to supply name/email — those come from
+        // the users table. They get the strict "one registration per user
         // per event" guarantee.
-        const member = await prisma.member.findUnique({
+        const u = await prisma.user.findUnique({
             where: { id: user.id },
             select: { id: true, fullName: true, email: true, phone: true },
         });
-        if (member) {
-            memberId = member.id;
-            memberFullName = member.fullName;
-            memberEmail = member.email;
-            memberPhone = member.phone;
+        if (u) {
+            userId = u.id;
+            memberFullName = u.fullName;
+            memberEmail = u.email;
+            memberPhone = u.phone;
         }
     }
 
-    if (!memberId) {
+    if (!userId) {
         guestName = ((formData.get("name") as string) ?? "").trim() || null;
         guestEmail = normaliseEmail(formData.get("email") as string);
         guestPhone = ((formData.get("phone") as string) ?? "").trim() || null;
@@ -109,9 +109,9 @@ export async function registerForEventAction(
     // Duplicate-guard before insert so we can return a friendly message instead
     // of a 23505 unique-violation. The DB has a partial unique index as a
     // backstop.
-    if (memberId) {
+    if (userId) {
         const existing = await prisma.eventRegistration.findFirst({
-            where: { eventId, memberId },
+            where: { eventId, userId },
             select: { qrToken: true },
         });
         if (existing) return { ok: true, token: existing.qrToken };
@@ -119,7 +119,7 @@ export async function registerForEventAction(
         const existing = await prisma.eventRegistration.findFirst({
             where: {
                 eventId,
-                memberId: null,
+                userId: null,
                 guestEmail: { equals: guestEmail, mode: "insensitive" },
             },
             select: { qrToken: true },
@@ -131,7 +131,7 @@ export async function registerForEventAction(
     const reg = await prisma.eventRegistration.create({
         data: {
             eventId,
-            memberId,
+            userId,
             guestName,
             guestEmail,
             guestPhone,
@@ -158,8 +158,8 @@ export async function registerForEventAction(
         participantName: memberFullName ?? guestName ?? "Participant",
         participantEmail: memberEmail ?? guestEmail ?? "",
         participantPhone: memberPhone ?? guestPhone ?? null,
-        memberId: memberId ?? null,
-        isGuest: !memberId,
+        memberId: userId ?? null,
+        isGuest: !userId,
         event: {
             id: event.id,
             title: event.title,
@@ -201,10 +201,8 @@ export async function checkInParticipantAction(
     } = await supabase.auth.getUser();
     if (!user) return { ok: false, error: "Sign in as an authority to check in participants." };
 
-    const me = await prisma.member.findUnique({
-        where: { id: user.id },
-        select: { role: true, dojoId: true },
-    });
+    const { loadCurrentUser } = await import("@/lib/auth/load-current-user");
+    const me = await loadCurrentUser(user.id);
     if (!me) return { ok: false, error: "Account not found." };
     if (
         me.role !== "ADMIN" &&
@@ -228,7 +226,7 @@ export async function checkInParticipantAction(
                     postedById: true,
                 },
             },
-            member: { select: { fullName: true } },
+            user: { select: { fullName: true } },
         },
     });
     if (!registration) {
@@ -252,7 +250,7 @@ export async function checkInParticipantAction(
     }
 
     const participantName =
-        registration.member?.fullName ?? registration.guestName ?? "Participant";
+        registration.user?.fullName ?? registration.guestName ?? "Participant";
 
     if (registration.checkedInAt) {
         return {
@@ -268,7 +266,7 @@ export async function checkInParticipantAction(
     const checkedInAt = new Date();
     await prisma.eventRegistration.update({
         where: { id: registration.id },
-        data: { checkedInAt, checkedInById: user.id },
+        data: { checkedInAt, checkedInByUserId: user.id },
     });
 
     revalidatePath(`/portal/admin/events/${registration.event.id}/participants`);

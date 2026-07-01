@@ -150,8 +150,8 @@ export async function createDojoRenewalOrderAction(): Promise<
 
   const dojoId = session.dojo.id;
 
-  const owner = await prisma.member.findFirst({
-    where: { dojoId, role: "DOJO_OWNER" },
+  const owner = await prisma.dojoOwner.findUnique({
+    where: { dojoId },
     select: { id: true },
   });
   if (!owner) {
@@ -179,7 +179,7 @@ export async function createDojoRenewalOrderAction(): Promise<
 
     const order = await prisma.shopOrder.create({
       data: {
-        memberId: owner.id,
+        userId: owner.id,
         dojoId,
         total: fee,
         membershipFee: fee,

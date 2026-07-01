@@ -188,14 +188,14 @@ function ChecklistRow({ item }: { item: Item }) {
 
 async function loadChecklistData(userId: string, dojoId: string | null) {
     try {
-        const [member, dojo, staffCount, orderCount] = await Promise.all([
-            prisma.member.findUnique({
+        const [u, student, dojo, instructorCount, managerCount, orderCount] = await Promise.all([
+            prisma.user.findUnique({
                 where: { id: userId },
-                select: {
-                    phone: true,
-                    dateOfBirth: true,
-                    address: true,
-                },
+                select: { phone: true },
+            }),
+            prisma.student.findUnique({
+                where: { id: userId },
+                select: { dateOfBirth: true, address: true },
             }),
             dojoId
                 ? prisma.dojo.findUnique({
@@ -204,20 +204,18 @@ async function loadChecklistData(userId: string, dojoId: string | null) {
                   })
                 : Promise.resolve(null),
             dojoId
-                ? prisma.member.count({
-                      where: {
-                          dojoId,
-                          id: { not: userId },
-                          role: { in: ["INSTRUCTOR", "DOJO_MANAGER"] },
-                      },
-                  })
+                ? prisma.instructor.count({ where: { dojoId, id: { not: userId } } })
                 : Promise.resolve(0),
-            prisma.shopOrder.count({ where: { memberId: userId } }),
+            dojoId
+                ? prisma.dojoManager.count({ where: { dojoId, id: { not: userId } } })
+                : Promise.resolve(0),
+            prisma.shopOrder.count({ where: { userId } }),
         ]);
+        const staffCount = instructorCount + managerCount;
 
         return {
             profileDone: Boolean(
-                member?.phone && member?.dateOfBirth && member?.address
+                u?.phone && student?.dateOfBirth && student?.address
             ),
             logoDone: Boolean(dojo?.logoUrl),
             scheduleDone: hasSchedule(dojo?.schedule),

@@ -12,28 +12,25 @@ export default async function AdminDojosPage() {
         prisma.dojo.findMany({
             orderBy: { createdAt: "desc" },
             include: {
-                _count: { select: { members: true } },
-                members: {
-                    where: { role: "DOJO_OWNER" },
-                    select: { id: true, fullName: true, email: true },
-                    take: 1,
+                _count: { select: { students: true } },
+                owner: {
+                    include: { user: { select: { id: true, fullName: true, email: true } } },
                 },
             },
         }),
-        prisma.member.findMany({
-            where: { role: { in: ["INSTRUCTOR", "DOJO_MANAGER", "DOJO_OWNER", "ADMIN"] } },
-            select: { id: true, fullName: true, email: true, role: true },
+        prisma.user.findMany({
+            where: { roleId: { in: ["INSTRUCTOR", "DOJO_MANAGER", "DOJO_OWNER", "ADMIN"] } },
+            select: { id: true, fullName: true, email: true, roleId: true },
             orderBy: { fullName: "asc" },
-        }),
+        }).then((rows) => rows.map((r) => ({ ...r, role: r.roleId }))),
     ]);
 
-    // Project the head from the unified members table onto the legacy field name
-    // the client component expects.
     const dojos = dojosRaw.map((d) => {
-        const { members, ...rest } = d;
-        const head = members[0] ?? null;
+        const { owner, _count, ...rest } = d;
+        const head = owner?.user ?? null;
         return {
             ...rest,
+            _count: { members: _count.students },
             headInstructorId: head?.id ?? null,
             headInstructor: head,
         };

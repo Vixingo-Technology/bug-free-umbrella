@@ -5,7 +5,7 @@ import { prisma } from "@/lib/prisma";
 export default async function ScheduledList({ dojoId }: { dojoId: string }) {
   const events = await prisma.gradingEvent.findMany({
     where: {
-      applications: { some: { member: { dojoId } } },
+      applications: { some: { student: { dojoId } } },
     },
     include: {
       _count: { select: { applications: true, gradings: true } },

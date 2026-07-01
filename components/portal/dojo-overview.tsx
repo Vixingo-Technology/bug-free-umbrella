@@ -227,19 +227,19 @@ async function loadStats(dojoId: string | null): Promise<Stats> {
         expiringSoon,
         expired,
     ] = await Promise.all([
-        prisma.member.count({ where: { dojoId, isActive: true } }),
-        prisma.member.count({ where: { dojoId, joinDate: { gte: monthAgo } } }),
+        prisma.student.count({ where: { dojoId, user: { isActive: true } } }),
+        prisma.student.count({ where: { dojoId, joinDate: { gte: monthAgo } } }),
         prisma.attendance.count({ where: { dojoId, date: { gte: weekAgo } } }),
         prisma.attendance.count({
             where: { dojoId, date: { gte: weekAgo }, present: true },
         }),
         prisma.gradingApplication.count({
-            where: { status: "SUBMITTED", member: { dojoId } },
+            where: { status: "SUBMITTED", student: { dojoId } },
         }),
-        prisma.member.count({
+        prisma.student.count({
             where: { dojoId, expiryDate: { gte: today, lte: in30Days } },
         }),
-        prisma.member.count({ where: { dojoId, expiryDate: { lt: today } } }),
+        prisma.student.count({ where: { dojoId, expiryDate: { lt: today } } }),
     ]);
 
     const rate =

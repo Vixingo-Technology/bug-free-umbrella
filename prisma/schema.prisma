@@ -1,6 +1,20 @@
 // =============================================================
-// JKA Bangladesh — Prisma Schema
+// JKA Bangladesh — Prisma Schema (3NF, role-normalized)
 // PostgreSQL via Supabase · Prisma 7 · driverAdapters preview
+//
+// Identity is split across:
+//   users               — shared profile (mirrors auth.users)
+//   roles               — RBAC role catalog (PK = slug)
+//   permissions         — permission catalog
+//   role_permissions    — M2M role↔permission
+//   students            — student-specific profile (1:1 with users)
+//   instructors         — instructor-specific profile (1:1 with users)
+//   dojo_managers       — dojo manager profile  (1:1 with users)
+//   dojo_owners         — dojo owner profile    (1:1 with users)
+//   admins              — admin profile         (1:1 with users)
+//
+// Each role-specific table has id = users.id (PK + FK). A user has
+// exactly one row in `users` and one row in the matching role table.
 //
 // Naming convention:
 //   - Prisma fields  → camelCase  (TypeScript client)
@@ -21,14 +35,6 @@ datasource db {
 // ─────────────────────────────────────────────
 // ENUMS
 // ─────────────────────────────────────────────
-
-enum MemberRole {
-  STUDENT
-  INSTRUCTOR
-  DOJO_MANAGER
-  DOJO_OWNER
-  ADMIN
-}
 
 enum MembershipStatus {
   PENDING   // Registered but has not paid
@@ -89,6 +95,224 @@ enum AttachmentType {
   PDF
 }
 
+enum AchievementTier {
+  COMMON
+  RARE
+  EPIC
+  LEGENDARY
+}
+
+enum AchievementRule {
+  MANUAL
+  ATTENDANCE_COUNT
+  CONSECUTIVE_ATTENDANCE
+  GRADINGS_PASSED
+  EVENTS_ATTENDED
+  TOURNAMENTS_PARTICIPATED
+  TOURNAMENT_WINS
+  CERTIFICATES_EARNED
+}
+
+// ─────────────────────────────────────────────
+// RBAC — Role / Permission / RolePermission
+// Role IDs are slugs (STUDENT, INSTRUCTOR, DOJO_MANAGER, DOJO_OWNER, ADMIN)
+// seeded by the SQL migration.
+// ─────────────────────────────────────────────
+
+model Role {
+  id            String  @id                           // slug
+  displayName   String  @map("display_name")
+  displayNameBn String? @map("display_name_bn")
+  description   String?
+
+  users           User[]
+  rolePermissions RolePermission[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("roles")
+}
+
+model Permission {
+  id          String  @id              // slug e.g. "members.read.own_dojo"
+  resource    String                   // "members" | "gradings" | ...
+  action      String                   // "read" | "write" | "approve" | ...
+  description String?
+
+  rolePermissions RolePermission[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("permissions")
+}
+
+model RolePermission {
+  roleId       String @map("role_id")
+  permissionId String @map("permission_id")
+
+  role       Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permission Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@id([roleId, permissionId])
+  @@map("role_permissions")
+}
+
+// ─────────────────────────────────────────────
+// USERS  (mirrors auth.users via id)
+// Shared profile fields for every authenticated user. Role-specific
+// data lives in the matching role table (students / instructors / etc).
+// ─────────────────────────────────────────────
+
+model User {
+  id        String  @id @db.Uuid                    // = auth.users.id
+  email     String  @unique
+  phone     String?
+  fullName  String  @map("full_name")
+  avatarUrl String? @map("avatar_url")
+  roleId    String  @default("STUDENT") @map("role_id")
+  isActive  Boolean @default(true) @map("is_active")
+
+  role         Role          @relation(fields: [roleId], references: [id])
+  student      Student?
+  instructor   Instructor?
+  dojoManager  DojoManager?
+  dojoOwner    DojoOwner?
+  admin        Admin?
+
+  notifications        Notification[]
+  orders               ShopOrder[]
+  eventRegistrations   EventRegistration[]
+  eventCheckIns        EventRegistration[]     @relation("EventCheckIns")
+  eventsPosted         Event[]                 @relation("EventsPosted")
+  announcementsPosted  Announcement[]          @relation("AnnouncementsPosted")
+  dojoSalesAsBuyer     DojoSale[]              @relation("DojoSaleBuyer")
+  dojoSalesSold        DojoSale[]              @relation("DojoSaleSeller")
+  achievementsAwarded  StudentAchievement[]    @relation("StudentAchievementsAwarded")
+  tournamentEntries    TournamentParticipant[] @relation("TournamentEntries")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt      @map("updated_at")
+
+  @@index([roleId])
+  @@map("users")
+}
+
+// ─────────────────────────────────────────────
+// STUDENT  — student-specific profile (1:1 with User)
+// ─────────────────────────────────────────────
+
+model Student {
+  id                   String           @id @db.Uuid                                         // = users.id
+  memberNumber         String?          @unique @map("member_number")
+  currentRank          String           @default("White Belt") @map("current_rank")
+  joinDate             DateTime         @default(now())        @map("join_date")
+  expiryDate           DateTime?        @map("expiry_date")
+  dojoId               String?          @db.Uuid               @map("dojo_id")
+
+  onboardingComplete   Boolean          @default(false)        @map("onboarding_complete")
+  membershipStatus     MembershipStatus @default(PENDING)      @map("membership_status")
+
+  dateOfBirth          DateTime?        @map("date_of_birth")  @db.Date
+  bloodGroup           String?          @map("blood_group")
+  address              String?
+  nationalId           String?          @map("national_id")
+  fatherName           String?          @map("father_name")
+  motherName           String?          @map("mother_name")
+  emergencyContactName String?          @map("emergency_contact_name")
+  emergencyContactPhone String?         @map("emergency_contact_phone")
+
+  user User @relation(fields: [id], references: [id], onDelete: Cascade)
+  dojo Dojo? @relation("DojoStudents", fields: [dojoId], references: [id])
+
+  attendance          Attendance[]
+  gradings            Grading[]
+  gradingApplications GradingApplication[]
+  certificateRequests CertificateRequest[]
+  achievements        StudentAchievement[] @relation("StudentAchievements")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt      @map("updated_at")
+
+  @@index([dojoId])
+  @@map("students")
+}
+
+// ─────────────────────────────────────────────
+// INSTRUCTOR  — 1:1 with User
+// ─────────────────────────────────────────────
+
+model Instructor {
+  id         String   @id @db.Uuid                       // = users.id
+  dojoId     String?  @db.Uuid @map("dojo_id")
+  joinedDate DateTime @default(now()) @map("joined_date")
+  bio        String?
+
+  user User  @relation(fields: [id], references: [id], onDelete: Cascade)
+  dojo Dojo? @relation("DojoInstructors", fields: [dojoId], references: [id])
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt      @map("updated_at")
+
+  @@index([dojoId])
+  @@map("instructors")
+}
+
+// ─────────────────────────────────────────────
+// DOJO MANAGER  — 1:1 with User
+// ─────────────────────────────────────────────
+
+model DojoManager {
+  id     String  @id @db.Uuid                       // = users.id
+  dojoId String? @db.Uuid @map("dojo_id")
+
+  user User  @relation(fields: [id], references: [id], onDelete: Cascade)
+  dojo Dojo? @relation("DojoManagers", fields: [dojoId], references: [id])
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt      @map("updated_at")
+
+  @@index([dojoId])
+  @@map("dojo_managers")
+}
+
+// ─────────────────────────────────────────────
+// DOJO OWNER  — 1:1 with User, 1:1 with Dojo
+// Replaces the partial unique index `members_one_owner_per_dojo` with
+// a hard UNIQUE constraint on dojo_id.
+// ─────────────────────────────────────────────
+
+model DojoOwner {
+  id           String  @id @db.Uuid                       // = users.id
+  dojoId       String? @unique @db.Uuid @map("dojo_id")
+  signatureUrl String? @map("signature_url")
+
+  user User  @relation(fields: [id], references: [id], onDelete: Cascade)
+  dojo Dojo? @relation("DojoOwner", fields: [dojoId], references: [id])
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt      @map("updated_at")
+
+  @@map("dojo_owners")
+}
+
+// ─────────────────────────────────────────────
+// ADMIN  — 1:1 with User
+// ─────────────────────────────────────────────
+
+model Admin {
+  id    String  @id @db.Uuid                          // = users.id
+  scope String?                                        // optional admin scope tag
+
+  user User @relation(fields: [id], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt      @map("updated_at")
+
+  @@map("admins")
+}
+
 // ─────────────────────────────────────────────
 // BELT RANKS
 // ─────────────────────────────────────────────
@@ -100,8 +324,6 @@ model BeltRank {
   colorHex   String? @map("color_hex")
   orderIndex Int     @unique @map("order_index")
 
-  // Certificate fee for this rank (BDT). Dojo pays this when requesting a
-  // printed certificate. Null/0 means no charge for this rank.
   certificatePrice Decimal? @db.Decimal(10, 2) @map("certificate_price")
 
   gradingsFrom        Grading[]            @relation("GradingFromRank")
@@ -131,33 +353,26 @@ model Dojo {
   schedule          Json?
   isActive          Boolean @default(true) @map("is_active")
 
-  // Renewal — dojos pay an annual federation fee, mirrors how members renew.
   annualFee  Decimal?  @db.Decimal(10, 2) @map("annual_fee")
   expiryDate DateTime? @map("expiry_date")
 
-  // Renewal orders placed by the DOJO_OWNER for this dojo.
   renewalOrders ShopOrder[] @relation("DojoRenewalOrders")
 
-  // Certificate orders + cert requests originated by this dojo.
   certificateOrders   ShopOrder[]          @relation("DojoCertificateOrders")
   certificateRequests CertificateRequest[]
 
-  // Cloudinary URL of the dojo owner's signature (PNG with transparent bg).
-  // Required before the dojo can place a certificate order.
   ownerSignatureUrl String? @map("owner_signature_url")
+  logoUrl           String? @map("logo_url")
 
-  // Cloudinary URL of the dojo logo (PNG or SVG, transparent background).
-  logoUrl String? @map("logo_url")
-
-  // The dojo head is the Member with role = DOJO_OWNER and dojoId = this.id.
-  // A partial unique index `members_one_owner_per_dojo` enforces "at most one
-  // owner per dojo" at the DB level (see scripts/migrations/2026-06-24-...sql).
-  members        Member[]     @relation("DojoMembers")
+  students       Student[]           @relation("DojoStudents")
+  instructors    Instructor[]        @relation("DojoInstructors")
+  managers       DojoManager[]       @relation("DojoManagers")
+  owner          DojoOwner?          @relation("DojoOwner")
   attendance     Attendance[]
-  events         Event[]      @relation("DojoEvents")
-  announcements  Announcement[] @relation("DojoAnnouncements")
+  events         Event[]             @relation("DojoEvents")
+  announcements  Announcement[]      @relation("DojoAnnouncements")
   inventoryItems DojoInventoryItem[] @relation("DojoInventoryItems")
-  sales          DojoSale[]   @relation("DojoSales")
+  sales          DojoSale[]          @relation("DojoSales")
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt      @map("updated_at")
@@ -167,9 +382,6 @@ model Dojo {
 
 // ─────────────────────────────────────────────
 // DOJO ENLISTMENT APPLICATIONS
-// Filed by dojo owners via /enlist-dojo. Stored as a separate
-// table from `dojos` so federation staff can review before a
-// public branch listing is created.
 // ─────────────────────────────────────────────
 
 enum DojoApplicationStatus {
@@ -209,76 +421,23 @@ model DojoApplication {
 }
 
 // ─────────────────────────────────────────────
-// MEMBERS  (mirrors auth.users via id)
-// ─────────────────────────────────────────────
-
-model Member {
-  id                   String           @id @db.Uuid           // = auth.users.id
-  fullName             String           @map("full_name")
-  email                String           @unique
-  phone                String?
-  avatarUrl            String?          @map("avatar_url")
-  role                 MemberRole       @default(STUDENT)
-  memberNumber         String?          @unique @map("member_number")
-  currentRank          String           @default("White Belt") @map("current_rank")
-  joinDate             DateTime         @default(now())        @map("join_date")
-  expiryDate           DateTime?        @map("expiry_date")
-  isActive             Boolean          @default(true)         @map("is_active")
-  dojoId               String?          @db.Uuid               @map("dojo_id")
-
-  // Onboarding & membership status
-  onboardingComplete   Boolean          @default(false)        @map("onboarding_complete")
-  membershipStatus     MembershipStatus @default(PENDING)      @map("membership_status")
-
-  // Extended profile (collected during onboarding)
-  dateOfBirth          DateTime?        @map("date_of_birth")  @db.Date
-  bloodGroup           String?          @map("blood_group")
-  address              String?
-  nationalId           String?          @map("national_id")
-  fatherName           String?          @map("father_name")
-  motherName           String?          @map("mother_name")
-  emergencyContactName String?          @map("emergency_contact_name")
-  emergencyContactPhone String?         @map("emergency_contact_phone")
-
-  dojo                 Dojo?                   @relation("DojoMembers", fields: [dojoId], references: [id])
-  gradings             Grading[]
-  gradingApplications  GradingApplication[]
-  eventRegistrations   EventRegistration[]
-  notifications        Notification[]
-  orders               ShopOrder[]
-  attendance           Attendance[]
-  tournamentEntries    TournamentParticipant[]
-  certificateRequests  CertificateRequest[]
-  eventsPosted         Event[]                 @relation("EventsPosted")
-  announcementsPosted  Announcement[]          @relation("AnnouncementsPosted")
-  eventCheckIns        EventRegistration[]     @relation("EventCheckIns")
-  dojoSalesAsBuyer     DojoSale[]              @relation("DojoSaleBuyer")
-  dojoSalesSold        DojoSale[]              @relation("DojoSaleSeller")
-
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt      @map("updated_at")
-
-  @@map("members")
-}
-
-// ─────────────────────────────────────────────
-// ATTENDANCE
+// ATTENDANCE — students only
 // ─────────────────────────────────────────────
 
 model Attendance {
-  id       String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  memberId String   @db.Uuid @map("member_id")
-  dojoId   String?  @db.Uuid @map("dojo_id")
-  date     DateTime @db.Date
-  present  Boolean  @default(true)
-  notes    String?
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  studentId String   @db.Uuid @map("student_id")
+  dojoId    String?  @db.Uuid @map("dojo_id")
+  date      DateTime @db.Date
+  present   Boolean  @default(true)
+  notes     String?
 
-  member Member @relation(fields: [memberId], references: [id], onDelete: Cascade)
-  dojo   Dojo?  @relation(fields: [dojoId], references: [id])
+  student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  dojo    Dojo?   @relation(fields: [dojoId], references: [id])
 
   createdAt DateTime @default(now()) @map("created_at")
 
-  @@unique([memberId, date])
+  @@unique([studentId, date])
   @@map("attendance")
 }
 
@@ -295,13 +454,9 @@ model GradingEvent {
   isOpen       Boolean   @default(true) @map("is_open")
   notes        String?
 
-  // Soft-cancel: a cancelled event keeps its row + Grading children for audit,
-  // but applications flip to CANCELLED and no further results may be drafted.
   cancelledAt   DateTime? @map("cancelled_at")
   cancelReason  String?   @map("cancel_reason")
 
-  // Results lifecycle: Grading rows exist as soon as the dojo drafts them,
-  // but stay hidden from students until resultsPublishedAt is set.
   resultsPublishedAt DateTime? @map("results_published_at")
 
   targetRank   BeltRank?            @relation("EventTargetRank", fields: [targetRankId], references: [id])
@@ -315,12 +470,12 @@ model GradingEvent {
 }
 
 // ─────────────────────────────────────────────
-// GRADING APPLICATIONS
+// GRADING APPLICATIONS — students only
 // ─────────────────────────────────────────────
 
 model GradingApplication {
   id             String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  memberId       String            @db.Uuid @map("member_id")
+  studentId      String            @db.Uuid @map("student_id")
   gradingEventId String?           @db.Uuid @map("grading_event_id")
   targetRankId   String?           @db.Uuid @map("target_rank_id")
   status         ApplicationStatus @default(SUBMITTED)
@@ -328,27 +483,22 @@ model GradingApplication {
   declineReason  String?           @map("decline_reason")
   appliedAt      DateTime          @default(now()) @map("applied_at")
 
-  member       Member        @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  student      Student       @relation(fields: [studentId], references: [id], onDelete: Cascade)
   gradingEvent GradingEvent? @relation(fields: [gradingEventId], references: [id], onDelete: Cascade)
   targetRank   BeltRank?     @relation("AppTargetRank", fields: [targetRankId], references: [id])
 
-  // Uniqueness is enforced at the DB level by two partial indexes (see
-  // scripts/migrations/2026-06-24-belt-test-requests.sql):
-  //   - one_pending_request_per_member  (when grading_event_id IS NULL)
-  //   - one_app_per_member_per_event    (when grading_event_id IS NOT NULL)
-
-  @@index([memberId])
+  @@index([studentId])
   @@index([gradingEventId])
   @@map("grading_applications")
 }
 
 // ─────────────────────────────────────────────
-// GRADINGS
+// GRADINGS — students only
 // ─────────────────────────────────────────────
 
 model Grading {
   id             String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  memberId       String        @db.Uuid @map("member_id")
+  studentId      String        @db.Uuid @map("student_id")
   gradingEventId String?       @db.Uuid @map("grading_event_id")
   fromRankId     String?       @db.Uuid @map("from_rank_id")
   toRankId       String?       @db.Uuid @map("to_rank_id")
@@ -356,7 +506,7 @@ model Grading {
   certificateUrl String?       @map("certificate_url")
   notes          String?
 
-  member       Member        @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  student      Student       @relation(fields: [studentId], references: [id], onDelete: Cascade)
   gradingEvent GradingEvent? @relation(fields: [gradingEventId], references: [id])
   fromRank     BeltRank?     @relation("GradingFromRank", fields: [fromRankId], references: [id])
   toRank       BeltRank?     @relation("GradingToRank", fields: [toRankId], references: [id])
@@ -370,15 +520,13 @@ model Grading {
 }
 
 // ─────────────────────────────────────────────
-// CERTIFICATE REQUESTS
-// Dojo-initiated: dojo selects passed gradings, pays the per-rank fee,
-// and the system renders and stores the PDF certificate.
+// CERTIFICATE REQUESTS — issued for students
 // ─────────────────────────────────────────────
 
 model CertificateRequest {
   id          String                   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   gradingId   String                   @db.Uuid @map("grading_id")
-  memberId    String                   @db.Uuid @map("member_id")
+  studentId   String                   @db.Uuid @map("student_id")
   dojoId      String                   @db.Uuid @map("dojo_id")
   orderId     String?                  @db.Uuid @map("order_id")
   status      CertificateRequestStatus @default(PENDING_PAYMENT)
@@ -386,23 +534,19 @@ model CertificateRequest {
   certificateUrl String?               @map("certificate_url")
   failureReason  String?               @map("failure_reason")
 
-  // Snapshotted at request time so a later rename of the member does not
-  // mutate an already-issued certificate.
   memberName     String                @map("member_name")
   fatherName     String?               @map("father_name")
   motherName     String?               @map("mother_name")
   rankName       String                @map("rank_name")
 
-  grading Grading   @relation(fields: [gradingId], references: [id], onDelete: Cascade)
-  member  Member    @relation(fields: [memberId], references: [id], onDelete: Cascade)
-  dojo    Dojo      @relation(fields: [dojoId], references: [id])
+  grading Grading    @relation(fields: [gradingId], references: [id], onDelete: Cascade)
+  student Student    @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  dojo    Dojo       @relation(fields: [dojoId], references: [id])
   order   ShopOrder? @relation("OrderCertificates", fields: [orderId], references: [id])
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt      @map("updated_at")
 
-  // One issued certificate per grading. PENDING_PAYMENT rows are deduped
-  // at the SQL layer with a partial unique index so retries don't pile up.
   @@index([gradingId])
   @@index([dojoId])
   @@index([orderId])
@@ -411,8 +555,7 @@ model CertificateRequest {
 }
 
 // ─────────────────────────────────────────────
-// SYSTEM SETTINGS — singleton row (id = "default")
-// Stores federation-wide configuration like the admin signature URL.
+// SYSTEM SETTINGS — singleton
 // ─────────────────────────────────────────────
 
 model SystemSettings {
@@ -429,7 +572,7 @@ model SystemSettings {
 }
 
 // ─────────────────────────────────────────────
-// EVENTS
+// EVENTS — posted by any user (admin or dojo owner)
 // ─────────────────────────────────────────────
 
 model Event {
@@ -443,17 +586,15 @@ model Event {
   maxCapacity Int?          @map("max_capacity")
   category    EventCategory @default(OTHER)
 
-  // Optional attachment (PDF brochure or image flyer) shown on the detail page.
   attachmentUrl  String?         @map("attachment_url")
   attachmentType AttachmentType? @map("attachment_type")
 
-  // Who posted this event. Either ADMIN (federation-wide) or DOJO_OWNER (dojo-scoped).
   postedById String? @db.Uuid @map("posted_by_id")
   dojoId     String? @db.Uuid @map("dojo_id")
 
   registrations EventRegistration[]
-  postedBy      Member? @relation("EventsPosted", fields: [postedById], references: [id])
-  dojo          Dojo?   @relation("DojoEvents", fields: [dojoId], references: [id])
+  postedBy      User? @relation("EventsPosted", fields: [postedById], references: [id])
+  dojo          Dojo? @relation("DojoEvents", fields: [dojoId], references: [id])
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt      @map("updated_at")
@@ -464,9 +605,7 @@ model Event {
 }
 
 // ─────────────────────────────────────────────
-// ANNOUNCEMENTS
-// Short text posts shown on the landing page Announcements tab.
-// Only ADMIN (federation-wide) and DOJO_OWNER (dojo-scoped) can post.
+// ANNOUNCEMENTS — posted by any user
 // ─────────────────────────────────────────────
 
 model Announcement {
@@ -477,15 +616,14 @@ model Announcement {
   isPublished Boolean  @default(true) @map("is_published")
   publishedAt DateTime @default(now()) @map("published_at")
 
-  // Optional attachment (PDF or image) shown on the detail page.
   attachmentUrl  String?         @map("attachment_url")
   attachmentType AttachmentType? @map("attachment_type")
 
   postedById String? @db.Uuid @map("posted_by_id")
   dojoId     String? @db.Uuid @map("dojo_id")
 
-  postedBy Member? @relation("AnnouncementsPosted", fields: [postedById], references: [id])
-  dojo     Dojo?   @relation("DojoAnnouncements", fields: [dojoId], references: [id])
+  postedBy User? @relation("AnnouncementsPosted", fields: [postedById], references: [id])
+  dojo     Dojo? @relation("DojoAnnouncements", fields: [dojoId], references: [id])
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt      @map("updated_at")
@@ -495,56 +633,47 @@ model Announcement {
 }
 
 // ─────────────────────────────────────────────
-// EVENT REGISTRATIONS
+// EVENT REGISTRATIONS — any user, or guest
 // ─────────────────────────────────────────────
 
 model EventRegistration {
   id      String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   eventId String  @db.Uuid @map("event_id")
 
-  // memberId is set when a signed-in member registers; null for public/guest
-  // registrations, in which case the guest_* fields capture the participant.
-  memberId    String? @db.Uuid @map("member_id")
+  userId      String? @db.Uuid @map("user_id")
   guestName   String? @map("guest_name")
   guestEmail  String? @map("guest_email")
   guestPhone  String? @map("guest_phone")
 
-  // Random URL-safe token embedded in the participant's QR code. Opening
-  // /check-in/[qrToken] as an authorised admin / dojo owner marks them present.
   qrToken String @unique @map("qr_token")
 
-  // Check-in state. Set the moment an authority opens the QR URL.
-  checkedInAt   DateTime? @map("checked_in_at")
-  checkedInById String?   @db.Uuid @map("checked_in_by_id")
+  checkedInAt       DateTime? @map("checked_in_at")
+  checkedInByUserId String?   @db.Uuid @map("checked_in_by_user_id")
 
-  event       Event   @relation(fields: [eventId], references: [id], onDelete: Cascade)
-  member      Member? @relation(fields: [memberId], references: [id], onDelete: Cascade)
-  checkedInBy Member? @relation("EventCheckIns", fields: [checkedInById], references: [id])
+  event       Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  user        User? @relation(fields: [userId], references: [id], onDelete: Cascade)
+  checkedInBy User? @relation("EventCheckIns", fields: [checkedInByUserId], references: [id])
 
   createdAt DateTime @default(now()) @map("created_at")
 
-  // Uniqueness is enforced at the DB level via two partial indexes:
-  //   one_registration_per_member_per_event  (when member_id IS NOT NULL)
-  //   one_guest_registration_per_event       (when member_id IS NULL,
-  //                                           keyed on guest_email)
   @@index([eventId, checkedInAt])
   @@map("event_registrations")
 }
 
 // ─────────────────────────────────────────────
-// NOTIFICATIONS
+// NOTIFICATIONS — any user
 // ─────────────────────────────────────────────
 
 model Notification {
-  id       String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  memberId String           @db.Uuid @map("member_id")
-  title    String
-  message  String
-  type     NotificationType @default(INFO)
-  isRead   Boolean          @default(false) @map("is_read")
-  link     String?
+  id      String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId  String           @db.Uuid @map("user_id")
+  title   String
+  message String
+  type    NotificationType @default(INFO)
+  isRead  Boolean          @default(false) @map("is_read")
+  link    String?
 
-  member Member @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt      @map("updated_at")
@@ -563,7 +692,7 @@ model ShopProduct {
   price       Decimal @db.Decimal(10, 2)
   stock       Int     @default(0)
   imageUrl    String? @map("image_url")
-  category    String? // e.g. "gear", "apparel", "equipment"
+  category    String?
   isActive    Boolean @default(true) @map("is_active")
 
   orderItems     ShopOrderItem[]
@@ -578,9 +707,6 @@ model ShopProduct {
 
 // ─────────────────────────────────────────────
 // DOJO INVENTORY
-// Per-dojo stock of JKA admin-uploaded products. A dojo "stocks" a product
-// by receiving N units from the federation; quantityOnHand decrements as
-// the dojo sells items to its members via DojoSale.
 // ─────────────────────────────────────────────
 
 model DojoInventoryItem {
@@ -588,8 +714,6 @@ model DojoInventoryItem {
   dojoId          String  @db.Uuid @map("dojo_id")
   productId       String  @db.Uuid @map("product_id")
   quantityOnHand  Int     @default(0) @map("quantity_on_hand")
-  // Selling price the dojo charges members. Defaults to the JKA price at
-  // stock-in time but is editable per dojo.
   unitPrice       Decimal @db.Decimal(10, 2) @map("unit_price")
 
   dojo    Dojo        @relation("DojoInventoryItems", fields: [dojoId], references: [id], onDelete: Cascade)
@@ -605,37 +729,32 @@ model DojoInventoryItem {
 
 // ─────────────────────────────────────────────
 // DOJO SALES (member receipts)
-// Created when a dojo gives items to a student / member. Decrements the
-// matching DojoInventoryItem rows in the same transaction. Receipt no.
-// is a printable per-dojo counter generated at create-time.
 // ─────────────────────────────────────────────
 
 model DojoSale {
-  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  dojoId       String   @db.Uuid @map("dojo_id")
-  receiptNo    String   @map("receipt_no")
-  // Buyer — either a registered member or a guest captured by name.
-  memberId     String?  @db.Uuid @map("member_id")
-  buyerName    String   @map("buyer_name")
-  // Whoever rang up the sale (instructor / manager / owner).
-  soldByUserId String?  @db.Uuid @map("sold_by_user_id")
-  soldByName   String?  @map("sold_by_name")
-  subtotal     Decimal  @db.Decimal(10, 2)
-  discount     Decimal  @default(0) @db.Decimal(10, 2)
-  total        Decimal  @db.Decimal(10, 2)
-  paymentMethod String? @map("payment_method")
-  notes        String?
+  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  dojoId        String   @db.Uuid @map("dojo_id")
+  receiptNo     String   @map("receipt_no")
+  buyerUserId   String?  @db.Uuid @map("buyer_user_id")
+  buyerName     String   @map("buyer_name")
+  soldByUserId  String?  @db.Uuid @map("sold_by_user_id")
+  soldByName    String?  @map("sold_by_name")
+  subtotal      Decimal  @db.Decimal(10, 2)
+  discount      Decimal  @default(0) @db.Decimal(10, 2)
+  total         Decimal  @db.Decimal(10, 2)
+  paymentMethod String?  @map("payment_method")
+  notes         String?
 
-  dojo   Dojo    @relation("DojoSales", fields: [dojoId], references: [id], onDelete: Cascade)
-  member Member? @relation("DojoSaleBuyer", fields: [memberId], references: [id], onDelete: SetNull)
-  soldBy Member? @relation("DojoSaleSeller", fields: [soldByUserId], references: [id], onDelete: SetNull)
+  dojo   Dojo  @relation("DojoSales", fields: [dojoId], references: [id], onDelete: Cascade)
+  buyer  User? @relation("DojoSaleBuyer",  fields: [buyerUserId],  references: [id], onDelete: SetNull)
+  soldBy User? @relation("DojoSaleSeller", fields: [soldByUserId], references: [id], onDelete: SetNull)
   items  DojoSaleItem[]
 
   createdAt DateTime @default(now()) @map("created_at")
 
   @@unique([dojoId, receiptNo])
   @@index([dojoId, createdAt])
-  @@index([memberId])
+  @@index([buyerUserId])
   @@map("dojo_sales")
 }
 
@@ -643,7 +762,6 @@ model DojoSaleItem {
   id          String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   saleId      String  @db.Uuid @map("sale_id")
   productId   String  @db.Uuid @map("product_id")
-  // Snapshotted at sale time so renaming the product doesn't mutate history.
   productName String  @map("product_name")
   quantity    Int
   unitPrice   Decimal @db.Decimal(10, 2) @map("unit_price")
@@ -657,32 +775,28 @@ model DojoSaleItem {
 }
 
 // ─────────────────────────────────────────────
-// SHOP ORDERS
+// SHOP ORDERS — any user
 // ─────────────────────────────────────────────
 
 model ShopOrder {
   id                  String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  memberId            String        @db.Uuid @map("member_id")
+  userId              String        @db.Uuid @map("user_id")
   paymentStatus       PaymentStatus @default(PENDING) @map("payment_status")
   paymentMethod       String?       @map("payment_method")
   total               Decimal       @db.Decimal(10, 2)
   currency            String        @default("BDT")
   transactionId       String?       @unique @map("transaction_id")
-  includesMembership  Boolean       @default(false) @map("includes_membership") // onboarding orders include the membership fee
+  includesMembership  Boolean       @default(false) @map("includes_membership")
   membershipFee       Decimal?      @db.Decimal(10, 2) @map("membership_fee")
   notes               String?
 
-  // Dojo renewal: when set, this order extends dojo.expiryDate on payment.
   dojoId              String?       @db.Uuid @map("dojo_id")
   includesDojoRenewal Boolean       @default(false) @map("includes_dojo_renewal")
 
-  // Certificate orders: a dojo bundles N cert requests into one order.
-  // When set, dojoCertOrderId distinguishes from renewal orders that
-  // also reference dojoId.
   includesCertificates Boolean       @default(false) @map("includes_certificates")
   certDojoId           String?       @db.Uuid @map("cert_dojo_id")
 
-  member             Member               @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  user               User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
   dojo               Dojo?                @relation("DojoRenewalOrders", fields: [dojoId], references: [id])
   certDojo           Dojo?                @relation("DojoCertificateOrders", fields: [certDojoId], references: [id])
   orderItems         ShopOrderItem[]
@@ -733,18 +847,18 @@ model Tournament {
 }
 
 // ─────────────────────────────────────────────
-// TOURNAMENT PARTICIPANTS
+// TOURNAMENT PARTICIPANTS — any user (students, admins-as-competitors)
 // ─────────────────────────────────────────────
 
 model TournamentParticipant {
   id           String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   tournamentId String  @db.Uuid @map("tournament_id")
-  memberId     String  @db.Uuid @map("member_id")
+  userId       String  @db.Uuid @map("user_id")
   category     String?
   weightClass  String? @map("weight_class")
 
   tournament Tournament @relation(fields: [tournamentId], references: [id], onDelete: Cascade)
-  member     Member     @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  user       User       @relation("TournamentEntries", fields: [userId], references: [id], onDelete: Cascade)
 
   matchesAsP1 TournamentMatch[] @relation("MatchParticipant1")
   matchesAsP2 TournamentMatch[] @relation("MatchParticipant2")
@@ -752,7 +866,7 @@ model TournamentParticipant {
 
   createdAt DateTime @default(now()) @map("created_at")
 
-  @@unique([tournamentId, memberId])
+  @@unique([tournamentId, userId])
   @@map("tournament_participants")
 }
 
@@ -778,4 +892,50 @@ model TournamentMatch {
   createdAt DateTime @default(now()) @map("created_at")
 
   @@map("tournament_matches")
+}
+
+// ─────────────────────────────────────────────
+// ACHIEVEMENTS
+// ─────────────────────────────────────────────
+
+model Achievement {
+  id            String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  slug          String          @unique
+  name          String
+  nameBn        String?         @map("name_bn")
+  description   String
+  descriptionBn String?         @map("description_bn")
+  icon          String
+  tier          AchievementTier @default(COMMON)
+  rule          AchievementRule @default(MANUAL)
+  threshold     Int?
+  orderIndex    Int             @default(0) @map("order_index")
+  isActive      Boolean         @default(true) @map("is_active")
+
+  studentAchievements StudentAchievement[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt      @map("updated_at")
+
+  @@index([tier, orderIndex])
+  @@map("achievements")
+}
+
+model StudentAchievement {
+  id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  studentId       String   @db.Uuid @map("student_id")
+  achievementId   String   @db.Uuid @map("achievement_id")
+  unlockedAt      DateTime @default(now()) @map("unlocked_at")
+  progress        Int      @default(0)
+  awardedByUserId String?  @db.Uuid @map("awarded_by_user_id")
+  note            String?
+
+  student     Student     @relation("StudentAchievements", fields: [studentId], references: [id], onDelete: Cascade)
+  achievement Achievement @relation(fields: [achievementId], references: [id], onDelete: Cascade)
+  awardedBy   User?       @relation("StudentAchievementsAwarded", fields: [awardedByUserId], references: [id], onDelete: SetNull)
+
+  @@unique([studentId, achievementId])
+  @@index([studentId])
+  @@index([achievementId])
+  @@map("student_achievements")
 }

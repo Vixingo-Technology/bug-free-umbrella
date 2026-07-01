@@ -46,8 +46,8 @@ export async function createCertificateOrderAction(input: {
         };
     }
 
-    const owner = await prisma.member.findFirst({
-        where: { dojoId, role: "DOJO_OWNER" },
+    const owner = await prisma.dojoOwner.findUnique({
+        where: { dojoId },
         select: { id: true },
     });
     if (!owner) {
@@ -62,16 +62,11 @@ export async function createCertificateOrderAction(input: {
         where: {
             id: { in: parsed.data.gradingIds },
             result: "PASSED",
-            member: { dojoId },
+            student: { dojoId },
         },
         include: {
-            member: {
-                select: {
-                    id: true,
-                    fullName: true,
-                    fatherName: true,
-                    motherName: true,
-                },
+            student: {
+                include: { user: { select: { fullName: true } } },
             },
             toRank: {
                 select: { name: true, certificatePrice: true },
@@ -85,12 +80,12 @@ export async function createCertificateOrderAction(input: {
 
     // Reject any students missing parent names — needed for the certificate.
     const missingParents = gradings.filter(
-        (g) => !g.member.fatherName?.trim() || !g.member.motherName?.trim(),
+        (g) => !g.student.fatherName?.trim() || !g.student.motherName?.trim(),
     );
     if (missingParents.length > 0) {
         return {
             error: `Father's and mother's name missing for: ${missingParents
-                .map((g) => g.member.fullName)
+                .map((g) => g.student.user.fullName)
                 .join(", ")}. Ask them to complete their profile first.`,
         };
     }
@@ -120,11 +115,11 @@ export async function createCertificateOrderAction(input: {
                 : 0;
         return {
             gradingId: g.id,
-            memberId: g.member.id,
+            studentId: g.student.id,
             rankName: g.toRank?.name ?? "Unknown rank",
-            memberName: g.member.fullName,
-            fatherName: g.member.fatherName ?? null,
-            motherName: g.member.motherName ?? null,
+            memberName: g.student.user.fullName,
+            fatherName: g.student.fatherName ?? null,
+            motherName: g.student.motherName ?? null,
             price,
         };
     });
@@ -142,7 +137,7 @@ export async function createCertificateOrderAction(input: {
             async (tx) => {
                 const order = await tx.shopOrder.create({
                     data: {
-                        memberId: owner.id,
+                        userId: owner.id,
                         certDojoId: dojoId,
                         includesCertificates: true,
                         total,
@@ -154,7 +149,7 @@ export async function createCertificateOrderAction(input: {
                 await tx.certificateRequest.createMany({
                     data: lineItems.map((l) => ({
                         gradingId: l.gradingId,
-                        memberId: l.memberId,
+                        studentId: l.studentId,
                         dojoId,
                         orderId: order.id,
                         status: SKIP_CERTIFICATE_PAYMENT ? "PAID" : "PENDING_PAYMENT",

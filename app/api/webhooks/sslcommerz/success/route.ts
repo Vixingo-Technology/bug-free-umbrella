@@ -46,11 +46,11 @@ export async function POST(request: Request) {
             ];
 
             // Member-level renewal (onboarding fee or /portal/renew) — extends
-            // the buyer's own membership.
+            // the buyer's own membership. Membership lives on Student now.
             if (order.includesMembership) {
                 writes.push(
-                    prisma.member.update({
-                        where: { id: order.memberId },
+                    prisma.student.update({
+                        where: { id: order.userId },
                         data: {
                             membershipStatus: "ACTIVE",
                             onboardingComplete: true,
@@ -70,17 +70,18 @@ export async function POST(request: Request) {
                 );
             }
 
-            const results = await prisma.$transaction(writes);
-            const updatedMember = order.includesMembership
-                ? (results[1] as Awaited<ReturnType<typeof prisma.member.update>>)
-                : await prisma.member.findUnique({ where: { id: order.memberId } });
+            await prisma.$transaction(writes);
+            const updatedUser = await prisma.user.findUnique({
+                where: { id: order.userId },
+                select: { id: true, fullName: true, email: true },
+            });
 
-            if (updatedMember) {
+            if (updatedUser) {
                 // Fire-and-forget n8n webhook (email + WhatsApp confirmation)
                 await emitPaymentSuccess({
-                    memberId: updatedMember.id,
-                    memberFullName: updatedMember.fullName,
-                    memberEmail: updatedMember.email,
+                    memberId: updatedUser.id,
+                    memberFullName: updatedUser.fullName,
+                    memberEmail: updatedUser.email,
                     orderId,
                     total: Number(order.total),
                     currency: order.currency,
@@ -89,8 +90,8 @@ export async function POST(request: Request) {
                     membershipExpiresAt: expiry.toISOString(),
                 });
 
-                // In-app receipt for the member.
-                await notifyMembers([updatedMember.id], {
+                // In-app receipt for the buyer.
+                await notifyMembers([updatedUser.id], {
                     title: "Payment received",
                     message: `Your payment of ${order.currency} ${Number(order.total).toLocaleString()} was successful. Thank you!`,
                     type: "PAYMENT",
@@ -100,7 +101,7 @@ export async function POST(request: Request) {
                 // Back-office heads-up.
                 await notifyAdmins({
                     title: "New paid order",
-                    message: `${updatedMember.fullName} paid ${order.currency} ${Number(order.total).toLocaleString()}${order.includesMembership ? " (incl. membership)" : ""}.`,
+                    message: `${updatedUser.fullName} paid ${order.currency} ${Number(order.total).toLocaleString()}${order.includesMembership ? " (incl. membership)" : ""}.`,
                     type: "PAYMENT",
                     link: "/portal/admin/orders",
                 });

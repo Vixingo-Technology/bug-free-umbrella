@@ -51,21 +51,23 @@ export default async function StudentsPage() {
     let pendingInvites: PendingInvite[] = [];
 
     if (session.dojo) {
-        const rows = await prisma.member.findMany({
+        const students = await prisma.student.findMany({
             where: { dojoId: session.dojo.id, id: { not: session.userId } },
             orderBy: [{ onboardingComplete: "asc" }, { joinDate: "desc" }],
-            select: {
-                id: true,
-                fullName: true,
-                email: true,
-                role: true,
-                currentRank: true,
-                joinDate: true,
-                isActive: true,
-                onboardingComplete: true,
-                createdAt: true,
-            },
+            include: { user: true },
         });
+
+        const rows = students.map((s) => ({
+            id: s.id,
+            fullName: s.user.fullName,
+            email: s.user.email,
+            role: s.user.roleId as RosterMember["role"],
+            currentRank: s.currentRank,
+            joinDate: s.joinDate,
+            isActive: s.user.isActive,
+            onboardingComplete: s.onboardingComplete,
+            createdAt: s.user.createdAt,
+        }));
 
         activeMembers = rows
             .filter((m) => m.onboardingComplete)
@@ -73,7 +75,7 @@ export default async function StudentsPage() {
                 id: m.id,
                 name: m.fullName,
                 email: m.email,
-                role: m.role as RosterMember["role"],
+                role: m.role,
                 rank: m.currentRank,
                 joined: m.joinDate.toLocaleDateString(undefined, {
                     month: "short",
@@ -91,7 +93,7 @@ export default async function StudentsPage() {
                         ? m.fullName
                         : m.email.split("@")[0],
                 email: m.email,
-                role: m.role as RosterMember["role"],
+                role: m.role,
                 invitedAt: relativeTime(m.createdAt),
             }));
     }

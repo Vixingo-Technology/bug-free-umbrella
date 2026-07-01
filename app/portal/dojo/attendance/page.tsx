@@ -1,36 +1,32 @@
 import type { Metadata } from "next";
-import { Check, QrCode } from "lucide-react";
+import { QrCode } from "lucide-react";
 import DojoPageHeader from "@/components/dojo/page-header";
 import { requireDojoRole } from "@/lib/dojo-session";
 import { prisma } from "@/lib/prisma";
+import AttendanceClient, {
+    type AttendanceMember,
+} from "@/components/dojo/attendance-client";
+import { ACHIEVEMENT_CATALOG } from "@/lib/achievements/catalog";
 
 export const metadata: Metadata = {
     title: "Attendance — Dojo Dashboard",
 };
 
-const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri"];
-
-type Row = {
-    name: string;
-    attended: boolean[];
-};
-
-const SAMPLE: Row[] = [
-    { name: "Tahmid Rahman", attended: [true, true, false, true, true] },
-    { name: "Anika Hossain", attended: [true, false, true, true, true] },
-    { name: "Ibrahim Khan", attended: [true, true, true, true, false] },
-    {
-        name: "Sumaiya Chowdhury",
-        attended: [false, true, true, false, true],
-    },
+const SAMPLE: AttendanceMember[] = [
+    { id: "sample-1", fullName: "Tahmid Rahman", attendance: [true, true, false, true, true], unlockedSlugs: [] },
+    { id: "sample-2", fullName: "Anika Hossain", attendance: [true, false, true, true, true], unlockedSlugs: [] },
+    { id: "sample-3", fullName: "Ibrahim Khan",  attendance: [true, true, true, true, false], unlockedSlugs: [] },
+    { id: "sample-4", fullName: "Sumaiya Chowdhury", attendance: [false, true, true, false, true], unlockedSlugs: [] },
 ];
 
 export default async function AttendancePage() {
     const session = await requireDojoRole("INSTRUCTOR");
 
-    const rows: Row[] = session.dojo
+    const { weekDates, members } = session.dojo
         ? await loadRealAttendance(session.dojo.id)
-        : SAMPLE;
+        : { weekDates: weekMondayThroughFriday(), members: SAMPLE };
+
+    const manualAchievements = ACHIEVEMENT_CATALOG.filter((a) => a.rule === "MANUAL");
 
     return (
         <>
@@ -39,7 +35,7 @@ export default async function AttendancePage() {
                 title="Attendance"
                 description={
                     session.dojo
-                        ? `Mon–Fri check-ins for ${session.dojo.name}.`
+                        ? `Mon–Fri check-ins for ${session.dojo.name}. Tap a day to toggle attendance.`
                         : "Sample week shown until your dojo is approved."
                 }
                 actions={
@@ -53,104 +49,71 @@ export default async function AttendancePage() {
                 }
             />
 
-            <div className="bg-white border border-zinc-200 rounded-sm shadow-sm overflow-x-auto">
-                {rows.length === 0 ? (
-                    <div className="p-10 text-center text-zinc-500 text-sm">
-                        No attendance recorded this week yet.
-                    </div>
-                ) : (
-                    <table className="w-full text-sm">
-                        <thead>
-                            <tr className="text-left text-[10px] tracking-widest uppercase font-bold text-zinc-400 border-b border-zinc-200">
-                                <th className="px-5 py-3">Student</th>
-                                {DAYS.map((d) => (
-                                    <th
-                                        key={d}
-                                        className="px-3 py-3 text-center"
-                                    >
-                                        {d}
-                                    </th>
-                                ))}
-                                <th className="px-5 py-3 text-center">Rate</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {rows.map((s) => {
-                                const total = s.attended.filter(Boolean).length;
-                                const pct = Math.round(
-                                    (total / s.attended.length) * 100
-                                );
-                                return (
-                                    <tr
-                                        key={s.name}
-                                        className="border-b border-zinc-100 hover:bg-zinc-50 transition-colors"
-                                    >
-                                        <td className="px-5 py-3 font-semibold text-zinc-900">
-                                            {s.name}
-                                        </td>
-                                        {s.attended.map((a, i) => (
-                                            <td
-                                                key={i}
-                                                className="px-3 py-3 text-center"
-                                            >
-                                                <span
-                                                    className={`inline-flex items-center justify-center w-7 h-7 rounded-full text-xs ${
-                                                        a
-                                                            ? "bg-emerald-100 text-emerald-700"
-                                                            : "bg-zinc-100 text-zinc-300"
-                                                    }`}
-                                                >
-                                                    {a && <Check size={14} />}
-                                                </span>
-                                            </td>
-                                        ))}
-                                        <td className="px-5 py-3 text-center font-mono font-bold text-zinc-700">
-                                            {pct}%
-                                        </td>
-                                    </tr>
-                                );
-                            })}
-                        </tbody>
-                    </table>
-                )}
-            </div>
+            <AttendanceClient
+                editable={!!session.dojo}
+                weekDates={weekDates}
+                members={members}
+                manualAchievements={manualAchievements.map((a) => ({
+                    slug: a.slug,
+                    name: a.name,
+                    tier: a.tier,
+                    description: a.description,
+                }))}
+            />
         </>
     );
 }
 
-async function loadRealAttendance(dojoId: string): Promise<Row[]> {
-    // Window: Monday → Friday of the current week.
+function weekMondayThroughFriday(): string[] {
     const now = new Date();
-    const day = now.getDay() === 0 ? 7 : now.getDay(); // 1=Mon..7=Sun
+    const day = now.getDay() === 0 ? 7 : now.getDay();
     const monday = new Date(now);
     monday.setHours(0, 0, 0, 0);
     monday.setDate(now.getDate() - (day - 1));
-    const friday = new Date(monday);
-    friday.setDate(monday.getDate() + 4);
-    friday.setHours(23, 59, 59, 999);
+    return Array.from({ length: 5 }, (_, i) => {
+        const d = new Date(monday);
+        d.setDate(monday.getDate() + i);
+        return d.toISOString().slice(0, 10);
+    });
+}
 
-    const members = await prisma.member.findMany({
-        where: { dojoId, isActive: true },
-        orderBy: { fullName: "asc" },
+async function loadRealAttendance(
+    dojoId: string,
+): Promise<{ weekDates: string[]; members: AttendanceMember[] }> {
+    const weekDates = weekMondayThroughFriday();
+    const monday = new Date(`${weekDates[0]}T00:00:00Z`);
+    const friday = new Date(`${weekDates[4]}T23:59:59Z`);
+
+    const rows = await prisma.student.findMany({
+        where: { dojoId, user: { isActive: true } },
+        orderBy: { user: { fullName: "asc" } },
         select: {
             id: true,
-            fullName: true,
+            user: { select: { fullName: true } },
             attendance: {
                 where: { date: { gte: monday, lte: friday } },
                 select: { date: true, present: true },
             },
+            achievements: {
+                select: { achievement: { select: { slug: true } } },
+            },
         },
     });
 
-    return members.map((m) => {
+    const members: AttendanceMember[] = rows.map((m: typeof rows[number]) => {
         const grid: boolean[] = [false, false, false, false, false];
         for (const a of m.attendance) {
-            const idx = Math.floor(
-                (a.date.getTime() - monday.getTime()) /
-                    (24 * 60 * 60 * 1000)
-            );
-            if (idx >= 0 && idx < 5) grid[idx] = a.present;
+            const ymd = a.date.toISOString().slice(0, 10);
+            const idx = weekDates.indexOf(ymd);
+            if (idx >= 0) grid[idx] = a.present;
         }
-        return { name: m.fullName, attended: grid };
+        return {
+            id: m.id,
+            fullName: m.user.fullName,
+            attendance: grid,
+            unlockedSlugs: m.achievements.map((r: { achievement: { slug: string } }) => r.achievement.slug),
+        };
     });
+
+    return { weekDates, members };
 }

@@ -20,15 +20,26 @@ export default async function PaymentSuccessPage({
     let order = null;
     let member = null;
 
-    try {
-        member = await prisma.member.findUnique({
+    const loadMember = async () => {
+        const u = await prisma.user.findUnique({
             where: { id: user.id },
-            include: { dojo: true },
+            include: { student: { include: { dojo: true } } },
         });
+        if (!u) return null;
+        return {
+            ...u,
+            ...(u.student ?? {}),
+            role: u.roleId,
+            dojo: u.student?.dojo ?? null,
+        };
+    };
+
+    try {
+        member = await loadMember();
 
         if (orderId) {
             order = await prisma.shopOrder.findUnique({
-                where: { id: orderId, memberId: user.id },
+                where: { id: orderId, userId: user.id },
                 include: { orderItems: { include: { product: true } } },
             });
         }
@@ -39,13 +50,12 @@ export default async function PaymentSuccessPage({
             expiry.setFullYear(expiry.getFullYear() + 1);
             await prisma.$transaction([
                 prisma.shopOrder.update({ where: { id: orderId! }, data: { paymentStatus: "PAID" } }),
-                prisma.member.update({
+                prisma.student.update({
                     where: { id: user.id },
                     data: { membershipStatus: "ACTIVE", onboardingComplete: true, expiryDate: expiry },
                 }),
             ]);
-            // Re-fetch updated member
-            member = await prisma.member.findUnique({ where: { id: user.id }, include: { dojo: true } });
+            member = await loadMember();
         }
     } catch {
         // silent

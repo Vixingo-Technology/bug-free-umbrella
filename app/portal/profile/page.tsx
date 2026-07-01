@@ -8,14 +8,26 @@ export default async function ProfilePage() {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) redirect("/login");
 
-    let member = null;
+    let member: any = null;
     let dojos: any[] = [];
 
     try {
-        member = await prisma.member.findUnique({
+        const u = await prisma.user.findUnique({
             where: { id: user.id },
-            include: { dojo: true },
+            include: { student: { include: { dojo: true } } },
         });
+        if (u) {
+            member = {
+                id: u.id,
+                fullName: u.fullName,
+                email: u.email,
+                phone: u.phone,
+                avatarUrl: u.avatarUrl,
+                role: u.roleId,
+                ...(u.student ?? {}),
+                dojo: u.student?.dojo ?? null,
+            };
+        }
 
         dojos = await prisma.dojo.findMany({
             where: { isActive: true },

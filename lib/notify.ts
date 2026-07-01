@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import type { Prisma, NotificationType } from "@/prisma/generated/client";
+import { findUserIdsByRoles } from "@/lib/notify/recipients";
 
 export type NotifyPayload = {
     title: string;
@@ -16,15 +17,15 @@ type TxLike = Prisma.TransactionClient | typeof prisma;
  * via the `tx` parameter, or stand-alone with the default prisma client.
  */
 export async function notifyMembers(
-    memberIds: string[],
+    userIds: string[],
     payload: NotifyPayload,
     tx: TxLike = prisma
 ): Promise<void> {
-    const unique = Array.from(new Set(memberIds.filter(Boolean)));
+    const unique = Array.from(new Set(userIds.filter(Boolean)));
     if (unique.length === 0) return;
     await tx.notification.createMany({
-        data: unique.map((memberId) => ({
-            memberId,
+        data: unique.map((userId) => ({
+            userId,
             title: payload.title,
             message: payload.message,
             type: payload.type,
@@ -41,17 +42,12 @@ export async function notifyAdmins(
     payload: NotifyPayload,
     tx: TxLike = prisma
 ): Promise<void> {
-    const admins = await tx.member.findMany({
-        where: { role: "ADMIN", isActive: true },
-        select: { id: true },
-    });
-    await notifyMembers(admins.map((m) => m.id), payload, tx);
+    const ids = await findUserIdsByRoles(["ADMIN"]);
+    await notifyMembers(ids, payload, tx);
 }
 
 /**
  * Fan out to a single dojo's staff (Instructor / Manager / Owner).
- * Use for events tied to a specific dojo — belt-test requests, new
- * enlistments, etc.
  */
 export async function notifyDojoStaff(
     dojoId: string,
@@ -68,13 +64,6 @@ export async function notifyDojoStaff(
               ? (["DOJO_MANAGER", "DOJO_OWNER"] as const)
               : (["INSTRUCTOR", "DOJO_MANAGER", "DOJO_OWNER"] as const);
 
-    const staff = await tx.member.findMany({
-        where: {
-            dojoId,
-            role: { in: allowed as unknown as Array<"INSTRUCTOR" | "DOJO_MANAGER" | "DOJO_OWNER"> },
-            isActive: true,
-        },
-        select: { id: true },
-    });
-    await notifyMembers(staff.map((m) => m.id), payload, tx);
+    const ids = await findUserIdsByRoles([...allowed], { dojoId });
+    await notifyMembers(ids, payload, tx);
 }

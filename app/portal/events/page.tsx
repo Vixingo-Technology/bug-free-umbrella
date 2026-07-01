@@ -30,7 +30,7 @@ export default async function EventsPage() {
         });
 
         const regs = await prisma.eventRegistration.findMany({
-            where: { memberId: user.id },
+            where: { userId: user.id },
             select: { eventId: true },
         });
         myRegistrations = regs.map((r: any) => r.eventId);

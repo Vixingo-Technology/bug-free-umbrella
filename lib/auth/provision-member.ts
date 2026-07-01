@@ -1,11 +1,13 @@
 import type { User } from "@supabase/supabase-js";
 import { prisma } from "@/lib/prisma";
 import { emitMemberCreated } from "@/lib/n8n";
+import type { RoleId } from "@/lib/auth/load-current-user";
 
 /**
- * Upsert a members row for a Supabase auth user and emit jka.member.created
- * on first creation. Safe to call from auth callbacks and OTP verification
- * flows — idempotent and non-fatal if anything fails.
+ * Upsert a user + role-specific profile row for a Supabase auth user
+ * and emit jka.member.created on first creation. Safe to call from auth
+ * callbacks and OTP verification flows — idempotent and non-fatal if
+ * anything fails.
  */
 export async function provisionMemberFromSupabaseUser(user: User): Promise<void> {
     try {
@@ -15,10 +17,7 @@ export async function provisionMemberFromSupabaseUser(user: User): Promise<void>
             [meta.first_name, meta.last_name].filter(Boolean).join(" ")) ||
             user.email!;
 
-        // Roles set during invite flows live in user_metadata.role.
-        // Honour every possible MemberRole value so dojo-invited staff don't
-        // collapse back into STUDENT when the auth callback upserts them.
-        const role =
+        const role: RoleId =
             meta.role === "ADMIN" ? "ADMIN"
             : meta.role === "DOJO_OWNER" ? "DOJO_OWNER"
             : meta.role === "DOJO_MANAGER" ? "DOJO_MANAGER"
@@ -27,34 +26,90 @@ export async function provisionMemberFromSupabaseUser(user: User): Promise<void>
 
         const dojoId =
             typeof meta.dojo_id === "string" && meta.dojo_id ? meta.dojo_id : null;
+        const phone =
+            typeof user.phone === "string" && user.phone ? user.phone : null;
 
-        await prisma.member.upsert({
+        const wasExisting = await prisma.user.findUnique({
+            where: { id: user.id },
+            select: { id: true },
+        });
+
+        await prisma.user.upsert({
             where: { id: user.id },
             create: {
                 id: user.id,
                 email: user.email!,
+                phone,
                 fullName,
-                currentRank: meta.current_rank ?? "White Belt",
-                role,
-                dojoId,
-                onboardingComplete: false,
-                membershipStatus: "PENDING",
+                roleId: role,
             },
             update: {
                 email: user.email!,
             },
         });
 
-        const freshMember = await prisma.member.findUnique({ where: { id: user.id } });
-        const isNew = freshMember && (Date.now() - freshMember.createdAt.getTime()) < 30_000;
-        if (isNew) {
-            await emitMemberCreated({
-                id: freshMember.id,
-                fullName: freshMember.fullName,
-                email: freshMember.email,
-                phone: freshMember.phone,
-                currentRank: freshMember.currentRank,
-            });
+        // Ensure the matching role-specific row exists, with appropriate
+        // defaults. Use plain create/update — we only insert when missing
+        // so an already-onboarded student isn't reset.
+        switch (role) {
+            case "STUDENT": {
+                await prisma.student.upsert({
+                    where: { id: user.id },
+                    create: {
+                        id: user.id,
+                        currentRank: meta.current_rank ?? "White Belt",
+                        dojoId,
+                        onboardingComplete: false,
+                        membershipStatus: "PENDING",
+                    },
+                    update: {},
+                });
+                break;
+            }
+            case "INSTRUCTOR":
+                await prisma.instructor.upsert({
+                    where: { id: user.id },
+                    create: { id: user.id, dojoId },
+                    update: {},
+                });
+                break;
+            case "DOJO_MANAGER":
+                await prisma.dojoManager.upsert({
+                    where: { id: user.id },
+                    create: { id: user.id, dojoId },
+                    update: {},
+                });
+                break;
+            case "DOJO_OWNER":
+                await prisma.dojoOwner.upsert({
+                    where: { id: user.id },
+                    create: { id: user.id, dojoId },
+                    update: {},
+                });
+                break;
+            case "ADMIN":
+                await prisma.admin.upsert({
+                    where: { id: user.id },
+                    create: { id: user.id },
+                    update: {},
+                });
+                break;
+        }
+
+        if (!wasExisting) {
+            const fresh = await prisma.user.findUnique({ where: { id: user.id } });
+            if (fresh) {
+                await emitMemberCreated({
+                    id: fresh.id,
+                    fullName: fresh.fullName,
+                    email: fresh.email,
+                    phone: fresh.phone,
+                    currentRank:
+                        role === "STUDENT"
+                            ? (meta.current_rank as string | undefined) ?? "White Belt"
+                            : "—",
+                });
+            }
         }
     } catch (err) {
         console.error("[provisionMemberFromSupabaseUser] failed:", err);

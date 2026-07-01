@@ -21,21 +21,21 @@ export type NextRankError =
 export async function resolveNextRankForMember(
   memberId: string
 ): Promise<NextRankResult> {
-  const member = await prisma.member.findUnique({
+  const student = await prisma.student.findUnique({
     where: { id: memberId },
     select: { currentRank: true },
   });
-  if (!member) {
+  if (!student) {
     return { ok: false, error: { kind: "UNRESOLVABLE_CURRENT_RANK", currentRank: "" } };
   }
 
   const current = await prisma.beltRank.findUnique({
-    where: { name: member.currentRank },
+    where: { name: student.currentRank },
   });
   if (!current) {
     return {
       ok: false,
-      error: { kind: "UNRESOLVABLE_CURRENT_RANK", currentRank: member.currentRank },
+      error: { kind: "UNRESOLVABLE_CURRENT_RANK", currentRank: student.currentRank },
     };
   }
 

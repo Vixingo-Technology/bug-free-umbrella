@@ -63,18 +63,26 @@ export default async function ParticipationCardPage({
                     dojo: { select: { name: true } },
                 },
             },
-            member: { select: { fullName: true, email: true, phone: true, memberNumber: true } },
+            user: {
+                select: {
+                    fullName: true,
+                    email: true,
+                    phone: true,
+                    student: { select: { memberNumber: true } },
+                },
+            },
         },
     });
 
     if (!registration) notFound();
 
     const participantName =
-        registration.member?.fullName ?? registration.guestName ?? "Participant";
+        registration.user?.fullName ?? registration.guestName ?? "Participant";
     const participantEmail =
-        registration.member?.email ?? registration.guestEmail ?? "";
+        registration.user?.email ?? registration.guestEmail ?? "";
     const participantPhone =
-        registration.member?.phone ?? registration.guestPhone ?? "";
+        registration.user?.phone ?? registration.guestPhone ?? "";
+    const memberNumber = registration.user?.student?.memberNumber ?? null;
 
     const appUrl =
         process.env.NEXT_PUBLIC_APP_URL ??
@@ -103,10 +111,8 @@ export default async function ParticipationCardPage({
 
     let canCheckIn = false;
     if (user) {
-        const me = await prisma.member.findUnique({
-            where: { id: user.id },
-            select: { role: true, dojoId: true },
-        });
+        const { loadCurrentUser } = await import("@/lib/auth/load-current-user");
+        const me = await loadCurrentUser(user.id);
         if (me) {
             if (me.role === "ADMIN") {
                 canCheckIn = true;
@@ -210,9 +216,9 @@ export default async function ParticipationCardPage({
                                             {participantPhone}
                                         </p>
                                     )}
-                                    {registration.member?.memberNumber && (
+                                    {memberNumber && (
                                         <p className="text-[10px] tracking-widest uppercase font-bold text-zinc-400 mt-1">
-                                            Member #{registration.member.memberNumber}
+                                            Member #{memberNumber}
                                         </p>
                                     )}
                                 </div>

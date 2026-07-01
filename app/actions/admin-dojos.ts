@@ -39,30 +39,46 @@ function buildData(formData: FormData) {
 
 /**
  * Set (or clear) the DOJO_OWNER for a dojo. Demotes any current owner to
- * INSTRUCTOR before promoting the new one so the partial unique index
- * `members_one_owner_per_dojo` is never violated.
+ * INSTRUCTOR before promoting the new one so the UNIQUE(dojo_id) constraint
+ * on dojo_owners is never violated.
  */
 async function setDojoHead(
     tx: Prisma.TransactionClient,
     dojoId: string,
     newOwnerId: string | null
 ): Promise<void> {
-    const current = await tx.member.findFirst({
-        where: { dojoId, role: "DOJO_OWNER" },
+    const current = await tx.dojoOwner.findUnique({
+        where: { dojoId },
         select: { id: true },
     });
 
     if (current && current.id !== newOwnerId) {
-        await tx.member.update({
+        // Demote: move from dojo_owners → instructors and flip users.role_id.
+        await tx.dojoOwner.delete({ where: { id: current.id } });
+        await tx.instructor.upsert({
             where: { id: current.id },
-            data: { role: "INSTRUCTOR" },
+            create: { id: current.id, dojoId },
+            update: { dojoId },
+        });
+        await tx.user.update({
+            where: { id: current.id },
+            data: { roleId: "INSTRUCTOR" },
         });
     }
 
     if (newOwnerId) {
-        await tx.member.update({
+        // Promote: remove any prior role row, insert into dojo_owners.
+        await tx.instructor.deleteMany({ where: { id: newOwnerId } });
+        await tx.dojoManager.deleteMany({ where: { id: newOwnerId } });
+        await tx.student.deleteMany({ where: { id: newOwnerId } });
+        await tx.dojoOwner.upsert({
             where: { id: newOwnerId },
-            data: { role: "DOJO_OWNER", dojoId },
+            create: { id: newOwnerId, dojoId },
+            update: { dojoId },
+        });
+        await tx.user.update({
+            where: { id: newOwnerId },
+            data: { roleId: "DOJO_OWNER" },
         });
     }
 }
@@ -129,7 +145,7 @@ export async function deleteDojoAction(formData: FormData): Promise<ActionResult
     const id = formData.get("id") as string;
     if (!id) return { ok: false, error: "Dojo id is required." };
 
-    const memberCount = await prisma.member.count({ where: { dojoId: id } });
+    const memberCount = await prisma.student.count({ where: { dojoId: id } });
     if (memberCount > 0) {
         await prisma.dojo.update({ where: { id }, data: { isActive: false } });
         revalidatePath("/portal/admin/dojos");
@@ -168,16 +184,16 @@ export async function sendDojoRenewalReminderAction(input: {
     const dojo = await prisma.dojo.findUnique({
         where: { id: input.dojoId },
         include: {
-            members: {
-                where: { role: "DOJO_OWNER" },
-                select: { id: true, fullName: true, email: true, phone: true },
-                take: 1,
+            owner: {
+                include: {
+                    user: { select: { id: true, fullName: true, email: true, phone: true } },
+                },
             },
         },
     });
     if (!dojo) return { ok: false, error: "Dojo not found." };
 
-    const owner = dojo.members[0];
+    const owner = dojo.owner?.user ?? null;
     const recipient = owner?.email ?? dojo.email;
     if (!recipient) {
         return {

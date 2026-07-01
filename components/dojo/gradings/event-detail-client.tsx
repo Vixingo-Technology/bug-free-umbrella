@@ -298,7 +298,7 @@ function ResultsSection({
   function saveDraft() {
     setError(null);
     const rows = applications.map((a) => ({
-      memberId: a.memberId,
+      studentId: a.memberId,
       result: draft[a.memberId].result,
       reviewNotes: draft[a.memberId].reviewNotes,
     }));

@@ -51,7 +51,7 @@ export default async function DojoCertificatesPage({
         prisma.grading.findMany({
             where: {
                 result: "PASSED",
-                member: { dojoId },
+                student: { dojoId },
                 certificateRequests: {
                     none: {
                         status: {
@@ -61,13 +61,13 @@ export default async function DojoCertificatesPage({
                 },
             },
             include: {
-                member: {
+                student: {
                     select: {
                         id: true,
-                        fullName: true,
                         memberNumber: true,
                         fatherName: true,
                         motherName: true,
+                        user: { select: { fullName: true } },
                     },
                 },
                 toRank: {
@@ -81,15 +81,27 @@ export default async function DojoCertificatesPage({
                 gradingEvent: { select: { name: true, eventDate: true } },
             },
             orderBy: { createdAt: "desc" },
-        }),
+        }).then((rows) => rows.map((g) => ({
+            ...g,
+            member: {
+                id: g.student.id,
+                fullName: g.student.user.fullName,
+                memberNumber: g.student.memberNumber,
+                fatherName: g.student.fatherName,
+                motherName: g.student.motherName,
+            },
+        }))),
         prisma.certificateRequest.findMany({
             where: { dojoId },
             orderBy: { createdAt: "desc" },
             take: 50,
             include: {
-                member: { select: { fullName: true, memberNumber: true, id: true } },
+                student: { select: { id: true, memberNumber: true, user: { select: { fullName: true } } } },
             },
-        }),
+        }).then((rows) => rows.map((r) => ({
+            ...r,
+            member: { id: r.student.id, fullName: r.student.user.fullName, memberNumber: r.student.memberNumber },
+        }))),
     ]);
 
     const missingSignature = !dojo?.ownerSignatureUrl;

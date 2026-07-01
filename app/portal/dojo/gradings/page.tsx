@@ -234,19 +234,19 @@ async function loadRealCandidates(dojoId: string): Promise<Candidate[]> {
     const apps = await prisma.gradingApplication.findMany({
         where: {
             status: "SUBMITTED",
-            member: { dojoId },
+            student: { dojoId },
         },
         orderBy: { appliedAt: "desc" },
         include: {
-            member: { select: { fullName: true, currentRank: true } },
+            student: { select: { currentRank: true, user: { select: { fullName: true } } } },
             targetRank: { select: { name: true } },
         },
     });
 
     return apps.map((a) => ({
         id: a.id,
-        name: a.member.fullName,
-        currentRank: a.member.currentRank,
+        name: a.student.user.fullName,
+        currentRank: a.student.currentRank,
         targetRank: a.targetRank?.name ?? "—",
         appliedOn: a.appliedAt.toLocaleDateString(undefined, {
             day: "numeric",

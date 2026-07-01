@@ -17,20 +17,23 @@ export default async function GradingPage() {
   let blockReason: string | null = null;
 
   try {
-    member = await prisma.member.findUnique({
+    const student = await prisma.student.findUnique({
       where: { id: user.id },
-      select: {
-        id: true,
-        fullName: true,
-        currentRank: true,
-        membershipStatus: true,
-      },
+      include: { user: { select: { fullName: true } } },
     });
+    if (student) {
+      member = {
+        id: student.id,
+        fullName: student.user.fullName,
+        currentRank: student.currentRank,
+        membershipStatus: student.membershipStatus,
+      };
+    }
 
     // The "active" request for display: pending first, otherwise the most
     // recent scheduled/declined within the last 60 days.
     const pending = await prisma.gradingApplication.findFirst({
-      where: { memberId: user.id, gradingEventId: null, status: "SUBMITTED" },
+      where: { studentId: user.id, gradingEventId: null, status: "SUBMITTED" },
       include: { targetRank: true },
     });
 
@@ -38,7 +41,7 @@ export default async function GradingPage() {
       currentRequest = { kind: "pending", row: pending };
     } else {
       const recent = await prisma.gradingApplication.findFirst({
-        where: { memberId: user.id },
+        where: { studentId: user.id },
         orderBy: { appliedAt: "desc" },
         include: { targetRank: true, gradingEvent: true },
       });
@@ -63,7 +66,7 @@ export default async function GradingPage() {
     // Drafts that haven't been published yet must never leak to the member.
     myGradings = await prisma.grading.findMany({
       where: {
-        memberId: user.id,
+        studentId: user.id,
         OR: [
           { gradingEventId: null },
           { gradingEvent: { resultsPublishedAt: { not: null } } },

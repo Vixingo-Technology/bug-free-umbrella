@@ -22,12 +22,12 @@ export default async function ReceiptPage({
     const session = await requireDojoRole("INSTRUCTOR");
     if (!session.dojo) redirect("/portal/dojo/shop");
 
-    const sale = await prisma.dojoSale.findUnique({
+    const saleRaw = await prisma.dojoSale.findUnique({
         where: { id },
         include: {
             items: true,
-            member: {
-                select: { id: true, fullName: true, memberNumber: true, currentRank: true },
+            buyer: {
+                select: { id: true, fullName: true, student: { select: { memberNumber: true, currentRank: true } } },
             },
             dojo: {
                 select: {
@@ -42,8 +42,19 @@ export default async function ReceiptPage({
             },
         },
     });
-    if (!sale) notFound();
-    if (sale.dojoId !== session.dojo.id) notFound();
+    if (!saleRaw) notFound();
+    if (saleRaw.dojoId !== session.dojo.id) notFound();
+    const sale = {
+        ...saleRaw,
+        member: saleRaw.buyer
+            ? {
+                id: saleRaw.buyer.id,
+                fullName: saleRaw.buyer.fullName,
+                memberNumber: saleRaw.buyer.student?.memberNumber ?? null,
+                currentRank: saleRaw.buyer.student?.currentRank ?? "—",
+            }
+            : null,
+    };
 
     const s = serialize(sale) as typeof sale & {
         subtotal: number;

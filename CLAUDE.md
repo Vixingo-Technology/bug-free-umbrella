@@ -72,36 +72,49 @@ styles/                 Global / utility CSS
 
 ## Database Schema
 
-17 tables managed via Prisma (PostgreSQL on Supabase). All tables have Row Level Security (RLS) policies enforced at the database level.
+Tables managed via Prisma (PostgreSQL on Supabase). Identity is normalized to 3NF — every authenticated user has exactly one row in `users` and one row in the matching role-specific table. All tables have Row Level Security (RLS) policies enforced at the database level.
 
-**Identity**
-- `members` — all ~700 members; roles: `STUDENT | INSTRUCTOR | ADMIN`
-- `admins` — super-admin accounts with elevated privileges
-- `instructors` — instructor profiles linked to members
+**Identity (3NF split)**
+- `users` — shared profile (id, email, phone, full_name, avatar_url, role_id, is_active); mirrors `auth.users` by id
+- `students` — student-specific profile (member_number, current_rank, dojo_id, membership_status, expiry_date, parent names, emergency contact, etc.); id is FK to `users.id`
+- `instructors` — instructor profile (dojo_id, joined_date, bio); id is FK to `users.id`
+- `dojo_managers` — manager profile (dojo_id); id is FK to `users.id`
+- `dojo_owners` — owner profile (dojo_id UNIQUE, signature_url); id is FK to `users.id`
+- `admins` — admin profile (scope); id is FK to `users.id`
+
+**RBAC**
+- `roles` — role catalog (slug-PK): `STUDENT`, `INSTRUCTOR`, `DOJO_MANAGER`, `DOJO_OWNER`, `ADMIN`; replaces the old `MemberRole` enum
+- `permissions` — permission catalog (e.g. `members.read.own_dojo`, `gradings.approve`)
+- `role_permissions` — many-to-many grants
 
 **Infrastructure**
 - `dojos` — branch locations with GPS coordinates and schedule JSON
-- `attendance` — per-session attendance records
+- `attendance` — per-session records (FK to `students.id`)
 
 **Ranking**
 - `belt_ranks` — bilingual rank definitions with color hex
-- `gradings` — individual grading results with certificate URL
+- `gradings` — individual grading results (FK to `students.id`)
 - `grading_events` — exam sessions
-- `grading_applications` — student applications for upcoming exams
+- `grading_applications` — student applications for upcoming exams (FK to `students.id`)
+- `certificate_requests` — printed-certificate orders (FK to `students.id`)
 
 **Competition**
 - `tournaments` — tournament metadata
-- `tournament_participants` — registered competitors
+- `tournament_participants` — registered competitors (FK to `students.id`)
 - `tournament_matches` — bracket matches with winner tracking
 
 **Content**
-- `events` — public events managed via Payload CMS
-- `event_registrations` — member event sign-ups
-- `notifications` — in-app and WhatsApp/email notification log
+- `events` — public events (`posted_by_id` → `users.id`)
+- `announcements` — short text posts (`posted_by_id` → `users.id`)
+- `event_registrations` — event sign-ups (`user_id` → `users.id`; nullable for guests, with `checked_in_by_user_id` → `users.id`)
+- `notifications` — in-app notification log (`user_id` → `users.id`)
+- `achievements` — achievement catalog
+- `student_achievements` — earned achievement rows (FK to `students.id`, `awarded_by_user_id` → `users.id`)
 
 **E-commerce**
 - `shop_products` — merchandise catalog
-- `shop_orders` — orders with payment status and items JSON
+- `shop_orders` — orders (`user_id` → `users.id`)
+- `dojo_inventory_items` / `dojo_sales` / `dojo_sale_items` — per-dojo stock and member receipts (`buyer_user_id`, `sold_by_user_id` → `users.id`)
 
 ---
 
@@ -124,7 +137,7 @@ All user-facing routes are under `app/[locale]/` and inherit the `en`/`bn` local
 
 1. **Server Components by default.** Use `"use client"` only for components that need browser APIs, user interaction, or Three.js canvas. Keep data-fetching in Server Components.
 
-2. **Supabase RLS is the security boundary.** Never skip RLS. Students must only read their own rows. Dojo Heads/Instructors see only their assigned students. All Prisma queries run through the Supabase connection — RLS is enforced at the DB level.
+2. **Supabase RLS is the security boundary.** Never skip RLS. Students must only read their own rows. Dojo Heads/Instructors see only their assigned students. All Prisma queries run through the Supabase connection — RLS is enforced at the DB level. RLS predicates read `users.role_id` (e.g. `(SELECT role_id FROM users WHERE id = auth.uid()) = 'ADMIN'`); dojo-scoped checks join through `instructors`/`dojo_managers`/`dojo_owners`.
 
 3. **Prisma for all DB mutations; Supabase client for auth and realtime.** Do not mix raw SQL with Prisma models except in migration files.
 
@@ -140,7 +153,9 @@ All user-facing routes are under `app/[locale]/` and inherit the `en`/`bn` local
 
 9. **Role-based access is enforced at two layers:** middleware (Next.js) checks the Supabase session role claim, and Prisma queries apply role-scoped `where` clauses as a second guard.
 
-10. **Standalone output mode is enabled.** `next.config.ts` uses `output: 'standalone'` for Docker-compatible Vercel deploys.
+10. **Identity is 3NF — never write to `users` without writing the matching role-table row.** Every authenticated user has exactly one row in `users` and one row in the matching role table (`students` / `instructors` / `dojo_managers` / `dojo_owners` / `admins`). To change a user's role, use `assignRole(userId, newRoleId)` from `lib/auth/assign-role.ts`; it removes the prior role-table row, inserts the new one, and updates `users.role_id` in one transaction. To load the current viewer's role + dojo in one call, use `loadCurrentUser(userId)` from `lib/auth/load-current-user.ts`. To fan-out notifications by role, use `findUserIdsByRoles([...roles], { dojoId })` from `lib/notify/recipients.ts`.
+
+11. **Standalone output mode is enabled.** `next.config.ts` uses `output: 'standalone'` for Docker-compatible Vercel deploys.
 
 ---
 

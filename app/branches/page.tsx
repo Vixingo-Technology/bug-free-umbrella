@@ -37,8 +37,8 @@ async function loadActiveDojos(): Promise<DojoCard[]> {
         });
         const counts = await Promise.all(
             rows.map((d) =>
-                prisma.member.count({
-                    where: { dojoId: d.id, isActive: true },
+                prisma.student.count({
+                    where: { dojoId: d.id, user: { isActive: true } },
                 }),
             ),
         );

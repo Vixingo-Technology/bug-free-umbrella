@@ -16,7 +16,10 @@ import Footer from "@/components/footer";
 import DigitalCard, {
     type MembershipStatusLabel,
 } from "@/components/portal/digital-card";
+import AchievementCard from "@/components/achievements/achievement-card";
 import { prisma } from "@/lib/prisma";
+import { TIER_RANK } from "@/lib/achievements/catalog";
+import type { AchievementTier } from "@/prisma/generated/client";
 
 export const dynamic = "force-dynamic";
 
@@ -28,14 +31,15 @@ export async function generateMetadata({
     const { id } = await params;
     if (!/^[0-9a-f-]{36}$/i.test(id)) return { title: "Member — JKA Bangladesh" };
     try {
-        const m = await prisma.member.findUnique({
+        const m = await prisma.user.findUnique({
             where: { id },
-            select: { fullName: true, currentRank: true },
+            select: { fullName: true, student: { select: { currentRank: true } } },
         });
         if (!m) return { title: "Member — JKA Bangladesh" };
+        const rank = m.student?.currentRank ?? "Member";
         return {
             title: `${m.fullName} — JKA Bangladesh`,
-            description: `${m.fullName} (${m.currentRank}) — public profile on JKA Bangladesh.`,
+            description: `${m.fullName} (${rank}) — public profile on JKA Bangladesh.`,
         };
     } catch {
         return { title: "Member — JKA Bangladesh" };
@@ -70,36 +74,34 @@ export default async function PublicMemberPage({
 
     let member: any = null;
     try {
-        member = await prisma.member.findUnique({
+        const u = await prisma.user.findUnique({
             where: { id },
             include: {
-                dojo: { select: { id: true, name: true, city: true } },
-                gradings: {
-                    orderBy: { createdAt: "asc" },
+                student: {
                     include: {
-                        fromRank: { select: { name: true, colorHex: true } },
-                        toRank: {
-                            select: {
-                                name: true,
-                                colorHex: true,
-                                orderIndex: true,
+                        dojo: { select: { id: true, name: true, city: true } },
+                        gradings: {
+                            orderBy: { createdAt: "asc" },
+                            include: {
+                                fromRank: { select: { name: true, colorHex: true } },
+                                toRank: {
+                                    select: { name: true, colorHex: true, orderIndex: true },
+                                },
+                                gradingEvent: { select: { name: true, eventDate: true } },
                             },
                         },
-                        gradingEvent: {
-                            select: { name: true, eventDate: true },
+                        achievements: {
+                            include: {
+                                achievement: {
+                                    select: { slug: true, name: true, description: true, icon: true, tier: true },
+                                },
+                            },
                         },
                     },
                 },
                 tournamentEntries: {
                     include: {
-                        tournament: {
-                            select: {
-                                id: true,
-                                name: true,
-                                date: true,
-                                location: true,
-                            },
-                        },
+                        tournament: { select: { id: true, name: true, date: true, location: true } },
                         matchesAsP1: { select: { id: true, winnerId: true } },
                         matchesAsP2: { select: { id: true, winnerId: true } },
                         matchesWon: { select: { id: true } },
@@ -107,6 +109,25 @@ export default async function PublicMemberPage({
                 },
             },
         });
+        if (u) {
+            member = {
+                id: u.id,
+                fullName: u.fullName,
+                email: u.email,
+                phone: u.phone,
+                avatarUrl: u.avatarUrl,
+                isActive: u.isActive,
+                role: u.roleId,
+                memberNumber: u.student?.memberNumber ?? null,
+                currentRank: u.student?.currentRank ?? "—",
+                joinDate: u.student?.joinDate ?? null,
+                expiryDate: u.student?.expiryDate ?? null,
+                dojo: u.student?.dojo ?? null,
+                gradings: u.student?.gradings ?? [],
+                tournamentEntries: u.tournamentEntries ?? [],
+                achievements: u.student?.achievements ?? [],
+            };
+        }
     } catch {
         notFound();
     }
@@ -125,6 +146,14 @@ export default async function PublicMemberPage({
     const tournamentEntries = (member.tournamentEntries ?? []).filter(
         (e: any) => e.tournament,
     );
+
+    const achievements = [...(member.achievements ?? [])].sort((a: any, b: any) => {
+        const tierDelta =
+            TIER_RANK[b.achievement.tier as AchievementTier] -
+            TIER_RANK[a.achievement.tier as AchievementTier];
+        if (tierDelta !== 0) return tierDelta;
+        return new Date(b.unlockedAt).getTime() - new Date(a.unlockedAt).getTime();
+    });
 
     return (
         <main className="min-h-screen bg-zinc-50 w-full overflow-hidden">
@@ -210,6 +239,10 @@ export default async function PublicMemberPage({
                                     label="Tournaments"
                                     value={tournamentEntries.length}
                                 />
+                                <Stat
+                                    label="Achievements"
+                                    value={achievements.length}
+                                />
                                 {member.joinDate && (
                                     <Stat
                                         label="Member since"
@@ -227,6 +260,29 @@ export default async function PublicMemberPage({
 
                     {/* Main column */}
                     <div className="lg:col-span-2 space-y-8 order-2 lg:order-1">
+                        <Card title="Achievements" count={achievements.length}>
+                            {achievements.length === 0 ? (
+                                <p className="text-sm text-zinc-500">
+                                    No achievements unlocked yet.
+                                </p>
+                            ) : (
+                                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                                    {achievements.map((m: any) => (
+                                        <AchievementCard
+                                            key={m.achievement.slug}
+                                            name={m.achievement.name}
+                                            description={m.achievement.description}
+                                            icon={m.achievement.icon}
+                                            tier={m.achievement.tier}
+                                            unlocked
+                                            unlockedAt={m.unlockedAt}
+                                            size="sm"
+                                        />
+                                    ))}
+                                </div>
+                            )}
+                        </Card>
+
                         <Card title="Belt progress" count={passedGradings.length}>
                             {passedGradings.length === 0 ? (
                                 <p className="text-sm text-zinc-500">

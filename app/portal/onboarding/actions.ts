@@ -6,6 +6,19 @@ import { createClient } from "@/lib/supabase/server";
 import { prisma } from "@/lib/prisma";
 import { MEMBERSHIP_FEE_BDT, MEMBERSHIP_DURATION_YEARS } from "@/lib/constants";
 import { notifyAdmins, notifyDojoStaff } from "@/lib/notify";
+import { provisionMemberFromSupabaseUser } from "@/lib/auth/provision-member";
+
+// Onboarding pages skip the provisioning that the portal layout normally
+// performs, so the users row may not exist yet when these actions fire.
+async function ensureMemberRow(user: { id: string } & Record<string, any>) {
+    const existing = await prisma.user.findUnique({
+        where: { id: user.id },
+        select: { id: true },
+    });
+    if (!existing) {
+        await provisionMemberFromSupabaseUser(user as any);
+    }
+}
 
 // ─── Step 1: Save profile ────────────────────────────────────────────────────
 
@@ -37,23 +50,59 @@ export async function saveProfileAction(formData: FormData) {
         return { error: "No dojo is available yet. Please contact the admin." };
     }
 
+    const meta = user.user_metadata ?? {};
+    const role: "ADMIN" | "DOJO_OWNER" | "DOJO_MANAGER" | "INSTRUCTOR" | "STUDENT" =
+        meta.role === "ADMIN" ? "ADMIN"
+        : meta.role === "DOJO_OWNER" ? "DOJO_OWNER"
+        : meta.role === "DOJO_MANAGER" ? "DOJO_MANAGER"
+        : meta.role === "INSTRUCTOR" ? "INSTRUCTOR"
+        : "STUDENT";
+
+    const studentData = {
+        dojoId,
+        dateOfBirth: dateOfBirth ? new Date(dateOfBirth) : null,
+        bloodGroup,
+        address,
+        nationalId,
+        fatherName,
+        motherName,
+        emergencyContactName,
+        emergencyContactPhone,
+    };
+
     try {
-        await prisma.member.update({
+        await prisma.user.upsert({
             where: { id: user.id },
-            data: {
+            create: {
+                id: user.id,
+                email: user.email!,
                 fullName,
                 phone,
-                dojoId,
-                dateOfBirth: dateOfBirth ? new Date(dateOfBirth) : null,
-                bloodGroup,
-                address,
-                nationalId,
-                fatherName,
-                motherName,
-                emergencyContactName,
-                emergencyContactPhone,
+                roleId: role,
             },
+            update: { fullName, phone, roleId: role },
         });
+
+        if (role === "STUDENT") {
+            await prisma.student.upsert({
+                where: { id: user.id },
+                create: {
+                    id: user.id,
+                    currentRank: meta.current_rank ?? "White Belt",
+                    onboardingComplete: false,
+                    membershipStatus: "PENDING",
+                    ...studentData,
+                },
+                update: studentData,
+            });
+        } else {
+            // Non-student roles still track their dojo on the role-specific table.
+            const data = { dojoId: studentData.dojoId };
+            if (role === "INSTRUCTOR")  await prisma.instructor.upsert({ where: { id: user.id }, create: { id: user.id, ...data }, update: data });
+            if (role === "DOJO_MANAGER") await prisma.dojoManager.upsert({ where: { id: user.id }, create: { id: user.id, ...data }, update: data });
+            if (role === "DOJO_OWNER")   await prisma.dojoOwner.upsert({ where: { id: user.id }, create: { id: user.id, ...data }, update: data });
+            if (role === "ADMIN")        await prisma.admin.upsert({ where: { id: user.id }, create: { id: user.id }, update: {} });
+        }
 
         return { success: true };
     } catch (err: any) {
@@ -70,6 +119,7 @@ export async function createOnboardingOrderAction(productIds: string[]) {
     if (!user) return { error: "Not authenticated." };
 
     try {
+        await ensureMemberRow(user);
         // Fetch selected products
         const products = productIds.length > 0
             ? await prisma.shopProduct.findMany({
@@ -84,7 +134,7 @@ export async function createOnboardingOrderAction(productIds: string[]) {
         // Delete any previous pending onboarding orders to avoid duplicates
         await prisma.shopOrder.deleteMany({
             where: {
-                memberId: user.id,
+                userId: user.id,
                 paymentStatus: "PENDING",
                 includesMembership: true,
             },
@@ -93,7 +143,7 @@ export async function createOnboardingOrderAction(productIds: string[]) {
         // Create new order
         const order = await prisma.shopOrder.create({
             data: {
-                memberId: user.id,
+                userId: user.id,
                 total: grandTotal,
                 membershipFee: membershipFee,
                 includesMembership: true,
@@ -124,27 +174,35 @@ export async function payLaterAction(orderId: string) {
     if (!user) return { error: "Not authenticated." };
 
     try {
-        const member = await prisma.member.update({
+        await ensureMemberRow(user);
+        await prisma.student.update({
             where: { id: user.id },
             data: {
                 onboardingComplete: true,
                 membershipStatus: "PENDING",
             },
-            select: { fullName: true, dojoId: true },
+        });
+        const u = await prisma.user.findUnique({
+            where: { id: user.id },
+            select: { fullName: true },
+        });
+        const student = await prisma.student.findUnique({
+            where: { id: user.id },
+            select: { dojoId: true },
         });
 
         // Heads-up to admins + the student's dojo: a new member is waiting
         // to settle their membership fee.
         await notifyAdmins({
             title: "Pending membership",
-            message: `${member.fullName} completed sign-up and is waiting to pay the membership fee.`,
+            message: `${u?.fullName ?? "A new member"} completed sign-up and is waiting to pay the membership fee.`,
             type: "INFO",
             link: "/portal/admin/members",
         });
-        if (member.dojoId) {
-            await notifyDojoStaff(member.dojoId, {
+        if (student?.dojoId) {
+            await notifyDojoStaff(student.dojoId, {
                 title: "New member at your dojo",
-                message: `${member.fullName} has joined and is waiting to pay the membership fee.`,
+                message: `${u?.fullName ?? "A new member"} has joined and is waiting to pay the membership fee.`,
                 type: "INFO",
                 link: "/portal/dojo/students",
             });
@@ -167,7 +225,8 @@ export async function payNowAction(orderId: string) {
     if (!user) return { error: "Not authenticated." };
 
     try {
-        await prisma.member.update({
+        await ensureMemberRow(user);
+        await prisma.student.update({
             where: { id: user.id },
             data: { onboardingComplete: true },
         });

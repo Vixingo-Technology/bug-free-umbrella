@@ -15,12 +15,14 @@ export default async function EventDetailPage({
   const event = await prisma.gradingEvent.findFirst({
     where: {
       id: eventId,
-      applications: { some: { member: { dojoId: session.dojo.id } } },
+      applications: { some: { student: { dojoId: session.dojo.id } } },
     },
     include: {
       applications: {
         include: {
-          member: { select: { id: true, fullName: true, currentRank: true } },
+          student: {
+            select: { id: true, currentRank: true, user: { select: { fullName: true } } },
+          },
           targetRank: { select: { id: true, name: true } },
         },
         orderBy: { appliedAt: "asc" },
@@ -28,7 +30,7 @@ export default async function EventDetailPage({
       gradings: {
         select: {
           id: true,
-          memberId: true,
+          studentId: true,
           result: true,
           notes: true,
           toRankId: true,
@@ -53,14 +55,14 @@ export default async function EventDetailPage({
       }}
       applications={event.applications.map((a) => ({
         id: a.id,
-        memberId: a.memberId,
-        memberName: a.member.fullName,
-        currentRank: a.member.currentRank,
+        memberId: a.studentId,
+        memberName: a.student.user.fullName,
+        currentRank: a.student.currentRank,
         targetRankId: a.targetRankId,
         targetRankName: a.targetRank?.name ?? null,
         status: a.status,
       }))}
-      gradings={event.gradings}
+      gradings={event.gradings.map((g) => ({ ...g, memberId: g.studentId }))}
     />
   );
 }

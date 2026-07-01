@@ -56,14 +56,14 @@ export default async function RegisterPage({ params, searchParams }: Props) {
     let memberPrefill: { fullName: string; email: string; phone: string | null } | null =
         null;
     if (user) {
-        const me = await prisma.member.findUnique({
+        const me = await prisma.user.findUnique({
             where: { id: user.id },
             select: { fullName: true, email: true, phone: true },
         });
         if (me) {
             memberPrefill = me;
             const existing = await prisma.eventRegistration.findFirst({
-                where: { eventId: event.id, memberId: user.id },
+                where: { eventId: event.id, userId: user.id },
                 select: { qrToken: true },
             });
             if (existing) redirect(`/participants/${existing.qrToken}`);

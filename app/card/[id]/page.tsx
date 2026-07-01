@@ -17,10 +17,21 @@ export default async function PublicCardPage({
 
     let member: any = null;
     try {
-        member = await prisma.member.findUnique({
+        const u = await prisma.user.findUnique({
             where: { id },
-            include: { dojo: true },
+            include: { student: { include: { dojo: true } } },
         });
+        if (u) {
+            member = {
+                fullName: u.fullName,
+                avatarUrl: u.avatarUrl,
+                role: u.roleId,
+                currentRank: u.student?.currentRank ?? "—",
+                memberNumber: u.student?.memberNumber ?? null,
+                dojo: u.student?.dojo ?? null,
+                expiryDate: u.student?.expiryDate ?? null,
+            };
+        }
     } catch {
         notFound();
     }

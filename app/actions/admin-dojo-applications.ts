@@ -73,27 +73,31 @@ export async function approveDojoApplicationAction(
             });
 
             // 2. Upsert the applicant as DOJO_OWNER of the new dojo.
-            //    The partial unique index members_one_owner_per_dojo guarantees
-            //    we won't end up with two owners on the same dojo.
-            await tx.member.upsert({
+            //    The UNIQUE(dojo_id) on dojo_owners guarantees only one owner per dojo.
+            await tx.user.upsert({
                 where: { id: application.userId! },
                 update: {
                     fullName: application.contactName,
                     email: application.email,
                     phone: application.phone,
-                    role: "DOJO_OWNER",
-                    dojoId: dojo.id,
+                    roleId: "DOJO_OWNER",
                 },
                 create: {
                     id: application.userId!,
                     fullName: application.contactName,
                     email: application.email,
                     phone: application.phone,
-                    role: "DOJO_OWNER",
-                    dojoId: dojo.id,
+                    roleId: "DOJO_OWNER",
                     isActive: true,
-                    membershipStatus: "ACTIVE",
                 },
+            });
+            await tx.student.deleteMany({ where: { id: application.userId! } });
+            await tx.instructor.deleteMany({ where: { id: application.userId! } });
+            await tx.dojoManager.deleteMany({ where: { id: application.userId! } });
+            await tx.dojoOwner.upsert({
+                where: { id: application.userId! },
+                create: { id: application.userId!, dojoId: dojo.id },
+                update: { dojoId: dojo.id },
             });
 
             // 3. Mark the application approved with the dojo id.

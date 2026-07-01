@@ -1,12 +1,12 @@
 // Shared role constants and predicates. No server-only imports here —
 // this module is imported by client components (e.g. dashboard shell).
-import type { MemberRole } from "@/prisma/generated/client";
+import type { RoleId } from "@/lib/auth/load-current-user";
 
 export const DOJO_ROLES = [
     "INSTRUCTOR",
     "DOJO_MANAGER",
     "DOJO_OWNER",
-] as const satisfies readonly MemberRole[];
+] as const satisfies readonly RoleId[];
 
 export type DojoRole = (typeof DOJO_ROLES)[number];
 

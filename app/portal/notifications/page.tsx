@@ -12,7 +12,7 @@ export default async function NotificationsPage() {
 
     try {
         notifications = await prisma.notification.findMany({
-            where: { memberId: user.id },
+            where: { userId: user.id },
             orderBy: { createdAt: "desc" },
             take: 50,
         });

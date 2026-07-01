@@ -49,8 +49,8 @@ export default async function CertificatePreviewPage({
             prisma.certificateRequest.findUnique({
                 where: { id },
                 include: {
-                    member: {
-                        select: { memberNumber: true, avatarUrl: true },
+                    student: {
+                        select: { memberNumber: true, user: { select: { avatarUrl: true } } },
                     },
                     dojo: {
                         select: { name: true, ownerSignatureUrl: true },
@@ -78,11 +78,11 @@ export default async function CertificatePreviewPage({
     const { data: { user } } = await supabase.auth.getUser();
     let canRegenerate = false;
     if (user) {
-        const m = await prisma.member.findUnique({
+        const m = await prisma.user.findUnique({
             where: { id: user.id },
-            select: { role: true },
+            select: { roleId: true },
         });
-        canRegenerate = m?.role === "ADMIN";
+        canRegenerate = m?.roleId === "ADMIN";
     }
 
     // Cloudinary blocks public delivery of PDFs by default ("Restricted media
@@ -108,7 +108,7 @@ export default async function CertificatePreviewPage({
             status={req.status}
             certificateUrl={signedUrl}
             memberName={req.memberName}
-            memberNumber={req.member?.memberNumber ?? null}
+            memberNumber={req.student?.memberNumber ?? null}
             fatherName={req.fatherName}
             motherName={req.motherName}
             rankName={req.rankName}

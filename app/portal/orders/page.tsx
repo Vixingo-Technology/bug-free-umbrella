@@ -13,7 +13,7 @@ export default async function OrdersPage() {
 
     try {
         orders = await prisma.shopOrder.findMany({
-            where: { memberId: user.id },
+            where: { userId: user.id },
             include: {
                 orderItems: {
                     include: { product: true },

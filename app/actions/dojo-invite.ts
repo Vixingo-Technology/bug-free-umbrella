@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { requireDojoRole } from "@/lib/dojo-session";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { assignRole } from "@/lib/auth/assign-role";
 
 const INVITABLE_ROLES = ["STUDENT", "INSTRUCTOR", "DOJO_MANAGER"] as const;
 type InvitableRole = (typeof INVITABLE_ROLES)[number];
@@ -47,15 +48,21 @@ export async function inviteDojoMemberAction(
         return { ok: false, error: "Pick a role for the invitee." };
     }
 
-    const existing = await prisma.member.findUnique({
+    const existing = await prisma.user.findUnique({
         where: { email },
-        select: { id: true, dojoId: true },
+        select: { id: true, student: { select: { dojoId: true } }, instructor: { select: { dojoId: true } }, dojoManager: { select: { dojoId: true } }, dojoOwner: { select: { dojoId: true } } },
     });
     if (existing) {
+        const existingDojoId =
+            existing.student?.dojoId ??
+            existing.instructor?.dojoId ??
+            existing.dojoManager?.dojoId ??
+            existing.dojoOwner?.dojoId ??
+            null;
         return {
             ok: false,
             error:
-                existing.dojoId === session.dojo.id
+                existingDojoId === session.dojo.id
                     ? "This email is already part of your dojo."
                     : "Someone with this email is already a JKA member.",
         };
@@ -82,25 +89,22 @@ export async function inviteDojoMemberAction(
         };
     }
 
-    await prisma.member.upsert({
+    await prisma.user.upsert({
         where: { id: data.user.id },
         create: {
             id: data.user.id,
             email,
             fullName: fullName || email,
-            role,
-            dojoId: session.dojo.id,
-            onboardingComplete: false,
-            membershipStatus: "PENDING",
+            roleId: role,
             isActive: false,
         },
         update: {
             email,
             fullName: fullName || email,
-            role,
-            dojoId: session.dojo.id,
+            roleId: role,
         },
     });
+    await assignRole(data.user.id, role, { dojoId: session.dojo.id });
 
     revalidatePath("/portal/dojo/students");
     return { ok: true };
@@ -118,22 +122,30 @@ export async function resendDojoInviteAction(
     }
 
     const memberId = (formData.get("memberId") as string) ?? "";
-    const member = await prisma.member.findUnique({
+    const member = await prisma.user.findUnique({
         where: { id: memberId },
         select: {
             id: true,
             email: true,
             fullName: true,
-            role: true,
-            dojoId: true,
-            onboardingComplete: true,
+            roleId: true,
+            student: { select: { dojoId: true, onboardingComplete: true } },
+            instructor: { select: { dojoId: true } },
+            dojoManager: { select: { dojoId: true } },
         },
     });
 
-    if (!member || member.dojoId !== session.dojo.id) {
+    const memberDojoId =
+        member?.student?.dojoId ??
+        member?.instructor?.dojoId ??
+        member?.dojoManager?.dojoId ??
+        null;
+    const memberOnboarded = member?.student?.onboardingComplete ?? (member?.roleId !== "STUDENT");
+
+    if (!member || memberDojoId !== session.dojo.id) {
         return { ok: false, error: "Member not found in your dojo." };
     }
-    if (member.onboardingComplete) {
+    if (memberOnboarded) {
         return {
             ok: false,
             error: "This member has already activated their account.",
@@ -146,7 +158,7 @@ export async function resendDojoInviteAction(
     const { error } = await admin.auth.admin.inviteUserByEmail(member.email, {
         redirectTo,
         data: {
-            role: member.role,
+            role: member.roleId,
             full_name: member.fullName,
             dojo_id: session.dojo.id,
             invited_by: session.userId,
@@ -173,19 +185,28 @@ export async function revokeDojoInviteAction(
     }
 
     const memberId = (formData.get("memberId") as string) ?? "";
-    const member = await prisma.member.findUnique({
+    const member = await prisma.user.findUnique({
         where: { id: memberId },
         select: {
             id: true,
-            dojoId: true,
-            onboardingComplete: true,
+            roleId: true,
+            student: { select: { dojoId: true, onboardingComplete: true } },
+            instructor: { select: { dojoId: true } },
+            dojoManager: { select: { dojoId: true } },
         },
     });
 
-    if (!member || member.dojoId !== session.dojo.id) {
+    const memberDojoId =
+        member?.student?.dojoId ??
+        member?.instructor?.dojoId ??
+        member?.dojoManager?.dojoId ??
+        null;
+    const memberOnboarded = member?.student?.onboardingComplete ?? (member?.roleId !== "STUDENT");
+
+    if (!member || memberDojoId !== session.dojo.id) {
         return { ok: false, error: "Member not found in your dojo." };
     }
-    if (member.onboardingComplete) {
+    if (memberOnboarded) {
         return {
             ok: false,
             error: "This member has already activated their account — remove them from the roster instead.",
@@ -194,7 +215,7 @@ export async function revokeDojoInviteAction(
 
     const admin = createAdminClient();
     await admin.auth.admin.deleteUser(memberId).catch(() => null);
-    await prisma.member.delete({ where: { id: memberId } });
+    await prisma.user.delete({ where: { id: memberId } });
 
     revalidatePath("/portal/dojo/students");
     return { ok: true };

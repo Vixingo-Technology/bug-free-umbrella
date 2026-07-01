@@ -28,20 +28,50 @@ export default async function OnboardingPage() {
     let alreadyComplete = false;
 
     try {
-        member = await prisma.member.findUnique({ where: { id: user.id } });
+        const u = await prisma.user.findUnique({
+            where: { id: user.id },
+            include: { student: true },
+        });
+        if (u) {
+            member = {
+                id: u.id,
+                fullName: u.fullName,
+                email: u.email,
+                phone: u.phone,
+                avatarUrl: u.avatarUrl,
+                role: u.roleId,
+                onboardingComplete: u.student?.onboardingComplete ?? false,
+                dojoId: u.student?.dojoId ?? null,
+                dateOfBirth: u.student?.dateOfBirth ?? null,
+                bloodGroup: u.student?.bloodGroup ?? null,
+                address: u.student?.address ?? null,
+                nationalId: u.student?.nationalId ?? null,
+                fatherName: u.student?.fatherName ?? null,
+                motherName: u.student?.motherName ?? null,
+                emergencyContactName: u.student?.emergencyContactName ?? null,
+                emergencyContactPhone: u.student?.emergencyContactPhone ?? null,
+            };
+        }
 
-        // Only skip onboarding when BOTH conditions are satisfied.
-        // If profile is incomplete, let the wizard handle it even for returning users.
-        alreadyComplete = !!(member?.onboardingComplete && isProfileComplete(member));
+        alreadyComplete = !!(member?.onboardingComplete && isProfileComplete({
+            phone: member?.phone ?? null,
+            dojoId: member?.dojoId ?? null,
+        }));
 
         if (!alreadyComplete) {
             dojos = await prisma.dojo.findMany({
                 where: { isActive: true },
                 orderBy: { name: "asc" },
-                select: { id: true, name: true, city: true },
+                select: {
+                    id: true,
+                    name: true,
+                    city: true,
+                    address: true,
+                    latitude: true,
+                    longitude: true,
+                },
             });
 
-            // Only load products for first-time flow (not profile-update mode).
             if (!member?.onboardingComplete) {
                 products = await prisma.shopProduct.findMany({
                     where: { isActive: true },
@@ -57,7 +87,10 @@ export default async function OnboardingPage() {
     if (alreadyComplete) redirect("/portal");
 
     // Profile-update mode: returning user with missing required fields.
-    const isProfileUpdateMode = !!(member?.onboardingComplete && !isProfileComplete(member));
+    const isProfileUpdateMode = !!(member?.onboardingComplete && !isProfileComplete({
+        phone: member?.phone ?? null,
+        dojoId: member?.dojoId ?? null,
+    }));
     const missingFields = getMissingFields(member);
 
     return (

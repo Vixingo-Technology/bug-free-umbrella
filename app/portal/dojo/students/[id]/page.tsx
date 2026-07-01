@@ -41,9 +41,10 @@ export default async function StudentDetailPage({
     const session = await requireDojoRole("INSTRUCTOR");
     if (!session.dojo) notFound();
 
-    const member = await prisma.member.findFirst({
+    const student = await prisma.student.findFirst({
         where: { id, dojoId: session.dojo.id },
         include: {
+            user: true,
             dojo: { select: { name: true } },
             gradings: {
                 orderBy: { createdAt: "desc" },
@@ -65,7 +66,17 @@ export default async function StudentDetailPage({
         },
     });
 
-    if (!member) notFound();
+    if (!student) notFound();
+
+    const member = {
+        ...student,
+        fullName: student.user.fullName,
+        email: student.user.email,
+        phone: student.user.phone,
+        avatarUrl: student.user.avatarUrl,
+        role: student.user.roleId,
+        isActive: student.user.isActive,
+    };
 
     const profile = serialize(member) as any;
 

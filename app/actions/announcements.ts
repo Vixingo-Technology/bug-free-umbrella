@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { createClient } from "@/lib/supabase/server";
 import { uploadAttachmentIfPresent } from "@/lib/attachment-upload";
+import { loadCurrentUser } from "@/lib/auth/load-current-user";
 
 type ActionResult = { ok: true; id?: string } | { ok: false; error: string };
 
@@ -21,21 +22,17 @@ async function requirePoster(): Promise<
     } = await supabase.auth.getUser();
     if (!user) return { ok: false, error: "Not signed in." };
 
-    const member = await prisma.member.findUnique({
-        where: { id: user.id },
-        select: { role: true, dojoId: true },
-    });
+    const current = await loadCurrentUser(user.id);
+    if (!current) return { ok: false, error: "Account not found." };
 
-    if (!member) return { ok: false, error: "Account not found." };
-
-    if (member.role === "ADMIN") {
+    if (current.role === "ADMIN") {
         return { ok: true, userId: user.id, role: "ADMIN", dojoId: null };
     }
-    if (member.role === "DOJO_OWNER") {
-        if (!member.dojoId) {
+    if (current.role === "DOJO_OWNER") {
+        if (!current.dojoId) {
             return { ok: false, error: "Your dojo is not yet approved." };
         }
-        return { ok: true, userId: user.id, role: "DOJO_OWNER", dojoId: member.dojoId };
+        return { ok: true, userId: user.id, role: "DOJO_OWNER", dojoId: current.dojoId };
     }
     return { ok: false, error: "Only admins and dojo owners can post." };
 }

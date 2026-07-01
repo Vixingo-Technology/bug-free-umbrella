@@ -1,11 +1,25 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import dynamic from "next/dynamic";
 import { motion } from "motion/react";
 import { User, Phone, MapPin, Heart, AlertCircle, ChevronRight, Users } from "lucide-react";
 import { saveProfileAction } from "@/app/portal/onboarding/actions";
 import { BLOOD_GROUPS } from "@/lib/constants";
 import AvatarUploader from "@/components/portal/avatar-uploader";
+
+// Leaflet pulls window/document, so it must render client-side only.
+const DojoMapPicker = dynamic(
+    () => import("@/components/portal/onboarding/dojo-map-picker"),
+    {
+        ssr: false,
+        loading: () => (
+            <div className="h-64 sm:h-80 bg-zinc-100 rounded-xl border border-zinc-200 flex items-center justify-center text-xs text-zinc-400">
+                Loading map…
+            </div>
+        ),
+    },
+);
 
 export interface ProfileData {
     fullName: string;
@@ -158,25 +172,36 @@ export default function StepProfile({
                     />
                 </Field>
 
-                {/* Dojo */}
+                {/* Dojo — map picker first, dropdown as a fallback for
+                    dojos without coordinates and for accessibility. */}
                 <Field label="Preferred Dojo *" icon={<MapPin size={15} />}>
-                    <select
-                        name="dojoId"
-                        value={value.dojoId}
-                        onChange={(e) => update("dojoId", e.target.value)}
-                        required
-                        disabled={dojos.length === 0}
-                        className={inputCls}
-                    >
-                        <option value="">
-                            {dojos.length === 0 ? "No dojos available yet" : "Select your nearest dojo"}
-                        </option>
-                        {dojos.map((d) => (
-                            <option key={d.id} value={d.id}>
-                                {d.name}{d.city ? ` — ${d.city}` : ""}
+                    <div className="space-y-3">
+                        <DojoMapPicker
+                            dojos={dojos}
+                            selectedId={value.dojoId}
+                            onSelect={(id) => update("dojoId", id)}
+                        />
+                        <select
+                            name="dojoId"
+                            value={value.dojoId}
+                            onChange={(e) => update("dojoId", e.target.value)}
+                            required
+                            disabled={dojos.length === 0}
+                            className={inputCls}
+                        >
+                            <option value="">
+                                {dojos.length === 0
+                                    ? "No dojos available yet"
+                                    : "…or pick from the list"}
                             </option>
-                        ))}
-                    </select>
+                            {dojos.map((d) => (
+                                <option key={d.id} value={d.id}>
+                                    {d.name}
+                                    {d.city ? ` — ${d.city}` : ""}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
                 </Field>
 
                 {/* Date of birth + Blood group */}

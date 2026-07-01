@@ -12,20 +12,20 @@ export async function requireAdmin(): Promise<{ userId: string }> {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) redirect("/login");
 
-    const member = await prisma.member.findUnique({
+    const u = await prisma.user.findUnique({
         where: { id: user.id },
-        select: { role: true },
+        select: { roleId: true },
     });
 
-    if (!member || member.role !== "ADMIN") redirect("/portal");
+    if (!u || u.roleId !== "ADMIN") redirect("/portal");
 
     return { userId: user.id };
 }
 
 export async function isAdmin(userId: string): Promise<boolean> {
-    const member = await prisma.member.findUnique({
+    const u = await prisma.user.findUnique({
         where: { id: userId },
-        select: { role: true },
+        select: { roleId: true },
     });
-    return member?.role === "ADMIN";
+    return u?.roleId === "ADMIN";
 }

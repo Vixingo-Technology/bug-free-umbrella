@@ -120,6 +120,92 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
   Serializable: 'Serializable'
 });
 
+exports.Prisma.RoleScalarFieldEnum = {
+  id: 'id',
+  displayName: 'displayName',
+  displayNameBn: 'displayNameBn',
+  description: 'description',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.PermissionScalarFieldEnum = {
+  id: 'id',
+  resource: 'resource',
+  action: 'action',
+  description: 'description',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.RolePermissionScalarFieldEnum = {
+  roleId: 'roleId',
+  permissionId: 'permissionId',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.UserScalarFieldEnum = {
+  id: 'id',
+  email: 'email',
+  phone: 'phone',
+  fullName: 'fullName',
+  avatarUrl: 'avatarUrl',
+  roleId: 'roleId',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.StudentScalarFieldEnum = {
+  id: 'id',
+  memberNumber: 'memberNumber',
+  currentRank: 'currentRank',
+  joinDate: 'joinDate',
+  expiryDate: 'expiryDate',
+  dojoId: 'dojoId',
+  onboardingComplete: 'onboardingComplete',
+  membershipStatus: 'membershipStatus',
+  dateOfBirth: 'dateOfBirth',
+  bloodGroup: 'bloodGroup',
+  address: 'address',
+  nationalId: 'nationalId',
+  fatherName: 'fatherName',
+  motherName: 'motherName',
+  emergencyContactName: 'emergencyContactName',
+  emergencyContactPhone: 'emergencyContactPhone',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.InstructorScalarFieldEnum = {
+  id: 'id',
+  dojoId: 'dojoId',
+  joinedDate: 'joinedDate',
+  bio: 'bio',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.DojoManagerScalarFieldEnum = {
+  id: 'id',
+  dojoId: 'dojoId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.DojoOwnerScalarFieldEnum = {
+  id: 'id',
+  dojoId: 'dojoId',
+  signatureUrl: 'signatureUrl',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.AdminScalarFieldEnum = {
+  id: 'id',
+  scope: 'scope',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.BeltRankScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -170,36 +256,9 @@ exports.Prisma.DojoApplicationScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
-exports.Prisma.MemberScalarFieldEnum = {
-  id: 'id',
-  fullName: 'fullName',
-  email: 'email',
-  phone: 'phone',
-  avatarUrl: 'avatarUrl',
-  role: 'role',
-  memberNumber: 'memberNumber',
-  currentRank: 'currentRank',
-  joinDate: 'joinDate',
-  expiryDate: 'expiryDate',
-  isActive: 'isActive',
-  dojoId: 'dojoId',
-  onboardingComplete: 'onboardingComplete',
-  membershipStatus: 'membershipStatus',
-  dateOfBirth: 'dateOfBirth',
-  bloodGroup: 'bloodGroup',
-  address: 'address',
-  nationalId: 'nationalId',
-  fatherName: 'fatherName',
-  motherName: 'motherName',
-  emergencyContactName: 'emergencyContactName',
-  emergencyContactPhone: 'emergencyContactPhone',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-};
-
 exports.Prisma.AttendanceScalarFieldEnum = {
   id: 'id',
-  memberId: 'memberId',
+  studentId: 'studentId',
   dojoId: 'dojoId',
   date: 'date',
   present: 'present',
@@ -224,7 +283,7 @@ exports.Prisma.GradingEventScalarFieldEnum = {
 
 exports.Prisma.GradingApplicationScalarFieldEnum = {
   id: 'id',
-  memberId: 'memberId',
+  studentId: 'studentId',
   gradingEventId: 'gradingEventId',
   targetRankId: 'targetRankId',
   status: 'status',
@@ -235,7 +294,7 @@ exports.Prisma.GradingApplicationScalarFieldEnum = {
 
 exports.Prisma.GradingScalarFieldEnum = {
   id: 'id',
-  memberId: 'memberId',
+  studentId: 'studentId',
   gradingEventId: 'gradingEventId',
   fromRankId: 'fromRankId',
   toRankId: 'toRankId',
@@ -249,7 +308,7 @@ exports.Prisma.GradingScalarFieldEnum = {
 exports.Prisma.CertificateRequestScalarFieldEnum = {
   id: 'id',
   gradingId: 'gradingId',
-  memberId: 'memberId',
+  studentId: 'studentId',
   dojoId: 'dojoId',
   orderId: 'orderId',
   status: 'status',
@@ -310,19 +369,19 @@ exports.Prisma.AnnouncementScalarFieldEnum = {
 exports.Prisma.EventRegistrationScalarFieldEnum = {
   id: 'id',
   eventId: 'eventId',
-  memberId: 'memberId',
+  userId: 'userId',
   guestName: 'guestName',
   guestEmail: 'guestEmail',
   guestPhone: 'guestPhone',
   qrToken: 'qrToken',
   checkedInAt: 'checkedInAt',
-  checkedInById: 'checkedInById',
+  checkedInByUserId: 'checkedInByUserId',
   createdAt: 'createdAt'
 };
 
 exports.Prisma.NotificationScalarFieldEnum = {
   id: 'id',
-  memberId: 'memberId',
+  userId: 'userId',
   title: 'title',
   message: 'message',
   type: 'type',
@@ -359,7 +418,7 @@ exports.Prisma.DojoSaleScalarFieldEnum = {
   id: 'id',
   dojoId: 'dojoId',
   receiptNo: 'receiptNo',
-  memberId: 'memberId',
+  buyerUserId: 'buyerUserId',
   buyerName: 'buyerName',
   soldByUserId: 'soldByUserId',
   soldByName: 'soldByName',
@@ -383,7 +442,7 @@ exports.Prisma.DojoSaleItemScalarFieldEnum = {
 
 exports.Prisma.ShopOrderScalarFieldEnum = {
   id: 'id',
-  memberId: 'memberId',
+  userId: 'userId',
   paymentStatus: 'paymentStatus',
   paymentMethod: 'paymentMethod',
   total: 'total',
@@ -422,7 +481,7 @@ exports.Prisma.TournamentScalarFieldEnum = {
 exports.Prisma.TournamentParticipantScalarFieldEnum = {
   id: 'id',
   tournamentId: 'tournamentId',
-  memberId: 'memberId',
+  userId: 'userId',
   category: 'category',
   weightClass: 'weightClass',
   createdAt: 'createdAt'
@@ -438,6 +497,33 @@ exports.Prisma.TournamentMatchScalarFieldEnum = {
   matchOrder: 'matchOrder',
   notes: 'notes',
   createdAt: 'createdAt'
+};
+
+exports.Prisma.AchievementScalarFieldEnum = {
+  id: 'id',
+  slug: 'slug',
+  name: 'name',
+  nameBn: 'nameBn',
+  description: 'description',
+  descriptionBn: 'descriptionBn',
+  icon: 'icon',
+  tier: 'tier',
+  rule: 'rule',
+  threshold: 'threshold',
+  orderIndex: 'orderIndex',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.StudentAchievementScalarFieldEnum = {
+  id: 'id',
+  studentId: 'studentId',
+  achievementId: 'achievementId',
+  unlockedAt: 'unlockedAt',
+  progress: 'progress',
+  awardedByUserId: 'awardedByUserId',
+  note: 'note'
 };
 
 exports.Prisma.SortOrder = {
@@ -469,26 +555,18 @@ exports.Prisma.JsonNullValueFilter = {
   JsonNull: Prisma.JsonNull,
   AnyNull: Prisma.AnyNull
 };
-exports.DojoApplicationStatus = exports.$Enums.DojoApplicationStatus = {
-  PENDING_PAYMENT: 'PENDING_PAYMENT',
-  PAID: 'PAID',
-  APPROVED: 'APPROVED',
-  REJECTED: 'REJECTED'
-};
-
-exports.MemberRole = exports.$Enums.MemberRole = {
-  STUDENT: 'STUDENT',
-  INSTRUCTOR: 'INSTRUCTOR',
-  DOJO_MANAGER: 'DOJO_MANAGER',
-  DOJO_OWNER: 'DOJO_OWNER',
-  ADMIN: 'ADMIN'
-};
-
 exports.MembershipStatus = exports.$Enums.MembershipStatus = {
   PENDING: 'PENDING',
   ACTIVE: 'ACTIVE',
   EXPIRED: 'EXPIRED',
   SUSPENDED: 'SUSPENDED'
+};
+
+exports.DojoApplicationStatus = exports.$Enums.DojoApplicationStatus = {
+  PENDING_PAYMENT: 'PENDING_PAYMENT',
+  PAID: 'PAID',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
 };
 
 exports.ApplicationStatus = exports.$Enums.ApplicationStatus = {
@@ -543,11 +621,37 @@ exports.PaymentStatus = exports.$Enums.PaymentStatus = {
   REFUNDED: 'REFUNDED'
 };
 
+exports.AchievementTier = exports.$Enums.AchievementTier = {
+  COMMON: 'COMMON',
+  RARE: 'RARE',
+  EPIC: 'EPIC',
+  LEGENDARY: 'LEGENDARY'
+};
+
+exports.AchievementRule = exports.$Enums.AchievementRule = {
+  MANUAL: 'MANUAL',
+  ATTENDANCE_COUNT: 'ATTENDANCE_COUNT',
+  CONSECUTIVE_ATTENDANCE: 'CONSECUTIVE_ATTENDANCE',
+  GRADINGS_PASSED: 'GRADINGS_PASSED',
+  EVENTS_ATTENDED: 'EVENTS_ATTENDED',
+  TOURNAMENTS_PARTICIPATED: 'TOURNAMENTS_PARTICIPATED',
+  TOURNAMENT_WINS: 'TOURNAMENT_WINS',
+  CERTIFICATES_EARNED: 'CERTIFICATES_EARNED'
+};
+
 exports.Prisma.ModelName = {
+  Role: 'Role',
+  Permission: 'Permission',
+  RolePermission: 'RolePermission',
+  User: 'User',
+  Student: 'Student',
+  Instructor: 'Instructor',
+  DojoManager: 'DojoManager',
+  DojoOwner: 'DojoOwner',
+  Admin: 'Admin',
   BeltRank: 'BeltRank',
   Dojo: 'Dojo',
   DojoApplication: 'DojoApplication',
-  Member: 'Member',
   Attendance: 'Attendance',
   GradingEvent: 'GradingEvent',
   GradingApplication: 'GradingApplication',
@@ -566,7 +670,9 @@ exports.Prisma.ModelName = {
   ShopOrderItem: 'ShopOrderItem',
   Tournament: 'Tournament',
   TournamentParticipant: 'TournamentParticipant',
-  TournamentMatch: 'TournamentMatch'
+  TournamentMatch: 'TournamentMatch',
+  Achievement: 'Achievement',
+  StudentAchievement: 'StudentAchievement'
 };
 
 /**

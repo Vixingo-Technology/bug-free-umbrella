@@ -13,9 +13,9 @@ export async function initiatePaymentAction(orderId: string) {
 
     try {
         const order = await prisma.shopOrder.findUnique({
-            where: { id: orderId, memberId: user.id },
+            where: { id: orderId, userId: user.id },
             include: {
-                member: true,
+                user: { include: { student: true } },
                 orderItems: { include: { product: true } },
             },
         });
@@ -48,10 +48,10 @@ export async function initiatePaymentAction(orderId: string) {
             fail_url: `${appUrl}/portal/checkout?orderId=${orderId}&failed=1`,
             cancel_url: `${appUrl}/portal/checkout?orderId=${orderId}`,
             ipn_url: `${appUrl}/api/webhooks/sslcommerz`,
-            cus_name: order.member.fullName,
-            cus_email: order.member.email,
-            cus_phone: order.member.phone ?? "01XXXXXXXXX",
-            cus_add1: order.member.address ?? "Bangladesh",
+            cus_name: order.user.fullName,
+            cus_email: order.user.email,
+            cus_phone: order.user.phone ?? "01XXXXXXXXX",
+            cus_add1: order.user.student?.address ?? "Bangladesh",
             cus_city: "Dhaka",
             cus_country: "Bangladesh",
             shipping_method: "NO",
@@ -89,7 +89,7 @@ export async function markOrderPaidAction(orderId: string) {
 
     try {
         const order = await prisma.shopOrder.findUnique({
-            where: { id: orderId, memberId: user.id },
+            where: { id: orderId, userId: user.id },
         });
         if (!order) return { error: "Order not found." };
 
@@ -101,7 +101,7 @@ export async function markOrderPaidAction(orderId: string) {
                 where: { id: orderId },
                 data: { paymentStatus: "PAID" },
             }),
-            prisma.member.update({
+            prisma.student.update({
                 where: { id: user.id },
                 data: {
                     membershipStatus: "ACTIVE",

@@ -25,6 +25,7 @@ import {
     ShieldCheck,
     Swords,
     Megaphone,
+    Trophy,
 } from "lucide-react";
 import Logo from "@/assets/jka_logo.svg";
 import { signoutAction } from "@/app/actions/auth";
@@ -43,6 +44,7 @@ const DOJO_ROLE_RANK: Record<DojoRole, number> = {
 const studentNavItems = [
     { label: "Dashboard",    href: "/portal",              icon: LayoutDashboard },
     { label: "My Progress",  href: "/portal/progress",     icon: TrendingUp },
+    { label: "Achievements", href: "/portal/achievements", icon: Trophy },
     { label: "Gradings",     href: "/portal/grading",      icon: Award },
     { label: "Certificates", href: "/portal/certificates", icon: FileText },
     { label: "Events",       href: "/portal/events",       icon: CalendarDays },

@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { prisma } from "@/lib/prisma";
 import { serialize } from "@/lib/serialize";
-import type { MemberRole } from "@/prisma/generated/client";
+import type { RoleId } from "@/lib/auth/load-current-user";
 import PortalDashboardClient from "@/components/portal/portal-dashboard-client";
 import AdminDashboardClient from "@/components/portal/admin/admin-dashboard-client";
 import DojoOverview from "@/components/portal/dojo-overview";
@@ -25,13 +25,13 @@ export default async function PortalDashboardPage({
     if (!user) redirect("/login");
 
     // Quick role lookup so we can render the right dashboard
-    let role: MemberRole = "STUDENT";
+    let role: RoleId = "STUDENT";
     try {
-        const m = await prisma.member.findUnique({
+        const u = await prisma.user.findUnique({
             where: { id: user.id },
-            select: { role: true },
+            select: { roleId: true },
         });
-        if (m?.role) role = m.role;
+        if (u?.roleId) role = u.roleId as RoleId;
     } catch {
         // DB not configured
     }
@@ -62,15 +62,16 @@ export default async function PortalDashboardPage({
 }
 
 async function StudentPortalDashboard({ userId }: { userId: string }) {
-    let member = null;
+    let member: any = null;
     let unreadNotifications = 0;
     let upcomingItems: any[] = [];
 
     try {
-        member = await prisma.member.findUnique({
+        const student = await prisma.student.findUnique({
             where: { id: userId },
             include: {
                 dojo: true,
+                user: true,
                 gradings: {
                     include: { fromRank: true, toRank: true },
                     orderBy: { createdAt: "desc" },
@@ -78,9 +79,21 @@ async function StudentPortalDashboard({ userId }: { userId: string }) {
                 },
             },
         });
+        // Flatten to the shape the existing client expects: user fields + student fields.
+        if (student) {
+            member = {
+                ...student,
+                fullName: student.user.fullName,
+                email: student.user.email,
+                phone: student.user.phone,
+                avatarUrl: student.user.avatarUrl,
+                role: student.user.roleId,
+                isActive: student.user.isActive,
+            };
+        }
 
         unreadNotifications = await prisma.notification.count({
-            where: { memberId: userId, isRead: false },
+            where: { userId, isRead: false },
         });
 
         const now = new Date();
@@ -93,7 +106,7 @@ async function StudentPortalDashboard({ userId }: { userId: string }) {
             }),
             prisma.gradingApplication.findMany({
                 where: {
-                    memberId: userId,
+                    studentId: userId,
                     status: "APPROVED",
                     gradingEvent: { eventDate: { gte: now } },
                 },
@@ -174,17 +187,17 @@ async function AdminPortalDashboard({ userId }: { userId: string }) {
         recentMembers,
         recentOrders,
     ] = await Promise.all([
-        prisma.member.findUnique({
+        prisma.user.findUnique({
             where: { id: userId },
             select: { fullName: true, email: true },
         }),
-        prisma.member.count(),
-        prisma.member.count({ where: { role: "STUDENT" } }),
-        prisma.member.count({ where: { role: "INSTRUCTOR" } }),
-        prisma.member.count({ where: { role: "ADMIN" } }),
-        prisma.member.count({ where: { membershipStatus: "PENDING" } }),
-        prisma.member.count({ where: { membershipStatus: "SUSPENDED" } }),
-        prisma.member.count({ where: { createdAt: { gte: since30 } } }),
+        prisma.user.count(),
+        prisma.user.count({ where: { roleId: "STUDENT" } }),
+        prisma.user.count({ where: { roleId: "INSTRUCTOR" } }),
+        prisma.user.count({ where: { roleId: "ADMIN" } }),
+        prisma.student.count({ where: { membershipStatus: "PENDING" } }),
+        prisma.student.count({ where: { membershipStatus: "SUSPENDED" } }),
+        prisma.user.count({ where: { createdAt: { gte: since30 } } }),
         prisma.dojo.count(),
         prisma.dojo.count({ where: { isActive: true } }),
         prisma.shopProduct.count(),
@@ -195,23 +208,33 @@ async function AdminPortalDashboard({ userId }: { userId: string }) {
             where: { paymentStatus: "PAID" },
             _sum: { total: true },
         }),
-        prisma.member.findMany({
+        prisma.user.findMany({
             orderBy: { createdAt: "desc" },
             take: 5,
             select: {
-                id: true, fullName: true, email: true, role: true,
-                membershipStatus: true, createdAt: true,
-                dojo: { select: { name: true } },
+                id: true, fullName: true, email: true, roleId: true, createdAt: true,
+                student: { select: { membershipStatus: true, dojo: { select: { name: true } } } },
             },
-        }),
+        }).then((rows) => rows.map((r) => ({
+            id: r.id,
+            fullName: r.fullName,
+            email: r.email,
+            role: r.roleId,
+            createdAt: r.createdAt,
+            membershipStatus: r.student?.membershipStatus ?? null,
+            dojo: r.student?.dojo ?? null,
+        }))),
         prisma.shopOrder.findMany({
             orderBy: { createdAt: "desc" },
             take: 5,
             select: {
                 id: true, paymentStatus: true, total: true, createdAt: true,
-                member: { select: { fullName: true, email: true } },
+                user: { select: { fullName: true, email: true } },
             },
-        }),
+        }).then((rows) => rows.map((o) => ({
+            ...o,
+            member: o.user,
+        }))),
     ]);
 
     const stats = {

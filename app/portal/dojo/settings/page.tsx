@@ -21,21 +21,29 @@ export default async function SettingsPage() {
           })
         : null;
 
-    const staff = dojoBase
-        ? await prisma.member.findMany({
-              where: {
-                  dojoId: dojoBase.id,
-                  role: { in: ["INSTRUCTOR", "DOJO_MANAGER", "DOJO_OWNER"] },
-              },
-              select: {
-                  id: true,
-                  fullName: true,
-                  currentRank: true,
-                  role: true,
-              },
-              orderBy: { fullName: "asc" },
-          })
-        : [];
+    type StaffRow = { id: string; fullName: string; currentRank: string; role: "INSTRUCTOR" | "DOJO_MANAGER" | "DOJO_OWNER" };
+    let staff: StaffRow[] = [];
+    if (dojoBase) {
+        const [instructors, managers, owner] = await Promise.all([
+            prisma.instructor.findMany({
+                where: { dojoId: dojoBase.id },
+                include: { user: { select: { fullName: true, student: { select: { currentRank: true } } } } },
+            }),
+            prisma.dojoManager.findMany({
+                where: { dojoId: dojoBase.id },
+                include: { user: { select: { fullName: true, student: { select: { currentRank: true } } } } },
+            }),
+            prisma.dojoOwner.findUnique({
+                where: { dojoId: dojoBase.id },
+                include: { user: { select: { fullName: true, student: { select: { currentRank: true } } } } },
+            }),
+        ]);
+        staff = [
+            ...(owner ? [{ id: owner.id, fullName: owner.user.fullName, currentRank: owner.user.student?.currentRank ?? "—", role: "DOJO_OWNER" as const }] : []),
+            ...managers.map((m) => ({ id: m.id, fullName: m.user.fullName, currentRank: m.user.student?.currentRank ?? "—", role: "DOJO_MANAGER" as const })),
+            ...instructors.map((i) => ({ id: i.id, fullName: i.user.fullName, currentRank: i.user.student?.currentRank ?? "—", role: "INSTRUCTOR" as const })),
+        ];
+    }
 
     const head = staff.find((m) => m.role === "DOJO_OWNER") ?? null;
     const dojo = dojoBase
@@ -49,7 +57,7 @@ export default async function SettingsPage() {
         : null;
 
     const memberCount = dojo
-        ? await prisma.member.count({ where: { dojoId: dojo.id } })
+        ? await prisma.student.count({ where: { dojoId: dojo.id } })
         : null;
 
     return (

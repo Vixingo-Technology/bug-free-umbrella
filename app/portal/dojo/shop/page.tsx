@@ -52,20 +52,27 @@ export default async function ShopPage() {
                 },
             },
         }),
-        prisma.member.findMany({
-            where: { dojoId, isActive: true, id: { not: session.userId } },
-            select: { id: true, fullName: true, currentRank: true, memberNumber: true },
-            orderBy: { fullName: "asc" },
-        }),
+        prisma.student.findMany({
+            where: { dojoId, user: { isActive: true }, id: { not: session.userId } },
+            include: { user: { select: { fullName: true } } },
+        }).then((rows) => rows.map((s) => ({
+            id: s.id,
+            fullName: s.user.fullName,
+            currentRank: s.currentRank,
+            memberNumber: s.memberNumber,
+        }))),
         prisma.dojoSale.findMany({
             where: { dojoId },
             orderBy: { createdAt: "desc" },
             take: 25,
             include: {
                 items: { select: { id: true, productName: true, quantity: true } },
-                member: { select: { id: true, fullName: true } },
+                buyer: { select: { id: true, fullName: true } },
             },
-        }),
+        }).then((rows) => rows.map((s) => ({
+            ...s,
+            member: s.buyer,
+        }))),
     ]);
 
     return (

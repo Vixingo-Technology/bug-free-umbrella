@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { prisma } from "@/lib/prisma";
 import { uploadToCloudinary, CLOUDINARY_FOLDERS } from "@/lib/cloudinary";
+import { provisionMemberFromSupabaseUser } from "@/lib/auth/provision-member";
 
 const MAX_BYTES = 5 * 1024 * 1024; // 5 MB
 const ALLOWED = new Set(["image/jpeg", "image/png", "image/webp", "image/heic"]);
@@ -41,7 +42,18 @@ export async function uploadAvatarAction(
             resourceType: "image",
         });
 
-        await prisma.member.update({
+        // Ensure a users row exists before updating — onboarding uploads
+        // can arrive before provisionMemberFromSupabaseUser has been called
+        // (e.g. legacy auth users, or a signup path that skipped OTP verify).
+        const existing = await prisma.user.findUnique({
+            where: { id: user.id },
+            select: { id: true },
+        });
+        if (!existing) {
+            await provisionMemberFromSupabaseUser(user);
+        }
+
+        await prisma.user.update({
             where: { id: user.id },
             data: { avatarUrl: url },
         });

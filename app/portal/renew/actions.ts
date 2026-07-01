@@ -19,7 +19,7 @@ export async function createRenewalOrderAction() {
         // Delete any previous pending renewal orders to avoid duplicates
         await prisma.shopOrder.deleteMany({
             where: {
-                memberId: user.id,
+                userId: user.id,
                 paymentStatus: "PENDING",
                 includesMembership: true,
             },
@@ -27,7 +27,7 @@ export async function createRenewalOrderAction() {
 
         const order = await prisma.shopOrder.create({
             data: {
-                memberId: user.id,
+                userId: user.id,
                 total: MEMBERSHIP_FEE_BDT,
                 membershipFee: MEMBERSHIP_FEE_BDT,
                 includesMembership: true,

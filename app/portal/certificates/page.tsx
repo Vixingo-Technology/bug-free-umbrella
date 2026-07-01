@@ -13,10 +13,20 @@ export default async function CertificatesPage() {
     let member = null;
 
     try {
-        member = await prisma.member.findUnique({ where: { id: user.id } });
+        const u = await prisma.user.findUnique({
+            where: { id: user.id },
+            include: { student: true },
+        });
+        if (u) {
+            member = {
+                ...u,
+                ...(u.student ?? {}),
+                role: u.roleId,
+            };
+        }
 
         gradings = await prisma.grading.findMany({
-            where: { memberId: user.id, result: "PASSED" },
+            where: { studentId: user.id, result: "PASSED" },
             include: {
                 fromRank: true,
                 toRank: true,

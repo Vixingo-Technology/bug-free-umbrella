@@ -170,18 +170,18 @@ export async function recordSaleAction(
     if (items.length === 0) return { ok: false, error: "Add at least one item." };
 
     let buyerName: string;
-    let memberId: string | null = null;
+    let buyerUserId: string | null = null;
     if (input.memberId) {
-        const m = await prisma.member.findUnique({
+        const s = await prisma.student.findUnique({
             where: { id: input.memberId },
-            select: { id: true, fullName: true, dojoId: true },
+            select: { id: true, dojoId: true, user: { select: { fullName: true } } },
         });
-        if (!m) return { ok: false, error: "Member not found." };
-        if (m.dojoId !== session.dojo.id) {
+        if (!s) return { ok: false, error: "Member not found." };
+        if (s.dojoId !== session.dojo.id) {
             return { ok: false, error: "Member is not enrolled at this dojo." };
         }
-        memberId = m.id;
-        buyerName = m.fullName;
+        buyerUserId = s.id;
+        buyerName = s.user.fullName;
     } else {
         buyerName = (input.guestName ?? "").trim();
         if (!buyerName) return { ok: false, error: "Pick a member or enter a buyer name." };
@@ -251,7 +251,7 @@ export async function recordSaleAction(
                 data: {
                     dojoId: session.dojo!.id,
                     receiptNo,
-                    memberId,
+                    buyerUserId,
                     buyerName,
                     soldByUserId: session.userId,
                     soldByName: session.fullName,

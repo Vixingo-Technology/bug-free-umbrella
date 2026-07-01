@@ -19,27 +19,39 @@ export type DojoMembership = {
 };
 
 /**
- * Resolve the dojo a member belongs to and their role inside it.
+ * Resolve the dojo a user belongs to and their role inside it.
  *
- * With the unified role system this is a single row read: members.role
- * tells us the dojo-scoped role (INSTRUCTOR / DOJO_MANAGER / DOJO_OWNER)
- * and members.dojoId tells us which dojo.
+ * Reads users.role_id, then the matching role-table for dojo_id.
  */
 export async function getCurrentDojoForUser(
     userId: string
 ): Promise<DojoMembership | null> {
-    const member = await prisma.member.findUnique({
+    const u = await prisma.user.findUnique({
         where: { id: userId },
-        select: {
-            role: true,
-            dojo: { select: dojoSelect() },
-        },
+        select: { roleId: true },
     });
+    if (!u || !isDojoRole(u.roleId)) return null;
 
-    if (!member || !member.dojo) return null;
-    if (!isDojoRole(member.role)) return null;
+    let dojoId: string | null = null;
+    if (u.roleId === "INSTRUCTOR") {
+        const row = await prisma.instructor.findUnique({ where: { id: userId }, select: { dojoId: true } });
+        dojoId = row?.dojoId ?? null;
+    } else if (u.roleId === "DOJO_MANAGER") {
+        const row = await prisma.dojoManager.findUnique({ where: { id: userId }, select: { dojoId: true } });
+        dojoId = row?.dojoId ?? null;
+    } else if (u.roleId === "DOJO_OWNER") {
+        const row = await prisma.dojoOwner.findUnique({ where: { id: userId }, select: { dojoId: true } });
+        dojoId = row?.dojoId ?? null;
+    }
+    if (!dojoId) return null;
 
-    return { dojo: member.dojo, role: member.role };
+    const dojo = await prisma.dojo.findUnique({
+        where: { id: dojoId },
+        select: dojoSelect(),
+    });
+    if (!dojo) return null;
+
+    return { dojo, role: u.roleId };
 }
 
 function dojoSelect() {

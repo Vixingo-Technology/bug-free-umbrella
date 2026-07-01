@@ -55,13 +55,13 @@ export async function generateCertificatePdf(
     const req = await prisma.certificateRequest.findUnique({
         where: { id: input.certificateRequestId },
         include: {
-            member: {
+            student: {
                 select: {
                     id: true,
-                    fullName: true,
                     memberNumber: true,
                     fatherName: true,
                     motherName: true,
+                    user: { select: { fullName: true } },
                 },
             },
             dojo: {
@@ -124,7 +124,7 @@ export async function generateCertificatePdf(
             }),
             prisma.notification.create({
                 data: {
-                    memberId: req.memberId,
+                    userId: req.studentId,
                     title: "Your certificate is ready",
                     message: `Your ${req.rankName} certificate has been issued. View or download it from your portal.`,
                     type: "CERTIFICATE",

@@ -10,7 +10,7 @@ export async function markNotificationReadAction(notificationId: string) {
     if (!user) return { error: "Not authenticated." };
 
     await prisma.notification.updateMany({
-        where: { id: notificationId, memberId: user.id },
+        where: { id: notificationId, userId: user.id },
         data: { isRead: true },
     });
 
@@ -24,7 +24,7 @@ export async function markAllReadAction() {
     if (!user) return { error: "Not authenticated." };
 
     await prisma.notification.updateMany({
-        where: { memberId: user.id, isRead: false },
+        where: { userId: user.id, isRead: false },
         data: { isRead: true },
     });
 

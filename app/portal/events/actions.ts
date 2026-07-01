@@ -21,7 +21,7 @@ export async function registerForEventAction(eventId: string) {
 
     try {
         const existing = await prisma.eventRegistration.findFirst({
-            where: { eventId, memberId: user.id },
+            where: { eventId, userId: user.id },
         });
         if (existing) return { error: "You are already registered for this event." };
 
@@ -33,7 +33,7 @@ export async function registerForEventAction(eventId: string) {
         }
 
         await prisma.eventRegistration.create({
-            data: { eventId, memberId: user.id, qrToken: urlSafeToken() },
+            data: { eventId, userId: user.id, qrToken: urlSafeToken() },
         });
 
         if (event) {
@@ -60,7 +60,7 @@ export async function cancelEventRegistrationAction(eventId: string) {
 
     try {
         await prisma.eventRegistration.deleteMany({
-            where: { eventId, memberId: user.id },
+            where: { eventId, userId: user.id },
         });
         revalidatePath("/portal/events");
         return { success: true };
