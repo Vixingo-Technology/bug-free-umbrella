@@ -15,10 +15,33 @@ const statusColors: Record<string, string> = {
     REFUNDED: "bg-zinc-100 text-zinc-500 border-zinc-200",
 };
 
+function membershipLine(order: any): { label: string; amount: number } | null {
+    if (order.includesMembership) {
+        return { label: "Membership Renewal (1 year)", amount: Number(order.membershipFee ?? order.total) };
+    }
+    if (order.includesDojoRenewal) {
+        return { label: "Dojo Federation Renewal", amount: Number(order.membershipFee ?? order.total) };
+    }
+    if (order.includesCertificates) {
+        return { label: order.notes ?? "Certificate Request", amount: Number(order.total) };
+    }
+    return null;
+}
+
+function orderLabel(order: any, hasOrderItems: boolean): string {
+    if (!hasOrderItems) {
+        if (order.includesMembership) return "Membership Renewal";
+        if (order.includesDojoRenewal) return "Dojo Federation Renewal";
+        if (order.includesCertificates) return "Certificate Request";
+    }
+    return `Order #${order.id.slice(0, 8).toUpperCase()}`;
+}
+
 function OrderRow({ order }: { order: any }) {
     const [expanded, setExpanded] = useState(false);
     const statusCls = statusColors[order.paymentStatus] ?? statusColors.PENDING;
-    const itemCount = order.orderItems?.length ?? 0;
+    const hasOrderItems = order.orderItems && order.orderItems.length > 0;
+    const feeLine = membershipLine(order);
 
     return (
         <motion.div
@@ -37,7 +60,7 @@ function OrderRow({ order }: { order: any }) {
                     </div>
                     <div>
                         <p className="text-sm font-bold text-zinc-900">
-                            Order #{order.id.slice(0, 8).toUpperCase()}
+                            {orderLabel(order, hasOrderItems)}
                         </p>
                         <p className="text-xs text-zinc-500 mt-0.5">
                             {new Date(order.createdAt).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}
@@ -52,7 +75,7 @@ function OrderRow({ order }: { order: any }) {
                     </span>
                     <div className="flex items-center gap-1 text-zinc-900 font-bold text-sm">
                         <CreditCard size={14} className="text-zinc-400" />
-                        ৳{Number(order.totalBdt).toLocaleString()}
+                        ৳{Number(order.total).toLocaleString()}
                     </div>
                     {expanded ? <ChevronUp size={16} className="text-zinc-400" /> : <ChevronDown size={16} className="text-zinc-400" />}
                 </div>
@@ -68,41 +91,56 @@ function OrderRow({ order }: { order: any }) {
                         className="overflow-hidden border-t border-zinc-100"
                     >
                         <div className="p-5 space-y-2">
-                            <p className="text-xs font-bold tracking-widest uppercase text-zinc-400 mb-3">
-                                Order Items ({itemCount})
-                            </p>
-                            {order.orderItems && order.orderItems.length > 0 ? (
-                                order.orderItems.map((item: any) => (
-                                    <div key={item.id} className="flex items-center justify-between py-2.5 border-b border-zinc-50 last:border-0">
-                                        <div className="flex items-center gap-3 min-w-0">
-                                            <div className="p-1.5 bg-zinc-100 rounded-lg flex-shrink-0">
-                                                <Package size={14} className="text-zinc-500" />
-                                            </div>
-                                            <div className="min-w-0">
-                                                <p className="text-sm font-medium text-zinc-900 truncate">
-                                                    {item.product?.nameEn ?? "Product"}
-                                                </p>
-                                                <p className="text-xs text-zinc-500">
-                                                    Qty: {item.quantity} × ৳{Number(item.unitPrice).toLocaleString()}
-                                                </p>
-                                            </div>
+                            {feeLine && (
+                                <div className="flex items-center justify-between py-2.5 border-b border-zinc-100">
+                                    <div className="flex items-center gap-3 min-w-0">
+                                        <div className="p-1.5 bg-zinc-100 rounded-lg flex-shrink-0">
+                                            <CreditCard size={14} className="text-zinc-500" />
                                         </div>
-                                        <p className="text-sm font-bold text-zinc-900 flex-shrink-0">
-                                            ৳{(item.quantity * Number(item.unitPrice)).toLocaleString()}
-                                        </p>
+                                        <p className="text-sm font-medium text-zinc-900 truncate">{feeLine.label}</p>
                                     </div>
-                                ))
-                            ) : (
-                                // Fallback: show itemsJson
-                                <div className="text-xs text-zinc-500 bg-zinc-50 rounded-xl p-3 font-mono">
-                                    {JSON.stringify(order.itemsJson, null, 2)}
+                                    <p className="text-sm font-bold text-zinc-900 flex-shrink-0">
+                                        ৳{feeLine.amount.toLocaleString()}
+                                    </p>
                                 </div>
+                            )}
+
+                            {hasOrderItems && (
+                                <>
+                                    <p className="text-xs font-bold tracking-widest uppercase text-zinc-400 mb-3 mt-1">
+                                        Order Items ({order.orderItems.length})
+                                    </p>
+                                    {order.orderItems.map((item: any) => (
+                                        <div key={item.id} className="flex items-center justify-between py-2.5 border-b border-zinc-50 last:border-0">
+                                            <div className="flex items-center gap-3 min-w-0">
+                                                <div className="p-1.5 bg-zinc-100 rounded-lg flex-shrink-0">
+                                                    <Package size={14} className="text-zinc-500" />
+                                                </div>
+                                                <div className="min-w-0">
+                                                    <p className="text-sm font-medium text-zinc-900 truncate">
+                                                        {item.product?.nameEn ?? "Product"}
+                                                    </p>
+                                                    <p className="text-xs text-zinc-500">
+                                                        Qty: {item.quantity} × ৳{Number(item.unitPrice).toLocaleString()}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <p className="text-sm font-bold text-zinc-900 flex-shrink-0">
+                                                ৳{(item.quantity * Number(item.unitPrice)).toLocaleString()}
+                                            </p>
+                                        </div>
+                                    ))}
+                                </>
+                            )}
+
+                            {!hasOrderItems && !feeLine && (
+                                <p className="text-xs text-zinc-500">{order.notes ?? "No item details available."}</p>
                             )}
 
                             {/* Order total */}
                             <div className="flex items-center justify-between pt-3 border-t border-zinc-100">
                                 <p className="text-xs font-bold text-zinc-500 tracking-widest uppercase">Total</p>
-                                <p className="text-base font-bold text-zinc-900">৳{Number(order.totalBdt).toLocaleString()}</p>
+                                <p className="text-base font-bold text-zinc-900">৳{Number(order.total).toLocaleString()}</p>
                             </div>
 
                             {order.shippingAddress && (
@@ -122,7 +160,7 @@ function OrderRow({ order }: { order: any }) {
 export default function OrdersClient({ orders }: Props) {
     const totalSpent = orders
         .filter((o: any) => o.paymentStatus === "PAID")
-        .reduce((sum: number, o: any) => sum + Number(o.totalBdt), 0);
+        .reduce((sum: number, o: any) => sum + Number(o.total), 0);
 
     return (
         <div className="space-y-6 max-w-3xl">
