@@ -8,6 +8,7 @@ import AdminDashboardClient from "@/components/portal/admin/admin-dashboard-clie
 import DojoOverview from "@/components/portal/dojo-overview";
 import { getDojoSession } from "@/lib/dojo-session";
 import { isDojoRole } from "@/lib/dojo-roles";
+import { ACHIEVEMENT_CATALOG } from "@/lib/achievements/catalog";
 
 type SearchParams = Promise<{
     enlistment?: string;
@@ -65,6 +66,8 @@ async function StudentPortalDashboard({ userId }: { userId: string }) {
     let member: any = null;
     let unreadNotifications = 0;
     let upcomingItems: any[] = [];
+    let achievements: any[] = [];
+    let achievementsSummary = { unlocked: 0, total: ACHIEVEMENT_CATALOG.length, pct: 0 };
 
     try {
         const student = await prisma.student.findUnique({
@@ -136,6 +139,34 @@ async function StudentPortalDashboard({ userId }: { userId: string }) {
         upcomingItems = [...eventItems, ...gradingItems]
             .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
             .slice(0, 5);
+
+        // Achievements — read already-unlocked rows only (evaluation runs on
+        // the /portal/achievements page). Build a Steam-style summary panel.
+        const unlockedRows = await prisma.studentAchievement.findMany({
+            where: { studentId: userId },
+            select: { unlockedAt: true, achievement: { select: { slug: true } } },
+        });
+        const unlockedBySlug = new Map(
+            unlockedRows.map((u: any) => [u.achievement.slug, u.unlockedAt]),
+        );
+        achievements = [...ACHIEVEMENT_CATALOG]
+            .sort((a, b) => a.orderIndex - b.orderIndex)
+            .map((a) => ({
+                slug: a.slug,
+                name: a.name,
+                description: a.description,
+                icon: a.icon,
+                tier: a.tier,
+                unlocked: unlockedBySlug.has(a.slug),
+                unlockedAt: unlockedBySlug.get(a.slug) ?? null,
+            }));
+        const total = ACHIEVEMENT_CATALOG.length;
+        const unlockedCount = unlockedRows.length;
+        achievementsSummary = {
+            unlocked: unlockedCount,
+            total,
+            pct: total > 0 ? Math.round((unlockedCount / total) * 100) : 0,
+        };
     } catch {
         // DB not configured yet
     }
@@ -159,6 +190,8 @@ async function StudentPortalDashboard({ userId }: { userId: string }) {
             membershipStatus={membershipStatus}
             unreadNotifications={unreadNotifications}
             upcomingItems={serialize(upcomingItems)}
+            achievements={serialize(achievements)}
+            achievementsSummary={achievementsSummary}
             userId={userId}
         />
     );

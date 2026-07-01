@@ -20,6 +20,7 @@ import {
 import TiltCard from "./tilt-card";
 import DigitalCard from "./digital-card";
 import MembershipCardDialog from "./membership-card-dialog";
+import AchievementsPanel, { type AchievementItem } from "./achievements-panel";
 
 type UpcomingItem =
     | { kind: "event";   id: string; title: string;      date: string; location: string | null }
@@ -30,6 +31,8 @@ interface Props {
     membershipStatus: "Active" | "Expired" | "Expiring Soon" | "Pending";
     unreadNotifications: number;
     upcomingItems: UpcomingItem[];
+    achievements: AchievementItem[];
+    achievementsSummary: { unlocked: number; total: number; pct: number };
     userId: string;
 }
 
@@ -62,8 +65,7 @@ function StatCard({ icon: Icon, label, value, sub, href, delay, accentClass }: {
     );
 }
 
-export default function PortalDashboardClient({ member, membershipStatus, unreadNotifications, upcomingItems }: Props) {
-    const gradings = member?.gradings ?? [];
+export default function PortalDashboardClient({ member, membershipStatus, unreadNotifications, upcomingItems, achievements, achievementsSummary }: Props) {
     const dojo = member?.dojo;
     const statusCfg = statusConfig[membershipStatus];
     const StatusIcon = statusCfg.icon;
@@ -170,63 +172,15 @@ export default function PortalDashboardClient({ member, membershipStatus, unread
                     </motion.div>
                 </div>
 
-                {/* Recent Gradings */}
+                {/* Achievements — Steam-style progress + badges */}
                 <div className="lg:col-span-3">
                     <TiltCard delay={0.25} className="p-6">
-                        <div className="flex flex-col h-full">
-                            <div className="flex items-center justify-between mb-4">
-                                <h2 className="text-sm font-bold text-zinc-900 flex items-center gap-2">
-                                    <Award size={16} className="text-amber-500" />
-                                    Recent Gradings
-                                </h2>
-                                <Link href="/portal/grading" className="text-xs text-accent-red font-semibold hover:text-accent-gold transition-colors flex items-center gap-1">
-                                    View All <ChevronRight size={12} />
-                                </Link>
-                            </div>
-
-                            {gradings.length > 0 ? (
-                                <div className="space-y-2">
-                                    {gradings.map((g: any, i: number) => (
-                                        <div key={g.id ?? i} className="flex items-center justify-between p-3 rounded-xl bg-zinc-50/70 backdrop-blur-sm hover:bg-zinc-100/80 transition-colors">
-                                            <div className="flex items-center gap-2.5">
-                                                {g.result === "PASSED" ? (
-                                                    <CheckCircle2 size={16} className="text-emerald-500 flex-shrink-0" />
-                                                ) : g.result === "FAILED" ? (
-                                                    <XCircle size={16} className="text-red-500 flex-shrink-0" />
-                                                ) : (
-                                                    <Clock size={16} className="text-amber-500 flex-shrink-0" />
-                                                )}
-                                                <div className="min-w-0">
-                                                    <p className="text-sm font-medium text-zinc-900 truncate">
-                                                        {g.fromRank?.nameEn ?? "—"} → {g.toRank?.nameEn ?? "—"}
-                                                    </p>
-                                                    {g.gradedAt && (
-                                                        <p className="text-xs text-zinc-500">
-                                                            {new Date(g.gradedAt).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })}
-                                                        </p>
-                                                    )}
-                                                </div>
-                                            </div>
-                                            <span className={`text-[10px] font-bold tracking-widest uppercase px-2 py-1 rounded-full flex-shrink-0 ${
-                                                g.result === "PASSED" ? "bg-emerald-50 text-emerald-600" :
-                                                g.result === "FAILED" ? "bg-red-50 text-red-600" :
-                                                "bg-amber-50 text-amber-600"
-                                            }`}>
-                                                {g.result ?? "PENDING"}
-                                            </span>
-                                        </div>
-                                    ))}
-                                </div>
-                            ) : (
-                                <div className="flex-1 flex flex-col items-center justify-center py-8 text-center">
-                                    <Award size={30} className="text-zinc-200 mb-2" />
-                                    <p className="text-zinc-500 text-sm">No gradings yet.</p>
-                                    <Link href="/portal/grading" className="text-xs text-accent-red font-semibold mt-2 hover:text-accent-gold transition-colors">
-                                        Apply for grading →
-                                    </Link>
-                                </div>
-                            )}
-                        </div>
+                        <AchievementsPanel
+                            achievements={achievements}
+                            unlocked={achievementsSummary.unlocked}
+                            total={achievementsSummary.total}
+                            pct={achievementsSummary.pct}
+                        />
                     </TiltCard>
                 </div>
             </div>
