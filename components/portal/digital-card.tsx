@@ -26,6 +26,7 @@ const beltColors: Record<string, string> = {
     "Orange Belt": "#FF8C00",
     "Green Belt": "#228B22",
     "Blue Belt": "#0000CD",
+    "Purple Belt": "#7C3AED",
     "Brown Belt": "#8B4513",
     "Black Belt": "#1a1a1a",
 };

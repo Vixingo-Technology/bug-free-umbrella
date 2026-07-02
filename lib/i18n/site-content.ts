@@ -144,11 +144,18 @@ export const siteContent = {
                 border: "border-green-700",
             },
             {
-                desktopLabel: "5th - 4th Kyu",
+                desktopLabel: "5th Kyu",
                 mobileLabel: "Blue Belt",
                 color: "blue",
                 bg: "bg-blue-600",
                 border: "border-blue-700",
+            },
+            {
+                desktopLabel: "4th Kyu",
+                mobileLabel: "Purple Belt",
+                color: "purple",
+                bg: "bg-purple-600",
+                border: "border-purple-700",
             },
             {
                 desktopLabel: "3rd - 1st Kyu",

@@ -29,6 +29,7 @@ const beltBg: Record<string, string> = {
     "Orange Belt": "bg-orange-500",
     "Green Belt":  "bg-green-600",
     "Blue Belt":   "bg-blue-600",
+    "Purple Belt": "bg-purple-600",
     "Brown Belt":  "bg-amber-800",
     "Black Belt":  "bg-zinc-950",
 };

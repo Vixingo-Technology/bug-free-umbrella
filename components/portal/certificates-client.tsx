@@ -15,6 +15,7 @@ const beltGradient: Record<string, string> = {
     "Orange Belt": "from-orange-400 to-orange-500",
     "Green Belt":  "from-green-500 to-green-600",
     "Blue Belt":   "from-blue-500 to-blue-600",
+    "Purple Belt": "from-purple-500 to-purple-600",
     "Brown Belt":  "from-amber-700 to-amber-800",
     "Black Belt":  "from-zinc-800 to-zinc-950",
 };
@@ -25,6 +26,7 @@ const beltTextColor: Record<string, string> = {
     "Orange Belt": "text-white",
     "Green Belt":  "text-white",
     "Blue Belt":   "text-white",
+    "Purple Belt": "text-white",
     "Brown Belt":  "text-white",
     "Black Belt":  "text-white",
 };
