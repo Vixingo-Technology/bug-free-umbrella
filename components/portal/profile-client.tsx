@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import TiltCard from "@/components/portal/tilt-card";
 import AvatarUploader from "@/components/portal/avatar-uploader";
@@ -8,6 +8,7 @@ import {
     User, Phone, Mail, MapPin, Shield, Loader2,
     CheckCircle2, AlertCircle, Key, Calendar, Award,
     Droplets, CreditCard, HeartPulse, FileText,
+    Copy, ExternalLink, Share2,
 } from "lucide-react";
 import { updateProfileAction, changePasswordAction } from "@/app/portal/profile/actions";
 import { BLOOD_GROUPS } from "@/lib/constants";
@@ -84,6 +85,24 @@ export default function ProfileClient({ member, dojos, userId }: Props) {
     const [confirmPassword, setConfirmPassword] = useState("");
     const [passwordMsg, setPasswordMsg] = useState<{ type: "success" | "error"; message: string } | null>(null);
     const [isPasswordPending, startPasswordTransition] = useTransition();
+
+    /* ── Public share link ───────────────────────────────────────────────── */
+    const [copied, setCopied] = useState(false);
+    const publicProfilePath = `/members/${userId}`;
+    const [publicProfileUrl, setPublicProfileUrl] = useState(publicProfilePath);
+    useEffect(() => {
+        setPublicProfileUrl(`${window.location.origin}${publicProfilePath}`);
+    }, [publicProfilePath]);
+
+    async function copyShareLink() {
+        try {
+            await navigator.clipboard.writeText(publicProfileUrl);
+            setCopied(true);
+            setTimeout(() => setCopied(false), 2000);
+        } catch {
+            // clipboard blocked — no-op
+        }
+    }
 
     /* ── Derived display values ──────────────────────────────────────────── */
     const expiryDate = member?.expiryDate
@@ -184,6 +203,50 @@ export default function ProfileClient({ member, dojos, userId }: Props) {
                             <p className="text-sm font-semibold text-zinc-700 mt-0.5">{createdAt}</p>
                         </div>
                     )}
+                </div>
+            </TiltCard>
+
+            {/* ── Public profile / share link ───────────────────────────────── */}
+            <TiltCard delay={0.08} className="p-5" tilt={false} glow={false}>
+                <div className="flex items-start gap-3 mb-4">
+                    <div className="w-9 h-9 rounded-full bg-blue-50 border border-blue-100 flex items-center justify-center shrink-0">
+                        <Share2 size={16} className="text-blue-500" />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                        <h2 className="text-sm font-bold text-zinc-900">Public Profile</h2>
+                        <p className="text-xs text-zinc-500 mt-0.5">
+                            Your profile is not listed on any dojo page. Share this private link with anyone you want to view it.
+                        </p>
+                    </div>
+                </div>
+
+                <div className="flex flex-col sm:flex-row gap-2">
+                    <div className="relative flex-1 min-w-0">
+                        <input
+                            type="text"
+                            readOnly
+                            value={publicProfileUrl}
+                            onFocus={(e) => e.currentTarget.select()}
+                            className="w-full bg-zinc-50 border border-zinc-200 rounded-xl py-2.5 px-3 text-xs font-mono text-zinc-700 focus:outline-none focus:border-accent-red truncate"
+                        />
+                    </div>
+                    <button
+                        type="button"
+                        onClick={copyShareLink}
+                        className="inline-flex items-center justify-center gap-2 bg-zinc-900 hover:bg-accent-red text-white text-xs font-bold px-4 py-2.5 rounded-xl transition-colors shrink-0"
+                    >
+                        {copied ? <CheckCircle2 size={14} /> : <Copy size={14} />}
+                        {copied ? "Copied" : "Copy link"}
+                    </button>
+                    <a
+                        href={publicProfilePath}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center justify-center gap-2 bg-white border border-zinc-200 hover:border-accent-red hover:text-accent-red text-zinc-700 text-xs font-bold px-4 py-2.5 rounded-xl transition-colors shrink-0"
+                    >
+                        <ExternalLink size={14} />
+                        View
+                    </a>
                 </div>
             </TiltCard>
 

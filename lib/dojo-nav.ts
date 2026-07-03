@@ -6,7 +6,6 @@ import {
     GraduationCap,
     LayoutDashboard,
     Megaphone,
-    PartyPopper,
     QrCode,
     RefreshCw,
     Settings,
@@ -93,13 +92,6 @@ export const DOJO_NAV: DojoNavItem[] = [
         icon: Settings,
         min: "DOJO_MANAGER",
         group: "business",
-    },
-    {
-        href: "/portal/dojo/events",
-        label: "Events",
-        icon: PartyPopper,
-        min: "DOJO_OWNER",
-        group: "leadership",
     },
     {
         href: "/portal/dojo/announcements",

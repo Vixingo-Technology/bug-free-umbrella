@@ -22,7 +22,7 @@ function isCategory(v: unknown): v is EventCategory {
 }
 
 async function requirePoster(): Promise<
-    | { ok: true; userId: string; role: "ADMIN" | "DOJO_OWNER"; dojoId: string | null }
+    | { ok: true; userId: string }
     | { ok: false; error: string }
 > {
     const supabase = await createClient();
@@ -34,23 +34,16 @@ async function requirePoster(): Promise<
     const current = await loadCurrentUser(user.id);
     if (!current) return { ok: false, error: "Account not found." };
 
-    if (current.role === "ADMIN") {
-        return { ok: true, userId: user.id, role: "ADMIN", dojoId: null };
+    if (current.role !== "ADMIN") {
+        return { ok: false, error: "Only admins can post events." };
     }
-    if (current.role === "DOJO_OWNER") {
-        if (!current.dojoId) {
-            return { ok: false, error: "Your dojo is not yet approved." };
-        }
-        return { ok: true, userId: user.id, role: "DOJO_OWNER", dojoId: current.dojoId };
-    }
-    return { ok: false, error: "Only admins and dojo owners can post." };
+    return { ok: true, userId: user.id };
 }
 
 function revalidateAll() {
     revalidatePath("/");
     revalidatePath("/events");
     revalidatePath("/portal/admin/events");
-    revalidatePath("/portal/dojo/events");
 }
 
 export async function createEventAction(formData: FormData): Promise<ActionResult> {
@@ -105,7 +98,7 @@ export async function createEventAction(formData: FormData): Promise<ActionResul
             attachmentUrl: attachment?.url ?? null,
             attachmentType: attachment?.type ?? null,
             postedById: auth.userId,
-            dojoId: auth.dojoId,
+            dojoId: null,
         },
     });
 
@@ -122,13 +115,9 @@ export async function deleteEventAction(formData: FormData): Promise<ActionResul
 
     const existing = await prisma.event.findUnique({
         where: { id },
-        select: { dojoId: true },
+        select: { id: true },
     });
     if (!existing) return { ok: false, error: "Event not found." };
-
-    if (auth.role === "DOJO_OWNER" && existing.dojoId !== auth.dojoId) {
-        return { ok: false, error: "You can only delete your own dojo's events." };
-    }
 
     await prisma.event.delete({ where: { id } });
 
@@ -148,13 +137,9 @@ export async function toggleEventPublishedAction(
 
     const existing = await prisma.event.findUnique({
         where: { id },
-        select: { dojoId: true },
+        select: { id: true },
     });
     if (!existing) return { ok: false, error: "Event not found." };
-
-    if (auth.role === "DOJO_OWNER" && existing.dojoId !== auth.dojoId) {
-        return { ok: false, error: "Not allowed." };
-    }
 
     await prisma.event.update({
         where: { id },

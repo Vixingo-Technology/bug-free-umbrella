@@ -66,21 +66,6 @@ export function buildExamUpdatedNotification(args: {
   };
 }
 
-export function buildExamCancelledNotification(args: {
-  eventName: string;
-  reason: string | null;
-}): NotificationPayload {
-  const reason = args.reason?.trim();
-  return {
-    title: "Belt test cancelled",
-    message: reason
-      ? `Your dojo cancelled ${args.eventName}. Reason: ${reason}`
-      : `Your dojo cancelled ${args.eventName}. Please speak with your instructor.`,
-    type: "GRADING",
-    link: "/portal/grading",
-  };
-}
-
 export function buildResultPublishedNotification(args: {
   passed: boolean;
   toRankName: string | null;

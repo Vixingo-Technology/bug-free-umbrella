@@ -8,14 +8,13 @@ import {
   CheckCircle2,
   Loader2,
   MapPin,
-  Pencil,
+  CalendarSync,
   Save,
   Send,
   XCircle,
 } from "lucide-react";
 import {
   updateScheduledExamAction,
-  cancelScheduledExamAction,
   upsertDraftResultsAction,
   publishResultsAction,
 } from "@/app/portal/dojo/gradings/actions";
@@ -123,7 +122,6 @@ export default function EventDetailClient({
 
 function EventHeaderCard({ event, readOnly }: { event: Event; readOnly: boolean }) {
   const [editing, setEditing] = useState(false);
-  const [cancelling, setCancelling] = useState(false);
 
   return (
     <section className="bg-white border border-zinc-200 rounded-sm shadow-sm mb-6">
@@ -148,18 +146,14 @@ function EventHeaderCard({ event, readOnly }: { event: Event; readOnly: boolean 
         </div>
         {!readOnly && (
           <div className="flex items-center gap-2 shrink-0">
-            <SmallBtn onClick={() => setEditing(true)} icon={<Pencil size={12} />} variant="ghost">
-              Edit
-            </SmallBtn>
-            <SmallBtn onClick={() => setCancelling(true)} icon={<XCircle size={12} />} variant="ghost">
-              Cancel test
+            <SmallBtn onClick={() => setEditing(true)} icon={<CalendarSync size={12} />} variant="ghost">
+              Reschedule
             </SmallBtn>
           </div>
         )}
       </div>
 
       {editing && <EditDialog event={event} onClose={() => setEditing(false)} />}
-      {cancelling && <CancelDialog event={event} onClose={() => setCancelling(false)} />}
     </section>
   );
 }
@@ -197,16 +191,20 @@ function EditDialog({ event, onClose }: { event: Event; onClose: () => void }) {
   }
 
   return (
-    <Modal title="Edit belt test" onClose={onClose}>
+    <Modal title="Reschedule belt test" onClose={onClose}>
       <form onSubmit={submit} className="space-y-3">
+        <p className="text-xs text-zinc-500">
+          Belt tests can't be cancelled — pick a new date and time for the test.
+          Enrolled candidates will be notified of the change.
+        </p>
         <Field label="Event name">
           <input value={name} onChange={(e) => setName(e.target.value)} className={input} required />
         </Field>
         <div className="grid grid-cols-2 gap-3">
-          <Field label="Date">
+          <Field label="New date">
             <input type="date" value={date} onChange={(e) => setDate(e.target.value)} className={input} required />
           </Field>
-          <Field label="Time">
+          <Field label="New time">
             <input type="time" value={time} onChange={(e) => setTime(e.target.value)} className={input} required />
           </Field>
         </div>
@@ -223,47 +221,6 @@ function EditDialog({ event, onClose }: { event: Event; onClose: () => void }) {
           </SmallBtn>
           <SmallBtn type="submit" disabled={isPending} icon={isPending ? <Loader2 size={12} className="animate-spin" /> : <Save size={12} />}>
             Save changes
-          </SmallBtn>
-        </div>
-      </form>
-    </Modal>
-  );
-}
-
-function CancelDialog({ event, onClose }: { event: Event; onClose: () => void }) {
-  const [reason, setReason] = useState("");
-  const [error, setError] = useState<string | null>(null);
-  const [isPending, startTransition] = useTransition();
-
-  function submit(e: React.FormEvent) {
-    e.preventDefault();
-    setError(null);
-    startTransition(async () => {
-      const res = await cancelScheduledExamAction({ eventId: event.id, reason });
-      if ("error" in res) setError(res.error);
-      else {
-        onClose();
-        window.location.reload();
-      }
-    });
-  }
-
-  return (
-    <Modal title="Cancel belt test" onClose={onClose}>
-      <form onSubmit={submit} className="space-y-3">
-        <p className="text-sm text-zinc-600">
-          Enrolled candidates will be notified. Cancellation can't be undone — you'll need to create a new test.
-        </p>
-        <Field label="Reason (optional)">
-          <textarea value={reason} onChange={(e) => setReason(e.target.value)} rows={3} className={input} placeholder="e.g. weather / venue change" />
-        </Field>
-        {error && <p className="text-xs text-red-600">{error}</p>}
-        <div className="flex justify-end gap-2 pt-1">
-          <SmallBtn type="button" onClick={onClose} disabled={isPending} variant="ghost">
-            Keep test
-          </SmallBtn>
-          <SmallBtn type="submit" disabled={isPending} icon={isPending ? <Loader2 size={12} className="animate-spin" /> : <XCircle size={12} />}>
-            Cancel test
           </SmallBtn>
         </div>
       </form>

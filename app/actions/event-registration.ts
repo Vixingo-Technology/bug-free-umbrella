@@ -142,7 +142,6 @@ export async function registerForEventAction(
 
     revalidatePath(`/events/${eventId}`);
     revalidatePath(`/portal/admin/events/${eventId}/participants`);
-    revalidatePath(`/portal/dojo/events/${eventId}/participants`);
 
     // Fire-and-forget — n8n handles the actual email + WhatsApp send.
     // emitWebhook never throws (see lib/n8n.ts), so a misconfigured n8n
@@ -270,7 +269,6 @@ export async function checkInParticipantAction(
     });
 
     revalidatePath(`/portal/admin/events/${registration.event.id}/participants`);
-    revalidatePath(`/portal/dojo/events/${registration.event.id}/participants`);
     revalidatePath(`/participants/${token}`);
 
     return {

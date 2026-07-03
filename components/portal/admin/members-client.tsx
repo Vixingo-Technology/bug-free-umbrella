@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState, useTransition } from "react";
+import Link from "next/link";
 import { motion } from "motion/react";
 import { UserPlus, Search, Mail, Shield, ShieldCheck, ShieldOff, X, CheckCircle2, AlertCircle, ChevronDown } from "lucide-react";
 import {
@@ -264,18 +265,23 @@ function Row({ member, onFlash }: { member: Member; onFlash: (k: "ok" | "err", m
     return (
         <tr className={`hover:bg-zinc-50/60 transition-colors ${isPending ? "opacity-60" : ""}`}>
             <td className="px-5 py-4">
-                <div className="flex items-center gap-3 min-w-[220px]">
+                <Link
+                    href={`/portal/admin/members/${member.id}`}
+                    className="flex items-center gap-3 min-w-[220px] group"
+                >
                     <div className="w-9 h-9 rounded-full bg-gradient-to-br from-zinc-700 to-zinc-900 flex items-center justify-center text-white font-bold text-xs flex-shrink-0">
                         {initial}
                     </div>
                     <div className="min-w-0">
-                        <p className="font-semibold text-zinc-900 truncate">{member.fullName}</p>
+                        <p className="font-semibold text-zinc-900 truncate group-hover:text-accent-red transition-colors">
+                            {member.fullName}
+                        </p>
                         <p className="text-xs text-zinc-500 truncate">{member.email}</p>
                         {member.memberNumber && (
                             <p className="text-[10px] text-zinc-400 mt-0.5">#{member.memberNumber}</p>
                         )}
                     </div>
-                </div>
+                </Link>
             </td>
             <td className="px-5 py-4 text-xs text-zinc-600">
                 <p className="font-medium text-zinc-800">{member.dojo?.name ?? "—"}</p>

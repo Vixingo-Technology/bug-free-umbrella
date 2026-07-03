@@ -122,7 +122,7 @@ export default async function GradingsPage() {
                     <div className="px-5 py-4 border-b border-zinc-200">
                         <h2 className="text-sm font-bold text-zinc-900">Scheduled belt tests</h2>
                         <p className="text-xs text-zinc-500 mt-0.5">
-                            Edit details, cancel, draft results, and publish.
+                            Reschedule, draft results, and publish.
                         </p>
                     </div>
                     <div className="px-5">

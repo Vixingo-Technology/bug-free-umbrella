@@ -7,7 +7,6 @@ import {
   buildScheduledNotification,
   buildDeclinedNotification,
   buildExamUpdatedNotification,
-  buildExamCancelledNotification,
   buildResultPublishedNotification,
 } from "@/lib/grading-notifications";
 import type { GradingResult } from "@/prisma/generated/client";
@@ -244,60 +243,10 @@ export async function updateScheduledExamAction(input: {
   return { success: true };
 }
 
-export async function cancelScheduledExamAction(input: {
-  eventId: string;
-  reason?: string;
-}): Promise<{ success: true } | { error: string }> {
-  const session = await requireDojoRole("INSTRUCTOR");
-  if (!session.dojo) return { error: "Your dojo is not set up yet." };
-
-  const reason = input.reason?.trim() || null;
-
-  try {
-    await prisma.$transaction(async (tx) => {
-      const event = await tx.gradingEvent.findFirst({
-        where: {
-          id: input.eventId,
-          applications: { some: { student: { dojoId: session.dojo!.id } } },
-        },
-        include: { applications: true },
-      });
-      if (!event) throw new Error("Belt test not found in your dojo.");
-      if (event.cancelledAt) throw new Error("Already cancelled.");
-      if (event.resultsPublishedAt) throw new Error("Results are already published — cannot cancel.");
-
-      await tx.gradingEvent.update({
-        where: { id: event.id },
-        data: { cancelledAt: new Date(), cancelReason: reason },
-      });
-
-      const approved = event.applications.filter((a) => a.status === "APPROVED");
-      if (approved.length) {
-        await tx.gradingApplication.updateMany({
-          where: { id: { in: approved.map((a) => a.id) } },
-          data: { status: "CANCELLED" },
-        });
-
-        const payload = buildExamCancelledNotification({ eventName: event.name, reason });
-        await tx.notification.createMany({
-          data: approved.map((a) => ({
-            userId: a.studentId,
-            title: payload.title,
-            message: payload.message,
-            type: payload.type,
-            link: payload.link,
-          })),
-        });
-      }
-    });
-  } catch (err: unknown) {
-    return { error: err instanceof Error ? err.message : "Failed to cancel belt test." };
-  }
-
-  revalidatePath("/portal/dojo/gradings");
-  revalidatePath(`/portal/dojo/gradings/${input.eventId}`);
-  return { success: true };
-}
+// Cancellation is intentionally not exposed. A dojo that needs to move a belt
+// test must reschedule it via updateScheduledExamAction — see the "Reschedule"
+// dialog in the dojo UI. Historical events with cancelledAt set remain
+// read-only for display purposes, but no new cancels can be created here.
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Results drafting + publishing
