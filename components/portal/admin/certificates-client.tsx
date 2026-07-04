@@ -1,6 +1,7 @@
 "use client";
 
-import { useRef, useState, useTransition } from "react";
+import { useMemo, useRef, useState, useTransition } from "react";
+import Link from "next/link";
 import {
     Award,
     Check,
@@ -10,6 +11,10 @@ import {
     Trash2,
     Upload,
     Image as ImageIcon,
+    LayoutTemplate,
+    Search,
+    ChevronLeft,
+    ChevronRight,
 } from "lucide-react";
 import {
     saveCertificateSettingsAction,
@@ -154,10 +159,16 @@ function SignatureCard({ settings }: { settings: Settings }) {
 
     return (
         <section className="bg-white border border-zinc-200 rounded-sm shadow-sm">
-            <header className="px-5 py-4 border-b border-zinc-200">
+            <header className="px-5 py-4 border-b border-zinc-200 flex items-center justify-between gap-3">
                 <h3 className="text-xs tracking-widest uppercase font-bold text-zinc-500">
                     Federation signature
                 </h3>
+                <Link
+                    href="/portal/admin/certificate-layout"
+                    className="inline-flex items-center gap-1.5 text-[10px] font-bold tracking-widest uppercase bg-zinc-900 text-white px-3 py-1.5 rounded-sm hover:bg-accent-red"
+                >
+                    <LayoutTemplate size={12} /> Certificate layout editor
+                </Link>
             </header>
             <div className="p-5 space-y-5">
                 <Preview
@@ -338,7 +349,41 @@ function PriceRow({ rank }: { rank: Rank }) {
     );
 }
 
+const PAGE_SIZE = 15;
+
+function certNumber(id: string) {
+    return id.slice(0, 8).toUpperCase();
+}
+
 function RecentRequestsCard({ requests }: { requests: RecentRequest[] }) {
+    const [query, setQuery] = useState("");
+    const [page, setPage] = useState(1);
+
+    const filtered = useMemo(() => {
+        const q = query.trim().toLowerCase();
+        if (!q) return requests;
+        return requests.filter((r) => {
+            const name = r.member.fullName.toLowerCase();
+            const num = certNumber(r.id).toLowerCase();
+            const memberNo = (r.member.memberNumber ?? "").toLowerCase();
+            return (
+                name.includes(q) ||
+                num.includes(q) ||
+                memberNo.includes(q)
+            );
+        });
+    }, [requests, query]);
+
+    const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+    const currentPage = Math.min(page, totalPages);
+    const start = (currentPage - 1) * PAGE_SIZE;
+    const pageRows = filtered.slice(start, start + PAGE_SIZE);
+
+    function updateQuery(next: string) {
+        setQuery(next);
+        setPage(1);
+    }
+
     if (requests.length === 0) {
         return (
             <section className="bg-white border border-zinc-200 rounded-sm shadow-sm p-8 text-center text-sm text-zinc-500">
@@ -346,17 +391,32 @@ function RecentRequestsCard({ requests }: { requests: RecentRequest[] }) {
             </section>
         );
     }
+
     return (
         <section className="bg-white border border-zinc-200 rounded-sm shadow-sm">
-            <header className="px-5 py-4 border-b border-zinc-200">
+            <header className="px-5 py-4 border-b border-zinc-200 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                 <h3 className="text-xs tracking-widest uppercase font-bold text-zinc-500">
                     Recent certificate requests
                 </h3>
+                <div className="relative w-full sm:w-72">
+                    <Search
+                        size={13}
+                        className="absolute left-2.5 top-1/2 -translate-y-1/2 text-zinc-400"
+                    />
+                    <input
+                        type="text"
+                        value={query}
+                        onChange={(e) => updateQuery(e.target.value)}
+                        placeholder="Search name or certificate no."
+                        className="w-full bg-zinc-50 border border-zinc-200 pl-8 pr-3 py-2 text-xs rounded-sm focus:outline-none focus:border-accent-red"
+                    />
+                </div>
             </header>
             <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                     <thead>
                         <tr className="text-left text-[10px] tracking-widest uppercase font-bold text-zinc-400 border-b border-zinc-200">
+                            <th className="px-5 py-3">Certificate no.</th>
                             <th className="px-5 py-3">Member</th>
                             <th className="px-5 py-3">Dojo</th>
                             <th className="px-5 py-3">Rank</th>
@@ -366,60 +426,104 @@ function RecentRequestsCard({ requests }: { requests: RecentRequest[] }) {
                         </tr>
                     </thead>
                     <tbody>
-                        {requests.map((r) => (
-                            <tr
-                                key={r.id}
-                                className="border-b border-zinc-100"
-                            >
-                                <td className="px-5 py-3">
-                                    <p className="font-semibold text-zinc-900">
-                                        {r.member.fullName}
-                                    </p>
-                                    {r.member.memberNumber && (
-                                        <p className="text-[10px] text-zinc-400 uppercase tracking-widest">
-                                            {r.member.memberNumber}
-                                        </p>
-                                    )}
-                                </td>
-                                <td className="px-5 py-3 text-zinc-600">
-                                    {r.dojo.name}
-                                </td>
-                                <td className="px-5 py-3 text-zinc-600">
-                                    {r.rankName}
-                                </td>
-                                <td className="px-5 py-3">
-                                    <StatusPill status={r.status} />
-                                </td>
-                                <td className="px-5 py-3 text-right text-zinc-700 font-mono">
-                                    ৳{Number(r.price).toLocaleString()}
-                                </td>
-                                <td className="px-5 py-3 text-right">
-                                    <div className="inline-flex items-center gap-2">
-                                        <a
-                                            href={`/certificates/${r.id}`}
-                                            target="_blank"
-                                            rel="noreferrer"
-                                            className="text-zinc-600 hover:text-accent-red text-[10px] font-bold tracking-widest uppercase"
-                                        >
-                                            Preview
-                                        </a>
-                                        {r.certificateUrl && (
-                                            <a
-                                                href={r.certificateUrl}
-                                                target="_blank"
-                                                rel="noreferrer"
-                                                className="text-accent-red text-[10px] font-bold tracking-widest uppercase"
-                                            >
-                                                PDF
-                                            </a>
-                                        )}
-                                    </div>
+                        {pageRows.length === 0 ? (
+                            <tr>
+                                <td
+                                    colSpan={7}
+                                    className="px-5 py-10 text-center text-sm text-zinc-500"
+                                >
+                                    No matching requests.
                                 </td>
                             </tr>
-                        ))}
+                        ) : (
+                            pageRows.map((r) => (
+                                <tr
+                                    key={r.id}
+                                    className="border-b border-zinc-100"
+                                >
+                                    <td className="px-5 py-3 font-mono text-[11px] tracking-wider text-zinc-700">
+                                        {certNumber(r.id)}
+                                    </td>
+                                    <td className="px-5 py-3">
+                                        <p className="font-semibold text-zinc-900">
+                                            {r.member.fullName}
+                                        </p>
+                                        {r.member.memberNumber && (
+                                            <p className="text-[10px] text-zinc-400 uppercase tracking-widest">
+                                                {r.member.memberNumber}
+                                            </p>
+                                        )}
+                                    </td>
+                                    <td className="px-5 py-3 text-zinc-600">
+                                        {r.dojo.name}
+                                    </td>
+                                    <td className="px-5 py-3 text-zinc-600">
+                                        {r.rankName}
+                                    </td>
+                                    <td className="px-5 py-3">
+                                        <StatusPill status={r.status} />
+                                    </td>
+                                    <td className="px-5 py-3 text-right text-zinc-700 font-mono">
+                                        ৳{Number(r.price).toLocaleString()}
+                                    </td>
+                                    <td className="px-5 py-3 text-right">
+                                        <div className="inline-flex items-center gap-2">
+                                            <a
+                                                href={`/certificates/${r.id}`}
+                                                target="_blank"
+                                                rel="noreferrer"
+                                                className="text-zinc-600 hover:text-accent-red text-[10px] font-bold tracking-widest uppercase"
+                                            >
+                                                Preview
+                                            </a>
+                                            {r.certificateUrl && (
+                                                <a
+                                                    href={r.certificateUrl}
+                                                    target="_blank"
+                                                    rel="noreferrer"
+                                                    className="text-accent-red text-[10px] font-bold tracking-widest uppercase"
+                                                >
+                                                    PDF
+                                                </a>
+                                            )}
+                                        </div>
+                                    </td>
+                                </tr>
+                            ))
+                        )}
                     </tbody>
                 </table>
             </div>
+            <footer className="px-5 py-3 border-t border-zinc-200 flex items-center justify-between text-[11px] text-zinc-500">
+                <p>
+                    {filtered.length === 0
+                        ? "0 results"
+                        : `${start + 1}–${Math.min(start + PAGE_SIZE, filtered.length)} of ${filtered.length}`}
+                </p>
+                <div className="inline-flex items-center gap-2">
+                    <button
+                        type="button"
+                        onClick={() => setPage((p) => Math.max(1, p - 1))}
+                        disabled={currentPage <= 1}
+                        className="inline-flex items-center gap-1 px-2 py-1 rounded-sm border border-zinc-200 hover:border-zinc-400 disabled:opacity-40 disabled:hover:border-zinc-200"
+                    >
+                        <ChevronLeft size={12} /> Prev
+                    </button>
+                    <span className="font-mono text-zinc-700">
+                        {currentPage} / {totalPages}
+                    </span>
+                    <button
+                        type="button"
+                        onClick={() =>
+                            setPage((p) => Math.min(totalPages, p + 1))
+                        }
+                        disabled={currentPage >= totalPages}
+                        className="inline-flex items-center gap-1 px-2 py-1 rounded-sm border border-zinc-200 hover:border-zinc-400 disabled:opacity-40 disabled:hover:border-zinc-200"
+                    >
+                        Next <ChevronRight size={12} />
+                    </button>
+                </div>
+            </footer>
         </section>
     );
 }

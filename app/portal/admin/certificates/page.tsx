@@ -27,7 +27,7 @@ export default async function AdminCertificatesPage() {
         }),
         prisma.certificateRequest.findMany({
             orderBy: { createdAt: "desc" },
-            take: 30,
+            take: 500,
             include: {
                 student: { select: { memberNumber: true, user: { select: { fullName: true } } } },
                 dojo: { select: { name: true } },
