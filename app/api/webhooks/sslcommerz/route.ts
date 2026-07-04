@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { prisma } from "@/lib/prisma";
 import { generateCertificatePdf } from "@/lib/certificates/generate";
+import { markRegistrationPaid } from "@/lib/events/ticket-payment";
 
 // Setup Supabase client only if environment variables are present.
 // Creating the client at import-time with empty values can throw during build.
@@ -33,6 +34,28 @@ export async function POST(request: Request) {
             validationData.status === "VALIDATED";
         if (!isValid) {
             return NextResponse.json({ error: "Invalid IPN" }, { status: 400 });
+        }
+
+        // Event-ticket payments also point their IPN here — tran_id is the
+        // event_registrations.id. Handle those before the shop-order path.
+        // (Guard the uuid shape so a malformed tran_id can't blow up the
+        // Postgres uuid cast.)
+        const isUuid =
+            /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
+                String(tran_id),
+            );
+        const eventReg = isUuid
+            ? await prisma.eventRegistration.findUnique({
+                  where: { id: String(tran_id) },
+                  select: { id: true },
+              })
+            : null;
+        if (eventReg) {
+            await markRegistrationPaid(eventReg.id, String(val_id ?? "SSLCOMMERZ"));
+            return NextResponse.json(
+                { message: "IPN handled successfully" },
+                { status: 200 },
+            );
         }
 
         if (!supabase) {

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, Calendar, MapPin, Users, UserPlus } from "lucide-react";
+import { ArrowLeft, Calendar, MapPin, Users, UserPlus, Ticket } from "lucide-react";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import AttachmentViewer from "@/components/attachment-viewer";
@@ -15,6 +15,14 @@ const CATEGORY_LABEL: Record<string, string> = {
     SEMINAR: "Seminar",
     TRAINING_CAMP: "Training Camp",
     OTHER: "Event",
+};
+
+const PARTICIPANT_LABEL: Record<string, string> = {
+    PUBLIC: "Open to everyone",
+    STUDENTS: "Students only",
+    INSTRUCTORS: "Teachers only",
+    PARENTS: "Parents only",
+    DOJO_MEMBERS: "Dojo members only",
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -48,11 +56,21 @@ export default async function EventDetailPage({ params }: Props) {
         include: {
             dojo: { select: { id: true, name: true } },
             postedBy: { select: { fullName: true } },
+            minRank: { select: { name: true } },
             _count: { select: { registrations: true } },
         },
     });
 
     if (!e || !e.isPublished) notFound();
+
+    const ticketPrice = e.ticketPrice ? Number(e.ticketPrice) : null;
+    const isPremium = e.isPremium && ticketPrice !== null && ticketPrice > 0;
+    const requirements: string[] = [];
+    if (e.participantType !== "PUBLIC") {
+        requirements.push(PARTICIPANT_LABEL[e.participantType] ?? e.participantType);
+    }
+    if (e.minAge !== null) requirements.push(`Age ${e.minAge}+`);
+    if (e.minRank) requirements.push(`${e.minRank.name} or above`);
 
     // eslint-disable-next-line react-hooks/purity -- server component re-renders per request (force-dynamic)
     const isPast = e.eventDate.getTime() < Date.now();
@@ -81,6 +99,24 @@ export default async function EventDetailPage({ params }: Props) {
                                 {e.dojo.name}
                             </span>
                         )}
+                        {isPremium ? (
+                            <span className="inline-flex items-center gap-1.5 text-[10px] tracking-widest uppercase font-bold px-3 py-1 rounded-full border border-amber-200 bg-amber-50 text-amber-700">
+                                <Ticket size={12} />
+                                ৳{ticketPrice?.toLocaleString()}
+                            </span>
+                        ) : (
+                            <span className="text-[10px] tracking-widest uppercase font-bold px-3 py-1 rounded-full border border-emerald-200 bg-emerald-50 text-emerald-700">
+                                Free entry
+                            </span>
+                        )}
+                        {requirements.map((r) => (
+                            <span
+                                key={r}
+                                className="text-[10px] tracking-widest uppercase font-bold px-3 py-1 rounded-full border border-zinc-200 bg-zinc-50 text-zinc-600"
+                            >
+                                {r}
+                            </span>
+                        ))}
                     </div>
 
                     <h1 className="font-karate text-3xl md:text-5xl text-zinc-900 mb-6 uppercase tracking-wider font-bold leading-tight">
@@ -176,7 +212,9 @@ export default async function EventDetailPage({ params }: Props) {
                                     Join this event
                                 </h3>
                                 <p className="text-sm text-zinc-600">
-                                    Register in under a minute. You&apos;ll get a participation card with a QR code to show at the door.
+                                    {isPremium
+                                        ? `Register and pay the ৳${ticketPrice?.toLocaleString()} ticket to get your participation card with a QR code to show at the door.`
+                                        : "Register in under a minute. You'll get a participation card with a QR code to show at the door."}
                                 </p>
                             </div>
                             {isFull ? (

@@ -8,17 +8,26 @@ import {
     CheckCircle2,
     ArrowLeft,
     AlertCircle,
+    Ticket,
 } from "lucide-react";
 import QRCode from "qrcode";
 import Logo from "@/assets/jka_logo.svg";
 import PrintButton from "@/components/print-button";
 import { prisma } from "@/lib/prisma";
 import { createClient } from "@/lib/supabase/server";
-import { checkInFromCardAction } from "@/app/actions/event-registration";
+import {
+    checkInFromCardAction,
+    payForRegistrationAction,
+} from "@/app/actions/event-registration";
 
 type Props = {
     params: Promise<{ token: string }>;
-    searchParams: Promise<{ checked?: string; error?: string }>;
+    searchParams: Promise<{
+        checked?: string;
+        error?: string;
+        paid?: string;
+        payfailed?: string;
+    }>;
 };
 
 export const metadata: Metadata = {
@@ -53,7 +62,7 @@ export default async function ParticipationCardPage({
     searchParams,
 }: Props) {
     const { token } = await params;
-    const { checked, error } = await searchParams;
+    const { checked, error, paid, payfailed } = await searchParams;
 
     const registration = await prisma.eventRegistration.findUnique({
         where: { qrToken: token },
@@ -102,6 +111,12 @@ export default async function ParticipationCardPage({
     });
 
     const checkedIn = !!registration.checkedInAt;
+    const paymentPending =
+        registration.paymentStatus === "PENDING" ||
+        registration.paymentStatus === "FAILED";
+    const amountDue = registration.amountDue
+        ? Number(registration.amountDue)
+        : null;
 
     // Does the current viewer have authority to check this participant in?
     const supabase = await createClient();
@@ -138,6 +153,19 @@ export default async function ParticipationCardPage({
                         Back to event
                     </Link>
 
+                    {paid === "1" && !paymentPending && (
+                        <div className="mb-6 flex items-center gap-2 text-sm font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-4 py-3 rounded-sm print:hidden">
+                            <CheckCircle2 size={16} className="shrink-0" />
+                            Payment confirmed — your participation card is ready.
+                        </div>
+                    )}
+                    {payfailed === "1" && paymentPending && (
+                        <div className="mb-6 flex items-center gap-2 text-sm font-semibold text-red-700 bg-red-50 border border-red-200 px-4 py-3 rounded-sm print:hidden">
+                            <AlertCircle size={16} className="shrink-0" />
+                            The payment didn&apos;t go through. You can try again below.
+                        </div>
+                    )}
+
                     <div className="bg-white border-2 border-zinc-900 shadow-xl rounded-sm overflow-hidden print:shadow-none print:border print:rounded-none">
                         {/* Header strip */}
                         <div className="bg-white border-b border-zinc-200 px-6 py-4 flex items-center justify-between">
@@ -157,12 +185,17 @@ export default async function ParticipationCardPage({
                                     </p>
                                 </div>
                             </div>
-                            {checkedIn && (
+                            {paymentPending ? (
+                                <span className="inline-flex items-center gap-1.5 text-[10px] tracking-widest uppercase font-bold px-3 py-1 rounded-full bg-amber-50 text-amber-700 border border-amber-200">
+                                    <Ticket size={12} />
+                                    Payment due
+                                </span>
+                            ) : checkedIn ? (
                                 <span className="inline-flex items-center gap-1.5 text-[10px] tracking-widest uppercase font-bold px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
                                     <CheckCircle2 size={12} />
                                     Checked in
                                 </span>
-                            )}
+                            ) : null}
                         </div>
 
                         {/* Body */}
@@ -224,18 +257,37 @@ export default async function ParticipationCardPage({
                                 </div>
                             </div>
 
-                            <div className="flex flex-col items-center md:items-end">
-                                <div
-                                    className="bg-white p-3 border border-zinc-200 rounded-sm"
-                                    dangerouslySetInnerHTML={{ __html: qrSvg }}
-                                />
-                                <p className="text-[10px] tracking-widest uppercase font-bold text-zinc-400 mt-3 text-center md:text-right">
-                                    Show this at the door
-                                </p>
-                                <p className="text-[10px] font-mono text-zinc-400 mt-1 select-all break-all max-w-[180px] text-center md:text-right">
-                                    {token}
-                                </p>
-                            </div>
+                            {paymentPending ? (
+                                <div className="flex flex-col items-center justify-center bg-amber-50 border border-amber-200 rounded-sm p-6 text-center max-w-[240px]">
+                                    <Ticket
+                                        size={28}
+                                        className="text-amber-600 mb-3"
+                                    />
+                                    <p className="text-sm font-bold text-zinc-900 mb-1">
+                                        Ticket not paid yet
+                                    </p>
+                                    <p className="text-xs text-zinc-600">
+                                        Your QR code will appear here once the
+                                        {amountDue
+                                            ? ` ৳${amountDue.toLocaleString()}`
+                                            : ""}{" "}
+                                        ticket payment is confirmed.
+                                    </p>
+                                </div>
+                            ) : (
+                                <div className="flex flex-col items-center md:items-end">
+                                    <div
+                                        className="bg-white p-3 border border-zinc-200 rounded-sm"
+                                        dangerouslySetInnerHTML={{ __html: qrSvg }}
+                                    />
+                                    <p className="text-[10px] tracking-widest uppercase font-bold text-zinc-400 mt-3 text-center md:text-right">
+                                        Show this at the door
+                                    </p>
+                                    <p className="text-[10px] font-mono text-zinc-400 mt-1 select-all break-all max-w-[180px] text-center md:text-right">
+                                        {token}
+                                    </p>
+                                </div>
+                            )}
                         </div>
 
                         {checkedIn && registration.checkedInAt && (
@@ -245,6 +297,32 @@ export default async function ParticipationCardPage({
                             </div>
                         )}
                     </div>
+
+                    {paymentPending && (
+                        <div className="mt-6 bg-white border border-amber-200 rounded-sm shadow-sm p-5 print:hidden">
+                            <p className="text-[10px] tracking-widest uppercase font-bold text-amber-600 mb-2">
+                                Payment required
+                            </p>
+                            <p className="text-sm text-zinc-600 mb-4">
+                                This is a premium event. Complete the
+                                {amountDue
+                                    ? ` ৳${amountDue.toLocaleString()}`
+                                    : ""}{" "}
+                                ticket payment to activate your participation
+                                card.
+                            </p>
+                            <form action={payForRegistrationAction}>
+                                <input type="hidden" name="token" value={token} />
+                                <button
+                                    type="submit"
+                                    className="w-full inline-flex items-center justify-center gap-2 bg-accent-red text-white px-4 py-3 text-xs font-bold tracking-widest uppercase hover:bg-accent-red/90 transition-colors rounded-sm"
+                                >
+                                    <Ticket size={14} />
+                                    Pay now{amountDue ? ` · ৳${amountDue.toLocaleString()}` : ""}
+                                </button>
+                            </form>
+                        </div>
+                    )}
 
                     {canCheckIn && (
                         <div className="mt-6 bg-white border border-zinc-200 rounded-sm shadow-sm p-5 print:hidden">

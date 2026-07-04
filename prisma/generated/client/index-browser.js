@@ -345,6 +345,11 @@ exports.Prisma.EventScalarFieldEnum = {
   category: 'category',
   attachmentUrl: 'attachmentUrl',
   attachmentType: 'attachmentType',
+  isPremium: 'isPremium',
+  ticketPrice: 'ticketPrice',
+  minAge: 'minAge',
+  minRankId: 'minRankId',
+  participantType: 'participantType',
   postedById: 'postedById',
   dojoId: 'dojoId',
   createdAt: 'createdAt',
@@ -374,6 +379,12 @@ exports.Prisma.EventRegistrationScalarFieldEnum = {
   guestEmail: 'guestEmail',
   guestPhone: 'guestPhone',
   qrToken: 'qrToken',
+  paymentStatus: 'paymentStatus',
+  amountDue: 'amountDue',
+  paidAt: 'paidAt',
+  transactionId: 'transactionId',
+  guestDateOfBirth: 'guestDateOfBirth',
+  parentOfMemberNumber: 'parentOfMemberNumber',
   checkedInAt: 'checkedInAt',
   checkedInByUserId: 'checkedInByUserId',
   createdAt: 'createdAt'
@@ -603,6 +614,21 @@ exports.AttachmentType = exports.$Enums.AttachmentType = {
   PDF: 'PDF'
 };
 
+exports.EventParticipantType = exports.$Enums.EventParticipantType = {
+  PUBLIC: 'PUBLIC',
+  STUDENTS: 'STUDENTS',
+  INSTRUCTORS: 'INSTRUCTORS',
+  PARENTS: 'PARENTS',
+  DOJO_MEMBERS: 'DOJO_MEMBERS'
+};
+
+exports.PaymentStatus = exports.$Enums.PaymentStatus = {
+  PENDING: 'PENDING',
+  PAID: 'PAID',
+  FAILED: 'FAILED',
+  REFUNDED: 'REFUNDED'
+};
+
 exports.NotificationType = exports.$Enums.NotificationType = {
   INFO: 'INFO',
   WARNING: 'WARNING',
@@ -612,13 +638,6 @@ exports.NotificationType = exports.$Enums.NotificationType = {
   EVENT: 'EVENT',
   RENEWAL: 'RENEWAL',
   CERTIFICATE: 'CERTIFICATE'
-};
-
-exports.PaymentStatus = exports.$Enums.PaymentStatus = {
-  PENDING: 'PENDING',
-  PAID: 'PAID',
-  FAILED: 'FAILED',
-  REFUNDED: 'REFUNDED'
 };
 
 exports.AchievementTier = exports.$Enums.AchievementTier = {

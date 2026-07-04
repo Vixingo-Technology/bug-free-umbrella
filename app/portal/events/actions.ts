@@ -5,6 +5,11 @@ import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { prisma } from "@/lib/prisma";
 import { notifyMembers } from "@/lib/notify";
+import {
+    checkEligibility,
+    loadEventGates,
+    loadViewerContext,
+} from "@/lib/events/eligibility";
 
 function urlSafeToken(bytes = 18): string {
     return randomBytes(bytes)
@@ -14,7 +19,14 @@ function urlSafeToken(bytes = 18): string {
         .replace(/=+$/g, "");
 }
 
-export async function registerForEventAction(eventId: string) {
+type RsvpResult = {
+    success?: boolean;
+    error?: string;
+    /** Client should navigate here (premium payment / full form). */
+    redirectTo?: string;
+};
+
+export async function registerForEventAction(eventId: string): Promise<RsvpResult> {
     const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return { error: "Not authenticated." };
@@ -22,8 +34,33 @@ export async function registerForEventAction(eventId: string) {
     try {
         const existing = await prisma.eventRegistration.findFirst({
             where: { eventId, userId: user.id },
+            select: { paymentStatus: true, qrToken: true },
         });
-        if (existing) return { error: "You are already registered for this event." };
+        if (existing) {
+            if (existing.paymentStatus === "PENDING") {
+                // Unpaid premium ticket — resume payment from the card.
+                return { redirectTo: `/participants/${existing.qrToken}` };
+            }
+            return { error: "You are already registered for this event." };
+        }
+
+        // Participation gates + premium ticketing.
+        const gates = await loadEventGates(eventId);
+        if (!gates) return { error: "Event not found." };
+
+        const viewer = await loadViewerContext(user.id);
+        const eligibility = checkEligibility(gates, viewer);
+        if (!eligibility.ok) {
+            return { error: eligibility.reason ?? "You are not eligible for this event." };
+        }
+        if (
+            gates.isPremium ||
+            eligibility.needsDateOfBirth ||
+            eligibility.needsChildMemberNumber
+        ) {
+            // Needs the full form (payment and/or extra fields).
+            return { redirectTo: `/events/${eventId}/register` };
+        }
 
         // Check capacity
         const event = await prisma.event.findUnique({ where: { id: eventId } });
@@ -59,6 +96,16 @@ export async function cancelEventRegistrationAction(eventId: string) {
     if (!user) return { error: "Not authenticated." };
 
     try {
+        const existing = await prisma.eventRegistration.findFirst({
+            where: { eventId, userId: user.id },
+            select: { paymentStatus: true },
+        });
+        if (existing?.paymentStatus === "PAID") {
+            return {
+                error: "This is a paid ticket — contact the organisers for a refund or cancellation.",
+            };
+        }
+
         await prisma.eventRegistration.deleteMany({
             where: { eventId, userId: user.id },
         });

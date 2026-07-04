@@ -1,11 +1,12 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "motion/react";
 import TiltCard from "@/components/portal/tilt-card";
 import {
     CalendarDays, MapPin, Users, CheckCircle2,
-    AlertCircle, Loader2, ChevronRight,
+    AlertCircle, Loader2, ChevronRight, Ticket,
 } from "lucide-react";
 import { registerForEventAction, cancelEventRegistrationAction } from "@/app/portal/events/actions";
 
@@ -15,6 +16,13 @@ interface Props {
     myRegistrations: string[];
     userId: string;
 }
+
+const participantLabels: Record<string, string> = {
+    STUDENTS:     "Students only",
+    INSTRUCTORS:  "Teachers only",
+    PARENTS:      "Parents only",
+    DOJO_MEMBERS: "Dojo members only",
+};
 
 const typeColors: Record<string, string> = {
     TOURNAMENT:    "bg-red-50 text-red-600",
@@ -29,12 +37,18 @@ export default function EventsClient({ upcomingEvents, pastEvents, myRegistratio
     const [feedback, setFeedback] = useState<{ type: "success" | "error"; message: string } | null>(null);
     const [loadingId, setLoadingId] = useState<string | null>(null);
     const [isPending, startTransition] = useTransition();
+    const router = useRouter();
 
     function handleRegister(eventId: string) {
         setLoadingId(eventId);
         setFeedback(null);
         startTransition(async () => {
             const res = await registerForEventAction(eventId);
+            if (res.redirectTo) {
+                // Premium event or extra details needed — full form / payment.
+                router.push(res.redirectTo);
+                return;
+            }
             setLoadingId(null);
             if (res.error) {
                 setFeedback({ type: "error", message: res.error });
@@ -120,6 +134,11 @@ export default function EventsClient({ upcomingEvents, pastEvents, myRegistratio
                                                 <span className={`text-[9px] font-bold tracking-widest uppercase px-2 py-0.5 rounded-full ${typeColors[category] ?? typeColors.OTHER}`}>
                                                     {category.replace("_", " ")}
                                                 </span>
+                                                {ev.isPremium && ev.ticketPrice ? (
+                                                    <span className="text-[9px] font-bold tracking-widest uppercase px-2 py-0.5 rounded-full bg-amber-50 text-amber-600 flex items-center gap-1">
+                                                        <Ticket size={10} /> ৳{Number(ev.ticketPrice).toLocaleString()}
+                                                    </span>
+                                                ) : null}
                                                 {isRegistered && (
                                                     <span className="text-[9px] font-bold tracking-widest uppercase px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-600 flex items-center gap-1">
                                                         <CheckCircle2 size={10} /> Registered
@@ -140,6 +159,15 @@ export default function EventsClient({ upcomingEvents, pastEvents, myRegistratio
                                                     <span className="flex items-center gap-1">
                                                         <Users size={11} />
                                                         {ev._count?.registrations ?? 0} / {ev.maxCapacity}
+                                                    </span>
+                                                )}
+                                                {(participantLabels[ev.participantType] || ev.minAge || ev.minRank) && (
+                                                    <span className="text-amber-600 font-semibold">
+                                                        {[
+                                                            participantLabels[ev.participantType],
+                                                            ev.minAge ? `Age ${ev.minAge}+` : null,
+                                                            ev.minRank?.name ? `${ev.minRank.name}+` : null,
+                                                        ].filter(Boolean).join(" · ")}
                                                     </span>
                                                 )}
                                             </div>

@@ -5,7 +5,10 @@ import { prisma } from "@/lib/prisma";
 import { createClient } from "@/lib/supabase/server";
 import { uploadAttachmentIfPresent } from "@/lib/attachment-upload";
 import { loadCurrentUser } from "@/lib/auth/load-current-user";
-import type { EventCategory } from "@/prisma/generated/client";
+import type {
+    EventCategory,
+    EventParticipantType,
+} from "@/prisma/generated/client";
 
 type ActionResult = { ok: true; id?: string } | { ok: false; error: string };
 
@@ -17,8 +20,23 @@ const CATEGORIES = [
     "OTHER",
 ] as const satisfies readonly EventCategory[];
 
+const PARTICIPANT_TYPES = [
+    "PUBLIC",
+    "STUDENTS",
+    "INSTRUCTORS",
+    "PARENTS",
+    "DOJO_MEMBERS",
+] as const satisfies readonly EventParticipantType[];
+
 function isCategory(v: unknown): v is EventCategory {
     return typeof v === "string" && (CATEGORIES as readonly string[]).includes(v);
+}
+
+function isParticipantType(v: unknown): v is EventParticipantType {
+    return (
+        typeof v === "string" &&
+        (PARTICIPANT_TYPES as readonly string[]).includes(v)
+    );
 }
 
 async function requirePoster(): Promise<
@@ -76,6 +94,48 @@ export async function createEventAction(formData: FormData): Promise<ActionResul
         maxCapacity = n;
     }
 
+    // ── Premium ticketing ───────────────────────────────────────────────
+    const isPremium = formData.get("isPremium") === "true";
+    let ticketPrice: number | null = null;
+    if (isPremium) {
+        const raw = ((formData.get("ticketPrice") as string) ?? "").trim();
+        const n = Number.parseFloat(raw);
+        if (!raw || !Number.isFinite(n) || n <= 0) {
+            return {
+                ok: false,
+                error: "Premium events need a ticket price greater than zero.",
+            };
+        }
+        ticketPrice = Math.round(n * 100) / 100;
+    }
+
+    // ── Optional participation gates ────────────────────────────────────
+    const participantTypeRaw = formData.get("participantType") ?? "PUBLIC";
+    if (!isParticipantType(participantTypeRaw)) {
+        return { ok: false, error: "Invalid participant type." };
+    }
+
+    let minAge: number | null = null;
+    const minAgeRaw = ((formData.get("minAge") as string) ?? "").trim();
+    if (minAgeRaw) {
+        const n = Number.parseInt(minAgeRaw, 10);
+        if (!Number.isFinite(n) || n < 1 || n > 100) {
+            return { ok: false, error: "Minimum age must be between 1 and 100." };
+        }
+        minAge = n;
+    }
+
+    let minRankId: string | null = null;
+    const minRankRaw = ((formData.get("minRankId") as string) ?? "").trim();
+    if (minRankRaw) {
+        const rank = await prisma.beltRank.findUnique({
+            where: { id: minRankRaw },
+            select: { id: true },
+        });
+        if (!rank) return { ok: false, error: "Unknown belt rank." };
+        minRankId = rank.id;
+    }
+
     let attachment: { url: string; type: "IMAGE" | "PDF" } | null;
     try {
         attachment = await uploadAttachmentIfPresent(formData.get("attachment"));
@@ -95,6 +155,11 @@ export async function createEventAction(formData: FormData): Promise<ActionResul
             category: categoryRaw,
             maxCapacity,
             isPublished,
+            isPremium,
+            ticketPrice,
+            minAge,
+            minRankId,
+            participantType: participantTypeRaw,
             attachmentUrl: attachment?.url ?? null,
             attachmentType: attachment?.type ?? null,
             postedById: auth.userId,

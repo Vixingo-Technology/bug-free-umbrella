@@ -15,19 +15,32 @@ export default async function EventsPage() {
     try {
         const now = new Date();
 
-        upcomingEvents = await prisma.event.findMany({
-            where: { isPublished: true, eventDate: { gte: now } },
-            orderBy: { eventDate: "asc" },
-            include: {
-                _count: { select: { registrations: true } },
-            },
-        });
+        // Decimal fields (ticketPrice) aren't serializable across the
+        // server→client boundary — convert to plain numbers.
+        upcomingEvents = (
+            await prisma.event.findMany({
+                where: { isPublished: true, eventDate: { gte: now } },
+                orderBy: { eventDate: "asc" },
+                include: {
+                    minRank: { select: { name: true } },
+                    _count: { select: { registrations: true } },
+                },
+            })
+        ).map((e) => ({
+            ...e,
+            ticketPrice: e.ticketPrice ? Number(e.ticketPrice) : null,
+        }));
 
-        pastEvents = await prisma.event.findMany({
-            where: { isPublished: true, eventDate: { lt: now } },
-            orderBy: { eventDate: "desc" },
-            take: 6,
-        });
+        pastEvents = (
+            await prisma.event.findMany({
+                where: { isPublished: true, eventDate: { lt: now } },
+                orderBy: { eventDate: "desc" },
+                take: 6,
+            })
+        ).map((e) => ({
+            ...e,
+            ticketPrice: e.ticketPrice ? Number(e.ticketPrice) : null,
+        }));
 
         const regs = await prisma.eventRegistration.findMany({
             where: { userId: user.id },

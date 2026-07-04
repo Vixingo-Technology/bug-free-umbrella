@@ -6,9 +6,16 @@ import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { createClient } from "@/lib/supabase/server";
 import { emitEventRegistered } from "@/lib/n8n";
+import {
+    ageAt,
+    checkEligibility,
+    loadViewerContext,
+    type EventGates,
+} from "@/lib/events/eligibility";
+import { initiateTicketPayment } from "@/lib/events/ticket-payment";
 
 type ActionResult =
-    | { ok: true; token: string }
+    | { ok: true; token: string; payUrl?: string }
     | { ok: false; error: string };
 
 type CheckInResult =
@@ -52,6 +59,12 @@ export async function registerForEventAction(
             maxCapacity: true,
             eventDate: true,
             location: true,
+            dojoId: true,
+            isPremium: true,
+            ticketPrice: true,
+            minAge: true,
+            participantType: true,
+            minRank: { select: { id: true, name: true, orderIndex: true } },
             dojo: { select: { name: true } },
             _count: { select: { registrations: true } },
         },
@@ -66,35 +79,39 @@ export async function registerForEventAction(
         return { ok: false, error: "This event is fully booked." };
     }
 
+    const ticketPrice = event.ticketPrice ? Number(event.ticketPrice) : null;
+    const isPremium = event.isPremium && ticketPrice !== null && ticketPrice > 0;
+
+    const gates: EventGates = {
+        id: event.id,
+        dojoId: event.dojoId,
+        eventDate: event.eventDate,
+        participantType: event.participantType,
+        minAge: event.minAge,
+        minRank: event.minRank,
+        isPremium,
+        ticketPrice,
+    };
+
     const supabase = await createClient();
     const {
         data: { user },
     } = await supabase.auth.getUser();
 
-    let userId: string | null = null;
+    const viewer = await loadViewerContext(user?.id ?? null);
+    const eligibility = checkEligibility(gates, viewer);
+    if (!eligibility.ok) {
+        return {
+            ok: false,
+            error:
+                eligibility.reason ?? "You are not eligible for this event.",
+        };
+    }
+
+    const userId = viewer.userId;
     let guestName: string | null = null;
     let guestEmail: string | null = null;
     let guestPhone: string | null = null;
-
-    let memberFullName: string | null = null;
-    let memberEmail: string | null = null;
-    let memberPhone: string | null = null;
-
-    if (user) {
-        // Signed-in users never need to supply name/email — those come from
-        // the users table. They get the strict "one registration per user
-        // per event" guarantee.
-        const u = await prisma.user.findUnique({
-            where: { id: user.id },
-            select: { id: true, fullName: true, email: true, phone: true },
-        });
-        if (u) {
-            userId = u.id;
-            memberFullName = u.fullName;
-            memberEmail = u.email;
-            memberPhone = u.phone;
-        }
-    }
 
     if (!userId) {
         guestName = ((formData.get("name") as string) ?? "").trim() || null;
@@ -106,25 +123,94 @@ export async function registerForEventAction(
         if (!guestPhone) return { ok: false, error: "Your phone is required." };
     }
 
+    // ── Gate answers collected on the form ─────────────────────────────
+    let guestDateOfBirth: Date | null = null;
+    if (eligibility.needsDateOfBirth) {
+        const dobStr = ((formData.get("dateOfBirth") as string) ?? "").trim();
+        const dob = dobStr ? new Date(dobStr) : null;
+        if (!dob || Number.isNaN(dob.getTime())) {
+            return {
+                ok: false,
+                error: "Your date of birth is required for this event.",
+            };
+        }
+        if (event.minAge !== null && ageAt(dob, event.eventDate) < event.minAge) {
+            return {
+                ok: false,
+                error: `Participants must be at least ${event.minAge} years old on the event date.`,
+            };
+        }
+        guestDateOfBirth = dob;
+    }
+
+    let parentOfMemberNumber: string | null = null;
+    if (eligibility.needsChildMemberNumber) {
+        const memberNumber = ((formData.get("childMemberNumber") as string) ?? "").trim();
+        if (!memberNumber) {
+            return {
+                ok: false,
+                error: "Your child's member number is required for this event.",
+            };
+        }
+        const child = await prisma.student.findUnique({
+            where: { memberNumber },
+            select: { id: true },
+        });
+        if (!child) {
+            return {
+                ok: false,
+                error: "No student found with that member number. Please check and try again.",
+            };
+        }
+        parentOfMemberNumber = memberNumber;
+    }
+
+    const participantName = viewer.fullName ?? guestName ?? "Participant";
+    const participantEmail = viewer.email ?? guestEmail ?? "";
+    const participantPhone = viewer.phone ?? guestPhone ?? null;
+
     // Duplicate-guard before insert so we can return a friendly message instead
     // of a 23505 unique-violation. The DB has a partial unique index as a
-    // backstop.
-    if (userId) {
-        const existing = await prisma.eventRegistration.findFirst({
-            where: { eventId, userId },
-            select: { qrToken: true },
+    // backstop. A registration stuck on PENDING payment is resumed, not
+    // duplicated.
+    const existing = userId
+        ? await prisma.eventRegistration.findFirst({
+              where: { eventId, userId },
+              select: { id: true, qrToken: true, paymentStatus: true, amountDue: true },
+          })
+        : guestEmail
+          ? await prisma.eventRegistration.findFirst({
+                where: {
+                    eventId,
+                    userId: null,
+                    guestEmail: { equals: guestEmail, mode: "insensitive" },
+                },
+                select: { id: true, qrToken: true, paymentStatus: true, amountDue: true },
+            })
+          : null;
+
+    if (existing) {
+        if (existing.paymentStatus !== "PENDING") {
+            return { ok: true, token: existing.qrToken };
+        }
+        // Resume the unpaid registration — send them back to the gateway.
+        const init = await initiateTicketPayment({
+            registrationId: existing.id,
+            qrToken: existing.qrToken,
+            amount: existing.amountDue ? Number(existing.amountDue) : (ticketPrice ?? 0),
+            eventId: event.id,
+            eventTitle: event.title,
+            customerName: participantName,
+            customerEmail: participantEmail,
+            customerPhone: participantPhone,
         });
-        if (existing) return { ok: true, token: existing.qrToken };
-    } else if (guestEmail) {
-        const existing = await prisma.eventRegistration.findFirst({
-            where: {
-                eventId,
-                userId: null,
-                guestEmail: { equals: guestEmail, mode: "insensitive" },
-            },
-            select: { qrToken: true },
-        });
-        if (existing) return { ok: true, token: existing.qrToken };
+        if (init.kind === "gateway") {
+            return { ok: true, token: existing.qrToken, payUrl: init.url };
+        }
+        if (init.kind === "devPaid") {
+            return { ok: true, token: existing.qrToken };
+        }
+        return { ok: false, error: init.message };
     }
 
     const qrToken = urlSafeToken();
@@ -136,12 +222,41 @@ export async function registerForEventAction(
             guestEmail,
             guestPhone,
             qrToken,
+            paymentStatus: isPremium ? "PENDING" : null,
+            amountDue: isPremium ? ticketPrice : null,
+            guestDateOfBirth,
+            parentOfMemberNumber,
         },
         select: { id: true, qrToken: true },
     });
 
     revalidatePath(`/events/${eventId}`);
     revalidatePath(`/portal/admin/events/${eventId}/participants`);
+
+    if (isPremium) {
+        // The card is only issued once the ticket is paid. markRegistrationPaid
+        // (called by the payment webhook, or directly in dev bypass) emits the
+        // n8n confirmation.
+        const init = await initiateTicketPayment({
+            registrationId: reg.id,
+            qrToken: reg.qrToken,
+            amount: ticketPrice ?? 0,
+            eventId: event.id,
+            eventTitle: event.title,
+            customerName: participantName,
+            customerEmail: participantEmail,
+            customerPhone: participantPhone,
+        });
+        if (init.kind === "gateway") {
+            return { ok: true, token: reg.qrToken, payUrl: init.url };
+        }
+        if (init.kind === "devPaid") {
+            return { ok: true, token: reg.qrToken };
+        }
+        // Gateway hiccup — the PENDING registration is kept; resubmitting
+        // resumes it via the duplicate guard above.
+        return { ok: false, error: init.message };
+    }
 
     // Fire-and-forget — n8n handles the actual email + WhatsApp send.
     // emitWebhook never throws (see lib/n8n.ts), so a misconfigured n8n
@@ -154,9 +269,9 @@ export async function registerForEventAction(
         registrationId: reg.id,
         qrToken: reg.qrToken,
         participationCardUrl: `${appUrl}/participants/${reg.qrToken}`,
-        participantName: memberFullName ?? guestName ?? "Participant",
-        participantEmail: memberEmail ?? guestEmail ?? "",
-        participantPhone: memberPhone ?? guestPhone ?? null,
+        participantName,
+        participantEmail,
+        participantPhone,
         memberId: userId ?? null,
         isGuest: !userId,
         event: {
@@ -181,7 +296,51 @@ export async function registerForEventAndRedirect(
             `/events/${eventId}/register?error=${encodeURIComponent(res.error)}`,
         );
     }
+    // Premium events go through the payment gateway before the card.
+    if (res.payUrl) redirect(res.payUrl);
     redirect(`/participants/${res.token}`);
+}
+
+/**
+ * Resume payment for a PENDING premium registration, from the participation
+ * card page. Token-based so guests can pay too — the qr token is the private
+ * link to the registration.
+ */
+export async function payForRegistrationAction(formData: FormData): Promise<void> {
+    const token = ((formData.get("token") as string) ?? "").trim();
+    if (!token) redirect("/");
+
+    const reg = await prisma.eventRegistration.findUnique({
+        where: { qrToken: token },
+        include: {
+            event: { select: { id: true, title: true } },
+            user: { select: { fullName: true, email: true, phone: true } },
+        },
+    });
+    if (!reg) redirect("/");
+    if (reg.paymentStatus !== "PENDING") {
+        redirect(`/participants/${encodeURIComponent(token)}`);
+    }
+
+    const init = await initiateTicketPayment({
+        registrationId: reg.id,
+        qrToken: reg.qrToken,
+        amount: reg.amountDue ? Number(reg.amountDue) : 0,
+        eventId: reg.event.id,
+        eventTitle: reg.event.title,
+        customerName: reg.user?.fullName ?? reg.guestName ?? "Participant",
+        customerEmail: reg.user?.email ?? reg.guestEmail ?? "",
+        customerPhone: reg.user?.phone ?? reg.guestPhone ?? null,
+    });
+    if (init.kind === "gateway") redirect(init.url);
+    if (init.kind === "devPaid") {
+        redirect(`/participants/${encodeURIComponent(token)}?paid=1`);
+    }
+    redirect(
+        `/participants/${encodeURIComponent(token)}?error=${encodeURIComponent(
+            init.kind === "error" ? init.message : "Payment failed.",
+        )}`,
+    );
 }
 
 /**
@@ -230,6 +389,17 @@ export async function checkInParticipantAction(
     });
     if (!registration) {
         return { ok: false, error: "Invalid or unknown check-in code." };
+    }
+
+    // Premium tickets must be settled before the holder can enter.
+    if (
+        registration.paymentStatus === "PENDING" ||
+        registration.paymentStatus === "FAILED"
+    ) {
+        return {
+            ok: false,
+            error: "This ticket has not been paid yet. Ask the participant to complete payment first.",
+        };
     }
 
     // ADMIN can always check in. Dojo-scoped roles can check in for events

@@ -25,6 +25,14 @@ const CATEGORY_LABEL: Record<string, string> = {
     OTHER: "Event",
 };
 
+const PARTICIPANT_LABEL: Record<string, string> = {
+    PUBLIC: "Open to everyone",
+    STUDENTS: "Students only",
+    INSTRUCTORS: "Teachers only",
+    PARENTS: "Parents only",
+    DOJO_MEMBERS: "Dojo members only",
+};
+
 function formatDate(d: Date): string {
     return d.toLocaleString("en-GB", {
         weekday: "short",
@@ -57,8 +65,17 @@ export default async function AdminEventsPage({
                   include: {
                       dojo: { select: { id: true, name: true } },
                       postedBy: { select: { fullName: true } },
+                      minRank: { select: { name: true } },
                       _count: { select: { registrations: true } },
                   },
+              })
+            : [];
+
+    const beltRanks =
+        tab === "new"
+            ? await prisma.beltRank.findMany({
+                  orderBy: { orderIndex: "asc" },
+                  select: { id: true, name: true },
               })
             : [];
 
@@ -86,6 +103,7 @@ export default async function AdminEventsPage({
                         eyebrow="New federation event"
                         submitLabel="Publish to landing page"
                         redirectAfter={BASE}
+                        beltRanks={beltRanks}
                     />
                 </div>
             ) : events.length === 0 ? (
@@ -127,6 +145,11 @@ export default async function AdminEventsPage({
                                 >
                                     {e.isPublished ? "Published" : "Hidden"}
                                 </span>
+                                {e.isPremium && (
+                                    <span className="text-[10px] tracking-widest uppercase font-bold px-2 py-1 rounded-full border bg-amber-50 text-amber-700 border-amber-200">
+                                        Premium · ৳{Number(e.ticketPrice ?? 0).toLocaleString()}
+                                    </span>
+                                )}
                             </div>
                             <p className="text-sm font-semibold text-accent-red mb-3">
                                 {formatDate(e.eventDate)}
@@ -151,6 +174,25 @@ export default async function AdminEventsPage({
                                         ? ` · cap ${e.maxCapacity}`
                                         : ""}
                                 </li>
+                                {(e.participantType !== "PUBLIC" ||
+                                    e.minAge !== null ||
+                                    e.minRank) && (
+                                    <li className="text-zinc-500">
+                                        {[
+                                            e.participantType !== "PUBLIC"
+                                                ? PARTICIPANT_LABEL[e.participantType]
+                                                : null,
+                                            e.minAge !== null
+                                                ? `age ${e.minAge}+`
+                                                : null,
+                                            e.minRank
+                                                ? `${e.minRank.name}+`
+                                                : null,
+                                        ]
+                                            .filter(Boolean)
+                                            .join(" · ")}
+                                    </li>
+                                )}
                             </ul>
                             <Link
                                 href={`/portal/admin/events/${e.id}/participants`}

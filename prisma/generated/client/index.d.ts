@@ -266,6 +266,17 @@ export const AttachmentType: {
 export type AttachmentType = (typeof AttachmentType)[keyof typeof AttachmentType]
 
 
+export const EventParticipantType: {
+  PUBLIC: 'PUBLIC',
+  STUDENTS: 'STUDENTS',
+  INSTRUCTORS: 'INSTRUCTORS',
+  PARENTS: 'PARENTS',
+  DOJO_MEMBERS: 'DOJO_MEMBERS'
+};
+
+export type EventParticipantType = (typeof EventParticipantType)[keyof typeof EventParticipantType]
+
+
 export const AchievementTier: {
   COMMON: 'COMMON',
   RARE: 'RARE',
@@ -332,6 +343,10 @@ export const EventCategory: typeof $Enums.EventCategory
 export type AttachmentType = $Enums.AttachmentType
 
 export const AttachmentType: typeof $Enums.AttachmentType
+
+export type EventParticipantType = $Enums.EventParticipantType
+
+export const EventParticipantType: typeof $Enums.EventParticipantType
 
 export type AchievementTier = $Enums.AchievementTier
 
@@ -4198,6 +4213,7 @@ export namespace Prisma {
     gradingsTo: number
     gradingEvents: number
     gradingApplications: number
+    minRankEvents: number
   }
 
   export type BeltRankCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4205,6 +4221,7 @@ export namespace Prisma {
     gradingsTo?: boolean | BeltRankCountOutputTypeCountGradingsToArgs
     gradingEvents?: boolean | BeltRankCountOutputTypeCountGradingEventsArgs
     gradingApplications?: boolean | BeltRankCountOutputTypeCountGradingApplicationsArgs
+    minRankEvents?: boolean | BeltRankCountOutputTypeCountMinRankEventsArgs
   }
 
   // Custom InputTypes
@@ -4244,6 +4261,13 @@ export namespace Prisma {
    */
   export type BeltRankCountOutputTypeCountGradingApplicationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: GradingApplicationWhereInput
+  }
+
+  /**
+   * BeltRankCountOutputType without action
+   */
+  export type BeltRankCountOutputTypeCountMinRankEventsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EventWhereInput
   }
 
 
@@ -15400,6 +15424,7 @@ export namespace Prisma {
     gradingsTo?: boolean | BeltRank$gradingsToArgs<ExtArgs>
     gradingEvents?: boolean | BeltRank$gradingEventsArgs<ExtArgs>
     gradingApplications?: boolean | BeltRank$gradingApplicationsArgs<ExtArgs>
+    minRankEvents?: boolean | BeltRank$minRankEventsArgs<ExtArgs>
     _count?: boolean | BeltRankCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["beltRank"]>
 
@@ -15442,6 +15467,7 @@ export namespace Prisma {
     gradingsTo?: boolean | BeltRank$gradingsToArgs<ExtArgs>
     gradingEvents?: boolean | BeltRank$gradingEventsArgs<ExtArgs>
     gradingApplications?: boolean | BeltRank$gradingApplicationsArgs<ExtArgs>
+    minRankEvents?: boolean | BeltRank$minRankEventsArgs<ExtArgs>
     _count?: boolean | BeltRankCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type BeltRankIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -15454,6 +15480,7 @@ export namespace Prisma {
       gradingsTo: Prisma.$GradingPayload<ExtArgs>[]
       gradingEvents: Prisma.$GradingEventPayload<ExtArgs>[]
       gradingApplications: Prisma.$GradingApplicationPayload<ExtArgs>[]
+      minRankEvents: Prisma.$EventPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -15862,6 +15889,7 @@ export namespace Prisma {
     gradingsTo<T extends BeltRank$gradingsToArgs<ExtArgs> = {}>(args?: Subset<T, BeltRank$gradingsToArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GradingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     gradingEvents<T extends BeltRank$gradingEventsArgs<ExtArgs> = {}>(args?: Subset<T, BeltRank$gradingEventsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GradingEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     gradingApplications<T extends BeltRank$gradingApplicationsArgs<ExtArgs> = {}>(args?: Subset<T, BeltRank$gradingApplicationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GradingApplicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    minRankEvents<T extends BeltRank$minRankEventsArgs<ExtArgs> = {}>(args?: Subset<T, BeltRank$minRankEventsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -16385,6 +16413,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: GradingApplicationScalarFieldEnum | GradingApplicationScalarFieldEnum[]
+  }
+
+  /**
+   * BeltRank.minRankEvents
+   */
+  export type BeltRank$minRankEventsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Event
+     */
+    select?: EventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Event
+     */
+    omit?: EventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventInclude<ExtArgs> | null
+    where?: EventWhereInput
+    orderBy?: EventOrderByWithRelationInput | EventOrderByWithRelationInput[]
+    cursor?: EventWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: EventScalarFieldEnum | EventScalarFieldEnum[]
   }
 
   /**
@@ -26203,10 +26255,14 @@ export namespace Prisma {
 
   export type EventAvgAggregateOutputType = {
     maxCapacity: number | null
+    ticketPrice: Decimal | null
+    minAge: number | null
   }
 
   export type EventSumAggregateOutputType = {
     maxCapacity: number | null
+    ticketPrice: Decimal | null
+    minAge: number | null
   }
 
   export type EventMinAggregateOutputType = {
@@ -26221,6 +26277,11 @@ export namespace Prisma {
     category: $Enums.EventCategory | null
     attachmentUrl: string | null
     attachmentType: $Enums.AttachmentType | null
+    isPremium: boolean | null
+    ticketPrice: Decimal | null
+    minAge: number | null
+    minRankId: string | null
+    participantType: $Enums.EventParticipantType | null
     postedById: string | null
     dojoId: string | null
     createdAt: Date | null
@@ -26239,6 +26300,11 @@ export namespace Prisma {
     category: $Enums.EventCategory | null
     attachmentUrl: string | null
     attachmentType: $Enums.AttachmentType | null
+    isPremium: boolean | null
+    ticketPrice: Decimal | null
+    minAge: number | null
+    minRankId: string | null
+    participantType: $Enums.EventParticipantType | null
     postedById: string | null
     dojoId: string | null
     createdAt: Date | null
@@ -26257,6 +26323,11 @@ export namespace Prisma {
     category: number
     attachmentUrl: number
     attachmentType: number
+    isPremium: number
+    ticketPrice: number
+    minAge: number
+    minRankId: number
+    participantType: number
     postedById: number
     dojoId: number
     createdAt: number
@@ -26267,10 +26338,14 @@ export namespace Prisma {
 
   export type EventAvgAggregateInputType = {
     maxCapacity?: true
+    ticketPrice?: true
+    minAge?: true
   }
 
   export type EventSumAggregateInputType = {
     maxCapacity?: true
+    ticketPrice?: true
+    minAge?: true
   }
 
   export type EventMinAggregateInputType = {
@@ -26285,6 +26360,11 @@ export namespace Prisma {
     category?: true
     attachmentUrl?: true
     attachmentType?: true
+    isPremium?: true
+    ticketPrice?: true
+    minAge?: true
+    minRankId?: true
+    participantType?: true
     postedById?: true
     dojoId?: true
     createdAt?: true
@@ -26303,6 +26383,11 @@ export namespace Prisma {
     category?: true
     attachmentUrl?: true
     attachmentType?: true
+    isPremium?: true
+    ticketPrice?: true
+    minAge?: true
+    minRankId?: true
+    participantType?: true
     postedById?: true
     dojoId?: true
     createdAt?: true
@@ -26321,6 +26406,11 @@ export namespace Prisma {
     category?: true
     attachmentUrl?: true
     attachmentType?: true
+    isPremium?: true
+    ticketPrice?: true
+    minAge?: true
+    minRankId?: true
+    participantType?: true
     postedById?: true
     dojoId?: true
     createdAt?: true
@@ -26426,6 +26516,11 @@ export namespace Prisma {
     category: $Enums.EventCategory
     attachmentUrl: string | null
     attachmentType: $Enums.AttachmentType | null
+    isPremium: boolean
+    ticketPrice: Decimal | null
+    minAge: number | null
+    minRankId: string | null
+    participantType: $Enums.EventParticipantType
     postedById: string | null
     dojoId: string | null
     createdAt: Date
@@ -26463,6 +26558,11 @@ export namespace Prisma {
     category?: boolean
     attachmentUrl?: boolean
     attachmentType?: boolean
+    isPremium?: boolean
+    ticketPrice?: boolean
+    minAge?: boolean
+    minRankId?: boolean
+    participantType?: boolean
     postedById?: boolean
     dojoId?: boolean
     createdAt?: boolean
@@ -26470,6 +26570,7 @@ export namespace Prisma {
     registrations?: boolean | Event$registrationsArgs<ExtArgs>
     postedBy?: boolean | Event$postedByArgs<ExtArgs>
     dojo?: boolean | Event$dojoArgs<ExtArgs>
+    minRank?: boolean | Event$minRankArgs<ExtArgs>
     _count?: boolean | EventCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["event"]>
 
@@ -26485,12 +26586,18 @@ export namespace Prisma {
     category?: boolean
     attachmentUrl?: boolean
     attachmentType?: boolean
+    isPremium?: boolean
+    ticketPrice?: boolean
+    minAge?: boolean
+    minRankId?: boolean
+    participantType?: boolean
     postedById?: boolean
     dojoId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     postedBy?: boolean | Event$postedByArgs<ExtArgs>
     dojo?: boolean | Event$dojoArgs<ExtArgs>
+    minRank?: boolean | Event$minRankArgs<ExtArgs>
   }, ExtArgs["result"]["event"]>
 
   export type EventSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -26505,12 +26612,18 @@ export namespace Prisma {
     category?: boolean
     attachmentUrl?: boolean
     attachmentType?: boolean
+    isPremium?: boolean
+    ticketPrice?: boolean
+    minAge?: boolean
+    minRankId?: boolean
+    participantType?: boolean
     postedById?: boolean
     dojoId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     postedBy?: boolean | Event$postedByArgs<ExtArgs>
     dojo?: boolean | Event$dojoArgs<ExtArgs>
+    minRank?: boolean | Event$minRankArgs<ExtArgs>
   }, ExtArgs["result"]["event"]>
 
   export type EventSelectScalar = {
@@ -26525,26 +26638,34 @@ export namespace Prisma {
     category?: boolean
     attachmentUrl?: boolean
     attachmentType?: boolean
+    isPremium?: boolean
+    ticketPrice?: boolean
+    minAge?: boolean
+    minRankId?: boolean
+    participantType?: boolean
     postedById?: boolean
     dojoId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type EventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "eventDate" | "location" | "imageUrl" | "isPublished" | "maxCapacity" | "category" | "attachmentUrl" | "attachmentType" | "postedById" | "dojoId" | "createdAt" | "updatedAt", ExtArgs["result"]["event"]>
+  export type EventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "eventDate" | "location" | "imageUrl" | "isPublished" | "maxCapacity" | "category" | "attachmentUrl" | "attachmentType" | "isPremium" | "ticketPrice" | "minAge" | "minRankId" | "participantType" | "postedById" | "dojoId" | "createdAt" | "updatedAt", ExtArgs["result"]["event"]>
   export type EventInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     registrations?: boolean | Event$registrationsArgs<ExtArgs>
     postedBy?: boolean | Event$postedByArgs<ExtArgs>
     dojo?: boolean | Event$dojoArgs<ExtArgs>
+    minRank?: boolean | Event$minRankArgs<ExtArgs>
     _count?: boolean | EventCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type EventIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     postedBy?: boolean | Event$postedByArgs<ExtArgs>
     dojo?: boolean | Event$dojoArgs<ExtArgs>
+    minRank?: boolean | Event$minRankArgs<ExtArgs>
   }
   export type EventIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     postedBy?: boolean | Event$postedByArgs<ExtArgs>
     dojo?: boolean | Event$dojoArgs<ExtArgs>
+    minRank?: boolean | Event$minRankArgs<ExtArgs>
   }
 
   export type $EventPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -26553,6 +26674,7 @@ export namespace Prisma {
       registrations: Prisma.$EventRegistrationPayload<ExtArgs>[]
       postedBy: Prisma.$UserPayload<ExtArgs> | null
       dojo: Prisma.$DojoPayload<ExtArgs> | null
+      minRank: Prisma.$BeltRankPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -26566,6 +26688,11 @@ export namespace Prisma {
       category: $Enums.EventCategory
       attachmentUrl: string | null
       attachmentType: $Enums.AttachmentType | null
+      isPremium: boolean
+      ticketPrice: Prisma.Decimal | null
+      minAge: number | null
+      minRankId: string | null
+      participantType: $Enums.EventParticipantType
       postedById: string | null
       dojoId: string | null
       createdAt: Date
@@ -26967,6 +27094,7 @@ export namespace Prisma {
     registrations<T extends Event$registrationsArgs<ExtArgs> = {}>(args?: Subset<T, Event$registrationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EventRegistrationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     postedBy<T extends Event$postedByArgs<ExtArgs> = {}>(args?: Subset<T, Event$postedByArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     dojo<T extends Event$dojoArgs<ExtArgs> = {}>(args?: Subset<T, Event$dojoArgs<ExtArgs>>): Prisma__DojoClient<$Result.GetResult<Prisma.$DojoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    minRank<T extends Event$minRankArgs<ExtArgs> = {}>(args?: Subset<T, Event$minRankArgs<ExtArgs>>): Prisma__BeltRankClient<$Result.GetResult<Prisma.$BeltRankPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -27007,6 +27135,11 @@ export namespace Prisma {
     readonly category: FieldRef<"Event", 'EventCategory'>
     readonly attachmentUrl: FieldRef<"Event", 'String'>
     readonly attachmentType: FieldRef<"Event", 'AttachmentType'>
+    readonly isPremium: FieldRef<"Event", 'Boolean'>
+    readonly ticketPrice: FieldRef<"Event", 'Decimal'>
+    readonly minAge: FieldRef<"Event", 'Int'>
+    readonly minRankId: FieldRef<"Event", 'String'>
+    readonly participantType: FieldRef<"Event", 'EventParticipantType'>
     readonly postedById: FieldRef<"Event", 'String'>
     readonly dojoId: FieldRef<"Event", 'String'>
     readonly createdAt: FieldRef<"Event", 'DateTime'>
@@ -27471,6 +27604,25 @@ export namespace Prisma {
      */
     include?: DojoInclude<ExtArgs> | null
     where?: DojoWhereInput
+  }
+
+  /**
+   * Event.minRank
+   */
+  export type Event$minRankArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BeltRank
+     */
+    select?: BeltRankSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BeltRank
+     */
+    omit?: BeltRankOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BeltRankInclude<ExtArgs> | null
+    where?: BeltRankWhereInput
   }
 
   /**
@@ -28698,8 +28850,18 @@ export namespace Prisma {
 
   export type AggregateEventRegistration = {
     _count: EventRegistrationCountAggregateOutputType | null
+    _avg: EventRegistrationAvgAggregateOutputType | null
+    _sum: EventRegistrationSumAggregateOutputType | null
     _min: EventRegistrationMinAggregateOutputType | null
     _max: EventRegistrationMaxAggregateOutputType | null
+  }
+
+  export type EventRegistrationAvgAggregateOutputType = {
+    amountDue: Decimal | null
+  }
+
+  export type EventRegistrationSumAggregateOutputType = {
+    amountDue: Decimal | null
   }
 
   export type EventRegistrationMinAggregateOutputType = {
@@ -28710,6 +28872,12 @@ export namespace Prisma {
     guestEmail: string | null
     guestPhone: string | null
     qrToken: string | null
+    paymentStatus: $Enums.PaymentStatus | null
+    amountDue: Decimal | null
+    paidAt: Date | null
+    transactionId: string | null
+    guestDateOfBirth: Date | null
+    parentOfMemberNumber: string | null
     checkedInAt: Date | null
     checkedInByUserId: string | null
     createdAt: Date | null
@@ -28723,6 +28891,12 @@ export namespace Prisma {
     guestEmail: string | null
     guestPhone: string | null
     qrToken: string | null
+    paymentStatus: $Enums.PaymentStatus | null
+    amountDue: Decimal | null
+    paidAt: Date | null
+    transactionId: string | null
+    guestDateOfBirth: Date | null
+    parentOfMemberNumber: string | null
     checkedInAt: Date | null
     checkedInByUserId: string | null
     createdAt: Date | null
@@ -28736,12 +28910,26 @@ export namespace Prisma {
     guestEmail: number
     guestPhone: number
     qrToken: number
+    paymentStatus: number
+    amountDue: number
+    paidAt: number
+    transactionId: number
+    guestDateOfBirth: number
+    parentOfMemberNumber: number
     checkedInAt: number
     checkedInByUserId: number
     createdAt: number
     _all: number
   }
 
+
+  export type EventRegistrationAvgAggregateInputType = {
+    amountDue?: true
+  }
+
+  export type EventRegistrationSumAggregateInputType = {
+    amountDue?: true
+  }
 
   export type EventRegistrationMinAggregateInputType = {
     id?: true
@@ -28751,6 +28939,12 @@ export namespace Prisma {
     guestEmail?: true
     guestPhone?: true
     qrToken?: true
+    paymentStatus?: true
+    amountDue?: true
+    paidAt?: true
+    transactionId?: true
+    guestDateOfBirth?: true
+    parentOfMemberNumber?: true
     checkedInAt?: true
     checkedInByUserId?: true
     createdAt?: true
@@ -28764,6 +28958,12 @@ export namespace Prisma {
     guestEmail?: true
     guestPhone?: true
     qrToken?: true
+    paymentStatus?: true
+    amountDue?: true
+    paidAt?: true
+    transactionId?: true
+    guestDateOfBirth?: true
+    parentOfMemberNumber?: true
     checkedInAt?: true
     checkedInByUserId?: true
     createdAt?: true
@@ -28777,6 +28977,12 @@ export namespace Prisma {
     guestEmail?: true
     guestPhone?: true
     qrToken?: true
+    paymentStatus?: true
+    amountDue?: true
+    paidAt?: true
+    transactionId?: true
+    guestDateOfBirth?: true
+    parentOfMemberNumber?: true
     checkedInAt?: true
     checkedInByUserId?: true
     createdAt?: true
@@ -28821,6 +29027,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: EventRegistrationAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: EventRegistrationSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: EventRegistrationMinAggregateInputType
@@ -28851,6 +29069,8 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: EventRegistrationCountAggregateInputType | true
+    _avg?: EventRegistrationAvgAggregateInputType
+    _sum?: EventRegistrationSumAggregateInputType
     _min?: EventRegistrationMinAggregateInputType
     _max?: EventRegistrationMaxAggregateInputType
   }
@@ -28863,10 +29083,18 @@ export namespace Prisma {
     guestEmail: string | null
     guestPhone: string | null
     qrToken: string
+    paymentStatus: $Enums.PaymentStatus | null
+    amountDue: Decimal | null
+    paidAt: Date | null
+    transactionId: string | null
+    guestDateOfBirth: Date | null
+    parentOfMemberNumber: string | null
     checkedInAt: Date | null
     checkedInByUserId: string | null
     createdAt: Date
     _count: EventRegistrationCountAggregateOutputType | null
+    _avg: EventRegistrationAvgAggregateOutputType | null
+    _sum: EventRegistrationSumAggregateOutputType | null
     _min: EventRegistrationMinAggregateOutputType | null
     _max: EventRegistrationMaxAggregateOutputType | null
   }
@@ -28893,6 +29121,12 @@ export namespace Prisma {
     guestEmail?: boolean
     guestPhone?: boolean
     qrToken?: boolean
+    paymentStatus?: boolean
+    amountDue?: boolean
+    paidAt?: boolean
+    transactionId?: boolean
+    guestDateOfBirth?: boolean
+    parentOfMemberNumber?: boolean
     checkedInAt?: boolean
     checkedInByUserId?: boolean
     createdAt?: boolean
@@ -28909,6 +29143,12 @@ export namespace Prisma {
     guestEmail?: boolean
     guestPhone?: boolean
     qrToken?: boolean
+    paymentStatus?: boolean
+    amountDue?: boolean
+    paidAt?: boolean
+    transactionId?: boolean
+    guestDateOfBirth?: boolean
+    parentOfMemberNumber?: boolean
     checkedInAt?: boolean
     checkedInByUserId?: boolean
     createdAt?: boolean
@@ -28925,6 +29165,12 @@ export namespace Prisma {
     guestEmail?: boolean
     guestPhone?: boolean
     qrToken?: boolean
+    paymentStatus?: boolean
+    amountDue?: boolean
+    paidAt?: boolean
+    transactionId?: boolean
+    guestDateOfBirth?: boolean
+    parentOfMemberNumber?: boolean
     checkedInAt?: boolean
     checkedInByUserId?: boolean
     createdAt?: boolean
@@ -28941,12 +29187,18 @@ export namespace Prisma {
     guestEmail?: boolean
     guestPhone?: boolean
     qrToken?: boolean
+    paymentStatus?: boolean
+    amountDue?: boolean
+    paidAt?: boolean
+    transactionId?: boolean
+    guestDateOfBirth?: boolean
+    parentOfMemberNumber?: boolean
     checkedInAt?: boolean
     checkedInByUserId?: boolean
     createdAt?: boolean
   }
 
-  export type EventRegistrationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "eventId" | "userId" | "guestName" | "guestEmail" | "guestPhone" | "qrToken" | "checkedInAt" | "checkedInByUserId" | "createdAt", ExtArgs["result"]["eventRegistration"]>
+  export type EventRegistrationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "eventId" | "userId" | "guestName" | "guestEmail" | "guestPhone" | "qrToken" | "paymentStatus" | "amountDue" | "paidAt" | "transactionId" | "guestDateOfBirth" | "parentOfMemberNumber" | "checkedInAt" | "checkedInByUserId" | "createdAt", ExtArgs["result"]["eventRegistration"]>
   export type EventRegistrationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     event?: boolean | EventDefaultArgs<ExtArgs>
     user?: boolean | EventRegistration$userArgs<ExtArgs>
@@ -28978,6 +29230,12 @@ export namespace Prisma {
       guestEmail: string | null
       guestPhone: string | null
       qrToken: string
+      paymentStatus: $Enums.PaymentStatus | null
+      amountDue: Prisma.Decimal | null
+      paidAt: Date | null
+      transactionId: string | null
+      guestDateOfBirth: Date | null
+      parentOfMemberNumber: string | null
       checkedInAt: Date | null
       checkedInByUserId: string | null
       createdAt: Date
@@ -29414,6 +29672,12 @@ export namespace Prisma {
     readonly guestEmail: FieldRef<"EventRegistration", 'String'>
     readonly guestPhone: FieldRef<"EventRegistration", 'String'>
     readonly qrToken: FieldRef<"EventRegistration", 'String'>
+    readonly paymentStatus: FieldRef<"EventRegistration", 'PaymentStatus'>
+    readonly amountDue: FieldRef<"EventRegistration", 'Decimal'>
+    readonly paidAt: FieldRef<"EventRegistration", 'DateTime'>
+    readonly transactionId: FieldRef<"EventRegistration", 'String'>
+    readonly guestDateOfBirth: FieldRef<"EventRegistration", 'DateTime'>
+    readonly parentOfMemberNumber: FieldRef<"EventRegistration", 'String'>
     readonly checkedInAt: FieldRef<"EventRegistration", 'DateTime'>
     readonly checkedInByUserId: FieldRef<"EventRegistration", 'String'>
     readonly createdAt: FieldRef<"EventRegistration", 'DateTime'>
@@ -44482,6 +44746,11 @@ export namespace Prisma {
     category: 'category',
     attachmentUrl: 'attachmentUrl',
     attachmentType: 'attachmentType',
+    isPremium: 'isPremium',
+    ticketPrice: 'ticketPrice',
+    minAge: 'minAge',
+    minRankId: 'minRankId',
+    participantType: 'participantType',
     postedById: 'postedById',
     dojoId: 'dojoId',
     createdAt: 'createdAt',
@@ -44517,6 +44786,12 @@ export namespace Prisma {
     guestEmail: 'guestEmail',
     guestPhone: 'guestPhone',
     qrToken: 'qrToken',
+    paymentStatus: 'paymentStatus',
+    amountDue: 'amountDue',
+    paidAt: 'paidAt',
+    transactionId: 'transactionId',
+    guestDateOfBirth: 'guestDateOfBirth',
+    parentOfMemberNumber: 'parentOfMemberNumber',
     checkedInAt: 'checkedInAt',
     checkedInByUserId: 'checkedInByUserId',
     createdAt: 'createdAt'
@@ -44951,16 +45226,16 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'NotificationType'
+   * Reference to a field of type 'EventParticipantType'
    */
-  export type EnumNotificationTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NotificationType'>
+  export type EnumEventParticipantTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EventParticipantType'>
     
 
 
   /**
-   * Reference to a field of type 'NotificationType[]'
+   * Reference to a field of type 'EventParticipantType[]'
    */
-  export type ListEnumNotificationTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NotificationType[]'>
+  export type ListEnumEventParticipantTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EventParticipantType[]'>
     
 
 
@@ -44975,6 +45250,20 @@ export namespace Prisma {
    * Reference to a field of type 'PaymentStatus[]'
    */
   export type ListEnumPaymentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PaymentStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'NotificationType'
+   */
+  export type EnumNotificationTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NotificationType'>
+    
+
+
+  /**
+   * Reference to a field of type 'NotificationType[]'
+   */
+  export type ListEnumNotificationTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NotificationType[]'>
     
 
 
@@ -45669,6 +45958,7 @@ export namespace Prisma {
     gradingsTo?: GradingListRelationFilter
     gradingEvents?: GradingEventListRelationFilter
     gradingApplications?: GradingApplicationListRelationFilter
+    minRankEvents?: EventListRelationFilter
   }
 
   export type BeltRankOrderByWithRelationInput = {
@@ -45684,6 +45974,7 @@ export namespace Prisma {
     gradingsTo?: GradingOrderByRelationAggregateInput
     gradingEvents?: GradingEventOrderByRelationAggregateInput
     gradingApplications?: GradingApplicationOrderByRelationAggregateInput
+    minRankEvents?: EventOrderByRelationAggregateInput
   }
 
   export type BeltRankWhereUniqueInput = Prisma.AtLeast<{
@@ -45702,6 +45993,7 @@ export namespace Prisma {
     gradingsTo?: GradingListRelationFilter
     gradingEvents?: GradingEventListRelationFilter
     gradingApplications?: GradingApplicationListRelationFilter
+    minRankEvents?: EventListRelationFilter
   }, "id" | "name" | "orderIndex">
 
   export type BeltRankOrderByWithAggregationInput = {
@@ -46519,6 +46811,11 @@ export namespace Prisma {
     category?: EnumEventCategoryFilter<"Event"> | $Enums.EventCategory
     attachmentUrl?: StringNullableFilter<"Event"> | string | null
     attachmentType?: EnumAttachmentTypeNullableFilter<"Event"> | $Enums.AttachmentType | null
+    isPremium?: BoolFilter<"Event"> | boolean
+    ticketPrice?: DecimalNullableFilter<"Event"> | Decimal | DecimalJsLike | number | string | null
+    minAge?: IntNullableFilter<"Event"> | number | null
+    minRankId?: UuidNullableFilter<"Event"> | string | null
+    participantType?: EnumEventParticipantTypeFilter<"Event"> | $Enums.EventParticipantType
     postedById?: UuidNullableFilter<"Event"> | string | null
     dojoId?: UuidNullableFilter<"Event"> | string | null
     createdAt?: DateTimeFilter<"Event"> | Date | string
@@ -46526,6 +46823,7 @@ export namespace Prisma {
     registrations?: EventRegistrationListRelationFilter
     postedBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     dojo?: XOR<DojoNullableScalarRelationFilter, DojoWhereInput> | null
+    minRank?: XOR<BeltRankNullableScalarRelationFilter, BeltRankWhereInput> | null
   }
 
   export type EventOrderByWithRelationInput = {
@@ -46540,6 +46838,11 @@ export namespace Prisma {
     category?: SortOrder
     attachmentUrl?: SortOrderInput | SortOrder
     attachmentType?: SortOrderInput | SortOrder
+    isPremium?: SortOrder
+    ticketPrice?: SortOrderInput | SortOrder
+    minAge?: SortOrderInput | SortOrder
+    minRankId?: SortOrderInput | SortOrder
+    participantType?: SortOrder
     postedById?: SortOrderInput | SortOrder
     dojoId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
@@ -46547,6 +46850,7 @@ export namespace Prisma {
     registrations?: EventRegistrationOrderByRelationAggregateInput
     postedBy?: UserOrderByWithRelationInput
     dojo?: DojoOrderByWithRelationInput
+    minRank?: BeltRankOrderByWithRelationInput
   }
 
   export type EventWhereUniqueInput = Prisma.AtLeast<{
@@ -46564,6 +46868,11 @@ export namespace Prisma {
     category?: EnumEventCategoryFilter<"Event"> | $Enums.EventCategory
     attachmentUrl?: StringNullableFilter<"Event"> | string | null
     attachmentType?: EnumAttachmentTypeNullableFilter<"Event"> | $Enums.AttachmentType | null
+    isPremium?: BoolFilter<"Event"> | boolean
+    ticketPrice?: DecimalNullableFilter<"Event"> | Decimal | DecimalJsLike | number | string | null
+    minAge?: IntNullableFilter<"Event"> | number | null
+    minRankId?: UuidNullableFilter<"Event"> | string | null
+    participantType?: EnumEventParticipantTypeFilter<"Event"> | $Enums.EventParticipantType
     postedById?: UuidNullableFilter<"Event"> | string | null
     dojoId?: UuidNullableFilter<"Event"> | string | null
     createdAt?: DateTimeFilter<"Event"> | Date | string
@@ -46571,6 +46880,7 @@ export namespace Prisma {
     registrations?: EventRegistrationListRelationFilter
     postedBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     dojo?: XOR<DojoNullableScalarRelationFilter, DojoWhereInput> | null
+    minRank?: XOR<BeltRankNullableScalarRelationFilter, BeltRankWhereInput> | null
   }, "id">
 
   export type EventOrderByWithAggregationInput = {
@@ -46585,6 +46895,11 @@ export namespace Prisma {
     category?: SortOrder
     attachmentUrl?: SortOrderInput | SortOrder
     attachmentType?: SortOrderInput | SortOrder
+    isPremium?: SortOrder
+    ticketPrice?: SortOrderInput | SortOrder
+    minAge?: SortOrderInput | SortOrder
+    minRankId?: SortOrderInput | SortOrder
+    participantType?: SortOrder
     postedById?: SortOrderInput | SortOrder
     dojoId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
@@ -46611,6 +46926,11 @@ export namespace Prisma {
     category?: EnumEventCategoryWithAggregatesFilter<"Event"> | $Enums.EventCategory
     attachmentUrl?: StringNullableWithAggregatesFilter<"Event"> | string | null
     attachmentType?: EnumAttachmentTypeNullableWithAggregatesFilter<"Event"> | $Enums.AttachmentType | null
+    isPremium?: BoolWithAggregatesFilter<"Event"> | boolean
+    ticketPrice?: DecimalNullableWithAggregatesFilter<"Event"> | Decimal | DecimalJsLike | number | string | null
+    minAge?: IntNullableWithAggregatesFilter<"Event"> | number | null
+    minRankId?: UuidNullableWithAggregatesFilter<"Event"> | string | null
+    participantType?: EnumEventParticipantTypeWithAggregatesFilter<"Event"> | $Enums.EventParticipantType
     postedById?: UuidNullableWithAggregatesFilter<"Event"> | string | null
     dojoId?: UuidNullableWithAggregatesFilter<"Event"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Event"> | Date | string
@@ -46721,6 +47041,12 @@ export namespace Prisma {
     guestEmail?: StringNullableFilter<"EventRegistration"> | string | null
     guestPhone?: StringNullableFilter<"EventRegistration"> | string | null
     qrToken?: StringFilter<"EventRegistration"> | string
+    paymentStatus?: EnumPaymentStatusNullableFilter<"EventRegistration"> | $Enums.PaymentStatus | null
+    amountDue?: DecimalNullableFilter<"EventRegistration"> | Decimal | DecimalJsLike | number | string | null
+    paidAt?: DateTimeNullableFilter<"EventRegistration"> | Date | string | null
+    transactionId?: StringNullableFilter<"EventRegistration"> | string | null
+    guestDateOfBirth?: DateTimeNullableFilter<"EventRegistration"> | Date | string | null
+    parentOfMemberNumber?: StringNullableFilter<"EventRegistration"> | string | null
     checkedInAt?: DateTimeNullableFilter<"EventRegistration"> | Date | string | null
     checkedInByUserId?: UuidNullableFilter<"EventRegistration"> | string | null
     createdAt?: DateTimeFilter<"EventRegistration"> | Date | string
@@ -46737,6 +47063,12 @@ export namespace Prisma {
     guestEmail?: SortOrderInput | SortOrder
     guestPhone?: SortOrderInput | SortOrder
     qrToken?: SortOrder
+    paymentStatus?: SortOrderInput | SortOrder
+    amountDue?: SortOrderInput | SortOrder
+    paidAt?: SortOrderInput | SortOrder
+    transactionId?: SortOrderInput | SortOrder
+    guestDateOfBirth?: SortOrderInput | SortOrder
+    parentOfMemberNumber?: SortOrderInput | SortOrder
     checkedInAt?: SortOrderInput | SortOrder
     checkedInByUserId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
@@ -46756,6 +47088,12 @@ export namespace Prisma {
     guestName?: StringNullableFilter<"EventRegistration"> | string | null
     guestEmail?: StringNullableFilter<"EventRegistration"> | string | null
     guestPhone?: StringNullableFilter<"EventRegistration"> | string | null
+    paymentStatus?: EnumPaymentStatusNullableFilter<"EventRegistration"> | $Enums.PaymentStatus | null
+    amountDue?: DecimalNullableFilter<"EventRegistration"> | Decimal | DecimalJsLike | number | string | null
+    paidAt?: DateTimeNullableFilter<"EventRegistration"> | Date | string | null
+    transactionId?: StringNullableFilter<"EventRegistration"> | string | null
+    guestDateOfBirth?: DateTimeNullableFilter<"EventRegistration"> | Date | string | null
+    parentOfMemberNumber?: StringNullableFilter<"EventRegistration"> | string | null
     checkedInAt?: DateTimeNullableFilter<"EventRegistration"> | Date | string | null
     checkedInByUserId?: UuidNullableFilter<"EventRegistration"> | string | null
     createdAt?: DateTimeFilter<"EventRegistration"> | Date | string
@@ -46772,12 +47110,20 @@ export namespace Prisma {
     guestEmail?: SortOrderInput | SortOrder
     guestPhone?: SortOrderInput | SortOrder
     qrToken?: SortOrder
+    paymentStatus?: SortOrderInput | SortOrder
+    amountDue?: SortOrderInput | SortOrder
+    paidAt?: SortOrderInput | SortOrder
+    transactionId?: SortOrderInput | SortOrder
+    guestDateOfBirth?: SortOrderInput | SortOrder
+    parentOfMemberNumber?: SortOrderInput | SortOrder
     checkedInAt?: SortOrderInput | SortOrder
     checkedInByUserId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     _count?: EventRegistrationCountOrderByAggregateInput
+    _avg?: EventRegistrationAvgOrderByAggregateInput
     _max?: EventRegistrationMaxOrderByAggregateInput
     _min?: EventRegistrationMinOrderByAggregateInput
+    _sum?: EventRegistrationSumOrderByAggregateInput
   }
 
   export type EventRegistrationScalarWhereWithAggregatesInput = {
@@ -46791,6 +47137,12 @@ export namespace Prisma {
     guestEmail?: StringNullableWithAggregatesFilter<"EventRegistration"> | string | null
     guestPhone?: StringNullableWithAggregatesFilter<"EventRegistration"> | string | null
     qrToken?: StringWithAggregatesFilter<"EventRegistration"> | string
+    paymentStatus?: EnumPaymentStatusNullableWithAggregatesFilter<"EventRegistration"> | $Enums.PaymentStatus | null
+    amountDue?: DecimalNullableWithAggregatesFilter<"EventRegistration"> | Decimal | DecimalJsLike | number | string | null
+    paidAt?: DateTimeNullableWithAggregatesFilter<"EventRegistration"> | Date | string | null
+    transactionId?: StringNullableWithAggregatesFilter<"EventRegistration"> | string | null
+    guestDateOfBirth?: DateTimeNullableWithAggregatesFilter<"EventRegistration"> | Date | string | null
+    parentOfMemberNumber?: StringNullableWithAggregatesFilter<"EventRegistration"> | string | null
     checkedInAt?: DateTimeNullableWithAggregatesFilter<"EventRegistration"> | Date | string | null
     checkedInByUserId?: UuidNullableWithAggregatesFilter<"EventRegistration"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"EventRegistration"> | Date | string
@@ -48494,6 +48846,7 @@ export namespace Prisma {
     gradingsTo?: GradingCreateNestedManyWithoutToRankInput
     gradingEvents?: GradingEventCreateNestedManyWithoutTargetRankInput
     gradingApplications?: GradingApplicationCreateNestedManyWithoutTargetRankInput
+    minRankEvents?: EventCreateNestedManyWithoutMinRankInput
   }
 
   export type BeltRankUncheckedCreateInput = {
@@ -48509,6 +48862,7 @@ export namespace Prisma {
     gradingsTo?: GradingUncheckedCreateNestedManyWithoutToRankInput
     gradingEvents?: GradingEventUncheckedCreateNestedManyWithoutTargetRankInput
     gradingApplications?: GradingApplicationUncheckedCreateNestedManyWithoutTargetRankInput
+    minRankEvents?: EventUncheckedCreateNestedManyWithoutMinRankInput
   }
 
   export type BeltRankUpdateInput = {
@@ -48524,6 +48878,7 @@ export namespace Prisma {
     gradingsTo?: GradingUpdateManyWithoutToRankNestedInput
     gradingEvents?: GradingEventUpdateManyWithoutTargetRankNestedInput
     gradingApplications?: GradingApplicationUpdateManyWithoutTargetRankNestedInput
+    minRankEvents?: EventUpdateManyWithoutMinRankNestedInput
   }
 
   export type BeltRankUncheckedUpdateInput = {
@@ -48539,6 +48894,7 @@ export namespace Prisma {
     gradingsTo?: GradingUncheckedUpdateManyWithoutToRankNestedInput
     gradingEvents?: GradingEventUncheckedUpdateManyWithoutTargetRankNestedInput
     gradingApplications?: GradingApplicationUncheckedUpdateManyWithoutTargetRankNestedInput
+    minRankEvents?: EventUncheckedUpdateManyWithoutMinRankNestedInput
   }
 
   export type BeltRankCreateManyInput = {
@@ -49444,11 +49800,16 @@ export namespace Prisma {
     category?: $Enums.EventCategory
     attachmentUrl?: string | null
     attachmentType?: $Enums.AttachmentType | null
+    isPremium?: boolean
+    ticketPrice?: Decimal | DecimalJsLike | number | string | null
+    minAge?: number | null
+    participantType?: $Enums.EventParticipantType
     createdAt?: Date | string
     updatedAt?: Date | string
     registrations?: EventRegistrationCreateNestedManyWithoutEventInput
     postedBy?: UserCreateNestedOneWithoutEventsPostedInput
     dojo?: DojoCreateNestedOneWithoutEventsInput
+    minRank?: BeltRankCreateNestedOneWithoutMinRankEventsInput
   }
 
   export type EventUncheckedCreateInput = {
@@ -49463,6 +49824,11 @@ export namespace Prisma {
     category?: $Enums.EventCategory
     attachmentUrl?: string | null
     attachmentType?: $Enums.AttachmentType | null
+    isPremium?: boolean
+    ticketPrice?: Decimal | DecimalJsLike | number | string | null
+    minAge?: number | null
+    minRankId?: string | null
+    participantType?: $Enums.EventParticipantType
     postedById?: string | null
     dojoId?: string | null
     createdAt?: Date | string
@@ -49482,11 +49848,16 @@ export namespace Prisma {
     category?: EnumEventCategoryFieldUpdateOperationsInput | $Enums.EventCategory
     attachmentUrl?: NullableStringFieldUpdateOperationsInput | string | null
     attachmentType?: NullableEnumAttachmentTypeFieldUpdateOperationsInput | $Enums.AttachmentType | null
+    isPremium?: BoolFieldUpdateOperationsInput | boolean
+    ticketPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    minAge?: NullableIntFieldUpdateOperationsInput | number | null
+    participantType?: EnumEventParticipantTypeFieldUpdateOperationsInput | $Enums.EventParticipantType
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     registrations?: EventRegistrationUpdateManyWithoutEventNestedInput
     postedBy?: UserUpdateOneWithoutEventsPostedNestedInput
     dojo?: DojoUpdateOneWithoutEventsNestedInput
+    minRank?: BeltRankUpdateOneWithoutMinRankEventsNestedInput
   }
 
   export type EventUncheckedUpdateInput = {
@@ -49501,6 +49872,11 @@ export namespace Prisma {
     category?: EnumEventCategoryFieldUpdateOperationsInput | $Enums.EventCategory
     attachmentUrl?: NullableStringFieldUpdateOperationsInput | string | null
     attachmentType?: NullableEnumAttachmentTypeFieldUpdateOperationsInput | $Enums.AttachmentType | null
+    isPremium?: BoolFieldUpdateOperationsInput | boolean
+    ticketPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    minAge?: NullableIntFieldUpdateOperationsInput | number | null
+    minRankId?: NullableStringFieldUpdateOperationsInput | string | null
+    participantType?: EnumEventParticipantTypeFieldUpdateOperationsInput | $Enums.EventParticipantType
     postedById?: NullableStringFieldUpdateOperationsInput | string | null
     dojoId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -49520,6 +49896,11 @@ export namespace Prisma {
     category?: $Enums.EventCategory
     attachmentUrl?: string | null
     attachmentType?: $Enums.AttachmentType | null
+    isPremium?: boolean
+    ticketPrice?: Decimal | DecimalJsLike | number | string | null
+    minAge?: number | null
+    minRankId?: string | null
+    participantType?: $Enums.EventParticipantType
     postedById?: string | null
     dojoId?: string | null
     createdAt?: Date | string
@@ -49538,6 +49919,10 @@ export namespace Prisma {
     category?: EnumEventCategoryFieldUpdateOperationsInput | $Enums.EventCategory
     attachmentUrl?: NullableStringFieldUpdateOperationsInput | string | null
     attachmentType?: NullableEnumAttachmentTypeFieldUpdateOperationsInput | $Enums.AttachmentType | null
+    isPremium?: BoolFieldUpdateOperationsInput | boolean
+    ticketPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    minAge?: NullableIntFieldUpdateOperationsInput | number | null
+    participantType?: EnumEventParticipantTypeFieldUpdateOperationsInput | $Enums.EventParticipantType
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -49554,6 +49939,11 @@ export namespace Prisma {
     category?: EnumEventCategoryFieldUpdateOperationsInput | $Enums.EventCategory
     attachmentUrl?: NullableStringFieldUpdateOperationsInput | string | null
     attachmentType?: NullableEnumAttachmentTypeFieldUpdateOperationsInput | $Enums.AttachmentType | null
+    isPremium?: BoolFieldUpdateOperationsInput | boolean
+    ticketPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    minAge?: NullableIntFieldUpdateOperationsInput | number | null
+    minRankId?: NullableStringFieldUpdateOperationsInput | string | null
+    participantType?: EnumEventParticipantTypeFieldUpdateOperationsInput | $Enums.EventParticipantType
     postedById?: NullableStringFieldUpdateOperationsInput | string | null
     dojoId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -49669,6 +50059,12 @@ export namespace Prisma {
     guestEmail?: string | null
     guestPhone?: string | null
     qrToken: string
+    paymentStatus?: $Enums.PaymentStatus | null
+    amountDue?: Decimal | DecimalJsLike | number | string | null
+    paidAt?: Date | string | null
+    transactionId?: string | null
+    guestDateOfBirth?: Date | string | null
+    parentOfMemberNumber?: string | null
     checkedInAt?: Date | string | null
     createdAt?: Date | string
     event: EventCreateNestedOneWithoutRegistrationsInput
@@ -49684,6 +50080,12 @@ export namespace Prisma {
     guestEmail?: string | null
     guestPhone?: string | null
     qrToken: string
+    paymentStatus?: $Enums.PaymentStatus | null
+    amountDue?: Decimal | DecimalJsLike | number | string | null
+    paidAt?: Date | string | null
+    transactionId?: string | null
+    guestDateOfBirth?: Date | string | null
+    parentOfMemberNumber?: string | null
     checkedInAt?: Date | string | null
     checkedInByUserId?: string | null
     createdAt?: Date | string
@@ -49695,6 +50097,12 @@ export namespace Prisma {
     guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
     guestPhone?: NullableStringFieldUpdateOperationsInput | string | null
     qrToken?: StringFieldUpdateOperationsInput | string
+    paymentStatus?: NullableEnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus | null
+    amountDue?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    transactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    guestDateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    parentOfMemberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     checkedInAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     event?: EventUpdateOneRequiredWithoutRegistrationsNestedInput
@@ -49710,6 +50118,12 @@ export namespace Prisma {
     guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
     guestPhone?: NullableStringFieldUpdateOperationsInput | string | null
     qrToken?: StringFieldUpdateOperationsInput | string
+    paymentStatus?: NullableEnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus | null
+    amountDue?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    transactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    guestDateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    parentOfMemberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     checkedInAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     checkedInByUserId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -49723,6 +50137,12 @@ export namespace Prisma {
     guestEmail?: string | null
     guestPhone?: string | null
     qrToken: string
+    paymentStatus?: $Enums.PaymentStatus | null
+    amountDue?: Decimal | DecimalJsLike | number | string | null
+    paidAt?: Date | string | null
+    transactionId?: string | null
+    guestDateOfBirth?: Date | string | null
+    parentOfMemberNumber?: string | null
     checkedInAt?: Date | string | null
     checkedInByUserId?: string | null
     createdAt?: Date | string
@@ -49734,6 +50154,12 @@ export namespace Prisma {
     guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
     guestPhone?: NullableStringFieldUpdateOperationsInput | string | null
     qrToken?: StringFieldUpdateOperationsInput | string
+    paymentStatus?: NullableEnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus | null
+    amountDue?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    transactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    guestDateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    parentOfMemberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     checkedInAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -49746,6 +50172,12 @@ export namespace Prisma {
     guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
     guestPhone?: NullableStringFieldUpdateOperationsInput | string | null
     qrToken?: StringFieldUpdateOperationsInput | string
+    paymentStatus?: NullableEnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus | null
+    amountDue?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    transactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    guestDateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    parentOfMemberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     checkedInAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     checkedInByUserId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -52266,6 +52698,13 @@ export namespace Prisma {
     not?: NestedEnumAttachmentTypeNullableFilter<$PrismaModel> | $Enums.AttachmentType | null
   }
 
+  export type EnumEventParticipantTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.EventParticipantType | EnumEventParticipantTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.EventParticipantType[] | ListEnumEventParticipantTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.EventParticipantType[] | ListEnumEventParticipantTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumEventParticipantTypeFilter<$PrismaModel> | $Enums.EventParticipantType
+  }
+
   export type UserNullableScalarRelationFilter = {
     is?: UserWhereInput | null
     isNot?: UserWhereInput | null
@@ -52283,6 +52722,11 @@ export namespace Prisma {
     category?: SortOrder
     attachmentUrl?: SortOrder
     attachmentType?: SortOrder
+    isPremium?: SortOrder
+    ticketPrice?: SortOrder
+    minAge?: SortOrder
+    minRankId?: SortOrder
+    participantType?: SortOrder
     postedById?: SortOrder
     dojoId?: SortOrder
     createdAt?: SortOrder
@@ -52291,6 +52735,8 @@ export namespace Prisma {
 
   export type EventAvgOrderByAggregateInput = {
     maxCapacity?: SortOrder
+    ticketPrice?: SortOrder
+    minAge?: SortOrder
   }
 
   export type EventMaxOrderByAggregateInput = {
@@ -52305,6 +52751,11 @@ export namespace Prisma {
     category?: SortOrder
     attachmentUrl?: SortOrder
     attachmentType?: SortOrder
+    isPremium?: SortOrder
+    ticketPrice?: SortOrder
+    minAge?: SortOrder
+    minRankId?: SortOrder
+    participantType?: SortOrder
     postedById?: SortOrder
     dojoId?: SortOrder
     createdAt?: SortOrder
@@ -52323,6 +52774,11 @@ export namespace Prisma {
     category?: SortOrder
     attachmentUrl?: SortOrder
     attachmentType?: SortOrder
+    isPremium?: SortOrder
+    ticketPrice?: SortOrder
+    minAge?: SortOrder
+    minRankId?: SortOrder
+    participantType?: SortOrder
     postedById?: SortOrder
     dojoId?: SortOrder
     createdAt?: SortOrder
@@ -52331,6 +52787,8 @@ export namespace Prisma {
 
   export type EventSumOrderByAggregateInput = {
     maxCapacity?: SortOrder
+    ticketPrice?: SortOrder
+    minAge?: SortOrder
   }
 
   export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -52367,6 +52825,16 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedEnumAttachmentTypeNullableFilter<$PrismaModel>
     _max?: NestedEnumAttachmentTypeNullableFilter<$PrismaModel>
+  }
+
+  export type EnumEventParticipantTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.EventParticipantType | EnumEventParticipantTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.EventParticipantType[] | ListEnumEventParticipantTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.EventParticipantType[] | ListEnumEventParticipantTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumEventParticipantTypeWithAggregatesFilter<$PrismaModel> | $Enums.EventParticipantType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumEventParticipantTypeFilter<$PrismaModel>
+    _max?: NestedEnumEventParticipantTypeFilter<$PrismaModel>
   }
 
   export type AnnouncementCountOrderByAggregateInput = {
@@ -52414,6 +52882,13 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
+  export type EnumPaymentStatusNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.PaymentStatus | EnumPaymentStatusFieldRefInput<$PrismaModel> | null
+    in?: $Enums.PaymentStatus[] | ListEnumPaymentStatusFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.PaymentStatus[] | ListEnumPaymentStatusFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumPaymentStatusNullableFilter<$PrismaModel> | $Enums.PaymentStatus | null
+  }
+
   export type EventScalarRelationFilter = {
     is?: EventWhereInput
     isNot?: EventWhereInput
@@ -52427,9 +52902,19 @@ export namespace Prisma {
     guestEmail?: SortOrder
     guestPhone?: SortOrder
     qrToken?: SortOrder
+    paymentStatus?: SortOrder
+    amountDue?: SortOrder
+    paidAt?: SortOrder
+    transactionId?: SortOrder
+    guestDateOfBirth?: SortOrder
+    parentOfMemberNumber?: SortOrder
     checkedInAt?: SortOrder
     checkedInByUserId?: SortOrder
     createdAt?: SortOrder
+  }
+
+  export type EventRegistrationAvgOrderByAggregateInput = {
+    amountDue?: SortOrder
   }
 
   export type EventRegistrationMaxOrderByAggregateInput = {
@@ -52440,6 +52925,12 @@ export namespace Prisma {
     guestEmail?: SortOrder
     guestPhone?: SortOrder
     qrToken?: SortOrder
+    paymentStatus?: SortOrder
+    amountDue?: SortOrder
+    paidAt?: SortOrder
+    transactionId?: SortOrder
+    guestDateOfBirth?: SortOrder
+    parentOfMemberNumber?: SortOrder
     checkedInAt?: SortOrder
     checkedInByUserId?: SortOrder
     createdAt?: SortOrder
@@ -52453,9 +52944,29 @@ export namespace Prisma {
     guestEmail?: SortOrder
     guestPhone?: SortOrder
     qrToken?: SortOrder
+    paymentStatus?: SortOrder
+    amountDue?: SortOrder
+    paidAt?: SortOrder
+    transactionId?: SortOrder
+    guestDateOfBirth?: SortOrder
+    parentOfMemberNumber?: SortOrder
     checkedInAt?: SortOrder
     checkedInByUserId?: SortOrder
     createdAt?: SortOrder
+  }
+
+  export type EventRegistrationSumOrderByAggregateInput = {
+    amountDue?: SortOrder
+  }
+
+  export type EnumPaymentStatusNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.PaymentStatus | EnumPaymentStatusFieldRefInput<$PrismaModel> | null
+    in?: $Enums.PaymentStatus[] | ListEnumPaymentStatusFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.PaymentStatus[] | ListEnumPaymentStatusFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumPaymentStatusNullableWithAggregatesFilter<$PrismaModel> | $Enums.PaymentStatus | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumPaymentStatusNullableFilter<$PrismaModel>
+    _max?: NestedEnumPaymentStatusNullableFilter<$PrismaModel>
   }
 
   export type EnumNotificationTypeFilter<$PrismaModel = never> = {
@@ -54283,6 +54794,13 @@ export namespace Prisma {
     connect?: GradingApplicationWhereUniqueInput | GradingApplicationWhereUniqueInput[]
   }
 
+  export type EventCreateNestedManyWithoutMinRankInput = {
+    create?: XOR<EventCreateWithoutMinRankInput, EventUncheckedCreateWithoutMinRankInput> | EventCreateWithoutMinRankInput[] | EventUncheckedCreateWithoutMinRankInput[]
+    connectOrCreate?: EventCreateOrConnectWithoutMinRankInput | EventCreateOrConnectWithoutMinRankInput[]
+    createMany?: EventCreateManyMinRankInputEnvelope
+    connect?: EventWhereUniqueInput | EventWhereUniqueInput[]
+  }
+
   export type GradingUncheckedCreateNestedManyWithoutFromRankInput = {
     create?: XOR<GradingCreateWithoutFromRankInput, GradingUncheckedCreateWithoutFromRankInput> | GradingCreateWithoutFromRankInput[] | GradingUncheckedCreateWithoutFromRankInput[]
     connectOrCreate?: GradingCreateOrConnectWithoutFromRankInput | GradingCreateOrConnectWithoutFromRankInput[]
@@ -54309,6 +54827,13 @@ export namespace Prisma {
     connectOrCreate?: GradingApplicationCreateOrConnectWithoutTargetRankInput | GradingApplicationCreateOrConnectWithoutTargetRankInput[]
     createMany?: GradingApplicationCreateManyTargetRankInputEnvelope
     connect?: GradingApplicationWhereUniqueInput | GradingApplicationWhereUniqueInput[]
+  }
+
+  export type EventUncheckedCreateNestedManyWithoutMinRankInput = {
+    create?: XOR<EventCreateWithoutMinRankInput, EventUncheckedCreateWithoutMinRankInput> | EventCreateWithoutMinRankInput[] | EventUncheckedCreateWithoutMinRankInput[]
+    connectOrCreate?: EventCreateOrConnectWithoutMinRankInput | EventCreateOrConnectWithoutMinRankInput[]
+    createMany?: EventCreateManyMinRankInputEnvelope
+    connect?: EventWhereUniqueInput | EventWhereUniqueInput[]
   }
 
   export type IntFieldUpdateOperationsInput = {
@@ -54383,6 +54908,20 @@ export namespace Prisma {
     deleteMany?: GradingApplicationScalarWhereInput | GradingApplicationScalarWhereInput[]
   }
 
+  export type EventUpdateManyWithoutMinRankNestedInput = {
+    create?: XOR<EventCreateWithoutMinRankInput, EventUncheckedCreateWithoutMinRankInput> | EventCreateWithoutMinRankInput[] | EventUncheckedCreateWithoutMinRankInput[]
+    connectOrCreate?: EventCreateOrConnectWithoutMinRankInput | EventCreateOrConnectWithoutMinRankInput[]
+    upsert?: EventUpsertWithWhereUniqueWithoutMinRankInput | EventUpsertWithWhereUniqueWithoutMinRankInput[]
+    createMany?: EventCreateManyMinRankInputEnvelope
+    set?: EventWhereUniqueInput | EventWhereUniqueInput[]
+    disconnect?: EventWhereUniqueInput | EventWhereUniqueInput[]
+    delete?: EventWhereUniqueInput | EventWhereUniqueInput[]
+    connect?: EventWhereUniqueInput | EventWhereUniqueInput[]
+    update?: EventUpdateWithWhereUniqueWithoutMinRankInput | EventUpdateWithWhereUniqueWithoutMinRankInput[]
+    updateMany?: EventUpdateManyWithWhereWithoutMinRankInput | EventUpdateManyWithWhereWithoutMinRankInput[]
+    deleteMany?: EventScalarWhereInput | EventScalarWhereInput[]
+  }
+
   export type GradingUncheckedUpdateManyWithoutFromRankNestedInput = {
     create?: XOR<GradingCreateWithoutFromRankInput, GradingUncheckedCreateWithoutFromRankInput> | GradingCreateWithoutFromRankInput[] | GradingUncheckedCreateWithoutFromRankInput[]
     connectOrCreate?: GradingCreateOrConnectWithoutFromRankInput | GradingCreateOrConnectWithoutFromRankInput[]
@@ -54437,6 +54976,20 @@ export namespace Prisma {
     update?: GradingApplicationUpdateWithWhereUniqueWithoutTargetRankInput | GradingApplicationUpdateWithWhereUniqueWithoutTargetRankInput[]
     updateMany?: GradingApplicationUpdateManyWithWhereWithoutTargetRankInput | GradingApplicationUpdateManyWithWhereWithoutTargetRankInput[]
     deleteMany?: GradingApplicationScalarWhereInput | GradingApplicationScalarWhereInput[]
+  }
+
+  export type EventUncheckedUpdateManyWithoutMinRankNestedInput = {
+    create?: XOR<EventCreateWithoutMinRankInput, EventUncheckedCreateWithoutMinRankInput> | EventCreateWithoutMinRankInput[] | EventUncheckedCreateWithoutMinRankInput[]
+    connectOrCreate?: EventCreateOrConnectWithoutMinRankInput | EventCreateOrConnectWithoutMinRankInput[]
+    upsert?: EventUpsertWithWhereUniqueWithoutMinRankInput | EventUpsertWithWhereUniqueWithoutMinRankInput[]
+    createMany?: EventCreateManyMinRankInputEnvelope
+    set?: EventWhereUniqueInput | EventWhereUniqueInput[]
+    disconnect?: EventWhereUniqueInput | EventWhereUniqueInput[]
+    delete?: EventWhereUniqueInput | EventWhereUniqueInput[]
+    connect?: EventWhereUniqueInput | EventWhereUniqueInput[]
+    update?: EventUpdateWithWhereUniqueWithoutMinRankInput | EventUpdateWithWhereUniqueWithoutMinRankInput[]
+    updateMany?: EventUpdateManyWithWhereWithoutMinRankInput | EventUpdateManyWithWhereWithoutMinRankInput[]
+    deleteMany?: EventScalarWhereInput | EventScalarWhereInput[]
   }
 
   export type ShopOrderCreateNestedManyWithoutDojoInput = {
@@ -55331,6 +55884,12 @@ export namespace Prisma {
     connect?: DojoWhereUniqueInput
   }
 
+  export type BeltRankCreateNestedOneWithoutMinRankEventsInput = {
+    create?: XOR<BeltRankCreateWithoutMinRankEventsInput, BeltRankUncheckedCreateWithoutMinRankEventsInput>
+    connectOrCreate?: BeltRankCreateOrConnectWithoutMinRankEventsInput
+    connect?: BeltRankWhereUniqueInput
+  }
+
   export type EventRegistrationUncheckedCreateNestedManyWithoutEventInput = {
     create?: XOR<EventRegistrationCreateWithoutEventInput, EventRegistrationUncheckedCreateWithoutEventInput> | EventRegistrationCreateWithoutEventInput[] | EventRegistrationUncheckedCreateWithoutEventInput[]
     connectOrCreate?: EventRegistrationCreateOrConnectWithoutEventInput | EventRegistrationCreateOrConnectWithoutEventInput[]
@@ -55352,6 +55911,10 @@ export namespace Prisma {
 
   export type NullableEnumAttachmentTypeFieldUpdateOperationsInput = {
     set?: $Enums.AttachmentType | null
+  }
+
+  export type EnumEventParticipantTypeFieldUpdateOperationsInput = {
+    set?: $Enums.EventParticipantType
   }
 
   export type EventRegistrationUpdateManyWithoutEventNestedInput = {
@@ -55386,6 +55949,16 @@ export namespace Prisma {
     delete?: DojoWhereInput | boolean
     connect?: DojoWhereUniqueInput
     update?: XOR<XOR<DojoUpdateToOneWithWhereWithoutEventsInput, DojoUpdateWithoutEventsInput>, DojoUncheckedUpdateWithoutEventsInput>
+  }
+
+  export type BeltRankUpdateOneWithoutMinRankEventsNestedInput = {
+    create?: XOR<BeltRankCreateWithoutMinRankEventsInput, BeltRankUncheckedCreateWithoutMinRankEventsInput>
+    connectOrCreate?: BeltRankCreateOrConnectWithoutMinRankEventsInput
+    upsert?: BeltRankUpsertWithoutMinRankEventsInput
+    disconnect?: BeltRankWhereInput | boolean
+    delete?: BeltRankWhereInput | boolean
+    connect?: BeltRankWhereUniqueInput
+    update?: XOR<XOR<BeltRankUpdateToOneWithWhereWithoutMinRankEventsInput, BeltRankUpdateWithoutMinRankEventsInput>, BeltRankUncheckedUpdateWithoutMinRankEventsInput>
   }
 
   export type EventRegistrationUncheckedUpdateManyWithoutEventNestedInput = {
@@ -55450,6 +56023,10 @@ export namespace Prisma {
     create?: XOR<UserCreateWithoutEventCheckInsInput, UserUncheckedCreateWithoutEventCheckInsInput>
     connectOrCreate?: UserCreateOrConnectWithoutEventCheckInsInput
     connect?: UserWhereUniqueInput
+  }
+
+  export type NullableEnumPaymentStatusFieldUpdateOperationsInput = {
+    set?: $Enums.PaymentStatus | null
   }
 
   export type EventUpdateOneRequiredWithoutRegistrationsNestedInput = {
@@ -56774,6 +57351,13 @@ export namespace Prisma {
     not?: NestedEnumAttachmentTypeNullableFilter<$PrismaModel> | $Enums.AttachmentType | null
   }
 
+  export type NestedEnumEventParticipantTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.EventParticipantType | EnumEventParticipantTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.EventParticipantType[] | ListEnumEventParticipantTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.EventParticipantType[] | ListEnumEventParticipantTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumEventParticipantTypeFilter<$PrismaModel> | $Enums.EventParticipantType
+  }
+
   export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel> | null
     in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
@@ -56808,6 +57392,33 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedEnumAttachmentTypeNullableFilter<$PrismaModel>
     _max?: NestedEnumAttachmentTypeNullableFilter<$PrismaModel>
+  }
+
+  export type NestedEnumEventParticipantTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.EventParticipantType | EnumEventParticipantTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.EventParticipantType[] | ListEnumEventParticipantTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.EventParticipantType[] | ListEnumEventParticipantTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumEventParticipantTypeWithAggregatesFilter<$PrismaModel> | $Enums.EventParticipantType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumEventParticipantTypeFilter<$PrismaModel>
+    _max?: NestedEnumEventParticipantTypeFilter<$PrismaModel>
+  }
+
+  export type NestedEnumPaymentStatusNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.PaymentStatus | EnumPaymentStatusFieldRefInput<$PrismaModel> | null
+    in?: $Enums.PaymentStatus[] | ListEnumPaymentStatusFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.PaymentStatus[] | ListEnumPaymentStatusFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumPaymentStatusNullableFilter<$PrismaModel> | $Enums.PaymentStatus | null
+  }
+
+  export type NestedEnumPaymentStatusNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.PaymentStatus | EnumPaymentStatusFieldRefInput<$PrismaModel> | null
+    in?: $Enums.PaymentStatus[] | ListEnumPaymentStatusFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.PaymentStatus[] | ListEnumPaymentStatusFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumPaymentStatusNullableWithAggregatesFilter<$PrismaModel> | $Enums.PaymentStatus | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumPaymentStatusNullableFilter<$PrismaModel>
+    _max?: NestedEnumPaymentStatusNullableFilter<$PrismaModel>
   }
 
   export type NestedEnumNotificationTypeFilter<$PrismaModel = never> = {
@@ -57392,6 +58003,12 @@ export namespace Prisma {
     guestEmail?: string | null
     guestPhone?: string | null
     qrToken: string
+    paymentStatus?: $Enums.PaymentStatus | null
+    amountDue?: Decimal | DecimalJsLike | number | string | null
+    paidAt?: Date | string | null
+    transactionId?: string | null
+    guestDateOfBirth?: Date | string | null
+    parentOfMemberNumber?: string | null
     checkedInAt?: Date | string | null
     createdAt?: Date | string
     event: EventCreateNestedOneWithoutRegistrationsInput
@@ -57405,6 +58022,12 @@ export namespace Prisma {
     guestEmail?: string | null
     guestPhone?: string | null
     qrToken: string
+    paymentStatus?: $Enums.PaymentStatus | null
+    amountDue?: Decimal | DecimalJsLike | number | string | null
+    paidAt?: Date | string | null
+    transactionId?: string | null
+    guestDateOfBirth?: Date | string | null
+    parentOfMemberNumber?: string | null
     checkedInAt?: Date | string | null
     checkedInByUserId?: string | null
     createdAt?: Date | string
@@ -57426,6 +58049,12 @@ export namespace Prisma {
     guestEmail?: string | null
     guestPhone?: string | null
     qrToken: string
+    paymentStatus?: $Enums.PaymentStatus | null
+    amountDue?: Decimal | DecimalJsLike | number | string | null
+    paidAt?: Date | string | null
+    transactionId?: string | null
+    guestDateOfBirth?: Date | string | null
+    parentOfMemberNumber?: string | null
     checkedInAt?: Date | string | null
     createdAt?: Date | string
     event: EventCreateNestedOneWithoutRegistrationsInput
@@ -57440,6 +58069,12 @@ export namespace Prisma {
     guestEmail?: string | null
     guestPhone?: string | null
     qrToken: string
+    paymentStatus?: $Enums.PaymentStatus | null
+    amountDue?: Decimal | DecimalJsLike | number | string | null
+    paidAt?: Date | string | null
+    transactionId?: string | null
+    guestDateOfBirth?: Date | string | null
+    parentOfMemberNumber?: string | null
     checkedInAt?: Date | string | null
     createdAt?: Date | string
   }
@@ -57466,10 +58101,15 @@ export namespace Prisma {
     category?: $Enums.EventCategory
     attachmentUrl?: string | null
     attachmentType?: $Enums.AttachmentType | null
+    isPremium?: boolean
+    ticketPrice?: Decimal | DecimalJsLike | number | string | null
+    minAge?: number | null
+    participantType?: $Enums.EventParticipantType
     createdAt?: Date | string
     updatedAt?: Date | string
     registrations?: EventRegistrationCreateNestedManyWithoutEventInput
     dojo?: DojoCreateNestedOneWithoutEventsInput
+    minRank?: BeltRankCreateNestedOneWithoutMinRankEventsInput
   }
 
   export type EventUncheckedCreateWithoutPostedByInput = {
@@ -57484,6 +58124,11 @@ export namespace Prisma {
     category?: $Enums.EventCategory
     attachmentUrl?: string | null
     attachmentType?: $Enums.AttachmentType | null
+    isPremium?: boolean
+    ticketPrice?: Decimal | DecimalJsLike | number | string | null
+    minAge?: number | null
+    minRankId?: string | null
+    participantType?: $Enums.EventParticipantType
     dojoId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -57966,6 +58611,12 @@ export namespace Prisma {
     guestEmail?: StringNullableFilter<"EventRegistration"> | string | null
     guestPhone?: StringNullableFilter<"EventRegistration"> | string | null
     qrToken?: StringFilter<"EventRegistration"> | string
+    paymentStatus?: EnumPaymentStatusNullableFilter<"EventRegistration"> | $Enums.PaymentStatus | null
+    amountDue?: DecimalNullableFilter<"EventRegistration"> | Decimal | DecimalJsLike | number | string | null
+    paidAt?: DateTimeNullableFilter<"EventRegistration"> | Date | string | null
+    transactionId?: StringNullableFilter<"EventRegistration"> | string | null
+    guestDateOfBirth?: DateTimeNullableFilter<"EventRegistration"> | Date | string | null
+    parentOfMemberNumber?: StringNullableFilter<"EventRegistration"> | string | null
     checkedInAt?: DateTimeNullableFilter<"EventRegistration"> | Date | string | null
     checkedInByUserId?: UuidNullableFilter<"EventRegistration"> | string | null
     createdAt?: DateTimeFilter<"EventRegistration"> | Date | string
@@ -58018,6 +58669,11 @@ export namespace Prisma {
     category?: EnumEventCategoryFilter<"Event"> | $Enums.EventCategory
     attachmentUrl?: StringNullableFilter<"Event"> | string | null
     attachmentType?: EnumAttachmentTypeNullableFilter<"Event"> | $Enums.AttachmentType | null
+    isPremium?: BoolFilter<"Event"> | boolean
+    ticketPrice?: DecimalNullableFilter<"Event"> | Decimal | DecimalJsLike | number | string | null
+    minAge?: IntNullableFilter<"Event"> | number | null
+    minRankId?: UuidNullableFilter<"Event"> | string | null
+    participantType?: EnumEventParticipantTypeFilter<"Event"> | $Enums.EventParticipantType
     postedById?: UuidNullableFilter<"Event"> | string | null
     dojoId?: UuidNullableFilter<"Event"> | string | null
     createdAt?: DateTimeFilter<"Event"> | Date | string
@@ -59764,6 +60420,62 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type EventCreateWithoutMinRankInput = {
+    id?: string
+    title: string
+    description?: string | null
+    eventDate: Date | string
+    location?: string | null
+    imageUrl?: string | null
+    isPublished?: boolean
+    maxCapacity?: number | null
+    category?: $Enums.EventCategory
+    attachmentUrl?: string | null
+    attachmentType?: $Enums.AttachmentType | null
+    isPremium?: boolean
+    ticketPrice?: Decimal | DecimalJsLike | number | string | null
+    minAge?: number | null
+    participantType?: $Enums.EventParticipantType
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    registrations?: EventRegistrationCreateNestedManyWithoutEventInput
+    postedBy?: UserCreateNestedOneWithoutEventsPostedInput
+    dojo?: DojoCreateNestedOneWithoutEventsInput
+  }
+
+  export type EventUncheckedCreateWithoutMinRankInput = {
+    id?: string
+    title: string
+    description?: string | null
+    eventDate: Date | string
+    location?: string | null
+    imageUrl?: string | null
+    isPublished?: boolean
+    maxCapacity?: number | null
+    category?: $Enums.EventCategory
+    attachmentUrl?: string | null
+    attachmentType?: $Enums.AttachmentType | null
+    isPremium?: boolean
+    ticketPrice?: Decimal | DecimalJsLike | number | string | null
+    minAge?: number | null
+    participantType?: $Enums.EventParticipantType
+    postedById?: string | null
+    dojoId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    registrations?: EventRegistrationUncheckedCreateNestedManyWithoutEventInput
+  }
+
+  export type EventCreateOrConnectWithoutMinRankInput = {
+    where: EventWhereUniqueInput
+    create: XOR<EventCreateWithoutMinRankInput, EventUncheckedCreateWithoutMinRankInput>
+  }
+
+  export type EventCreateManyMinRankInputEnvelope = {
+    data: EventCreateManyMinRankInput | EventCreateManyMinRankInput[]
+    skipDuplicates?: boolean
+  }
+
   export type GradingUpsertWithWhereUniqueWithoutFromRankInput = {
     where: GradingWhereUniqueInput
     update: XOR<GradingUpdateWithoutFromRankInput, GradingUncheckedUpdateWithoutFromRankInput>
@@ -59844,6 +60556,22 @@ export namespace Prisma {
   export type GradingApplicationUpdateManyWithWhereWithoutTargetRankInput = {
     where: GradingApplicationScalarWhereInput
     data: XOR<GradingApplicationUpdateManyMutationInput, GradingApplicationUncheckedUpdateManyWithoutTargetRankInput>
+  }
+
+  export type EventUpsertWithWhereUniqueWithoutMinRankInput = {
+    where: EventWhereUniqueInput
+    update: XOR<EventUpdateWithoutMinRankInput, EventUncheckedUpdateWithoutMinRankInput>
+    create: XOR<EventCreateWithoutMinRankInput, EventUncheckedCreateWithoutMinRankInput>
+  }
+
+  export type EventUpdateWithWhereUniqueWithoutMinRankInput = {
+    where: EventWhereUniqueInput
+    data: XOR<EventUpdateWithoutMinRankInput, EventUncheckedUpdateWithoutMinRankInput>
+  }
+
+  export type EventUpdateManyWithWhereWithoutMinRankInput = {
+    where: EventScalarWhereInput
+    data: XOR<EventUpdateManyMutationInput, EventUncheckedUpdateManyWithoutMinRankInput>
   }
 
   export type ShopOrderCreateWithoutDojoInput = {
@@ -60157,10 +60885,15 @@ export namespace Prisma {
     category?: $Enums.EventCategory
     attachmentUrl?: string | null
     attachmentType?: $Enums.AttachmentType | null
+    isPremium?: boolean
+    ticketPrice?: Decimal | DecimalJsLike | number | string | null
+    minAge?: number | null
+    participantType?: $Enums.EventParticipantType
     createdAt?: Date | string
     updatedAt?: Date | string
     registrations?: EventRegistrationCreateNestedManyWithoutEventInput
     postedBy?: UserCreateNestedOneWithoutEventsPostedInput
+    minRank?: BeltRankCreateNestedOneWithoutMinRankEventsInput
   }
 
   export type EventUncheckedCreateWithoutDojoInput = {
@@ -60175,6 +60908,11 @@ export namespace Prisma {
     category?: $Enums.EventCategory
     attachmentUrl?: string | null
     attachmentType?: $Enums.AttachmentType | null
+    isPremium?: boolean
+    ticketPrice?: Decimal | DecimalJsLike | number | string | null
+    minAge?: number | null
+    minRankId?: string | null
+    participantType?: $Enums.EventParticipantType
     postedById?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -60823,6 +61561,7 @@ export namespace Prisma {
     gradingsFrom?: GradingCreateNestedManyWithoutFromRankInput
     gradingsTo?: GradingCreateNestedManyWithoutToRankInput
     gradingApplications?: GradingApplicationCreateNestedManyWithoutTargetRankInput
+    minRankEvents?: EventCreateNestedManyWithoutMinRankInput
   }
 
   export type BeltRankUncheckedCreateWithoutGradingEventsInput = {
@@ -60837,6 +61576,7 @@ export namespace Prisma {
     gradingsFrom?: GradingUncheckedCreateNestedManyWithoutFromRankInput
     gradingsTo?: GradingUncheckedCreateNestedManyWithoutToRankInput
     gradingApplications?: GradingApplicationUncheckedCreateNestedManyWithoutTargetRankInput
+    minRankEvents?: EventUncheckedCreateNestedManyWithoutMinRankInput
   }
 
   export type BeltRankCreateOrConnectWithoutGradingEventsInput = {
@@ -60933,6 +61673,7 @@ export namespace Prisma {
     gradingsFrom?: GradingUpdateManyWithoutFromRankNestedInput
     gradingsTo?: GradingUpdateManyWithoutToRankNestedInput
     gradingApplications?: GradingApplicationUpdateManyWithoutTargetRankNestedInput
+    minRankEvents?: EventUpdateManyWithoutMinRankNestedInput
   }
 
   export type BeltRankUncheckedUpdateWithoutGradingEventsInput = {
@@ -60947,6 +61688,7 @@ export namespace Prisma {
     gradingsFrom?: GradingUncheckedUpdateManyWithoutFromRankNestedInput
     gradingsTo?: GradingUncheckedUpdateManyWithoutToRankNestedInput
     gradingApplications?: GradingApplicationUncheckedUpdateManyWithoutTargetRankNestedInput
+    minRankEvents?: EventUncheckedUpdateManyWithoutMinRankNestedInput
   }
 
   export type GradingUpsertWithWhereUniqueWithoutGradingEventInput = {
@@ -61085,6 +61827,7 @@ export namespace Prisma {
     gradingsFrom?: GradingCreateNestedManyWithoutFromRankInput
     gradingsTo?: GradingCreateNestedManyWithoutToRankInput
     gradingEvents?: GradingEventCreateNestedManyWithoutTargetRankInput
+    minRankEvents?: EventCreateNestedManyWithoutMinRankInput
   }
 
   export type BeltRankUncheckedCreateWithoutGradingApplicationsInput = {
@@ -61099,6 +61842,7 @@ export namespace Prisma {
     gradingsFrom?: GradingUncheckedCreateNestedManyWithoutFromRankInput
     gradingsTo?: GradingUncheckedCreateNestedManyWithoutToRankInput
     gradingEvents?: GradingEventUncheckedCreateNestedManyWithoutTargetRankInput
+    minRankEvents?: EventUncheckedCreateNestedManyWithoutMinRankInput
   }
 
   export type BeltRankCreateOrConnectWithoutGradingApplicationsInput = {
@@ -61233,6 +61977,7 @@ export namespace Prisma {
     gradingsFrom?: GradingUpdateManyWithoutFromRankNestedInput
     gradingsTo?: GradingUpdateManyWithoutToRankNestedInput
     gradingEvents?: GradingEventUpdateManyWithoutTargetRankNestedInput
+    minRankEvents?: EventUpdateManyWithoutMinRankNestedInput
   }
 
   export type BeltRankUncheckedUpdateWithoutGradingApplicationsInput = {
@@ -61247,6 +61992,7 @@ export namespace Prisma {
     gradingsFrom?: GradingUncheckedUpdateManyWithoutFromRankNestedInput
     gradingsTo?: GradingUncheckedUpdateManyWithoutToRankNestedInput
     gradingEvents?: GradingEventUncheckedUpdateManyWithoutTargetRankNestedInput
+    minRankEvents?: EventUncheckedUpdateManyWithoutMinRankNestedInput
   }
 
   export type StudentCreateWithoutGradingsInput = {
@@ -61353,6 +62099,7 @@ export namespace Prisma {
     gradingsTo?: GradingCreateNestedManyWithoutToRankInput
     gradingEvents?: GradingEventCreateNestedManyWithoutTargetRankInput
     gradingApplications?: GradingApplicationCreateNestedManyWithoutTargetRankInput
+    minRankEvents?: EventCreateNestedManyWithoutMinRankInput
   }
 
   export type BeltRankUncheckedCreateWithoutGradingsFromInput = {
@@ -61367,6 +62114,7 @@ export namespace Prisma {
     gradingsTo?: GradingUncheckedCreateNestedManyWithoutToRankInput
     gradingEvents?: GradingEventUncheckedCreateNestedManyWithoutTargetRankInput
     gradingApplications?: GradingApplicationUncheckedCreateNestedManyWithoutTargetRankInput
+    minRankEvents?: EventUncheckedCreateNestedManyWithoutMinRankInput
   }
 
   export type BeltRankCreateOrConnectWithoutGradingsFromInput = {
@@ -61386,6 +62134,7 @@ export namespace Prisma {
     gradingsFrom?: GradingCreateNestedManyWithoutFromRankInput
     gradingEvents?: GradingEventCreateNestedManyWithoutTargetRankInput
     gradingApplications?: GradingApplicationCreateNestedManyWithoutTargetRankInput
+    minRankEvents?: EventCreateNestedManyWithoutMinRankInput
   }
 
   export type BeltRankUncheckedCreateWithoutGradingsToInput = {
@@ -61400,6 +62149,7 @@ export namespace Prisma {
     gradingsFrom?: GradingUncheckedCreateNestedManyWithoutFromRankInput
     gradingEvents?: GradingEventUncheckedCreateNestedManyWithoutTargetRankInput
     gradingApplications?: GradingApplicationUncheckedCreateNestedManyWithoutTargetRankInput
+    minRankEvents?: EventUncheckedCreateNestedManyWithoutMinRankInput
   }
 
   export type BeltRankCreateOrConnectWithoutGradingsToInput = {
@@ -61578,6 +62328,7 @@ export namespace Prisma {
     gradingsTo?: GradingUpdateManyWithoutToRankNestedInput
     gradingEvents?: GradingEventUpdateManyWithoutTargetRankNestedInput
     gradingApplications?: GradingApplicationUpdateManyWithoutTargetRankNestedInput
+    minRankEvents?: EventUpdateManyWithoutMinRankNestedInput
   }
 
   export type BeltRankUncheckedUpdateWithoutGradingsFromInput = {
@@ -61592,6 +62343,7 @@ export namespace Prisma {
     gradingsTo?: GradingUncheckedUpdateManyWithoutToRankNestedInput
     gradingEvents?: GradingEventUncheckedUpdateManyWithoutTargetRankNestedInput
     gradingApplications?: GradingApplicationUncheckedUpdateManyWithoutTargetRankNestedInput
+    minRankEvents?: EventUncheckedUpdateManyWithoutMinRankNestedInput
   }
 
   export type BeltRankUpsertWithoutGradingsToInput = {
@@ -61617,6 +62369,7 @@ export namespace Prisma {
     gradingsFrom?: GradingUpdateManyWithoutFromRankNestedInput
     gradingEvents?: GradingEventUpdateManyWithoutTargetRankNestedInput
     gradingApplications?: GradingApplicationUpdateManyWithoutTargetRankNestedInput
+    minRankEvents?: EventUpdateManyWithoutMinRankNestedInput
   }
 
   export type BeltRankUncheckedUpdateWithoutGradingsToInput = {
@@ -61631,6 +62384,7 @@ export namespace Prisma {
     gradingsFrom?: GradingUncheckedUpdateManyWithoutFromRankNestedInput
     gradingEvents?: GradingEventUncheckedUpdateManyWithoutTargetRankNestedInput
     gradingApplications?: GradingApplicationUncheckedUpdateManyWithoutTargetRankNestedInput
+    minRankEvents?: EventUncheckedUpdateManyWithoutMinRankNestedInput
   }
 
   export type CertificateRequestUpsertWithWhereUniqueWithoutGradingInput = {
@@ -62071,6 +62825,12 @@ export namespace Prisma {
     guestEmail?: string | null
     guestPhone?: string | null
     qrToken: string
+    paymentStatus?: $Enums.PaymentStatus | null
+    amountDue?: Decimal | DecimalJsLike | number | string | null
+    paidAt?: Date | string | null
+    transactionId?: string | null
+    guestDateOfBirth?: Date | string | null
+    parentOfMemberNumber?: string | null
     checkedInAt?: Date | string | null
     createdAt?: Date | string
     user?: UserCreateNestedOneWithoutEventRegistrationsInput
@@ -62084,6 +62844,12 @@ export namespace Prisma {
     guestEmail?: string | null
     guestPhone?: string | null
     qrToken: string
+    paymentStatus?: $Enums.PaymentStatus | null
+    amountDue?: Decimal | DecimalJsLike | number | string | null
+    paidAt?: Date | string | null
+    transactionId?: string | null
+    guestDateOfBirth?: Date | string | null
+    parentOfMemberNumber?: string | null
     checkedInAt?: Date | string | null
     checkedInByUserId?: string | null
     createdAt?: Date | string
@@ -62219,6 +62985,41 @@ export namespace Prisma {
   export type DojoCreateOrConnectWithoutEventsInput = {
     where: DojoWhereUniqueInput
     create: XOR<DojoCreateWithoutEventsInput, DojoUncheckedCreateWithoutEventsInput>
+  }
+
+  export type BeltRankCreateWithoutMinRankEventsInput = {
+    id?: string
+    name: string
+    kyuDan?: string | null
+    colorHex?: string | null
+    orderIndex: number
+    certificatePrice?: Decimal | DecimalJsLike | number | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    gradingsFrom?: GradingCreateNestedManyWithoutFromRankInput
+    gradingsTo?: GradingCreateNestedManyWithoutToRankInput
+    gradingEvents?: GradingEventCreateNestedManyWithoutTargetRankInput
+    gradingApplications?: GradingApplicationCreateNestedManyWithoutTargetRankInput
+  }
+
+  export type BeltRankUncheckedCreateWithoutMinRankEventsInput = {
+    id?: string
+    name: string
+    kyuDan?: string | null
+    colorHex?: string | null
+    orderIndex: number
+    certificatePrice?: Decimal | DecimalJsLike | number | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    gradingsFrom?: GradingUncheckedCreateNestedManyWithoutFromRankInput
+    gradingsTo?: GradingUncheckedCreateNestedManyWithoutToRankInput
+    gradingEvents?: GradingEventUncheckedCreateNestedManyWithoutTargetRankInput
+    gradingApplications?: GradingApplicationUncheckedCreateNestedManyWithoutTargetRankInput
+  }
+
+  export type BeltRankCreateOrConnectWithoutMinRankEventsInput = {
+    where: BeltRankWhereUniqueInput
+    create: XOR<BeltRankCreateWithoutMinRankEventsInput, BeltRankUncheckedCreateWithoutMinRankEventsInput>
   }
 
   export type EventRegistrationUpsertWithWhereUniqueWithoutEventInput = {
@@ -62369,6 +63170,47 @@ export namespace Prisma {
     announcements?: AnnouncementUncheckedUpdateManyWithoutDojoNestedInput
     inventoryItems?: DojoInventoryItemUncheckedUpdateManyWithoutDojoNestedInput
     sales?: DojoSaleUncheckedUpdateManyWithoutDojoNestedInput
+  }
+
+  export type BeltRankUpsertWithoutMinRankEventsInput = {
+    update: XOR<BeltRankUpdateWithoutMinRankEventsInput, BeltRankUncheckedUpdateWithoutMinRankEventsInput>
+    create: XOR<BeltRankCreateWithoutMinRankEventsInput, BeltRankUncheckedCreateWithoutMinRankEventsInput>
+    where?: BeltRankWhereInput
+  }
+
+  export type BeltRankUpdateToOneWithWhereWithoutMinRankEventsInput = {
+    where?: BeltRankWhereInput
+    data: XOR<BeltRankUpdateWithoutMinRankEventsInput, BeltRankUncheckedUpdateWithoutMinRankEventsInput>
+  }
+
+  export type BeltRankUpdateWithoutMinRankEventsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    kyuDan?: NullableStringFieldUpdateOperationsInput | string | null
+    colorHex?: NullableStringFieldUpdateOperationsInput | string | null
+    orderIndex?: IntFieldUpdateOperationsInput | number
+    certificatePrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    gradingsFrom?: GradingUpdateManyWithoutFromRankNestedInput
+    gradingsTo?: GradingUpdateManyWithoutToRankNestedInput
+    gradingEvents?: GradingEventUpdateManyWithoutTargetRankNestedInput
+    gradingApplications?: GradingApplicationUpdateManyWithoutTargetRankNestedInput
+  }
+
+  export type BeltRankUncheckedUpdateWithoutMinRankEventsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    kyuDan?: NullableStringFieldUpdateOperationsInput | string | null
+    colorHex?: NullableStringFieldUpdateOperationsInput | string | null
+    orderIndex?: IntFieldUpdateOperationsInput | number
+    certificatePrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    gradingsFrom?: GradingUncheckedUpdateManyWithoutFromRankNestedInput
+    gradingsTo?: GradingUncheckedUpdateManyWithoutToRankNestedInput
+    gradingEvents?: GradingEventUncheckedUpdateManyWithoutTargetRankNestedInput
+    gradingApplications?: GradingApplicationUncheckedUpdateManyWithoutTargetRankNestedInput
   }
 
   export type UserCreateWithoutAnnouncementsPostedInput = {
@@ -62639,10 +63481,15 @@ export namespace Prisma {
     category?: $Enums.EventCategory
     attachmentUrl?: string | null
     attachmentType?: $Enums.AttachmentType | null
+    isPremium?: boolean
+    ticketPrice?: Decimal | DecimalJsLike | number | string | null
+    minAge?: number | null
+    participantType?: $Enums.EventParticipantType
     createdAt?: Date | string
     updatedAt?: Date | string
     postedBy?: UserCreateNestedOneWithoutEventsPostedInput
     dojo?: DojoCreateNestedOneWithoutEventsInput
+    minRank?: BeltRankCreateNestedOneWithoutMinRankEventsInput
   }
 
   export type EventUncheckedCreateWithoutRegistrationsInput = {
@@ -62657,6 +63504,11 @@ export namespace Prisma {
     category?: $Enums.EventCategory
     attachmentUrl?: string | null
     attachmentType?: $Enums.AttachmentType | null
+    isPremium?: boolean
+    ticketPrice?: Decimal | DecimalJsLike | number | string | null
+    minAge?: number | null
+    minRankId?: string | null
+    participantType?: $Enums.EventParticipantType
     postedById?: string | null
     dojoId?: string | null
     createdAt?: Date | string
@@ -62805,10 +63657,15 @@ export namespace Prisma {
     category?: EnumEventCategoryFieldUpdateOperationsInput | $Enums.EventCategory
     attachmentUrl?: NullableStringFieldUpdateOperationsInput | string | null
     attachmentType?: NullableEnumAttachmentTypeFieldUpdateOperationsInput | $Enums.AttachmentType | null
+    isPremium?: BoolFieldUpdateOperationsInput | boolean
+    ticketPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    minAge?: NullableIntFieldUpdateOperationsInput | number | null
+    participantType?: EnumEventParticipantTypeFieldUpdateOperationsInput | $Enums.EventParticipantType
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     postedBy?: UserUpdateOneWithoutEventsPostedNestedInput
     dojo?: DojoUpdateOneWithoutEventsNestedInput
+    minRank?: BeltRankUpdateOneWithoutMinRankEventsNestedInput
   }
 
   export type EventUncheckedUpdateWithoutRegistrationsInput = {
@@ -62823,6 +63680,11 @@ export namespace Prisma {
     category?: EnumEventCategoryFieldUpdateOperationsInput | $Enums.EventCategory
     attachmentUrl?: NullableStringFieldUpdateOperationsInput | string | null
     attachmentType?: NullableEnumAttachmentTypeFieldUpdateOperationsInput | $Enums.AttachmentType | null
+    isPremium?: BoolFieldUpdateOperationsInput | boolean
+    ticketPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    minAge?: NullableIntFieldUpdateOperationsInput | number | null
+    minRankId?: NullableStringFieldUpdateOperationsInput | string | null
+    participantType?: EnumEventParticipantTypeFieldUpdateOperationsInput | $Enums.EventParticipantType
     postedById?: NullableStringFieldUpdateOperationsInput | string | null
     dojoId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -65876,6 +66738,12 @@ export namespace Prisma {
     guestEmail?: string | null
     guestPhone?: string | null
     qrToken: string
+    paymentStatus?: $Enums.PaymentStatus | null
+    amountDue?: Decimal | DecimalJsLike | number | string | null
+    paidAt?: Date | string | null
+    transactionId?: string | null
+    guestDateOfBirth?: Date | string | null
+    parentOfMemberNumber?: string | null
     checkedInAt?: Date | string | null
     checkedInByUserId?: string | null
     createdAt?: Date | string
@@ -65889,6 +66757,12 @@ export namespace Prisma {
     guestEmail?: string | null
     guestPhone?: string | null
     qrToken: string
+    paymentStatus?: $Enums.PaymentStatus | null
+    amountDue?: Decimal | DecimalJsLike | number | string | null
+    paidAt?: Date | string | null
+    transactionId?: string | null
+    guestDateOfBirth?: Date | string | null
+    parentOfMemberNumber?: string | null
     checkedInAt?: Date | string | null
     createdAt?: Date | string
   }
@@ -65905,6 +66779,11 @@ export namespace Prisma {
     category?: $Enums.EventCategory
     attachmentUrl?: string | null
     attachmentType?: $Enums.AttachmentType | null
+    isPremium?: boolean
+    ticketPrice?: Decimal | DecimalJsLike | number | string | null
+    minAge?: number | null
+    minRankId?: string | null
+    participantType?: $Enums.EventParticipantType
     dojoId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -66068,6 +66947,12 @@ export namespace Prisma {
     guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
     guestPhone?: NullableStringFieldUpdateOperationsInput | string | null
     qrToken?: StringFieldUpdateOperationsInput | string
+    paymentStatus?: NullableEnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus | null
+    amountDue?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    transactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    guestDateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    parentOfMemberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     checkedInAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     event?: EventUpdateOneRequiredWithoutRegistrationsNestedInput
@@ -66081,6 +66966,12 @@ export namespace Prisma {
     guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
     guestPhone?: NullableStringFieldUpdateOperationsInput | string | null
     qrToken?: StringFieldUpdateOperationsInput | string
+    paymentStatus?: NullableEnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus | null
+    amountDue?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    transactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    guestDateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    parentOfMemberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     checkedInAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     checkedInByUserId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -66093,6 +66984,12 @@ export namespace Prisma {
     guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
     guestPhone?: NullableStringFieldUpdateOperationsInput | string | null
     qrToken?: StringFieldUpdateOperationsInput | string
+    paymentStatus?: NullableEnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus | null
+    amountDue?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    transactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    guestDateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    parentOfMemberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     checkedInAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     checkedInByUserId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -66104,6 +67001,12 @@ export namespace Prisma {
     guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
     guestPhone?: NullableStringFieldUpdateOperationsInput | string | null
     qrToken?: StringFieldUpdateOperationsInput | string
+    paymentStatus?: NullableEnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus | null
+    amountDue?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    transactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    guestDateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    parentOfMemberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     checkedInAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     event?: EventUpdateOneRequiredWithoutRegistrationsNestedInput
@@ -66118,6 +67021,12 @@ export namespace Prisma {
     guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
     guestPhone?: NullableStringFieldUpdateOperationsInput | string | null
     qrToken?: StringFieldUpdateOperationsInput | string
+    paymentStatus?: NullableEnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus | null
+    amountDue?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    transactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    guestDateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    parentOfMemberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     checkedInAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -66130,6 +67039,12 @@ export namespace Prisma {
     guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
     guestPhone?: NullableStringFieldUpdateOperationsInput | string | null
     qrToken?: StringFieldUpdateOperationsInput | string
+    paymentStatus?: NullableEnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus | null
+    amountDue?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    transactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    guestDateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    parentOfMemberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     checkedInAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -66146,10 +67061,15 @@ export namespace Prisma {
     category?: EnumEventCategoryFieldUpdateOperationsInput | $Enums.EventCategory
     attachmentUrl?: NullableStringFieldUpdateOperationsInput | string | null
     attachmentType?: NullableEnumAttachmentTypeFieldUpdateOperationsInput | $Enums.AttachmentType | null
+    isPremium?: BoolFieldUpdateOperationsInput | boolean
+    ticketPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    minAge?: NullableIntFieldUpdateOperationsInput | number | null
+    participantType?: EnumEventParticipantTypeFieldUpdateOperationsInput | $Enums.EventParticipantType
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     registrations?: EventRegistrationUpdateManyWithoutEventNestedInput
     dojo?: DojoUpdateOneWithoutEventsNestedInput
+    minRank?: BeltRankUpdateOneWithoutMinRankEventsNestedInput
   }
 
   export type EventUncheckedUpdateWithoutPostedByInput = {
@@ -66164,6 +67084,11 @@ export namespace Prisma {
     category?: EnumEventCategoryFieldUpdateOperationsInput | $Enums.EventCategory
     attachmentUrl?: NullableStringFieldUpdateOperationsInput | string | null
     attachmentType?: NullableEnumAttachmentTypeFieldUpdateOperationsInput | $Enums.AttachmentType | null
+    isPremium?: BoolFieldUpdateOperationsInput | boolean
+    ticketPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    minAge?: NullableIntFieldUpdateOperationsInput | number | null
+    minRankId?: NullableStringFieldUpdateOperationsInput | string | null
+    participantType?: EnumEventParticipantTypeFieldUpdateOperationsInput | $Enums.EventParticipantType
     dojoId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -66182,6 +67107,11 @@ export namespace Prisma {
     category?: EnumEventCategoryFieldUpdateOperationsInput | $Enums.EventCategory
     attachmentUrl?: NullableStringFieldUpdateOperationsInput | string | null
     attachmentType?: NullableEnumAttachmentTypeFieldUpdateOperationsInput | $Enums.AttachmentType | null
+    isPremium?: BoolFieldUpdateOperationsInput | boolean
+    ticketPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    minAge?: NullableIntFieldUpdateOperationsInput | number | null
+    minRankId?: NullableStringFieldUpdateOperationsInput | string | null
+    participantType?: EnumEventParticipantTypeFieldUpdateOperationsInput | $Enums.EventParticipantType
     dojoId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -66658,6 +67588,28 @@ export namespace Prisma {
     appliedAt?: Date | string
   }
 
+  export type EventCreateManyMinRankInput = {
+    id?: string
+    title: string
+    description?: string | null
+    eventDate: Date | string
+    location?: string | null
+    imageUrl?: string | null
+    isPublished?: boolean
+    maxCapacity?: number | null
+    category?: $Enums.EventCategory
+    attachmentUrl?: string | null
+    attachmentType?: $Enums.AttachmentType | null
+    isPremium?: boolean
+    ticketPrice?: Decimal | DecimalJsLike | number | string | null
+    minAge?: number | null
+    participantType?: $Enums.EventParticipantType
+    postedById?: string | null
+    dojoId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type GradingUpdateWithoutFromRankInput = {
     id?: StringFieldUpdateOperationsInput | string
     result?: EnumGradingResultFieldUpdateOperationsInput | $Enums.GradingResult
@@ -66810,6 +67762,74 @@ export namespace Prisma {
     appliedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type EventUpdateWithoutMinRankInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    eventDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
+    maxCapacity?: NullableIntFieldUpdateOperationsInput | number | null
+    category?: EnumEventCategoryFieldUpdateOperationsInput | $Enums.EventCategory
+    attachmentUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    attachmentType?: NullableEnumAttachmentTypeFieldUpdateOperationsInput | $Enums.AttachmentType | null
+    isPremium?: BoolFieldUpdateOperationsInput | boolean
+    ticketPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    minAge?: NullableIntFieldUpdateOperationsInput | number | null
+    participantType?: EnumEventParticipantTypeFieldUpdateOperationsInput | $Enums.EventParticipantType
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    registrations?: EventRegistrationUpdateManyWithoutEventNestedInput
+    postedBy?: UserUpdateOneWithoutEventsPostedNestedInput
+    dojo?: DojoUpdateOneWithoutEventsNestedInput
+  }
+
+  export type EventUncheckedUpdateWithoutMinRankInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    eventDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
+    maxCapacity?: NullableIntFieldUpdateOperationsInput | number | null
+    category?: EnumEventCategoryFieldUpdateOperationsInput | $Enums.EventCategory
+    attachmentUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    attachmentType?: NullableEnumAttachmentTypeFieldUpdateOperationsInput | $Enums.AttachmentType | null
+    isPremium?: BoolFieldUpdateOperationsInput | boolean
+    ticketPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    minAge?: NullableIntFieldUpdateOperationsInput | number | null
+    participantType?: EnumEventParticipantTypeFieldUpdateOperationsInput | $Enums.EventParticipantType
+    postedById?: NullableStringFieldUpdateOperationsInput | string | null
+    dojoId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    registrations?: EventRegistrationUncheckedUpdateManyWithoutEventNestedInput
+  }
+
+  export type EventUncheckedUpdateManyWithoutMinRankInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    eventDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
+    maxCapacity?: NullableIntFieldUpdateOperationsInput | number | null
+    category?: EnumEventCategoryFieldUpdateOperationsInput | $Enums.EventCategory
+    attachmentUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    attachmentType?: NullableEnumAttachmentTypeFieldUpdateOperationsInput | $Enums.AttachmentType | null
+    isPremium?: BoolFieldUpdateOperationsInput | boolean
+    ticketPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    minAge?: NullableIntFieldUpdateOperationsInput | number | null
+    participantType?: EnumEventParticipantTypeFieldUpdateOperationsInput | $Enums.EventParticipantType
+    postedById?: NullableStringFieldUpdateOperationsInput | string | null
+    dojoId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type ShopOrderCreateManyDojoInput = {
     id?: string
     userId: string
@@ -66918,6 +67938,11 @@ export namespace Prisma {
     category?: $Enums.EventCategory
     attachmentUrl?: string | null
     attachmentType?: $Enums.AttachmentType | null
+    isPremium?: boolean
+    ticketPrice?: Decimal | DecimalJsLike | number | string | null
+    minAge?: number | null
+    minRankId?: string | null
+    participantType?: $Enums.EventParticipantType
     postedById?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -67279,10 +68304,15 @@ export namespace Prisma {
     category?: EnumEventCategoryFieldUpdateOperationsInput | $Enums.EventCategory
     attachmentUrl?: NullableStringFieldUpdateOperationsInput | string | null
     attachmentType?: NullableEnumAttachmentTypeFieldUpdateOperationsInput | $Enums.AttachmentType | null
+    isPremium?: BoolFieldUpdateOperationsInput | boolean
+    ticketPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    minAge?: NullableIntFieldUpdateOperationsInput | number | null
+    participantType?: EnumEventParticipantTypeFieldUpdateOperationsInput | $Enums.EventParticipantType
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     registrations?: EventRegistrationUpdateManyWithoutEventNestedInput
     postedBy?: UserUpdateOneWithoutEventsPostedNestedInput
+    minRank?: BeltRankUpdateOneWithoutMinRankEventsNestedInput
   }
 
   export type EventUncheckedUpdateWithoutDojoInput = {
@@ -67297,6 +68327,11 @@ export namespace Prisma {
     category?: EnumEventCategoryFieldUpdateOperationsInput | $Enums.EventCategory
     attachmentUrl?: NullableStringFieldUpdateOperationsInput | string | null
     attachmentType?: NullableEnumAttachmentTypeFieldUpdateOperationsInput | $Enums.AttachmentType | null
+    isPremium?: BoolFieldUpdateOperationsInput | boolean
+    ticketPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    minAge?: NullableIntFieldUpdateOperationsInput | number | null
+    minRankId?: NullableStringFieldUpdateOperationsInput | string | null
+    participantType?: EnumEventParticipantTypeFieldUpdateOperationsInput | $Enums.EventParticipantType
     postedById?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -67315,6 +68350,11 @@ export namespace Prisma {
     category?: EnumEventCategoryFieldUpdateOperationsInput | $Enums.EventCategory
     attachmentUrl?: NullableStringFieldUpdateOperationsInput | string | null
     attachmentType?: NullableEnumAttachmentTypeFieldUpdateOperationsInput | $Enums.AttachmentType | null
+    isPremium?: BoolFieldUpdateOperationsInput | boolean
+    ticketPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    minAge?: NullableIntFieldUpdateOperationsInput | number | null
+    minRankId?: NullableStringFieldUpdateOperationsInput | string | null
+    participantType?: EnumEventParticipantTypeFieldUpdateOperationsInput | $Enums.EventParticipantType
     postedById?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -67601,6 +68641,12 @@ export namespace Prisma {
     guestEmail?: string | null
     guestPhone?: string | null
     qrToken: string
+    paymentStatus?: $Enums.PaymentStatus | null
+    amountDue?: Decimal | DecimalJsLike | number | string | null
+    paidAt?: Date | string | null
+    transactionId?: string | null
+    guestDateOfBirth?: Date | string | null
+    parentOfMemberNumber?: string | null
     checkedInAt?: Date | string | null
     checkedInByUserId?: string | null
     createdAt?: Date | string
@@ -67612,6 +68658,12 @@ export namespace Prisma {
     guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
     guestPhone?: NullableStringFieldUpdateOperationsInput | string | null
     qrToken?: StringFieldUpdateOperationsInput | string
+    paymentStatus?: NullableEnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus | null
+    amountDue?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    transactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    guestDateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    parentOfMemberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     checkedInAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneWithoutEventRegistrationsNestedInput
@@ -67625,6 +68677,12 @@ export namespace Prisma {
     guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
     guestPhone?: NullableStringFieldUpdateOperationsInput | string | null
     qrToken?: StringFieldUpdateOperationsInput | string
+    paymentStatus?: NullableEnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus | null
+    amountDue?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    transactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    guestDateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    parentOfMemberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     checkedInAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     checkedInByUserId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -67637,6 +68695,12 @@ export namespace Prisma {
     guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
     guestPhone?: NullableStringFieldUpdateOperationsInput | string | null
     qrToken?: StringFieldUpdateOperationsInput | string
+    paymentStatus?: NullableEnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus | null
+    amountDue?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    transactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    guestDateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    parentOfMemberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     checkedInAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     checkedInByUserId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
