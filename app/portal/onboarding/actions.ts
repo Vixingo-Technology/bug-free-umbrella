@@ -7,6 +7,7 @@ import { prisma } from "@/lib/prisma";
 import { MEMBERSHIP_FEE_BDT, MEMBERSHIP_DURATION_YEARS } from "@/lib/constants";
 import { notifyAdmins, notifyDojoStaff } from "@/lib/notify";
 import { provisionMemberFromSupabaseUser } from "@/lib/auth/provision-member";
+import { ensureRegNo } from "@/lib/members/reg-no";
 
 // Onboarding pages skip the provisioning that the portal layout normally
 // performs, so the users row may not exist yet when these actions fire.
@@ -103,6 +104,8 @@ export async function saveProfileAction(formData: FormData) {
             if (role === "DOJO_OWNER")   await prisma.dojoOwner.upsert({ where: { id: user.id }, create: { id: user.id, ...data }, update: data });
             if (role === "ADMIN")        await prisma.admin.upsert({ where: { id: user.id }, create: { id: user.id }, update: {} });
         }
+
+        await ensureRegNo(user.id);
 
         return { success: true };
     } catch (err: any) {

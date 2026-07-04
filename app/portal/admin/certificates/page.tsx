@@ -29,12 +29,12 @@ export default async function AdminCertificatesPage() {
             orderBy: { createdAt: "desc" },
             take: 500,
             include: {
-                student: { select: { memberNumber: true, user: { select: { fullName: true } } } },
+                student: { select: { user: { select: { fullName: true, memberNumber: true } } } },
                 dojo: { select: { name: true } },
             },
         }).then((rows) => rows.map((r) => ({
             ...r,
-            member: { fullName: r.student.user.fullName, memberNumber: r.student.memberNumber },
+            member: { fullName: r.student.user.fullName, memberNumber: r.student.user.memberNumber },
         }))),
     ]);
 

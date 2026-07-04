@@ -210,8 +210,8 @@ export default async function AdminMemberDetailPage({
                             </span>
                         </div>
                         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-4 pt-4 border-t border-zinc-100">
-                            {s?.memberNumber && (
-                                <MiniStat label="Member No." value={s.memberNumber} />
+                            {p.memberNumber && (
+                                <MiniStat label="Member No." value={p.memberNumber} />
                             )}
                             {dojoLabel && <MiniStat label="Dojo" value={dojoLabel} />}
                             {s?.expiryDate && (
@@ -257,7 +257,7 @@ export default async function AdminMemberDetailPage({
                     {s && (
                         <Section title="Student profile">
                             <FieldGrid>
-                                <Field icon={<Award size={14} />} label="Member number" value={s.memberNumber} />
+                                <Field icon={<Award size={14} />} label="Member number" value={p.memberNumber} />
                                 <Field icon={<Award size={14} />} label="Current rank" value={s.currentRank} />
                                 <Field
                                     icon={<Calendar size={14} />}

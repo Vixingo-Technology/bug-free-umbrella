@@ -27,7 +27,7 @@ export default async function ReceiptPage({
         include: {
             items: true,
             buyer: {
-                select: { id: true, fullName: true, student: { select: { memberNumber: true, currentRank: true } } },
+                select: { id: true, fullName: true, memberNumber: true, student: { select: { currentRank: true } } },
             },
             dojo: {
                 select: {
@@ -50,7 +50,7 @@ export default async function ReceiptPage({
             ? {
                 id: saleRaw.buyer.id,
                 fullName: saleRaw.buyer.fullName,
-                memberNumber: saleRaw.buyer.student?.memberNumber ?? null,
+                memberNumber: saleRaw.buyer.memberNumber ?? null,
                 currentRank: saleRaw.buyer.student?.currentRank ?? "—",
             }
             : null,

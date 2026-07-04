@@ -118,7 +118,7 @@ export default async function PublicMemberPage({
                 avatarUrl: u.avatarUrl,
                 isActive: u.isActive,
                 role: u.roleId,
-                memberNumber: u.student?.memberNumber ?? null,
+                memberNumber: u.memberNumber ?? null,
                 currentRank: u.student?.currentRank ?? "—",
                 joinDate: u.student?.joinDate ?? null,
                 expiryDate: u.student?.expiryDate ?? null,

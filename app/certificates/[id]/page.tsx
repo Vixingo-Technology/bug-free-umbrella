@@ -50,7 +50,7 @@ export default async function CertificatePreviewPage({
                 where: { id },
                 include: {
                     student: {
-                        select: { memberNumber: true, user: { select: { avatarUrl: true } } },
+                        select: { user: { select: { avatarUrl: true, memberNumber: true } } },
                     },
                     dojo: {
                         select: { name: true, ownerSignatureUrl: true },
@@ -108,7 +108,7 @@ export default async function CertificatePreviewPage({
             status={req.status}
             certificateUrl={signedUrl}
             memberName={req.memberName}
-            memberNumber={req.student?.memberNumber ?? null}
+            memberNumber={req.student?.user?.memberNumber ?? null}
             fatherName={req.fatherName}
             motherName={req.motherName}
             rankName={req.rankName}

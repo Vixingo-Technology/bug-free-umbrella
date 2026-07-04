@@ -27,7 +27,7 @@ export default async function PublicCardPage({
                 avatarUrl: u.avatarUrl,
                 role: u.roleId,
                 currentRank: u.student?.currentRank ?? "—",
-                memberNumber: u.student?.memberNumber ?? null,
+                memberNumber: u.memberNumber ?? null,
                 dojo: u.student?.dojo ?? null,
                 expiryDate: u.student?.expiryDate ?? null,
             };

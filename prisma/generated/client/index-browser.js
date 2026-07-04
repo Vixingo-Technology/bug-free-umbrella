@@ -150,13 +150,13 @@ exports.Prisma.UserScalarFieldEnum = {
   avatarUrl: 'avatarUrl',
   roleId: 'roleId',
   isActive: 'isActive',
+  memberNumber: 'memberNumber',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
 
 exports.Prisma.StudentScalarFieldEnum = {
   id: 'id',
-  memberNumber: 'memberNumber',
   currentRank: 'currentRank',
   joinDate: 'joinDate',
   expiryDate: 'expiryDate',

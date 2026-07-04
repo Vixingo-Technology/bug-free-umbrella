@@ -85,7 +85,7 @@ export default async function EventParticipantsList({
                     fullName: true,
                     email: true,
                     phone: true,
-                    student: { select: { memberNumber: true } },
+                    memberNumber: true,
                 },
             },
             checkedInBy: { select: { fullName: true } },
@@ -98,7 +98,7 @@ export default async function EventParticipantsList({
                 fullName: p.user.fullName,
                 email: p.user.email,
                 phone: p.user.phone,
-                memberNumber: p.user.student?.memberNumber ?? null,
+                memberNumber: p.user.memberNumber ?? null,
             }
             : null,
     }));

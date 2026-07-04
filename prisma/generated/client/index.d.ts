@@ -7979,6 +7979,7 @@ export namespace Prisma {
     avatarUrl: string | null
     roleId: string | null
     isActive: boolean | null
+    memberNumber: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -7991,6 +7992,7 @@ export namespace Prisma {
     avatarUrl: string | null
     roleId: string | null
     isActive: boolean | null
+    memberNumber: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -8003,6 +8005,7 @@ export namespace Prisma {
     avatarUrl: number
     roleId: number
     isActive: number
+    memberNumber: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -8017,6 +8020,7 @@ export namespace Prisma {
     avatarUrl?: true
     roleId?: true
     isActive?: true
+    memberNumber?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -8029,6 +8033,7 @@ export namespace Prisma {
     avatarUrl?: true
     roleId?: true
     isActive?: true
+    memberNumber?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -8041,6 +8046,7 @@ export namespace Prisma {
     avatarUrl?: true
     roleId?: true
     isActive?: true
+    memberNumber?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -8126,6 +8132,7 @@ export namespace Prisma {
     avatarUrl: string | null
     roleId: string
     isActive: boolean
+    memberNumber: string | null
     createdAt: Date
     updatedAt: Date
     _count: UserCountAggregateOutputType | null
@@ -8155,6 +8162,7 @@ export namespace Prisma {
     avatarUrl?: boolean
     roleId?: boolean
     isActive?: boolean
+    memberNumber?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     role?: boolean | RoleDefaultArgs<ExtArgs>
@@ -8184,6 +8192,7 @@ export namespace Prisma {
     avatarUrl?: boolean
     roleId?: boolean
     isActive?: boolean
+    memberNumber?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     role?: boolean | RoleDefaultArgs<ExtArgs>
@@ -8197,6 +8206,7 @@ export namespace Prisma {
     avatarUrl?: boolean
     roleId?: boolean
     isActive?: boolean
+    memberNumber?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     role?: boolean | RoleDefaultArgs<ExtArgs>
@@ -8210,11 +8220,12 @@ export namespace Prisma {
     avatarUrl?: boolean
     roleId?: boolean
     isActive?: boolean
+    memberNumber?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "phone" | "fullName" | "avatarUrl" | "roleId" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "phone" | "fullName" | "avatarUrl" | "roleId" | "isActive" | "memberNumber" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     role?: boolean | RoleDefaultArgs<ExtArgs>
     student?: boolean | User$studentArgs<ExtArgs>
@@ -8269,6 +8280,7 @@ export namespace Prisma {
       avatarUrl: string | null
       roleId: string
       isActive: boolean
+      memberNumber: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["user"]>
@@ -8717,6 +8729,7 @@ export namespace Prisma {
     readonly avatarUrl: FieldRef<"User", 'String'>
     readonly roleId: FieldRef<"User", 'String'>
     readonly isActive: FieldRef<"User", 'Boolean'>
+    readonly memberNumber: FieldRef<"User", 'String'>
     readonly createdAt: FieldRef<"User", 'DateTime'>
     readonly updatedAt: FieldRef<"User", 'DateTime'>
   }
@@ -9485,7 +9498,6 @@ export namespace Prisma {
 
   export type StudentMinAggregateOutputType = {
     id: string | null
-    memberNumber: string | null
     currentRank: string | null
     joinDate: Date | null
     expiryDate: Date | null
@@ -9506,7 +9518,6 @@ export namespace Prisma {
 
   export type StudentMaxAggregateOutputType = {
     id: string | null
-    memberNumber: string | null
     currentRank: string | null
     joinDate: Date | null
     expiryDate: Date | null
@@ -9527,7 +9538,6 @@ export namespace Prisma {
 
   export type StudentCountAggregateOutputType = {
     id: number
-    memberNumber: number
     currentRank: number
     joinDate: number
     expiryDate: number
@@ -9550,7 +9560,6 @@ export namespace Prisma {
 
   export type StudentMinAggregateInputType = {
     id?: true
-    memberNumber?: true
     currentRank?: true
     joinDate?: true
     expiryDate?: true
@@ -9571,7 +9580,6 @@ export namespace Prisma {
 
   export type StudentMaxAggregateInputType = {
     id?: true
-    memberNumber?: true
     currentRank?: true
     joinDate?: true
     expiryDate?: true
@@ -9592,7 +9600,6 @@ export namespace Prisma {
 
   export type StudentCountAggregateInputType = {
     id?: true
-    memberNumber?: true
     currentRank?: true
     joinDate?: true
     expiryDate?: true
@@ -9686,7 +9693,6 @@ export namespace Prisma {
 
   export type StudentGroupByOutputType = {
     id: string
-    memberNumber: string | null
     currentRank: string
     joinDate: Date
     expiryDate: Date | null
@@ -9724,7 +9730,6 @@ export namespace Prisma {
 
   export type StudentSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    memberNumber?: boolean
     currentRank?: boolean
     joinDate?: boolean
     expiryDate?: boolean
@@ -9753,7 +9758,6 @@ export namespace Prisma {
 
   export type StudentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    memberNumber?: boolean
     currentRank?: boolean
     joinDate?: boolean
     expiryDate?: boolean
@@ -9776,7 +9780,6 @@ export namespace Prisma {
 
   export type StudentSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    memberNumber?: boolean
     currentRank?: boolean
     joinDate?: boolean
     expiryDate?: boolean
@@ -9799,7 +9802,6 @@ export namespace Prisma {
 
   export type StudentSelectScalar = {
     id?: boolean
-    memberNumber?: boolean
     currentRank?: boolean
     joinDate?: boolean
     expiryDate?: boolean
@@ -9818,7 +9820,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type StudentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "memberNumber" | "currentRank" | "joinDate" | "expiryDate" | "dojoId" | "onboardingComplete" | "membershipStatus" | "dateOfBirth" | "bloodGroup" | "address" | "nationalId" | "fatherName" | "motherName" | "emergencyContactName" | "emergencyContactPhone" | "createdAt" | "updatedAt", ExtArgs["result"]["student"]>
+  export type StudentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "currentRank" | "joinDate" | "expiryDate" | "dojoId" | "onboardingComplete" | "membershipStatus" | "dateOfBirth" | "bloodGroup" | "address" | "nationalId" | "fatherName" | "motherName" | "emergencyContactName" | "emergencyContactPhone" | "createdAt" | "updatedAt", ExtArgs["result"]["student"]>
   export type StudentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     dojo?: boolean | Student$dojoArgs<ExtArgs>
@@ -9851,7 +9853,6 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      memberNumber: string | null
       currentRank: string
       joinDate: Date
       expiryDate: Date | null
@@ -10299,7 +10300,6 @@ export namespace Prisma {
    */
   interface StudentFieldRefs {
     readonly id: FieldRef<"Student", 'String'>
-    readonly memberNumber: FieldRef<"Student", 'String'>
     readonly currentRank: FieldRef<"Student", 'String'>
     readonly joinDate: FieldRef<"Student", 'DateTime'>
     readonly expiryDate: FieldRef<"Student", 'DateTime'>
@@ -44506,6 +44506,7 @@ export namespace Prisma {
     avatarUrl: 'avatarUrl',
     roleId: 'roleId',
     isActive: 'isActive',
+    memberNumber: 'memberNumber',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -44515,7 +44516,6 @@ export namespace Prisma {
 
   export const StudentScalarFieldEnum: {
     id: 'id',
-    memberNumber: 'memberNumber',
     currentRank: 'currentRank',
     joinDate: 'joinDate',
     expiryDate: 'expiryDate',
@@ -45471,6 +45471,7 @@ export namespace Prisma {
     avatarUrl?: StringNullableFilter<"User"> | string | null
     roleId?: StringFilter<"User"> | string
     isActive?: BoolFilter<"User"> | boolean
+    memberNumber?: StringNullableFilter<"User"> | string | null
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     role?: XOR<RoleScalarRelationFilter, RoleWhereInput>
@@ -45499,6 +45500,7 @@ export namespace Prisma {
     avatarUrl?: SortOrderInput | SortOrder
     roleId?: SortOrder
     isActive?: SortOrder
+    memberNumber?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     role?: RoleOrderByWithRelationInput
@@ -45522,6 +45524,7 @@ export namespace Prisma {
   export type UserWhereUniqueInput = Prisma.AtLeast<{
     id?: string
     email?: string
+    memberNumber?: string
     AND?: UserWhereInput | UserWhereInput[]
     OR?: UserWhereInput[]
     NOT?: UserWhereInput | UserWhereInput[]
@@ -45548,7 +45551,7 @@ export namespace Prisma {
     dojoSalesSold?: DojoSaleListRelationFilter
     achievementsAwarded?: StudentAchievementListRelationFilter
     tournamentEntries?: TournamentParticipantListRelationFilter
-  }, "id" | "email">
+  }, "id" | "email" | "memberNumber">
 
   export type UserOrderByWithAggregationInput = {
     id?: SortOrder
@@ -45558,6 +45561,7 @@ export namespace Prisma {
     avatarUrl?: SortOrderInput | SortOrder
     roleId?: SortOrder
     isActive?: SortOrder
+    memberNumber?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: UserCountOrderByAggregateInput
@@ -45576,6 +45580,7 @@ export namespace Prisma {
     avatarUrl?: StringNullableWithAggregatesFilter<"User"> | string | null
     roleId?: StringWithAggregatesFilter<"User"> | string
     isActive?: BoolWithAggregatesFilter<"User"> | boolean
+    memberNumber?: StringNullableWithAggregatesFilter<"User"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
   }
@@ -45585,7 +45590,6 @@ export namespace Prisma {
     OR?: StudentWhereInput[]
     NOT?: StudentWhereInput | StudentWhereInput[]
     id?: UuidFilter<"Student"> | string
-    memberNumber?: StringNullableFilter<"Student"> | string | null
     currentRank?: StringFilter<"Student"> | string
     joinDate?: DateTimeFilter<"Student"> | Date | string
     expiryDate?: DateTimeNullableFilter<"Student"> | Date | string | null
@@ -45613,7 +45617,6 @@ export namespace Prisma {
 
   export type StudentOrderByWithRelationInput = {
     id?: SortOrder
-    memberNumber?: SortOrderInput | SortOrder
     currentRank?: SortOrder
     joinDate?: SortOrder
     expiryDate?: SortOrderInput | SortOrder
@@ -45641,7 +45644,6 @@ export namespace Prisma {
 
   export type StudentWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    memberNumber?: string
     AND?: StudentWhereInput | StudentWhereInput[]
     OR?: StudentWhereInput[]
     NOT?: StudentWhereInput | StudentWhereInput[]
@@ -45668,11 +45670,10 @@ export namespace Prisma {
     gradingApplications?: GradingApplicationListRelationFilter
     certificateRequests?: CertificateRequestListRelationFilter
     achievements?: StudentAchievementListRelationFilter
-  }, "id" | "memberNumber">
+  }, "id">
 
   export type StudentOrderByWithAggregationInput = {
     id?: SortOrder
-    memberNumber?: SortOrderInput | SortOrder
     currentRank?: SortOrder
     joinDate?: SortOrder
     expiryDate?: SortOrderInput | SortOrder
@@ -45699,7 +45700,6 @@ export namespace Prisma {
     OR?: StudentScalarWhereWithAggregatesInput[]
     NOT?: StudentScalarWhereWithAggregatesInput | StudentScalarWhereWithAggregatesInput[]
     id?: UuidWithAggregatesFilter<"Student"> | string
-    memberNumber?: StringNullableWithAggregatesFilter<"Student"> | string | null
     currentRank?: StringWithAggregatesFilter<"Student"> | string
     joinDate?: DateTimeWithAggregatesFilter<"Student"> | Date | string
     expiryDate?: DateTimeNullableWithAggregatesFilter<"Student"> | Date | string | null
@@ -48322,6 +48322,7 @@ export namespace Prisma {
     fullName: string
     avatarUrl?: string | null
     isActive?: boolean
+    memberNumber?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     role?: RoleCreateNestedOneWithoutUsersInput
@@ -48350,6 +48351,7 @@ export namespace Prisma {
     avatarUrl?: string | null
     roleId?: string
     isActive?: boolean
+    memberNumber?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     student?: StudentUncheckedCreateNestedOneWithoutUserInput
@@ -48376,6 +48378,7 @@ export namespace Prisma {
     fullName?: StringFieldUpdateOperationsInput | string
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
@@ -48404,6 +48407,7 @@ export namespace Prisma {
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     roleId?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     student?: StudentUncheckedUpdateOneWithoutUserNestedInput
@@ -48431,6 +48435,7 @@ export namespace Prisma {
     avatarUrl?: string | null
     roleId?: string
     isActive?: boolean
+    memberNumber?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -48442,6 +48447,7 @@ export namespace Prisma {
     fullName?: StringFieldUpdateOperationsInput | string
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -48454,12 +48460,12 @@ export namespace Prisma {
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     roleId?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type StudentCreateInput = {
-    memberNumber?: string | null
     currentRank?: string
     joinDate?: Date | string
     expiryDate?: Date | string | null
@@ -48486,7 +48492,6 @@ export namespace Prisma {
 
   export type StudentUncheckedCreateInput = {
     id: string
-    memberNumber?: string | null
     currentRank?: string
     joinDate?: Date | string
     expiryDate?: Date | string | null
@@ -48511,7 +48516,6 @@ export namespace Prisma {
   }
 
   export type StudentUpdateInput = {
-    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     currentRank?: StringFieldUpdateOperationsInput | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
     expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -48538,7 +48542,6 @@ export namespace Prisma {
 
   export type StudentUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     currentRank?: StringFieldUpdateOperationsInput | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
     expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -48564,7 +48567,6 @@ export namespace Prisma {
 
   export type StudentCreateManyInput = {
     id: string
-    memberNumber?: string | null
     currentRank?: string
     joinDate?: Date | string
     expiryDate?: Date | string | null
@@ -48584,7 +48586,6 @@ export namespace Prisma {
   }
 
   export type StudentUpdateManyMutationInput = {
-    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     currentRank?: StringFieldUpdateOperationsInput | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
     expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -48604,7 +48605,6 @@ export namespace Prisma {
 
   export type StudentUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     currentRank?: StringFieldUpdateOperationsInput | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
     expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -51565,6 +51565,7 @@ export namespace Prisma {
     avatarUrl?: SortOrder
     roleId?: SortOrder
     isActive?: SortOrder
+    memberNumber?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -51577,6 +51578,7 @@ export namespace Prisma {
     avatarUrl?: SortOrder
     roleId?: SortOrder
     isActive?: SortOrder
+    memberNumber?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -51589,6 +51591,7 @@ export namespace Prisma {
     avatarUrl?: SortOrder
     roleId?: SortOrder
     isActive?: SortOrder
+    memberNumber?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -51698,7 +51701,6 @@ export namespace Prisma {
 
   export type StudentCountOrderByAggregateInput = {
     id?: SortOrder
-    memberNumber?: SortOrder
     currentRank?: SortOrder
     joinDate?: SortOrder
     expiryDate?: SortOrder
@@ -51719,7 +51721,6 @@ export namespace Prisma {
 
   export type StudentMaxOrderByAggregateInput = {
     id?: SortOrder
-    memberNumber?: SortOrder
     currentRank?: SortOrder
     joinDate?: SortOrder
     expiryDate?: SortOrder
@@ -51740,7 +51741,6 @@ export namespace Prisma {
 
   export type StudentMinOrderByAggregateInput = {
     id?: SortOrder
-    memberNumber?: SortOrder
     currentRank?: SortOrder
     joinDate?: SortOrder
     expiryDate?: SortOrder
@@ -57496,6 +57496,7 @@ export namespace Prisma {
     fullName: string
     avatarUrl?: string | null
     isActive?: boolean
+    memberNumber?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     student?: StudentCreateNestedOneWithoutUserInput
@@ -57522,6 +57523,7 @@ export namespace Prisma {
     fullName: string
     avatarUrl?: string | null
     isActive?: boolean
+    memberNumber?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     student?: StudentUncheckedCreateNestedOneWithoutUserInput
@@ -57598,6 +57600,7 @@ export namespace Prisma {
     avatarUrl?: StringNullableFilter<"User"> | string | null
     roleId?: StringFilter<"User"> | string
     isActive?: BoolFilter<"User"> | boolean
+    memberNumber?: StringNullableFilter<"User"> | string | null
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
   }
@@ -57787,7 +57790,6 @@ export namespace Prisma {
   }
 
   export type StudentCreateWithoutUserInput = {
-    memberNumber?: string | null
     currentRank?: string
     joinDate?: Date | string
     expiryDate?: Date | string | null
@@ -57812,7 +57814,6 @@ export namespace Prisma {
   }
 
   export type StudentUncheckedCreateWithoutUserInput = {
-    memberNumber?: string | null
     currentRank?: string
     joinDate?: Date | string
     expiryDate?: Date | string | null
@@ -58368,7 +58369,6 @@ export namespace Prisma {
   }
 
   export type StudentUpdateWithoutUserInput = {
-    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     currentRank?: StringFieldUpdateOperationsInput | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
     expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -58393,7 +58393,6 @@ export namespace Prisma {
   }
 
   export type StudentUncheckedUpdateWithoutUserInput = {
-    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     currentRank?: StringFieldUpdateOperationsInput | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
     expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -58829,6 +58828,7 @@ export namespace Prisma {
     fullName: string
     avatarUrl?: string | null
     isActive?: boolean
+    memberNumber?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     role?: RoleCreateNestedOneWithoutUsersInput
@@ -58856,6 +58856,7 @@ export namespace Prisma {
     avatarUrl?: string | null
     roleId?: string
     isActive?: boolean
+    memberNumber?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     instructor?: InstructorUncheckedCreateNestedOneWithoutUserInput
@@ -59128,6 +59129,7 @@ export namespace Prisma {
     fullName?: StringFieldUpdateOperationsInput | string
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
@@ -59155,6 +59157,7 @@ export namespace Prisma {
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     roleId?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     instructor?: InstructorUncheckedUpdateOneWithoutUserNestedInput
@@ -59395,6 +59398,7 @@ export namespace Prisma {
     fullName: string
     avatarUrl?: string | null
     isActive?: boolean
+    memberNumber?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     role?: RoleCreateNestedOneWithoutUsersInput
@@ -59422,6 +59426,7 @@ export namespace Prisma {
     avatarUrl?: string | null
     roleId?: string
     isActive?: boolean
+    memberNumber?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     student?: StudentUncheckedCreateNestedOneWithoutUserInput
@@ -59528,6 +59533,7 @@ export namespace Prisma {
     fullName?: StringFieldUpdateOperationsInput | string
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
@@ -59555,6 +59561,7 @@ export namespace Prisma {
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     roleId?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     student?: StudentUncheckedUpdateOneWithoutUserNestedInput
@@ -59651,6 +59658,7 @@ export namespace Prisma {
     fullName: string
     avatarUrl?: string | null
     isActive?: boolean
+    memberNumber?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     role?: RoleCreateNestedOneWithoutUsersInput
@@ -59678,6 +59686,7 @@ export namespace Prisma {
     avatarUrl?: string | null
     roleId?: string
     isActive?: boolean
+    memberNumber?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     student?: StudentUncheckedCreateNestedOneWithoutUserInput
@@ -59784,6 +59793,7 @@ export namespace Prisma {
     fullName?: StringFieldUpdateOperationsInput | string
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
@@ -59811,6 +59821,7 @@ export namespace Prisma {
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     roleId?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     student?: StudentUncheckedUpdateOneWithoutUserNestedInput
@@ -59907,6 +59918,7 @@ export namespace Prisma {
     fullName: string
     avatarUrl?: string | null
     isActive?: boolean
+    memberNumber?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     role?: RoleCreateNestedOneWithoutUsersInput
@@ -59934,6 +59946,7 @@ export namespace Prisma {
     avatarUrl?: string | null
     roleId?: string
     isActive?: boolean
+    memberNumber?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     student?: StudentUncheckedCreateNestedOneWithoutUserInput
@@ -60040,6 +60053,7 @@ export namespace Prisma {
     fullName?: StringFieldUpdateOperationsInput | string
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
@@ -60067,6 +60081,7 @@ export namespace Prisma {
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     roleId?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     student?: StudentUncheckedUpdateOneWithoutUserNestedInput
@@ -60163,6 +60178,7 @@ export namespace Prisma {
     fullName: string
     avatarUrl?: string | null
     isActive?: boolean
+    memberNumber?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     role?: RoleCreateNestedOneWithoutUsersInput
@@ -60190,6 +60206,7 @@ export namespace Prisma {
     avatarUrl?: string | null
     roleId?: string
     isActive?: boolean
+    memberNumber?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     student?: StudentUncheckedCreateNestedOneWithoutUserInput
@@ -60231,6 +60248,7 @@ export namespace Prisma {
     fullName?: StringFieldUpdateOperationsInput | string
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
@@ -60258,6 +60276,7 @@ export namespace Prisma {
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     roleId?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     student?: StudentUncheckedUpdateOneWithoutUserNestedInput
@@ -60719,7 +60738,6 @@ export namespace Prisma {
   }
 
   export type StudentCreateWithoutDojoInput = {
-    memberNumber?: string | null
     currentRank?: string
     joinDate?: Date | string
     expiryDate?: Date | string | null
@@ -60745,7 +60763,6 @@ export namespace Prisma {
 
   export type StudentUncheckedCreateWithoutDojoInput = {
     id: string
-    memberNumber?: string | null
     currentRank?: string
     joinDate?: Date | string
     expiryDate?: Date | string | null
@@ -61106,7 +61123,6 @@ export namespace Prisma {
     OR?: StudentScalarWhereInput[]
     NOT?: StudentScalarWhereInput | StudentScalarWhereInput[]
     id?: UuidFilter<"Student"> | string
-    memberNumber?: StringNullableFilter<"Student"> | string | null
     currentRank?: StringFilter<"Student"> | string
     joinDate?: DateTimeFilter<"Student"> | Date | string
     expiryDate?: DateTimeNullableFilter<"Student"> | Date | string | null
@@ -61298,7 +61314,6 @@ export namespace Prisma {
   }
 
   export type StudentCreateWithoutAttendanceInput = {
-    memberNumber?: string | null
     currentRank?: string
     joinDate?: Date | string
     expiryDate?: Date | string | null
@@ -61324,7 +61339,6 @@ export namespace Prisma {
 
   export type StudentUncheckedCreateWithoutAttendanceInput = {
     id: string
-    memberNumber?: string | null
     currentRank?: string
     joinDate?: Date | string
     expiryDate?: Date | string | null
@@ -61429,7 +61443,6 @@ export namespace Prisma {
   }
 
   export type StudentUpdateWithoutAttendanceInput = {
-    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     currentRank?: StringFieldUpdateOperationsInput | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
     expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -61455,7 +61468,6 @@ export namespace Prisma {
 
   export type StudentUncheckedUpdateWithoutAttendanceInput = {
     id?: StringFieldUpdateOperationsInput | string
-    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     currentRank?: StringFieldUpdateOperationsInput | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
     expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -61724,7 +61736,6 @@ export namespace Prisma {
   }
 
   export type StudentCreateWithoutGradingApplicationsInput = {
-    memberNumber?: string | null
     currentRank?: string
     joinDate?: Date | string
     expiryDate?: Date | string | null
@@ -61750,7 +61761,6 @@ export namespace Prisma {
 
   export type StudentUncheckedCreateWithoutGradingApplicationsInput = {
     id: string
-    memberNumber?: string | null
     currentRank?: string
     joinDate?: Date | string
     expiryDate?: Date | string | null
@@ -61862,7 +61872,6 @@ export namespace Prisma {
   }
 
   export type StudentUpdateWithoutGradingApplicationsInput = {
-    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     currentRank?: StringFieldUpdateOperationsInput | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
     expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -61888,7 +61897,6 @@ export namespace Prisma {
 
   export type StudentUncheckedUpdateWithoutGradingApplicationsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     currentRank?: StringFieldUpdateOperationsInput | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
     expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -61996,7 +62004,6 @@ export namespace Prisma {
   }
 
   export type StudentCreateWithoutGradingsInput = {
-    memberNumber?: string | null
     currentRank?: string
     joinDate?: Date | string
     expiryDate?: Date | string | null
@@ -62022,7 +62029,6 @@ export namespace Prisma {
 
   export type StudentUncheckedCreateWithoutGradingsInput = {
     id: string
-    memberNumber?: string | null
     currentRank?: string
     joinDate?: Date | string
     expiryDate?: Date | string | null
@@ -62213,7 +62219,6 @@ export namespace Prisma {
   }
 
   export type StudentUpdateWithoutGradingsInput = {
-    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     currentRank?: StringFieldUpdateOperationsInput | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
     expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -62239,7 +62244,6 @@ export namespace Prisma {
 
   export type StudentUncheckedUpdateWithoutGradingsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     currentRank?: StringFieldUpdateOperationsInput | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
     expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -62435,7 +62439,6 @@ export namespace Prisma {
   }
 
   export type StudentCreateWithoutCertificateRequestsInput = {
-    memberNumber?: string | null
     currentRank?: string
     joinDate?: Date | string
     expiryDate?: Date | string | null
@@ -62461,7 +62464,6 @@ export namespace Prisma {
 
   export type StudentUncheckedCreateWithoutCertificateRequestsInput = {
     id: string
-    memberNumber?: string | null
     currentRank?: string
     joinDate?: Date | string
     expiryDate?: Date | string | null
@@ -62648,7 +62650,6 @@ export namespace Prisma {
   }
 
   export type StudentUpdateWithoutCertificateRequestsInput = {
-    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     currentRank?: StringFieldUpdateOperationsInput | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
     expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -62674,7 +62675,6 @@ export namespace Prisma {
 
   export type StudentUncheckedUpdateWithoutCertificateRequestsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     currentRank?: StringFieldUpdateOperationsInput | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
     expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -62872,6 +62872,7 @@ export namespace Prisma {
     fullName: string
     avatarUrl?: string | null
     isActive?: boolean
+    memberNumber?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     role?: RoleCreateNestedOneWithoutUsersInput
@@ -62899,6 +62900,7 @@ export namespace Prisma {
     avatarUrl?: string | null
     roleId?: string
     isActive?: boolean
+    memberNumber?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     student?: StudentUncheckedCreateNestedOneWithoutUserInput
@@ -63056,6 +63058,7 @@ export namespace Prisma {
     fullName?: StringFieldUpdateOperationsInput | string
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
@@ -63083,6 +63086,7 @@ export namespace Prisma {
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     roleId?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     student?: StudentUncheckedUpdateOneWithoutUserNestedInput
@@ -63220,6 +63224,7 @@ export namespace Prisma {
     fullName: string
     avatarUrl?: string | null
     isActive?: boolean
+    memberNumber?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     role?: RoleCreateNestedOneWithoutUsersInput
@@ -63247,6 +63252,7 @@ export namespace Prisma {
     avatarUrl?: string | null
     roleId?: string
     isActive?: boolean
+    memberNumber?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     student?: StudentUncheckedCreateNestedOneWithoutUserInput
@@ -63353,6 +63359,7 @@ export namespace Prisma {
     fullName?: StringFieldUpdateOperationsInput | string
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
@@ -63380,6 +63387,7 @@ export namespace Prisma {
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     roleId?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     student?: StudentUncheckedUpdateOneWithoutUserNestedInput
@@ -63527,6 +63535,7 @@ export namespace Prisma {
     fullName: string
     avatarUrl?: string | null
     isActive?: boolean
+    memberNumber?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     role?: RoleCreateNestedOneWithoutUsersInput
@@ -63554,6 +63563,7 @@ export namespace Prisma {
     avatarUrl?: string | null
     roleId?: string
     isActive?: boolean
+    memberNumber?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     student?: StudentUncheckedCreateNestedOneWithoutUserInput
@@ -63584,6 +63594,7 @@ export namespace Prisma {
     fullName: string
     avatarUrl?: string | null
     isActive?: boolean
+    memberNumber?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     role?: RoleCreateNestedOneWithoutUsersInput
@@ -63611,6 +63622,7 @@ export namespace Prisma {
     avatarUrl?: string | null
     roleId?: string
     isActive?: boolean
+    memberNumber?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     student?: StudentUncheckedCreateNestedOneWithoutUserInput
@@ -63709,6 +63721,7 @@ export namespace Prisma {
     fullName?: StringFieldUpdateOperationsInput | string
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
@@ -63736,6 +63749,7 @@ export namespace Prisma {
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     roleId?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     student?: StudentUncheckedUpdateOneWithoutUserNestedInput
@@ -63772,6 +63786,7 @@ export namespace Prisma {
     fullName?: StringFieldUpdateOperationsInput | string
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
@@ -63799,6 +63814,7 @@ export namespace Prisma {
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     roleId?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     student?: StudentUncheckedUpdateOneWithoutUserNestedInput
@@ -63824,6 +63840,7 @@ export namespace Prisma {
     fullName: string
     avatarUrl?: string | null
     isActive?: boolean
+    memberNumber?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     role?: RoleCreateNestedOneWithoutUsersInput
@@ -63851,6 +63868,7 @@ export namespace Prisma {
     avatarUrl?: string | null
     roleId?: string
     isActive?: boolean
+    memberNumber?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     student?: StudentUncheckedCreateNestedOneWithoutUserInput
@@ -63892,6 +63910,7 @@ export namespace Prisma {
     fullName?: StringFieldUpdateOperationsInput | string
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
@@ -63919,6 +63938,7 @@ export namespace Prisma {
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     roleId?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     student?: StudentUncheckedUpdateOneWithoutUserNestedInput
@@ -64373,6 +64393,7 @@ export namespace Prisma {
     fullName: string
     avatarUrl?: string | null
     isActive?: boolean
+    memberNumber?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     role?: RoleCreateNestedOneWithoutUsersInput
@@ -64400,6 +64421,7 @@ export namespace Prisma {
     avatarUrl?: string | null
     roleId?: string
     isActive?: boolean
+    memberNumber?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     student?: StudentUncheckedCreateNestedOneWithoutUserInput
@@ -64430,6 +64452,7 @@ export namespace Prisma {
     fullName: string
     avatarUrl?: string | null
     isActive?: boolean
+    memberNumber?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     role?: RoleCreateNestedOneWithoutUsersInput
@@ -64457,6 +64480,7 @@ export namespace Prisma {
     avatarUrl?: string | null
     roleId?: string
     isActive?: boolean
+    memberNumber?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     student?: StudentUncheckedCreateNestedOneWithoutUserInput
@@ -64597,6 +64621,7 @@ export namespace Prisma {
     fullName?: StringFieldUpdateOperationsInput | string
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
@@ -64624,6 +64649,7 @@ export namespace Prisma {
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     roleId?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     student?: StudentUncheckedUpdateOneWithoutUserNestedInput
@@ -64660,6 +64686,7 @@ export namespace Prisma {
     fullName?: StringFieldUpdateOperationsInput | string
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
@@ -64687,6 +64714,7 @@ export namespace Prisma {
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     roleId?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     student?: StudentUncheckedUpdateOneWithoutUserNestedInput
@@ -64884,6 +64912,7 @@ export namespace Prisma {
     fullName: string
     avatarUrl?: string | null
     isActive?: boolean
+    memberNumber?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     role?: RoleCreateNestedOneWithoutUsersInput
@@ -64911,6 +64940,7 @@ export namespace Prisma {
     avatarUrl?: string | null
     roleId?: string
     isActive?: boolean
+    memberNumber?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     student?: StudentUncheckedCreateNestedOneWithoutUserInput
@@ -65150,6 +65180,7 @@ export namespace Prisma {
     fullName?: StringFieldUpdateOperationsInput | string
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
@@ -65177,6 +65208,7 @@ export namespace Prisma {
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     roleId?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     student?: StudentUncheckedUpdateOneWithoutUserNestedInput
@@ -65688,6 +65720,7 @@ export namespace Prisma {
     fullName: string
     avatarUrl?: string | null
     isActive?: boolean
+    memberNumber?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     role?: RoleCreateNestedOneWithoutUsersInput
@@ -65715,6 +65748,7 @@ export namespace Prisma {
     avatarUrl?: string | null
     roleId?: string
     isActive?: boolean
+    memberNumber?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     student?: StudentUncheckedCreateNestedOneWithoutUserInput
@@ -65887,6 +65921,7 @@ export namespace Prisma {
     fullName?: StringFieldUpdateOperationsInput | string
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
@@ -65914,6 +65949,7 @@ export namespace Prisma {
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     roleId?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     student?: StudentUncheckedUpdateOneWithoutUserNestedInput
@@ -66269,7 +66305,6 @@ export namespace Prisma {
   }
 
   export type StudentCreateWithoutAchievementsInput = {
-    memberNumber?: string | null
     currentRank?: string
     joinDate?: Date | string
     expiryDate?: Date | string | null
@@ -66295,7 +66330,6 @@ export namespace Prisma {
 
   export type StudentUncheckedCreateWithoutAchievementsInput = {
     id: string
-    memberNumber?: string | null
     currentRank?: string
     joinDate?: Date | string
     expiryDate?: Date | string | null
@@ -66369,6 +66403,7 @@ export namespace Prisma {
     fullName: string
     avatarUrl?: string | null
     isActive?: boolean
+    memberNumber?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     role?: RoleCreateNestedOneWithoutUsersInput
@@ -66396,6 +66431,7 @@ export namespace Prisma {
     avatarUrl?: string | null
     roleId?: string
     isActive?: boolean
+    memberNumber?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     student?: StudentUncheckedCreateNestedOneWithoutUserInput
@@ -66431,7 +66467,6 @@ export namespace Prisma {
   }
 
   export type StudentUpdateWithoutAchievementsInput = {
-    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     currentRank?: StringFieldUpdateOperationsInput | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
     expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -66457,7 +66492,6 @@ export namespace Prisma {
 
   export type StudentUncheckedUpdateWithoutAchievementsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     currentRank?: StringFieldUpdateOperationsInput | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
     expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -66543,6 +66577,7 @@ export namespace Prisma {
     fullName?: StringFieldUpdateOperationsInput | string
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
@@ -66570,6 +66605,7 @@ export namespace Prisma {
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     roleId?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     student?: StudentUncheckedUpdateOneWithoutUserNestedInput
@@ -66595,6 +66631,7 @@ export namespace Prisma {
     fullName: string
     avatarUrl?: string | null
     isActive?: boolean
+    memberNumber?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -66611,6 +66648,7 @@ export namespace Prisma {
     fullName?: StringFieldUpdateOperationsInput | string
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     student?: StudentUpdateOneWithoutUserNestedInput
@@ -66637,6 +66675,7 @@ export namespace Prisma {
     fullName?: StringFieldUpdateOperationsInput | string
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     student?: StudentUncheckedUpdateOneWithoutUserNestedInput
@@ -66663,6 +66702,7 @@ export namespace Prisma {
     fullName?: StringFieldUpdateOperationsInput | string
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -67885,7 +67925,6 @@ export namespace Prisma {
 
   export type StudentCreateManyDojoInput = {
     id: string
-    memberNumber?: string | null
     currentRank?: string
     joinDate?: Date | string
     expiryDate?: Date | string | null
@@ -68154,7 +68193,6 @@ export namespace Prisma {
   }
 
   export type StudentUpdateWithoutDojoInput = {
-    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     currentRank?: StringFieldUpdateOperationsInput | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
     expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -68180,7 +68218,6 @@ export namespace Prisma {
 
   export type StudentUncheckedUpdateWithoutDojoInput = {
     id?: StringFieldUpdateOperationsInput | string
-    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     currentRank?: StringFieldUpdateOperationsInput | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
     expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -68205,7 +68242,6 @@ export namespace Prisma {
 
   export type StudentUncheckedUpdateManyWithoutDojoInput = {
     id?: StringFieldUpdateOperationsInput | string
-    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     currentRank?: StringFieldUpdateOperationsInput | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
     expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null

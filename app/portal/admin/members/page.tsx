@@ -26,7 +26,7 @@ export default async function AdminMembersPage() {
         createdAt: u.createdAt,
         membershipStatus: u.student?.membershipStatus ?? "PENDING",
         currentRank: u.student?.currentRank ?? "—",
-        memberNumber: u.student?.memberNumber ?? null,
+        memberNumber: u.memberNumber ?? null,
         onboardingComplete: u.student?.onboardingComplete ?? (u.roleId !== "STUDENT"),
         dojo: u.student?.dojo ?? null,
     }));

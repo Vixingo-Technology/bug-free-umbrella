@@ -31,6 +31,15 @@ const beltColors: Record<string, string> = {
     "Black Belt": "#1a1a1a",
 };
 
+function isLightColor(hex: string): boolean {
+    const clean = hex.replace("#", "");
+    if (clean.length !== 6) return false;
+    const r = parseInt(clean.slice(0, 2), 16);
+    const g = parseInt(clean.slice(2, 4), 16);
+    const b = parseInt(clean.slice(4, 6), 16);
+    return (r * 299 + g * 587 + b * 114) / 1000 > 170;
+}
+
 interface Props {
     fullName: string;
     email?: string | null;
@@ -46,7 +55,6 @@ interface Props {
 
 export default function DigitalCard({
     fullName,
-    email,
     currentRank,
     dojoName,
     role,
@@ -57,12 +65,17 @@ export default function DigitalCard({
 }: Props) {
     const belt = currentRank ?? "White Belt";
     const beltColor = beltColors[belt] ?? "#FFFFFF";
+    const beltTextDark = isLightColor(beltColor);
     const dot = statusDot[membershipStatus];
     const initial = (fullName || "M").charAt(0).toUpperCase();
+    const affiliation =
+        role && dojoName
+            ? `${role} of ${dojoName}`
+            : role ?? (dojoName ? `Member of ${dojoName}` : "Member");
 
     return (
         <div
-            className={`relative h-[260px] w-full overflow-hidden rounded-2xl p-6 bg-gradient-to-br from-zinc-900 via-zinc-800 to-zinc-900 border border-white/10 text-white ${interactive ? "transition-transform duration-300 hover:scale-[1.01] cursor-pointer" : ""}`}
+            className={`relative h-full min-h-[260px] w-full overflow-hidden rounded-2xl p-6 bg-gradient-to-br from-zinc-900 via-zinc-800 to-zinc-900 border border-white/10 text-white ${interactive ? "transition-transform duration-300 hover:scale-[1.01] cursor-pointer" : ""}`}
         >
             <div
                 className="absolute -top-2 -right-2 w-40 h-40 rounded-full blur-[60px] opacity-30"
@@ -71,15 +84,15 @@ export default function DigitalCard({
             <div className="absolute -bottom-4 -left-4 w-28 h-28 bg-accent-red/20 rounded-full blur-[50px]" />
 
             <div className="relative z-10 flex flex-col h-full">
-                <div className="flex items-start justify-between mb-0">
-                    <div className="flex items-center gap-2">
+                <div className="flex items-start justify-between gap-3">
+                    <div className="flex items-center gap-2 min-w-0">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
                             src="/assets/jka_logo.svg"
                             alt="JKA Bangladesh"
                             className="w-10 h-10 flex-shrink-0 drop-shadow-[0_2px_6px_rgba(0,0,0,0.45)]"
                         />
-                        <div>
+                        <div className="min-w-0">
                             <p className="text-[9px] tracking-[0.3em] uppercase text-zinc-400 font-bold">
                                 JKA Bangladesh
                             </p>
@@ -88,18 +101,28 @@ export default function DigitalCard({
                             </p>
                         </div>
                     </div>
+
                     <div
-                        className="w-4 h-4 rounded-full border border-white/30 flex-shrink-0 shadow"
+                        className="shrink-0 rounded-full px-3 py-1 border shadow-md"
                         style={{
                             backgroundColor: beltColor,
-                            boxShadow: `0 0 10px ${beltColor}55`,
+                            borderColor: beltTextDark
+                                ? "rgba(0,0,0,0.15)"
+                                : "rgba(255,255,255,0.25)",
+                            boxShadow: `0 0 14px ${beltColor}66`,
                         }}
-                        aria-label={`${belt} accent`}
-                    />
+                    >
+                        <p
+                            className="text-[10px] tracking-widest uppercase font-bold whitespace-nowrap"
+                            style={{ color: beltTextDark ? "#111" : "#fff" }}
+                        >
+                            {belt}
+                        </p>
+                    </div>
                 </div>
 
-                <div className="flex flex-row-reverse items-center justify-start gap-3">
-                    <div className="w-14 h-14 rounded-full overflow-hidden border-2 border-white/20 bg-white/5 flex-shrink-0 shadow-lg">
+                <div className="flex flex-col items-center text-center mt-4 mb-3">
+                    <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-white/25 bg-white/5 shadow-xl">
                         {avatarUrl ? (
                             /* eslint-disable-next-line @next/next/no-img-element */
                             <img
@@ -108,62 +131,33 @@ export default function DigitalCard({
                                 className="w-full h-full object-cover"
                             />
                         ) : (
-                            <span className="flex w-full h-full items-center justify-center text-lg font-bold text-white/90 bg-gradient-to-br from-zinc-700 to-zinc-900">
+                            <span className="flex w-full h-full items-center justify-center text-2xl font-bold text-white/90 bg-gradient-to-br from-zinc-700 to-zinc-900">
                                 {initial}
                             </span>
                         )}
                     </div>
-                    <div className="min-w-0 text-right">
-                        <h3 className="text-lg font-bold leading-tight truncate">
-                            {fullName || "Member"}
-                        </h3>
-                        {email && (
-                            <p className="text-zinc-400 text-xs mt-0.5 truncate">
-                                {email}
-                            </p>
-                        )}
-                        {memberNumber && (
-                            <p className="text-[10px] tracking-widest uppercase text-zinc-500 mt-1 font-mono">
-                                #{memberNumber}
-                            </p>
-                        )}
-                    </div>
+                    <h3 className="text-xl md:text-2xl font-bold leading-tight mt-3 truncate max-w-full">
+                        {fullName || "Member"}
+                    </h3>
+                    <p className="text-xs text-zinc-300 mt-1 truncate max-w-full">
+                        {affiliation}
+                    </p>
                 </div>
 
-                <div className="mt-auto grid grid-cols-2 gap-3 pt-5 border-t border-zinc-700/50">
-                    <div>
-                        <p className="text-[9px] tracking-widest uppercase text-zinc-500">
-                            Rank
+                <div className="mt-auto flex items-center justify-between gap-3 pt-4 border-t border-zinc-700/50">
+                    {memberNumber ? (
+                        <p className="text-[11px] tracking-widest uppercase text-zinc-300 font-mono font-bold truncate">
+                            #{memberNumber}
                         </p>
-                        <p className="text-xs font-semibold mt-0.5">{belt}</p>
-                    </div>
-                    <div>
-                        <p className="text-[9px] tracking-widest uppercase text-zinc-500">
-                            Dojo
-                        </p>
-                        <p className="text-xs font-semibold mt-0.5 truncate">
-                            {dojoName ?? "—"}
-                        </p>
-                    </div>
-                    <div>
-                        <p className="text-[9px] tracking-widest uppercase text-zinc-500">
-                            Status
-                        </p>
-                        <div className="flex items-center gap-1 mt-0.5">
-                            <span
-                                className={`w-1.5 h-1.5 rounded-full ${dot}`}
-                            />
-                            <p className="text-xs font-semibold">
-                                {membershipStatus}
-                            </p>
-                        </div>
-                    </div>
-                    <div>
-                        <p className="text-[9px] tracking-widest uppercase text-zinc-500">
-                            Role
-                        </p>
-                        <p className="text-xs font-semibold mt-0.5">
-                            {role ?? "Student"}
+                    ) : (
+                        <span className="text-[11px] tracking-widest uppercase text-zinc-500 font-mono">
+                            Reg No pending
+                        </span>
+                    )}
+                    <div className="flex items-center gap-1.5 shrink-0">
+                        <span className={`w-2 h-2 rounded-full ${dot}`} />
+                        <p className="text-[10px] tracking-widest uppercase font-bold">
+                            {membershipStatus}
                         </p>
                     </div>
                 </div>

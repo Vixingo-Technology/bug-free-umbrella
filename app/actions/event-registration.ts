@@ -152,11 +152,11 @@ export async function registerForEventAction(
                 error: "Your child's member number is required for this event.",
             };
         }
-        const child = await prisma.student.findUnique({
+        const child = await prisma.user.findUnique({
             where: { memberNumber },
-            select: { id: true },
+            select: { id: true, student: { select: { id: true } } },
         });
-        if (!child) {
+        if (!child?.student) {
             return {
                 ok: false,
                 error: "No student found with that member number. Please check and try again.",

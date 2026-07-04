@@ -54,12 +54,12 @@ export default async function ShopPage() {
         }),
         prisma.student.findMany({
             where: { dojoId, user: { isActive: true }, id: { not: session.userId } },
-            include: { user: { select: { fullName: true } } },
+            include: { user: { select: { fullName: true, memberNumber: true } } },
         }).then((rows) => rows.map((s) => ({
             id: s.id,
             fullName: s.user.fullName,
             currentRank: s.currentRank,
-            memberNumber: s.memberNumber,
+            memberNumber: s.user.memberNumber,
         }))),
         prisma.dojoSale.findMany({
             where: { dojoId },

@@ -177,13 +177,14 @@ model RolePermission {
 // ─────────────────────────────────────────────
 
 model User {
-  id        String  @id @db.Uuid // = auth.users.id
-  email     String  @unique
-  phone     String?
-  fullName  String  @map("full_name")
-  avatarUrl String? @map("avatar_url")
-  roleId    String  @default("STUDENT") @map("role_id")
-  isActive  Boolean @default(true) @map("is_active")
+  id           String  @id @db.Uuid // = auth.users.id
+  email        String  @unique
+  phone        String?
+  fullName     String  @map("full_name")
+  avatarUrl    String? @map("avatar_url")
+  roleId       String  @default("STUDENT") @map("role_id")
+  isActive     Boolean @default(true) @map("is_active")
+  memberNumber String? @unique @map("member_number")
 
   role        Role         @relation(fields: [roleId], references: [id])
   student     Student?
@@ -215,12 +216,11 @@ model User {
 // ─────────────────────────────────────────────
 
 model Student {
-  id           String    @id @db.Uuid // = users.id
-  memberNumber String?   @unique @map("member_number")
-  currentRank  String    @default("White Belt") @map("current_rank")
-  joinDate     DateTime  @default(now()) @map("join_date")
-  expiryDate   DateTime? @map("expiry_date")
-  dojoId       String?   @map("dojo_id") @db.Uuid
+  id          String    @id @db.Uuid // = users.id
+  currentRank String    @default("White Belt") @map("current_rank")
+  joinDate    DateTime  @default(now()) @map("join_date")
+  expiryDate  DateTime? @map("expiry_date")
+  dojoId      String?   @map("dojo_id") @db.Uuid
 
   onboardingComplete Boolean          @default(false) @map("onboarding_complete")
   membershipStatus   MembershipStatus @default(PENDING) @map("membership_status")

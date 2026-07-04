@@ -12,7 +12,7 @@ export default async function AdminOrdersPage() {
         orderBy: { createdAt: "desc" },
         include: {
             user: {
-                select: { id: true, fullName: true, email: true, phone: true, student: { select: { memberNumber: true } } },
+                select: { id: true, fullName: true, email: true, phone: true, memberNumber: true },
             },
             orderItems: {
                 include: { product: { select: { id: true, name: true } } },
@@ -26,7 +26,7 @@ export default async function AdminOrdersPage() {
             fullName: o.user.fullName,
             email: o.user.email,
             phone: o.user.phone,
-            memberNumber: o.user.student?.memberNumber ?? null,
+            memberNumber: o.user.memberNumber ?? null,
         },
     }));
 

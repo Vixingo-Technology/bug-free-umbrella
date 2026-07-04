@@ -58,7 +58,6 @@ export async function generateCertificatePdf(
             student: {
                 select: {
                     id: true,
-                    memberNumber: true,
                     fatherName: true,
                     motherName: true,
                     user: { select: { fullName: true } },

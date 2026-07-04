@@ -3,9 +3,9 @@ export const siteContent = {
         links: [
             { name: "About", href: "/about" },
             { name: "Journey", href: "/journey" },
-            { name: "Techniques", href: "/techniques" },
             { name: "Events", href: "/events" },
             { name: "Branches", href: "/branches" },
+            { name: "Members", href: "/members" },
         ],
         membership: "Membership",
     },
@@ -234,7 +234,7 @@ export const siteContent = {
         quickLinks: [
             { label: "About Us", href: "/about" },
             { label: "Member Privileges", href: "/about" },
-            { label: "Three Pillars", href: "/techniques" },
+            { label: "Three Pillars", href: "/journey#techniques" },
             { label: "Events & Championships", href: "/events" },
             { label: "Find a Dojo", href: "/branches" },
             { label: "Enlist Your Dojo", href: "/enlist-dojo" },

@@ -77,7 +77,7 @@ export default async function ParticipationCardPage({
                     fullName: true,
                     email: true,
                     phone: true,
-                    student: { select: { memberNumber: true } },
+                    memberNumber: true,
                 },
             },
         },
@@ -91,7 +91,7 @@ export default async function ParticipationCardPage({
         registration.user?.email ?? registration.guestEmail ?? "";
     const participantPhone =
         registration.user?.phone ?? registration.guestPhone ?? "";
-    const memberNumber = registration.user?.student?.memberNumber ?? null;
+    const memberNumber = registration.user?.memberNumber ?? null;
 
     const appUrl =
         process.env.NEXT_PUBLIC_APP_URL ??

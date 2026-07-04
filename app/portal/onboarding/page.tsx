@@ -40,6 +40,7 @@ export default async function OnboardingPage() {
                 phone: u.phone,
                 avatarUrl: u.avatarUrl,
                 role: u.roleId,
+                memberNumber: u.memberNumber,
                 onboardingComplete: u.student?.onboardingComplete ?? false,
                 dojoId: u.student?.dojoId ?? null,
                 dateOfBirth: u.student?.dateOfBirth ?? null,

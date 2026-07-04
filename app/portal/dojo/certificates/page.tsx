@@ -64,10 +64,9 @@ export default async function DojoCertificatesPage({
                 student: {
                     select: {
                         id: true,
-                        memberNumber: true,
                         fatherName: true,
                         motherName: true,
-                        user: { select: { fullName: true } },
+                        user: { select: { fullName: true, memberNumber: true } },
                     },
                 },
                 toRank: {
@@ -86,7 +85,7 @@ export default async function DojoCertificatesPage({
             member: {
                 id: g.student.id,
                 fullName: g.student.user.fullName,
-                memberNumber: g.student.memberNumber,
+                memberNumber: g.student.user.memberNumber,
                 fatherName: g.student.fatherName,
                 motherName: g.student.motherName,
             },
@@ -96,11 +95,11 @@ export default async function DojoCertificatesPage({
             orderBy: { createdAt: "desc" },
             take: 50,
             include: {
-                student: { select: { id: true, memberNumber: true, user: { select: { fullName: true } } } },
+                student: { select: { id: true, user: { select: { fullName: true, memberNumber: true } } } },
             },
         }).then((rows) => rows.map((r) => ({
             ...r,
-            member: { id: r.student.id, fullName: r.student.user.fullName, memberNumber: r.student.memberNumber },
+            member: { id: r.student.id, fullName: r.student.user.fullName, memberNumber: r.student.user.memberNumber },
         }))),
     ]);
 

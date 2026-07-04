@@ -92,6 +92,7 @@ async function StudentPortalDashboard({ userId }: { userId: string }) {
                 avatarUrl: student.user.avatarUrl,
                 role: student.user.roleId,
                 isActive: student.user.isActive,
+                memberNumber: student.user.memberNumber,
             };
         }
 

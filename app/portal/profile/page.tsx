@@ -24,6 +24,7 @@ export default async function ProfilePage() {
                 phone: u.phone,
                 avatarUrl: u.avatarUrl,
                 role: u.roleId,
+                memberNumber: u.memberNumber,
                 ...(u.student ?? {}),
                 dojo: u.student?.dojo ?? null,
             };

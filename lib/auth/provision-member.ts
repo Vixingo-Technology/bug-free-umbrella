@@ -2,6 +2,7 @@ import type { User } from "@supabase/supabase-js";
 import { prisma } from "@/lib/prisma";
 import { emitMemberCreated } from "@/lib/n8n";
 import type { RoleId } from "@/lib/auth/load-current-user";
+import { ensureRegNo } from "@/lib/members/reg-no";
 
 /**
  * Upsert a user + role-specific profile row for a Supabase auth user
@@ -95,6 +96,9 @@ export async function provisionMemberFromSupabaseUser(user: User): Promise<void>
                 });
                 break;
         }
+
+        // Every role gets a Reg No (JKA-BD-YYMMxxx) on the users row.
+        await ensureRegNo(user.id);
 
         if (!wasExisting) {
             const fresh = await prisma.user.findUnique({ where: { id: user.id } });
