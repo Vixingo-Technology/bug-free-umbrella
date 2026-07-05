@@ -52,7 +52,7 @@ export default function RequestHistoryList({
                             </td>
                             <td className="px-5 py-3">
                                 <Link
-                                    href={`/portal/dojo/students/${r.member.id}`}
+                                    href={`/portal/dojo/members/${r.member.id}`}
                                     className="font-semibold text-zinc-900 hover:text-accent-red"
                                 >
                                     {r.member.fullName}

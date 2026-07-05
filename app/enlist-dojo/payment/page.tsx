@@ -9,6 +9,7 @@ import {
     ArrowLeft,
     ArrowRight,
     CheckCircle2,
+    Clock,
     CreditCard,
     Loader2,
     Lock,
@@ -18,14 +19,25 @@ import Logo from "@/assets/jka_logo.svg";
 import {
     commitDojoEnlistment,
     initiateDojoEnlistmentPayment,
+    markDojoEnlistmentPaid,
     type DojoEnlistmentInput,
 } from "@/app/actions/enlist-dojo";
 
 const DRAFT_KEY = "jka.enlistDojo.draft";
 
-type DraftShape = DojoEnlistmentInput & {
-    logoName?: string;
-    interiorNames?: string[];
+type UploadedImage = { name: string; dataUrl: string };
+
+type DraftShape = {
+    dojoName: string;
+    email: string;
+    phone: string;
+    contactName: string;
+    contactRank?: string;
+    address: string;
+    latitude: string;
+    longitude: string;
+    logo?: UploadedImage | null;
+    interiors?: UploadedImage[];
 };
 
 const ENLISTMENT_FEE_BDT = 10000;
@@ -53,10 +65,37 @@ function PaymentContent() {
     const router = useRouter();
     const params = useSearchParams();
     const email = params.get("email") ?? "";
+    const existingApplicationId = params.get("applicationId");
 
     const [method, setMethod] = useState("sslcommerz");
     const [error, setError] = useState<string | null>(null);
     const [isPending, startTransition] = useTransition();
+    const [payLaterPending, startPayLaterTransition] = useTransition();
+
+    function readDraft(): DraftShape | null {
+        try {
+            const raw = sessionStorage.getItem(DRAFT_KEY);
+            if (raw) return JSON.parse(raw) as DraftShape;
+        } catch {
+            /* ignore */
+        }
+        return null;
+    }
+
+    function draftToInput(draft: DraftShape): DojoEnlistmentInput {
+        return {
+            dojoName: draft.dojoName,
+            logoDataUrl: draft.logo?.dataUrl ?? null,
+            email: draft.email,
+            phone: draft.phone,
+            contactName: draft.contactName,
+            contactRank: draft.contactRank ?? "",
+            address: draft.address,
+            latitude: draft.latitude,
+            longitude: draft.longitude,
+            interiorDataUrls: (draft.interiors ?? []).map((i) => i.dataUrl),
+        };
+    }
 
     function handlePay() {
         setError(null);
@@ -75,42 +114,75 @@ function PaymentContent() {
                 return;
             }
 
-            // Stub gateway success — read the draft from sessionStorage
-            // and commit the enlistment record to Postgres.
-            let draft: DraftShape | null = null;
+            // Stub gateway success path.
+            let applicationId = existingApplicationId;
+            let dojoId: string | undefined;
+
+            if (!applicationId) {
+                const draft = readDraft();
+                if (!draft) {
+                    setError(
+                        "Your enlistment draft was lost. Please restart from the beginning."
+                    );
+                    return;
+                }
+                const commit = await commitDojoEnlistment(draftToInput(draft), {
+                    paidNow: true,
+                });
+                if (commit?.error || !commit?.applicationId) {
+                    router.push(
+                        `/enlist-dojo/success?status=failed&reason=${encodeURIComponent(
+                            commit?.error ??
+                                "We couldn't save your enlistment after payment."
+                        )}`
+                    );
+                    return;
+                }
+                applicationId = commit.applicationId;
+                dojoId = commit.dojoId;
+            } else {
+                const paid = await markDojoEnlistmentPaid(applicationId);
+                if (paid?.error) {
+                    setError(paid.error);
+                    return;
+                }
+            }
+
             try {
-                const raw = sessionStorage.getItem(DRAFT_KEY);
-                if (raw) draft = JSON.parse(raw) as DraftShape;
+                sessionStorage.removeItem(DRAFT_KEY);
             } catch {
                 /* ignore */
             }
+            router.push(
+                `/enlist-dojo/success?applicationId=${encodeURIComponent(
+                    applicationId!
+                )}`
+            );
+        });
+    }
+
+    function handlePayLater() {
+        setError(null);
+        startPayLaterTransition(async () => {
+            // If we already have an application, just send them to the dashboard.
+            if (existingApplicationId) {
+                router.push("/portal?enlistment=pay_later");
+                return;
+            }
+            const draft = readDraft();
             if (!draft) {
                 setError(
                     "Your enlistment draft was lost. Please restart from the beginning."
                 );
                 return;
             }
-            const commit = await commitDojoEnlistment({
-                dojoName: draft.dojoName,
-                logoUrl: undefined,
-                email: draft.email,
-                phone: draft.phone,
-                contactName: draft.contactName,
-                contactRole: draft.contactRole,
-                address: draft.address,
-                latitude: draft.latitude,
-                longitude: draft.longitude,
-                interiorUrls: [],
-                trainers: (draft.trainers ?? []).filter(
-                    (t) => t.name?.trim() && t.rank?.trim()
-                ),
+            const commit = await commitDojoEnlistment(draftToInput(draft), {
+                paidNow: false,
             });
             if (commit?.error || !commit?.applicationId) {
-                router.push(
-                    `/enlist-dojo/success?status=failed&reason=${encodeURIComponent(
-                        commit?.error ??
-                            "We couldn't save your enlistment after payment."
-                    )}`
+                setError(
+                    commit?.error ??
+                        "We couldn't save your enlistment. Please try again."
                 );
                 return;
             }
@@ -119,11 +191,7 @@ function PaymentContent() {
             } catch {
                 /* ignore */
             }
-            router.push(
-                `/enlist-dojo/success?applicationId=${encodeURIComponent(
-                    commit.applicationId
-                )}`
-            );
+            router.push("/portal?enlistment=pay_later");
         });
     }
 
@@ -134,9 +202,13 @@ function PaymentContent() {
 
             <div className="w-full max-w-2xl mx-auto px-6 relative z-10">
                 <Link
-                    href={`/enlist-dojo/set-password?email=${encodeURIComponent(
-                        email
-                    )}`}
+                    href={
+                        existingApplicationId
+                            ? "/portal"
+                            : `/enlist-dojo/set-password?email=${encodeURIComponent(
+                                  email
+                              )}`
+                    }
                     className="inline-flex items-center gap-2 text-xs font-bold tracking-widest uppercase text-zinc-500 hover:text-accent-red transition-colors mb-8 group"
                 >
                     <ArrowLeft
@@ -164,11 +236,15 @@ function PaymentContent() {
                             Email verified
                         </div>
                         <h1 className="font-serif text-2xl font-bold text-zinc-900 mb-3">
-                            Complete your enlistment
+                            {existingApplicationId
+                                ? "Activate your dojo"
+                                : "Complete your enlistment"}
                         </h1>
                         <p className="text-zinc-500 text-sm leading-relaxed max-w-md">
-                            One last step — settle the one-time enlistment fee
-                            to activate your Dojo Dashboard.
+                            Settle the one-time enlistment fee to activate your
+                            Dojo Dashboard and appear on the public branch
+                            locator — or pay later and finish setting things up
+                            from your dashboard.
                         </p>
                     </div>
 
@@ -254,7 +330,7 @@ function PaymentContent() {
                     <button
                         type="button"
                         onClick={handlePay}
-                        disabled={isPending}
+                        disabled={isPending || payLaterPending}
                         className="w-full inline-flex items-center justify-center gap-3 bg-accent-red text-white px-6 py-4 text-xs font-bold tracking-widest uppercase hover:bg-accent-red/90 disabled:opacity-60 transition-colors group rounded-sm"
                     >
                         {isPending ? (
@@ -274,6 +350,28 @@ function PaymentContent() {
                                     size={14}
                                     className="group-hover:translate-x-1 transition-transform"
                                 />
+                            </>
+                        )}
+                    </button>
+
+                    <button
+                        type="button"
+                        onClick={handlePayLater}
+                        disabled={isPending || payLaterPending}
+                        className="w-full inline-flex items-center justify-center gap-2 mt-3 border border-zinc-300 text-zinc-700 px-6 py-4 text-xs font-bold tracking-widest uppercase hover:border-accent-red hover:text-accent-red disabled:opacity-60 transition-colors rounded-sm"
+                    >
+                        {payLaterPending ? (
+                            <>
+                                <Loader2
+                                    size={14}
+                                    className="animate-spin"
+                                />
+                                Saving
+                            </>
+                        ) : (
+                            <>
+                                <Clock size={14} />
+                                Pay later & Continue to Dashboard
                             </>
                         )}
                     </button>

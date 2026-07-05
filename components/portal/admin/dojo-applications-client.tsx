@@ -19,6 +19,8 @@ import {
 type Trainer = {
     name?: string;
     rank?: string;
+    email?: string;
+    /** Legacy field from earlier form iteration — kept so old rows still render. */
     contact?: string;
 };
 
@@ -31,6 +33,7 @@ type Application = {
     phone: string;
     contactName: string;
     contactRole: string;
+    contactRank: string | null;
     address: string;
     latitude: number | null;
     longitude: number | null;
@@ -220,17 +223,39 @@ function ApplicationRow({
     return (
         <li className="bg-white border border-zinc-200 rounded-sm shadow-sm">
             <div className="p-5 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-3 mb-1">
-                        <h3 className="font-serif font-bold text-lg text-zinc-900 truncate">
-                            {a.dojoName}
-                        </h3>
-                        <StatusBadge status={a.status} />
-                    </div>
+                <div className="flex items-start gap-4 flex-1 min-w-0">
+                    {a.logoUrl && (
+                        <button
+                            type="button"
+                            onClick={() => setExpanded((e) => !e)}
+                            className="shrink-0 w-12 h-12 rounded-sm border border-zinc-200 overflow-hidden bg-white"
+                            aria-label="View dojo photos"
+                        >
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img
+                                src={a.logoUrl}
+                                alt=""
+                                className="w-full h-full object-cover"
+                            />
+                        </button>
+                    )}
+                    <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-3 mb-1">
+                            <button
+                                type="button"
+                                onClick={() => setExpanded((e) => !e)}
+                                className="font-serif font-bold text-lg text-zinc-900 truncate hover:text-accent-red transition-colors text-left"
+                                aria-expanded={expanded}
+                            >
+                                {a.dojoName}
+                            </button>
+                            <StatusBadge status={a.status} />
+                        </div>
                     <div className="flex flex-wrap gap-x-5 gap-y-1 text-xs text-zinc-500">
                         <span className="inline-flex items-center gap-1">
                             <User size={12} />
-                            {a.contactName} ({a.contactRole})
+                            {a.contactName}
+                            {a.contactRank ? ` · ${a.contactRank}` : ""}
                         </span>
                         <span className="inline-flex items-center gap-1">
                             <Mail size={12} />
@@ -251,6 +276,7 @@ function ApplicationRow({
                                 }
                             )}
                         </span>
+                    </div>
                     </div>
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
@@ -292,66 +318,88 @@ function ApplicationRow({
             </div>
 
             {expanded && (
-                <div className="border-t border-zinc-200 p-5 grid md:grid-cols-2 gap-x-8 gap-y-4 text-sm">
-                    <Kv label="Address">
-                        <span className="inline-flex items-start gap-1.5">
-                            <MapPin
-                                size={12}
-                                className="text-zinc-400 mt-1 shrink-0"
-                            />
-                            <span className="text-zinc-700">{a.address}</span>
-                        </span>
-                    </Kv>
-                    <Kv label="Coordinates">
-                        <span className="text-zinc-700 font-mono text-xs">
-                            {a.latitude != null && a.longitude != null
-                                ? `${a.latitude.toFixed(5)}, ${a.longitude.toFixed(5)}`
-                                : "—"}
-                        </span>
-                    </Kv>
-                    <Kv label="Trainers">
-                        {a.trainers.length === 0 ? (
-                            <span className="text-zinc-500">None listed</span>
-                        ) : (
-                            <ul className="space-y-1">
-                                {a.trainers.map((t, i) => (
-                                    <li
-                                        key={i}
-                                        className="text-zinc-700"
+                <div className="border-t border-zinc-200 p-5 space-y-6 text-sm">
+                    {(a.logoUrl || a.interiorUrls.length > 0) && (
+                        <div>
+                            <p className="text-[10px] tracking-widest uppercase font-bold text-zinc-400 mb-3">
+                                Uploaded photos
+                            </p>
+                            <div className="flex flex-wrap gap-3">
+                                {a.logoUrl && (
+                                    <a
+                                        href={a.logoUrl}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="relative block w-28 h-28 rounded-sm border border-zinc-200 overflow-hidden bg-white group"
+                                        title="Dojo logo"
                                     >
-                                        {t.name}
-                                        {t.rank && (
-                                            <span className="text-zinc-500">
-                                                {" "}
-                                                · {t.rank}
-                                            </span>
-                                        )}
-                                        {t.contact && (
-                                            <span className="text-zinc-400 text-xs">
-                                                {" "}
-                                                ({t.contact})
-                                            </span>
-                                        )}
-                                    </li>
+                                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                                        <img
+                                            src={a.logoUrl}
+                                            alt={`${a.dojoName} logo`}
+                                            className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                                        />
+                                        <span className="absolute bottom-0 inset-x-0 bg-black/60 text-white text-[10px] tracking-widest uppercase font-bold text-center py-1">
+                                            Logo
+                                        </span>
+                                    </a>
+                                )}
+                                {a.interiorUrls.map((url, i) => (
+                                    <a
+                                        key={`${url}-${i}`}
+                                        href={url}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="relative block w-28 h-28 rounded-sm border border-zinc-200 overflow-hidden bg-white group"
+                                        title={`Interior ${i + 1}`}
+                                    >
+                                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                                        <img
+                                            src={url}
+                                            alt={`${a.dojoName} interior ${i + 1}`}
+                                            className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                                        />
+                                    </a>
                                 ))}
-                            </ul>
-                        )}
-                    </Kv>
-                    <Kv label="Payment reference">
-                        <span className="text-zinc-700 font-mono text-xs">
-                            {a.paymentId ?? "—"}
-                        </span>
-                    </Kv>
-                    <Kv label="Application id">
-                        <span className="text-zinc-500 font-mono text-xs">
-                            {a.id}
-                        </span>
-                    </Kv>
-                    <Kv label="Supabase user id">
-                        <span className="text-zinc-500 font-mono text-xs">
-                            {a.userId ?? "—"}
-                        </span>
-                    </Kv>
+                            </div>
+                        </div>
+                    )}
+
+                    <div className="grid md:grid-cols-2 gap-x-8 gap-y-4">
+                        <Kv label="Address">
+                            <span className="inline-flex items-start gap-1.5">
+                                <MapPin
+                                    size={12}
+                                    className="text-zinc-400 mt-1 shrink-0"
+                                />
+                                <span className="text-zinc-700">
+                                    {a.address}
+                                </span>
+                            </span>
+                        </Kv>
+                        <Kv label="Coordinates">
+                            <span className="text-zinc-700 font-mono text-xs">
+                                {a.latitude != null && a.longitude != null
+                                    ? `${a.latitude.toFixed(5)}, ${a.longitude.toFixed(5)}`
+                                    : "—"}
+                            </span>
+                        </Kv>
+                        <Kv label="Payment reference">
+                            <span className="text-zinc-700 font-mono text-xs">
+                                {a.paymentId ?? "—"}
+                            </span>
+                        </Kv>
+                        <Kv label="Application id">
+                            <span className="text-zinc-500 font-mono text-xs">
+                                {a.id}
+                            </span>
+                        </Kv>
+                        <Kv label="Supabase user id">
+                            <span className="text-zinc-500 font-mono text-xs">
+                                {a.userId ?? "—"}
+                            </span>
+                        </Kv>
+                    </div>
                 </div>
             )}
         </li>

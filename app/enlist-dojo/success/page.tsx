@@ -56,6 +56,7 @@ export default async function EnlistDojoSuccessPage({
             dojoName: true,
             contactName: true,
             contactRole: true,
+            contactRank: true,
             email: true,
             phone: true,
             status: true,
@@ -84,6 +85,7 @@ type Application = {
     dojoName: string;
     contactName: string;
     contactRole: string;
+    contactRank: string | null;
     email: string;
     phone: string;
     status: string;
@@ -185,10 +187,10 @@ function SuccessScreen({
                             <KV label="Submitted" value={submittedAt} />
                             <KV label="Dojo" value={application.dojoName} />
                             <KV
-                                label="Primary contact"
+                                label="Dojo Head"
                                 value={`${application.contactName}${
-                                    application.contactRole
-                                        ? ` · ${application.contactRole}`
+                                    application.contactRank
+                                        ? ` · ${application.contactRank}`
                                         : ""
                                 }`}
                             />

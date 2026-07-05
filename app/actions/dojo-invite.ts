@@ -5,9 +5,13 @@ import { prisma } from "@/lib/prisma";
 import { requireDojoRole } from "@/lib/dojo-session";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { assignRole } from "@/lib/auth/assign-role";
+import { invitableRolesFor, type InvitableRole } from "@/lib/dojo-roles";
 
-const INVITABLE_ROLES = ["STUDENT", "INSTRUCTOR", "DOJO_MANAGER"] as const;
-type InvitableRole = (typeof INVITABLE_ROLES)[number];
+const ROLE_LABEL: Record<InvitableRole, string> = {
+    STUDENT: "student",
+    INSTRUCTOR: "instructor",
+    DOJO_MANAGER: "manager",
+};
 
 export type DojoInviteResult = { ok: true } | { ok: false; error: string };
 
@@ -27,7 +31,9 @@ function appUrl(): string {
 export async function inviteDojoMemberAction(
     formData: FormData
 ): Promise<DojoInviteResult> {
-    const session = await requireDojoRole("DOJO_OWNER");
+    // Anyone at Instructor level or above can invite — the specific roles
+    // they're allowed to invite depend on their own role (see invitableRolesFor).
+    const session = await requireDojoRole("INSTRUCTOR");
     if (!session.dojo) {
         return {
             ok: false,
@@ -35,17 +41,33 @@ export async function inviteDojoMemberAction(
         };
     }
 
+    // Activation gate — the dojo must have completed the enlistment payment
+    // before anyone can invite members.
+    if (!session.dojo.isActive) {
+        return {
+            ok: false,
+            error: "Activate your dojo (complete the enlistment payment) before inviting members.",
+        };
+    }
+
     const email = ((formData.get("email") as string) ?? "")
         .trim()
         .toLowerCase();
     const fullName = ((formData.get("fullName") as string) ?? "").trim();
+    const rank = ((formData.get("rank") as string) ?? "").trim();
     const role = formData.get("role") as InvitableRole;
 
     if (!email || !email.includes("@")) {
         return { ok: false, error: "A valid email is required." };
     }
-    if (!INVITABLE_ROLES.includes(role)) {
-        return { ok: false, error: "Pick a role for the invitee." };
+
+    const allowedRoles = invitableRolesFor(session.role);
+    if (!allowedRoles.includes(role)) {
+        const allowedNames = allowedRoles.map((r) => ROLE_LABEL[r]).join(", ");
+        return {
+            ok: false,
+            error: `You can only invite: ${allowedNames}.`,
+        };
     }
 
     const existing = await prisma.user.findUnique({
@@ -69,16 +91,19 @@ export async function inviteDojoMemberAction(
     }
 
     const admin = createAdminClient();
-    const redirectTo = `${appUrl()}/auth/callback?next=/set-password`;
+    const redirectTo = `${appUrl()}/auth/callback?next=/invite`;
 
     const { data, error } = await admin.auth.admin.inviteUserByEmail(email, {
         redirectTo,
         data: {
             role,
             full_name: fullName || email,
+            rank,
             dojo_id: session.dojo.id,
+            dojo_name: session.dojo.name,
             invited_by: session.userId,
             invited: true,
+            pending_invite: true,
         },
     });
 
@@ -106,7 +131,7 @@ export async function inviteDojoMemberAction(
     });
     await assignRole(data.user.id, role, { dojoId: session.dojo.id });
 
-    revalidatePath("/portal/dojo/students");
+    revalidatePath("/portal/dojo/members");
     return { ok: true };
 }
 
@@ -116,9 +141,15 @@ export async function inviteDojoMemberAction(
 export async function resendDojoInviteAction(
     formData: FormData
 ): Promise<DojoInviteResult> {
-    const session = await requireDojoRole("DOJO_OWNER");
+    const session = await requireDojoRole("INSTRUCTOR");
     if (!session.dojo) {
         return { ok: false, error: "Your dojo isn't approved yet." };
+    }
+    if (!session.dojo.isActive) {
+        return {
+            ok: false,
+            error: "Activate your dojo before managing invites.",
+        };
     }
 
     const memberId = (formData.get("memberId") as string) ?? "";
@@ -129,6 +160,7 @@ export async function resendDojoInviteAction(
             email: true,
             fullName: true,
             roleId: true,
+            isActive: true,
             student: { select: { dojoId: true, onboardingComplete: true } },
             instructor: { select: { dojoId: true } },
             dojoManager: { select: { dojoId: true } },
@@ -140,7 +172,13 @@ export async function resendDojoInviteAction(
         member?.instructor?.dojoId ??
         member?.dojoManager?.dojoId ??
         null;
-    const memberOnboarded = member?.student?.onboardingComplete ?? (member?.roleId !== "STUDENT");
+    // A pending invite is any user whose account isn't active yet, OR a
+    // student who hasn't finished onboarding. Non-student invitees don't
+    // have an onboarding step — `isActive` is the source of truth for them.
+    const memberOnboarded =
+        member?.roleId === "STUDENT"
+            ? (member?.student?.onboardingComplete ?? false)
+            : (member?.isActive ?? false);
 
     if (!member || memberDojoId !== session.dojo.id) {
         return { ok: false, error: "Member not found in your dojo." };
@@ -153,7 +191,7 @@ export async function resendDojoInviteAction(
     }
 
     const admin = createAdminClient();
-    const redirectTo = `${appUrl()}/auth/callback?next=/set-password`;
+    const redirectTo = `${appUrl()}/auth/callback?next=/invite`;
 
     const { error } = await admin.auth.admin.inviteUserByEmail(member.email, {
         redirectTo,
@@ -161,14 +199,16 @@ export async function resendDojoInviteAction(
             role: member.roleId,
             full_name: member.fullName,
             dojo_id: session.dojo.id,
+            dojo_name: session.dojo.name,
             invited_by: session.userId,
             invited: true,
+            pending_invite: true,
         },
     });
 
     if (error) return { ok: false, error: error.message };
 
-    revalidatePath("/portal/dojo/students");
+    revalidatePath("/portal/dojo/members");
     return { ok: true };
 }
 
@@ -179,9 +219,15 @@ export async function resendDojoInviteAction(
 export async function revokeDojoInviteAction(
     formData: FormData
 ): Promise<DojoInviteResult> {
-    const session = await requireDojoRole("DOJO_OWNER");
+    const session = await requireDojoRole("INSTRUCTOR");
     if (!session.dojo) {
         return { ok: false, error: "Your dojo isn't approved yet." };
+    }
+    if (!session.dojo.isActive) {
+        return {
+            ok: false,
+            error: "Activate your dojo before managing invites.",
+        };
     }
 
     const memberId = (formData.get("memberId") as string) ?? "";
@@ -190,6 +236,7 @@ export async function revokeDojoInviteAction(
         select: {
             id: true,
             roleId: true,
+            isActive: true,
             student: { select: { dojoId: true, onboardingComplete: true } },
             instructor: { select: { dojoId: true } },
             dojoManager: { select: { dojoId: true } },
@@ -201,7 +248,10 @@ export async function revokeDojoInviteAction(
         member?.instructor?.dojoId ??
         member?.dojoManager?.dojoId ??
         null;
-    const memberOnboarded = member?.student?.onboardingComplete ?? (member?.roleId !== "STUDENT");
+    const memberOnboarded =
+        member?.roleId === "STUDENT"
+            ? (member?.student?.onboardingComplete ?? false)
+            : (member?.isActive ?? false);
 
     if (!member || memberDojoId !== session.dojo.id) {
         return { ok: false, error: "Member not found in your dojo." };
@@ -217,6 +267,6 @@ export async function revokeDojoInviteAction(
     await admin.auth.admin.deleteUser(memberId).catch(() => null);
     await prisma.user.delete({ where: { id: memberId } });
 
-    revalidatePath("/portal/dojo/students");
+    revalidatePath("/portal/dojo/members");
     return { ok: true };
 }

@@ -6,37 +6,43 @@ import { inviteDojoMemberAction } from "@/app/actions/dojo-invite";
 
 type Role = "STUDENT" | "INSTRUCTOR" | "DOJO_MANAGER";
 
-const ROLE_OPTIONS: { value: Role; label: string; hint: string }[] = [
-    {
-        value: "STUDENT",
+const ROLE_OPTIONS: Record<
+    Role,
+    { label: string; hint: string }
+> = {
+    STUDENT: {
         label: "Student",
         hint: "Trains at the dojo, gets graded, joins events.",
     },
-    {
-        value: "INSTRUCTOR",
+    INSTRUCTOR: {
         label: "Instructor",
         hint: "Runs classes, takes attendance, grades students.",
     },
-    {
-        value: "DOJO_MANAGER",
+    DOJO_MANAGER: {
         label: "Manager",
         hint: "Handles renewals, billing, and roster admin.",
     },
-];
+};
 
 type Props = {
+    /** Roles the current staff member is allowed to invite. Order determines
+     *  the default selection (first item). */
+    allowedRoles: Role[];
     disabled?: boolean;
     disabledReason?: string;
 };
 
 export default function InviteMemberModal({
+    allowedRoles,
     disabled = false,
     disabledReason,
 }: Props) {
+    const defaultRole = allowedRoles[0] ?? "STUDENT";
     const [open, setOpen] = useState(false);
     const [email, setEmail] = useState("");
     const [fullName, setFullName] = useState("");
-    const [role, setRole] = useState<Role>("STUDENT");
+    const [rank, setRank] = useState("");
+    const [role, setRole] = useState<Role>(defaultRole);
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState<string | null>(null);
     const [isPending, startTransition] = useTransition();
@@ -44,7 +50,8 @@ export default function InviteMemberModal({
     function reset() {
         setEmail("");
         setFullName("");
-        setRole("STUDENT");
+        setRank("");
+        setRole(defaultRole);
         setError(null);
         setSuccess(null);
     }
@@ -63,6 +70,7 @@ export default function InviteMemberModal({
         const form = new FormData();
         form.set("email", email);
         form.set("fullName", fullName);
+        form.set("rank", rank);
         form.set("role", role);
 
         startTransition(async () => {
@@ -74,7 +82,8 @@ export default function InviteMemberModal({
             setSuccess(`Invitation sent to ${email}.`);
             setEmail("");
             setFullName("");
-            setRole("STUDENT");
+            setRank("");
+            setRole(defaultRole);
         });
     }
 
@@ -168,16 +177,41 @@ export default function InviteMemberModal({
                                 />
                             </div>
 
+                            {(role === "INSTRUCTOR" || role === "STUDENT") && (
+                                <div>
+                                    <label
+                                        htmlFor="invite-rank"
+                                        className="block text-[10px] tracking-widest uppercase font-bold text-zinc-500 mb-1.5"
+                                    >
+                                        Belt rank{" "}
+                                        <span className="text-zinc-400 font-normal normal-case tracking-normal">
+                                            (optional)
+                                        </span>
+                                    </label>
+                                    <input
+                                        id="invite-rank"
+                                        type="text"
+                                        autoComplete="off"
+                                        value={rank}
+                                        onChange={(e) => setRank(e.target.value)}
+                                        disabled={isPending}
+                                        placeholder="e.g. 3rd Dan · White Belt"
+                                        className="w-full bg-white border border-zinc-300 rounded-sm px-3 py-2.5 text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:border-accent-red focus:ring-1 focus:ring-accent-red disabled:opacity-60"
+                                    />
+                                </div>
+                            )}
+
                             <div>
                                 <p className="text-[10px] tracking-widest uppercase font-bold text-zinc-500 mb-2">
                                     Role
                                 </p>
                                 <div className="space-y-2">
-                                    {ROLE_OPTIONS.map((opt) => {
-                                        const active = role === opt.value;
+                                    {allowedRoles.map((value) => {
+                                        const opt = ROLE_OPTIONS[value];
+                                        const active = role === value;
                                         return (
                                             <label
-                                                key={opt.value}
+                                                key={value}
                                                 className={`flex items-start gap-3 p-3 border rounded-sm cursor-pointer transition-colors ${
                                                     active
                                                         ? "border-accent-red ring-1 ring-accent-red bg-accent-red/5"
@@ -187,10 +221,10 @@ export default function InviteMemberModal({
                                                 <input
                                                     type="radio"
                                                     name="invite-role"
-                                                    value={opt.value}
+                                                    value={value}
                                                     checked={active}
                                                     onChange={() =>
-                                                        setRole(opt.value)
+                                                        setRole(value)
                                                     }
                                                     disabled={isPending}
                                                     className="mt-1 accent-accent-red"

@@ -107,7 +107,7 @@ export default async function StudentDetailPage({
                 description={`Profile, digital card, and certificates for ${member.fullName}.`}
                 actions={
                     <Link
-                        href="/portal/dojo/students"
+                        href="/portal/dojo/members"
                         className="text-[10px] tracking-widest uppercase font-bold text-zinc-500 hover:text-accent-red"
                     >
                         ← Back to roster

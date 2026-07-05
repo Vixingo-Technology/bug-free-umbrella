@@ -60,7 +60,7 @@ export default async function DojoSetupChecklist({
             key: "staff",
             title: "Invite your first staff member",
             body: "Add a manager or instructor to help run the dojo day-to-day.",
-            href: "/portal/dojo/students",
+            href: "/portal/dojo/members",
             status: pendingApproval
                 ? "locked"
                 : data.staffDone

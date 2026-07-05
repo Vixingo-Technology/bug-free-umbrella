@@ -5,31 +5,27 @@ import { createClient } from "@/lib/supabase/server";
 import { prisma } from "@/lib/prisma";
 import { notifyAdmins } from "@/lib/notify";
 import { assignRole } from "@/lib/auth/assign-role";
-
-export type DojoTrainerInput = {
-    name: string;
-    rank: string;
-    contact: string;
-};
+import { uploadToCloudinary } from "@/lib/cloudinary";
 
 export type DojoEnlistmentInput = {
     dojoName: string;
-    logoUrl?: string;
+    /** base64 data URL — will be uploaded to Cloudinary during commit. */
+    logoDataUrl?: string | null;
     email: string;
     phone: string;
     contactName: string;
-    contactRole: string;
+    contactRank: string;
     address: string;
     latitude: string;
     longitude: string;
-    interiorUrls?: string[];
-    trainers: DojoTrainerInput[];
+    /** base64 data URLs — uploaded to Cloudinary during commit. */
+    interiorDataUrls?: string[];
 };
 
 /**
  * Step 1 — kick off enlistment.
  * Sends a Supabase email OTP. We do NOT touch the database yet;
- * the form payload lives in client sessionStorage until payment success.
+ * the form payload lives in client sessionStorage until commit.
  */
 export async function submitDojoEnlistment(
     input: Pick<DojoEnlistmentInput, "dojoName" | "email">
@@ -84,7 +80,6 @@ export async function verifyDojoOtp(
 
 /**
  * Step 3 — set the dojo owner's account password.
- * Must be called while the OTP-verified session is active.
  */
 export async function setDojoOwnerPassword(
     password: string,
@@ -129,10 +124,8 @@ export async function resendDojoOtp(
 }
 
 /**
- * Step 4 — initiate payment.
- * Stub: returns success and lets the client redirect into the commit step.
- * Real implementation will create an SSLCommerz session and return the
- * gateway redirect URL; the success webhook will call commitDojoEnlistment.
+ * Step 4 — initiate payment (stub gateway).
+ * Real implementation will create an SSLCommerz session.
  */
 export async function initiateDojoEnlistmentPayment(
     _email: string
@@ -141,13 +134,22 @@ export async function initiateDojoEnlistmentPayment(
 }
 
 /**
- * Final step — commit the enlistment record to Postgres.
- * Called after the user "pays" (currently a stub redirect).
- * Requires an active Supabase session for the dojo owner.
+ * Commit the enlistment. Creates:
+ *   - Dojo (isActive = paidNow) with the uploaded logo URL.
+ *   - DojoOwner linking the current user to the Dojo.
+ *   - Application row with the Cloudinary URLs.
+ *
+ * paidNow = false → application stays PENDING_PAYMENT and the dashboard
+ * shows the "Activate your Dojo" banner. Once payment lands the dojo is
+ * flipped to isActive=true via markDojoEnlistmentPaid.
+ *
+ * Trainer / instructor / student invites are handled from the dashboard
+ * after activation — no invites are sent from this action.
  */
 export async function commitDojoEnlistment(
-    input: DojoEnlistmentInput
-): Promise<{ error?: string; applicationId?: string }> {
+    input: DojoEnlistmentInput,
+    options: { paidNow: boolean } = { paidNow: false }
+): Promise<{ error?: string; applicationId?: string; dojoId?: string }> {
     const supabase = await createClient();
     const {
         data: { user },
@@ -170,58 +172,222 @@ export async function commitDojoEnlistment(
 
     const lat = input.latitude ? parseFloat(input.latitude) : null;
     const lng = input.longitude ? parseFloat(input.longitude) : null;
+    const contactRank = input.contactRank?.trim() || "";
+
+    // Upload assets to Cloudinary. If Cloudinary isn't configured, keep
+    // the data URLs — they still render in <img>, so admins can preview.
+    let logoUrl: string | null = null;
+    if (input.logoDataUrl) {
+        try {
+            const { url } = await uploadToCloudinary(input.logoDataUrl, {
+                folder: "jka/dojo-logos",
+                publicId: `${user.id}-logo`,
+                resourceType: "image",
+            });
+            logoUrl = url;
+        } catch (e) {
+            console.error("[enlist-dojo] logo upload failed", e);
+            logoUrl = input.logoDataUrl;
+        }
+    }
+
+    const interiorUrls: string[] = [];
+    for (const [i, dataUrl] of (input.interiorDataUrls ?? []).entries()) {
+        try {
+            const { url } = await uploadToCloudinary(dataUrl, {
+                folder: "jka/dojo-interiors",
+                publicId: `${user.id}-interior-${i}-${Date.now()}`,
+                resourceType: "image",
+            });
+            interiorUrls.push(url);
+        } catch (e) {
+            console.error("[enlist-dojo] interior upload failed", e);
+            interiorUrls.push(dataUrl);
+        }
+    }
+
+    const existing = await prisma.dojoApplication.findFirst({
+        where: { userId: user.id },
+        orderBy: { createdAt: "desc" },
+        select: { id: true, dojoId: true, status: true, interiorUrls: true, logoUrl: true },
+    });
+
+    let applicationId: string;
+    let dojoId: string | null = existing?.dojoId ?? null;
+
+    // Merge with existing images so re-committing doesn't drop earlier uploads.
+    const finalLogoUrl = logoUrl ?? existing?.logoUrl ?? null;
+    const finalInteriorUrls =
+        interiorUrls.length > 0
+            ? interiorUrls
+            : existing?.interiorUrls ?? [];
 
     try {
-        // Ensure a User row exists for the dojo owner with the right role.
-        // Without this the /portal layout's safety-net creates one with the
-        // STUDENT default and bounces the user into the student onboarding flow.
-        await prisma.user.upsert({
-            where: { id: user.id },
-            create: {
-                id: user.id,
-                email: input.email.trim(),
-                fullName: input.contactName.trim(),
-                phone: input.phone.trim(),
-                roleId: "DOJO_OWNER",
-            },
-            update: {
-                roleId: "DOJO_OWNER",
-            },
-        });
-        await assignRole(user.id, "DOJO_OWNER");
+        await prisma.$transaction(async (tx) => {
+            await tx.user.upsert({
+                where: { id: user.id },
+                create: {
+                    id: user.id,
+                    email: input.email.trim(),
+                    fullName: input.contactName.trim(),
+                    phone: input.phone.trim(),
+                    roleId: "DOJO_OWNER",
+                },
+                update: {
+                    fullName: input.contactName.trim(),
+                    phone: input.phone.trim(),
+                    roleId: "DOJO_OWNER",
+                },
+            });
 
-        const application = await prisma.dojoApplication.create({
-            data: {
-                userId: user.id,
-                dojoName: input.dojoName.trim(),
-                logoUrl: input.logoUrl ?? null,
-                email: input.email.trim(),
-                phone: input.phone.trim(),
-                contactName: input.contactName.trim(),
-                contactRole: input.contactRole.trim(),
-                address: input.address.trim(),
-                latitude: Number.isFinite(lat) ? lat : null,
-                longitude: Number.isFinite(lng) ? lng : null,
-                interiorUrls: input.interiorUrls ?? [],
-                trainers: input.trainers ?? [],
-                status: "PAID",
-            },
-            select: { id: true },
-        });
+            if (!dojoId) {
+                const dojo = await tx.dojo.create({
+                    data: {
+                        name: input.dojoName.trim(),
+                        address: input.address.trim(),
+                        phone: input.phone.trim(),
+                        email: input.email.trim(),
+                        latitude: Number.isFinite(lat) ? lat : null,
+                        longitude: Number.isFinite(lng) ? lng : null,
+                        logoUrl: finalLogoUrl,
+                        isActive: options.paidNow,
+                    },
+                    select: { id: true },
+                });
+                dojoId = dojo.id;
+            } else {
+                await tx.dojo.update({
+                    where: { id: dojoId },
+                    data: {
+                        name: input.dojoName.trim(),
+                        address: input.address.trim(),
+                        phone: input.phone.trim(),
+                        email: input.email.trim(),
+                        latitude: Number.isFinite(lat) ? lat : null,
+                        longitude: Number.isFinite(lng) ? lng : null,
+                        logoUrl: finalLogoUrl,
+                        isActive: options.paidNow ? true : undefined,
+                    },
+                });
+            }
 
-        await notifyAdmins({
-            title: "New dojo enlistment",
-            message: `${input.dojoName.trim()} — submitted by ${input.contactName.trim()}. Review and approve.`,
-            type: "INFO",
-            link: "/portal/admin/dojos/applications",
-        });
+            await tx.student.deleteMany({ where: { id: user.id } });
+            await tx.instructor.deleteMany({ where: { id: user.id } });
+            await tx.dojoManager.deleteMany({ where: { id: user.id } });
+            await tx.dojoOwner.upsert({
+                where: { id: user.id },
+                create: { id: user.id, dojoId },
+                update: { dojoId },
+            });
 
-        return { applicationId: application.id };
+            if (existing) {
+                await tx.dojoApplication.update({
+                    where: { id: existing.id },
+                    data: {
+                        dojoName: input.dojoName.trim(),
+                        logoUrl: finalLogoUrl,
+                        email: input.email.trim(),
+                        phone: input.phone.trim(),
+                        contactName: input.contactName.trim(),
+                        contactRole: "Head Instructor",
+                        contactRank,
+                        address: input.address.trim(),
+                        latitude: Number.isFinite(lat) ? lat : null,
+                        longitude: Number.isFinite(lng) ? lng : null,
+                        interiorUrls: finalInteriorUrls,
+                        trainers: [],
+                        status: options.paidNow ? "PAID" : "PENDING_PAYMENT",
+                        dojoId,
+                    },
+                });
+                applicationId = existing.id;
+            } else {
+                const created = await tx.dojoApplication.create({
+                    data: {
+                        userId: user.id,
+                        dojoName: input.dojoName.trim(),
+                        logoUrl: finalLogoUrl,
+                        email: input.email.trim(),
+                        phone: input.phone.trim(),
+                        contactName: input.contactName.trim(),
+                        contactRole: "Head Instructor",
+                        contactRank,
+                        address: input.address.trim(),
+                        latitude: Number.isFinite(lat) ? lat : null,
+                        longitude: Number.isFinite(lng) ? lng : null,
+                        interiorUrls: finalInteriorUrls,
+                        trainers: [],
+                        status: options.paidNow ? "PAID" : "PENDING_PAYMENT",
+                        dojoId,
+                    },
+                    select: { id: true },
+                });
+                applicationId = created.id;
+            }
+        });
     } catch (e) {
         const message =
             e instanceof Error ? e.message : "Could not save your enlistment.";
         return { error: message };
     }
+
+    await assignRole(user.id, "DOJO_OWNER", { dojoId });
+
+    await notifyAdmins({
+        title: "New dojo enlistment",
+        message: `${input.dojoName.trim()} — submitted by ${input.contactName.trim()}. Review and approve.`,
+        type: "INFO",
+        link: "/portal/admin/dojos/applications",
+    });
+
+    return { applicationId: applicationId!, dojoId: dojoId! };
+}
+
+/**
+ * Flip the dojo to active + application to PAID once payment is received.
+ */
+export async function markDojoEnlistmentPaid(
+    applicationId: string,
+    paymentId?: string
+): Promise<{ error?: string }> {
+    const supabase = await createClient();
+    const {
+        data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) return { error: "Session expired." };
+
+    const application = await prisma.dojoApplication.findUnique({
+        where: { id: applicationId },
+        select: { id: true, userId: true, dojoId: true, status: true },
+    });
+    if (!application || application.userId !== user.id) {
+        return { error: "Application not found." };
+    }
+    if (application.status === "PAID" || application.status === "APPROVED") {
+        return {};
+    }
+
+    try {
+        await prisma.$transaction(async (tx) => {
+            if (application.dojoId) {
+                await tx.dojo.update({
+                    where: { id: application.dojoId },
+                    data: { isActive: true },
+                });
+            }
+            await tx.dojoApplication.update({
+                where: { id: application.id },
+                data: {
+                    status: "PAID",
+                    paymentId: paymentId ?? `paid:${Date.now()}`,
+                },
+            });
+        });
+    } catch (e) {
+        const message = e instanceof Error ? e.message : "Activation failed.";
+        return { error: message };
+    }
+    return {};
 }
 
 /**

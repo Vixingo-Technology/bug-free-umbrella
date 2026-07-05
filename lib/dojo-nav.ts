@@ -31,8 +31,8 @@ export const DOJO_NAV: DojoNavItem[] = [
         group: "operations",
     },
     {
-        href: "/portal/dojo/students",
-        label: "Students",
+        href: "/portal/dojo/members",
+        label: "Members",
         icon: Users,
         min: "INSTRUCTOR",
         group: "operations",

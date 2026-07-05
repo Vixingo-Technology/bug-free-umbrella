@@ -56,24 +56,34 @@ export async function approveDojoApplicationAction(
 
     try {
         await prisma.$transaction(async (tx) => {
-            // 1. Create the Dojo first so we have an id to assign as the
-            //    owner's dojoId in step 2.
-            const dojo = await tx.dojo.create({
-                data: {
-                    name: application.dojoName,
-                    address: application.address,
-                    city: null,
-                    phone: application.phone,
-                    email: application.email,
-                    latitude: application.latitude,
-                    longitude: application.longitude,
-                    isActive: true,
-                },
-                select: { id: true },
-            });
+            // 1. Reuse the pre-created Dojo when present (enlistment flow
+            //    now creates the row upfront so trainer invites can point at
+            //    a real id). Fall back to creating it here for legacy
+            //    applications submitted before that change.
+            let dojoId = application.dojoId;
+            if (!dojoId) {
+                const dojo = await tx.dojo.create({
+                    data: {
+                        name: application.dojoName,
+                        address: application.address,
+                        city: null,
+                        phone: application.phone,
+                        email: application.email,
+                        latitude: application.latitude,
+                        longitude: application.longitude,
+                        isActive: true,
+                    },
+                    select: { id: true },
+                });
+                dojoId = dojo.id;
+            } else {
+                await tx.dojo.update({
+                    where: { id: dojoId },
+                    data: { isActive: true },
+                });
+            }
 
-            // 2. Upsert the applicant as DOJO_OWNER of the new dojo.
-            //    The UNIQUE(dojo_id) on dojo_owners guarantees only one owner per dojo.
+            // 2. Upsert the applicant as DOJO_OWNER of the (now approved) dojo.
             await tx.user.upsert({
                 where: { id: application.userId! },
                 update: {
@@ -96,8 +106,8 @@ export async function approveDojoApplicationAction(
             await tx.dojoManager.deleteMany({ where: { id: application.userId! } });
             await tx.dojoOwner.upsert({
                 where: { id: application.userId! },
-                create: { id: application.userId!, dojoId: dojo.id },
-                update: { dojoId: dojo.id },
+                create: { id: application.userId!, dojoId },
+                update: { dojoId },
             });
 
             // 3. Mark the application approved with the dojo id.
@@ -105,7 +115,8 @@ export async function approveDojoApplicationAction(
                 where: { id: application.id },
                 data: {
                     status: "APPROVED",
-                    paymentId: application.paymentId ?? `approved:${dojo.id}`,
+                    dojoId,
+                    paymentId: application.paymentId ?? `approved:${dojoId}`,
                 },
             });
         });

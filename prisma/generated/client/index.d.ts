@@ -16755,6 +16755,7 @@ export namespace Prisma {
     instructors?: boolean | Dojo$instructorsArgs<ExtArgs>
     managers?: boolean | Dojo$managersArgs<ExtArgs>
     owner?: boolean | Dojo$ownerArgs<ExtArgs>
+    application?: boolean | Dojo$applicationArgs<ExtArgs>
     attendance?: boolean | Dojo$attendanceArgs<ExtArgs>
     events?: boolean | Dojo$eventsArgs<ExtArgs>
     announcements?: boolean | Dojo$announcementsArgs<ExtArgs>
@@ -16829,6 +16830,7 @@ export namespace Prisma {
     instructors?: boolean | Dojo$instructorsArgs<ExtArgs>
     managers?: boolean | Dojo$managersArgs<ExtArgs>
     owner?: boolean | Dojo$ownerArgs<ExtArgs>
+    application?: boolean | Dojo$applicationArgs<ExtArgs>
     attendance?: boolean | Dojo$attendanceArgs<ExtArgs>
     events?: boolean | Dojo$eventsArgs<ExtArgs>
     announcements?: boolean | Dojo$announcementsArgs<ExtArgs>
@@ -16849,6 +16851,7 @@ export namespace Prisma {
       instructors: Prisma.$InstructorPayload<ExtArgs>[]
       managers: Prisma.$DojoManagerPayload<ExtArgs>[]
       owner: Prisma.$DojoOwnerPayload<ExtArgs> | null
+      application: Prisma.$DojoApplicationPayload<ExtArgs> | null
       attendance: Prisma.$AttendancePayload<ExtArgs>[]
       events: Prisma.$EventPayload<ExtArgs>[]
       announcements: Prisma.$AnnouncementPayload<ExtArgs>[]
@@ -17273,6 +17276,7 @@ export namespace Prisma {
     instructors<T extends Dojo$instructorsArgs<ExtArgs> = {}>(args?: Subset<T, Dojo$instructorsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InstructorPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     managers<T extends Dojo$managersArgs<ExtArgs> = {}>(args?: Subset<T, Dojo$managersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DojoManagerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     owner<T extends Dojo$ownerArgs<ExtArgs> = {}>(args?: Subset<T, Dojo$ownerArgs<ExtArgs>>): Prisma__DojoOwnerClient<$Result.GetResult<Prisma.$DojoOwnerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    application<T extends Dojo$applicationArgs<ExtArgs> = {}>(args?: Subset<T, Dojo$applicationArgs<ExtArgs>>): Prisma__DojoApplicationClient<$Result.GetResult<Prisma.$DojoApplicationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     attendance<T extends Dojo$attendanceArgs<ExtArgs> = {}>(args?: Subset<T, Dojo$attendanceArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AttendancePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     events<T extends Dojo$eventsArgs<ExtArgs> = {}>(args?: Subset<T, Dojo$eventsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     announcements<T extends Dojo$announcementsArgs<ExtArgs> = {}>(args?: Subset<T, Dojo$announcementsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AnnouncementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -17879,6 +17883,25 @@ export namespace Prisma {
   }
 
   /**
+   * Dojo.application
+   */
+  export type Dojo$applicationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DojoApplication
+     */
+    select?: DojoApplicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DojoApplication
+     */
+    omit?: DojoApplicationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DojoApplicationInclude<ExtArgs> | null
+    where?: DojoApplicationWhereInput
+  }
+
+  /**
    * Dojo.attendance
    */
   export type Dojo$attendanceArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -18048,11 +18071,13 @@ export namespace Prisma {
     phone: string | null
     contactName: string | null
     contactRole: string | null
+    contactRank: string | null
     address: string | null
     latitude: number | null
     longitude: number | null
     status: $Enums.DojoApplicationStatus | null
     paymentId: string | null
+    dojoId: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -18066,11 +18091,13 @@ export namespace Prisma {
     phone: string | null
     contactName: string | null
     contactRole: string | null
+    contactRank: string | null
     address: string | null
     latitude: number | null
     longitude: number | null
     status: $Enums.DojoApplicationStatus | null
     paymentId: string | null
+    dojoId: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -18084,6 +18111,7 @@ export namespace Prisma {
     phone: number
     contactName: number
     contactRole: number
+    contactRank: number
     address: number
     latitude: number
     longitude: number
@@ -18091,6 +18119,7 @@ export namespace Prisma {
     trainers: number
     status: number
     paymentId: number
+    dojoId: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -18116,11 +18145,13 @@ export namespace Prisma {
     phone?: true
     contactName?: true
     contactRole?: true
+    contactRank?: true
     address?: true
     latitude?: true
     longitude?: true
     status?: true
     paymentId?: true
+    dojoId?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -18134,11 +18165,13 @@ export namespace Prisma {
     phone?: true
     contactName?: true
     contactRole?: true
+    contactRank?: true
     address?: true
     latitude?: true
     longitude?: true
     status?: true
     paymentId?: true
+    dojoId?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -18152,6 +18185,7 @@ export namespace Prisma {
     phone?: true
     contactName?: true
     contactRole?: true
+    contactRank?: true
     address?: true
     latitude?: true
     longitude?: true
@@ -18159,6 +18193,7 @@ export namespace Prisma {
     trainers?: true
     status?: true
     paymentId?: true
+    dojoId?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -18259,6 +18294,7 @@ export namespace Prisma {
     phone: string
     contactName: string
     contactRole: string
+    contactRank: string | null
     address: string
     latitude: number | null
     longitude: number | null
@@ -18266,6 +18302,7 @@ export namespace Prisma {
     trainers: JsonValue
     status: $Enums.DojoApplicationStatus
     paymentId: string | null
+    dojoId: string | null
     createdAt: Date
     updatedAt: Date
     _count: DojoApplicationCountAggregateOutputType | null
@@ -18298,6 +18335,7 @@ export namespace Prisma {
     phone?: boolean
     contactName?: boolean
     contactRole?: boolean
+    contactRank?: boolean
     address?: boolean
     latitude?: boolean
     longitude?: boolean
@@ -18305,8 +18343,10 @@ export namespace Prisma {
     trainers?: boolean
     status?: boolean
     paymentId?: boolean
+    dojoId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    dojo?: boolean | DojoApplication$dojoArgs<ExtArgs>
   }, ExtArgs["result"]["dojoApplication"]>
 
   export type DojoApplicationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -18318,6 +18358,7 @@ export namespace Prisma {
     phone?: boolean
     contactName?: boolean
     contactRole?: boolean
+    contactRank?: boolean
     address?: boolean
     latitude?: boolean
     longitude?: boolean
@@ -18325,8 +18366,10 @@ export namespace Prisma {
     trainers?: boolean
     status?: boolean
     paymentId?: boolean
+    dojoId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    dojo?: boolean | DojoApplication$dojoArgs<ExtArgs>
   }, ExtArgs["result"]["dojoApplication"]>
 
   export type DojoApplicationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -18338,6 +18381,7 @@ export namespace Prisma {
     phone?: boolean
     contactName?: boolean
     contactRole?: boolean
+    contactRank?: boolean
     address?: boolean
     latitude?: boolean
     longitude?: boolean
@@ -18345,8 +18389,10 @@ export namespace Prisma {
     trainers?: boolean
     status?: boolean
     paymentId?: boolean
+    dojoId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    dojo?: boolean | DojoApplication$dojoArgs<ExtArgs>
   }, ExtArgs["result"]["dojoApplication"]>
 
   export type DojoApplicationSelectScalar = {
@@ -18358,6 +18404,7 @@ export namespace Prisma {
     phone?: boolean
     contactName?: boolean
     contactRole?: boolean
+    contactRank?: boolean
     address?: boolean
     latitude?: boolean
     longitude?: boolean
@@ -18365,15 +18412,27 @@ export namespace Prisma {
     trainers?: boolean
     status?: boolean
     paymentId?: boolean
+    dojoId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type DojoApplicationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "dojoName" | "logoUrl" | "email" | "phone" | "contactName" | "contactRole" | "address" | "latitude" | "longitude" | "interiorUrls" | "trainers" | "status" | "paymentId" | "createdAt" | "updatedAt", ExtArgs["result"]["dojoApplication"]>
+  export type DojoApplicationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "dojoName" | "logoUrl" | "email" | "phone" | "contactName" | "contactRole" | "contactRank" | "address" | "latitude" | "longitude" | "interiorUrls" | "trainers" | "status" | "paymentId" | "dojoId" | "createdAt" | "updatedAt", ExtArgs["result"]["dojoApplication"]>
+  export type DojoApplicationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    dojo?: boolean | DojoApplication$dojoArgs<ExtArgs>
+  }
+  export type DojoApplicationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    dojo?: boolean | DojoApplication$dojoArgs<ExtArgs>
+  }
+  export type DojoApplicationIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    dojo?: boolean | DojoApplication$dojoArgs<ExtArgs>
+  }
 
   export type $DojoApplicationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "DojoApplication"
-    objects: {}
+    objects: {
+      dojo: Prisma.$DojoPayload<ExtArgs> | null
+    }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       userId: string | null
@@ -18383,6 +18442,7 @@ export namespace Prisma {
       phone: string
       contactName: string
       contactRole: string
+      contactRank: string | null
       address: string
       latitude: number | null
       longitude: number | null
@@ -18390,6 +18450,7 @@ export namespace Prisma {
       trainers: Prisma.JsonValue
       status: $Enums.DojoApplicationStatus
       paymentId: string | null
+      dojoId: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["dojoApplication"]>
@@ -18786,6 +18847,7 @@ export namespace Prisma {
    */
   export interface Prisma__DojoApplicationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    dojo<T extends DojoApplication$dojoArgs<ExtArgs> = {}>(args?: Subset<T, DojoApplication$dojoArgs<ExtArgs>>): Prisma__DojoClient<$Result.GetResult<Prisma.$DojoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -18823,6 +18885,7 @@ export namespace Prisma {
     readonly phone: FieldRef<"DojoApplication", 'String'>
     readonly contactName: FieldRef<"DojoApplication", 'String'>
     readonly contactRole: FieldRef<"DojoApplication", 'String'>
+    readonly contactRank: FieldRef<"DojoApplication", 'String'>
     readonly address: FieldRef<"DojoApplication", 'String'>
     readonly latitude: FieldRef<"DojoApplication", 'Float'>
     readonly longitude: FieldRef<"DojoApplication", 'Float'>
@@ -18830,6 +18893,7 @@ export namespace Prisma {
     readonly trainers: FieldRef<"DojoApplication", 'Json'>
     readonly status: FieldRef<"DojoApplication", 'DojoApplicationStatus'>
     readonly paymentId: FieldRef<"DojoApplication", 'String'>
+    readonly dojoId: FieldRef<"DojoApplication", 'String'>
     readonly createdAt: FieldRef<"DojoApplication", 'DateTime'>
     readonly updatedAt: FieldRef<"DojoApplication", 'DateTime'>
   }
@@ -18849,6 +18913,10 @@ export namespace Prisma {
      */
     omit?: DojoApplicationOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DojoApplicationInclude<ExtArgs> | null
+    /**
      * Filter, which DojoApplication to fetch.
      */
     where: DojoApplicationWhereUniqueInput
@@ -18867,6 +18935,10 @@ export namespace Prisma {
      */
     omit?: DojoApplicationOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DojoApplicationInclude<ExtArgs> | null
+    /**
      * Filter, which DojoApplication to fetch.
      */
     where: DojoApplicationWhereUniqueInput
@@ -18884,6 +18956,10 @@ export namespace Prisma {
      * Omit specific fields from the DojoApplication
      */
     omit?: DojoApplicationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DojoApplicationInclude<ExtArgs> | null
     /**
      * Filter, which DojoApplication to fetch.
      */
@@ -18933,6 +19009,10 @@ export namespace Prisma {
      */
     omit?: DojoApplicationOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DojoApplicationInclude<ExtArgs> | null
+    /**
      * Filter, which DojoApplication to fetch.
      */
     where?: DojoApplicationWhereInput
@@ -18980,6 +19060,10 @@ export namespace Prisma {
      * Omit specific fields from the DojoApplication
      */
     omit?: DojoApplicationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DojoApplicationInclude<ExtArgs> | null
     /**
      * Filter, which DojoApplications to fetch.
      */
@@ -19029,6 +19113,10 @@ export namespace Prisma {
      */
     omit?: DojoApplicationOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DojoApplicationInclude<ExtArgs> | null
+    /**
      * The data needed to create a DojoApplication.
      */
     data: XOR<DojoApplicationCreateInput, DojoApplicationUncheckedCreateInput>
@@ -19062,6 +19150,10 @@ export namespace Prisma {
      */
     data: DojoApplicationCreateManyInput | DojoApplicationCreateManyInput[]
     skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DojoApplicationIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -19076,6 +19168,10 @@ export namespace Prisma {
      * Omit specific fields from the DojoApplication
      */
     omit?: DojoApplicationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DojoApplicationInclude<ExtArgs> | null
     /**
      * The data needed to update a DojoApplication.
      */
@@ -19128,6 +19224,10 @@ export namespace Prisma {
      * Limit how many DojoApplications to update.
      */
     limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DojoApplicationIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -19142,6 +19242,10 @@ export namespace Prisma {
      * Omit specific fields from the DojoApplication
      */
     omit?: DojoApplicationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DojoApplicationInclude<ExtArgs> | null
     /**
      * The filter to search for the DojoApplication to update in case it exists.
      */
@@ -19169,6 +19273,10 @@ export namespace Prisma {
      */
     omit?: DojoApplicationOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DojoApplicationInclude<ExtArgs> | null
+    /**
      * Filter which DojoApplication to delete.
      */
     where: DojoApplicationWhereUniqueInput
@@ -19189,6 +19297,25 @@ export namespace Prisma {
   }
 
   /**
+   * DojoApplication.dojo
+   */
+  export type DojoApplication$dojoArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Dojo
+     */
+    select?: DojoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Dojo
+     */
+    omit?: DojoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DojoInclude<ExtArgs> | null
+    where?: DojoWhereInput
+  }
+
+  /**
    * DojoApplication without action
    */
   export type DojoApplicationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -19200,6 +19327,10 @@ export namespace Prisma {
      * Omit specific fields from the DojoApplication
      */
     omit?: DojoApplicationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DojoApplicationInclude<ExtArgs> | null
   }
 
 
@@ -44625,6 +44756,7 @@ export namespace Prisma {
     phone: 'phone',
     contactName: 'contactName',
     contactRole: 'contactRole',
+    contactRank: 'contactRank',
     address: 'address',
     latitude: 'latitude',
     longitude: 'longitude',
@@ -44632,6 +44764,7 @@ export namespace Prisma {
     trainers: 'trainers',
     status: 'status',
     paymentId: 'paymentId',
+    dojoId: 'dojoId',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -46053,6 +46186,7 @@ export namespace Prisma {
     instructors?: InstructorListRelationFilter
     managers?: DojoManagerListRelationFilter
     owner?: XOR<DojoOwnerNullableScalarRelationFilter, DojoOwnerWhereInput> | null
+    application?: XOR<DojoApplicationNullableScalarRelationFilter, DojoApplicationWhereInput> | null
     attendance?: AttendanceListRelationFilter
     events?: EventListRelationFilter
     announcements?: AnnouncementListRelationFilter
@@ -46084,6 +46218,7 @@ export namespace Prisma {
     instructors?: InstructorOrderByRelationAggregateInput
     managers?: DojoManagerOrderByRelationAggregateInput
     owner?: DojoOwnerOrderByWithRelationInput
+    application?: DojoApplicationOrderByWithRelationInput
     attendance?: AttendanceOrderByRelationAggregateInput
     events?: EventOrderByRelationAggregateInput
     announcements?: AnnouncementOrderByRelationAggregateInput
@@ -46118,6 +46253,7 @@ export namespace Prisma {
     instructors?: InstructorListRelationFilter
     managers?: DojoManagerListRelationFilter
     owner?: XOR<DojoOwnerNullableScalarRelationFilter, DojoOwnerWhereInput> | null
+    application?: XOR<DojoApplicationNullableScalarRelationFilter, DojoApplicationWhereInput> | null
     attendance?: AttendanceListRelationFilter
     events?: EventListRelationFilter
     announcements?: AnnouncementListRelationFilter
@@ -46183,6 +46319,7 @@ export namespace Prisma {
     phone?: StringFilter<"DojoApplication"> | string
     contactName?: StringFilter<"DojoApplication"> | string
     contactRole?: StringFilter<"DojoApplication"> | string
+    contactRank?: StringNullableFilter<"DojoApplication"> | string | null
     address?: StringFilter<"DojoApplication"> | string
     latitude?: FloatNullableFilter<"DojoApplication"> | number | null
     longitude?: FloatNullableFilter<"DojoApplication"> | number | null
@@ -46190,8 +46327,10 @@ export namespace Prisma {
     trainers?: JsonFilter<"DojoApplication">
     status?: EnumDojoApplicationStatusFilter<"DojoApplication"> | $Enums.DojoApplicationStatus
     paymentId?: StringNullableFilter<"DojoApplication"> | string | null
+    dojoId?: UuidNullableFilter<"DojoApplication"> | string | null
     createdAt?: DateTimeFilter<"DojoApplication"> | Date | string
     updatedAt?: DateTimeFilter<"DojoApplication"> | Date | string
+    dojo?: XOR<DojoNullableScalarRelationFilter, DojoWhereInput> | null
   }
 
   export type DojoApplicationOrderByWithRelationInput = {
@@ -46203,6 +46342,7 @@ export namespace Prisma {
     phone?: SortOrder
     contactName?: SortOrder
     contactRole?: SortOrder
+    contactRank?: SortOrderInput | SortOrder
     address?: SortOrder
     latitude?: SortOrderInput | SortOrder
     longitude?: SortOrderInput | SortOrder
@@ -46210,12 +46350,15 @@ export namespace Prisma {
     trainers?: SortOrder
     status?: SortOrder
     paymentId?: SortOrderInput | SortOrder
+    dojoId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    dojo?: DojoOrderByWithRelationInput
   }
 
   export type DojoApplicationWhereUniqueInput = Prisma.AtLeast<{
     id?: string
+    dojoId?: string
     AND?: DojoApplicationWhereInput | DojoApplicationWhereInput[]
     OR?: DojoApplicationWhereInput[]
     NOT?: DojoApplicationWhereInput | DojoApplicationWhereInput[]
@@ -46226,6 +46369,7 @@ export namespace Prisma {
     phone?: StringFilter<"DojoApplication"> | string
     contactName?: StringFilter<"DojoApplication"> | string
     contactRole?: StringFilter<"DojoApplication"> | string
+    contactRank?: StringNullableFilter<"DojoApplication"> | string | null
     address?: StringFilter<"DojoApplication"> | string
     latitude?: FloatNullableFilter<"DojoApplication"> | number | null
     longitude?: FloatNullableFilter<"DojoApplication"> | number | null
@@ -46235,7 +46379,8 @@ export namespace Prisma {
     paymentId?: StringNullableFilter<"DojoApplication"> | string | null
     createdAt?: DateTimeFilter<"DojoApplication"> | Date | string
     updatedAt?: DateTimeFilter<"DojoApplication"> | Date | string
-  }, "id">
+    dojo?: XOR<DojoNullableScalarRelationFilter, DojoWhereInput> | null
+  }, "id" | "dojoId">
 
   export type DojoApplicationOrderByWithAggregationInput = {
     id?: SortOrder
@@ -46246,6 +46391,7 @@ export namespace Prisma {
     phone?: SortOrder
     contactName?: SortOrder
     contactRole?: SortOrder
+    contactRank?: SortOrderInput | SortOrder
     address?: SortOrder
     latitude?: SortOrderInput | SortOrder
     longitude?: SortOrderInput | SortOrder
@@ -46253,6 +46399,7 @@ export namespace Prisma {
     trainers?: SortOrder
     status?: SortOrder
     paymentId?: SortOrderInput | SortOrder
+    dojoId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: DojoApplicationCountOrderByAggregateInput
@@ -46274,6 +46421,7 @@ export namespace Prisma {
     phone?: StringWithAggregatesFilter<"DojoApplication"> | string
     contactName?: StringWithAggregatesFilter<"DojoApplication"> | string
     contactRole?: StringWithAggregatesFilter<"DojoApplication"> | string
+    contactRank?: StringNullableWithAggregatesFilter<"DojoApplication"> | string | null
     address?: StringWithAggregatesFilter<"DojoApplication"> | string
     latitude?: FloatNullableWithAggregatesFilter<"DojoApplication"> | number | null
     longitude?: FloatNullableWithAggregatesFilter<"DojoApplication"> | number | null
@@ -46281,6 +46429,7 @@ export namespace Prisma {
     trainers?: JsonWithAggregatesFilter<"DojoApplication">
     status?: EnumDojoApplicationStatusWithAggregatesFilter<"DojoApplication"> | $Enums.DojoApplicationStatus
     paymentId?: StringNullableWithAggregatesFilter<"DojoApplication"> | string | null
+    dojoId?: UuidNullableWithAggregatesFilter<"DojoApplication"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"DojoApplication"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"DojoApplication"> | Date | string
   }
@@ -48954,6 +49103,7 @@ export namespace Prisma {
     instructors?: InstructorCreateNestedManyWithoutDojoInput
     managers?: DojoManagerCreateNestedManyWithoutDojoInput
     owner?: DojoOwnerCreateNestedOneWithoutDojoInput
+    application?: DojoApplicationCreateNestedOneWithoutDojoInput
     attendance?: AttendanceCreateNestedManyWithoutDojoInput
     events?: EventCreateNestedManyWithoutDojoInput
     announcements?: AnnouncementCreateNestedManyWithoutDojoInput
@@ -48985,6 +49135,7 @@ export namespace Prisma {
     instructors?: InstructorUncheckedCreateNestedManyWithoutDojoInput
     managers?: DojoManagerUncheckedCreateNestedManyWithoutDojoInput
     owner?: DojoOwnerUncheckedCreateNestedOneWithoutDojoInput
+    application?: DojoApplicationUncheckedCreateNestedOneWithoutDojoInput
     attendance?: AttendanceUncheckedCreateNestedManyWithoutDojoInput
     events?: EventUncheckedCreateNestedManyWithoutDojoInput
     announcements?: AnnouncementUncheckedCreateNestedManyWithoutDojoInput
@@ -49016,6 +49167,7 @@ export namespace Prisma {
     instructors?: InstructorUpdateManyWithoutDojoNestedInput
     managers?: DojoManagerUpdateManyWithoutDojoNestedInput
     owner?: DojoOwnerUpdateOneWithoutDojoNestedInput
+    application?: DojoApplicationUpdateOneWithoutDojoNestedInput
     attendance?: AttendanceUpdateManyWithoutDojoNestedInput
     events?: EventUpdateManyWithoutDojoNestedInput
     announcements?: AnnouncementUpdateManyWithoutDojoNestedInput
@@ -49047,6 +49199,7 @@ export namespace Prisma {
     instructors?: InstructorUncheckedUpdateManyWithoutDojoNestedInput
     managers?: DojoManagerUncheckedUpdateManyWithoutDojoNestedInput
     owner?: DojoOwnerUncheckedUpdateOneWithoutDojoNestedInput
+    application?: DojoApplicationUncheckedUpdateOneWithoutDojoNestedInput
     attendance?: AttendanceUncheckedUpdateManyWithoutDojoNestedInput
     events?: EventUncheckedUpdateManyWithoutDojoNestedInput
     announcements?: AnnouncementUncheckedUpdateManyWithoutDojoNestedInput
@@ -49120,6 +49273,7 @@ export namespace Prisma {
     phone: string
     contactName: string
     contactRole: string
+    contactRank?: string | null
     address: string
     latitude?: number | null
     longitude?: number | null
@@ -49129,6 +49283,7 @@ export namespace Prisma {
     paymentId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    dojo?: DojoCreateNestedOneWithoutApplicationInput
   }
 
   export type DojoApplicationUncheckedCreateInput = {
@@ -49140,6 +49295,7 @@ export namespace Prisma {
     phone: string
     contactName: string
     contactRole: string
+    contactRank?: string | null
     address: string
     latitude?: number | null
     longitude?: number | null
@@ -49147,6 +49303,7 @@ export namespace Prisma {
     trainers?: JsonNullValueInput | InputJsonValue
     status?: $Enums.DojoApplicationStatus
     paymentId?: string | null
+    dojoId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -49160,6 +49317,7 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     contactName?: StringFieldUpdateOperationsInput | string
     contactRole?: StringFieldUpdateOperationsInput | string
+    contactRank?: NullableStringFieldUpdateOperationsInput | string | null
     address?: StringFieldUpdateOperationsInput | string
     latitude?: NullableFloatFieldUpdateOperationsInput | number | null
     longitude?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -49169,6 +49327,7 @@ export namespace Prisma {
     paymentId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    dojo?: DojoUpdateOneWithoutApplicationNestedInput
   }
 
   export type DojoApplicationUncheckedUpdateInput = {
@@ -49180,6 +49339,7 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     contactName?: StringFieldUpdateOperationsInput | string
     contactRole?: StringFieldUpdateOperationsInput | string
+    contactRank?: NullableStringFieldUpdateOperationsInput | string | null
     address?: StringFieldUpdateOperationsInput | string
     latitude?: NullableFloatFieldUpdateOperationsInput | number | null
     longitude?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -49187,6 +49347,7 @@ export namespace Prisma {
     trainers?: JsonNullValueInput | InputJsonValue
     status?: EnumDojoApplicationStatusFieldUpdateOperationsInput | $Enums.DojoApplicationStatus
     paymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    dojoId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -49200,6 +49361,7 @@ export namespace Prisma {
     phone: string
     contactName: string
     contactRole: string
+    contactRank?: string | null
     address: string
     latitude?: number | null
     longitude?: number | null
@@ -49207,6 +49369,7 @@ export namespace Prisma {
     trainers?: JsonNullValueInput | InputJsonValue
     status?: $Enums.DojoApplicationStatus
     paymentId?: string | null
+    dojoId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -49220,6 +49383,7 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     contactName?: StringFieldUpdateOperationsInput | string
     contactRole?: StringFieldUpdateOperationsInput | string
+    contactRank?: NullableStringFieldUpdateOperationsInput | string | null
     address?: StringFieldUpdateOperationsInput | string
     latitude?: NullableFloatFieldUpdateOperationsInput | number | null
     longitude?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -49240,6 +49404,7 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     contactName?: StringFieldUpdateOperationsInput | string
     contactRole?: StringFieldUpdateOperationsInput | string
+    contactRank?: NullableStringFieldUpdateOperationsInput | string | null
     address?: StringFieldUpdateOperationsInput | string
     latitude?: NullableFloatFieldUpdateOperationsInput | number | null
     longitude?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -49247,6 +49412,7 @@ export namespace Prisma {
     trainers?: JsonNullValueInput | InputJsonValue
     status?: EnumDojoApplicationStatusFieldUpdateOperationsInput | $Enums.DojoApplicationStatus
     paymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    dojoId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -52050,6 +52216,11 @@ export namespace Prisma {
     none?: DojoManagerWhereInput
   }
 
+  export type DojoApplicationNullableScalarRelationFilter = {
+    is?: DojoApplicationWhereInput | null
+    isNot?: DojoApplicationWhereInput | null
+  }
+
   export type DojoInventoryItemListRelationFilter = {
     every?: DojoInventoryItemWhereInput
     some?: DojoInventoryItemWhereInput
@@ -52228,6 +52399,7 @@ export namespace Prisma {
     phone?: SortOrder
     contactName?: SortOrder
     contactRole?: SortOrder
+    contactRank?: SortOrder
     address?: SortOrder
     latitude?: SortOrder
     longitude?: SortOrder
@@ -52235,6 +52407,7 @@ export namespace Prisma {
     trainers?: SortOrder
     status?: SortOrder
     paymentId?: SortOrder
+    dojoId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -52253,11 +52426,13 @@ export namespace Prisma {
     phone?: SortOrder
     contactName?: SortOrder
     contactRole?: SortOrder
+    contactRank?: SortOrder
     address?: SortOrder
     latitude?: SortOrder
     longitude?: SortOrder
     status?: SortOrder
     paymentId?: SortOrder
+    dojoId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -52271,11 +52446,13 @@ export namespace Prisma {
     phone?: SortOrder
     contactName?: SortOrder
     contactRole?: SortOrder
+    contactRank?: SortOrder
     address?: SortOrder
     latitude?: SortOrder
     longitude?: SortOrder
     status?: SortOrder
     paymentId?: SortOrder
+    dojoId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -55040,6 +55217,12 @@ export namespace Prisma {
     connect?: DojoOwnerWhereUniqueInput
   }
 
+  export type DojoApplicationCreateNestedOneWithoutDojoInput = {
+    create?: XOR<DojoApplicationCreateWithoutDojoInput, DojoApplicationUncheckedCreateWithoutDojoInput>
+    connectOrCreate?: DojoApplicationCreateOrConnectWithoutDojoInput
+    connect?: DojoApplicationWhereUniqueInput
+  }
+
   export type AttendanceCreateNestedManyWithoutDojoInput = {
     create?: XOR<AttendanceCreateWithoutDojoInput, AttendanceUncheckedCreateWithoutDojoInput> | AttendanceCreateWithoutDojoInput[] | AttendanceUncheckedCreateWithoutDojoInput[]
     connectOrCreate?: AttendanceCreateOrConnectWithoutDojoInput | AttendanceCreateOrConnectWithoutDojoInput[]
@@ -55121,6 +55304,12 @@ export namespace Prisma {
     create?: XOR<DojoOwnerCreateWithoutDojoInput, DojoOwnerUncheckedCreateWithoutDojoInput>
     connectOrCreate?: DojoOwnerCreateOrConnectWithoutDojoInput
     connect?: DojoOwnerWhereUniqueInput
+  }
+
+  export type DojoApplicationUncheckedCreateNestedOneWithoutDojoInput = {
+    create?: XOR<DojoApplicationCreateWithoutDojoInput, DojoApplicationUncheckedCreateWithoutDojoInput>
+    connectOrCreate?: DojoApplicationCreateOrConnectWithoutDojoInput
+    connect?: DojoApplicationWhereUniqueInput
   }
 
   export type AttendanceUncheckedCreateNestedManyWithoutDojoInput = {
@@ -55258,6 +55447,16 @@ export namespace Prisma {
     delete?: DojoOwnerWhereInput | boolean
     connect?: DojoOwnerWhereUniqueInput
     update?: XOR<XOR<DojoOwnerUpdateToOneWithWhereWithoutDojoInput, DojoOwnerUpdateWithoutDojoInput>, DojoOwnerUncheckedUpdateWithoutDojoInput>
+  }
+
+  export type DojoApplicationUpdateOneWithoutDojoNestedInput = {
+    create?: XOR<DojoApplicationCreateWithoutDojoInput, DojoApplicationUncheckedCreateWithoutDojoInput>
+    connectOrCreate?: DojoApplicationCreateOrConnectWithoutDojoInput
+    upsert?: DojoApplicationUpsertWithoutDojoInput
+    disconnect?: DojoApplicationWhereInput | boolean
+    delete?: DojoApplicationWhereInput | boolean
+    connect?: DojoApplicationWhereUniqueInput
+    update?: XOR<XOR<DojoApplicationUpdateToOneWithWhereWithoutDojoInput, DojoApplicationUpdateWithoutDojoInput>, DojoApplicationUncheckedUpdateWithoutDojoInput>
   }
 
   export type AttendanceUpdateManyWithoutDojoNestedInput = {
@@ -55424,6 +55623,16 @@ export namespace Prisma {
     update?: XOR<XOR<DojoOwnerUpdateToOneWithWhereWithoutDojoInput, DojoOwnerUpdateWithoutDojoInput>, DojoOwnerUncheckedUpdateWithoutDojoInput>
   }
 
+  export type DojoApplicationUncheckedUpdateOneWithoutDojoNestedInput = {
+    create?: XOR<DojoApplicationCreateWithoutDojoInput, DojoApplicationUncheckedCreateWithoutDojoInput>
+    connectOrCreate?: DojoApplicationCreateOrConnectWithoutDojoInput
+    upsert?: DojoApplicationUpsertWithoutDojoInput
+    disconnect?: DojoApplicationWhereInput | boolean
+    delete?: DojoApplicationWhereInput | boolean
+    connect?: DojoApplicationWhereUniqueInput
+    update?: XOR<XOR<DojoApplicationUpdateToOneWithWhereWithoutDojoInput, DojoApplicationUpdateWithoutDojoInput>, DojoApplicationUncheckedUpdateWithoutDojoInput>
+  }
+
   export type AttendanceUncheckedUpdateManyWithoutDojoNestedInput = {
     create?: XOR<AttendanceCreateWithoutDojoInput, AttendanceUncheckedCreateWithoutDojoInput> | AttendanceCreateWithoutDojoInput[] | AttendanceUncheckedCreateWithoutDojoInput[]
     connectOrCreate?: AttendanceCreateOrConnectWithoutDojoInput | AttendanceCreateOrConnectWithoutDojoInput[]
@@ -55498,6 +55707,12 @@ export namespace Prisma {
     set: string[]
   }
 
+  export type DojoCreateNestedOneWithoutApplicationInput = {
+    create?: XOR<DojoCreateWithoutApplicationInput, DojoUncheckedCreateWithoutApplicationInput>
+    connectOrCreate?: DojoCreateOrConnectWithoutApplicationInput
+    connect?: DojoWhereUniqueInput
+  }
+
   export type DojoApplicationUpdateinteriorUrlsInput = {
     set?: string[]
     push?: string | string[]
@@ -55505,6 +55720,16 @@ export namespace Prisma {
 
   export type EnumDojoApplicationStatusFieldUpdateOperationsInput = {
     set?: $Enums.DojoApplicationStatus
+  }
+
+  export type DojoUpdateOneWithoutApplicationNestedInput = {
+    create?: XOR<DojoCreateWithoutApplicationInput, DojoUncheckedCreateWithoutApplicationInput>
+    connectOrCreate?: DojoCreateOrConnectWithoutApplicationInput
+    upsert?: DojoUpsertWithoutApplicationInput
+    disconnect?: DojoWhereInput | boolean
+    delete?: DojoWhereInput | boolean
+    connect?: DojoWhereUniqueInput
+    update?: XOR<XOR<DojoUpdateToOneWithWhereWithoutApplicationInput, DojoUpdateWithoutApplicationInput>, DojoUncheckedUpdateWithoutApplicationInput>
   }
 
   export type StudentCreateNestedOneWithoutAttendanceInput = {
@@ -58903,6 +59128,7 @@ export namespace Prisma {
     instructors?: InstructorCreateNestedManyWithoutDojoInput
     managers?: DojoManagerCreateNestedManyWithoutDojoInput
     owner?: DojoOwnerCreateNestedOneWithoutDojoInput
+    application?: DojoApplicationCreateNestedOneWithoutDojoInput
     attendance?: AttendanceCreateNestedManyWithoutDojoInput
     events?: EventCreateNestedManyWithoutDojoInput
     announcements?: AnnouncementCreateNestedManyWithoutDojoInput
@@ -58933,6 +59159,7 @@ export namespace Prisma {
     instructors?: InstructorUncheckedCreateNestedManyWithoutDojoInput
     managers?: DojoManagerUncheckedCreateNestedManyWithoutDojoInput
     owner?: DojoOwnerUncheckedCreateNestedOneWithoutDojoInput
+    application?: DojoApplicationUncheckedCreateNestedOneWithoutDojoInput
     attendance?: AttendanceUncheckedCreateNestedManyWithoutDojoInput
     events?: EventUncheckedCreateNestedManyWithoutDojoInput
     announcements?: AnnouncementUncheckedCreateNestedManyWithoutDojoInput
@@ -59210,6 +59437,7 @@ export namespace Prisma {
     instructors?: InstructorUpdateManyWithoutDojoNestedInput
     managers?: DojoManagerUpdateManyWithoutDojoNestedInput
     owner?: DojoOwnerUpdateOneWithoutDojoNestedInput
+    application?: DojoApplicationUpdateOneWithoutDojoNestedInput
     attendance?: AttendanceUpdateManyWithoutDojoNestedInput
     events?: EventUpdateManyWithoutDojoNestedInput
     announcements?: AnnouncementUpdateManyWithoutDojoNestedInput
@@ -59240,6 +59468,7 @@ export namespace Prisma {
     instructors?: InstructorUncheckedUpdateManyWithoutDojoNestedInput
     managers?: DojoManagerUncheckedUpdateManyWithoutDojoNestedInput
     owner?: DojoOwnerUncheckedUpdateOneWithoutDojoNestedInput
+    application?: DojoApplicationUncheckedUpdateOneWithoutDojoNestedInput
     attendance?: AttendanceUncheckedUpdateManyWithoutDojoNestedInput
     events?: EventUncheckedUpdateManyWithoutDojoNestedInput
     announcements?: AnnouncementUncheckedUpdateManyWithoutDojoNestedInput
@@ -59473,6 +59702,7 @@ export namespace Prisma {
     students?: StudentCreateNestedManyWithoutDojoInput
     managers?: DojoManagerCreateNestedManyWithoutDojoInput
     owner?: DojoOwnerCreateNestedOneWithoutDojoInput
+    application?: DojoApplicationCreateNestedOneWithoutDojoInput
     attendance?: AttendanceCreateNestedManyWithoutDojoInput
     events?: EventCreateNestedManyWithoutDojoInput
     announcements?: AnnouncementCreateNestedManyWithoutDojoInput
@@ -59503,6 +59733,7 @@ export namespace Prisma {
     students?: StudentUncheckedCreateNestedManyWithoutDojoInput
     managers?: DojoManagerUncheckedCreateNestedManyWithoutDojoInput
     owner?: DojoOwnerUncheckedCreateNestedOneWithoutDojoInput
+    application?: DojoApplicationUncheckedCreateNestedOneWithoutDojoInput
     attendance?: AttendanceUncheckedCreateNestedManyWithoutDojoInput
     events?: EventUncheckedCreateNestedManyWithoutDojoInput
     announcements?: AnnouncementUncheckedCreateNestedManyWithoutDojoInput
@@ -59614,6 +59845,7 @@ export namespace Prisma {
     students?: StudentUpdateManyWithoutDojoNestedInput
     managers?: DojoManagerUpdateManyWithoutDojoNestedInput
     owner?: DojoOwnerUpdateOneWithoutDojoNestedInput
+    application?: DojoApplicationUpdateOneWithoutDojoNestedInput
     attendance?: AttendanceUpdateManyWithoutDojoNestedInput
     events?: EventUpdateManyWithoutDojoNestedInput
     announcements?: AnnouncementUpdateManyWithoutDojoNestedInput
@@ -59644,6 +59876,7 @@ export namespace Prisma {
     students?: StudentUncheckedUpdateManyWithoutDojoNestedInput
     managers?: DojoManagerUncheckedUpdateManyWithoutDojoNestedInput
     owner?: DojoOwnerUncheckedUpdateOneWithoutDojoNestedInput
+    application?: DojoApplicationUncheckedUpdateOneWithoutDojoNestedInput
     attendance?: AttendanceUncheckedUpdateManyWithoutDojoNestedInput
     events?: EventUncheckedUpdateManyWithoutDojoNestedInput
     announcements?: AnnouncementUncheckedUpdateManyWithoutDojoNestedInput
@@ -59733,6 +59966,7 @@ export namespace Prisma {
     students?: StudentCreateNestedManyWithoutDojoInput
     instructors?: InstructorCreateNestedManyWithoutDojoInput
     owner?: DojoOwnerCreateNestedOneWithoutDojoInput
+    application?: DojoApplicationCreateNestedOneWithoutDojoInput
     attendance?: AttendanceCreateNestedManyWithoutDojoInput
     events?: EventCreateNestedManyWithoutDojoInput
     announcements?: AnnouncementCreateNestedManyWithoutDojoInput
@@ -59763,6 +59997,7 @@ export namespace Prisma {
     students?: StudentUncheckedCreateNestedManyWithoutDojoInput
     instructors?: InstructorUncheckedCreateNestedManyWithoutDojoInput
     owner?: DojoOwnerUncheckedCreateNestedOneWithoutDojoInput
+    application?: DojoApplicationUncheckedCreateNestedOneWithoutDojoInput
     attendance?: AttendanceUncheckedCreateNestedManyWithoutDojoInput
     events?: EventUncheckedCreateNestedManyWithoutDojoInput
     announcements?: AnnouncementUncheckedCreateNestedManyWithoutDojoInput
@@ -59874,6 +60109,7 @@ export namespace Prisma {
     students?: StudentUpdateManyWithoutDojoNestedInput
     instructors?: InstructorUpdateManyWithoutDojoNestedInput
     owner?: DojoOwnerUpdateOneWithoutDojoNestedInput
+    application?: DojoApplicationUpdateOneWithoutDojoNestedInput
     attendance?: AttendanceUpdateManyWithoutDojoNestedInput
     events?: EventUpdateManyWithoutDojoNestedInput
     announcements?: AnnouncementUpdateManyWithoutDojoNestedInput
@@ -59904,6 +60140,7 @@ export namespace Prisma {
     students?: StudentUncheckedUpdateManyWithoutDojoNestedInput
     instructors?: InstructorUncheckedUpdateManyWithoutDojoNestedInput
     owner?: DojoOwnerUncheckedUpdateOneWithoutDojoNestedInput
+    application?: DojoApplicationUncheckedUpdateOneWithoutDojoNestedInput
     attendance?: AttendanceUncheckedUpdateManyWithoutDojoNestedInput
     events?: EventUncheckedUpdateManyWithoutDojoNestedInput
     announcements?: AnnouncementUncheckedUpdateManyWithoutDojoNestedInput
@@ -59993,6 +60230,7 @@ export namespace Prisma {
     students?: StudentCreateNestedManyWithoutDojoInput
     instructors?: InstructorCreateNestedManyWithoutDojoInput
     managers?: DojoManagerCreateNestedManyWithoutDojoInput
+    application?: DojoApplicationCreateNestedOneWithoutDojoInput
     attendance?: AttendanceCreateNestedManyWithoutDojoInput
     events?: EventCreateNestedManyWithoutDojoInput
     announcements?: AnnouncementCreateNestedManyWithoutDojoInput
@@ -60023,6 +60261,7 @@ export namespace Prisma {
     students?: StudentUncheckedCreateNestedManyWithoutDojoInput
     instructors?: InstructorUncheckedCreateNestedManyWithoutDojoInput
     managers?: DojoManagerUncheckedCreateNestedManyWithoutDojoInput
+    application?: DojoApplicationUncheckedCreateNestedOneWithoutDojoInput
     attendance?: AttendanceUncheckedCreateNestedManyWithoutDojoInput
     events?: EventUncheckedCreateNestedManyWithoutDojoInput
     announcements?: AnnouncementUncheckedCreateNestedManyWithoutDojoInput
@@ -60134,6 +60373,7 @@ export namespace Prisma {
     students?: StudentUpdateManyWithoutDojoNestedInput
     instructors?: InstructorUpdateManyWithoutDojoNestedInput
     managers?: DojoManagerUpdateManyWithoutDojoNestedInput
+    application?: DojoApplicationUpdateOneWithoutDojoNestedInput
     attendance?: AttendanceUpdateManyWithoutDojoNestedInput
     events?: EventUpdateManyWithoutDojoNestedInput
     announcements?: AnnouncementUpdateManyWithoutDojoNestedInput
@@ -60164,6 +60404,7 @@ export namespace Prisma {
     students?: StudentUncheckedUpdateManyWithoutDojoNestedInput
     instructors?: InstructorUncheckedUpdateManyWithoutDojoNestedInput
     managers?: DojoManagerUncheckedUpdateManyWithoutDojoNestedInput
+    application?: DojoApplicationUncheckedUpdateOneWithoutDojoNestedInput
     attendance?: AttendanceUncheckedUpdateManyWithoutDojoNestedInput
     events?: EventUncheckedUpdateManyWithoutDojoNestedInput
     announcements?: AnnouncementUncheckedUpdateManyWithoutDojoNestedInput
@@ -60862,6 +61103,53 @@ export namespace Prisma {
     create: XOR<DojoOwnerCreateWithoutDojoInput, DojoOwnerUncheckedCreateWithoutDojoInput>
   }
 
+  export type DojoApplicationCreateWithoutDojoInput = {
+    id?: string
+    userId?: string | null
+    dojoName: string
+    logoUrl?: string | null
+    email: string
+    phone: string
+    contactName: string
+    contactRole: string
+    contactRank?: string | null
+    address: string
+    latitude?: number | null
+    longitude?: number | null
+    interiorUrls?: DojoApplicationCreateinteriorUrlsInput | string[]
+    trainers?: JsonNullValueInput | InputJsonValue
+    status?: $Enums.DojoApplicationStatus
+    paymentId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DojoApplicationUncheckedCreateWithoutDojoInput = {
+    id?: string
+    userId?: string | null
+    dojoName: string
+    logoUrl?: string | null
+    email: string
+    phone: string
+    contactName: string
+    contactRole: string
+    contactRank?: string | null
+    address: string
+    latitude?: number | null
+    longitude?: number | null
+    interiorUrls?: DojoApplicationCreateinteriorUrlsInput | string[]
+    trainers?: JsonNullValueInput | InputJsonValue
+    status?: $Enums.DojoApplicationStatus
+    paymentId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DojoApplicationCreateOrConnectWithoutDojoInput = {
+    where: DojoApplicationWhereUniqueInput
+    create: XOR<DojoApplicationCreateWithoutDojoInput, DojoApplicationUncheckedCreateWithoutDojoInput>
+  }
+
   export type AttendanceCreateWithoutDojoInput = {
     id?: string
     date: Date | string
@@ -61220,6 +61508,59 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type DojoApplicationUpsertWithoutDojoInput = {
+    update: XOR<DojoApplicationUpdateWithoutDojoInput, DojoApplicationUncheckedUpdateWithoutDojoInput>
+    create: XOR<DojoApplicationCreateWithoutDojoInput, DojoApplicationUncheckedCreateWithoutDojoInput>
+    where?: DojoApplicationWhereInput
+  }
+
+  export type DojoApplicationUpdateToOneWithWhereWithoutDojoInput = {
+    where?: DojoApplicationWhereInput
+    data: XOR<DojoApplicationUpdateWithoutDojoInput, DojoApplicationUncheckedUpdateWithoutDojoInput>
+  }
+
+  export type DojoApplicationUpdateWithoutDojoInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    dojoName?: StringFieldUpdateOperationsInput | string
+    logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    contactName?: StringFieldUpdateOperationsInput | string
+    contactRole?: StringFieldUpdateOperationsInput | string
+    contactRank?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: StringFieldUpdateOperationsInput | string
+    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    interiorUrls?: DojoApplicationUpdateinteriorUrlsInput | string[]
+    trainers?: JsonNullValueInput | InputJsonValue
+    status?: EnumDojoApplicationStatusFieldUpdateOperationsInput | $Enums.DojoApplicationStatus
+    paymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DojoApplicationUncheckedUpdateWithoutDojoInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    dojoName?: StringFieldUpdateOperationsInput | string
+    logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    contactName?: StringFieldUpdateOperationsInput | string
+    contactRole?: StringFieldUpdateOperationsInput | string
+    contactRank?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: StringFieldUpdateOperationsInput | string
+    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    interiorUrls?: DojoApplicationUpdateinteriorUrlsInput | string[]
+    trainers?: JsonNullValueInput | InputJsonValue
+    status?: EnumDojoApplicationStatusFieldUpdateOperationsInput | $Enums.DojoApplicationStatus
+    paymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type AttendanceUpsertWithWhereUniqueWithoutDojoInput = {
     where: AttendanceWhereUniqueInput
     update: XOR<AttendanceUpdateWithoutDojoInput, AttendanceUncheckedUpdateWithoutDojoInput>
@@ -61313,6 +61654,146 @@ export namespace Prisma {
     data: XOR<DojoSaleUpdateManyMutationInput, DojoSaleUncheckedUpdateManyWithoutDojoInput>
   }
 
+  export type DojoCreateWithoutApplicationInput = {
+    id?: string
+    name: string
+    address?: string | null
+    city?: string | null
+    latitude?: number | null
+    longitude?: number | null
+    phone?: string | null
+    email?: string | null
+    schedule?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: boolean
+    annualFee?: Decimal | DecimalJsLike | number | string | null
+    expiryDate?: Date | string | null
+    ownerSignatureUrl?: string | null
+    logoUrl?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    renewalOrders?: ShopOrderCreateNestedManyWithoutDojoInput
+    certificateOrders?: ShopOrderCreateNestedManyWithoutCertDojoInput
+    certificateRequests?: CertificateRequestCreateNestedManyWithoutDojoInput
+    students?: StudentCreateNestedManyWithoutDojoInput
+    instructors?: InstructorCreateNestedManyWithoutDojoInput
+    managers?: DojoManagerCreateNestedManyWithoutDojoInput
+    owner?: DojoOwnerCreateNestedOneWithoutDojoInput
+    attendance?: AttendanceCreateNestedManyWithoutDojoInput
+    events?: EventCreateNestedManyWithoutDojoInput
+    announcements?: AnnouncementCreateNestedManyWithoutDojoInput
+    inventoryItems?: DojoInventoryItemCreateNestedManyWithoutDojoInput
+    sales?: DojoSaleCreateNestedManyWithoutDojoInput
+  }
+
+  export type DojoUncheckedCreateWithoutApplicationInput = {
+    id?: string
+    name: string
+    address?: string | null
+    city?: string | null
+    latitude?: number | null
+    longitude?: number | null
+    phone?: string | null
+    email?: string | null
+    schedule?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: boolean
+    annualFee?: Decimal | DecimalJsLike | number | string | null
+    expiryDate?: Date | string | null
+    ownerSignatureUrl?: string | null
+    logoUrl?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    renewalOrders?: ShopOrderUncheckedCreateNestedManyWithoutDojoInput
+    certificateOrders?: ShopOrderUncheckedCreateNestedManyWithoutCertDojoInput
+    certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutDojoInput
+    students?: StudentUncheckedCreateNestedManyWithoutDojoInput
+    instructors?: InstructorUncheckedCreateNestedManyWithoutDojoInput
+    managers?: DojoManagerUncheckedCreateNestedManyWithoutDojoInput
+    owner?: DojoOwnerUncheckedCreateNestedOneWithoutDojoInput
+    attendance?: AttendanceUncheckedCreateNestedManyWithoutDojoInput
+    events?: EventUncheckedCreateNestedManyWithoutDojoInput
+    announcements?: AnnouncementUncheckedCreateNestedManyWithoutDojoInput
+    inventoryItems?: DojoInventoryItemUncheckedCreateNestedManyWithoutDojoInput
+    sales?: DojoSaleUncheckedCreateNestedManyWithoutDojoInput
+  }
+
+  export type DojoCreateOrConnectWithoutApplicationInput = {
+    where: DojoWhereUniqueInput
+    create: XOR<DojoCreateWithoutApplicationInput, DojoUncheckedCreateWithoutApplicationInput>
+  }
+
+  export type DojoUpsertWithoutApplicationInput = {
+    update: XOR<DojoUpdateWithoutApplicationInput, DojoUncheckedUpdateWithoutApplicationInput>
+    create: XOR<DojoCreateWithoutApplicationInput, DojoUncheckedCreateWithoutApplicationInput>
+    where?: DojoWhereInput
+  }
+
+  export type DojoUpdateToOneWithWhereWithoutApplicationInput = {
+    where?: DojoWhereInput
+    data: XOR<DojoUpdateWithoutApplicationInput, DojoUncheckedUpdateWithoutApplicationInput>
+  }
+
+  export type DojoUpdateWithoutApplicationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    schedule?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    annualFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    ownerSignatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    renewalOrders?: ShopOrderUpdateManyWithoutDojoNestedInput
+    certificateOrders?: ShopOrderUpdateManyWithoutCertDojoNestedInput
+    certificateRequests?: CertificateRequestUpdateManyWithoutDojoNestedInput
+    students?: StudentUpdateManyWithoutDojoNestedInput
+    instructors?: InstructorUpdateManyWithoutDojoNestedInput
+    managers?: DojoManagerUpdateManyWithoutDojoNestedInput
+    owner?: DojoOwnerUpdateOneWithoutDojoNestedInput
+    attendance?: AttendanceUpdateManyWithoutDojoNestedInput
+    events?: EventUpdateManyWithoutDojoNestedInput
+    announcements?: AnnouncementUpdateManyWithoutDojoNestedInput
+    inventoryItems?: DojoInventoryItemUpdateManyWithoutDojoNestedInput
+    sales?: DojoSaleUpdateManyWithoutDojoNestedInput
+  }
+
+  export type DojoUncheckedUpdateWithoutApplicationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    schedule?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    annualFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    ownerSignatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    renewalOrders?: ShopOrderUncheckedUpdateManyWithoutDojoNestedInput
+    certificateOrders?: ShopOrderUncheckedUpdateManyWithoutCertDojoNestedInput
+    certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutDojoNestedInput
+    students?: StudentUncheckedUpdateManyWithoutDojoNestedInput
+    instructors?: InstructorUncheckedUpdateManyWithoutDojoNestedInput
+    managers?: DojoManagerUncheckedUpdateManyWithoutDojoNestedInput
+    owner?: DojoOwnerUncheckedUpdateOneWithoutDojoNestedInput
+    attendance?: AttendanceUncheckedUpdateManyWithoutDojoNestedInput
+    events?: EventUncheckedUpdateManyWithoutDojoNestedInput
+    announcements?: AnnouncementUncheckedUpdateManyWithoutDojoNestedInput
+    inventoryItems?: DojoInventoryItemUncheckedUpdateManyWithoutDojoNestedInput
+    sales?: DojoSaleUncheckedUpdateManyWithoutDojoNestedInput
+  }
+
   export type StudentCreateWithoutAttendanceInput = {
     currentRank?: string
     joinDate?: Date | string
@@ -61390,6 +61871,7 @@ export namespace Prisma {
     instructors?: InstructorCreateNestedManyWithoutDojoInput
     managers?: DojoManagerCreateNestedManyWithoutDojoInput
     owner?: DojoOwnerCreateNestedOneWithoutDojoInput
+    application?: DojoApplicationCreateNestedOneWithoutDojoInput
     events?: EventCreateNestedManyWithoutDojoInput
     announcements?: AnnouncementCreateNestedManyWithoutDojoInput
     inventoryItems?: DojoInventoryItemCreateNestedManyWithoutDojoInput
@@ -61420,6 +61902,7 @@ export namespace Prisma {
     instructors?: InstructorUncheckedCreateNestedManyWithoutDojoInput
     managers?: DojoManagerUncheckedCreateNestedManyWithoutDojoInput
     owner?: DojoOwnerUncheckedCreateNestedOneWithoutDojoInput
+    application?: DojoApplicationUncheckedCreateNestedOneWithoutDojoInput
     events?: EventUncheckedCreateNestedManyWithoutDojoInput
     announcements?: AnnouncementUncheckedCreateNestedManyWithoutDojoInput
     inventoryItems?: DojoInventoryItemUncheckedCreateNestedManyWithoutDojoInput
@@ -61525,6 +62008,7 @@ export namespace Prisma {
     instructors?: InstructorUpdateManyWithoutDojoNestedInput
     managers?: DojoManagerUpdateManyWithoutDojoNestedInput
     owner?: DojoOwnerUpdateOneWithoutDojoNestedInput
+    application?: DojoApplicationUpdateOneWithoutDojoNestedInput
     events?: EventUpdateManyWithoutDojoNestedInput
     announcements?: AnnouncementUpdateManyWithoutDojoNestedInput
     inventoryItems?: DojoInventoryItemUpdateManyWithoutDojoNestedInput
@@ -61555,6 +62039,7 @@ export namespace Prisma {
     instructors?: InstructorUncheckedUpdateManyWithoutDojoNestedInput
     managers?: DojoManagerUncheckedUpdateManyWithoutDojoNestedInput
     owner?: DojoOwnerUncheckedUpdateOneWithoutDojoNestedInput
+    application?: DojoApplicationUncheckedUpdateOneWithoutDojoNestedInput
     events?: EventUncheckedUpdateManyWithoutDojoNestedInput
     announcements?: AnnouncementUncheckedUpdateManyWithoutDojoNestedInput
     inventoryItems?: DojoInventoryItemUncheckedUpdateManyWithoutDojoNestedInput
@@ -62514,6 +62999,7 @@ export namespace Prisma {
     instructors?: InstructorCreateNestedManyWithoutDojoInput
     managers?: DojoManagerCreateNestedManyWithoutDojoInput
     owner?: DojoOwnerCreateNestedOneWithoutDojoInput
+    application?: DojoApplicationCreateNestedOneWithoutDojoInput
     attendance?: AttendanceCreateNestedManyWithoutDojoInput
     events?: EventCreateNestedManyWithoutDojoInput
     announcements?: AnnouncementCreateNestedManyWithoutDojoInput
@@ -62544,6 +63030,7 @@ export namespace Prisma {
     instructors?: InstructorUncheckedCreateNestedManyWithoutDojoInput
     managers?: DojoManagerUncheckedCreateNestedManyWithoutDojoInput
     owner?: DojoOwnerUncheckedCreateNestedOneWithoutDojoInput
+    application?: DojoApplicationUncheckedCreateNestedOneWithoutDojoInput
     attendance?: AttendanceUncheckedCreateNestedManyWithoutDojoInput
     events?: EventUncheckedCreateNestedManyWithoutDojoInput
     announcements?: AnnouncementUncheckedCreateNestedManyWithoutDojoInput
@@ -62731,6 +63218,7 @@ export namespace Prisma {
     instructors?: InstructorUpdateManyWithoutDojoNestedInput
     managers?: DojoManagerUpdateManyWithoutDojoNestedInput
     owner?: DojoOwnerUpdateOneWithoutDojoNestedInput
+    application?: DojoApplicationUpdateOneWithoutDojoNestedInput
     attendance?: AttendanceUpdateManyWithoutDojoNestedInput
     events?: EventUpdateManyWithoutDojoNestedInput
     announcements?: AnnouncementUpdateManyWithoutDojoNestedInput
@@ -62761,6 +63249,7 @@ export namespace Prisma {
     instructors?: InstructorUncheckedUpdateManyWithoutDojoNestedInput
     managers?: DojoManagerUncheckedUpdateManyWithoutDojoNestedInput
     owner?: DojoOwnerUncheckedUpdateOneWithoutDojoNestedInput
+    application?: DojoApplicationUncheckedUpdateOneWithoutDojoNestedInput
     attendance?: AttendanceUncheckedUpdateManyWithoutDojoNestedInput
     events?: EventUncheckedUpdateManyWithoutDojoNestedInput
     announcements?: AnnouncementUncheckedUpdateManyWithoutDojoNestedInput
@@ -62948,6 +63437,7 @@ export namespace Prisma {
     instructors?: InstructorCreateNestedManyWithoutDojoInput
     managers?: DojoManagerCreateNestedManyWithoutDojoInput
     owner?: DojoOwnerCreateNestedOneWithoutDojoInput
+    application?: DojoApplicationCreateNestedOneWithoutDojoInput
     attendance?: AttendanceCreateNestedManyWithoutDojoInput
     announcements?: AnnouncementCreateNestedManyWithoutDojoInput
     inventoryItems?: DojoInventoryItemCreateNestedManyWithoutDojoInput
@@ -62978,6 +63468,7 @@ export namespace Prisma {
     instructors?: InstructorUncheckedCreateNestedManyWithoutDojoInput
     managers?: DojoManagerUncheckedCreateNestedManyWithoutDojoInput
     owner?: DojoOwnerUncheckedCreateNestedOneWithoutDojoInput
+    application?: DojoApplicationUncheckedCreateNestedOneWithoutDojoInput
     attendance?: AttendanceUncheckedCreateNestedManyWithoutDojoInput
     announcements?: AnnouncementUncheckedCreateNestedManyWithoutDojoInput
     inventoryItems?: DojoInventoryItemUncheckedCreateNestedManyWithoutDojoInput
@@ -63140,6 +63631,7 @@ export namespace Prisma {
     instructors?: InstructorUpdateManyWithoutDojoNestedInput
     managers?: DojoManagerUpdateManyWithoutDojoNestedInput
     owner?: DojoOwnerUpdateOneWithoutDojoNestedInput
+    application?: DojoApplicationUpdateOneWithoutDojoNestedInput
     attendance?: AttendanceUpdateManyWithoutDojoNestedInput
     announcements?: AnnouncementUpdateManyWithoutDojoNestedInput
     inventoryItems?: DojoInventoryItemUpdateManyWithoutDojoNestedInput
@@ -63170,6 +63662,7 @@ export namespace Prisma {
     instructors?: InstructorUncheckedUpdateManyWithoutDojoNestedInput
     managers?: DojoManagerUncheckedUpdateManyWithoutDojoNestedInput
     owner?: DojoOwnerUncheckedUpdateOneWithoutDojoNestedInput
+    application?: DojoApplicationUncheckedUpdateOneWithoutDojoNestedInput
     attendance?: AttendanceUncheckedUpdateManyWithoutDojoNestedInput
     announcements?: AnnouncementUncheckedUpdateManyWithoutDojoNestedInput
     inventoryItems?: DojoInventoryItemUncheckedUpdateManyWithoutDojoNestedInput
@@ -63300,6 +63793,7 @@ export namespace Prisma {
     instructors?: InstructorCreateNestedManyWithoutDojoInput
     managers?: DojoManagerCreateNestedManyWithoutDojoInput
     owner?: DojoOwnerCreateNestedOneWithoutDojoInput
+    application?: DojoApplicationCreateNestedOneWithoutDojoInput
     attendance?: AttendanceCreateNestedManyWithoutDojoInput
     events?: EventCreateNestedManyWithoutDojoInput
     inventoryItems?: DojoInventoryItemCreateNestedManyWithoutDojoInput
@@ -63330,6 +63824,7 @@ export namespace Prisma {
     instructors?: InstructorUncheckedCreateNestedManyWithoutDojoInput
     managers?: DojoManagerUncheckedCreateNestedManyWithoutDojoInput
     owner?: DojoOwnerUncheckedCreateNestedOneWithoutDojoInput
+    application?: DojoApplicationUncheckedCreateNestedOneWithoutDojoInput
     attendance?: AttendanceUncheckedCreateNestedManyWithoutDojoInput
     events?: EventUncheckedCreateNestedManyWithoutDojoInput
     inventoryItems?: DojoInventoryItemUncheckedCreateNestedManyWithoutDojoInput
@@ -63441,6 +63936,7 @@ export namespace Prisma {
     instructors?: InstructorUpdateManyWithoutDojoNestedInput
     managers?: DojoManagerUpdateManyWithoutDojoNestedInput
     owner?: DojoOwnerUpdateOneWithoutDojoNestedInput
+    application?: DojoApplicationUpdateOneWithoutDojoNestedInput
     attendance?: AttendanceUpdateManyWithoutDojoNestedInput
     events?: EventUpdateManyWithoutDojoNestedInput
     inventoryItems?: DojoInventoryItemUpdateManyWithoutDojoNestedInput
@@ -63471,6 +63967,7 @@ export namespace Prisma {
     instructors?: InstructorUncheckedUpdateManyWithoutDojoNestedInput
     managers?: DojoManagerUncheckedUpdateManyWithoutDojoNestedInput
     owner?: DojoOwnerUncheckedUpdateOneWithoutDojoNestedInput
+    application?: DojoApplicationUncheckedUpdateOneWithoutDojoNestedInput
     attendance?: AttendanceUncheckedUpdateManyWithoutDojoNestedInput
     events?: EventUncheckedUpdateManyWithoutDojoNestedInput
     inventoryItems?: DojoInventoryItemUncheckedUpdateManyWithoutDojoNestedInput
@@ -64133,6 +64630,7 @@ export namespace Prisma {
     instructors?: InstructorCreateNestedManyWithoutDojoInput
     managers?: DojoManagerCreateNestedManyWithoutDojoInput
     owner?: DojoOwnerCreateNestedOneWithoutDojoInput
+    application?: DojoApplicationCreateNestedOneWithoutDojoInput
     attendance?: AttendanceCreateNestedManyWithoutDojoInput
     events?: EventCreateNestedManyWithoutDojoInput
     announcements?: AnnouncementCreateNestedManyWithoutDojoInput
@@ -64163,6 +64661,7 @@ export namespace Prisma {
     instructors?: InstructorUncheckedCreateNestedManyWithoutDojoInput
     managers?: DojoManagerUncheckedCreateNestedManyWithoutDojoInput
     owner?: DojoOwnerUncheckedCreateNestedOneWithoutDojoInput
+    application?: DojoApplicationUncheckedCreateNestedOneWithoutDojoInput
     attendance?: AttendanceUncheckedCreateNestedManyWithoutDojoInput
     events?: EventUncheckedCreateNestedManyWithoutDojoInput
     announcements?: AnnouncementUncheckedCreateNestedManyWithoutDojoInput
@@ -64244,6 +64743,7 @@ export namespace Prisma {
     instructors?: InstructorUpdateManyWithoutDojoNestedInput
     managers?: DojoManagerUpdateManyWithoutDojoNestedInput
     owner?: DojoOwnerUpdateOneWithoutDojoNestedInput
+    application?: DojoApplicationUpdateOneWithoutDojoNestedInput
     attendance?: AttendanceUpdateManyWithoutDojoNestedInput
     events?: EventUpdateManyWithoutDojoNestedInput
     announcements?: AnnouncementUpdateManyWithoutDojoNestedInput
@@ -64274,6 +64774,7 @@ export namespace Prisma {
     instructors?: InstructorUncheckedUpdateManyWithoutDojoNestedInput
     managers?: DojoManagerUncheckedUpdateManyWithoutDojoNestedInput
     owner?: DojoOwnerUncheckedUpdateOneWithoutDojoNestedInput
+    application?: DojoApplicationUncheckedUpdateOneWithoutDojoNestedInput
     attendance?: AttendanceUncheckedUpdateManyWithoutDojoNestedInput
     events?: EventUncheckedUpdateManyWithoutDojoNestedInput
     announcements?: AnnouncementUncheckedUpdateManyWithoutDojoNestedInput
@@ -64345,6 +64846,7 @@ export namespace Prisma {
     instructors?: InstructorCreateNestedManyWithoutDojoInput
     managers?: DojoManagerCreateNestedManyWithoutDojoInput
     owner?: DojoOwnerCreateNestedOneWithoutDojoInput
+    application?: DojoApplicationCreateNestedOneWithoutDojoInput
     attendance?: AttendanceCreateNestedManyWithoutDojoInput
     events?: EventCreateNestedManyWithoutDojoInput
     announcements?: AnnouncementCreateNestedManyWithoutDojoInput
@@ -64375,6 +64877,7 @@ export namespace Prisma {
     instructors?: InstructorUncheckedCreateNestedManyWithoutDojoInput
     managers?: DojoManagerUncheckedCreateNestedManyWithoutDojoInput
     owner?: DojoOwnerUncheckedCreateNestedOneWithoutDojoInput
+    application?: DojoApplicationUncheckedCreateNestedOneWithoutDojoInput
     attendance?: AttendanceUncheckedCreateNestedManyWithoutDojoInput
     events?: EventUncheckedCreateNestedManyWithoutDojoInput
     announcements?: AnnouncementUncheckedCreateNestedManyWithoutDojoInput
@@ -64567,6 +65070,7 @@ export namespace Prisma {
     instructors?: InstructorUpdateManyWithoutDojoNestedInput
     managers?: DojoManagerUpdateManyWithoutDojoNestedInput
     owner?: DojoOwnerUpdateOneWithoutDojoNestedInput
+    application?: DojoApplicationUpdateOneWithoutDojoNestedInput
     attendance?: AttendanceUpdateManyWithoutDojoNestedInput
     events?: EventUpdateManyWithoutDojoNestedInput
     announcements?: AnnouncementUpdateManyWithoutDojoNestedInput
@@ -64597,6 +65101,7 @@ export namespace Prisma {
     instructors?: InstructorUncheckedUpdateManyWithoutDojoNestedInput
     managers?: DojoManagerUncheckedUpdateManyWithoutDojoNestedInput
     owner?: DojoOwnerUncheckedUpdateOneWithoutDojoNestedInput
+    application?: DojoApplicationUncheckedUpdateOneWithoutDojoNestedInput
     attendance?: AttendanceUncheckedUpdateManyWithoutDojoNestedInput
     events?: EventUncheckedUpdateManyWithoutDojoNestedInput
     announcements?: AnnouncementUncheckedUpdateManyWithoutDojoNestedInput
@@ -64987,6 +65492,7 @@ export namespace Prisma {
     instructors?: InstructorCreateNestedManyWithoutDojoInput
     managers?: DojoManagerCreateNestedManyWithoutDojoInput
     owner?: DojoOwnerCreateNestedOneWithoutDojoInput
+    application?: DojoApplicationCreateNestedOneWithoutDojoInput
     attendance?: AttendanceCreateNestedManyWithoutDojoInput
     events?: EventCreateNestedManyWithoutDojoInput
     announcements?: AnnouncementCreateNestedManyWithoutDojoInput
@@ -65017,6 +65523,7 @@ export namespace Prisma {
     instructors?: InstructorUncheckedCreateNestedManyWithoutDojoInput
     managers?: DojoManagerUncheckedCreateNestedManyWithoutDojoInput
     owner?: DojoOwnerUncheckedCreateNestedOneWithoutDojoInput
+    application?: DojoApplicationUncheckedCreateNestedOneWithoutDojoInput
     attendance?: AttendanceUncheckedCreateNestedManyWithoutDojoInput
     events?: EventUncheckedCreateNestedManyWithoutDojoInput
     announcements?: AnnouncementUncheckedCreateNestedManyWithoutDojoInput
@@ -65052,6 +65559,7 @@ export namespace Prisma {
     instructors?: InstructorCreateNestedManyWithoutDojoInput
     managers?: DojoManagerCreateNestedManyWithoutDojoInput
     owner?: DojoOwnerCreateNestedOneWithoutDojoInput
+    application?: DojoApplicationCreateNestedOneWithoutDojoInput
     attendance?: AttendanceCreateNestedManyWithoutDojoInput
     events?: EventCreateNestedManyWithoutDojoInput
     announcements?: AnnouncementCreateNestedManyWithoutDojoInput
@@ -65082,6 +65590,7 @@ export namespace Prisma {
     instructors?: InstructorUncheckedCreateNestedManyWithoutDojoInput
     managers?: DojoManagerUncheckedCreateNestedManyWithoutDojoInput
     owner?: DojoOwnerUncheckedCreateNestedOneWithoutDojoInput
+    application?: DojoApplicationUncheckedCreateNestedOneWithoutDojoInput
     attendance?: AttendanceUncheckedCreateNestedManyWithoutDojoInput
     events?: EventUncheckedCreateNestedManyWithoutDojoInput
     announcements?: AnnouncementUncheckedCreateNestedManyWithoutDojoInput
@@ -65261,6 +65770,7 @@ export namespace Prisma {
     instructors?: InstructorUpdateManyWithoutDojoNestedInput
     managers?: DojoManagerUpdateManyWithoutDojoNestedInput
     owner?: DojoOwnerUpdateOneWithoutDojoNestedInput
+    application?: DojoApplicationUpdateOneWithoutDojoNestedInput
     attendance?: AttendanceUpdateManyWithoutDojoNestedInput
     events?: EventUpdateManyWithoutDojoNestedInput
     announcements?: AnnouncementUpdateManyWithoutDojoNestedInput
@@ -65291,6 +65801,7 @@ export namespace Prisma {
     instructors?: InstructorUncheckedUpdateManyWithoutDojoNestedInput
     managers?: DojoManagerUncheckedUpdateManyWithoutDojoNestedInput
     owner?: DojoOwnerUncheckedUpdateOneWithoutDojoNestedInput
+    application?: DojoApplicationUncheckedUpdateOneWithoutDojoNestedInput
     attendance?: AttendanceUncheckedUpdateManyWithoutDojoNestedInput
     events?: EventUncheckedUpdateManyWithoutDojoNestedInput
     announcements?: AnnouncementUncheckedUpdateManyWithoutDojoNestedInput
@@ -65332,6 +65843,7 @@ export namespace Prisma {
     instructors?: InstructorUpdateManyWithoutDojoNestedInput
     managers?: DojoManagerUpdateManyWithoutDojoNestedInput
     owner?: DojoOwnerUpdateOneWithoutDojoNestedInput
+    application?: DojoApplicationUpdateOneWithoutDojoNestedInput
     attendance?: AttendanceUpdateManyWithoutDojoNestedInput
     events?: EventUpdateManyWithoutDojoNestedInput
     announcements?: AnnouncementUpdateManyWithoutDojoNestedInput
@@ -65362,6 +65874,7 @@ export namespace Prisma {
     instructors?: InstructorUncheckedUpdateManyWithoutDojoNestedInput
     managers?: DojoManagerUncheckedUpdateManyWithoutDojoNestedInput
     owner?: DojoOwnerUncheckedUpdateOneWithoutDojoNestedInput
+    application?: DojoApplicationUncheckedUpdateOneWithoutDojoNestedInput
     attendance?: AttendanceUncheckedUpdateManyWithoutDojoNestedInput
     events?: EventUncheckedUpdateManyWithoutDojoNestedInput
     announcements?: AnnouncementUncheckedUpdateManyWithoutDojoNestedInput

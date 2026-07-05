@@ -27,33 +27,31 @@ import {
     ImagePlus,
     Loader2,
     MapPin,
-    Plus,
     Trash2,
     Upload,
     UserSquare2,
-    Users,
+    X,
 } from "lucide-react";
 import Logo from "@/assets/jka_logo.svg";
 import { submitDojoEnlistment } from "@/app/actions/enlist-dojo";
 
-type Trainer = {
+type UploadedImage = {
     name: string;
-    rank: string;
-    contact: string;
+    /** Base64 data URL — becomes a Cloudinary URL after commit. */
+    dataUrl: string;
 };
 
 type FormState = {
     dojoName: string;
-    logoName: string;
+    logo: UploadedImage | null;
     email: string;
     phone: string;
     contactName: string;
-    contactRole: string;
+    contactRank: string;
     address: string;
     latitude: string;
     longitude: string;
-    interiorNames: string[];
-    trainers: Trainer[];
+    interiors: UploadedImage[];
     acceptedTerms: boolean;
 };
 
@@ -62,26 +60,47 @@ const STEPS = [
     { id: 1, title: "Contact", icon: UserSquare2 },
     { id: 2, title: "Location", icon: MapPin },
     { id: 3, title: "Interiors", icon: ImagePlus },
-    { id: 4, title: "Trainers", icon: Users },
-    { id: 5, title: "Review", icon: CheckCircle2 },
+    { id: 4, title: "Review", icon: CheckCircle2 },
 ];
-
-const emptyTrainer: Trainer = { name: "", rank: "", contact: "" };
 
 const initialState: FormState = {
     dojoName: "",
-    logoName: "",
+    logo: null,
     email: "",
     phone: "",
     contactName: "",
-    contactRole: "Head Instructor",
+    contactRank: "",
     address: "",
     latitude: "",
     longitude: "",
-    interiorNames: [],
-    trainers: [{ ...emptyTrainer }],
+    interiors: [],
     acceptedTerms: false,
 };
+
+const MAX_INTERIOR_IMAGES = 5;
+/** Reject files larger than this pre-encoding — protects the 5 MB
+ *  sessionStorage cap and keeps commit payloads manageable. */
+const MAX_IMAGE_BYTES = 2 * 1024 * 1024;
+
+function readFileAsDataUrl(file: File): Promise<string> {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result as string);
+        reader.onerror = () => reject(reader.error);
+        reader.readAsDataURL(file);
+    });
+}
+
+const BELT_RANKS = [
+    "1st Kyu",
+    "Shodan (1st Dan)",
+    "Nidan (2nd Dan)",
+    "Sandan (3rd Dan)",
+    "Yondan (4th Dan)",
+    "Godan (5th Dan)",
+    "Rokudan (6th Dan)",
+    "Nanadan (7th Dan)",
+];
 
 const DRAFT_KEY = "jka.enlistDojo.draft";
 
@@ -127,25 +146,55 @@ export default function EnlistDojoSignupPage() {
         setForm((f) => ({ ...f, latitude: lat, longitude: lng }));
     }
 
-    function updateTrainer(i: number, key: keyof Trainer, value: string) {
-        setForm((f) => {
-            const next = [...f.trainers];
-            next[i] = { ...next[i], [key]: value };
-            return { ...f, trainers: next };
-        });
+    async function handleLogoFile(file: File | null) {
+        if (!file) {
+            setForm((f) => ({ ...f, logo: null }));
+            return;
+        }
+        if (file.size > MAX_IMAGE_BYTES) {
+            setError("Logo must be under 2 MB.");
+            return;
+        }
+        try {
+            const dataUrl = await readFileAsDataUrl(file);
+            setForm((f) => ({ ...f, logo: { name: file.name, dataUrl } }));
+            setError(null);
+        } catch {
+            setError("Could not read that file. Try another image.");
+        }
     }
 
-    function addTrainer() {
-        setForm((f) => ({
-            ...f,
-            trainers: [...f.trainers, { ...emptyTrainer }],
-        }));
+    async function handleInteriorFiles(files: FileList | null) {
+        if (!files || files.length === 0) return;
+        const room = MAX_INTERIOR_IMAGES - form.interiors.length;
+        if (room <= 0) {
+            setError(`You can upload up to ${MAX_INTERIOR_IMAGES} interior photos.`);
+            return;
+        }
+        const list = Array.from(files).slice(0, room);
+        const added: UploadedImage[] = [];
+        for (const file of list) {
+            if (file.size > MAX_IMAGE_BYTES) {
+                setError(`${file.name} is over 2 MB — skipped.`);
+                continue;
+            }
+            try {
+                const dataUrl = await readFileAsDataUrl(file);
+                added.push({ name: file.name, dataUrl });
+            } catch {
+                /* skip broken file */
+            }
+        }
+        if (added.length > 0) {
+            setForm((f) => ({ ...f, interiors: [...f.interiors, ...added] }));
+            setError(null);
+        }
     }
 
-    function removeTrainer(i: number) {
+    function removeInterior(i: number) {
         setForm((f) => ({
             ...f,
-            trainers: f.trainers.filter((_, idx) => idx !== i),
+            interiors: f.interiors.filter((_, idx) => idx !== i),
         }));
     }
 
@@ -158,7 +207,9 @@ export default function EnlistDojoSignupPage() {
                 return "Please enter a valid email address.";
             if (!form.phone.trim()) return "Please enter a contact phone number.";
             if (!form.contactName.trim())
-                return "Please enter the contact person's name.";
+                return "Please enter the Dojo Head's name.";
+            if (!form.contactRank.trim())
+                return "Please select the Dojo Head's belt rank.";
         }
         if (s === 2) {
             if (!form.address.trim())
@@ -167,13 +218,6 @@ export default function EnlistDojoSignupPage() {
                 return "Please pin your location on the map.";
         }
         if (s === 4) {
-            const valid = form.trainers.some(
-                (t) => t.name.trim() && t.rank.trim()
-            );
-            if (!valid)
-                return "Please add at least one trainer with name and rank.";
-        }
-        if (s === 5) {
             if (!form.acceptedTerms)
                 return "Please accept the terms and conditions to continue.";
         }
@@ -196,7 +240,7 @@ export default function EnlistDojoSignupPage() {
     }
 
     function handleSubmit() {
-        const err = validateStep(5);
+        const err = validateStep(4);
         if (err) {
             setError(err);
             return;
@@ -320,6 +364,7 @@ export default function EnlistDojoSignupPage() {
                                 <BasicsStep
                                     form={form}
                                     update={update}
+                                    onLogo={handleLogoFile}
                                 />
                             )}
                             {step === 1 && (
@@ -338,18 +383,11 @@ export default function EnlistDojoSignupPage() {
                             {step === 3 && (
                                 <InteriorsStep
                                     form={form}
-                                    update={update}
+                                    onAdd={handleInteriorFiles}
+                                    onRemove={removeInterior}
                                 />
                             )}
                             {step === 4 && (
-                                <TrainersStep
-                                    form={form}
-                                    updateTrainer={updateTrainer}
-                                    addTrainer={addTrainer}
-                                    removeTrainer={removeTrainer}
-                                />
-                            )}
-                            {step === 5 && (
                                 <ReviewStep
                                     form={form}
                                     update={update}
@@ -436,9 +474,11 @@ function inputClass() {
 function BasicsStep({
     form,
     update,
+    onLogo,
 }: {
     form: FormState;
     update: <K extends keyof FormState>(k: K, v: FormState[K]) => void;
+    onLogo: (file: File | null) => void;
 }) {
     return (
         <div className="space-y-6">
@@ -464,28 +504,55 @@ function BasicsStep({
 
             <div>
                 <Label>Dojo logo (optional)</Label>
-                <label className="flex items-center gap-4 border-2 border-dashed border-zinc-300 hover:border-accent-red/60 transition-colors px-5 py-6 rounded-sm cursor-pointer bg-white">
-                    <div className="w-12 h-12 rounded-sm bg-accent-red/10 flex items-center justify-center">
-                        <Upload size={18} className="text-accent-red" />
-                    </div>
-                    <div className="flex-1">
-                        <div className="text-sm font-semibold text-zinc-900">
-                            {form.logoName || "Upload your dojo emblem"}
+                {form.logo ? (
+                    <div className="flex items-center gap-4 border border-zinc-200 bg-white p-4 rounded-sm">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                            src={form.logo.dataUrl}
+                            alt="Dojo logo preview"
+                            className="w-16 h-16 rounded-sm object-cover border border-zinc-200"
+                        />
+                        <div className="flex-1 min-w-0">
+                            <div className="text-sm font-semibold text-zinc-900 truncate">
+                                {form.logo.name}
+                            </div>
+                            <div className="text-xs text-zinc-500 mt-1">
+                                Preview — this is how your logo will look on
+                                your branch card.
+                            </div>
                         </div>
-                        <div className="text-xs text-zinc-500 mt-1">
-                            PNG or SVG, square, at least 400×400. Optional —
-                            you can add it later.
-                        </div>
+                        <button
+                            type="button"
+                            onClick={() => onLogo(null)}
+                            className="text-zinc-400 hover:text-accent-red transition-colors"
+                            aria-label="Remove logo"
+                        >
+                            <X size={18} />
+                        </button>
                     </div>
-                    <input
-                        type="file"
-                        accept="image/*"
-                        className="hidden"
-                        onChange={(e) =>
-                            update("logoName", e.target.files?.[0]?.name ?? "")
-                        }
-                    />
-                </label>
+                ) : (
+                    <label className="flex items-center gap-4 border-2 border-dashed border-zinc-300 hover:border-accent-red/60 transition-colors px-5 py-6 rounded-sm cursor-pointer bg-white">
+                        <div className="w-12 h-12 rounded-sm bg-accent-red/10 flex items-center justify-center">
+                            <Upload size={18} className="text-accent-red" />
+                        </div>
+                        <div className="flex-1">
+                            <div className="text-sm font-semibold text-zinc-900">
+                                Upload your dojo emblem
+                            </div>
+                            <div className="text-xs text-zinc-500 mt-1">
+                                PNG or JPG, square, at least 400×400 · max 2 MB.
+                            </div>
+                        </div>
+                        <input
+                            type="file"
+                            accept="image/*"
+                            className="hidden"
+                            onChange={(e) =>
+                                onLogo(e.target.files?.[0] ?? null)
+                            }
+                        />
+                    </label>
+                )}
             </div>
         </div>
     );
@@ -502,10 +569,11 @@ function ContactStep({
         <div className="space-y-6">
             <div>
                 <h2 className="font-serif text-xl font-bold text-zinc-900 mb-1">
-                    Primary contact
+                    Dojo Head details
                 </h2>
                 <p className="text-zinc-500 text-sm">
-                    Who should the federation reach out to about your dojo?
+                    You are enlisting as the Head Instructor of this dojo. Your
+                    profile will be linked to it as its official owner.
                 </p>
             </div>
 
@@ -533,7 +601,7 @@ function ContactStep({
             </div>
             <div className="grid md:grid-cols-2 gap-4">
                 <div>
-                    <Label>Contact person name *</Label>
+                    <Label>Full name *</Label>
                     <input
                         type="text"
                         value={form.contactName}
@@ -543,16 +611,18 @@ function ContactStep({
                     />
                 </div>
                 <div>
-                    <Label>Role</Label>
+                    <Label>Belt rank *</Label>
                     <select
-                        value={form.contactRole}
-                        onChange={(e) => update("contactRole", e.target.value)}
+                        value={form.contactRank}
+                        onChange={(e) => update("contactRank", e.target.value)}
                         className={inputClass()}
                     >
-                        <option>Head Instructor</option>
-                        <option>Owner</option>
-                        <option>Manager</option>
-                        <option>Senior Instructor</option>
+                        <option value="">Select your rank…</option>
+                        {BELT_RANKS.map((r) => (
+                            <option key={r} value={r}>
+                                {r}
+                            </option>
+                        ))}
                     </select>
                 </div>
             </div>
@@ -629,23 +699,14 @@ function LocationStep({
 
 function InteriorsStep({
     form,
-    update,
+    onAdd,
+    onRemove,
 }: {
     form: FormState;
-    update: <K extends keyof FormState>(k: K, v: FormState[K]) => void;
+    onAdd: (files: FileList | null) => void;
+    onRemove: (i: number) => void;
 }) {
-    function handleFiles(files: FileList | null) {
-        if (!files) return;
-        const names = Array.from(files).map((f) => f.name);
-        update("interiorNames", [...form.interiorNames, ...names]);
-    }
-    function remove(i: number) {
-        update(
-            "interiorNames",
-            form.interiorNames.filter((_, idx) => idx !== i)
-        );
-    }
-
+    const remaining = MAX_INTERIOR_IMAGES - form.interiors.length;
     return (
         <div className="space-y-6">
             <div>
@@ -658,143 +719,62 @@ function InteriorsStep({
                 </p>
             </div>
 
-            <label className="flex flex-col items-center justify-center gap-3 border-2 border-dashed border-zinc-300 hover:border-accent-red/60 transition-colors px-5 py-10 rounded-sm cursor-pointer bg-white">
+            <label
+                className={`flex flex-col items-center justify-center gap-3 border-2 border-dashed border-zinc-300 hover:border-accent-red/60 transition-colors px-5 py-10 rounded-sm bg-white ${
+                    remaining > 0
+                        ? "cursor-pointer"
+                        : "cursor-not-allowed opacity-60"
+                }`}
+            >
                 <div className="w-14 h-14 rounded-full bg-accent-red/10 flex items-center justify-center">
                     <ImagePlus size={22} className="text-accent-red" />
                 </div>
                 <div className="text-sm font-semibold text-zinc-900">
-                    Click to add photos
+                    {remaining > 0
+                        ? "Click to add photos"
+                        : "Maximum photos added"}
                 </div>
                 <div className="text-xs text-zinc-500">
-                    JPG / PNG · up to 5 images
+                    JPG / PNG · up to {MAX_INTERIOR_IMAGES} images · 2 MB each
                 </div>
                 <input
                     type="file"
                     accept="image/*"
                     multiple
                     className="hidden"
-                    onChange={(e) => handleFiles(e.target.files)}
+                    disabled={remaining <= 0}
+                    onChange={(e) => onAdd(e.target.files)}
                 />
             </label>
 
-            {form.interiorNames.length > 0 && (
-                <div className="space-y-2">
-                    {form.interiorNames.map((name, i) => (
+            {form.interiors.length > 0 && (
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                    {form.interiors.map((img, i) => (
                         <div
-                            key={`${name}-${i}`}
-                            className="flex items-center justify-between bg-white border border-zinc-200 rounded-sm px-4 py-3 text-sm"
+                            key={`${img.name}-${i}`}
+                            className="relative group rounded-sm overflow-hidden border border-zinc-200 bg-white"
                         >
-                            <span className="truncate text-zinc-700">
-                                {name}
-                            </span>
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img
+                                src={img.dataUrl}
+                                alt={img.name}
+                                className="w-full h-32 object-cover"
+                            />
                             <button
                                 type="button"
-                                onClick={() => remove(i)}
-                                className="text-zinc-400 hover:text-accent-red transition-colors"
+                                onClick={() => onRemove(i)}
+                                className="absolute top-2 right-2 w-7 h-7 rounded-full bg-white/90 text-zinc-500 hover:text-accent-red hover:bg-white flex items-center justify-center shadow"
+                                aria-label={`Remove ${img.name}`}
                             >
-                                <Trash2 size={16} />
+                                <Trash2 size={14} />
                             </button>
+                            <p className="text-[10px] text-zinc-500 truncate px-2 py-1 border-t border-zinc-100">
+                                {img.name}
+                            </p>
                         </div>
                     ))}
                 </div>
             )}
-        </div>
-    );
-}
-
-function TrainersStep({
-    form,
-    updateTrainer,
-    addTrainer,
-    removeTrainer,
-}: {
-    form: FormState;
-    updateTrainer: (i: number, k: keyof Trainer, v: string) => void;
-    addTrainer: () => void;
-    removeTrainer: (i: number) => void;
-}) {
-    return (
-        <div className="space-y-6">
-            <div>
-                <h2 className="font-serif text-xl font-bold text-zinc-900 mb-1">
-                    Trainers at your dojo
-                </h2>
-                <p className="text-zinc-500 text-sm">
-                    List your head instructor and any assistant instructors.
-                    You can add more later from the dashboard.
-                </p>
-            </div>
-
-            <div className="space-y-4">
-                {form.trainers.map((t, i) => (
-                    <div
-                        key={i}
-                        className="bg-white border border-zinc-200 rounded-sm p-5 space-y-4"
-                    >
-                        <div className="flex items-center justify-between">
-                            <h3 className="text-xs tracking-widest uppercase font-bold text-zinc-500">
-                                Trainer {i + 1}
-                            </h3>
-                            {form.trainers.length > 1 && (
-                                <button
-                                    type="button"
-                                    onClick={() => removeTrainer(i)}
-                                    className="text-zinc-400 hover:text-accent-red transition-colors"
-                                >
-                                    <Trash2 size={16} />
-                                </button>
-                            )}
-                        </div>
-                        <div className="grid md:grid-cols-2 gap-4">
-                            <div>
-                                <Label>Full name</Label>
-                                <input
-                                    type="text"
-                                    value={t.name}
-                                    onChange={(e) =>
-                                        updateTrainer(i, "name", e.target.value)
-                                    }
-                                    placeholder="e.g. Sensei Rahim"
-                                    className={inputClass()}
-                                />
-                            </div>
-                            <div>
-                                <Label>Rank</Label>
-                                <input
-                                    type="text"
-                                    value={t.rank}
-                                    onChange={(e) =>
-                                        updateTrainer(i, "rank", e.target.value)
-                                    }
-                                    placeholder="e.g. 3rd Dan"
-                                    className={inputClass()}
-                                />
-                            </div>
-                        </div>
-                        <div>
-                            <Label>Contact (email or phone)</Label>
-                            <input
-                                type="text"
-                                value={t.contact}
-                                onChange={(e) =>
-                                    updateTrainer(i, "contact", e.target.value)
-                                }
-                                placeholder="trainer@example.com"
-                                className={inputClass()}
-                            />
-                        </div>
-                    </div>
-                ))}
-            </div>
-
-            <button
-                type="button"
-                onClick={addTrainer}
-                className="inline-flex items-center gap-2 text-xs font-bold tracking-widest uppercase text-accent-red hover:text-accent-red/80 transition-colors"
-            >
-                <Plus size={14} />
-                Add another trainer
-            </button>
         </div>
     );
 }
@@ -820,12 +800,12 @@ function ReviewStep({
 
             <div className="bg-white border border-zinc-200 rounded-sm divide-y divide-zinc-200">
                 <ReviewRow label="Dojo name" value={form.dojoName} />
-                <ReviewRow label="Logo" value={form.logoName || "—"} />
+                <ReviewRow label="Logo" value={form.logo?.name || "—"} />
                 <ReviewRow label="Email" value={form.email} />
                 <ReviewRow label="Phone" value={form.phone} />
                 <ReviewRow
-                    label="Contact"
-                    value={`${form.contactName} (${form.contactRole})`}
+                    label="Dojo Head"
+                    value={`${form.contactName} · ${form.contactRank || "—"}`}
                 />
                 <ReviewRow label="Address" value={form.address} />
                 <ReviewRow
@@ -838,15 +818,31 @@ function ReviewStep({
                 />
                 <ReviewRow
                     label="Interior photos"
-                    value={`${form.interiorNames.length} uploaded`}
-                />
-                <ReviewRow
-                    label="Trainers"
-                    value={`${
-                        form.trainers.filter((t) => t.name.trim()).length
-                    } listed`}
+                    value={`${form.interiors.length} uploaded`}
                 />
             </div>
+
+            {(form.logo || form.interiors.length > 0) && (
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                    {form.logo && (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                            src={form.logo.dataUrl}
+                            alt="Dojo logo"
+                            className="w-full h-24 object-cover rounded-sm border border-zinc-200"
+                        />
+                    )}
+                    {form.interiors.map((img, i) => (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                            key={`${img.name}-${i}`}
+                            src={img.dataUrl}
+                            alt={img.name}
+                            className="w-full h-24 object-cover rounded-sm border border-zinc-200"
+                        />
+                    ))}
+                </div>
+            )}
 
             <label className="flex items-start gap-3 cursor-pointer">
                 <input

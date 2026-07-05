@@ -207,7 +207,7 @@ export async function payLaterAction(orderId: string) {
                 title: "New member at your dojo",
                 message: `${u?.fullName ?? "A new member"} has joined and is waiting to pay the membership fee.`,
                 type: "INFO",
-                link: "/portal/dojo/students",
+                link: "/portal/dojo/members",
             });
         }
 

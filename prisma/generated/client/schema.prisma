@@ -380,6 +380,7 @@ model Dojo {
   instructors    Instructor[]        @relation("DojoInstructors")
   managers       DojoManager[]       @relation("DojoManagers")
   owner          DojoOwner?          @relation("DojoOwner")
+  application    DojoApplication?    @relation("DojoApplicationDojo")
   attendance     Attendance[]
   events         Event[]             @relation("DojoEvents")
   announcements  Announcement[]      @relation("DojoAnnouncements")
@@ -413,6 +414,7 @@ model DojoApplication {
   phone       String
   contactName String  @map("contact_name")
   contactRole String  @map("contact_role")
+  contactRank String? @map("contact_rank")
 
   address   String
   latitude  Float?
@@ -423,6 +425,9 @@ model DojoApplication {
 
   status    DojoApplicationStatus @default(PENDING_PAYMENT)
   paymentId String?               @map("payment_id")
+
+  dojoId String? @unique @map("dojo_id") @db.Uuid
+  dojo   Dojo?   @relation("DojoApplicationDojo", fields: [dojoId], references: [id])
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")

@@ -12,6 +12,7 @@ import {
     ShieldAlert,
     Users,
     XCircle,
+    Zap,
 } from "lucide-react";
 import DojoPageHeader from "@/components/dojo/page-header";
 import DojoSetupChecklist from "@/components/portal/dojo-setup-checklist";
@@ -59,10 +60,18 @@ export default async function DojoOverview({
 }: Props) {
     const stats = await loadStats(dojoId);
     const renewal = dojoId ? await loadRenewalStatus(dojoId) : null;
+    const activation =
+        role === "DOJO_OWNER" ? await loadActivation(userId) : null;
 
     return (
         <>
-            {pendingApproval && (
+            {activation && (
+                <ActivationBanner
+                    applicationId={activation.applicationId}
+                    email={activation.email}
+                />
+            )}
+            {pendingApproval && !activation && (
                 <div className="mb-6 rounded-sm border border-amber-200 bg-amber-50 text-amber-900 p-4 flex items-start gap-3">
                     <div className="w-9 h-9 rounded-full bg-amber-500 text-white flex items-center justify-center shrink-0 text-xs font-bold">
                         !
@@ -256,6 +265,53 @@ async function loadStats(dojoId: string | null): Promise<Stats> {
         expiringSoon,
         expired,
     };
+}
+
+async function loadActivation(
+    userId: string
+): Promise<{ applicationId: string; email: string } | null> {
+    const app = await prisma.dojoApplication.findFirst({
+        where: { userId, status: "PENDING_PAYMENT" },
+        orderBy: { createdAt: "desc" },
+        select: { id: true, email: true },
+    });
+    return app ? { applicationId: app.id, email: app.email } : null;
+}
+
+function ActivationBanner({
+    applicationId,
+    email,
+}: {
+    applicationId: string;
+    email: string;
+}) {
+    const href = `/enlist-dojo/payment?applicationId=${encodeURIComponent(
+        applicationId
+    )}&email=${encodeURIComponent(email)}`;
+    return (
+        <div className="rounded-sm border border-accent-red/40 bg-accent-red/5 p-5 mb-8 flex items-start gap-4">
+            <div className="w-10 h-10 rounded-full bg-accent-red text-white flex items-center justify-center shrink-0">
+                <Zap size={20} />
+            </div>
+            <div className="flex-1 min-w-0">
+                <h2 className="font-serif text-base font-bold text-zinc-900 mb-1">
+                    Activate your Dojo
+                </h2>
+                <p className="text-sm text-zinc-700 leading-relaxed">
+                    Your enlistment is saved but your dojo isn&apos;t public
+                    yet. Complete the one-time enlistment fee to activate
+                    your listing and unlock the full dashboard.
+                </p>
+            </div>
+            <Link
+                href={href}
+                className="inline-flex items-center gap-2 text-xs font-bold tracking-widest uppercase px-4 py-2.5 rounded-sm shrink-0 bg-accent-red hover:bg-accent-red/90 text-white transition-colors"
+            >
+                <CreditCard size={12} />
+                Pay now
+            </Link>
+        </div>
+    );
 }
 
 async function loadRenewalStatus(dojoId: string): Promise<RenewalStatus | null> {
@@ -453,7 +509,7 @@ function BeltPipelinePreview({ pending }: { pending: number }) {
 
 function QuickActions({ role }: { role: string }) {
     const actions: { href: string; label: string; min: number }[] = [
-        { href: "/portal/dojo/students", label: "Add a student", min: 1 },
+        { href: "/portal/dojo/members", label: "Invite a member", min: 1 },
         { href: "/portal/dojo/attendance", label: "Take attendance", min: 1 },
         { href: "/portal/dojo/gradings", label: "Schedule a belt test", min: 1 },
         { href: "/portal/dojo/renewals", label: "Renew dojo membership", min: 2 },
