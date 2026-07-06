@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, CheckCircle2, Circle, Lock } from "lucide-react";
+import { ArrowRight, CheckCircle2, ChevronDown, Circle, Lock } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 
 type ItemStatus = "done" | "todo" | "locked";
@@ -83,8 +83,11 @@ export default async function DojoSetupChecklist({
     const pct = Math.round((done / total) * 100);
 
     return (
-        <section className="mb-8 bg-white border border-zinc-200 rounded-sm shadow-sm">
-            <header className="px-5 py-4 border-b border-zinc-200 flex items-center justify-between gap-4">
+        <details
+            open
+            className="group/checklist mb-8 bg-white border border-zinc-200 rounded-sm shadow-sm"
+        >
+            <summary className="px-5 py-4 flex items-center justify-between gap-4 cursor-pointer list-none [&::-webkit-details-marker]:hidden border-b border-transparent group-open/checklist:border-zinc-200 hover:bg-zinc-50/50 transition-colors">
                 <div className="min-w-0">
                     <p className="text-[10px] tracking-widest uppercase font-bold text-zinc-400 mb-1">
                         Set up your dojo
@@ -93,30 +96,37 @@ export default async function DojoSetupChecklist({
                         {done} of {total} steps complete
                     </h3>
                 </div>
-                <div className="hidden sm:flex items-center gap-3 w-56 shrink-0">
-                    <div
-                        className="flex-1 h-2 bg-zinc-100 rounded-full overflow-hidden"
-                        role="progressbar"
-                        aria-valuenow={pct}
-                        aria-valuemin={0}
-                        aria-valuemax={100}
-                    >
+                <div className="flex items-center gap-3 shrink-0">
+                    <div className="hidden sm:flex items-center gap-3 w-56">
                         <div
-                            className="h-full bg-emerald-500 transition-[width]"
-                            style={{ width: `${pct}%` }}
-                        />
+                            className="flex-1 h-2 bg-zinc-100 rounded-full overflow-hidden"
+                            role="progressbar"
+                            aria-valuenow={pct}
+                            aria-valuemin={0}
+                            aria-valuemax={100}
+                        >
+                            <div
+                                className="h-full bg-emerald-500 transition-[width]"
+                                style={{ width: `${pct}%` }}
+                            />
+                        </div>
+                        <span className="text-xs font-bold tabular-nums text-zinc-700">
+                            {pct}%
+                        </span>
                     </div>
-                    <span className="text-xs font-bold tabular-nums text-zinc-700">
-                        {pct}%
-                    </span>
+                    <ChevronDown
+                        size={18}
+                        className="text-zinc-400 transition-transform group-open/checklist:rotate-180"
+                        aria-hidden
+                    />
                 </div>
-            </header>
+            </summary>
             <ul className="divide-y divide-zinc-100">
                 {items.map((item) => (
                     <ChecklistRow key={item.key} item={item} />
                 ))}
             </ul>
-        </section>
+        </details>
     );
 }
 

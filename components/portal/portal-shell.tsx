@@ -121,7 +121,7 @@ export default function PortalShell({ userId, initialRole = "STUDENT", children 
             const { count } = await supabase
                 .from("notifications")
                 .select("*", { count: "exact", head: true })
-                .eq("member_id", userId)
+                .eq("user_id", userId)
                 .eq("is_read", false);
 
             setUnreadCount(count ?? 0);
@@ -140,7 +140,7 @@ export default function PortalShell({ userId, initialRole = "STUDENT", children 
                     event: "INSERT",
                     schema: "public",
                     table: "notifications",
-                    filter: `member_id=eq.${userId}`,
+                    filter: `user_id=eq.${userId}`,
                 },
                 (payload) => {
                     setUnreadCount((c) => c + 1);

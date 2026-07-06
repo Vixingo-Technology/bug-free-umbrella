@@ -144,7 +144,7 @@ export default function NotificationBell({
             const { data } = await supabase
                 .from("notifications")
                 .select("id, title, message, type, is_read, link, created_at")
-                .eq("member_id", userId)
+                .eq("user_id", userId)
                 .order("created_at", { ascending: false })
                 .limit(5);
             setItems(data ?? []);
