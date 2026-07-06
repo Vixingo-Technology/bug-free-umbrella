@@ -26,6 +26,7 @@ import {
     Swords,
     Megaphone,
     Trophy,
+    ArrowRightLeft,
 } from "lucide-react";
 import Logo from "@/assets/jka_logo.svg";
 import { signoutAction } from "@/app/actions/auth";
@@ -51,6 +52,7 @@ const studentNavItems = [
     { label: "Notifications",href: "/portal/notifications",icon: Bell },
     { label: "Shop Orders",  href: "/portal/orders",       icon: ShoppingBag },
     { label: "Renew",        href: "/portal/renew",        icon: RefreshCw },
+    { label: "Transfer Dojo",href: "/portal/transfer",     icon: ArrowRightLeft },
     { label: "My Profile",   href: "/portal/profile",      icon: User },
 ];
 
@@ -71,6 +73,7 @@ const adminNavItems = [
     { label: "Orders",   href: "/portal/admin/orders",   icon: ShoppingBag },
     { label: "Dojos",    href: "/portal/admin/dojos",    icon: Building2 },
     { label: "Certificates", href: "/portal/admin/certificates", icon: Award },
+    { label: "Transfers", href: "/portal/admin/transfers", icon: ArrowRightLeft },
 ];
 
 // Dojo staff (Instructor / Manager / Dojo Head) share the personal sidebar;

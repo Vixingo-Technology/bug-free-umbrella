@@ -11,6 +11,9 @@ export const APP_NAME = "JKA Bangladesh";
 /** Membership duration in years */
 export const MEMBERSHIP_DURATION_YEARS = 1;
 
+/** Dojo transfer request fee in BDT (non-refundable once paid) */
+export const TRANSFER_REQUEST_FEE_BDT = 1000;
+
 /** Belt rank names in order (matches belt_ranks.name in DB) */
 export const BELT_RANKS_ORDERED = [
   "White Belt",

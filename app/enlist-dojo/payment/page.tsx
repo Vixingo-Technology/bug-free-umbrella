@@ -20,6 +20,7 @@ import {
     commitDojoEnlistment,
     initiateDojoEnlistmentPayment,
     markDojoEnlistmentPaid,
+    uploadDojoAssetFromDataUrl,
     type DojoEnlistmentInput,
 } from "@/app/actions/enlist-dojo";
 
@@ -37,7 +38,6 @@ type DraftShape = {
     latitude: string;
     longitude: string;
     logo?: UploadedImage | null;
-    interiors?: UploadedImage[];
 };
 
 const ENLISTMENT_FEE_BDT = 10000;
@@ -82,10 +82,22 @@ function PaymentContent() {
         return null;
     }
 
-    function draftToInput(draft: DraftShape): DojoEnlistmentInput {
+    async function draftToInput(draft: DraftShape): Promise<DojoEnlistmentInput> {
+        let logoUrl: string | null = null;
+        if (draft.logo?.dataUrl) {
+            const res = await uploadDojoAssetFromDataUrl(
+                draft.logo.dataUrl,
+                "logo"
+            );
+            if (res?.error || !res?.url) {
+                throw new Error(res?.error ?? "Could not upload dojo logo.");
+            }
+            logoUrl = res.url;
+        }
+
         return {
             dojoName: draft.dojoName,
-            logoDataUrl: draft.logo?.dataUrl ?? null,
+            logoUrl,
             email: draft.email,
             phone: draft.phone,
             contactName: draft.contactName,
@@ -93,7 +105,7 @@ function PaymentContent() {
             address: draft.address,
             latitude: draft.latitude,
             longitude: draft.longitude,
-            interiorDataUrls: (draft.interiors ?? []).map((i) => i.dataUrl),
+            interiorUrls: [],
         };
     }
 
@@ -126,7 +138,18 @@ function PaymentContent() {
                     );
                     return;
                 }
-                const commit = await commitDojoEnlistment(draftToInput(draft), {
+                let input: DojoEnlistmentInput;
+                try {
+                    input = await draftToInput(draft);
+                } catch (e) {
+                    setError(
+                        e instanceof Error
+                            ? e.message
+                            : "Could not upload your dojo images."
+                    );
+                    return;
+                }
+                const commit = await commitDojoEnlistment(input, {
                     paidNow: true,
                 });
                 if (commit?.error || !commit?.applicationId) {
@@ -176,7 +199,18 @@ function PaymentContent() {
                 );
                 return;
             }
-            const commit = await commitDojoEnlistment(draftToInput(draft), {
+            let input: DojoEnlistmentInput;
+            try {
+                input = await draftToInput(draft);
+            } catch (e) {
+                setError(
+                    e instanceof Error
+                        ? e.message
+                        : "Could not upload your dojo images."
+                );
+                return;
+            }
+            const commit = await commitDojoEnlistment(input, {
                 paidNow: false,
             });
             if (commit?.error || !commit?.applicationId) {

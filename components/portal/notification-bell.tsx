@@ -15,6 +15,7 @@ import {
     FileText,
     Check,
     ChevronRight,
+    ArrowRightLeft,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import {
@@ -41,6 +42,7 @@ const typeConfig: Record<string, { icon: any; color: string; bg: string }> = {
     EVENT:       { icon: CalendarDays, color: "text-sky-600",     bg: "bg-sky-50" },
     RENEWAL:     { icon: AlertTriangle, color: "text-amber-600",  bg: "bg-amber-50" },
     CERTIFICATE: { icon: FileText,     color: "text-indigo-600",  bg: "bg-indigo-50" },
+    TRANSFER:    { icon: ArrowRightLeft, color: "text-teal-700",   bg: "bg-teal-50" },
     REMINDER:    { icon: AlertTriangle, color: "text-amber-600",  bg: "bg-amber-50" },
     ALERT:       { icon: AlertTriangle, color: "text-red-600",    bg: "bg-red-50" },
     WELCOME:     { icon: Gift,         color: "text-emerald-600", bg: "bg-emerald-50" },

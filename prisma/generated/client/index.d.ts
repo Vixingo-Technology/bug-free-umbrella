@@ -178,6 +178,16 @@ export type Achievement = $Result.DefaultSelection<Prisma.$AchievementPayload>
  * 
  */
 export type StudentAchievement = $Result.DefaultSelection<Prisma.$StudentAchievementPayload>
+/**
+ * Model StudentTransferRequest
+ * 
+ */
+export type StudentTransferRequest = $Result.DefaultSelection<Prisma.$StudentTransferRequestPayload>
+/**
+ * Model StudentDojoHistory
+ * 
+ */
+export type StudentDojoHistory = $Result.DefaultSelection<Prisma.$StudentDojoHistoryPayload>
 
 /**
  * Enums
@@ -230,10 +240,32 @@ export const NotificationType: {
   GRADING: 'GRADING',
   EVENT: 'EVENT',
   RENEWAL: 'RENEWAL',
-  CERTIFICATE: 'CERTIFICATE'
+  CERTIFICATE: 'CERTIFICATE',
+  TRANSFER: 'TRANSFER'
 };
 
 export type NotificationType = (typeof NotificationType)[keyof typeof NotificationType]
+
+
+export const StudentTransferStatus: {
+  PENDING_PAYMENT: 'PENDING_PAYMENT',
+  AWAITING_DOJO: 'AWAITING_DOJO',
+  AWAITING_ADMIN: 'AWAITING_ADMIN',
+  APPROVED: 'APPROVED',
+  DENIED: 'DENIED',
+  CANCELLED: 'CANCELLED'
+};
+
+export type StudentTransferStatus = (typeof StudentTransferStatus)[keyof typeof StudentTransferStatus]
+
+
+export const StudentTransferDojoDecision: {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
+};
+
+export type StudentTransferDojoDecision = (typeof StudentTransferDojoDecision)[keyof typeof StudentTransferDojoDecision]
 
 
 export const CertificateRequestStatus: {
@@ -331,6 +363,14 @@ export const PaymentStatus: typeof $Enums.PaymentStatus
 export type NotificationType = $Enums.NotificationType
 
 export const NotificationType: typeof $Enums.NotificationType
+
+export type StudentTransferStatus = $Enums.StudentTransferStatus
+
+export const StudentTransferStatus: typeof $Enums.StudentTransferStatus
+
+export type StudentTransferDojoDecision = $Enums.StudentTransferDojoDecision
+
+export const StudentTransferDojoDecision: typeof $Enums.StudentTransferDojoDecision
 
 export type CertificateRequestStatus = $Enums.CertificateRequestStatus
 
@@ -810,6 +850,26 @@ export class PrismaClient<
     * ```
     */
   get studentAchievement(): Prisma.StudentAchievementDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.studentTransferRequest`: Exposes CRUD operations for the **StudentTransferRequest** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more StudentTransferRequests
+    * const studentTransferRequests = await prisma.studentTransferRequest.findMany()
+    * ```
+    */
+  get studentTransferRequest(): Prisma.StudentTransferRequestDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.studentDojoHistory`: Exposes CRUD operations for the **StudentDojoHistory** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more StudentDojoHistories
+    * const studentDojoHistories = await prisma.studentDojoHistory.findMany()
+    * ```
+    */
+  get studentDojoHistory(): Prisma.StudentDojoHistoryDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -1276,7 +1336,9 @@ export namespace Prisma {
     TournamentParticipant: 'TournamentParticipant',
     TournamentMatch: 'TournamentMatch',
     Achievement: 'Achievement',
-    StudentAchievement: 'StudentAchievement'
+    StudentAchievement: 'StudentAchievement',
+    StudentTransferRequest: 'StudentTransferRequest',
+    StudentDojoHistory: 'StudentDojoHistory'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1292,7 +1354,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "role" | "permission" | "rolePermission" | "user" | "student" | "instructor" | "dojoManager" | "dojoOwner" | "admin" | "beltRank" | "dojo" | "dojoApplication" | "attendance" | "gradingEvent" | "gradingApplication" | "grading" | "certificateRequest" | "systemSettings" | "event" | "announcement" | "eventRegistration" | "notification" | "shopProduct" | "dojoInventoryItem" | "dojoSale" | "dojoSaleItem" | "shopOrder" | "shopOrderItem" | "tournament" | "tournamentParticipant" | "tournamentMatch" | "achievement" | "studentAchievement"
+      modelProps: "role" | "permission" | "rolePermission" | "user" | "student" | "instructor" | "dojoManager" | "dojoOwner" | "admin" | "beltRank" | "dojo" | "dojoApplication" | "attendance" | "gradingEvent" | "gradingApplication" | "grading" | "certificateRequest" | "systemSettings" | "event" | "announcement" | "eventRegistration" | "notification" | "shopProduct" | "dojoInventoryItem" | "dojoSale" | "dojoSaleItem" | "shopOrder" | "shopOrderItem" | "tournament" | "tournamentParticipant" | "tournamentMatch" | "achievement" | "studentAchievement" | "studentTransferRequest" | "studentDojoHistory"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -3738,6 +3800,154 @@ export namespace Prisma {
           }
         }
       }
+      StudentTransferRequest: {
+        payload: Prisma.$StudentTransferRequestPayload<ExtArgs>
+        fields: Prisma.StudentTransferRequestFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.StudentTransferRequestFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentTransferRequestPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.StudentTransferRequestFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentTransferRequestPayload>
+          }
+          findFirst: {
+            args: Prisma.StudentTransferRequestFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentTransferRequestPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.StudentTransferRequestFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentTransferRequestPayload>
+          }
+          findMany: {
+            args: Prisma.StudentTransferRequestFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentTransferRequestPayload>[]
+          }
+          create: {
+            args: Prisma.StudentTransferRequestCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentTransferRequestPayload>
+          }
+          createMany: {
+            args: Prisma.StudentTransferRequestCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.StudentTransferRequestCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentTransferRequestPayload>[]
+          }
+          delete: {
+            args: Prisma.StudentTransferRequestDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentTransferRequestPayload>
+          }
+          update: {
+            args: Prisma.StudentTransferRequestUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentTransferRequestPayload>
+          }
+          deleteMany: {
+            args: Prisma.StudentTransferRequestDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.StudentTransferRequestUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.StudentTransferRequestUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentTransferRequestPayload>[]
+          }
+          upsert: {
+            args: Prisma.StudentTransferRequestUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentTransferRequestPayload>
+          }
+          aggregate: {
+            args: Prisma.StudentTransferRequestAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateStudentTransferRequest>
+          }
+          groupBy: {
+            args: Prisma.StudentTransferRequestGroupByArgs<ExtArgs>
+            result: $Utils.Optional<StudentTransferRequestGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.StudentTransferRequestCountArgs<ExtArgs>
+            result: $Utils.Optional<StudentTransferRequestCountAggregateOutputType> | number
+          }
+        }
+      }
+      StudentDojoHistory: {
+        payload: Prisma.$StudentDojoHistoryPayload<ExtArgs>
+        fields: Prisma.StudentDojoHistoryFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.StudentDojoHistoryFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentDojoHistoryPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.StudentDojoHistoryFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentDojoHistoryPayload>
+          }
+          findFirst: {
+            args: Prisma.StudentDojoHistoryFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentDojoHistoryPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.StudentDojoHistoryFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentDojoHistoryPayload>
+          }
+          findMany: {
+            args: Prisma.StudentDojoHistoryFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentDojoHistoryPayload>[]
+          }
+          create: {
+            args: Prisma.StudentDojoHistoryCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentDojoHistoryPayload>
+          }
+          createMany: {
+            args: Prisma.StudentDojoHistoryCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.StudentDojoHistoryCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentDojoHistoryPayload>[]
+          }
+          delete: {
+            args: Prisma.StudentDojoHistoryDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentDojoHistoryPayload>
+          }
+          update: {
+            args: Prisma.StudentDojoHistoryUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentDojoHistoryPayload>
+          }
+          deleteMany: {
+            args: Prisma.StudentDojoHistoryDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.StudentDojoHistoryUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.StudentDojoHistoryUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentDojoHistoryPayload>[]
+          }
+          upsert: {
+            args: Prisma.StudentDojoHistoryUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentDojoHistoryPayload>
+          }
+          aggregate: {
+            args: Prisma.StudentDojoHistoryAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateStudentDojoHistory>
+          }
+          groupBy: {
+            args: Prisma.StudentDojoHistoryGroupByArgs<ExtArgs>
+            result: $Utils.Optional<StudentDojoHistoryGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.StudentDojoHistoryCountArgs<ExtArgs>
+            result: $Utils.Optional<StudentDojoHistoryCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -3879,6 +4089,8 @@ export namespace Prisma {
     tournamentMatch?: TournamentMatchOmit
     achievement?: AchievementOmit
     studentAchievement?: StudentAchievementOmit
+    studentTransferRequest?: StudentTransferRequestOmit
+    studentDojoHistory?: StudentDojoHistoryOmit
   }
 
   /* Types for Logging */
@@ -4040,6 +4252,9 @@ export namespace Prisma {
     dojoSalesSold: number
     achievementsAwarded: number
     tournamentEntries: number
+    transfersDojoActed: number
+    transfersAdminActed: number
+    dojoHistoryChanges: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4053,6 +4268,9 @@ export namespace Prisma {
     dojoSalesSold?: boolean | UserCountOutputTypeCountDojoSalesSoldArgs
     achievementsAwarded?: boolean | UserCountOutputTypeCountAchievementsAwardedArgs
     tournamentEntries?: boolean | UserCountOutputTypeCountTournamentEntriesArgs
+    transfersDojoActed?: boolean | UserCountOutputTypeCountTransfersDojoActedArgs
+    transfersAdminActed?: boolean | UserCountOutputTypeCountTransfersAdminActedArgs
+    dojoHistoryChanges?: boolean | UserCountOutputTypeCountDojoHistoryChangesArgs
   }
 
   // Custom InputTypes
@@ -4136,6 +4354,27 @@ export namespace Prisma {
     where?: TournamentParticipantWhereInput
   }
 
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountTransfersDojoActedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: StudentTransferRequestWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountTransfersAdminActedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: StudentTransferRequestWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountDojoHistoryChangesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: StudentDojoHistoryWhereInput
+  }
+
 
   /**
    * Count Type StudentCountOutputType
@@ -4147,6 +4386,8 @@ export namespace Prisma {
     gradingApplications: number
     certificateRequests: number
     achievements: number
+    transferRequests: number
+    dojoHistory: number
   }
 
   export type StudentCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4155,6 +4396,8 @@ export namespace Prisma {
     gradingApplications?: boolean | StudentCountOutputTypeCountGradingApplicationsArgs
     certificateRequests?: boolean | StudentCountOutputTypeCountCertificateRequestsArgs
     achievements?: boolean | StudentCountOutputTypeCountAchievementsArgs
+    transferRequests?: boolean | StudentCountOutputTypeCountTransferRequestsArgs
+    dojoHistory?: boolean | StudentCountOutputTypeCountDojoHistoryArgs
   }
 
   // Custom InputTypes
@@ -4201,6 +4444,20 @@ export namespace Prisma {
    */
   export type StudentCountOutputTypeCountAchievementsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: StudentAchievementWhereInput
+  }
+
+  /**
+   * StudentCountOutputType without action
+   */
+  export type StudentCountOutputTypeCountTransferRequestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: StudentTransferRequestWhereInput
+  }
+
+  /**
+   * StudentCountOutputType without action
+   */
+  export type StudentCountOutputTypeCountDojoHistoryArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: StudentDojoHistoryWhereInput
   }
 
 
@@ -4287,6 +4544,10 @@ export namespace Prisma {
     announcements: number
     inventoryItems: number
     sales: number
+    transfersOut: number
+    transfersIn: number
+    historyFrom: number
+    historyTo: number
   }
 
   export type DojoCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4301,6 +4562,10 @@ export namespace Prisma {
     announcements?: boolean | DojoCountOutputTypeCountAnnouncementsArgs
     inventoryItems?: boolean | DojoCountOutputTypeCountInventoryItemsArgs
     sales?: boolean | DojoCountOutputTypeCountSalesArgs
+    transfersOut?: boolean | DojoCountOutputTypeCountTransfersOutArgs
+    transfersIn?: boolean | DojoCountOutputTypeCountTransfersInArgs
+    historyFrom?: boolean | DojoCountOutputTypeCountHistoryFromArgs
+    historyTo?: boolean | DojoCountOutputTypeCountHistoryToArgs
   }
 
   // Custom InputTypes
@@ -4389,6 +4654,34 @@ export namespace Prisma {
    */
   export type DojoCountOutputTypeCountSalesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: DojoSaleWhereInput
+  }
+
+  /**
+   * DojoCountOutputType without action
+   */
+  export type DojoCountOutputTypeCountTransfersOutArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: StudentTransferRequestWhereInput
+  }
+
+  /**
+   * DojoCountOutputType without action
+   */
+  export type DojoCountOutputTypeCountTransfersInArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: StudentTransferRequestWhereInput
+  }
+
+  /**
+   * DojoCountOutputType without action
+   */
+  export type DojoCountOutputTypeCountHistoryFromArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: StudentDojoHistoryWhereInput
+  }
+
+  /**
+   * DojoCountOutputType without action
+   */
+  export type DojoCountOutputTypeCountHistoryToArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: StudentDojoHistoryWhereInput
   }
 
 
@@ -4731,6 +5024,37 @@ export namespace Prisma {
    */
   export type AchievementCountOutputTypeCountStudentAchievementsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: StudentAchievementWhereInput
+  }
+
+
+  /**
+   * Count Type StudentTransferRequestCountOutputType
+   */
+
+  export type StudentTransferRequestCountOutputType = {
+    history: number
+  }
+
+  export type StudentTransferRequestCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    history?: boolean | StudentTransferRequestCountOutputTypeCountHistoryArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * StudentTransferRequestCountOutputType without action
+   */
+  export type StudentTransferRequestCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentTransferRequestCountOutputType
+     */
+    select?: StudentTransferRequestCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * StudentTransferRequestCountOutputType without action
+   */
+  export type StudentTransferRequestCountOutputTypeCountHistoryArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: StudentDojoHistoryWhereInput
   }
 
 
@@ -8181,6 +8505,9 @@ export namespace Prisma {
     dojoSalesSold?: boolean | User$dojoSalesSoldArgs<ExtArgs>
     achievementsAwarded?: boolean | User$achievementsAwardedArgs<ExtArgs>
     tournamentEntries?: boolean | User$tournamentEntriesArgs<ExtArgs>
+    transfersDojoActed?: boolean | User$transfersDojoActedArgs<ExtArgs>
+    transfersAdminActed?: boolean | User$transfersAdminActedArgs<ExtArgs>
+    dojoHistoryChanges?: boolean | User$dojoHistoryChangesArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -8243,6 +8570,9 @@ export namespace Prisma {
     dojoSalesSold?: boolean | User$dojoSalesSoldArgs<ExtArgs>
     achievementsAwarded?: boolean | User$achievementsAwardedArgs<ExtArgs>
     tournamentEntries?: boolean | User$tournamentEntriesArgs<ExtArgs>
+    transfersDojoActed?: boolean | User$transfersDojoActedArgs<ExtArgs>
+    transfersAdminActed?: boolean | User$transfersAdminActedArgs<ExtArgs>
+    dojoHistoryChanges?: boolean | User$dojoHistoryChangesArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -8271,6 +8601,9 @@ export namespace Prisma {
       dojoSalesSold: Prisma.$DojoSalePayload<ExtArgs>[]
       achievementsAwarded: Prisma.$StudentAchievementPayload<ExtArgs>[]
       tournamentEntries: Prisma.$TournamentParticipantPayload<ExtArgs>[]
+      transfersDojoActed: Prisma.$StudentTransferRequestPayload<ExtArgs>[]
+      transfersAdminActed: Prisma.$StudentTransferRequestPayload<ExtArgs>[]
+      dojoHistoryChanges: Prisma.$StudentDojoHistoryPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -8693,6 +9026,9 @@ export namespace Prisma {
     dojoSalesSold<T extends User$dojoSalesSoldArgs<ExtArgs> = {}>(args?: Subset<T, User$dojoSalesSoldArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DojoSalePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     achievementsAwarded<T extends User$achievementsAwardedArgs<ExtArgs> = {}>(args?: Subset<T, User$achievementsAwardedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentAchievementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     tournamentEntries<T extends User$tournamentEntriesArgs<ExtArgs> = {}>(args?: Subset<T, User$tournamentEntriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TournamentParticipantPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    transfersDojoActed<T extends User$transfersDojoActedArgs<ExtArgs> = {}>(args?: Subset<T, User$transfersDojoActedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentTransferRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    transfersAdminActed<T extends User$transfersAdminActedArgs<ExtArgs> = {}>(args?: Subset<T, User$transfersAdminActedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentTransferRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    dojoHistoryChanges<T extends User$dojoHistoryChangesArgs<ExtArgs> = {}>(args?: Subset<T, User$dojoHistoryChangesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentDojoHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -9468,6 +9804,78 @@ export namespace Prisma {
   }
 
   /**
+   * User.transfersDojoActed
+   */
+  export type User$transfersDojoActedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentTransferRequest
+     */
+    select?: StudentTransferRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentTransferRequest
+     */
+    omit?: StudentTransferRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentTransferRequestInclude<ExtArgs> | null
+    where?: StudentTransferRequestWhereInput
+    orderBy?: StudentTransferRequestOrderByWithRelationInput | StudentTransferRequestOrderByWithRelationInput[]
+    cursor?: StudentTransferRequestWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: StudentTransferRequestScalarFieldEnum | StudentTransferRequestScalarFieldEnum[]
+  }
+
+  /**
+   * User.transfersAdminActed
+   */
+  export type User$transfersAdminActedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentTransferRequest
+     */
+    select?: StudentTransferRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentTransferRequest
+     */
+    omit?: StudentTransferRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentTransferRequestInclude<ExtArgs> | null
+    where?: StudentTransferRequestWhereInput
+    orderBy?: StudentTransferRequestOrderByWithRelationInput | StudentTransferRequestOrderByWithRelationInput[]
+    cursor?: StudentTransferRequestWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: StudentTransferRequestScalarFieldEnum | StudentTransferRequestScalarFieldEnum[]
+  }
+
+  /**
+   * User.dojoHistoryChanges
+   */
+  export type User$dojoHistoryChangesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentDojoHistory
+     */
+    select?: StudentDojoHistorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentDojoHistory
+     */
+    omit?: StudentDojoHistoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentDojoHistoryInclude<ExtArgs> | null
+    where?: StudentDojoHistoryWhereInput
+    orderBy?: StudentDojoHistoryOrderByWithRelationInput | StudentDojoHistoryOrderByWithRelationInput[]
+    cursor?: StudentDojoHistoryWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: StudentDojoHistoryScalarFieldEnum | StudentDojoHistoryScalarFieldEnum[]
+  }
+
+  /**
    * User without action
    */
   export type UserDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -9753,6 +10161,8 @@ export namespace Prisma {
     gradingApplications?: boolean | Student$gradingApplicationsArgs<ExtArgs>
     certificateRequests?: boolean | Student$certificateRequestsArgs<ExtArgs>
     achievements?: boolean | Student$achievementsArgs<ExtArgs>
+    transferRequests?: boolean | Student$transferRequestsArgs<ExtArgs>
+    dojoHistory?: boolean | Student$dojoHistoryArgs<ExtArgs>
     _count?: boolean | StudentCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["student"]>
 
@@ -9829,6 +10239,8 @@ export namespace Prisma {
     gradingApplications?: boolean | Student$gradingApplicationsArgs<ExtArgs>
     certificateRequests?: boolean | Student$certificateRequestsArgs<ExtArgs>
     achievements?: boolean | Student$achievementsArgs<ExtArgs>
+    transferRequests?: boolean | Student$transferRequestsArgs<ExtArgs>
+    dojoHistory?: boolean | Student$dojoHistoryArgs<ExtArgs>
     _count?: boolean | StudentCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type StudentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -9850,6 +10262,8 @@ export namespace Prisma {
       gradingApplications: Prisma.$GradingApplicationPayload<ExtArgs>[]
       certificateRequests: Prisma.$CertificateRequestPayload<ExtArgs>[]
       achievements: Prisma.$StudentAchievementPayload<ExtArgs>[]
+      transferRequests: Prisma.$StudentTransferRequestPayload<ExtArgs>[]
+      dojoHistory: Prisma.$StudentDojoHistoryPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -10270,6 +10684,8 @@ export namespace Prisma {
     gradingApplications<T extends Student$gradingApplicationsArgs<ExtArgs> = {}>(args?: Subset<T, Student$gradingApplicationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GradingApplicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     certificateRequests<T extends Student$certificateRequestsArgs<ExtArgs> = {}>(args?: Subset<T, Student$certificateRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificateRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     achievements<T extends Student$achievementsArgs<ExtArgs> = {}>(args?: Subset<T, Student$achievementsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentAchievementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    transferRequests<T extends Student$transferRequestsArgs<ExtArgs> = {}>(args?: Subset<T, Student$transferRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentTransferRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    dojoHistory<T extends Student$dojoHistoryArgs<ExtArgs> = {}>(args?: Subset<T, Student$dojoHistoryArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentDojoHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -10853,6 +11269,54 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: StudentAchievementScalarFieldEnum | StudentAchievementScalarFieldEnum[]
+  }
+
+  /**
+   * Student.transferRequests
+   */
+  export type Student$transferRequestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentTransferRequest
+     */
+    select?: StudentTransferRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentTransferRequest
+     */
+    omit?: StudentTransferRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentTransferRequestInclude<ExtArgs> | null
+    where?: StudentTransferRequestWhereInput
+    orderBy?: StudentTransferRequestOrderByWithRelationInput | StudentTransferRequestOrderByWithRelationInput[]
+    cursor?: StudentTransferRequestWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: StudentTransferRequestScalarFieldEnum | StudentTransferRequestScalarFieldEnum[]
+  }
+
+  /**
+   * Student.dojoHistory
+   */
+  export type Student$dojoHistoryArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentDojoHistory
+     */
+    select?: StudentDojoHistorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentDojoHistory
+     */
+    omit?: StudentDojoHistoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentDojoHistoryInclude<ExtArgs> | null
+    where?: StudentDojoHistoryWhereInput
+    orderBy?: StudentDojoHistoryOrderByWithRelationInput | StudentDojoHistoryOrderByWithRelationInput[]
+    cursor?: StudentDojoHistoryWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: StudentDojoHistoryScalarFieldEnum | StudentDojoHistoryScalarFieldEnum[]
   }
 
   /**
@@ -16761,6 +17225,10 @@ export namespace Prisma {
     announcements?: boolean | Dojo$announcementsArgs<ExtArgs>
     inventoryItems?: boolean | Dojo$inventoryItemsArgs<ExtArgs>
     sales?: boolean | Dojo$salesArgs<ExtArgs>
+    transfersOut?: boolean | Dojo$transfersOutArgs<ExtArgs>
+    transfersIn?: boolean | Dojo$transfersInArgs<ExtArgs>
+    historyFrom?: boolean | Dojo$historyFromArgs<ExtArgs>
+    historyTo?: boolean | Dojo$historyToArgs<ExtArgs>
     _count?: boolean | DojoCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["dojo"]>
 
@@ -16836,6 +17304,10 @@ export namespace Prisma {
     announcements?: boolean | Dojo$announcementsArgs<ExtArgs>
     inventoryItems?: boolean | Dojo$inventoryItemsArgs<ExtArgs>
     sales?: boolean | Dojo$salesArgs<ExtArgs>
+    transfersOut?: boolean | Dojo$transfersOutArgs<ExtArgs>
+    transfersIn?: boolean | Dojo$transfersInArgs<ExtArgs>
+    historyFrom?: boolean | Dojo$historyFromArgs<ExtArgs>
+    historyTo?: boolean | Dojo$historyToArgs<ExtArgs>
     _count?: boolean | DojoCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type DojoIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -16857,6 +17329,10 @@ export namespace Prisma {
       announcements: Prisma.$AnnouncementPayload<ExtArgs>[]
       inventoryItems: Prisma.$DojoInventoryItemPayload<ExtArgs>[]
       sales: Prisma.$DojoSalePayload<ExtArgs>[]
+      transfersOut: Prisma.$StudentTransferRequestPayload<ExtArgs>[]
+      transfersIn: Prisma.$StudentTransferRequestPayload<ExtArgs>[]
+      historyFrom: Prisma.$StudentDojoHistoryPayload<ExtArgs>[]
+      historyTo: Prisma.$StudentDojoHistoryPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -17282,6 +17758,10 @@ export namespace Prisma {
     announcements<T extends Dojo$announcementsArgs<ExtArgs> = {}>(args?: Subset<T, Dojo$announcementsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AnnouncementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     inventoryItems<T extends Dojo$inventoryItemsArgs<ExtArgs> = {}>(args?: Subset<T, Dojo$inventoryItemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DojoInventoryItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     sales<T extends Dojo$salesArgs<ExtArgs> = {}>(args?: Subset<T, Dojo$salesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DojoSalePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    transfersOut<T extends Dojo$transfersOutArgs<ExtArgs> = {}>(args?: Subset<T, Dojo$transfersOutArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentTransferRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    transfersIn<T extends Dojo$transfersInArgs<ExtArgs> = {}>(args?: Subset<T, Dojo$transfersInArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentTransferRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    historyFrom<T extends Dojo$historyFromArgs<ExtArgs> = {}>(args?: Subset<T, Dojo$historyFromArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentDojoHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    historyTo<T extends Dojo$historyToArgs<ExtArgs> = {}>(args?: Subset<T, Dojo$historyToArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentDojoHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -18019,6 +18499,102 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: DojoSaleScalarFieldEnum | DojoSaleScalarFieldEnum[]
+  }
+
+  /**
+   * Dojo.transfersOut
+   */
+  export type Dojo$transfersOutArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentTransferRequest
+     */
+    select?: StudentTransferRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentTransferRequest
+     */
+    omit?: StudentTransferRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentTransferRequestInclude<ExtArgs> | null
+    where?: StudentTransferRequestWhereInput
+    orderBy?: StudentTransferRequestOrderByWithRelationInput | StudentTransferRequestOrderByWithRelationInput[]
+    cursor?: StudentTransferRequestWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: StudentTransferRequestScalarFieldEnum | StudentTransferRequestScalarFieldEnum[]
+  }
+
+  /**
+   * Dojo.transfersIn
+   */
+  export type Dojo$transfersInArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentTransferRequest
+     */
+    select?: StudentTransferRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentTransferRequest
+     */
+    omit?: StudentTransferRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentTransferRequestInclude<ExtArgs> | null
+    where?: StudentTransferRequestWhereInput
+    orderBy?: StudentTransferRequestOrderByWithRelationInput | StudentTransferRequestOrderByWithRelationInput[]
+    cursor?: StudentTransferRequestWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: StudentTransferRequestScalarFieldEnum | StudentTransferRequestScalarFieldEnum[]
+  }
+
+  /**
+   * Dojo.historyFrom
+   */
+  export type Dojo$historyFromArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentDojoHistory
+     */
+    select?: StudentDojoHistorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentDojoHistory
+     */
+    omit?: StudentDojoHistoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentDojoHistoryInclude<ExtArgs> | null
+    where?: StudentDojoHistoryWhereInput
+    orderBy?: StudentDojoHistoryOrderByWithRelationInput | StudentDojoHistoryOrderByWithRelationInput[]
+    cursor?: StudentDojoHistoryWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: StudentDojoHistoryScalarFieldEnum | StudentDojoHistoryScalarFieldEnum[]
+  }
+
+  /**
+   * Dojo.historyTo
+   */
+  export type Dojo$historyToArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentDojoHistory
+     */
+    select?: StudentDojoHistorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentDojoHistory
+     */
+    omit?: StudentDojoHistoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentDojoHistoryInclude<ExtArgs> | null
+    where?: StudentDojoHistoryWhereInput
+    orderBy?: StudentDojoHistoryOrderByWithRelationInput | StudentDojoHistoryOrderByWithRelationInput[]
+    cursor?: StudentDojoHistoryWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: StudentDojoHistoryScalarFieldEnum | StudentDojoHistoryScalarFieldEnum[]
   }
 
   /**
@@ -36249,6 +36825,7 @@ export namespace Prisma {
     includesDojoRenewal: boolean | null
     includesCertificates: boolean | null
     certDojoId: string | null
+    includesTransferRequest: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -36273,6 +36850,7 @@ export namespace Prisma {
     includesDojoRenewal: boolean | null
     includesCertificates: boolean | null
     certDojoId: string | null
+    includesTransferRequest: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -36297,6 +36875,7 @@ export namespace Prisma {
     includesDojoRenewal: number
     includesCertificates: number
     certDojoId: number
+    includesTransferRequest: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -36333,6 +36912,7 @@ export namespace Prisma {
     includesDojoRenewal?: true
     includesCertificates?: true
     certDojoId?: true
+    includesTransferRequest?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -36357,6 +36937,7 @@ export namespace Prisma {
     includesDojoRenewal?: true
     includesCertificates?: true
     certDojoId?: true
+    includesTransferRequest?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -36381,6 +36962,7 @@ export namespace Prisma {
     includesDojoRenewal?: true
     includesCertificates?: true
     certDojoId?: true
+    includesTransferRequest?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -36492,6 +37074,7 @@ export namespace Prisma {
     includesDojoRenewal: boolean
     includesCertificates: boolean
     certDojoId: string | null
+    includesTransferRequest: boolean
     createdAt: Date
     updatedAt: Date
     _count: ShopOrderCountAggregateOutputType | null
@@ -36535,6 +37118,7 @@ export namespace Prisma {
     includesDojoRenewal?: boolean
     includesCertificates?: boolean
     certDojoId?: boolean
+    includesTransferRequest?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | ShopOrder$userArgs<ExtArgs>
@@ -36542,6 +37126,7 @@ export namespace Prisma {
     certDojo?: boolean | ShopOrder$certDojoArgs<ExtArgs>
     orderItems?: boolean | ShopOrder$orderItemsArgs<ExtArgs>
     certificateRequests?: boolean | ShopOrder$certificateRequestsArgs<ExtArgs>
+    transferRequest?: boolean | ShopOrder$transferRequestArgs<ExtArgs>
     _count?: boolean | ShopOrderCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["shopOrder"]>
 
@@ -36565,6 +37150,7 @@ export namespace Prisma {
     includesDojoRenewal?: boolean
     includesCertificates?: boolean
     certDojoId?: boolean
+    includesTransferRequest?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | ShopOrder$userArgs<ExtArgs>
@@ -36592,6 +37178,7 @@ export namespace Prisma {
     includesDojoRenewal?: boolean
     includesCertificates?: boolean
     certDojoId?: boolean
+    includesTransferRequest?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | ShopOrder$userArgs<ExtArgs>
@@ -36619,17 +37206,19 @@ export namespace Prisma {
     includesDojoRenewal?: boolean
     includesCertificates?: boolean
     certDojoId?: boolean
+    includesTransferRequest?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type ShopOrderOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "paymentStatus" | "paymentMethod" | "total" | "currency" | "transactionId" | "includesMembership" | "membershipFee" | "notes" | "guestName" | "guestEmail" | "guestPhone" | "guestAddress" | "isGuestOrder" | "dojoId" | "includesDojoRenewal" | "includesCertificates" | "certDojoId" | "createdAt" | "updatedAt", ExtArgs["result"]["shopOrder"]>
+  export type ShopOrderOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "paymentStatus" | "paymentMethod" | "total" | "currency" | "transactionId" | "includesMembership" | "membershipFee" | "notes" | "guestName" | "guestEmail" | "guestPhone" | "guestAddress" | "isGuestOrder" | "dojoId" | "includesDojoRenewal" | "includesCertificates" | "certDojoId" | "includesTransferRequest" | "createdAt" | "updatedAt", ExtArgs["result"]["shopOrder"]>
   export type ShopOrderInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | ShopOrder$userArgs<ExtArgs>
     dojo?: boolean | ShopOrder$dojoArgs<ExtArgs>
     certDojo?: boolean | ShopOrder$certDojoArgs<ExtArgs>
     orderItems?: boolean | ShopOrder$orderItemsArgs<ExtArgs>
     certificateRequests?: boolean | ShopOrder$certificateRequestsArgs<ExtArgs>
+    transferRequest?: boolean | ShopOrder$transferRequestArgs<ExtArgs>
     _count?: boolean | ShopOrderCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ShopOrderIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -36651,6 +37240,7 @@ export namespace Prisma {
       certDojo: Prisma.$DojoPayload<ExtArgs> | null
       orderItems: Prisma.$ShopOrderItemPayload<ExtArgs>[]
       certificateRequests: Prisma.$CertificateRequestPayload<ExtArgs>[]
+      transferRequest: Prisma.$StudentTransferRequestPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -36672,6 +37262,7 @@ export namespace Prisma {
       includesDojoRenewal: boolean
       includesCertificates: boolean
       certDojoId: string | null
+      includesTransferRequest: boolean
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["shopOrder"]>
@@ -37073,6 +37664,7 @@ export namespace Prisma {
     certDojo<T extends ShopOrder$certDojoArgs<ExtArgs> = {}>(args?: Subset<T, ShopOrder$certDojoArgs<ExtArgs>>): Prisma__DojoClient<$Result.GetResult<Prisma.$DojoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     orderItems<T extends ShopOrder$orderItemsArgs<ExtArgs> = {}>(args?: Subset<T, ShopOrder$orderItemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ShopOrderItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     certificateRequests<T extends ShopOrder$certificateRequestsArgs<ExtArgs> = {}>(args?: Subset<T, ShopOrder$certificateRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificateRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    transferRequest<T extends ShopOrder$transferRequestArgs<ExtArgs> = {}>(args?: Subset<T, ShopOrder$transferRequestArgs<ExtArgs>>): Prisma__StudentTransferRequestClient<$Result.GetResult<Prisma.$StudentTransferRequestPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -37121,6 +37713,7 @@ export namespace Prisma {
     readonly includesDojoRenewal: FieldRef<"ShopOrder", 'Boolean'>
     readonly includesCertificates: FieldRef<"ShopOrder", 'Boolean'>
     readonly certDojoId: FieldRef<"ShopOrder", 'String'>
+    readonly includesTransferRequest: FieldRef<"ShopOrder", 'Boolean'>
     readonly createdAt: FieldRef<"ShopOrder", 'DateTime'>
     readonly updatedAt: FieldRef<"ShopOrder", 'DateTime'>
   }
@@ -37626,6 +38219,25 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: CertificateRequestScalarFieldEnum | CertificateRequestScalarFieldEnum[]
+  }
+
+  /**
+   * ShopOrder.transferRequest
+   */
+  export type ShopOrder$transferRequestArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentTransferRequest
+     */
+    select?: StudentTransferRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentTransferRequest
+     */
+    omit?: StudentTransferRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentTransferRequestInclude<ExtArgs> | null
+    where?: StudentTransferRequestWhereInput
   }
 
   /**
@@ -44704,6 +45316,2609 @@ export namespace Prisma {
 
 
   /**
+   * Model StudentTransferRequest
+   */
+
+  export type AggregateStudentTransferRequest = {
+    _count: StudentTransferRequestCountAggregateOutputType | null
+    _avg: StudentTransferRequestAvgAggregateOutputType | null
+    _sum: StudentTransferRequestSumAggregateOutputType | null
+    _min: StudentTransferRequestMinAggregateOutputType | null
+    _max: StudentTransferRequestMaxAggregateOutputType | null
+  }
+
+  export type StudentTransferRequestAvgAggregateOutputType = {
+    fee: Decimal | null
+  }
+
+  export type StudentTransferRequestSumAggregateOutputType = {
+    fee: Decimal | null
+  }
+
+  export type StudentTransferRequestMinAggregateOutputType = {
+    id: string | null
+    studentId: string | null
+    fromDojoId: string | null
+    toDojoId: string | null
+    status: $Enums.StudentTransferStatus | null
+    dojoDecision: $Enums.StudentTransferDojoDecision | null
+    reason: string | null
+    dojoNote: string | null
+    adminNote: string | null
+    fee: Decimal | null
+    orderId: string | null
+    paidAt: Date | null
+    dojoActedAt: Date | null
+    dojoActedById: string | null
+    adminActedAt: Date | null
+    adminActedById: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type StudentTransferRequestMaxAggregateOutputType = {
+    id: string | null
+    studentId: string | null
+    fromDojoId: string | null
+    toDojoId: string | null
+    status: $Enums.StudentTransferStatus | null
+    dojoDecision: $Enums.StudentTransferDojoDecision | null
+    reason: string | null
+    dojoNote: string | null
+    adminNote: string | null
+    fee: Decimal | null
+    orderId: string | null
+    paidAt: Date | null
+    dojoActedAt: Date | null
+    dojoActedById: string | null
+    adminActedAt: Date | null
+    adminActedById: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type StudentTransferRequestCountAggregateOutputType = {
+    id: number
+    studentId: number
+    fromDojoId: number
+    toDojoId: number
+    status: number
+    dojoDecision: number
+    reason: number
+    dojoNote: number
+    adminNote: number
+    fee: number
+    orderId: number
+    paidAt: number
+    dojoActedAt: number
+    dojoActedById: number
+    adminActedAt: number
+    adminActedById: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type StudentTransferRequestAvgAggregateInputType = {
+    fee?: true
+  }
+
+  export type StudentTransferRequestSumAggregateInputType = {
+    fee?: true
+  }
+
+  export type StudentTransferRequestMinAggregateInputType = {
+    id?: true
+    studentId?: true
+    fromDojoId?: true
+    toDojoId?: true
+    status?: true
+    dojoDecision?: true
+    reason?: true
+    dojoNote?: true
+    adminNote?: true
+    fee?: true
+    orderId?: true
+    paidAt?: true
+    dojoActedAt?: true
+    dojoActedById?: true
+    adminActedAt?: true
+    adminActedById?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type StudentTransferRequestMaxAggregateInputType = {
+    id?: true
+    studentId?: true
+    fromDojoId?: true
+    toDojoId?: true
+    status?: true
+    dojoDecision?: true
+    reason?: true
+    dojoNote?: true
+    adminNote?: true
+    fee?: true
+    orderId?: true
+    paidAt?: true
+    dojoActedAt?: true
+    dojoActedById?: true
+    adminActedAt?: true
+    adminActedById?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type StudentTransferRequestCountAggregateInputType = {
+    id?: true
+    studentId?: true
+    fromDojoId?: true
+    toDojoId?: true
+    status?: true
+    dojoDecision?: true
+    reason?: true
+    dojoNote?: true
+    adminNote?: true
+    fee?: true
+    orderId?: true
+    paidAt?: true
+    dojoActedAt?: true
+    dojoActedById?: true
+    adminActedAt?: true
+    adminActedById?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type StudentTransferRequestAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which StudentTransferRequest to aggregate.
+     */
+    where?: StudentTransferRequestWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of StudentTransferRequests to fetch.
+     */
+    orderBy?: StudentTransferRequestOrderByWithRelationInput | StudentTransferRequestOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: StudentTransferRequestWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` StudentTransferRequests from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` StudentTransferRequests.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned StudentTransferRequests
+    **/
+    _count?: true | StudentTransferRequestCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: StudentTransferRequestAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: StudentTransferRequestSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: StudentTransferRequestMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: StudentTransferRequestMaxAggregateInputType
+  }
+
+  export type GetStudentTransferRequestAggregateType<T extends StudentTransferRequestAggregateArgs> = {
+        [P in keyof T & keyof AggregateStudentTransferRequest]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateStudentTransferRequest[P]>
+      : GetScalarType<T[P], AggregateStudentTransferRequest[P]>
+  }
+
+
+
+
+  export type StudentTransferRequestGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: StudentTransferRequestWhereInput
+    orderBy?: StudentTransferRequestOrderByWithAggregationInput | StudentTransferRequestOrderByWithAggregationInput[]
+    by: StudentTransferRequestScalarFieldEnum[] | StudentTransferRequestScalarFieldEnum
+    having?: StudentTransferRequestScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: StudentTransferRequestCountAggregateInputType | true
+    _avg?: StudentTransferRequestAvgAggregateInputType
+    _sum?: StudentTransferRequestSumAggregateInputType
+    _min?: StudentTransferRequestMinAggregateInputType
+    _max?: StudentTransferRequestMaxAggregateInputType
+  }
+
+  export type StudentTransferRequestGroupByOutputType = {
+    id: string
+    studentId: string
+    fromDojoId: string
+    toDojoId: string
+    status: $Enums.StudentTransferStatus
+    dojoDecision: $Enums.StudentTransferDojoDecision
+    reason: string | null
+    dojoNote: string | null
+    adminNote: string | null
+    fee: Decimal
+    orderId: string | null
+    paidAt: Date | null
+    dojoActedAt: Date | null
+    dojoActedById: string | null
+    adminActedAt: Date | null
+    adminActedById: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: StudentTransferRequestCountAggregateOutputType | null
+    _avg: StudentTransferRequestAvgAggregateOutputType | null
+    _sum: StudentTransferRequestSumAggregateOutputType | null
+    _min: StudentTransferRequestMinAggregateOutputType | null
+    _max: StudentTransferRequestMaxAggregateOutputType | null
+  }
+
+  type GetStudentTransferRequestGroupByPayload<T extends StudentTransferRequestGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<StudentTransferRequestGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof StudentTransferRequestGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], StudentTransferRequestGroupByOutputType[P]>
+            : GetScalarType<T[P], StudentTransferRequestGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type StudentTransferRequestSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    studentId?: boolean
+    fromDojoId?: boolean
+    toDojoId?: boolean
+    status?: boolean
+    dojoDecision?: boolean
+    reason?: boolean
+    dojoNote?: boolean
+    adminNote?: boolean
+    fee?: boolean
+    orderId?: boolean
+    paidAt?: boolean
+    dojoActedAt?: boolean
+    dojoActedById?: boolean
+    adminActedAt?: boolean
+    adminActedById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    student?: boolean | StudentDefaultArgs<ExtArgs>
+    fromDojo?: boolean | DojoDefaultArgs<ExtArgs>
+    toDojo?: boolean | DojoDefaultArgs<ExtArgs>
+    order?: boolean | StudentTransferRequest$orderArgs<ExtArgs>
+    dojoActedBy?: boolean | StudentTransferRequest$dojoActedByArgs<ExtArgs>
+    adminActedBy?: boolean | StudentTransferRequest$adminActedByArgs<ExtArgs>
+    history?: boolean | StudentTransferRequest$historyArgs<ExtArgs>
+    _count?: boolean | StudentTransferRequestCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["studentTransferRequest"]>
+
+  export type StudentTransferRequestSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    studentId?: boolean
+    fromDojoId?: boolean
+    toDojoId?: boolean
+    status?: boolean
+    dojoDecision?: boolean
+    reason?: boolean
+    dojoNote?: boolean
+    adminNote?: boolean
+    fee?: boolean
+    orderId?: boolean
+    paidAt?: boolean
+    dojoActedAt?: boolean
+    dojoActedById?: boolean
+    adminActedAt?: boolean
+    adminActedById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    student?: boolean | StudentDefaultArgs<ExtArgs>
+    fromDojo?: boolean | DojoDefaultArgs<ExtArgs>
+    toDojo?: boolean | DojoDefaultArgs<ExtArgs>
+    order?: boolean | StudentTransferRequest$orderArgs<ExtArgs>
+    dojoActedBy?: boolean | StudentTransferRequest$dojoActedByArgs<ExtArgs>
+    adminActedBy?: boolean | StudentTransferRequest$adminActedByArgs<ExtArgs>
+  }, ExtArgs["result"]["studentTransferRequest"]>
+
+  export type StudentTransferRequestSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    studentId?: boolean
+    fromDojoId?: boolean
+    toDojoId?: boolean
+    status?: boolean
+    dojoDecision?: boolean
+    reason?: boolean
+    dojoNote?: boolean
+    adminNote?: boolean
+    fee?: boolean
+    orderId?: boolean
+    paidAt?: boolean
+    dojoActedAt?: boolean
+    dojoActedById?: boolean
+    adminActedAt?: boolean
+    adminActedById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    student?: boolean | StudentDefaultArgs<ExtArgs>
+    fromDojo?: boolean | DojoDefaultArgs<ExtArgs>
+    toDojo?: boolean | DojoDefaultArgs<ExtArgs>
+    order?: boolean | StudentTransferRequest$orderArgs<ExtArgs>
+    dojoActedBy?: boolean | StudentTransferRequest$dojoActedByArgs<ExtArgs>
+    adminActedBy?: boolean | StudentTransferRequest$adminActedByArgs<ExtArgs>
+  }, ExtArgs["result"]["studentTransferRequest"]>
+
+  export type StudentTransferRequestSelectScalar = {
+    id?: boolean
+    studentId?: boolean
+    fromDojoId?: boolean
+    toDojoId?: boolean
+    status?: boolean
+    dojoDecision?: boolean
+    reason?: boolean
+    dojoNote?: boolean
+    adminNote?: boolean
+    fee?: boolean
+    orderId?: boolean
+    paidAt?: boolean
+    dojoActedAt?: boolean
+    dojoActedById?: boolean
+    adminActedAt?: boolean
+    adminActedById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type StudentTransferRequestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "studentId" | "fromDojoId" | "toDojoId" | "status" | "dojoDecision" | "reason" | "dojoNote" | "adminNote" | "fee" | "orderId" | "paidAt" | "dojoActedAt" | "dojoActedById" | "adminActedAt" | "adminActedById" | "createdAt" | "updatedAt", ExtArgs["result"]["studentTransferRequest"]>
+  export type StudentTransferRequestInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    student?: boolean | StudentDefaultArgs<ExtArgs>
+    fromDojo?: boolean | DojoDefaultArgs<ExtArgs>
+    toDojo?: boolean | DojoDefaultArgs<ExtArgs>
+    order?: boolean | StudentTransferRequest$orderArgs<ExtArgs>
+    dojoActedBy?: boolean | StudentTransferRequest$dojoActedByArgs<ExtArgs>
+    adminActedBy?: boolean | StudentTransferRequest$adminActedByArgs<ExtArgs>
+    history?: boolean | StudentTransferRequest$historyArgs<ExtArgs>
+    _count?: boolean | StudentTransferRequestCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type StudentTransferRequestIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    student?: boolean | StudentDefaultArgs<ExtArgs>
+    fromDojo?: boolean | DojoDefaultArgs<ExtArgs>
+    toDojo?: boolean | DojoDefaultArgs<ExtArgs>
+    order?: boolean | StudentTransferRequest$orderArgs<ExtArgs>
+    dojoActedBy?: boolean | StudentTransferRequest$dojoActedByArgs<ExtArgs>
+    adminActedBy?: boolean | StudentTransferRequest$adminActedByArgs<ExtArgs>
+  }
+  export type StudentTransferRequestIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    student?: boolean | StudentDefaultArgs<ExtArgs>
+    fromDojo?: boolean | DojoDefaultArgs<ExtArgs>
+    toDojo?: boolean | DojoDefaultArgs<ExtArgs>
+    order?: boolean | StudentTransferRequest$orderArgs<ExtArgs>
+    dojoActedBy?: boolean | StudentTransferRequest$dojoActedByArgs<ExtArgs>
+    adminActedBy?: boolean | StudentTransferRequest$adminActedByArgs<ExtArgs>
+  }
+
+  export type $StudentTransferRequestPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "StudentTransferRequest"
+    objects: {
+      student: Prisma.$StudentPayload<ExtArgs>
+      fromDojo: Prisma.$DojoPayload<ExtArgs>
+      toDojo: Prisma.$DojoPayload<ExtArgs>
+      order: Prisma.$ShopOrderPayload<ExtArgs> | null
+      dojoActedBy: Prisma.$UserPayload<ExtArgs> | null
+      adminActedBy: Prisma.$UserPayload<ExtArgs> | null
+      history: Prisma.$StudentDojoHistoryPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      studentId: string
+      fromDojoId: string
+      toDojoId: string
+      status: $Enums.StudentTransferStatus
+      dojoDecision: $Enums.StudentTransferDojoDecision
+      reason: string | null
+      dojoNote: string | null
+      adminNote: string | null
+      fee: Prisma.Decimal
+      orderId: string | null
+      paidAt: Date | null
+      dojoActedAt: Date | null
+      dojoActedById: string | null
+      adminActedAt: Date | null
+      adminActedById: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["studentTransferRequest"]>
+    composites: {}
+  }
+
+  type StudentTransferRequestGetPayload<S extends boolean | null | undefined | StudentTransferRequestDefaultArgs> = $Result.GetResult<Prisma.$StudentTransferRequestPayload, S>
+
+  type StudentTransferRequestCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<StudentTransferRequestFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: StudentTransferRequestCountAggregateInputType | true
+    }
+
+  export interface StudentTransferRequestDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['StudentTransferRequest'], meta: { name: 'StudentTransferRequest' } }
+    /**
+     * Find zero or one StudentTransferRequest that matches the filter.
+     * @param {StudentTransferRequestFindUniqueArgs} args - Arguments to find a StudentTransferRequest
+     * @example
+     * // Get one StudentTransferRequest
+     * const studentTransferRequest = await prisma.studentTransferRequest.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends StudentTransferRequestFindUniqueArgs>(args: SelectSubset<T, StudentTransferRequestFindUniqueArgs<ExtArgs>>): Prisma__StudentTransferRequestClient<$Result.GetResult<Prisma.$StudentTransferRequestPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one StudentTransferRequest that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {StudentTransferRequestFindUniqueOrThrowArgs} args - Arguments to find a StudentTransferRequest
+     * @example
+     * // Get one StudentTransferRequest
+     * const studentTransferRequest = await prisma.studentTransferRequest.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends StudentTransferRequestFindUniqueOrThrowArgs>(args: SelectSubset<T, StudentTransferRequestFindUniqueOrThrowArgs<ExtArgs>>): Prisma__StudentTransferRequestClient<$Result.GetResult<Prisma.$StudentTransferRequestPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first StudentTransferRequest that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StudentTransferRequestFindFirstArgs} args - Arguments to find a StudentTransferRequest
+     * @example
+     * // Get one StudentTransferRequest
+     * const studentTransferRequest = await prisma.studentTransferRequest.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends StudentTransferRequestFindFirstArgs>(args?: SelectSubset<T, StudentTransferRequestFindFirstArgs<ExtArgs>>): Prisma__StudentTransferRequestClient<$Result.GetResult<Prisma.$StudentTransferRequestPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first StudentTransferRequest that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StudentTransferRequestFindFirstOrThrowArgs} args - Arguments to find a StudentTransferRequest
+     * @example
+     * // Get one StudentTransferRequest
+     * const studentTransferRequest = await prisma.studentTransferRequest.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends StudentTransferRequestFindFirstOrThrowArgs>(args?: SelectSubset<T, StudentTransferRequestFindFirstOrThrowArgs<ExtArgs>>): Prisma__StudentTransferRequestClient<$Result.GetResult<Prisma.$StudentTransferRequestPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more StudentTransferRequests that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StudentTransferRequestFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all StudentTransferRequests
+     * const studentTransferRequests = await prisma.studentTransferRequest.findMany()
+     * 
+     * // Get first 10 StudentTransferRequests
+     * const studentTransferRequests = await prisma.studentTransferRequest.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const studentTransferRequestWithIdOnly = await prisma.studentTransferRequest.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends StudentTransferRequestFindManyArgs>(args?: SelectSubset<T, StudentTransferRequestFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentTransferRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a StudentTransferRequest.
+     * @param {StudentTransferRequestCreateArgs} args - Arguments to create a StudentTransferRequest.
+     * @example
+     * // Create one StudentTransferRequest
+     * const StudentTransferRequest = await prisma.studentTransferRequest.create({
+     *   data: {
+     *     // ... data to create a StudentTransferRequest
+     *   }
+     * })
+     * 
+     */
+    create<T extends StudentTransferRequestCreateArgs>(args: SelectSubset<T, StudentTransferRequestCreateArgs<ExtArgs>>): Prisma__StudentTransferRequestClient<$Result.GetResult<Prisma.$StudentTransferRequestPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many StudentTransferRequests.
+     * @param {StudentTransferRequestCreateManyArgs} args - Arguments to create many StudentTransferRequests.
+     * @example
+     * // Create many StudentTransferRequests
+     * const studentTransferRequest = await prisma.studentTransferRequest.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends StudentTransferRequestCreateManyArgs>(args?: SelectSubset<T, StudentTransferRequestCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many StudentTransferRequests and returns the data saved in the database.
+     * @param {StudentTransferRequestCreateManyAndReturnArgs} args - Arguments to create many StudentTransferRequests.
+     * @example
+     * // Create many StudentTransferRequests
+     * const studentTransferRequest = await prisma.studentTransferRequest.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many StudentTransferRequests and only return the `id`
+     * const studentTransferRequestWithIdOnly = await prisma.studentTransferRequest.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends StudentTransferRequestCreateManyAndReturnArgs>(args?: SelectSubset<T, StudentTransferRequestCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentTransferRequestPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a StudentTransferRequest.
+     * @param {StudentTransferRequestDeleteArgs} args - Arguments to delete one StudentTransferRequest.
+     * @example
+     * // Delete one StudentTransferRequest
+     * const StudentTransferRequest = await prisma.studentTransferRequest.delete({
+     *   where: {
+     *     // ... filter to delete one StudentTransferRequest
+     *   }
+     * })
+     * 
+     */
+    delete<T extends StudentTransferRequestDeleteArgs>(args: SelectSubset<T, StudentTransferRequestDeleteArgs<ExtArgs>>): Prisma__StudentTransferRequestClient<$Result.GetResult<Prisma.$StudentTransferRequestPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one StudentTransferRequest.
+     * @param {StudentTransferRequestUpdateArgs} args - Arguments to update one StudentTransferRequest.
+     * @example
+     * // Update one StudentTransferRequest
+     * const studentTransferRequest = await prisma.studentTransferRequest.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends StudentTransferRequestUpdateArgs>(args: SelectSubset<T, StudentTransferRequestUpdateArgs<ExtArgs>>): Prisma__StudentTransferRequestClient<$Result.GetResult<Prisma.$StudentTransferRequestPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more StudentTransferRequests.
+     * @param {StudentTransferRequestDeleteManyArgs} args - Arguments to filter StudentTransferRequests to delete.
+     * @example
+     * // Delete a few StudentTransferRequests
+     * const { count } = await prisma.studentTransferRequest.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends StudentTransferRequestDeleteManyArgs>(args?: SelectSubset<T, StudentTransferRequestDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more StudentTransferRequests.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StudentTransferRequestUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many StudentTransferRequests
+     * const studentTransferRequest = await prisma.studentTransferRequest.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends StudentTransferRequestUpdateManyArgs>(args: SelectSubset<T, StudentTransferRequestUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more StudentTransferRequests and returns the data updated in the database.
+     * @param {StudentTransferRequestUpdateManyAndReturnArgs} args - Arguments to update many StudentTransferRequests.
+     * @example
+     * // Update many StudentTransferRequests
+     * const studentTransferRequest = await prisma.studentTransferRequest.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more StudentTransferRequests and only return the `id`
+     * const studentTransferRequestWithIdOnly = await prisma.studentTransferRequest.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends StudentTransferRequestUpdateManyAndReturnArgs>(args: SelectSubset<T, StudentTransferRequestUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentTransferRequestPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one StudentTransferRequest.
+     * @param {StudentTransferRequestUpsertArgs} args - Arguments to update or create a StudentTransferRequest.
+     * @example
+     * // Update or create a StudentTransferRequest
+     * const studentTransferRequest = await prisma.studentTransferRequest.upsert({
+     *   create: {
+     *     // ... data to create a StudentTransferRequest
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the StudentTransferRequest we want to update
+     *   }
+     * })
+     */
+    upsert<T extends StudentTransferRequestUpsertArgs>(args: SelectSubset<T, StudentTransferRequestUpsertArgs<ExtArgs>>): Prisma__StudentTransferRequestClient<$Result.GetResult<Prisma.$StudentTransferRequestPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of StudentTransferRequests.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StudentTransferRequestCountArgs} args - Arguments to filter StudentTransferRequests to count.
+     * @example
+     * // Count the number of StudentTransferRequests
+     * const count = await prisma.studentTransferRequest.count({
+     *   where: {
+     *     // ... the filter for the StudentTransferRequests we want to count
+     *   }
+     * })
+    **/
+    count<T extends StudentTransferRequestCountArgs>(
+      args?: Subset<T, StudentTransferRequestCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], StudentTransferRequestCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a StudentTransferRequest.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StudentTransferRequestAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends StudentTransferRequestAggregateArgs>(args: Subset<T, StudentTransferRequestAggregateArgs>): Prisma.PrismaPromise<GetStudentTransferRequestAggregateType<T>>
+
+    /**
+     * Group by StudentTransferRequest.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StudentTransferRequestGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends StudentTransferRequestGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: StudentTransferRequestGroupByArgs['orderBy'] }
+        : { orderBy?: StudentTransferRequestGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, StudentTransferRequestGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetStudentTransferRequestGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the StudentTransferRequest model
+   */
+  readonly fields: StudentTransferRequestFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for StudentTransferRequest.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__StudentTransferRequestClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    student<T extends StudentDefaultArgs<ExtArgs> = {}>(args?: Subset<T, StudentDefaultArgs<ExtArgs>>): Prisma__StudentClient<$Result.GetResult<Prisma.$StudentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    fromDojo<T extends DojoDefaultArgs<ExtArgs> = {}>(args?: Subset<T, DojoDefaultArgs<ExtArgs>>): Prisma__DojoClient<$Result.GetResult<Prisma.$DojoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    toDojo<T extends DojoDefaultArgs<ExtArgs> = {}>(args?: Subset<T, DojoDefaultArgs<ExtArgs>>): Prisma__DojoClient<$Result.GetResult<Prisma.$DojoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    order<T extends StudentTransferRequest$orderArgs<ExtArgs> = {}>(args?: Subset<T, StudentTransferRequest$orderArgs<ExtArgs>>): Prisma__ShopOrderClient<$Result.GetResult<Prisma.$ShopOrderPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    dojoActedBy<T extends StudentTransferRequest$dojoActedByArgs<ExtArgs> = {}>(args?: Subset<T, StudentTransferRequest$dojoActedByArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    adminActedBy<T extends StudentTransferRequest$adminActedByArgs<ExtArgs> = {}>(args?: Subset<T, StudentTransferRequest$adminActedByArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    history<T extends StudentTransferRequest$historyArgs<ExtArgs> = {}>(args?: Subset<T, StudentTransferRequest$historyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentDojoHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the StudentTransferRequest model
+   */
+  interface StudentTransferRequestFieldRefs {
+    readonly id: FieldRef<"StudentTransferRequest", 'String'>
+    readonly studentId: FieldRef<"StudentTransferRequest", 'String'>
+    readonly fromDojoId: FieldRef<"StudentTransferRequest", 'String'>
+    readonly toDojoId: FieldRef<"StudentTransferRequest", 'String'>
+    readonly status: FieldRef<"StudentTransferRequest", 'StudentTransferStatus'>
+    readonly dojoDecision: FieldRef<"StudentTransferRequest", 'StudentTransferDojoDecision'>
+    readonly reason: FieldRef<"StudentTransferRequest", 'String'>
+    readonly dojoNote: FieldRef<"StudentTransferRequest", 'String'>
+    readonly adminNote: FieldRef<"StudentTransferRequest", 'String'>
+    readonly fee: FieldRef<"StudentTransferRequest", 'Decimal'>
+    readonly orderId: FieldRef<"StudentTransferRequest", 'String'>
+    readonly paidAt: FieldRef<"StudentTransferRequest", 'DateTime'>
+    readonly dojoActedAt: FieldRef<"StudentTransferRequest", 'DateTime'>
+    readonly dojoActedById: FieldRef<"StudentTransferRequest", 'String'>
+    readonly adminActedAt: FieldRef<"StudentTransferRequest", 'DateTime'>
+    readonly adminActedById: FieldRef<"StudentTransferRequest", 'String'>
+    readonly createdAt: FieldRef<"StudentTransferRequest", 'DateTime'>
+    readonly updatedAt: FieldRef<"StudentTransferRequest", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * StudentTransferRequest findUnique
+   */
+  export type StudentTransferRequestFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentTransferRequest
+     */
+    select?: StudentTransferRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentTransferRequest
+     */
+    omit?: StudentTransferRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentTransferRequestInclude<ExtArgs> | null
+    /**
+     * Filter, which StudentTransferRequest to fetch.
+     */
+    where: StudentTransferRequestWhereUniqueInput
+  }
+
+  /**
+   * StudentTransferRequest findUniqueOrThrow
+   */
+  export type StudentTransferRequestFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentTransferRequest
+     */
+    select?: StudentTransferRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentTransferRequest
+     */
+    omit?: StudentTransferRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentTransferRequestInclude<ExtArgs> | null
+    /**
+     * Filter, which StudentTransferRequest to fetch.
+     */
+    where: StudentTransferRequestWhereUniqueInput
+  }
+
+  /**
+   * StudentTransferRequest findFirst
+   */
+  export type StudentTransferRequestFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentTransferRequest
+     */
+    select?: StudentTransferRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentTransferRequest
+     */
+    omit?: StudentTransferRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentTransferRequestInclude<ExtArgs> | null
+    /**
+     * Filter, which StudentTransferRequest to fetch.
+     */
+    where?: StudentTransferRequestWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of StudentTransferRequests to fetch.
+     */
+    orderBy?: StudentTransferRequestOrderByWithRelationInput | StudentTransferRequestOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for StudentTransferRequests.
+     */
+    cursor?: StudentTransferRequestWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` StudentTransferRequests from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` StudentTransferRequests.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of StudentTransferRequests.
+     */
+    distinct?: StudentTransferRequestScalarFieldEnum | StudentTransferRequestScalarFieldEnum[]
+  }
+
+  /**
+   * StudentTransferRequest findFirstOrThrow
+   */
+  export type StudentTransferRequestFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentTransferRequest
+     */
+    select?: StudentTransferRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentTransferRequest
+     */
+    omit?: StudentTransferRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentTransferRequestInclude<ExtArgs> | null
+    /**
+     * Filter, which StudentTransferRequest to fetch.
+     */
+    where?: StudentTransferRequestWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of StudentTransferRequests to fetch.
+     */
+    orderBy?: StudentTransferRequestOrderByWithRelationInput | StudentTransferRequestOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for StudentTransferRequests.
+     */
+    cursor?: StudentTransferRequestWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` StudentTransferRequests from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` StudentTransferRequests.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of StudentTransferRequests.
+     */
+    distinct?: StudentTransferRequestScalarFieldEnum | StudentTransferRequestScalarFieldEnum[]
+  }
+
+  /**
+   * StudentTransferRequest findMany
+   */
+  export type StudentTransferRequestFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentTransferRequest
+     */
+    select?: StudentTransferRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentTransferRequest
+     */
+    omit?: StudentTransferRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentTransferRequestInclude<ExtArgs> | null
+    /**
+     * Filter, which StudentTransferRequests to fetch.
+     */
+    where?: StudentTransferRequestWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of StudentTransferRequests to fetch.
+     */
+    orderBy?: StudentTransferRequestOrderByWithRelationInput | StudentTransferRequestOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing StudentTransferRequests.
+     */
+    cursor?: StudentTransferRequestWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` StudentTransferRequests from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` StudentTransferRequests.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of StudentTransferRequests.
+     */
+    distinct?: StudentTransferRequestScalarFieldEnum | StudentTransferRequestScalarFieldEnum[]
+  }
+
+  /**
+   * StudentTransferRequest create
+   */
+  export type StudentTransferRequestCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentTransferRequest
+     */
+    select?: StudentTransferRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentTransferRequest
+     */
+    omit?: StudentTransferRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentTransferRequestInclude<ExtArgs> | null
+    /**
+     * The data needed to create a StudentTransferRequest.
+     */
+    data: XOR<StudentTransferRequestCreateInput, StudentTransferRequestUncheckedCreateInput>
+  }
+
+  /**
+   * StudentTransferRequest createMany
+   */
+  export type StudentTransferRequestCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many StudentTransferRequests.
+     */
+    data: StudentTransferRequestCreateManyInput | StudentTransferRequestCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * StudentTransferRequest createManyAndReturn
+   */
+  export type StudentTransferRequestCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentTransferRequest
+     */
+    select?: StudentTransferRequestSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentTransferRequest
+     */
+    omit?: StudentTransferRequestOmit<ExtArgs> | null
+    /**
+     * The data used to create many StudentTransferRequests.
+     */
+    data: StudentTransferRequestCreateManyInput | StudentTransferRequestCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentTransferRequestIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * StudentTransferRequest update
+   */
+  export type StudentTransferRequestUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentTransferRequest
+     */
+    select?: StudentTransferRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentTransferRequest
+     */
+    omit?: StudentTransferRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentTransferRequestInclude<ExtArgs> | null
+    /**
+     * The data needed to update a StudentTransferRequest.
+     */
+    data: XOR<StudentTransferRequestUpdateInput, StudentTransferRequestUncheckedUpdateInput>
+    /**
+     * Choose, which StudentTransferRequest to update.
+     */
+    where: StudentTransferRequestWhereUniqueInput
+  }
+
+  /**
+   * StudentTransferRequest updateMany
+   */
+  export type StudentTransferRequestUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update StudentTransferRequests.
+     */
+    data: XOR<StudentTransferRequestUpdateManyMutationInput, StudentTransferRequestUncheckedUpdateManyInput>
+    /**
+     * Filter which StudentTransferRequests to update
+     */
+    where?: StudentTransferRequestWhereInput
+    /**
+     * Limit how many StudentTransferRequests to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * StudentTransferRequest updateManyAndReturn
+   */
+  export type StudentTransferRequestUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentTransferRequest
+     */
+    select?: StudentTransferRequestSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentTransferRequest
+     */
+    omit?: StudentTransferRequestOmit<ExtArgs> | null
+    /**
+     * The data used to update StudentTransferRequests.
+     */
+    data: XOR<StudentTransferRequestUpdateManyMutationInput, StudentTransferRequestUncheckedUpdateManyInput>
+    /**
+     * Filter which StudentTransferRequests to update
+     */
+    where?: StudentTransferRequestWhereInput
+    /**
+     * Limit how many StudentTransferRequests to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentTransferRequestIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * StudentTransferRequest upsert
+   */
+  export type StudentTransferRequestUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentTransferRequest
+     */
+    select?: StudentTransferRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentTransferRequest
+     */
+    omit?: StudentTransferRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentTransferRequestInclude<ExtArgs> | null
+    /**
+     * The filter to search for the StudentTransferRequest to update in case it exists.
+     */
+    where: StudentTransferRequestWhereUniqueInput
+    /**
+     * In case the StudentTransferRequest found by the `where` argument doesn't exist, create a new StudentTransferRequest with this data.
+     */
+    create: XOR<StudentTransferRequestCreateInput, StudentTransferRequestUncheckedCreateInput>
+    /**
+     * In case the StudentTransferRequest was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<StudentTransferRequestUpdateInput, StudentTransferRequestUncheckedUpdateInput>
+  }
+
+  /**
+   * StudentTransferRequest delete
+   */
+  export type StudentTransferRequestDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentTransferRequest
+     */
+    select?: StudentTransferRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentTransferRequest
+     */
+    omit?: StudentTransferRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentTransferRequestInclude<ExtArgs> | null
+    /**
+     * Filter which StudentTransferRequest to delete.
+     */
+    where: StudentTransferRequestWhereUniqueInput
+  }
+
+  /**
+   * StudentTransferRequest deleteMany
+   */
+  export type StudentTransferRequestDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which StudentTransferRequests to delete
+     */
+    where?: StudentTransferRequestWhereInput
+    /**
+     * Limit how many StudentTransferRequests to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * StudentTransferRequest.order
+   */
+  export type StudentTransferRequest$orderArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShopOrder
+     */
+    select?: ShopOrderSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ShopOrder
+     */
+    omit?: ShopOrderOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShopOrderInclude<ExtArgs> | null
+    where?: ShopOrderWhereInput
+  }
+
+  /**
+   * StudentTransferRequest.dojoActedBy
+   */
+  export type StudentTransferRequest$dojoActedByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * StudentTransferRequest.adminActedBy
+   */
+  export type StudentTransferRequest$adminActedByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * StudentTransferRequest.history
+   */
+  export type StudentTransferRequest$historyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentDojoHistory
+     */
+    select?: StudentDojoHistorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentDojoHistory
+     */
+    omit?: StudentDojoHistoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentDojoHistoryInclude<ExtArgs> | null
+    where?: StudentDojoHistoryWhereInput
+    orderBy?: StudentDojoHistoryOrderByWithRelationInput | StudentDojoHistoryOrderByWithRelationInput[]
+    cursor?: StudentDojoHistoryWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: StudentDojoHistoryScalarFieldEnum | StudentDojoHistoryScalarFieldEnum[]
+  }
+
+  /**
+   * StudentTransferRequest without action
+   */
+  export type StudentTransferRequestDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentTransferRequest
+     */
+    select?: StudentTransferRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentTransferRequest
+     */
+    omit?: StudentTransferRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentTransferRequestInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model StudentDojoHistory
+   */
+
+  export type AggregateStudentDojoHistory = {
+    _count: StudentDojoHistoryCountAggregateOutputType | null
+    _min: StudentDojoHistoryMinAggregateOutputType | null
+    _max: StudentDojoHistoryMaxAggregateOutputType | null
+  }
+
+  export type StudentDojoHistoryMinAggregateOutputType = {
+    id: string | null
+    studentId: string | null
+    fromDojoId: string | null
+    toDojoId: string | null
+    transferRequestId: string | null
+    changedById: string | null
+    reason: string | null
+    createdAt: Date | null
+  }
+
+  export type StudentDojoHistoryMaxAggregateOutputType = {
+    id: string | null
+    studentId: string | null
+    fromDojoId: string | null
+    toDojoId: string | null
+    transferRequestId: string | null
+    changedById: string | null
+    reason: string | null
+    createdAt: Date | null
+  }
+
+  export type StudentDojoHistoryCountAggregateOutputType = {
+    id: number
+    studentId: number
+    fromDojoId: number
+    toDojoId: number
+    transferRequestId: number
+    changedById: number
+    reason: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type StudentDojoHistoryMinAggregateInputType = {
+    id?: true
+    studentId?: true
+    fromDojoId?: true
+    toDojoId?: true
+    transferRequestId?: true
+    changedById?: true
+    reason?: true
+    createdAt?: true
+  }
+
+  export type StudentDojoHistoryMaxAggregateInputType = {
+    id?: true
+    studentId?: true
+    fromDojoId?: true
+    toDojoId?: true
+    transferRequestId?: true
+    changedById?: true
+    reason?: true
+    createdAt?: true
+  }
+
+  export type StudentDojoHistoryCountAggregateInputType = {
+    id?: true
+    studentId?: true
+    fromDojoId?: true
+    toDojoId?: true
+    transferRequestId?: true
+    changedById?: true
+    reason?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type StudentDojoHistoryAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which StudentDojoHistory to aggregate.
+     */
+    where?: StudentDojoHistoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of StudentDojoHistories to fetch.
+     */
+    orderBy?: StudentDojoHistoryOrderByWithRelationInput | StudentDojoHistoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: StudentDojoHistoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` StudentDojoHistories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` StudentDojoHistories.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned StudentDojoHistories
+    **/
+    _count?: true | StudentDojoHistoryCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: StudentDojoHistoryMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: StudentDojoHistoryMaxAggregateInputType
+  }
+
+  export type GetStudentDojoHistoryAggregateType<T extends StudentDojoHistoryAggregateArgs> = {
+        [P in keyof T & keyof AggregateStudentDojoHistory]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateStudentDojoHistory[P]>
+      : GetScalarType<T[P], AggregateStudentDojoHistory[P]>
+  }
+
+
+
+
+  export type StudentDojoHistoryGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: StudentDojoHistoryWhereInput
+    orderBy?: StudentDojoHistoryOrderByWithAggregationInput | StudentDojoHistoryOrderByWithAggregationInput[]
+    by: StudentDojoHistoryScalarFieldEnum[] | StudentDojoHistoryScalarFieldEnum
+    having?: StudentDojoHistoryScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: StudentDojoHistoryCountAggregateInputType | true
+    _min?: StudentDojoHistoryMinAggregateInputType
+    _max?: StudentDojoHistoryMaxAggregateInputType
+  }
+
+  export type StudentDojoHistoryGroupByOutputType = {
+    id: string
+    studentId: string
+    fromDojoId: string | null
+    toDojoId: string | null
+    transferRequestId: string | null
+    changedById: string | null
+    reason: string | null
+    createdAt: Date
+    _count: StudentDojoHistoryCountAggregateOutputType | null
+    _min: StudentDojoHistoryMinAggregateOutputType | null
+    _max: StudentDojoHistoryMaxAggregateOutputType | null
+  }
+
+  type GetStudentDojoHistoryGroupByPayload<T extends StudentDojoHistoryGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<StudentDojoHistoryGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof StudentDojoHistoryGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], StudentDojoHistoryGroupByOutputType[P]>
+            : GetScalarType<T[P], StudentDojoHistoryGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type StudentDojoHistorySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    studentId?: boolean
+    fromDojoId?: boolean
+    toDojoId?: boolean
+    transferRequestId?: boolean
+    changedById?: boolean
+    reason?: boolean
+    createdAt?: boolean
+    student?: boolean | StudentDefaultArgs<ExtArgs>
+    fromDojo?: boolean | StudentDojoHistory$fromDojoArgs<ExtArgs>
+    toDojo?: boolean | StudentDojoHistory$toDojoArgs<ExtArgs>
+    transferRequest?: boolean | StudentDojoHistory$transferRequestArgs<ExtArgs>
+    changedBy?: boolean | StudentDojoHistory$changedByArgs<ExtArgs>
+  }, ExtArgs["result"]["studentDojoHistory"]>
+
+  export type StudentDojoHistorySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    studentId?: boolean
+    fromDojoId?: boolean
+    toDojoId?: boolean
+    transferRequestId?: boolean
+    changedById?: boolean
+    reason?: boolean
+    createdAt?: boolean
+    student?: boolean | StudentDefaultArgs<ExtArgs>
+    fromDojo?: boolean | StudentDojoHistory$fromDojoArgs<ExtArgs>
+    toDojo?: boolean | StudentDojoHistory$toDojoArgs<ExtArgs>
+    transferRequest?: boolean | StudentDojoHistory$transferRequestArgs<ExtArgs>
+    changedBy?: boolean | StudentDojoHistory$changedByArgs<ExtArgs>
+  }, ExtArgs["result"]["studentDojoHistory"]>
+
+  export type StudentDojoHistorySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    studentId?: boolean
+    fromDojoId?: boolean
+    toDojoId?: boolean
+    transferRequestId?: boolean
+    changedById?: boolean
+    reason?: boolean
+    createdAt?: boolean
+    student?: boolean | StudentDefaultArgs<ExtArgs>
+    fromDojo?: boolean | StudentDojoHistory$fromDojoArgs<ExtArgs>
+    toDojo?: boolean | StudentDojoHistory$toDojoArgs<ExtArgs>
+    transferRequest?: boolean | StudentDojoHistory$transferRequestArgs<ExtArgs>
+    changedBy?: boolean | StudentDojoHistory$changedByArgs<ExtArgs>
+  }, ExtArgs["result"]["studentDojoHistory"]>
+
+  export type StudentDojoHistorySelectScalar = {
+    id?: boolean
+    studentId?: boolean
+    fromDojoId?: boolean
+    toDojoId?: boolean
+    transferRequestId?: boolean
+    changedById?: boolean
+    reason?: boolean
+    createdAt?: boolean
+  }
+
+  export type StudentDojoHistoryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "studentId" | "fromDojoId" | "toDojoId" | "transferRequestId" | "changedById" | "reason" | "createdAt", ExtArgs["result"]["studentDojoHistory"]>
+  export type StudentDojoHistoryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    student?: boolean | StudentDefaultArgs<ExtArgs>
+    fromDojo?: boolean | StudentDojoHistory$fromDojoArgs<ExtArgs>
+    toDojo?: boolean | StudentDojoHistory$toDojoArgs<ExtArgs>
+    transferRequest?: boolean | StudentDojoHistory$transferRequestArgs<ExtArgs>
+    changedBy?: boolean | StudentDojoHistory$changedByArgs<ExtArgs>
+  }
+  export type StudentDojoHistoryIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    student?: boolean | StudentDefaultArgs<ExtArgs>
+    fromDojo?: boolean | StudentDojoHistory$fromDojoArgs<ExtArgs>
+    toDojo?: boolean | StudentDojoHistory$toDojoArgs<ExtArgs>
+    transferRequest?: boolean | StudentDojoHistory$transferRequestArgs<ExtArgs>
+    changedBy?: boolean | StudentDojoHistory$changedByArgs<ExtArgs>
+  }
+  export type StudentDojoHistoryIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    student?: boolean | StudentDefaultArgs<ExtArgs>
+    fromDojo?: boolean | StudentDojoHistory$fromDojoArgs<ExtArgs>
+    toDojo?: boolean | StudentDojoHistory$toDojoArgs<ExtArgs>
+    transferRequest?: boolean | StudentDojoHistory$transferRequestArgs<ExtArgs>
+    changedBy?: boolean | StudentDojoHistory$changedByArgs<ExtArgs>
+  }
+
+  export type $StudentDojoHistoryPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "StudentDojoHistory"
+    objects: {
+      student: Prisma.$StudentPayload<ExtArgs>
+      fromDojo: Prisma.$DojoPayload<ExtArgs> | null
+      toDojo: Prisma.$DojoPayload<ExtArgs> | null
+      transferRequest: Prisma.$StudentTransferRequestPayload<ExtArgs> | null
+      changedBy: Prisma.$UserPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      studentId: string
+      fromDojoId: string | null
+      toDojoId: string | null
+      transferRequestId: string | null
+      changedById: string | null
+      reason: string | null
+      createdAt: Date
+    }, ExtArgs["result"]["studentDojoHistory"]>
+    composites: {}
+  }
+
+  type StudentDojoHistoryGetPayload<S extends boolean | null | undefined | StudentDojoHistoryDefaultArgs> = $Result.GetResult<Prisma.$StudentDojoHistoryPayload, S>
+
+  type StudentDojoHistoryCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<StudentDojoHistoryFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: StudentDojoHistoryCountAggregateInputType | true
+    }
+
+  export interface StudentDojoHistoryDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['StudentDojoHistory'], meta: { name: 'StudentDojoHistory' } }
+    /**
+     * Find zero or one StudentDojoHistory that matches the filter.
+     * @param {StudentDojoHistoryFindUniqueArgs} args - Arguments to find a StudentDojoHistory
+     * @example
+     * // Get one StudentDojoHistory
+     * const studentDojoHistory = await prisma.studentDojoHistory.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends StudentDojoHistoryFindUniqueArgs>(args: SelectSubset<T, StudentDojoHistoryFindUniqueArgs<ExtArgs>>): Prisma__StudentDojoHistoryClient<$Result.GetResult<Prisma.$StudentDojoHistoryPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one StudentDojoHistory that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {StudentDojoHistoryFindUniqueOrThrowArgs} args - Arguments to find a StudentDojoHistory
+     * @example
+     * // Get one StudentDojoHistory
+     * const studentDojoHistory = await prisma.studentDojoHistory.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends StudentDojoHistoryFindUniqueOrThrowArgs>(args: SelectSubset<T, StudentDojoHistoryFindUniqueOrThrowArgs<ExtArgs>>): Prisma__StudentDojoHistoryClient<$Result.GetResult<Prisma.$StudentDojoHistoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first StudentDojoHistory that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StudentDojoHistoryFindFirstArgs} args - Arguments to find a StudentDojoHistory
+     * @example
+     * // Get one StudentDojoHistory
+     * const studentDojoHistory = await prisma.studentDojoHistory.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends StudentDojoHistoryFindFirstArgs>(args?: SelectSubset<T, StudentDojoHistoryFindFirstArgs<ExtArgs>>): Prisma__StudentDojoHistoryClient<$Result.GetResult<Prisma.$StudentDojoHistoryPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first StudentDojoHistory that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StudentDojoHistoryFindFirstOrThrowArgs} args - Arguments to find a StudentDojoHistory
+     * @example
+     * // Get one StudentDojoHistory
+     * const studentDojoHistory = await prisma.studentDojoHistory.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends StudentDojoHistoryFindFirstOrThrowArgs>(args?: SelectSubset<T, StudentDojoHistoryFindFirstOrThrowArgs<ExtArgs>>): Prisma__StudentDojoHistoryClient<$Result.GetResult<Prisma.$StudentDojoHistoryPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more StudentDojoHistories that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StudentDojoHistoryFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all StudentDojoHistories
+     * const studentDojoHistories = await prisma.studentDojoHistory.findMany()
+     * 
+     * // Get first 10 StudentDojoHistories
+     * const studentDojoHistories = await prisma.studentDojoHistory.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const studentDojoHistoryWithIdOnly = await prisma.studentDojoHistory.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends StudentDojoHistoryFindManyArgs>(args?: SelectSubset<T, StudentDojoHistoryFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentDojoHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a StudentDojoHistory.
+     * @param {StudentDojoHistoryCreateArgs} args - Arguments to create a StudentDojoHistory.
+     * @example
+     * // Create one StudentDojoHistory
+     * const StudentDojoHistory = await prisma.studentDojoHistory.create({
+     *   data: {
+     *     // ... data to create a StudentDojoHistory
+     *   }
+     * })
+     * 
+     */
+    create<T extends StudentDojoHistoryCreateArgs>(args: SelectSubset<T, StudentDojoHistoryCreateArgs<ExtArgs>>): Prisma__StudentDojoHistoryClient<$Result.GetResult<Prisma.$StudentDojoHistoryPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many StudentDojoHistories.
+     * @param {StudentDojoHistoryCreateManyArgs} args - Arguments to create many StudentDojoHistories.
+     * @example
+     * // Create many StudentDojoHistories
+     * const studentDojoHistory = await prisma.studentDojoHistory.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends StudentDojoHistoryCreateManyArgs>(args?: SelectSubset<T, StudentDojoHistoryCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many StudentDojoHistories and returns the data saved in the database.
+     * @param {StudentDojoHistoryCreateManyAndReturnArgs} args - Arguments to create many StudentDojoHistories.
+     * @example
+     * // Create many StudentDojoHistories
+     * const studentDojoHistory = await prisma.studentDojoHistory.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many StudentDojoHistories and only return the `id`
+     * const studentDojoHistoryWithIdOnly = await prisma.studentDojoHistory.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends StudentDojoHistoryCreateManyAndReturnArgs>(args?: SelectSubset<T, StudentDojoHistoryCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentDojoHistoryPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a StudentDojoHistory.
+     * @param {StudentDojoHistoryDeleteArgs} args - Arguments to delete one StudentDojoHistory.
+     * @example
+     * // Delete one StudentDojoHistory
+     * const StudentDojoHistory = await prisma.studentDojoHistory.delete({
+     *   where: {
+     *     // ... filter to delete one StudentDojoHistory
+     *   }
+     * })
+     * 
+     */
+    delete<T extends StudentDojoHistoryDeleteArgs>(args: SelectSubset<T, StudentDojoHistoryDeleteArgs<ExtArgs>>): Prisma__StudentDojoHistoryClient<$Result.GetResult<Prisma.$StudentDojoHistoryPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one StudentDojoHistory.
+     * @param {StudentDojoHistoryUpdateArgs} args - Arguments to update one StudentDojoHistory.
+     * @example
+     * // Update one StudentDojoHistory
+     * const studentDojoHistory = await prisma.studentDojoHistory.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends StudentDojoHistoryUpdateArgs>(args: SelectSubset<T, StudentDojoHistoryUpdateArgs<ExtArgs>>): Prisma__StudentDojoHistoryClient<$Result.GetResult<Prisma.$StudentDojoHistoryPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more StudentDojoHistories.
+     * @param {StudentDojoHistoryDeleteManyArgs} args - Arguments to filter StudentDojoHistories to delete.
+     * @example
+     * // Delete a few StudentDojoHistories
+     * const { count } = await prisma.studentDojoHistory.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends StudentDojoHistoryDeleteManyArgs>(args?: SelectSubset<T, StudentDojoHistoryDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more StudentDojoHistories.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StudentDojoHistoryUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many StudentDojoHistories
+     * const studentDojoHistory = await prisma.studentDojoHistory.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends StudentDojoHistoryUpdateManyArgs>(args: SelectSubset<T, StudentDojoHistoryUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more StudentDojoHistories and returns the data updated in the database.
+     * @param {StudentDojoHistoryUpdateManyAndReturnArgs} args - Arguments to update many StudentDojoHistories.
+     * @example
+     * // Update many StudentDojoHistories
+     * const studentDojoHistory = await prisma.studentDojoHistory.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more StudentDojoHistories and only return the `id`
+     * const studentDojoHistoryWithIdOnly = await prisma.studentDojoHistory.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends StudentDojoHistoryUpdateManyAndReturnArgs>(args: SelectSubset<T, StudentDojoHistoryUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentDojoHistoryPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one StudentDojoHistory.
+     * @param {StudentDojoHistoryUpsertArgs} args - Arguments to update or create a StudentDojoHistory.
+     * @example
+     * // Update or create a StudentDojoHistory
+     * const studentDojoHistory = await prisma.studentDojoHistory.upsert({
+     *   create: {
+     *     // ... data to create a StudentDojoHistory
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the StudentDojoHistory we want to update
+     *   }
+     * })
+     */
+    upsert<T extends StudentDojoHistoryUpsertArgs>(args: SelectSubset<T, StudentDojoHistoryUpsertArgs<ExtArgs>>): Prisma__StudentDojoHistoryClient<$Result.GetResult<Prisma.$StudentDojoHistoryPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of StudentDojoHistories.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StudentDojoHistoryCountArgs} args - Arguments to filter StudentDojoHistories to count.
+     * @example
+     * // Count the number of StudentDojoHistories
+     * const count = await prisma.studentDojoHistory.count({
+     *   where: {
+     *     // ... the filter for the StudentDojoHistories we want to count
+     *   }
+     * })
+    **/
+    count<T extends StudentDojoHistoryCountArgs>(
+      args?: Subset<T, StudentDojoHistoryCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], StudentDojoHistoryCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a StudentDojoHistory.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StudentDojoHistoryAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends StudentDojoHistoryAggregateArgs>(args: Subset<T, StudentDojoHistoryAggregateArgs>): Prisma.PrismaPromise<GetStudentDojoHistoryAggregateType<T>>
+
+    /**
+     * Group by StudentDojoHistory.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StudentDojoHistoryGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends StudentDojoHistoryGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: StudentDojoHistoryGroupByArgs['orderBy'] }
+        : { orderBy?: StudentDojoHistoryGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, StudentDojoHistoryGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetStudentDojoHistoryGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the StudentDojoHistory model
+   */
+  readonly fields: StudentDojoHistoryFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for StudentDojoHistory.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__StudentDojoHistoryClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    student<T extends StudentDefaultArgs<ExtArgs> = {}>(args?: Subset<T, StudentDefaultArgs<ExtArgs>>): Prisma__StudentClient<$Result.GetResult<Prisma.$StudentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    fromDojo<T extends StudentDojoHistory$fromDojoArgs<ExtArgs> = {}>(args?: Subset<T, StudentDojoHistory$fromDojoArgs<ExtArgs>>): Prisma__DojoClient<$Result.GetResult<Prisma.$DojoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    toDojo<T extends StudentDojoHistory$toDojoArgs<ExtArgs> = {}>(args?: Subset<T, StudentDojoHistory$toDojoArgs<ExtArgs>>): Prisma__DojoClient<$Result.GetResult<Prisma.$DojoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    transferRequest<T extends StudentDojoHistory$transferRequestArgs<ExtArgs> = {}>(args?: Subset<T, StudentDojoHistory$transferRequestArgs<ExtArgs>>): Prisma__StudentTransferRequestClient<$Result.GetResult<Prisma.$StudentTransferRequestPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    changedBy<T extends StudentDojoHistory$changedByArgs<ExtArgs> = {}>(args?: Subset<T, StudentDojoHistory$changedByArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the StudentDojoHistory model
+   */
+  interface StudentDojoHistoryFieldRefs {
+    readonly id: FieldRef<"StudentDojoHistory", 'String'>
+    readonly studentId: FieldRef<"StudentDojoHistory", 'String'>
+    readonly fromDojoId: FieldRef<"StudentDojoHistory", 'String'>
+    readonly toDojoId: FieldRef<"StudentDojoHistory", 'String'>
+    readonly transferRequestId: FieldRef<"StudentDojoHistory", 'String'>
+    readonly changedById: FieldRef<"StudentDojoHistory", 'String'>
+    readonly reason: FieldRef<"StudentDojoHistory", 'String'>
+    readonly createdAt: FieldRef<"StudentDojoHistory", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * StudentDojoHistory findUnique
+   */
+  export type StudentDojoHistoryFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentDojoHistory
+     */
+    select?: StudentDojoHistorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentDojoHistory
+     */
+    omit?: StudentDojoHistoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentDojoHistoryInclude<ExtArgs> | null
+    /**
+     * Filter, which StudentDojoHistory to fetch.
+     */
+    where: StudentDojoHistoryWhereUniqueInput
+  }
+
+  /**
+   * StudentDojoHistory findUniqueOrThrow
+   */
+  export type StudentDojoHistoryFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentDojoHistory
+     */
+    select?: StudentDojoHistorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentDojoHistory
+     */
+    omit?: StudentDojoHistoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentDojoHistoryInclude<ExtArgs> | null
+    /**
+     * Filter, which StudentDojoHistory to fetch.
+     */
+    where: StudentDojoHistoryWhereUniqueInput
+  }
+
+  /**
+   * StudentDojoHistory findFirst
+   */
+  export type StudentDojoHistoryFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentDojoHistory
+     */
+    select?: StudentDojoHistorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentDojoHistory
+     */
+    omit?: StudentDojoHistoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentDojoHistoryInclude<ExtArgs> | null
+    /**
+     * Filter, which StudentDojoHistory to fetch.
+     */
+    where?: StudentDojoHistoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of StudentDojoHistories to fetch.
+     */
+    orderBy?: StudentDojoHistoryOrderByWithRelationInput | StudentDojoHistoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for StudentDojoHistories.
+     */
+    cursor?: StudentDojoHistoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` StudentDojoHistories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` StudentDojoHistories.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of StudentDojoHistories.
+     */
+    distinct?: StudentDojoHistoryScalarFieldEnum | StudentDojoHistoryScalarFieldEnum[]
+  }
+
+  /**
+   * StudentDojoHistory findFirstOrThrow
+   */
+  export type StudentDojoHistoryFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentDojoHistory
+     */
+    select?: StudentDojoHistorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentDojoHistory
+     */
+    omit?: StudentDojoHistoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentDojoHistoryInclude<ExtArgs> | null
+    /**
+     * Filter, which StudentDojoHistory to fetch.
+     */
+    where?: StudentDojoHistoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of StudentDojoHistories to fetch.
+     */
+    orderBy?: StudentDojoHistoryOrderByWithRelationInput | StudentDojoHistoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for StudentDojoHistories.
+     */
+    cursor?: StudentDojoHistoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` StudentDojoHistories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` StudentDojoHistories.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of StudentDojoHistories.
+     */
+    distinct?: StudentDojoHistoryScalarFieldEnum | StudentDojoHistoryScalarFieldEnum[]
+  }
+
+  /**
+   * StudentDojoHistory findMany
+   */
+  export type StudentDojoHistoryFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentDojoHistory
+     */
+    select?: StudentDojoHistorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentDojoHistory
+     */
+    omit?: StudentDojoHistoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentDojoHistoryInclude<ExtArgs> | null
+    /**
+     * Filter, which StudentDojoHistories to fetch.
+     */
+    where?: StudentDojoHistoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of StudentDojoHistories to fetch.
+     */
+    orderBy?: StudentDojoHistoryOrderByWithRelationInput | StudentDojoHistoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing StudentDojoHistories.
+     */
+    cursor?: StudentDojoHistoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` StudentDojoHistories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` StudentDojoHistories.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of StudentDojoHistories.
+     */
+    distinct?: StudentDojoHistoryScalarFieldEnum | StudentDojoHistoryScalarFieldEnum[]
+  }
+
+  /**
+   * StudentDojoHistory create
+   */
+  export type StudentDojoHistoryCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentDojoHistory
+     */
+    select?: StudentDojoHistorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentDojoHistory
+     */
+    omit?: StudentDojoHistoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentDojoHistoryInclude<ExtArgs> | null
+    /**
+     * The data needed to create a StudentDojoHistory.
+     */
+    data: XOR<StudentDojoHistoryCreateInput, StudentDojoHistoryUncheckedCreateInput>
+  }
+
+  /**
+   * StudentDojoHistory createMany
+   */
+  export type StudentDojoHistoryCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many StudentDojoHistories.
+     */
+    data: StudentDojoHistoryCreateManyInput | StudentDojoHistoryCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * StudentDojoHistory createManyAndReturn
+   */
+  export type StudentDojoHistoryCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentDojoHistory
+     */
+    select?: StudentDojoHistorySelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentDojoHistory
+     */
+    omit?: StudentDojoHistoryOmit<ExtArgs> | null
+    /**
+     * The data used to create many StudentDojoHistories.
+     */
+    data: StudentDojoHistoryCreateManyInput | StudentDojoHistoryCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentDojoHistoryIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * StudentDojoHistory update
+   */
+  export type StudentDojoHistoryUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentDojoHistory
+     */
+    select?: StudentDojoHistorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentDojoHistory
+     */
+    omit?: StudentDojoHistoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentDojoHistoryInclude<ExtArgs> | null
+    /**
+     * The data needed to update a StudentDojoHistory.
+     */
+    data: XOR<StudentDojoHistoryUpdateInput, StudentDojoHistoryUncheckedUpdateInput>
+    /**
+     * Choose, which StudentDojoHistory to update.
+     */
+    where: StudentDojoHistoryWhereUniqueInput
+  }
+
+  /**
+   * StudentDojoHistory updateMany
+   */
+  export type StudentDojoHistoryUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update StudentDojoHistories.
+     */
+    data: XOR<StudentDojoHistoryUpdateManyMutationInput, StudentDojoHistoryUncheckedUpdateManyInput>
+    /**
+     * Filter which StudentDojoHistories to update
+     */
+    where?: StudentDojoHistoryWhereInput
+    /**
+     * Limit how many StudentDojoHistories to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * StudentDojoHistory updateManyAndReturn
+   */
+  export type StudentDojoHistoryUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentDojoHistory
+     */
+    select?: StudentDojoHistorySelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentDojoHistory
+     */
+    omit?: StudentDojoHistoryOmit<ExtArgs> | null
+    /**
+     * The data used to update StudentDojoHistories.
+     */
+    data: XOR<StudentDojoHistoryUpdateManyMutationInput, StudentDojoHistoryUncheckedUpdateManyInput>
+    /**
+     * Filter which StudentDojoHistories to update
+     */
+    where?: StudentDojoHistoryWhereInput
+    /**
+     * Limit how many StudentDojoHistories to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentDojoHistoryIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * StudentDojoHistory upsert
+   */
+  export type StudentDojoHistoryUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentDojoHistory
+     */
+    select?: StudentDojoHistorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentDojoHistory
+     */
+    omit?: StudentDojoHistoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentDojoHistoryInclude<ExtArgs> | null
+    /**
+     * The filter to search for the StudentDojoHistory to update in case it exists.
+     */
+    where: StudentDojoHistoryWhereUniqueInput
+    /**
+     * In case the StudentDojoHistory found by the `where` argument doesn't exist, create a new StudentDojoHistory with this data.
+     */
+    create: XOR<StudentDojoHistoryCreateInput, StudentDojoHistoryUncheckedCreateInput>
+    /**
+     * In case the StudentDojoHistory was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<StudentDojoHistoryUpdateInput, StudentDojoHistoryUncheckedUpdateInput>
+  }
+
+  /**
+   * StudentDojoHistory delete
+   */
+  export type StudentDojoHistoryDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentDojoHistory
+     */
+    select?: StudentDojoHistorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentDojoHistory
+     */
+    omit?: StudentDojoHistoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentDojoHistoryInclude<ExtArgs> | null
+    /**
+     * Filter which StudentDojoHistory to delete.
+     */
+    where: StudentDojoHistoryWhereUniqueInput
+  }
+
+  /**
+   * StudentDojoHistory deleteMany
+   */
+  export type StudentDojoHistoryDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which StudentDojoHistories to delete
+     */
+    where?: StudentDojoHistoryWhereInput
+    /**
+     * Limit how many StudentDojoHistories to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * StudentDojoHistory.fromDojo
+   */
+  export type StudentDojoHistory$fromDojoArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Dojo
+     */
+    select?: DojoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Dojo
+     */
+    omit?: DojoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DojoInclude<ExtArgs> | null
+    where?: DojoWhereInput
+  }
+
+  /**
+   * StudentDojoHistory.toDojo
+   */
+  export type StudentDojoHistory$toDojoArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Dojo
+     */
+    select?: DojoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Dojo
+     */
+    omit?: DojoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DojoInclude<ExtArgs> | null
+    where?: DojoWhereInput
+  }
+
+  /**
+   * StudentDojoHistory.transferRequest
+   */
+  export type StudentDojoHistory$transferRequestArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentTransferRequest
+     */
+    select?: StudentTransferRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentTransferRequest
+     */
+    omit?: StudentTransferRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentTransferRequestInclude<ExtArgs> | null
+    where?: StudentTransferRequestWhereInput
+  }
+
+  /**
+   * StudentDojoHistory.changedBy
+   */
+  export type StudentDojoHistory$changedByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * StudentDojoHistory without action
+   */
+  export type StudentDojoHistoryDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentDojoHistory
+     */
+    select?: StudentDojoHistorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentDojoHistory
+     */
+    omit?: StudentDojoHistoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentDojoHistoryInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -45150,6 +48365,7 @@ export namespace Prisma {
     includesDojoRenewal: 'includesDojoRenewal',
     includesCertificates: 'includesCertificates',
     certDojoId: 'certDojoId',
+    includesTransferRequest: 'includesTransferRequest',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -45241,6 +48457,44 @@ export namespace Prisma {
   };
 
   export type StudentAchievementScalarFieldEnum = (typeof StudentAchievementScalarFieldEnum)[keyof typeof StudentAchievementScalarFieldEnum]
+
+
+  export const StudentTransferRequestScalarFieldEnum: {
+    id: 'id',
+    studentId: 'studentId',
+    fromDojoId: 'fromDojoId',
+    toDojoId: 'toDojoId',
+    status: 'status',
+    dojoDecision: 'dojoDecision',
+    reason: 'reason',
+    dojoNote: 'dojoNote',
+    adminNote: 'adminNote',
+    fee: 'fee',
+    orderId: 'orderId',
+    paidAt: 'paidAt',
+    dojoActedAt: 'dojoActedAt',
+    dojoActedById: 'dojoActedById',
+    adminActedAt: 'adminActedAt',
+    adminActedById: 'adminActedById',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type StudentTransferRequestScalarFieldEnum = (typeof StudentTransferRequestScalarFieldEnum)[keyof typeof StudentTransferRequestScalarFieldEnum]
+
+
+  export const StudentDojoHistoryScalarFieldEnum: {
+    id: 'id',
+    studentId: 'studentId',
+    fromDojoId: 'fromDojoId',
+    toDojoId: 'toDojoId',
+    transferRequestId: 'transferRequestId',
+    changedById: 'changedById',
+    reason: 'reason',
+    createdAt: 'createdAt'
+  };
+
+  export type StudentDojoHistoryScalarFieldEnum = (typeof StudentDojoHistoryScalarFieldEnum)[keyof typeof StudentDojoHistoryScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -45553,6 +48807,34 @@ export namespace Prisma {
    */
   export type ListEnumAchievementRuleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AchievementRule[]'>
     
+
+
+  /**
+   * Reference to a field of type 'StudentTransferStatus'
+   */
+  export type EnumStudentTransferStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StudentTransferStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'StudentTransferStatus[]'
+   */
+  export type ListEnumStudentTransferStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StudentTransferStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'StudentTransferDojoDecision'
+   */
+  export type EnumStudentTransferDojoDecisionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StudentTransferDojoDecision'>
+    
+
+
+  /**
+   * Reference to a field of type 'StudentTransferDojoDecision[]'
+   */
+  export type ListEnumStudentTransferDojoDecisionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StudentTransferDojoDecision[]'>
+    
   /**
    * Deep Input Types
    */
@@ -45750,6 +49032,9 @@ export namespace Prisma {
     dojoSalesSold?: DojoSaleListRelationFilter
     achievementsAwarded?: StudentAchievementListRelationFilter
     tournamentEntries?: TournamentParticipantListRelationFilter
+    transfersDojoActed?: StudentTransferRequestListRelationFilter
+    transfersAdminActed?: StudentTransferRequestListRelationFilter
+    dojoHistoryChanges?: StudentDojoHistoryListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -45779,6 +49064,9 @@ export namespace Prisma {
     dojoSalesSold?: DojoSaleOrderByRelationAggregateInput
     achievementsAwarded?: StudentAchievementOrderByRelationAggregateInput
     tournamentEntries?: TournamentParticipantOrderByRelationAggregateInput
+    transfersDojoActed?: StudentTransferRequestOrderByRelationAggregateInput
+    transfersAdminActed?: StudentTransferRequestOrderByRelationAggregateInput
+    dojoHistoryChanges?: StudentDojoHistoryOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -45811,6 +49099,9 @@ export namespace Prisma {
     dojoSalesSold?: DojoSaleListRelationFilter
     achievementsAwarded?: StudentAchievementListRelationFilter
     tournamentEntries?: TournamentParticipantListRelationFilter
+    transfersDojoActed?: StudentTransferRequestListRelationFilter
+    transfersAdminActed?: StudentTransferRequestListRelationFilter
+    dojoHistoryChanges?: StudentDojoHistoryListRelationFilter
   }, "id" | "email" | "memberNumber">
 
   export type UserOrderByWithAggregationInput = {
@@ -45873,6 +49164,8 @@ export namespace Prisma {
     gradingApplications?: GradingApplicationListRelationFilter
     certificateRequests?: CertificateRequestListRelationFilter
     achievements?: StudentAchievementListRelationFilter
+    transferRequests?: StudentTransferRequestListRelationFilter
+    dojoHistory?: StudentDojoHistoryListRelationFilter
   }
 
   export type StudentOrderByWithRelationInput = {
@@ -45900,6 +49193,8 @@ export namespace Prisma {
     gradingApplications?: GradingApplicationOrderByRelationAggregateInput
     certificateRequests?: CertificateRequestOrderByRelationAggregateInput
     achievements?: StudentAchievementOrderByRelationAggregateInput
+    transferRequests?: StudentTransferRequestOrderByRelationAggregateInput
+    dojoHistory?: StudentDojoHistoryOrderByRelationAggregateInput
   }
 
   export type StudentWhereUniqueInput = Prisma.AtLeast<{
@@ -45930,6 +49225,8 @@ export namespace Prisma {
     gradingApplications?: GradingApplicationListRelationFilter
     certificateRequests?: CertificateRequestListRelationFilter
     achievements?: StudentAchievementListRelationFilter
+    transferRequests?: StudentTransferRequestListRelationFilter
+    dojoHistory?: StudentDojoHistoryListRelationFilter
   }, "id">
 
   export type StudentOrderByWithAggregationInput = {
@@ -46319,6 +49616,10 @@ export namespace Prisma {
     announcements?: AnnouncementListRelationFilter
     inventoryItems?: DojoInventoryItemListRelationFilter
     sales?: DojoSaleListRelationFilter
+    transfersOut?: StudentTransferRequestListRelationFilter
+    transfersIn?: StudentTransferRequestListRelationFilter
+    historyFrom?: StudentDojoHistoryListRelationFilter
+    historyTo?: StudentDojoHistoryListRelationFilter
   }
 
   export type DojoOrderByWithRelationInput = {
@@ -46351,6 +49652,10 @@ export namespace Prisma {
     announcements?: AnnouncementOrderByRelationAggregateInput
     inventoryItems?: DojoInventoryItemOrderByRelationAggregateInput
     sales?: DojoSaleOrderByRelationAggregateInput
+    transfersOut?: StudentTransferRequestOrderByRelationAggregateInput
+    transfersIn?: StudentTransferRequestOrderByRelationAggregateInput
+    historyFrom?: StudentDojoHistoryOrderByRelationAggregateInput
+    historyTo?: StudentDojoHistoryOrderByRelationAggregateInput
   }
 
   export type DojoWhereUniqueInput = Prisma.AtLeast<{
@@ -46386,6 +49691,10 @@ export namespace Prisma {
     announcements?: AnnouncementListRelationFilter
     inventoryItems?: DojoInventoryItemListRelationFilter
     sales?: DojoSaleListRelationFilter
+    transfersOut?: StudentTransferRequestListRelationFilter
+    transfersIn?: StudentTransferRequestListRelationFilter
+    historyFrom?: StudentDojoHistoryListRelationFilter
+    historyTo?: StudentDojoHistoryListRelationFilter
   }, "id">
 
   export type DojoOrderByWithAggregationInput = {
@@ -47868,6 +51177,7 @@ export namespace Prisma {
     includesDojoRenewal?: BoolFilter<"ShopOrder"> | boolean
     includesCertificates?: BoolFilter<"ShopOrder"> | boolean
     certDojoId?: UuidNullableFilter<"ShopOrder"> | string | null
+    includesTransferRequest?: BoolFilter<"ShopOrder"> | boolean
     createdAt?: DateTimeFilter<"ShopOrder"> | Date | string
     updatedAt?: DateTimeFilter<"ShopOrder"> | Date | string
     user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
@@ -47875,6 +51185,7 @@ export namespace Prisma {
     certDojo?: XOR<DojoNullableScalarRelationFilter, DojoWhereInput> | null
     orderItems?: ShopOrderItemListRelationFilter
     certificateRequests?: CertificateRequestListRelationFilter
+    transferRequest?: XOR<StudentTransferRequestNullableScalarRelationFilter, StudentTransferRequestWhereInput> | null
   }
 
   export type ShopOrderOrderByWithRelationInput = {
@@ -47897,6 +51208,7 @@ export namespace Prisma {
     includesDojoRenewal?: SortOrder
     includesCertificates?: SortOrder
     certDojoId?: SortOrderInput | SortOrder
+    includesTransferRequest?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     user?: UserOrderByWithRelationInput
@@ -47904,6 +51216,7 @@ export namespace Prisma {
     certDojo?: DojoOrderByWithRelationInput
     orderItems?: ShopOrderItemOrderByRelationAggregateInput
     certificateRequests?: CertificateRequestOrderByRelationAggregateInput
+    transferRequest?: StudentTransferRequestOrderByWithRelationInput
   }
 
   export type ShopOrderWhereUniqueInput = Prisma.AtLeast<{
@@ -47929,6 +51242,7 @@ export namespace Prisma {
     includesDojoRenewal?: BoolFilter<"ShopOrder"> | boolean
     includesCertificates?: BoolFilter<"ShopOrder"> | boolean
     certDojoId?: UuidNullableFilter<"ShopOrder"> | string | null
+    includesTransferRequest?: BoolFilter<"ShopOrder"> | boolean
     createdAt?: DateTimeFilter<"ShopOrder"> | Date | string
     updatedAt?: DateTimeFilter<"ShopOrder"> | Date | string
     user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
@@ -47936,6 +51250,7 @@ export namespace Prisma {
     certDojo?: XOR<DojoNullableScalarRelationFilter, DojoWhereInput> | null
     orderItems?: ShopOrderItemListRelationFilter
     certificateRequests?: CertificateRequestListRelationFilter
+    transferRequest?: XOR<StudentTransferRequestNullableScalarRelationFilter, StudentTransferRequestWhereInput> | null
   }, "id" | "transactionId">
 
   export type ShopOrderOrderByWithAggregationInput = {
@@ -47958,6 +51273,7 @@ export namespace Prisma {
     includesDojoRenewal?: SortOrder
     includesCertificates?: SortOrder
     certDojoId?: SortOrderInput | SortOrder
+    includesTransferRequest?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: ShopOrderCountOrderByAggregateInput
@@ -47990,6 +51306,7 @@ export namespace Prisma {
     includesDojoRenewal?: BoolWithAggregatesFilter<"ShopOrder"> | boolean
     includesCertificates?: BoolWithAggregatesFilter<"ShopOrder"> | boolean
     certDojoId?: UuidNullableWithAggregatesFilter<"ShopOrder"> | string | null
+    includesTransferRequest?: BoolWithAggregatesFilter<"ShopOrder"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"ShopOrder"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"ShopOrder"> | Date | string
   }
@@ -48467,6 +51784,228 @@ export namespace Prisma {
     note?: StringNullableWithAggregatesFilter<"StudentAchievement"> | string | null
   }
 
+  export type StudentTransferRequestWhereInput = {
+    AND?: StudentTransferRequestWhereInput | StudentTransferRequestWhereInput[]
+    OR?: StudentTransferRequestWhereInput[]
+    NOT?: StudentTransferRequestWhereInput | StudentTransferRequestWhereInput[]
+    id?: UuidFilter<"StudentTransferRequest"> | string
+    studentId?: UuidFilter<"StudentTransferRequest"> | string
+    fromDojoId?: UuidFilter<"StudentTransferRequest"> | string
+    toDojoId?: UuidFilter<"StudentTransferRequest"> | string
+    status?: EnumStudentTransferStatusFilter<"StudentTransferRequest"> | $Enums.StudentTransferStatus
+    dojoDecision?: EnumStudentTransferDojoDecisionFilter<"StudentTransferRequest"> | $Enums.StudentTransferDojoDecision
+    reason?: StringNullableFilter<"StudentTransferRequest"> | string | null
+    dojoNote?: StringNullableFilter<"StudentTransferRequest"> | string | null
+    adminNote?: StringNullableFilter<"StudentTransferRequest"> | string | null
+    fee?: DecimalFilter<"StudentTransferRequest"> | Decimal | DecimalJsLike | number | string
+    orderId?: UuidNullableFilter<"StudentTransferRequest"> | string | null
+    paidAt?: DateTimeNullableFilter<"StudentTransferRequest"> | Date | string | null
+    dojoActedAt?: DateTimeNullableFilter<"StudentTransferRequest"> | Date | string | null
+    dojoActedById?: UuidNullableFilter<"StudentTransferRequest"> | string | null
+    adminActedAt?: DateTimeNullableFilter<"StudentTransferRequest"> | Date | string | null
+    adminActedById?: UuidNullableFilter<"StudentTransferRequest"> | string | null
+    createdAt?: DateTimeFilter<"StudentTransferRequest"> | Date | string
+    updatedAt?: DateTimeFilter<"StudentTransferRequest"> | Date | string
+    student?: XOR<StudentScalarRelationFilter, StudentWhereInput>
+    fromDojo?: XOR<DojoScalarRelationFilter, DojoWhereInput>
+    toDojo?: XOR<DojoScalarRelationFilter, DojoWhereInput>
+    order?: XOR<ShopOrderNullableScalarRelationFilter, ShopOrderWhereInput> | null
+    dojoActedBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    adminActedBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    history?: StudentDojoHistoryListRelationFilter
+  }
+
+  export type StudentTransferRequestOrderByWithRelationInput = {
+    id?: SortOrder
+    studentId?: SortOrder
+    fromDojoId?: SortOrder
+    toDojoId?: SortOrder
+    status?: SortOrder
+    dojoDecision?: SortOrder
+    reason?: SortOrderInput | SortOrder
+    dojoNote?: SortOrderInput | SortOrder
+    adminNote?: SortOrderInput | SortOrder
+    fee?: SortOrder
+    orderId?: SortOrderInput | SortOrder
+    paidAt?: SortOrderInput | SortOrder
+    dojoActedAt?: SortOrderInput | SortOrder
+    dojoActedById?: SortOrderInput | SortOrder
+    adminActedAt?: SortOrderInput | SortOrder
+    adminActedById?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    student?: StudentOrderByWithRelationInput
+    fromDojo?: DojoOrderByWithRelationInput
+    toDojo?: DojoOrderByWithRelationInput
+    order?: ShopOrderOrderByWithRelationInput
+    dojoActedBy?: UserOrderByWithRelationInput
+    adminActedBy?: UserOrderByWithRelationInput
+    history?: StudentDojoHistoryOrderByRelationAggregateInput
+  }
+
+  export type StudentTransferRequestWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    orderId?: string
+    AND?: StudentTransferRequestWhereInput | StudentTransferRequestWhereInput[]
+    OR?: StudentTransferRequestWhereInput[]
+    NOT?: StudentTransferRequestWhereInput | StudentTransferRequestWhereInput[]
+    studentId?: UuidFilter<"StudentTransferRequest"> | string
+    fromDojoId?: UuidFilter<"StudentTransferRequest"> | string
+    toDojoId?: UuidFilter<"StudentTransferRequest"> | string
+    status?: EnumStudentTransferStatusFilter<"StudentTransferRequest"> | $Enums.StudentTransferStatus
+    dojoDecision?: EnumStudentTransferDojoDecisionFilter<"StudentTransferRequest"> | $Enums.StudentTransferDojoDecision
+    reason?: StringNullableFilter<"StudentTransferRequest"> | string | null
+    dojoNote?: StringNullableFilter<"StudentTransferRequest"> | string | null
+    adminNote?: StringNullableFilter<"StudentTransferRequest"> | string | null
+    fee?: DecimalFilter<"StudentTransferRequest"> | Decimal | DecimalJsLike | number | string
+    paidAt?: DateTimeNullableFilter<"StudentTransferRequest"> | Date | string | null
+    dojoActedAt?: DateTimeNullableFilter<"StudentTransferRequest"> | Date | string | null
+    dojoActedById?: UuidNullableFilter<"StudentTransferRequest"> | string | null
+    adminActedAt?: DateTimeNullableFilter<"StudentTransferRequest"> | Date | string | null
+    adminActedById?: UuidNullableFilter<"StudentTransferRequest"> | string | null
+    createdAt?: DateTimeFilter<"StudentTransferRequest"> | Date | string
+    updatedAt?: DateTimeFilter<"StudentTransferRequest"> | Date | string
+    student?: XOR<StudentScalarRelationFilter, StudentWhereInput>
+    fromDojo?: XOR<DojoScalarRelationFilter, DojoWhereInput>
+    toDojo?: XOR<DojoScalarRelationFilter, DojoWhereInput>
+    order?: XOR<ShopOrderNullableScalarRelationFilter, ShopOrderWhereInput> | null
+    dojoActedBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    adminActedBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    history?: StudentDojoHistoryListRelationFilter
+  }, "id" | "orderId">
+
+  export type StudentTransferRequestOrderByWithAggregationInput = {
+    id?: SortOrder
+    studentId?: SortOrder
+    fromDojoId?: SortOrder
+    toDojoId?: SortOrder
+    status?: SortOrder
+    dojoDecision?: SortOrder
+    reason?: SortOrderInput | SortOrder
+    dojoNote?: SortOrderInput | SortOrder
+    adminNote?: SortOrderInput | SortOrder
+    fee?: SortOrder
+    orderId?: SortOrderInput | SortOrder
+    paidAt?: SortOrderInput | SortOrder
+    dojoActedAt?: SortOrderInput | SortOrder
+    dojoActedById?: SortOrderInput | SortOrder
+    adminActedAt?: SortOrderInput | SortOrder
+    adminActedById?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: StudentTransferRequestCountOrderByAggregateInput
+    _avg?: StudentTransferRequestAvgOrderByAggregateInput
+    _max?: StudentTransferRequestMaxOrderByAggregateInput
+    _min?: StudentTransferRequestMinOrderByAggregateInput
+    _sum?: StudentTransferRequestSumOrderByAggregateInput
+  }
+
+  export type StudentTransferRequestScalarWhereWithAggregatesInput = {
+    AND?: StudentTransferRequestScalarWhereWithAggregatesInput | StudentTransferRequestScalarWhereWithAggregatesInput[]
+    OR?: StudentTransferRequestScalarWhereWithAggregatesInput[]
+    NOT?: StudentTransferRequestScalarWhereWithAggregatesInput | StudentTransferRequestScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"StudentTransferRequest"> | string
+    studentId?: UuidWithAggregatesFilter<"StudentTransferRequest"> | string
+    fromDojoId?: UuidWithAggregatesFilter<"StudentTransferRequest"> | string
+    toDojoId?: UuidWithAggregatesFilter<"StudentTransferRequest"> | string
+    status?: EnumStudentTransferStatusWithAggregatesFilter<"StudentTransferRequest"> | $Enums.StudentTransferStatus
+    dojoDecision?: EnumStudentTransferDojoDecisionWithAggregatesFilter<"StudentTransferRequest"> | $Enums.StudentTransferDojoDecision
+    reason?: StringNullableWithAggregatesFilter<"StudentTransferRequest"> | string | null
+    dojoNote?: StringNullableWithAggregatesFilter<"StudentTransferRequest"> | string | null
+    adminNote?: StringNullableWithAggregatesFilter<"StudentTransferRequest"> | string | null
+    fee?: DecimalWithAggregatesFilter<"StudentTransferRequest"> | Decimal | DecimalJsLike | number | string
+    orderId?: UuidNullableWithAggregatesFilter<"StudentTransferRequest"> | string | null
+    paidAt?: DateTimeNullableWithAggregatesFilter<"StudentTransferRequest"> | Date | string | null
+    dojoActedAt?: DateTimeNullableWithAggregatesFilter<"StudentTransferRequest"> | Date | string | null
+    dojoActedById?: UuidNullableWithAggregatesFilter<"StudentTransferRequest"> | string | null
+    adminActedAt?: DateTimeNullableWithAggregatesFilter<"StudentTransferRequest"> | Date | string | null
+    adminActedById?: UuidNullableWithAggregatesFilter<"StudentTransferRequest"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"StudentTransferRequest"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"StudentTransferRequest"> | Date | string
+  }
+
+  export type StudentDojoHistoryWhereInput = {
+    AND?: StudentDojoHistoryWhereInput | StudentDojoHistoryWhereInput[]
+    OR?: StudentDojoHistoryWhereInput[]
+    NOT?: StudentDojoHistoryWhereInput | StudentDojoHistoryWhereInput[]
+    id?: UuidFilter<"StudentDojoHistory"> | string
+    studentId?: UuidFilter<"StudentDojoHistory"> | string
+    fromDojoId?: UuidNullableFilter<"StudentDojoHistory"> | string | null
+    toDojoId?: UuidNullableFilter<"StudentDojoHistory"> | string | null
+    transferRequestId?: UuidNullableFilter<"StudentDojoHistory"> | string | null
+    changedById?: UuidNullableFilter<"StudentDojoHistory"> | string | null
+    reason?: StringNullableFilter<"StudentDojoHistory"> | string | null
+    createdAt?: DateTimeFilter<"StudentDojoHistory"> | Date | string
+    student?: XOR<StudentScalarRelationFilter, StudentWhereInput>
+    fromDojo?: XOR<DojoNullableScalarRelationFilter, DojoWhereInput> | null
+    toDojo?: XOR<DojoNullableScalarRelationFilter, DojoWhereInput> | null
+    transferRequest?: XOR<StudentTransferRequestNullableScalarRelationFilter, StudentTransferRequestWhereInput> | null
+    changedBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+  }
+
+  export type StudentDojoHistoryOrderByWithRelationInput = {
+    id?: SortOrder
+    studentId?: SortOrder
+    fromDojoId?: SortOrderInput | SortOrder
+    toDojoId?: SortOrderInput | SortOrder
+    transferRequestId?: SortOrderInput | SortOrder
+    changedById?: SortOrderInput | SortOrder
+    reason?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    student?: StudentOrderByWithRelationInput
+    fromDojo?: DojoOrderByWithRelationInput
+    toDojo?: DojoOrderByWithRelationInput
+    transferRequest?: StudentTransferRequestOrderByWithRelationInput
+    changedBy?: UserOrderByWithRelationInput
+  }
+
+  export type StudentDojoHistoryWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: StudentDojoHistoryWhereInput | StudentDojoHistoryWhereInput[]
+    OR?: StudentDojoHistoryWhereInput[]
+    NOT?: StudentDojoHistoryWhereInput | StudentDojoHistoryWhereInput[]
+    studentId?: UuidFilter<"StudentDojoHistory"> | string
+    fromDojoId?: UuidNullableFilter<"StudentDojoHistory"> | string | null
+    toDojoId?: UuidNullableFilter<"StudentDojoHistory"> | string | null
+    transferRequestId?: UuidNullableFilter<"StudentDojoHistory"> | string | null
+    changedById?: UuidNullableFilter<"StudentDojoHistory"> | string | null
+    reason?: StringNullableFilter<"StudentDojoHistory"> | string | null
+    createdAt?: DateTimeFilter<"StudentDojoHistory"> | Date | string
+    student?: XOR<StudentScalarRelationFilter, StudentWhereInput>
+    fromDojo?: XOR<DojoNullableScalarRelationFilter, DojoWhereInput> | null
+    toDojo?: XOR<DojoNullableScalarRelationFilter, DojoWhereInput> | null
+    transferRequest?: XOR<StudentTransferRequestNullableScalarRelationFilter, StudentTransferRequestWhereInput> | null
+    changedBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+  }, "id">
+
+  export type StudentDojoHistoryOrderByWithAggregationInput = {
+    id?: SortOrder
+    studentId?: SortOrder
+    fromDojoId?: SortOrderInput | SortOrder
+    toDojoId?: SortOrderInput | SortOrder
+    transferRequestId?: SortOrderInput | SortOrder
+    changedById?: SortOrderInput | SortOrder
+    reason?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    _count?: StudentDojoHistoryCountOrderByAggregateInput
+    _max?: StudentDojoHistoryMaxOrderByAggregateInput
+    _min?: StudentDojoHistoryMinOrderByAggregateInput
+  }
+
+  export type StudentDojoHistoryScalarWhereWithAggregatesInput = {
+    AND?: StudentDojoHistoryScalarWhereWithAggregatesInput | StudentDojoHistoryScalarWhereWithAggregatesInput[]
+    OR?: StudentDojoHistoryScalarWhereWithAggregatesInput[]
+    NOT?: StudentDojoHistoryScalarWhereWithAggregatesInput | StudentDojoHistoryScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"StudentDojoHistory"> | string
+    studentId?: UuidWithAggregatesFilter<"StudentDojoHistory"> | string
+    fromDojoId?: UuidNullableWithAggregatesFilter<"StudentDojoHistory"> | string | null
+    toDojoId?: UuidNullableWithAggregatesFilter<"StudentDojoHistory"> | string | null
+    transferRequestId?: UuidNullableWithAggregatesFilter<"StudentDojoHistory"> | string | null
+    changedById?: UuidNullableWithAggregatesFilter<"StudentDojoHistory"> | string | null
+    reason?: StringNullableWithAggregatesFilter<"StudentDojoHistory"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"StudentDojoHistory"> | Date | string
+  }
+
   export type RoleCreateInput = {
     id: string
     displayName: string
@@ -48657,6 +52196,9 @@ export namespace Prisma {
     dojoSalesSold?: DojoSaleCreateNestedManyWithoutSoldByInput
     achievementsAwarded?: StudentAchievementCreateNestedManyWithoutAwardedByInput
     tournamentEntries?: TournamentParticipantCreateNestedManyWithoutUserInput
+    transfersDojoActed?: StudentTransferRequestCreateNestedManyWithoutDojoActedByInput
+    transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
+    dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -48685,6 +52227,9 @@ export namespace Prisma {
     dojoSalesSold?: DojoSaleUncheckedCreateNestedManyWithoutSoldByInput
     achievementsAwarded?: StudentAchievementUncheckedCreateNestedManyWithoutAwardedByInput
     tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutUserInput
+    transfersDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutDojoActedByInput
+    transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
+    dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
   }
 
   export type UserUpdateInput = {
@@ -48713,6 +52258,9 @@ export namespace Prisma {
     dojoSalesSold?: DojoSaleUpdateManyWithoutSoldByNestedInput
     achievementsAwarded?: StudentAchievementUpdateManyWithoutAwardedByNestedInput
     tournamentEntries?: TournamentParticipantUpdateManyWithoutUserNestedInput
+    transfersDojoActed?: StudentTransferRequestUpdateManyWithoutDojoActedByNestedInput
+    transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
+    dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -48741,6 +52289,9 @@ export namespace Prisma {
     dojoSalesSold?: DojoSaleUncheckedUpdateManyWithoutSoldByNestedInput
     achievementsAwarded?: StudentAchievementUncheckedUpdateManyWithoutAwardedByNestedInput
     tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutUserNestedInput
+    transfersDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
+    transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
+    dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -48804,6 +52355,8 @@ export namespace Prisma {
     gradingApplications?: GradingApplicationCreateNestedManyWithoutStudentInput
     certificateRequests?: CertificateRequestCreateNestedManyWithoutStudentInput
     achievements?: StudentAchievementCreateNestedManyWithoutStudentInput
+    transferRequests?: StudentTransferRequestCreateNestedManyWithoutStudentInput
+    dojoHistory?: StudentDojoHistoryCreateNestedManyWithoutStudentInput
   }
 
   export type StudentUncheckedCreateInput = {
@@ -48829,6 +52382,8 @@ export namespace Prisma {
     gradingApplications?: GradingApplicationUncheckedCreateNestedManyWithoutStudentInput
     certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutStudentInput
     achievements?: StudentAchievementUncheckedCreateNestedManyWithoutStudentInput
+    transferRequests?: StudentTransferRequestUncheckedCreateNestedManyWithoutStudentInput
+    dojoHistory?: StudentDojoHistoryUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type StudentUpdateInput = {
@@ -48854,6 +52409,8 @@ export namespace Prisma {
     gradingApplications?: GradingApplicationUpdateManyWithoutStudentNestedInput
     certificateRequests?: CertificateRequestUpdateManyWithoutStudentNestedInput
     achievements?: StudentAchievementUpdateManyWithoutStudentNestedInput
+    transferRequests?: StudentTransferRequestUpdateManyWithoutStudentNestedInput
+    dojoHistory?: StudentDojoHistoryUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateInput = {
@@ -48879,6 +52436,8 @@ export namespace Prisma {
     gradingApplications?: GradingApplicationUncheckedUpdateManyWithoutStudentNestedInput
     certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutStudentNestedInput
     achievements?: StudentAchievementUncheckedUpdateManyWithoutStudentNestedInput
+    transferRequests?: StudentTransferRequestUncheckedUpdateManyWithoutStudentNestedInput
+    dojoHistory?: StudentDojoHistoryUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentCreateManyInput = {
@@ -49276,6 +52835,10 @@ export namespace Prisma {
     announcements?: AnnouncementCreateNestedManyWithoutDojoInput
     inventoryItems?: DojoInventoryItemCreateNestedManyWithoutDojoInput
     sales?: DojoSaleCreateNestedManyWithoutDojoInput
+    transfersOut?: StudentTransferRequestCreateNestedManyWithoutFromDojoInput
+    transfersIn?: StudentTransferRequestCreateNestedManyWithoutToDojoInput
+    historyFrom?: StudentDojoHistoryCreateNestedManyWithoutFromDojoInput
+    historyTo?: StudentDojoHistoryCreateNestedManyWithoutToDojoInput
   }
 
   export type DojoUncheckedCreateInput = {
@@ -49308,6 +52871,10 @@ export namespace Prisma {
     announcements?: AnnouncementUncheckedCreateNestedManyWithoutDojoInput
     inventoryItems?: DojoInventoryItemUncheckedCreateNestedManyWithoutDojoInput
     sales?: DojoSaleUncheckedCreateNestedManyWithoutDojoInput
+    transfersOut?: StudentTransferRequestUncheckedCreateNestedManyWithoutFromDojoInput
+    transfersIn?: StudentTransferRequestUncheckedCreateNestedManyWithoutToDojoInput
+    historyFrom?: StudentDojoHistoryUncheckedCreateNestedManyWithoutFromDojoInput
+    historyTo?: StudentDojoHistoryUncheckedCreateNestedManyWithoutToDojoInput
   }
 
   export type DojoUpdateInput = {
@@ -49340,6 +52907,10 @@ export namespace Prisma {
     announcements?: AnnouncementUpdateManyWithoutDojoNestedInput
     inventoryItems?: DojoInventoryItemUpdateManyWithoutDojoNestedInput
     sales?: DojoSaleUpdateManyWithoutDojoNestedInput
+    transfersOut?: StudentTransferRequestUpdateManyWithoutFromDojoNestedInput
+    transfersIn?: StudentTransferRequestUpdateManyWithoutToDojoNestedInput
+    historyFrom?: StudentDojoHistoryUpdateManyWithoutFromDojoNestedInput
+    historyTo?: StudentDojoHistoryUpdateManyWithoutToDojoNestedInput
   }
 
   export type DojoUncheckedUpdateInput = {
@@ -49372,6 +52943,10 @@ export namespace Prisma {
     announcements?: AnnouncementUncheckedUpdateManyWithoutDojoNestedInput
     inventoryItems?: DojoInventoryItemUncheckedUpdateManyWithoutDojoNestedInput
     sales?: DojoSaleUncheckedUpdateManyWithoutDojoNestedInput
+    transfersOut?: StudentTransferRequestUncheckedUpdateManyWithoutFromDojoNestedInput
+    transfersIn?: StudentTransferRequestUncheckedUpdateManyWithoutToDojoNestedInput
+    historyFrom?: StudentDojoHistoryUncheckedUpdateManyWithoutFromDojoNestedInput
+    historyTo?: StudentDojoHistoryUncheckedUpdateManyWithoutToDojoNestedInput
   }
 
   export type DojoCreateManyInput = {
@@ -50982,6 +54557,7 @@ export namespace Prisma {
     isGuestOrder?: boolean
     includesDojoRenewal?: boolean
     includesCertificates?: boolean
+    includesTransferRequest?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     user?: UserCreateNestedOneWithoutOrdersInput
@@ -50989,6 +54565,7 @@ export namespace Prisma {
     certDojo?: DojoCreateNestedOneWithoutCertificateOrdersInput
     orderItems?: ShopOrderItemCreateNestedManyWithoutOrderInput
     certificateRequests?: CertificateRequestCreateNestedManyWithoutOrderInput
+    transferRequest?: StudentTransferRequestCreateNestedOneWithoutOrderInput
   }
 
   export type ShopOrderUncheckedCreateInput = {
@@ -51011,10 +54588,12 @@ export namespace Prisma {
     includesDojoRenewal?: boolean
     includesCertificates?: boolean
     certDojoId?: string | null
+    includesTransferRequest?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     orderItems?: ShopOrderItemUncheckedCreateNestedManyWithoutOrderInput
     certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutOrderInput
+    transferRequest?: StudentTransferRequestUncheckedCreateNestedOneWithoutOrderInput
   }
 
   export type ShopOrderUpdateInput = {
@@ -51034,6 +54613,7 @@ export namespace Prisma {
     isGuestOrder?: BoolFieldUpdateOperationsInput | boolean
     includesDojoRenewal?: BoolFieldUpdateOperationsInput | boolean
     includesCertificates?: BoolFieldUpdateOperationsInput | boolean
+    includesTransferRequest?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneWithoutOrdersNestedInput
@@ -51041,6 +54621,7 @@ export namespace Prisma {
     certDojo?: DojoUpdateOneWithoutCertificateOrdersNestedInput
     orderItems?: ShopOrderItemUpdateManyWithoutOrderNestedInput
     certificateRequests?: CertificateRequestUpdateManyWithoutOrderNestedInput
+    transferRequest?: StudentTransferRequestUpdateOneWithoutOrderNestedInput
   }
 
   export type ShopOrderUncheckedUpdateInput = {
@@ -51063,10 +54644,12 @@ export namespace Prisma {
     includesDojoRenewal?: BoolFieldUpdateOperationsInput | boolean
     includesCertificates?: BoolFieldUpdateOperationsInput | boolean
     certDojoId?: NullableStringFieldUpdateOperationsInput | string | null
+    includesTransferRequest?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     orderItems?: ShopOrderItemUncheckedUpdateManyWithoutOrderNestedInput
     certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutOrderNestedInput
+    transferRequest?: StudentTransferRequestUncheckedUpdateOneWithoutOrderNestedInput
   }
 
   export type ShopOrderCreateManyInput = {
@@ -51089,6 +54672,7 @@ export namespace Prisma {
     includesDojoRenewal?: boolean
     includesCertificates?: boolean
     certDojoId?: string | null
+    includesTransferRequest?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -51110,6 +54694,7 @@ export namespace Prisma {
     isGuestOrder?: BoolFieldUpdateOperationsInput | boolean
     includesDojoRenewal?: BoolFieldUpdateOperationsInput | boolean
     includesCertificates?: BoolFieldUpdateOperationsInput | boolean
+    includesTransferRequest?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -51134,6 +54719,7 @@ export namespace Prisma {
     includesDojoRenewal?: BoolFieldUpdateOperationsInput | boolean
     includesCertificates?: BoolFieldUpdateOperationsInput | boolean
     certDojoId?: NullableStringFieldUpdateOperationsInput | string | null
+    includesTransferRequest?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -51627,6 +55213,223 @@ export namespace Prisma {
     note?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
+  export type StudentTransferRequestCreateInput = {
+    id?: string
+    status?: $Enums.StudentTransferStatus
+    dojoDecision?: $Enums.StudentTransferDojoDecision
+    reason?: string | null
+    dojoNote?: string | null
+    adminNote?: string | null
+    fee: Decimal | DecimalJsLike | number | string
+    paidAt?: Date | string | null
+    dojoActedAt?: Date | string | null
+    adminActedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    student: StudentCreateNestedOneWithoutTransferRequestsInput
+    fromDojo: DojoCreateNestedOneWithoutTransfersOutInput
+    toDojo: DojoCreateNestedOneWithoutTransfersInInput
+    order?: ShopOrderCreateNestedOneWithoutTransferRequestInput
+    dojoActedBy?: UserCreateNestedOneWithoutTransfersDojoActedInput
+    adminActedBy?: UserCreateNestedOneWithoutTransfersAdminActedInput
+    history?: StudentDojoHistoryCreateNestedManyWithoutTransferRequestInput
+  }
+
+  export type StudentTransferRequestUncheckedCreateInput = {
+    id?: string
+    studentId: string
+    fromDojoId: string
+    toDojoId: string
+    status?: $Enums.StudentTransferStatus
+    dojoDecision?: $Enums.StudentTransferDojoDecision
+    reason?: string | null
+    dojoNote?: string | null
+    adminNote?: string | null
+    fee: Decimal | DecimalJsLike | number | string
+    orderId?: string | null
+    paidAt?: Date | string | null
+    dojoActedAt?: Date | string | null
+    dojoActedById?: string | null
+    adminActedAt?: Date | string | null
+    adminActedById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    history?: StudentDojoHistoryUncheckedCreateNestedManyWithoutTransferRequestInput
+  }
+
+  export type StudentTransferRequestUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumStudentTransferStatusFieldUpdateOperationsInput | $Enums.StudentTransferStatus
+    dojoDecision?: EnumStudentTransferDojoDecisionFieldUpdateOperationsInput | $Enums.StudentTransferDojoDecision
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    dojoNote?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNote?: NullableStringFieldUpdateOperationsInput | string | null
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    adminActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    student?: StudentUpdateOneRequiredWithoutTransferRequestsNestedInput
+    fromDojo?: DojoUpdateOneRequiredWithoutTransfersOutNestedInput
+    toDojo?: DojoUpdateOneRequiredWithoutTransfersInNestedInput
+    order?: ShopOrderUpdateOneWithoutTransferRequestNestedInput
+    dojoActedBy?: UserUpdateOneWithoutTransfersDojoActedNestedInput
+    adminActedBy?: UserUpdateOneWithoutTransfersAdminActedNestedInput
+    history?: StudentDojoHistoryUpdateManyWithoutTransferRequestNestedInput
+  }
+
+  export type StudentTransferRequestUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    fromDojoId?: StringFieldUpdateOperationsInput | string
+    toDojoId?: StringFieldUpdateOperationsInput | string
+    status?: EnumStudentTransferStatusFieldUpdateOperationsInput | $Enums.StudentTransferStatus
+    dojoDecision?: EnumStudentTransferDojoDecisionFieldUpdateOperationsInput | $Enums.StudentTransferDojoDecision
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    dojoNote?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNote?: NullableStringFieldUpdateOperationsInput | string | null
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    orderId?: NullableStringFieldUpdateOperationsInput | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dojoActedById?: NullableStringFieldUpdateOperationsInput | string | null
+    adminActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    adminActedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    history?: StudentDojoHistoryUncheckedUpdateManyWithoutTransferRequestNestedInput
+  }
+
+  export type StudentTransferRequestCreateManyInput = {
+    id?: string
+    studentId: string
+    fromDojoId: string
+    toDojoId: string
+    status?: $Enums.StudentTransferStatus
+    dojoDecision?: $Enums.StudentTransferDojoDecision
+    reason?: string | null
+    dojoNote?: string | null
+    adminNote?: string | null
+    fee: Decimal | DecimalJsLike | number | string
+    orderId?: string | null
+    paidAt?: Date | string | null
+    dojoActedAt?: Date | string | null
+    dojoActedById?: string | null
+    adminActedAt?: Date | string | null
+    adminActedById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type StudentTransferRequestUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumStudentTransferStatusFieldUpdateOperationsInput | $Enums.StudentTransferStatus
+    dojoDecision?: EnumStudentTransferDojoDecisionFieldUpdateOperationsInput | $Enums.StudentTransferDojoDecision
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    dojoNote?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNote?: NullableStringFieldUpdateOperationsInput | string | null
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    adminActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type StudentTransferRequestUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    fromDojoId?: StringFieldUpdateOperationsInput | string
+    toDojoId?: StringFieldUpdateOperationsInput | string
+    status?: EnumStudentTransferStatusFieldUpdateOperationsInput | $Enums.StudentTransferStatus
+    dojoDecision?: EnumStudentTransferDojoDecisionFieldUpdateOperationsInput | $Enums.StudentTransferDojoDecision
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    dojoNote?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNote?: NullableStringFieldUpdateOperationsInput | string | null
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    orderId?: NullableStringFieldUpdateOperationsInput | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dojoActedById?: NullableStringFieldUpdateOperationsInput | string | null
+    adminActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    adminActedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type StudentDojoHistoryCreateInput = {
+    id?: string
+    reason?: string | null
+    createdAt?: Date | string
+    student: StudentCreateNestedOneWithoutDojoHistoryInput
+    fromDojo?: DojoCreateNestedOneWithoutHistoryFromInput
+    toDojo?: DojoCreateNestedOneWithoutHistoryToInput
+    transferRequest?: StudentTransferRequestCreateNestedOneWithoutHistoryInput
+    changedBy?: UserCreateNestedOneWithoutDojoHistoryChangesInput
+  }
+
+  export type StudentDojoHistoryUncheckedCreateInput = {
+    id?: string
+    studentId: string
+    fromDojoId?: string | null
+    toDojoId?: string | null
+    transferRequestId?: string | null
+    changedById?: string | null
+    reason?: string | null
+    createdAt?: Date | string
+  }
+
+  export type StudentDojoHistoryUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    student?: StudentUpdateOneRequiredWithoutDojoHistoryNestedInput
+    fromDojo?: DojoUpdateOneWithoutHistoryFromNestedInput
+    toDojo?: DojoUpdateOneWithoutHistoryToNestedInput
+    transferRequest?: StudentTransferRequestUpdateOneWithoutHistoryNestedInput
+    changedBy?: UserUpdateOneWithoutDojoHistoryChangesNestedInput
+  }
+
+  export type StudentDojoHistoryUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    fromDojoId?: NullableStringFieldUpdateOperationsInput | string | null
+    toDojoId?: NullableStringFieldUpdateOperationsInput | string | null
+    transferRequestId?: NullableStringFieldUpdateOperationsInput | string | null
+    changedById?: NullableStringFieldUpdateOperationsInput | string | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type StudentDojoHistoryCreateManyInput = {
+    id?: string
+    studentId: string
+    fromDojoId?: string | null
+    toDojoId?: string | null
+    transferRequestId?: string | null
+    changedById?: string | null
+    reason?: string | null
+    createdAt?: Date | string
+  }
+
+  export type StudentDojoHistoryUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type StudentDojoHistoryUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    fromDojoId?: NullableStringFieldUpdateOperationsInput | string | null
+    toDojoId?: NullableStringFieldUpdateOperationsInput | string | null
+    transferRequestId?: NullableStringFieldUpdateOperationsInput | string | null
+    changedById?: NullableStringFieldUpdateOperationsInput | string | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -51914,6 +55717,18 @@ export namespace Prisma {
     none?: TournamentParticipantWhereInput
   }
 
+  export type StudentTransferRequestListRelationFilter = {
+    every?: StudentTransferRequestWhereInput
+    some?: StudentTransferRequestWhereInput
+    none?: StudentTransferRequestWhereInput
+  }
+
+  export type StudentDojoHistoryListRelationFilter = {
+    every?: StudentDojoHistoryWhereInput
+    some?: StudentDojoHistoryWhereInput
+    none?: StudentDojoHistoryWhereInput
+  }
+
   export type NotificationOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -51943,6 +55758,14 @@ export namespace Prisma {
   }
 
   export type TournamentParticipantOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type StudentTransferRequestOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type StudentDojoHistoryOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -53664,6 +57487,11 @@ export namespace Prisma {
     not?: NestedEnumPaymentStatusFilter<$PrismaModel> | $Enums.PaymentStatus
   }
 
+  export type StudentTransferRequestNullableScalarRelationFilter = {
+    is?: StudentTransferRequestWhereInput | null
+    isNot?: StudentTransferRequestWhereInput | null
+  }
+
   export type ShopOrderCountOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
@@ -53684,6 +57512,7 @@ export namespace Prisma {
     includesDojoRenewal?: SortOrder
     includesCertificates?: SortOrder
     certDojoId?: SortOrder
+    includesTransferRequest?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -53713,6 +57542,7 @@ export namespace Prisma {
     includesDojoRenewal?: SortOrder
     includesCertificates?: SortOrder
     certDojoId?: SortOrder
+    includesTransferRequest?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -53737,6 +57567,7 @@ export namespace Prisma {
     includesDojoRenewal?: SortOrder
     includesCertificates?: SortOrder
     certDojoId?: SortOrder
+    includesTransferRequest?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -54072,6 +57903,144 @@ export namespace Prisma {
     progress?: SortOrder
   }
 
+  export type EnumStudentTransferStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.StudentTransferStatus | EnumStudentTransferStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.StudentTransferStatus[] | ListEnumStudentTransferStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.StudentTransferStatus[] | ListEnumStudentTransferStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumStudentTransferStatusFilter<$PrismaModel> | $Enums.StudentTransferStatus
+  }
+
+  export type EnumStudentTransferDojoDecisionFilter<$PrismaModel = never> = {
+    equals?: $Enums.StudentTransferDojoDecision | EnumStudentTransferDojoDecisionFieldRefInput<$PrismaModel>
+    in?: $Enums.StudentTransferDojoDecision[] | ListEnumStudentTransferDojoDecisionFieldRefInput<$PrismaModel>
+    notIn?: $Enums.StudentTransferDojoDecision[] | ListEnumStudentTransferDojoDecisionFieldRefInput<$PrismaModel>
+    not?: NestedEnumStudentTransferDojoDecisionFilter<$PrismaModel> | $Enums.StudentTransferDojoDecision
+  }
+
+  export type StudentTransferRequestCountOrderByAggregateInput = {
+    id?: SortOrder
+    studentId?: SortOrder
+    fromDojoId?: SortOrder
+    toDojoId?: SortOrder
+    status?: SortOrder
+    dojoDecision?: SortOrder
+    reason?: SortOrder
+    dojoNote?: SortOrder
+    adminNote?: SortOrder
+    fee?: SortOrder
+    orderId?: SortOrder
+    paidAt?: SortOrder
+    dojoActedAt?: SortOrder
+    dojoActedById?: SortOrder
+    adminActedAt?: SortOrder
+    adminActedById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type StudentTransferRequestAvgOrderByAggregateInput = {
+    fee?: SortOrder
+  }
+
+  export type StudentTransferRequestMaxOrderByAggregateInput = {
+    id?: SortOrder
+    studentId?: SortOrder
+    fromDojoId?: SortOrder
+    toDojoId?: SortOrder
+    status?: SortOrder
+    dojoDecision?: SortOrder
+    reason?: SortOrder
+    dojoNote?: SortOrder
+    adminNote?: SortOrder
+    fee?: SortOrder
+    orderId?: SortOrder
+    paidAt?: SortOrder
+    dojoActedAt?: SortOrder
+    dojoActedById?: SortOrder
+    adminActedAt?: SortOrder
+    adminActedById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type StudentTransferRequestMinOrderByAggregateInput = {
+    id?: SortOrder
+    studentId?: SortOrder
+    fromDojoId?: SortOrder
+    toDojoId?: SortOrder
+    status?: SortOrder
+    dojoDecision?: SortOrder
+    reason?: SortOrder
+    dojoNote?: SortOrder
+    adminNote?: SortOrder
+    fee?: SortOrder
+    orderId?: SortOrder
+    paidAt?: SortOrder
+    dojoActedAt?: SortOrder
+    dojoActedById?: SortOrder
+    adminActedAt?: SortOrder
+    adminActedById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type StudentTransferRequestSumOrderByAggregateInput = {
+    fee?: SortOrder
+  }
+
+  export type EnumStudentTransferStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.StudentTransferStatus | EnumStudentTransferStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.StudentTransferStatus[] | ListEnumStudentTransferStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.StudentTransferStatus[] | ListEnumStudentTransferStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumStudentTransferStatusWithAggregatesFilter<$PrismaModel> | $Enums.StudentTransferStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumStudentTransferStatusFilter<$PrismaModel>
+    _max?: NestedEnumStudentTransferStatusFilter<$PrismaModel>
+  }
+
+  export type EnumStudentTransferDojoDecisionWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.StudentTransferDojoDecision | EnumStudentTransferDojoDecisionFieldRefInput<$PrismaModel>
+    in?: $Enums.StudentTransferDojoDecision[] | ListEnumStudentTransferDojoDecisionFieldRefInput<$PrismaModel>
+    notIn?: $Enums.StudentTransferDojoDecision[] | ListEnumStudentTransferDojoDecisionFieldRefInput<$PrismaModel>
+    not?: NestedEnumStudentTransferDojoDecisionWithAggregatesFilter<$PrismaModel> | $Enums.StudentTransferDojoDecision
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumStudentTransferDojoDecisionFilter<$PrismaModel>
+    _max?: NestedEnumStudentTransferDojoDecisionFilter<$PrismaModel>
+  }
+
+  export type StudentDojoHistoryCountOrderByAggregateInput = {
+    id?: SortOrder
+    studentId?: SortOrder
+    fromDojoId?: SortOrder
+    toDojoId?: SortOrder
+    transferRequestId?: SortOrder
+    changedById?: SortOrder
+    reason?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type StudentDojoHistoryMaxOrderByAggregateInput = {
+    id?: SortOrder
+    studentId?: SortOrder
+    fromDojoId?: SortOrder
+    toDojoId?: SortOrder
+    transferRequestId?: SortOrder
+    changedById?: SortOrder
+    reason?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type StudentDojoHistoryMinOrderByAggregateInput = {
+    id?: SortOrder
+    studentId?: SortOrder
+    fromDojoId?: SortOrder
+    toDojoId?: SortOrder
+    transferRequestId?: SortOrder
+    changedById?: SortOrder
+    reason?: SortOrder
+    createdAt?: SortOrder
+  }
+
   export type UserCreateNestedManyWithoutRoleInput = {
     create?: XOR<UserCreateWithoutRoleInput, UserUncheckedCreateWithoutRoleInput> | UserCreateWithoutRoleInput[] | UserUncheckedCreateWithoutRoleInput[]
     connectOrCreate?: UserCreateOrConnectWithoutRoleInput | UserCreateOrConnectWithoutRoleInput[]
@@ -54344,6 +58313,27 @@ export namespace Prisma {
     connect?: TournamentParticipantWhereUniqueInput | TournamentParticipantWhereUniqueInput[]
   }
 
+  export type StudentTransferRequestCreateNestedManyWithoutDojoActedByInput = {
+    create?: XOR<StudentTransferRequestCreateWithoutDojoActedByInput, StudentTransferRequestUncheckedCreateWithoutDojoActedByInput> | StudentTransferRequestCreateWithoutDojoActedByInput[] | StudentTransferRequestUncheckedCreateWithoutDojoActedByInput[]
+    connectOrCreate?: StudentTransferRequestCreateOrConnectWithoutDojoActedByInput | StudentTransferRequestCreateOrConnectWithoutDojoActedByInput[]
+    createMany?: StudentTransferRequestCreateManyDojoActedByInputEnvelope
+    connect?: StudentTransferRequestWhereUniqueInput | StudentTransferRequestWhereUniqueInput[]
+  }
+
+  export type StudentTransferRequestCreateNestedManyWithoutAdminActedByInput = {
+    create?: XOR<StudentTransferRequestCreateWithoutAdminActedByInput, StudentTransferRequestUncheckedCreateWithoutAdminActedByInput> | StudentTransferRequestCreateWithoutAdminActedByInput[] | StudentTransferRequestUncheckedCreateWithoutAdminActedByInput[]
+    connectOrCreate?: StudentTransferRequestCreateOrConnectWithoutAdminActedByInput | StudentTransferRequestCreateOrConnectWithoutAdminActedByInput[]
+    createMany?: StudentTransferRequestCreateManyAdminActedByInputEnvelope
+    connect?: StudentTransferRequestWhereUniqueInput | StudentTransferRequestWhereUniqueInput[]
+  }
+
+  export type StudentDojoHistoryCreateNestedManyWithoutChangedByInput = {
+    create?: XOR<StudentDojoHistoryCreateWithoutChangedByInput, StudentDojoHistoryUncheckedCreateWithoutChangedByInput> | StudentDojoHistoryCreateWithoutChangedByInput[] | StudentDojoHistoryUncheckedCreateWithoutChangedByInput[]
+    connectOrCreate?: StudentDojoHistoryCreateOrConnectWithoutChangedByInput | StudentDojoHistoryCreateOrConnectWithoutChangedByInput[]
+    createMany?: StudentDojoHistoryCreateManyChangedByInputEnvelope
+    connect?: StudentDojoHistoryWhereUniqueInput | StudentDojoHistoryWhereUniqueInput[]
+  }
+
   export type StudentUncheckedCreateNestedOneWithoutUserInput = {
     create?: XOR<StudentCreateWithoutUserInput, StudentUncheckedCreateWithoutUserInput>
     connectOrCreate?: StudentCreateOrConnectWithoutUserInput
@@ -54442,6 +58432,27 @@ export namespace Prisma {
     connectOrCreate?: TournamentParticipantCreateOrConnectWithoutUserInput | TournamentParticipantCreateOrConnectWithoutUserInput[]
     createMany?: TournamentParticipantCreateManyUserInputEnvelope
     connect?: TournamentParticipantWhereUniqueInput | TournamentParticipantWhereUniqueInput[]
+  }
+
+  export type StudentTransferRequestUncheckedCreateNestedManyWithoutDojoActedByInput = {
+    create?: XOR<StudentTransferRequestCreateWithoutDojoActedByInput, StudentTransferRequestUncheckedCreateWithoutDojoActedByInput> | StudentTransferRequestCreateWithoutDojoActedByInput[] | StudentTransferRequestUncheckedCreateWithoutDojoActedByInput[]
+    connectOrCreate?: StudentTransferRequestCreateOrConnectWithoutDojoActedByInput | StudentTransferRequestCreateOrConnectWithoutDojoActedByInput[]
+    createMany?: StudentTransferRequestCreateManyDojoActedByInputEnvelope
+    connect?: StudentTransferRequestWhereUniqueInput | StudentTransferRequestWhereUniqueInput[]
+  }
+
+  export type StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput = {
+    create?: XOR<StudentTransferRequestCreateWithoutAdminActedByInput, StudentTransferRequestUncheckedCreateWithoutAdminActedByInput> | StudentTransferRequestCreateWithoutAdminActedByInput[] | StudentTransferRequestUncheckedCreateWithoutAdminActedByInput[]
+    connectOrCreate?: StudentTransferRequestCreateOrConnectWithoutAdminActedByInput | StudentTransferRequestCreateOrConnectWithoutAdminActedByInput[]
+    createMany?: StudentTransferRequestCreateManyAdminActedByInputEnvelope
+    connect?: StudentTransferRequestWhereUniqueInput | StudentTransferRequestWhereUniqueInput[]
+  }
+
+  export type StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput = {
+    create?: XOR<StudentDojoHistoryCreateWithoutChangedByInput, StudentDojoHistoryUncheckedCreateWithoutChangedByInput> | StudentDojoHistoryCreateWithoutChangedByInput[] | StudentDojoHistoryUncheckedCreateWithoutChangedByInput[]
+    connectOrCreate?: StudentDojoHistoryCreateOrConnectWithoutChangedByInput | StudentDojoHistoryCreateOrConnectWithoutChangedByInput[]
+    createMany?: StudentDojoHistoryCreateManyChangedByInputEnvelope
+    connect?: StudentDojoHistoryWhereUniqueInput | StudentDojoHistoryWhereUniqueInput[]
   }
 
   export type BoolFieldUpdateOperationsInput = {
@@ -54646,6 +58657,48 @@ export namespace Prisma {
     deleteMany?: TournamentParticipantScalarWhereInput | TournamentParticipantScalarWhereInput[]
   }
 
+  export type StudentTransferRequestUpdateManyWithoutDojoActedByNestedInput = {
+    create?: XOR<StudentTransferRequestCreateWithoutDojoActedByInput, StudentTransferRequestUncheckedCreateWithoutDojoActedByInput> | StudentTransferRequestCreateWithoutDojoActedByInput[] | StudentTransferRequestUncheckedCreateWithoutDojoActedByInput[]
+    connectOrCreate?: StudentTransferRequestCreateOrConnectWithoutDojoActedByInput | StudentTransferRequestCreateOrConnectWithoutDojoActedByInput[]
+    upsert?: StudentTransferRequestUpsertWithWhereUniqueWithoutDojoActedByInput | StudentTransferRequestUpsertWithWhereUniqueWithoutDojoActedByInput[]
+    createMany?: StudentTransferRequestCreateManyDojoActedByInputEnvelope
+    set?: StudentTransferRequestWhereUniqueInput | StudentTransferRequestWhereUniqueInput[]
+    disconnect?: StudentTransferRequestWhereUniqueInput | StudentTransferRequestWhereUniqueInput[]
+    delete?: StudentTransferRequestWhereUniqueInput | StudentTransferRequestWhereUniqueInput[]
+    connect?: StudentTransferRequestWhereUniqueInput | StudentTransferRequestWhereUniqueInput[]
+    update?: StudentTransferRequestUpdateWithWhereUniqueWithoutDojoActedByInput | StudentTransferRequestUpdateWithWhereUniqueWithoutDojoActedByInput[]
+    updateMany?: StudentTransferRequestUpdateManyWithWhereWithoutDojoActedByInput | StudentTransferRequestUpdateManyWithWhereWithoutDojoActedByInput[]
+    deleteMany?: StudentTransferRequestScalarWhereInput | StudentTransferRequestScalarWhereInput[]
+  }
+
+  export type StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput = {
+    create?: XOR<StudentTransferRequestCreateWithoutAdminActedByInput, StudentTransferRequestUncheckedCreateWithoutAdminActedByInput> | StudentTransferRequestCreateWithoutAdminActedByInput[] | StudentTransferRequestUncheckedCreateWithoutAdminActedByInput[]
+    connectOrCreate?: StudentTransferRequestCreateOrConnectWithoutAdminActedByInput | StudentTransferRequestCreateOrConnectWithoutAdminActedByInput[]
+    upsert?: StudentTransferRequestUpsertWithWhereUniqueWithoutAdminActedByInput | StudentTransferRequestUpsertWithWhereUniqueWithoutAdminActedByInput[]
+    createMany?: StudentTransferRequestCreateManyAdminActedByInputEnvelope
+    set?: StudentTransferRequestWhereUniqueInput | StudentTransferRequestWhereUniqueInput[]
+    disconnect?: StudentTransferRequestWhereUniqueInput | StudentTransferRequestWhereUniqueInput[]
+    delete?: StudentTransferRequestWhereUniqueInput | StudentTransferRequestWhereUniqueInput[]
+    connect?: StudentTransferRequestWhereUniqueInput | StudentTransferRequestWhereUniqueInput[]
+    update?: StudentTransferRequestUpdateWithWhereUniqueWithoutAdminActedByInput | StudentTransferRequestUpdateWithWhereUniqueWithoutAdminActedByInput[]
+    updateMany?: StudentTransferRequestUpdateManyWithWhereWithoutAdminActedByInput | StudentTransferRequestUpdateManyWithWhereWithoutAdminActedByInput[]
+    deleteMany?: StudentTransferRequestScalarWhereInput | StudentTransferRequestScalarWhereInput[]
+  }
+
+  export type StudentDojoHistoryUpdateManyWithoutChangedByNestedInput = {
+    create?: XOR<StudentDojoHistoryCreateWithoutChangedByInput, StudentDojoHistoryUncheckedCreateWithoutChangedByInput> | StudentDojoHistoryCreateWithoutChangedByInput[] | StudentDojoHistoryUncheckedCreateWithoutChangedByInput[]
+    connectOrCreate?: StudentDojoHistoryCreateOrConnectWithoutChangedByInput | StudentDojoHistoryCreateOrConnectWithoutChangedByInput[]
+    upsert?: StudentDojoHistoryUpsertWithWhereUniqueWithoutChangedByInput | StudentDojoHistoryUpsertWithWhereUniqueWithoutChangedByInput[]
+    createMany?: StudentDojoHistoryCreateManyChangedByInputEnvelope
+    set?: StudentDojoHistoryWhereUniqueInput | StudentDojoHistoryWhereUniqueInput[]
+    disconnect?: StudentDojoHistoryWhereUniqueInput | StudentDojoHistoryWhereUniqueInput[]
+    delete?: StudentDojoHistoryWhereUniqueInput | StudentDojoHistoryWhereUniqueInput[]
+    connect?: StudentDojoHistoryWhereUniqueInput | StudentDojoHistoryWhereUniqueInput[]
+    update?: StudentDojoHistoryUpdateWithWhereUniqueWithoutChangedByInput | StudentDojoHistoryUpdateWithWhereUniqueWithoutChangedByInput[]
+    updateMany?: StudentDojoHistoryUpdateManyWithWhereWithoutChangedByInput | StudentDojoHistoryUpdateManyWithWhereWithoutChangedByInput[]
+    deleteMany?: StudentDojoHistoryScalarWhereInput | StudentDojoHistoryScalarWhereInput[]
+  }
+
   export type StudentUncheckedUpdateOneWithoutUserNestedInput = {
     create?: XOR<StudentCreateWithoutUserInput, StudentUncheckedCreateWithoutUserInput>
     connectOrCreate?: StudentCreateOrConnectWithoutUserInput
@@ -54836,6 +58889,48 @@ export namespace Prisma {
     deleteMany?: TournamentParticipantScalarWhereInput | TournamentParticipantScalarWhereInput[]
   }
 
+  export type StudentTransferRequestUncheckedUpdateManyWithoutDojoActedByNestedInput = {
+    create?: XOR<StudentTransferRequestCreateWithoutDojoActedByInput, StudentTransferRequestUncheckedCreateWithoutDojoActedByInput> | StudentTransferRequestCreateWithoutDojoActedByInput[] | StudentTransferRequestUncheckedCreateWithoutDojoActedByInput[]
+    connectOrCreate?: StudentTransferRequestCreateOrConnectWithoutDojoActedByInput | StudentTransferRequestCreateOrConnectWithoutDojoActedByInput[]
+    upsert?: StudentTransferRequestUpsertWithWhereUniqueWithoutDojoActedByInput | StudentTransferRequestUpsertWithWhereUniqueWithoutDojoActedByInput[]
+    createMany?: StudentTransferRequestCreateManyDojoActedByInputEnvelope
+    set?: StudentTransferRequestWhereUniqueInput | StudentTransferRequestWhereUniqueInput[]
+    disconnect?: StudentTransferRequestWhereUniqueInput | StudentTransferRequestWhereUniqueInput[]
+    delete?: StudentTransferRequestWhereUniqueInput | StudentTransferRequestWhereUniqueInput[]
+    connect?: StudentTransferRequestWhereUniqueInput | StudentTransferRequestWhereUniqueInput[]
+    update?: StudentTransferRequestUpdateWithWhereUniqueWithoutDojoActedByInput | StudentTransferRequestUpdateWithWhereUniqueWithoutDojoActedByInput[]
+    updateMany?: StudentTransferRequestUpdateManyWithWhereWithoutDojoActedByInput | StudentTransferRequestUpdateManyWithWhereWithoutDojoActedByInput[]
+    deleteMany?: StudentTransferRequestScalarWhereInput | StudentTransferRequestScalarWhereInput[]
+  }
+
+  export type StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput = {
+    create?: XOR<StudentTransferRequestCreateWithoutAdminActedByInput, StudentTransferRequestUncheckedCreateWithoutAdminActedByInput> | StudentTransferRequestCreateWithoutAdminActedByInput[] | StudentTransferRequestUncheckedCreateWithoutAdminActedByInput[]
+    connectOrCreate?: StudentTransferRequestCreateOrConnectWithoutAdminActedByInput | StudentTransferRequestCreateOrConnectWithoutAdminActedByInput[]
+    upsert?: StudentTransferRequestUpsertWithWhereUniqueWithoutAdminActedByInput | StudentTransferRequestUpsertWithWhereUniqueWithoutAdminActedByInput[]
+    createMany?: StudentTransferRequestCreateManyAdminActedByInputEnvelope
+    set?: StudentTransferRequestWhereUniqueInput | StudentTransferRequestWhereUniqueInput[]
+    disconnect?: StudentTransferRequestWhereUniqueInput | StudentTransferRequestWhereUniqueInput[]
+    delete?: StudentTransferRequestWhereUniqueInput | StudentTransferRequestWhereUniqueInput[]
+    connect?: StudentTransferRequestWhereUniqueInput | StudentTransferRequestWhereUniqueInput[]
+    update?: StudentTransferRequestUpdateWithWhereUniqueWithoutAdminActedByInput | StudentTransferRequestUpdateWithWhereUniqueWithoutAdminActedByInput[]
+    updateMany?: StudentTransferRequestUpdateManyWithWhereWithoutAdminActedByInput | StudentTransferRequestUpdateManyWithWhereWithoutAdminActedByInput[]
+    deleteMany?: StudentTransferRequestScalarWhereInput | StudentTransferRequestScalarWhereInput[]
+  }
+
+  export type StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput = {
+    create?: XOR<StudentDojoHistoryCreateWithoutChangedByInput, StudentDojoHistoryUncheckedCreateWithoutChangedByInput> | StudentDojoHistoryCreateWithoutChangedByInput[] | StudentDojoHistoryUncheckedCreateWithoutChangedByInput[]
+    connectOrCreate?: StudentDojoHistoryCreateOrConnectWithoutChangedByInput | StudentDojoHistoryCreateOrConnectWithoutChangedByInput[]
+    upsert?: StudentDojoHistoryUpsertWithWhereUniqueWithoutChangedByInput | StudentDojoHistoryUpsertWithWhereUniqueWithoutChangedByInput[]
+    createMany?: StudentDojoHistoryCreateManyChangedByInputEnvelope
+    set?: StudentDojoHistoryWhereUniqueInput | StudentDojoHistoryWhereUniqueInput[]
+    disconnect?: StudentDojoHistoryWhereUniqueInput | StudentDojoHistoryWhereUniqueInput[]
+    delete?: StudentDojoHistoryWhereUniqueInput | StudentDojoHistoryWhereUniqueInput[]
+    connect?: StudentDojoHistoryWhereUniqueInput | StudentDojoHistoryWhereUniqueInput[]
+    update?: StudentDojoHistoryUpdateWithWhereUniqueWithoutChangedByInput | StudentDojoHistoryUpdateWithWhereUniqueWithoutChangedByInput[]
+    updateMany?: StudentDojoHistoryUpdateManyWithWhereWithoutChangedByInput | StudentDojoHistoryUpdateManyWithWhereWithoutChangedByInput[]
+    deleteMany?: StudentDojoHistoryScalarWhereInput | StudentDojoHistoryScalarWhereInput[]
+  }
+
   export type UserCreateNestedOneWithoutStudentInput = {
     create?: XOR<UserCreateWithoutStudentInput, UserUncheckedCreateWithoutStudentInput>
     connectOrCreate?: UserCreateOrConnectWithoutStudentInput
@@ -54883,6 +58978,20 @@ export namespace Prisma {
     connect?: StudentAchievementWhereUniqueInput | StudentAchievementWhereUniqueInput[]
   }
 
+  export type StudentTransferRequestCreateNestedManyWithoutStudentInput = {
+    create?: XOR<StudentTransferRequestCreateWithoutStudentInput, StudentTransferRequestUncheckedCreateWithoutStudentInput> | StudentTransferRequestCreateWithoutStudentInput[] | StudentTransferRequestUncheckedCreateWithoutStudentInput[]
+    connectOrCreate?: StudentTransferRequestCreateOrConnectWithoutStudentInput | StudentTransferRequestCreateOrConnectWithoutStudentInput[]
+    createMany?: StudentTransferRequestCreateManyStudentInputEnvelope
+    connect?: StudentTransferRequestWhereUniqueInput | StudentTransferRequestWhereUniqueInput[]
+  }
+
+  export type StudentDojoHistoryCreateNestedManyWithoutStudentInput = {
+    create?: XOR<StudentDojoHistoryCreateWithoutStudentInput, StudentDojoHistoryUncheckedCreateWithoutStudentInput> | StudentDojoHistoryCreateWithoutStudentInput[] | StudentDojoHistoryUncheckedCreateWithoutStudentInput[]
+    connectOrCreate?: StudentDojoHistoryCreateOrConnectWithoutStudentInput | StudentDojoHistoryCreateOrConnectWithoutStudentInput[]
+    createMany?: StudentDojoHistoryCreateManyStudentInputEnvelope
+    connect?: StudentDojoHistoryWhereUniqueInput | StudentDojoHistoryWhereUniqueInput[]
+  }
+
   export type AttendanceUncheckedCreateNestedManyWithoutStudentInput = {
     create?: XOR<AttendanceCreateWithoutStudentInput, AttendanceUncheckedCreateWithoutStudentInput> | AttendanceCreateWithoutStudentInput[] | AttendanceUncheckedCreateWithoutStudentInput[]
     connectOrCreate?: AttendanceCreateOrConnectWithoutStudentInput | AttendanceCreateOrConnectWithoutStudentInput[]
@@ -54916,6 +59025,20 @@ export namespace Prisma {
     connectOrCreate?: StudentAchievementCreateOrConnectWithoutStudentInput | StudentAchievementCreateOrConnectWithoutStudentInput[]
     createMany?: StudentAchievementCreateManyStudentInputEnvelope
     connect?: StudentAchievementWhereUniqueInput | StudentAchievementWhereUniqueInput[]
+  }
+
+  export type StudentTransferRequestUncheckedCreateNestedManyWithoutStudentInput = {
+    create?: XOR<StudentTransferRequestCreateWithoutStudentInput, StudentTransferRequestUncheckedCreateWithoutStudentInput> | StudentTransferRequestCreateWithoutStudentInput[] | StudentTransferRequestUncheckedCreateWithoutStudentInput[]
+    connectOrCreate?: StudentTransferRequestCreateOrConnectWithoutStudentInput | StudentTransferRequestCreateOrConnectWithoutStudentInput[]
+    createMany?: StudentTransferRequestCreateManyStudentInputEnvelope
+    connect?: StudentTransferRequestWhereUniqueInput | StudentTransferRequestWhereUniqueInput[]
+  }
+
+  export type StudentDojoHistoryUncheckedCreateNestedManyWithoutStudentInput = {
+    create?: XOR<StudentDojoHistoryCreateWithoutStudentInput, StudentDojoHistoryUncheckedCreateWithoutStudentInput> | StudentDojoHistoryCreateWithoutStudentInput[] | StudentDojoHistoryUncheckedCreateWithoutStudentInput[]
+    connectOrCreate?: StudentDojoHistoryCreateOrConnectWithoutStudentInput | StudentDojoHistoryCreateOrConnectWithoutStudentInput[]
+    createMany?: StudentDojoHistoryCreateManyStudentInputEnvelope
+    connect?: StudentDojoHistoryWhereUniqueInput | StudentDojoHistoryWhereUniqueInput[]
   }
 
   export type NullableDateTimeFieldUpdateOperationsInput = {
@@ -55014,6 +59137,34 @@ export namespace Prisma {
     deleteMany?: StudentAchievementScalarWhereInput | StudentAchievementScalarWhereInput[]
   }
 
+  export type StudentTransferRequestUpdateManyWithoutStudentNestedInput = {
+    create?: XOR<StudentTransferRequestCreateWithoutStudentInput, StudentTransferRequestUncheckedCreateWithoutStudentInput> | StudentTransferRequestCreateWithoutStudentInput[] | StudentTransferRequestUncheckedCreateWithoutStudentInput[]
+    connectOrCreate?: StudentTransferRequestCreateOrConnectWithoutStudentInput | StudentTransferRequestCreateOrConnectWithoutStudentInput[]
+    upsert?: StudentTransferRequestUpsertWithWhereUniqueWithoutStudentInput | StudentTransferRequestUpsertWithWhereUniqueWithoutStudentInput[]
+    createMany?: StudentTransferRequestCreateManyStudentInputEnvelope
+    set?: StudentTransferRequestWhereUniqueInput | StudentTransferRequestWhereUniqueInput[]
+    disconnect?: StudentTransferRequestWhereUniqueInput | StudentTransferRequestWhereUniqueInput[]
+    delete?: StudentTransferRequestWhereUniqueInput | StudentTransferRequestWhereUniqueInput[]
+    connect?: StudentTransferRequestWhereUniqueInput | StudentTransferRequestWhereUniqueInput[]
+    update?: StudentTransferRequestUpdateWithWhereUniqueWithoutStudentInput | StudentTransferRequestUpdateWithWhereUniqueWithoutStudentInput[]
+    updateMany?: StudentTransferRequestUpdateManyWithWhereWithoutStudentInput | StudentTransferRequestUpdateManyWithWhereWithoutStudentInput[]
+    deleteMany?: StudentTransferRequestScalarWhereInput | StudentTransferRequestScalarWhereInput[]
+  }
+
+  export type StudentDojoHistoryUpdateManyWithoutStudentNestedInput = {
+    create?: XOR<StudentDojoHistoryCreateWithoutStudentInput, StudentDojoHistoryUncheckedCreateWithoutStudentInput> | StudentDojoHistoryCreateWithoutStudentInput[] | StudentDojoHistoryUncheckedCreateWithoutStudentInput[]
+    connectOrCreate?: StudentDojoHistoryCreateOrConnectWithoutStudentInput | StudentDojoHistoryCreateOrConnectWithoutStudentInput[]
+    upsert?: StudentDojoHistoryUpsertWithWhereUniqueWithoutStudentInput | StudentDojoHistoryUpsertWithWhereUniqueWithoutStudentInput[]
+    createMany?: StudentDojoHistoryCreateManyStudentInputEnvelope
+    set?: StudentDojoHistoryWhereUniqueInput | StudentDojoHistoryWhereUniqueInput[]
+    disconnect?: StudentDojoHistoryWhereUniqueInput | StudentDojoHistoryWhereUniqueInput[]
+    delete?: StudentDojoHistoryWhereUniqueInput | StudentDojoHistoryWhereUniqueInput[]
+    connect?: StudentDojoHistoryWhereUniqueInput | StudentDojoHistoryWhereUniqueInput[]
+    update?: StudentDojoHistoryUpdateWithWhereUniqueWithoutStudentInput | StudentDojoHistoryUpdateWithWhereUniqueWithoutStudentInput[]
+    updateMany?: StudentDojoHistoryUpdateManyWithWhereWithoutStudentInput | StudentDojoHistoryUpdateManyWithWhereWithoutStudentInput[]
+    deleteMany?: StudentDojoHistoryScalarWhereInput | StudentDojoHistoryScalarWhereInput[]
+  }
+
   export type AttendanceUncheckedUpdateManyWithoutStudentNestedInput = {
     create?: XOR<AttendanceCreateWithoutStudentInput, AttendanceUncheckedCreateWithoutStudentInput> | AttendanceCreateWithoutStudentInput[] | AttendanceUncheckedCreateWithoutStudentInput[]
     connectOrCreate?: AttendanceCreateOrConnectWithoutStudentInput | AttendanceCreateOrConnectWithoutStudentInput[]
@@ -55082,6 +59233,34 @@ export namespace Prisma {
     update?: StudentAchievementUpdateWithWhereUniqueWithoutStudentInput | StudentAchievementUpdateWithWhereUniqueWithoutStudentInput[]
     updateMany?: StudentAchievementUpdateManyWithWhereWithoutStudentInput | StudentAchievementUpdateManyWithWhereWithoutStudentInput[]
     deleteMany?: StudentAchievementScalarWhereInput | StudentAchievementScalarWhereInput[]
+  }
+
+  export type StudentTransferRequestUncheckedUpdateManyWithoutStudentNestedInput = {
+    create?: XOR<StudentTransferRequestCreateWithoutStudentInput, StudentTransferRequestUncheckedCreateWithoutStudentInput> | StudentTransferRequestCreateWithoutStudentInput[] | StudentTransferRequestUncheckedCreateWithoutStudentInput[]
+    connectOrCreate?: StudentTransferRequestCreateOrConnectWithoutStudentInput | StudentTransferRequestCreateOrConnectWithoutStudentInput[]
+    upsert?: StudentTransferRequestUpsertWithWhereUniqueWithoutStudentInput | StudentTransferRequestUpsertWithWhereUniqueWithoutStudentInput[]
+    createMany?: StudentTransferRequestCreateManyStudentInputEnvelope
+    set?: StudentTransferRequestWhereUniqueInput | StudentTransferRequestWhereUniqueInput[]
+    disconnect?: StudentTransferRequestWhereUniqueInput | StudentTransferRequestWhereUniqueInput[]
+    delete?: StudentTransferRequestWhereUniqueInput | StudentTransferRequestWhereUniqueInput[]
+    connect?: StudentTransferRequestWhereUniqueInput | StudentTransferRequestWhereUniqueInput[]
+    update?: StudentTransferRequestUpdateWithWhereUniqueWithoutStudentInput | StudentTransferRequestUpdateWithWhereUniqueWithoutStudentInput[]
+    updateMany?: StudentTransferRequestUpdateManyWithWhereWithoutStudentInput | StudentTransferRequestUpdateManyWithWhereWithoutStudentInput[]
+    deleteMany?: StudentTransferRequestScalarWhereInput | StudentTransferRequestScalarWhereInput[]
+  }
+
+  export type StudentDojoHistoryUncheckedUpdateManyWithoutStudentNestedInput = {
+    create?: XOR<StudentDojoHistoryCreateWithoutStudentInput, StudentDojoHistoryUncheckedCreateWithoutStudentInput> | StudentDojoHistoryCreateWithoutStudentInput[] | StudentDojoHistoryUncheckedCreateWithoutStudentInput[]
+    connectOrCreate?: StudentDojoHistoryCreateOrConnectWithoutStudentInput | StudentDojoHistoryCreateOrConnectWithoutStudentInput[]
+    upsert?: StudentDojoHistoryUpsertWithWhereUniqueWithoutStudentInput | StudentDojoHistoryUpsertWithWhereUniqueWithoutStudentInput[]
+    createMany?: StudentDojoHistoryCreateManyStudentInputEnvelope
+    set?: StudentDojoHistoryWhereUniqueInput | StudentDojoHistoryWhereUniqueInput[]
+    disconnect?: StudentDojoHistoryWhereUniqueInput | StudentDojoHistoryWhereUniqueInput[]
+    delete?: StudentDojoHistoryWhereUniqueInput | StudentDojoHistoryWhereUniqueInput[]
+    connect?: StudentDojoHistoryWhereUniqueInput | StudentDojoHistoryWhereUniqueInput[]
+    update?: StudentDojoHistoryUpdateWithWhereUniqueWithoutStudentInput | StudentDojoHistoryUpdateWithWhereUniqueWithoutStudentInput[]
+    updateMany?: StudentDojoHistoryUpdateManyWithWhereWithoutStudentInput | StudentDojoHistoryUpdateManyWithWhereWithoutStudentInput[]
+    deleteMany?: StudentDojoHistoryScalarWhereInput | StudentDojoHistoryScalarWhereInput[]
   }
 
   export type UserCreateNestedOneWithoutInstructorInput = {
@@ -55503,6 +59682,34 @@ export namespace Prisma {
     connect?: DojoSaleWhereUniqueInput | DojoSaleWhereUniqueInput[]
   }
 
+  export type StudentTransferRequestCreateNestedManyWithoutFromDojoInput = {
+    create?: XOR<StudentTransferRequestCreateWithoutFromDojoInput, StudentTransferRequestUncheckedCreateWithoutFromDojoInput> | StudentTransferRequestCreateWithoutFromDojoInput[] | StudentTransferRequestUncheckedCreateWithoutFromDojoInput[]
+    connectOrCreate?: StudentTransferRequestCreateOrConnectWithoutFromDojoInput | StudentTransferRequestCreateOrConnectWithoutFromDojoInput[]
+    createMany?: StudentTransferRequestCreateManyFromDojoInputEnvelope
+    connect?: StudentTransferRequestWhereUniqueInput | StudentTransferRequestWhereUniqueInput[]
+  }
+
+  export type StudentTransferRequestCreateNestedManyWithoutToDojoInput = {
+    create?: XOR<StudentTransferRequestCreateWithoutToDojoInput, StudentTransferRequestUncheckedCreateWithoutToDojoInput> | StudentTransferRequestCreateWithoutToDojoInput[] | StudentTransferRequestUncheckedCreateWithoutToDojoInput[]
+    connectOrCreate?: StudentTransferRequestCreateOrConnectWithoutToDojoInput | StudentTransferRequestCreateOrConnectWithoutToDojoInput[]
+    createMany?: StudentTransferRequestCreateManyToDojoInputEnvelope
+    connect?: StudentTransferRequestWhereUniqueInput | StudentTransferRequestWhereUniqueInput[]
+  }
+
+  export type StudentDojoHistoryCreateNestedManyWithoutFromDojoInput = {
+    create?: XOR<StudentDojoHistoryCreateWithoutFromDojoInput, StudentDojoHistoryUncheckedCreateWithoutFromDojoInput> | StudentDojoHistoryCreateWithoutFromDojoInput[] | StudentDojoHistoryUncheckedCreateWithoutFromDojoInput[]
+    connectOrCreate?: StudentDojoHistoryCreateOrConnectWithoutFromDojoInput | StudentDojoHistoryCreateOrConnectWithoutFromDojoInput[]
+    createMany?: StudentDojoHistoryCreateManyFromDojoInputEnvelope
+    connect?: StudentDojoHistoryWhereUniqueInput | StudentDojoHistoryWhereUniqueInput[]
+  }
+
+  export type StudentDojoHistoryCreateNestedManyWithoutToDojoInput = {
+    create?: XOR<StudentDojoHistoryCreateWithoutToDojoInput, StudentDojoHistoryUncheckedCreateWithoutToDojoInput> | StudentDojoHistoryCreateWithoutToDojoInput[] | StudentDojoHistoryUncheckedCreateWithoutToDojoInput[]
+    connectOrCreate?: StudentDojoHistoryCreateOrConnectWithoutToDojoInput | StudentDojoHistoryCreateOrConnectWithoutToDojoInput[]
+    createMany?: StudentDojoHistoryCreateManyToDojoInputEnvelope
+    connect?: StudentDojoHistoryWhereUniqueInput | StudentDojoHistoryWhereUniqueInput[]
+  }
+
   export type ShopOrderUncheckedCreateNestedManyWithoutDojoInput = {
     create?: XOR<ShopOrderCreateWithoutDojoInput, ShopOrderUncheckedCreateWithoutDojoInput> | ShopOrderCreateWithoutDojoInput[] | ShopOrderUncheckedCreateWithoutDojoInput[]
     connectOrCreate?: ShopOrderCreateOrConnectWithoutDojoInput | ShopOrderCreateOrConnectWithoutDojoInput[]
@@ -55590,6 +59797,34 @@ export namespace Prisma {
     connectOrCreate?: DojoSaleCreateOrConnectWithoutDojoInput | DojoSaleCreateOrConnectWithoutDojoInput[]
     createMany?: DojoSaleCreateManyDojoInputEnvelope
     connect?: DojoSaleWhereUniqueInput | DojoSaleWhereUniqueInput[]
+  }
+
+  export type StudentTransferRequestUncheckedCreateNestedManyWithoutFromDojoInput = {
+    create?: XOR<StudentTransferRequestCreateWithoutFromDojoInput, StudentTransferRequestUncheckedCreateWithoutFromDojoInput> | StudentTransferRequestCreateWithoutFromDojoInput[] | StudentTransferRequestUncheckedCreateWithoutFromDojoInput[]
+    connectOrCreate?: StudentTransferRequestCreateOrConnectWithoutFromDojoInput | StudentTransferRequestCreateOrConnectWithoutFromDojoInput[]
+    createMany?: StudentTransferRequestCreateManyFromDojoInputEnvelope
+    connect?: StudentTransferRequestWhereUniqueInput | StudentTransferRequestWhereUniqueInput[]
+  }
+
+  export type StudentTransferRequestUncheckedCreateNestedManyWithoutToDojoInput = {
+    create?: XOR<StudentTransferRequestCreateWithoutToDojoInput, StudentTransferRequestUncheckedCreateWithoutToDojoInput> | StudentTransferRequestCreateWithoutToDojoInput[] | StudentTransferRequestUncheckedCreateWithoutToDojoInput[]
+    connectOrCreate?: StudentTransferRequestCreateOrConnectWithoutToDojoInput | StudentTransferRequestCreateOrConnectWithoutToDojoInput[]
+    createMany?: StudentTransferRequestCreateManyToDojoInputEnvelope
+    connect?: StudentTransferRequestWhereUniqueInput | StudentTransferRequestWhereUniqueInput[]
+  }
+
+  export type StudentDojoHistoryUncheckedCreateNestedManyWithoutFromDojoInput = {
+    create?: XOR<StudentDojoHistoryCreateWithoutFromDojoInput, StudentDojoHistoryUncheckedCreateWithoutFromDojoInput> | StudentDojoHistoryCreateWithoutFromDojoInput[] | StudentDojoHistoryUncheckedCreateWithoutFromDojoInput[]
+    connectOrCreate?: StudentDojoHistoryCreateOrConnectWithoutFromDojoInput | StudentDojoHistoryCreateOrConnectWithoutFromDojoInput[]
+    createMany?: StudentDojoHistoryCreateManyFromDojoInputEnvelope
+    connect?: StudentDojoHistoryWhereUniqueInput | StudentDojoHistoryWhereUniqueInput[]
+  }
+
+  export type StudentDojoHistoryUncheckedCreateNestedManyWithoutToDojoInput = {
+    create?: XOR<StudentDojoHistoryCreateWithoutToDojoInput, StudentDojoHistoryUncheckedCreateWithoutToDojoInput> | StudentDojoHistoryCreateWithoutToDojoInput[] | StudentDojoHistoryUncheckedCreateWithoutToDojoInput[]
+    connectOrCreate?: StudentDojoHistoryCreateOrConnectWithoutToDojoInput | StudentDojoHistoryCreateOrConnectWithoutToDojoInput[]
+    createMany?: StudentDojoHistoryCreateManyToDojoInputEnvelope
+    connect?: StudentDojoHistoryWhereUniqueInput | StudentDojoHistoryWhereUniqueInput[]
   }
 
   export type NullableFloatFieldUpdateOperationsInput = {
@@ -55774,6 +60009,62 @@ export namespace Prisma {
     deleteMany?: DojoSaleScalarWhereInput | DojoSaleScalarWhereInput[]
   }
 
+  export type StudentTransferRequestUpdateManyWithoutFromDojoNestedInput = {
+    create?: XOR<StudentTransferRequestCreateWithoutFromDojoInput, StudentTransferRequestUncheckedCreateWithoutFromDojoInput> | StudentTransferRequestCreateWithoutFromDojoInput[] | StudentTransferRequestUncheckedCreateWithoutFromDojoInput[]
+    connectOrCreate?: StudentTransferRequestCreateOrConnectWithoutFromDojoInput | StudentTransferRequestCreateOrConnectWithoutFromDojoInput[]
+    upsert?: StudentTransferRequestUpsertWithWhereUniqueWithoutFromDojoInput | StudentTransferRequestUpsertWithWhereUniqueWithoutFromDojoInput[]
+    createMany?: StudentTransferRequestCreateManyFromDojoInputEnvelope
+    set?: StudentTransferRequestWhereUniqueInput | StudentTransferRequestWhereUniqueInput[]
+    disconnect?: StudentTransferRequestWhereUniqueInput | StudentTransferRequestWhereUniqueInput[]
+    delete?: StudentTransferRequestWhereUniqueInput | StudentTransferRequestWhereUniqueInput[]
+    connect?: StudentTransferRequestWhereUniqueInput | StudentTransferRequestWhereUniqueInput[]
+    update?: StudentTransferRequestUpdateWithWhereUniqueWithoutFromDojoInput | StudentTransferRequestUpdateWithWhereUniqueWithoutFromDojoInput[]
+    updateMany?: StudentTransferRequestUpdateManyWithWhereWithoutFromDojoInput | StudentTransferRequestUpdateManyWithWhereWithoutFromDojoInput[]
+    deleteMany?: StudentTransferRequestScalarWhereInput | StudentTransferRequestScalarWhereInput[]
+  }
+
+  export type StudentTransferRequestUpdateManyWithoutToDojoNestedInput = {
+    create?: XOR<StudentTransferRequestCreateWithoutToDojoInput, StudentTransferRequestUncheckedCreateWithoutToDojoInput> | StudentTransferRequestCreateWithoutToDojoInput[] | StudentTransferRequestUncheckedCreateWithoutToDojoInput[]
+    connectOrCreate?: StudentTransferRequestCreateOrConnectWithoutToDojoInput | StudentTransferRequestCreateOrConnectWithoutToDojoInput[]
+    upsert?: StudentTransferRequestUpsertWithWhereUniqueWithoutToDojoInput | StudentTransferRequestUpsertWithWhereUniqueWithoutToDojoInput[]
+    createMany?: StudentTransferRequestCreateManyToDojoInputEnvelope
+    set?: StudentTransferRequestWhereUniqueInput | StudentTransferRequestWhereUniqueInput[]
+    disconnect?: StudentTransferRequestWhereUniqueInput | StudentTransferRequestWhereUniqueInput[]
+    delete?: StudentTransferRequestWhereUniqueInput | StudentTransferRequestWhereUniqueInput[]
+    connect?: StudentTransferRequestWhereUniqueInput | StudentTransferRequestWhereUniqueInput[]
+    update?: StudentTransferRequestUpdateWithWhereUniqueWithoutToDojoInput | StudentTransferRequestUpdateWithWhereUniqueWithoutToDojoInput[]
+    updateMany?: StudentTransferRequestUpdateManyWithWhereWithoutToDojoInput | StudentTransferRequestUpdateManyWithWhereWithoutToDojoInput[]
+    deleteMany?: StudentTransferRequestScalarWhereInput | StudentTransferRequestScalarWhereInput[]
+  }
+
+  export type StudentDojoHistoryUpdateManyWithoutFromDojoNestedInput = {
+    create?: XOR<StudentDojoHistoryCreateWithoutFromDojoInput, StudentDojoHistoryUncheckedCreateWithoutFromDojoInput> | StudentDojoHistoryCreateWithoutFromDojoInput[] | StudentDojoHistoryUncheckedCreateWithoutFromDojoInput[]
+    connectOrCreate?: StudentDojoHistoryCreateOrConnectWithoutFromDojoInput | StudentDojoHistoryCreateOrConnectWithoutFromDojoInput[]
+    upsert?: StudentDojoHistoryUpsertWithWhereUniqueWithoutFromDojoInput | StudentDojoHistoryUpsertWithWhereUniqueWithoutFromDojoInput[]
+    createMany?: StudentDojoHistoryCreateManyFromDojoInputEnvelope
+    set?: StudentDojoHistoryWhereUniqueInput | StudentDojoHistoryWhereUniqueInput[]
+    disconnect?: StudentDojoHistoryWhereUniqueInput | StudentDojoHistoryWhereUniqueInput[]
+    delete?: StudentDojoHistoryWhereUniqueInput | StudentDojoHistoryWhereUniqueInput[]
+    connect?: StudentDojoHistoryWhereUniqueInput | StudentDojoHistoryWhereUniqueInput[]
+    update?: StudentDojoHistoryUpdateWithWhereUniqueWithoutFromDojoInput | StudentDojoHistoryUpdateWithWhereUniqueWithoutFromDojoInput[]
+    updateMany?: StudentDojoHistoryUpdateManyWithWhereWithoutFromDojoInput | StudentDojoHistoryUpdateManyWithWhereWithoutFromDojoInput[]
+    deleteMany?: StudentDojoHistoryScalarWhereInput | StudentDojoHistoryScalarWhereInput[]
+  }
+
+  export type StudentDojoHistoryUpdateManyWithoutToDojoNestedInput = {
+    create?: XOR<StudentDojoHistoryCreateWithoutToDojoInput, StudentDojoHistoryUncheckedCreateWithoutToDojoInput> | StudentDojoHistoryCreateWithoutToDojoInput[] | StudentDojoHistoryUncheckedCreateWithoutToDojoInput[]
+    connectOrCreate?: StudentDojoHistoryCreateOrConnectWithoutToDojoInput | StudentDojoHistoryCreateOrConnectWithoutToDojoInput[]
+    upsert?: StudentDojoHistoryUpsertWithWhereUniqueWithoutToDojoInput | StudentDojoHistoryUpsertWithWhereUniqueWithoutToDojoInput[]
+    createMany?: StudentDojoHistoryCreateManyToDojoInputEnvelope
+    set?: StudentDojoHistoryWhereUniqueInput | StudentDojoHistoryWhereUniqueInput[]
+    disconnect?: StudentDojoHistoryWhereUniqueInput | StudentDojoHistoryWhereUniqueInput[]
+    delete?: StudentDojoHistoryWhereUniqueInput | StudentDojoHistoryWhereUniqueInput[]
+    connect?: StudentDojoHistoryWhereUniqueInput | StudentDojoHistoryWhereUniqueInput[]
+    update?: StudentDojoHistoryUpdateWithWhereUniqueWithoutToDojoInput | StudentDojoHistoryUpdateWithWhereUniqueWithoutToDojoInput[]
+    updateMany?: StudentDojoHistoryUpdateManyWithWhereWithoutToDojoInput | StudentDojoHistoryUpdateManyWithWhereWithoutToDojoInput[]
+    deleteMany?: StudentDojoHistoryScalarWhereInput | StudentDojoHistoryScalarWhereInput[]
+  }
+
   export type ShopOrderUncheckedUpdateManyWithoutDojoNestedInput = {
     create?: XOR<ShopOrderCreateWithoutDojoInput, ShopOrderUncheckedCreateWithoutDojoInput> | ShopOrderCreateWithoutDojoInput[] | ShopOrderUncheckedCreateWithoutDojoInput[]
     connectOrCreate?: ShopOrderCreateOrConnectWithoutDojoInput | ShopOrderCreateOrConnectWithoutDojoInput[]
@@ -55946,6 +60237,62 @@ export namespace Prisma {
     update?: DojoSaleUpdateWithWhereUniqueWithoutDojoInput | DojoSaleUpdateWithWhereUniqueWithoutDojoInput[]
     updateMany?: DojoSaleUpdateManyWithWhereWithoutDojoInput | DojoSaleUpdateManyWithWhereWithoutDojoInput[]
     deleteMany?: DojoSaleScalarWhereInput | DojoSaleScalarWhereInput[]
+  }
+
+  export type StudentTransferRequestUncheckedUpdateManyWithoutFromDojoNestedInput = {
+    create?: XOR<StudentTransferRequestCreateWithoutFromDojoInput, StudentTransferRequestUncheckedCreateWithoutFromDojoInput> | StudentTransferRequestCreateWithoutFromDojoInput[] | StudentTransferRequestUncheckedCreateWithoutFromDojoInput[]
+    connectOrCreate?: StudentTransferRequestCreateOrConnectWithoutFromDojoInput | StudentTransferRequestCreateOrConnectWithoutFromDojoInput[]
+    upsert?: StudentTransferRequestUpsertWithWhereUniqueWithoutFromDojoInput | StudentTransferRequestUpsertWithWhereUniqueWithoutFromDojoInput[]
+    createMany?: StudentTransferRequestCreateManyFromDojoInputEnvelope
+    set?: StudentTransferRequestWhereUniqueInput | StudentTransferRequestWhereUniqueInput[]
+    disconnect?: StudentTransferRequestWhereUniqueInput | StudentTransferRequestWhereUniqueInput[]
+    delete?: StudentTransferRequestWhereUniqueInput | StudentTransferRequestWhereUniqueInput[]
+    connect?: StudentTransferRequestWhereUniqueInput | StudentTransferRequestWhereUniqueInput[]
+    update?: StudentTransferRequestUpdateWithWhereUniqueWithoutFromDojoInput | StudentTransferRequestUpdateWithWhereUniqueWithoutFromDojoInput[]
+    updateMany?: StudentTransferRequestUpdateManyWithWhereWithoutFromDojoInput | StudentTransferRequestUpdateManyWithWhereWithoutFromDojoInput[]
+    deleteMany?: StudentTransferRequestScalarWhereInput | StudentTransferRequestScalarWhereInput[]
+  }
+
+  export type StudentTransferRequestUncheckedUpdateManyWithoutToDojoNestedInput = {
+    create?: XOR<StudentTransferRequestCreateWithoutToDojoInput, StudentTransferRequestUncheckedCreateWithoutToDojoInput> | StudentTransferRequestCreateWithoutToDojoInput[] | StudentTransferRequestUncheckedCreateWithoutToDojoInput[]
+    connectOrCreate?: StudentTransferRequestCreateOrConnectWithoutToDojoInput | StudentTransferRequestCreateOrConnectWithoutToDojoInput[]
+    upsert?: StudentTransferRequestUpsertWithWhereUniqueWithoutToDojoInput | StudentTransferRequestUpsertWithWhereUniqueWithoutToDojoInput[]
+    createMany?: StudentTransferRequestCreateManyToDojoInputEnvelope
+    set?: StudentTransferRequestWhereUniqueInput | StudentTransferRequestWhereUniqueInput[]
+    disconnect?: StudentTransferRequestWhereUniqueInput | StudentTransferRequestWhereUniqueInput[]
+    delete?: StudentTransferRequestWhereUniqueInput | StudentTransferRequestWhereUniqueInput[]
+    connect?: StudentTransferRequestWhereUniqueInput | StudentTransferRequestWhereUniqueInput[]
+    update?: StudentTransferRequestUpdateWithWhereUniqueWithoutToDojoInput | StudentTransferRequestUpdateWithWhereUniqueWithoutToDojoInput[]
+    updateMany?: StudentTransferRequestUpdateManyWithWhereWithoutToDojoInput | StudentTransferRequestUpdateManyWithWhereWithoutToDojoInput[]
+    deleteMany?: StudentTransferRequestScalarWhereInput | StudentTransferRequestScalarWhereInput[]
+  }
+
+  export type StudentDojoHistoryUncheckedUpdateManyWithoutFromDojoNestedInput = {
+    create?: XOR<StudentDojoHistoryCreateWithoutFromDojoInput, StudentDojoHistoryUncheckedCreateWithoutFromDojoInput> | StudentDojoHistoryCreateWithoutFromDojoInput[] | StudentDojoHistoryUncheckedCreateWithoutFromDojoInput[]
+    connectOrCreate?: StudentDojoHistoryCreateOrConnectWithoutFromDojoInput | StudentDojoHistoryCreateOrConnectWithoutFromDojoInput[]
+    upsert?: StudentDojoHistoryUpsertWithWhereUniqueWithoutFromDojoInput | StudentDojoHistoryUpsertWithWhereUniqueWithoutFromDojoInput[]
+    createMany?: StudentDojoHistoryCreateManyFromDojoInputEnvelope
+    set?: StudentDojoHistoryWhereUniqueInput | StudentDojoHistoryWhereUniqueInput[]
+    disconnect?: StudentDojoHistoryWhereUniqueInput | StudentDojoHistoryWhereUniqueInput[]
+    delete?: StudentDojoHistoryWhereUniqueInput | StudentDojoHistoryWhereUniqueInput[]
+    connect?: StudentDojoHistoryWhereUniqueInput | StudentDojoHistoryWhereUniqueInput[]
+    update?: StudentDojoHistoryUpdateWithWhereUniqueWithoutFromDojoInput | StudentDojoHistoryUpdateWithWhereUniqueWithoutFromDojoInput[]
+    updateMany?: StudentDojoHistoryUpdateManyWithWhereWithoutFromDojoInput | StudentDojoHistoryUpdateManyWithWhereWithoutFromDojoInput[]
+    deleteMany?: StudentDojoHistoryScalarWhereInput | StudentDojoHistoryScalarWhereInput[]
+  }
+
+  export type StudentDojoHistoryUncheckedUpdateManyWithoutToDojoNestedInput = {
+    create?: XOR<StudentDojoHistoryCreateWithoutToDojoInput, StudentDojoHistoryUncheckedCreateWithoutToDojoInput> | StudentDojoHistoryCreateWithoutToDojoInput[] | StudentDojoHistoryUncheckedCreateWithoutToDojoInput[]
+    connectOrCreate?: StudentDojoHistoryCreateOrConnectWithoutToDojoInput | StudentDojoHistoryCreateOrConnectWithoutToDojoInput[]
+    upsert?: StudentDojoHistoryUpsertWithWhereUniqueWithoutToDojoInput | StudentDojoHistoryUpsertWithWhereUniqueWithoutToDojoInput[]
+    createMany?: StudentDojoHistoryCreateManyToDojoInputEnvelope
+    set?: StudentDojoHistoryWhereUniqueInput | StudentDojoHistoryWhereUniqueInput[]
+    disconnect?: StudentDojoHistoryWhereUniqueInput | StudentDojoHistoryWhereUniqueInput[]
+    delete?: StudentDojoHistoryWhereUniqueInput | StudentDojoHistoryWhereUniqueInput[]
+    connect?: StudentDojoHistoryWhereUniqueInput | StudentDojoHistoryWhereUniqueInput[]
+    update?: StudentDojoHistoryUpdateWithWhereUniqueWithoutToDojoInput | StudentDojoHistoryUpdateWithWhereUniqueWithoutToDojoInput[]
+    updateMany?: StudentDojoHistoryUpdateManyWithWhereWithoutToDojoInput | StudentDojoHistoryUpdateManyWithWhereWithoutToDojoInput[]
+    deleteMany?: StudentDojoHistoryScalarWhereInput | StudentDojoHistoryScalarWhereInput[]
   }
 
   export type DojoApplicationCreateinteriorUrlsInput = {
@@ -56856,6 +61203,12 @@ export namespace Prisma {
     connect?: CertificateRequestWhereUniqueInput | CertificateRequestWhereUniqueInput[]
   }
 
+  export type StudentTransferRequestCreateNestedOneWithoutOrderInput = {
+    create?: XOR<StudentTransferRequestCreateWithoutOrderInput, StudentTransferRequestUncheckedCreateWithoutOrderInput>
+    connectOrCreate?: StudentTransferRequestCreateOrConnectWithoutOrderInput
+    connect?: StudentTransferRequestWhereUniqueInput
+  }
+
   export type ShopOrderItemUncheckedCreateNestedManyWithoutOrderInput = {
     create?: XOR<ShopOrderItemCreateWithoutOrderInput, ShopOrderItemUncheckedCreateWithoutOrderInput> | ShopOrderItemCreateWithoutOrderInput[] | ShopOrderItemUncheckedCreateWithoutOrderInput[]
     connectOrCreate?: ShopOrderItemCreateOrConnectWithoutOrderInput | ShopOrderItemCreateOrConnectWithoutOrderInput[]
@@ -56868,6 +61221,12 @@ export namespace Prisma {
     connectOrCreate?: CertificateRequestCreateOrConnectWithoutOrderInput | CertificateRequestCreateOrConnectWithoutOrderInput[]
     createMany?: CertificateRequestCreateManyOrderInputEnvelope
     connect?: CertificateRequestWhereUniqueInput | CertificateRequestWhereUniqueInput[]
+  }
+
+  export type StudentTransferRequestUncheckedCreateNestedOneWithoutOrderInput = {
+    create?: XOR<StudentTransferRequestCreateWithoutOrderInput, StudentTransferRequestUncheckedCreateWithoutOrderInput>
+    connectOrCreate?: StudentTransferRequestCreateOrConnectWithoutOrderInput
+    connect?: StudentTransferRequestWhereUniqueInput
   }
 
   export type EnumPaymentStatusFieldUpdateOperationsInput = {
@@ -56932,6 +61291,16 @@ export namespace Prisma {
     deleteMany?: CertificateRequestScalarWhereInput | CertificateRequestScalarWhereInput[]
   }
 
+  export type StudentTransferRequestUpdateOneWithoutOrderNestedInput = {
+    create?: XOR<StudentTransferRequestCreateWithoutOrderInput, StudentTransferRequestUncheckedCreateWithoutOrderInput>
+    connectOrCreate?: StudentTransferRequestCreateOrConnectWithoutOrderInput
+    upsert?: StudentTransferRequestUpsertWithoutOrderInput
+    disconnect?: StudentTransferRequestWhereInput | boolean
+    delete?: StudentTransferRequestWhereInput | boolean
+    connect?: StudentTransferRequestWhereUniqueInput
+    update?: XOR<XOR<StudentTransferRequestUpdateToOneWithWhereWithoutOrderInput, StudentTransferRequestUpdateWithoutOrderInput>, StudentTransferRequestUncheckedUpdateWithoutOrderInput>
+  }
+
   export type ShopOrderItemUncheckedUpdateManyWithoutOrderNestedInput = {
     create?: XOR<ShopOrderItemCreateWithoutOrderInput, ShopOrderItemUncheckedCreateWithoutOrderInput> | ShopOrderItemCreateWithoutOrderInput[] | ShopOrderItemUncheckedCreateWithoutOrderInput[]
     connectOrCreate?: ShopOrderItemCreateOrConnectWithoutOrderInput | ShopOrderItemCreateOrConnectWithoutOrderInput[]
@@ -56958,6 +61327,16 @@ export namespace Prisma {
     update?: CertificateRequestUpdateWithWhereUniqueWithoutOrderInput | CertificateRequestUpdateWithWhereUniqueWithoutOrderInput[]
     updateMany?: CertificateRequestUpdateManyWithWhereWithoutOrderInput | CertificateRequestUpdateManyWithWhereWithoutOrderInput[]
     deleteMany?: CertificateRequestScalarWhereInput | CertificateRequestScalarWhereInput[]
+  }
+
+  export type StudentTransferRequestUncheckedUpdateOneWithoutOrderNestedInput = {
+    create?: XOR<StudentTransferRequestCreateWithoutOrderInput, StudentTransferRequestUncheckedCreateWithoutOrderInput>
+    connectOrCreate?: StudentTransferRequestCreateOrConnectWithoutOrderInput
+    upsert?: StudentTransferRequestUpsertWithoutOrderInput
+    disconnect?: StudentTransferRequestWhereInput | boolean
+    delete?: StudentTransferRequestWhereInput | boolean
+    connect?: StudentTransferRequestWhereUniqueInput
+    update?: XOR<XOR<StudentTransferRequestUpdateToOneWithWhereWithoutOrderInput, StudentTransferRequestUpdateWithoutOrderInput>, StudentTransferRequestUncheckedUpdateWithoutOrderInput>
   }
 
   export type ShopOrderCreateNestedOneWithoutOrderItemsInput = {
@@ -57380,6 +61759,224 @@ export namespace Prisma {
     delete?: UserWhereInput | boolean
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutAchievementsAwardedInput, UserUpdateWithoutAchievementsAwardedInput>, UserUncheckedUpdateWithoutAchievementsAwardedInput>
+  }
+
+  export type StudentCreateNestedOneWithoutTransferRequestsInput = {
+    create?: XOR<StudentCreateWithoutTransferRequestsInput, StudentUncheckedCreateWithoutTransferRequestsInput>
+    connectOrCreate?: StudentCreateOrConnectWithoutTransferRequestsInput
+    connect?: StudentWhereUniqueInput
+  }
+
+  export type DojoCreateNestedOneWithoutTransfersOutInput = {
+    create?: XOR<DojoCreateWithoutTransfersOutInput, DojoUncheckedCreateWithoutTransfersOutInput>
+    connectOrCreate?: DojoCreateOrConnectWithoutTransfersOutInput
+    connect?: DojoWhereUniqueInput
+  }
+
+  export type DojoCreateNestedOneWithoutTransfersInInput = {
+    create?: XOR<DojoCreateWithoutTransfersInInput, DojoUncheckedCreateWithoutTransfersInInput>
+    connectOrCreate?: DojoCreateOrConnectWithoutTransfersInInput
+    connect?: DojoWhereUniqueInput
+  }
+
+  export type ShopOrderCreateNestedOneWithoutTransferRequestInput = {
+    create?: XOR<ShopOrderCreateWithoutTransferRequestInput, ShopOrderUncheckedCreateWithoutTransferRequestInput>
+    connectOrCreate?: ShopOrderCreateOrConnectWithoutTransferRequestInput
+    connect?: ShopOrderWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutTransfersDojoActedInput = {
+    create?: XOR<UserCreateWithoutTransfersDojoActedInput, UserUncheckedCreateWithoutTransfersDojoActedInput>
+    connectOrCreate?: UserCreateOrConnectWithoutTransfersDojoActedInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutTransfersAdminActedInput = {
+    create?: XOR<UserCreateWithoutTransfersAdminActedInput, UserUncheckedCreateWithoutTransfersAdminActedInput>
+    connectOrCreate?: UserCreateOrConnectWithoutTransfersAdminActedInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type StudentDojoHistoryCreateNestedManyWithoutTransferRequestInput = {
+    create?: XOR<StudentDojoHistoryCreateWithoutTransferRequestInput, StudentDojoHistoryUncheckedCreateWithoutTransferRequestInput> | StudentDojoHistoryCreateWithoutTransferRequestInput[] | StudentDojoHistoryUncheckedCreateWithoutTransferRequestInput[]
+    connectOrCreate?: StudentDojoHistoryCreateOrConnectWithoutTransferRequestInput | StudentDojoHistoryCreateOrConnectWithoutTransferRequestInput[]
+    createMany?: StudentDojoHistoryCreateManyTransferRequestInputEnvelope
+    connect?: StudentDojoHistoryWhereUniqueInput | StudentDojoHistoryWhereUniqueInput[]
+  }
+
+  export type StudentDojoHistoryUncheckedCreateNestedManyWithoutTransferRequestInput = {
+    create?: XOR<StudentDojoHistoryCreateWithoutTransferRequestInput, StudentDojoHistoryUncheckedCreateWithoutTransferRequestInput> | StudentDojoHistoryCreateWithoutTransferRequestInput[] | StudentDojoHistoryUncheckedCreateWithoutTransferRequestInput[]
+    connectOrCreate?: StudentDojoHistoryCreateOrConnectWithoutTransferRequestInput | StudentDojoHistoryCreateOrConnectWithoutTransferRequestInput[]
+    createMany?: StudentDojoHistoryCreateManyTransferRequestInputEnvelope
+    connect?: StudentDojoHistoryWhereUniqueInput | StudentDojoHistoryWhereUniqueInput[]
+  }
+
+  export type EnumStudentTransferStatusFieldUpdateOperationsInput = {
+    set?: $Enums.StudentTransferStatus
+  }
+
+  export type EnumStudentTransferDojoDecisionFieldUpdateOperationsInput = {
+    set?: $Enums.StudentTransferDojoDecision
+  }
+
+  export type StudentUpdateOneRequiredWithoutTransferRequestsNestedInput = {
+    create?: XOR<StudentCreateWithoutTransferRequestsInput, StudentUncheckedCreateWithoutTransferRequestsInput>
+    connectOrCreate?: StudentCreateOrConnectWithoutTransferRequestsInput
+    upsert?: StudentUpsertWithoutTransferRequestsInput
+    connect?: StudentWhereUniqueInput
+    update?: XOR<XOR<StudentUpdateToOneWithWhereWithoutTransferRequestsInput, StudentUpdateWithoutTransferRequestsInput>, StudentUncheckedUpdateWithoutTransferRequestsInput>
+  }
+
+  export type DojoUpdateOneRequiredWithoutTransfersOutNestedInput = {
+    create?: XOR<DojoCreateWithoutTransfersOutInput, DojoUncheckedCreateWithoutTransfersOutInput>
+    connectOrCreate?: DojoCreateOrConnectWithoutTransfersOutInput
+    upsert?: DojoUpsertWithoutTransfersOutInput
+    connect?: DojoWhereUniqueInput
+    update?: XOR<XOR<DojoUpdateToOneWithWhereWithoutTransfersOutInput, DojoUpdateWithoutTransfersOutInput>, DojoUncheckedUpdateWithoutTransfersOutInput>
+  }
+
+  export type DojoUpdateOneRequiredWithoutTransfersInNestedInput = {
+    create?: XOR<DojoCreateWithoutTransfersInInput, DojoUncheckedCreateWithoutTransfersInInput>
+    connectOrCreate?: DojoCreateOrConnectWithoutTransfersInInput
+    upsert?: DojoUpsertWithoutTransfersInInput
+    connect?: DojoWhereUniqueInput
+    update?: XOR<XOR<DojoUpdateToOneWithWhereWithoutTransfersInInput, DojoUpdateWithoutTransfersInInput>, DojoUncheckedUpdateWithoutTransfersInInput>
+  }
+
+  export type ShopOrderUpdateOneWithoutTransferRequestNestedInput = {
+    create?: XOR<ShopOrderCreateWithoutTransferRequestInput, ShopOrderUncheckedCreateWithoutTransferRequestInput>
+    connectOrCreate?: ShopOrderCreateOrConnectWithoutTransferRequestInput
+    upsert?: ShopOrderUpsertWithoutTransferRequestInput
+    disconnect?: ShopOrderWhereInput | boolean
+    delete?: ShopOrderWhereInput | boolean
+    connect?: ShopOrderWhereUniqueInput
+    update?: XOR<XOR<ShopOrderUpdateToOneWithWhereWithoutTransferRequestInput, ShopOrderUpdateWithoutTransferRequestInput>, ShopOrderUncheckedUpdateWithoutTransferRequestInput>
+  }
+
+  export type UserUpdateOneWithoutTransfersDojoActedNestedInput = {
+    create?: XOR<UserCreateWithoutTransfersDojoActedInput, UserUncheckedCreateWithoutTransfersDojoActedInput>
+    connectOrCreate?: UserCreateOrConnectWithoutTransfersDojoActedInput
+    upsert?: UserUpsertWithoutTransfersDojoActedInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutTransfersDojoActedInput, UserUpdateWithoutTransfersDojoActedInput>, UserUncheckedUpdateWithoutTransfersDojoActedInput>
+  }
+
+  export type UserUpdateOneWithoutTransfersAdminActedNestedInput = {
+    create?: XOR<UserCreateWithoutTransfersAdminActedInput, UserUncheckedCreateWithoutTransfersAdminActedInput>
+    connectOrCreate?: UserCreateOrConnectWithoutTransfersAdminActedInput
+    upsert?: UserUpsertWithoutTransfersAdminActedInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutTransfersAdminActedInput, UserUpdateWithoutTransfersAdminActedInput>, UserUncheckedUpdateWithoutTransfersAdminActedInput>
+  }
+
+  export type StudentDojoHistoryUpdateManyWithoutTransferRequestNestedInput = {
+    create?: XOR<StudentDojoHistoryCreateWithoutTransferRequestInput, StudentDojoHistoryUncheckedCreateWithoutTransferRequestInput> | StudentDojoHistoryCreateWithoutTransferRequestInput[] | StudentDojoHistoryUncheckedCreateWithoutTransferRequestInput[]
+    connectOrCreate?: StudentDojoHistoryCreateOrConnectWithoutTransferRequestInput | StudentDojoHistoryCreateOrConnectWithoutTransferRequestInput[]
+    upsert?: StudentDojoHistoryUpsertWithWhereUniqueWithoutTransferRequestInput | StudentDojoHistoryUpsertWithWhereUniqueWithoutTransferRequestInput[]
+    createMany?: StudentDojoHistoryCreateManyTransferRequestInputEnvelope
+    set?: StudentDojoHistoryWhereUniqueInput | StudentDojoHistoryWhereUniqueInput[]
+    disconnect?: StudentDojoHistoryWhereUniqueInput | StudentDojoHistoryWhereUniqueInput[]
+    delete?: StudentDojoHistoryWhereUniqueInput | StudentDojoHistoryWhereUniqueInput[]
+    connect?: StudentDojoHistoryWhereUniqueInput | StudentDojoHistoryWhereUniqueInput[]
+    update?: StudentDojoHistoryUpdateWithWhereUniqueWithoutTransferRequestInput | StudentDojoHistoryUpdateWithWhereUniqueWithoutTransferRequestInput[]
+    updateMany?: StudentDojoHistoryUpdateManyWithWhereWithoutTransferRequestInput | StudentDojoHistoryUpdateManyWithWhereWithoutTransferRequestInput[]
+    deleteMany?: StudentDojoHistoryScalarWhereInput | StudentDojoHistoryScalarWhereInput[]
+  }
+
+  export type StudentDojoHistoryUncheckedUpdateManyWithoutTransferRequestNestedInput = {
+    create?: XOR<StudentDojoHistoryCreateWithoutTransferRequestInput, StudentDojoHistoryUncheckedCreateWithoutTransferRequestInput> | StudentDojoHistoryCreateWithoutTransferRequestInput[] | StudentDojoHistoryUncheckedCreateWithoutTransferRequestInput[]
+    connectOrCreate?: StudentDojoHistoryCreateOrConnectWithoutTransferRequestInput | StudentDojoHistoryCreateOrConnectWithoutTransferRequestInput[]
+    upsert?: StudentDojoHistoryUpsertWithWhereUniqueWithoutTransferRequestInput | StudentDojoHistoryUpsertWithWhereUniqueWithoutTransferRequestInput[]
+    createMany?: StudentDojoHistoryCreateManyTransferRequestInputEnvelope
+    set?: StudentDojoHistoryWhereUniqueInput | StudentDojoHistoryWhereUniqueInput[]
+    disconnect?: StudentDojoHistoryWhereUniqueInput | StudentDojoHistoryWhereUniqueInput[]
+    delete?: StudentDojoHistoryWhereUniqueInput | StudentDojoHistoryWhereUniqueInput[]
+    connect?: StudentDojoHistoryWhereUniqueInput | StudentDojoHistoryWhereUniqueInput[]
+    update?: StudentDojoHistoryUpdateWithWhereUniqueWithoutTransferRequestInput | StudentDojoHistoryUpdateWithWhereUniqueWithoutTransferRequestInput[]
+    updateMany?: StudentDojoHistoryUpdateManyWithWhereWithoutTransferRequestInput | StudentDojoHistoryUpdateManyWithWhereWithoutTransferRequestInput[]
+    deleteMany?: StudentDojoHistoryScalarWhereInput | StudentDojoHistoryScalarWhereInput[]
+  }
+
+  export type StudentCreateNestedOneWithoutDojoHistoryInput = {
+    create?: XOR<StudentCreateWithoutDojoHistoryInput, StudentUncheckedCreateWithoutDojoHistoryInput>
+    connectOrCreate?: StudentCreateOrConnectWithoutDojoHistoryInput
+    connect?: StudentWhereUniqueInput
+  }
+
+  export type DojoCreateNestedOneWithoutHistoryFromInput = {
+    create?: XOR<DojoCreateWithoutHistoryFromInput, DojoUncheckedCreateWithoutHistoryFromInput>
+    connectOrCreate?: DojoCreateOrConnectWithoutHistoryFromInput
+    connect?: DojoWhereUniqueInput
+  }
+
+  export type DojoCreateNestedOneWithoutHistoryToInput = {
+    create?: XOR<DojoCreateWithoutHistoryToInput, DojoUncheckedCreateWithoutHistoryToInput>
+    connectOrCreate?: DojoCreateOrConnectWithoutHistoryToInput
+    connect?: DojoWhereUniqueInput
+  }
+
+  export type StudentTransferRequestCreateNestedOneWithoutHistoryInput = {
+    create?: XOR<StudentTransferRequestCreateWithoutHistoryInput, StudentTransferRequestUncheckedCreateWithoutHistoryInput>
+    connectOrCreate?: StudentTransferRequestCreateOrConnectWithoutHistoryInput
+    connect?: StudentTransferRequestWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutDojoHistoryChangesInput = {
+    create?: XOR<UserCreateWithoutDojoHistoryChangesInput, UserUncheckedCreateWithoutDojoHistoryChangesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutDojoHistoryChangesInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type StudentUpdateOneRequiredWithoutDojoHistoryNestedInput = {
+    create?: XOR<StudentCreateWithoutDojoHistoryInput, StudentUncheckedCreateWithoutDojoHistoryInput>
+    connectOrCreate?: StudentCreateOrConnectWithoutDojoHistoryInput
+    upsert?: StudentUpsertWithoutDojoHistoryInput
+    connect?: StudentWhereUniqueInput
+    update?: XOR<XOR<StudentUpdateToOneWithWhereWithoutDojoHistoryInput, StudentUpdateWithoutDojoHistoryInput>, StudentUncheckedUpdateWithoutDojoHistoryInput>
+  }
+
+  export type DojoUpdateOneWithoutHistoryFromNestedInput = {
+    create?: XOR<DojoCreateWithoutHistoryFromInput, DojoUncheckedCreateWithoutHistoryFromInput>
+    connectOrCreate?: DojoCreateOrConnectWithoutHistoryFromInput
+    upsert?: DojoUpsertWithoutHistoryFromInput
+    disconnect?: DojoWhereInput | boolean
+    delete?: DojoWhereInput | boolean
+    connect?: DojoWhereUniqueInput
+    update?: XOR<XOR<DojoUpdateToOneWithWhereWithoutHistoryFromInput, DojoUpdateWithoutHistoryFromInput>, DojoUncheckedUpdateWithoutHistoryFromInput>
+  }
+
+  export type DojoUpdateOneWithoutHistoryToNestedInput = {
+    create?: XOR<DojoCreateWithoutHistoryToInput, DojoUncheckedCreateWithoutHistoryToInput>
+    connectOrCreate?: DojoCreateOrConnectWithoutHistoryToInput
+    upsert?: DojoUpsertWithoutHistoryToInput
+    disconnect?: DojoWhereInput | boolean
+    delete?: DojoWhereInput | boolean
+    connect?: DojoWhereUniqueInput
+    update?: XOR<XOR<DojoUpdateToOneWithWhereWithoutHistoryToInput, DojoUpdateWithoutHistoryToInput>, DojoUncheckedUpdateWithoutHistoryToInput>
+  }
+
+  export type StudentTransferRequestUpdateOneWithoutHistoryNestedInput = {
+    create?: XOR<StudentTransferRequestCreateWithoutHistoryInput, StudentTransferRequestUncheckedCreateWithoutHistoryInput>
+    connectOrCreate?: StudentTransferRequestCreateOrConnectWithoutHistoryInput
+    upsert?: StudentTransferRequestUpsertWithoutHistoryInput
+    disconnect?: StudentTransferRequestWhereInput | boolean
+    delete?: StudentTransferRequestWhereInput | boolean
+    connect?: StudentTransferRequestWhereUniqueInput
+    update?: XOR<XOR<StudentTransferRequestUpdateToOneWithWhereWithoutHistoryInput, StudentTransferRequestUpdateWithoutHistoryInput>, StudentTransferRequestUncheckedUpdateWithoutHistoryInput>
+  }
+
+  export type UserUpdateOneWithoutDojoHistoryChangesNestedInput = {
+    create?: XOR<UserCreateWithoutDojoHistoryChangesInput, UserUncheckedCreateWithoutDojoHistoryChangesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutDojoHistoryChangesInput
+    upsert?: UserUpsertWithoutDojoHistoryChangesInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutDojoHistoryChangesInput, UserUpdateWithoutDojoHistoryChangesInput>, UserUncheckedUpdateWithoutDojoHistoryChangesInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -57970,6 +62567,40 @@ export namespace Prisma {
     _max?: NestedEnumAchievementRuleFilter<$PrismaModel>
   }
 
+  export type NestedEnumStudentTransferStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.StudentTransferStatus | EnumStudentTransferStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.StudentTransferStatus[] | ListEnumStudentTransferStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.StudentTransferStatus[] | ListEnumStudentTransferStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumStudentTransferStatusFilter<$PrismaModel> | $Enums.StudentTransferStatus
+  }
+
+  export type NestedEnumStudentTransferDojoDecisionFilter<$PrismaModel = never> = {
+    equals?: $Enums.StudentTransferDojoDecision | EnumStudentTransferDojoDecisionFieldRefInput<$PrismaModel>
+    in?: $Enums.StudentTransferDojoDecision[] | ListEnumStudentTransferDojoDecisionFieldRefInput<$PrismaModel>
+    notIn?: $Enums.StudentTransferDojoDecision[] | ListEnumStudentTransferDojoDecisionFieldRefInput<$PrismaModel>
+    not?: NestedEnumStudentTransferDojoDecisionFilter<$PrismaModel> | $Enums.StudentTransferDojoDecision
+  }
+
+  export type NestedEnumStudentTransferStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.StudentTransferStatus | EnumStudentTransferStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.StudentTransferStatus[] | ListEnumStudentTransferStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.StudentTransferStatus[] | ListEnumStudentTransferStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumStudentTransferStatusWithAggregatesFilter<$PrismaModel> | $Enums.StudentTransferStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumStudentTransferStatusFilter<$PrismaModel>
+    _max?: NestedEnumStudentTransferStatusFilter<$PrismaModel>
+  }
+
+  export type NestedEnumStudentTransferDojoDecisionWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.StudentTransferDojoDecision | EnumStudentTransferDojoDecisionFieldRefInput<$PrismaModel>
+    in?: $Enums.StudentTransferDojoDecision[] | ListEnumStudentTransferDojoDecisionFieldRefInput<$PrismaModel>
+    notIn?: $Enums.StudentTransferDojoDecision[] | ListEnumStudentTransferDojoDecisionFieldRefInput<$PrismaModel>
+    not?: NestedEnumStudentTransferDojoDecisionWithAggregatesFilter<$PrismaModel> | $Enums.StudentTransferDojoDecision
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumStudentTransferDojoDecisionFilter<$PrismaModel>
+    _max?: NestedEnumStudentTransferDojoDecisionFilter<$PrismaModel>
+  }
+
   export type UserCreateWithoutRoleInput = {
     id: string
     email: string
@@ -57995,6 +62626,9 @@ export namespace Prisma {
     dojoSalesSold?: DojoSaleCreateNestedManyWithoutSoldByInput
     achievementsAwarded?: StudentAchievementCreateNestedManyWithoutAwardedByInput
     tournamentEntries?: TournamentParticipantCreateNestedManyWithoutUserInput
+    transfersDojoActed?: StudentTransferRequestCreateNestedManyWithoutDojoActedByInput
+    transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
+    dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
   }
 
   export type UserUncheckedCreateWithoutRoleInput = {
@@ -58022,6 +62656,9 @@ export namespace Prisma {
     dojoSalesSold?: DojoSaleUncheckedCreateNestedManyWithoutSoldByInput
     achievementsAwarded?: StudentAchievementUncheckedCreateNestedManyWithoutAwardedByInput
     tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutUserInput
+    transfersDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutDojoActedByInput
+    transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
+    dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
   }
 
   export type UserCreateOrConnectWithoutRoleInput = {
@@ -58292,6 +62929,8 @@ export namespace Prisma {
     gradingApplications?: GradingApplicationCreateNestedManyWithoutStudentInput
     certificateRequests?: CertificateRequestCreateNestedManyWithoutStudentInput
     achievements?: StudentAchievementCreateNestedManyWithoutStudentInput
+    transferRequests?: StudentTransferRequestCreateNestedManyWithoutStudentInput
+    dojoHistory?: StudentDojoHistoryCreateNestedManyWithoutStudentInput
   }
 
   export type StudentUncheckedCreateWithoutUserInput = {
@@ -58316,6 +62955,8 @@ export namespace Prisma {
     gradingApplications?: GradingApplicationUncheckedCreateNestedManyWithoutStudentInput
     certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutStudentInput
     achievements?: StudentAchievementUncheckedCreateNestedManyWithoutStudentInput
+    transferRequests?: StudentTransferRequestUncheckedCreateNestedManyWithoutStudentInput
+    dojoHistory?: StudentDojoHistoryUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type StudentCreateOrConnectWithoutUserInput = {
@@ -58446,12 +63087,14 @@ export namespace Prisma {
     isGuestOrder?: boolean
     includesDojoRenewal?: boolean
     includesCertificates?: boolean
+    includesTransferRequest?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     dojo?: DojoCreateNestedOneWithoutRenewalOrdersInput
     certDojo?: DojoCreateNestedOneWithoutCertificateOrdersInput
     orderItems?: ShopOrderItemCreateNestedManyWithoutOrderInput
     certificateRequests?: CertificateRequestCreateNestedManyWithoutOrderInput
+    transferRequest?: StudentTransferRequestCreateNestedOneWithoutOrderInput
   }
 
   export type ShopOrderUncheckedCreateWithoutUserInput = {
@@ -58473,10 +63116,12 @@ export namespace Prisma {
     includesDojoRenewal?: boolean
     includesCertificates?: boolean
     certDojoId?: string | null
+    includesTransferRequest?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     orderItems?: ShopOrderItemUncheckedCreateNestedManyWithoutOrderInput
     certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutOrderInput
+    transferRequest?: StudentTransferRequestUncheckedCreateNestedOneWithoutOrderInput
   }
 
   export type ShopOrderCreateOrConnectWithoutUserInput = {
@@ -58819,6 +63464,140 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type StudentTransferRequestCreateWithoutDojoActedByInput = {
+    id?: string
+    status?: $Enums.StudentTransferStatus
+    dojoDecision?: $Enums.StudentTransferDojoDecision
+    reason?: string | null
+    dojoNote?: string | null
+    adminNote?: string | null
+    fee: Decimal | DecimalJsLike | number | string
+    paidAt?: Date | string | null
+    dojoActedAt?: Date | string | null
+    adminActedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    student: StudentCreateNestedOneWithoutTransferRequestsInput
+    fromDojo: DojoCreateNestedOneWithoutTransfersOutInput
+    toDojo: DojoCreateNestedOneWithoutTransfersInInput
+    order?: ShopOrderCreateNestedOneWithoutTransferRequestInput
+    adminActedBy?: UserCreateNestedOneWithoutTransfersAdminActedInput
+    history?: StudentDojoHistoryCreateNestedManyWithoutTransferRequestInput
+  }
+
+  export type StudentTransferRequestUncheckedCreateWithoutDojoActedByInput = {
+    id?: string
+    studentId: string
+    fromDojoId: string
+    toDojoId: string
+    status?: $Enums.StudentTransferStatus
+    dojoDecision?: $Enums.StudentTransferDojoDecision
+    reason?: string | null
+    dojoNote?: string | null
+    adminNote?: string | null
+    fee: Decimal | DecimalJsLike | number | string
+    orderId?: string | null
+    paidAt?: Date | string | null
+    dojoActedAt?: Date | string | null
+    adminActedAt?: Date | string | null
+    adminActedById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    history?: StudentDojoHistoryUncheckedCreateNestedManyWithoutTransferRequestInput
+  }
+
+  export type StudentTransferRequestCreateOrConnectWithoutDojoActedByInput = {
+    where: StudentTransferRequestWhereUniqueInput
+    create: XOR<StudentTransferRequestCreateWithoutDojoActedByInput, StudentTransferRequestUncheckedCreateWithoutDojoActedByInput>
+  }
+
+  export type StudentTransferRequestCreateManyDojoActedByInputEnvelope = {
+    data: StudentTransferRequestCreateManyDojoActedByInput | StudentTransferRequestCreateManyDojoActedByInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type StudentTransferRequestCreateWithoutAdminActedByInput = {
+    id?: string
+    status?: $Enums.StudentTransferStatus
+    dojoDecision?: $Enums.StudentTransferDojoDecision
+    reason?: string | null
+    dojoNote?: string | null
+    adminNote?: string | null
+    fee: Decimal | DecimalJsLike | number | string
+    paidAt?: Date | string | null
+    dojoActedAt?: Date | string | null
+    adminActedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    student: StudentCreateNestedOneWithoutTransferRequestsInput
+    fromDojo: DojoCreateNestedOneWithoutTransfersOutInput
+    toDojo: DojoCreateNestedOneWithoutTransfersInInput
+    order?: ShopOrderCreateNestedOneWithoutTransferRequestInput
+    dojoActedBy?: UserCreateNestedOneWithoutTransfersDojoActedInput
+    history?: StudentDojoHistoryCreateNestedManyWithoutTransferRequestInput
+  }
+
+  export type StudentTransferRequestUncheckedCreateWithoutAdminActedByInput = {
+    id?: string
+    studentId: string
+    fromDojoId: string
+    toDojoId: string
+    status?: $Enums.StudentTransferStatus
+    dojoDecision?: $Enums.StudentTransferDojoDecision
+    reason?: string | null
+    dojoNote?: string | null
+    adminNote?: string | null
+    fee: Decimal | DecimalJsLike | number | string
+    orderId?: string | null
+    paidAt?: Date | string | null
+    dojoActedAt?: Date | string | null
+    dojoActedById?: string | null
+    adminActedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    history?: StudentDojoHistoryUncheckedCreateNestedManyWithoutTransferRequestInput
+  }
+
+  export type StudentTransferRequestCreateOrConnectWithoutAdminActedByInput = {
+    where: StudentTransferRequestWhereUniqueInput
+    create: XOR<StudentTransferRequestCreateWithoutAdminActedByInput, StudentTransferRequestUncheckedCreateWithoutAdminActedByInput>
+  }
+
+  export type StudentTransferRequestCreateManyAdminActedByInputEnvelope = {
+    data: StudentTransferRequestCreateManyAdminActedByInput | StudentTransferRequestCreateManyAdminActedByInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type StudentDojoHistoryCreateWithoutChangedByInput = {
+    id?: string
+    reason?: string | null
+    createdAt?: Date | string
+    student: StudentCreateNestedOneWithoutDojoHistoryInput
+    fromDojo?: DojoCreateNestedOneWithoutHistoryFromInput
+    toDojo?: DojoCreateNestedOneWithoutHistoryToInput
+    transferRequest?: StudentTransferRequestCreateNestedOneWithoutHistoryInput
+  }
+
+  export type StudentDojoHistoryUncheckedCreateWithoutChangedByInput = {
+    id?: string
+    studentId: string
+    fromDojoId?: string | null
+    toDojoId?: string | null
+    transferRequestId?: string | null
+    reason?: string | null
+    createdAt?: Date | string
+  }
+
+  export type StudentDojoHistoryCreateOrConnectWithoutChangedByInput = {
+    where: StudentDojoHistoryWhereUniqueInput
+    create: XOR<StudentDojoHistoryCreateWithoutChangedByInput, StudentDojoHistoryUncheckedCreateWithoutChangedByInput>
+  }
+
+  export type StudentDojoHistoryCreateManyChangedByInputEnvelope = {
+    data: StudentDojoHistoryCreateManyChangedByInput | StudentDojoHistoryCreateManyChangedByInput[]
+    skipDuplicates?: boolean
+  }
+
   export type RoleUpsertWithoutUsersInput = {
     update: XOR<RoleUpdateWithoutUsersInput, RoleUncheckedUpdateWithoutUsersInput>
     create: XOR<RoleCreateWithoutUsersInput, RoleUncheckedCreateWithoutUsersInput>
@@ -58881,6 +63660,8 @@ export namespace Prisma {
     gradingApplications?: GradingApplicationUpdateManyWithoutStudentNestedInput
     certificateRequests?: CertificateRequestUpdateManyWithoutStudentNestedInput
     achievements?: StudentAchievementUpdateManyWithoutStudentNestedInput
+    transferRequests?: StudentTransferRequestUpdateManyWithoutStudentNestedInput
+    dojoHistory?: StudentDojoHistoryUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateWithoutUserInput = {
@@ -58905,6 +63686,8 @@ export namespace Prisma {
     gradingApplications?: GradingApplicationUncheckedUpdateManyWithoutStudentNestedInput
     certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutStudentNestedInput
     achievements?: StudentAchievementUncheckedUpdateManyWithoutStudentNestedInput
+    transferRequests?: StudentTransferRequestUncheckedUpdateManyWithoutStudentNestedInput
+    dojoHistory?: StudentDojoHistoryUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type InstructorUpsertWithoutUserInput = {
@@ -59075,6 +63858,7 @@ export namespace Prisma {
     includesDojoRenewal?: BoolFilter<"ShopOrder"> | boolean
     includesCertificates?: BoolFilter<"ShopOrder"> | boolean
     certDojoId?: UuidNullableFilter<"ShopOrder"> | string | null
+    includesTransferRequest?: BoolFilter<"ShopOrder"> | boolean
     createdAt?: DateTimeFilter<"ShopOrder"> | Date | string
     updatedAt?: DateTimeFilter<"ShopOrder"> | Date | string
   }
@@ -59317,6 +64101,92 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"TournamentParticipant"> | Date | string
   }
 
+  export type StudentTransferRequestUpsertWithWhereUniqueWithoutDojoActedByInput = {
+    where: StudentTransferRequestWhereUniqueInput
+    update: XOR<StudentTransferRequestUpdateWithoutDojoActedByInput, StudentTransferRequestUncheckedUpdateWithoutDojoActedByInput>
+    create: XOR<StudentTransferRequestCreateWithoutDojoActedByInput, StudentTransferRequestUncheckedCreateWithoutDojoActedByInput>
+  }
+
+  export type StudentTransferRequestUpdateWithWhereUniqueWithoutDojoActedByInput = {
+    where: StudentTransferRequestWhereUniqueInput
+    data: XOR<StudentTransferRequestUpdateWithoutDojoActedByInput, StudentTransferRequestUncheckedUpdateWithoutDojoActedByInput>
+  }
+
+  export type StudentTransferRequestUpdateManyWithWhereWithoutDojoActedByInput = {
+    where: StudentTransferRequestScalarWhereInput
+    data: XOR<StudentTransferRequestUpdateManyMutationInput, StudentTransferRequestUncheckedUpdateManyWithoutDojoActedByInput>
+  }
+
+  export type StudentTransferRequestScalarWhereInput = {
+    AND?: StudentTransferRequestScalarWhereInput | StudentTransferRequestScalarWhereInput[]
+    OR?: StudentTransferRequestScalarWhereInput[]
+    NOT?: StudentTransferRequestScalarWhereInput | StudentTransferRequestScalarWhereInput[]
+    id?: UuidFilter<"StudentTransferRequest"> | string
+    studentId?: UuidFilter<"StudentTransferRequest"> | string
+    fromDojoId?: UuidFilter<"StudentTransferRequest"> | string
+    toDojoId?: UuidFilter<"StudentTransferRequest"> | string
+    status?: EnumStudentTransferStatusFilter<"StudentTransferRequest"> | $Enums.StudentTransferStatus
+    dojoDecision?: EnumStudentTransferDojoDecisionFilter<"StudentTransferRequest"> | $Enums.StudentTransferDojoDecision
+    reason?: StringNullableFilter<"StudentTransferRequest"> | string | null
+    dojoNote?: StringNullableFilter<"StudentTransferRequest"> | string | null
+    adminNote?: StringNullableFilter<"StudentTransferRequest"> | string | null
+    fee?: DecimalFilter<"StudentTransferRequest"> | Decimal | DecimalJsLike | number | string
+    orderId?: UuidNullableFilter<"StudentTransferRequest"> | string | null
+    paidAt?: DateTimeNullableFilter<"StudentTransferRequest"> | Date | string | null
+    dojoActedAt?: DateTimeNullableFilter<"StudentTransferRequest"> | Date | string | null
+    dojoActedById?: UuidNullableFilter<"StudentTransferRequest"> | string | null
+    adminActedAt?: DateTimeNullableFilter<"StudentTransferRequest"> | Date | string | null
+    adminActedById?: UuidNullableFilter<"StudentTransferRequest"> | string | null
+    createdAt?: DateTimeFilter<"StudentTransferRequest"> | Date | string
+    updatedAt?: DateTimeFilter<"StudentTransferRequest"> | Date | string
+  }
+
+  export type StudentTransferRequestUpsertWithWhereUniqueWithoutAdminActedByInput = {
+    where: StudentTransferRequestWhereUniqueInput
+    update: XOR<StudentTransferRequestUpdateWithoutAdminActedByInput, StudentTransferRequestUncheckedUpdateWithoutAdminActedByInput>
+    create: XOR<StudentTransferRequestCreateWithoutAdminActedByInput, StudentTransferRequestUncheckedCreateWithoutAdminActedByInput>
+  }
+
+  export type StudentTransferRequestUpdateWithWhereUniqueWithoutAdminActedByInput = {
+    where: StudentTransferRequestWhereUniqueInput
+    data: XOR<StudentTransferRequestUpdateWithoutAdminActedByInput, StudentTransferRequestUncheckedUpdateWithoutAdminActedByInput>
+  }
+
+  export type StudentTransferRequestUpdateManyWithWhereWithoutAdminActedByInput = {
+    where: StudentTransferRequestScalarWhereInput
+    data: XOR<StudentTransferRequestUpdateManyMutationInput, StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByInput>
+  }
+
+  export type StudentDojoHistoryUpsertWithWhereUniqueWithoutChangedByInput = {
+    where: StudentDojoHistoryWhereUniqueInput
+    update: XOR<StudentDojoHistoryUpdateWithoutChangedByInput, StudentDojoHistoryUncheckedUpdateWithoutChangedByInput>
+    create: XOR<StudentDojoHistoryCreateWithoutChangedByInput, StudentDojoHistoryUncheckedCreateWithoutChangedByInput>
+  }
+
+  export type StudentDojoHistoryUpdateWithWhereUniqueWithoutChangedByInput = {
+    where: StudentDojoHistoryWhereUniqueInput
+    data: XOR<StudentDojoHistoryUpdateWithoutChangedByInput, StudentDojoHistoryUncheckedUpdateWithoutChangedByInput>
+  }
+
+  export type StudentDojoHistoryUpdateManyWithWhereWithoutChangedByInput = {
+    where: StudentDojoHistoryScalarWhereInput
+    data: XOR<StudentDojoHistoryUpdateManyMutationInput, StudentDojoHistoryUncheckedUpdateManyWithoutChangedByInput>
+  }
+
+  export type StudentDojoHistoryScalarWhereInput = {
+    AND?: StudentDojoHistoryScalarWhereInput | StudentDojoHistoryScalarWhereInput[]
+    OR?: StudentDojoHistoryScalarWhereInput[]
+    NOT?: StudentDojoHistoryScalarWhereInput | StudentDojoHistoryScalarWhereInput[]
+    id?: UuidFilter<"StudentDojoHistory"> | string
+    studentId?: UuidFilter<"StudentDojoHistory"> | string
+    fromDojoId?: UuidNullableFilter<"StudentDojoHistory"> | string | null
+    toDojoId?: UuidNullableFilter<"StudentDojoHistory"> | string | null
+    transferRequestId?: UuidNullableFilter<"StudentDojoHistory"> | string | null
+    changedById?: UuidNullableFilter<"StudentDojoHistory"> | string | null
+    reason?: StringNullableFilter<"StudentDojoHistory"> | string | null
+    createdAt?: DateTimeFilter<"StudentDojoHistory"> | Date | string
+  }
+
   export type UserCreateWithoutStudentInput = {
     id: string
     email: string
@@ -59342,6 +64212,9 @@ export namespace Prisma {
     dojoSalesSold?: DojoSaleCreateNestedManyWithoutSoldByInput
     achievementsAwarded?: StudentAchievementCreateNestedManyWithoutAwardedByInput
     tournamentEntries?: TournamentParticipantCreateNestedManyWithoutUserInput
+    transfersDojoActed?: StudentTransferRequestCreateNestedManyWithoutDojoActedByInput
+    transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
+    dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
   }
 
   export type UserUncheckedCreateWithoutStudentInput = {
@@ -59369,6 +64242,9 @@ export namespace Prisma {
     dojoSalesSold?: DojoSaleUncheckedCreateNestedManyWithoutSoldByInput
     achievementsAwarded?: StudentAchievementUncheckedCreateNestedManyWithoutAwardedByInput
     tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutUserInput
+    transfersDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutDojoActedByInput
+    transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
+    dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
   }
 
   export type UserCreateOrConnectWithoutStudentInput = {
@@ -59405,6 +64281,10 @@ export namespace Prisma {
     announcements?: AnnouncementCreateNestedManyWithoutDojoInput
     inventoryItems?: DojoInventoryItemCreateNestedManyWithoutDojoInput
     sales?: DojoSaleCreateNestedManyWithoutDojoInput
+    transfersOut?: StudentTransferRequestCreateNestedManyWithoutFromDojoInput
+    transfersIn?: StudentTransferRequestCreateNestedManyWithoutToDojoInput
+    historyFrom?: StudentDojoHistoryCreateNestedManyWithoutFromDojoInput
+    historyTo?: StudentDojoHistoryCreateNestedManyWithoutToDojoInput
   }
 
   export type DojoUncheckedCreateWithoutStudentsInput = {
@@ -59436,6 +64316,10 @@ export namespace Prisma {
     announcements?: AnnouncementUncheckedCreateNestedManyWithoutDojoInput
     inventoryItems?: DojoInventoryItemUncheckedCreateNestedManyWithoutDojoInput
     sales?: DojoSaleUncheckedCreateNestedManyWithoutDojoInput
+    transfersOut?: StudentTransferRequestUncheckedCreateNestedManyWithoutFromDojoInput
+    transfersIn?: StudentTransferRequestUncheckedCreateNestedManyWithoutToDojoInput
+    historyFrom?: StudentDojoHistoryUncheckedCreateNestedManyWithoutFromDojoInput
+    historyTo?: StudentDojoHistoryUncheckedCreateNestedManyWithoutToDojoInput
   }
 
   export type DojoCreateOrConnectWithoutStudentsInput = {
@@ -59609,6 +64493,88 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type StudentTransferRequestCreateWithoutStudentInput = {
+    id?: string
+    status?: $Enums.StudentTransferStatus
+    dojoDecision?: $Enums.StudentTransferDojoDecision
+    reason?: string | null
+    dojoNote?: string | null
+    adminNote?: string | null
+    fee: Decimal | DecimalJsLike | number | string
+    paidAt?: Date | string | null
+    dojoActedAt?: Date | string | null
+    adminActedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    fromDojo: DojoCreateNestedOneWithoutTransfersOutInput
+    toDojo: DojoCreateNestedOneWithoutTransfersInInput
+    order?: ShopOrderCreateNestedOneWithoutTransferRequestInput
+    dojoActedBy?: UserCreateNestedOneWithoutTransfersDojoActedInput
+    adminActedBy?: UserCreateNestedOneWithoutTransfersAdminActedInput
+    history?: StudentDojoHistoryCreateNestedManyWithoutTransferRequestInput
+  }
+
+  export type StudentTransferRequestUncheckedCreateWithoutStudentInput = {
+    id?: string
+    fromDojoId: string
+    toDojoId: string
+    status?: $Enums.StudentTransferStatus
+    dojoDecision?: $Enums.StudentTransferDojoDecision
+    reason?: string | null
+    dojoNote?: string | null
+    adminNote?: string | null
+    fee: Decimal | DecimalJsLike | number | string
+    orderId?: string | null
+    paidAt?: Date | string | null
+    dojoActedAt?: Date | string | null
+    dojoActedById?: string | null
+    adminActedAt?: Date | string | null
+    adminActedById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    history?: StudentDojoHistoryUncheckedCreateNestedManyWithoutTransferRequestInput
+  }
+
+  export type StudentTransferRequestCreateOrConnectWithoutStudentInput = {
+    where: StudentTransferRequestWhereUniqueInput
+    create: XOR<StudentTransferRequestCreateWithoutStudentInput, StudentTransferRequestUncheckedCreateWithoutStudentInput>
+  }
+
+  export type StudentTransferRequestCreateManyStudentInputEnvelope = {
+    data: StudentTransferRequestCreateManyStudentInput | StudentTransferRequestCreateManyStudentInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type StudentDojoHistoryCreateWithoutStudentInput = {
+    id?: string
+    reason?: string | null
+    createdAt?: Date | string
+    fromDojo?: DojoCreateNestedOneWithoutHistoryFromInput
+    toDojo?: DojoCreateNestedOneWithoutHistoryToInput
+    transferRequest?: StudentTransferRequestCreateNestedOneWithoutHistoryInput
+    changedBy?: UserCreateNestedOneWithoutDojoHistoryChangesInput
+  }
+
+  export type StudentDojoHistoryUncheckedCreateWithoutStudentInput = {
+    id?: string
+    fromDojoId?: string | null
+    toDojoId?: string | null
+    transferRequestId?: string | null
+    changedById?: string | null
+    reason?: string | null
+    createdAt?: Date | string
+  }
+
+  export type StudentDojoHistoryCreateOrConnectWithoutStudentInput = {
+    where: StudentDojoHistoryWhereUniqueInput
+    create: XOR<StudentDojoHistoryCreateWithoutStudentInput, StudentDojoHistoryUncheckedCreateWithoutStudentInput>
+  }
+
+  export type StudentDojoHistoryCreateManyStudentInputEnvelope = {
+    data: StudentDojoHistoryCreateManyStudentInput | StudentDojoHistoryCreateManyStudentInput[]
+    skipDuplicates?: boolean
+  }
+
   export type UserUpsertWithoutStudentInput = {
     update: XOR<UserUpdateWithoutStudentInput, UserUncheckedUpdateWithoutStudentInput>
     create: XOR<UserCreateWithoutStudentInput, UserUncheckedCreateWithoutStudentInput>
@@ -59645,6 +64611,9 @@ export namespace Prisma {
     dojoSalesSold?: DojoSaleUpdateManyWithoutSoldByNestedInput
     achievementsAwarded?: StudentAchievementUpdateManyWithoutAwardedByNestedInput
     tournamentEntries?: TournamentParticipantUpdateManyWithoutUserNestedInput
+    transfersDojoActed?: StudentTransferRequestUpdateManyWithoutDojoActedByNestedInput
+    transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
+    dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutStudentInput = {
@@ -59672,6 +64641,9 @@ export namespace Prisma {
     dojoSalesSold?: DojoSaleUncheckedUpdateManyWithoutSoldByNestedInput
     achievementsAwarded?: StudentAchievementUncheckedUpdateManyWithoutAwardedByNestedInput
     tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutUserNestedInput
+    transfersDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
+    transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
+    dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
   }
 
   export type DojoUpsertWithoutStudentsInput = {
@@ -59714,6 +64686,10 @@ export namespace Prisma {
     announcements?: AnnouncementUpdateManyWithoutDojoNestedInput
     inventoryItems?: DojoInventoryItemUpdateManyWithoutDojoNestedInput
     sales?: DojoSaleUpdateManyWithoutDojoNestedInput
+    transfersOut?: StudentTransferRequestUpdateManyWithoutFromDojoNestedInput
+    transfersIn?: StudentTransferRequestUpdateManyWithoutToDojoNestedInput
+    historyFrom?: StudentDojoHistoryUpdateManyWithoutFromDojoNestedInput
+    historyTo?: StudentDojoHistoryUpdateManyWithoutToDojoNestedInput
   }
 
   export type DojoUncheckedUpdateWithoutStudentsInput = {
@@ -59745,6 +64721,10 @@ export namespace Prisma {
     announcements?: AnnouncementUncheckedUpdateManyWithoutDojoNestedInput
     inventoryItems?: DojoInventoryItemUncheckedUpdateManyWithoutDojoNestedInput
     sales?: DojoSaleUncheckedUpdateManyWithoutDojoNestedInput
+    transfersOut?: StudentTransferRequestUncheckedUpdateManyWithoutFromDojoNestedInput
+    transfersIn?: StudentTransferRequestUncheckedUpdateManyWithoutToDojoNestedInput
+    historyFrom?: StudentDojoHistoryUncheckedUpdateManyWithoutFromDojoNestedInput
+    historyTo?: StudentDojoHistoryUncheckedUpdateManyWithoutToDojoNestedInput
   }
 
   export type AttendanceUpsertWithWhereUniqueWithoutStudentInput = {
@@ -59891,6 +64871,38 @@ export namespace Prisma {
     data: XOR<StudentAchievementUpdateManyMutationInput, StudentAchievementUncheckedUpdateManyWithoutStudentInput>
   }
 
+  export type StudentTransferRequestUpsertWithWhereUniqueWithoutStudentInput = {
+    where: StudentTransferRequestWhereUniqueInput
+    update: XOR<StudentTransferRequestUpdateWithoutStudentInput, StudentTransferRequestUncheckedUpdateWithoutStudentInput>
+    create: XOR<StudentTransferRequestCreateWithoutStudentInput, StudentTransferRequestUncheckedCreateWithoutStudentInput>
+  }
+
+  export type StudentTransferRequestUpdateWithWhereUniqueWithoutStudentInput = {
+    where: StudentTransferRequestWhereUniqueInput
+    data: XOR<StudentTransferRequestUpdateWithoutStudentInput, StudentTransferRequestUncheckedUpdateWithoutStudentInput>
+  }
+
+  export type StudentTransferRequestUpdateManyWithWhereWithoutStudentInput = {
+    where: StudentTransferRequestScalarWhereInput
+    data: XOR<StudentTransferRequestUpdateManyMutationInput, StudentTransferRequestUncheckedUpdateManyWithoutStudentInput>
+  }
+
+  export type StudentDojoHistoryUpsertWithWhereUniqueWithoutStudentInput = {
+    where: StudentDojoHistoryWhereUniqueInput
+    update: XOR<StudentDojoHistoryUpdateWithoutStudentInput, StudentDojoHistoryUncheckedUpdateWithoutStudentInput>
+    create: XOR<StudentDojoHistoryCreateWithoutStudentInput, StudentDojoHistoryUncheckedCreateWithoutStudentInput>
+  }
+
+  export type StudentDojoHistoryUpdateWithWhereUniqueWithoutStudentInput = {
+    where: StudentDojoHistoryWhereUniqueInput
+    data: XOR<StudentDojoHistoryUpdateWithoutStudentInput, StudentDojoHistoryUncheckedUpdateWithoutStudentInput>
+  }
+
+  export type StudentDojoHistoryUpdateManyWithWhereWithoutStudentInput = {
+    where: StudentDojoHistoryScalarWhereInput
+    data: XOR<StudentDojoHistoryUpdateManyMutationInput, StudentDojoHistoryUncheckedUpdateManyWithoutStudentInput>
+  }
+
   export type UserCreateWithoutInstructorInput = {
     id: string
     email: string
@@ -59916,6 +64928,9 @@ export namespace Prisma {
     dojoSalesSold?: DojoSaleCreateNestedManyWithoutSoldByInput
     achievementsAwarded?: StudentAchievementCreateNestedManyWithoutAwardedByInput
     tournamentEntries?: TournamentParticipantCreateNestedManyWithoutUserInput
+    transfersDojoActed?: StudentTransferRequestCreateNestedManyWithoutDojoActedByInput
+    transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
+    dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
   }
 
   export type UserUncheckedCreateWithoutInstructorInput = {
@@ -59943,6 +64958,9 @@ export namespace Prisma {
     dojoSalesSold?: DojoSaleUncheckedCreateNestedManyWithoutSoldByInput
     achievementsAwarded?: StudentAchievementUncheckedCreateNestedManyWithoutAwardedByInput
     tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutUserInput
+    transfersDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutDojoActedByInput
+    transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
+    dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
   }
 
   export type UserCreateOrConnectWithoutInstructorInput = {
@@ -59979,6 +64997,10 @@ export namespace Prisma {
     announcements?: AnnouncementCreateNestedManyWithoutDojoInput
     inventoryItems?: DojoInventoryItemCreateNestedManyWithoutDojoInput
     sales?: DojoSaleCreateNestedManyWithoutDojoInput
+    transfersOut?: StudentTransferRequestCreateNestedManyWithoutFromDojoInput
+    transfersIn?: StudentTransferRequestCreateNestedManyWithoutToDojoInput
+    historyFrom?: StudentDojoHistoryCreateNestedManyWithoutFromDojoInput
+    historyTo?: StudentDojoHistoryCreateNestedManyWithoutToDojoInput
   }
 
   export type DojoUncheckedCreateWithoutInstructorsInput = {
@@ -60010,6 +65032,10 @@ export namespace Prisma {
     announcements?: AnnouncementUncheckedCreateNestedManyWithoutDojoInput
     inventoryItems?: DojoInventoryItemUncheckedCreateNestedManyWithoutDojoInput
     sales?: DojoSaleUncheckedCreateNestedManyWithoutDojoInput
+    transfersOut?: StudentTransferRequestUncheckedCreateNestedManyWithoutFromDojoInput
+    transfersIn?: StudentTransferRequestUncheckedCreateNestedManyWithoutToDojoInput
+    historyFrom?: StudentDojoHistoryUncheckedCreateNestedManyWithoutFromDojoInput
+    historyTo?: StudentDojoHistoryUncheckedCreateNestedManyWithoutToDojoInput
   }
 
   export type DojoCreateOrConnectWithoutInstructorsInput = {
@@ -60053,6 +65079,9 @@ export namespace Prisma {
     dojoSalesSold?: DojoSaleUpdateManyWithoutSoldByNestedInput
     achievementsAwarded?: StudentAchievementUpdateManyWithoutAwardedByNestedInput
     tournamentEntries?: TournamentParticipantUpdateManyWithoutUserNestedInput
+    transfersDojoActed?: StudentTransferRequestUpdateManyWithoutDojoActedByNestedInput
+    transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
+    dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInstructorInput = {
@@ -60080,6 +65109,9 @@ export namespace Prisma {
     dojoSalesSold?: DojoSaleUncheckedUpdateManyWithoutSoldByNestedInput
     achievementsAwarded?: StudentAchievementUncheckedUpdateManyWithoutAwardedByNestedInput
     tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutUserNestedInput
+    transfersDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
+    transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
+    dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
   }
 
   export type DojoUpsertWithoutInstructorsInput = {
@@ -60122,6 +65154,10 @@ export namespace Prisma {
     announcements?: AnnouncementUpdateManyWithoutDojoNestedInput
     inventoryItems?: DojoInventoryItemUpdateManyWithoutDojoNestedInput
     sales?: DojoSaleUpdateManyWithoutDojoNestedInput
+    transfersOut?: StudentTransferRequestUpdateManyWithoutFromDojoNestedInput
+    transfersIn?: StudentTransferRequestUpdateManyWithoutToDojoNestedInput
+    historyFrom?: StudentDojoHistoryUpdateManyWithoutFromDojoNestedInput
+    historyTo?: StudentDojoHistoryUpdateManyWithoutToDojoNestedInput
   }
 
   export type DojoUncheckedUpdateWithoutInstructorsInput = {
@@ -60153,6 +65189,10 @@ export namespace Prisma {
     announcements?: AnnouncementUncheckedUpdateManyWithoutDojoNestedInput
     inventoryItems?: DojoInventoryItemUncheckedUpdateManyWithoutDojoNestedInput
     sales?: DojoSaleUncheckedUpdateManyWithoutDojoNestedInput
+    transfersOut?: StudentTransferRequestUncheckedUpdateManyWithoutFromDojoNestedInput
+    transfersIn?: StudentTransferRequestUncheckedUpdateManyWithoutToDojoNestedInput
+    historyFrom?: StudentDojoHistoryUncheckedUpdateManyWithoutFromDojoNestedInput
+    historyTo?: StudentDojoHistoryUncheckedUpdateManyWithoutToDojoNestedInput
   }
 
   export type UserCreateWithoutDojoManagerInput = {
@@ -60180,6 +65220,9 @@ export namespace Prisma {
     dojoSalesSold?: DojoSaleCreateNestedManyWithoutSoldByInput
     achievementsAwarded?: StudentAchievementCreateNestedManyWithoutAwardedByInput
     tournamentEntries?: TournamentParticipantCreateNestedManyWithoutUserInput
+    transfersDojoActed?: StudentTransferRequestCreateNestedManyWithoutDojoActedByInput
+    transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
+    dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
   }
 
   export type UserUncheckedCreateWithoutDojoManagerInput = {
@@ -60207,6 +65250,9 @@ export namespace Prisma {
     dojoSalesSold?: DojoSaleUncheckedCreateNestedManyWithoutSoldByInput
     achievementsAwarded?: StudentAchievementUncheckedCreateNestedManyWithoutAwardedByInput
     tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutUserInput
+    transfersDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutDojoActedByInput
+    transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
+    dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
   }
 
   export type UserCreateOrConnectWithoutDojoManagerInput = {
@@ -60243,6 +65289,10 @@ export namespace Prisma {
     announcements?: AnnouncementCreateNestedManyWithoutDojoInput
     inventoryItems?: DojoInventoryItemCreateNestedManyWithoutDojoInput
     sales?: DojoSaleCreateNestedManyWithoutDojoInput
+    transfersOut?: StudentTransferRequestCreateNestedManyWithoutFromDojoInput
+    transfersIn?: StudentTransferRequestCreateNestedManyWithoutToDojoInput
+    historyFrom?: StudentDojoHistoryCreateNestedManyWithoutFromDojoInput
+    historyTo?: StudentDojoHistoryCreateNestedManyWithoutToDojoInput
   }
 
   export type DojoUncheckedCreateWithoutManagersInput = {
@@ -60274,6 +65324,10 @@ export namespace Prisma {
     announcements?: AnnouncementUncheckedCreateNestedManyWithoutDojoInput
     inventoryItems?: DojoInventoryItemUncheckedCreateNestedManyWithoutDojoInput
     sales?: DojoSaleUncheckedCreateNestedManyWithoutDojoInput
+    transfersOut?: StudentTransferRequestUncheckedCreateNestedManyWithoutFromDojoInput
+    transfersIn?: StudentTransferRequestUncheckedCreateNestedManyWithoutToDojoInput
+    historyFrom?: StudentDojoHistoryUncheckedCreateNestedManyWithoutFromDojoInput
+    historyTo?: StudentDojoHistoryUncheckedCreateNestedManyWithoutToDojoInput
   }
 
   export type DojoCreateOrConnectWithoutManagersInput = {
@@ -60317,6 +65371,9 @@ export namespace Prisma {
     dojoSalesSold?: DojoSaleUpdateManyWithoutSoldByNestedInput
     achievementsAwarded?: StudentAchievementUpdateManyWithoutAwardedByNestedInput
     tournamentEntries?: TournamentParticipantUpdateManyWithoutUserNestedInput
+    transfersDojoActed?: StudentTransferRequestUpdateManyWithoutDojoActedByNestedInput
+    transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
+    dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDojoManagerInput = {
@@ -60344,6 +65401,9 @@ export namespace Prisma {
     dojoSalesSold?: DojoSaleUncheckedUpdateManyWithoutSoldByNestedInput
     achievementsAwarded?: StudentAchievementUncheckedUpdateManyWithoutAwardedByNestedInput
     tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutUserNestedInput
+    transfersDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
+    transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
+    dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
   }
 
   export type DojoUpsertWithoutManagersInput = {
@@ -60386,6 +65446,10 @@ export namespace Prisma {
     announcements?: AnnouncementUpdateManyWithoutDojoNestedInput
     inventoryItems?: DojoInventoryItemUpdateManyWithoutDojoNestedInput
     sales?: DojoSaleUpdateManyWithoutDojoNestedInput
+    transfersOut?: StudentTransferRequestUpdateManyWithoutFromDojoNestedInput
+    transfersIn?: StudentTransferRequestUpdateManyWithoutToDojoNestedInput
+    historyFrom?: StudentDojoHistoryUpdateManyWithoutFromDojoNestedInput
+    historyTo?: StudentDojoHistoryUpdateManyWithoutToDojoNestedInput
   }
 
   export type DojoUncheckedUpdateWithoutManagersInput = {
@@ -60417,6 +65481,10 @@ export namespace Prisma {
     announcements?: AnnouncementUncheckedUpdateManyWithoutDojoNestedInput
     inventoryItems?: DojoInventoryItemUncheckedUpdateManyWithoutDojoNestedInput
     sales?: DojoSaleUncheckedUpdateManyWithoutDojoNestedInput
+    transfersOut?: StudentTransferRequestUncheckedUpdateManyWithoutFromDojoNestedInput
+    transfersIn?: StudentTransferRequestUncheckedUpdateManyWithoutToDojoNestedInput
+    historyFrom?: StudentDojoHistoryUncheckedUpdateManyWithoutFromDojoNestedInput
+    historyTo?: StudentDojoHistoryUncheckedUpdateManyWithoutToDojoNestedInput
   }
 
   export type UserCreateWithoutDojoOwnerInput = {
@@ -60444,6 +65512,9 @@ export namespace Prisma {
     dojoSalesSold?: DojoSaleCreateNestedManyWithoutSoldByInput
     achievementsAwarded?: StudentAchievementCreateNestedManyWithoutAwardedByInput
     tournamentEntries?: TournamentParticipantCreateNestedManyWithoutUserInput
+    transfersDojoActed?: StudentTransferRequestCreateNestedManyWithoutDojoActedByInput
+    transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
+    dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
   }
 
   export type UserUncheckedCreateWithoutDojoOwnerInput = {
@@ -60471,6 +65542,9 @@ export namespace Prisma {
     dojoSalesSold?: DojoSaleUncheckedCreateNestedManyWithoutSoldByInput
     achievementsAwarded?: StudentAchievementUncheckedCreateNestedManyWithoutAwardedByInput
     tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutUserInput
+    transfersDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutDojoActedByInput
+    transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
+    dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
   }
 
   export type UserCreateOrConnectWithoutDojoOwnerInput = {
@@ -60507,6 +65581,10 @@ export namespace Prisma {
     announcements?: AnnouncementCreateNestedManyWithoutDojoInput
     inventoryItems?: DojoInventoryItemCreateNestedManyWithoutDojoInput
     sales?: DojoSaleCreateNestedManyWithoutDojoInput
+    transfersOut?: StudentTransferRequestCreateNestedManyWithoutFromDojoInput
+    transfersIn?: StudentTransferRequestCreateNestedManyWithoutToDojoInput
+    historyFrom?: StudentDojoHistoryCreateNestedManyWithoutFromDojoInput
+    historyTo?: StudentDojoHistoryCreateNestedManyWithoutToDojoInput
   }
 
   export type DojoUncheckedCreateWithoutOwnerInput = {
@@ -60538,6 +65616,10 @@ export namespace Prisma {
     announcements?: AnnouncementUncheckedCreateNestedManyWithoutDojoInput
     inventoryItems?: DojoInventoryItemUncheckedCreateNestedManyWithoutDojoInput
     sales?: DojoSaleUncheckedCreateNestedManyWithoutDojoInput
+    transfersOut?: StudentTransferRequestUncheckedCreateNestedManyWithoutFromDojoInput
+    transfersIn?: StudentTransferRequestUncheckedCreateNestedManyWithoutToDojoInput
+    historyFrom?: StudentDojoHistoryUncheckedCreateNestedManyWithoutFromDojoInput
+    historyTo?: StudentDojoHistoryUncheckedCreateNestedManyWithoutToDojoInput
   }
 
   export type DojoCreateOrConnectWithoutOwnerInput = {
@@ -60581,6 +65663,9 @@ export namespace Prisma {
     dojoSalesSold?: DojoSaleUpdateManyWithoutSoldByNestedInput
     achievementsAwarded?: StudentAchievementUpdateManyWithoutAwardedByNestedInput
     tournamentEntries?: TournamentParticipantUpdateManyWithoutUserNestedInput
+    transfersDojoActed?: StudentTransferRequestUpdateManyWithoutDojoActedByNestedInput
+    transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
+    dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDojoOwnerInput = {
@@ -60608,6 +65693,9 @@ export namespace Prisma {
     dojoSalesSold?: DojoSaleUncheckedUpdateManyWithoutSoldByNestedInput
     achievementsAwarded?: StudentAchievementUncheckedUpdateManyWithoutAwardedByNestedInput
     tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutUserNestedInput
+    transfersDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
+    transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
+    dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
   }
 
   export type DojoUpsertWithoutOwnerInput = {
@@ -60650,6 +65738,10 @@ export namespace Prisma {
     announcements?: AnnouncementUpdateManyWithoutDojoNestedInput
     inventoryItems?: DojoInventoryItemUpdateManyWithoutDojoNestedInput
     sales?: DojoSaleUpdateManyWithoutDojoNestedInput
+    transfersOut?: StudentTransferRequestUpdateManyWithoutFromDojoNestedInput
+    transfersIn?: StudentTransferRequestUpdateManyWithoutToDojoNestedInput
+    historyFrom?: StudentDojoHistoryUpdateManyWithoutFromDojoNestedInput
+    historyTo?: StudentDojoHistoryUpdateManyWithoutToDojoNestedInput
   }
 
   export type DojoUncheckedUpdateWithoutOwnerInput = {
@@ -60681,6 +65773,10 @@ export namespace Prisma {
     announcements?: AnnouncementUncheckedUpdateManyWithoutDojoNestedInput
     inventoryItems?: DojoInventoryItemUncheckedUpdateManyWithoutDojoNestedInput
     sales?: DojoSaleUncheckedUpdateManyWithoutDojoNestedInput
+    transfersOut?: StudentTransferRequestUncheckedUpdateManyWithoutFromDojoNestedInput
+    transfersIn?: StudentTransferRequestUncheckedUpdateManyWithoutToDojoNestedInput
+    historyFrom?: StudentDojoHistoryUncheckedUpdateManyWithoutFromDojoNestedInput
+    historyTo?: StudentDojoHistoryUncheckedUpdateManyWithoutToDojoNestedInput
   }
 
   export type UserCreateWithoutAdminInput = {
@@ -60708,6 +65804,9 @@ export namespace Prisma {
     dojoSalesSold?: DojoSaleCreateNestedManyWithoutSoldByInput
     achievementsAwarded?: StudentAchievementCreateNestedManyWithoutAwardedByInput
     tournamentEntries?: TournamentParticipantCreateNestedManyWithoutUserInput
+    transfersDojoActed?: StudentTransferRequestCreateNestedManyWithoutDojoActedByInput
+    transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
+    dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
   }
 
   export type UserUncheckedCreateWithoutAdminInput = {
@@ -60735,6 +65834,9 @@ export namespace Prisma {
     dojoSalesSold?: DojoSaleUncheckedCreateNestedManyWithoutSoldByInput
     achievementsAwarded?: StudentAchievementUncheckedCreateNestedManyWithoutAwardedByInput
     tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutUserInput
+    transfersDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutDojoActedByInput
+    transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
+    dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
   }
 
   export type UserCreateOrConnectWithoutAdminInput = {
@@ -60778,6 +65880,9 @@ export namespace Prisma {
     dojoSalesSold?: DojoSaleUpdateManyWithoutSoldByNestedInput
     achievementsAwarded?: StudentAchievementUpdateManyWithoutAwardedByNestedInput
     tournamentEntries?: TournamentParticipantUpdateManyWithoutUserNestedInput
+    transfersDojoActed?: StudentTransferRequestUpdateManyWithoutDojoActedByNestedInput
+    transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
+    dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAdminInput = {
@@ -60805,6 +65910,9 @@ export namespace Prisma {
     dojoSalesSold?: DojoSaleUncheckedUpdateManyWithoutSoldByNestedInput
     achievementsAwarded?: StudentAchievementUncheckedUpdateManyWithoutAwardedByNestedInput
     tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutUserNestedInput
+    transfersDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
+    transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
+    dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
   }
 
   export type GradingCreateWithoutFromRankInput = {
@@ -61122,12 +66230,14 @@ export namespace Prisma {
     isGuestOrder?: boolean
     includesDojoRenewal?: boolean
     includesCertificates?: boolean
+    includesTransferRequest?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     user?: UserCreateNestedOneWithoutOrdersInput
     certDojo?: DojoCreateNestedOneWithoutCertificateOrdersInput
     orderItems?: ShopOrderItemCreateNestedManyWithoutOrderInput
     certificateRequests?: CertificateRequestCreateNestedManyWithoutOrderInput
+    transferRequest?: StudentTransferRequestCreateNestedOneWithoutOrderInput
   }
 
   export type ShopOrderUncheckedCreateWithoutDojoInput = {
@@ -61149,10 +66259,12 @@ export namespace Prisma {
     includesDojoRenewal?: boolean
     includesCertificates?: boolean
     certDojoId?: string | null
+    includesTransferRequest?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     orderItems?: ShopOrderItemUncheckedCreateNestedManyWithoutOrderInput
     certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutOrderInput
+    transferRequest?: StudentTransferRequestUncheckedCreateNestedOneWithoutOrderInput
   }
 
   export type ShopOrderCreateOrConnectWithoutDojoInput = {
@@ -61182,12 +66294,14 @@ export namespace Prisma {
     isGuestOrder?: boolean
     includesDojoRenewal?: boolean
     includesCertificates?: boolean
+    includesTransferRequest?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     user?: UserCreateNestedOneWithoutOrdersInput
     dojo?: DojoCreateNestedOneWithoutRenewalOrdersInput
     orderItems?: ShopOrderItemCreateNestedManyWithoutOrderInput
     certificateRequests?: CertificateRequestCreateNestedManyWithoutOrderInput
+    transferRequest?: StudentTransferRequestCreateNestedOneWithoutOrderInput
   }
 
   export type ShopOrderUncheckedCreateWithoutCertDojoInput = {
@@ -61209,10 +66323,12 @@ export namespace Prisma {
     dojoId?: string | null
     includesDojoRenewal?: boolean
     includesCertificates?: boolean
+    includesTransferRequest?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     orderItems?: ShopOrderItemUncheckedCreateNestedManyWithoutOrderInput
     certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutOrderInput
+    transferRequest?: StudentTransferRequestUncheckedCreateNestedOneWithoutOrderInput
   }
 
   export type ShopOrderCreateOrConnectWithoutCertDojoInput = {
@@ -61291,6 +66407,8 @@ export namespace Prisma {
     gradingApplications?: GradingApplicationCreateNestedManyWithoutStudentInput
     certificateRequests?: CertificateRequestCreateNestedManyWithoutStudentInput
     achievements?: StudentAchievementCreateNestedManyWithoutStudentInput
+    transferRequests?: StudentTransferRequestCreateNestedManyWithoutStudentInput
+    dojoHistory?: StudentDojoHistoryCreateNestedManyWithoutStudentInput
   }
 
   export type StudentUncheckedCreateWithoutDojoInput = {
@@ -61315,6 +66433,8 @@ export namespace Prisma {
     gradingApplications?: GradingApplicationUncheckedCreateNestedManyWithoutStudentInput
     certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutStudentInput
     achievements?: StudentAchievementUncheckedCreateNestedManyWithoutStudentInput
+    transferRequests?: StudentTransferRequestUncheckedCreateNestedManyWithoutStudentInput
+    dojoHistory?: StudentDojoHistoryUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type StudentCreateOrConnectWithoutDojoInput = {
@@ -61633,6 +66753,170 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type StudentTransferRequestCreateWithoutFromDojoInput = {
+    id?: string
+    status?: $Enums.StudentTransferStatus
+    dojoDecision?: $Enums.StudentTransferDojoDecision
+    reason?: string | null
+    dojoNote?: string | null
+    adminNote?: string | null
+    fee: Decimal | DecimalJsLike | number | string
+    paidAt?: Date | string | null
+    dojoActedAt?: Date | string | null
+    adminActedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    student: StudentCreateNestedOneWithoutTransferRequestsInput
+    toDojo: DojoCreateNestedOneWithoutTransfersInInput
+    order?: ShopOrderCreateNestedOneWithoutTransferRequestInput
+    dojoActedBy?: UserCreateNestedOneWithoutTransfersDojoActedInput
+    adminActedBy?: UserCreateNestedOneWithoutTransfersAdminActedInput
+    history?: StudentDojoHistoryCreateNestedManyWithoutTransferRequestInput
+  }
+
+  export type StudentTransferRequestUncheckedCreateWithoutFromDojoInput = {
+    id?: string
+    studentId: string
+    toDojoId: string
+    status?: $Enums.StudentTransferStatus
+    dojoDecision?: $Enums.StudentTransferDojoDecision
+    reason?: string | null
+    dojoNote?: string | null
+    adminNote?: string | null
+    fee: Decimal | DecimalJsLike | number | string
+    orderId?: string | null
+    paidAt?: Date | string | null
+    dojoActedAt?: Date | string | null
+    dojoActedById?: string | null
+    adminActedAt?: Date | string | null
+    adminActedById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    history?: StudentDojoHistoryUncheckedCreateNestedManyWithoutTransferRequestInput
+  }
+
+  export type StudentTransferRequestCreateOrConnectWithoutFromDojoInput = {
+    where: StudentTransferRequestWhereUniqueInput
+    create: XOR<StudentTransferRequestCreateWithoutFromDojoInput, StudentTransferRequestUncheckedCreateWithoutFromDojoInput>
+  }
+
+  export type StudentTransferRequestCreateManyFromDojoInputEnvelope = {
+    data: StudentTransferRequestCreateManyFromDojoInput | StudentTransferRequestCreateManyFromDojoInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type StudentTransferRequestCreateWithoutToDojoInput = {
+    id?: string
+    status?: $Enums.StudentTransferStatus
+    dojoDecision?: $Enums.StudentTransferDojoDecision
+    reason?: string | null
+    dojoNote?: string | null
+    adminNote?: string | null
+    fee: Decimal | DecimalJsLike | number | string
+    paidAt?: Date | string | null
+    dojoActedAt?: Date | string | null
+    adminActedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    student: StudentCreateNestedOneWithoutTransferRequestsInput
+    fromDojo: DojoCreateNestedOneWithoutTransfersOutInput
+    order?: ShopOrderCreateNestedOneWithoutTransferRequestInput
+    dojoActedBy?: UserCreateNestedOneWithoutTransfersDojoActedInput
+    adminActedBy?: UserCreateNestedOneWithoutTransfersAdminActedInput
+    history?: StudentDojoHistoryCreateNestedManyWithoutTransferRequestInput
+  }
+
+  export type StudentTransferRequestUncheckedCreateWithoutToDojoInput = {
+    id?: string
+    studentId: string
+    fromDojoId: string
+    status?: $Enums.StudentTransferStatus
+    dojoDecision?: $Enums.StudentTransferDojoDecision
+    reason?: string | null
+    dojoNote?: string | null
+    adminNote?: string | null
+    fee: Decimal | DecimalJsLike | number | string
+    orderId?: string | null
+    paidAt?: Date | string | null
+    dojoActedAt?: Date | string | null
+    dojoActedById?: string | null
+    adminActedAt?: Date | string | null
+    adminActedById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    history?: StudentDojoHistoryUncheckedCreateNestedManyWithoutTransferRequestInput
+  }
+
+  export type StudentTransferRequestCreateOrConnectWithoutToDojoInput = {
+    where: StudentTransferRequestWhereUniqueInput
+    create: XOR<StudentTransferRequestCreateWithoutToDojoInput, StudentTransferRequestUncheckedCreateWithoutToDojoInput>
+  }
+
+  export type StudentTransferRequestCreateManyToDojoInputEnvelope = {
+    data: StudentTransferRequestCreateManyToDojoInput | StudentTransferRequestCreateManyToDojoInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type StudentDojoHistoryCreateWithoutFromDojoInput = {
+    id?: string
+    reason?: string | null
+    createdAt?: Date | string
+    student: StudentCreateNestedOneWithoutDojoHistoryInput
+    toDojo?: DojoCreateNestedOneWithoutHistoryToInput
+    transferRequest?: StudentTransferRequestCreateNestedOneWithoutHistoryInput
+    changedBy?: UserCreateNestedOneWithoutDojoHistoryChangesInput
+  }
+
+  export type StudentDojoHistoryUncheckedCreateWithoutFromDojoInput = {
+    id?: string
+    studentId: string
+    toDojoId?: string | null
+    transferRequestId?: string | null
+    changedById?: string | null
+    reason?: string | null
+    createdAt?: Date | string
+  }
+
+  export type StudentDojoHistoryCreateOrConnectWithoutFromDojoInput = {
+    where: StudentDojoHistoryWhereUniqueInput
+    create: XOR<StudentDojoHistoryCreateWithoutFromDojoInput, StudentDojoHistoryUncheckedCreateWithoutFromDojoInput>
+  }
+
+  export type StudentDojoHistoryCreateManyFromDojoInputEnvelope = {
+    data: StudentDojoHistoryCreateManyFromDojoInput | StudentDojoHistoryCreateManyFromDojoInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type StudentDojoHistoryCreateWithoutToDojoInput = {
+    id?: string
+    reason?: string | null
+    createdAt?: Date | string
+    student: StudentCreateNestedOneWithoutDojoHistoryInput
+    fromDojo?: DojoCreateNestedOneWithoutHistoryFromInput
+    transferRequest?: StudentTransferRequestCreateNestedOneWithoutHistoryInput
+    changedBy?: UserCreateNestedOneWithoutDojoHistoryChangesInput
+  }
+
+  export type StudentDojoHistoryUncheckedCreateWithoutToDojoInput = {
+    id?: string
+    studentId: string
+    fromDojoId?: string | null
+    transferRequestId?: string | null
+    changedById?: string | null
+    reason?: string | null
+    createdAt?: Date | string
+  }
+
+  export type StudentDojoHistoryCreateOrConnectWithoutToDojoInput = {
+    where: StudentDojoHistoryWhereUniqueInput
+    create: XOR<StudentDojoHistoryCreateWithoutToDojoInput, StudentDojoHistoryUncheckedCreateWithoutToDojoInput>
+  }
+
+  export type StudentDojoHistoryCreateManyToDojoInputEnvelope = {
+    data: StudentDojoHistoryCreateManyToDojoInput | StudentDojoHistoryCreateManyToDojoInput[]
+    skipDuplicates?: boolean
+  }
+
   export type ShopOrderUpsertWithWhereUniqueWithoutDojoInput = {
     where: ShopOrderWhereUniqueInput
     update: XOR<ShopOrderUpdateWithoutDojoInput, ShopOrderUncheckedUpdateWithoutDojoInput>
@@ -61945,6 +67229,70 @@ export namespace Prisma {
     data: XOR<DojoSaleUpdateManyMutationInput, DojoSaleUncheckedUpdateManyWithoutDojoInput>
   }
 
+  export type StudentTransferRequestUpsertWithWhereUniqueWithoutFromDojoInput = {
+    where: StudentTransferRequestWhereUniqueInput
+    update: XOR<StudentTransferRequestUpdateWithoutFromDojoInput, StudentTransferRequestUncheckedUpdateWithoutFromDojoInput>
+    create: XOR<StudentTransferRequestCreateWithoutFromDojoInput, StudentTransferRequestUncheckedCreateWithoutFromDojoInput>
+  }
+
+  export type StudentTransferRequestUpdateWithWhereUniqueWithoutFromDojoInput = {
+    where: StudentTransferRequestWhereUniqueInput
+    data: XOR<StudentTransferRequestUpdateWithoutFromDojoInput, StudentTransferRequestUncheckedUpdateWithoutFromDojoInput>
+  }
+
+  export type StudentTransferRequestUpdateManyWithWhereWithoutFromDojoInput = {
+    where: StudentTransferRequestScalarWhereInput
+    data: XOR<StudentTransferRequestUpdateManyMutationInput, StudentTransferRequestUncheckedUpdateManyWithoutFromDojoInput>
+  }
+
+  export type StudentTransferRequestUpsertWithWhereUniqueWithoutToDojoInput = {
+    where: StudentTransferRequestWhereUniqueInput
+    update: XOR<StudentTransferRequestUpdateWithoutToDojoInput, StudentTransferRequestUncheckedUpdateWithoutToDojoInput>
+    create: XOR<StudentTransferRequestCreateWithoutToDojoInput, StudentTransferRequestUncheckedCreateWithoutToDojoInput>
+  }
+
+  export type StudentTransferRequestUpdateWithWhereUniqueWithoutToDojoInput = {
+    where: StudentTransferRequestWhereUniqueInput
+    data: XOR<StudentTransferRequestUpdateWithoutToDojoInput, StudentTransferRequestUncheckedUpdateWithoutToDojoInput>
+  }
+
+  export type StudentTransferRequestUpdateManyWithWhereWithoutToDojoInput = {
+    where: StudentTransferRequestScalarWhereInput
+    data: XOR<StudentTransferRequestUpdateManyMutationInput, StudentTransferRequestUncheckedUpdateManyWithoutToDojoInput>
+  }
+
+  export type StudentDojoHistoryUpsertWithWhereUniqueWithoutFromDojoInput = {
+    where: StudentDojoHistoryWhereUniqueInput
+    update: XOR<StudentDojoHistoryUpdateWithoutFromDojoInput, StudentDojoHistoryUncheckedUpdateWithoutFromDojoInput>
+    create: XOR<StudentDojoHistoryCreateWithoutFromDojoInput, StudentDojoHistoryUncheckedCreateWithoutFromDojoInput>
+  }
+
+  export type StudentDojoHistoryUpdateWithWhereUniqueWithoutFromDojoInput = {
+    where: StudentDojoHistoryWhereUniqueInput
+    data: XOR<StudentDojoHistoryUpdateWithoutFromDojoInput, StudentDojoHistoryUncheckedUpdateWithoutFromDojoInput>
+  }
+
+  export type StudentDojoHistoryUpdateManyWithWhereWithoutFromDojoInput = {
+    where: StudentDojoHistoryScalarWhereInput
+    data: XOR<StudentDojoHistoryUpdateManyMutationInput, StudentDojoHistoryUncheckedUpdateManyWithoutFromDojoInput>
+  }
+
+  export type StudentDojoHistoryUpsertWithWhereUniqueWithoutToDojoInput = {
+    where: StudentDojoHistoryWhereUniqueInput
+    update: XOR<StudentDojoHistoryUpdateWithoutToDojoInput, StudentDojoHistoryUncheckedUpdateWithoutToDojoInput>
+    create: XOR<StudentDojoHistoryCreateWithoutToDojoInput, StudentDojoHistoryUncheckedCreateWithoutToDojoInput>
+  }
+
+  export type StudentDojoHistoryUpdateWithWhereUniqueWithoutToDojoInput = {
+    where: StudentDojoHistoryWhereUniqueInput
+    data: XOR<StudentDojoHistoryUpdateWithoutToDojoInput, StudentDojoHistoryUncheckedUpdateWithoutToDojoInput>
+  }
+
+  export type StudentDojoHistoryUpdateManyWithWhereWithoutToDojoInput = {
+    where: StudentDojoHistoryScalarWhereInput
+    data: XOR<StudentDojoHistoryUpdateManyMutationInput, StudentDojoHistoryUncheckedUpdateManyWithoutToDojoInput>
+  }
+
   export type DojoCreateWithoutApplicationInput = {
     id?: string
     name: string
@@ -61974,6 +67322,10 @@ export namespace Prisma {
     announcements?: AnnouncementCreateNestedManyWithoutDojoInput
     inventoryItems?: DojoInventoryItemCreateNestedManyWithoutDojoInput
     sales?: DojoSaleCreateNestedManyWithoutDojoInput
+    transfersOut?: StudentTransferRequestCreateNestedManyWithoutFromDojoInput
+    transfersIn?: StudentTransferRequestCreateNestedManyWithoutToDojoInput
+    historyFrom?: StudentDojoHistoryCreateNestedManyWithoutFromDojoInput
+    historyTo?: StudentDojoHistoryCreateNestedManyWithoutToDojoInput
   }
 
   export type DojoUncheckedCreateWithoutApplicationInput = {
@@ -62005,6 +67357,10 @@ export namespace Prisma {
     announcements?: AnnouncementUncheckedCreateNestedManyWithoutDojoInput
     inventoryItems?: DojoInventoryItemUncheckedCreateNestedManyWithoutDojoInput
     sales?: DojoSaleUncheckedCreateNestedManyWithoutDojoInput
+    transfersOut?: StudentTransferRequestUncheckedCreateNestedManyWithoutFromDojoInput
+    transfersIn?: StudentTransferRequestUncheckedCreateNestedManyWithoutToDojoInput
+    historyFrom?: StudentDojoHistoryUncheckedCreateNestedManyWithoutFromDojoInput
+    historyTo?: StudentDojoHistoryUncheckedCreateNestedManyWithoutToDojoInput
   }
 
   export type DojoCreateOrConnectWithoutApplicationInput = {
@@ -62052,6 +67408,10 @@ export namespace Prisma {
     announcements?: AnnouncementUpdateManyWithoutDojoNestedInput
     inventoryItems?: DojoInventoryItemUpdateManyWithoutDojoNestedInput
     sales?: DojoSaleUpdateManyWithoutDojoNestedInput
+    transfersOut?: StudentTransferRequestUpdateManyWithoutFromDojoNestedInput
+    transfersIn?: StudentTransferRequestUpdateManyWithoutToDojoNestedInput
+    historyFrom?: StudentDojoHistoryUpdateManyWithoutFromDojoNestedInput
+    historyTo?: StudentDojoHistoryUpdateManyWithoutToDojoNestedInput
   }
 
   export type DojoUncheckedUpdateWithoutApplicationInput = {
@@ -62083,6 +67443,10 @@ export namespace Prisma {
     announcements?: AnnouncementUncheckedUpdateManyWithoutDojoNestedInput
     inventoryItems?: DojoInventoryItemUncheckedUpdateManyWithoutDojoNestedInput
     sales?: DojoSaleUncheckedUpdateManyWithoutDojoNestedInput
+    transfersOut?: StudentTransferRequestUncheckedUpdateManyWithoutFromDojoNestedInput
+    transfersIn?: StudentTransferRequestUncheckedUpdateManyWithoutToDojoNestedInput
+    historyFrom?: StudentDojoHistoryUncheckedUpdateManyWithoutFromDojoNestedInput
+    historyTo?: StudentDojoHistoryUncheckedUpdateManyWithoutToDojoNestedInput
   }
 
   export type StudentCreateWithoutAttendanceInput = {
@@ -62107,6 +67471,8 @@ export namespace Prisma {
     gradingApplications?: GradingApplicationCreateNestedManyWithoutStudentInput
     certificateRequests?: CertificateRequestCreateNestedManyWithoutStudentInput
     achievements?: StudentAchievementCreateNestedManyWithoutStudentInput
+    transferRequests?: StudentTransferRequestCreateNestedManyWithoutStudentInput
+    dojoHistory?: StudentDojoHistoryCreateNestedManyWithoutStudentInput
   }
 
   export type StudentUncheckedCreateWithoutAttendanceInput = {
@@ -62131,6 +67497,8 @@ export namespace Prisma {
     gradingApplications?: GradingApplicationUncheckedCreateNestedManyWithoutStudentInput
     certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutStudentInput
     achievements?: StudentAchievementUncheckedCreateNestedManyWithoutStudentInput
+    transferRequests?: StudentTransferRequestUncheckedCreateNestedManyWithoutStudentInput
+    dojoHistory?: StudentDojoHistoryUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type StudentCreateOrConnectWithoutAttendanceInput = {
@@ -62167,6 +67535,10 @@ export namespace Prisma {
     announcements?: AnnouncementCreateNestedManyWithoutDojoInput
     inventoryItems?: DojoInventoryItemCreateNestedManyWithoutDojoInput
     sales?: DojoSaleCreateNestedManyWithoutDojoInput
+    transfersOut?: StudentTransferRequestCreateNestedManyWithoutFromDojoInput
+    transfersIn?: StudentTransferRequestCreateNestedManyWithoutToDojoInput
+    historyFrom?: StudentDojoHistoryCreateNestedManyWithoutFromDojoInput
+    historyTo?: StudentDojoHistoryCreateNestedManyWithoutToDojoInput
   }
 
   export type DojoUncheckedCreateWithoutAttendanceInput = {
@@ -62198,6 +67570,10 @@ export namespace Prisma {
     announcements?: AnnouncementUncheckedCreateNestedManyWithoutDojoInput
     inventoryItems?: DojoInventoryItemUncheckedCreateNestedManyWithoutDojoInput
     sales?: DojoSaleUncheckedCreateNestedManyWithoutDojoInput
+    transfersOut?: StudentTransferRequestUncheckedCreateNestedManyWithoutFromDojoInput
+    transfersIn?: StudentTransferRequestUncheckedCreateNestedManyWithoutToDojoInput
+    historyFrom?: StudentDojoHistoryUncheckedCreateNestedManyWithoutFromDojoInput
+    historyTo?: StudentDojoHistoryUncheckedCreateNestedManyWithoutToDojoInput
   }
 
   export type DojoCreateOrConnectWithoutAttendanceInput = {
@@ -62238,6 +67614,8 @@ export namespace Prisma {
     gradingApplications?: GradingApplicationUpdateManyWithoutStudentNestedInput
     certificateRequests?: CertificateRequestUpdateManyWithoutStudentNestedInput
     achievements?: StudentAchievementUpdateManyWithoutStudentNestedInput
+    transferRequests?: StudentTransferRequestUpdateManyWithoutStudentNestedInput
+    dojoHistory?: StudentDojoHistoryUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateWithoutAttendanceInput = {
@@ -62262,6 +67640,8 @@ export namespace Prisma {
     gradingApplications?: GradingApplicationUncheckedUpdateManyWithoutStudentNestedInput
     certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutStudentNestedInput
     achievements?: StudentAchievementUncheckedUpdateManyWithoutStudentNestedInput
+    transferRequests?: StudentTransferRequestUncheckedUpdateManyWithoutStudentNestedInput
+    dojoHistory?: StudentDojoHistoryUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type DojoUpsertWithoutAttendanceInput = {
@@ -62304,6 +67684,10 @@ export namespace Prisma {
     announcements?: AnnouncementUpdateManyWithoutDojoNestedInput
     inventoryItems?: DojoInventoryItemUpdateManyWithoutDojoNestedInput
     sales?: DojoSaleUpdateManyWithoutDojoNestedInput
+    transfersOut?: StudentTransferRequestUpdateManyWithoutFromDojoNestedInput
+    transfersIn?: StudentTransferRequestUpdateManyWithoutToDojoNestedInput
+    historyFrom?: StudentDojoHistoryUpdateManyWithoutFromDojoNestedInput
+    historyTo?: StudentDojoHistoryUpdateManyWithoutToDojoNestedInput
   }
 
   export type DojoUncheckedUpdateWithoutAttendanceInput = {
@@ -62335,6 +67719,10 @@ export namespace Prisma {
     announcements?: AnnouncementUncheckedUpdateManyWithoutDojoNestedInput
     inventoryItems?: DojoInventoryItemUncheckedUpdateManyWithoutDojoNestedInput
     sales?: DojoSaleUncheckedUpdateManyWithoutDojoNestedInput
+    transfersOut?: StudentTransferRequestUncheckedUpdateManyWithoutFromDojoNestedInput
+    transfersIn?: StudentTransferRequestUncheckedUpdateManyWithoutToDojoNestedInput
+    historyFrom?: StudentDojoHistoryUncheckedUpdateManyWithoutFromDojoNestedInput
+    historyTo?: StudentDojoHistoryUncheckedUpdateManyWithoutToDojoNestedInput
   }
 
   export type BeltRankCreateWithoutGradingEventsInput = {
@@ -62533,6 +67921,8 @@ export namespace Prisma {
     gradings?: GradingCreateNestedManyWithoutStudentInput
     certificateRequests?: CertificateRequestCreateNestedManyWithoutStudentInput
     achievements?: StudentAchievementCreateNestedManyWithoutStudentInput
+    transferRequests?: StudentTransferRequestCreateNestedManyWithoutStudentInput
+    dojoHistory?: StudentDojoHistoryCreateNestedManyWithoutStudentInput
   }
 
   export type StudentUncheckedCreateWithoutGradingApplicationsInput = {
@@ -62557,6 +67947,8 @@ export namespace Prisma {
     gradings?: GradingUncheckedCreateNestedManyWithoutStudentInput
     certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutStudentInput
     achievements?: StudentAchievementUncheckedCreateNestedManyWithoutStudentInput
+    transferRequests?: StudentTransferRequestUncheckedCreateNestedManyWithoutStudentInput
+    dojoHistory?: StudentDojoHistoryUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type StudentCreateOrConnectWithoutGradingApplicationsInput = {
@@ -62669,6 +68061,8 @@ export namespace Prisma {
     gradings?: GradingUpdateManyWithoutStudentNestedInput
     certificateRequests?: CertificateRequestUpdateManyWithoutStudentNestedInput
     achievements?: StudentAchievementUpdateManyWithoutStudentNestedInput
+    transferRequests?: StudentTransferRequestUpdateManyWithoutStudentNestedInput
+    dojoHistory?: StudentDojoHistoryUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateWithoutGradingApplicationsInput = {
@@ -62693,6 +68087,8 @@ export namespace Prisma {
     gradings?: GradingUncheckedUpdateManyWithoutStudentNestedInput
     certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutStudentNestedInput
     achievements?: StudentAchievementUncheckedUpdateManyWithoutStudentNestedInput
+    transferRequests?: StudentTransferRequestUncheckedUpdateManyWithoutStudentNestedInput
+    dojoHistory?: StudentDojoHistoryUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type GradingEventUpsertWithoutApplicationsInput = {
@@ -62801,6 +68197,8 @@ export namespace Prisma {
     gradingApplications?: GradingApplicationCreateNestedManyWithoutStudentInput
     certificateRequests?: CertificateRequestCreateNestedManyWithoutStudentInput
     achievements?: StudentAchievementCreateNestedManyWithoutStudentInput
+    transferRequests?: StudentTransferRequestCreateNestedManyWithoutStudentInput
+    dojoHistory?: StudentDojoHistoryCreateNestedManyWithoutStudentInput
   }
 
   export type StudentUncheckedCreateWithoutGradingsInput = {
@@ -62825,6 +68223,8 @@ export namespace Prisma {
     gradingApplications?: GradingApplicationUncheckedCreateNestedManyWithoutStudentInput
     certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutStudentInput
     achievements?: StudentAchievementUncheckedCreateNestedManyWithoutStudentInput
+    transferRequests?: StudentTransferRequestUncheckedCreateNestedManyWithoutStudentInput
+    dojoHistory?: StudentDojoHistoryUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type StudentCreateOrConnectWithoutGradingsInput = {
@@ -63016,6 +68416,8 @@ export namespace Prisma {
     gradingApplications?: GradingApplicationUpdateManyWithoutStudentNestedInput
     certificateRequests?: CertificateRequestUpdateManyWithoutStudentNestedInput
     achievements?: StudentAchievementUpdateManyWithoutStudentNestedInput
+    transferRequests?: StudentTransferRequestUpdateManyWithoutStudentNestedInput
+    dojoHistory?: StudentDojoHistoryUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateWithoutGradingsInput = {
@@ -63040,6 +68442,8 @@ export namespace Prisma {
     gradingApplications?: GradingApplicationUncheckedUpdateManyWithoutStudentNestedInput
     certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutStudentNestedInput
     achievements?: StudentAchievementUncheckedUpdateManyWithoutStudentNestedInput
+    transferRequests?: StudentTransferRequestUncheckedUpdateManyWithoutStudentNestedInput
+    dojoHistory?: StudentDojoHistoryUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type GradingEventUpsertWithoutGradingsInput = {
@@ -63236,6 +68640,8 @@ export namespace Prisma {
     gradings?: GradingCreateNestedManyWithoutStudentInput
     gradingApplications?: GradingApplicationCreateNestedManyWithoutStudentInput
     achievements?: StudentAchievementCreateNestedManyWithoutStudentInput
+    transferRequests?: StudentTransferRequestCreateNestedManyWithoutStudentInput
+    dojoHistory?: StudentDojoHistoryCreateNestedManyWithoutStudentInput
   }
 
   export type StudentUncheckedCreateWithoutCertificateRequestsInput = {
@@ -63260,6 +68666,8 @@ export namespace Prisma {
     gradings?: GradingUncheckedCreateNestedManyWithoutStudentInput
     gradingApplications?: GradingApplicationUncheckedCreateNestedManyWithoutStudentInput
     achievements?: StudentAchievementUncheckedCreateNestedManyWithoutStudentInput
+    transferRequests?: StudentTransferRequestUncheckedCreateNestedManyWithoutStudentInput
+    dojoHistory?: StudentDojoHistoryUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type StudentCreateOrConnectWithoutCertificateRequestsInput = {
@@ -63296,6 +68704,10 @@ export namespace Prisma {
     announcements?: AnnouncementCreateNestedManyWithoutDojoInput
     inventoryItems?: DojoInventoryItemCreateNestedManyWithoutDojoInput
     sales?: DojoSaleCreateNestedManyWithoutDojoInput
+    transfersOut?: StudentTransferRequestCreateNestedManyWithoutFromDojoInput
+    transfersIn?: StudentTransferRequestCreateNestedManyWithoutToDojoInput
+    historyFrom?: StudentDojoHistoryCreateNestedManyWithoutFromDojoInput
+    historyTo?: StudentDojoHistoryCreateNestedManyWithoutToDojoInput
   }
 
   export type DojoUncheckedCreateWithoutCertificateRequestsInput = {
@@ -63327,6 +68739,10 @@ export namespace Prisma {
     announcements?: AnnouncementUncheckedCreateNestedManyWithoutDojoInput
     inventoryItems?: DojoInventoryItemUncheckedCreateNestedManyWithoutDojoInput
     sales?: DojoSaleUncheckedCreateNestedManyWithoutDojoInput
+    transfersOut?: StudentTransferRequestUncheckedCreateNestedManyWithoutFromDojoInput
+    transfersIn?: StudentTransferRequestUncheckedCreateNestedManyWithoutToDojoInput
+    historyFrom?: StudentDojoHistoryUncheckedCreateNestedManyWithoutFromDojoInput
+    historyTo?: StudentDojoHistoryUncheckedCreateNestedManyWithoutToDojoInput
   }
 
   export type DojoCreateOrConnectWithoutCertificateRequestsInput = {
@@ -63351,12 +68767,14 @@ export namespace Prisma {
     isGuestOrder?: boolean
     includesDojoRenewal?: boolean
     includesCertificates?: boolean
+    includesTransferRequest?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     user?: UserCreateNestedOneWithoutOrdersInput
     dojo?: DojoCreateNestedOneWithoutRenewalOrdersInput
     certDojo?: DojoCreateNestedOneWithoutCertificateOrdersInput
     orderItems?: ShopOrderItemCreateNestedManyWithoutOrderInput
+    transferRequest?: StudentTransferRequestCreateNestedOneWithoutOrderInput
   }
 
   export type ShopOrderUncheckedCreateWithoutCertificateRequestsInput = {
@@ -63379,9 +68797,11 @@ export namespace Prisma {
     includesDojoRenewal?: boolean
     includesCertificates?: boolean
     certDojoId?: string | null
+    includesTransferRequest?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     orderItems?: ShopOrderItemUncheckedCreateNestedManyWithoutOrderInput
+    transferRequest?: StudentTransferRequestUncheckedCreateNestedOneWithoutOrderInput
   }
 
   export type ShopOrderCreateOrConnectWithoutCertificateRequestsInput = {
@@ -63459,6 +68879,8 @@ export namespace Prisma {
     gradings?: GradingUpdateManyWithoutStudentNestedInput
     gradingApplications?: GradingApplicationUpdateManyWithoutStudentNestedInput
     achievements?: StudentAchievementUpdateManyWithoutStudentNestedInput
+    transferRequests?: StudentTransferRequestUpdateManyWithoutStudentNestedInput
+    dojoHistory?: StudentDojoHistoryUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateWithoutCertificateRequestsInput = {
@@ -63483,6 +68905,8 @@ export namespace Prisma {
     gradings?: GradingUncheckedUpdateManyWithoutStudentNestedInput
     gradingApplications?: GradingApplicationUncheckedUpdateManyWithoutStudentNestedInput
     achievements?: StudentAchievementUncheckedUpdateManyWithoutStudentNestedInput
+    transferRequests?: StudentTransferRequestUncheckedUpdateManyWithoutStudentNestedInput
+    dojoHistory?: StudentDojoHistoryUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type DojoUpsertWithoutCertificateRequestsInput = {
@@ -63525,6 +68949,10 @@ export namespace Prisma {
     announcements?: AnnouncementUpdateManyWithoutDojoNestedInput
     inventoryItems?: DojoInventoryItemUpdateManyWithoutDojoNestedInput
     sales?: DojoSaleUpdateManyWithoutDojoNestedInput
+    transfersOut?: StudentTransferRequestUpdateManyWithoutFromDojoNestedInput
+    transfersIn?: StudentTransferRequestUpdateManyWithoutToDojoNestedInput
+    historyFrom?: StudentDojoHistoryUpdateManyWithoutFromDojoNestedInput
+    historyTo?: StudentDojoHistoryUpdateManyWithoutToDojoNestedInput
   }
 
   export type DojoUncheckedUpdateWithoutCertificateRequestsInput = {
@@ -63556,6 +68984,10 @@ export namespace Prisma {
     announcements?: AnnouncementUncheckedUpdateManyWithoutDojoNestedInput
     inventoryItems?: DojoInventoryItemUncheckedUpdateManyWithoutDojoNestedInput
     sales?: DojoSaleUncheckedUpdateManyWithoutDojoNestedInput
+    transfersOut?: StudentTransferRequestUncheckedUpdateManyWithoutFromDojoNestedInput
+    transfersIn?: StudentTransferRequestUncheckedUpdateManyWithoutToDojoNestedInput
+    historyFrom?: StudentDojoHistoryUncheckedUpdateManyWithoutFromDojoNestedInput
+    historyTo?: StudentDojoHistoryUncheckedUpdateManyWithoutToDojoNestedInput
   }
 
   export type ShopOrderUpsertWithoutCertificateRequestsInput = {
@@ -63586,12 +69018,14 @@ export namespace Prisma {
     isGuestOrder?: BoolFieldUpdateOperationsInput | boolean
     includesDojoRenewal?: BoolFieldUpdateOperationsInput | boolean
     includesCertificates?: BoolFieldUpdateOperationsInput | boolean
+    includesTransferRequest?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneWithoutOrdersNestedInput
     dojo?: DojoUpdateOneWithoutRenewalOrdersNestedInput
     certDojo?: DojoUpdateOneWithoutCertificateOrdersNestedInput
     orderItems?: ShopOrderItemUpdateManyWithoutOrderNestedInput
+    transferRequest?: StudentTransferRequestUpdateOneWithoutOrderNestedInput
   }
 
   export type ShopOrderUncheckedUpdateWithoutCertificateRequestsInput = {
@@ -63614,9 +69048,11 @@ export namespace Prisma {
     includesDojoRenewal?: BoolFieldUpdateOperationsInput | boolean
     includesCertificates?: BoolFieldUpdateOperationsInput | boolean
     certDojoId?: NullableStringFieldUpdateOperationsInput | string | null
+    includesTransferRequest?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     orderItems?: ShopOrderItemUncheckedUpdateManyWithoutOrderNestedInput
+    transferRequest?: StudentTransferRequestUncheckedUpdateOneWithoutOrderNestedInput
   }
 
   export type EventRegistrationCreateWithoutEventInput = {
@@ -63690,6 +69126,9 @@ export namespace Prisma {
     dojoSalesSold?: DojoSaleCreateNestedManyWithoutSoldByInput
     achievementsAwarded?: StudentAchievementCreateNestedManyWithoutAwardedByInput
     tournamentEntries?: TournamentParticipantCreateNestedManyWithoutUserInput
+    transfersDojoActed?: StudentTransferRequestCreateNestedManyWithoutDojoActedByInput
+    transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
+    dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
   }
 
   export type UserUncheckedCreateWithoutEventsPostedInput = {
@@ -63717,6 +69156,9 @@ export namespace Prisma {
     dojoSalesSold?: DojoSaleUncheckedCreateNestedManyWithoutSoldByInput
     achievementsAwarded?: StudentAchievementUncheckedCreateNestedManyWithoutAwardedByInput
     tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutUserInput
+    transfersDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutDojoActedByInput
+    transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
+    dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
   }
 
   export type UserCreateOrConnectWithoutEventsPostedInput = {
@@ -63753,6 +69195,10 @@ export namespace Prisma {
     announcements?: AnnouncementCreateNestedManyWithoutDojoInput
     inventoryItems?: DojoInventoryItemCreateNestedManyWithoutDojoInput
     sales?: DojoSaleCreateNestedManyWithoutDojoInput
+    transfersOut?: StudentTransferRequestCreateNestedManyWithoutFromDojoInput
+    transfersIn?: StudentTransferRequestCreateNestedManyWithoutToDojoInput
+    historyFrom?: StudentDojoHistoryCreateNestedManyWithoutFromDojoInput
+    historyTo?: StudentDojoHistoryCreateNestedManyWithoutToDojoInput
   }
 
   export type DojoUncheckedCreateWithoutEventsInput = {
@@ -63784,6 +69230,10 @@ export namespace Prisma {
     announcements?: AnnouncementUncheckedCreateNestedManyWithoutDojoInput
     inventoryItems?: DojoInventoryItemUncheckedCreateNestedManyWithoutDojoInput
     sales?: DojoSaleUncheckedCreateNestedManyWithoutDojoInput
+    transfersOut?: StudentTransferRequestUncheckedCreateNestedManyWithoutFromDojoInput
+    transfersIn?: StudentTransferRequestUncheckedCreateNestedManyWithoutToDojoInput
+    historyFrom?: StudentDojoHistoryUncheckedCreateNestedManyWithoutFromDojoInput
+    historyTo?: StudentDojoHistoryUncheckedCreateNestedManyWithoutToDojoInput
   }
 
   export type DojoCreateOrConnectWithoutEventsInput = {
@@ -63878,6 +69328,9 @@ export namespace Prisma {
     dojoSalesSold?: DojoSaleUpdateManyWithoutSoldByNestedInput
     achievementsAwarded?: StudentAchievementUpdateManyWithoutAwardedByNestedInput
     tournamentEntries?: TournamentParticipantUpdateManyWithoutUserNestedInput
+    transfersDojoActed?: StudentTransferRequestUpdateManyWithoutDojoActedByNestedInput
+    transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
+    dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEventsPostedInput = {
@@ -63905,6 +69358,9 @@ export namespace Prisma {
     dojoSalesSold?: DojoSaleUncheckedUpdateManyWithoutSoldByNestedInput
     achievementsAwarded?: StudentAchievementUncheckedUpdateManyWithoutAwardedByNestedInput
     tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutUserNestedInput
+    transfersDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
+    transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
+    dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
   }
 
   export type DojoUpsertWithoutEventsInput = {
@@ -63947,6 +69403,10 @@ export namespace Prisma {
     announcements?: AnnouncementUpdateManyWithoutDojoNestedInput
     inventoryItems?: DojoInventoryItemUpdateManyWithoutDojoNestedInput
     sales?: DojoSaleUpdateManyWithoutDojoNestedInput
+    transfersOut?: StudentTransferRequestUpdateManyWithoutFromDojoNestedInput
+    transfersIn?: StudentTransferRequestUpdateManyWithoutToDojoNestedInput
+    historyFrom?: StudentDojoHistoryUpdateManyWithoutFromDojoNestedInput
+    historyTo?: StudentDojoHistoryUpdateManyWithoutToDojoNestedInput
   }
 
   export type DojoUncheckedUpdateWithoutEventsInput = {
@@ -63978,6 +69438,10 @@ export namespace Prisma {
     announcements?: AnnouncementUncheckedUpdateManyWithoutDojoNestedInput
     inventoryItems?: DojoInventoryItemUncheckedUpdateManyWithoutDojoNestedInput
     sales?: DojoSaleUncheckedUpdateManyWithoutDojoNestedInput
+    transfersOut?: StudentTransferRequestUncheckedUpdateManyWithoutFromDojoNestedInput
+    transfersIn?: StudentTransferRequestUncheckedUpdateManyWithoutToDojoNestedInput
+    historyFrom?: StudentDojoHistoryUncheckedUpdateManyWithoutFromDojoNestedInput
+    historyTo?: StudentDojoHistoryUncheckedUpdateManyWithoutToDojoNestedInput
   }
 
   export type BeltRankUpsertWithoutMinRankEventsInput = {
@@ -64046,6 +69510,9 @@ export namespace Prisma {
     dojoSalesSold?: DojoSaleCreateNestedManyWithoutSoldByInput
     achievementsAwarded?: StudentAchievementCreateNestedManyWithoutAwardedByInput
     tournamentEntries?: TournamentParticipantCreateNestedManyWithoutUserInput
+    transfersDojoActed?: StudentTransferRequestCreateNestedManyWithoutDojoActedByInput
+    transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
+    dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
   }
 
   export type UserUncheckedCreateWithoutAnnouncementsPostedInput = {
@@ -64073,6 +69540,9 @@ export namespace Prisma {
     dojoSalesSold?: DojoSaleUncheckedCreateNestedManyWithoutSoldByInput
     achievementsAwarded?: StudentAchievementUncheckedCreateNestedManyWithoutAwardedByInput
     tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutUserInput
+    transfersDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutDojoActedByInput
+    transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
+    dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
   }
 
   export type UserCreateOrConnectWithoutAnnouncementsPostedInput = {
@@ -64109,6 +69579,10 @@ export namespace Prisma {
     events?: EventCreateNestedManyWithoutDojoInput
     inventoryItems?: DojoInventoryItemCreateNestedManyWithoutDojoInput
     sales?: DojoSaleCreateNestedManyWithoutDojoInput
+    transfersOut?: StudentTransferRequestCreateNestedManyWithoutFromDojoInput
+    transfersIn?: StudentTransferRequestCreateNestedManyWithoutToDojoInput
+    historyFrom?: StudentDojoHistoryCreateNestedManyWithoutFromDojoInput
+    historyTo?: StudentDojoHistoryCreateNestedManyWithoutToDojoInput
   }
 
   export type DojoUncheckedCreateWithoutAnnouncementsInput = {
@@ -64140,6 +69614,10 @@ export namespace Prisma {
     events?: EventUncheckedCreateNestedManyWithoutDojoInput
     inventoryItems?: DojoInventoryItemUncheckedCreateNestedManyWithoutDojoInput
     sales?: DojoSaleUncheckedCreateNestedManyWithoutDojoInput
+    transfersOut?: StudentTransferRequestUncheckedCreateNestedManyWithoutFromDojoInput
+    transfersIn?: StudentTransferRequestUncheckedCreateNestedManyWithoutToDojoInput
+    historyFrom?: StudentDojoHistoryUncheckedCreateNestedManyWithoutFromDojoInput
+    historyTo?: StudentDojoHistoryUncheckedCreateNestedManyWithoutToDojoInput
   }
 
   export type DojoCreateOrConnectWithoutAnnouncementsInput = {
@@ -64183,6 +69661,9 @@ export namespace Prisma {
     dojoSalesSold?: DojoSaleUpdateManyWithoutSoldByNestedInput
     achievementsAwarded?: StudentAchievementUpdateManyWithoutAwardedByNestedInput
     tournamentEntries?: TournamentParticipantUpdateManyWithoutUserNestedInput
+    transfersDojoActed?: StudentTransferRequestUpdateManyWithoutDojoActedByNestedInput
+    transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
+    dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAnnouncementsPostedInput = {
@@ -64210,6 +69691,9 @@ export namespace Prisma {
     dojoSalesSold?: DojoSaleUncheckedUpdateManyWithoutSoldByNestedInput
     achievementsAwarded?: StudentAchievementUncheckedUpdateManyWithoutAwardedByNestedInput
     tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutUserNestedInput
+    transfersDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
+    transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
+    dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
   }
 
   export type DojoUpsertWithoutAnnouncementsInput = {
@@ -64252,6 +69736,10 @@ export namespace Prisma {
     events?: EventUpdateManyWithoutDojoNestedInput
     inventoryItems?: DojoInventoryItemUpdateManyWithoutDojoNestedInput
     sales?: DojoSaleUpdateManyWithoutDojoNestedInput
+    transfersOut?: StudentTransferRequestUpdateManyWithoutFromDojoNestedInput
+    transfersIn?: StudentTransferRequestUpdateManyWithoutToDojoNestedInput
+    historyFrom?: StudentDojoHistoryUpdateManyWithoutFromDojoNestedInput
+    historyTo?: StudentDojoHistoryUpdateManyWithoutToDojoNestedInput
   }
 
   export type DojoUncheckedUpdateWithoutAnnouncementsInput = {
@@ -64283,6 +69771,10 @@ export namespace Prisma {
     events?: EventUncheckedUpdateManyWithoutDojoNestedInput
     inventoryItems?: DojoInventoryItemUncheckedUpdateManyWithoutDojoNestedInput
     sales?: DojoSaleUncheckedUpdateManyWithoutDojoNestedInput
+    transfersOut?: StudentTransferRequestUncheckedUpdateManyWithoutFromDojoNestedInput
+    transfersIn?: StudentTransferRequestUncheckedUpdateManyWithoutToDojoNestedInput
+    historyFrom?: StudentDojoHistoryUncheckedUpdateManyWithoutFromDojoNestedInput
+    historyTo?: StudentDojoHistoryUncheckedUpdateManyWithoutToDojoNestedInput
   }
 
   export type EventCreateWithoutRegistrationsInput = {
@@ -64361,6 +69853,9 @@ export namespace Prisma {
     dojoSalesSold?: DojoSaleCreateNestedManyWithoutSoldByInput
     achievementsAwarded?: StudentAchievementCreateNestedManyWithoutAwardedByInput
     tournamentEntries?: TournamentParticipantCreateNestedManyWithoutUserInput
+    transfersDojoActed?: StudentTransferRequestCreateNestedManyWithoutDojoActedByInput
+    transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
+    dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
   }
 
   export type UserUncheckedCreateWithoutEventRegistrationsInput = {
@@ -64388,6 +69883,9 @@ export namespace Prisma {
     dojoSalesSold?: DojoSaleUncheckedCreateNestedManyWithoutSoldByInput
     achievementsAwarded?: StudentAchievementUncheckedCreateNestedManyWithoutAwardedByInput
     tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutUserInput
+    transfersDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutDojoActedByInput
+    transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
+    dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
   }
 
   export type UserCreateOrConnectWithoutEventRegistrationsInput = {
@@ -64420,6 +69918,9 @@ export namespace Prisma {
     dojoSalesSold?: DojoSaleCreateNestedManyWithoutSoldByInput
     achievementsAwarded?: StudentAchievementCreateNestedManyWithoutAwardedByInput
     tournamentEntries?: TournamentParticipantCreateNestedManyWithoutUserInput
+    transfersDojoActed?: StudentTransferRequestCreateNestedManyWithoutDojoActedByInput
+    transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
+    dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
   }
 
   export type UserUncheckedCreateWithoutEventCheckInsInput = {
@@ -64447,6 +69948,9 @@ export namespace Prisma {
     dojoSalesSold?: DojoSaleUncheckedCreateNestedManyWithoutSoldByInput
     achievementsAwarded?: StudentAchievementUncheckedCreateNestedManyWithoutAwardedByInput
     tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutUserInput
+    transfersDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutDojoActedByInput
+    transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
+    dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
   }
 
   export type UserCreateOrConnectWithoutEventCheckInsInput = {
@@ -64547,6 +70051,9 @@ export namespace Prisma {
     dojoSalesSold?: DojoSaleUpdateManyWithoutSoldByNestedInput
     achievementsAwarded?: StudentAchievementUpdateManyWithoutAwardedByNestedInput
     tournamentEntries?: TournamentParticipantUpdateManyWithoutUserNestedInput
+    transfersDojoActed?: StudentTransferRequestUpdateManyWithoutDojoActedByNestedInput
+    transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
+    dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEventRegistrationsInput = {
@@ -64574,6 +70081,9 @@ export namespace Prisma {
     dojoSalesSold?: DojoSaleUncheckedUpdateManyWithoutSoldByNestedInput
     achievementsAwarded?: StudentAchievementUncheckedUpdateManyWithoutAwardedByNestedInput
     tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutUserNestedInput
+    transfersDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
+    transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
+    dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
   }
 
   export type UserUpsertWithoutEventCheckInsInput = {
@@ -64612,6 +70122,9 @@ export namespace Prisma {
     dojoSalesSold?: DojoSaleUpdateManyWithoutSoldByNestedInput
     achievementsAwarded?: StudentAchievementUpdateManyWithoutAwardedByNestedInput
     tournamentEntries?: TournamentParticipantUpdateManyWithoutUserNestedInput
+    transfersDojoActed?: StudentTransferRequestUpdateManyWithoutDojoActedByNestedInput
+    transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
+    dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEventCheckInsInput = {
@@ -64639,6 +70152,9 @@ export namespace Prisma {
     dojoSalesSold?: DojoSaleUncheckedUpdateManyWithoutSoldByNestedInput
     achievementsAwarded?: StudentAchievementUncheckedUpdateManyWithoutAwardedByNestedInput
     tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutUserNestedInput
+    transfersDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
+    transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
+    dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
   }
 
   export type UserCreateWithoutNotificationsInput = {
@@ -64666,6 +70182,9 @@ export namespace Prisma {
     dojoSalesSold?: DojoSaleCreateNestedManyWithoutSoldByInput
     achievementsAwarded?: StudentAchievementCreateNestedManyWithoutAwardedByInput
     tournamentEntries?: TournamentParticipantCreateNestedManyWithoutUserInput
+    transfersDojoActed?: StudentTransferRequestCreateNestedManyWithoutDojoActedByInput
+    transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
+    dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
   }
 
   export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -64693,6 +70212,9 @@ export namespace Prisma {
     dojoSalesSold?: DojoSaleUncheckedCreateNestedManyWithoutSoldByInput
     achievementsAwarded?: StudentAchievementUncheckedCreateNestedManyWithoutAwardedByInput
     tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutUserInput
+    transfersDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutDojoActedByInput
+    transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
+    dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
   }
 
   export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -64736,6 +70258,9 @@ export namespace Prisma {
     dojoSalesSold?: DojoSaleUpdateManyWithoutSoldByNestedInput
     achievementsAwarded?: StudentAchievementUpdateManyWithoutAwardedByNestedInput
     tournamentEntries?: TournamentParticipantUpdateManyWithoutUserNestedInput
+    transfersDojoActed?: StudentTransferRequestUpdateManyWithoutDojoActedByNestedInput
+    transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
+    dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -64763,6 +70288,9 @@ export namespace Prisma {
     dojoSalesSold?: DojoSaleUncheckedUpdateManyWithoutSoldByNestedInput
     achievementsAwarded?: StudentAchievementUncheckedUpdateManyWithoutAwardedByNestedInput
     tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutUserNestedInput
+    transfersDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
+    transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
+    dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
   }
 
   export type ShopOrderItemCreateWithoutProductInput = {
@@ -64949,6 +70477,10 @@ export namespace Prisma {
     events?: EventCreateNestedManyWithoutDojoInput
     announcements?: AnnouncementCreateNestedManyWithoutDojoInput
     sales?: DojoSaleCreateNestedManyWithoutDojoInput
+    transfersOut?: StudentTransferRequestCreateNestedManyWithoutFromDojoInput
+    transfersIn?: StudentTransferRequestCreateNestedManyWithoutToDojoInput
+    historyFrom?: StudentDojoHistoryCreateNestedManyWithoutFromDojoInput
+    historyTo?: StudentDojoHistoryCreateNestedManyWithoutToDojoInput
   }
 
   export type DojoUncheckedCreateWithoutInventoryItemsInput = {
@@ -64980,6 +70512,10 @@ export namespace Prisma {
     events?: EventUncheckedCreateNestedManyWithoutDojoInput
     announcements?: AnnouncementUncheckedCreateNestedManyWithoutDojoInput
     sales?: DojoSaleUncheckedCreateNestedManyWithoutDojoInput
+    transfersOut?: StudentTransferRequestUncheckedCreateNestedManyWithoutFromDojoInput
+    transfersIn?: StudentTransferRequestUncheckedCreateNestedManyWithoutToDojoInput
+    historyFrom?: StudentDojoHistoryUncheckedCreateNestedManyWithoutFromDojoInput
+    historyTo?: StudentDojoHistoryUncheckedCreateNestedManyWithoutToDojoInput
   }
 
   export type DojoCreateOrConnectWithoutInventoryItemsInput = {
@@ -65066,6 +70602,10 @@ export namespace Prisma {
     events?: EventUpdateManyWithoutDojoNestedInput
     announcements?: AnnouncementUpdateManyWithoutDojoNestedInput
     sales?: DojoSaleUpdateManyWithoutDojoNestedInput
+    transfersOut?: StudentTransferRequestUpdateManyWithoutFromDojoNestedInput
+    transfersIn?: StudentTransferRequestUpdateManyWithoutToDojoNestedInput
+    historyFrom?: StudentDojoHistoryUpdateManyWithoutFromDojoNestedInput
+    historyTo?: StudentDojoHistoryUpdateManyWithoutToDojoNestedInput
   }
 
   export type DojoUncheckedUpdateWithoutInventoryItemsInput = {
@@ -65097,6 +70637,10 @@ export namespace Prisma {
     events?: EventUncheckedUpdateManyWithoutDojoNestedInput
     announcements?: AnnouncementUncheckedUpdateManyWithoutDojoNestedInput
     sales?: DojoSaleUncheckedUpdateManyWithoutDojoNestedInput
+    transfersOut?: StudentTransferRequestUncheckedUpdateManyWithoutFromDojoNestedInput
+    transfersIn?: StudentTransferRequestUncheckedUpdateManyWithoutToDojoNestedInput
+    historyFrom?: StudentDojoHistoryUncheckedUpdateManyWithoutFromDojoNestedInput
+    historyTo?: StudentDojoHistoryUncheckedUpdateManyWithoutToDojoNestedInput
   }
 
   export type ShopProductUpsertWithoutDojoInventoryInput = {
@@ -65173,6 +70717,10 @@ export namespace Prisma {
     events?: EventCreateNestedManyWithoutDojoInput
     announcements?: AnnouncementCreateNestedManyWithoutDojoInput
     inventoryItems?: DojoInventoryItemCreateNestedManyWithoutDojoInput
+    transfersOut?: StudentTransferRequestCreateNestedManyWithoutFromDojoInput
+    transfersIn?: StudentTransferRequestCreateNestedManyWithoutToDojoInput
+    historyFrom?: StudentDojoHistoryCreateNestedManyWithoutFromDojoInput
+    historyTo?: StudentDojoHistoryCreateNestedManyWithoutToDojoInput
   }
 
   export type DojoUncheckedCreateWithoutSalesInput = {
@@ -65204,6 +70752,10 @@ export namespace Prisma {
     events?: EventUncheckedCreateNestedManyWithoutDojoInput
     announcements?: AnnouncementUncheckedCreateNestedManyWithoutDojoInput
     inventoryItems?: DojoInventoryItemUncheckedCreateNestedManyWithoutDojoInput
+    transfersOut?: StudentTransferRequestUncheckedCreateNestedManyWithoutFromDojoInput
+    transfersIn?: StudentTransferRequestUncheckedCreateNestedManyWithoutToDojoInput
+    historyFrom?: StudentDojoHistoryUncheckedCreateNestedManyWithoutFromDojoInput
+    historyTo?: StudentDojoHistoryUncheckedCreateNestedManyWithoutToDojoInput
   }
 
   export type DojoCreateOrConnectWithoutSalesInput = {
@@ -65236,6 +70788,9 @@ export namespace Prisma {
     dojoSalesSold?: DojoSaleCreateNestedManyWithoutSoldByInput
     achievementsAwarded?: StudentAchievementCreateNestedManyWithoutAwardedByInput
     tournamentEntries?: TournamentParticipantCreateNestedManyWithoutUserInput
+    transfersDojoActed?: StudentTransferRequestCreateNestedManyWithoutDojoActedByInput
+    transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
+    dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
   }
 
   export type UserUncheckedCreateWithoutDojoSalesAsBuyerInput = {
@@ -65263,6 +70818,9 @@ export namespace Prisma {
     dojoSalesSold?: DojoSaleUncheckedCreateNestedManyWithoutSoldByInput
     achievementsAwarded?: StudentAchievementUncheckedCreateNestedManyWithoutAwardedByInput
     tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutUserInput
+    transfersDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutDojoActedByInput
+    transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
+    dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
   }
 
   export type UserCreateOrConnectWithoutDojoSalesAsBuyerInput = {
@@ -65295,6 +70853,9 @@ export namespace Prisma {
     dojoSalesAsBuyer?: DojoSaleCreateNestedManyWithoutBuyerInput
     achievementsAwarded?: StudentAchievementCreateNestedManyWithoutAwardedByInput
     tournamentEntries?: TournamentParticipantCreateNestedManyWithoutUserInput
+    transfersDojoActed?: StudentTransferRequestCreateNestedManyWithoutDojoActedByInput
+    transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
+    dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
   }
 
   export type UserUncheckedCreateWithoutDojoSalesSoldInput = {
@@ -65322,6 +70883,9 @@ export namespace Prisma {
     dojoSalesAsBuyer?: DojoSaleUncheckedCreateNestedManyWithoutBuyerInput
     achievementsAwarded?: StudentAchievementUncheckedCreateNestedManyWithoutAwardedByInput
     tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutUserInput
+    transfersDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutDojoActedByInput
+    transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
+    dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
   }
 
   export type UserCreateOrConnectWithoutDojoSalesSoldInput = {
@@ -65397,6 +70961,10 @@ export namespace Prisma {
     events?: EventUpdateManyWithoutDojoNestedInput
     announcements?: AnnouncementUpdateManyWithoutDojoNestedInput
     inventoryItems?: DojoInventoryItemUpdateManyWithoutDojoNestedInput
+    transfersOut?: StudentTransferRequestUpdateManyWithoutFromDojoNestedInput
+    transfersIn?: StudentTransferRequestUpdateManyWithoutToDojoNestedInput
+    historyFrom?: StudentDojoHistoryUpdateManyWithoutFromDojoNestedInput
+    historyTo?: StudentDojoHistoryUpdateManyWithoutToDojoNestedInput
   }
 
   export type DojoUncheckedUpdateWithoutSalesInput = {
@@ -65428,6 +70996,10 @@ export namespace Prisma {
     events?: EventUncheckedUpdateManyWithoutDojoNestedInput
     announcements?: AnnouncementUncheckedUpdateManyWithoutDojoNestedInput
     inventoryItems?: DojoInventoryItemUncheckedUpdateManyWithoutDojoNestedInput
+    transfersOut?: StudentTransferRequestUncheckedUpdateManyWithoutFromDojoNestedInput
+    transfersIn?: StudentTransferRequestUncheckedUpdateManyWithoutToDojoNestedInput
+    historyFrom?: StudentDojoHistoryUncheckedUpdateManyWithoutFromDojoNestedInput
+    historyTo?: StudentDojoHistoryUncheckedUpdateManyWithoutToDojoNestedInput
   }
 
   export type UserUpsertWithoutDojoSalesAsBuyerInput = {
@@ -65466,6 +71038,9 @@ export namespace Prisma {
     dojoSalesSold?: DojoSaleUpdateManyWithoutSoldByNestedInput
     achievementsAwarded?: StudentAchievementUpdateManyWithoutAwardedByNestedInput
     tournamentEntries?: TournamentParticipantUpdateManyWithoutUserNestedInput
+    transfersDojoActed?: StudentTransferRequestUpdateManyWithoutDojoActedByNestedInput
+    transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
+    dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDojoSalesAsBuyerInput = {
@@ -65493,6 +71068,9 @@ export namespace Prisma {
     dojoSalesSold?: DojoSaleUncheckedUpdateManyWithoutSoldByNestedInput
     achievementsAwarded?: StudentAchievementUncheckedUpdateManyWithoutAwardedByNestedInput
     tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutUserNestedInput
+    transfersDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
+    transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
+    dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
   }
 
   export type UserUpsertWithoutDojoSalesSoldInput = {
@@ -65531,6 +71109,9 @@ export namespace Prisma {
     dojoSalesAsBuyer?: DojoSaleUpdateManyWithoutBuyerNestedInput
     achievementsAwarded?: StudentAchievementUpdateManyWithoutAwardedByNestedInput
     tournamentEntries?: TournamentParticipantUpdateManyWithoutUserNestedInput
+    transfersDojoActed?: StudentTransferRequestUpdateManyWithoutDojoActedByNestedInput
+    transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
+    dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDojoSalesSoldInput = {
@@ -65558,6 +71139,9 @@ export namespace Prisma {
     dojoSalesAsBuyer?: DojoSaleUncheckedUpdateManyWithoutBuyerNestedInput
     achievementsAwarded?: StudentAchievementUncheckedUpdateManyWithoutAwardedByNestedInput
     tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutUserNestedInput
+    transfersDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
+    transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
+    dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
   }
 
   export type DojoSaleItemUpsertWithWhereUniqueWithoutSaleInput = {
@@ -65765,6 +71349,9 @@ export namespace Prisma {
     dojoSalesSold?: DojoSaleCreateNestedManyWithoutSoldByInput
     achievementsAwarded?: StudentAchievementCreateNestedManyWithoutAwardedByInput
     tournamentEntries?: TournamentParticipantCreateNestedManyWithoutUserInput
+    transfersDojoActed?: StudentTransferRequestCreateNestedManyWithoutDojoActedByInput
+    transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
+    dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
   }
 
   export type UserUncheckedCreateWithoutOrdersInput = {
@@ -65792,6 +71379,9 @@ export namespace Prisma {
     dojoSalesSold?: DojoSaleUncheckedCreateNestedManyWithoutSoldByInput
     achievementsAwarded?: StudentAchievementUncheckedCreateNestedManyWithoutAwardedByInput
     tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutUserInput
+    transfersDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutDojoActedByInput
+    transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
+    dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
   }
 
   export type UserCreateOrConnectWithoutOrdersInput = {
@@ -65828,6 +71418,10 @@ export namespace Prisma {
     announcements?: AnnouncementCreateNestedManyWithoutDojoInput
     inventoryItems?: DojoInventoryItemCreateNestedManyWithoutDojoInput
     sales?: DojoSaleCreateNestedManyWithoutDojoInput
+    transfersOut?: StudentTransferRequestCreateNestedManyWithoutFromDojoInput
+    transfersIn?: StudentTransferRequestCreateNestedManyWithoutToDojoInput
+    historyFrom?: StudentDojoHistoryCreateNestedManyWithoutFromDojoInput
+    historyTo?: StudentDojoHistoryCreateNestedManyWithoutToDojoInput
   }
 
   export type DojoUncheckedCreateWithoutRenewalOrdersInput = {
@@ -65859,6 +71453,10 @@ export namespace Prisma {
     announcements?: AnnouncementUncheckedCreateNestedManyWithoutDojoInput
     inventoryItems?: DojoInventoryItemUncheckedCreateNestedManyWithoutDojoInput
     sales?: DojoSaleUncheckedCreateNestedManyWithoutDojoInput
+    transfersOut?: StudentTransferRequestUncheckedCreateNestedManyWithoutFromDojoInput
+    transfersIn?: StudentTransferRequestUncheckedCreateNestedManyWithoutToDojoInput
+    historyFrom?: StudentDojoHistoryUncheckedCreateNestedManyWithoutFromDojoInput
+    historyTo?: StudentDojoHistoryUncheckedCreateNestedManyWithoutToDojoInput
   }
 
   export type DojoCreateOrConnectWithoutRenewalOrdersInput = {
@@ -65895,6 +71493,10 @@ export namespace Prisma {
     announcements?: AnnouncementCreateNestedManyWithoutDojoInput
     inventoryItems?: DojoInventoryItemCreateNestedManyWithoutDojoInput
     sales?: DojoSaleCreateNestedManyWithoutDojoInput
+    transfersOut?: StudentTransferRequestCreateNestedManyWithoutFromDojoInput
+    transfersIn?: StudentTransferRequestCreateNestedManyWithoutToDojoInput
+    historyFrom?: StudentDojoHistoryCreateNestedManyWithoutFromDojoInput
+    historyTo?: StudentDojoHistoryCreateNestedManyWithoutToDojoInput
   }
 
   export type DojoUncheckedCreateWithoutCertificateOrdersInput = {
@@ -65926,6 +71528,10 @@ export namespace Prisma {
     announcements?: AnnouncementUncheckedCreateNestedManyWithoutDojoInput
     inventoryItems?: DojoInventoryItemUncheckedCreateNestedManyWithoutDojoInput
     sales?: DojoSaleUncheckedCreateNestedManyWithoutDojoInput
+    transfersOut?: StudentTransferRequestUncheckedCreateNestedManyWithoutFromDojoInput
+    transfersIn?: StudentTransferRequestUncheckedCreateNestedManyWithoutToDojoInput
+    historyFrom?: StudentDojoHistoryUncheckedCreateNestedManyWithoutFromDojoInput
+    historyTo?: StudentDojoHistoryUncheckedCreateNestedManyWithoutToDojoInput
   }
 
   export type DojoCreateOrConnectWithoutCertificateOrdersInput = {
@@ -66003,6 +71609,53 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type StudentTransferRequestCreateWithoutOrderInput = {
+    id?: string
+    status?: $Enums.StudentTransferStatus
+    dojoDecision?: $Enums.StudentTransferDojoDecision
+    reason?: string | null
+    dojoNote?: string | null
+    adminNote?: string | null
+    fee: Decimal | DecimalJsLike | number | string
+    paidAt?: Date | string | null
+    dojoActedAt?: Date | string | null
+    adminActedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    student: StudentCreateNestedOneWithoutTransferRequestsInput
+    fromDojo: DojoCreateNestedOneWithoutTransfersOutInput
+    toDojo: DojoCreateNestedOneWithoutTransfersInInput
+    dojoActedBy?: UserCreateNestedOneWithoutTransfersDojoActedInput
+    adminActedBy?: UserCreateNestedOneWithoutTransfersAdminActedInput
+    history?: StudentDojoHistoryCreateNestedManyWithoutTransferRequestInput
+  }
+
+  export type StudentTransferRequestUncheckedCreateWithoutOrderInput = {
+    id?: string
+    studentId: string
+    fromDojoId: string
+    toDojoId: string
+    status?: $Enums.StudentTransferStatus
+    dojoDecision?: $Enums.StudentTransferDojoDecision
+    reason?: string | null
+    dojoNote?: string | null
+    adminNote?: string | null
+    fee: Decimal | DecimalJsLike | number | string
+    paidAt?: Date | string | null
+    dojoActedAt?: Date | string | null
+    dojoActedById?: string | null
+    adminActedAt?: Date | string | null
+    adminActedById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    history?: StudentDojoHistoryUncheckedCreateNestedManyWithoutTransferRequestInput
+  }
+
+  export type StudentTransferRequestCreateOrConnectWithoutOrderInput = {
+    where: StudentTransferRequestWhereUniqueInput
+    create: XOR<StudentTransferRequestCreateWithoutOrderInput, StudentTransferRequestUncheckedCreateWithoutOrderInput>
+  }
+
   export type UserUpsertWithoutOrdersInput = {
     update: XOR<UserUpdateWithoutOrdersInput, UserUncheckedUpdateWithoutOrdersInput>
     create: XOR<UserCreateWithoutOrdersInput, UserUncheckedCreateWithoutOrdersInput>
@@ -66039,6 +71692,9 @@ export namespace Prisma {
     dojoSalesSold?: DojoSaleUpdateManyWithoutSoldByNestedInput
     achievementsAwarded?: StudentAchievementUpdateManyWithoutAwardedByNestedInput
     tournamentEntries?: TournamentParticipantUpdateManyWithoutUserNestedInput
+    transfersDojoActed?: StudentTransferRequestUpdateManyWithoutDojoActedByNestedInput
+    transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
+    dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOrdersInput = {
@@ -66066,6 +71722,9 @@ export namespace Prisma {
     dojoSalesSold?: DojoSaleUncheckedUpdateManyWithoutSoldByNestedInput
     achievementsAwarded?: StudentAchievementUncheckedUpdateManyWithoutAwardedByNestedInput
     tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutUserNestedInput
+    transfersDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
+    transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
+    dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
   }
 
   export type DojoUpsertWithoutRenewalOrdersInput = {
@@ -66108,6 +71767,10 @@ export namespace Prisma {
     announcements?: AnnouncementUpdateManyWithoutDojoNestedInput
     inventoryItems?: DojoInventoryItemUpdateManyWithoutDojoNestedInput
     sales?: DojoSaleUpdateManyWithoutDojoNestedInput
+    transfersOut?: StudentTransferRequestUpdateManyWithoutFromDojoNestedInput
+    transfersIn?: StudentTransferRequestUpdateManyWithoutToDojoNestedInput
+    historyFrom?: StudentDojoHistoryUpdateManyWithoutFromDojoNestedInput
+    historyTo?: StudentDojoHistoryUpdateManyWithoutToDojoNestedInput
   }
 
   export type DojoUncheckedUpdateWithoutRenewalOrdersInput = {
@@ -66139,6 +71802,10 @@ export namespace Prisma {
     announcements?: AnnouncementUncheckedUpdateManyWithoutDojoNestedInput
     inventoryItems?: DojoInventoryItemUncheckedUpdateManyWithoutDojoNestedInput
     sales?: DojoSaleUncheckedUpdateManyWithoutDojoNestedInput
+    transfersOut?: StudentTransferRequestUncheckedUpdateManyWithoutFromDojoNestedInput
+    transfersIn?: StudentTransferRequestUncheckedUpdateManyWithoutToDojoNestedInput
+    historyFrom?: StudentDojoHistoryUncheckedUpdateManyWithoutFromDojoNestedInput
+    historyTo?: StudentDojoHistoryUncheckedUpdateManyWithoutToDojoNestedInput
   }
 
   export type DojoUpsertWithoutCertificateOrdersInput = {
@@ -66181,6 +71848,10 @@ export namespace Prisma {
     announcements?: AnnouncementUpdateManyWithoutDojoNestedInput
     inventoryItems?: DojoInventoryItemUpdateManyWithoutDojoNestedInput
     sales?: DojoSaleUpdateManyWithoutDojoNestedInput
+    transfersOut?: StudentTransferRequestUpdateManyWithoutFromDojoNestedInput
+    transfersIn?: StudentTransferRequestUpdateManyWithoutToDojoNestedInput
+    historyFrom?: StudentDojoHistoryUpdateManyWithoutFromDojoNestedInput
+    historyTo?: StudentDojoHistoryUpdateManyWithoutToDojoNestedInput
   }
 
   export type DojoUncheckedUpdateWithoutCertificateOrdersInput = {
@@ -66212,6 +71883,10 @@ export namespace Prisma {
     announcements?: AnnouncementUncheckedUpdateManyWithoutDojoNestedInput
     inventoryItems?: DojoInventoryItemUncheckedUpdateManyWithoutDojoNestedInput
     sales?: DojoSaleUncheckedUpdateManyWithoutDojoNestedInput
+    transfersOut?: StudentTransferRequestUncheckedUpdateManyWithoutFromDojoNestedInput
+    transfersIn?: StudentTransferRequestUncheckedUpdateManyWithoutToDojoNestedInput
+    historyFrom?: StudentDojoHistoryUncheckedUpdateManyWithoutFromDojoNestedInput
+    historyTo?: StudentDojoHistoryUncheckedUpdateManyWithoutToDojoNestedInput
   }
 
   export type ShopOrderItemUpsertWithWhereUniqueWithoutOrderInput = {
@@ -66246,6 +71921,59 @@ export namespace Prisma {
     data: XOR<CertificateRequestUpdateManyMutationInput, CertificateRequestUncheckedUpdateManyWithoutOrderInput>
   }
 
+  export type StudentTransferRequestUpsertWithoutOrderInput = {
+    update: XOR<StudentTransferRequestUpdateWithoutOrderInput, StudentTransferRequestUncheckedUpdateWithoutOrderInput>
+    create: XOR<StudentTransferRequestCreateWithoutOrderInput, StudentTransferRequestUncheckedCreateWithoutOrderInput>
+    where?: StudentTransferRequestWhereInput
+  }
+
+  export type StudentTransferRequestUpdateToOneWithWhereWithoutOrderInput = {
+    where?: StudentTransferRequestWhereInput
+    data: XOR<StudentTransferRequestUpdateWithoutOrderInput, StudentTransferRequestUncheckedUpdateWithoutOrderInput>
+  }
+
+  export type StudentTransferRequestUpdateWithoutOrderInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumStudentTransferStatusFieldUpdateOperationsInput | $Enums.StudentTransferStatus
+    dojoDecision?: EnumStudentTransferDojoDecisionFieldUpdateOperationsInput | $Enums.StudentTransferDojoDecision
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    dojoNote?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNote?: NullableStringFieldUpdateOperationsInput | string | null
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    adminActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    student?: StudentUpdateOneRequiredWithoutTransferRequestsNestedInput
+    fromDojo?: DojoUpdateOneRequiredWithoutTransfersOutNestedInput
+    toDojo?: DojoUpdateOneRequiredWithoutTransfersInNestedInput
+    dojoActedBy?: UserUpdateOneWithoutTransfersDojoActedNestedInput
+    adminActedBy?: UserUpdateOneWithoutTransfersAdminActedNestedInput
+    history?: StudentDojoHistoryUpdateManyWithoutTransferRequestNestedInput
+  }
+
+  export type StudentTransferRequestUncheckedUpdateWithoutOrderInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    fromDojoId?: StringFieldUpdateOperationsInput | string
+    toDojoId?: StringFieldUpdateOperationsInput | string
+    status?: EnumStudentTransferStatusFieldUpdateOperationsInput | $Enums.StudentTransferStatus
+    dojoDecision?: EnumStudentTransferDojoDecisionFieldUpdateOperationsInput | $Enums.StudentTransferDojoDecision
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    dojoNote?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNote?: NullableStringFieldUpdateOperationsInput | string | null
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dojoActedById?: NullableStringFieldUpdateOperationsInput | string | null
+    adminActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    adminActedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    history?: StudentDojoHistoryUncheckedUpdateManyWithoutTransferRequestNestedInput
+  }
+
   export type ShopOrderCreateWithoutOrderItemsInput = {
     id?: string
     paymentStatus?: $Enums.PaymentStatus
@@ -66263,12 +71991,14 @@ export namespace Prisma {
     isGuestOrder?: boolean
     includesDojoRenewal?: boolean
     includesCertificates?: boolean
+    includesTransferRequest?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     user?: UserCreateNestedOneWithoutOrdersInput
     dojo?: DojoCreateNestedOneWithoutRenewalOrdersInput
     certDojo?: DojoCreateNestedOneWithoutCertificateOrdersInput
     certificateRequests?: CertificateRequestCreateNestedManyWithoutOrderInput
+    transferRequest?: StudentTransferRequestCreateNestedOneWithoutOrderInput
   }
 
   export type ShopOrderUncheckedCreateWithoutOrderItemsInput = {
@@ -66291,9 +72021,11 @@ export namespace Prisma {
     includesDojoRenewal?: boolean
     includesCertificates?: boolean
     certDojoId?: string | null
+    includesTransferRequest?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutOrderInput
+    transferRequest?: StudentTransferRequestUncheckedCreateNestedOneWithoutOrderInput
   }
 
   export type ShopOrderCreateOrConnectWithoutOrderItemsInput = {
@@ -66368,12 +72100,14 @@ export namespace Prisma {
     isGuestOrder?: BoolFieldUpdateOperationsInput | boolean
     includesDojoRenewal?: BoolFieldUpdateOperationsInput | boolean
     includesCertificates?: BoolFieldUpdateOperationsInput | boolean
+    includesTransferRequest?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneWithoutOrdersNestedInput
     dojo?: DojoUpdateOneWithoutRenewalOrdersNestedInput
     certDojo?: DojoUpdateOneWithoutCertificateOrdersNestedInput
     certificateRequests?: CertificateRequestUpdateManyWithoutOrderNestedInput
+    transferRequest?: StudentTransferRequestUpdateOneWithoutOrderNestedInput
   }
 
   export type ShopOrderUncheckedUpdateWithoutOrderItemsInput = {
@@ -66396,9 +72130,11 @@ export namespace Prisma {
     includesDojoRenewal?: BoolFieldUpdateOperationsInput | boolean
     includesCertificates?: BoolFieldUpdateOperationsInput | boolean
     certDojoId?: NullableStringFieldUpdateOperationsInput | string | null
+    includesTransferRequest?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutOrderNestedInput
+    transferRequest?: StudentTransferRequestUncheckedUpdateOneWithoutOrderNestedInput
   }
 
   export type ShopProductUpsertWithoutOrderItemsInput = {
@@ -66611,6 +72347,9 @@ export namespace Prisma {
     dojoSalesAsBuyer?: DojoSaleCreateNestedManyWithoutBuyerInput
     dojoSalesSold?: DojoSaleCreateNestedManyWithoutSoldByInput
     achievementsAwarded?: StudentAchievementCreateNestedManyWithoutAwardedByInput
+    transfersDojoActed?: StudentTransferRequestCreateNestedManyWithoutDojoActedByInput
+    transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
+    dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
   }
 
   export type UserUncheckedCreateWithoutTournamentEntriesInput = {
@@ -66638,6 +72377,9 @@ export namespace Prisma {
     dojoSalesAsBuyer?: DojoSaleUncheckedCreateNestedManyWithoutBuyerInput
     dojoSalesSold?: DojoSaleUncheckedCreateNestedManyWithoutSoldByInput
     achievementsAwarded?: StudentAchievementUncheckedCreateNestedManyWithoutAwardedByInput
+    transfersDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutDojoActedByInput
+    transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
+    dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
   }
 
   export type UserCreateOrConnectWithoutTournamentEntriesInput = {
@@ -66812,6 +72554,9 @@ export namespace Prisma {
     dojoSalesAsBuyer?: DojoSaleUpdateManyWithoutBuyerNestedInput
     dojoSalesSold?: DojoSaleUpdateManyWithoutSoldByNestedInput
     achievementsAwarded?: StudentAchievementUpdateManyWithoutAwardedByNestedInput
+    transfersDojoActed?: StudentTransferRequestUpdateManyWithoutDojoActedByNestedInput
+    transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
+    dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTournamentEntriesInput = {
@@ -66839,6 +72584,9 @@ export namespace Prisma {
     dojoSalesAsBuyer?: DojoSaleUncheckedUpdateManyWithoutBuyerNestedInput
     dojoSalesSold?: DojoSaleUncheckedUpdateManyWithoutSoldByNestedInput
     achievementsAwarded?: StudentAchievementUncheckedUpdateManyWithoutAwardedByNestedInput
+    transfersDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
+    transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
+    dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
   }
 
   export type TournamentMatchUpsertWithWhereUniqueWithoutParticipant1Input = {
@@ -67199,6 +72947,8 @@ export namespace Prisma {
     gradings?: GradingCreateNestedManyWithoutStudentInput
     gradingApplications?: GradingApplicationCreateNestedManyWithoutStudentInput
     certificateRequests?: CertificateRequestCreateNestedManyWithoutStudentInput
+    transferRequests?: StudentTransferRequestCreateNestedManyWithoutStudentInput
+    dojoHistory?: StudentDojoHistoryCreateNestedManyWithoutStudentInput
   }
 
   export type StudentUncheckedCreateWithoutAchievementsInput = {
@@ -67223,6 +72973,8 @@ export namespace Prisma {
     gradings?: GradingUncheckedCreateNestedManyWithoutStudentInput
     gradingApplications?: GradingApplicationUncheckedCreateNestedManyWithoutStudentInput
     certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutStudentInput
+    transferRequests?: StudentTransferRequestUncheckedCreateNestedManyWithoutStudentInput
+    dojoHistory?: StudentDojoHistoryUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type StudentCreateOrConnectWithoutAchievementsInput = {
@@ -67294,6 +73046,9 @@ export namespace Prisma {
     dojoSalesAsBuyer?: DojoSaleCreateNestedManyWithoutBuyerInput
     dojoSalesSold?: DojoSaleCreateNestedManyWithoutSoldByInput
     tournamentEntries?: TournamentParticipantCreateNestedManyWithoutUserInput
+    transfersDojoActed?: StudentTransferRequestCreateNestedManyWithoutDojoActedByInput
+    transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
+    dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
   }
 
   export type UserUncheckedCreateWithoutAchievementsAwardedInput = {
@@ -67321,6 +73076,9 @@ export namespace Prisma {
     dojoSalesAsBuyer?: DojoSaleUncheckedCreateNestedManyWithoutBuyerInput
     dojoSalesSold?: DojoSaleUncheckedCreateNestedManyWithoutSoldByInput
     tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutUserInput
+    transfersDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutDojoActedByInput
+    transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
+    dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
   }
 
   export type UserCreateOrConnectWithoutAchievementsAwardedInput = {
@@ -67361,6 +73119,8 @@ export namespace Prisma {
     gradings?: GradingUpdateManyWithoutStudentNestedInput
     gradingApplications?: GradingApplicationUpdateManyWithoutStudentNestedInput
     certificateRequests?: CertificateRequestUpdateManyWithoutStudentNestedInput
+    transferRequests?: StudentTransferRequestUpdateManyWithoutStudentNestedInput
+    dojoHistory?: StudentDojoHistoryUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateWithoutAchievementsInput = {
@@ -67385,6 +73145,8 @@ export namespace Prisma {
     gradings?: GradingUncheckedUpdateManyWithoutStudentNestedInput
     gradingApplications?: GradingApplicationUncheckedUpdateManyWithoutStudentNestedInput
     certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutStudentNestedInput
+    transferRequests?: StudentTransferRequestUncheckedUpdateManyWithoutStudentNestedInput
+    dojoHistory?: StudentDojoHistoryUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type AchievementUpsertWithoutStudentAchievementsInput = {
@@ -67468,6 +73230,9 @@ export namespace Prisma {
     dojoSalesAsBuyer?: DojoSaleUpdateManyWithoutBuyerNestedInput
     dojoSalesSold?: DojoSaleUpdateManyWithoutSoldByNestedInput
     tournamentEntries?: TournamentParticipantUpdateManyWithoutUserNestedInput
+    transfersDojoActed?: StudentTransferRequestUpdateManyWithoutDojoActedByNestedInput
+    transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
+    dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAchievementsAwardedInput = {
@@ -67495,6 +73260,1551 @@ export namespace Prisma {
     dojoSalesAsBuyer?: DojoSaleUncheckedUpdateManyWithoutBuyerNestedInput
     dojoSalesSold?: DojoSaleUncheckedUpdateManyWithoutSoldByNestedInput
     tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutUserNestedInput
+    transfersDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
+    transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
+    dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+  }
+
+  export type StudentCreateWithoutTransferRequestsInput = {
+    currentRank?: string
+    joinDate?: Date | string
+    expiryDate?: Date | string | null
+    onboardingComplete?: boolean
+    membershipStatus?: $Enums.MembershipStatus
+    dateOfBirth?: Date | string | null
+    bloodGroup?: string | null
+    address?: string | null
+    nationalId?: string | null
+    fatherName?: string | null
+    motherName?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutStudentInput
+    dojo?: DojoCreateNestedOneWithoutStudentsInput
+    attendance?: AttendanceCreateNestedManyWithoutStudentInput
+    gradings?: GradingCreateNestedManyWithoutStudentInput
+    gradingApplications?: GradingApplicationCreateNestedManyWithoutStudentInput
+    certificateRequests?: CertificateRequestCreateNestedManyWithoutStudentInput
+    achievements?: StudentAchievementCreateNestedManyWithoutStudentInput
+    dojoHistory?: StudentDojoHistoryCreateNestedManyWithoutStudentInput
+  }
+
+  export type StudentUncheckedCreateWithoutTransferRequestsInput = {
+    id: string
+    currentRank?: string
+    joinDate?: Date | string
+    expiryDate?: Date | string | null
+    dojoId?: string | null
+    onboardingComplete?: boolean
+    membershipStatus?: $Enums.MembershipStatus
+    dateOfBirth?: Date | string | null
+    bloodGroup?: string | null
+    address?: string | null
+    nationalId?: string | null
+    fatherName?: string | null
+    motherName?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    attendance?: AttendanceUncheckedCreateNestedManyWithoutStudentInput
+    gradings?: GradingUncheckedCreateNestedManyWithoutStudentInput
+    gradingApplications?: GradingApplicationUncheckedCreateNestedManyWithoutStudentInput
+    certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutStudentInput
+    achievements?: StudentAchievementUncheckedCreateNestedManyWithoutStudentInput
+    dojoHistory?: StudentDojoHistoryUncheckedCreateNestedManyWithoutStudentInput
+  }
+
+  export type StudentCreateOrConnectWithoutTransferRequestsInput = {
+    where: StudentWhereUniqueInput
+    create: XOR<StudentCreateWithoutTransferRequestsInput, StudentUncheckedCreateWithoutTransferRequestsInput>
+  }
+
+  export type DojoCreateWithoutTransfersOutInput = {
+    id?: string
+    name: string
+    address?: string | null
+    city?: string | null
+    latitude?: number | null
+    longitude?: number | null
+    phone?: string | null
+    email?: string | null
+    schedule?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: boolean
+    annualFee?: Decimal | DecimalJsLike | number | string | null
+    expiryDate?: Date | string | null
+    ownerSignatureUrl?: string | null
+    logoUrl?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    renewalOrders?: ShopOrderCreateNestedManyWithoutDojoInput
+    certificateOrders?: ShopOrderCreateNestedManyWithoutCertDojoInput
+    certificateRequests?: CertificateRequestCreateNestedManyWithoutDojoInput
+    students?: StudentCreateNestedManyWithoutDojoInput
+    instructors?: InstructorCreateNestedManyWithoutDojoInput
+    managers?: DojoManagerCreateNestedManyWithoutDojoInput
+    owner?: DojoOwnerCreateNestedOneWithoutDojoInput
+    application?: DojoApplicationCreateNestedOneWithoutDojoInput
+    attendance?: AttendanceCreateNestedManyWithoutDojoInput
+    events?: EventCreateNestedManyWithoutDojoInput
+    announcements?: AnnouncementCreateNestedManyWithoutDojoInput
+    inventoryItems?: DojoInventoryItemCreateNestedManyWithoutDojoInput
+    sales?: DojoSaleCreateNestedManyWithoutDojoInput
+    transfersIn?: StudentTransferRequestCreateNestedManyWithoutToDojoInput
+    historyFrom?: StudentDojoHistoryCreateNestedManyWithoutFromDojoInput
+    historyTo?: StudentDojoHistoryCreateNestedManyWithoutToDojoInput
+  }
+
+  export type DojoUncheckedCreateWithoutTransfersOutInput = {
+    id?: string
+    name: string
+    address?: string | null
+    city?: string | null
+    latitude?: number | null
+    longitude?: number | null
+    phone?: string | null
+    email?: string | null
+    schedule?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: boolean
+    annualFee?: Decimal | DecimalJsLike | number | string | null
+    expiryDate?: Date | string | null
+    ownerSignatureUrl?: string | null
+    logoUrl?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    renewalOrders?: ShopOrderUncheckedCreateNestedManyWithoutDojoInput
+    certificateOrders?: ShopOrderUncheckedCreateNestedManyWithoutCertDojoInput
+    certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutDojoInput
+    students?: StudentUncheckedCreateNestedManyWithoutDojoInput
+    instructors?: InstructorUncheckedCreateNestedManyWithoutDojoInput
+    managers?: DojoManagerUncheckedCreateNestedManyWithoutDojoInput
+    owner?: DojoOwnerUncheckedCreateNestedOneWithoutDojoInput
+    application?: DojoApplicationUncheckedCreateNestedOneWithoutDojoInput
+    attendance?: AttendanceUncheckedCreateNestedManyWithoutDojoInput
+    events?: EventUncheckedCreateNestedManyWithoutDojoInput
+    announcements?: AnnouncementUncheckedCreateNestedManyWithoutDojoInput
+    inventoryItems?: DojoInventoryItemUncheckedCreateNestedManyWithoutDojoInput
+    sales?: DojoSaleUncheckedCreateNestedManyWithoutDojoInput
+    transfersIn?: StudentTransferRequestUncheckedCreateNestedManyWithoutToDojoInput
+    historyFrom?: StudentDojoHistoryUncheckedCreateNestedManyWithoutFromDojoInput
+    historyTo?: StudentDojoHistoryUncheckedCreateNestedManyWithoutToDojoInput
+  }
+
+  export type DojoCreateOrConnectWithoutTransfersOutInput = {
+    where: DojoWhereUniqueInput
+    create: XOR<DojoCreateWithoutTransfersOutInput, DojoUncheckedCreateWithoutTransfersOutInput>
+  }
+
+  export type DojoCreateWithoutTransfersInInput = {
+    id?: string
+    name: string
+    address?: string | null
+    city?: string | null
+    latitude?: number | null
+    longitude?: number | null
+    phone?: string | null
+    email?: string | null
+    schedule?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: boolean
+    annualFee?: Decimal | DecimalJsLike | number | string | null
+    expiryDate?: Date | string | null
+    ownerSignatureUrl?: string | null
+    logoUrl?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    renewalOrders?: ShopOrderCreateNestedManyWithoutDojoInput
+    certificateOrders?: ShopOrderCreateNestedManyWithoutCertDojoInput
+    certificateRequests?: CertificateRequestCreateNestedManyWithoutDojoInput
+    students?: StudentCreateNestedManyWithoutDojoInput
+    instructors?: InstructorCreateNestedManyWithoutDojoInput
+    managers?: DojoManagerCreateNestedManyWithoutDojoInput
+    owner?: DojoOwnerCreateNestedOneWithoutDojoInput
+    application?: DojoApplicationCreateNestedOneWithoutDojoInput
+    attendance?: AttendanceCreateNestedManyWithoutDojoInput
+    events?: EventCreateNestedManyWithoutDojoInput
+    announcements?: AnnouncementCreateNestedManyWithoutDojoInput
+    inventoryItems?: DojoInventoryItemCreateNestedManyWithoutDojoInput
+    sales?: DojoSaleCreateNestedManyWithoutDojoInput
+    transfersOut?: StudentTransferRequestCreateNestedManyWithoutFromDojoInput
+    historyFrom?: StudentDojoHistoryCreateNestedManyWithoutFromDojoInput
+    historyTo?: StudentDojoHistoryCreateNestedManyWithoutToDojoInput
+  }
+
+  export type DojoUncheckedCreateWithoutTransfersInInput = {
+    id?: string
+    name: string
+    address?: string | null
+    city?: string | null
+    latitude?: number | null
+    longitude?: number | null
+    phone?: string | null
+    email?: string | null
+    schedule?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: boolean
+    annualFee?: Decimal | DecimalJsLike | number | string | null
+    expiryDate?: Date | string | null
+    ownerSignatureUrl?: string | null
+    logoUrl?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    renewalOrders?: ShopOrderUncheckedCreateNestedManyWithoutDojoInput
+    certificateOrders?: ShopOrderUncheckedCreateNestedManyWithoutCertDojoInput
+    certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutDojoInput
+    students?: StudentUncheckedCreateNestedManyWithoutDojoInput
+    instructors?: InstructorUncheckedCreateNestedManyWithoutDojoInput
+    managers?: DojoManagerUncheckedCreateNestedManyWithoutDojoInput
+    owner?: DojoOwnerUncheckedCreateNestedOneWithoutDojoInput
+    application?: DojoApplicationUncheckedCreateNestedOneWithoutDojoInput
+    attendance?: AttendanceUncheckedCreateNestedManyWithoutDojoInput
+    events?: EventUncheckedCreateNestedManyWithoutDojoInput
+    announcements?: AnnouncementUncheckedCreateNestedManyWithoutDojoInput
+    inventoryItems?: DojoInventoryItemUncheckedCreateNestedManyWithoutDojoInput
+    sales?: DojoSaleUncheckedCreateNestedManyWithoutDojoInput
+    transfersOut?: StudentTransferRequestUncheckedCreateNestedManyWithoutFromDojoInput
+    historyFrom?: StudentDojoHistoryUncheckedCreateNestedManyWithoutFromDojoInput
+    historyTo?: StudentDojoHistoryUncheckedCreateNestedManyWithoutToDojoInput
+  }
+
+  export type DojoCreateOrConnectWithoutTransfersInInput = {
+    where: DojoWhereUniqueInput
+    create: XOR<DojoCreateWithoutTransfersInInput, DojoUncheckedCreateWithoutTransfersInInput>
+  }
+
+  export type ShopOrderCreateWithoutTransferRequestInput = {
+    id?: string
+    paymentStatus?: $Enums.PaymentStatus
+    paymentMethod?: string | null
+    total: Decimal | DecimalJsLike | number | string
+    currency?: string
+    transactionId?: string | null
+    includesMembership?: boolean
+    membershipFee?: Decimal | DecimalJsLike | number | string | null
+    notes?: string | null
+    guestName?: string | null
+    guestEmail?: string | null
+    guestPhone?: string | null
+    guestAddress?: string | null
+    isGuestOrder?: boolean
+    includesDojoRenewal?: boolean
+    includesCertificates?: boolean
+    includesTransferRequest?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user?: UserCreateNestedOneWithoutOrdersInput
+    dojo?: DojoCreateNestedOneWithoutRenewalOrdersInput
+    certDojo?: DojoCreateNestedOneWithoutCertificateOrdersInput
+    orderItems?: ShopOrderItemCreateNestedManyWithoutOrderInput
+    certificateRequests?: CertificateRequestCreateNestedManyWithoutOrderInput
+  }
+
+  export type ShopOrderUncheckedCreateWithoutTransferRequestInput = {
+    id?: string
+    userId?: string | null
+    paymentStatus?: $Enums.PaymentStatus
+    paymentMethod?: string | null
+    total: Decimal | DecimalJsLike | number | string
+    currency?: string
+    transactionId?: string | null
+    includesMembership?: boolean
+    membershipFee?: Decimal | DecimalJsLike | number | string | null
+    notes?: string | null
+    guestName?: string | null
+    guestEmail?: string | null
+    guestPhone?: string | null
+    guestAddress?: string | null
+    isGuestOrder?: boolean
+    dojoId?: string | null
+    includesDojoRenewal?: boolean
+    includesCertificates?: boolean
+    certDojoId?: string | null
+    includesTransferRequest?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    orderItems?: ShopOrderItemUncheckedCreateNestedManyWithoutOrderInput
+    certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutOrderInput
+  }
+
+  export type ShopOrderCreateOrConnectWithoutTransferRequestInput = {
+    where: ShopOrderWhereUniqueInput
+    create: XOR<ShopOrderCreateWithoutTransferRequestInput, ShopOrderUncheckedCreateWithoutTransferRequestInput>
+  }
+
+  export type UserCreateWithoutTransfersDojoActedInput = {
+    id: string
+    email: string
+    phone?: string | null
+    fullName: string
+    avatarUrl?: string | null
+    isActive?: boolean
+    memberNumber?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    role?: RoleCreateNestedOneWithoutUsersInput
+    student?: StudentCreateNestedOneWithoutUserInput
+    instructor?: InstructorCreateNestedOneWithoutUserInput
+    dojoManager?: DojoManagerCreateNestedOneWithoutUserInput
+    dojoOwner?: DojoOwnerCreateNestedOneWithoutUserInput
+    admin?: AdminCreateNestedOneWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    orders?: ShopOrderCreateNestedManyWithoutUserInput
+    eventRegistrations?: EventRegistrationCreateNestedManyWithoutUserInput
+    eventCheckIns?: EventRegistrationCreateNestedManyWithoutCheckedInByInput
+    eventsPosted?: EventCreateNestedManyWithoutPostedByInput
+    announcementsPosted?: AnnouncementCreateNestedManyWithoutPostedByInput
+    dojoSalesAsBuyer?: DojoSaleCreateNestedManyWithoutBuyerInput
+    dojoSalesSold?: DojoSaleCreateNestedManyWithoutSoldByInput
+    achievementsAwarded?: StudentAchievementCreateNestedManyWithoutAwardedByInput
+    tournamentEntries?: TournamentParticipantCreateNestedManyWithoutUserInput
+    transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
+    dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
+  }
+
+  export type UserUncheckedCreateWithoutTransfersDojoActedInput = {
+    id: string
+    email: string
+    phone?: string | null
+    fullName: string
+    avatarUrl?: string | null
+    roleId?: string
+    isActive?: boolean
+    memberNumber?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    student?: StudentUncheckedCreateNestedOneWithoutUserInput
+    instructor?: InstructorUncheckedCreateNestedOneWithoutUserInput
+    dojoManager?: DojoManagerUncheckedCreateNestedOneWithoutUserInput
+    dojoOwner?: DojoOwnerUncheckedCreateNestedOneWithoutUserInput
+    admin?: AdminUncheckedCreateNestedOneWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    orders?: ShopOrderUncheckedCreateNestedManyWithoutUserInput
+    eventRegistrations?: EventRegistrationUncheckedCreateNestedManyWithoutUserInput
+    eventCheckIns?: EventRegistrationUncheckedCreateNestedManyWithoutCheckedInByInput
+    eventsPosted?: EventUncheckedCreateNestedManyWithoutPostedByInput
+    announcementsPosted?: AnnouncementUncheckedCreateNestedManyWithoutPostedByInput
+    dojoSalesAsBuyer?: DojoSaleUncheckedCreateNestedManyWithoutBuyerInput
+    dojoSalesSold?: DojoSaleUncheckedCreateNestedManyWithoutSoldByInput
+    achievementsAwarded?: StudentAchievementUncheckedCreateNestedManyWithoutAwardedByInput
+    tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutUserInput
+    transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
+    dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
+  }
+
+  export type UserCreateOrConnectWithoutTransfersDojoActedInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutTransfersDojoActedInput, UserUncheckedCreateWithoutTransfersDojoActedInput>
+  }
+
+  export type UserCreateWithoutTransfersAdminActedInput = {
+    id: string
+    email: string
+    phone?: string | null
+    fullName: string
+    avatarUrl?: string | null
+    isActive?: boolean
+    memberNumber?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    role?: RoleCreateNestedOneWithoutUsersInput
+    student?: StudentCreateNestedOneWithoutUserInput
+    instructor?: InstructorCreateNestedOneWithoutUserInput
+    dojoManager?: DojoManagerCreateNestedOneWithoutUserInput
+    dojoOwner?: DojoOwnerCreateNestedOneWithoutUserInput
+    admin?: AdminCreateNestedOneWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    orders?: ShopOrderCreateNestedManyWithoutUserInput
+    eventRegistrations?: EventRegistrationCreateNestedManyWithoutUserInput
+    eventCheckIns?: EventRegistrationCreateNestedManyWithoutCheckedInByInput
+    eventsPosted?: EventCreateNestedManyWithoutPostedByInput
+    announcementsPosted?: AnnouncementCreateNestedManyWithoutPostedByInput
+    dojoSalesAsBuyer?: DojoSaleCreateNestedManyWithoutBuyerInput
+    dojoSalesSold?: DojoSaleCreateNestedManyWithoutSoldByInput
+    achievementsAwarded?: StudentAchievementCreateNestedManyWithoutAwardedByInput
+    tournamentEntries?: TournamentParticipantCreateNestedManyWithoutUserInput
+    transfersDojoActed?: StudentTransferRequestCreateNestedManyWithoutDojoActedByInput
+    dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
+  }
+
+  export type UserUncheckedCreateWithoutTransfersAdminActedInput = {
+    id: string
+    email: string
+    phone?: string | null
+    fullName: string
+    avatarUrl?: string | null
+    roleId?: string
+    isActive?: boolean
+    memberNumber?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    student?: StudentUncheckedCreateNestedOneWithoutUserInput
+    instructor?: InstructorUncheckedCreateNestedOneWithoutUserInput
+    dojoManager?: DojoManagerUncheckedCreateNestedOneWithoutUserInput
+    dojoOwner?: DojoOwnerUncheckedCreateNestedOneWithoutUserInput
+    admin?: AdminUncheckedCreateNestedOneWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    orders?: ShopOrderUncheckedCreateNestedManyWithoutUserInput
+    eventRegistrations?: EventRegistrationUncheckedCreateNestedManyWithoutUserInput
+    eventCheckIns?: EventRegistrationUncheckedCreateNestedManyWithoutCheckedInByInput
+    eventsPosted?: EventUncheckedCreateNestedManyWithoutPostedByInput
+    announcementsPosted?: AnnouncementUncheckedCreateNestedManyWithoutPostedByInput
+    dojoSalesAsBuyer?: DojoSaleUncheckedCreateNestedManyWithoutBuyerInput
+    dojoSalesSold?: DojoSaleUncheckedCreateNestedManyWithoutSoldByInput
+    achievementsAwarded?: StudentAchievementUncheckedCreateNestedManyWithoutAwardedByInput
+    tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutUserInput
+    transfersDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutDojoActedByInput
+    dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
+  }
+
+  export type UserCreateOrConnectWithoutTransfersAdminActedInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutTransfersAdminActedInput, UserUncheckedCreateWithoutTransfersAdminActedInput>
+  }
+
+  export type StudentDojoHistoryCreateWithoutTransferRequestInput = {
+    id?: string
+    reason?: string | null
+    createdAt?: Date | string
+    student: StudentCreateNestedOneWithoutDojoHistoryInput
+    fromDojo?: DojoCreateNestedOneWithoutHistoryFromInput
+    toDojo?: DojoCreateNestedOneWithoutHistoryToInput
+    changedBy?: UserCreateNestedOneWithoutDojoHistoryChangesInput
+  }
+
+  export type StudentDojoHistoryUncheckedCreateWithoutTransferRequestInput = {
+    id?: string
+    studentId: string
+    fromDojoId?: string | null
+    toDojoId?: string | null
+    changedById?: string | null
+    reason?: string | null
+    createdAt?: Date | string
+  }
+
+  export type StudentDojoHistoryCreateOrConnectWithoutTransferRequestInput = {
+    where: StudentDojoHistoryWhereUniqueInput
+    create: XOR<StudentDojoHistoryCreateWithoutTransferRequestInput, StudentDojoHistoryUncheckedCreateWithoutTransferRequestInput>
+  }
+
+  export type StudentDojoHistoryCreateManyTransferRequestInputEnvelope = {
+    data: StudentDojoHistoryCreateManyTransferRequestInput | StudentDojoHistoryCreateManyTransferRequestInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type StudentUpsertWithoutTransferRequestsInput = {
+    update: XOR<StudentUpdateWithoutTransferRequestsInput, StudentUncheckedUpdateWithoutTransferRequestsInput>
+    create: XOR<StudentCreateWithoutTransferRequestsInput, StudentUncheckedCreateWithoutTransferRequestsInput>
+    where?: StudentWhereInput
+  }
+
+  export type StudentUpdateToOneWithWhereWithoutTransferRequestsInput = {
+    where?: StudentWhereInput
+    data: XOR<StudentUpdateWithoutTransferRequestsInput, StudentUncheckedUpdateWithoutTransferRequestsInput>
+  }
+
+  export type StudentUpdateWithoutTransferRequestsInput = {
+    currentRank?: StringFieldUpdateOperationsInput | string
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    onboardingComplete?: BoolFieldUpdateOperationsInput | boolean
+    membershipStatus?: EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutStudentNestedInput
+    dojo?: DojoUpdateOneWithoutStudentsNestedInput
+    attendance?: AttendanceUpdateManyWithoutStudentNestedInput
+    gradings?: GradingUpdateManyWithoutStudentNestedInput
+    gradingApplications?: GradingApplicationUpdateManyWithoutStudentNestedInput
+    certificateRequests?: CertificateRequestUpdateManyWithoutStudentNestedInput
+    achievements?: StudentAchievementUpdateManyWithoutStudentNestedInput
+    dojoHistory?: StudentDojoHistoryUpdateManyWithoutStudentNestedInput
+  }
+
+  export type StudentUncheckedUpdateWithoutTransferRequestsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    currentRank?: StringFieldUpdateOperationsInput | string
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dojoId?: NullableStringFieldUpdateOperationsInput | string | null
+    onboardingComplete?: BoolFieldUpdateOperationsInput | boolean
+    membershipStatus?: EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    attendance?: AttendanceUncheckedUpdateManyWithoutStudentNestedInput
+    gradings?: GradingUncheckedUpdateManyWithoutStudentNestedInput
+    gradingApplications?: GradingApplicationUncheckedUpdateManyWithoutStudentNestedInput
+    certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutStudentNestedInput
+    achievements?: StudentAchievementUncheckedUpdateManyWithoutStudentNestedInput
+    dojoHistory?: StudentDojoHistoryUncheckedUpdateManyWithoutStudentNestedInput
+  }
+
+  export type DojoUpsertWithoutTransfersOutInput = {
+    update: XOR<DojoUpdateWithoutTransfersOutInput, DojoUncheckedUpdateWithoutTransfersOutInput>
+    create: XOR<DojoCreateWithoutTransfersOutInput, DojoUncheckedCreateWithoutTransfersOutInput>
+    where?: DojoWhereInput
+  }
+
+  export type DojoUpdateToOneWithWhereWithoutTransfersOutInput = {
+    where?: DojoWhereInput
+    data: XOR<DojoUpdateWithoutTransfersOutInput, DojoUncheckedUpdateWithoutTransfersOutInput>
+  }
+
+  export type DojoUpdateWithoutTransfersOutInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    schedule?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    annualFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    ownerSignatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    renewalOrders?: ShopOrderUpdateManyWithoutDojoNestedInput
+    certificateOrders?: ShopOrderUpdateManyWithoutCertDojoNestedInput
+    certificateRequests?: CertificateRequestUpdateManyWithoutDojoNestedInput
+    students?: StudentUpdateManyWithoutDojoNestedInput
+    instructors?: InstructorUpdateManyWithoutDojoNestedInput
+    managers?: DojoManagerUpdateManyWithoutDojoNestedInput
+    owner?: DojoOwnerUpdateOneWithoutDojoNestedInput
+    application?: DojoApplicationUpdateOneWithoutDojoNestedInput
+    attendance?: AttendanceUpdateManyWithoutDojoNestedInput
+    events?: EventUpdateManyWithoutDojoNestedInput
+    announcements?: AnnouncementUpdateManyWithoutDojoNestedInput
+    inventoryItems?: DojoInventoryItemUpdateManyWithoutDojoNestedInput
+    sales?: DojoSaleUpdateManyWithoutDojoNestedInput
+    transfersIn?: StudentTransferRequestUpdateManyWithoutToDojoNestedInput
+    historyFrom?: StudentDojoHistoryUpdateManyWithoutFromDojoNestedInput
+    historyTo?: StudentDojoHistoryUpdateManyWithoutToDojoNestedInput
+  }
+
+  export type DojoUncheckedUpdateWithoutTransfersOutInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    schedule?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    annualFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    ownerSignatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    renewalOrders?: ShopOrderUncheckedUpdateManyWithoutDojoNestedInput
+    certificateOrders?: ShopOrderUncheckedUpdateManyWithoutCertDojoNestedInput
+    certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutDojoNestedInput
+    students?: StudentUncheckedUpdateManyWithoutDojoNestedInput
+    instructors?: InstructorUncheckedUpdateManyWithoutDojoNestedInput
+    managers?: DojoManagerUncheckedUpdateManyWithoutDojoNestedInput
+    owner?: DojoOwnerUncheckedUpdateOneWithoutDojoNestedInput
+    application?: DojoApplicationUncheckedUpdateOneWithoutDojoNestedInput
+    attendance?: AttendanceUncheckedUpdateManyWithoutDojoNestedInput
+    events?: EventUncheckedUpdateManyWithoutDojoNestedInput
+    announcements?: AnnouncementUncheckedUpdateManyWithoutDojoNestedInput
+    inventoryItems?: DojoInventoryItemUncheckedUpdateManyWithoutDojoNestedInput
+    sales?: DojoSaleUncheckedUpdateManyWithoutDojoNestedInput
+    transfersIn?: StudentTransferRequestUncheckedUpdateManyWithoutToDojoNestedInput
+    historyFrom?: StudentDojoHistoryUncheckedUpdateManyWithoutFromDojoNestedInput
+    historyTo?: StudentDojoHistoryUncheckedUpdateManyWithoutToDojoNestedInput
+  }
+
+  export type DojoUpsertWithoutTransfersInInput = {
+    update: XOR<DojoUpdateWithoutTransfersInInput, DojoUncheckedUpdateWithoutTransfersInInput>
+    create: XOR<DojoCreateWithoutTransfersInInput, DojoUncheckedCreateWithoutTransfersInInput>
+    where?: DojoWhereInput
+  }
+
+  export type DojoUpdateToOneWithWhereWithoutTransfersInInput = {
+    where?: DojoWhereInput
+    data: XOR<DojoUpdateWithoutTransfersInInput, DojoUncheckedUpdateWithoutTransfersInInput>
+  }
+
+  export type DojoUpdateWithoutTransfersInInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    schedule?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    annualFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    ownerSignatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    renewalOrders?: ShopOrderUpdateManyWithoutDojoNestedInput
+    certificateOrders?: ShopOrderUpdateManyWithoutCertDojoNestedInput
+    certificateRequests?: CertificateRequestUpdateManyWithoutDojoNestedInput
+    students?: StudentUpdateManyWithoutDojoNestedInput
+    instructors?: InstructorUpdateManyWithoutDojoNestedInput
+    managers?: DojoManagerUpdateManyWithoutDojoNestedInput
+    owner?: DojoOwnerUpdateOneWithoutDojoNestedInput
+    application?: DojoApplicationUpdateOneWithoutDojoNestedInput
+    attendance?: AttendanceUpdateManyWithoutDojoNestedInput
+    events?: EventUpdateManyWithoutDojoNestedInput
+    announcements?: AnnouncementUpdateManyWithoutDojoNestedInput
+    inventoryItems?: DojoInventoryItemUpdateManyWithoutDojoNestedInput
+    sales?: DojoSaleUpdateManyWithoutDojoNestedInput
+    transfersOut?: StudentTransferRequestUpdateManyWithoutFromDojoNestedInput
+    historyFrom?: StudentDojoHistoryUpdateManyWithoutFromDojoNestedInput
+    historyTo?: StudentDojoHistoryUpdateManyWithoutToDojoNestedInput
+  }
+
+  export type DojoUncheckedUpdateWithoutTransfersInInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    schedule?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    annualFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    ownerSignatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    renewalOrders?: ShopOrderUncheckedUpdateManyWithoutDojoNestedInput
+    certificateOrders?: ShopOrderUncheckedUpdateManyWithoutCertDojoNestedInput
+    certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutDojoNestedInput
+    students?: StudentUncheckedUpdateManyWithoutDojoNestedInput
+    instructors?: InstructorUncheckedUpdateManyWithoutDojoNestedInput
+    managers?: DojoManagerUncheckedUpdateManyWithoutDojoNestedInput
+    owner?: DojoOwnerUncheckedUpdateOneWithoutDojoNestedInput
+    application?: DojoApplicationUncheckedUpdateOneWithoutDojoNestedInput
+    attendance?: AttendanceUncheckedUpdateManyWithoutDojoNestedInput
+    events?: EventUncheckedUpdateManyWithoutDojoNestedInput
+    announcements?: AnnouncementUncheckedUpdateManyWithoutDojoNestedInput
+    inventoryItems?: DojoInventoryItemUncheckedUpdateManyWithoutDojoNestedInput
+    sales?: DojoSaleUncheckedUpdateManyWithoutDojoNestedInput
+    transfersOut?: StudentTransferRequestUncheckedUpdateManyWithoutFromDojoNestedInput
+    historyFrom?: StudentDojoHistoryUncheckedUpdateManyWithoutFromDojoNestedInput
+    historyTo?: StudentDojoHistoryUncheckedUpdateManyWithoutToDojoNestedInput
+  }
+
+  export type ShopOrderUpsertWithoutTransferRequestInput = {
+    update: XOR<ShopOrderUpdateWithoutTransferRequestInput, ShopOrderUncheckedUpdateWithoutTransferRequestInput>
+    create: XOR<ShopOrderCreateWithoutTransferRequestInput, ShopOrderUncheckedCreateWithoutTransferRequestInput>
+    where?: ShopOrderWhereInput
+  }
+
+  export type ShopOrderUpdateToOneWithWhereWithoutTransferRequestInput = {
+    where?: ShopOrderWhereInput
+    data: XOR<ShopOrderUpdateWithoutTransferRequestInput, ShopOrderUncheckedUpdateWithoutTransferRequestInput>
+  }
+
+  export type ShopOrderUpdateWithoutTransferRequestInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: StringFieldUpdateOperationsInput | string
+    transactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    includesMembership?: BoolFieldUpdateOperationsInput | boolean
+    membershipFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    guestName?: NullableStringFieldUpdateOperationsInput | string | null
+    guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    guestPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guestAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    isGuestOrder?: BoolFieldUpdateOperationsInput | boolean
+    includesDojoRenewal?: BoolFieldUpdateOperationsInput | boolean
+    includesCertificates?: BoolFieldUpdateOperationsInput | boolean
+    includesTransferRequest?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneWithoutOrdersNestedInput
+    dojo?: DojoUpdateOneWithoutRenewalOrdersNestedInput
+    certDojo?: DojoUpdateOneWithoutCertificateOrdersNestedInput
+    orderItems?: ShopOrderItemUpdateManyWithoutOrderNestedInput
+    certificateRequests?: CertificateRequestUpdateManyWithoutOrderNestedInput
+  }
+
+  export type ShopOrderUncheckedUpdateWithoutTransferRequestInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: StringFieldUpdateOperationsInput | string
+    transactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    includesMembership?: BoolFieldUpdateOperationsInput | boolean
+    membershipFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    guestName?: NullableStringFieldUpdateOperationsInput | string | null
+    guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    guestPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guestAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    isGuestOrder?: BoolFieldUpdateOperationsInput | boolean
+    dojoId?: NullableStringFieldUpdateOperationsInput | string | null
+    includesDojoRenewal?: BoolFieldUpdateOperationsInput | boolean
+    includesCertificates?: BoolFieldUpdateOperationsInput | boolean
+    certDojoId?: NullableStringFieldUpdateOperationsInput | string | null
+    includesTransferRequest?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    orderItems?: ShopOrderItemUncheckedUpdateManyWithoutOrderNestedInput
+    certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutOrderNestedInput
+  }
+
+  export type UserUpsertWithoutTransfersDojoActedInput = {
+    update: XOR<UserUpdateWithoutTransfersDojoActedInput, UserUncheckedUpdateWithoutTransfersDojoActedInput>
+    create: XOR<UserCreateWithoutTransfersDojoActedInput, UserUncheckedCreateWithoutTransfersDojoActedInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutTransfersDojoActedInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutTransfersDojoActedInput, UserUncheckedUpdateWithoutTransfersDojoActedInput>
+  }
+
+  export type UserUpdateWithoutTransfersDojoActedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    fullName?: StringFieldUpdateOperationsInput | string
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: RoleUpdateOneRequiredWithoutUsersNestedInput
+    student?: StudentUpdateOneWithoutUserNestedInput
+    instructor?: InstructorUpdateOneWithoutUserNestedInput
+    dojoManager?: DojoManagerUpdateOneWithoutUserNestedInput
+    dojoOwner?: DojoOwnerUpdateOneWithoutUserNestedInput
+    admin?: AdminUpdateOneWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    orders?: ShopOrderUpdateManyWithoutUserNestedInput
+    eventRegistrations?: EventRegistrationUpdateManyWithoutUserNestedInput
+    eventCheckIns?: EventRegistrationUpdateManyWithoutCheckedInByNestedInput
+    eventsPosted?: EventUpdateManyWithoutPostedByNestedInput
+    announcementsPosted?: AnnouncementUpdateManyWithoutPostedByNestedInput
+    dojoSalesAsBuyer?: DojoSaleUpdateManyWithoutBuyerNestedInput
+    dojoSalesSold?: DojoSaleUpdateManyWithoutSoldByNestedInput
+    achievementsAwarded?: StudentAchievementUpdateManyWithoutAwardedByNestedInput
+    tournamentEntries?: TournamentParticipantUpdateManyWithoutUserNestedInput
+    transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
+    dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutTransfersDojoActedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    fullName?: StringFieldUpdateOperationsInput | string
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    roleId?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    student?: StudentUncheckedUpdateOneWithoutUserNestedInput
+    instructor?: InstructorUncheckedUpdateOneWithoutUserNestedInput
+    dojoManager?: DojoManagerUncheckedUpdateOneWithoutUserNestedInput
+    dojoOwner?: DojoOwnerUncheckedUpdateOneWithoutUserNestedInput
+    admin?: AdminUncheckedUpdateOneWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    orders?: ShopOrderUncheckedUpdateManyWithoutUserNestedInput
+    eventRegistrations?: EventRegistrationUncheckedUpdateManyWithoutUserNestedInput
+    eventCheckIns?: EventRegistrationUncheckedUpdateManyWithoutCheckedInByNestedInput
+    eventsPosted?: EventUncheckedUpdateManyWithoutPostedByNestedInput
+    announcementsPosted?: AnnouncementUncheckedUpdateManyWithoutPostedByNestedInput
+    dojoSalesAsBuyer?: DojoSaleUncheckedUpdateManyWithoutBuyerNestedInput
+    dojoSalesSold?: DojoSaleUncheckedUpdateManyWithoutSoldByNestedInput
+    achievementsAwarded?: StudentAchievementUncheckedUpdateManyWithoutAwardedByNestedInput
+    tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutUserNestedInput
+    transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
+    dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+  }
+
+  export type UserUpsertWithoutTransfersAdminActedInput = {
+    update: XOR<UserUpdateWithoutTransfersAdminActedInput, UserUncheckedUpdateWithoutTransfersAdminActedInput>
+    create: XOR<UserCreateWithoutTransfersAdminActedInput, UserUncheckedCreateWithoutTransfersAdminActedInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutTransfersAdminActedInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutTransfersAdminActedInput, UserUncheckedUpdateWithoutTransfersAdminActedInput>
+  }
+
+  export type UserUpdateWithoutTransfersAdminActedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    fullName?: StringFieldUpdateOperationsInput | string
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: RoleUpdateOneRequiredWithoutUsersNestedInput
+    student?: StudentUpdateOneWithoutUserNestedInput
+    instructor?: InstructorUpdateOneWithoutUserNestedInput
+    dojoManager?: DojoManagerUpdateOneWithoutUserNestedInput
+    dojoOwner?: DojoOwnerUpdateOneWithoutUserNestedInput
+    admin?: AdminUpdateOneWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    orders?: ShopOrderUpdateManyWithoutUserNestedInput
+    eventRegistrations?: EventRegistrationUpdateManyWithoutUserNestedInput
+    eventCheckIns?: EventRegistrationUpdateManyWithoutCheckedInByNestedInput
+    eventsPosted?: EventUpdateManyWithoutPostedByNestedInput
+    announcementsPosted?: AnnouncementUpdateManyWithoutPostedByNestedInput
+    dojoSalesAsBuyer?: DojoSaleUpdateManyWithoutBuyerNestedInput
+    dojoSalesSold?: DojoSaleUpdateManyWithoutSoldByNestedInput
+    achievementsAwarded?: StudentAchievementUpdateManyWithoutAwardedByNestedInput
+    tournamentEntries?: TournamentParticipantUpdateManyWithoutUserNestedInput
+    transfersDojoActed?: StudentTransferRequestUpdateManyWithoutDojoActedByNestedInput
+    dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutTransfersAdminActedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    fullName?: StringFieldUpdateOperationsInput | string
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    roleId?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    student?: StudentUncheckedUpdateOneWithoutUserNestedInput
+    instructor?: InstructorUncheckedUpdateOneWithoutUserNestedInput
+    dojoManager?: DojoManagerUncheckedUpdateOneWithoutUserNestedInput
+    dojoOwner?: DojoOwnerUncheckedUpdateOneWithoutUserNestedInput
+    admin?: AdminUncheckedUpdateOneWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    orders?: ShopOrderUncheckedUpdateManyWithoutUserNestedInput
+    eventRegistrations?: EventRegistrationUncheckedUpdateManyWithoutUserNestedInput
+    eventCheckIns?: EventRegistrationUncheckedUpdateManyWithoutCheckedInByNestedInput
+    eventsPosted?: EventUncheckedUpdateManyWithoutPostedByNestedInput
+    announcementsPosted?: AnnouncementUncheckedUpdateManyWithoutPostedByNestedInput
+    dojoSalesAsBuyer?: DojoSaleUncheckedUpdateManyWithoutBuyerNestedInput
+    dojoSalesSold?: DojoSaleUncheckedUpdateManyWithoutSoldByNestedInput
+    achievementsAwarded?: StudentAchievementUncheckedUpdateManyWithoutAwardedByNestedInput
+    tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutUserNestedInput
+    transfersDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
+    dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+  }
+
+  export type StudentDojoHistoryUpsertWithWhereUniqueWithoutTransferRequestInput = {
+    where: StudentDojoHistoryWhereUniqueInput
+    update: XOR<StudentDojoHistoryUpdateWithoutTransferRequestInput, StudentDojoHistoryUncheckedUpdateWithoutTransferRequestInput>
+    create: XOR<StudentDojoHistoryCreateWithoutTransferRequestInput, StudentDojoHistoryUncheckedCreateWithoutTransferRequestInput>
+  }
+
+  export type StudentDojoHistoryUpdateWithWhereUniqueWithoutTransferRequestInput = {
+    where: StudentDojoHistoryWhereUniqueInput
+    data: XOR<StudentDojoHistoryUpdateWithoutTransferRequestInput, StudentDojoHistoryUncheckedUpdateWithoutTransferRequestInput>
+  }
+
+  export type StudentDojoHistoryUpdateManyWithWhereWithoutTransferRequestInput = {
+    where: StudentDojoHistoryScalarWhereInput
+    data: XOR<StudentDojoHistoryUpdateManyMutationInput, StudentDojoHistoryUncheckedUpdateManyWithoutTransferRequestInput>
+  }
+
+  export type StudentCreateWithoutDojoHistoryInput = {
+    currentRank?: string
+    joinDate?: Date | string
+    expiryDate?: Date | string | null
+    onboardingComplete?: boolean
+    membershipStatus?: $Enums.MembershipStatus
+    dateOfBirth?: Date | string | null
+    bloodGroup?: string | null
+    address?: string | null
+    nationalId?: string | null
+    fatherName?: string | null
+    motherName?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutStudentInput
+    dojo?: DojoCreateNestedOneWithoutStudentsInput
+    attendance?: AttendanceCreateNestedManyWithoutStudentInput
+    gradings?: GradingCreateNestedManyWithoutStudentInput
+    gradingApplications?: GradingApplicationCreateNestedManyWithoutStudentInput
+    certificateRequests?: CertificateRequestCreateNestedManyWithoutStudentInput
+    achievements?: StudentAchievementCreateNestedManyWithoutStudentInput
+    transferRequests?: StudentTransferRequestCreateNestedManyWithoutStudentInput
+  }
+
+  export type StudentUncheckedCreateWithoutDojoHistoryInput = {
+    id: string
+    currentRank?: string
+    joinDate?: Date | string
+    expiryDate?: Date | string | null
+    dojoId?: string | null
+    onboardingComplete?: boolean
+    membershipStatus?: $Enums.MembershipStatus
+    dateOfBirth?: Date | string | null
+    bloodGroup?: string | null
+    address?: string | null
+    nationalId?: string | null
+    fatherName?: string | null
+    motherName?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    attendance?: AttendanceUncheckedCreateNestedManyWithoutStudentInput
+    gradings?: GradingUncheckedCreateNestedManyWithoutStudentInput
+    gradingApplications?: GradingApplicationUncheckedCreateNestedManyWithoutStudentInput
+    certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutStudentInput
+    achievements?: StudentAchievementUncheckedCreateNestedManyWithoutStudentInput
+    transferRequests?: StudentTransferRequestUncheckedCreateNestedManyWithoutStudentInput
+  }
+
+  export type StudentCreateOrConnectWithoutDojoHistoryInput = {
+    where: StudentWhereUniqueInput
+    create: XOR<StudentCreateWithoutDojoHistoryInput, StudentUncheckedCreateWithoutDojoHistoryInput>
+  }
+
+  export type DojoCreateWithoutHistoryFromInput = {
+    id?: string
+    name: string
+    address?: string | null
+    city?: string | null
+    latitude?: number | null
+    longitude?: number | null
+    phone?: string | null
+    email?: string | null
+    schedule?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: boolean
+    annualFee?: Decimal | DecimalJsLike | number | string | null
+    expiryDate?: Date | string | null
+    ownerSignatureUrl?: string | null
+    logoUrl?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    renewalOrders?: ShopOrderCreateNestedManyWithoutDojoInput
+    certificateOrders?: ShopOrderCreateNestedManyWithoutCertDojoInput
+    certificateRequests?: CertificateRequestCreateNestedManyWithoutDojoInput
+    students?: StudentCreateNestedManyWithoutDojoInput
+    instructors?: InstructorCreateNestedManyWithoutDojoInput
+    managers?: DojoManagerCreateNestedManyWithoutDojoInput
+    owner?: DojoOwnerCreateNestedOneWithoutDojoInput
+    application?: DojoApplicationCreateNestedOneWithoutDojoInput
+    attendance?: AttendanceCreateNestedManyWithoutDojoInput
+    events?: EventCreateNestedManyWithoutDojoInput
+    announcements?: AnnouncementCreateNestedManyWithoutDojoInput
+    inventoryItems?: DojoInventoryItemCreateNestedManyWithoutDojoInput
+    sales?: DojoSaleCreateNestedManyWithoutDojoInput
+    transfersOut?: StudentTransferRequestCreateNestedManyWithoutFromDojoInput
+    transfersIn?: StudentTransferRequestCreateNestedManyWithoutToDojoInput
+    historyTo?: StudentDojoHistoryCreateNestedManyWithoutToDojoInput
+  }
+
+  export type DojoUncheckedCreateWithoutHistoryFromInput = {
+    id?: string
+    name: string
+    address?: string | null
+    city?: string | null
+    latitude?: number | null
+    longitude?: number | null
+    phone?: string | null
+    email?: string | null
+    schedule?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: boolean
+    annualFee?: Decimal | DecimalJsLike | number | string | null
+    expiryDate?: Date | string | null
+    ownerSignatureUrl?: string | null
+    logoUrl?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    renewalOrders?: ShopOrderUncheckedCreateNestedManyWithoutDojoInput
+    certificateOrders?: ShopOrderUncheckedCreateNestedManyWithoutCertDojoInput
+    certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutDojoInput
+    students?: StudentUncheckedCreateNestedManyWithoutDojoInput
+    instructors?: InstructorUncheckedCreateNestedManyWithoutDojoInput
+    managers?: DojoManagerUncheckedCreateNestedManyWithoutDojoInput
+    owner?: DojoOwnerUncheckedCreateNestedOneWithoutDojoInput
+    application?: DojoApplicationUncheckedCreateNestedOneWithoutDojoInput
+    attendance?: AttendanceUncheckedCreateNestedManyWithoutDojoInput
+    events?: EventUncheckedCreateNestedManyWithoutDojoInput
+    announcements?: AnnouncementUncheckedCreateNestedManyWithoutDojoInput
+    inventoryItems?: DojoInventoryItemUncheckedCreateNestedManyWithoutDojoInput
+    sales?: DojoSaleUncheckedCreateNestedManyWithoutDojoInput
+    transfersOut?: StudentTransferRequestUncheckedCreateNestedManyWithoutFromDojoInput
+    transfersIn?: StudentTransferRequestUncheckedCreateNestedManyWithoutToDojoInput
+    historyTo?: StudentDojoHistoryUncheckedCreateNestedManyWithoutToDojoInput
+  }
+
+  export type DojoCreateOrConnectWithoutHistoryFromInput = {
+    where: DojoWhereUniqueInput
+    create: XOR<DojoCreateWithoutHistoryFromInput, DojoUncheckedCreateWithoutHistoryFromInput>
+  }
+
+  export type DojoCreateWithoutHistoryToInput = {
+    id?: string
+    name: string
+    address?: string | null
+    city?: string | null
+    latitude?: number | null
+    longitude?: number | null
+    phone?: string | null
+    email?: string | null
+    schedule?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: boolean
+    annualFee?: Decimal | DecimalJsLike | number | string | null
+    expiryDate?: Date | string | null
+    ownerSignatureUrl?: string | null
+    logoUrl?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    renewalOrders?: ShopOrderCreateNestedManyWithoutDojoInput
+    certificateOrders?: ShopOrderCreateNestedManyWithoutCertDojoInput
+    certificateRequests?: CertificateRequestCreateNestedManyWithoutDojoInput
+    students?: StudentCreateNestedManyWithoutDojoInput
+    instructors?: InstructorCreateNestedManyWithoutDojoInput
+    managers?: DojoManagerCreateNestedManyWithoutDojoInput
+    owner?: DojoOwnerCreateNestedOneWithoutDojoInput
+    application?: DojoApplicationCreateNestedOneWithoutDojoInput
+    attendance?: AttendanceCreateNestedManyWithoutDojoInput
+    events?: EventCreateNestedManyWithoutDojoInput
+    announcements?: AnnouncementCreateNestedManyWithoutDojoInput
+    inventoryItems?: DojoInventoryItemCreateNestedManyWithoutDojoInput
+    sales?: DojoSaleCreateNestedManyWithoutDojoInput
+    transfersOut?: StudentTransferRequestCreateNestedManyWithoutFromDojoInput
+    transfersIn?: StudentTransferRequestCreateNestedManyWithoutToDojoInput
+    historyFrom?: StudentDojoHistoryCreateNestedManyWithoutFromDojoInput
+  }
+
+  export type DojoUncheckedCreateWithoutHistoryToInput = {
+    id?: string
+    name: string
+    address?: string | null
+    city?: string | null
+    latitude?: number | null
+    longitude?: number | null
+    phone?: string | null
+    email?: string | null
+    schedule?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: boolean
+    annualFee?: Decimal | DecimalJsLike | number | string | null
+    expiryDate?: Date | string | null
+    ownerSignatureUrl?: string | null
+    logoUrl?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    renewalOrders?: ShopOrderUncheckedCreateNestedManyWithoutDojoInput
+    certificateOrders?: ShopOrderUncheckedCreateNestedManyWithoutCertDojoInput
+    certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutDojoInput
+    students?: StudentUncheckedCreateNestedManyWithoutDojoInput
+    instructors?: InstructorUncheckedCreateNestedManyWithoutDojoInput
+    managers?: DojoManagerUncheckedCreateNestedManyWithoutDojoInput
+    owner?: DojoOwnerUncheckedCreateNestedOneWithoutDojoInput
+    application?: DojoApplicationUncheckedCreateNestedOneWithoutDojoInput
+    attendance?: AttendanceUncheckedCreateNestedManyWithoutDojoInput
+    events?: EventUncheckedCreateNestedManyWithoutDojoInput
+    announcements?: AnnouncementUncheckedCreateNestedManyWithoutDojoInput
+    inventoryItems?: DojoInventoryItemUncheckedCreateNestedManyWithoutDojoInput
+    sales?: DojoSaleUncheckedCreateNestedManyWithoutDojoInput
+    transfersOut?: StudentTransferRequestUncheckedCreateNestedManyWithoutFromDojoInput
+    transfersIn?: StudentTransferRequestUncheckedCreateNestedManyWithoutToDojoInput
+    historyFrom?: StudentDojoHistoryUncheckedCreateNestedManyWithoutFromDojoInput
+  }
+
+  export type DojoCreateOrConnectWithoutHistoryToInput = {
+    where: DojoWhereUniqueInput
+    create: XOR<DojoCreateWithoutHistoryToInput, DojoUncheckedCreateWithoutHistoryToInput>
+  }
+
+  export type StudentTransferRequestCreateWithoutHistoryInput = {
+    id?: string
+    status?: $Enums.StudentTransferStatus
+    dojoDecision?: $Enums.StudentTransferDojoDecision
+    reason?: string | null
+    dojoNote?: string | null
+    adminNote?: string | null
+    fee: Decimal | DecimalJsLike | number | string
+    paidAt?: Date | string | null
+    dojoActedAt?: Date | string | null
+    adminActedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    student: StudentCreateNestedOneWithoutTransferRequestsInput
+    fromDojo: DojoCreateNestedOneWithoutTransfersOutInput
+    toDojo: DojoCreateNestedOneWithoutTransfersInInput
+    order?: ShopOrderCreateNestedOneWithoutTransferRequestInput
+    dojoActedBy?: UserCreateNestedOneWithoutTransfersDojoActedInput
+    adminActedBy?: UserCreateNestedOneWithoutTransfersAdminActedInput
+  }
+
+  export type StudentTransferRequestUncheckedCreateWithoutHistoryInput = {
+    id?: string
+    studentId: string
+    fromDojoId: string
+    toDojoId: string
+    status?: $Enums.StudentTransferStatus
+    dojoDecision?: $Enums.StudentTransferDojoDecision
+    reason?: string | null
+    dojoNote?: string | null
+    adminNote?: string | null
+    fee: Decimal | DecimalJsLike | number | string
+    orderId?: string | null
+    paidAt?: Date | string | null
+    dojoActedAt?: Date | string | null
+    dojoActedById?: string | null
+    adminActedAt?: Date | string | null
+    adminActedById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type StudentTransferRequestCreateOrConnectWithoutHistoryInput = {
+    where: StudentTransferRequestWhereUniqueInput
+    create: XOR<StudentTransferRequestCreateWithoutHistoryInput, StudentTransferRequestUncheckedCreateWithoutHistoryInput>
+  }
+
+  export type UserCreateWithoutDojoHistoryChangesInput = {
+    id: string
+    email: string
+    phone?: string | null
+    fullName: string
+    avatarUrl?: string | null
+    isActive?: boolean
+    memberNumber?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    role?: RoleCreateNestedOneWithoutUsersInput
+    student?: StudentCreateNestedOneWithoutUserInput
+    instructor?: InstructorCreateNestedOneWithoutUserInput
+    dojoManager?: DojoManagerCreateNestedOneWithoutUserInput
+    dojoOwner?: DojoOwnerCreateNestedOneWithoutUserInput
+    admin?: AdminCreateNestedOneWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    orders?: ShopOrderCreateNestedManyWithoutUserInput
+    eventRegistrations?: EventRegistrationCreateNestedManyWithoutUserInput
+    eventCheckIns?: EventRegistrationCreateNestedManyWithoutCheckedInByInput
+    eventsPosted?: EventCreateNestedManyWithoutPostedByInput
+    announcementsPosted?: AnnouncementCreateNestedManyWithoutPostedByInput
+    dojoSalesAsBuyer?: DojoSaleCreateNestedManyWithoutBuyerInput
+    dojoSalesSold?: DojoSaleCreateNestedManyWithoutSoldByInput
+    achievementsAwarded?: StudentAchievementCreateNestedManyWithoutAwardedByInput
+    tournamentEntries?: TournamentParticipantCreateNestedManyWithoutUserInput
+    transfersDojoActed?: StudentTransferRequestCreateNestedManyWithoutDojoActedByInput
+    transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
+  }
+
+  export type UserUncheckedCreateWithoutDojoHistoryChangesInput = {
+    id: string
+    email: string
+    phone?: string | null
+    fullName: string
+    avatarUrl?: string | null
+    roleId?: string
+    isActive?: boolean
+    memberNumber?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    student?: StudentUncheckedCreateNestedOneWithoutUserInput
+    instructor?: InstructorUncheckedCreateNestedOneWithoutUserInput
+    dojoManager?: DojoManagerUncheckedCreateNestedOneWithoutUserInput
+    dojoOwner?: DojoOwnerUncheckedCreateNestedOneWithoutUserInput
+    admin?: AdminUncheckedCreateNestedOneWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    orders?: ShopOrderUncheckedCreateNestedManyWithoutUserInput
+    eventRegistrations?: EventRegistrationUncheckedCreateNestedManyWithoutUserInput
+    eventCheckIns?: EventRegistrationUncheckedCreateNestedManyWithoutCheckedInByInput
+    eventsPosted?: EventUncheckedCreateNestedManyWithoutPostedByInput
+    announcementsPosted?: AnnouncementUncheckedCreateNestedManyWithoutPostedByInput
+    dojoSalesAsBuyer?: DojoSaleUncheckedCreateNestedManyWithoutBuyerInput
+    dojoSalesSold?: DojoSaleUncheckedCreateNestedManyWithoutSoldByInput
+    achievementsAwarded?: StudentAchievementUncheckedCreateNestedManyWithoutAwardedByInput
+    tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutUserInput
+    transfersDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutDojoActedByInput
+    transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
+  }
+
+  export type UserCreateOrConnectWithoutDojoHistoryChangesInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutDojoHistoryChangesInput, UserUncheckedCreateWithoutDojoHistoryChangesInput>
+  }
+
+  export type StudentUpsertWithoutDojoHistoryInput = {
+    update: XOR<StudentUpdateWithoutDojoHistoryInput, StudentUncheckedUpdateWithoutDojoHistoryInput>
+    create: XOR<StudentCreateWithoutDojoHistoryInput, StudentUncheckedCreateWithoutDojoHistoryInput>
+    where?: StudentWhereInput
+  }
+
+  export type StudentUpdateToOneWithWhereWithoutDojoHistoryInput = {
+    where?: StudentWhereInput
+    data: XOR<StudentUpdateWithoutDojoHistoryInput, StudentUncheckedUpdateWithoutDojoHistoryInput>
+  }
+
+  export type StudentUpdateWithoutDojoHistoryInput = {
+    currentRank?: StringFieldUpdateOperationsInput | string
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    onboardingComplete?: BoolFieldUpdateOperationsInput | boolean
+    membershipStatus?: EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutStudentNestedInput
+    dojo?: DojoUpdateOneWithoutStudentsNestedInput
+    attendance?: AttendanceUpdateManyWithoutStudentNestedInput
+    gradings?: GradingUpdateManyWithoutStudentNestedInput
+    gradingApplications?: GradingApplicationUpdateManyWithoutStudentNestedInput
+    certificateRequests?: CertificateRequestUpdateManyWithoutStudentNestedInput
+    achievements?: StudentAchievementUpdateManyWithoutStudentNestedInput
+    transferRequests?: StudentTransferRequestUpdateManyWithoutStudentNestedInput
+  }
+
+  export type StudentUncheckedUpdateWithoutDojoHistoryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    currentRank?: StringFieldUpdateOperationsInput | string
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dojoId?: NullableStringFieldUpdateOperationsInput | string | null
+    onboardingComplete?: BoolFieldUpdateOperationsInput | boolean
+    membershipStatus?: EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    attendance?: AttendanceUncheckedUpdateManyWithoutStudentNestedInput
+    gradings?: GradingUncheckedUpdateManyWithoutStudentNestedInput
+    gradingApplications?: GradingApplicationUncheckedUpdateManyWithoutStudentNestedInput
+    certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutStudentNestedInput
+    achievements?: StudentAchievementUncheckedUpdateManyWithoutStudentNestedInput
+    transferRequests?: StudentTransferRequestUncheckedUpdateManyWithoutStudentNestedInput
+  }
+
+  export type DojoUpsertWithoutHistoryFromInput = {
+    update: XOR<DojoUpdateWithoutHistoryFromInput, DojoUncheckedUpdateWithoutHistoryFromInput>
+    create: XOR<DojoCreateWithoutHistoryFromInput, DojoUncheckedCreateWithoutHistoryFromInput>
+    where?: DojoWhereInput
+  }
+
+  export type DojoUpdateToOneWithWhereWithoutHistoryFromInput = {
+    where?: DojoWhereInput
+    data: XOR<DojoUpdateWithoutHistoryFromInput, DojoUncheckedUpdateWithoutHistoryFromInput>
+  }
+
+  export type DojoUpdateWithoutHistoryFromInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    schedule?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    annualFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    ownerSignatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    renewalOrders?: ShopOrderUpdateManyWithoutDojoNestedInput
+    certificateOrders?: ShopOrderUpdateManyWithoutCertDojoNestedInput
+    certificateRequests?: CertificateRequestUpdateManyWithoutDojoNestedInput
+    students?: StudentUpdateManyWithoutDojoNestedInput
+    instructors?: InstructorUpdateManyWithoutDojoNestedInput
+    managers?: DojoManagerUpdateManyWithoutDojoNestedInput
+    owner?: DojoOwnerUpdateOneWithoutDojoNestedInput
+    application?: DojoApplicationUpdateOneWithoutDojoNestedInput
+    attendance?: AttendanceUpdateManyWithoutDojoNestedInput
+    events?: EventUpdateManyWithoutDojoNestedInput
+    announcements?: AnnouncementUpdateManyWithoutDojoNestedInput
+    inventoryItems?: DojoInventoryItemUpdateManyWithoutDojoNestedInput
+    sales?: DojoSaleUpdateManyWithoutDojoNestedInput
+    transfersOut?: StudentTransferRequestUpdateManyWithoutFromDojoNestedInput
+    transfersIn?: StudentTransferRequestUpdateManyWithoutToDojoNestedInput
+    historyTo?: StudentDojoHistoryUpdateManyWithoutToDojoNestedInput
+  }
+
+  export type DojoUncheckedUpdateWithoutHistoryFromInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    schedule?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    annualFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    ownerSignatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    renewalOrders?: ShopOrderUncheckedUpdateManyWithoutDojoNestedInput
+    certificateOrders?: ShopOrderUncheckedUpdateManyWithoutCertDojoNestedInput
+    certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutDojoNestedInput
+    students?: StudentUncheckedUpdateManyWithoutDojoNestedInput
+    instructors?: InstructorUncheckedUpdateManyWithoutDojoNestedInput
+    managers?: DojoManagerUncheckedUpdateManyWithoutDojoNestedInput
+    owner?: DojoOwnerUncheckedUpdateOneWithoutDojoNestedInput
+    application?: DojoApplicationUncheckedUpdateOneWithoutDojoNestedInput
+    attendance?: AttendanceUncheckedUpdateManyWithoutDojoNestedInput
+    events?: EventUncheckedUpdateManyWithoutDojoNestedInput
+    announcements?: AnnouncementUncheckedUpdateManyWithoutDojoNestedInput
+    inventoryItems?: DojoInventoryItemUncheckedUpdateManyWithoutDojoNestedInput
+    sales?: DojoSaleUncheckedUpdateManyWithoutDojoNestedInput
+    transfersOut?: StudentTransferRequestUncheckedUpdateManyWithoutFromDojoNestedInput
+    transfersIn?: StudentTransferRequestUncheckedUpdateManyWithoutToDojoNestedInput
+    historyTo?: StudentDojoHistoryUncheckedUpdateManyWithoutToDojoNestedInput
+  }
+
+  export type DojoUpsertWithoutHistoryToInput = {
+    update: XOR<DojoUpdateWithoutHistoryToInput, DojoUncheckedUpdateWithoutHistoryToInput>
+    create: XOR<DojoCreateWithoutHistoryToInput, DojoUncheckedCreateWithoutHistoryToInput>
+    where?: DojoWhereInput
+  }
+
+  export type DojoUpdateToOneWithWhereWithoutHistoryToInput = {
+    where?: DojoWhereInput
+    data: XOR<DojoUpdateWithoutHistoryToInput, DojoUncheckedUpdateWithoutHistoryToInput>
+  }
+
+  export type DojoUpdateWithoutHistoryToInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    schedule?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    annualFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    ownerSignatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    renewalOrders?: ShopOrderUpdateManyWithoutDojoNestedInput
+    certificateOrders?: ShopOrderUpdateManyWithoutCertDojoNestedInput
+    certificateRequests?: CertificateRequestUpdateManyWithoutDojoNestedInput
+    students?: StudentUpdateManyWithoutDojoNestedInput
+    instructors?: InstructorUpdateManyWithoutDojoNestedInput
+    managers?: DojoManagerUpdateManyWithoutDojoNestedInput
+    owner?: DojoOwnerUpdateOneWithoutDojoNestedInput
+    application?: DojoApplicationUpdateOneWithoutDojoNestedInput
+    attendance?: AttendanceUpdateManyWithoutDojoNestedInput
+    events?: EventUpdateManyWithoutDojoNestedInput
+    announcements?: AnnouncementUpdateManyWithoutDojoNestedInput
+    inventoryItems?: DojoInventoryItemUpdateManyWithoutDojoNestedInput
+    sales?: DojoSaleUpdateManyWithoutDojoNestedInput
+    transfersOut?: StudentTransferRequestUpdateManyWithoutFromDojoNestedInput
+    transfersIn?: StudentTransferRequestUpdateManyWithoutToDojoNestedInput
+    historyFrom?: StudentDojoHistoryUpdateManyWithoutFromDojoNestedInput
+  }
+
+  export type DojoUncheckedUpdateWithoutHistoryToInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    schedule?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    annualFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    ownerSignatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    renewalOrders?: ShopOrderUncheckedUpdateManyWithoutDojoNestedInput
+    certificateOrders?: ShopOrderUncheckedUpdateManyWithoutCertDojoNestedInput
+    certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutDojoNestedInput
+    students?: StudentUncheckedUpdateManyWithoutDojoNestedInput
+    instructors?: InstructorUncheckedUpdateManyWithoutDojoNestedInput
+    managers?: DojoManagerUncheckedUpdateManyWithoutDojoNestedInput
+    owner?: DojoOwnerUncheckedUpdateOneWithoutDojoNestedInput
+    application?: DojoApplicationUncheckedUpdateOneWithoutDojoNestedInput
+    attendance?: AttendanceUncheckedUpdateManyWithoutDojoNestedInput
+    events?: EventUncheckedUpdateManyWithoutDojoNestedInput
+    announcements?: AnnouncementUncheckedUpdateManyWithoutDojoNestedInput
+    inventoryItems?: DojoInventoryItemUncheckedUpdateManyWithoutDojoNestedInput
+    sales?: DojoSaleUncheckedUpdateManyWithoutDojoNestedInput
+    transfersOut?: StudentTransferRequestUncheckedUpdateManyWithoutFromDojoNestedInput
+    transfersIn?: StudentTransferRequestUncheckedUpdateManyWithoutToDojoNestedInput
+    historyFrom?: StudentDojoHistoryUncheckedUpdateManyWithoutFromDojoNestedInput
+  }
+
+  export type StudentTransferRequestUpsertWithoutHistoryInput = {
+    update: XOR<StudentTransferRequestUpdateWithoutHistoryInput, StudentTransferRequestUncheckedUpdateWithoutHistoryInput>
+    create: XOR<StudentTransferRequestCreateWithoutHistoryInput, StudentTransferRequestUncheckedCreateWithoutHistoryInput>
+    where?: StudentTransferRequestWhereInput
+  }
+
+  export type StudentTransferRequestUpdateToOneWithWhereWithoutHistoryInput = {
+    where?: StudentTransferRequestWhereInput
+    data: XOR<StudentTransferRequestUpdateWithoutHistoryInput, StudentTransferRequestUncheckedUpdateWithoutHistoryInput>
+  }
+
+  export type StudentTransferRequestUpdateWithoutHistoryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumStudentTransferStatusFieldUpdateOperationsInput | $Enums.StudentTransferStatus
+    dojoDecision?: EnumStudentTransferDojoDecisionFieldUpdateOperationsInput | $Enums.StudentTransferDojoDecision
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    dojoNote?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNote?: NullableStringFieldUpdateOperationsInput | string | null
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    adminActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    student?: StudentUpdateOneRequiredWithoutTransferRequestsNestedInput
+    fromDojo?: DojoUpdateOneRequiredWithoutTransfersOutNestedInput
+    toDojo?: DojoUpdateOneRequiredWithoutTransfersInNestedInput
+    order?: ShopOrderUpdateOneWithoutTransferRequestNestedInput
+    dojoActedBy?: UserUpdateOneWithoutTransfersDojoActedNestedInput
+    adminActedBy?: UserUpdateOneWithoutTransfersAdminActedNestedInput
+  }
+
+  export type StudentTransferRequestUncheckedUpdateWithoutHistoryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    fromDojoId?: StringFieldUpdateOperationsInput | string
+    toDojoId?: StringFieldUpdateOperationsInput | string
+    status?: EnumStudentTransferStatusFieldUpdateOperationsInput | $Enums.StudentTransferStatus
+    dojoDecision?: EnumStudentTransferDojoDecisionFieldUpdateOperationsInput | $Enums.StudentTransferDojoDecision
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    dojoNote?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNote?: NullableStringFieldUpdateOperationsInput | string | null
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    orderId?: NullableStringFieldUpdateOperationsInput | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dojoActedById?: NullableStringFieldUpdateOperationsInput | string | null
+    adminActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    adminActedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserUpsertWithoutDojoHistoryChangesInput = {
+    update: XOR<UserUpdateWithoutDojoHistoryChangesInput, UserUncheckedUpdateWithoutDojoHistoryChangesInput>
+    create: XOR<UserCreateWithoutDojoHistoryChangesInput, UserUncheckedCreateWithoutDojoHistoryChangesInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutDojoHistoryChangesInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutDojoHistoryChangesInput, UserUncheckedUpdateWithoutDojoHistoryChangesInput>
+  }
+
+  export type UserUpdateWithoutDojoHistoryChangesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    fullName?: StringFieldUpdateOperationsInput | string
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: RoleUpdateOneRequiredWithoutUsersNestedInput
+    student?: StudentUpdateOneWithoutUserNestedInput
+    instructor?: InstructorUpdateOneWithoutUserNestedInput
+    dojoManager?: DojoManagerUpdateOneWithoutUserNestedInput
+    dojoOwner?: DojoOwnerUpdateOneWithoutUserNestedInput
+    admin?: AdminUpdateOneWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    orders?: ShopOrderUpdateManyWithoutUserNestedInput
+    eventRegistrations?: EventRegistrationUpdateManyWithoutUserNestedInput
+    eventCheckIns?: EventRegistrationUpdateManyWithoutCheckedInByNestedInput
+    eventsPosted?: EventUpdateManyWithoutPostedByNestedInput
+    announcementsPosted?: AnnouncementUpdateManyWithoutPostedByNestedInput
+    dojoSalesAsBuyer?: DojoSaleUpdateManyWithoutBuyerNestedInput
+    dojoSalesSold?: DojoSaleUpdateManyWithoutSoldByNestedInput
+    achievementsAwarded?: StudentAchievementUpdateManyWithoutAwardedByNestedInput
+    tournamentEntries?: TournamentParticipantUpdateManyWithoutUserNestedInput
+    transfersDojoActed?: StudentTransferRequestUpdateManyWithoutDojoActedByNestedInput
+    transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutDojoHistoryChangesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    fullName?: StringFieldUpdateOperationsInput | string
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    roleId?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    student?: StudentUncheckedUpdateOneWithoutUserNestedInput
+    instructor?: InstructorUncheckedUpdateOneWithoutUserNestedInput
+    dojoManager?: DojoManagerUncheckedUpdateOneWithoutUserNestedInput
+    dojoOwner?: DojoOwnerUncheckedUpdateOneWithoutUserNestedInput
+    admin?: AdminUncheckedUpdateOneWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    orders?: ShopOrderUncheckedUpdateManyWithoutUserNestedInput
+    eventRegistrations?: EventRegistrationUncheckedUpdateManyWithoutUserNestedInput
+    eventCheckIns?: EventRegistrationUncheckedUpdateManyWithoutCheckedInByNestedInput
+    eventsPosted?: EventUncheckedUpdateManyWithoutPostedByNestedInput
+    announcementsPosted?: AnnouncementUncheckedUpdateManyWithoutPostedByNestedInput
+    dojoSalesAsBuyer?: DojoSaleUncheckedUpdateManyWithoutBuyerNestedInput
+    dojoSalesSold?: DojoSaleUncheckedUpdateManyWithoutSoldByNestedInput
+    achievementsAwarded?: StudentAchievementUncheckedUpdateManyWithoutAwardedByNestedInput
+    tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutUserNestedInput
+    transfersDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
+    transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
   }
 
   export type UserCreateManyRoleInput = {
@@ -67539,6 +74849,9 @@ export namespace Prisma {
     dojoSalesSold?: DojoSaleUpdateManyWithoutSoldByNestedInput
     achievementsAwarded?: StudentAchievementUpdateManyWithoutAwardedByNestedInput
     tournamentEntries?: TournamentParticipantUpdateManyWithoutUserNestedInput
+    transfersDojoActed?: StudentTransferRequestUpdateManyWithoutDojoActedByNestedInput
+    transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
+    dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRoleInput = {
@@ -67566,6 +74879,9 @@ export namespace Prisma {
     dojoSalesSold?: DojoSaleUncheckedUpdateManyWithoutSoldByNestedInput
     achievementsAwarded?: StudentAchievementUncheckedUpdateManyWithoutAwardedByNestedInput
     tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutUserNestedInput
+    transfersDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
+    transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
+    dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutRoleInput = {
@@ -67645,6 +74961,7 @@ export namespace Prisma {
     includesDojoRenewal?: boolean
     includesCertificates?: boolean
     certDojoId?: string | null
+    includesTransferRequest?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -67768,6 +75085,56 @@ export namespace Prisma {
     createdAt?: Date | string
   }
 
+  export type StudentTransferRequestCreateManyDojoActedByInput = {
+    id?: string
+    studentId: string
+    fromDojoId: string
+    toDojoId: string
+    status?: $Enums.StudentTransferStatus
+    dojoDecision?: $Enums.StudentTransferDojoDecision
+    reason?: string | null
+    dojoNote?: string | null
+    adminNote?: string | null
+    fee: Decimal | DecimalJsLike | number | string
+    orderId?: string | null
+    paidAt?: Date | string | null
+    dojoActedAt?: Date | string | null
+    adminActedAt?: Date | string | null
+    adminActedById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type StudentTransferRequestCreateManyAdminActedByInput = {
+    id?: string
+    studentId: string
+    fromDojoId: string
+    toDojoId: string
+    status?: $Enums.StudentTransferStatus
+    dojoDecision?: $Enums.StudentTransferDojoDecision
+    reason?: string | null
+    dojoNote?: string | null
+    adminNote?: string | null
+    fee: Decimal | DecimalJsLike | number | string
+    orderId?: string | null
+    paidAt?: Date | string | null
+    dojoActedAt?: Date | string | null
+    dojoActedById?: string | null
+    adminActedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type StudentDojoHistoryCreateManyChangedByInput = {
+    id?: string
+    studentId: string
+    fromDojoId?: string | null
+    toDojoId?: string | null
+    transferRequestId?: string | null
+    reason?: string | null
+    createdAt?: Date | string
+  }
+
   export type NotificationUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
@@ -67818,12 +75185,14 @@ export namespace Prisma {
     isGuestOrder?: BoolFieldUpdateOperationsInput | boolean
     includesDojoRenewal?: BoolFieldUpdateOperationsInput | boolean
     includesCertificates?: BoolFieldUpdateOperationsInput | boolean
+    includesTransferRequest?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dojo?: DojoUpdateOneWithoutRenewalOrdersNestedInput
     certDojo?: DojoUpdateOneWithoutCertificateOrdersNestedInput
     orderItems?: ShopOrderItemUpdateManyWithoutOrderNestedInput
     certificateRequests?: CertificateRequestUpdateManyWithoutOrderNestedInput
+    transferRequest?: StudentTransferRequestUpdateOneWithoutOrderNestedInput
   }
 
   export type ShopOrderUncheckedUpdateWithoutUserInput = {
@@ -67845,10 +75214,12 @@ export namespace Prisma {
     includesDojoRenewal?: BoolFieldUpdateOperationsInput | boolean
     includesCertificates?: BoolFieldUpdateOperationsInput | boolean
     certDojoId?: NullableStringFieldUpdateOperationsInput | string | null
+    includesTransferRequest?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     orderItems?: ShopOrderItemUncheckedUpdateManyWithoutOrderNestedInput
     certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutOrderNestedInput
+    transferRequest?: StudentTransferRequestUncheckedUpdateOneWithoutOrderNestedInput
   }
 
   export type ShopOrderUncheckedUpdateManyWithoutUserInput = {
@@ -67870,6 +75241,7 @@ export namespace Prisma {
     includesDojoRenewal?: BoolFieldUpdateOperationsInput | boolean
     includesCertificates?: BoolFieldUpdateOperationsInput | boolean
     certDojoId?: NullableStringFieldUpdateOperationsInput | string | null
+    includesTransferRequest?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -68243,6 +75615,160 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type StudentTransferRequestUpdateWithoutDojoActedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumStudentTransferStatusFieldUpdateOperationsInput | $Enums.StudentTransferStatus
+    dojoDecision?: EnumStudentTransferDojoDecisionFieldUpdateOperationsInput | $Enums.StudentTransferDojoDecision
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    dojoNote?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNote?: NullableStringFieldUpdateOperationsInput | string | null
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    adminActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    student?: StudentUpdateOneRequiredWithoutTransferRequestsNestedInput
+    fromDojo?: DojoUpdateOneRequiredWithoutTransfersOutNestedInput
+    toDojo?: DojoUpdateOneRequiredWithoutTransfersInNestedInput
+    order?: ShopOrderUpdateOneWithoutTransferRequestNestedInput
+    adminActedBy?: UserUpdateOneWithoutTransfersAdminActedNestedInput
+    history?: StudentDojoHistoryUpdateManyWithoutTransferRequestNestedInput
+  }
+
+  export type StudentTransferRequestUncheckedUpdateWithoutDojoActedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    fromDojoId?: StringFieldUpdateOperationsInput | string
+    toDojoId?: StringFieldUpdateOperationsInput | string
+    status?: EnumStudentTransferStatusFieldUpdateOperationsInput | $Enums.StudentTransferStatus
+    dojoDecision?: EnumStudentTransferDojoDecisionFieldUpdateOperationsInput | $Enums.StudentTransferDojoDecision
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    dojoNote?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNote?: NullableStringFieldUpdateOperationsInput | string | null
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    orderId?: NullableStringFieldUpdateOperationsInput | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    adminActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    adminActedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    history?: StudentDojoHistoryUncheckedUpdateManyWithoutTransferRequestNestedInput
+  }
+
+  export type StudentTransferRequestUncheckedUpdateManyWithoutDojoActedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    fromDojoId?: StringFieldUpdateOperationsInput | string
+    toDojoId?: StringFieldUpdateOperationsInput | string
+    status?: EnumStudentTransferStatusFieldUpdateOperationsInput | $Enums.StudentTransferStatus
+    dojoDecision?: EnumStudentTransferDojoDecisionFieldUpdateOperationsInput | $Enums.StudentTransferDojoDecision
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    dojoNote?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNote?: NullableStringFieldUpdateOperationsInput | string | null
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    orderId?: NullableStringFieldUpdateOperationsInput | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    adminActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    adminActedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type StudentTransferRequestUpdateWithoutAdminActedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumStudentTransferStatusFieldUpdateOperationsInput | $Enums.StudentTransferStatus
+    dojoDecision?: EnumStudentTransferDojoDecisionFieldUpdateOperationsInput | $Enums.StudentTransferDojoDecision
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    dojoNote?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNote?: NullableStringFieldUpdateOperationsInput | string | null
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    adminActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    student?: StudentUpdateOneRequiredWithoutTransferRequestsNestedInput
+    fromDojo?: DojoUpdateOneRequiredWithoutTransfersOutNestedInput
+    toDojo?: DojoUpdateOneRequiredWithoutTransfersInNestedInput
+    order?: ShopOrderUpdateOneWithoutTransferRequestNestedInput
+    dojoActedBy?: UserUpdateOneWithoutTransfersDojoActedNestedInput
+    history?: StudentDojoHistoryUpdateManyWithoutTransferRequestNestedInput
+  }
+
+  export type StudentTransferRequestUncheckedUpdateWithoutAdminActedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    fromDojoId?: StringFieldUpdateOperationsInput | string
+    toDojoId?: StringFieldUpdateOperationsInput | string
+    status?: EnumStudentTransferStatusFieldUpdateOperationsInput | $Enums.StudentTransferStatus
+    dojoDecision?: EnumStudentTransferDojoDecisionFieldUpdateOperationsInput | $Enums.StudentTransferDojoDecision
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    dojoNote?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNote?: NullableStringFieldUpdateOperationsInput | string | null
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    orderId?: NullableStringFieldUpdateOperationsInput | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dojoActedById?: NullableStringFieldUpdateOperationsInput | string | null
+    adminActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    history?: StudentDojoHistoryUncheckedUpdateManyWithoutTransferRequestNestedInput
+  }
+
+  export type StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    fromDojoId?: StringFieldUpdateOperationsInput | string
+    toDojoId?: StringFieldUpdateOperationsInput | string
+    status?: EnumStudentTransferStatusFieldUpdateOperationsInput | $Enums.StudentTransferStatus
+    dojoDecision?: EnumStudentTransferDojoDecisionFieldUpdateOperationsInput | $Enums.StudentTransferDojoDecision
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    dojoNote?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNote?: NullableStringFieldUpdateOperationsInput | string | null
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    orderId?: NullableStringFieldUpdateOperationsInput | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dojoActedById?: NullableStringFieldUpdateOperationsInput | string | null
+    adminActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type StudentDojoHistoryUpdateWithoutChangedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    student?: StudentUpdateOneRequiredWithoutDojoHistoryNestedInput
+    fromDojo?: DojoUpdateOneWithoutHistoryFromNestedInput
+    toDojo?: DojoUpdateOneWithoutHistoryToNestedInput
+    transferRequest?: StudentTransferRequestUpdateOneWithoutHistoryNestedInput
+  }
+
+  export type StudentDojoHistoryUncheckedUpdateWithoutChangedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    fromDojoId?: NullableStringFieldUpdateOperationsInput | string | null
+    toDojoId?: NullableStringFieldUpdateOperationsInput | string | null
+    transferRequestId?: NullableStringFieldUpdateOperationsInput | string | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type StudentDojoHistoryUncheckedUpdateManyWithoutChangedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    fromDojoId?: NullableStringFieldUpdateOperationsInput | string | null
+    toDojoId?: NullableStringFieldUpdateOperationsInput | string | null
+    transferRequestId?: NullableStringFieldUpdateOperationsInput | string | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type AttendanceCreateManyStudentInput = {
     id?: string
     dojoId?: string | null
@@ -68298,6 +75824,36 @@ export namespace Prisma {
     progress?: number
     awardedByUserId?: string | null
     note?: string | null
+  }
+
+  export type StudentTransferRequestCreateManyStudentInput = {
+    id?: string
+    fromDojoId: string
+    toDojoId: string
+    status?: $Enums.StudentTransferStatus
+    dojoDecision?: $Enums.StudentTransferDojoDecision
+    reason?: string | null
+    dojoNote?: string | null
+    adminNote?: string | null
+    fee: Decimal | DecimalJsLike | number | string
+    orderId?: string | null
+    paidAt?: Date | string | null
+    dojoActedAt?: Date | string | null
+    dojoActedById?: string | null
+    adminActedAt?: Date | string | null
+    adminActedById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type StudentDojoHistoryCreateManyStudentInput = {
+    id?: string
+    fromDojoId?: string | null
+    toDojoId?: string | null
+    transferRequestId?: string | null
+    changedById?: string | null
+    reason?: string | null
+    createdAt?: Date | string
   }
 
   export type AttendanceUpdateWithoutStudentInput = {
@@ -68471,6 +76027,98 @@ export namespace Prisma {
     progress?: IntFieldUpdateOperationsInput | number
     awardedByUserId?: NullableStringFieldUpdateOperationsInput | string | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type StudentTransferRequestUpdateWithoutStudentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumStudentTransferStatusFieldUpdateOperationsInput | $Enums.StudentTransferStatus
+    dojoDecision?: EnumStudentTransferDojoDecisionFieldUpdateOperationsInput | $Enums.StudentTransferDojoDecision
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    dojoNote?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNote?: NullableStringFieldUpdateOperationsInput | string | null
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    adminActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    fromDojo?: DojoUpdateOneRequiredWithoutTransfersOutNestedInput
+    toDojo?: DojoUpdateOneRequiredWithoutTransfersInNestedInput
+    order?: ShopOrderUpdateOneWithoutTransferRequestNestedInput
+    dojoActedBy?: UserUpdateOneWithoutTransfersDojoActedNestedInput
+    adminActedBy?: UserUpdateOneWithoutTransfersAdminActedNestedInput
+    history?: StudentDojoHistoryUpdateManyWithoutTransferRequestNestedInput
+  }
+
+  export type StudentTransferRequestUncheckedUpdateWithoutStudentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fromDojoId?: StringFieldUpdateOperationsInput | string
+    toDojoId?: StringFieldUpdateOperationsInput | string
+    status?: EnumStudentTransferStatusFieldUpdateOperationsInput | $Enums.StudentTransferStatus
+    dojoDecision?: EnumStudentTransferDojoDecisionFieldUpdateOperationsInput | $Enums.StudentTransferDojoDecision
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    dojoNote?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNote?: NullableStringFieldUpdateOperationsInput | string | null
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    orderId?: NullableStringFieldUpdateOperationsInput | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dojoActedById?: NullableStringFieldUpdateOperationsInput | string | null
+    adminActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    adminActedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    history?: StudentDojoHistoryUncheckedUpdateManyWithoutTransferRequestNestedInput
+  }
+
+  export type StudentTransferRequestUncheckedUpdateManyWithoutStudentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fromDojoId?: StringFieldUpdateOperationsInput | string
+    toDojoId?: StringFieldUpdateOperationsInput | string
+    status?: EnumStudentTransferStatusFieldUpdateOperationsInput | $Enums.StudentTransferStatus
+    dojoDecision?: EnumStudentTransferDojoDecisionFieldUpdateOperationsInput | $Enums.StudentTransferDojoDecision
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    dojoNote?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNote?: NullableStringFieldUpdateOperationsInput | string | null
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    orderId?: NullableStringFieldUpdateOperationsInput | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dojoActedById?: NullableStringFieldUpdateOperationsInput | string | null
+    adminActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    adminActedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type StudentDojoHistoryUpdateWithoutStudentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    fromDojo?: DojoUpdateOneWithoutHistoryFromNestedInput
+    toDojo?: DojoUpdateOneWithoutHistoryToNestedInput
+    transferRequest?: StudentTransferRequestUpdateOneWithoutHistoryNestedInput
+    changedBy?: UserUpdateOneWithoutDojoHistoryChangesNestedInput
+  }
+
+  export type StudentDojoHistoryUncheckedUpdateWithoutStudentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fromDojoId?: NullableStringFieldUpdateOperationsInput | string | null
+    toDojoId?: NullableStringFieldUpdateOperationsInput | string | null
+    transferRequestId?: NullableStringFieldUpdateOperationsInput | string | null
+    changedById?: NullableStringFieldUpdateOperationsInput | string | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type StudentDojoHistoryUncheckedUpdateManyWithoutStudentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fromDojoId?: NullableStringFieldUpdateOperationsInput | string | null
+    toDojoId?: NullableStringFieldUpdateOperationsInput | string | null
+    transferRequestId?: NullableStringFieldUpdateOperationsInput | string | null
+    changedById?: NullableStringFieldUpdateOperationsInput | string | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type GradingCreateManyFromRankInput = {
@@ -68782,6 +76430,7 @@ export namespace Prisma {
     includesDojoRenewal?: boolean
     includesCertificates?: boolean
     certDojoId?: string | null
+    includesTransferRequest?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -68805,6 +76454,7 @@ export namespace Prisma {
     dojoId?: string | null
     includesDojoRenewal?: boolean
     includesCertificates?: boolean
+    includesTransferRequest?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -68928,6 +76578,66 @@ export namespace Prisma {
     createdAt?: Date | string
   }
 
+  export type StudentTransferRequestCreateManyFromDojoInput = {
+    id?: string
+    studentId: string
+    toDojoId: string
+    status?: $Enums.StudentTransferStatus
+    dojoDecision?: $Enums.StudentTransferDojoDecision
+    reason?: string | null
+    dojoNote?: string | null
+    adminNote?: string | null
+    fee: Decimal | DecimalJsLike | number | string
+    orderId?: string | null
+    paidAt?: Date | string | null
+    dojoActedAt?: Date | string | null
+    dojoActedById?: string | null
+    adminActedAt?: Date | string | null
+    adminActedById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type StudentTransferRequestCreateManyToDojoInput = {
+    id?: string
+    studentId: string
+    fromDojoId: string
+    status?: $Enums.StudentTransferStatus
+    dojoDecision?: $Enums.StudentTransferDojoDecision
+    reason?: string | null
+    dojoNote?: string | null
+    adminNote?: string | null
+    fee: Decimal | DecimalJsLike | number | string
+    orderId?: string | null
+    paidAt?: Date | string | null
+    dojoActedAt?: Date | string | null
+    dojoActedById?: string | null
+    adminActedAt?: Date | string | null
+    adminActedById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type StudentDojoHistoryCreateManyFromDojoInput = {
+    id?: string
+    studentId: string
+    toDojoId?: string | null
+    transferRequestId?: string | null
+    changedById?: string | null
+    reason?: string | null
+    createdAt?: Date | string
+  }
+
+  export type StudentDojoHistoryCreateManyToDojoInput = {
+    id?: string
+    studentId: string
+    fromDojoId?: string | null
+    transferRequestId?: string | null
+    changedById?: string | null
+    reason?: string | null
+    createdAt?: Date | string
+  }
+
   export type ShopOrderUpdateWithoutDojoInput = {
     id?: StringFieldUpdateOperationsInput | string
     paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
@@ -68945,12 +76655,14 @@ export namespace Prisma {
     isGuestOrder?: BoolFieldUpdateOperationsInput | boolean
     includesDojoRenewal?: BoolFieldUpdateOperationsInput | boolean
     includesCertificates?: BoolFieldUpdateOperationsInput | boolean
+    includesTransferRequest?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneWithoutOrdersNestedInput
     certDojo?: DojoUpdateOneWithoutCertificateOrdersNestedInput
     orderItems?: ShopOrderItemUpdateManyWithoutOrderNestedInput
     certificateRequests?: CertificateRequestUpdateManyWithoutOrderNestedInput
+    transferRequest?: StudentTransferRequestUpdateOneWithoutOrderNestedInput
   }
 
   export type ShopOrderUncheckedUpdateWithoutDojoInput = {
@@ -68972,10 +76684,12 @@ export namespace Prisma {
     includesDojoRenewal?: BoolFieldUpdateOperationsInput | boolean
     includesCertificates?: BoolFieldUpdateOperationsInput | boolean
     certDojoId?: NullableStringFieldUpdateOperationsInput | string | null
+    includesTransferRequest?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     orderItems?: ShopOrderItemUncheckedUpdateManyWithoutOrderNestedInput
     certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutOrderNestedInput
+    transferRequest?: StudentTransferRequestUncheckedUpdateOneWithoutOrderNestedInput
   }
 
   export type ShopOrderUncheckedUpdateManyWithoutDojoInput = {
@@ -68997,6 +76711,7 @@ export namespace Prisma {
     includesDojoRenewal?: BoolFieldUpdateOperationsInput | boolean
     includesCertificates?: BoolFieldUpdateOperationsInput | boolean
     certDojoId?: NullableStringFieldUpdateOperationsInput | string | null
+    includesTransferRequest?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -69018,12 +76733,14 @@ export namespace Prisma {
     isGuestOrder?: BoolFieldUpdateOperationsInput | boolean
     includesDojoRenewal?: BoolFieldUpdateOperationsInput | boolean
     includesCertificates?: BoolFieldUpdateOperationsInput | boolean
+    includesTransferRequest?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneWithoutOrdersNestedInput
     dojo?: DojoUpdateOneWithoutRenewalOrdersNestedInput
     orderItems?: ShopOrderItemUpdateManyWithoutOrderNestedInput
     certificateRequests?: CertificateRequestUpdateManyWithoutOrderNestedInput
+    transferRequest?: StudentTransferRequestUpdateOneWithoutOrderNestedInput
   }
 
   export type ShopOrderUncheckedUpdateWithoutCertDojoInput = {
@@ -69045,10 +76762,12 @@ export namespace Prisma {
     dojoId?: NullableStringFieldUpdateOperationsInput | string | null
     includesDojoRenewal?: BoolFieldUpdateOperationsInput | boolean
     includesCertificates?: BoolFieldUpdateOperationsInput | boolean
+    includesTransferRequest?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     orderItems?: ShopOrderItemUncheckedUpdateManyWithoutOrderNestedInput
     certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutOrderNestedInput
+    transferRequest?: StudentTransferRequestUncheckedUpdateOneWithoutOrderNestedInput
   }
 
   export type ShopOrderUncheckedUpdateManyWithoutCertDojoInput = {
@@ -69070,6 +76789,7 @@ export namespace Prisma {
     dojoId?: NullableStringFieldUpdateOperationsInput | string | null
     includesDojoRenewal?: BoolFieldUpdateOperationsInput | boolean
     includesCertificates?: BoolFieldUpdateOperationsInput | boolean
+    includesTransferRequest?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -69147,6 +76867,8 @@ export namespace Prisma {
     gradingApplications?: GradingApplicationUpdateManyWithoutStudentNestedInput
     certificateRequests?: CertificateRequestUpdateManyWithoutStudentNestedInput
     achievements?: StudentAchievementUpdateManyWithoutStudentNestedInput
+    transferRequests?: StudentTransferRequestUpdateManyWithoutStudentNestedInput
+    dojoHistory?: StudentDojoHistoryUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateWithoutDojoInput = {
@@ -69171,6 +76893,8 @@ export namespace Prisma {
     gradingApplications?: GradingApplicationUncheckedUpdateManyWithoutStudentNestedInput
     certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutStudentNestedInput
     achievements?: StudentAchievementUncheckedUpdateManyWithoutStudentNestedInput
+    transferRequests?: StudentTransferRequestUncheckedUpdateManyWithoutStudentNestedInput
+    dojoHistory?: StudentDojoHistoryUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateManyWithoutDojoInput = {
@@ -69442,6 +77166,190 @@ export namespace Prisma {
     total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type StudentTransferRequestUpdateWithoutFromDojoInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumStudentTransferStatusFieldUpdateOperationsInput | $Enums.StudentTransferStatus
+    dojoDecision?: EnumStudentTransferDojoDecisionFieldUpdateOperationsInput | $Enums.StudentTransferDojoDecision
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    dojoNote?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNote?: NullableStringFieldUpdateOperationsInput | string | null
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    adminActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    student?: StudentUpdateOneRequiredWithoutTransferRequestsNestedInput
+    toDojo?: DojoUpdateOneRequiredWithoutTransfersInNestedInput
+    order?: ShopOrderUpdateOneWithoutTransferRequestNestedInput
+    dojoActedBy?: UserUpdateOneWithoutTransfersDojoActedNestedInput
+    adminActedBy?: UserUpdateOneWithoutTransfersAdminActedNestedInput
+    history?: StudentDojoHistoryUpdateManyWithoutTransferRequestNestedInput
+  }
+
+  export type StudentTransferRequestUncheckedUpdateWithoutFromDojoInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    toDojoId?: StringFieldUpdateOperationsInput | string
+    status?: EnumStudentTransferStatusFieldUpdateOperationsInput | $Enums.StudentTransferStatus
+    dojoDecision?: EnumStudentTransferDojoDecisionFieldUpdateOperationsInput | $Enums.StudentTransferDojoDecision
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    dojoNote?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNote?: NullableStringFieldUpdateOperationsInput | string | null
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    orderId?: NullableStringFieldUpdateOperationsInput | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dojoActedById?: NullableStringFieldUpdateOperationsInput | string | null
+    adminActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    adminActedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    history?: StudentDojoHistoryUncheckedUpdateManyWithoutTransferRequestNestedInput
+  }
+
+  export type StudentTransferRequestUncheckedUpdateManyWithoutFromDojoInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    toDojoId?: StringFieldUpdateOperationsInput | string
+    status?: EnumStudentTransferStatusFieldUpdateOperationsInput | $Enums.StudentTransferStatus
+    dojoDecision?: EnumStudentTransferDojoDecisionFieldUpdateOperationsInput | $Enums.StudentTransferDojoDecision
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    dojoNote?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNote?: NullableStringFieldUpdateOperationsInput | string | null
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    orderId?: NullableStringFieldUpdateOperationsInput | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dojoActedById?: NullableStringFieldUpdateOperationsInput | string | null
+    adminActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    adminActedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type StudentTransferRequestUpdateWithoutToDojoInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumStudentTransferStatusFieldUpdateOperationsInput | $Enums.StudentTransferStatus
+    dojoDecision?: EnumStudentTransferDojoDecisionFieldUpdateOperationsInput | $Enums.StudentTransferDojoDecision
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    dojoNote?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNote?: NullableStringFieldUpdateOperationsInput | string | null
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    adminActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    student?: StudentUpdateOneRequiredWithoutTransferRequestsNestedInput
+    fromDojo?: DojoUpdateOneRequiredWithoutTransfersOutNestedInput
+    order?: ShopOrderUpdateOneWithoutTransferRequestNestedInput
+    dojoActedBy?: UserUpdateOneWithoutTransfersDojoActedNestedInput
+    adminActedBy?: UserUpdateOneWithoutTransfersAdminActedNestedInput
+    history?: StudentDojoHistoryUpdateManyWithoutTransferRequestNestedInput
+  }
+
+  export type StudentTransferRequestUncheckedUpdateWithoutToDojoInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    fromDojoId?: StringFieldUpdateOperationsInput | string
+    status?: EnumStudentTransferStatusFieldUpdateOperationsInput | $Enums.StudentTransferStatus
+    dojoDecision?: EnumStudentTransferDojoDecisionFieldUpdateOperationsInput | $Enums.StudentTransferDojoDecision
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    dojoNote?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNote?: NullableStringFieldUpdateOperationsInput | string | null
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    orderId?: NullableStringFieldUpdateOperationsInput | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dojoActedById?: NullableStringFieldUpdateOperationsInput | string | null
+    adminActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    adminActedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    history?: StudentDojoHistoryUncheckedUpdateManyWithoutTransferRequestNestedInput
+  }
+
+  export type StudentTransferRequestUncheckedUpdateManyWithoutToDojoInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    fromDojoId?: StringFieldUpdateOperationsInput | string
+    status?: EnumStudentTransferStatusFieldUpdateOperationsInput | $Enums.StudentTransferStatus
+    dojoDecision?: EnumStudentTransferDojoDecisionFieldUpdateOperationsInput | $Enums.StudentTransferDojoDecision
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    dojoNote?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNote?: NullableStringFieldUpdateOperationsInput | string | null
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    orderId?: NullableStringFieldUpdateOperationsInput | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dojoActedById?: NullableStringFieldUpdateOperationsInput | string | null
+    adminActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    adminActedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type StudentDojoHistoryUpdateWithoutFromDojoInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    student?: StudentUpdateOneRequiredWithoutDojoHistoryNestedInput
+    toDojo?: DojoUpdateOneWithoutHistoryToNestedInput
+    transferRequest?: StudentTransferRequestUpdateOneWithoutHistoryNestedInput
+    changedBy?: UserUpdateOneWithoutDojoHistoryChangesNestedInput
+  }
+
+  export type StudentDojoHistoryUncheckedUpdateWithoutFromDojoInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    toDojoId?: NullableStringFieldUpdateOperationsInput | string | null
+    transferRequestId?: NullableStringFieldUpdateOperationsInput | string | null
+    changedById?: NullableStringFieldUpdateOperationsInput | string | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type StudentDojoHistoryUncheckedUpdateManyWithoutFromDojoInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    toDojoId?: NullableStringFieldUpdateOperationsInput | string | null
+    transferRequestId?: NullableStringFieldUpdateOperationsInput | string | null
+    changedById?: NullableStringFieldUpdateOperationsInput | string | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type StudentDojoHistoryUpdateWithoutToDojoInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    student?: StudentUpdateOneRequiredWithoutDojoHistoryNestedInput
+    fromDojo?: DojoUpdateOneWithoutHistoryFromNestedInput
+    transferRequest?: StudentTransferRequestUpdateOneWithoutHistoryNestedInput
+    changedBy?: UserUpdateOneWithoutDojoHistoryChangesNestedInput
+  }
+
+  export type StudentDojoHistoryUncheckedUpdateWithoutToDojoInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    fromDojoId?: NullableStringFieldUpdateOperationsInput | string | null
+    transferRequestId?: NullableStringFieldUpdateOperationsInput | string | null
+    changedById?: NullableStringFieldUpdateOperationsInput | string | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type StudentDojoHistoryUncheckedUpdateManyWithoutToDojoInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    fromDojoId?: NullableStringFieldUpdateOperationsInput | string | null
+    transferRequestId?: NullableStringFieldUpdateOperationsInput | string | null
+    changedById?: NullableStringFieldUpdateOperationsInput | string | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -70163,6 +78071,46 @@ export namespace Prisma {
     progress?: IntFieldUpdateOperationsInput | number
     awardedByUserId?: NullableStringFieldUpdateOperationsInput | string | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type StudentDojoHistoryCreateManyTransferRequestInput = {
+    id?: string
+    studentId: string
+    fromDojoId?: string | null
+    toDojoId?: string | null
+    changedById?: string | null
+    reason?: string | null
+    createdAt?: Date | string
+  }
+
+  export type StudentDojoHistoryUpdateWithoutTransferRequestInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    student?: StudentUpdateOneRequiredWithoutDojoHistoryNestedInput
+    fromDojo?: DojoUpdateOneWithoutHistoryFromNestedInput
+    toDojo?: DojoUpdateOneWithoutHistoryToNestedInput
+    changedBy?: UserUpdateOneWithoutDojoHistoryChangesNestedInput
+  }
+
+  export type StudentDojoHistoryUncheckedUpdateWithoutTransferRequestInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    fromDojoId?: NullableStringFieldUpdateOperationsInput | string | null
+    toDojoId?: NullableStringFieldUpdateOperationsInput | string | null
+    changedById?: NullableStringFieldUpdateOperationsInput | string | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type StudentDojoHistoryUncheckedUpdateManyWithoutTransferRequestInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    fromDojoId?: NullableStringFieldUpdateOperationsInput | string | null
+    toDojoId?: NullableStringFieldUpdateOperationsInput | string | null
+    changedById?: NullableStringFieldUpdateOperationsInput | string | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
 

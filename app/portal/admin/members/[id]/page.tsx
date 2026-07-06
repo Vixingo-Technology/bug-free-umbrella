@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import {
     ArrowLeft,
+    ArrowRightLeft,
     Award,
     Calendar,
     Droplets,
@@ -18,6 +19,7 @@ import {
     User as UserIcon,
     Users,
     Ticket,
+    Building2,
 } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/admin-guard";
@@ -97,6 +99,21 @@ export default async function AdminMemberDetailPage({
                             price: true,
                             certificateUrl: true,
                             createdAt: true,
+                        },
+                    },
+                    dojoHistory: {
+                        orderBy: { createdAt: "desc" },
+                        include: {
+                            fromDojo: { select: { id: true, name: true } },
+                            toDojo:   { select: { id: true, name: true } },
+                            changedBy: { select: { id: true, fullName: true } },
+                        },
+                    },
+                    transferRequests: {
+                        orderBy: { createdAt: "desc" },
+                        include: {
+                            fromDojo: { select: { id: true, name: true } },
+                            toDojo:   { select: { id: true, name: true } },
                         },
                     },
                 },
@@ -382,6 +399,58 @@ export default async function AdminMemberDetailPage({
                                             </span>
                                         </li>
                                     ))}
+                                </ul>
+                            )}
+                        </Section>
+                    )}
+
+                    {s && (
+                        <Section
+                            title={`Profile history (${s.dojoHistory.length})`}
+                            icon={<ArrowRightLeft size={14} className="text-accent-red" />}
+                        >
+                            {s.dojoHistory.length === 0 && s.transferRequests.length === 0 ? (
+                                <Empty>No dojo changes on record.</Empty>
+                            ) : (
+                                <ul className="divide-y divide-zinc-100">
+                                    {s.dojoHistory.map((h: any) => (
+                                        <li key={h.id} className="px-5 py-3 flex items-start justify-between gap-3">
+                                            <div className="flex items-start gap-3 min-w-0">
+                                                <Building2 size={14} className="text-zinc-400 mt-0.5 shrink-0" />
+                                                <div className="min-w-0">
+                                                    <p className="text-sm font-semibold text-zinc-900">
+                                                        {h.fromDojo?.name ?? "Unassigned"} → {h.toDojo?.name ?? "Unassigned"}
+                                                    </p>
+                                                    <p className="text-xs text-zinc-500">
+                                                        {dateTimeFmt.format(new Date(h.createdAt))}
+                                                        {h.reason ? ` · ${h.reason}` : ""}
+                                                        {h.changedBy ? ` · by ${h.changedBy.fullName}` : ""}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    ))}
+                                    {s.transferRequests
+                                        .filter((r: any) => r.status !== "APPROVED")
+                                        .map((r: any) => (
+                                            <li key={r.id} className="px-5 py-3 flex items-start justify-between gap-3">
+                                                <div className="flex items-start gap-3 min-w-0">
+                                                    <ArrowRightLeft size={14} className="text-zinc-400 mt-0.5 shrink-0" />
+                                                    <div className="min-w-0">
+                                                        <p className="text-sm font-semibold text-zinc-900">
+                                                            Requested: {r.fromDojo.name} → {r.toDojo.name}
+                                                        </p>
+                                                        <p className="text-xs text-zinc-500">
+                                                            {dateTimeFmt.format(new Date(r.createdAt))}
+                                                            {r.reason ? ` · ${r.reason}` : ""}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <span className="text-[10px] font-bold tracking-widest uppercase px-2 py-0.5 rounded-full border bg-zinc-50 text-zinc-600 border-zinc-200 shrink-0">
+                                                    {r.status}
+                                                </span>
+                                            </li>
+                                        ))}
                                 </ul>
                             )}
                         </Section>

@@ -475,6 +475,7 @@ exports.Prisma.ShopOrderScalarFieldEnum = {
   includesDojoRenewal: 'includesDojoRenewal',
   includesCertificates: 'includesCertificates',
   certDojoId: 'certDojoId',
+  includesTransferRequest: 'includesTransferRequest',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -545,6 +546,38 @@ exports.Prisma.StudentAchievementScalarFieldEnum = {
   progress: 'progress',
   awardedByUserId: 'awardedByUserId',
   note: 'note'
+};
+
+exports.Prisma.StudentTransferRequestScalarFieldEnum = {
+  id: 'id',
+  studentId: 'studentId',
+  fromDojoId: 'fromDojoId',
+  toDojoId: 'toDojoId',
+  status: 'status',
+  dojoDecision: 'dojoDecision',
+  reason: 'reason',
+  dojoNote: 'dojoNote',
+  adminNote: 'adminNote',
+  fee: 'fee',
+  orderId: 'orderId',
+  paidAt: 'paidAt',
+  dojoActedAt: 'dojoActedAt',
+  dojoActedById: 'dojoActedById',
+  adminActedAt: 'adminActedAt',
+  adminActedById: 'adminActedById',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.StudentDojoHistoryScalarFieldEnum = {
+  id: 'id',
+  studentId: 'studentId',
+  fromDojoId: 'fromDojoId',
+  toDojoId: 'toDojoId',
+  transferRequestId: 'transferRequestId',
+  changedById: 'changedById',
+  reason: 'reason',
+  createdAt: 'createdAt'
 };
 
 exports.Prisma.SortOrder = {
@@ -647,7 +680,8 @@ exports.NotificationType = exports.$Enums.NotificationType = {
   GRADING: 'GRADING',
   EVENT: 'EVENT',
   RENEWAL: 'RENEWAL',
-  CERTIFICATE: 'CERTIFICATE'
+  CERTIFICATE: 'CERTIFICATE',
+  TRANSFER: 'TRANSFER'
 };
 
 exports.AchievementTier = exports.$Enums.AchievementTier = {
@@ -666,6 +700,21 @@ exports.AchievementRule = exports.$Enums.AchievementRule = {
   TOURNAMENTS_PARTICIPATED: 'TOURNAMENTS_PARTICIPATED',
   TOURNAMENT_WINS: 'TOURNAMENT_WINS',
   CERTIFICATES_EARNED: 'CERTIFICATES_EARNED'
+};
+
+exports.StudentTransferStatus = exports.$Enums.StudentTransferStatus = {
+  PENDING_PAYMENT: 'PENDING_PAYMENT',
+  AWAITING_DOJO: 'AWAITING_DOJO',
+  AWAITING_ADMIN: 'AWAITING_ADMIN',
+  APPROVED: 'APPROVED',
+  DENIED: 'DENIED',
+  CANCELLED: 'CANCELLED'
+};
+
+exports.StudentTransferDojoDecision = exports.$Enums.StudentTransferDojoDecision = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
 };
 
 exports.Prisma.ModelName = {
@@ -701,7 +750,9 @@ exports.Prisma.ModelName = {
   TournamentParticipant: 'TournamentParticipant',
   TournamentMatch: 'TournamentMatch',
   Achievement: 'Achievement',
-  StudentAchievement: 'StudentAchievement'
+  StudentAchievement: 'StudentAchievement',
+  StudentTransferRequest: 'StudentTransferRequest',
+  StudentDojoHistory: 'StudentDojoHistory'
 };
 
 /**

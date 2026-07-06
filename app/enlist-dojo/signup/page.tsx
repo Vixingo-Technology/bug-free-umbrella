@@ -24,10 +24,8 @@ import {
     Building2,
     Check,
     CheckCircle2,
-    ImagePlus,
     Loader2,
     MapPin,
-    Trash2,
     Upload,
     UserSquare2,
     X,
@@ -51,7 +49,6 @@ type FormState = {
     address: string;
     latitude: string;
     longitude: string;
-    interiors: UploadedImage[];
     acceptedTerms: boolean;
 };
 
@@ -59,8 +56,7 @@ const STEPS = [
     { id: 0, title: "Dojo basics", icon: Building2 },
     { id: 1, title: "Contact", icon: UserSquare2 },
     { id: 2, title: "Location", icon: MapPin },
-    { id: 3, title: "Interiors", icon: ImagePlus },
-    { id: 4, title: "Review", icon: CheckCircle2 },
+    { id: 3, title: "Review", icon: CheckCircle2 },
 ];
 
 const initialState: FormState = {
@@ -73,11 +69,9 @@ const initialState: FormState = {
     address: "",
     latitude: "",
     longitude: "",
-    interiors: [],
     acceptedTerms: false,
 };
 
-const MAX_INTERIOR_IMAGES = 5;
 /** Reject files larger than this pre-encoding — protects the 5 MB
  *  sessionStorage cap and keeps commit payloads manageable. */
 const MAX_IMAGE_BYTES = 2 * 1024 * 1024;
@@ -164,40 +158,6 @@ export default function EnlistDojoSignupPage() {
         }
     }
 
-    async function handleInteriorFiles(files: FileList | null) {
-        if (!files || files.length === 0) return;
-        const room = MAX_INTERIOR_IMAGES - form.interiors.length;
-        if (room <= 0) {
-            setError(`You can upload up to ${MAX_INTERIOR_IMAGES} interior photos.`);
-            return;
-        }
-        const list = Array.from(files).slice(0, room);
-        const added: UploadedImage[] = [];
-        for (const file of list) {
-            if (file.size > MAX_IMAGE_BYTES) {
-                setError(`${file.name} is over 2 MB — skipped.`);
-                continue;
-            }
-            try {
-                const dataUrl = await readFileAsDataUrl(file);
-                added.push({ name: file.name, dataUrl });
-            } catch {
-                /* skip broken file */
-            }
-        }
-        if (added.length > 0) {
-            setForm((f) => ({ ...f, interiors: [...f.interiors, ...added] }));
-            setError(null);
-        }
-    }
-
-    function removeInterior(i: number) {
-        setForm((f) => ({
-            ...f,
-            interiors: f.interiors.filter((_, idx) => idx !== i),
-        }));
-    }
-
     function validateStep(s: number): string | null {
         if (s === 0) {
             if (!form.dojoName.trim()) return "Please enter your dojo name.";
@@ -217,7 +177,7 @@ export default function EnlistDojoSignupPage() {
             if (!form.latitude || !form.longitude)
                 return "Please pin your location on the map.";
         }
-        if (s === 4) {
+        if (s === 3) {
             if (!form.acceptedTerms)
                 return "Please accept the terms and conditions to continue.";
         }
@@ -240,7 +200,7 @@ export default function EnlistDojoSignupPage() {
     }
 
     function handleSubmit() {
-        const err = validateStep(4);
+        const err = validateStep(3);
         if (err) {
             setError(err);
             return;
@@ -381,13 +341,6 @@ export default function EnlistDojoSignupPage() {
                                 />
                             )}
                             {step === 3 && (
-                                <InteriorsStep
-                                    form={form}
-                                    onAdd={handleInteriorFiles}
-                                    onRemove={removeInterior}
-                                />
-                            )}
-                            {step === 4 && (
                                 <ReviewStep
                                     form={form}
                                     update={update}
@@ -697,88 +650,6 @@ function LocationStep({
     );
 }
 
-function InteriorsStep({
-    form,
-    onAdd,
-    onRemove,
-}: {
-    form: FormState;
-    onAdd: (files: FileList | null) => void;
-    onRemove: (i: number) => void;
-}) {
-    const remaining = MAX_INTERIOR_IMAGES - form.interiors.length;
-    return (
-        <div className="space-y-6">
-            <div>
-                <h2 className="font-serif text-xl font-bold text-zinc-900 mb-1">
-                    Interior photos
-                </h2>
-                <p className="text-zinc-500 text-sm">
-                    Optional. A few photos of your training floor help students
-                    pick a dojo that feels right for them.
-                </p>
-            </div>
-
-            <label
-                className={`flex flex-col items-center justify-center gap-3 border-2 border-dashed border-zinc-300 hover:border-accent-red/60 transition-colors px-5 py-10 rounded-sm bg-white ${
-                    remaining > 0
-                        ? "cursor-pointer"
-                        : "cursor-not-allowed opacity-60"
-                }`}
-            >
-                <div className="w-14 h-14 rounded-full bg-accent-red/10 flex items-center justify-center">
-                    <ImagePlus size={22} className="text-accent-red" />
-                </div>
-                <div className="text-sm font-semibold text-zinc-900">
-                    {remaining > 0
-                        ? "Click to add photos"
-                        : "Maximum photos added"}
-                </div>
-                <div className="text-xs text-zinc-500">
-                    JPG / PNG · up to {MAX_INTERIOR_IMAGES} images · 2 MB each
-                </div>
-                <input
-                    type="file"
-                    accept="image/*"
-                    multiple
-                    className="hidden"
-                    disabled={remaining <= 0}
-                    onChange={(e) => onAdd(e.target.files)}
-                />
-            </label>
-
-            {form.interiors.length > 0 && (
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                    {form.interiors.map((img, i) => (
-                        <div
-                            key={`${img.name}-${i}`}
-                            className="relative group rounded-sm overflow-hidden border border-zinc-200 bg-white"
-                        >
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img
-                                src={img.dataUrl}
-                                alt={img.name}
-                                className="w-full h-32 object-cover"
-                            />
-                            <button
-                                type="button"
-                                onClick={() => onRemove(i)}
-                                className="absolute top-2 right-2 w-7 h-7 rounded-full bg-white/90 text-zinc-500 hover:text-accent-red hover:bg-white flex items-center justify-center shadow"
-                                aria-label={`Remove ${img.name}`}
-                            >
-                                <Trash2 size={14} />
-                            </button>
-                            <p className="text-[10px] text-zinc-500 truncate px-2 py-1 border-t border-zinc-100">
-                                {img.name}
-                            </p>
-                        </div>
-                    ))}
-                </div>
-            )}
-        </div>
-    );
-}
-
 function ReviewStep({
     form,
     update,
@@ -816,31 +687,16 @@ function ReviewStep({
                             : "—"
                     }
                 />
-                <ReviewRow
-                    label="Interior photos"
-                    value={`${form.interiors.length} uploaded`}
-                />
             </div>
 
-            {(form.logo || form.interiors.length > 0) && (
+            {form.logo && (
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                    {form.logo && (
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img
-                            src={form.logo.dataUrl}
-                            alt="Dojo logo"
-                            className="w-full h-24 object-cover rounded-sm border border-zinc-200"
-                        />
-                    )}
-                    {form.interiors.map((img, i) => (
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img
-                            key={`${img.name}-${i}`}
-                            src={img.dataUrl}
-                            alt={img.name}
-                            className="w-full h-24 object-cover rounded-sm border border-zinc-200"
-                        />
-                    ))}
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                        src={form.logo.dataUrl}
+                        alt="Dojo logo"
+                        className="w-full h-24 object-cover rounded-sm border border-zinc-200"
+                    />
                 </div>
             )}
 

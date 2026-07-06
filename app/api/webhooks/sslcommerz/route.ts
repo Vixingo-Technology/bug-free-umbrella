@@ -106,10 +106,26 @@ async function handleOrderSideEffects(orderId: string) {
         select: {
             id: true,
             includesCertificates: true,
+            includesTransferRequest: true,
             certificateRequests: { select: { id: true } },
+            transferRequest: { select: { id: true, status: true } },
         },
     });
     if (!order) return;
+
+    // Idempotent fallback for transfer requests — the success route usually
+    // handles this, but if the user closes the browser before the redirect
+    // fires we still advance the request out of PENDING_PAYMENT.
+    if (
+        order.includesTransferRequest &&
+        order.transferRequest &&
+        order.transferRequest.status === "PENDING_PAYMENT"
+    ) {
+        await prisma.studentTransferRequest.update({
+            where: { id: order.transferRequest.id },
+            data: { status: "AWAITING_DOJO", paidAt: new Date() },
+        });
+    }
 
     if (!order.includesCertificates || order.certificateRequests.length === 0) {
         return;

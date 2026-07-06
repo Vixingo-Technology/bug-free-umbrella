@@ -9,8 +9,8 @@ import { uploadToCloudinary } from "@/lib/cloudinary";
 
 export type DojoEnlistmentInput = {
     dojoName: string;
-    /** base64 data URL — will be uploaded to Cloudinary during commit. */
-    logoDataUrl?: string | null;
+    /** Cloudinary URL — upload via `uploadDojoAssetFromDataUrl` before calling commit. */
+    logoUrl?: string | null;
     email: string;
     phone: string;
     contactName: string;
@@ -18,9 +18,52 @@ export type DojoEnlistmentInput = {
     address: string;
     latitude: string;
     longitude: string;
-    /** base64 data URLs — uploaded to Cloudinary during commit. */
-    interiorDataUrls?: string[];
+    /** Cloudinary URLs — upload via `uploadDojoAssetFromDataUrl` before calling commit. */
+    interiorUrls?: string[];
 };
+
+/**
+ * Upload a single dojo asset (logo or interior photo) from a base64 data URL
+ * to Cloudinary and return the public URL. Called from the client one asset
+ * at a time so we never push megabytes of base64 through a single server
+ * action call (which trips the RSC "Maximum array nesting exceeded" limit).
+ */
+export async function uploadDojoAssetFromDataUrl(
+    dataUrl: string,
+    kind: "logo" | "interior"
+): Promise<{ error?: string; url?: string }> {
+    if (!dataUrl?.startsWith("data:")) {
+        return { error: "Invalid image payload." };
+    }
+    const supabase = await createClient();
+    const {
+        data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) {
+        return { error: "Your session has expired. Please restart the enlistment." };
+    }
+    try {
+        const { url } = await uploadToCloudinary(dataUrl, {
+            folder: kind === "logo" ? "jka/dojo-logos" : "jka/dojo-interiors",
+            publicId:
+                kind === "logo"
+                    ? `${user.id}-logo`
+                    : `${user.id}-interior-${Date.now()}-${Math.random()
+                          .toString(36)
+                          .slice(2, 8)}`,
+            resourceType: "image",
+        });
+        return { url };
+    } catch (e) {
+        console.error("[enlist-dojo] asset upload failed", e);
+        return {
+            error:
+                e instanceof Error
+                    ? e.message
+                    : "Could not upload image. Please try again.",
+        };
+    }
+}
 
 /**
  * Step 1 — kick off enlistment.
@@ -174,37 +217,10 @@ export async function commitDojoEnlistment(
     const lng = input.longitude ? parseFloat(input.longitude) : null;
     const contactRank = input.contactRank?.trim() || "";
 
-    // Upload assets to Cloudinary. If Cloudinary isn't configured, keep
-    // the data URLs — they still render in <img>, so admins can preview.
-    let logoUrl: string | null = null;
-    if (input.logoDataUrl) {
-        try {
-            const { url } = await uploadToCloudinary(input.logoDataUrl, {
-                folder: "jka/dojo-logos",
-                publicId: `${user.id}-logo`,
-                resourceType: "image",
-            });
-            logoUrl = url;
-        } catch (e) {
-            console.error("[enlist-dojo] logo upload failed", e);
-            logoUrl = input.logoDataUrl;
-        }
-    }
-
-    const interiorUrls: string[] = [];
-    for (const [i, dataUrl] of (input.interiorDataUrls ?? []).entries()) {
-        try {
-            const { url } = await uploadToCloudinary(dataUrl, {
-                folder: "jka/dojo-interiors",
-                publicId: `${user.id}-interior-${i}-${Date.now()}`,
-                resourceType: "image",
-            });
-            interiorUrls.push(url);
-        } catch (e) {
-            console.error("[enlist-dojo] interior upload failed", e);
-            interiorUrls.push(dataUrl);
-        }
-    }
+    // Images have already been uploaded via uploadDojoAssetFromDataUrl —
+    // we only receive URLs here.
+    const logoUrl: string | null = input.logoUrl ?? null;
+    const interiorUrls: string[] = input.interiorUrls ?? [];
 
     const existing = await prisma.dojoApplication.findFirst({
         where: { userId: user.id },

@@ -48,13 +48,28 @@ export default async function PaymentSuccessPage({
         if (dev === "1" && order && order.paymentStatus !== "PAID") {
             const expiry = new Date();
             expiry.setFullYear(expiry.getFullYear() + 1);
-            await prisma.$transaction([
+            const writes: any[] = [
                 prisma.shopOrder.update({ where: { id: orderId! }, data: { paymentStatus: "PAID" } }),
-                prisma.student.update({
+            ];
+            if (order.includesMembership) {
+                writes.push(prisma.student.update({
                     where: { id: user.id },
                     data: { membershipStatus: "ACTIVE", onboardingComplete: true, expiryDate: expiry },
-                }),
-            ]);
+                }));
+            }
+            if (order.includesTransferRequest) {
+                const linkedReq = await prisma.studentTransferRequest.findFirst({
+                    where: { orderId: orderId!, status: "PENDING_PAYMENT" },
+                    select: { id: true },
+                });
+                if (linkedReq) {
+                    writes.push(prisma.studentTransferRequest.update({
+                        where: { id: linkedReq.id },
+                        data: { status: "AWAITING_DOJO", paidAt: new Date() },
+                    }));
+                }
+            }
+            await prisma.$transaction(writes);
             member = await loadMember();
         }
     } catch {

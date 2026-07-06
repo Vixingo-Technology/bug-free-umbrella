@@ -17,10 +17,12 @@ export async function initiatePaymentAction(orderId: string) {
             include: {
                 user: { include: { student: true } },
                 orderItems: { include: { product: true } },
+                transferRequest: { select: { id: true } },
             },
         });
 
         if (!order) return { error: "Order not found." };
+        if (!order.user) return { error: "Order is not linked to your account." };
         if (order.paymentStatus === "PAID") return { error: "This order is already paid." };
 
         const storeId = process.env.SSLCOMMERZ_STORE_ID;
@@ -38,6 +40,19 @@ export async function initiatePaymentAction(orderId: string) {
             ? "https://sandbox.sslcommerz.com/gwprocess/v4/api.php"
             : "https://securepay.sslcommerz.com/gwprocess/v4/api.php";
 
+        const transferReqId = order.transferRequest?.id;
+        const failUrl = order.includesTransferRequest && transferReqId
+            ? `${appUrl}/portal/transfer/failed?requestId=${transferReqId}`
+            : `${appUrl}/portal/checkout?orderId=${orderId}&failed=1`;
+        const cancelUrl = order.includesTransferRequest && transferReqId
+            ? `${appUrl}/portal/transfer/failed?requestId=${transferReqId}`
+            : `${appUrl}/portal/checkout?orderId=${orderId}`;
+        const productName = order.includesTransferRequest
+            ? "JKA Dojo Transfer Fee"
+            : order.includesMembership
+                ? "JKA Membership + Gear"
+                : "JKA Shop Order";
+
         const params = new URLSearchParams({
             store_id: storeId,
             store_passwd: storePassword!,
@@ -45,8 +60,8 @@ export async function initiatePaymentAction(orderId: string) {
             currency: "BDT",
             tran_id: order.id,
             success_url: `${appUrl}/api/webhooks/sslcommerz/success?orderId=${orderId}`,
-            fail_url: `${appUrl}/portal/checkout?orderId=${orderId}&failed=1`,
-            cancel_url: `${appUrl}/portal/checkout?orderId=${orderId}`,
+            fail_url: failUrl,
+            cancel_url: cancelUrl,
             ipn_url: `${appUrl}/api/webhooks/sslcommerz`,
             cus_name: order.user.fullName,
             cus_email: order.user.email,
@@ -55,10 +70,10 @@ export async function initiatePaymentAction(orderId: string) {
             cus_city: "Dhaka",
             cus_country: "Bangladesh",
             shipping_method: "NO",
-            product_name: order.includesMembership ? "JKA Membership + Gear" : "JKA Shop Order",
-            product_category: "Membership",
+            product_name: productName,
+            product_category: order.includesTransferRequest ? "Service" : "Membership",
             product_profile: "non-physical-goods",
-            num_of_item: String(order.orderItems.length + (order.includesMembership ? 1 : 0)),
+            num_of_item: String(order.orderItems.length + (order.includesMembership ? 1 : 0) + (order.includesTransferRequest ? 1 : 0)),
         });
 
         const res = await fetch(baseUrl, {

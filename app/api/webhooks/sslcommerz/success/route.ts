@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { emitPaymentSuccess } from "@/lib/n8n";
 import type { Prisma } from "@/prisma/generated/client";
 import { notifyAdmins, notifyMembers } from "@/lib/notify";
+import { findUserIdsByRoles } from "@/lib/notify/recipients";
 
 // Called by SSLCommerz after successful payment (success_url).
 // SSLCommerz POSTs form data here; we validate, mark order paid, redirect.
@@ -33,8 +34,11 @@ export async function POST(request: Request) {
         }
 
         // Mark order paid + activate membership (member and/or dojo)
-        const order = await prisma.shopOrder.findUnique({ where: { id: orderId } });
-        if (order && order.paymentStatus !== "PAID") {
+        const order = await prisma.shopOrder.findUnique({
+            where: { id: orderId },
+            include: { transferRequest: { select: { id: true, studentId: true, fromDojoId: true, toDojo: { select: { name: true } }, fromDojo: { select: { name: true } } } } },
+        });
+        if (order && order.paymentStatus !== "PAID" && order.userId) {
             const expiry = new Date();
             expiry.setFullYear(expiry.getFullYear() + 1);
 
@@ -70,7 +74,37 @@ export async function POST(request: Request) {
                 );
             }
 
+            // Transfer request fee — move the linked request to AWAITING_DOJO.
+            if (order.includesTransferRequest && order.transferRequest) {
+                writes.push(
+                    prisma.studentTransferRequest.update({
+                        where: { id: order.transferRequest.id },
+                        data: {
+                            status: "AWAITING_DOJO",
+                            paidAt: new Date(),
+                        },
+                    }),
+                );
+            }
+
             await prisma.$transaction(writes);
+
+            // Notify current dojo owner + student now that the request is live.
+            if (order.includesTransferRequest && order.transferRequest) {
+                const ownerIds = await findUserIdsByRoles(["DOJO_OWNER"], { dojoId: order.transferRequest.fromDojoId });
+                await notifyMembers(ownerIds, {
+                    title: "Transfer request pending your clearance",
+                    message: `A student has requested a transfer from ${order.transferRequest.fromDojo?.name ?? "your dojo"} to ${order.transferRequest.toDojo?.name ?? "another dojo"}.`,
+                    type: "TRANSFER",
+                    link: "/portal/dojo/transfers",
+                });
+                await notifyMembers([order.transferRequest.studentId], {
+                    title: "Transfer payment received",
+                    message: `Your ৳${Number(order.total).toLocaleString()} transfer fee was received. Awaiting clearance from your current dojo.`,
+                    type: "PAYMENT",
+                    link: "/portal/transfer",
+                });
+            }
             const updatedUser = await prisma.user.findUnique({
                 where: { id: order.userId },
                 select: { id: true, fullName: true, email: true },

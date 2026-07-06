@@ -1,5 +1,6 @@
 import type { LucideIcon } from "lucide-react";
 import {
+    ArrowRightLeft,
     Award,
     Calendar,
     CreditCard,
@@ -97,6 +98,13 @@ export const DOJO_NAV: DojoNavItem[] = [
         href: "/portal/dojo/announcements",
         label: "Announcements",
         icon: Megaphone,
+        min: "DOJO_OWNER",
+        group: "leadership",
+    },
+    {
+        href: "/portal/dojo/transfers",
+        label: "Transfer requests",
+        icon: ArrowRightLeft,
         min: "DOJO_OWNER",
         group: "leadership",
     },
