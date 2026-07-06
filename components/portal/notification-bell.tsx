@@ -22,6 +22,7 @@ import {
     markAllReadAction,
     markNotificationReadAction,
 } from "@/app/portal/notifications/actions";
+import { enablePush, disablePush, isPushSupported, pushPermission } from "@/lib/push/client";
 
 type Notif = {
     id: string;
@@ -85,8 +86,35 @@ export default function NotificationBell({
     const [items, setItems] = useState<Notif[]>([]);
     const [loading, setLoading] = useState(false);
     const [pulse, setPulse] = useState(false);
+    const [pushState, setPushState] = useState<"unsupported" | "default" | "granted" | "denied" | "busy">(
+        "default"
+    );
     const panelRef = useRef<HTMLDivElement>(null);
     const buttonRef = useRef<HTMLButtonElement>(null);
+
+    useEffect(() => {
+        if (!isPushSupported()) {
+            setPushState("unsupported");
+            return;
+        }
+        setPushState(pushPermission() as "default" | "granted" | "denied");
+    }, []);
+
+    async function togglePush() {
+        if (pushState === "unsupported" || pushState === "busy") return;
+        setPushState("busy");
+        try {
+            if (pushPermission() === "granted") {
+                await disablePush();
+                setPushState("default");
+            } else {
+                const res = await enablePush();
+                setPushState(res.permission as "default" | "granted" | "denied");
+            }
+        } catch {
+            setPushState(pushPermission() as "default" | "granted" | "denied");
+        }
+    }
 
     useEffect(() => {
         function onDown(e: MouseEvent) {
@@ -356,6 +384,43 @@ export default function NotificationBell({
                                 </ul>
                             )}
                         </div>
+
+                        {/* Push toggle */}
+                        {pushState !== "unsupported" && (
+                            <div className="px-4 py-2 border-t border-zinc-100 bg-white flex items-center justify-between gap-3">
+                                <div className="flex flex-col">
+                                    <span className="text-[11px] font-bold text-zinc-700">
+                                        Desktop &amp; mobile push
+                                    </span>
+                                    <span className="text-[10px] text-zinc-400 leading-tight">
+                                        {pushState === "granted"
+                                            ? "On — you’ll get alerts even when this tab is closed."
+                                            : pushState === "denied"
+                                              ? "Blocked in browser settings."
+                                              : "Get instant alerts on this device."}
+                                    </span>
+                                </div>
+                                <button
+                                    onClick={togglePush}
+                                    disabled={pushState === "denied" || pushState === "busy"}
+                                    className={`text-[11px] font-bold px-2.5 py-1 rounded-md transition-colors ${
+                                        pushState === "granted"
+                                            ? "bg-emerald-50 text-emerald-700 hover:bg-emerald-100"
+                                            : pushState === "denied"
+                                              ? "bg-zinc-100 text-zinc-400 cursor-not-allowed"
+                                              : "bg-accent-red text-white hover:bg-accent-red/90"
+                                    }`}
+                                >
+                                    {pushState === "busy"
+                                        ? "…"
+                                        : pushState === "granted"
+                                          ? "Turn off"
+                                          : pushState === "denied"
+                                            ? "Blocked"
+                                            : "Enable"}
+                                </button>
+                            </div>
+                        )}
 
                         {/* Footer */}
                         <div className="px-4 py-2.5 border-t border-zinc-100 bg-zinc-50/50">

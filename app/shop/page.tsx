@@ -28,18 +28,19 @@ export default async function ShopPage() {
     return (
         <main className="min-h-screen bg-white pb-24">
             {/* Hero */}
-            <section className="relative bg-bg-deep pb-16 pt-40 text-white">
+            <section className="relative bg-zinc-50 pb-16 pt-40 text-black">
                 <div className="mx-auto max-w-7xl px-6 md:px-12">
                     <p className="text-[11px] uppercase tracking-[0.4em] text-accent-gold">
                         Official Store
                     </p>
                     <h1 className="mt-3 font-serif text-4xl md:text-6xl">
-                        JKA Bangladesh <span className="text-accent-red">Shop</span>
+                        JKA Bangladesh{" "}
+                        <span className="text-accent-red">Shop</span>
                     </h1>
-                    <p className="mt-4 max-w-2xl text-sm text-zinc-300 md:text-base">
-                        Authentic JKA-approved gear, apparel and study materials.
-                        Order online — pay securely with SSLCommerz. Delivery
-                        anywhere in Bangladesh.
+                    <p className="mt-4 max-w-2xl text-sm text-zinc-500 md:text-base">
+                        Authentic JKA-approved gear, apparel and study
+                        materials. Order online — pay securely with SSLCommerz.
+                        Delivery anywhere in Bangladesh.
                     </p>
                 </div>
             </section>
@@ -49,8 +50,8 @@ export default async function ShopPage() {
                 {products.length === 0 ? (
                     <div className="rounded-sm border border-dashed border-zinc-300 bg-white py-20 text-center">
                         <p className="text-sm text-zinc-500">
-                            No products available at the moment. Please check back
-                            soon.
+                            No products available at the moment. Please check
+                            back soon.
                         </p>
                     </div>
                 ) : (

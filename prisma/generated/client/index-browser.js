@@ -404,6 +404,17 @@ exports.Prisma.NotificationScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.PushSubscriptionScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  endpoint: 'endpoint',
+  p256dh: 'p256dh',
+  auth: 'auth',
+  userAgent: 'userAgent',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.ShopProductScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -740,6 +751,7 @@ exports.Prisma.ModelName = {
   Announcement: 'Announcement',
   EventRegistration: 'EventRegistration',
   Notification: 'Notification',
+  PushSubscription: 'PushSubscription',
   ShopProduct: 'ShopProduct',
   DojoInventoryItem: 'DojoInventoryItem',
   DojoSale: 'DojoSale',

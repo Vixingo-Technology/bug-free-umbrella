@@ -222,6 +222,7 @@ model User {
   transfersDojoActed  StudentTransferRequest[] @relation("TransferDojoActor")
   transfersAdminActed StudentTransferRequest[] @relation("TransferAdminActor")
   dojoHistoryChanges  StudentDojoHistory[]     @relation("HistoryChangedBy")
+  pushSubscriptions   PushSubscription[]
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -742,6 +743,27 @@ model Notification {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("notifications")
+}
+
+// ─────────────────────────────────────────────
+// PUSH SUBSCRIPTIONS — Web Push (browser + PWA)
+// ─────────────────────────────────────────────
+
+model PushSubscription {
+  id        String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId    String  @map("user_id") @db.Uuid
+  endpoint  String  @unique
+  p256dh    String
+  auth      String
+  userAgent String? @map("user_agent")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([userId])
+  @@map("push_subscriptions")
 }
 
 // ─────────────────────────────────────────────
