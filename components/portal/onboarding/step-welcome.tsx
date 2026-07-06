@@ -238,7 +238,7 @@ export default function StepWelcome({ member, orderId, onBack }: Props) {
                     onClick={onBack}
                     className="w-full flex items-center justify-center gap-1.5 text-zinc-400 hover:text-zinc-600 text-xs py-2 transition-colors"
                 >
-                    <ChevronLeft size={13} /> Back to products
+                    <ChevronLeft size={13} /> Back to profile
                 </button>
             </motion.div>
         </div>

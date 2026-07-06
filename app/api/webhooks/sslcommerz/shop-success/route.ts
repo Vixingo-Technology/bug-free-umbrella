@@ -70,7 +70,7 @@ export async function POST(request: Request) {
 
         if (json.status !== "VALID" && json.status !== "VALIDATED") {
             return NextResponse.redirect(
-                new URL(`/shop/checkout?orderId=${orderId}&failed=1`, request.url),
+                new URL(`/shop/failed?orderId=${orderId}`, request.url),
             );
         }
 

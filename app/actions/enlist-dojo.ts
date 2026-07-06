@@ -9,8 +9,6 @@ import { uploadToCloudinary } from "@/lib/cloudinary";
 
 export type DojoEnlistmentInput = {
     dojoName: string;
-    /** Cloudinary URL — upload via `uploadDojoAssetFromDataUrl` before calling commit. */
-    logoUrl?: string | null;
     email: string;
     phone: string;
     contactName: string;
@@ -23,14 +21,14 @@ export type DojoEnlistmentInput = {
 };
 
 /**
- * Upload a single dojo asset (logo or interior photo) from a base64 data URL
- * to Cloudinary and return the public URL. Called from the client one asset
- * at a time so we never push megabytes of base64 through a single server
- * action call (which trips the RSC "Maximum array nesting exceeded" limit).
+ * Upload a single dojo interior photo from a base64 data URL to Cloudinary
+ * and return the public URL. Called from the client one asset at a time so
+ * we never push megabytes of base64 through a single server action call
+ * (which trips the RSC "Maximum array nesting exceeded" limit).
  */
 export async function uploadDojoAssetFromDataUrl(
     dataUrl: string,
-    kind: "logo" | "interior"
+    _kind: "interior"
 ): Promise<{ error?: string; url?: string }> {
     if (!dataUrl?.startsWith("data:")) {
         return { error: "Invalid image payload." };
@@ -44,13 +42,10 @@ export async function uploadDojoAssetFromDataUrl(
     }
     try {
         const { url } = await uploadToCloudinary(dataUrl, {
-            folder: kind === "logo" ? "jka/dojo-logos" : "jka/dojo-interiors",
-            publicId:
-                kind === "logo"
-                    ? `${user.id}-logo`
-                    : `${user.id}-interior-${Date.now()}-${Math.random()
-                          .toString(36)
-                          .slice(2, 8)}`,
+            folder: "jka/dojo-interiors",
+            publicId: `${user.id}-interior-${Date.now()}-${Math.random()
+                .toString(36)
+                .slice(2, 8)}`,
             resourceType: "image",
         });
         return { url };
@@ -166,19 +161,169 @@ export async function resendDojoOtp(
     return {};
 }
 
+const ENLISTMENT_FEE_BDT = 10000;
+
 /**
- * Step 4 — initiate payment (stub gateway).
- * Real implementation will create an SSLCommerz session.
+ * Step 4 — initiate payment. Starts an SSLCommerz sandbox session for the
+ * given dojo application. The application must already be committed (as
+ * PENDING_PAYMENT); the returned gateway URL should be opened via
+ * `window.location`. If SSLCommerz isn't configured, we mark the application
+ * paid directly (dev bypass) and return no redirect URL.
  */
 export async function initiateDojoEnlistmentPayment(
-    _email: string
-): Promise<{ error?: string; redirectUrl?: string }> {
-    return {};
+    applicationId: string
+): Promise<{ error?: string; redirectUrl?: string; devPaid?: boolean }> {
+    if (!applicationId?.trim()) {
+        return { error: "Missing application reference." };
+    }
+
+    const supabase = await createClient();
+    const {
+        data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) {
+        return {
+            error: "Your session has expired. Please restart the enlistment.",
+        };
+    }
+
+    const application = await prisma.dojoApplication.findUnique({
+        where: { id: applicationId },
+        select: {
+            id: true,
+            userId: true,
+            dojoName: true,
+            email: true,
+            phone: true,
+            contactName: true,
+            address: true,
+            status: true,
+        },
+    });
+    if (!application || application.userId !== user.id) {
+        return { error: "Application not found." };
+    }
+    if (application.status === "PAID" || application.status === "APPROVED") {
+        return { error: "This application is already paid." };
+    }
+
+    const storeId = process.env.SSLCOMMERZ_STORE_ID;
+    const storePassword = process.env.SSLCOMMERZ_STORE_PASSWORD;
+    const isSandbox = process.env.SSLCOMMERZ_ENV !== "live";
+    const appUrl = process.env.APP_URL ?? "http://localhost:3000";
+
+    // Dev bypass — no credentials configured. Mark paid straight away.
+    if (
+        !storeId ||
+        storeId === "your-sslcommerz-store-id" ||
+        !storePassword
+    ) {
+        await markDojoEnlistmentPaidInternal(
+            application.id,
+            `DEV-${Date.now()}`
+        );
+        return { devPaid: true };
+    }
+
+    const gatewayUrl = isSandbox
+        ? "https://sandbox.sslcommerz.com/gwprocess/v4/api.php"
+        : "https://securepay.sslcommerz.com/gwprocess/v4/api.php";
+
+    const params = new URLSearchParams({
+        store_id: storeId,
+        store_passwd: storePassword,
+        total_amount: ENLISTMENT_FEE_BDT.toFixed(2),
+        currency: "BDT",
+        tran_id: application.id,
+        success_url: `${appUrl}/api/webhooks/sslcommerz/dojo-success?applicationId=${application.id}`,
+        fail_url: `${appUrl}/enlist-dojo/failed?applicationId=${application.id}`,
+        cancel_url: `${appUrl}/enlist-dojo/failed?applicationId=${application.id}&cancelled=1`,
+        ipn_url: `${appUrl}/api/webhooks/sslcommerz`,
+        cus_name: application.contactName,
+        cus_email: application.email,
+        cus_phone: application.phone,
+        cus_add1: application.address,
+        cus_city: "Dhaka",
+        cus_postcode: "1000",
+        cus_country: "Bangladesh",
+        shipping_method: "NO",
+        ship_name: application.contactName,
+        ship_add1: application.address,
+        ship_city: "Dhaka",
+        ship_postcode: "1000",
+        ship_country: "Bangladesh",
+        product_name: `Dojo enlistment — ${application.dojoName}`.slice(0, 100),
+        product_category: "Membership",
+        product_profile: "non-physical-goods",
+        num_of_item: "1",
+    });
+
+    try {
+        const res = await fetch(gatewayUrl, {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: params.toString(),
+        });
+        const json = await res.json();
+        if (json.status === "SUCCESS" && json.GatewayPageURL) {
+            return { redirectUrl: json.GatewayPageURL as string };
+        }
+        return {
+            error:
+                json.failedreason ??
+                "Payment gateway error. Please try again.",
+        };
+    } catch {
+        return {
+            error:
+                "Could not reach the payment gateway. Please check your connection and try again.",
+        };
+    }
+}
+
+/**
+ * Service-level (no auth check) helper used by the SSLCommerz webhook after
+ * IPN validation succeeds. Flips the dojo → active and the application →
+ * PAID in a single transaction. Idempotent.
+ */
+export async function markDojoEnlistmentPaidInternal(
+    applicationId: string,
+    paymentId: string
+): Promise<{ ok: boolean }> {
+    const application = await prisma.dojoApplication.findUnique({
+        where: { id: applicationId },
+        select: { id: true, dojoId: true, status: true },
+    });
+    if (!application) return { ok: false };
+    if (application.status === "PAID" || application.status === "APPROVED") {
+        return { ok: true };
+    }
+    try {
+        await prisma.$transaction(async (tx) => {
+            if (application.dojoId) {
+                await tx.dojo.update({
+                    where: { id: application.dojoId },
+                    data: { isActive: true },
+                });
+            }
+            await tx.dojoApplication.update({
+                where: { id: application.id },
+                data: {
+                    status: "PAID",
+                    paymentId,
+                },
+            });
+        });
+        return { ok: true };
+    } catch (e) {
+        console.error("[enlist-dojo] markDojoEnlistmentPaidInternal failed", e);
+        return { ok: false };
+    }
 }
 
 /**
  * Commit the enlistment. Creates:
- *   - Dojo (isActive = paidNow) with the uploaded logo URL.
+ *   - Dojo (isActive = paidNow).
  *   - DojoOwner linking the current user to the Dojo.
  *   - Application row with the Cloudinary URLs.
  *
@@ -219,20 +364,18 @@ export async function commitDojoEnlistment(
 
     // Images have already been uploaded via uploadDojoAssetFromDataUrl —
     // we only receive URLs here.
-    const logoUrl: string | null = input.logoUrl ?? null;
     const interiorUrls: string[] = input.interiorUrls ?? [];
 
     const existing = await prisma.dojoApplication.findFirst({
         where: { userId: user.id },
         orderBy: { createdAt: "desc" },
-        select: { id: true, dojoId: true, status: true, interiorUrls: true, logoUrl: true },
+        select: { id: true, dojoId: true, status: true, interiorUrls: true },
     });
 
     let applicationId: string;
     let dojoId: string | null = existing?.dojoId ?? null;
 
     // Merge with existing images so re-committing doesn't drop earlier uploads.
-    const finalLogoUrl = logoUrl ?? existing?.logoUrl ?? null;
     const finalInteriorUrls =
         interiorUrls.length > 0
             ? interiorUrls
@@ -265,7 +408,6 @@ export async function commitDojoEnlistment(
                         email: input.email.trim(),
                         latitude: Number.isFinite(lat) ? lat : null,
                         longitude: Number.isFinite(lng) ? lng : null,
-                        logoUrl: finalLogoUrl,
                         isActive: options.paidNow,
                     },
                     select: { id: true },
@@ -281,7 +423,6 @@ export async function commitDojoEnlistment(
                         email: input.email.trim(),
                         latitude: Number.isFinite(lat) ? lat : null,
                         longitude: Number.isFinite(lng) ? lng : null,
-                        logoUrl: finalLogoUrl,
                         isActive: options.paidNow ? true : undefined,
                     },
                 });
@@ -301,7 +442,6 @@ export async function commitDojoEnlistment(
                     where: { id: existing.id },
                     data: {
                         dojoName: input.dojoName.trim(),
-                        logoUrl: finalLogoUrl,
                         email: input.email.trim(),
                         phone: input.phone.trim(),
                         contactName: input.contactName.trim(),
@@ -322,7 +462,6 @@ export async function commitDojoEnlistment(
                     data: {
                         userId: user.id,
                         dojoName: input.dojoName.trim(),
-                        logoUrl: finalLogoUrl,
                         email: input.email.trim(),
                         phone: input.phone.trim(),
                         contactName: input.contactName.trim(),

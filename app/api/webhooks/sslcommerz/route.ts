@@ -20,12 +20,26 @@ if (supabaseUrl && supabaseServiceKey) {
 export async function POST(request: Request) {
     try {
         const formData = await request.formData();
-        const status = formData.get("status");
         const val_id = formData.get("val_id");
         const tran_id = formData.get("tran_id");
 
+        const storeId = process.env.SSLCOMMERZ_STORE_ID;
+        const storePassword = process.env.SSLCOMMERZ_STORE_PASSWORD;
+        const isSandbox = process.env.SSLCOMMERZ_ENV !== "live";
+
+        if (!storeId || !storePassword) {
+            console.error("[sslcommerz] IPN received but store credentials missing");
+            return NextResponse.json(
+                { error: "Gateway not configured" },
+                { status: 500 },
+            );
+        }
+
         // 1. Validate the IPN with SSLCommerz to prevent spoofing
-        const validationUrl = `https://sandbox.sslcommerz.com/validator/api/validationserverAPI.php?val_id=${val_id}&store_id=${process.env.SSLC_STORE_ID}&store_passwd=${process.env.SSLC_STORE_PASSWORD}&v=1&format=json`;
+        const validatorHost = isSandbox
+            ? "sandbox.sslcommerz.com"
+            : "securepay.sslcommerz.com";
+        const validationUrl = `https://${validatorHost}/validator/api/validationserverAPI.php?val_id=${val_id}&store_id=${storeId}&store_passwd=${storePassword}&v=1&format=json`;
         const validationResponse = await fetch(validationUrl);
         const validationData = await validationResponse.json();
 

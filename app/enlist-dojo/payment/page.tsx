@@ -20,13 +20,10 @@ import {
     commitDojoEnlistment,
     initiateDojoEnlistmentPayment,
     markDojoEnlistmentPaid,
-    uploadDojoAssetFromDataUrl,
     type DojoEnlistmentInput,
 } from "@/app/actions/enlist-dojo";
 
 const DRAFT_KEY = "jka.enlistDojo.draft";
-
-type UploadedImage = { name: string; dataUrl: string };
 
 type DraftShape = {
     dojoName: string;
@@ -37,7 +34,6 @@ type DraftShape = {
     address: string;
     latitude: string;
     longitude: string;
-    logo?: UploadedImage | null;
 };
 
 const ENLISTMENT_FEE_BDT = 10000;
@@ -82,22 +78,9 @@ function PaymentContent() {
         return null;
     }
 
-    async function draftToInput(draft: DraftShape): Promise<DojoEnlistmentInput> {
-        let logoUrl: string | null = null;
-        if (draft.logo?.dataUrl) {
-            const res = await uploadDojoAssetFromDataUrl(
-                draft.logo.dataUrl,
-                "logo"
-            );
-            if (res?.error || !res?.url) {
-                throw new Error(res?.error ?? "Could not upload dojo logo.");
-            }
-            logoUrl = res.url;
-        }
-
+    function draftToInput(draft: DraftShape): DojoEnlistmentInput {
         return {
             dojoName: draft.dojoName,
-            logoUrl,
             email: draft.email,
             phone: draft.phone,
             contactName: draft.contactName,
@@ -112,24 +95,9 @@ function PaymentContent() {
     function handlePay() {
         setError(null);
         startTransition(async () => {
-            const init = await initiateDojoEnlistmentPayment(email);
-            if (init?.error) {
-                router.push(
-                    `/enlist-dojo/success?status=failed&reason=${encodeURIComponent(
-                        init.error
-                    )}`
-                );
-                return;
-            }
-            if (init?.redirectUrl) {
-                window.location.href = init.redirectUrl;
-                return;
-            }
-
-            // Stub gateway success path.
+            // 1. Ensure a DojoApplication row exists as PENDING_PAYMENT so the
+            //    SSLCommerz tran_id has something to point at.
             let applicationId = existingApplicationId;
-            let dojoId: string | undefined;
-
             if (!applicationId) {
                 const draft = readDraft();
                 if (!draft) {
@@ -138,43 +106,64 @@ function PaymentContent() {
                     );
                     return;
                 }
-                let input: DojoEnlistmentInput;
-                try {
-                    input = await draftToInput(draft);
-                } catch (e) {
-                    setError(
-                        e instanceof Error
-                            ? e.message
-                            : "Could not upload your dojo images."
-                    );
-                    return;
-                }
-                const commit = await commitDojoEnlistment(input, {
-                    paidNow: true,
-                });
+                const commit = await commitDojoEnlistment(
+                    draftToInput(draft),
+                    { paidNow: false }
+                );
                 if (commit?.error || !commit?.applicationId) {
                     router.push(
-                        `/enlist-dojo/success?status=failed&reason=${encodeURIComponent(
+                        `/enlist-dojo/failed?reason=${encodeURIComponent(
                             commit?.error ??
-                                "We couldn't save your enlistment after payment."
+                                "We couldn't save your enlistment before payment."
                         )}`
                     );
                     return;
                 }
                 applicationId = commit.applicationId;
-                dojoId = commit.dojoId;
-            } else {
-                const paid = await markDojoEnlistmentPaid(applicationId);
-                if (paid?.error) {
-                    setError(paid.error);
-                    return;
-                }
+            }
+
+            // 2. Start the SSLCommerz sandbox session.
+            const init = await initiateDojoEnlistmentPayment(applicationId!);
+            if (init?.error) {
+                router.push(
+                    `/enlist-dojo/failed?applicationId=${encodeURIComponent(
+                        applicationId!
+                    )}&reason=${encodeURIComponent(init.error)}`
+                );
+                return;
             }
 
             try {
                 sessionStorage.removeItem(DRAFT_KEY);
             } catch {
                 /* ignore */
+            }
+
+            if (init?.redirectUrl) {
+                window.location.href = init.redirectUrl;
+                return;
+            }
+
+            // Dev bypass (no gateway configured) — the server marked us paid.
+            if (init?.devPaid) {
+                router.push(
+                    `/enlist-dojo/success?applicationId=${encodeURIComponent(
+                        applicationId!
+                    )}`
+                );
+                return;
+            }
+
+            // Belt-and-braces fallback: mark paid via the authenticated action
+            // and land on the success page.
+            const paid = await markDojoEnlistmentPaid(applicationId!);
+            if (paid?.error) {
+                router.push(
+                    `/enlist-dojo/failed?applicationId=${encodeURIComponent(
+                        applicationId!
+                    )}&reason=${encodeURIComponent(paid.error)}`
+                );
+                return;
             }
             router.push(
                 `/enlist-dojo/success?applicationId=${encodeURIComponent(
@@ -199,17 +188,7 @@ function PaymentContent() {
                 );
                 return;
             }
-            let input: DojoEnlistmentInput;
-            try {
-                input = await draftToInput(draft);
-            } catch (e) {
-                setError(
-                    e instanceof Error
-                        ? e.message
-                        : "Could not upload your dojo images."
-                );
-                return;
-            }
+            const input = draftToInput(draft);
             const commit = await commitDojoEnlistment(input, {
                 paidNow: false,
             });

@@ -24,7 +24,6 @@ export default async function OnboardingPage() {
 
     let member = null;
     let dojos: any[] = [];
-    let products: any[] = [];
     let alreadyComplete = false;
 
     try {
@@ -72,13 +71,6 @@ export default async function OnboardingPage() {
                     longitude: true,
                 },
             });
-
-            if (!member?.onboardingComplete) {
-                products = await prisma.shopProduct.findMany({
-                    where: { isActive: true },
-                    orderBy: { category: "asc" },
-                });
-            }
         }
     } catch {
         // DB not ready — still render (wizard handles gracefully)
@@ -99,7 +91,6 @@ export default async function OnboardingPage() {
             userId={user.id}
             member={serialize(member)}
             dojos={dojos}
-            products={serialize(products)}
             isProfileUpdateMode={isProfileUpdateMode}
             missingFields={missingFields}
         />

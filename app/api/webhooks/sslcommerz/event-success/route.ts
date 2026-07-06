@@ -20,13 +20,13 @@ export async function POST(request: Request) {
         });
         if (!reg) return NextResponse.redirect(new URL("/", request.url));
 
-        const cardUrl = new URL(
-            `/participants/${reg.qrToken}`,
+        const successUrl = new URL(
+            `/events/payment-success?regId=${regId}`,
             request.url,
         );
 
         if (reg.paymentStatus === "PAID") {
-            return NextResponse.redirect(cardUrl);
+            return NextResponse.redirect(successUrl);
         }
 
         const storeId = process.env.SSLCOMMERZ_STORE_ID;
@@ -38,21 +38,21 @@ export async function POST(request: Request) {
             const validation = await fetch(validateUrl);
             const json = await validation.json();
             if (json.status !== "VALID" && json.status !== "VALIDATED") {
-                cardUrl.searchParams.set("payfailed", "1");
-                return NextResponse.redirect(cardUrl);
+                return NextResponse.redirect(
+                    new URL(`/events/payment-failed?regId=${regId}`, request.url),
+                );
             }
         }
 
         await markRegistrationPaid(regId, valId ?? "SSLCOMMERZ");
-        cardUrl.searchParams.set("paid", "1");
-        return NextResponse.redirect(cardUrl);
+        return NextResponse.redirect(successUrl);
     } catch (err) {
         console.error("SSLCommerz event-success webhook error:", err);
         return NextResponse.redirect(new URL("/", request.url));
     }
 }
 
-// Dev bypass / manual revisit — just land on the card.
+// Dev bypass / manual revisit — land on the success page.
 export async function GET(request: Request) {
     const url = new URL(request.url);
     const regId = url.searchParams.get("regId");
@@ -60,10 +60,10 @@ export async function GET(request: Request) {
 
     const reg = await prisma.eventRegistration.findUnique({
         where: { id: regId },
-        select: { qrToken: true },
+        select: { id: true },
     });
     if (!reg) return NextResponse.redirect(new URL("/", request.url));
     return NextResponse.redirect(
-        new URL(`/participants/${reg.qrToken}`, request.url),
+        new URL(`/events/payment-success?regId=${regId}`, request.url),
     );
 }

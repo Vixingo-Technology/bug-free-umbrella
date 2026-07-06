@@ -71,7 +71,7 @@ export default async function DojoSetupChecklist({
             key: "gear",
             title: "Order your starter gear",
             body: "Pick up federation-issued belts, certificates, and uniforms from the shop.",
-            href: "/portal/dojo/shop",
+            href: "/shop",
             status: data.gearDone ? "done" : "todo",
         },
     ];

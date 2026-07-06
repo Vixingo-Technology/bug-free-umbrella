@@ -4,21 +4,20 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "motion/react";
 import StepProfile, { type ProfileData } from "./step-profile";
-import StepProducts from "./step-products";
 import StepWelcome from "./step-welcome";
+import { createOnboardingOrderAction } from "@/app/portal/onboarding/actions";
 
 interface Props {
     userId: string;
     member: any;
     dojos: any[];
-    products: any[];
     /** True when the user already completed onboarding but has missing required fields. */
     isProfileUpdateMode?: boolean;
     /** Human-readable list of fields still missing (for display in Step 1 banner). */
     missingFields?: string[];
 }
 
-const STEPS_FULL   = [{ label: "Profile", number: 1 }, { label: "Gear Up", number: 2 }, { label: "Welcome", number: 3 }];
+const STEPS_FULL   = [{ label: "Profile", number: 1 }, { label: "Welcome", number: 2 }];
 const STEPS_UPDATE = [{ label: "Update Profile", number: 1 }];
 
 function initialProfile(member: any): ProfileData {
@@ -43,7 +42,6 @@ export default function OnboardingWizard({
     userId,
     member,
     dojos,
-    products,
     isProfileUpdateMode = false,
     missingFields = [],
 }: Props) {
@@ -51,23 +49,22 @@ export default function OnboardingWizard({
     const [step, setStep] = useState(1);
     const [orderId, setOrderId] = useState<string | null>(null);
 
-    // ── Persisted wizard state ─────────────────────────────────────────────
-    // Lifted here so navigating Back from step 2 → 1 or 3 → 2 preserves
-    // everything the user typed / selected.
     const [profile, setProfile] = useState<ProfileData>(() => initialProfile(member));
-    const [selectedProducts, setSelectedProducts] = useState<Set<string>>(new Set());
 
     const STEPS = isProfileUpdateMode ? STEPS_UPDATE : STEPS_FULL;
     const totalSteps = STEPS.length;
 
     /** Called when Step 1 (profile) is saved successfully. */
-    function handleProfileNext() {
+    async function handleProfileNext() {
         if (isProfileUpdateMode) {
-            // Profile-update mode: go straight to portal, skip gear/welcome.
             router.push("/portal");
-        } else {
-            setStep(2);
+            return;
         }
+        const res = await createOnboardingOrderAction([]);
+        if (res && "orderId" in res && res.orderId) {
+            setOrderId(res.orderId);
+        }
+        setStep(2);
     }
 
     return (
@@ -152,31 +149,12 @@ export default function OnboardingWizard({
                             animate={{ opacity: 1, x: 0 }}
                             exit={{ opacity: 0, x: -40 }}
                             transition={{ duration: 0.3 }}
-                            className="w-full max-w-4xl"
-                        >
-                            <StepProducts
-                                products={products}
-                                value={selectedProducts}
-                                onChange={setSelectedProducts}
-                                onBack={() => setStep(1)}
-                                onNext={(oid) => { setOrderId(oid); setStep(3); }}
-                            />
-                        </motion.div>
-                    )}
-
-                    {!isProfileUpdateMode && step === 3 && (
-                        <motion.div
-                            key="step3"
-                            initial={{ opacity: 0, x: 40 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: -40 }}
-                            transition={{ duration: 0.3 }}
                             className="w-full max-w-xl"
                         >
                             <StepWelcome
                                 member={{ ...member, ...profile }}
                                 orderId={orderId}
-                                onBack={() => setStep(2)}
+                                onBack={() => setStep(1)}
                             />
                         </motion.div>
                     )}

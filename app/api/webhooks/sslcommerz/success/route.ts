@@ -30,7 +30,7 @@ export async function POST(request: Request) {
         const json = await validation.json();
 
         if (json.status !== "VALID" && json.status !== "VALIDATED") {
-            return NextResponse.redirect(new URL(`/portal/checkout?orderId=${orderId}&failed=1`, request.url));
+            return NextResponse.redirect(new URL(`/portal/payment-failed?orderId=${orderId}`, request.url));
         }
 
         // Mark order paid + activate membership (member and/or dojo)

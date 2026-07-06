@@ -26,22 +26,13 @@ import {
     CheckCircle2,
     Loader2,
     MapPin,
-    Upload,
     UserSquare2,
-    X,
 } from "lucide-react";
 import Logo from "@/assets/jka_logo.svg";
 import { submitDojoEnlistment } from "@/app/actions/enlist-dojo";
 
-type UploadedImage = {
-    name: string;
-    /** Base64 data URL — becomes a Cloudinary URL after commit. */
-    dataUrl: string;
-};
-
 type FormState = {
     dojoName: string;
-    logo: UploadedImage | null;
     email: string;
     phone: string;
     contactName: string;
@@ -61,7 +52,6 @@ const STEPS = [
 
 const initialState: FormState = {
     dojoName: "",
-    logo: null,
     email: "",
     phone: "",
     contactName: "",
@@ -71,19 +61,6 @@ const initialState: FormState = {
     longitude: "",
     acceptedTerms: false,
 };
-
-/** Reject files larger than this pre-encoding — protects the 5 MB
- *  sessionStorage cap and keeps commit payloads manageable. */
-const MAX_IMAGE_BYTES = 2 * 1024 * 1024;
-
-function readFileAsDataUrl(file: File): Promise<string> {
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = () => resolve(reader.result as string);
-        reader.onerror = () => reject(reader.error);
-        reader.readAsDataURL(file);
-    });
-}
 
 const BELT_RANKS = [
     "1st Kyu",
@@ -138,24 +115,6 @@ export default function EnlistDojoSignupPage() {
 
     function setLatLng(lat: string, lng: string) {
         setForm((f) => ({ ...f, latitude: lat, longitude: lng }));
-    }
-
-    async function handleLogoFile(file: File | null) {
-        if (!file) {
-            setForm((f) => ({ ...f, logo: null }));
-            return;
-        }
-        if (file.size > MAX_IMAGE_BYTES) {
-            setError("Logo must be under 2 MB.");
-            return;
-        }
-        try {
-            const dataUrl = await readFileAsDataUrl(file);
-            setForm((f) => ({ ...f, logo: { name: file.name, dataUrl } }));
-            setError(null);
-        } catch {
-            setError("Could not read that file. Try another image.");
-        }
     }
 
     function validateStep(s: number): string | null {
@@ -324,7 +283,6 @@ export default function EnlistDojoSignupPage() {
                                 <BasicsStep
                                     form={form}
                                     update={update}
-                                    onLogo={handleLogoFile}
                                 />
                             )}
                             {step === 1 && (
@@ -427,11 +385,9 @@ function inputClass() {
 function BasicsStep({
     form,
     update,
-    onLogo,
 }: {
     form: FormState;
     update: <K extends keyof FormState>(k: K, v: FormState[K]) => void;
-    onLogo: (file: File | null) => void;
 }) {
     return (
         <div className="space-y-6">
@@ -440,7 +396,7 @@ function BasicsStep({
                     Tell us about your dojo
                 </h2>
                 <p className="text-zinc-500 text-sm">
-                    The name and emblem your students train under.
+                    The name your students train under.
                 </p>
             </div>
 
@@ -453,59 +409,6 @@ function BasicsStep({
                     placeholder="e.g. Shotokan Dhanmondi Dojo"
                     className={inputClass()}
                 />
-            </div>
-
-            <div>
-                <Label>Dojo logo (optional)</Label>
-                {form.logo ? (
-                    <div className="flex items-center gap-4 border border-zinc-200 bg-white p-4 rounded-sm">
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img
-                            src={form.logo.dataUrl}
-                            alt="Dojo logo preview"
-                            className="w-16 h-16 rounded-sm object-cover border border-zinc-200"
-                        />
-                        <div className="flex-1 min-w-0">
-                            <div className="text-sm font-semibold text-zinc-900 truncate">
-                                {form.logo.name}
-                            </div>
-                            <div className="text-xs text-zinc-500 mt-1">
-                                Preview — this is how your logo will look on
-                                your branch card.
-                            </div>
-                        </div>
-                        <button
-                            type="button"
-                            onClick={() => onLogo(null)}
-                            className="text-zinc-400 hover:text-accent-red transition-colors"
-                            aria-label="Remove logo"
-                        >
-                            <X size={18} />
-                        </button>
-                    </div>
-                ) : (
-                    <label className="flex items-center gap-4 border-2 border-dashed border-zinc-300 hover:border-accent-red/60 transition-colors px-5 py-6 rounded-sm cursor-pointer bg-white">
-                        <div className="w-12 h-12 rounded-sm bg-accent-red/10 flex items-center justify-center">
-                            <Upload size={18} className="text-accent-red" />
-                        </div>
-                        <div className="flex-1">
-                            <div className="text-sm font-semibold text-zinc-900">
-                                Upload your dojo emblem
-                            </div>
-                            <div className="text-xs text-zinc-500 mt-1">
-                                PNG or JPG, square, at least 400×400 · max 2 MB.
-                            </div>
-                        </div>
-                        <input
-                            type="file"
-                            accept="image/*"
-                            className="hidden"
-                            onChange={(e) =>
-                                onLogo(e.target.files?.[0] ?? null)
-                            }
-                        />
-                    </label>
-                )}
             </div>
         </div>
     );
@@ -671,7 +574,6 @@ function ReviewStep({
 
             <div className="bg-white border border-zinc-200 rounded-sm divide-y divide-zinc-200">
                 <ReviewRow label="Dojo name" value={form.dojoName} />
-                <ReviewRow label="Logo" value={form.logo?.name || "—"} />
                 <ReviewRow label="Email" value={form.email} />
                 <ReviewRow label="Phone" value={form.phone} />
                 <ReviewRow
@@ -688,17 +590,6 @@ function ReviewStep({
                     }
                 />
             </div>
-
-            {form.logo && (
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                        src={form.logo.dataUrl}
-                        alt="Dojo logo"
-                        className="w-full h-24 object-cover rounded-sm border border-zinc-200"
-                    />
-                </div>
-            )}
 
             <label className="flex items-start gap-3 cursor-pointer">
                 <input

@@ -43,10 +43,10 @@ export async function initiatePaymentAction(orderId: string) {
         const transferReqId = order.transferRequest?.id;
         const failUrl = order.includesTransferRequest && transferReqId
             ? `${appUrl}/portal/transfer/failed?requestId=${transferReqId}`
-            : `${appUrl}/portal/checkout?orderId=${orderId}&failed=1`;
+            : `${appUrl}/portal/payment-failed?orderId=${orderId}`;
         const cancelUrl = order.includesTransferRequest && transferReqId
             ? `${appUrl}/portal/transfer/failed?requestId=${transferReqId}`
-            : `${appUrl}/portal/checkout?orderId=${orderId}`;
+            : `${appUrl}/portal/payment-failed?orderId=${orderId}&cancelled=1`;
         const productName = order.includesTransferRequest
             ? "JKA Dojo Transfer Fee"
             : order.includesMembership
@@ -68,8 +68,14 @@ export async function initiatePaymentAction(orderId: string) {
             cus_phone: order.user.phone ?? "01XXXXXXXXX",
             cus_add1: order.user.student?.address ?? "Bangladesh",
             cus_city: "Dhaka",
+            cus_postcode: "1000",
             cus_country: "Bangladesh",
             shipping_method: "NO",
+            ship_name: order.user.fullName,
+            ship_add1: order.user.student?.address ?? "Bangladesh",
+            ship_city: "Dhaka",
+            ship_postcode: "1000",
+            ship_country: "Bangladesh",
             product_name: productName,
             product_category: order.includesTransferRequest ? "Service" : "Membership",
             product_profile: "non-physical-goods",
