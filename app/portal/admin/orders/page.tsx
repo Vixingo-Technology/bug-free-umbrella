@@ -12,7 +12,10 @@ export default async function AdminOrdersPage() {
         orderBy: { createdAt: "desc" },
         include: {
             user: {
-                select: { id: true, fullName: true, email: true, phone: true, memberNumber: true },
+                select: {
+                    id: true, fullName: true, email: true, phone: true, memberNumber: true,
+                    student: { select: { address: true } },
+                },
             },
             orderItems: {
                 include: { product: { select: { id: true, name: true } } },
@@ -21,13 +24,25 @@ export default async function AdminOrdersPage() {
     });
     const orders = ordersRaw.map((o) => ({
         ...o,
-        member: {
-            id: o.user.id,
-            fullName: o.user.fullName,
-            email: o.user.email,
-            phone: o.user.phone,
-            memberNumber: o.user.memberNumber ?? null,
-        },
+        member: o.user
+            ? {
+                id: o.user.id,
+                fullName: o.user.fullName,
+                email: o.user.email,
+                phone: o.user.phone,
+                address: o.user.student?.address ?? null,
+                memberNumber: o.user.memberNumber ?? null,
+                isGuest: false,
+            }
+            : {
+                id: null,
+                fullName: o.guestName ?? "Guest",
+                email: o.guestEmail ?? "",
+                phone: o.guestPhone ?? null,
+                address: o.guestAddress ?? null,
+                memberNumber: null,
+                isGuest: true,
+            },
     }));
 
     return <OrdersAdminClient orders={serialize(orders) as never} />;

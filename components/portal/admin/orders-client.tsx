@@ -21,11 +21,13 @@ type Order = {
     notes: string | null;
     createdAt: string | Date;
     member: {
-        id: string;
+        id: string | null;
         fullName: string;
         email: string;
         phone: string | null;
+        address: string | null;
         memberNumber: string | null;
+        isGuest: boolean;
     };
     orderItems: {
         id: string;
@@ -266,18 +268,33 @@ function OrderRow({ order, onFlash }: { order: Order; onFlash: (k: "ok" | "err",
                         </div>
 
                         {/* Meta */}
-                        <div className="space-y-2 text-sm">
-                            <p className="text-[10px] font-bold tracking-widest uppercase text-zinc-500 mb-3 flex items-center gap-1.5">
-                                <CreditCard size={11} /> Payment
-                            </p>
-                            <Meta label="Transaction" value={order.transactionId ?? "—"} mono />
-                            <Meta label="Method" value={order.paymentMethod ?? "—"} />
-                            <Meta label="Currency" value={order.currency} />
-                            <Meta label="Phone" value={order.member.phone ?? "—"} />
-                            {order.member.memberNumber && (
-                                <Meta label="Member #" value={order.member.memberNumber} />
-                            )}
-                            {order.notes && <Meta label="Notes" value={order.notes} />}
+                        <div className="space-y-4 text-sm">
+                            <div className="space-y-2">
+                                <p className="text-[10px] font-bold tracking-widest uppercase text-zinc-500 mb-3 flex items-center gap-1.5">
+                                    <UserIcon size={11} /> Customer
+                                    {order.member.isGuest && (
+                                        <span className="text-[9px] font-bold tracking-widest uppercase px-1.5 py-0.5 rounded-full bg-zinc-100 text-zinc-600 border border-zinc-200">
+                                            Guest
+                                        </span>
+                                    )}
+                                </p>
+                                <Meta label="Name" value={order.member.fullName} />
+                                <Meta label="Email" value={order.member.email || "—"} />
+                                <Meta label="Phone" value={order.member.phone ?? "—"} />
+                                <Meta label="Address" value={order.member.address ?? "—"} />
+                                {order.member.memberNumber && (
+                                    <Meta label="Member #" value={order.member.memberNumber} />
+                                )}
+                            </div>
+                            <div className="space-y-2">
+                                <p className="text-[10px] font-bold tracking-widest uppercase text-zinc-500 mb-3 flex items-center gap-1.5">
+                                    <CreditCard size={11} /> Payment
+                                </p>
+                                <Meta label="Transaction" value={order.transactionId ?? "—"} mono />
+                                <Meta label="Method" value={order.paymentMethod ?? "—"} />
+                                <Meta label="Currency" value={order.currency} />
+                                {order.notes && <Meta label="Notes" value={order.notes} />}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -289,8 +306,8 @@ function OrderRow({ order, onFlash }: { order: Order; onFlash: (k: "ok" | "err",
 function Meta({ label, value, mono }: { label: string; value: string; mono?: boolean }) {
     return (
         <div className="flex items-start justify-between gap-3">
-            <span className="text-xs text-zinc-500">{label}</span>
-            <span className={`text-xs text-zinc-800 text-right ${mono ? "font-mono" : "font-medium"}`}>
+            <span className="text-xs text-zinc-500 flex-shrink-0">{label}</span>
+            <span className={`text-xs text-zinc-800 text-right break-words min-w-0 ${mono ? "font-mono" : "font-medium"}`}>
                 {value}
             </span>
         </div>

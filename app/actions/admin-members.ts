@@ -116,6 +116,39 @@ export async function updateMemberStatusAction(formData: FormData): Promise<Acti
     return { ok: true };
 }
 
+export async function deleteMemberAction(formData: FormData): Promise<ActionResult> {
+    const { userId: adminId } = await requireAdmin();
+
+    const memberId = formData.get("memberId") as string;
+    if (!memberId) return { ok: false, error: "Member id is required." };
+    if (memberId === adminId) {
+        return { ok: false, error: "You cannot delete your own admin account." };
+    }
+
+    const target = await prisma.user.findUnique({
+        where: { id: memberId },
+        select: { id: true },
+    });
+    if (!target) return { ok: false, error: "Member not found." };
+
+    const admin = createAdminClient();
+
+    // Delete the Supabase auth user first — the DB row (and every role-table
+    // row via ON DELETE CASCADE) goes with it because `users.id` references
+    // `auth.users.id`. If auth deletion fails we bail out before touching the DB.
+    const { error: authError } = await admin.auth.admin.deleteUser(memberId);
+    if (authError && !/not.?found/i.test(authError.message)) {
+        return { ok: false, error: authError.message };
+    }
+
+    // Belt-and-braces: if the DB row is still present (e.g. no auth cascade
+    // configured), remove it explicitly. Role-specific rows cascade from `users`.
+    await prisma.user.deleteMany({ where: { id: memberId } });
+
+    revalidatePath("/portal/admin/members");
+    return { ok: true };
+}
+
 export async function resendInviteAction(formData: FormData): Promise<ActionResult> {
     await requireAdmin();
 

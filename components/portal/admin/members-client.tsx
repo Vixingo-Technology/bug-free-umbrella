@@ -1,14 +1,16 @@
 "use client";
 
-import { useMemo, useState, useTransition } from "react";
+import { useEffect, useMemo, useState, useTransition } from "react";
+import { createPortal } from "react-dom";
 import Link from "next/link";
 import { motion } from "motion/react";
-import { UserPlus, Search, Mail, Shield, ShieldCheck, ShieldOff, X, CheckCircle2, AlertCircle, ChevronDown } from "lucide-react";
+import { UserPlus, Search, Mail, Shield, ShieldCheck, ShieldOff, X, CheckCircle2, AlertCircle, ChevronDown, Trash2, AlertTriangle } from "lucide-react";
 import {
     inviteMemberAction,
     updateMemberRoleAction,
     updateMemberStatusAction,
     resendInviteAction,
+    deleteMemberAction,
 } from "@/app/actions/admin-members";
 
 type Role = "STUDENT" | "INSTRUCTOR" | "DOJO_MANAGER" | "DOJO_OWNER" | "ADMIN";
@@ -216,6 +218,23 @@ function Row({ member, onFlash }: { member: Member; onFlash: (k: "ok" | "err", m
     const [isPending, startTransition] = useTransition();
     const [role, setRole] = useState<Role>(member.role);
     const [status, setStatus] = useState<Status>(member.membershipStatus);
+    const [confirmDelete, setConfirmDelete] = useState(false);
+    const [deleted, setDeleted] = useState(false);
+
+    function performDelete() {
+        const fd = new FormData();
+        fd.set("memberId", member.id);
+        startTransition(async () => {
+            const res = await deleteMemberAction(fd);
+            if (res.ok) {
+                setConfirmDelete(false);
+                setDeleted(true);
+                onFlash("ok", `${member.fullName} was permanently deleted.`);
+            } else {
+                onFlash("err", res.error);
+            }
+        });
+    }
 
     function changeRole(next: Role) {
         if (next === role) return;
@@ -261,6 +280,8 @@ function Row({ member, onFlash }: { member: Member; onFlash: (k: "ok" | "err", m
 
     const initial = member.fullName.charAt(0).toUpperCase();
     const isInvitePending = !member.onboardingComplete && member.membershipStatus === "PENDING";
+
+    if (deleted) return null;
 
     return (
         <tr className={`hover:bg-zinc-50/60 transition-colors ${isPending ? "opacity-60" : ""}`}>
@@ -336,9 +357,121 @@ function Row({ member, onFlash }: { member: Member; onFlash: (k: "ok" | "err", m
                             <ShieldOff size={12} /> Suspend
                         </button>
                     )}
+                    <button
+                        onClick={() => setConfirmDelete(true)}
+                        disabled={isPending}
+                        title="Delete member permanently"
+                        className="inline-flex items-center gap-1.5 text-xs font-semibold text-red-700 hover:text-white bg-red-50 hover:bg-red-600 px-2.5 py-1.5 rounded-lg transition-colors"
+                    >
+                        <Trash2 size={12} /> Delete
+                    </button>
                 </div>
             </td>
+            {confirmDelete && (
+                <DeleteConfirmModal
+                    member={member}
+                    isPending={isPending}
+                    onCancel={() => setConfirmDelete(false)}
+                    onConfirm={performDelete}
+                />
+            )}
         </tr>
+    );
+}
+
+function DeleteConfirmModal({
+    member, isPending, onCancel, onConfirm,
+}: {
+    member: Member;
+    isPending: boolean;
+    onCancel: () => void;
+    onConfirm: () => void;
+}) {
+    const [typed, setTyped] = useState("");
+    const [mounted, setMounted] = useState(false);
+    const confirmPhrase = "DELETE";
+    const canConfirm = typed.trim().toUpperCase() === confirmPhrase && !isPending;
+
+    useEffect(() => setMounted(true), []);
+    if (!mounted) return null;
+
+    return createPortal(
+        (
+            <div
+                className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
+                onClick={onCancel}
+            >
+                <motion.div
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    onClick={(e) => e.stopPropagation()}
+                    className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden"
+                >
+                    <div className="px-6 py-5 border-b border-zinc-100 flex items-start gap-3">
+                        <div className="p-2 bg-red-50 rounded-xl flex-shrink-0">
+                            <AlertTriangle size={20} className="text-red-600" />
+                        </div>
+                        <div>
+                            <h2 className="text-lg font-bold text-zinc-900">Delete member permanently?</h2>
+                            <p className="text-xs text-zinc-500 mt-1">
+                                This action is <span className="font-semibold text-red-600">irreversible</span>.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div className="p-6 space-y-4">
+                        <div className="rounded-xl border border-red-200 bg-red-50/60 p-4 text-sm text-red-900">
+                            <p className="font-semibold">
+                                You are about to permanently delete{" "}
+                                <span className="underline decoration-red-400">{member.fullName}</span>{" "}
+                                <span className="text-red-700">({member.email})</span>.
+                            </p>
+                            <ul className="mt-3 list-disc pl-5 space-y-1 text-xs text-red-800/90">
+                                <li>Their authentication account will be removed.</li>
+                                <li>All linked records (student / instructor / manager / owner / admin profile) will be deleted.</li>
+                                <li>Attendance, gradings, tournament entries and other cascaded rows will be lost.</li>
+                                <li>This cannot be undone — even by an admin.</li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <label className="block text-xs font-bold tracking-widest uppercase text-zinc-500 mb-2">
+                                Type <span className="text-red-600">{confirmPhrase}</span> to confirm
+                            </label>
+                            <input
+                                type="text"
+                                value={typed}
+                                onChange={(e) => setTyped(e.target.value)}
+                                autoFocus
+                                placeholder={confirmPhrase}
+                                className="w-full px-3 py-2.5 text-sm bg-zinc-50 border border-zinc-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500/30 focus:border-red-500 focus:bg-white"
+                            />
+                        </div>
+
+                        <div className="flex items-center gap-3 pt-2">
+                            <button
+                                type="button"
+                                onClick={onCancel}
+                                disabled={isPending}
+                                className="flex-1 px-4 py-2.5 text-sm font-semibold text-zinc-700 hover:bg-zinc-100 rounded-xl transition-colors disabled:opacity-50"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                type="button"
+                                onClick={onConfirm}
+                                disabled={!canConfirm}
+                                className="flex-1 inline-flex items-center justify-center gap-1.5 px-4 py-2.5 text-sm font-semibold text-white bg-red-600 hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed rounded-xl transition-colors"
+                            >
+                                <Trash2 size={14} />
+                                {isPending ? "Deleting…" : "Delete forever"}
+                            </button>
+                        </div>
+                    </div>
+                </motion.div>
+            </div>
+        ),
+        document.body,
     );
 }
 
