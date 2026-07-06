@@ -31415,6 +31415,7 @@ export namespace Prisma {
     imageUrl: string | null
     category: string | null
     isActive: boolean | null
+    hasSizes: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -31428,6 +31429,7 @@ export namespace Prisma {
     imageUrl: string | null
     category: string | null
     isActive: boolean | null
+    hasSizes: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -31441,6 +31443,8 @@ export namespace Prisma {
     imageUrl: number
     category: number
     isActive: number
+    hasSizes: number
+    sizes: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -31466,6 +31470,7 @@ export namespace Prisma {
     imageUrl?: true
     category?: true
     isActive?: true
+    hasSizes?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -31479,6 +31484,7 @@ export namespace Prisma {
     imageUrl?: true
     category?: true
     isActive?: true
+    hasSizes?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -31492,6 +31498,8 @@ export namespace Prisma {
     imageUrl?: true
     category?: true
     isActive?: true
+    hasSizes?: true
+    sizes?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -31592,6 +31600,8 @@ export namespace Prisma {
     imageUrl: string | null
     category: string | null
     isActive: boolean
+    hasSizes: boolean
+    sizes: string[]
     createdAt: Date
     updatedAt: Date
     _count: ShopProductCountAggregateOutputType | null
@@ -31624,6 +31634,8 @@ export namespace Prisma {
     imageUrl?: boolean
     category?: boolean
     isActive?: boolean
+    hasSizes?: boolean
+    sizes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     orderItems?: boolean | ShopProduct$orderItemsArgs<ExtArgs>
@@ -31641,6 +31653,8 @@ export namespace Prisma {
     imageUrl?: boolean
     category?: boolean
     isActive?: boolean
+    hasSizes?: boolean
+    sizes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["shopProduct"]>
@@ -31654,6 +31668,8 @@ export namespace Prisma {
     imageUrl?: boolean
     category?: boolean
     isActive?: boolean
+    hasSizes?: boolean
+    sizes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["shopProduct"]>
@@ -31667,11 +31683,13 @@ export namespace Prisma {
     imageUrl?: boolean
     category?: boolean
     isActive?: boolean
+    hasSizes?: boolean
+    sizes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type ShopProductOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "price" | "stock" | "imageUrl" | "category" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["shopProduct"]>
+  export type ShopProductOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "price" | "stock" | "imageUrl" | "category" | "isActive" | "hasSizes" | "sizes" | "createdAt" | "updatedAt", ExtArgs["result"]["shopProduct"]>
   export type ShopProductInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     orderItems?: boolean | ShopProduct$orderItemsArgs<ExtArgs>
     dojoInventory?: boolean | ShopProduct$dojoInventoryArgs<ExtArgs>
@@ -31697,6 +31715,8 @@ export namespace Prisma {
       imageUrl: string | null
       category: string | null
       isActive: boolean
+      hasSizes: boolean
+      sizes: string[]
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["shopProduct"]>
@@ -32133,6 +32153,8 @@ export namespace Prisma {
     readonly imageUrl: FieldRef<"ShopProduct", 'String'>
     readonly category: FieldRef<"ShopProduct", 'String'>
     readonly isActive: FieldRef<"ShopProduct", 'Boolean'>
+    readonly hasSizes: FieldRef<"ShopProduct", 'Boolean'>
+    readonly sizes: FieldRef<"ShopProduct", 'String[]'>
     readonly createdAt: FieldRef<"ShopProduct", 'DateTime'>
     readonly updatedAt: FieldRef<"ShopProduct", 'DateTime'>
   }
@@ -36218,6 +36240,11 @@ export namespace Prisma {
     includesMembership: boolean | null
     membershipFee: Decimal | null
     notes: string | null
+    guestName: string | null
+    guestEmail: string | null
+    guestPhone: string | null
+    guestAddress: string | null
+    isGuestOrder: boolean | null
     dojoId: string | null
     includesDojoRenewal: boolean | null
     includesCertificates: boolean | null
@@ -36237,6 +36264,11 @@ export namespace Prisma {
     includesMembership: boolean | null
     membershipFee: Decimal | null
     notes: string | null
+    guestName: string | null
+    guestEmail: string | null
+    guestPhone: string | null
+    guestAddress: string | null
+    isGuestOrder: boolean | null
     dojoId: string | null
     includesDojoRenewal: boolean | null
     includesCertificates: boolean | null
@@ -36256,6 +36288,11 @@ export namespace Prisma {
     includesMembership: number
     membershipFee: number
     notes: number
+    guestName: number
+    guestEmail: number
+    guestPhone: number
+    guestAddress: number
+    isGuestOrder: number
     dojoId: number
     includesDojoRenewal: number
     includesCertificates: number
@@ -36287,6 +36324,11 @@ export namespace Prisma {
     includesMembership?: true
     membershipFee?: true
     notes?: true
+    guestName?: true
+    guestEmail?: true
+    guestPhone?: true
+    guestAddress?: true
+    isGuestOrder?: true
     dojoId?: true
     includesDojoRenewal?: true
     includesCertificates?: true
@@ -36306,6 +36348,11 @@ export namespace Prisma {
     includesMembership?: true
     membershipFee?: true
     notes?: true
+    guestName?: true
+    guestEmail?: true
+    guestPhone?: true
+    guestAddress?: true
+    isGuestOrder?: true
     dojoId?: true
     includesDojoRenewal?: true
     includesCertificates?: true
@@ -36325,6 +36372,11 @@ export namespace Prisma {
     includesMembership?: true
     membershipFee?: true
     notes?: true
+    guestName?: true
+    guestEmail?: true
+    guestPhone?: true
+    guestAddress?: true
+    isGuestOrder?: true
     dojoId?: true
     includesDojoRenewal?: true
     includesCertificates?: true
@@ -36422,7 +36474,7 @@ export namespace Prisma {
 
   export type ShopOrderGroupByOutputType = {
     id: string
-    userId: string
+    userId: string | null
     paymentStatus: $Enums.PaymentStatus
     paymentMethod: string | null
     total: Decimal
@@ -36431,6 +36483,11 @@ export namespace Prisma {
     includesMembership: boolean
     membershipFee: Decimal | null
     notes: string | null
+    guestName: string | null
+    guestEmail: string | null
+    guestPhone: string | null
+    guestAddress: string | null
+    isGuestOrder: boolean
     dojoId: string | null
     includesDojoRenewal: boolean
     includesCertificates: boolean
@@ -36469,13 +36526,18 @@ export namespace Prisma {
     includesMembership?: boolean
     membershipFee?: boolean
     notes?: boolean
+    guestName?: boolean
+    guestEmail?: boolean
+    guestPhone?: boolean
+    guestAddress?: boolean
+    isGuestOrder?: boolean
     dojoId?: boolean
     includesDojoRenewal?: boolean
     includesCertificates?: boolean
     certDojoId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    user?: boolean | UserDefaultArgs<ExtArgs>
+    user?: boolean | ShopOrder$userArgs<ExtArgs>
     dojo?: boolean | ShopOrder$dojoArgs<ExtArgs>
     certDojo?: boolean | ShopOrder$certDojoArgs<ExtArgs>
     orderItems?: boolean | ShopOrder$orderItemsArgs<ExtArgs>
@@ -36494,13 +36556,18 @@ export namespace Prisma {
     includesMembership?: boolean
     membershipFee?: boolean
     notes?: boolean
+    guestName?: boolean
+    guestEmail?: boolean
+    guestPhone?: boolean
+    guestAddress?: boolean
+    isGuestOrder?: boolean
     dojoId?: boolean
     includesDojoRenewal?: boolean
     includesCertificates?: boolean
     certDojoId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    user?: boolean | UserDefaultArgs<ExtArgs>
+    user?: boolean | ShopOrder$userArgs<ExtArgs>
     dojo?: boolean | ShopOrder$dojoArgs<ExtArgs>
     certDojo?: boolean | ShopOrder$certDojoArgs<ExtArgs>
   }, ExtArgs["result"]["shopOrder"]>
@@ -36516,13 +36583,18 @@ export namespace Prisma {
     includesMembership?: boolean
     membershipFee?: boolean
     notes?: boolean
+    guestName?: boolean
+    guestEmail?: boolean
+    guestPhone?: boolean
+    guestAddress?: boolean
+    isGuestOrder?: boolean
     dojoId?: boolean
     includesDojoRenewal?: boolean
     includesCertificates?: boolean
     certDojoId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    user?: boolean | UserDefaultArgs<ExtArgs>
+    user?: boolean | ShopOrder$userArgs<ExtArgs>
     dojo?: boolean | ShopOrder$dojoArgs<ExtArgs>
     certDojo?: boolean | ShopOrder$certDojoArgs<ExtArgs>
   }, ExtArgs["result"]["shopOrder"]>
@@ -36538,6 +36610,11 @@ export namespace Prisma {
     includesMembership?: boolean
     membershipFee?: boolean
     notes?: boolean
+    guestName?: boolean
+    guestEmail?: boolean
+    guestPhone?: boolean
+    guestAddress?: boolean
+    isGuestOrder?: boolean
     dojoId?: boolean
     includesDojoRenewal?: boolean
     includesCertificates?: boolean
@@ -36546,9 +36623,9 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type ShopOrderOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "paymentStatus" | "paymentMethod" | "total" | "currency" | "transactionId" | "includesMembership" | "membershipFee" | "notes" | "dojoId" | "includesDojoRenewal" | "includesCertificates" | "certDojoId" | "createdAt" | "updatedAt", ExtArgs["result"]["shopOrder"]>
+  export type ShopOrderOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "paymentStatus" | "paymentMethod" | "total" | "currency" | "transactionId" | "includesMembership" | "membershipFee" | "notes" | "guestName" | "guestEmail" | "guestPhone" | "guestAddress" | "isGuestOrder" | "dojoId" | "includesDojoRenewal" | "includesCertificates" | "certDojoId" | "createdAt" | "updatedAt", ExtArgs["result"]["shopOrder"]>
   export type ShopOrderInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    user?: boolean | UserDefaultArgs<ExtArgs>
+    user?: boolean | ShopOrder$userArgs<ExtArgs>
     dojo?: boolean | ShopOrder$dojoArgs<ExtArgs>
     certDojo?: boolean | ShopOrder$certDojoArgs<ExtArgs>
     orderItems?: boolean | ShopOrder$orderItemsArgs<ExtArgs>
@@ -36556,12 +36633,12 @@ export namespace Prisma {
     _count?: boolean | ShopOrderCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ShopOrderIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    user?: boolean | UserDefaultArgs<ExtArgs>
+    user?: boolean | ShopOrder$userArgs<ExtArgs>
     dojo?: boolean | ShopOrder$dojoArgs<ExtArgs>
     certDojo?: boolean | ShopOrder$certDojoArgs<ExtArgs>
   }
   export type ShopOrderIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    user?: boolean | UserDefaultArgs<ExtArgs>
+    user?: boolean | ShopOrder$userArgs<ExtArgs>
     dojo?: boolean | ShopOrder$dojoArgs<ExtArgs>
     certDojo?: boolean | ShopOrder$certDojoArgs<ExtArgs>
   }
@@ -36569,7 +36646,7 @@ export namespace Prisma {
   export type $ShopOrderPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "ShopOrder"
     objects: {
-      user: Prisma.$UserPayload<ExtArgs>
+      user: Prisma.$UserPayload<ExtArgs> | null
       dojo: Prisma.$DojoPayload<ExtArgs> | null
       certDojo: Prisma.$DojoPayload<ExtArgs> | null
       orderItems: Prisma.$ShopOrderItemPayload<ExtArgs>[]
@@ -36577,7 +36654,7 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      userId: string
+      userId: string | null
       paymentStatus: $Enums.PaymentStatus
       paymentMethod: string | null
       total: Prisma.Decimal
@@ -36586,6 +36663,11 @@ export namespace Prisma {
       includesMembership: boolean
       membershipFee: Prisma.Decimal | null
       notes: string | null
+      guestName: string | null
+      guestEmail: string | null
+      guestPhone: string | null
+      guestAddress: string | null
+      isGuestOrder: boolean
       dojoId: string | null
       includesDojoRenewal: boolean
       includesCertificates: boolean
@@ -36986,7 +37068,7 @@ export namespace Prisma {
    */
   export interface Prisma__ShopOrderClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    user<T extends ShopOrder$userArgs<ExtArgs> = {}>(args?: Subset<T, ShopOrder$userArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     dojo<T extends ShopOrder$dojoArgs<ExtArgs> = {}>(args?: Subset<T, ShopOrder$dojoArgs<ExtArgs>>): Prisma__DojoClient<$Result.GetResult<Prisma.$DojoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     certDojo<T extends ShopOrder$certDojoArgs<ExtArgs> = {}>(args?: Subset<T, ShopOrder$certDojoArgs<ExtArgs>>): Prisma__DojoClient<$Result.GetResult<Prisma.$DojoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     orderItems<T extends ShopOrder$orderItemsArgs<ExtArgs> = {}>(args?: Subset<T, ShopOrder$orderItemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ShopOrderItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -37030,6 +37112,11 @@ export namespace Prisma {
     readonly includesMembership: FieldRef<"ShopOrder", 'Boolean'>
     readonly membershipFee: FieldRef<"ShopOrder", 'Decimal'>
     readonly notes: FieldRef<"ShopOrder", 'String'>
+    readonly guestName: FieldRef<"ShopOrder", 'String'>
+    readonly guestEmail: FieldRef<"ShopOrder", 'String'>
+    readonly guestPhone: FieldRef<"ShopOrder", 'String'>
+    readonly guestAddress: FieldRef<"ShopOrder", 'String'>
+    readonly isGuestOrder: FieldRef<"ShopOrder", 'Boolean'>
     readonly dojoId: FieldRef<"ShopOrder", 'String'>
     readonly includesDojoRenewal: FieldRef<"ShopOrder", 'Boolean'>
     readonly includesCertificates: FieldRef<"ShopOrder", 'Boolean'>
@@ -37437,6 +37524,25 @@ export namespace Prisma {
   }
 
   /**
+   * ShopOrder.user
+   */
+  export type ShopOrder$userArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
    * ShopOrder.dojo
    */
   export type ShopOrder$dojoArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -37569,6 +37675,7 @@ export namespace Prisma {
     productId: string | null
     quantity: number | null
     unitPrice: Decimal | null
+    size: string | null
   }
 
   export type ShopOrderItemMaxAggregateOutputType = {
@@ -37577,6 +37684,7 @@ export namespace Prisma {
     productId: string | null
     quantity: number | null
     unitPrice: Decimal | null
+    size: string | null
   }
 
   export type ShopOrderItemCountAggregateOutputType = {
@@ -37585,6 +37693,7 @@ export namespace Prisma {
     productId: number
     quantity: number
     unitPrice: number
+    size: number
     _all: number
   }
 
@@ -37605,6 +37714,7 @@ export namespace Prisma {
     productId?: true
     quantity?: true
     unitPrice?: true
+    size?: true
   }
 
   export type ShopOrderItemMaxAggregateInputType = {
@@ -37613,6 +37723,7 @@ export namespace Prisma {
     productId?: true
     quantity?: true
     unitPrice?: true
+    size?: true
   }
 
   export type ShopOrderItemCountAggregateInputType = {
@@ -37621,6 +37732,7 @@ export namespace Prisma {
     productId?: true
     quantity?: true
     unitPrice?: true
+    size?: true
     _all?: true
   }
 
@@ -37716,6 +37828,7 @@ export namespace Prisma {
     productId: string
     quantity: number
     unitPrice: Decimal
+    size: string | null
     _count: ShopOrderItemCountAggregateOutputType | null
     _avg: ShopOrderItemAvgAggregateOutputType | null
     _sum: ShopOrderItemSumAggregateOutputType | null
@@ -37743,6 +37856,7 @@ export namespace Prisma {
     productId?: boolean
     quantity?: boolean
     unitPrice?: boolean
+    size?: boolean
     order?: boolean | ShopOrderDefaultArgs<ExtArgs>
     product?: boolean | ShopProductDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["shopOrderItem"]>
@@ -37753,6 +37867,7 @@ export namespace Prisma {
     productId?: boolean
     quantity?: boolean
     unitPrice?: boolean
+    size?: boolean
     order?: boolean | ShopOrderDefaultArgs<ExtArgs>
     product?: boolean | ShopProductDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["shopOrderItem"]>
@@ -37763,6 +37878,7 @@ export namespace Prisma {
     productId?: boolean
     quantity?: boolean
     unitPrice?: boolean
+    size?: boolean
     order?: boolean | ShopOrderDefaultArgs<ExtArgs>
     product?: boolean | ShopProductDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["shopOrderItem"]>
@@ -37773,9 +37889,10 @@ export namespace Prisma {
     productId?: boolean
     quantity?: boolean
     unitPrice?: boolean
+    size?: boolean
   }
 
-  export type ShopOrderItemOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "orderId" | "productId" | "quantity" | "unitPrice", ExtArgs["result"]["shopOrderItem"]>
+  export type ShopOrderItemOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "orderId" | "productId" | "quantity" | "unitPrice" | "size", ExtArgs["result"]["shopOrderItem"]>
   export type ShopOrderItemInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     order?: boolean | ShopOrderDefaultArgs<ExtArgs>
     product?: boolean | ShopProductDefaultArgs<ExtArgs>
@@ -37801,6 +37918,7 @@ export namespace Prisma {
       productId: string
       quantity: number
       unitPrice: Prisma.Decimal
+      size: string | null
     }, ExtArgs["result"]["shopOrderItem"]>
     composites: {}
   }
@@ -38231,6 +38349,7 @@ export namespace Prisma {
     readonly productId: FieldRef<"ShopOrderItem", 'String'>
     readonly quantity: FieldRef<"ShopOrderItem", 'Int'>
     readonly unitPrice: FieldRef<"ShopOrderItem", 'Decimal'>
+    readonly size: FieldRef<"ShopOrderItem", 'String'>
   }
     
 
@@ -44957,6 +45076,8 @@ export namespace Prisma {
     imageUrl: 'imageUrl',
     category: 'category',
     isActive: 'isActive',
+    hasSizes: 'hasSizes',
+    sizes: 'sizes',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -45020,6 +45141,11 @@ export namespace Prisma {
     includesMembership: 'includesMembership',
     membershipFee: 'membershipFee',
     notes: 'notes',
+    guestName: 'guestName',
+    guestEmail: 'guestEmail',
+    guestPhone: 'guestPhone',
+    guestAddress: 'guestAddress',
+    isGuestOrder: 'isGuestOrder',
     dojoId: 'dojoId',
     includesDojoRenewal: 'includesDojoRenewal',
     includesCertificates: 'includesCertificates',
@@ -45036,7 +45162,8 @@ export namespace Prisma {
     orderId: 'orderId',
     productId: 'productId',
     quantity: 'quantity',
-    unitPrice: 'unitPrice'
+    unitPrice: 'unitPrice',
+    size: 'size'
   };
 
   export type ShopOrderItemScalarFieldEnum = (typeof ShopOrderItemScalarFieldEnum)[keyof typeof ShopOrderItemScalarFieldEnum]
@@ -47384,6 +47511,8 @@ export namespace Prisma {
     imageUrl?: StringNullableFilter<"ShopProduct"> | string | null
     category?: StringNullableFilter<"ShopProduct"> | string | null
     isActive?: BoolFilter<"ShopProduct"> | boolean
+    hasSizes?: BoolFilter<"ShopProduct"> | boolean
+    sizes?: StringNullableListFilter<"ShopProduct">
     createdAt?: DateTimeFilter<"ShopProduct"> | Date | string
     updatedAt?: DateTimeFilter<"ShopProduct"> | Date | string
     orderItems?: ShopOrderItemListRelationFilter
@@ -47400,6 +47529,8 @@ export namespace Prisma {
     imageUrl?: SortOrderInput | SortOrder
     category?: SortOrderInput | SortOrder
     isActive?: SortOrder
+    hasSizes?: SortOrder
+    sizes?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     orderItems?: ShopOrderItemOrderByRelationAggregateInput
@@ -47419,6 +47550,8 @@ export namespace Prisma {
     imageUrl?: StringNullableFilter<"ShopProduct"> | string | null
     category?: StringNullableFilter<"ShopProduct"> | string | null
     isActive?: BoolFilter<"ShopProduct"> | boolean
+    hasSizes?: BoolFilter<"ShopProduct"> | boolean
+    sizes?: StringNullableListFilter<"ShopProduct">
     createdAt?: DateTimeFilter<"ShopProduct"> | Date | string
     updatedAt?: DateTimeFilter<"ShopProduct"> | Date | string
     orderItems?: ShopOrderItemListRelationFilter
@@ -47435,6 +47568,8 @@ export namespace Prisma {
     imageUrl?: SortOrderInput | SortOrder
     category?: SortOrderInput | SortOrder
     isActive?: SortOrder
+    hasSizes?: SortOrder
+    sizes?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: ShopProductCountOrderByAggregateInput
@@ -47456,6 +47591,8 @@ export namespace Prisma {
     imageUrl?: StringNullableWithAggregatesFilter<"ShopProduct"> | string | null
     category?: StringNullableWithAggregatesFilter<"ShopProduct"> | string | null
     isActive?: BoolWithAggregatesFilter<"ShopProduct"> | boolean
+    hasSizes?: BoolWithAggregatesFilter<"ShopProduct"> | boolean
+    sizes?: StringNullableListFilter<"ShopProduct">
     createdAt?: DateTimeWithAggregatesFilter<"ShopProduct"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"ShopProduct"> | Date | string
   }
@@ -47713,7 +47850,7 @@ export namespace Prisma {
     OR?: ShopOrderWhereInput[]
     NOT?: ShopOrderWhereInput | ShopOrderWhereInput[]
     id?: UuidFilter<"ShopOrder"> | string
-    userId?: UuidFilter<"ShopOrder"> | string
+    userId?: UuidNullableFilter<"ShopOrder"> | string | null
     paymentStatus?: EnumPaymentStatusFilter<"ShopOrder"> | $Enums.PaymentStatus
     paymentMethod?: StringNullableFilter<"ShopOrder"> | string | null
     total?: DecimalFilter<"ShopOrder"> | Decimal | DecimalJsLike | number | string
@@ -47722,13 +47859,18 @@ export namespace Prisma {
     includesMembership?: BoolFilter<"ShopOrder"> | boolean
     membershipFee?: DecimalNullableFilter<"ShopOrder"> | Decimal | DecimalJsLike | number | string | null
     notes?: StringNullableFilter<"ShopOrder"> | string | null
+    guestName?: StringNullableFilter<"ShopOrder"> | string | null
+    guestEmail?: StringNullableFilter<"ShopOrder"> | string | null
+    guestPhone?: StringNullableFilter<"ShopOrder"> | string | null
+    guestAddress?: StringNullableFilter<"ShopOrder"> | string | null
+    isGuestOrder?: BoolFilter<"ShopOrder"> | boolean
     dojoId?: UuidNullableFilter<"ShopOrder"> | string | null
     includesDojoRenewal?: BoolFilter<"ShopOrder"> | boolean
     includesCertificates?: BoolFilter<"ShopOrder"> | boolean
     certDojoId?: UuidNullableFilter<"ShopOrder"> | string | null
     createdAt?: DateTimeFilter<"ShopOrder"> | Date | string
     updatedAt?: DateTimeFilter<"ShopOrder"> | Date | string
-    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     dojo?: XOR<DojoNullableScalarRelationFilter, DojoWhereInput> | null
     certDojo?: XOR<DojoNullableScalarRelationFilter, DojoWhereInput> | null
     orderItems?: ShopOrderItemListRelationFilter
@@ -47737,7 +47879,7 @@ export namespace Prisma {
 
   export type ShopOrderOrderByWithRelationInput = {
     id?: SortOrder
-    userId?: SortOrder
+    userId?: SortOrderInput | SortOrder
     paymentStatus?: SortOrder
     paymentMethod?: SortOrderInput | SortOrder
     total?: SortOrder
@@ -47746,6 +47888,11 @@ export namespace Prisma {
     includesMembership?: SortOrder
     membershipFee?: SortOrderInput | SortOrder
     notes?: SortOrderInput | SortOrder
+    guestName?: SortOrderInput | SortOrder
+    guestEmail?: SortOrderInput | SortOrder
+    guestPhone?: SortOrderInput | SortOrder
+    guestAddress?: SortOrderInput | SortOrder
+    isGuestOrder?: SortOrder
     dojoId?: SortOrderInput | SortOrder
     includesDojoRenewal?: SortOrder
     includesCertificates?: SortOrder
@@ -47765,7 +47912,7 @@ export namespace Prisma {
     AND?: ShopOrderWhereInput | ShopOrderWhereInput[]
     OR?: ShopOrderWhereInput[]
     NOT?: ShopOrderWhereInput | ShopOrderWhereInput[]
-    userId?: UuidFilter<"ShopOrder"> | string
+    userId?: UuidNullableFilter<"ShopOrder"> | string | null
     paymentStatus?: EnumPaymentStatusFilter<"ShopOrder"> | $Enums.PaymentStatus
     paymentMethod?: StringNullableFilter<"ShopOrder"> | string | null
     total?: DecimalFilter<"ShopOrder"> | Decimal | DecimalJsLike | number | string
@@ -47773,13 +47920,18 @@ export namespace Prisma {
     includesMembership?: BoolFilter<"ShopOrder"> | boolean
     membershipFee?: DecimalNullableFilter<"ShopOrder"> | Decimal | DecimalJsLike | number | string | null
     notes?: StringNullableFilter<"ShopOrder"> | string | null
+    guestName?: StringNullableFilter<"ShopOrder"> | string | null
+    guestEmail?: StringNullableFilter<"ShopOrder"> | string | null
+    guestPhone?: StringNullableFilter<"ShopOrder"> | string | null
+    guestAddress?: StringNullableFilter<"ShopOrder"> | string | null
+    isGuestOrder?: BoolFilter<"ShopOrder"> | boolean
     dojoId?: UuidNullableFilter<"ShopOrder"> | string | null
     includesDojoRenewal?: BoolFilter<"ShopOrder"> | boolean
     includesCertificates?: BoolFilter<"ShopOrder"> | boolean
     certDojoId?: UuidNullableFilter<"ShopOrder"> | string | null
     createdAt?: DateTimeFilter<"ShopOrder"> | Date | string
     updatedAt?: DateTimeFilter<"ShopOrder"> | Date | string
-    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     dojo?: XOR<DojoNullableScalarRelationFilter, DojoWhereInput> | null
     certDojo?: XOR<DojoNullableScalarRelationFilter, DojoWhereInput> | null
     orderItems?: ShopOrderItemListRelationFilter
@@ -47788,7 +47940,7 @@ export namespace Prisma {
 
   export type ShopOrderOrderByWithAggregationInput = {
     id?: SortOrder
-    userId?: SortOrder
+    userId?: SortOrderInput | SortOrder
     paymentStatus?: SortOrder
     paymentMethod?: SortOrderInput | SortOrder
     total?: SortOrder
@@ -47797,6 +47949,11 @@ export namespace Prisma {
     includesMembership?: SortOrder
     membershipFee?: SortOrderInput | SortOrder
     notes?: SortOrderInput | SortOrder
+    guestName?: SortOrderInput | SortOrder
+    guestEmail?: SortOrderInput | SortOrder
+    guestPhone?: SortOrderInput | SortOrder
+    guestAddress?: SortOrderInput | SortOrder
+    isGuestOrder?: SortOrder
     dojoId?: SortOrderInput | SortOrder
     includesDojoRenewal?: SortOrder
     includesCertificates?: SortOrder
@@ -47815,7 +47972,7 @@ export namespace Prisma {
     OR?: ShopOrderScalarWhereWithAggregatesInput[]
     NOT?: ShopOrderScalarWhereWithAggregatesInput | ShopOrderScalarWhereWithAggregatesInput[]
     id?: UuidWithAggregatesFilter<"ShopOrder"> | string
-    userId?: UuidWithAggregatesFilter<"ShopOrder"> | string
+    userId?: UuidNullableWithAggregatesFilter<"ShopOrder"> | string | null
     paymentStatus?: EnumPaymentStatusWithAggregatesFilter<"ShopOrder"> | $Enums.PaymentStatus
     paymentMethod?: StringNullableWithAggregatesFilter<"ShopOrder"> | string | null
     total?: DecimalWithAggregatesFilter<"ShopOrder"> | Decimal | DecimalJsLike | number | string
@@ -47824,6 +47981,11 @@ export namespace Prisma {
     includesMembership?: BoolWithAggregatesFilter<"ShopOrder"> | boolean
     membershipFee?: DecimalNullableWithAggregatesFilter<"ShopOrder"> | Decimal | DecimalJsLike | number | string | null
     notes?: StringNullableWithAggregatesFilter<"ShopOrder"> | string | null
+    guestName?: StringNullableWithAggregatesFilter<"ShopOrder"> | string | null
+    guestEmail?: StringNullableWithAggregatesFilter<"ShopOrder"> | string | null
+    guestPhone?: StringNullableWithAggregatesFilter<"ShopOrder"> | string | null
+    guestAddress?: StringNullableWithAggregatesFilter<"ShopOrder"> | string | null
+    isGuestOrder?: BoolWithAggregatesFilter<"ShopOrder"> | boolean
     dojoId?: UuidNullableWithAggregatesFilter<"ShopOrder"> | string | null
     includesDojoRenewal?: BoolWithAggregatesFilter<"ShopOrder"> | boolean
     includesCertificates?: BoolWithAggregatesFilter<"ShopOrder"> | boolean
@@ -47841,6 +48003,7 @@ export namespace Prisma {
     productId?: UuidFilter<"ShopOrderItem"> | string
     quantity?: IntFilter<"ShopOrderItem"> | number
     unitPrice?: DecimalFilter<"ShopOrderItem"> | Decimal | DecimalJsLike | number | string
+    size?: StringNullableFilter<"ShopOrderItem"> | string | null
     order?: XOR<ShopOrderScalarRelationFilter, ShopOrderWhereInput>
     product?: XOR<ShopProductScalarRelationFilter, ShopProductWhereInput>
   }
@@ -47851,6 +48014,7 @@ export namespace Prisma {
     productId?: SortOrder
     quantity?: SortOrder
     unitPrice?: SortOrder
+    size?: SortOrderInput | SortOrder
     order?: ShopOrderOrderByWithRelationInput
     product?: ShopProductOrderByWithRelationInput
   }
@@ -47864,6 +48028,7 @@ export namespace Prisma {
     productId?: UuidFilter<"ShopOrderItem"> | string
     quantity?: IntFilter<"ShopOrderItem"> | number
     unitPrice?: DecimalFilter<"ShopOrderItem"> | Decimal | DecimalJsLike | number | string
+    size?: StringNullableFilter<"ShopOrderItem"> | string | null
     order?: XOR<ShopOrderScalarRelationFilter, ShopOrderWhereInput>
     product?: XOR<ShopProductScalarRelationFilter, ShopProductWhereInput>
   }, "id">
@@ -47874,6 +48039,7 @@ export namespace Prisma {
     productId?: SortOrder
     quantity?: SortOrder
     unitPrice?: SortOrder
+    size?: SortOrderInput | SortOrder
     _count?: ShopOrderItemCountOrderByAggregateInput
     _avg?: ShopOrderItemAvgOrderByAggregateInput
     _max?: ShopOrderItemMaxOrderByAggregateInput
@@ -47890,6 +48056,7 @@ export namespace Prisma {
     productId?: UuidWithAggregatesFilter<"ShopOrderItem"> | string
     quantity?: IntWithAggregatesFilter<"ShopOrderItem"> | number
     unitPrice?: DecimalWithAggregatesFilter<"ShopOrderItem"> | Decimal | DecimalJsLike | number | string
+    size?: StringNullableWithAggregatesFilter<"ShopOrderItem"> | string | null
   }
 
   export type TournamentWhereInput = {
@@ -50441,6 +50608,8 @@ export namespace Prisma {
     imageUrl?: string | null
     category?: string | null
     isActive?: boolean
+    hasSizes?: boolean
+    sizes?: ShopProductCreatesizesInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     orderItems?: ShopOrderItemCreateNestedManyWithoutProductInput
@@ -50457,6 +50626,8 @@ export namespace Prisma {
     imageUrl?: string | null
     category?: string | null
     isActive?: boolean
+    hasSizes?: boolean
+    sizes?: ShopProductCreatesizesInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     orderItems?: ShopOrderItemUncheckedCreateNestedManyWithoutProductInput
@@ -50473,6 +50644,8 @@ export namespace Prisma {
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    hasSizes?: BoolFieldUpdateOperationsInput | boolean
+    sizes?: ShopProductUpdatesizesInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     orderItems?: ShopOrderItemUpdateManyWithoutProductNestedInput
@@ -50489,6 +50662,8 @@ export namespace Prisma {
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    hasSizes?: BoolFieldUpdateOperationsInput | boolean
+    sizes?: ShopProductUpdatesizesInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     orderItems?: ShopOrderItemUncheckedUpdateManyWithoutProductNestedInput
@@ -50505,6 +50680,8 @@ export namespace Prisma {
     imageUrl?: string | null
     category?: string | null
     isActive?: boolean
+    hasSizes?: boolean
+    sizes?: ShopProductCreatesizesInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -50518,6 +50695,8 @@ export namespace Prisma {
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    hasSizes?: BoolFieldUpdateOperationsInput | boolean
+    sizes?: ShopProductUpdatesizesInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -50531,6 +50710,8 @@ export namespace Prisma {
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    hasSizes?: BoolFieldUpdateOperationsInput | boolean
+    sizes?: ShopProductUpdatesizesInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -50794,11 +50975,16 @@ export namespace Prisma {
     includesMembership?: boolean
     membershipFee?: Decimal | DecimalJsLike | number | string | null
     notes?: string | null
+    guestName?: string | null
+    guestEmail?: string | null
+    guestPhone?: string | null
+    guestAddress?: string | null
+    isGuestOrder?: boolean
     includesDojoRenewal?: boolean
     includesCertificates?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
-    user: UserCreateNestedOneWithoutOrdersInput
+    user?: UserCreateNestedOneWithoutOrdersInput
     dojo?: DojoCreateNestedOneWithoutRenewalOrdersInput
     certDojo?: DojoCreateNestedOneWithoutCertificateOrdersInput
     orderItems?: ShopOrderItemCreateNestedManyWithoutOrderInput
@@ -50807,7 +50993,7 @@ export namespace Prisma {
 
   export type ShopOrderUncheckedCreateInput = {
     id?: string
-    userId: string
+    userId?: string | null
     paymentStatus?: $Enums.PaymentStatus
     paymentMethod?: string | null
     total: Decimal | DecimalJsLike | number | string
@@ -50816,6 +51002,11 @@ export namespace Prisma {
     includesMembership?: boolean
     membershipFee?: Decimal | DecimalJsLike | number | string | null
     notes?: string | null
+    guestName?: string | null
+    guestEmail?: string | null
+    guestPhone?: string | null
+    guestAddress?: string | null
+    isGuestOrder?: boolean
     dojoId?: string | null
     includesDojoRenewal?: boolean
     includesCertificates?: boolean
@@ -50836,11 +51027,16 @@ export namespace Prisma {
     includesMembership?: BoolFieldUpdateOperationsInput | boolean
     membershipFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    guestName?: NullableStringFieldUpdateOperationsInput | string | null
+    guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    guestPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guestAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    isGuestOrder?: BoolFieldUpdateOperationsInput | boolean
     includesDojoRenewal?: BoolFieldUpdateOperationsInput | boolean
     includesCertificates?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    user?: UserUpdateOneRequiredWithoutOrdersNestedInput
+    user?: UserUpdateOneWithoutOrdersNestedInput
     dojo?: DojoUpdateOneWithoutRenewalOrdersNestedInput
     certDojo?: DojoUpdateOneWithoutCertificateOrdersNestedInput
     orderItems?: ShopOrderItemUpdateManyWithoutOrderNestedInput
@@ -50849,7 +51045,7 @@ export namespace Prisma {
 
   export type ShopOrderUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    userId?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
     paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
     paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
     total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -50858,6 +51054,11 @@ export namespace Prisma {
     includesMembership?: BoolFieldUpdateOperationsInput | boolean
     membershipFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    guestName?: NullableStringFieldUpdateOperationsInput | string | null
+    guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    guestPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guestAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    isGuestOrder?: BoolFieldUpdateOperationsInput | boolean
     dojoId?: NullableStringFieldUpdateOperationsInput | string | null
     includesDojoRenewal?: BoolFieldUpdateOperationsInput | boolean
     includesCertificates?: BoolFieldUpdateOperationsInput | boolean
@@ -50870,7 +51071,7 @@ export namespace Prisma {
 
   export type ShopOrderCreateManyInput = {
     id?: string
-    userId: string
+    userId?: string | null
     paymentStatus?: $Enums.PaymentStatus
     paymentMethod?: string | null
     total: Decimal | DecimalJsLike | number | string
@@ -50879,6 +51080,11 @@ export namespace Prisma {
     includesMembership?: boolean
     membershipFee?: Decimal | DecimalJsLike | number | string | null
     notes?: string | null
+    guestName?: string | null
+    guestEmail?: string | null
+    guestPhone?: string | null
+    guestAddress?: string | null
+    isGuestOrder?: boolean
     dojoId?: string | null
     includesDojoRenewal?: boolean
     includesCertificates?: boolean
@@ -50897,6 +51103,11 @@ export namespace Prisma {
     includesMembership?: BoolFieldUpdateOperationsInput | boolean
     membershipFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    guestName?: NullableStringFieldUpdateOperationsInput | string | null
+    guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    guestPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guestAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    isGuestOrder?: BoolFieldUpdateOperationsInput | boolean
     includesDojoRenewal?: BoolFieldUpdateOperationsInput | boolean
     includesCertificates?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -50905,7 +51116,7 @@ export namespace Prisma {
 
   export type ShopOrderUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    userId?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
     paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
     paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
     total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -50914,6 +51125,11 @@ export namespace Prisma {
     includesMembership?: BoolFieldUpdateOperationsInput | boolean
     membershipFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    guestName?: NullableStringFieldUpdateOperationsInput | string | null
+    guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    guestPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guestAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    isGuestOrder?: BoolFieldUpdateOperationsInput | boolean
     dojoId?: NullableStringFieldUpdateOperationsInput | string | null
     includesDojoRenewal?: BoolFieldUpdateOperationsInput | boolean
     includesCertificates?: BoolFieldUpdateOperationsInput | boolean
@@ -50926,6 +51142,7 @@ export namespace Prisma {
     id?: string
     quantity: number
     unitPrice: Decimal | DecimalJsLike | number | string
+    size?: string | null
     order: ShopOrderCreateNestedOneWithoutOrderItemsInput
     product: ShopProductCreateNestedOneWithoutOrderItemsInput
   }
@@ -50936,12 +51153,14 @@ export namespace Prisma {
     productId: string
     quantity: number
     unitPrice: Decimal | DecimalJsLike | number | string
+    size?: string | null
   }
 
   export type ShopOrderItemUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
     unitPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    size?: NullableStringFieldUpdateOperationsInput | string | null
     order?: ShopOrderUpdateOneRequiredWithoutOrderItemsNestedInput
     product?: ShopProductUpdateOneRequiredWithoutOrderItemsNestedInput
   }
@@ -50952,6 +51171,7 @@ export namespace Prisma {
     productId?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
     unitPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    size?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ShopOrderItemCreateManyInput = {
@@ -50960,12 +51180,14 @@ export namespace Prisma {
     productId: string
     quantity: number
     unitPrice: Decimal | DecimalJsLike | number | string
+    size?: string | null
   }
 
   export type ShopOrderItemUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
     unitPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    size?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ShopOrderItemUncheckedUpdateManyInput = {
@@ -50974,6 +51196,7 @@ export namespace Prisma {
     productId?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
     unitPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    size?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type TournamentCreateInput = {
@@ -53228,6 +53451,8 @@ export namespace Prisma {
     imageUrl?: SortOrder
     category?: SortOrder
     isActive?: SortOrder
+    hasSizes?: SortOrder
+    sizes?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -53246,6 +53471,7 @@ export namespace Prisma {
     imageUrl?: SortOrder
     category?: SortOrder
     isActive?: SortOrder
+    hasSizes?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -53259,6 +53485,7 @@ export namespace Prisma {
     imageUrl?: SortOrder
     category?: SortOrder
     isActive?: SortOrder
+    hasSizes?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -53448,6 +53675,11 @@ export namespace Prisma {
     includesMembership?: SortOrder
     membershipFee?: SortOrder
     notes?: SortOrder
+    guestName?: SortOrder
+    guestEmail?: SortOrder
+    guestPhone?: SortOrder
+    guestAddress?: SortOrder
+    isGuestOrder?: SortOrder
     dojoId?: SortOrder
     includesDojoRenewal?: SortOrder
     includesCertificates?: SortOrder
@@ -53472,6 +53704,11 @@ export namespace Prisma {
     includesMembership?: SortOrder
     membershipFee?: SortOrder
     notes?: SortOrder
+    guestName?: SortOrder
+    guestEmail?: SortOrder
+    guestPhone?: SortOrder
+    guestAddress?: SortOrder
+    isGuestOrder?: SortOrder
     dojoId?: SortOrder
     includesDojoRenewal?: SortOrder
     includesCertificates?: SortOrder
@@ -53491,6 +53728,11 @@ export namespace Prisma {
     includesMembership?: SortOrder
     membershipFee?: SortOrder
     notes?: SortOrder
+    guestName?: SortOrder
+    guestEmail?: SortOrder
+    guestPhone?: SortOrder
+    guestAddress?: SortOrder
+    isGuestOrder?: SortOrder
     dojoId?: SortOrder
     includesDojoRenewal?: SortOrder
     includesCertificates?: SortOrder
@@ -53525,6 +53767,7 @@ export namespace Prisma {
     productId?: SortOrder
     quantity?: SortOrder
     unitPrice?: SortOrder
+    size?: SortOrder
   }
 
   export type ShopOrderItemAvgOrderByAggregateInput = {
@@ -53538,6 +53781,7 @@ export namespace Prisma {
     productId?: SortOrder
     quantity?: SortOrder
     unitPrice?: SortOrder
+    size?: SortOrder
   }
 
   export type ShopOrderItemMinOrderByAggregateInput = {
@@ -53546,6 +53790,7 @@ export namespace Prisma {
     productId?: SortOrder
     quantity?: SortOrder
     unitPrice?: SortOrder
+    size?: SortOrder
   }
 
   export type ShopOrderItemSumOrderByAggregateInput = {
@@ -56300,6 +56545,10 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutNotificationsInput, UserUpdateWithoutNotificationsInput>, UserUncheckedUpdateWithoutNotificationsInput>
   }
 
+  export type ShopProductCreatesizesInput = {
+    set: string[]
+  }
+
   export type ShopOrderItemCreateNestedManyWithoutProductInput = {
     create?: XOR<ShopOrderItemCreateWithoutProductInput, ShopOrderItemUncheckedCreateWithoutProductInput> | ShopOrderItemCreateWithoutProductInput[] | ShopOrderItemUncheckedCreateWithoutProductInput[]
     connectOrCreate?: ShopOrderItemCreateOrConnectWithoutProductInput | ShopOrderItemCreateOrConnectWithoutProductInput[]
@@ -56340,6 +56589,11 @@ export namespace Prisma {
     connectOrCreate?: DojoSaleItemCreateOrConnectWithoutProductInput | DojoSaleItemCreateOrConnectWithoutProductInput[]
     createMany?: DojoSaleItemCreateManyProductInputEnvelope
     connect?: DojoSaleItemWhereUniqueInput | DojoSaleItemWhereUniqueInput[]
+  }
+
+  export type ShopProductUpdatesizesInput = {
+    set?: string[]
+    push?: string | string[]
   }
 
   export type ShopOrderItemUpdateManyWithoutProductNestedInput = {
@@ -56620,10 +56874,12 @@ export namespace Prisma {
     set?: $Enums.PaymentStatus
   }
 
-  export type UserUpdateOneRequiredWithoutOrdersNestedInput = {
+  export type UserUpdateOneWithoutOrdersNestedInput = {
     create?: XOR<UserCreateWithoutOrdersInput, UserUncheckedCreateWithoutOrdersInput>
     connectOrCreate?: UserCreateOrConnectWithoutOrdersInput
     upsert?: UserUpsertWithoutOrdersInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutOrdersInput, UserUpdateWithoutOrdersInput>, UserUncheckedUpdateWithoutOrdersInput>
   }
@@ -58183,6 +58439,11 @@ export namespace Prisma {
     includesMembership?: boolean
     membershipFee?: Decimal | DecimalJsLike | number | string | null
     notes?: string | null
+    guestName?: string | null
+    guestEmail?: string | null
+    guestPhone?: string | null
+    guestAddress?: string | null
+    isGuestOrder?: boolean
     includesDojoRenewal?: boolean
     includesCertificates?: boolean
     createdAt?: Date | string
@@ -58203,6 +58464,11 @@ export namespace Prisma {
     includesMembership?: boolean
     membershipFee?: Decimal | DecimalJsLike | number | string | null
     notes?: string | null
+    guestName?: string | null
+    guestEmail?: string | null
+    guestPhone?: string | null
+    guestAddress?: string | null
+    isGuestOrder?: boolean
     dojoId?: string | null
     includesDojoRenewal?: boolean
     includesCertificates?: boolean
@@ -58791,7 +59057,7 @@ export namespace Prisma {
     OR?: ShopOrderScalarWhereInput[]
     NOT?: ShopOrderScalarWhereInput | ShopOrderScalarWhereInput[]
     id?: UuidFilter<"ShopOrder"> | string
-    userId?: UuidFilter<"ShopOrder"> | string
+    userId?: UuidNullableFilter<"ShopOrder"> | string | null
     paymentStatus?: EnumPaymentStatusFilter<"ShopOrder"> | $Enums.PaymentStatus
     paymentMethod?: StringNullableFilter<"ShopOrder"> | string | null
     total?: DecimalFilter<"ShopOrder"> | Decimal | DecimalJsLike | number | string
@@ -58800,6 +59066,11 @@ export namespace Prisma {
     includesMembership?: BoolFilter<"ShopOrder"> | boolean
     membershipFee?: DecimalNullableFilter<"ShopOrder"> | Decimal | DecimalJsLike | number | string | null
     notes?: StringNullableFilter<"ShopOrder"> | string | null
+    guestName?: StringNullableFilter<"ShopOrder"> | string | null
+    guestEmail?: StringNullableFilter<"ShopOrder"> | string | null
+    guestPhone?: StringNullableFilter<"ShopOrder"> | string | null
+    guestAddress?: StringNullableFilter<"ShopOrder"> | string | null
+    isGuestOrder?: BoolFilter<"ShopOrder"> | boolean
     dojoId?: UuidNullableFilter<"ShopOrder"> | string | null
     includesDojoRenewal?: BoolFilter<"ShopOrder"> | boolean
     includesCertificates?: BoolFilter<"ShopOrder"> | boolean
@@ -60844,11 +61115,16 @@ export namespace Prisma {
     includesMembership?: boolean
     membershipFee?: Decimal | DecimalJsLike | number | string | null
     notes?: string | null
+    guestName?: string | null
+    guestEmail?: string | null
+    guestPhone?: string | null
+    guestAddress?: string | null
+    isGuestOrder?: boolean
     includesDojoRenewal?: boolean
     includesCertificates?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
-    user: UserCreateNestedOneWithoutOrdersInput
+    user?: UserCreateNestedOneWithoutOrdersInput
     certDojo?: DojoCreateNestedOneWithoutCertificateOrdersInput
     orderItems?: ShopOrderItemCreateNestedManyWithoutOrderInput
     certificateRequests?: CertificateRequestCreateNestedManyWithoutOrderInput
@@ -60856,7 +61132,7 @@ export namespace Prisma {
 
   export type ShopOrderUncheckedCreateWithoutDojoInput = {
     id?: string
-    userId: string
+    userId?: string | null
     paymentStatus?: $Enums.PaymentStatus
     paymentMethod?: string | null
     total: Decimal | DecimalJsLike | number | string
@@ -60865,6 +61141,11 @@ export namespace Prisma {
     includesMembership?: boolean
     membershipFee?: Decimal | DecimalJsLike | number | string | null
     notes?: string | null
+    guestName?: string | null
+    guestEmail?: string | null
+    guestPhone?: string | null
+    guestAddress?: string | null
+    isGuestOrder?: boolean
     includesDojoRenewal?: boolean
     includesCertificates?: boolean
     certDojoId?: string | null
@@ -60894,11 +61175,16 @@ export namespace Prisma {
     includesMembership?: boolean
     membershipFee?: Decimal | DecimalJsLike | number | string | null
     notes?: string | null
+    guestName?: string | null
+    guestEmail?: string | null
+    guestPhone?: string | null
+    guestAddress?: string | null
+    isGuestOrder?: boolean
     includesDojoRenewal?: boolean
     includesCertificates?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
-    user: UserCreateNestedOneWithoutOrdersInput
+    user?: UserCreateNestedOneWithoutOrdersInput
     dojo?: DojoCreateNestedOneWithoutRenewalOrdersInput
     orderItems?: ShopOrderItemCreateNestedManyWithoutOrderInput
     certificateRequests?: CertificateRequestCreateNestedManyWithoutOrderInput
@@ -60906,7 +61192,7 @@ export namespace Prisma {
 
   export type ShopOrderUncheckedCreateWithoutCertDojoInput = {
     id?: string
-    userId: string
+    userId?: string | null
     paymentStatus?: $Enums.PaymentStatus
     paymentMethod?: string | null
     total: Decimal | DecimalJsLike | number | string
@@ -60915,6 +61201,11 @@ export namespace Prisma {
     includesMembership?: boolean
     membershipFee?: Decimal | DecimalJsLike | number | string | null
     notes?: string | null
+    guestName?: string | null
+    guestEmail?: string | null
+    guestPhone?: string | null
+    guestAddress?: string | null
+    isGuestOrder?: boolean
     dojoId?: string | null
     includesDojoRenewal?: boolean
     includesCertificates?: boolean
@@ -63053,11 +63344,16 @@ export namespace Prisma {
     includesMembership?: boolean
     membershipFee?: Decimal | DecimalJsLike | number | string | null
     notes?: string | null
+    guestName?: string | null
+    guestEmail?: string | null
+    guestPhone?: string | null
+    guestAddress?: string | null
+    isGuestOrder?: boolean
     includesDojoRenewal?: boolean
     includesCertificates?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
-    user: UserCreateNestedOneWithoutOrdersInput
+    user?: UserCreateNestedOneWithoutOrdersInput
     dojo?: DojoCreateNestedOneWithoutRenewalOrdersInput
     certDojo?: DojoCreateNestedOneWithoutCertificateOrdersInput
     orderItems?: ShopOrderItemCreateNestedManyWithoutOrderInput
@@ -63065,7 +63361,7 @@ export namespace Prisma {
 
   export type ShopOrderUncheckedCreateWithoutCertificateRequestsInput = {
     id?: string
-    userId: string
+    userId?: string | null
     paymentStatus?: $Enums.PaymentStatus
     paymentMethod?: string | null
     total: Decimal | DecimalJsLike | number | string
@@ -63074,6 +63370,11 @@ export namespace Prisma {
     includesMembership?: boolean
     membershipFee?: Decimal | DecimalJsLike | number | string | null
     notes?: string | null
+    guestName?: string | null
+    guestEmail?: string | null
+    guestPhone?: string | null
+    guestAddress?: string | null
+    isGuestOrder?: boolean
     dojoId?: string | null
     includesDojoRenewal?: boolean
     includesCertificates?: boolean
@@ -63278,11 +63579,16 @@ export namespace Prisma {
     includesMembership?: BoolFieldUpdateOperationsInput | boolean
     membershipFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    guestName?: NullableStringFieldUpdateOperationsInput | string | null
+    guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    guestPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guestAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    isGuestOrder?: BoolFieldUpdateOperationsInput | boolean
     includesDojoRenewal?: BoolFieldUpdateOperationsInput | boolean
     includesCertificates?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    user?: UserUpdateOneRequiredWithoutOrdersNestedInput
+    user?: UserUpdateOneWithoutOrdersNestedInput
     dojo?: DojoUpdateOneWithoutRenewalOrdersNestedInput
     certDojo?: DojoUpdateOneWithoutCertificateOrdersNestedInput
     orderItems?: ShopOrderItemUpdateManyWithoutOrderNestedInput
@@ -63290,7 +63596,7 @@ export namespace Prisma {
 
   export type ShopOrderUncheckedUpdateWithoutCertificateRequestsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    userId?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
     paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
     paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
     total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -63299,6 +63605,11 @@ export namespace Prisma {
     includesMembership?: BoolFieldUpdateOperationsInput | boolean
     membershipFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    guestName?: NullableStringFieldUpdateOperationsInput | string | null
+    guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    guestPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guestAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    isGuestOrder?: BoolFieldUpdateOperationsInput | boolean
     dojoId?: NullableStringFieldUpdateOperationsInput | string | null
     includesDojoRenewal?: BoolFieldUpdateOperationsInput | boolean
     includesCertificates?: BoolFieldUpdateOperationsInput | boolean
@@ -64458,6 +64769,7 @@ export namespace Prisma {
     id?: string
     quantity: number
     unitPrice: Decimal | DecimalJsLike | number | string
+    size?: string | null
     order: ShopOrderCreateNestedOneWithoutOrderItemsInput
   }
 
@@ -64466,6 +64778,7 @@ export namespace Prisma {
     orderId: string
     quantity: number
     unitPrice: Decimal | DecimalJsLike | number | string
+    size?: string | null
   }
 
   export type ShopOrderItemCreateOrConnectWithoutProductInput = {
@@ -64559,6 +64872,7 @@ export namespace Prisma {
     productId?: UuidFilter<"ShopOrderItem"> | string
     quantity?: IntFilter<"ShopOrderItem"> | number
     unitPrice?: DecimalFilter<"ShopOrderItem"> | Decimal | DecimalJsLike | number | string
+    size?: StringNullableFilter<"ShopOrderItem"> | string | null
   }
 
   export type DojoInventoryItemUpsertWithWhereUniqueWithoutProductInput = {
@@ -64682,6 +64996,8 @@ export namespace Prisma {
     imageUrl?: string | null
     category?: string | null
     isActive?: boolean
+    hasSizes?: boolean
+    sizes?: ShopProductCreatesizesInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     orderItems?: ShopOrderItemCreateNestedManyWithoutProductInput
@@ -64697,6 +65013,8 @@ export namespace Prisma {
     imageUrl?: string | null
     category?: string | null
     isActive?: boolean
+    hasSizes?: boolean
+    sizes?: ShopProductCreatesizesInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     orderItems?: ShopOrderItemUncheckedCreateNestedManyWithoutProductInput
@@ -64801,6 +65119,8 @@ export namespace Prisma {
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    hasSizes?: BoolFieldUpdateOperationsInput | boolean
+    sizes?: ShopProductUpdatesizesInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     orderItems?: ShopOrderItemUpdateManyWithoutProductNestedInput
@@ -64816,6 +65136,8 @@ export namespace Prisma {
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    hasSizes?: BoolFieldUpdateOperationsInput | boolean
+    sizes?: ShopProductUpdatesizesInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     orderItems?: ShopOrderItemUncheckedUpdateManyWithoutProductNestedInput
@@ -65300,6 +65622,8 @@ export namespace Prisma {
     imageUrl?: string | null
     category?: string | null
     isActive?: boolean
+    hasSizes?: boolean
+    sizes?: ShopProductCreatesizesInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     orderItems?: ShopOrderItemCreateNestedManyWithoutProductInput
@@ -65315,6 +65639,8 @@ export namespace Prisma {
     imageUrl?: string | null
     category?: string | null
     isActive?: boolean
+    hasSizes?: boolean
+    sizes?: ShopProductCreatesizesInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     orderItems?: ShopOrderItemUncheckedCreateNestedManyWithoutProductInput
@@ -65389,6 +65715,8 @@ export namespace Prisma {
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    hasSizes?: BoolFieldUpdateOperationsInput | boolean
+    sizes?: ShopProductUpdatesizesInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     orderItems?: ShopOrderItemUpdateManyWithoutProductNestedInput
@@ -65404,6 +65732,8 @@ export namespace Prisma {
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    hasSizes?: BoolFieldUpdateOperationsInput | boolean
+    sizes?: ShopProductUpdatesizesInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     orderItems?: ShopOrderItemUncheckedUpdateManyWithoutProductNestedInput
@@ -65607,6 +65937,7 @@ export namespace Prisma {
     id?: string
     quantity: number
     unitPrice: Decimal | DecimalJsLike | number | string
+    size?: string | null
     product: ShopProductCreateNestedOneWithoutOrderItemsInput
   }
 
@@ -65615,6 +65946,7 @@ export namespace Prisma {
     productId: string
     quantity: number
     unitPrice: Decimal | DecimalJsLike | number | string
+    size?: string | null
   }
 
   export type ShopOrderItemCreateOrConnectWithoutOrderInput = {
@@ -65924,11 +66256,16 @@ export namespace Prisma {
     includesMembership?: boolean
     membershipFee?: Decimal | DecimalJsLike | number | string | null
     notes?: string | null
+    guestName?: string | null
+    guestEmail?: string | null
+    guestPhone?: string | null
+    guestAddress?: string | null
+    isGuestOrder?: boolean
     includesDojoRenewal?: boolean
     includesCertificates?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
-    user: UserCreateNestedOneWithoutOrdersInput
+    user?: UserCreateNestedOneWithoutOrdersInput
     dojo?: DojoCreateNestedOneWithoutRenewalOrdersInput
     certDojo?: DojoCreateNestedOneWithoutCertificateOrdersInput
     certificateRequests?: CertificateRequestCreateNestedManyWithoutOrderInput
@@ -65936,7 +66273,7 @@ export namespace Prisma {
 
   export type ShopOrderUncheckedCreateWithoutOrderItemsInput = {
     id?: string
-    userId: string
+    userId?: string | null
     paymentStatus?: $Enums.PaymentStatus
     paymentMethod?: string | null
     total: Decimal | DecimalJsLike | number | string
@@ -65945,6 +66282,11 @@ export namespace Prisma {
     includesMembership?: boolean
     membershipFee?: Decimal | DecimalJsLike | number | string | null
     notes?: string | null
+    guestName?: string | null
+    guestEmail?: string | null
+    guestPhone?: string | null
+    guestAddress?: string | null
+    isGuestOrder?: boolean
     dojoId?: string | null
     includesDojoRenewal?: boolean
     includesCertificates?: boolean
@@ -65968,6 +66310,8 @@ export namespace Prisma {
     imageUrl?: string | null
     category?: string | null
     isActive?: boolean
+    hasSizes?: boolean
+    sizes?: ShopProductCreatesizesInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     dojoInventory?: DojoInventoryItemCreateNestedManyWithoutProductInput
@@ -65983,6 +66327,8 @@ export namespace Prisma {
     imageUrl?: string | null
     category?: string | null
     isActive?: boolean
+    hasSizes?: boolean
+    sizes?: ShopProductCreatesizesInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     dojoInventory?: DojoInventoryItemUncheckedCreateNestedManyWithoutProductInput
@@ -66015,11 +66361,16 @@ export namespace Prisma {
     includesMembership?: BoolFieldUpdateOperationsInput | boolean
     membershipFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    guestName?: NullableStringFieldUpdateOperationsInput | string | null
+    guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    guestPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guestAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    isGuestOrder?: BoolFieldUpdateOperationsInput | boolean
     includesDojoRenewal?: BoolFieldUpdateOperationsInput | boolean
     includesCertificates?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    user?: UserUpdateOneRequiredWithoutOrdersNestedInput
+    user?: UserUpdateOneWithoutOrdersNestedInput
     dojo?: DojoUpdateOneWithoutRenewalOrdersNestedInput
     certDojo?: DojoUpdateOneWithoutCertificateOrdersNestedInput
     certificateRequests?: CertificateRequestUpdateManyWithoutOrderNestedInput
@@ -66027,7 +66378,7 @@ export namespace Prisma {
 
   export type ShopOrderUncheckedUpdateWithoutOrderItemsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    userId?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
     paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
     paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
     total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -66036,6 +66387,11 @@ export namespace Prisma {
     includesMembership?: BoolFieldUpdateOperationsInput | boolean
     membershipFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    guestName?: NullableStringFieldUpdateOperationsInput | string | null
+    guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    guestPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guestAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    isGuestOrder?: BoolFieldUpdateOperationsInput | boolean
     dojoId?: NullableStringFieldUpdateOperationsInput | string | null
     includesDojoRenewal?: BoolFieldUpdateOperationsInput | boolean
     includesCertificates?: BoolFieldUpdateOperationsInput | boolean
@@ -66065,6 +66421,8 @@ export namespace Prisma {
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    hasSizes?: BoolFieldUpdateOperationsInput | boolean
+    sizes?: ShopProductUpdatesizesInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dojoInventory?: DojoInventoryItemUpdateManyWithoutProductNestedInput
@@ -66080,6 +66438,8 @@ export namespace Prisma {
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    hasSizes?: BoolFieldUpdateOperationsInput | boolean
+    sizes?: ShopProductUpdatesizesInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dojoInventory?: DojoInventoryItemUncheckedUpdateManyWithoutProductNestedInput
@@ -67276,6 +67636,11 @@ export namespace Prisma {
     includesMembership?: boolean
     membershipFee?: Decimal | DecimalJsLike | number | string | null
     notes?: string | null
+    guestName?: string | null
+    guestEmail?: string | null
+    guestPhone?: string | null
+    guestAddress?: string | null
+    isGuestOrder?: boolean
     dojoId?: string | null
     includesDojoRenewal?: boolean
     includesCertificates?: boolean
@@ -67446,6 +67811,11 @@ export namespace Prisma {
     includesMembership?: BoolFieldUpdateOperationsInput | boolean
     membershipFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    guestName?: NullableStringFieldUpdateOperationsInput | string | null
+    guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    guestPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guestAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    isGuestOrder?: BoolFieldUpdateOperationsInput | boolean
     includesDojoRenewal?: BoolFieldUpdateOperationsInput | boolean
     includesCertificates?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -67466,6 +67836,11 @@ export namespace Prisma {
     includesMembership?: BoolFieldUpdateOperationsInput | boolean
     membershipFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    guestName?: NullableStringFieldUpdateOperationsInput | string | null
+    guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    guestPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guestAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    isGuestOrder?: BoolFieldUpdateOperationsInput | boolean
     dojoId?: NullableStringFieldUpdateOperationsInput | string | null
     includesDojoRenewal?: BoolFieldUpdateOperationsInput | boolean
     includesCertificates?: BoolFieldUpdateOperationsInput | boolean
@@ -67486,6 +67861,11 @@ export namespace Prisma {
     includesMembership?: BoolFieldUpdateOperationsInput | boolean
     membershipFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    guestName?: NullableStringFieldUpdateOperationsInput | string | null
+    guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    guestPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guestAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    isGuestOrder?: BoolFieldUpdateOperationsInput | boolean
     dojoId?: NullableStringFieldUpdateOperationsInput | string | null
     includesDojoRenewal?: BoolFieldUpdateOperationsInput | boolean
     includesCertificates?: BoolFieldUpdateOperationsInput | boolean
@@ -68385,7 +68765,7 @@ export namespace Prisma {
 
   export type ShopOrderCreateManyDojoInput = {
     id?: string
-    userId: string
+    userId?: string | null
     paymentStatus?: $Enums.PaymentStatus
     paymentMethod?: string | null
     total: Decimal | DecimalJsLike | number | string
@@ -68394,6 +68774,11 @@ export namespace Prisma {
     includesMembership?: boolean
     membershipFee?: Decimal | DecimalJsLike | number | string | null
     notes?: string | null
+    guestName?: string | null
+    guestEmail?: string | null
+    guestPhone?: string | null
+    guestAddress?: string | null
+    isGuestOrder?: boolean
     includesDojoRenewal?: boolean
     includesCertificates?: boolean
     certDojoId?: string | null
@@ -68403,7 +68788,7 @@ export namespace Prisma {
 
   export type ShopOrderCreateManyCertDojoInput = {
     id?: string
-    userId: string
+    userId?: string | null
     paymentStatus?: $Enums.PaymentStatus
     paymentMethod?: string | null
     total: Decimal | DecimalJsLike | number | string
@@ -68412,6 +68797,11 @@ export namespace Prisma {
     includesMembership?: boolean
     membershipFee?: Decimal | DecimalJsLike | number | string | null
     notes?: string | null
+    guestName?: string | null
+    guestEmail?: string | null
+    guestPhone?: string | null
+    guestAddress?: string | null
+    isGuestOrder?: boolean
     dojoId?: string | null
     includesDojoRenewal?: boolean
     includesCertificates?: boolean
@@ -68548,11 +68938,16 @@ export namespace Prisma {
     includesMembership?: BoolFieldUpdateOperationsInput | boolean
     membershipFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    guestName?: NullableStringFieldUpdateOperationsInput | string | null
+    guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    guestPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guestAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    isGuestOrder?: BoolFieldUpdateOperationsInput | boolean
     includesDojoRenewal?: BoolFieldUpdateOperationsInput | boolean
     includesCertificates?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    user?: UserUpdateOneRequiredWithoutOrdersNestedInput
+    user?: UserUpdateOneWithoutOrdersNestedInput
     certDojo?: DojoUpdateOneWithoutCertificateOrdersNestedInput
     orderItems?: ShopOrderItemUpdateManyWithoutOrderNestedInput
     certificateRequests?: CertificateRequestUpdateManyWithoutOrderNestedInput
@@ -68560,7 +68955,7 @@ export namespace Prisma {
 
   export type ShopOrderUncheckedUpdateWithoutDojoInput = {
     id?: StringFieldUpdateOperationsInput | string
-    userId?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
     paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
     paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
     total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -68569,6 +68964,11 @@ export namespace Prisma {
     includesMembership?: BoolFieldUpdateOperationsInput | boolean
     membershipFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    guestName?: NullableStringFieldUpdateOperationsInput | string | null
+    guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    guestPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guestAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    isGuestOrder?: BoolFieldUpdateOperationsInput | boolean
     includesDojoRenewal?: BoolFieldUpdateOperationsInput | boolean
     includesCertificates?: BoolFieldUpdateOperationsInput | boolean
     certDojoId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -68580,7 +68980,7 @@ export namespace Prisma {
 
   export type ShopOrderUncheckedUpdateManyWithoutDojoInput = {
     id?: StringFieldUpdateOperationsInput | string
-    userId?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
     paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
     paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
     total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -68589,6 +68989,11 @@ export namespace Prisma {
     includesMembership?: BoolFieldUpdateOperationsInput | boolean
     membershipFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    guestName?: NullableStringFieldUpdateOperationsInput | string | null
+    guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    guestPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guestAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    isGuestOrder?: BoolFieldUpdateOperationsInput | boolean
     includesDojoRenewal?: BoolFieldUpdateOperationsInput | boolean
     includesCertificates?: BoolFieldUpdateOperationsInput | boolean
     certDojoId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -68606,11 +69011,16 @@ export namespace Prisma {
     includesMembership?: BoolFieldUpdateOperationsInput | boolean
     membershipFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    guestName?: NullableStringFieldUpdateOperationsInput | string | null
+    guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    guestPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guestAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    isGuestOrder?: BoolFieldUpdateOperationsInput | boolean
     includesDojoRenewal?: BoolFieldUpdateOperationsInput | boolean
     includesCertificates?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    user?: UserUpdateOneRequiredWithoutOrdersNestedInput
+    user?: UserUpdateOneWithoutOrdersNestedInput
     dojo?: DojoUpdateOneWithoutRenewalOrdersNestedInput
     orderItems?: ShopOrderItemUpdateManyWithoutOrderNestedInput
     certificateRequests?: CertificateRequestUpdateManyWithoutOrderNestedInput
@@ -68618,7 +69028,7 @@ export namespace Prisma {
 
   export type ShopOrderUncheckedUpdateWithoutCertDojoInput = {
     id?: StringFieldUpdateOperationsInput | string
-    userId?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
     paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
     paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
     total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -68627,6 +69037,11 @@ export namespace Prisma {
     includesMembership?: BoolFieldUpdateOperationsInput | boolean
     membershipFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    guestName?: NullableStringFieldUpdateOperationsInput | string | null
+    guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    guestPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guestAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    isGuestOrder?: BoolFieldUpdateOperationsInput | boolean
     dojoId?: NullableStringFieldUpdateOperationsInput | string | null
     includesDojoRenewal?: BoolFieldUpdateOperationsInput | boolean
     includesCertificates?: BoolFieldUpdateOperationsInput | boolean
@@ -68638,7 +69053,7 @@ export namespace Prisma {
 
   export type ShopOrderUncheckedUpdateManyWithoutCertDojoInput = {
     id?: StringFieldUpdateOperationsInput | string
-    userId?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
     paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
     paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
     total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -68647,6 +69062,11 @@ export namespace Prisma {
     includesMembership?: BoolFieldUpdateOperationsInput | boolean
     membershipFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    guestName?: NullableStringFieldUpdateOperationsInput | string | null
+    guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    guestPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guestAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    isGuestOrder?: BoolFieldUpdateOperationsInput | boolean
     dojoId?: NullableStringFieldUpdateOperationsInput | string | null
     includesDojoRenewal?: BoolFieldUpdateOperationsInput | boolean
     includesCertificates?: BoolFieldUpdateOperationsInput | boolean
@@ -69260,6 +69680,7 @@ export namespace Prisma {
     orderId: string
     quantity: number
     unitPrice: Decimal | DecimalJsLike | number | string
+    size?: string | null
   }
 
   export type DojoInventoryItemCreateManyProductInput = {
@@ -69284,6 +69705,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
     unitPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    size?: NullableStringFieldUpdateOperationsInput | string | null
     order?: ShopOrderUpdateOneRequiredWithoutOrderItemsNestedInput
   }
 
@@ -69292,6 +69714,7 @@ export namespace Prisma {
     orderId?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
     unitPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    size?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ShopOrderItemUncheckedUpdateManyWithoutProductInput = {
@@ -69299,6 +69722,7 @@ export namespace Prisma {
     orderId?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
     unitPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    size?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type DojoInventoryItemUpdateWithoutProductInput = {
@@ -69396,6 +69820,7 @@ export namespace Prisma {
     productId: string
     quantity: number
     unitPrice: Decimal | DecimalJsLike | number | string
+    size?: string | null
   }
 
   export type CertificateRequestCreateManyOrderInput = {
@@ -69419,6 +69844,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
     unitPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    size?: NullableStringFieldUpdateOperationsInput | string | null
     product?: ShopProductUpdateOneRequiredWithoutOrderItemsNestedInput
   }
 
@@ -69427,6 +69853,7 @@ export namespace Prisma {
     productId?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
     unitPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    size?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ShopOrderItemUncheckedUpdateManyWithoutOrderInput = {
@@ -69434,6 +69861,7 @@ export namespace Prisma {
     productId?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
     unitPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    size?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type CertificateRequestUpdateWithoutOrderInput = {

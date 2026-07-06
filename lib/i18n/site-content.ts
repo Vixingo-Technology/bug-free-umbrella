@@ -6,6 +6,7 @@ export const siteContent = {
             { name: "Events", href: "/events" },
             { name: "Branches", href: "/branches" },
             { name: "Members", href: "/members" },
+            { name: "Shop", href: "/shop" },
         ],
         membership: "Membership",
     },

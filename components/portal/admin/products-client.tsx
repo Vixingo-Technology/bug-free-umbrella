@@ -24,6 +24,8 @@ type Product = {
     imageUrl: string | null;
     category: string | null;
     isActive: boolean;
+    hasSizes: boolean;
+    sizes: string[];
     createdAt: string | Date;
 };
 
@@ -302,6 +304,8 @@ function ProductFormModal({
         imageUrl: product?.imageUrl ?? "",
         category: product?.category ?? "",
         isActive: product?.isActive ?? true,
+        hasSizes: product?.hasSizes ?? false,
+        sizes: product?.sizes?.join(", ") ?? "",
     });
 
     function submit(e: React.FormEvent) {
@@ -315,6 +319,8 @@ function ProductFormModal({
         fd.set("imageUrl", form.imageUrl);
         fd.set("category", form.category);
         if (form.isActive) fd.set("isActive", "true");
+        if (form.hasSizes) fd.set("hasSizes", "true");
+        fd.set("sizes", form.sizes);
 
         startTransition(async () => {
             const res = isEdit ? await updateProductAction(fd) : await createProductAction(fd);
@@ -408,6 +414,42 @@ function ProductFormModal({
                             onChange={(url) => setForm({ ...form, imageUrl: url })}
                         />
                     </Field>
+
+                    <div className="rounded-xl border border-zinc-200 bg-zinc-50/50 p-4 space-y-3">
+                        <label className="flex items-center gap-3 cursor-pointer">
+                            <input
+                                type="checkbox"
+                                checked={form.hasSizes}
+                                onChange={(e) =>
+                                    setForm({ ...form, hasSizes: e.target.checked })
+                                }
+                                className="w-4 h-4 rounded text-accent-red focus:ring-accent-red"
+                            />
+                            <span className="text-sm font-medium text-zinc-700">
+                                This product has sizes
+                            </span>
+                        </label>
+                        {form.hasSizes && (
+                            <div>
+                                <label className="text-xs font-semibold text-zinc-600 uppercase tracking-widest">
+                                    Available sizes
+                                </label>
+                                <input
+                                    type="text"
+                                    value={form.sizes}
+                                    onChange={(e) =>
+                                        setForm({ ...form, sizes: e.target.value })
+                                    }
+                                    placeholder="e.g. S, M, L, XL"
+                                    className={inputCls + " mt-1"}
+                                />
+                                <p className="text-[11px] text-zinc-500 mt-1.5">
+                                    Comma-separated labels. Customers must pick one
+                                    before adding to cart.
+                                </p>
+                            </div>
+                        )}
+                    </div>
 
                     <label className="flex items-center gap-3 cursor-pointer">
                         <input

@@ -2,7 +2,6 @@
 
 import { motion } from "motion/react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import {
     ArrowRight,
@@ -51,7 +50,6 @@ export default function InviteClient({
     role,
     dojoName,
 }: Props) {
-    const router = useRouter();
     const [fullName, setFullName] = useState(initialFullName);
     const [rank, setRank] = useState(initialRank);
     const [password, setPassword] = useState("");
@@ -79,13 +77,12 @@ export default function InviteClient({
             fd.set("rank", rank);
             fd.set("password", password);
             fd.set("confirm", confirm);
+            // The action redirects server-side on success — control only
+            // returns here if it produced an error to display.
             const result = await completeInviteSignupAction(fd);
             if (result?.error) {
                 setError(result.error);
-                return;
             }
-            router.push("/portal");
-            router.refresh();
         });
     }
 

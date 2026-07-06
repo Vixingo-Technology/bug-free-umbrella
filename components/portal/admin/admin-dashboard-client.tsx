@@ -39,7 +39,7 @@ type RecentOrder = {
     paymentStatus: "PENDING" | "PAID" | "FAILED" | "REFUNDED";
     total: number;
     createdAt: string | Date;
-    member: { fullName: string; email: string };
+    member: { fullName: string; email: string } | null;
 };
 
 const statusStyles: Record<RecentMember["membershipStatus"], string> = {
@@ -221,7 +221,7 @@ export default function AdminDashboardClient({
                                             #{o.id.slice(0, 8).toUpperCase()}
                                         </p>
                                         <p className="text-xs text-zinc-500 truncate">
-                                            {o.member.fullName}
+                                            {o.member?.fullName ?? "Guest"}
                                         </p>
                                     </div>
                                     <div className="flex flex-col items-end gap-1">

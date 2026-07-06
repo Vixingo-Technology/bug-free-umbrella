@@ -2,6 +2,8 @@
 
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { provisionMemberFromSupabaseUser } from "@/lib/auth/provision-member";
+import { resolvePostAuthLanding } from "@/lib/auth/post-auth-landing";
 
 export async function setPasswordAction(formData: FormData) {
     const password = formData.get("password") as string;
@@ -21,5 +23,10 @@ export async function setPasswordAction(formData: FormData) {
     const { error } = await supabase.auth.updateUser({ password });
     if (error) return { error: error.message };
 
-    redirect("/portal");
+    // Make sure the users + student rows exist before we decide the landing
+    // path — otherwise a brand-new invitee looks like "no student row" and
+    // we'd still fall through to /portal, defeating the direct redirect.
+    await provisionMemberFromSupabaseUser(user);
+
+    redirect(await resolvePostAuthLanding(user.id));
 }

@@ -733,6 +733,12 @@ model ShopProduct {
   category    String?
   isActive    Boolean @default(true) @map("is_active")
 
+  // Sizing — when hasSizes is true, customers must pick one of `sizes` before
+  // adding to cart. Kept as a plain text array so admins can use any labels
+  // (S/M/L, 32/34/36, kids/adult, etc.).
+  hasSizes Boolean  @default(false) @map("has_sizes")
+  sizes    String[] @default([])
+
   orderItems    ShopOrderItem[]
   dojoInventory DojoInventoryItem[] @relation("InventoryProduct")
   dojoSaleItems DojoSaleItem[]      @relation("SaleItemProduct")
@@ -818,7 +824,7 @@ model DojoSaleItem {
 
 model ShopOrder {
   id                 String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  userId             String        @map("user_id") @db.Uuid
+  userId             String?       @map("user_id") @db.Uuid
   paymentStatus      PaymentStatus @default(PENDING) @map("payment_status")
   paymentMethod      String?       @map("payment_method")
   total              Decimal       @db.Decimal(10, 2)
@@ -828,13 +834,20 @@ model ShopOrder {
   membershipFee      Decimal?      @map("membership_fee") @db.Decimal(10, 2)
   notes              String?
 
+  // Guest shop-checkout fields — used when there is no logged-in user.
+  guestName    String? @map("guest_name")
+  guestEmail   String? @map("guest_email")
+  guestPhone   String? @map("guest_phone")
+  guestAddress String? @map("guest_address")
+  isGuestOrder Boolean @default(false) @map("is_guest_order")
+
   dojoId              String? @map("dojo_id") @db.Uuid
   includesDojoRenewal Boolean @default(false) @map("includes_dojo_renewal")
 
   includesCertificates Boolean @default(false) @map("includes_certificates")
   certDojoId           String? @map("cert_dojo_id") @db.Uuid
 
-  user                User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user                User?                @relation(fields: [userId], references: [id], onDelete: SetNull)
   dojo                Dojo?                @relation("DojoRenewalOrders", fields: [dojoId], references: [id])
   certDojo            Dojo?                @relation("DojoCertificateOrders", fields: [certDojoId], references: [id])
   orderItems          ShopOrderItem[]
@@ -856,6 +869,7 @@ model ShopOrderItem {
   productId String  @map("product_id") @db.Uuid
   quantity  Int
   unitPrice Decimal @map("unit_price") @db.Decimal(10, 2)
+  size      String?
 
   order   ShopOrder   @relation(fields: [orderId], references: [id], onDelete: Cascade)
   product ShopProduct @relation(fields: [productId], references: [id])

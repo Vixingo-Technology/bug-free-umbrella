@@ -413,6 +413,8 @@ exports.Prisma.ShopProductScalarFieldEnum = {
   imageUrl: 'imageUrl',
   category: 'category',
   isActive: 'isActive',
+  hasSizes: 'hasSizes',
+  sizes: 'sizes',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -464,6 +466,11 @@ exports.Prisma.ShopOrderScalarFieldEnum = {
   includesMembership: 'includesMembership',
   membershipFee: 'membershipFee',
   notes: 'notes',
+  guestName: 'guestName',
+  guestEmail: 'guestEmail',
+  guestPhone: 'guestPhone',
+  guestAddress: 'guestAddress',
+  isGuestOrder: 'isGuestOrder',
   dojoId: 'dojoId',
   includesDojoRenewal: 'includesDojoRenewal',
   includesCertificates: 'includesCertificates',
@@ -477,7 +484,8 @@ exports.Prisma.ShopOrderItemScalarFieldEnum = {
   orderId: 'orderId',
   productId: 'productId',
   quantity: 'quantity',
-  unitPrice: 'unitPrice'
+  unitPrice: 'unitPrice',
+  size: 'size'
 };
 
 exports.Prisma.TournamentScalarFieldEnum = {

@@ -1,9 +1,11 @@
 "use server";
 
+import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { prisma } from "@/lib/prisma";
 import { assignRole } from "@/lib/auth/assign-role";
 import type { RoleId } from "@/lib/auth/load-current-user";
+import { resolvePostAuthLanding } from "@/lib/auth/post-auth-landing";
 
 type Result = { ok?: true; error?: string };
 
@@ -96,5 +98,10 @@ export async function completeInviteSignupAction(
             e instanceof Error ? e.message : "Could not activate your account.";
         return { error: message };
     }
-    return { ok: true };
+
+    // redirect() throws NEXT_REDIRECT — must run outside the try/catch above.
+    // Redirect straight to the correct landing so we avoid a client-side
+    // /portal → /portal/onboarding double-hop that can strand the router on
+    // a stale RSC tree (blank onboarding screen until manual reload).
+    redirect(await resolvePostAuthLanding(user.id));
 }

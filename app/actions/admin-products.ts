@@ -62,6 +62,14 @@ function parseInt(v: FormDataEntryValue | null): number | null {
     return Number.isFinite(n) ? n : null;
 }
 
+function parseSizes(v: FormDataEntryValue | null): string[] {
+    if (!v) return [];
+    return String(v)
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean);
+}
+
 export async function createProductAction(formData: FormData): Promise<ActionResult> {
     await requireAdmin();
 
@@ -72,12 +80,16 @@ export async function createProductAction(formData: FormData): Promise<ActionRes
     const imageUrl = ((formData.get("imageUrl") as string) ?? "").trim() || null;
     const category = ((formData.get("category") as string) ?? "").trim() || null;
     const isActive = formData.get("isActive") === "on" || formData.get("isActive") === "true";
+    const hasSizes = formData.get("hasSizes") === "on" || formData.get("hasSizes") === "true";
+    const sizes = hasSizes ? parseSizes(formData.get("sizes")) : [];
 
     if (!name) return { ok: false, error: "Name is required." };
     if (price === null || price < 0) return { ok: false, error: "Valid price is required." };
+    if (hasSizes && sizes.length === 0)
+        return { ok: false, error: "Add at least one size, or turn off sizing." };
 
     const product = await prisma.shopProduct.create({
-        data: { name, description, price, stock, imageUrl, category, isActive },
+        data: { name, description, price, stock, imageUrl, category, isActive, hasSizes, sizes },
     });
 
     revalidatePath("/portal/admin/products");
@@ -97,13 +109,17 @@ export async function updateProductAction(formData: FormData): Promise<ActionRes
     const imageUrl = ((formData.get("imageUrl") as string) ?? "").trim() || null;
     const category = ((formData.get("category") as string) ?? "").trim() || null;
     const isActive = formData.get("isActive") === "on" || formData.get("isActive") === "true";
+    const hasSizes = formData.get("hasSizes") === "on" || formData.get("hasSizes") === "true";
+    const sizes = hasSizes ? parseSizes(formData.get("sizes")) : [];
 
     if (!name) return { ok: false, error: "Name is required." };
     if (price === null || price < 0) return { ok: false, error: "Valid price is required." };
+    if (hasSizes && sizes.length === 0)
+        return { ok: false, error: "Add at least one size, or turn off sizing." };
 
     await prisma.shopProduct.update({
         where: { id },
-        data: { name, description, price, stock, imageUrl, category, isActive },
+        data: { name, description, price, stock, imageUrl, category, isActive, hasSizes, sizes },
     });
 
     revalidatePath("/portal/admin/products");

@@ -263,11 +263,19 @@ async function AdminPortalDashboard({ userId }: { userId: string }) {
             take: 5,
             select: {
                 id: true, paymentStatus: true, total: true, createdAt: true,
+                guestName: true, guestEmail: true, isGuestOrder: true,
                 user: { select: { fullName: true, email: true } },
             },
         }).then((rows) => rows.map((o) => ({
-            ...o,
-            member: o.user,
+            id: o.id,
+            paymentStatus: o.paymentStatus,
+            total: o.total,
+            createdAt: o.createdAt,
+            member: o.user
+                ? o.user
+                : (o.guestName || o.guestEmail)
+                    ? { fullName: o.guestName ?? "Guest", email: o.guestEmail ?? "" }
+                    : null,
         }))),
     ]);
 
