@@ -20,7 +20,7 @@ export default async function ShopPage() {
             where: { isActive: true },
             orderBy: [{ category: "asc" }, { createdAt: "desc" }],
         });
-        products = serialize(rows) as ProductCardData[];
+        products = serialize(rows) as unknown as ProductCardData[];
     } catch {
         products = [];
     }
