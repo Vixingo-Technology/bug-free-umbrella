@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
+import { AnimatePresence, motion } from "motion/react";
 import {
   AlertTriangle,
   Calendar,
@@ -12,6 +13,7 @@ import {
   RefreshCw,
   Save,
   Shield,
+  X,
   XCircle,
 } from "lucide-react";
 import {
@@ -19,11 +21,17 @@ import {
   saveDojoAnnualFeeAction,
 } from "@/app/portal/dojo/settings/actions";
 
+type Feedback =
+  | { kind: "success"; expiry: string | null }
+  | { kind: "failed"; reason: string }
+  | null;
+
 export type DojoMembershipCardProps = {
   annualFeeBDT: number;
   storedAnnualFee: string;
   expiryDate: string | null;
   canEdit: boolean;
+  feedback?: Feedback;
 };
 
 const fmtDate = new Intl.DateTimeFormat("en-GB", {
@@ -37,6 +45,7 @@ export default function DojoMembershipCard({
   storedAnnualFee,
   expiryDate,
   canEdit,
+  feedback,
 }: DojoMembershipCardProps) {
   const [feeInput, setFeeInput] = useState(storedAnnualFee);
   const [feeError, setFeeError] = useState<string | null>(null);
@@ -45,6 +54,24 @@ export default function DojoMembershipCard({
 
   const [payError, setPayError] = useState<string | null>(null);
   const [payPending, startPay] = useTransition();
+
+  const [popup, setPopup] = useState<Feedback>(feedback ?? null);
+  useEffect(() => {
+    setPopup(feedback ?? null);
+  }, [feedback]);
+  function closePopup() {
+    setPopup(null);
+    if (typeof window === "undefined") return;
+    const url = new URL(window.location.href);
+    ["status", "reason", "orderId", "expiry", "dev"].forEach((k) =>
+      url.searchParams.delete(k),
+    );
+    // Full navigation (not replaceState) so the layout re-renders WITH the
+    // auth cookie — SSLCommerz's cross-site POST → GET chain can strip
+    // SameSite=Lax cookies on the return hop, hiding the portal sidebar
+    // until a real GET is issued.
+    window.location.replace(url.pathname + (url.search ? url.search : ""));
+  }
 
   const expiry = expiryDate ? new Date(expiryDate) : null;
   const today = new Date();
@@ -194,7 +221,102 @@ export default function DojoMembershipCard({
           </p>
         </div>
       </div>
+
+      <RenewalPopup popup={popup} onClose={closePopup} />
     </div>
+  );
+}
+
+function RenewalPopup({
+  popup,
+  onClose,
+}: {
+  popup: Feedback;
+  onClose: () => void;
+}) {
+  return (
+    <AnimatePresence>
+      {popup && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-zinc-950/60 backdrop-blur-sm px-4"
+          onClick={onClose}
+        >
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            transition={{ type: "spring", stiffness: 220, damping: 22 }}
+            className="relative w-full max-w-md rounded-2xl bg-white shadow-2xl overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              type="button"
+              onClick={onClose}
+              className="absolute top-3 right-3 p-1.5 rounded-full text-zinc-400 hover:text-zinc-900 hover:bg-zinc-100 transition"
+              aria-label="Close"
+            >
+              <X size={16} />
+            </button>
+            {popup.kind === "success" ? (
+              <div className="p-8 text-center">
+                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 text-emerald-600 mb-4">
+                  <CheckCircle2 size={36} />
+                </div>
+                <p className="text-[11px] uppercase tracking-[0.35em] text-emerald-600 mb-2">
+                  Dojo renewed
+                </p>
+                <h2 className="text-2xl font-bold text-zinc-900">
+                  Thank you!
+                </h2>
+                <p className="mt-2 text-sm text-zinc-500">
+                  Your dojo membership has been renewed.
+                </p>
+                {popup.expiry && (
+                  <div className="mt-6 rounded-xl bg-zinc-50 border border-zinc-200 px-4 py-3">
+                    <p className="text-[10px] uppercase tracking-widest text-zinc-500">
+                      Valid until
+                    </p>
+                    <p className="mt-1 text-lg font-bold text-zinc-900">
+                      {fmtDate.format(new Date(popup.expiry))}
+                    </p>
+                  </div>
+                )}
+                <button
+                  type="button"
+                  onClick={onClose}
+                  className="mt-6 w-full inline-flex items-center justify-center bg-zinc-900 hover:bg-accent-red text-white font-bold text-sm py-3 rounded-sm transition-colors"
+                >
+                  Done
+                </button>
+              </div>
+            ) : (
+              <div className="p-8 text-center">
+                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-red-100 text-red-600 mb-4">
+                  <XCircle size={36} />
+                </div>
+                <p className="text-[11px] uppercase tracking-[0.35em] text-red-600 mb-2">
+                  Renewal failed
+                </p>
+                <h2 className="text-2xl font-bold text-zinc-900">
+                  Payment did not go through
+                </h2>
+                <p className="mt-2 text-sm text-zinc-500">{popup.reason}</p>
+                <button
+                  type="button"
+                  onClick={onClose}
+                  className="mt-6 w-full inline-flex items-center justify-center bg-zinc-900 hover:bg-accent-red text-white font-bold text-sm py-3 rounded-sm transition-colors"
+                >
+                  Try again
+                </button>
+              </div>
+            )}
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }
 

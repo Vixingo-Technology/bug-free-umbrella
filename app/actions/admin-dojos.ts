@@ -4,7 +4,14 @@ import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/admin-guard";
 import { emitWebhook } from "@/lib/n8n";
+import { notifyMembers } from "@/lib/notify";
 import type { Prisma } from "@/prisma/generated/client";
+
+const fmtDate = new Intl.DateTimeFormat("en-GB", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+});
 
 type ActionResult = { ok: true; id?: string } | { ok: false; error: string };
 
@@ -202,6 +209,24 @@ export async function sendDojoRenewalReminderAction(input: {
         };
     }
 
+    // Compute days-left so the reminder body — both email and in-app — can
+    // quote a concrete deadline ("30 days left" / "expired 5 days ago") rather
+    // than a bare date.
+    const daysLeft = dojo.expiryDate
+        ? Math.ceil(
+              (dojo.expiryDate.getTime() - Date.now()) / (1000 * 60 * 60 * 24),
+          )
+        : null;
+    const expiryLabel = dojo.expiryDate ? fmtDate.format(dojo.expiryDate) : null;
+    const urgencyPhrase =
+        daysLeft === null
+            ? "Please renew your dojo membership."
+            : daysLeft < 0
+                ? `Your dojo membership expired ${Math.abs(daysLeft)} day${Math.abs(daysLeft) === 1 ? "" : "s"} ago${expiryLabel ? ` (on ${expiryLabel})` : ""}. Please renew to restore your public listing.`
+                : daysLeft === 0
+                    ? `Your dojo membership expires today${expiryLabel ? ` (${expiryLabel})` : ""}. Please renew today to avoid interruption.`
+                    : `Your dojo membership expires in ${daysLeft} day${daysLeft === 1 ? "" : "s"}${expiryLabel ? ` (on ${expiryLabel})` : ""}. Please renew soon.`;
+
     await emitWebhook("jka.renewal.reminder", {
         kind: "dojo",
         dojoId: dojo.id,
@@ -210,9 +235,25 @@ export async function sendDojoRenewalReminderAction(input: {
         recipientName: owner?.fullName ?? dojo.name,
         recipientPhone: owner?.phone ?? null,
         expiryDate: dojo.expiryDate?.toISOString() ?? null,
+        daysLeft,
+        message: urgencyPhrase,
         annualFee: dojo.annualFee != null ? Number(dojo.annualFee) : null,
-        renewUrl: "/portal/dojo/settings#renewal",
+        renewUrl: "/portal/dojo/renewals",
     });
+
+    // In-app notification for the dojo owner — same body as the email so the
+    // owner sees a consistent message in the bell dropdown.
+    if (owner?.id) {
+        await notifyMembers([owner.id], {
+            title:
+                daysLeft !== null && daysLeft < 0
+                    ? "Dojo membership expired"
+                    : "Renew your dojo membership",
+            message: urgencyPhrase,
+            type: "PAYMENT",
+            link: "/portal/dojo/renewals",
+        });
+    }
 
     return { ok: true };
 }

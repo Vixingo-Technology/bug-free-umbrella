@@ -4,6 +4,49 @@ import { emitPaymentSuccess } from "@/lib/n8n";
 import type { Prisma } from "@/prisma/generated/client";
 import { notifyAdmins, notifyMembers } from "@/lib/notify";
 import { findUserIdsByRoles } from "@/lib/notify/recipients";
+import { extendExpiry } from "@/lib/renewals/extend-expiry";
+
+// Landing pages for the buyer after we finish server-side processing. We
+// prefer the page the buyer came from (renew form, dojo renewal card) so
+// they see a contextual popup instead of a generic confirmation screen.
+function successRedirectFor(order: {
+    includesMembership: boolean;
+    includesDojoRenewal: boolean;
+    includesTransferRequest: boolean;
+}, orderId: string, expiryIso: string | null): string {
+    if (order.includesDojoRenewal) {
+        const params = new URLSearchParams({
+            status: "success",
+            orderId,
+            ...(expiryIso ? { expiry: expiryIso } : {}),
+        });
+        return `/portal/dojo/renewals?${params.toString()}`;
+    }
+    if (order.includesMembership) {
+        const params = new URLSearchParams({
+            status: "success",
+            orderId,
+            ...(expiryIso ? { expiry: expiryIso } : {}),
+        });
+        return `/portal/renew?${params.toString()}`;
+    }
+    return `/portal/payment-success?orderId=${orderId}`;
+}
+
+function failureRedirectFor(order: {
+    includesMembership: boolean;
+    includesDojoRenewal: boolean;
+    includesTransferRequest: boolean;
+} | null, orderId: string, reason: string): string {
+    const reasonParam = encodeURIComponent(reason);
+    if (order?.includesDojoRenewal) {
+        return `/portal/dojo/renewals?status=failed&orderId=${orderId}&reason=${reasonParam}`;
+    }
+    if (order?.includesMembership) {
+        return `/portal/renew?status=failed&orderId=${orderId}&reason=${reasonParam}`;
+    }
+    return `/portal/payment-failed?orderId=${orderId}&reason=${reasonParam}`;
+}
 
 // Called by SSLCommerz after successful payment (success_url).
 // SSLCommerz POSTs form data here; we validate, mark order paid, redirect.
@@ -29,19 +72,39 @@ export async function POST(request: Request) {
         const validation = await fetch(validateUrl);
         const json = await validation.json();
 
+        // Grab a lightweight copy of the order so we know where to send the
+        // buyer on failure (renew page vs generic).
+        const orderShell = await prisma.shopOrder.findUnique({
+            where: { id: orderId },
+            select: {
+                includesMembership: true,
+                includesDojoRenewal: true,
+                includesTransferRequest: true,
+            },
+        });
+
         if (json.status !== "VALID" && json.status !== "VALIDATED") {
-            return NextResponse.redirect(new URL(`/portal/payment-failed?orderId=${orderId}`, request.url));
+            const reason =
+                json.failedreason ||
+                "The payment gateway declined the transaction.";
+            return NextResponse.redirect(
+                new URL(
+                    failureRedirectFor(orderShell, orderId, reason),
+                    request.url,
+                ),
+            );
         }
 
         // Mark order paid + activate membership (member and/or dojo)
         const order = await prisma.shopOrder.findUnique({
             where: { id: orderId },
-            include: { transferRequest: { select: { id: true, studentId: true, fromDojoId: true, toDojo: { select: { name: true } }, fromDojo: { select: { name: true } } } } },
+            include: {
+                dojo: { select: { expiryDate: true } },
+                transferRequest: { select: { id: true, studentId: true, fromDojoId: true, toDojo: { select: { name: true } }, fromDojo: { select: { name: true } } } },
+            },
         });
+        let renewedExpiryIso: string | null = null;
         if (order && order.paymentStatus !== "PAID" && order.userId) {
-            const expiry = new Date();
-            expiry.setFullYear(expiry.getFullYear() + 1);
-
             const writes: Prisma.PrismaPromise<unknown>[] = [
                 prisma.shopOrder.update({
                     where: { id: orderId },
@@ -51,28 +114,47 @@ export async function POST(request: Request) {
 
             // Member-level renewal (onboarding fee or /portal/renew) — extends
             // the buyer's own membership. Membership lives on Student now.
+            let memberExpiry: Date | null = null;
             if (order.includesMembership) {
+                const existing = await prisma.student.findUnique({
+                    where: { id: order.userId },
+                    select: { expiryDate: true },
+                });
+                memberExpiry = extendExpiry(existing?.expiryDate ?? null);
                 writes.push(
                     prisma.student.update({
                         where: { id: order.userId },
                         data: {
                             membershipStatus: "ACTIVE",
                             onboardingComplete: true,
-                            expiryDate: expiry,
+                            expiryDate: memberExpiry,
                         },
                     }),
                 );
             }
 
             // Dojo-level renewal — extends the dojo's federation membership.
+            // Also re-activates the owner's account so lapsed dojos get their
+            // dashboard back the moment the fee lands.
+            let dojoExpiry: Date | null = null;
             if (order.includesDojoRenewal && order.dojoId) {
+                dojoExpiry = extendExpiry(order.dojo?.expiryDate ?? null);
                 writes.push(
                     prisma.dojo.update({
                         where: { id: order.dojoId },
-                        data: { expiryDate: expiry, isActive: true },
+                        data: { expiryDate: dojoExpiry, isActive: true },
+                    }),
+                );
+                writes.push(
+                    prisma.user.update({
+                        where: { id: order.userId },
+                        data: { isActive: true },
                     }),
                 );
             }
+
+            renewedExpiryIso =
+                (dojoExpiry ?? memberExpiry)?.toISOString() ?? null;
 
             // Transfer request fee — move the linked request to AWAITING_DOJO.
             if (order.includesTransferRequest && order.transferRequest) {
@@ -121,28 +203,48 @@ export async function POST(request: Request) {
                     currency: order.currency,
                     includesMembership:
                         order.includesMembership || order.includesDojoRenewal,
-                    membershipExpiresAt: expiry.toISOString(),
+                    membershipExpiresAt: renewedExpiryIso ?? undefined,
                 });
 
                 // In-app receipt for the buyer.
+                const receiptLink = order.includesDojoRenewal
+                    ? "/portal/dojo/renewals"
+                    : order.includesMembership
+                        ? "/portal/renew"
+                        : "/portal/orders";
                 await notifyMembers([updatedUser.id], {
-                    title: "Payment received",
-                    message: `Your payment of ${order.currency} ${Number(order.total).toLocaleString()} was successful. Thank you!`,
+                    title: order.includesDojoRenewal
+                        ? "Dojo membership renewed"
+                        : order.includesMembership
+                            ? "Membership renewed"
+                            : "Payment received",
+                    message: renewedExpiryIso
+                        ? `Payment of ${order.currency} ${Number(order.total).toLocaleString()} received. Valid until ${new Date(renewedExpiryIso).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}.`
+                        : `Your payment of ${order.currency} ${Number(order.total).toLocaleString()} was successful. Thank you!`,
                     type: "PAYMENT",
-                    link: "/portal/orders",
+                    link: receiptLink,
                 });
 
                 // Back-office heads-up.
                 await notifyAdmins({
                     title: "New paid order",
-                    message: `${updatedUser.fullName} paid ${order.currency} ${Number(order.total).toLocaleString()}${order.includesMembership ? " (incl. membership)" : ""}.`,
+                    message: `${updatedUser.fullName} paid ${order.currency} ${Number(order.total).toLocaleString()}${order.includesMembership ? " (incl. membership)" : ""}${order.includesDojoRenewal ? " (incl. dojo renewal)" : ""}.`,
                     type: "PAYMENT",
                     link: "/portal/admin/orders",
                 });
             }
         }
 
-        return NextResponse.redirect(new URL(`/portal/payment-success?orderId=${orderId}`, request.url));
+        const target = successRedirectFor(
+            {
+                includesMembership: order?.includesMembership ?? false,
+                includesDojoRenewal: order?.includesDojoRenewal ?? false,
+                includesTransferRequest: order?.includesTransferRequest ?? false,
+            },
+            orderId,
+            renewedExpiryIso,
+        );
+        return NextResponse.redirect(new URL(target, request.url));
     } catch (err) {
         console.error("SSLCommerz success webhook error:", err);
         return NextResponse.redirect(new URL("/portal", request.url));

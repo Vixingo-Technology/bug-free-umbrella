@@ -213,15 +213,17 @@ export default async function PublicMemberPage({
                 <div className="max-w-6xl mx-auto px-6 lg:px-12 grid lg:grid-cols-3 gap-8">
                     {/* Sidebar: digital card */}
                     <aside className="space-y-6 order-1 lg:order-2">
-                        <DigitalCard
-                            fullName={member.fullName}
-                            currentRank={member.currentRank}
-                            dojoName={member.dojo?.name}
-                            role={roleLabel[member.role] ?? member.role}
-                            membershipStatus={status}
-                            memberNumber={member.memberNumber}
-                            avatarUrl={member.avatarUrl}
-                        />
+                        <div className="h-[300px]">
+                            <DigitalCard
+                                fullName={member.fullName}
+                                currentRank={member.currentRank}
+                                dojoName={member.dojo?.name}
+                                role={roleLabel[member.role] ?? member.role}
+                                membershipStatus={status}
+                                memberNumber={member.memberNumber}
+                                avatarUrl={member.avatarUrl}
+                            />
+                        </div>
                         <div className="bg-white border border-zinc-200 rounded-sm shadow-sm p-5">
                             <h3 className="text-xs tracking-widest uppercase font-bold text-zinc-500 mb-3">
                                 At a glance

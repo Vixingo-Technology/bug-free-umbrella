@@ -19,6 +19,54 @@ const annualFeeSchema = z.object({
     .nullable(),
 });
 
+const locationSchema = z.object({
+  address: z
+    .string()
+    .max(500, "Address is too long.")
+    .nullable(),
+  latitude: z
+    .number()
+    .min(-90, "Latitude must be between -90 and 90.")
+    .max(90, "Latitude must be between -90 and 90.")
+    .nullable(),
+  longitude: z
+    .number()
+    .min(-180, "Longitude must be between -180 and 180.")
+    .max(180, "Longitude must be between -180 and 180.")
+    .nullable(),
+});
+
+export async function saveDojoLocationAction(input: {
+  address: string | null;
+  latitude: number | null;
+  longitude: number | null;
+}): Promise<{ success: true } | { error: string }> {
+  const session = await requireDojoRole("DOJO_MANAGER");
+  if (!session.dojo) return { error: "Your dojo is not set up yet." };
+
+  const parsed = locationSchema.safeParse(input);
+  if (!parsed.success) {
+    return { error: parsed.error.issues[0]?.message ?? "Invalid input." };
+  }
+
+  try {
+    await prisma.dojo.update({
+      where: { id: session.dojo.id },
+      data: {
+        address: parsed.data.address,
+        latitude: parsed.data.latitude,
+        longitude: parsed.data.longitude,
+      },
+    });
+  } catch (e) {
+    console.error("[saveDojoLocation] update failed", e);
+    return { error: "Could not save location. Try again." };
+  }
+
+  revalidatePath("/portal/dojo/settings");
+  return { success: true };
+}
+
 export async function saveDojoAnnualFeeAction(input: {
   annualFee: number | null;
 }): Promise<{ success: true } | { error: string }> {

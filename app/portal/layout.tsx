@@ -33,10 +33,17 @@ export default async function PortalLayout({
 }) {
     const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
-    if (!user) redirect("/login");
 
     const headersList = await headers();
     const pathname = headersList.get("x-pathname") ?? "";
+    const isPostPaymentLanding =
+        headersList.get("x-post-payment-landing") === "1";
+
+    if (!user && !isPostPaymentLanding) redirect("/login");
+
+    // Unauthenticated post-payment visitor — skip role/onboarding checks
+    // and let the page render its own popup + shell-less body.
+    if (!user) return <>{children}</>;
 
     const isExempt = ONBOARDING_EXEMPT.some((p) => pathname.startsWith(p));
 

@@ -59,12 +59,38 @@ export async function updateSession(request: NextRequest) {
     ]);
     const user = userResult.data.user;
 
+    // Public post-payment landing pages. These need to render even when the
+    // Supabase auth cookie was dropped during the SSLCommerz cross-site POST
+    // → redirect chain, otherwise the buyer sees /login instead of their
+    // success/failure popup. The pages themselves gate reads by orderId
+    // ownership so this doesn't expose anything private.
+    const isPostPaymentLanding =
+        pathname === "/portal/payment-success" ||
+        pathname === "/portal/payment-failed" ||
+        (pathname === "/portal/renew" &&
+            request.nextUrl.searchParams.has("status")) ||
+        (pathname === "/portal/dojo/renewals" &&
+            request.nextUrl.searchParams.has("status"));
+
+    // Signal downstream layouts (which can't read searchParams directly) to
+    // skip their own auth redirect on these pages. The response is re-created
+    // here so the header actually reaches the downstream request.
+    if (isPostPaymentLanding) {
+        requestHeaders.set("x-post-payment-landing", "1");
+        supabaseResponse = NextResponse.next({
+            request: {
+                headers: requestHeaders,
+            },
+        });
+    }
+
     // Protected route patterns
     const isProtected =
-        pathname.startsWith("/dashboard") ||
-        pathname.startsWith("/portal") ||
-        // locale-prefixed portal routes e.g. /en/portal, /bn/portal
-        /^\/(en|bn)\/portal/.test(pathname);
+        !isPostPaymentLanding &&
+        (pathname.startsWith("/dashboard") ||
+            pathname.startsWith("/portal") ||
+            // locale-prefixed portal routes e.g. /en/portal, /bn/portal
+            /^\/(en|bn)\/portal/.test(pathname));
 
     // Auth pages
     const isAuthPage =

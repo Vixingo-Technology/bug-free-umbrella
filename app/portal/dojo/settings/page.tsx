@@ -1,12 +1,11 @@
 import type { Metadata } from "next";
 import { Save } from "lucide-react";
 import DojoPageHeader from "@/components/dojo/page-header";
-import DojoMembershipCard from "@/components/dojo/settings/dojo-membership-card";
+import LocationEditor from "@/components/dojo/settings/location-editor";
 import SignatureUploader from "@/components/dojo/settings/signature-uploader";
 import LogoUploader from "@/components/dojo/settings/logo-uploader";
 import { requireDojoRole } from "@/lib/dojo-session";
 import { prisma } from "@/lib/prisma";
-import { MEMBERSHIP_FEE_BDT } from "@/lib/constants";
 
 export const metadata: Metadata = {
     title: "Dojo settings — Dojo Dashboard",
@@ -97,25 +96,30 @@ export default async function SettingsPage() {
                     />
                 </Card>
 
-                <Card title="Location">
-                    <Field
-                        label="Address"
-                        defaultValue={
-                            dojo?.address ??
-                            "House 12, Road 7, Dhanmondi, Dhaka"
-                        }
-                    />
-                    <div className="grid grid-cols-2 gap-3">
-                        <Field
-                            label="Latitude"
-                            defaultValue={dojo?.latitude?.toString() ?? "23.7461"}
-                        />
-                        <Field
-                            label="Longitude"
-                            defaultValue={dojo?.longitude?.toString() ?? "90.3742"}
-                        />
-                    </div>
-                </Card>
+                <div className="lg:col-span-2">
+                    <Card title="Location">
+                        {dojo ? (
+                            <LocationEditor
+                                initialAddress={dojo.address ?? ""}
+                                initialLatitude={
+                                    dojo.latitude != null
+                                        ? dojo.latitude.toString()
+                                        : ""
+                                }
+                                initialLongitude={
+                                    dojo.longitude != null
+                                        ? dojo.longitude.toString()
+                                        : ""
+                                }
+                            />
+                        ) : (
+                            <p className="text-sm text-zinc-500">
+                                Location editing becomes available once your
+                                dojo is approved.
+                            </p>
+                        )}
+                    </Card>
+                </div>
 
                 <Card title="Head instructor">
                     {dojo?.headInstructor ? (
@@ -157,15 +161,15 @@ export default async function SettingsPage() {
                 </Card>
 
                 <Card title="Activity">
-                    <Field
+                    <ReadOnlyField
                         label="Status"
-                        defaultValue={
+                        value={
                             dojo?.isActive === false ? "Inactive" : "Active"
                         }
                     />
-                    <Field
+                    <ReadOnlyField
                         label="Members enrolled"
-                        defaultValue={
+                        value={
                             memberCount !== null
                                 ? `${memberCount} members`
                                 : "48 members"
@@ -203,31 +207,6 @@ export default async function SettingsPage() {
                     </Card>
                 </div>
 
-                <div id="renewal" className="lg:col-span-2 scroll-mt-24">
-                    <Card title="Dojo membership">
-                        {dojo ? (
-                            <DojoMembershipCard
-                                annualFeeBDT={MEMBERSHIP_FEE_BDT}
-                                storedAnnualFee={
-                                    dojoBase?.annualFee != null
-                                        ? dojoBase.annualFee.toString()
-                                        : ""
-                                }
-                                expiryDate={
-                                    dojoBase?.expiryDate
-                                        ? dojoBase.expiryDate.toISOString()
-                                        : null
-                                }
-                                canEdit={true}
-                            />
-                        ) : (
-                            <p className="text-sm text-zinc-500">
-                                Dojo membership renewal becomes available once
-                                your dojo is approved by the federation.
-                            </p>
-                        )}
-                    </Card>
-                </div>
             </div>
         </>
     );
@@ -269,6 +248,19 @@ function Field({
                 defaultValue={defaultValue}
                 className="w-full bg-zinc-50 border border-zinc-200 text-zinc-900 px-3 py-2 focus:outline-none focus:border-accent-red text-sm transition-colors rounded-sm"
             />
+        </div>
+    );
+}
+
+function ReadOnlyField({ label, value }: { label: string; value: string }) {
+    return (
+        <div>
+            <label className="block text-[10px] tracking-widest uppercase font-bold text-zinc-500 mb-2">
+                {label}
+            </label>
+            <div className="w-full bg-zinc-50 border border-zinc-200 text-zinc-900 px-3 py-2 text-sm rounded-sm">
+                {value}
+            </div>
         </div>
     );
 }

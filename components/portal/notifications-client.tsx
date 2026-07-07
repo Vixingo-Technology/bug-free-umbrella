@@ -22,11 +22,14 @@ import Link from "next/link";
 import {
     markNotificationReadAction,
     markAllReadAction,
+    loadMoreNotificationsAction,
 } from "@/app/portal/notifications/actions";
 
 interface Props {
     notifications: any[];
     userId: string;
+    totalCount: number;
+    pageSize: number;
 }
 
 type TypeKey =
@@ -96,16 +99,26 @@ function relativeTime(d: Date): string {
     });
 }
 
-export default function NotificationsClient({ notifications, userId: _userId }: Props) {
+export default function NotificationsClient({
+    notifications: initialNotifications,
+    userId: _userId,
+    totalCount,
+    pageSize,
+}: Props) {
+    const [notifications, setNotifications] = useState<any[]>(initialNotifications);
     const [readIds, setReadIds] = useState<Set<string>>(
-        new Set(notifications.filter((n) => n.isRead).map((n) => n.id))
+        new Set(initialNotifications.filter((n) => n.isRead).map((n) => n.id))
     );
     const [isPending, startTransition] = useTransition();
+    const [isLoadingMore, setIsLoadingMore] = useState(false);
+    const [loadMoreError, setLoadMoreError] = useState<string | null>(null);
     const [readFilter, setReadFilter] = useState<ReadFilter>("all");
     const [typeFilter, setTypeFilter] = useState<string>("all");
     const [dateFilter, setDateFilter] = useState<DateFilter>("all");
     const [search, setSearch] = useState("");
     const [showFilters, setShowFilters] = useState(false);
+
+    const hasMore = notifications.length < totalCount;
 
     const unreadCount = useMemo(
         () => notifications.filter((n) => !readIds.has(n.id)).length,
@@ -154,6 +167,33 @@ export default function NotificationsClient({ notifications, userId: _userId }: 
         startTransition(async () => {
             await markAllReadAction();
         });
+    }
+
+    async function handleLoadMore() {
+        if (isLoadingMore || !hasMore) return;
+        setIsLoadingMore(true);
+        setLoadMoreError(null);
+        try {
+            const res = await loadMoreNotificationsAction(notifications.length, pageSize);
+            if (res.error) {
+                setLoadMoreError(res.error);
+            } else if (res.notifications?.length) {
+                const existing = new Set(notifications.map((n) => n.id));
+                const fresh = res.notifications.filter((n: any) => !existing.has(n.id));
+                setNotifications((prev) => [...prev, ...fresh]);
+                setReadIds((prev) => {
+                    const next = new Set(prev);
+                    fresh.forEach((n: any) => {
+                        if (n.isRead) next.add(n.id);
+                    });
+                    return next;
+                });
+            }
+        } catch {
+            setLoadMoreError("Failed to load more notifications.");
+        } finally {
+            setIsLoadingMore(false);
+        }
     }
 
     const hasActiveFilters =
@@ -468,6 +508,25 @@ export default function NotificationsClient({ notifications, userId: _userId }: 
                         })}
                     </AnimatePresence>
                 </ul>
+            )}
+
+            {/* Load more */}
+            {notifications.length > 0 && hasMore && (
+                <div className="flex flex-col items-center gap-2 pt-2">
+                    <button
+                        onClick={handleLoadMore}
+                        disabled={isLoadingMore}
+                        className="inline-flex items-center gap-2 text-xs font-bold text-zinc-700 hover:text-zinc-900 border border-zinc-200 hover:border-zinc-400 px-4 py-2.5 rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed bg-white"
+                    >
+                        {isLoadingMore ? "Loading…" : "Load more"}
+                    </button>
+                    <span className="text-[11px] text-zinc-400">
+                        Showing {notifications.length} of {totalCount}
+                    </span>
+                    {loadMoreError && (
+                        <span className="text-[11px] text-accent-red">{loadMoreError}</span>
+                    )}
+                </div>
             )}
         </div>
     );

@@ -1,11 +1,11 @@
 "use client";
 
-import { useMemo, useState, useTransition } from "react";
+import { useEffect, useMemo, useState, useTransition } from "react";
 import { motion } from "motion/react";
 import {
     ShoppingBag, Search, ChevronDown, ChevronUp, CreditCard,
     User as UserIcon, Package, AlertCircle, CheckCircle2,
-    Award, IdCard, Truck,
+    Award, IdCard, Truck, ChevronLeft, ChevronRight,
 } from "lucide-react";
 import {
     updateOrderStatusAction,
@@ -84,11 +84,16 @@ function formatTimestamp(v: string | Date) {
     });
 }
 
+const PAGE_SIZE = 10;
+
 export default function OrdersAdminClient({ orders }: { orders: Order[] }) {
     const [tab, setTab] = useState<Category>("SHOP");
     const [search, setSearch] = useState("");
     const [statusFilter, setStatusFilter] = useState<"ALL" | Status>("ALL");
     const [toast, setToast] = useState<{ kind: "ok" | "err"; msg: string } | null>(null);
+    const [page, setPage] = useState(1);
+
+    useEffect(() => { setPage(1); }, [tab, search, statusFilter]);
 
     const counts = useMemo(() => {
         const c: Record<Category, number> = { SHOP: 0, CERTIFICATE: 0, MEMBERSHIP: 0 };
@@ -120,6 +125,11 @@ export default function OrdersAdminClient({ orders }: { orders: Order[] }) {
         });
         return t;
     }, [filtered]);
+
+    const pageCount = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+    const currentPage = Math.min(page, pageCount);
+    const pageStart = (currentPage - 1) * PAGE_SIZE;
+    const paged = filtered.slice(pageStart, pageStart + PAGE_SIZE);
 
     function flash(kind: "ok" | "err", msg: string) {
         setToast({ kind, msg });
@@ -197,7 +207,7 @@ export default function OrdersAdminClient({ orders }: { orders: Order[] }) {
 
             {/* Orders */}
             <div className="space-y-3">
-                {filtered.map((o) => (
+                {paged.map((o) => (
                     <OrderRow key={o.id} order={o} onFlash={flash} />
                 ))}
                 {filtered.length === 0 && (
@@ -206,6 +216,17 @@ export default function OrdersAdminClient({ orders }: { orders: Order[] }) {
                     </div>
                 )}
             </div>
+
+            {/* Pagination */}
+            {filtered.length > 0 && (
+                <Pagination
+                    page={currentPage}
+                    pageCount={pageCount}
+                    total={filtered.length}
+                    pageSize={PAGE_SIZE}
+                    onChange={setPage}
+                />
+            )}
 
             {toast && (
                 <motion.div
@@ -417,6 +438,66 @@ function OrderRow({ order, onFlash }: { order: Order; onFlash: (k: "ok" | "err",
                 </div>
             )}
         </motion.div>
+    );
+}
+
+function Pagination({
+    page, pageCount, total, pageSize, onChange,
+}: {
+    page: number; pageCount: number; total: number; pageSize: number;
+    onChange: (p: number) => void;
+}) {
+    const start = (page - 1) * pageSize + 1;
+    const end = Math.min(page * pageSize, total);
+
+    const pages: (number | "…")[] = [];
+    const push = (v: number | "…") => { if (pages[pages.length - 1] !== v) pages.push(v); };
+    for (let i = 1; i <= pageCount; i++) {
+        if (i === 1 || i === pageCount || Math.abs(i - page) <= 1) push(i);
+        else push("…");
+    }
+
+    return (
+        <div className="mt-6 flex flex-col sm:flex-row items-center justify-between gap-3 px-2">
+            <p className="text-xs text-zinc-500">
+                Showing <span className="font-semibold text-zinc-800">{start}</span>–<span className="font-semibold text-zinc-800">{end}</span> of <span className="font-semibold text-zinc-800">{total}</span>
+            </p>
+            <div className="flex items-center gap-1">
+                <button
+                    onClick={() => onChange(Math.max(1, page - 1))}
+                    disabled={page === 1}
+                    className="p-1.5 rounded-lg border border-zinc-200 text-zinc-600 hover:bg-zinc-50 disabled:opacity-40 disabled:cursor-not-allowed"
+                    aria-label="Previous page"
+                >
+                    <ChevronLeft size={14} />
+                </button>
+                {pages.map((p, i) =>
+                    p === "…" ? (
+                        <span key={`e${i}`} className="px-2 text-xs text-zinc-400">…</span>
+                    ) : (
+                        <button
+                            key={p}
+                            onClick={() => onChange(p)}
+                            className={`min-w-[28px] h-7 px-2 rounded-lg text-xs font-semibold border transition-colors ${
+                                p === page
+                                    ? "bg-accent-red text-white border-accent-red"
+                                    : "bg-white text-zinc-700 border-zinc-200 hover:bg-zinc-50"
+                            }`}
+                        >
+                            {p}
+                        </button>
+                    )
+                )}
+                <button
+                    onClick={() => onChange(Math.min(pageCount, page + 1))}
+                    disabled={page === pageCount}
+                    className="p-1.5 rounded-lg border border-zinc-200 text-zinc-600 hover:bg-zinc-50 disabled:opacity-40 disabled:cursor-not-allowed"
+                    aria-label="Next page"
+                >
+                    <ChevronRight size={14} />
+                </button>
+            </div>
+        </div>
     );
 }
 

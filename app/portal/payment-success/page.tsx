@@ -13,16 +13,20 @@ export default async function PaymentSuccessPage({
 }) {
     const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
-    if (!user) redirect("/login");
 
     const { orderId, dev } = await searchParams;
+
+    // Post-payment landing is public: if there's no session, we still show
+    // the receipt for the passed-in orderId. Deep links without either get
+    // sent home.
+    if (!user && !orderId) redirect("/");
 
     let order = null;
     let member = null;
 
-    const loadMember = async () => {
+    const loadMemberById = async (userId: string) => {
         const u = await prisma.user.findUnique({
-            where: { id: user.id },
+            where: { id: userId },
             include: { student: { include: { dojo: true } } },
         });
         if (!u) return null;
@@ -35,19 +39,33 @@ export default async function PaymentSuccessPage({
     };
 
     try {
-        member = await loadMember();
+        if (user) member = await loadMemberById(user.id);
 
         if (orderId) {
             order = await prisma.shopOrder.findUnique({
-                where: { id: orderId, userId: user.id },
+                where: user
+                    ? { id: orderId, userId: user.id }
+                    : { id: orderId },
                 include: { orderItems: { include: { product: true } } },
             });
+            // If we didn't have a session, pull the member off the order.
+            if (!member && order?.userId) {
+                member = await loadMemberById(order.userId);
+            }
         }
 
-        // Dev bypass: mark paid right here
-        if (dev === "1" && order && order.paymentStatus !== "PAID") {
-            const expiry = new Date();
-            expiry.setFullYear(expiry.getFullYear() + 1);
+        // Dev bypass: mark paid right here. Needs an authenticated session
+        // — production uses the SSLCommerz IPN + service role, so no auth is
+        // required there.
+        if (user && dev === "1" && order && order.paymentStatus !== "PAID") {
+            const existing = await prisma.student.findUnique({
+                where: { id: user.id },
+                select: { expiryDate: true },
+            });
+            const { extendExpiry } = await import(
+                "@/lib/renewals/extend-expiry"
+            );
+            const expiry = extendExpiry(existing?.expiryDate ?? null);
             const writes: any[] = [
                 prisma.shopOrder.update({ where: { id: orderId! }, data: { paymentStatus: "PAID" } }),
             ];
@@ -70,7 +88,7 @@ export default async function PaymentSuccessPage({
                 }
             }
             await prisma.$transaction(writes);
-            member = await loadMember();
+            member = await loadMemberById(user.id);
         }
     } catch {
         // silent

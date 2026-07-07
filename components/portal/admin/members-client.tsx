@@ -26,6 +26,10 @@ const ROLE_LABELS: Record<Role, string> = {
 
 const ROLE_VALUES: Role[] = ["STUDENT", "INSTRUCTOR", "DOJO_MANAGER", "DOJO_OWNER", "ADMIN"];
 
+// Admins can only issue federation-level invites. Instructor / Manager /
+// Student invites are the Dojo Owner's job, from inside their dojo panel.
+const INVITABLE_ROLES: Role[] = ["DOJO_OWNER", "ADMIN"];
+
 type Member = {
     id: string;
     fullName: string;
@@ -505,7 +509,7 @@ function InviteModal({ onClose, onFlash }: { onClose: () => void; onFlash: (k: "
     const [isPending, startTransition] = useTransition();
     const [email, setEmail] = useState("");
     const [fullName, setFullName] = useState("");
-    const [role, setRole] = useState<Role>("STUDENT");
+    const [role, setRole] = useState<Role>("DOJO_OWNER");
 
     function submit(e: React.FormEvent) {
         e.preventDefault();
@@ -574,14 +578,12 @@ function InviteModal({ onClose, onFlash }: { onClose: () => void; onFlash: (k: "
                     <div>
                         <label className="block text-xs font-bold tracking-widest uppercase text-zinc-500 mb-2">Role</label>
                         <div className="grid grid-cols-2 gap-2">
-                            {ROLE_VALUES.map((r, i) => (
+                            {INVITABLE_ROLES.map((r) => (
                                 <button
                                     type="button"
                                     key={r}
                                     onClick={() => setRole(r)}
                                     className={`flex flex-col items-center gap-1.5 py-3 rounded-xl border text-xs font-semibold transition-all ${
-                                        i === ROLE_VALUES.length - 1 ? "col-span-2" : ""
-                                    } ${
                                         role === r
                                             ? "border-accent-red bg-accent-red/5 text-accent-red"
                                             : "border-zinc-200 text-zinc-600 hover:border-zinc-300"
@@ -592,6 +594,15 @@ function InviteModal({ onClose, onFlash }: { onClose: () => void; onFlash: (k: "
                                 </button>
                             ))}
                         </div>
+                        <p className="mt-3 text-[11px] leading-relaxed text-zinc-500">
+                            {role === "DOJO_OWNER"
+                                ? "The owner will receive a branded invite email with the enlistment link and fee breakdown. They complete the /enlist-dojo/signup flow themselves."
+                                : "The admin will receive a Supabase email to set their password and go straight to the back-office."}
+                        </p>
+                        <p className="mt-2 text-[11px] text-zinc-400">
+                            Instructor / Manager / Student invites are issued
+                            by the Dojo Owner from inside their dojo panel.
+                        </p>
                     </div>
 
                     <div className="flex items-center gap-3 pt-2">

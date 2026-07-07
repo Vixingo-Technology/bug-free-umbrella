@@ -561,7 +561,7 @@ function ExpiryRow({
     function sendReminder() {
         startTransition(async () => {
             const res = await sendDojoRenewalReminderAction({ dojoId: dojo.id });
-            if (res.ok) onFlash("ok", "Renewal reminder sent.");
+            if (res.ok) onFlash("ok", `${dojo.name} notified.`);
             else onFlash("err", res.error);
         });
     }
@@ -587,14 +587,20 @@ function ExpiryRow({
                     onClick={sendReminder}
                     disabled={isPending}
                     className="inline-flex items-center gap-1.5 text-xs font-semibold text-zinc-700 hover:text-accent-red hover:bg-red-50 border border-zinc-200 hover:border-red-200 px-3 py-2 rounded-lg transition-colors disabled:opacity-50 shrink-0"
-                    title="Email the dojo owner a renewal reminder"
+                    title={
+                        days === null
+                            ? "Notify the dojo owner to renew"
+                            : days < 0
+                                ? `Dojo expired ${Math.abs(days)}d ago — send reminder`
+                                : `${days} days left — send reminder`
+                    }
                 >
                     {isPending ? (
                         <Loader2 size={12} className="animate-spin" />
                     ) : (
                         <Send size={12} />
                     )}
-                    Send email
+                    Send reminder
                 </button>
             </div>
         </div>

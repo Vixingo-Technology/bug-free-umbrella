@@ -27,7 +27,6 @@ export default async function PortalPaymentFailedPage({
     const {
         data: { user },
     } = await supabase.auth.getUser();
-    if (!user) redirect("/login");
 
     const params = await searchParams;
     const orderId = params.orderId?.trim() || null;
@@ -38,13 +37,22 @@ export default async function PortalPaymentFailedPage({
             ? "You cancelled the payment before it was completed."
             : "The payment gateway declined the transaction. No charge has been made.");
 
+    // Anonymous visitors coming back from SSLCommerz can view the receipt
+    // for the order they just paid for — no login required. Users who
+    // deep-link here without an orderId or session go home.
+    if (!user && !orderId) redirect("/");
+
     let orderTotal: number | null = null;
     let orderCurrency = "BDT";
     let includesMembership = false;
     if (orderId) {
         try {
             const order = await prisma.shopOrder.findUnique({
-                where: { id: orderId, userId: user.id },
+                // Skip the userId gate when we don't have a session so the
+                // buyer can still see their own receipt.
+                where: user
+                    ? { id: orderId, userId: user.id }
+                    : { id: orderId },
                 select: {
                     total: true,
                     currency: true,

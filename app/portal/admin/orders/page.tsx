@@ -24,10 +24,11 @@ export default async function AdminOrdersPage() {
     });
     const orders = ordersRaw.map((o) => {
         const hasShopItems = o.orderItems.length > 0;
+        const isMembershipish = o.includesMembership || o.includesDojoRenewal;
         const category: "SHOP" | "CERTIFICATE" | "MEMBERSHIP" =
             o.includesCertificates
                 ? "CERTIFICATE"
-                : o.includesMembership && !hasShopItems
+                : isMembershipish && !hasShopItems
                     ? "MEMBERSHIP"
                     : "SHOP";
         return {

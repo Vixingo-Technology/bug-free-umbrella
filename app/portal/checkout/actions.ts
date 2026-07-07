@@ -18,6 +18,7 @@ export async function initiatePaymentAction(orderId: string) {
                 user: { include: { student: true } },
                 orderItems: { include: { product: true } },
                 transferRequest: { select: { id: true } },
+                dojo: { select: { id: true } },
             },
         });
 
@@ -31,7 +32,15 @@ export async function initiatePaymentAction(orderId: string) {
 
         // If SSLCommerz not configured, use dev bypass
         if (!storeId || storeId === "your-sslcommerz-store-id") {
-            // Dev mode: simulate payment success
+            // Dev mode: simulate payment success. Renewal orders route to
+            // their originating page so we hit the same success handler as
+            // production.
+            if (order.includesDojoRenewal) {
+                redirect(`/portal/dojo/renewals?status=success&orderId=${orderId}&dev=1`);
+            }
+            if (order.includesMembership && !order.orderItems.length) {
+                redirect(`/portal/renew?status=success&orderId=${orderId}&dev=1`);
+            }
             redirect(`/portal/payment-success?orderId=${orderId}&dev=1`);
         }
 
@@ -41,12 +50,21 @@ export async function initiatePaymentAction(orderId: string) {
             : "https://securepay.sslcommerz.com/gwprocess/v4/api.php";
 
         const transferReqId = order.transferRequest?.id;
+        // Return buyers to the same page they started renewal from so we can
+        // show a contextual popup (success or failed) with fresh data.
+        const renewFailBase = order.includesDojoRenewal
+            ? `${appUrl}/portal/dojo/renewals?status=failed&orderId=${orderId}`
+            : order.includesMembership
+                ? `${appUrl}/portal/renew?status=failed&orderId=${orderId}`
+                : null;
         const failUrl = order.includesTransferRequest && transferReqId
             ? `${appUrl}/portal/transfer/failed?requestId=${transferReqId}`
-            : `${appUrl}/portal/payment-failed?orderId=${orderId}`;
+            : renewFailBase ?? `${appUrl}/portal/payment-failed?orderId=${orderId}`;
         const cancelUrl = order.includesTransferRequest && transferReqId
             ? `${appUrl}/portal/transfer/failed?requestId=${transferReqId}`
-            : `${appUrl}/portal/payment-failed?orderId=${orderId}&cancelled=1`;
+            : renewFailBase
+                ? `${renewFailBase}&reason=${encodeURIComponent("You cancelled the payment before it was completed.")}`
+                : `${appUrl}/portal/payment-failed?orderId=${orderId}&cancelled=1`;
         const productName = order.includesTransferRequest
             ? "JKA Dojo Transfer Fee"
             : order.includesMembership

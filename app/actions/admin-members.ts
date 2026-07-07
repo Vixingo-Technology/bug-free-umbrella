@@ -5,32 +5,78 @@ import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/admin-guard";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { assignRole } from "@/lib/auth/assign-role";
+import { sendEmail } from "@/lib/email/resend";
+import { buildDojoOwnerInviteEmail } from "@/lib/email/templates/dojo-owner-invite";
 
 type ActionResult = { ok: true } | { ok: false; error: string };
 
 const ROLES = ["STUDENT", "INSTRUCTOR", "DOJO_MANAGER", "DOJO_OWNER", "ADMIN"] as const;
 type Role = (typeof ROLES)[number];
 
+// Admin can only issue federation-level invites: bring on new Dojo Owners
+// (via the enlist-dojo flow) or promote another Admin. Instructors, managers
+// and students are invited by a Dojo Owner from within their own dojo panel.
+const ADMIN_INVITABLE_ROLES = ["DOJO_OWNER", "ADMIN"] as const;
+type AdminInvitableRole = (typeof ADMIN_INVITABLE_ROLES)[number];
+
 const STATUSES = ["PENDING", "ACTIVE", "EXPIRED", "SUSPENDED"] as const;
 type Status = (typeof STATUSES)[number];
 
+function appUrl(): string {
+    return (
+        process.env.NEXT_PUBLIC_APP_URL ??
+        process.env.APP_URL ??
+        "http://localhost:3000"
+    );
+}
+
 export async function inviteMemberAction(formData: FormData): Promise<ActionResult> {
-    await requireAdmin();
+    const { userId: adminId } = await requireAdmin();
 
     const email = (formData.get("email") as string)?.trim().toLowerCase();
     const fullName = ((formData.get("fullName") as string) ?? "").trim();
-    const role = formData.get("role") as Role;
+    const role = formData.get("role") as AdminInvitableRole;
 
     if (!email) return { ok: false, error: "Email is required." };
-    if (!ROLES.includes(role)) return { ok: false, error: "Invalid role." };
+    if (!ADMIN_INVITABLE_ROLES.includes(role)) {
+        return {
+            ok: false,
+            error: "Admins can only invite Dojo Owners or other Admins.",
+        };
+    }
 
     const existing = await prisma.user.findUnique({ where: { email } });
     if (existing) return { ok: false, error: "A member with this email already exists." };
 
-    const admin = createAdminClient();
+    // Dojo Owners go through the public /enlist-dojo/signup flow — we send a
+    // marketing-style invitation email with the CTA, but we do NOT pre-create
+    // a Supabase auth user or a DB row. The enlistment wizard collects the
+    // dojo, verifies email, and takes the one-time payment on its own.
+    if (role === "DOJO_OWNER") {
+        const inviter = await prisma.user.findUnique({
+            where: { id: adminId },
+            select: { fullName: true },
+        });
+        const signupUrl = `${appUrl()}/enlist-dojo/signup`;
+        const email_ = buildDojoOwnerInviteEmail({
+            signupUrl,
+            inviteeName: fullName || null,
+            inviterName: inviter?.fullName ?? null,
+        });
+        const res = await sendEmail({
+            to: email,
+            subject: email_.subject,
+            html: email_.html,
+            text: email_.text,
+        });
+        if (!res.ok) return { ok: false, error: res.error };
+        return { ok: true };
+    }
 
-    const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? process.env.APP_URL ?? "http://localhost:3000";
-    const redirectTo = `${appUrl}/auth/callback?next=/set-password`;
+    // ADMIN — use Supabase's invite so the recipient lands on /set-password
+    // and immediately has a working admin account.
+    const admin = createAdminClient();
+    const redirectTo = `${appUrl()}/auth/callback?next=/set-password`;
 
     const { data, error } = await admin.auth.admin.inviteUserByEmail(email, {
         redirectTo,
@@ -45,8 +91,6 @@ export async function inviteMemberAction(formData: FormData): Promise<ActionResu
         return { ok: false, error: error?.message ?? "Failed to send invite." };
     }
 
-    // Pre-create the user + role-specific row so the invited account shows
-    // up in the list immediately. The auth/callback upsert keeps it in sync.
     await prisma.user.upsert({
         where: { id: data.user.id },
         create: {

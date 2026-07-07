@@ -1,18 +1,24 @@
 "use client";
 
-import { useTransition, useState } from "react";
-import { motion } from "motion/react";
+import { useTransition, useState, useEffect } from "react";
+import { motion, AnimatePresence } from "motion/react";
 import TiltCard from "@/components/portal/tilt-card";
 import {
     RefreshCw, Calendar, CheckCircle2, AlertTriangle,
-    XCircle, Clock, Loader2, Shield, CreditCard,
+    XCircle, Clock, Loader2, Shield, CreditCard, X,
 } from "lucide-react";
 import { createRenewalOrderAction } from "@/app/portal/renew/actions";
+
+type Feedback =
+    | { kind: "success"; expiry: string | null }
+    | { kind: "failed"; reason: string }
+    | null;
 
 interface Props {
     member: any;
     membershipFeeBDT: number;
     userId: string;
+    feedback?: Feedback;
 }
 
 function ExpiryBanner({ member }: { member: any }) {
@@ -90,9 +96,30 @@ function ExpiryBanner({ member }: { member: any }) {
     return null;
 }
 
-export default function RenewClient({ member, membershipFeeBDT, userId }: Props) {
+export default function RenewClient({ member, membershipFeeBDT, userId, feedback }: Props) {
     const [isPending, startTransition] = useTransition();
     const [error, setError] = useState<string | null>(null);
+    const [popup, setPopup] = useState<Feedback>(feedback ?? null);
+
+    useEffect(() => {
+        setPopup(feedback ?? null);
+    }, [feedback]);
+
+    function closePopup() {
+        setPopup(null);
+        if (typeof window === "undefined") return;
+        const url = new URL(window.location.href);
+        ["status", "reason", "orderId", "expiry", "dev"].forEach((k) =>
+            url.searchParams.delete(k),
+        );
+        // Full navigation (not replaceState) so the layout re-renders WITH
+        // the auth cookie attached — SSLCommerz's cross-site redirect chain
+        // can drop SameSite=Lax cookies on the first hop, which leaves the
+        // portal sidebar hidden until we do a real GET.
+        window.location.replace(
+            url.pathname + (url.search ? url.search : ""),
+        );
+    }
 
     function handleRenew() {
         setError(null);
@@ -190,6 +217,110 @@ export default function RenewClient({ member, membershipFeeBDT, userId }: Props)
                 <Shield size={13} />
                 Secured by SSLCommerz · bKash · Nagad · Cards
             </motion.div>
+
+            <RenewalPopup popup={popup} onClose={closePopup} />
         </div>
+    );
+}
+
+function RenewalPopup({
+    popup,
+    onClose,
+}: {
+    popup: Feedback;
+    onClose: () => void;
+}) {
+    return (
+        <AnimatePresence>
+            {popup && (
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="fixed inset-0 z-50 flex items-center justify-center bg-zinc-950/60 backdrop-blur-sm px-4"
+                    onClick={onClose}
+                >
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                        exit={{ opacity: 0, scale: 0.95 }}
+                        transition={{ type: "spring", stiffness: 220, damping: 22 }}
+                        className="relative w-full max-w-md rounded-2xl bg-white shadow-2xl overflow-hidden"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <button
+                            type="button"
+                            onClick={onClose}
+                            className="absolute top-3 right-3 p-1.5 rounded-full text-zinc-400 hover:text-zinc-900 hover:bg-zinc-100 transition"
+                            aria-label="Close"
+                        >
+                            <X size={16} />
+                        </button>
+                        {popup.kind === "success" ? (
+                            <div className="p-8 text-center">
+                                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 text-emerald-600 mb-4">
+                                    <CheckCircle2 size={36} />
+                                </div>
+                                <p className="text-[11px] uppercase tracking-[0.35em] text-emerald-600 mb-2">
+                                    Payment successful
+                                </p>
+                                <h2 className="text-2xl font-bold text-zinc-900">
+                                    Thank you!
+                                </h2>
+                                <p className="mt-2 text-sm text-zinc-500">
+                                    Your membership has been renewed.
+                                </p>
+                                {popup.expiry && (
+                                    <div className="mt-6 rounded-xl bg-zinc-50 border border-zinc-200 px-4 py-3">
+                                        <p className="text-[10px] uppercase tracking-widest text-zinc-500">
+                                            Valid until
+                                        </p>
+                                        <p className="mt-1 text-lg font-bold text-zinc-900">
+                                            {new Date(popup.expiry).toLocaleDateString(
+                                                "en-GB",
+                                                {
+                                                    day: "numeric",
+                                                    month: "long",
+                                                    year: "numeric",
+                                                },
+                                            )}
+                                        </p>
+                                    </div>
+                                )}
+                                <button
+                                    type="button"
+                                    onClick={onClose}
+                                    className="mt-6 w-full inline-flex items-center justify-center bg-zinc-900 hover:bg-accent-red text-white font-bold text-sm py-3 rounded-xl transition-colors"
+                                >
+                                    Done
+                                </button>
+                            </div>
+                        ) : (
+                            <div className="p-8 text-center">
+                                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-red-100 text-red-600 mb-4">
+                                    <XCircle size={36} />
+                                </div>
+                                <p className="text-[11px] uppercase tracking-[0.35em] text-red-600 mb-2">
+                                    Renewal failed
+                                </p>
+                                <h2 className="text-2xl font-bold text-zinc-900">
+                                    Payment did not go through
+                                </h2>
+                                <p className="mt-2 text-sm text-zinc-500">
+                                    {popup.reason}
+                                </p>
+                                <button
+                                    type="button"
+                                    onClick={onClose}
+                                    className="mt-6 w-full inline-flex items-center justify-center bg-zinc-900 hover:bg-accent-red text-white font-bold text-sm py-3 rounded-xl transition-colors"
+                                >
+                                    Try again
+                                </button>
+                            </div>
+                        )}
+                    </motion.div>
+                </motion.div>
+            )}
+        </AnimatePresence>
     );
 }
