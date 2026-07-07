@@ -108,7 +108,7 @@ export default async function MembersPage({
                     <div className="h-px w-16 bg-accent-red mt-4 mb-4" />
                     <p className="text-zinc-600 max-w-2xl text-sm md:text-base">
                         Search verified JKA Bangladesh members by full name or by Reg
-                        No (format <span className="font-mono">JKA-BD-2607101</span>).
+                        No (format <span className="font-mono">JKA-BD-26071111</span>).
                         Tap a member to open their digital membership card.
                     </p>
                 </div>

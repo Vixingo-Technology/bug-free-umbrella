@@ -98,7 +98,7 @@ export default function MembersDirectoryClient({
                             type="text"
                             value={term}
                             onChange={(e) => setTerm(e.target.value)}
-                            placeholder="Search by name or Reg No (e.g. JKA-BD-2607101)"
+                            placeholder="Search by name or Reg No (e.g. JKA-BD-26071111)"
                             className="flex-1 py-3 pr-2 outline-none bg-transparent text-sm placeholder:text-zinc-400"
                         />
                         {term && (

@@ -1,28 +1,28 @@
 import { prisma } from "@/lib/prisma";
 
 const PREFIX = "JKA-BD-";
-const MIN_SERIAL = 101;
-const MAX_SERIAL = 999;
+const MIN_SERIAL = 1111;
+const MAX_SERIAL = 9999;
 
 /**
- * Reg No format: JKA-BD-YYMMxxx (year, month, serial 101-999).
- * Example: JKA-BD-2607101 → registered in July 2026, serial 101.
+ * Reg No format: JKA-BD-YYMMxxxx (year, month, serial 1111-9999).
+ * Example: JKA-BD-26071111 → registered in July 2026, serial 1111.
  */
 export function formatRegNo(year: number, month: number, serial: number): string {
     const yy = String(year % 100).padStart(2, "0");
     const mm = String(month).padStart(2, "0");
-    const nnn = String(serial).padStart(3, "0");
-    return `${PREFIX}${yy}${mm}${nnn}`;
+    const nnnn = String(serial).padStart(4, "0");
+    return `${PREFIX}${yy}${mm}${nnnn}`;
 }
 
 export function isRegNo(value: string): boolean {
-    return /^JKA-BD-\d{7}$/.test(value.trim().toUpperCase());
+    return /^JKA-BD-\d{8}$/.test(value.trim().toUpperCase());
 }
 
 /**
  * Generate the next available Reg No for the given date.
  * Scans existing user.memberNumber rows for the same YYMM cycle and
- * picks the next serial. Falls back to serial 101 when no rows exist yet.
+ * picks the next serial. Falls back to serial 1111 when no rows exist yet.
  */
 export async function generateNextRegNo(now: Date = new Date()): Promise<string> {
     const year = now.getFullYear();
