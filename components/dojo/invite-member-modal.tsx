@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react";
 import { CheckCircle2, Loader2, Plus, X } from "lucide-react";
 import { inviteDojoMemberAction } from "@/app/actions/dojo-invite";
+import { BELT_RANKS_ORDERED } from "@/lib/constants";
 
 type Role = "STUDENT" | "INSTRUCTOR" | "DOJO_MANAGER";
 
@@ -188,16 +189,20 @@ export default function InviteMemberModal({
                                             (optional)
                                         </span>
                                     </label>
-                                    <input
+                                    <select
                                         id="invite-rank"
-                                        type="text"
-                                        autoComplete="off"
                                         value={rank}
                                         onChange={(e) => setRank(e.target.value)}
                                         disabled={isPending}
-                                        placeholder="e.g. 3rd Dan · White Belt"
-                                        className="w-full bg-white border border-zinc-300 rounded-sm px-3 py-2.5 text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:border-accent-red focus:ring-1 focus:ring-accent-red disabled:opacity-60"
-                                    />
+                                        className="w-full bg-white border border-zinc-300 rounded-sm px-3 py-2.5 text-sm text-zinc-900 focus:outline-none focus:border-accent-red focus:ring-1 focus:ring-accent-red disabled:opacity-60"
+                                    >
+                                        <option value="">Not set</option>
+                                        {BELT_RANKS_ORDERED.map((r) => (
+                                            <option key={r} value={r}>
+                                                {r}
+                                            </option>
+                                        ))}
+                                    </select>
                                 </div>
                             )}
 

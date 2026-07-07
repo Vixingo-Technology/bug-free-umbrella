@@ -13,6 +13,7 @@ import {
     Sparkles,
 } from "lucide-react";
 import Logo from "@/assets/jka_logo.svg";
+import { BELT_RANKS_ORDERED } from "@/lib/constants";
 import { completeInviteSignupAction } from "./actions";
 
 type InvitableRole = "STUDENT" | "INSTRUCTOR" | "DOJO_MANAGER";
@@ -162,15 +163,19 @@ export default function InviteClient({
                             {showRank && (
                                 <div>
                                     <Label>Belt rank</Label>
-                                    <input
-                                        type="text"
-                                        value={rank}
+                                    <select
+                                        value={rank || "White Belt"}
                                         onChange={(e) =>
                                             setRank(e.target.value)
                                         }
-                                        placeholder="e.g. 3rd Dan"
                                         className={inputClass}
-                                    />
+                                    >
+                                        {BELT_RANKS_ORDERED.map((r) => (
+                                            <option key={r} value={r}>
+                                                {r}
+                                            </option>
+                                        ))}
+                                    </select>
                                 </div>
                             )}
                         </div>
