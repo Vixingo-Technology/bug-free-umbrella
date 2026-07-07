@@ -5,19 +5,28 @@ import { motion } from "motion/react";
 import {
     ShoppingBag, Search, ChevronDown, ChevronUp, CreditCard,
     User as UserIcon, Package, AlertCircle, CheckCircle2,
+    Award, IdCard, Truck,
 } from "lucide-react";
-import { updateOrderStatusAction } from "@/app/actions/admin-orders";
+import {
+    updateOrderStatusAction,
+    updateOrderFulfillmentAction,
+} from "@/app/actions/admin-orders";
 
 type Status = "PENDING" | "PAID" | "FAILED" | "REFUNDED";
+type FulfillmentStatus = "PREPARING" | "IN_TRANSIT" | "DELIVERED" | "RETURNED";
+type Category = "SHOP" | "CERTIFICATE" | "MEMBERSHIP";
 
 type Order = {
     id: string;
     paymentStatus: Status;
+    fulfillmentStatus: FulfillmentStatus;
     paymentMethod: string | null;
     total: number;
     currency: string;
     transactionId: string | null;
     includesMembership: boolean;
+    includesCertificates: boolean;
+    category: Category;
     notes: string | null;
     createdAt: string | Date;
     member: {
@@ -44,14 +53,53 @@ const statusStyles: Record<Status, string> = {
     REFUNDED: "bg-zinc-100 text-zinc-600 border-zinc-200",
 };
 
+const fulfillmentStyles: Record<FulfillmentStatus, string> = {
+    PREPARING: "bg-sky-50 text-sky-700 border-sky-200",
+    IN_TRANSIT: "bg-indigo-50 text-indigo-700 border-indigo-200",
+    DELIVERED: "bg-emerald-50 text-emerald-700 border-emerald-200",
+    RETURNED: "bg-rose-50 text-rose-700 border-rose-200",
+};
+
+const fulfillmentLabels: Record<FulfillmentStatus, string> = {
+    PREPARING: "Preparing",
+    IN_TRANSIT: "In transit",
+    DELIVERED: "Delivered",
+    RETURNED: "Returned",
+};
+
+const categoryTabs: { key: Category; label: string; icon: typeof ShoppingBag }[] = [
+    { key: "SHOP", label: "Shop", icon: ShoppingBag },
+    { key: "CERTIFICATE", label: "Certificate", icon: Award },
+    { key: "MEMBERSHIP", label: "Membership", icon: IdCard },
+];
+
+function formatTimestamp(v: string | Date) {
+    const d = new Date(v);
+    return d.toLocaleString("en-GB", {
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+    });
+}
+
 export default function OrdersAdminClient({ orders }: { orders: Order[] }) {
+    const [tab, setTab] = useState<Category>("SHOP");
     const [search, setSearch] = useState("");
     const [statusFilter, setStatusFilter] = useState<"ALL" | Status>("ALL");
     const [toast, setToast] = useState<{ kind: "ok" | "err"; msg: string } | null>(null);
 
+    const counts = useMemo(() => {
+        const c: Record<Category, number> = { SHOP: 0, CERTIFICATE: 0, MEMBERSHIP: 0 };
+        orders.forEach((o) => { c[o.category] += 1; });
+        return c;
+    }, [orders]);
+
     const filtered = useMemo(() => {
         const q = search.trim().toLowerCase();
         return orders.filter((o) => {
+            if (o.category !== tab) return false;
             if (statusFilter !== "ALL" && o.paymentStatus !== statusFilter) return false;
             if (!q) return true;
             return (
@@ -61,7 +109,7 @@ export default function OrdersAdminClient({ orders }: { orders: Order[] }) {
                 (o.transactionId ?? "").toLowerCase().includes(q)
             );
         });
-    }, [orders, search, statusFilter]);
+    }, [orders, search, statusFilter, tab]);
 
     const totals = useMemo(() => {
         const t = { all: 0, paid: 0, pending: 0 };
@@ -83,8 +131,34 @@ export default function OrdersAdminClient({ orders }: { orders: Order[] }) {
             <div className="mb-6">
                 <h1 className="text-2xl font-bold text-zinc-900">Orders</h1>
                 <p className="text-sm text-zinc-500 mt-1">
-                    {filtered.length} of {orders.length} orders
+                    {filtered.length} {categoryTabs.find((c) => c.key === tab)?.label.toLowerCase()} orders
                 </p>
+            </div>
+
+            {/* Category tabs */}
+            <div className="flex gap-2 mb-6 border-b border-zinc-200">
+                {categoryTabs.map(({ key, label, icon: Icon }) => {
+                    const active = tab === key;
+                    return (
+                        <button
+                            key={key}
+                            onClick={() => setTab(key)}
+                            className={`flex items-center gap-2 px-4 py-2.5 text-sm font-semibold border-b-2 transition-colors -mb-px ${
+                                active
+                                    ? "border-accent-red text-accent-red"
+                                    : "border-transparent text-zinc-500 hover:text-zinc-800"
+                            }`}
+                        >
+                            <Icon size={15} />
+                            {label}
+                            <span className={`ml-1 text-[10px] font-bold tracking-widest px-1.5 py-0.5 rounded-full ${
+                                active ? "bg-accent-red/10 text-accent-red" : "bg-zinc-100 text-zinc-500"
+                            }`}>
+                                {counts[key]}
+                            </span>
+                        </button>
+                    );
+                })}
             </div>
 
             {/* Stats */}
@@ -167,6 +241,12 @@ function OrderRow({ order, onFlash }: { order: Order; onFlash: (k: "ok" | "err",
     const [open, setOpen] = useState(false);
     const [isPending, startTransition] = useTransition();
     const [status, setStatus] = useState<Status>(order.paymentStatus);
+    const [fulfillment, setFulfillment] = useState<FulfillmentStatus>(order.fulfillmentStatus);
+
+    const CategoryIcon =
+        order.category === "CERTIFICATE" ? Award :
+        order.category === "MEMBERSHIP" ? IdCard :
+        ShoppingBag;
 
     function changeStatus(next: Status) {
         if (next === status) return;
@@ -178,6 +258,20 @@ function OrderRow({ order, onFlash }: { order: Order; onFlash: (k: "ok" | "err",
             if (res.ok) {
                 setStatus(next);
                 onFlash("ok", `Order marked ${next.toLowerCase()}.`);
+            } else onFlash("err", res.error);
+        });
+    }
+
+    function changeFulfillment(next: FulfillmentStatus) {
+        if (next === fulfillment) return;
+        const fd = new FormData();
+        fd.set("id", order.id);
+        fd.set("status", next);
+        startTransition(async () => {
+            const res = await updateOrderFulfillmentAction(fd);
+            if (res.ok) {
+                setFulfillment(next);
+                onFlash("ok", `Fulfillment set to ${fulfillmentLabels[next].toLowerCase()}.`);
             } else onFlash("err", res.error);
         });
     }
@@ -194,7 +288,7 @@ function OrderRow({ order, onFlash }: { order: Order; onFlash: (k: "ok" | "err",
             >
                 <div className="flex items-start gap-4 min-w-0">
                     <div className="p-2.5 bg-zinc-100 rounded-xl flex-shrink-0">
-                        <ShoppingBag size={18} className="text-zinc-600" />
+                        <CategoryIcon size={18} className="text-zinc-600" />
                     </div>
                     <div className="min-w-0">
                         <p className="text-sm font-bold text-zinc-900 truncate">
@@ -210,13 +304,29 @@ function OrderRow({ order, onFlash }: { order: Order; onFlash: (k: "ok" | "err",
                             {order.member.fullName} · {order.member.email}
                         </p>
                         <p className="text-[11px] text-zinc-400 mt-0.5">
-                            {new Date(order.createdAt).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}
+                            {formatTimestamp(order.createdAt)}
                             {order.paymentMethod && ` · ${order.paymentMethod}`}
                         </p>
                     </div>
                 </div>
 
-                <div className="flex items-center gap-3 pl-14 sm:pl-0">
+                <div className="flex items-center gap-3 pl-14 sm:pl-0 flex-wrap justify-end">
+                    {order.category === "SHOP" && (
+                        <div className="relative" onClick={(e) => e.stopPropagation()}>
+                            <select
+                                value={fulfillment}
+                                onChange={(e) => changeFulfillment(e.target.value as FulfillmentStatus)}
+                                className={`appearance-none pl-6 pr-7 py-1 text-[11px] font-bold tracking-widest uppercase border rounded-full cursor-pointer focus:outline-none focus:ring-2 focus:ring-accent-red/30 ${fulfillmentStyles[fulfillment]}`}
+                            >
+                                <option value="PREPARING">Preparing</option>
+                                <option value="IN_TRANSIT">In transit</option>
+                                <option value="DELIVERED">Delivered</option>
+                                <option value="RETURNED">Returned</option>
+                            </select>
+                            <Truck size={10} className="absolute left-2 top-1/2 -translate-y-1/2 pointer-events-none opacity-70" />
+                            <ChevronDown size={10} className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none opacity-60" />
+                        </div>
+                    )}
                     <div className="relative" onClick={(e) => e.stopPropagation()}>
                         <select
                             value={status}
@@ -262,7 +372,13 @@ function OrderRow({ order, onFlash }: { order: Order; onFlash: (k: "ok" | "err",
                                     </div>
                                 ))}
                                 {order.orderItems.length === 0 && (
-                                    <p className="text-xs text-zinc-400 italic">No line items (membership-only order).</p>
+                                    <p className="text-xs text-zinc-400 italic">
+                                        {order.category === "CERTIFICATE"
+                                            ? "Certificate request order — no shop line items."
+                                            : order.category === "MEMBERSHIP"
+                                                ? "Membership-only order — no shop line items."
+                                                : "No line items."}
+                                    </p>
                                 )}
                             </div>
                         </div>
@@ -290,6 +406,7 @@ function OrderRow({ order, onFlash }: { order: Order; onFlash: (k: "ok" | "err",
                                 <p className="text-[10px] font-bold tracking-widest uppercase text-zinc-500 mb-3 flex items-center gap-1.5">
                                     <CreditCard size={11} /> Payment
                                 </p>
+                                <Meta label="Placed at" value={formatTimestamp(order.createdAt)} />
                                 <Meta label="Transaction" value={order.transactionId ?? "—"} mono />
                                 <Meta label="Method" value={order.paymentMethod ?? "—"} />
                                 <Meta label="Currency" value={order.currency} />

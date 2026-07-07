@@ -476,6 +476,7 @@ exports.Prisma.ShopOrderScalarFieldEnum = {
   transactionId: 'transactionId',
   includesMembership: 'includesMembership',
   membershipFee: 'membershipFee',
+  fulfillmentStatus: 'fulfillmentStatus',
   notes: 'notes',
   guestName: 'guestName',
   guestEmail: 'guestEmail',
@@ -693,6 +694,13 @@ exports.NotificationType = exports.$Enums.NotificationType = {
   RENEWAL: 'RENEWAL',
   CERTIFICATE: 'CERTIFICATE',
   TRANSFER: 'TRANSFER'
+};
+
+exports.ShopFulfillmentStatus = exports.$Enums.ShopFulfillmentStatus = {
+  PREPARING: 'PREPARING',
+  IN_TRANSIT: 'IN_TRANSIT',
+  DELIVERED: 'DELIVERED',
+  RETURNED: 'RETURNED'
 };
 
 exports.AchievementTier = exports.$Enums.AchievementTier = {

@@ -22,8 +22,17 @@ export default async function AdminOrdersPage() {
             },
         },
     });
-    const orders = ordersRaw.map((o) => ({
+    const orders = ordersRaw.map((o) => {
+        const hasShopItems = o.orderItems.length > 0;
+        const category: "SHOP" | "CERTIFICATE" | "MEMBERSHIP" =
+            o.includesCertificates
+                ? "CERTIFICATE"
+                : o.includesMembership && !hasShopItems
+                    ? "MEMBERSHIP"
+                    : "SHOP";
+        return {
         ...o,
+        category,
         member: o.user
             ? {
                 id: o.user.id,
@@ -43,7 +52,8 @@ export default async function AdminOrdersPage() {
                 memberNumber: null,
                 isGuest: true,
             },
-    }));
+        };
+    });
 
     return <OrdersAdminClient orders={serialize(orders) as never} />;
 }

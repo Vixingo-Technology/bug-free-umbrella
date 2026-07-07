@@ -63,6 +63,13 @@ enum PaymentStatus {
   REFUNDED
 }
 
+enum ShopFulfillmentStatus {
+  PREPARING
+  IN_TRANSIT
+  DELIVERED
+  RETURNED
+}
+
 enum NotificationType {
   INFO
   WARNING
@@ -870,15 +877,16 @@ model DojoSaleItem {
 // ─────────────────────────────────────────────
 
 model ShopOrder {
-  id                 String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  userId             String?       @map("user_id") @db.Uuid
-  paymentStatus      PaymentStatus @default(PENDING) @map("payment_status")
-  paymentMethod      String?       @map("payment_method")
-  total              Decimal       @db.Decimal(10, 2)
-  currency           String        @default("BDT")
-  transactionId      String?       @unique @map("transaction_id")
-  includesMembership Boolean       @default(false) @map("includes_membership")
-  membershipFee      Decimal?      @map("membership_fee") @db.Decimal(10, 2)
+  id                 String                @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId             String?               @map("user_id") @db.Uuid
+  paymentStatus      PaymentStatus         @default(PENDING) @map("payment_status")
+  paymentMethod      String?               @map("payment_method")
+  total              Decimal               @db.Decimal(10, 2)
+  currency           String                @default("BDT")
+  transactionId      String?               @unique @map("transaction_id")
+  includesMembership Boolean               @default(false) @map("includes_membership")
+  membershipFee      Decimal?              @map("membership_fee") @db.Decimal(10, 2)
+  fulfillmentStatus  ShopFulfillmentStatus @default(PREPARING) @map("fulfillment_status")
   notes              String?
 
   // Guest shop-checkout fields — used when there is no logged-in user.

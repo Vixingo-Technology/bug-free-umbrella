@@ -237,6 +237,16 @@ export const PaymentStatus: {
 export type PaymentStatus = (typeof PaymentStatus)[keyof typeof PaymentStatus]
 
 
+export const ShopFulfillmentStatus: {
+  PREPARING: 'PREPARING',
+  IN_TRANSIT: 'IN_TRANSIT',
+  DELIVERED: 'DELIVERED',
+  RETURNED: 'RETURNED'
+};
+
+export type ShopFulfillmentStatus = (typeof ShopFulfillmentStatus)[keyof typeof ShopFulfillmentStatus]
+
+
 export const NotificationType: {
   INFO: 'INFO',
   WARNING: 'WARNING',
@@ -364,6 +374,10 @@ export const ApplicationStatus: typeof $Enums.ApplicationStatus
 export type PaymentStatus = $Enums.PaymentStatus
 
 export const PaymentStatus: typeof $Enums.PaymentStatus
+
+export type ShopFulfillmentStatus = $Enums.ShopFulfillmentStatus
+
+export const ShopFulfillmentStatus: typeof $Enums.ShopFulfillmentStatus
 
 export type NotificationType = $Enums.NotificationType
 
@@ -38045,6 +38059,7 @@ export namespace Prisma {
     transactionId: string | null
     includesMembership: boolean | null
     membershipFee: Decimal | null
+    fulfillmentStatus: $Enums.ShopFulfillmentStatus | null
     notes: string | null
     guestName: string | null
     guestEmail: string | null
@@ -38070,6 +38085,7 @@ export namespace Prisma {
     transactionId: string | null
     includesMembership: boolean | null
     membershipFee: Decimal | null
+    fulfillmentStatus: $Enums.ShopFulfillmentStatus | null
     notes: string | null
     guestName: string | null
     guestEmail: string | null
@@ -38095,6 +38111,7 @@ export namespace Prisma {
     transactionId: number
     includesMembership: number
     membershipFee: number
+    fulfillmentStatus: number
     notes: number
     guestName: number
     guestEmail: number
@@ -38132,6 +38149,7 @@ export namespace Prisma {
     transactionId?: true
     includesMembership?: true
     membershipFee?: true
+    fulfillmentStatus?: true
     notes?: true
     guestName?: true
     guestEmail?: true
@@ -38157,6 +38175,7 @@ export namespace Prisma {
     transactionId?: true
     includesMembership?: true
     membershipFee?: true
+    fulfillmentStatus?: true
     notes?: true
     guestName?: true
     guestEmail?: true
@@ -38182,6 +38201,7 @@ export namespace Prisma {
     transactionId?: true
     includesMembership?: true
     membershipFee?: true
+    fulfillmentStatus?: true
     notes?: true
     guestName?: true
     guestEmail?: true
@@ -38294,6 +38314,7 @@ export namespace Prisma {
     transactionId: string | null
     includesMembership: boolean
     membershipFee: Decimal | null
+    fulfillmentStatus: $Enums.ShopFulfillmentStatus
     notes: string | null
     guestName: string | null
     guestEmail: string | null
@@ -38338,6 +38359,7 @@ export namespace Prisma {
     transactionId?: boolean
     includesMembership?: boolean
     membershipFee?: boolean
+    fulfillmentStatus?: boolean
     notes?: boolean
     guestName?: boolean
     guestEmail?: boolean
@@ -38370,6 +38392,7 @@ export namespace Prisma {
     transactionId?: boolean
     includesMembership?: boolean
     membershipFee?: boolean
+    fulfillmentStatus?: boolean
     notes?: boolean
     guestName?: boolean
     guestEmail?: boolean
@@ -38398,6 +38421,7 @@ export namespace Prisma {
     transactionId?: boolean
     includesMembership?: boolean
     membershipFee?: boolean
+    fulfillmentStatus?: boolean
     notes?: boolean
     guestName?: boolean
     guestEmail?: boolean
@@ -38426,6 +38450,7 @@ export namespace Prisma {
     transactionId?: boolean
     includesMembership?: boolean
     membershipFee?: boolean
+    fulfillmentStatus?: boolean
     notes?: boolean
     guestName?: boolean
     guestEmail?: boolean
@@ -38441,7 +38466,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type ShopOrderOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "paymentStatus" | "paymentMethod" | "total" | "currency" | "transactionId" | "includesMembership" | "membershipFee" | "notes" | "guestName" | "guestEmail" | "guestPhone" | "guestAddress" | "isGuestOrder" | "dojoId" | "includesDojoRenewal" | "includesCertificates" | "certDojoId" | "includesTransferRequest" | "createdAt" | "updatedAt", ExtArgs["result"]["shopOrder"]>
+  export type ShopOrderOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "paymentStatus" | "paymentMethod" | "total" | "currency" | "transactionId" | "includesMembership" | "membershipFee" | "fulfillmentStatus" | "notes" | "guestName" | "guestEmail" | "guestPhone" | "guestAddress" | "isGuestOrder" | "dojoId" | "includesDojoRenewal" | "includesCertificates" | "certDojoId" | "includesTransferRequest" | "createdAt" | "updatedAt", ExtArgs["result"]["shopOrder"]>
   export type ShopOrderInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | ShopOrder$userArgs<ExtArgs>
     dojo?: boolean | ShopOrder$dojoArgs<ExtArgs>
@@ -38482,6 +38507,7 @@ export namespace Prisma {
       transactionId: string | null
       includesMembership: boolean
       membershipFee: Prisma.Decimal | null
+      fulfillmentStatus: $Enums.ShopFulfillmentStatus
       notes: string | null
       guestName: string | null
       guestEmail: string | null
@@ -38933,6 +38959,7 @@ export namespace Prisma {
     readonly transactionId: FieldRef<"ShopOrder", 'String'>
     readonly includesMembership: FieldRef<"ShopOrder", 'Boolean'>
     readonly membershipFee: FieldRef<"ShopOrder", 'Decimal'>
+    readonly fulfillmentStatus: FieldRef<"ShopOrder", 'ShopFulfillmentStatus'>
     readonly notes: FieldRef<"ShopOrder", 'String'>
     readonly guestName: FieldRef<"ShopOrder", 'String'>
     readonly guestEmail: FieldRef<"ShopOrder", 'String'>
@@ -49599,6 +49626,7 @@ export namespace Prisma {
     transactionId: 'transactionId',
     includesMembership: 'includesMembership',
     membershipFee: 'membershipFee',
+    fulfillmentStatus: 'fulfillmentStatus',
     notes: 'notes',
     guestName: 'guestName',
     guestEmail: 'guestEmail',
@@ -50022,6 +50050,20 @@ export namespace Prisma {
    * Reference to a field of type 'NotificationType[]'
    */
   export type ListEnumNotificationTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NotificationType[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'ShopFulfillmentStatus'
+   */
+  export type EnumShopFulfillmentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ShopFulfillmentStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'ShopFulfillmentStatus[]'
+   */
+  export type ListEnumShopFulfillmentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ShopFulfillmentStatus[]'>
     
 
 
@@ -52484,6 +52526,7 @@ export namespace Prisma {
     transactionId?: StringNullableFilter<"ShopOrder"> | string | null
     includesMembership?: BoolFilter<"ShopOrder"> | boolean
     membershipFee?: DecimalNullableFilter<"ShopOrder"> | Decimal | DecimalJsLike | number | string | null
+    fulfillmentStatus?: EnumShopFulfillmentStatusFilter<"ShopOrder"> | $Enums.ShopFulfillmentStatus
     notes?: StringNullableFilter<"ShopOrder"> | string | null
     guestName?: StringNullableFilter<"ShopOrder"> | string | null
     guestEmail?: StringNullableFilter<"ShopOrder"> | string | null
@@ -52515,6 +52558,7 @@ export namespace Prisma {
     transactionId?: SortOrderInput | SortOrder
     includesMembership?: SortOrder
     membershipFee?: SortOrderInput | SortOrder
+    fulfillmentStatus?: SortOrder
     notes?: SortOrderInput | SortOrder
     guestName?: SortOrderInput | SortOrder
     guestEmail?: SortOrderInput | SortOrder
@@ -52549,6 +52593,7 @@ export namespace Prisma {
     currency?: StringFilter<"ShopOrder"> | string
     includesMembership?: BoolFilter<"ShopOrder"> | boolean
     membershipFee?: DecimalNullableFilter<"ShopOrder"> | Decimal | DecimalJsLike | number | string | null
+    fulfillmentStatus?: EnumShopFulfillmentStatusFilter<"ShopOrder"> | $Enums.ShopFulfillmentStatus
     notes?: StringNullableFilter<"ShopOrder"> | string | null
     guestName?: StringNullableFilter<"ShopOrder"> | string | null
     guestEmail?: StringNullableFilter<"ShopOrder"> | string | null
@@ -52580,6 +52625,7 @@ export namespace Prisma {
     transactionId?: SortOrderInput | SortOrder
     includesMembership?: SortOrder
     membershipFee?: SortOrderInput | SortOrder
+    fulfillmentStatus?: SortOrder
     notes?: SortOrderInput | SortOrder
     guestName?: SortOrderInput | SortOrder
     guestEmail?: SortOrderInput | SortOrder
@@ -52613,6 +52659,7 @@ export namespace Prisma {
     transactionId?: StringNullableWithAggregatesFilter<"ShopOrder"> | string | null
     includesMembership?: BoolWithAggregatesFilter<"ShopOrder"> | boolean
     membershipFee?: DecimalNullableWithAggregatesFilter<"ShopOrder"> | Decimal | DecimalJsLike | number | string | null
+    fulfillmentStatus?: EnumShopFulfillmentStatusWithAggregatesFilter<"ShopOrder"> | $Enums.ShopFulfillmentStatus
     notes?: StringNullableWithAggregatesFilter<"ShopOrder"> | string | null
     guestName?: StringNullableWithAggregatesFilter<"ShopOrder"> | string | null
     guestEmail?: StringNullableWithAggregatesFilter<"ShopOrder"> | string | null
@@ -55946,6 +55993,7 @@ export namespace Prisma {
     transactionId?: string | null
     includesMembership?: boolean
     membershipFee?: Decimal | DecimalJsLike | number | string | null
+    fulfillmentStatus?: $Enums.ShopFulfillmentStatus
     notes?: string | null
     guestName?: string | null
     guestEmail?: string | null
@@ -55975,6 +56023,7 @@ export namespace Prisma {
     transactionId?: string | null
     includesMembership?: boolean
     membershipFee?: Decimal | DecimalJsLike | number | string | null
+    fulfillmentStatus?: $Enums.ShopFulfillmentStatus
     notes?: string | null
     guestName?: string | null
     guestEmail?: string | null
@@ -56002,6 +56051,7 @@ export namespace Prisma {
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null
     includesMembership?: BoolFieldUpdateOperationsInput | boolean
     membershipFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    fulfillmentStatus?: EnumShopFulfillmentStatusFieldUpdateOperationsInput | $Enums.ShopFulfillmentStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     guestName?: NullableStringFieldUpdateOperationsInput | string | null
     guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
@@ -56031,6 +56081,7 @@ export namespace Prisma {
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null
     includesMembership?: BoolFieldUpdateOperationsInput | boolean
     membershipFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    fulfillmentStatus?: EnumShopFulfillmentStatusFieldUpdateOperationsInput | $Enums.ShopFulfillmentStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     guestName?: NullableStringFieldUpdateOperationsInput | string | null
     guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
@@ -56059,6 +56110,7 @@ export namespace Prisma {
     transactionId?: string | null
     includesMembership?: boolean
     membershipFee?: Decimal | DecimalJsLike | number | string | null
+    fulfillmentStatus?: $Enums.ShopFulfillmentStatus
     notes?: string | null
     guestName?: string | null
     guestEmail?: string | null
@@ -56083,6 +56135,7 @@ export namespace Prisma {
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null
     includesMembership?: BoolFieldUpdateOperationsInput | boolean
     membershipFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    fulfillmentStatus?: EnumShopFulfillmentStatusFieldUpdateOperationsInput | $Enums.ShopFulfillmentStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     guestName?: NullableStringFieldUpdateOperationsInput | string | null
     guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
@@ -56106,6 +56159,7 @@ export namespace Prisma {
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null
     includesMembership?: BoolFieldUpdateOperationsInput | boolean
     membershipFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    fulfillmentStatus?: EnumShopFulfillmentStatusFieldUpdateOperationsInput | $Enums.ShopFulfillmentStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     guestName?: NullableStringFieldUpdateOperationsInput | string | null
     guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
@@ -58927,6 +58981,13 @@ export namespace Prisma {
     not?: NestedEnumPaymentStatusFilter<$PrismaModel> | $Enums.PaymentStatus
   }
 
+  export type EnumShopFulfillmentStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.ShopFulfillmentStatus | EnumShopFulfillmentStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ShopFulfillmentStatus[] | ListEnumShopFulfillmentStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ShopFulfillmentStatus[] | ListEnumShopFulfillmentStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumShopFulfillmentStatusFilter<$PrismaModel> | $Enums.ShopFulfillmentStatus
+  }
+
   export type StudentTransferRequestNullableScalarRelationFilter = {
     is?: StudentTransferRequestWhereInput | null
     isNot?: StudentTransferRequestWhereInput | null
@@ -58942,6 +59003,7 @@ export namespace Prisma {
     transactionId?: SortOrder
     includesMembership?: SortOrder
     membershipFee?: SortOrder
+    fulfillmentStatus?: SortOrder
     notes?: SortOrder
     guestName?: SortOrder
     guestEmail?: SortOrder
@@ -58972,6 +59034,7 @@ export namespace Prisma {
     transactionId?: SortOrder
     includesMembership?: SortOrder
     membershipFee?: SortOrder
+    fulfillmentStatus?: SortOrder
     notes?: SortOrder
     guestName?: SortOrder
     guestEmail?: SortOrder
@@ -58997,6 +59060,7 @@ export namespace Prisma {
     transactionId?: SortOrder
     includesMembership?: SortOrder
     membershipFee?: SortOrder
+    fulfillmentStatus?: SortOrder
     notes?: SortOrder
     guestName?: SortOrder
     guestEmail?: SortOrder
@@ -59025,6 +59089,16 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumPaymentStatusFilter<$PrismaModel>
     _max?: NestedEnumPaymentStatusFilter<$PrismaModel>
+  }
+
+  export type EnumShopFulfillmentStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ShopFulfillmentStatus | EnumShopFulfillmentStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ShopFulfillmentStatus[] | ListEnumShopFulfillmentStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ShopFulfillmentStatus[] | ListEnumShopFulfillmentStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumShopFulfillmentStatusWithAggregatesFilter<$PrismaModel> | $Enums.ShopFulfillmentStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumShopFulfillmentStatusFilter<$PrismaModel>
+    _max?: NestedEnumShopFulfillmentStatusFilter<$PrismaModel>
   }
 
   export type ShopOrderScalarRelationFilter = {
@@ -62729,6 +62803,10 @@ export namespace Prisma {
     set?: $Enums.PaymentStatus
   }
 
+  export type EnumShopFulfillmentStatusFieldUpdateOperationsInput = {
+    set?: $Enums.ShopFulfillmentStatus
+  }
+
   export type UserUpdateOneWithoutOrdersNestedInput = {
     create?: XOR<UserCreateWithoutOrdersInput, UserUncheckedCreateWithoutOrdersInput>
     connectOrCreate?: UserCreateOrConnectWithoutOrdersInput
@@ -64019,6 +64097,13 @@ export namespace Prisma {
     not?: NestedEnumPaymentStatusFilter<$PrismaModel> | $Enums.PaymentStatus
   }
 
+  export type NestedEnumShopFulfillmentStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.ShopFulfillmentStatus | EnumShopFulfillmentStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ShopFulfillmentStatus[] | ListEnumShopFulfillmentStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ShopFulfillmentStatus[] | ListEnumShopFulfillmentStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumShopFulfillmentStatusFilter<$PrismaModel> | $Enums.ShopFulfillmentStatus
+  }
+
   export type NestedEnumPaymentStatusWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.PaymentStatus | EnumPaymentStatusFieldRefInput<$PrismaModel>
     in?: $Enums.PaymentStatus[] | ListEnumPaymentStatusFieldRefInput<$PrismaModel>
@@ -64027,6 +64112,16 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumPaymentStatusFilter<$PrismaModel>
     _max?: NestedEnumPaymentStatusFilter<$PrismaModel>
+  }
+
+  export type NestedEnumShopFulfillmentStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ShopFulfillmentStatus | EnumShopFulfillmentStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ShopFulfillmentStatus[] | ListEnumShopFulfillmentStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ShopFulfillmentStatus[] | ListEnumShopFulfillmentStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumShopFulfillmentStatusWithAggregatesFilter<$PrismaModel> | $Enums.ShopFulfillmentStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumShopFulfillmentStatusFilter<$PrismaModel>
+    _max?: NestedEnumShopFulfillmentStatusFilter<$PrismaModel>
   }
 
   export type NestedEnumAchievementTierFilter<$PrismaModel = never> = {
@@ -64577,6 +64672,7 @@ export namespace Prisma {
     transactionId?: string | null
     includesMembership?: boolean
     membershipFee?: Decimal | DecimalJsLike | number | string | null
+    fulfillmentStatus?: $Enums.ShopFulfillmentStatus
     notes?: string | null
     guestName?: string | null
     guestEmail?: string | null
@@ -64604,6 +64700,7 @@ export namespace Prisma {
     transactionId?: string | null
     includesMembership?: boolean
     membershipFee?: Decimal | DecimalJsLike | number | string | null
+    fulfillmentStatus?: $Enums.ShopFulfillmentStatus
     notes?: string | null
     guestName?: string | null
     guestEmail?: string | null
@@ -65376,6 +65473,7 @@ export namespace Prisma {
     transactionId?: StringNullableFilter<"ShopOrder"> | string | null
     includesMembership?: BoolFilter<"ShopOrder"> | boolean
     membershipFee?: DecimalNullableFilter<"ShopOrder"> | Decimal | DecimalJsLike | number | string | null
+    fulfillmentStatus?: EnumShopFulfillmentStatusFilter<"ShopOrder"> | $Enums.ShopFulfillmentStatus
     notes?: StringNullableFilter<"ShopOrder"> | string | null
     guestName?: StringNullableFilter<"ShopOrder"> | string | null
     guestEmail?: StringNullableFilter<"ShopOrder"> | string | null
@@ -67800,6 +67898,7 @@ export namespace Prisma {
     transactionId?: string | null
     includesMembership?: boolean
     membershipFee?: Decimal | DecimalJsLike | number | string | null
+    fulfillmentStatus?: $Enums.ShopFulfillmentStatus
     notes?: string | null
     guestName?: string | null
     guestEmail?: string | null
@@ -67828,6 +67927,7 @@ export namespace Prisma {
     transactionId?: string | null
     includesMembership?: boolean
     membershipFee?: Decimal | DecimalJsLike | number | string | null
+    fulfillmentStatus?: $Enums.ShopFulfillmentStatus
     notes?: string | null
     guestName?: string | null
     guestEmail?: string | null
@@ -67864,6 +67964,7 @@ export namespace Prisma {
     transactionId?: string | null
     includesMembership?: boolean
     membershipFee?: Decimal | DecimalJsLike | number | string | null
+    fulfillmentStatus?: $Enums.ShopFulfillmentStatus
     notes?: string | null
     guestName?: string | null
     guestEmail?: string | null
@@ -67892,6 +67993,7 @@ export namespace Prisma {
     transactionId?: string | null
     includesMembership?: boolean
     membershipFee?: Decimal | DecimalJsLike | number | string | null
+    fulfillmentStatus?: $Enums.ShopFulfillmentStatus
     notes?: string | null
     guestName?: string | null
     guestEmail?: string | null
@@ -70337,6 +70439,7 @@ export namespace Prisma {
     transactionId?: string | null
     includesMembership?: boolean
     membershipFee?: Decimal | DecimalJsLike | number | string | null
+    fulfillmentStatus?: $Enums.ShopFulfillmentStatus
     notes?: string | null
     guestName?: string | null
     guestEmail?: string | null
@@ -70365,6 +70468,7 @@ export namespace Prisma {
     transactionId?: string | null
     includesMembership?: boolean
     membershipFee?: Decimal | DecimalJsLike | number | string | null
+    fulfillmentStatus?: $Enums.ShopFulfillmentStatus
     notes?: string | null
     guestName?: string | null
     guestEmail?: string | null
@@ -70588,6 +70692,7 @@ export namespace Prisma {
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null
     includesMembership?: BoolFieldUpdateOperationsInput | boolean
     membershipFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    fulfillmentStatus?: EnumShopFulfillmentStatusFieldUpdateOperationsInput | $Enums.ShopFulfillmentStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     guestName?: NullableStringFieldUpdateOperationsInput | string | null
     guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
@@ -70616,6 +70721,7 @@ export namespace Prisma {
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null
     includesMembership?: BoolFieldUpdateOperationsInput | boolean
     membershipFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    fulfillmentStatus?: EnumShopFulfillmentStatusFieldUpdateOperationsInput | $Enums.ShopFulfillmentStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     guestName?: NullableStringFieldUpdateOperationsInput | string | null
     guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
@@ -73733,6 +73839,7 @@ export namespace Prisma {
     transactionId?: string | null
     includesMembership?: boolean
     membershipFee?: Decimal | DecimalJsLike | number | string | null
+    fulfillmentStatus?: $Enums.ShopFulfillmentStatus
     notes?: string | null
     guestName?: string | null
     guestEmail?: string | null
@@ -73761,6 +73868,7 @@ export namespace Prisma {
     transactionId?: string | null
     includesMembership?: boolean
     membershipFee?: Decimal | DecimalJsLike | number | string | null
+    fulfillmentStatus?: $Enums.ShopFulfillmentStatus
     notes?: string | null
     guestName?: string | null
     guestEmail?: string | null
@@ -73842,6 +73950,7 @@ export namespace Prisma {
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null
     includesMembership?: BoolFieldUpdateOperationsInput | boolean
     membershipFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    fulfillmentStatus?: EnumShopFulfillmentStatusFieldUpdateOperationsInput | $Enums.ShopFulfillmentStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     guestName?: NullableStringFieldUpdateOperationsInput | string | null
     guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
@@ -73870,6 +73979,7 @@ export namespace Prisma {
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null
     includesMembership?: BoolFieldUpdateOperationsInput | boolean
     membershipFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    fulfillmentStatus?: EnumShopFulfillmentStatusFieldUpdateOperationsInput | $Enums.ShopFulfillmentStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     guestName?: NullableStringFieldUpdateOperationsInput | string | null
     guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
@@ -75239,6 +75349,7 @@ export namespace Prisma {
     transactionId?: string | null
     includesMembership?: boolean
     membershipFee?: Decimal | DecimalJsLike | number | string | null
+    fulfillmentStatus?: $Enums.ShopFulfillmentStatus
     notes?: string | null
     guestName?: string | null
     guestEmail?: string | null
@@ -75267,6 +75378,7 @@ export namespace Prisma {
     transactionId?: string | null
     includesMembership?: boolean
     membershipFee?: Decimal | DecimalJsLike | number | string | null
+    fulfillmentStatus?: $Enums.ShopFulfillmentStatus
     notes?: string | null
     guestName?: string | null
     guestEmail?: string | null
@@ -75698,6 +75810,7 @@ export namespace Prisma {
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null
     includesMembership?: BoolFieldUpdateOperationsInput | boolean
     membershipFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    fulfillmentStatus?: EnumShopFulfillmentStatusFieldUpdateOperationsInput | $Enums.ShopFulfillmentStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     guestName?: NullableStringFieldUpdateOperationsInput | string | null
     guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
@@ -75726,6 +75839,7 @@ export namespace Prisma {
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null
     includesMembership?: BoolFieldUpdateOperationsInput | boolean
     membershipFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    fulfillmentStatus?: EnumShopFulfillmentStatusFieldUpdateOperationsInput | $Enums.ShopFulfillmentStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     guestName?: NullableStringFieldUpdateOperationsInput | string | null
     guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
@@ -76723,6 +76837,7 @@ export namespace Prisma {
     transactionId?: string | null
     includesMembership?: boolean
     membershipFee?: Decimal | DecimalJsLike | number | string | null
+    fulfillmentStatus?: $Enums.ShopFulfillmentStatus
     notes?: string | null
     guestName?: string | null
     guestEmail?: string | null
@@ -76959,6 +77074,7 @@ export namespace Prisma {
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null
     includesMembership?: BoolFieldUpdateOperationsInput | boolean
     membershipFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    fulfillmentStatus?: EnumShopFulfillmentStatusFieldUpdateOperationsInput | $Enums.ShopFulfillmentStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     guestName?: NullableStringFieldUpdateOperationsInput | string | null
     guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
@@ -76986,6 +77102,7 @@ export namespace Prisma {
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null
     includesMembership?: BoolFieldUpdateOperationsInput | boolean
     membershipFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    fulfillmentStatus?: EnumShopFulfillmentStatusFieldUpdateOperationsInput | $Enums.ShopFulfillmentStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     guestName?: NullableStringFieldUpdateOperationsInput | string | null
     guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
@@ -77013,6 +77130,7 @@ export namespace Prisma {
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null
     includesMembership?: BoolFieldUpdateOperationsInput | boolean
     membershipFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    fulfillmentStatus?: EnumShopFulfillmentStatusFieldUpdateOperationsInput | $Enums.ShopFulfillmentStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     guestName?: NullableStringFieldUpdateOperationsInput | string | null
     guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
@@ -78233,6 +78351,7 @@ export namespace Prisma {
     transactionId?: string | null
     includesMembership?: boolean
     membershipFee?: Decimal | DecimalJsLike | number | string | null
+    fulfillmentStatus?: $Enums.ShopFulfillmentStatus
     notes?: string | null
     guestName?: string | null
     guestEmail?: string | null
@@ -78257,6 +78376,7 @@ export namespace Prisma {
     transactionId?: string | null
     includesMembership?: boolean
     membershipFee?: Decimal | DecimalJsLike | number | string | null
+    fulfillmentStatus?: $Enums.ShopFulfillmentStatus
     notes?: string | null
     guestName?: string | null
     guestEmail?: string | null
@@ -78459,6 +78579,7 @@ export namespace Prisma {
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null
     includesMembership?: BoolFieldUpdateOperationsInput | boolean
     membershipFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    fulfillmentStatus?: EnumShopFulfillmentStatusFieldUpdateOperationsInput | $Enums.ShopFulfillmentStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     guestName?: NullableStringFieldUpdateOperationsInput | string | null
     guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
@@ -78487,6 +78608,7 @@ export namespace Prisma {
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null
     includesMembership?: BoolFieldUpdateOperationsInput | boolean
     membershipFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    fulfillmentStatus?: EnumShopFulfillmentStatusFieldUpdateOperationsInput | $Enums.ShopFulfillmentStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     guestName?: NullableStringFieldUpdateOperationsInput | string | null
     guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
@@ -78514,6 +78636,7 @@ export namespace Prisma {
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null
     includesMembership?: BoolFieldUpdateOperationsInput | boolean
     membershipFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    fulfillmentStatus?: EnumShopFulfillmentStatusFieldUpdateOperationsInput | $Enums.ShopFulfillmentStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     guestName?: NullableStringFieldUpdateOperationsInput | string | null
     guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
@@ -78537,6 +78660,7 @@ export namespace Prisma {
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null
     includesMembership?: BoolFieldUpdateOperationsInput | boolean
     membershipFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    fulfillmentStatus?: EnumShopFulfillmentStatusFieldUpdateOperationsInput | $Enums.ShopFulfillmentStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     guestName?: NullableStringFieldUpdateOperationsInput | string | null
     guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
@@ -78565,6 +78689,7 @@ export namespace Prisma {
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null
     includesMembership?: BoolFieldUpdateOperationsInput | boolean
     membershipFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    fulfillmentStatus?: EnumShopFulfillmentStatusFieldUpdateOperationsInput | $Enums.ShopFulfillmentStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     guestName?: NullableStringFieldUpdateOperationsInput | string | null
     guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
@@ -78592,6 +78717,7 @@ export namespace Prisma {
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null
     includesMembership?: BoolFieldUpdateOperationsInput | boolean
     membershipFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    fulfillmentStatus?: EnumShopFulfillmentStatusFieldUpdateOperationsInput | $Enums.ShopFulfillmentStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     guestName?: NullableStringFieldUpdateOperationsInput | string | null
     guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
