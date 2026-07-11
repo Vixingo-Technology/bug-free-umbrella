@@ -16,6 +16,8 @@ export type DojoEnlistmentInput = {
     address: string;
     latitude: string;
     longitude: string;
+    /** One of the 8 Bangladesh divisions — stored on `Dojo.city` and drives the landing-page filter. */
+    division?: string;
     /** Cloudinary URLs — upload via `uploadDojoAssetFromDataUrl` before calling commit. */
     interiorUrls?: string[];
 };
@@ -361,6 +363,7 @@ export async function commitDojoEnlistment(
     const lat = input.latitude ? parseFloat(input.latitude) : null;
     const lng = input.longitude ? parseFloat(input.longitude) : null;
     const contactRank = input.contactRank?.trim() || "";
+    const division = input.division?.trim() || null;
 
     // Images have already been uploaded via uploadDojoAssetFromDataUrl —
     // we only receive URLs here.
@@ -404,6 +407,7 @@ export async function commitDojoEnlistment(
                     data: {
                         name: input.dojoName.trim(),
                         address: input.address.trim(),
+                        city: division,
                         phone: input.phone.trim(),
                         email: input.email.trim(),
                         latitude: Number.isFinite(lat) ? lat : null,
@@ -419,6 +423,7 @@ export async function commitDojoEnlistment(
                     data: {
                         name: input.dojoName.trim(),
                         address: input.address.trim(),
+                        city: division ?? undefined,
                         phone: input.phone.trim(),
                         email: input.email.trim(),
                         latitude: Number.isFinite(lat) ? lat : null,

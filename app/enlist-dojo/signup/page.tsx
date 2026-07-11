@@ -37,11 +37,40 @@ type FormState = {
     phone: string;
     contactName: string;
     contactRank: string;
+    division: string;
+    district: string;
+    city: string;
+    area: string;
+    houseRoad: string;
     address: string;
     latitude: string;
     longitude: string;
     acceptedTerms: boolean;
 };
+
+const BD_DIVISIONS = [
+    "Dhaka",
+    "Chattogram",
+    "Rajshahi",
+    "Khulna",
+    "Barishal",
+    "Sylhet",
+    "Rangpur",
+    "Mymensingh",
+];
+
+function composeAddress(f: {
+    houseRoad: string;
+    area: string;
+    city: string;
+    district: string;
+    division: string;
+}) {
+    return [f.houseRoad, f.area, f.city, f.district, f.division]
+        .map((p) => p.trim())
+        .filter(Boolean)
+        .join(", ");
+}
 
 const STEPS = [
     { id: 0, title: "Dojo basics", icon: Building2 },
@@ -56,6 +85,11 @@ const initialState: FormState = {
     phone: "",
     contactName: "",
     contactRank: "",
+    division: "",
+    district: "",
+    city: "",
+    area: "",
+    houseRoad: "",
     address: "",
     latitude: "",
     longitude: "",
@@ -131,8 +165,12 @@ export default function EnlistDojoSignupPage() {
                 return "Please select the Dojo Head's belt rank.";
         }
         if (s === 2) {
-            if (!form.address.trim())
-                return "Please enter your dojo's address.";
+            if (!form.division.trim()) return "Please select a division.";
+            if (!form.district.trim()) return "Please enter your district.";
+            if (!form.city.trim()) return "Please enter your city.";
+            if (!form.area.trim()) return "Please enter your area.";
+            if (!form.houseRoad.trim())
+                return "Please enter your house / road number.";
             if (!form.latitude || !form.longitude)
                 return "Please pin your location on the map.";
         }
@@ -165,16 +203,23 @@ export default function EnlistDojoSignupPage() {
             return;
         }
         setError(null);
+        // Address column is a concatenation of the structured fields; downstream
+        // (SSLCommerz, admin review, /branches cards) still reads a single string.
+        const finalForm: FormState = {
+            ...form,
+            address: composeAddress(form),
+        };
+        setForm(finalForm);
         startTransition(async () => {
             // Persist final draft so /verify, /set-password, /payment can read it.
             try {
-                sessionStorage.setItem(DRAFT_KEY, JSON.stringify(form));
+                sessionStorage.setItem(DRAFT_KEY, JSON.stringify(finalForm));
             } catch {
                 /* ignore */
             }
             const result = await submitDojoEnlistment({
-                dojoName: form.dojoName,
-                email: form.email,
+                dojoName: finalForm.dojoName,
+                email: finalForm.email,
             });
             if (result?.error) {
                 setError(result.error);
@@ -502,20 +547,71 @@ function LocationStep({
                     Where do you train?
                 </h2>
                 <p className="text-zinc-500 text-sm">
-                    Drop a pin on the map and confirm your address so students
-                    can find you.
+                    Break down your address so students can find you and we can
+                    group your dojo by division.
                 </p>
             </div>
 
             <div>
-                <Label>Full address *</Label>
-                <textarea
-                    value={form.address}
-                    onChange={(e) => update("address", e.target.value)}
-                    placeholder="House / Road / Area, City, Postal code"
-                    rows={3}
+                <Label>Division *</Label>
+                <select
+                    value={form.division}
+                    onChange={(e) => update("division", e.target.value)}
                     className={inputClass()}
-                />
+                >
+                    <option value="">Select a division…</option>
+                    {BD_DIVISIONS.map((d) => (
+                        <option key={d} value={d}>
+                            {d}
+                        </option>
+                    ))}
+                </select>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-4">
+                <div>
+                    <Label>District *</Label>
+                    <input
+                        type="text"
+                        value={form.district}
+                        onChange={(e) => update("district", e.target.value)}
+                        placeholder="e.g. Dhaka"
+                        className={inputClass()}
+                    />
+                </div>
+                <div>
+                    <Label>City *</Label>
+                    <input
+                        type="text"
+                        value={form.city}
+                        onChange={(e) => update("city", e.target.value)}
+                        placeholder="e.g. Dhaka"
+                        className={inputClass()}
+                    />
+                </div>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-4">
+                <div>
+                    <Label>Area *</Label>
+                    <input
+                        type="text"
+                        value={form.area}
+                        onChange={(e) => update("area", e.target.value)}
+                        placeholder="e.g. Dhanmondi"
+                        className={inputClass()}
+                    />
+                </div>
+                <div>
+                    <Label>House / Road No *</Label>
+                    <input
+                        type="text"
+                        value={form.houseRoad}
+                        onChange={(e) => update("houseRoad", e.target.value)}
+                        placeholder="e.g. House 12, Road 3"
+                        className={inputClass()}
+                    />
+                </div>
             </div>
 
             <div>
@@ -580,7 +676,11 @@ function ReviewStep({
                     label="Dojo Head"
                     value={`${form.contactName} · ${form.contactRank || "—"}`}
                 />
-                <ReviewRow label="Address" value={form.address} />
+                <ReviewRow label="Division" value={form.division} />
+                <ReviewRow label="District" value={form.district} />
+                <ReviewRow label="City" value={form.city} />
+                <ReviewRow label="Area" value={form.area} />
+                <ReviewRow label="House / Road" value={form.houseRoad} />
                 <ReviewRow
                     label="Coordinates"
                     value={
