@@ -52,12 +52,23 @@ export async function saveProfileAction(formData: FormData) {
     }
 
     const meta = user.user_metadata ?? {};
-    const role: "ADMIN" | "DOJO_OWNER" | "DOJO_MANAGER" | "INSTRUCTOR" | "STUDENT" =
+
+    // The authoritative role lives on `users.role_id`. Reading from
+    // `user_metadata.role` can misfire when someone started an enlist-dojo
+    // signup (which stamps role=DOJO_OWNER on metadata) but never finished,
+    // then reappears in the generic /portal/onboarding wizard.
+    const dbUser = await prisma.user.findUnique({
+        where: { id: user.id },
+        select: { roleId: true },
+    });
+    const metaRole =
         meta.role === "ADMIN" ? "ADMIN"
         : meta.role === "DOJO_OWNER" ? "DOJO_OWNER"
         : meta.role === "DOJO_MANAGER" ? "DOJO_MANAGER"
         : meta.role === "INSTRUCTOR" ? "INSTRUCTOR"
         : "STUDENT";
+    const role: "ADMIN" | "DOJO_OWNER" | "DOJO_MANAGER" | "INSTRUCTOR" | "STUDENT" =
+        (dbUser?.roleId as typeof metaRole | undefined) ?? metaRole;
 
     const studentData = {
         dojoId,
@@ -101,7 +112,18 @@ export async function saveProfileAction(formData: FormData) {
             const data = { dojoId: studentData.dojoId };
             if (role === "INSTRUCTOR")  await prisma.instructor.upsert({ where: { id: user.id }, create: { id: user.id, ...data }, update: data });
             if (role === "DOJO_MANAGER") await prisma.dojoManager.upsert({ where: { id: user.id }, create: { id: user.id, ...data }, update: data });
-            if (role === "DOJO_OWNER")   await prisma.dojoOwner.upsert({ where: { id: user.id }, create: { id: user.id, ...data }, update: data });
+            if (role === "DOJO_OWNER") {
+                // dojo_owners.dojo_id is UNIQUE — surface a friendly error instead
+                // of letting Prisma throw the constraint violation.
+                const takenBy = await prisma.dojoOwner.findUnique({
+                    where: { dojoId: studentData.dojoId },
+                    select: { id: true },
+                });
+                if (takenBy && takenBy.id !== user.id) {
+                    return { error: "This dojo already has an owner. Please pick a different dojo or contact the admin." };
+                }
+                await prisma.dojoOwner.upsert({ where: { id: user.id }, create: { id: user.id, ...data }, update: data });
+            }
             if (role === "ADMIN")        await prisma.admin.upsert({ where: { id: user.id }, create: { id: user.id }, update: {} });
         }
 

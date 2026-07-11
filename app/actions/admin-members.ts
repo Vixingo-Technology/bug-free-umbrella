@@ -177,7 +177,16 @@ export async function deleteMemberAction(formData: FormData): Promise<ActionResu
 
     const admin = createAdminClient();
 
-    // Delete the Supabase auth user first — the DB row (and every role-table
+    // Detach any dojo the member is tied to BEFORE removing the user. The
+    // dojo itself must survive — a Dojo Owner leaving the club doesn't take
+    // the physical dojo with them. Doing this explicitly (rather than relying
+    // on schema-level FK behaviour) removes any risk that a stale DB-level
+    // cascade from an earlier migration takes the dojo down with the owner.
+    await prisma.dojoOwner.deleteMany({ where: { id: memberId } });
+    await prisma.dojoManager.deleteMany({ where: { id: memberId } });
+    await prisma.instructor.deleteMany({ where: { id: memberId } });
+
+    // Delete the Supabase auth user next — the DB row (and every role-table
     // row via ON DELETE CASCADE) goes with it because `users.id` references
     // `auth.users.id`. If auth deletion fails we bail out before touching the DB.
     const { error: authError } = await admin.auth.admin.deleteUser(memberId);

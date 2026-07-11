@@ -59,6 +59,13 @@ export async function signupAction(formData: FormData) {
         return { error: error.message };
     }
 
+    // Supabase does not throw on duplicate email — instead it returns a
+    // shadow user with an empty `identities` array (an anti-enumeration
+    // measure). Detect that shape and tell the user plainly.
+    if (data.user && (data.user.identities?.length ?? 0) === 0) {
+        return { error: "This email is already registered. Please log in instead." };
+    }
+
     // If Supabase returned a session immediately (email confirmation disabled),
     // provision the member row and skip the OTP step.
     if (data.session && data.user) {
