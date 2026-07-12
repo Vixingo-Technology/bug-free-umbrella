@@ -71,7 +71,15 @@ export default function EventsTabsClient({
 
     return (
         <section id="events" className="py-32 bg-bg-deep relative">
-            <div className="max-w-7xl mx-auto px-6 lg:px-12">
+            {/* Floating red bubble backdrop */}
+            <div
+                aria-hidden
+                className="pointer-events-none absolute inset-0"
+            >
+                <div className="absolute top-1/2 -right-24 -translate-y-1/2 w-[480px] h-[480px] rounded-full bg-accent-red/40 blur-3xl animate-bubble-float-slow" />
+            </div>
+
+            <div className="relative max-w-7xl mx-auto px-6 lg:px-12">
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 gap-6">
                     <div>
                         <h2 className="font-karate text-3xl md:text-5xl text-zinc-900 mb-4 uppercase tracking-widest font-bold">
@@ -91,19 +99,17 @@ export default function EventsTabsClient({
                     </Link>
                 </div>
 
-                <div className="bg-white border border-zinc-200 rounded-sm shadow-sm overflow-hidden">
-                    <div className="flex items-center gap-2 p-4 border-b border-zinc-150 bg-zinc-50/50">
+                <div className="bg-white/60 backdrop-blur-xl border border-white/40 ring-1 ring-zinc-900/5 rounded-sm shadow-[0_8px_32px_rgba(0,0,0,0.06)] overflow-hidden">
+                    <div className="flex items-center gap-2 p-4 border-b border-zinc-100/70 bg-white/30">
                         <TabPill
                             active={tab === "announcements"}
                             onClick={() => setTab("announcements")}
                             label="Announcements"
-                            count={announcements.length}
                         />
                         <TabPill
                             active={tab === "events"}
                             onClick={() => setTab("events")}
                             label="Events"
-                            count={events.length}
                         />
                     </div>
 
@@ -119,7 +125,7 @@ export default function EventsTabsClient({
                                 {announcements.length === 0 ? (
                                     <EmptyState text="No announcements yet." />
                                 ) : (
-                                    <ul className="divide-y divide-zinc-150">
+                                    <ul className="divide-y divide-zinc-200/40">
                                         {announcements.map((a) => {
                                             const { day, month } = dayMonth(
                                                 a.publishedAt,
@@ -166,7 +172,7 @@ export default function EventsTabsClient({
                                 {events.length === 0 ? (
                                     <EmptyState text="No upcoming events." />
                                 ) : (
-                                    <ul className="divide-y divide-zinc-150">
+                                    <ul className="divide-y divide-zinc-200/40">
                                         {events.map((e) => {
                                             const { day, month } = dayMonth(
                                                 e.eventDate,
@@ -237,31 +243,22 @@ function TabPill({
     active,
     onClick,
     label,
-    count,
 }: {
     active: boolean;
     onClick: () => void;
     label: string;
-    count: number;
 }) {
     return (
         <button
             type="button"
             onClick={onClick}
-            className={`inline-flex items-center gap-2 px-5 py-2.5 text-xs font-bold tracking-widest uppercase rounded-full transition-colors ${
+            className={`inline-flex items-center px-5 py-2.5 text-xs font-bold tracking-widest uppercase rounded-full transition-colors ${
                 active
                     ? "bg-accent-red text-white border border-accent-red"
                     : "bg-transparent text-zinc-700 border border-zinc-200 hover:border-accent-red hover:text-accent-red"
             }`}
         >
             {label}
-            <span
-                className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
-                    active ? "bg-white/20 text-white" : "bg-zinc-100 text-zinc-500"
-                }`}
-            >
-                {count}
-            </span>
         </button>
     );
 }

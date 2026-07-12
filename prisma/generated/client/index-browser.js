@@ -246,6 +246,7 @@ exports.Prisma.DojoApplicationScalarFieldEnum = {
   contactName: 'contactName',
   contactRole: 'contactRole',
   contactRank: 'contactRank',
+  contactDob: 'contactDob',
   address: 'address',
   latitude: 'latitude',
   longitude: 'longitude',

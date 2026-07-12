@@ -1,28 +1,83 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useTransition } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import { motion } from "motion/react";
 import { AlertTriangle, ArrowLeft, ArrowRight, ShoppingBag } from "lucide-react";
 import { useCart } from "./cart-context";
 import { placeGuestOrderAction } from "@/app/shop/actions";
 import { validatePhone } from "@/lib/validation/phone";
 
+type CheckoutForm = {
+    fullName: string;
+    phone: string;
+    address: string;
+    email: string;
+    notes: string;
+};
+
+const EMPTY_FORM: CheckoutForm = {
+    fullName: "",
+    phone: "",
+    address: "",
+    email: "",
+    notes: "",
+};
+
+const FORM_STORAGE_KEY = "jka:shop:checkout-form:v1";
+const PENDING_ORDER_KEY = "jka:shop:pending-order-id:v1";
+
 export default function CheckoutClient({
     paymentFailed,
+    resumedOrderId,
 }: {
     paymentFailed: boolean;
+    resumedOrderId: string | null;
 }) {
-    const { items, totalCount, totalAmount, clear } = useCart();
+    const { items, totalCount, totalAmount, hydrated: cartHydrated } = useCart();
     const [error, setError] = useState<string | null>(null);
     const [pending, startTransition] = useTransition();
-    const [form, setForm] = useState({
-        fullName: "",
-        phone: "",
-        address: "",
-        email: "",
-        notes: "",
-    });
+    const [form, setForm] = useState<CheckoutForm>(EMPTY_FORM);
+    const [pendingOrderId, setPendingOrderId] = useState<string | null>(
+        resumedOrderId,
+    );
+    const [formHydrated, setFormHydrated] = useState(false);
+    // Prevent the persist effect from writing back the initial empty form
+    // before hydration finishes (which would wipe saved data on first paint).
+    const hasHydrated = useRef(false);
+
+    // Hydrate saved form + pending order id from localStorage.
+    useEffect(() => {
+        try {
+            const raw = localStorage.getItem(FORM_STORAGE_KEY);
+            if (raw) {
+                const parsed = JSON.parse(raw) as Partial<CheckoutForm>;
+                setForm({ ...EMPTY_FORM, ...parsed });
+            }
+            const savedOrderId = localStorage.getItem(PENDING_ORDER_KEY);
+            // URL-supplied orderId (from the failed page) takes precedence, so
+            // the user always retries the exact order that failed.
+            if (resumedOrderId) {
+                localStorage.setItem(PENDING_ORDER_KEY, resumedOrderId);
+            } else if (savedOrderId) {
+                setPendingOrderId(savedOrderId);
+            }
+        } catch {
+            /* corrupt storage — start fresh */
+        }
+        hasHydrated.current = true;
+        setFormHydrated(true);
+    }, [resumedOrderId]);
+
+    // Persist form on change so browser close / refresh doesn't lose data.
+    useEffect(() => {
+        if (!hasHydrated.current) return;
+        try {
+            localStorage.setItem(FORM_STORAGE_KEY, JSON.stringify(form));
+        } catch {
+            /* ignore quota */
+        }
+    }, [form]);
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -43,6 +98,7 @@ export default function CheckoutClient({
                 quantity: i.quantity,
                 size: i.size ?? null,
             })),
+            pendingOrderId,
         };
 
         // Stash cart snapshot for the thank-you page (server can't read the
@@ -58,13 +114,24 @@ export default function CheckoutClient({
 
         startTransition(async () => {
             const result = await placeGuestOrderAction(payload);
-            if (result?.error) {
+            if ("error" in result) {
                 setError(result.error);
                 return;
             }
-            // If we reach here without an error, the server should have
-            // redirected. If somehow we didn't, clear the cart anyway.
-            clear();
+            // Save orderId so a subsequent retry updates this same order
+            // instead of creating a duplicate.
+            try {
+                localStorage.setItem(PENDING_ORDER_KEY, result.orderId);
+            } catch {
+                /* ignore */
+            }
+            setPendingOrderId(result.orderId);
+            // Absolute URLs go to the gateway; relative URLs stay in-app.
+            if (/^https?:\/\//i.test(result.redirectUrl)) {
+                window.location.href = result.redirectUrl;
+            } else {
+                window.location.assign(result.redirectUrl);
+            }
         });
     };
 
@@ -101,11 +168,21 @@ export default function CheckoutClient({
                             <div className="mt-6 flex items-start gap-3 rounded-sm border border-red-200 bg-red-50 p-4 text-sm text-red-800">
                                 <AlertTriangle size={16} className="mt-0.5" />
                                 <div>
-                                    Payment did not complete. Please review your
-                                    details and try again.
+                                    Payment did not complete. Your details are
+                                    saved — review them below and try again.
                                 </div>
                             </div>
                         )}
+
+                        {!paymentFailed &&
+                            formHydrated &&
+                            pendingOrderId &&
+                            (form.fullName || form.phone || form.address) && (
+                                <div className="mt-6 rounded-sm border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800">
+                                    We restored your last checkout. Update the
+                                    details if needed and continue to payment.
+                                </div>
+                            )}
 
                         {error && (
                             <div className="mt-6 rounded-sm border border-red-200 bg-red-50 p-4 text-sm text-red-800">
@@ -172,7 +249,9 @@ export default function CheckoutClient({
 
                             <button
                                 type="submit"
-                                disabled={pending || items.length === 0}
+                                disabled={
+                                    pending || !cartHydrated || items.length === 0
+                                }
                                 className="inline-flex w-full items-center justify-center gap-2 rounded-sm bg-accent-red px-6 py-3.5 text-sm font-semibold uppercase tracking-widest text-white transition hover:bg-accent-red/90 disabled:cursor-not-allowed disabled:bg-zinc-300"
                             >
                                 {pending

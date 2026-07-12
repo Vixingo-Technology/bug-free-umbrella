@@ -6,7 +6,7 @@ import Journey from "@/components/journey";
 import Techniques from "@/components/techniques";
 import Events from "@/components/events";
 import Branches from "@/components/branches";
-import Gallery from "@/components/gallery";
+import ShopPreview from "@/components/shop-preview";
 import Testimonials from "@/components/testimonials";
 import CTA from "@/components/cta";
 import Footer from "@/components/footer";
@@ -22,7 +22,7 @@ export default function Home() {
             <Journey />
             <Techniques />
             <Branches />
-            <Gallery />
+            <ShopPreview />
             <Testimonials />
             <CTA />
             <Footer />

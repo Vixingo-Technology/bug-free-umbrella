@@ -108,11 +108,11 @@ export default function EnlistDojoPage() {
                     <div className="h-px w-24 bg-accent-red mb-8" />
                     <p className="text-lg md:text-xl text-zinc-700 leading-relaxed max-w-3xl mb-10">
                         Affiliate with the only federation in Bangladesh
-                        directly chartered by the Japan Karate Association
-                        World Federation. Stand alongside more than 50
-                        registered branches, certify your students under the
-                        official JKA syllabus, and run your dojo from a single,
-                        beautiful digital portal.
+                        directly chartered by the Japan Karate Association World
+                        Federation. Stand alongside more than 50 registered
+                        branches, certify your students under the official JKA
+                        syllabus, and run your dojo from a single, beautiful
+                        digital portal.
                     </p>
                     <div className="flex flex-wrap gap-4">
                         <Link
@@ -234,7 +234,7 @@ export default function EnlistDojoPage() {
                             <p className="text-xs tracking-[0.4em] uppercase text-accent-red font-bold mb-4">
                                 Eligibility
                             </p>
-                            <h2 className="font-karate text-3xl md:text-4xl font-bold text-zinc-900 uppercase tracking-wider leading-[1.15] mb-6">
+                            <h2 className="font-karate text-3xl md:text-3xl font-bold text-zinc-900 uppercase tracking-wider leading-[1.15] mb-6">
                                 Requirements{" "}
                                 <span className="text-accent-red italic lowercase font-serif font-normal">
                                     to enlist
@@ -279,10 +279,7 @@ export default function EnlistDojoPage() {
                     <div className="grid md:grid-cols-2 gap-6">
                         <div className="bg-white border border-zinc-200 p-10 rounded-sm shadow-sm">
                             <div className="flex items-center gap-3 mb-6">
-                                <Award
-                                    size={20}
-                                    className="text-accent-red"
-                                />
+                                <Award size={20} className="text-accent-red" />
                                 <h3 className="font-serif font-bold text-lg text-zinc-900">
                                     One-time enlistment fee
                                 </h3>
@@ -313,9 +310,9 @@ export default function EnlistDojoPage() {
                                 </span>
                             </p>
                             <p className="text-zinc-600 leading-relaxed text-sm">
-                                Keeps your dojo certified, students event-eligible,
-                                and your portal access active. Renewable 60 days
-                                before expiry.
+                                Keeps your dojo certified, students
+                                event-eligible, and your portal access active.
+                                Renewable 60 days before expiry.
                             </p>
                         </div>
                     </div>

@@ -440,13 +440,14 @@ model DojoApplication {
   id     String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   userId String? @map("user_id") @db.Uuid // Supabase auth.users id of the owner
 
-  dojoName    String  @map("dojo_name")
-  logoUrl     String? @map("logo_url")
-  email       String
-  phone       String
-  contactName String  @map("contact_name")
-  contactRole String  @map("contact_role")
-  contactRank String? @map("contact_rank")
+  dojoName         String    @map("dojo_name")
+  logoUrl          String?   @map("logo_url")
+  email            String
+  phone            String
+  contactName      String    @map("contact_name")
+  contactRole      String    @map("contact_role")
+  contactRank      String?   @map("contact_rank")
+  contactDob       DateTime? @map("contact_dob") @db.Date
 
   address   String
   latitude  Float?

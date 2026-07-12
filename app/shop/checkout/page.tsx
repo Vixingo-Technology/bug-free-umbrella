@@ -8,8 +8,13 @@ export const metadata: Metadata = {
 export default async function ShopCheckoutPage({
     searchParams,
 }: {
-    searchParams: Promise<{ failed?: string }>;
+    searchParams: Promise<{ failed?: string; orderId?: string }>;
 }) {
-    const { failed } = await searchParams;
-    return <CheckoutClient paymentFailed={failed === "1"} />;
+    const { failed, orderId } = await searchParams;
+    return (
+        <CheckoutClient
+            paymentFailed={failed === "1"}
+            resumedOrderId={orderId?.trim() || null}
+        />
+    );
 }

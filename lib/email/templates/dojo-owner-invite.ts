@@ -1,4 +1,4 @@
-import { APP_NAME, MEMBERSHIP_FEE_BDT } from "@/lib/constants";
+import { APP_NAME, DOJO_RENEWAL_FEE_BDT } from "@/lib/constants";
 
 const ENLISTMENT_FEE_BDT = 10000;
 
@@ -34,7 +34,7 @@ export function buildDojoOwnerInviteEmail(opts: {
         : `The ${APP_NAME} federation office`;
 
     const oneTimeFee = ENLISTMENT_FEE_BDT.toLocaleString("en-IN");
-    const annualFee = MEMBERSHIP_FEE_BDT.toLocaleString("en-IN");
+    const annualFee = DOJO_RENEWAL_FEE_BDT.toLocaleString("en-IN");
 
     const subject = `You're invited to enlist your dojo with ${APP_NAME}`;
 

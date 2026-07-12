@@ -31,6 +31,9 @@ import {
 import Logo from "@/assets/jka_logo.svg";
 import { submitDojoEnlistment } from "@/app/actions/enlist-dojo";
 import { validatePhone } from "@/lib/validation/phone";
+import { validateMinAge, maxDobForAge } from "@/lib/validation/age";
+
+const DOJO_OWNER_MIN_AGE = 18;
 
 type FormState = {
     dojoName: string;
@@ -38,6 +41,7 @@ type FormState = {
     phone: string;
     contactName: string;
     contactRank: string;
+    contactDob: string;
     division: string;
     district: string;
     city: string;
@@ -86,6 +90,7 @@ const initialState: FormState = {
     phone: "",
     contactName: "",
     contactRank: "",
+    contactDob: "",
     division: "",
     district: "",
     city: "",
@@ -165,6 +170,8 @@ export default function EnlistDojoSignupPage() {
                 return "Please enter the Dojo Head's name.";
             if (!form.contactRank.trim())
                 return "Please select the Dojo Head's belt rank.";
+            const dobError = validateMinAge(form.contactDob, DOJO_OWNER_MIN_AGE);
+            if (dobError) return dobError;
         }
         if (s === 2) {
             if (!form.division.trim()) return "Please select a division.";
@@ -537,6 +544,17 @@ function ContactStep({
                     </select>
                 </div>
             </div>
+            <div>
+                <Label>Date of birth *</Label>
+                <input
+                    type="date"
+                    value={form.contactDob}
+                    max={maxDobForAge(DOJO_OWNER_MIN_AGE)}
+                    onChange={(e) => update("contactDob", e.target.value)}
+                    title={`Dojo Head must be at least ${DOJO_OWNER_MIN_AGE} years old.`}
+                    className={inputClass()}
+                />
+            </div>
         </div>
     );
 }
@@ -686,6 +704,7 @@ function ReviewStep({
                     label="Dojo Head"
                     value={`${form.contactName} · ${form.contactRank || "—"}`}
                 />
+                <ReviewRow label="Date of birth" value={form.contactDob} />
                 <ReviewRow label="Division" value={form.division} />
                 <ReviewRow label="District" value={form.district} />
                 <ReviewRow label="City" value={form.city} />

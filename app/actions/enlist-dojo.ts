@@ -13,6 +13,8 @@ export type DojoEnlistmentInput = {
     phone: string;
     contactName: string;
     contactRank: string;
+    /** ISO yyyy-mm-dd — Dojo Head's date of birth; must be 18+ at submission. */
+    contactDob: string;
     address: string;
     latitude: string;
     longitude: string;
@@ -21,6 +23,15 @@ export type DojoEnlistmentInput = {
     /** Cloudinary URLs — upload via `uploadDojoAssetFromDataUrl` before calling commit. */
     interiorUrls?: string[];
 };
+
+const DOJO_OWNER_MIN_AGE = 18;
+
+function ageInYears(dob: Date, now: Date): number {
+    let age = now.getFullYear() - dob.getFullYear();
+    const m = now.getMonth() - dob.getMonth();
+    if (m < 0 || (m === 0 && now.getDate() < dob.getDate())) age--;
+    return age;
+}
 
 /**
  * Upload a single dojo interior photo from a base64 data URL to Cloudinary
@@ -355,9 +366,18 @@ export async function commitDojoEnlistment(
         !input.email?.trim() ||
         !input.phone?.trim() ||
         !input.contactName?.trim() ||
+        !input.contactDob?.trim() ||
         !input.address?.trim()
     ) {
         return { error: "Some required fields are missing." };
+    }
+
+    const contactDob = new Date(input.contactDob);
+    if (isNaN(contactDob.getTime())) {
+        return { error: "Please enter a valid date of birth." };
+    }
+    if (ageInYears(contactDob, new Date()) < DOJO_OWNER_MIN_AGE) {
+        return { error: `Dojo Head must be at least ${DOJO_OWNER_MIN_AGE} years old.` };
     }
 
     const lat = input.latitude ? parseFloat(input.latitude) : null;
@@ -452,6 +472,7 @@ export async function commitDojoEnlistment(
                         contactName: input.contactName.trim(),
                         contactRole: "Head Instructor",
                         contactRank,
+                        contactDob,
                         address: input.address.trim(),
                         latitude: Number.isFinite(lat) ? lat : null,
                         longitude: Number.isFinite(lng) ? lng : null,
@@ -472,6 +493,7 @@ export async function commitDojoEnlistment(
                         contactName: input.contactName.trim(),
                         contactRole: "Head Instructor",
                         contactRank,
+                        contactDob,
                         address: input.address.trim(),
                         latitude: Number.isFinite(lat) ? lat : null,
                         longitude: Number.isFinite(lng) ? lng : null,

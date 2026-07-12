@@ -1,6 +1,5 @@
 "use server";
 
-import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { notifyAdmins } from "@/lib/notify";
 
@@ -17,9 +16,15 @@ export type CheckoutInput = {
     email?: string;
     notes?: string;
     items: CheckoutItem[];
+    // When present, we resume/update an existing PENDING guest order instead
+    // of creating a new one. Lets buyers retry a failed payment without
+    // spawning duplicate orders in the admin queue.
+    pendingOrderId?: string | null;
 };
 
-export type CheckoutResult = { error?: string };
+export type CheckoutResult =
+    | { error: string }
+    | { orderId: string; redirectUrl: string; alreadyPaid?: boolean };
 
 // ─── Place order + start SSLCommerz session ────────────────────────────────
 
@@ -73,31 +78,76 @@ export async function placeGuestOrderAction(
 
     if (total <= 0) return { error: "Order total is invalid." };
 
-    const order = await prisma.shopOrder.create({
-        data: {
-            userId: null,
-            isGuestOrder: true,
-            guestName: name,
-            guestPhone: phone,
-            guestAddress: address,
-            guestEmail: email,
-            total,
-            currency: "BDT",
-            notes: input.notes?.trim() || null,
-            orderItems: { create: itemRows },
-        },
-    });
-
-    // Notify admins so someone can pack + dispatch.
-    try {
-        await notifyAdmins({
-            title: "New shop order",
-            message: `${name} placed an order worth BDT ${total.toLocaleString()}.`,
-            type: "PAYMENT",
-            link: "/portal/admin/orders",
+    // Resume flow: reuse an existing PENDING guest order instead of creating a
+    // duplicate. If it's already PAID we short-circuit straight to thank-you.
+    let order: { id: string; total: number } | null = null;
+    if (input.pendingOrderId) {
+        const existing = await prisma.shopOrder.findUnique({
+            where: { id: input.pendingOrderId },
+            select: {
+                id: true,
+                paymentStatus: true,
+                isGuestOrder: true,
+            },
         });
-    } catch {
-        /* notifications are best-effort */
+        if (existing && existing.isGuestOrder) {
+            if (existing.paymentStatus === "PAID") {
+                return {
+                    orderId: existing.id,
+                    redirectUrl: `/shop/thank-you?orderId=${existing.id}`,
+                    alreadyPaid: true,
+                };
+            }
+            // Refresh items + delivery details in a transaction so the buyer's
+            // latest cart & address win.
+            await prisma.$transaction([
+                prisma.shopOrderItem.deleteMany({ where: { orderId: existing.id } }),
+                prisma.shopOrder.update({
+                    where: { id: existing.id },
+                    data: {
+                        guestName: name,
+                        guestPhone: phone,
+                        guestAddress: address,
+                        guestEmail: email,
+                        total,
+                        notes: input.notes?.trim() || null,
+                        orderItems: { create: itemRows },
+                    },
+                }),
+            ]);
+            order = { id: existing.id, total };
+        }
+    }
+
+    if (!order) {
+        const created = await prisma.shopOrder.create({
+            data: {
+                userId: null,
+                isGuestOrder: true,
+                guestName: name,
+                guestPhone: phone,
+                guestAddress: address,
+                guestEmail: email,
+                total,
+                currency: "BDT",
+                notes: input.notes?.trim() || null,
+                orderItems: { create: itemRows },
+            },
+        });
+        order = { id: created.id, total: Number(created.total) };
+
+        // Notify admins so someone can pack + dispatch. Only fires on the
+        // first attempt — retries don't spam a second notification.
+        try {
+            await notifyAdmins({
+                title: "New shop order",
+                message: `${name} placed an order worth BDT ${total.toLocaleString()}.`,
+                type: "PAYMENT",
+                link: "/portal/admin/orders",
+            });
+        } catch {
+            /* notifications are best-effort */
+        }
     }
 
     // ─── Start SSLCommerz session ─────────────────────────────────────────
@@ -108,9 +158,10 @@ export async function placeGuestOrderAction(
 
     // Dev bypass — no gateway credentials configured.
     if (!storeId || storeId === "your-sslcommerz-store-id" || !storePassword) {
-        redirect(
-            `/api/webhooks/sslcommerz/shop-success?orderId=${order.id}&dev=1`,
-        );
+        return {
+            orderId: order.id,
+            redirectUrl: `/api/webhooks/sslcommerz/shop-success?orderId=${order.id}&dev=1`,
+        };
     }
 
     const baseUrl = isSandbox
@@ -154,21 +205,12 @@ export async function placeGuestOrderAction(
         });
         const json = await res.json();
         if (json.status === "SUCCESS" && json.GatewayPageURL) {
-            redirect(json.GatewayPageURL);
+            return { orderId: order.id, redirectUrl: json.GatewayPageURL };
         }
         return {
             error: json.failedreason ?? "Payment gateway error. Please try again.",
         };
-    } catch (err: unknown) {
-        if (
-            err &&
-            typeof err === "object" &&
-            "digest" in err &&
-            typeof (err as { digest?: string }).digest === "string" &&
-            (err as { digest: string }).digest.startsWith("NEXT_REDIRECT")
-        ) {
-            throw err;
-        }
+    } catch {
         return { error: "Failed to reach the payment gateway. Please try again." };
     }
 }

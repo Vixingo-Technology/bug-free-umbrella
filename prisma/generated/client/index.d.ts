@@ -18662,6 +18662,7 @@ export namespace Prisma {
     contactName: string | null
     contactRole: string | null
     contactRank: string | null
+    contactDob: Date | null
     address: string | null
     latitude: number | null
     longitude: number | null
@@ -18682,6 +18683,7 @@ export namespace Prisma {
     contactName: string | null
     contactRole: string | null
     contactRank: string | null
+    contactDob: Date | null
     address: string | null
     latitude: number | null
     longitude: number | null
@@ -18702,6 +18704,7 @@ export namespace Prisma {
     contactName: number
     contactRole: number
     contactRank: number
+    contactDob: number
     address: number
     latitude: number
     longitude: number
@@ -18736,6 +18739,7 @@ export namespace Prisma {
     contactName?: true
     contactRole?: true
     contactRank?: true
+    contactDob?: true
     address?: true
     latitude?: true
     longitude?: true
@@ -18756,6 +18760,7 @@ export namespace Prisma {
     contactName?: true
     contactRole?: true
     contactRank?: true
+    contactDob?: true
     address?: true
     latitude?: true
     longitude?: true
@@ -18776,6 +18781,7 @@ export namespace Prisma {
     contactName?: true
     contactRole?: true
     contactRank?: true
+    contactDob?: true
     address?: true
     latitude?: true
     longitude?: true
@@ -18885,6 +18891,7 @@ export namespace Prisma {
     contactName: string
     contactRole: string
     contactRank: string | null
+    contactDob: Date | null
     address: string
     latitude: number | null
     longitude: number | null
@@ -18926,6 +18933,7 @@ export namespace Prisma {
     contactName?: boolean
     contactRole?: boolean
     contactRank?: boolean
+    contactDob?: boolean
     address?: boolean
     latitude?: boolean
     longitude?: boolean
@@ -18949,6 +18957,7 @@ export namespace Prisma {
     contactName?: boolean
     contactRole?: boolean
     contactRank?: boolean
+    contactDob?: boolean
     address?: boolean
     latitude?: boolean
     longitude?: boolean
@@ -18972,6 +18981,7 @@ export namespace Prisma {
     contactName?: boolean
     contactRole?: boolean
     contactRank?: boolean
+    contactDob?: boolean
     address?: boolean
     latitude?: boolean
     longitude?: boolean
@@ -18995,6 +19005,7 @@ export namespace Prisma {
     contactName?: boolean
     contactRole?: boolean
     contactRank?: boolean
+    contactDob?: boolean
     address?: boolean
     latitude?: boolean
     longitude?: boolean
@@ -19007,7 +19018,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type DojoApplicationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "dojoName" | "logoUrl" | "email" | "phone" | "contactName" | "contactRole" | "contactRank" | "address" | "latitude" | "longitude" | "interiorUrls" | "trainers" | "status" | "paymentId" | "dojoId" | "createdAt" | "updatedAt", ExtArgs["result"]["dojoApplication"]>
+  export type DojoApplicationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "dojoName" | "logoUrl" | "email" | "phone" | "contactName" | "contactRole" | "contactRank" | "contactDob" | "address" | "latitude" | "longitude" | "interiorUrls" | "trainers" | "status" | "paymentId" | "dojoId" | "createdAt" | "updatedAt", ExtArgs["result"]["dojoApplication"]>
   export type DojoApplicationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     dojo?: boolean | DojoApplication$dojoArgs<ExtArgs>
   }
@@ -19033,6 +19044,7 @@ export namespace Prisma {
       contactName: string
       contactRole: string
       contactRank: string | null
+      contactDob: Date | null
       address: string
       latitude: number | null
       longitude: number | null
@@ -19476,6 +19488,7 @@ export namespace Prisma {
     readonly contactName: FieldRef<"DojoApplication", 'String'>
     readonly contactRole: FieldRef<"DojoApplication", 'String'>
     readonly contactRank: FieldRef<"DojoApplication", 'String'>
+    readonly contactDob: FieldRef<"DojoApplication", 'DateTime'>
     readonly address: FieldRef<"DojoApplication", 'String'>
     readonly latitude: FieldRef<"DojoApplication", 'Float'>
     readonly longitude: FieldRef<"DojoApplication", 'Float'>
@@ -48118,6 +48131,7 @@ export namespace Prisma {
     contactName: 'contactName',
     contactRole: 'contactRole',
     contactRank: 'contactRank',
+    contactDob: 'contactDob',
     address: 'address',
     latitude: 'latitude',
     longitude: 'longitude',
@@ -49798,6 +49812,7 @@ export namespace Prisma {
     contactName?: StringFilter<"DojoApplication"> | string
     contactRole?: StringFilter<"DojoApplication"> | string
     contactRank?: StringNullableFilter<"DojoApplication"> | string | null
+    contactDob?: DateTimeNullableFilter<"DojoApplication"> | Date | string | null
     address?: StringFilter<"DojoApplication"> | string
     latitude?: FloatNullableFilter<"DojoApplication"> | number | null
     longitude?: FloatNullableFilter<"DojoApplication"> | number | null
@@ -49821,6 +49836,7 @@ export namespace Prisma {
     contactName?: SortOrder
     contactRole?: SortOrder
     contactRank?: SortOrderInput | SortOrder
+    contactDob?: SortOrderInput | SortOrder
     address?: SortOrder
     latitude?: SortOrderInput | SortOrder
     longitude?: SortOrderInput | SortOrder
@@ -49848,6 +49864,7 @@ export namespace Prisma {
     contactName?: StringFilter<"DojoApplication"> | string
     contactRole?: StringFilter<"DojoApplication"> | string
     contactRank?: StringNullableFilter<"DojoApplication"> | string | null
+    contactDob?: DateTimeNullableFilter<"DojoApplication"> | Date | string | null
     address?: StringFilter<"DojoApplication"> | string
     latitude?: FloatNullableFilter<"DojoApplication"> | number | null
     longitude?: FloatNullableFilter<"DojoApplication"> | number | null
@@ -49870,6 +49887,7 @@ export namespace Prisma {
     contactName?: SortOrder
     contactRole?: SortOrder
     contactRank?: SortOrderInput | SortOrder
+    contactDob?: SortOrderInput | SortOrder
     address?: SortOrder
     latitude?: SortOrderInput | SortOrder
     longitude?: SortOrderInput | SortOrder
@@ -49900,6 +49918,7 @@ export namespace Prisma {
     contactName?: StringWithAggregatesFilter<"DojoApplication"> | string
     contactRole?: StringWithAggregatesFilter<"DojoApplication"> | string
     contactRank?: StringNullableWithAggregatesFilter<"DojoApplication"> | string | null
+    contactDob?: DateTimeNullableWithAggregatesFilter<"DojoApplication"> | Date | string | null
     address?: StringWithAggregatesFilter<"DojoApplication"> | string
     latitude?: FloatNullableWithAggregatesFilter<"DojoApplication"> | number | null
     longitude?: FloatNullableWithAggregatesFilter<"DojoApplication"> | number | null
@@ -53063,6 +53082,7 @@ export namespace Prisma {
     contactName: string
     contactRole: string
     contactRank?: string | null
+    contactDob?: Date | string | null
     address: string
     latitude?: number | null
     longitude?: number | null
@@ -53085,6 +53105,7 @@ export namespace Prisma {
     contactName: string
     contactRole: string
     contactRank?: string | null
+    contactDob?: Date | string | null
     address: string
     latitude?: number | null
     longitude?: number | null
@@ -53107,6 +53128,7 @@ export namespace Prisma {
     contactName?: StringFieldUpdateOperationsInput | string
     contactRole?: StringFieldUpdateOperationsInput | string
     contactRank?: NullableStringFieldUpdateOperationsInput | string | null
+    contactDob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     address?: StringFieldUpdateOperationsInput | string
     latitude?: NullableFloatFieldUpdateOperationsInput | number | null
     longitude?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -53129,6 +53151,7 @@ export namespace Prisma {
     contactName?: StringFieldUpdateOperationsInput | string
     contactRole?: StringFieldUpdateOperationsInput | string
     contactRank?: NullableStringFieldUpdateOperationsInput | string | null
+    contactDob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     address?: StringFieldUpdateOperationsInput | string
     latitude?: NullableFloatFieldUpdateOperationsInput | number | null
     longitude?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -53151,6 +53174,7 @@ export namespace Prisma {
     contactName: string
     contactRole: string
     contactRank?: string | null
+    contactDob?: Date | string | null
     address: string
     latitude?: number | null
     longitude?: number | null
@@ -53173,6 +53197,7 @@ export namespace Prisma {
     contactName?: StringFieldUpdateOperationsInput | string
     contactRole?: StringFieldUpdateOperationsInput | string
     contactRank?: NullableStringFieldUpdateOperationsInput | string | null
+    contactDob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     address?: StringFieldUpdateOperationsInput | string
     latitude?: NullableFloatFieldUpdateOperationsInput | number | null
     longitude?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -53194,6 +53219,7 @@ export namespace Prisma {
     contactName?: StringFieldUpdateOperationsInput | string
     contactRole?: StringFieldUpdateOperationsInput | string
     contactRank?: NullableStringFieldUpdateOperationsInput | string | null
+    contactDob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     address?: StringFieldUpdateOperationsInput | string
     latitude?: NullableFloatFieldUpdateOperationsInput | number | null
     longitude?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -56500,6 +56526,7 @@ export namespace Prisma {
     contactName?: SortOrder
     contactRole?: SortOrder
     contactRank?: SortOrder
+    contactDob?: SortOrder
     address?: SortOrder
     latitude?: SortOrder
     longitude?: SortOrder
@@ -56527,6 +56554,7 @@ export namespace Prisma {
     contactName?: SortOrder
     contactRole?: SortOrder
     contactRank?: SortOrder
+    contactDob?: SortOrder
     address?: SortOrder
     latitude?: SortOrder
     longitude?: SortOrder
@@ -56547,6 +56575,7 @@ export namespace Prisma {
     contactName?: SortOrder
     contactRole?: SortOrder
     contactRank?: SortOrder
+    contactDob?: SortOrder
     address?: SortOrder
     latitude?: SortOrder
     longitude?: SortOrder
@@ -66626,6 +66655,7 @@ export namespace Prisma {
     contactName: string
     contactRole: string
     contactRank?: string | null
+    contactDob?: Date | string | null
     address: string
     latitude?: number | null
     longitude?: number | null
@@ -66647,6 +66677,7 @@ export namespace Prisma {
     contactName: string
     contactRole: string
     contactRank?: string | null
+    contactDob?: Date | string | null
     address: string
     latitude?: number | null
     longitude?: number | null
@@ -67206,6 +67237,7 @@ export namespace Prisma {
     contactName?: StringFieldUpdateOperationsInput | string
     contactRole?: StringFieldUpdateOperationsInput | string
     contactRank?: NullableStringFieldUpdateOperationsInput | string | null
+    contactDob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     address?: StringFieldUpdateOperationsInput | string
     latitude?: NullableFloatFieldUpdateOperationsInput | number | null
     longitude?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -67227,6 +67259,7 @@ export namespace Prisma {
     contactName?: StringFieldUpdateOperationsInput | string
     contactRole?: StringFieldUpdateOperationsInput | string
     contactRank?: NullableStringFieldUpdateOperationsInput | string | null
+    contactDob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     address?: StringFieldUpdateOperationsInput | string
     latitude?: NullableFloatFieldUpdateOperationsInput | number | null
     longitude?: NullableFloatFieldUpdateOperationsInput | number | null

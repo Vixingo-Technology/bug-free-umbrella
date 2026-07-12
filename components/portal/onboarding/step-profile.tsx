@@ -8,6 +8,9 @@ import { saveProfileAction } from "@/app/portal/onboarding/actions";
 import { BLOOD_GROUPS } from "@/lib/constants";
 import AvatarUploader from "@/components/portal/avatar-uploader";
 import { validatePhone } from "@/lib/validation/phone";
+import { validateMinAge, maxDobForAge } from "@/lib/validation/age";
+
+const STUDENT_MIN_AGE = 6;
 
 // Leaflet pulls window/document, so it must render client-side only.
 const DojoMapPicker = dynamic(
@@ -72,6 +75,11 @@ export default function StepProfile({
         const phoneError = validatePhone(value.phone);
         if (phoneError) {
             setError(phoneError);
+            return;
+        }
+        const ageError = validateMinAge(value.dateOfBirth, STUDENT_MIN_AGE);
+        if (ageError) {
+            setError(ageError);
             return;
         }
         if (value.emergencyContactPhone && value.emergencyContactPhone.trim()) {
@@ -225,12 +233,15 @@ export default function StepProfile({
 
                 {/* Date of birth + Blood group */}
                 <div className="grid grid-cols-2 gap-4">
-                    <Field label="Date of Birth">
+                    <Field label="Date of Birth *">
                         <input
                             name="dateOfBirth"
                             type="date"
+                            required
+                            max={maxDobForAge(STUDENT_MIN_AGE)}
                             value={value.dateOfBirth}
                             onChange={(e) => update("dateOfBirth", e.target.value)}
+                            title={`You must be at least ${STUDENT_MIN_AGE} years old.`}
                             className={inputCls}
                         />
                     </Field>

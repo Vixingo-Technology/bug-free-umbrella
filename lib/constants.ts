@@ -2,8 +2,11 @@
 // JKA Bangladesh — App-wide Constants
 // =============================================================
 
-/** Annual membership fee in BDT */
+/** Annual student membership fee in BDT */
 export const MEMBERSHIP_FEE_BDT = 3000;
+
+/** Annual dojo federation renewal fee in BDT */
+export const DOJO_RENEWAL_FEE_BDT = 6000;
 
 /** App name */
 export const APP_NAME = "JKA Bangladesh";

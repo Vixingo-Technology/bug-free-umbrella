@@ -31,6 +31,7 @@ type DraftShape = {
     phone: string;
     contactName: string;
     contactRank?: string;
+    contactDob?: string;
     division?: string;
     district?: string;
     city?: string;
@@ -90,6 +91,7 @@ function PaymentContent() {
             phone: draft.phone,
             contactName: draft.contactName,
             contactRank: draft.contactRank ?? "",
+            contactDob: draft.contactDob ?? "",
             division: draft.division ?? "",
             address: draft.address,
             latitude: draft.latitude,

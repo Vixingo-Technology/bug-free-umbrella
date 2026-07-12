@@ -5,7 +5,7 @@ import DojoMembershipCard from "@/components/dojo/settings/dojo-membership-card"
 import { getDojoSession } from "@/lib/dojo-session";
 import { hasAtLeast } from "@/lib/dojo-roles";
 import { prisma } from "@/lib/prisma";
-import { MEMBERSHIP_FEE_BDT } from "@/lib/constants";
+import { DOJO_RENEWAL_FEE_BDT } from "@/lib/constants";
 import { extendExpiry } from "@/lib/renewals/extend-expiry";
 
 export const metadata: Metadata = {
@@ -149,7 +149,7 @@ export default async function RenewalsPage({
                 />
                 <div className="max-w-2xl">
                     <DojoMembershipCard
-                        annualFeeBDT={MEMBERSHIP_FEE_BDT}
+                        annualFeeBDT={DOJO_RENEWAL_FEE_BDT}
                         storedAnnualFee=""
                         expiryDate={null}
                         canEdit={false}
@@ -181,7 +181,7 @@ export default async function RenewalsPage({
 
             <div className="max-w-2xl">
                 <DojoMembershipCard
-                    annualFeeBDT={MEMBERSHIP_FEE_BDT}
+                    annualFeeBDT={DOJO_RENEWAL_FEE_BDT}
                     storedAnnualFee={
                         dojo.annualFee != null ? dojo.annualFee.toString() : ""
                     }
