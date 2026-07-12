@@ -237,6 +237,11 @@ export default async function RegisterPage({ params, searchParams }: Props) {
                                             name="phone"
                                             type="tel"
                                             required
+                                            inputMode="numeric"
+                                            pattern="\d{11}"
+                                            maxLength={11}
+                                            minLength={11}
+                                            title="Phone number must be exactly 11 digits."
                                             placeholder="01XXXXXXXXX"
                                             className="w-full bg-zinc-50 border border-zinc-200 text-zinc-900 px-3 py-2.5 focus:outline-none focus:border-accent-red text-sm transition-colors rounded-sm"
                                         />

@@ -30,6 +30,7 @@ import {
 } from "lucide-react";
 import Logo from "@/assets/jka_logo.svg";
 import { submitDojoEnlistment } from "@/app/actions/enlist-dojo";
+import { validatePhone } from "@/lib/validation/phone";
 
 type FormState = {
     dojoName: string;
@@ -158,7 +159,8 @@ export default function EnlistDojoSignupPage() {
         if (s === 1) {
             if (!form.email.trim() || !form.email.includes("@"))
                 return "Please enter a valid email address.";
-            if (!form.phone.trim()) return "Please enter a contact phone number.";
+            const phoneError = validatePhone(form.phone);
+            if (phoneError) return phoneError;
             if (!form.contactName.trim())
                 return "Please enter the Dojo Head's name.";
             if (!form.contactRank.trim())
@@ -493,9 +495,17 @@ function ContactStep({
                     <Label>Phone *</Label>
                     <input
                         type="tel"
+                        inputMode="numeric"
+                        pattern="[0-9]{11}"
+                        maxLength={11}
                         value={form.phone}
-                        onChange={(e) => update("phone", e.target.value)}
-                        placeholder="+880 1XXX XXXXXX"
+                        onChange={(e) =>
+                            update(
+                                "phone",
+                                e.target.value.replace(/\D/g, "").slice(0, 11)
+                            )
+                        }
+                        placeholder="01XXXXXXXXX"
                         className={inputClass()}
                     />
                 </div>

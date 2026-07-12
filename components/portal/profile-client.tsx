@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { updateProfileAction, changePasswordAction } from "@/app/portal/profile/actions";
 import { BLOOD_GROUPS } from "@/lib/constants";
+import { validatePhone } from "@/lib/validation/phone";
 
 interface Props {
     member: any;
@@ -116,6 +117,18 @@ export default function ProfileClient({ member, dojos, userId }: Props) {
     function handleProfileSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
         setProfileMsg(null);
+        const phoneError = validatePhone(phone);
+        if (phoneError) {
+            setProfileMsg({ type: "error", message: phoneError });
+            return;
+        }
+        if (emergencyContactPhone.trim()) {
+            const emergencyError = validatePhone(emergencyContactPhone);
+            if (emergencyError) {
+                setProfileMsg({ type: "error", message: `Emergency contact: ${emergencyError}` });
+                return;
+            }
+        }
         const formData = new FormData(e.currentTarget);
         startProfileTransition(async () => {
             const res = await updateProfileAction(formData);
@@ -376,9 +389,14 @@ export default function ProfileClient({ member, dojos, userId }: Props) {
                                 <input
                                     type="tel"
                                     name="phone"
+                                    inputMode="numeric"
+                                    pattern="\d{11}"
+                                    maxLength={11}
+                                    minLength={11}
+                                    title="Phone number must be exactly 11 digits."
                                     value={phone}
-                                    onChange={(e) => setPhone(e.target.value)}
-                                    placeholder="+880 1X XXX XXXXX"
+                                    onChange={(e) => setPhone(e.target.value.replace(/\D/g, "").slice(0, 11))}
+                                    placeholder="01XXXXXXXXX"
                                     className={inputCls}
                                 />
                             </div>
@@ -436,9 +454,13 @@ export default function ProfileClient({ member, dojos, userId }: Props) {
                                 <input
                                     type="tel"
                                     name="emergencyContactPhone"
+                                    inputMode="numeric"
+                                    pattern="\d{11}"
+                                    maxLength={11}
+                                    title="Phone number must be exactly 11 digits."
                                     value={emergencyContactPhone}
-                                    onChange={(e) => setEmergencyContactPhone(e.target.value)}
-                                    placeholder="+880 1X XXX XXXXX"
+                                    onChange={(e) => setEmergencyContactPhone(e.target.value.replace(/\D/g, "").slice(0, 11))}
+                                    placeholder="01XXXXXXXXX"
                                     className={inputCls}
                                 />
                             </div>

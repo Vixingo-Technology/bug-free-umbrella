@@ -6,6 +6,7 @@ import { motion } from "motion/react";
 import { AlertTriangle, ArrowLeft, ArrowRight, ShoppingBag } from "lucide-react";
 import { useCart } from "./cart-context";
 import { placeGuestOrderAction } from "@/app/shop/actions";
+import { validatePhone } from "@/lib/validation/phone";
 
 export default function CheckoutClient({
     paymentFailed,
@@ -28,6 +29,11 @@ export default function CheckoutClient({
         setError(null);
         if (items.length === 0) {
             setError("Your cart is empty.");
+            return;
+        }
+        const phoneError = validatePhone(form.phone);
+        if (phoneError) {
+            setError(phoneError);
             return;
         }
         const payload = {
@@ -121,9 +127,17 @@ export default function CheckoutClient({
                                 label="Phone number"
                                 required
                                 type="tel"
+                                inputMode="numeric"
+                                pattern="\d{11}"
+                                maxLength={11}
+                                minLength={11}
+                                title="Phone number must be exactly 11 digits."
                                 value={form.phone}
                                 onChange={(v) =>
-                                    setForm((f) => ({ ...f, phone: v }))
+                                    setForm((f) => ({
+                                        ...f,
+                                        phone: v.replace(/\D/g, "").slice(0, 11),
+                                    }))
                                 }
                                 placeholder="01XXXXXXXXX"
                             />
@@ -271,6 +285,11 @@ function Field({
     placeholder,
     required,
     multiline,
+    pattern,
+    maxLength,
+    minLength,
+    inputMode,
+    title,
 }: {
     label: string;
     value: string;
@@ -279,6 +298,11 @@ function Field({
     placeholder?: string;
     required?: boolean;
     multiline?: boolean;
+    pattern?: string;
+    maxLength?: number;
+    minLength?: number;
+    inputMode?: "numeric" | "text" | "tel" | "email" | "url" | "search" | "none" | "decimal";
+    title?: string;
 }) {
     return (
         <label className="block">
@@ -302,6 +326,11 @@ function Field({
                     onChange={(e) => onChange(e.target.value)}
                     placeholder={placeholder}
                     required={required}
+                    pattern={pattern}
+                    maxLength={maxLength}
+                    minLength={minLength}
+                    inputMode={inputMode}
+                    title={title}
                     className="w-full rounded-sm border border-zinc-200 bg-white px-3 py-2.5 text-sm text-zinc-900 outline-none transition focus:border-accent-red focus:ring-2 focus:ring-accent-red/20"
                 />
             )}

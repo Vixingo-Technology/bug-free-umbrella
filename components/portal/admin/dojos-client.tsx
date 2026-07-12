@@ -14,6 +14,7 @@ import {
     assignDojoInstructorAction,
     sendDojoRenewalReminderAction,
 } from "@/app/actions/admin-dojos";
+import { validatePhone } from "@/lib/validation/phone";
 
 type Instructor = { id: string; fullName: string; email: string; role: string };
 
@@ -336,6 +337,13 @@ function DojoFormModal({
 
     function submit(e: React.FormEvent) {
         e.preventDefault();
+        if (form.phone && form.phone.trim()) {
+            const phoneError = validatePhone(form.phone);
+            if (phoneError) {
+                onFlash("err", phoneError);
+                return;
+            }
+        }
         const fd = new FormData();
         if (dojo) fd.set("id", dojo.id);
         Object.entries(form).forEach(([k, v]) => {
@@ -409,8 +417,13 @@ function DojoFormModal({
                         <Field label="Phone">
                             <input
                                 type="tel"
+                                inputMode="numeric"
+                                pattern="\d{11}"
+                                maxLength={11}
+                                title="Phone number must be exactly 11 digits."
+                                placeholder="01XXXXXXXXX"
                                 value={form.phone}
-                                onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                                onChange={(e) => setForm({ ...form, phone: e.target.value.replace(/\D/g, "").slice(0, 11) })}
                                 className={inputCls}
                             />
                         </Field>

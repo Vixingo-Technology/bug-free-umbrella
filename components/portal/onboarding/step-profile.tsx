@@ -7,6 +7,7 @@ import { User, Phone, MapPin, Heart, AlertCircle, ChevronRight, Users } from "lu
 import { saveProfileAction } from "@/app/portal/onboarding/actions";
 import { BLOOD_GROUPS } from "@/lib/constants";
 import AvatarUploader from "@/components/portal/avatar-uploader";
+import { validatePhone } from "@/lib/validation/phone";
 
 // Leaflet pulls window/document, so it must render client-side only.
 const DojoMapPicker = dynamic(
@@ -67,6 +68,19 @@ export default function StepProfile({
     function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
         setError(null);
+
+        const phoneError = validatePhone(value.phone);
+        if (phoneError) {
+            setError(phoneError);
+            return;
+        }
+        if (value.emergencyContactPhone && value.emergencyContactPhone.trim()) {
+            const emergencyError = validatePhone(value.emergencyContactPhone);
+            if (emergencyError) {
+                setError(`Emergency contact: ${emergencyError}`);
+                return;
+            }
+        }
 
         const formData = new FormData();
         for (const [k, v] of Object.entries(value)) {
@@ -164,9 +178,14 @@ export default function StepProfile({
                     <input
                         name="phone"
                         type="tel"
+                        inputMode="numeric"
+                        pattern="\d{11}"
+                        maxLength={11}
+                        minLength={11}
+                        title="Phone number must be exactly 11 digits."
                         value={value.phone}
-                        onChange={(e) => update("phone", e.target.value)}
-                        placeholder="+880 1XXX-XXXXXX"
+                        onChange={(e) => update("phone", e.target.value.replace(/\D/g, "").slice(0, 11))}
+                        placeholder="01XXXXXXXXX"
                         required
                         className={inputCls}
                     />
@@ -296,9 +315,13 @@ export default function StepProfile({
                             <input
                                 name="emergencyContactPhone"
                                 type="tel"
+                                inputMode="numeric"
+                                pattern="\d{11}"
+                                maxLength={11}
+                                title="Phone number must be exactly 11 digits."
                                 value={value.emergencyContactPhone}
-                                onChange={(e) => update("emergencyContactPhone", e.target.value)}
-                                placeholder="+880 1XXX-XXXXXX"
+                                onChange={(e) => update("emergencyContactPhone", e.target.value.replace(/\D/g, "").slice(0, 11))}
+                                placeholder="01XXXXXXXXX"
                                 className={inputCls}
                             />
                         </Field>
