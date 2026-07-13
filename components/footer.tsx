@@ -79,26 +79,54 @@ export default function Footer() {
                                     className="text-accent-red shrink-0 mt-0.5"
                                 />
                                 <span>
-                                    National Sports Council
+                                    89, Rahmathgonj
                                     <br />
-                                    62/3 Purana Paltan
+                                    K.B.A Satter Road
                                     <br />
-                                    Dhaka, Bangladesh
+                                    Chittagong, Bangladesh
                                 </span>
                             </li>
-                            <li className="flex items-center gap-3">
+                            <li className="flex items-start gap-3">
                                 <Phone
                                     size={18}
-                                    className="text-accent-red shrink-0"
+                                    className="text-accent-red shrink-0 mt-0.5"
                                 />
-                                <span>+880 1234 567890</span>
+                                <span>
+                                    <a
+                                        href="tel:+8801612900075"
+                                        className="hover:text-accent-red transition-colors"
+                                    >
+                                        +880 1612-900075
+                                    </a>
+                                    <br />
+                                    <a
+                                        href="tel:+8801819648456"
+                                        className="hover:text-accent-red transition-colors"
+                                    >
+                                        +880 1819-648456
+                                    </a>
+                                </span>
                             </li>
-                            <li className="flex items-center gap-3">
+                            <li className="flex items-start gap-3">
                                 <Mail
                                     size={18}
-                                    className="text-accent-red shrink-0"
+                                    className="text-accent-red shrink-0 mt-0.5"
                                 />
-                                <span>info@jkabangladesh.com</span>
+                                <span>
+                                    <a
+                                        href="mailto:jkabangladesh@gmail.com"
+                                        className="hover:text-accent-red transition-colors"
+                                    >
+                                        jkabangladesh@gmail.com
+                                    </a>
+                                    <br />
+                                    <a
+                                        href="mailto:shamscjks456@gmail.com"
+                                        className="hover:text-accent-red transition-colors"
+                                    >
+                                        shamscjks456@gmail.com
+                                    </a>
+                                </span>
                             </li>
                         </ul>
                     </div>
