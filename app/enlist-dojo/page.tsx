@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
+import { getFees } from "@/lib/settings/fees";
 
 export const metadata: Metadata = {
     title: "Enlist Your Dojo — JKA Bangladesh",
@@ -79,7 +80,8 @@ const portalFeatures = [
     },
 ];
 
-export default function EnlistDojoPage() {
+export default async function EnlistDojoPage() {
+    const { dojoEnlistmentFeeBDT, dojoRenewalFeeBDT } = await getFees();
     return (
         <main className="min-h-screen bg-bg-deep w-full overflow-hidden">
             <Navbar />
@@ -285,7 +287,7 @@ export default function EnlistDojoPage() {
                                 </h3>
                             </div>
                             <p className="font-karate text-3xl font-bold text-zinc-900 mb-4">
-                                ৳ 10,000
+                                ৳ {dojoEnlistmentFeeBDT.toLocaleString("en-IN")}
                             </p>
                             <p className="text-zinc-600 leading-relaxed text-sm">
                                 Covers certification review, federation listing,
@@ -304,7 +306,7 @@ export default function EnlistDojoPage() {
                                 </h3>
                             </div>
                             <p className="font-karate text-3xl font-bold text-zinc-900 mb-4">
-                                ৳ 6,000{" "}
+                                ৳ {dojoRenewalFeeBDT.toLocaleString("en-IN")}{" "}
                                 <span className="text-base text-zinc-500 font-sans font-normal">
                                     / year
                                 </span>

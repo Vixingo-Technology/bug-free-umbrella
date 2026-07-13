@@ -4,7 +4,8 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { prisma } from "@/lib/prisma";
-import { MEMBERSHIP_FEE_BDT, MEMBERSHIP_DURATION_YEARS } from "@/lib/constants";
+import { MEMBERSHIP_DURATION_YEARS } from "@/lib/constants";
+import { getFees } from "@/lib/settings/fees";
 import { notifyAdmins, notifyDojoStaff } from "@/lib/notify";
 import { provisionMemberFromSupabaseUser } from "@/lib/auth/provision-member";
 import { ensureRegNo } from "@/lib/members/reg-no";
@@ -153,7 +154,8 @@ export async function createOnboardingOrderAction(productIds: string[]) {
             : [];
 
         const productTotal = products.reduce((sum, p) => sum + Number(p.price), 0);
-        const membershipFee = MEMBERSHIP_FEE_BDT;
+        const { membershipFeeBDT } = await getFees();
+        const membershipFee = membershipFeeBDT;
         const grandTotal = productTotal + membershipFee;
 
         // Delete any previous pending onboarding orders to avoid duplicates

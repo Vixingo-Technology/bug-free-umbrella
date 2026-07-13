@@ -15,6 +15,7 @@ import {
 import Logo from "@/assets/jka_logo.svg";
 import { createClient } from "@/lib/supabase/server";
 import { prisma } from "@/lib/prisma";
+import { getFees } from "@/lib/settings/fees";
 import PrintReceiptButton from "./print-button";
 
 export const metadata: Metadata = {
@@ -72,10 +73,13 @@ export default async function EnlistDojoSuccessPage({
         redirect("/enlist-dojo");
     }
 
+    const { dojoEnlistmentFeeBDT } = await getFees();
+
     return (
         <SuccessScreen
             application={application}
             email={user?.email ?? application.email}
+            enlistmentFeeBDT={dojoEnlistmentFeeBDT}
         />
     );
 }
@@ -95,9 +99,11 @@ type Application = {
 function SuccessScreen({
     application,
     email,
+    enlistmentFeeBDT,
 }: {
     application: Application;
     email: string;
+    enlistmentFeeBDT: number;
 }) {
     const reference = `DOJO-${application.id.slice(0, 8).toUpperCase()}`;
     const submittedAt = application.createdAt.toLocaleString("en-GB", {
@@ -117,7 +123,9 @@ function SuccessScreen({
         {
             state: "done" as const,
             title: "Payment received",
-            body: "Enlistment fee of ৳ 10,000 settled successfully.",
+            body: `Enlistment fee of ৳ ${enlistmentFeeBDT.toLocaleString(
+                "en-IN"
+            )} settled successfully.`,
         },
         {
             state: "in_progress" as const,

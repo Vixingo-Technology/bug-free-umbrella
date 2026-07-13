@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { serialize } from "@/lib/serialize";
 import OnboardingWizard from "@/components/portal/onboarding/onboarding-wizard";
 import { isProfileComplete } from "@/lib/profile";
+import { getFees } from "@/lib/settings/fees";
 
 export const metadata = {
     title: "Welcome to JKA Bangladesh",
@@ -86,6 +87,8 @@ export default async function OnboardingPage() {
     }));
     const missingFields = getMissingFields(member);
 
+    const { membershipFeeBDT } = await getFees();
+
     return (
         <OnboardingWizard
             userId={user.id}
@@ -93,6 +96,7 @@ export default async function OnboardingPage() {
             dojos={dojos}
             isProfileUpdateMode={isProfileUpdateMode}
             missingFields={missingFields}
+            membershipFeeBDT={membershipFeeBDT}
         />
     );
 }

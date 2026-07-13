@@ -5,7 +5,12 @@ import { prisma } from "@/lib/prisma";
 import { requireDojoRole } from "@/lib/dojo-session";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { assignRole } from "@/lib/auth/assign-role";
-import { invitableRolesFor, type InvitableRole } from "@/lib/dojo-roles";
+import {
+    DOJO_STAFF_LIMIT,
+    invitableRolesFor,
+    isStaffRole,
+    type InvitableRole,
+} from "@/lib/dojo-roles";
 
 const ROLE_LABEL: Record<InvitableRole, string> = {
     STUDENT: "student",
@@ -68,6 +73,19 @@ export async function inviteDojoMemberAction(
             ok: false,
             error: `You can only invite: ${allowedNames}.`,
         };
+    }
+
+    if (isStaffRole(role)) {
+        const [instructorCount, managerCount] = await Promise.all([
+            prisma.instructor.count({ where: { dojoId: session.dojo.id } }),
+            prisma.dojoManager.count({ where: { dojoId: session.dojo.id } }),
+        ]);
+        if (instructorCount + managerCount >= DOJO_STAFF_LIMIT) {
+            return {
+                ok: false,
+                error: `Your dojo has reached the ${DOJO_STAFF_LIMIT}-staff limit (instructors + managers combined). Revoke a pending invite or remove a staff member before inviting another. Students are unlimited.`,
+            };
+        }
     }
 
     const existing = await prisma.user.findUnique({

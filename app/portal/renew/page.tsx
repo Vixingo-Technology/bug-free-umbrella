@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { prisma } from "@/lib/prisma";
 import RenewClient from "@/components/portal/renew-client";
-import { MEMBERSHIP_FEE_BDT } from "@/lib/constants";
+import { getFees } from "@/lib/settings/fees";
 import { extendExpiry } from "@/lib/renewals/extend-expiry";
 
 export const metadata = { title: "Renew Membership — JKA Bangladesh" };
@@ -134,10 +134,12 @@ export default async function RenewPage({
                   }
                 : null;
 
+    const { membershipFeeBDT } = await getFees();
+
     return (
         <RenewClient
             member={member}
-            membershipFeeBDT={MEMBERSHIP_FEE_BDT}
+            membershipFeeBDT={membershipFeeBDT}
             userId={user?.id ?? ""}
             feedback={feedback}
         />

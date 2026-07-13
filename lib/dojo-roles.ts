@@ -42,6 +42,16 @@ export function isDojoRole(value: unknown): value is DojoRole {
 export type InvitableRole = "STUDENT" | "INSTRUCTOR" | "DOJO_MANAGER";
 
 /**
+ * Maximum combined instructors + managers a single dojo can have.
+ * Students are unlimited.
+ */
+export const DOJO_STAFF_LIMIT = 3;
+
+export function isStaffRole(role: InvitableRole): boolean {
+    return role === "INSTRUCTOR" || role === "DOJO_MANAGER";
+}
+
+/**
  * Roles a given dojo staff member is allowed to invite.
  *
  *   INSTRUCTOR   → STUDENT

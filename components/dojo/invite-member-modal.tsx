@@ -4,6 +4,7 @@ import { useState, useTransition } from "react";
 import { CheckCircle2, Loader2, Plus, X } from "lucide-react";
 import { inviteDojoMemberAction } from "@/app/actions/dojo-invite";
 import { BELT_RANKS_ORDERED } from "@/lib/constants";
+import { DOJO_STAFF_LIMIT } from "@/lib/dojo-roles";
 
 type Role = "STUDENT" | "INSTRUCTOR" | "DOJO_MANAGER";
 
@@ -29,16 +30,24 @@ type Props = {
     /** Roles the current staff member is allowed to invite. Order determines
      *  the default selection (first item). */
     allowedRoles: Role[];
+    /** Current instructors + managers in the dojo (activated + pending). */
+    staffCount: number;
     disabled?: boolean;
     disabledReason?: string;
 };
 
 export default function InviteMemberModal({
     allowedRoles,
+    staffCount,
     disabled = false,
     disabledReason,
 }: Props) {
-    const defaultRole = allowedRoles[0] ?? "STUDENT";
+    const staffSlotsLeft = Math.max(0, DOJO_STAFF_LIMIT - staffCount);
+    const staffFull = staffSlotsLeft === 0;
+    const effectiveRoles = staffFull
+        ? allowedRoles.filter((r) => r === "STUDENT")
+        : allowedRoles;
+    const defaultRole = effectiveRoles[0] ?? allowedRoles[0] ?? "STUDENT";
     const [open, setOpen] = useState(false);
     const [email, setEmail] = useState("");
     const [fullName, setFullName] = useState("");
@@ -207,11 +216,40 @@ export default function InviteMemberModal({
                             )}
 
                             <div>
-                                <p className="text-[10px] tracking-widest uppercase font-bold text-zinc-500 mb-2">
-                                    Role
-                                </p>
+                                <div className="flex items-center justify-between mb-2">
+                                    <p className="text-[10px] tracking-widest uppercase font-bold text-zinc-500">
+                                        Role
+                                    </p>
+                                    {allowedRoles.some(
+                                        (r) => r !== "STUDENT"
+                                    ) && (
+                                        <p
+                                            className={`text-[10px] tracking-widest uppercase font-bold ${
+                                                staffFull
+                                                    ? "text-accent-red"
+                                                    : "text-zinc-500"
+                                            }`}
+                                        >
+                                            Staff {staffCount}/
+                                            {DOJO_STAFF_LIMIT}
+                                        </p>
+                                    )}
+                                </div>
+                                {staffFull &&
+                                    allowedRoles.some(
+                                        (r) => r !== "STUDENT"
+                                    ) && (
+                                        <p className="text-xs text-zinc-500 mb-3 leading-relaxed">
+                                            Your dojo has reached the{" "}
+                                            {DOJO_STAFF_LIMIT}-staff limit.
+                                            Revoke a pending invite or remove a
+                                            staff member before inviting another
+                                            instructor or manager. Students
+                                            remain unlimited.
+                                        </p>
+                                    )}
                                 <div className="space-y-2">
-                                    {allowedRoles.map((value) => {
+                                    {effectiveRoles.map((value) => {
                                         const opt = ROLE_OPTIONS[value];
                                         const active = role === value;
                                         return (

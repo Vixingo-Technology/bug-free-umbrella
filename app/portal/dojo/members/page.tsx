@@ -229,6 +229,12 @@ export default async function MembersPage({
                     canInvite ? (
                         <InviteMemberModal
                             allowedRoles={invitableRolesFor(session.role)}
+                            staffCount={
+                                rosters.INSTRUCTOR.length +
+                                rosters.DOJO_MANAGER.length +
+                                invited.INSTRUCTOR.length +
+                                invited.DOJO_MANAGER.length
+                            }
                             disabled={
                                 !session.dojo ||
                                 !dojoIsActivated

@@ -5,7 +5,7 @@ import DojoMembershipCard from "@/components/dojo/settings/dojo-membership-card"
 import { getDojoSession } from "@/lib/dojo-session";
 import { hasAtLeast } from "@/lib/dojo-roles";
 import { prisma } from "@/lib/prisma";
-import { DOJO_RENEWAL_FEE_BDT } from "@/lib/constants";
+import { getFees } from "@/lib/settings/fees";
 import { extendExpiry } from "@/lib/renewals/extend-expiry";
 
 export const metadata: Metadata = {
@@ -43,6 +43,7 @@ export default async function RenewalsPage({
 }) {
     const params = await searchParams;
     const session = await getDojoSession();
+    const { dojoRenewalFeeBDT } = await getFees();
 
     // Unauthenticated visitors are only allowed here when they're returning
     // from an SSLCommerz post-payment redirect. Everyone else → /login.
@@ -149,7 +150,7 @@ export default async function RenewalsPage({
                 />
                 <div className="max-w-2xl">
                     <DojoMembershipCard
-                        annualFeeBDT={DOJO_RENEWAL_FEE_BDT}
+                        annualFeeBDT={dojoRenewalFeeBDT}
                         storedAnnualFee=""
                         expiryDate={null}
                         canEdit={false}
@@ -181,7 +182,7 @@ export default async function RenewalsPage({
 
             <div className="max-w-2xl">
                 <DojoMembershipCard
-                    annualFeeBDT={DOJO_RENEWAL_FEE_BDT}
+                    annualFeeBDT={dojoRenewalFeeBDT}
                     storedAnnualFee={
                         dojo.annualFee != null ? dojo.annualFee.toString() : ""
                     }

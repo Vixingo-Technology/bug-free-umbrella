@@ -1,6 +1,5 @@
-import { APP_NAME, DOJO_RENEWAL_FEE_BDT } from "@/lib/constants";
-
-const ENLISTMENT_FEE_BDT = 10000;
+import { APP_NAME } from "@/lib/constants";
+import { getFees } from "@/lib/settings/fees";
 
 export type DojoOwnerInviteContent = {
     signupUrl: string;
@@ -20,11 +19,11 @@ function escape(s: string): string {
         .replace(/'/g, "&#39;");
 }
 
-export function buildDojoOwnerInviteEmail(opts: {
+export async function buildDojoOwnerInviteEmail(opts: {
     signupUrl: string;
     inviteeName?: string | null;
     inviterName?: string | null;
-}): DojoOwnerInviteContent {
+}): Promise<DojoOwnerInviteContent> {
     const signupUrl = opts.signupUrl;
     const greeting = opts.inviteeName?.trim()
         ? `Hello ${escape(opts.inviteeName.trim())},`
@@ -33,8 +32,9 @@ export function buildDojoOwnerInviteEmail(opts: {
         ? `${escape(opts.inviterName.trim())} at ${APP_NAME}`
         : `The ${APP_NAME} federation office`;
 
-    const oneTimeFee = ENLISTMENT_FEE_BDT.toLocaleString("en-IN");
-    const annualFee = DOJO_RENEWAL_FEE_BDT.toLocaleString("en-IN");
+    const { dojoEnlistmentFeeBDT, dojoRenewalFeeBDT } = await getFees();
+    const oneTimeFee = dojoEnlistmentFeeBDT.toLocaleString("en-IN");
+    const annualFee = dojoRenewalFeeBDT.toLocaleString("en-IN");
 
     const subject = `You're invited to enlist your dojo with ${APP_NAME}`;
 

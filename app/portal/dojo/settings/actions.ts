@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { requireDojoRole } from "@/lib/dojo-session";
-import { DOJO_RENEWAL_FEE_BDT } from "@/lib/constants";
+import { getFees } from "@/lib/settings/fees";
 import {
     uploadToCloudinary,
     CLOUDINARY_FOLDERS,
@@ -213,8 +213,9 @@ export async function createDojoRenewalOrderAction(): Promise<
     where: { id: dojoId },
     select: { annualFee: true, name: true },
   });
+  const { dojoRenewalFeeBDT } = await getFees();
   const fee =
-    dojo?.annualFee != null ? Number(dojo.annualFee) : DOJO_RENEWAL_FEE_BDT;
+    dojo?.annualFee != null ? Number(dojo.annualFee) : dojoRenewalFeeBDT;
 
   try {
     await prisma.shopOrder.deleteMany({

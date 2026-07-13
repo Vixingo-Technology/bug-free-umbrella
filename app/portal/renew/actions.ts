@@ -3,7 +3,8 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { prisma } from "@/lib/prisma";
-import { MEMBERSHIP_FEE_BDT, MEMBERSHIP_DURATION_YEARS } from "@/lib/constants";
+import { MEMBERSHIP_DURATION_YEARS } from "@/lib/constants";
+import { getFees } from "@/lib/settings/fees";
 
 /**
  * Creates a renewal ShopOrder and redirects to checkout.
@@ -25,11 +26,12 @@ export async function createRenewalOrderAction() {
             },
         });
 
+        const { membershipFeeBDT } = await getFees();
         const order = await prisma.shopOrder.create({
             data: {
                 userId: user.id,
-                total: MEMBERSHIP_FEE_BDT,
-                membershipFee: MEMBERSHIP_FEE_BDT,
+                total: membershipFeeBDT,
+                membershipFee: membershipFeeBDT,
                 includesMembership: true,
                 paymentStatus: "PENDING",
                 notes: `Renewal for ${MEMBERSHIP_DURATION_YEARS} year`,

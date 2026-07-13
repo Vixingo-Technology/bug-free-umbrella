@@ -6,6 +6,7 @@ import { prisma } from "@/lib/prisma";
 import { notifyAdmins } from "@/lib/notify";
 import { assignRole } from "@/lib/auth/assign-role";
 import { uploadToCloudinary } from "@/lib/cloudinary";
+import { getFees } from "@/lib/settings/fees";
 
 export type DojoEnlistmentInput = {
     dojoName: string;
@@ -174,8 +175,6 @@ export async function resendDojoOtp(
     return {};
 }
 
-const ENLISTMENT_FEE_BDT = 10000;
-
 /**
  * Step 4 — initiate payment. Starts an SSLCommerz sandbox session for the
  * given dojo application. The application must already be committed (as
@@ -242,10 +241,12 @@ export async function initiateDojoEnlistmentPayment(
         ? "https://sandbox.sslcommerz.com/gwprocess/v4/api.php"
         : "https://securepay.sslcommerz.com/gwprocess/v4/api.php";
 
+    const { dojoEnlistmentFeeBDT } = await getFees();
+
     const params = new URLSearchParams({
         store_id: storeId,
         store_passwd: storePassword,
-        total_amount: ENLISTMENT_FEE_BDT.toFixed(2),
+        total_amount: dojoEnlistmentFeeBDT.toFixed(2),
         currency: "BDT",
         tran_id: application.id,
         success_url: `${appUrl}/api/webhooks/sslcommerz/dojo-success?applicationId=${application.id}`,

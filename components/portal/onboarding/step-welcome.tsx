@@ -4,15 +4,21 @@ import { useEffect, useState, useTransition } from "react";
 import { motion, useMotionValue, useTransform, useSpring } from "motion/react";
 import { CreditCard, Zap, Clock, ChevronLeft, AlertCircle } from "lucide-react";
 import { payNowAction, payLaterAction } from "@/app/portal/onboarding/actions";
-import { MEMBERSHIP_FEE_BDT, BELT_COLORS } from "@/lib/constants";
+import { BELT_COLORS } from "@/lib/constants";
 
 interface Props {
     member: any;
     orderId: string | null;
     onBack: () => void;
+    membershipFeeBDT: number;
 }
 
-export default function StepWelcome({ member, orderId, onBack }: Props) {
+export default function StepWelcome({
+    member,
+    orderId,
+    onBack,
+    membershipFeeBDT,
+}: Props) {
     const [isPending, startTransition] = useTransition();
     const [pendingAction, setPendingAction] = useState<"pay" | "later" | null>(null);
     const [error, setError] = useState<string | null>(null);
@@ -194,7 +200,7 @@ export default function StepWelcome({ member, orderId, onBack }: Props) {
                 className="inline-flex items-center gap-1.5 bg-amber-50 border border-amber-200 text-amber-600 text-xs font-semibold px-3 py-1.5 rounded-full mb-8"
             >
                 <Clock size={12} />
-                Pending activation · ৳{MEMBERSHIP_FEE_BDT.toLocaleString()} / year
+                Pending activation · ৳{membershipFeeBDT.toLocaleString()} / year
             </motion.div>
 
             {/* Error */}

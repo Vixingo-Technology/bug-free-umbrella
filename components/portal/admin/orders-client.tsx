@@ -90,10 +90,11 @@ export default function OrdersAdminClient({ orders }: { orders: Order[] }) {
     const [tab, setTab] = useState<Category>("SHOP");
     const [search, setSearch] = useState("");
     const [statusFilter, setStatusFilter] = useState<"ALL" | Status>("ALL");
+    const [fulfillmentFilter, setFulfillmentFilter] = useState<"ALL" | FulfillmentStatus>("ALL");
     const [toast, setToast] = useState<{ kind: "ok" | "err"; msg: string } | null>(null);
     const [page, setPage] = useState(1);
 
-    useEffect(() => { setPage(1); }, [tab, search, statusFilter]);
+    useEffect(() => { setPage(1); }, [tab, search, statusFilter, fulfillmentFilter]);
 
     const counts = useMemo(() => {
         const c: Record<Category, number> = { SHOP: 0, CERTIFICATE: 0, MEMBERSHIP: 0 };
@@ -106,6 +107,7 @@ export default function OrdersAdminClient({ orders }: { orders: Order[] }) {
         return orders.filter((o) => {
             if (o.category !== tab) return false;
             if (statusFilter !== "ALL" && o.paymentStatus !== statusFilter) return false;
+            if (tab === "SHOP" && fulfillmentFilter !== "ALL" && o.fulfillmentStatus !== fulfillmentFilter) return false;
             if (!q) return true;
             return (
                 o.id.toLowerCase().includes(q) ||
@@ -114,7 +116,7 @@ export default function OrdersAdminClient({ orders }: { orders: Order[] }) {
                 (o.transactionId ?? "").toLowerCase().includes(q)
             );
         });
-    }, [orders, search, statusFilter, tab]);
+    }, [orders, search, statusFilter, fulfillmentFilter, tab]);
 
     const totals = useMemo(() => {
         const t = { all: 0, paid: 0, pending: 0 };
@@ -203,6 +205,23 @@ export default function OrdersAdminClient({ orders }: { orders: Order[] }) {
                     </select>
                     <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 pointer-events-none" />
                 </div>
+                {tab === "SHOP" && (
+                    <div className="relative">
+                        <select
+                            value={fulfillmentFilter}
+                            onChange={(e) => setFulfillmentFilter(e.target.value as "ALL" | FulfillmentStatus)}
+                            className="appearance-none pl-9 pr-9 py-2.5 text-sm bg-white border border-zinc-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-accent-red/30 focus:border-accent-red min-w-[190px]"
+                        >
+                            <option value="ALL">All delivery</option>
+                            <option value="PREPARING">Preparing</option>
+                            <option value="IN_TRANSIT">In transit</option>
+                            <option value="DELIVERED">Delivered</option>
+                            <option value="RETURNED">Returned</option>
+                        </select>
+                        <Truck size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 pointer-events-none" />
+                        <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 pointer-events-none" />
+                    </div>
+                )}
             </div>
 
             {/* Orders */}

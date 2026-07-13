@@ -229,6 +229,7 @@ model User {
   transfersDojoActed  StudentTransferRequest[] @relation("TransferDojoActor")
   transfersAdminActed StudentTransferRequest[] @relation("TransferAdminActor")
   dojoHistoryChanges  StudentDojoHistory[]     @relation("HistoryChangedBy")
+  activityLogs        ActivityLog[]
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -615,6 +616,12 @@ model SystemSettings {
   adminSignerTitle   String? @map("admin_signer_title")
   certificateLogoUrl String? @map("certificate_logo_url")
 
+  // Subscription / affiliation fees (BDT). Editable from the admin
+  // subscriptions page; NULL means "fall back to the built-in default".
+  dojoEnlistmentFeeBDT Decimal? @map("dojo_enlistment_fee_bdt") @db.Decimal(10, 2)
+  dojoRenewalFeeBDT    Decimal? @map("dojo_renewal_fee_bdt") @db.Decimal(10, 2)
+  membershipFeeBDT     Decimal? @map("membership_fee_bdt") @db.Decimal(10, 2)
+
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
@@ -750,6 +757,42 @@ model Notification {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("notifications")
+}
+
+// ─────────────────────────────────────────────
+// ACTIVITY LOG — system-wide real-time log for the admin monitor
+// ─────────────────────────────────────────────
+
+enum ActivitySeverity {
+  INFO
+  SUCCESS
+  WARNING
+  ERROR
+  CRITICAL
+}
+
+model ActivityLog {
+  id         String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  actorId    String?          @map("actor_id") @db.Uuid
+  actorLabel String?          @map("actor_label")
+  actorRole  String?          @map("actor_role")
+  action     String
+  resource   String?
+  resourceId String?          @map("resource_id")
+  severity   ActivitySeverity @default(INFO)
+  message    String
+  ip         String?          @db.Inet
+  userAgent  String?          @map("user_agent")
+  metadata   Json             @default("{}")
+
+  actor User? @relation(fields: [actorId], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([createdAt(sort: Desc)])
+  @@index([severity, createdAt(sort: Desc)])
+  @@index([actorId, createdAt(sort: Desc)])
+  @@map("activity_logs")
 }
 
 // ─────────────────────────────────────────────

@@ -332,6 +332,9 @@ exports.Prisma.SystemSettingsScalarFieldEnum = {
   adminSignerName: 'adminSignerName',
   adminSignerTitle: 'adminSignerTitle',
   certificateLogoUrl: 'certificateLogoUrl',
+  dojoEnlistmentFeeBDT: 'dojoEnlistmentFeeBDT',
+  dojoRenewalFeeBDT: 'dojoRenewalFeeBDT',
+  membershipFeeBDT: 'membershipFeeBDT',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -403,6 +406,22 @@ exports.Prisma.NotificationScalarFieldEnum = {
   link: 'link',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ActivityLogScalarFieldEnum = {
+  id: 'id',
+  actorId: 'actorId',
+  actorLabel: 'actorLabel',
+  actorRole: 'actorRole',
+  action: 'action',
+  resource: 'resource',
+  resourceId: 'resourceId',
+  severity: 'severity',
+  message: 'message',
+  ip: 'ip',
+  userAgent: 'userAgent',
+  metadata: 'metadata',
+  createdAt: 'createdAt'
 };
 
 exports.Prisma.ShopProductScalarFieldEnum = {
@@ -686,6 +705,14 @@ exports.NotificationType = exports.$Enums.NotificationType = {
   TRANSFER: 'TRANSFER'
 };
 
+exports.ActivitySeverity = exports.$Enums.ActivitySeverity = {
+  INFO: 'INFO',
+  SUCCESS: 'SUCCESS',
+  WARNING: 'WARNING',
+  ERROR: 'ERROR',
+  CRITICAL: 'CRITICAL'
+};
+
 exports.ShopFulfillmentStatus = exports.$Enums.ShopFulfillmentStatus = {
   PREPARING: 'PREPARING',
   IN_TRANSIT: 'IN_TRANSIT',
@@ -749,6 +776,7 @@ exports.Prisma.ModelName = {
   Announcement: 'Announcement',
   EventRegistration: 'EventRegistration',
   Notification: 'Notification',
+  ActivityLog: 'ActivityLog',
   ShopProduct: 'ShopProduct',
   DojoInventoryItem: 'DojoInventoryItem',
   DojoSale: 'DojoSale',

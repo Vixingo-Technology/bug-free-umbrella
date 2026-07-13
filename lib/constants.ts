@@ -3,10 +3,13 @@
 // =============================================================
 
 /** Annual student membership fee in BDT */
-export const MEMBERSHIP_FEE_BDT = 3000;
+export const MEMBERSHIP_FEE_BDT = 300;
+
+/** One-time dojo affiliation (enlistment) fee in BDT */
+export const DOJO_ENLISTMENT_FEE_BDT = 5000;
 
 /** Annual dojo federation renewal fee in BDT */
-export const DOJO_RENEWAL_FEE_BDT = 6000;
+export const DOJO_RENEWAL_FEE_BDT = 2500;
 
 /** App name */
 export const APP_NAME = "JKA Bangladesh";

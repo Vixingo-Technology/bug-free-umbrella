@@ -15,6 +15,7 @@ interface Props {
     isProfileUpdateMode?: boolean;
     /** Human-readable list of fields still missing (for display in Step 1 banner). */
     missingFields?: string[];
+    membershipFeeBDT: number;
 }
 
 const STEPS_FULL   = [{ label: "Profile", number: 1 }, { label: "Welcome", number: 2 }];
@@ -44,6 +45,7 @@ export default function OnboardingWizard({
     dojos,
     isProfileUpdateMode = false,
     missingFields = [],
+    membershipFeeBDT,
 }: Props) {
     const router = useRouter();
     const [step, setStep] = useState(1);
@@ -155,6 +157,7 @@ export default function OnboardingWizard({
                                 member={{ ...member, ...profile }}
                                 orderId={orderId}
                                 onBack={() => setStep(1)}
+                                membershipFeeBDT={membershipFeeBDT}
                             />
                         </motion.div>
                     )}
