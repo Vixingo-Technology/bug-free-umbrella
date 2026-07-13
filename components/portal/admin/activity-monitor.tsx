@@ -1,18 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { motion, AnimatePresence } from "motion/react";
-import {
-    Activity,
-    ChevronUp,
-    ChevronDown,
-    Info,
-    CheckCircle2,
-    AlertTriangle,
-    AlertOctagon,
-    ShieldAlert,
-    Radio,
-} from "lucide-react";
+import Link from "next/link";
+import { Activity, ChevronRight, ShieldAlert } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { playNotificationChime } from "@/lib/notification-sound";
 
@@ -21,20 +11,8 @@ type Severity = "INFO" | "SUCCESS" | "WARNING" | "ERROR" | "CRITICAL";
 type LogRow = {
     id: string;
     action: string;
-    message: string;
     severity: Severity;
-    actor_label: string | null;
-    actor_role: string | null;
-    resource: string | null;
     created_at: string;
-};
-
-const sevConfig: Record<Severity, { icon: typeof Info; color: string; dot: string }> = {
-    INFO:     { icon: Info,          color: "text-zinc-400",   dot: "bg-zinc-400" },
-    SUCCESS:  { icon: CheckCircle2,  color: "text-emerald-500", dot: "bg-emerald-500" },
-    WARNING:  { icon: AlertTriangle, color: "text-amber-500",  dot: "bg-amber-500" },
-    ERROR:    { icon: AlertOctagon,  color: "text-red-500",    dot: "bg-red-500" },
-    CRITICAL: { icon: ShieldAlert,   color: "text-red-600",    dot: "bg-red-600 animate-pulse" },
 };
 
 function relTime(iso: string): string {
@@ -45,17 +23,20 @@ function relTime(iso: string): string {
     return `${Math.floor(diff / 86400)}d`;
 }
 
-const MAX_ROWS = 40;
 const ANOMALY_WINDOW_MS = 60_000;
 const ANOMALY_THRESHOLD = 5;
 
+/**
+ * Compact live indicator that lives at the bottom of the admin sidebar.
+ * Shows connection state + latest event + unseen anomaly badge, and links
+ * to the full activity page. Full log rendering lives on that page.
+ */
 export default function ActivityMonitor() {
-    const [expanded, setExpanded] = useState(false);
-    const [rows, setRows] = useState<LogRow[]>([]);
+    const [latest, setLatest] = useState<LogRow | null>(null);
     const [connected, setConnected] = useState(false);
-    const [criticalCount, setCriticalCount] = useState(0);
-    const anomalyTimestamps = useRef<number[]>([]);
+    const [anomalyBadge, setAnomalyBadge] = useState(0);
     const [burstAlert, setBurstAlert] = useState<string | null>(null);
+    const anomalyTimestamps = useRef<number[]>([]);
 
     useEffect(() => {
         const supabase = createClient();
@@ -64,27 +45,26 @@ export default function ActivityMonitor() {
         async function seed() {
             const { data } = await supabase
                 .from("activity_logs")
-                .select("id, action, message, severity, actor_label, actor_role, resource, created_at")
+                .select("id, action, severity, created_at")
                 .order("created_at", { ascending: false })
-                .limit(MAX_ROWS);
-            if (!cancelled && data) {
-                setRows(data as LogRow[]);
+                .limit(1);
+            if (!cancelled && data && data.length > 0) {
+                setLatest(data[0] as LogRow);
             }
         }
         seed();
 
         const channel = supabase
-            .channel("activity-monitor")
+            .channel("activity-monitor-chip")
             .on(
                 "postgres_changes",
                 { event: "INSERT", schema: "public", table: "activity_logs" },
                 (payload) => {
                     const row = payload.new as LogRow;
-                    setRows((prev) => [row, ...prev].slice(0, MAX_ROWS));
+                    setLatest(row);
 
-                    const sev = row.severity;
-                    if (sev === "CRITICAL" || sev === "ERROR") {
-                        setCriticalCount((c) => c + 1);
+                    if (row.severity === "CRITICAL" || row.severity === "ERROR") {
+                        setAnomalyBadge((c) => c + 1);
                         playNotificationChime();
                     }
 
@@ -94,7 +74,7 @@ export default function ActivityMonitor() {
                         now,
                     ];
                     if (
-                        (sev === "WARNING" || sev === "ERROR" || sev === "CRITICAL") &&
+                        (row.severity === "WARNING" || row.severity === "ERROR" || row.severity === "CRITICAL") &&
                         anomalyTimestamps.current.length >= ANOMALY_THRESHOLD
                     ) {
                         setBurstAlert(
@@ -104,9 +84,7 @@ export default function ActivityMonitor() {
                     }
                 },
             )
-            .subscribe((status) => {
-                setConnected(status === "SUBSCRIBED");
-            });
+            .subscribe((status) => setConnected(status === "SUBSCRIBED"));
 
         return () => {
             cancelled = true;
@@ -114,14 +92,12 @@ export default function ActivityMonitor() {
         };
     }, []);
 
-    // Force re-render every 30s so relative times stay fresh.
+    // Keep relative times fresh.
     const [, setTick] = useState(0);
     useEffect(() => {
         const t = setInterval(() => setTick((n) => n + 1), 30_000);
         return () => clearInterval(t);
     }, []);
-
-    const latest = rows[0];
 
     return (
         <div className="border-t border-zinc-100 bg-white">
@@ -134,12 +110,9 @@ export default function ActivityMonitor() {
                 </div>
             )}
 
-            <button
-                type="button"
-                onClick={() => {
-                    setExpanded((v) => !v);
-                    if (!expanded) setCriticalCount(0);
-                }}
+            <Link
+                href="/portal/admin/activity"
+                onClick={() => setAnomalyBadge(0)}
                 className="w-full px-3 py-2.5 flex items-center gap-2 hover:bg-zinc-50 transition-colors"
             >
                 <div className="relative flex-shrink-0">
@@ -163,76 +136,13 @@ export default function ActivityMonitor() {
                                 : "Connecting…"}
                     </p>
                 </div>
-                {criticalCount > 0 && !expanded && (
+                {anomalyBadge > 0 && (
                     <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-red-500 text-white">
-                        {criticalCount > 9 ? "9+" : criticalCount}
+                        {anomalyBadge > 9 ? "9+" : anomalyBadge}
                     </span>
                 )}
-                {expanded ? (
-                    <ChevronDown size={14} className="text-zinc-400" />
-                ) : (
-                    <ChevronUp size={14} className="text-zinc-400" />
-                )}
-            </button>
-
-            <AnimatePresence initial={false}>
-                {expanded && (
-                    <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.2 }}
-                        className="overflow-hidden"
-                    >
-                        <div className="px-2 pb-2 max-h-72 overflow-y-auto space-y-1">
-                            <div className="px-2 py-1 flex items-center justify-between text-[9px] uppercase tracking-widest text-zinc-400">
-                                <span className="flex items-center gap-1">
-                                    <Radio size={9} className={connected ? "text-emerald-500" : "text-zinc-400"} />
-                                    {connected ? "Live" : "Offline"}
-                                </span>
-                                <span>{rows.length} events</span>
-                            </div>
-                            {rows.length === 0 && (
-                                <div className="px-2 py-4 text-center text-[11px] text-zinc-400">
-                                    No activity yet.
-                                </div>
-                            )}
-                            {rows.map((row) => {
-                                const cfg = sevConfig[row.severity] ?? sevConfig.INFO;
-                                const Icon = cfg.icon;
-                                return (
-                                    <div
-                                        key={row.id}
-                                        className="px-2 py-1.5 rounded-lg hover:bg-zinc-50 flex items-start gap-2"
-                                    >
-                                        <span className={`mt-0.5 w-1.5 h-1.5 rounded-full flex-shrink-0 ${cfg.dot}`} />
-                                        <div className="min-w-0 flex-1">
-                                            <div className="flex items-center gap-1.5">
-                                                <Icon size={11} className={`${cfg.color} flex-shrink-0`} />
-                                                <span className="text-[11px] font-semibold text-zinc-900 truncate">
-                                                    {row.action}
-                                                </span>
-                                                <span className="text-[9px] text-zinc-400 flex-shrink-0 ml-auto">
-                                                    {relTime(row.created_at)}
-                                                </span>
-                                            </div>
-                                            <p className="text-[11px] text-zinc-600 leading-snug break-words">
-                                                {row.message}
-                                            </p>
-                                            {(row.actor_label || row.actor_role) && (
-                                                <p className="text-[10px] text-zinc-400 truncate">
-                                                    {row.actor_label ?? "system"}
-                                                    {row.actor_role ? ` · ${row.actor_role}` : ""}
-                                                </p>
-                                            )}
-                                        </div>
-                                    </div>
-                                );
-                            })}
-                        </div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
+                <ChevronRight size={14} className="text-zinc-400" />
+            </Link>
         </div>
     );
 }

@@ -203,7 +203,7 @@ export default function NotificationsClient({
         search.trim().length > 0;
 
     return (
-        <div className="space-y-5 max-w-3xl">
+        <div className="space-y-5 max-w-3xl mx-auto">
             {/* Header */}
             <div className="flex items-start justify-between gap-4">
                 <div>

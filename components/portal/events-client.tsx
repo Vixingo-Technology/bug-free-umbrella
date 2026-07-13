@@ -75,7 +75,7 @@ export default function EventsClient({ upcomingEvents, pastEvents, myRegistratio
     }
 
     return (
-        <div className="space-y-6 max-w-4xl">
+        <div className="space-y-6 max-w-4xl mx-auto">
             <div>
                 <h1 className="text-2xl sm:text-3xl font-bold text-zinc-900">Events</h1>
                 <p className="text-zinc-500 mt-1 text-sm">Register for tournaments, seminars, and training camps.</p>
