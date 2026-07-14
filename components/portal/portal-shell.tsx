@@ -109,17 +109,22 @@ export default function PortalShell({ userId, initialRole = "STUDENT", children 
 
         async function fetchMember() {
             const { data } = await supabase
-                .from("members")
-                .select("full_name, email, current_rank, role")
+                .from("users")
+                .select("full_name, email, role_id, students(current_rank)")
                 .eq("id", userId)
-                .single();
+                .single<{
+                    full_name: string;
+                    email: string;
+                    role_id: string;
+                    students: { current_rank: string | null } | null;
+                }>();
 
             if (data) {
                 setMember({
                     fullName: data.full_name,
                     email: data.email,
-                    currentRank: data.current_rank,
-                    role: data.role,
+                    currentRank: data.students?.current_rank ?? null,
+                    role: data.role_id,
                 });
             }
 
