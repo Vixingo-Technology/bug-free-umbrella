@@ -8,7 +8,7 @@ import {
     User, Phone, Mail, MapPin, Shield, Loader2,
     CheckCircle2, AlertCircle, Key, Calendar, Award,
     Droplets, CreditCard, HeartPulse, FileText,
-    Copy, ExternalLink, Share2,
+    Copy, ExternalLink, Share2, Users,
 } from "lucide-react";
 import { updateProfileAction, changePasswordAction } from "@/app/portal/profile/actions";
 import { BLOOD_GROUPS } from "@/lib/constants";
@@ -75,6 +75,8 @@ export default function ProfileClient({ member, dojos, userId }: Props) {
     const [bloodGroup,            setBloodGroup]            = useState(member?.bloodGroup ?? "");
     const [address,               setAddress]               = useState(member?.address ?? "");
     const [nationalId,            setNationalId]            = useState(member?.nationalId ?? "");
+    const [fatherName,            setFatherName]            = useState(member?.fatherName ?? "");
+    const [motherName,            setMotherName]            = useState(member?.motherName ?? "");
     const [emergencyContactName,  setEmergencyContactName]  = useState(member?.emergencyContactName ?? "");
     const [emergencyContactPhone, setEmergencyContactPhone] = useState(member?.emergencyContactPhone ?? "");
 
@@ -351,6 +353,39 @@ export default function ProfileClient({ member, dojos, userId }: Props) {
                                     placeholder="NID or passport number"
                                     className={inputCls}
                                 />
+                            </div>
+                        </div>
+
+                        {/* Parents */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label className={labelCls}>Father&apos;s Name</label>
+                                <div className="relative">
+                                    <Users size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400" />
+                                    <input
+                                        type="text"
+                                        name="fatherName"
+                                        value={fatherName}
+                                        onChange={(e) => setFatherName(e.target.value)}
+                                        placeholder="Father's full name"
+                                        className={inputCls}
+                                    />
+                                </div>
+                            </div>
+
+                            <div>
+                                <label className={labelCls}>Mother&apos;s Name</label>
+                                <div className="relative">
+                                    <Users size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400" />
+                                    <input
+                                        type="text"
+                                        name="motherName"
+                                        value={motherName}
+                                        onChange={(e) => setMotherName(e.target.value)}
+                                        placeholder="Mother's full name"
+                                        className={inputCls}
+                                    />
+                                </div>
                             </div>
                         </div>
 

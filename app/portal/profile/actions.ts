@@ -15,6 +15,8 @@ export async function updateProfileAction(formData: FormData) {
     const bloodGroup            = (formData.get("bloodGroup") as string) || null;
     const address               = (formData.get("address") as string)?.trim() || null;
     const nationalId            = (formData.get("nationalId") as string)?.trim() || null;
+    const fatherName            = (formData.get("fatherName") as string)?.trim() || null;
+    const motherName            = (formData.get("motherName") as string)?.trim() || null;
     const emergencyContactName  = (formData.get("emergencyContactName") as string)?.trim() || null;
     const emergencyContactPhone = (formData.get("emergencyContactPhone") as string)?.trim() || null;
 
@@ -37,6 +39,8 @@ export async function updateProfileAction(formData: FormData) {
                     bloodGroup,
                     address,
                     nationalId,
+                    fatherName,
+                    motherName,
                     emergencyContactName,
                     emergencyContactPhone,
                     dateOfBirth,
