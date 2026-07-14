@@ -99,12 +99,12 @@ export default function Footer() {
                                         +880 1612-900075
                                     </a>
                                     <br />
-                                    <a
+                                    {/* <a
                                         href="tel:+8801819648456"
                                         className="hover:text-accent-red transition-colors"
                                     >
                                         +880 1819-648456
-                                    </a>
+                                    </a> */}
                                 </span>
                             </li>
                             <li className="flex items-start gap-3">
@@ -120,12 +120,12 @@ export default function Footer() {
                                         jkabangladesh@gmail.com
                                     </a>
                                     <br />
-                                    <a
+                                    {/* <a
                                         href="mailto:shamscjks456@gmail.com"
                                         className="hover:text-accent-red transition-colors"
                                     >
                                         shamscjks456@gmail.com
-                                    </a>
+                                    </a> */}
                                 </span>
                             </li>
                         </ul>

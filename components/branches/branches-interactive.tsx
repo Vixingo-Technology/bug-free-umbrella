@@ -48,7 +48,7 @@ export default function BranchesInteractive({ dojos, divisions }: Props) {
                 <p className="text-zinc-650 font-normal max-w-md mb-8">
                     {copy.branches.description}
                 </p>
-
+                {/* 
                 <div className="relative mb-8">
                     <Search
                         className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400"
@@ -61,7 +61,7 @@ export default function BranchesInteractive({ dojos, divisions }: Props) {
                         placeholder={copy.branches.searchPlaceholder}
                         className="w-full bg-white border border-zinc-200 text-zinc-950 px-12 py-4 focus:outline-none focus:border-accent-red font-mono text-sm tracking-widest placeholder:text-zinc-400 transition-colors shadow-sm"
                     />
-                </div>
+                </div> */}
 
                 {activeDivision && (
                     <button
@@ -119,7 +119,8 @@ export default function BranchesInteractive({ dojos, divisions }: Props) {
                                             : "text-zinc-500"
                                     }`}
                                 >
-                                    {region.count} {copy.branches.dojoCountLabel}
+                                    {region.count}{" "}
+                                    {copy.branches.dojoCountLabel}
                                 </span>
                             </motion.button>
                         );
