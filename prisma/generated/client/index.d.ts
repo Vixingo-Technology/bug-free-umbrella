@@ -124,11 +124,6 @@ export type EventRegistration = $Result.DefaultSelection<Prisma.$EventRegistrati
  */
 export type Notification = $Result.DefaultSelection<Prisma.$NotificationPayload>
 /**
- * Model ActivityLog
- * 
- */
-export type ActivityLog = $Result.DefaultSelection<Prisma.$ActivityLogPayload>
-/**
  * Model ShopProduct
  * 
  */
@@ -357,17 +352,6 @@ export const DojoApplicationStatus: {
 
 export type DojoApplicationStatus = (typeof DojoApplicationStatus)[keyof typeof DojoApplicationStatus]
 
-
-export const ActivitySeverity: {
-  INFO: 'INFO',
-  SUCCESS: 'SUCCESS',
-  WARNING: 'WARNING',
-  ERROR: 'ERROR',
-  CRITICAL: 'CRITICAL'
-};
-
-export type ActivitySeverity = (typeof ActivitySeverity)[keyof typeof ActivitySeverity]
-
 }
 
 export type MembershipStatus = $Enums.MembershipStatus
@@ -429,10 +413,6 @@ export const AchievementRule: typeof $Enums.AchievementRule
 export type DojoApplicationStatus = $Enums.DojoApplicationStatus
 
 export const DojoApplicationStatus: typeof $Enums.DojoApplicationStatus
-
-export type ActivitySeverity = $Enums.ActivitySeverity
-
-export const ActivitySeverity: typeof $Enums.ActivitySeverity
 
 /**
  * ##  Prisma Client ʲˢ
@@ -774,16 +754,6 @@ export class PrismaClient<
     * ```
     */
   get notification(): Prisma.NotificationDelegate<ExtArgs, ClientOptions>;
-
-  /**
-   * `prisma.activityLog`: Exposes CRUD operations for the **ActivityLog** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more ActivityLogs
-    * const activityLogs = await prisma.activityLog.findMany()
-    * ```
-    */
-  get activityLog(): Prisma.ActivityLogDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.shopProduct`: Exposes CRUD operations for the **ShopProduct** model.
@@ -1370,7 +1340,6 @@ export namespace Prisma {
     Announcement: 'Announcement',
     EventRegistration: 'EventRegistration',
     Notification: 'Notification',
-    ActivityLog: 'ActivityLog',
     ShopProduct: 'ShopProduct',
     DojoInventoryItem: 'DojoInventoryItem',
     DojoSale: 'DojoSale',
@@ -1399,7 +1368,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "role" | "permission" | "rolePermission" | "user" | "student" | "instructor" | "dojoManager" | "dojoOwner" | "admin" | "beltRank" | "dojo" | "dojoApplication" | "attendance" | "gradingEvent" | "gradingApplication" | "grading" | "certificateRequest" | "systemSettings" | "event" | "announcement" | "eventRegistration" | "notification" | "activityLog" | "shopProduct" | "dojoInventoryItem" | "dojoSale" | "dojoSaleItem" | "shopOrder" | "shopOrderItem" | "tournament" | "tournamentParticipant" | "tournamentMatch" | "achievement" | "studentAchievement" | "studentTransferRequest" | "studentDojoHistory"
+      modelProps: "role" | "permission" | "rolePermission" | "user" | "student" | "instructor" | "dojoManager" | "dojoOwner" | "admin" | "beltRank" | "dojo" | "dojoApplication" | "attendance" | "gradingEvent" | "gradingApplication" | "grading" | "certificateRequest" | "systemSettings" | "event" | "announcement" | "eventRegistration" | "notification" | "shopProduct" | "dojoInventoryItem" | "dojoSale" | "dojoSaleItem" | "shopOrder" | "shopOrderItem" | "tournament" | "tournamentParticipant" | "tournamentMatch" | "achievement" | "studentAchievement" | "studentTransferRequest" | "studentDojoHistory"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -3031,80 +3000,6 @@ export namespace Prisma {
           }
         }
       }
-      ActivityLog: {
-        payload: Prisma.$ActivityLogPayload<ExtArgs>
-        fields: Prisma.ActivityLogFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.ActivityLogFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ActivityLogPayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.ActivityLogFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ActivityLogPayload>
-          }
-          findFirst: {
-            args: Prisma.ActivityLogFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ActivityLogPayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.ActivityLogFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ActivityLogPayload>
-          }
-          findMany: {
-            args: Prisma.ActivityLogFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ActivityLogPayload>[]
-          }
-          create: {
-            args: Prisma.ActivityLogCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ActivityLogPayload>
-          }
-          createMany: {
-            args: Prisma.ActivityLogCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.ActivityLogCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ActivityLogPayload>[]
-          }
-          delete: {
-            args: Prisma.ActivityLogDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ActivityLogPayload>
-          }
-          update: {
-            args: Prisma.ActivityLogUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ActivityLogPayload>
-          }
-          deleteMany: {
-            args: Prisma.ActivityLogDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.ActivityLogUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateManyAndReturn: {
-            args: Prisma.ActivityLogUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ActivityLogPayload>[]
-          }
-          upsert: {
-            args: Prisma.ActivityLogUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ActivityLogPayload>
-          }
-          aggregate: {
-            args: Prisma.ActivityLogAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateActivityLog>
-          }
-          groupBy: {
-            args: Prisma.ActivityLogGroupByArgs<ExtArgs>
-            result: $Utils.Optional<ActivityLogGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.ActivityLogCountArgs<ExtArgs>
-            result: $Utils.Optional<ActivityLogCountAggregateOutputType> | number
-          }
-        }
-      }
       ShopProduct: {
         payload: Prisma.$ShopProductPayload<ExtArgs>
         fields: Prisma.ShopProductFieldRefs
@@ -4197,7 +4092,6 @@ export namespace Prisma {
     announcement?: AnnouncementOmit
     eventRegistration?: EventRegistrationOmit
     notification?: NotificationOmit
-    activityLog?: ActivityLogOmit
     shopProduct?: ShopProductOmit
     dojoInventoryItem?: DojoInventoryItemOmit
     dojoSale?: DojoSaleOmit
@@ -4375,7 +4269,6 @@ export namespace Prisma {
     transfersDojoActed: number
     transfersAdminActed: number
     dojoHistoryChanges: number
-    activityLogs: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4392,7 +4285,6 @@ export namespace Prisma {
     transfersDojoActed?: boolean | UserCountOutputTypeCountTransfersDojoActedArgs
     transfersAdminActed?: boolean | UserCountOutputTypeCountTransfersAdminActedArgs
     dojoHistoryChanges?: boolean | UserCountOutputTypeCountDojoHistoryChangesArgs
-    activityLogs?: boolean | UserCountOutputTypeCountActivityLogsArgs
   }
 
   // Custom InputTypes
@@ -4495,13 +4387,6 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountDojoHistoryChangesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: StudentDojoHistoryWhereInput
-  }
-
-  /**
-   * UserCountOutputType without action
-   */
-  export type UserCountOutputTypeCountActivityLogsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ActivityLogWhereInput
   }
 
 
@@ -8637,7 +8522,6 @@ export namespace Prisma {
     transfersDojoActed?: boolean | User$transfersDojoActedArgs<ExtArgs>
     transfersAdminActed?: boolean | User$transfersAdminActedArgs<ExtArgs>
     dojoHistoryChanges?: boolean | User$dojoHistoryChangesArgs<ExtArgs>
-    activityLogs?: boolean | User$activityLogsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -8703,7 +8587,6 @@ export namespace Prisma {
     transfersDojoActed?: boolean | User$transfersDojoActedArgs<ExtArgs>
     transfersAdminActed?: boolean | User$transfersAdminActedArgs<ExtArgs>
     dojoHistoryChanges?: boolean | User$dojoHistoryChangesArgs<ExtArgs>
-    activityLogs?: boolean | User$activityLogsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -8735,7 +8618,6 @@ export namespace Prisma {
       transfersDojoActed: Prisma.$StudentTransferRequestPayload<ExtArgs>[]
       transfersAdminActed: Prisma.$StudentTransferRequestPayload<ExtArgs>[]
       dojoHistoryChanges: Prisma.$StudentDojoHistoryPayload<ExtArgs>[]
-      activityLogs: Prisma.$ActivityLogPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -9161,7 +9043,6 @@ export namespace Prisma {
     transfersDojoActed<T extends User$transfersDojoActedArgs<ExtArgs> = {}>(args?: Subset<T, User$transfersDojoActedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentTransferRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     transfersAdminActed<T extends User$transfersAdminActedArgs<ExtArgs> = {}>(args?: Subset<T, User$transfersAdminActedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentTransferRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     dojoHistoryChanges<T extends User$dojoHistoryChangesArgs<ExtArgs> = {}>(args?: Subset<T, User$dojoHistoryChangesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentDojoHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    activityLogs<T extends User$activityLogsArgs<ExtArgs> = {}>(args?: Subset<T, User$activityLogsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ActivityLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -10006,30 +9887,6 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: StudentDojoHistoryScalarFieldEnum | StudentDojoHistoryScalarFieldEnum[]
-  }
-
-  /**
-   * User.activityLogs
-   */
-  export type User$activityLogsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ActivityLog
-     */
-    select?: ActivityLogSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ActivityLog
-     */
-    omit?: ActivityLogOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ActivityLogInclude<ExtArgs> | null
-    where?: ActivityLogWhereInput
-    orderBy?: ActivityLogOrderByWithRelationInput | ActivityLogOrderByWithRelationInput[]
-    cursor?: ActivityLogWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: ActivityLogScalarFieldEnum | ActivityLogScalarFieldEnum[]
   }
 
   /**
@@ -32212,1188 +32069,6 @@ export namespace Prisma {
 
 
   /**
-   * Model ActivityLog
-   */
-
-  export type AggregateActivityLog = {
-    _count: ActivityLogCountAggregateOutputType | null
-    _min: ActivityLogMinAggregateOutputType | null
-    _max: ActivityLogMaxAggregateOutputType | null
-  }
-
-  export type ActivityLogMinAggregateOutputType = {
-    id: string | null
-    actorId: string | null
-    actorLabel: string | null
-    actorRole: string | null
-    action: string | null
-    resource: string | null
-    resourceId: string | null
-    severity: $Enums.ActivitySeverity | null
-    message: string | null
-    ip: string | null
-    userAgent: string | null
-    createdAt: Date | null
-  }
-
-  export type ActivityLogMaxAggregateOutputType = {
-    id: string | null
-    actorId: string | null
-    actorLabel: string | null
-    actorRole: string | null
-    action: string | null
-    resource: string | null
-    resourceId: string | null
-    severity: $Enums.ActivitySeverity | null
-    message: string | null
-    ip: string | null
-    userAgent: string | null
-    createdAt: Date | null
-  }
-
-  export type ActivityLogCountAggregateOutputType = {
-    id: number
-    actorId: number
-    actorLabel: number
-    actorRole: number
-    action: number
-    resource: number
-    resourceId: number
-    severity: number
-    message: number
-    ip: number
-    userAgent: number
-    metadata: number
-    createdAt: number
-    _all: number
-  }
-
-
-  export type ActivityLogMinAggregateInputType = {
-    id?: true
-    actorId?: true
-    actorLabel?: true
-    actorRole?: true
-    action?: true
-    resource?: true
-    resourceId?: true
-    severity?: true
-    message?: true
-    ip?: true
-    userAgent?: true
-    createdAt?: true
-  }
-
-  export type ActivityLogMaxAggregateInputType = {
-    id?: true
-    actorId?: true
-    actorLabel?: true
-    actorRole?: true
-    action?: true
-    resource?: true
-    resourceId?: true
-    severity?: true
-    message?: true
-    ip?: true
-    userAgent?: true
-    createdAt?: true
-  }
-
-  export type ActivityLogCountAggregateInputType = {
-    id?: true
-    actorId?: true
-    actorLabel?: true
-    actorRole?: true
-    action?: true
-    resource?: true
-    resourceId?: true
-    severity?: true
-    message?: true
-    ip?: true
-    userAgent?: true
-    metadata?: true
-    createdAt?: true
-    _all?: true
-  }
-
-  export type ActivityLogAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which ActivityLog to aggregate.
-     */
-    where?: ActivityLogWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of ActivityLogs to fetch.
-     */
-    orderBy?: ActivityLogOrderByWithRelationInput | ActivityLogOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: ActivityLogWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` ActivityLogs from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` ActivityLogs.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned ActivityLogs
-    **/
-    _count?: true | ActivityLogCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: ActivityLogMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: ActivityLogMaxAggregateInputType
-  }
-
-  export type GetActivityLogAggregateType<T extends ActivityLogAggregateArgs> = {
-        [P in keyof T & keyof AggregateActivityLog]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateActivityLog[P]>
-      : GetScalarType<T[P], AggregateActivityLog[P]>
-  }
-
-
-
-
-  export type ActivityLogGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ActivityLogWhereInput
-    orderBy?: ActivityLogOrderByWithAggregationInput | ActivityLogOrderByWithAggregationInput[]
-    by: ActivityLogScalarFieldEnum[] | ActivityLogScalarFieldEnum
-    having?: ActivityLogScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: ActivityLogCountAggregateInputType | true
-    _min?: ActivityLogMinAggregateInputType
-    _max?: ActivityLogMaxAggregateInputType
-  }
-
-  export type ActivityLogGroupByOutputType = {
-    id: string
-    actorId: string | null
-    actorLabel: string | null
-    actorRole: string | null
-    action: string
-    resource: string | null
-    resourceId: string | null
-    severity: $Enums.ActivitySeverity
-    message: string
-    ip: string | null
-    userAgent: string | null
-    metadata: JsonValue
-    createdAt: Date
-    _count: ActivityLogCountAggregateOutputType | null
-    _min: ActivityLogMinAggregateOutputType | null
-    _max: ActivityLogMaxAggregateOutputType | null
-  }
-
-  type GetActivityLogGroupByPayload<T extends ActivityLogGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<ActivityLogGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof ActivityLogGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], ActivityLogGroupByOutputType[P]>
-            : GetScalarType<T[P], ActivityLogGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type ActivityLogSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    actorId?: boolean
-    actorLabel?: boolean
-    actorRole?: boolean
-    action?: boolean
-    resource?: boolean
-    resourceId?: boolean
-    severity?: boolean
-    message?: boolean
-    ip?: boolean
-    userAgent?: boolean
-    metadata?: boolean
-    createdAt?: boolean
-    actor?: boolean | ActivityLog$actorArgs<ExtArgs>
-  }, ExtArgs["result"]["activityLog"]>
-
-  export type ActivityLogSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    actorId?: boolean
-    actorLabel?: boolean
-    actorRole?: boolean
-    action?: boolean
-    resource?: boolean
-    resourceId?: boolean
-    severity?: boolean
-    message?: boolean
-    ip?: boolean
-    userAgent?: boolean
-    metadata?: boolean
-    createdAt?: boolean
-    actor?: boolean | ActivityLog$actorArgs<ExtArgs>
-  }, ExtArgs["result"]["activityLog"]>
-
-  export type ActivityLogSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    actorId?: boolean
-    actorLabel?: boolean
-    actorRole?: boolean
-    action?: boolean
-    resource?: boolean
-    resourceId?: boolean
-    severity?: boolean
-    message?: boolean
-    ip?: boolean
-    userAgent?: boolean
-    metadata?: boolean
-    createdAt?: boolean
-    actor?: boolean | ActivityLog$actorArgs<ExtArgs>
-  }, ExtArgs["result"]["activityLog"]>
-
-  export type ActivityLogSelectScalar = {
-    id?: boolean
-    actorId?: boolean
-    actorLabel?: boolean
-    actorRole?: boolean
-    action?: boolean
-    resource?: boolean
-    resourceId?: boolean
-    severity?: boolean
-    message?: boolean
-    ip?: boolean
-    userAgent?: boolean
-    metadata?: boolean
-    createdAt?: boolean
-  }
-
-  export type ActivityLogOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "actorId" | "actorLabel" | "actorRole" | "action" | "resource" | "resourceId" | "severity" | "message" | "ip" | "userAgent" | "metadata" | "createdAt", ExtArgs["result"]["activityLog"]>
-  export type ActivityLogInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    actor?: boolean | ActivityLog$actorArgs<ExtArgs>
-  }
-  export type ActivityLogIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    actor?: boolean | ActivityLog$actorArgs<ExtArgs>
-  }
-  export type ActivityLogIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    actor?: boolean | ActivityLog$actorArgs<ExtArgs>
-  }
-
-  export type $ActivityLogPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "ActivityLog"
-    objects: {
-      actor: Prisma.$UserPayload<ExtArgs> | null
-    }
-    scalars: $Extensions.GetPayloadResult<{
-      id: string
-      actorId: string | null
-      actorLabel: string | null
-      actorRole: string | null
-      action: string
-      resource: string | null
-      resourceId: string | null
-      severity: $Enums.ActivitySeverity
-      message: string
-      ip: string | null
-      userAgent: string | null
-      metadata: Prisma.JsonValue
-      createdAt: Date
-    }, ExtArgs["result"]["activityLog"]>
-    composites: {}
-  }
-
-  type ActivityLogGetPayload<S extends boolean | null | undefined | ActivityLogDefaultArgs> = $Result.GetResult<Prisma.$ActivityLogPayload, S>
-
-  type ActivityLogCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<ActivityLogFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: ActivityLogCountAggregateInputType | true
-    }
-
-  export interface ActivityLogDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ActivityLog'], meta: { name: 'ActivityLog' } }
-    /**
-     * Find zero or one ActivityLog that matches the filter.
-     * @param {ActivityLogFindUniqueArgs} args - Arguments to find a ActivityLog
-     * @example
-     * // Get one ActivityLog
-     * const activityLog = await prisma.activityLog.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUnique<T extends ActivityLogFindUniqueArgs>(args: SelectSubset<T, ActivityLogFindUniqueArgs<ExtArgs>>): Prisma__ActivityLogClient<$Result.GetResult<Prisma.$ActivityLogPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find one ActivityLog that matches the filter or throw an error with `error.code='P2025'`
-     * if no matches were found.
-     * @param {ActivityLogFindUniqueOrThrowArgs} args - Arguments to find a ActivityLog
-     * @example
-     * // Get one ActivityLog
-     * const activityLog = await prisma.activityLog.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUniqueOrThrow<T extends ActivityLogFindUniqueOrThrowArgs>(args: SelectSubset<T, ActivityLogFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ActivityLogClient<$Result.GetResult<Prisma.$ActivityLogPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first ActivityLog that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ActivityLogFindFirstArgs} args - Arguments to find a ActivityLog
-     * @example
-     * // Get one ActivityLog
-     * const activityLog = await prisma.activityLog.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirst<T extends ActivityLogFindFirstArgs>(args?: SelectSubset<T, ActivityLogFindFirstArgs<ExtArgs>>): Prisma__ActivityLogClient<$Result.GetResult<Prisma.$ActivityLogPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first ActivityLog that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ActivityLogFindFirstOrThrowArgs} args - Arguments to find a ActivityLog
-     * @example
-     * // Get one ActivityLog
-     * const activityLog = await prisma.activityLog.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirstOrThrow<T extends ActivityLogFindFirstOrThrowArgs>(args?: SelectSubset<T, ActivityLogFindFirstOrThrowArgs<ExtArgs>>): Prisma__ActivityLogClient<$Result.GetResult<Prisma.$ActivityLogPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find zero or more ActivityLogs that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ActivityLogFindManyArgs} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all ActivityLogs
-     * const activityLogs = await prisma.activityLog.findMany()
-     * 
-     * // Get first 10 ActivityLogs
-     * const activityLogs = await prisma.activityLog.findMany({ take: 10 })
-     * 
-     * // Only select the `id`
-     * const activityLogWithIdOnly = await prisma.activityLog.findMany({ select: { id: true } })
-     * 
-     */
-    findMany<T extends ActivityLogFindManyArgs>(args?: SelectSubset<T, ActivityLogFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ActivityLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
-
-    /**
-     * Create a ActivityLog.
-     * @param {ActivityLogCreateArgs} args - Arguments to create a ActivityLog.
-     * @example
-     * // Create one ActivityLog
-     * const ActivityLog = await prisma.activityLog.create({
-     *   data: {
-     *     // ... data to create a ActivityLog
-     *   }
-     * })
-     * 
-     */
-    create<T extends ActivityLogCreateArgs>(args: SelectSubset<T, ActivityLogCreateArgs<ExtArgs>>): Prisma__ActivityLogClient<$Result.GetResult<Prisma.$ActivityLogPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Create many ActivityLogs.
-     * @param {ActivityLogCreateManyArgs} args - Arguments to create many ActivityLogs.
-     * @example
-     * // Create many ActivityLogs
-     * const activityLog = await prisma.activityLog.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *     
-     */
-    createMany<T extends ActivityLogCreateManyArgs>(args?: SelectSubset<T, ActivityLogCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create many ActivityLogs and returns the data saved in the database.
-     * @param {ActivityLogCreateManyAndReturnArgs} args - Arguments to create many ActivityLogs.
-     * @example
-     * // Create many ActivityLogs
-     * const activityLog = await prisma.activityLog.createManyAndReturn({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Create many ActivityLogs and only return the `id`
-     * const activityLogWithIdOnly = await prisma.activityLog.createManyAndReturn({
-     *   select: { id: true },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    createManyAndReturn<T extends ActivityLogCreateManyAndReturnArgs>(args?: SelectSubset<T, ActivityLogCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ActivityLogPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Delete a ActivityLog.
-     * @param {ActivityLogDeleteArgs} args - Arguments to delete one ActivityLog.
-     * @example
-     * // Delete one ActivityLog
-     * const ActivityLog = await prisma.activityLog.delete({
-     *   where: {
-     *     // ... filter to delete one ActivityLog
-     *   }
-     * })
-     * 
-     */
-    delete<T extends ActivityLogDeleteArgs>(args: SelectSubset<T, ActivityLogDeleteArgs<ExtArgs>>): Prisma__ActivityLogClient<$Result.GetResult<Prisma.$ActivityLogPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Update one ActivityLog.
-     * @param {ActivityLogUpdateArgs} args - Arguments to update one ActivityLog.
-     * @example
-     * // Update one ActivityLog
-     * const activityLog = await prisma.activityLog.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    update<T extends ActivityLogUpdateArgs>(args: SelectSubset<T, ActivityLogUpdateArgs<ExtArgs>>): Prisma__ActivityLogClient<$Result.GetResult<Prisma.$ActivityLogPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Delete zero or more ActivityLogs.
-     * @param {ActivityLogDeleteManyArgs} args - Arguments to filter ActivityLogs to delete.
-     * @example
-     * // Delete a few ActivityLogs
-     * const { count } = await prisma.activityLog.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-     */
-    deleteMany<T extends ActivityLogDeleteManyArgs>(args?: SelectSubset<T, ActivityLogDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more ActivityLogs.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ActivityLogUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many ActivityLogs
-     * const activityLog = await prisma.activityLog.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    updateMany<T extends ActivityLogUpdateManyArgs>(args: SelectSubset<T, ActivityLogUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more ActivityLogs and returns the data updated in the database.
-     * @param {ActivityLogUpdateManyAndReturnArgs} args - Arguments to update many ActivityLogs.
-     * @example
-     * // Update many ActivityLogs
-     * const activityLog = await prisma.activityLog.updateManyAndReturn({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Update zero or more ActivityLogs and only return the `id`
-     * const activityLogWithIdOnly = await prisma.activityLog.updateManyAndReturn({
-     *   select: { id: true },
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    updateManyAndReturn<T extends ActivityLogUpdateManyAndReturnArgs>(args: SelectSubset<T, ActivityLogUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ActivityLogPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Create or update one ActivityLog.
-     * @param {ActivityLogUpsertArgs} args - Arguments to update or create a ActivityLog.
-     * @example
-     * // Update or create a ActivityLog
-     * const activityLog = await prisma.activityLog.upsert({
-     *   create: {
-     *     // ... data to create a ActivityLog
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the ActivityLog we want to update
-     *   }
-     * })
-     */
-    upsert<T extends ActivityLogUpsertArgs>(args: SelectSubset<T, ActivityLogUpsertArgs<ExtArgs>>): Prisma__ActivityLogClient<$Result.GetResult<Prisma.$ActivityLogPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-
-    /**
-     * Count the number of ActivityLogs.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ActivityLogCountArgs} args - Arguments to filter ActivityLogs to count.
-     * @example
-     * // Count the number of ActivityLogs
-     * const count = await prisma.activityLog.count({
-     *   where: {
-     *     // ... the filter for the ActivityLogs we want to count
-     *   }
-     * })
-    **/
-    count<T extends ActivityLogCountArgs>(
-      args?: Subset<T, ActivityLogCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], ActivityLogCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a ActivityLog.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ActivityLogAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends ActivityLogAggregateArgs>(args: Subset<T, ActivityLogAggregateArgs>): Prisma.PrismaPromise<GetActivityLogAggregateType<T>>
-
-    /**
-     * Group by ActivityLog.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ActivityLogGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends ActivityLogGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: ActivityLogGroupByArgs['orderBy'] }
-        : { orderBy?: ActivityLogGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, ActivityLogGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetActivityLogGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the ActivityLog model
-   */
-  readonly fields: ActivityLogFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for ActivityLog.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__ActivityLogClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    actor<T extends ActivityLog$actorArgs<ExtArgs> = {}>(args?: Subset<T, ActivityLog$actorArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
-  }
-
-
-
-
-  /**
-   * Fields of the ActivityLog model
-   */
-  interface ActivityLogFieldRefs {
-    readonly id: FieldRef<"ActivityLog", 'String'>
-    readonly actorId: FieldRef<"ActivityLog", 'String'>
-    readonly actorLabel: FieldRef<"ActivityLog", 'String'>
-    readonly actorRole: FieldRef<"ActivityLog", 'String'>
-    readonly action: FieldRef<"ActivityLog", 'String'>
-    readonly resource: FieldRef<"ActivityLog", 'String'>
-    readonly resourceId: FieldRef<"ActivityLog", 'String'>
-    readonly severity: FieldRef<"ActivityLog", 'ActivitySeverity'>
-    readonly message: FieldRef<"ActivityLog", 'String'>
-    readonly ip: FieldRef<"ActivityLog", 'String'>
-    readonly userAgent: FieldRef<"ActivityLog", 'String'>
-    readonly metadata: FieldRef<"ActivityLog", 'Json'>
-    readonly createdAt: FieldRef<"ActivityLog", 'DateTime'>
-  }
-    
-
-  // Custom InputTypes
-  /**
-   * ActivityLog findUnique
-   */
-  export type ActivityLogFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ActivityLog
-     */
-    select?: ActivityLogSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ActivityLog
-     */
-    omit?: ActivityLogOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ActivityLogInclude<ExtArgs> | null
-    /**
-     * Filter, which ActivityLog to fetch.
-     */
-    where: ActivityLogWhereUniqueInput
-  }
-
-  /**
-   * ActivityLog findUniqueOrThrow
-   */
-  export type ActivityLogFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ActivityLog
-     */
-    select?: ActivityLogSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ActivityLog
-     */
-    omit?: ActivityLogOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ActivityLogInclude<ExtArgs> | null
-    /**
-     * Filter, which ActivityLog to fetch.
-     */
-    where: ActivityLogWhereUniqueInput
-  }
-
-  /**
-   * ActivityLog findFirst
-   */
-  export type ActivityLogFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ActivityLog
-     */
-    select?: ActivityLogSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ActivityLog
-     */
-    omit?: ActivityLogOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ActivityLogInclude<ExtArgs> | null
-    /**
-     * Filter, which ActivityLog to fetch.
-     */
-    where?: ActivityLogWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of ActivityLogs to fetch.
-     */
-    orderBy?: ActivityLogOrderByWithRelationInput | ActivityLogOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for ActivityLogs.
-     */
-    cursor?: ActivityLogWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` ActivityLogs from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` ActivityLogs.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of ActivityLogs.
-     */
-    distinct?: ActivityLogScalarFieldEnum | ActivityLogScalarFieldEnum[]
-  }
-
-  /**
-   * ActivityLog findFirstOrThrow
-   */
-  export type ActivityLogFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ActivityLog
-     */
-    select?: ActivityLogSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ActivityLog
-     */
-    omit?: ActivityLogOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ActivityLogInclude<ExtArgs> | null
-    /**
-     * Filter, which ActivityLog to fetch.
-     */
-    where?: ActivityLogWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of ActivityLogs to fetch.
-     */
-    orderBy?: ActivityLogOrderByWithRelationInput | ActivityLogOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for ActivityLogs.
-     */
-    cursor?: ActivityLogWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` ActivityLogs from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` ActivityLogs.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of ActivityLogs.
-     */
-    distinct?: ActivityLogScalarFieldEnum | ActivityLogScalarFieldEnum[]
-  }
-
-  /**
-   * ActivityLog findMany
-   */
-  export type ActivityLogFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ActivityLog
-     */
-    select?: ActivityLogSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ActivityLog
-     */
-    omit?: ActivityLogOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ActivityLogInclude<ExtArgs> | null
-    /**
-     * Filter, which ActivityLogs to fetch.
-     */
-    where?: ActivityLogWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of ActivityLogs to fetch.
-     */
-    orderBy?: ActivityLogOrderByWithRelationInput | ActivityLogOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing ActivityLogs.
-     */
-    cursor?: ActivityLogWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` ActivityLogs from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` ActivityLogs.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of ActivityLogs.
-     */
-    distinct?: ActivityLogScalarFieldEnum | ActivityLogScalarFieldEnum[]
-  }
-
-  /**
-   * ActivityLog create
-   */
-  export type ActivityLogCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ActivityLog
-     */
-    select?: ActivityLogSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ActivityLog
-     */
-    omit?: ActivityLogOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ActivityLogInclude<ExtArgs> | null
-    /**
-     * The data needed to create a ActivityLog.
-     */
-    data: XOR<ActivityLogCreateInput, ActivityLogUncheckedCreateInput>
-  }
-
-  /**
-   * ActivityLog createMany
-   */
-  export type ActivityLogCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many ActivityLogs.
-     */
-    data: ActivityLogCreateManyInput | ActivityLogCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * ActivityLog createManyAndReturn
-   */
-  export type ActivityLogCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ActivityLog
-     */
-    select?: ActivityLogSelectCreateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the ActivityLog
-     */
-    omit?: ActivityLogOmit<ExtArgs> | null
-    /**
-     * The data used to create many ActivityLogs.
-     */
-    data: ActivityLogCreateManyInput | ActivityLogCreateManyInput[]
-    skipDuplicates?: boolean
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ActivityLogIncludeCreateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * ActivityLog update
-   */
-  export type ActivityLogUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ActivityLog
-     */
-    select?: ActivityLogSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ActivityLog
-     */
-    omit?: ActivityLogOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ActivityLogInclude<ExtArgs> | null
-    /**
-     * The data needed to update a ActivityLog.
-     */
-    data: XOR<ActivityLogUpdateInput, ActivityLogUncheckedUpdateInput>
-    /**
-     * Choose, which ActivityLog to update.
-     */
-    where: ActivityLogWhereUniqueInput
-  }
-
-  /**
-   * ActivityLog updateMany
-   */
-  export type ActivityLogUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update ActivityLogs.
-     */
-    data: XOR<ActivityLogUpdateManyMutationInput, ActivityLogUncheckedUpdateManyInput>
-    /**
-     * Filter which ActivityLogs to update
-     */
-    where?: ActivityLogWhereInput
-    /**
-     * Limit how many ActivityLogs to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * ActivityLog updateManyAndReturn
-   */
-  export type ActivityLogUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ActivityLog
-     */
-    select?: ActivityLogSelectUpdateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the ActivityLog
-     */
-    omit?: ActivityLogOmit<ExtArgs> | null
-    /**
-     * The data used to update ActivityLogs.
-     */
-    data: XOR<ActivityLogUpdateManyMutationInput, ActivityLogUncheckedUpdateManyInput>
-    /**
-     * Filter which ActivityLogs to update
-     */
-    where?: ActivityLogWhereInput
-    /**
-     * Limit how many ActivityLogs to update.
-     */
-    limit?: number
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ActivityLogIncludeUpdateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * ActivityLog upsert
-   */
-  export type ActivityLogUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ActivityLog
-     */
-    select?: ActivityLogSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ActivityLog
-     */
-    omit?: ActivityLogOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ActivityLogInclude<ExtArgs> | null
-    /**
-     * The filter to search for the ActivityLog to update in case it exists.
-     */
-    where: ActivityLogWhereUniqueInput
-    /**
-     * In case the ActivityLog found by the `where` argument doesn't exist, create a new ActivityLog with this data.
-     */
-    create: XOR<ActivityLogCreateInput, ActivityLogUncheckedCreateInput>
-    /**
-     * In case the ActivityLog was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<ActivityLogUpdateInput, ActivityLogUncheckedUpdateInput>
-  }
-
-  /**
-   * ActivityLog delete
-   */
-  export type ActivityLogDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ActivityLog
-     */
-    select?: ActivityLogSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ActivityLog
-     */
-    omit?: ActivityLogOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ActivityLogInclude<ExtArgs> | null
-    /**
-     * Filter which ActivityLog to delete.
-     */
-    where: ActivityLogWhereUniqueInput
-  }
-
-  /**
-   * ActivityLog deleteMany
-   */
-  export type ActivityLogDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which ActivityLogs to delete
-     */
-    where?: ActivityLogWhereInput
-    /**
-     * Limit how many ActivityLogs to delete.
-     */
-    limit?: number
-  }
-
-  /**
-   * ActivityLog.actor
-   */
-  export type ActivityLog$actorArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the User
-     */
-    select?: UserSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the User
-     */
-    omit?: UserOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: UserInclude<ExtArgs> | null
-    where?: UserWhereInput
-  }
-
-  /**
-   * ActivityLog without action
-   */
-  export type ActivityLogDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ActivityLog
-     */
-    select?: ActivityLogSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ActivityLog
-     */
-    omit?: ActivityLogOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ActivityLogInclude<ExtArgs> | null
-  }
-
-
-  /**
    * Model ShopProduct
    */
 
@@ -49732,25 +48407,6 @@ export namespace Prisma {
   export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
 
 
-  export const ActivityLogScalarFieldEnum: {
-    id: 'id',
-    actorId: 'actorId',
-    actorLabel: 'actorLabel',
-    actorRole: 'actorRole',
-    action: 'action',
-    resource: 'resource',
-    resourceId: 'resourceId',
-    severity: 'severity',
-    message: 'message',
-    ip: 'ip',
-    userAgent: 'userAgent',
-    metadata: 'metadata',
-    createdAt: 'createdAt'
-  };
-
-  export type ActivityLogScalarFieldEnum = (typeof ActivityLogScalarFieldEnum)[keyof typeof ActivityLogScalarFieldEnum]
-
-
   export const ShopProductScalarFieldEnum: {
     id: 'id',
     name: 'name',
@@ -50252,20 +48908,6 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'ActivitySeverity'
-   */
-  export type EnumActivitySeverityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ActivitySeverity'>
-    
-
-
-  /**
-   * Reference to a field of type 'ActivitySeverity[]'
-   */
-  export type ListEnumActivitySeverityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ActivitySeverity[]'>
-    
-
-
-  /**
    * Reference to a field of type 'ShopFulfillmentStatus'
    */
   export type EnumShopFulfillmentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ShopFulfillmentStatus'>
@@ -50533,7 +49175,6 @@ export namespace Prisma {
     transfersDojoActed?: StudentTransferRequestListRelationFilter
     transfersAdminActed?: StudentTransferRequestListRelationFilter
     dojoHistoryChanges?: StudentDojoHistoryListRelationFilter
-    activityLogs?: ActivityLogListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -50566,7 +49207,6 @@ export namespace Prisma {
     transfersDojoActed?: StudentTransferRequestOrderByRelationAggregateInput
     transfersAdminActed?: StudentTransferRequestOrderByRelationAggregateInput
     dojoHistoryChanges?: StudentDojoHistoryOrderByRelationAggregateInput
-    activityLogs?: ActivityLogOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -50602,7 +49242,6 @@ export namespace Prisma {
     transfersDojoActed?: StudentTransferRequestListRelationFilter
     transfersAdminActed?: StudentTransferRequestListRelationFilter
     dojoHistoryChanges?: StudentDojoHistoryListRelationFilter
-    activityLogs?: ActivityLogListRelationFilter
   }, "id" | "email" | "memberNumber">
 
   export type UserOrderByWithAggregationInput = {
@@ -52331,101 +50970,6 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"Notification"> | Date | string
   }
 
-  export type ActivityLogWhereInput = {
-    AND?: ActivityLogWhereInput | ActivityLogWhereInput[]
-    OR?: ActivityLogWhereInput[]
-    NOT?: ActivityLogWhereInput | ActivityLogWhereInput[]
-    id?: UuidFilter<"ActivityLog"> | string
-    actorId?: UuidNullableFilter<"ActivityLog"> | string | null
-    actorLabel?: StringNullableFilter<"ActivityLog"> | string | null
-    actorRole?: StringNullableFilter<"ActivityLog"> | string | null
-    action?: StringFilter<"ActivityLog"> | string
-    resource?: StringNullableFilter<"ActivityLog"> | string | null
-    resourceId?: StringNullableFilter<"ActivityLog"> | string | null
-    severity?: EnumActivitySeverityFilter<"ActivityLog"> | $Enums.ActivitySeverity
-    message?: StringFilter<"ActivityLog"> | string
-    ip?: StringNullableFilter<"ActivityLog"> | string | null
-    userAgent?: StringNullableFilter<"ActivityLog"> | string | null
-    metadata?: JsonFilter<"ActivityLog">
-    createdAt?: DateTimeFilter<"ActivityLog"> | Date | string
-    actor?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
-  }
-
-  export type ActivityLogOrderByWithRelationInput = {
-    id?: SortOrder
-    actorId?: SortOrderInput | SortOrder
-    actorLabel?: SortOrderInput | SortOrder
-    actorRole?: SortOrderInput | SortOrder
-    action?: SortOrder
-    resource?: SortOrderInput | SortOrder
-    resourceId?: SortOrderInput | SortOrder
-    severity?: SortOrder
-    message?: SortOrder
-    ip?: SortOrderInput | SortOrder
-    userAgent?: SortOrderInput | SortOrder
-    metadata?: SortOrder
-    createdAt?: SortOrder
-    actor?: UserOrderByWithRelationInput
-  }
-
-  export type ActivityLogWhereUniqueInput = Prisma.AtLeast<{
-    id?: string
-    AND?: ActivityLogWhereInput | ActivityLogWhereInput[]
-    OR?: ActivityLogWhereInput[]
-    NOT?: ActivityLogWhereInput | ActivityLogWhereInput[]
-    actorId?: UuidNullableFilter<"ActivityLog"> | string | null
-    actorLabel?: StringNullableFilter<"ActivityLog"> | string | null
-    actorRole?: StringNullableFilter<"ActivityLog"> | string | null
-    action?: StringFilter<"ActivityLog"> | string
-    resource?: StringNullableFilter<"ActivityLog"> | string | null
-    resourceId?: StringNullableFilter<"ActivityLog"> | string | null
-    severity?: EnumActivitySeverityFilter<"ActivityLog"> | $Enums.ActivitySeverity
-    message?: StringFilter<"ActivityLog"> | string
-    ip?: StringNullableFilter<"ActivityLog"> | string | null
-    userAgent?: StringNullableFilter<"ActivityLog"> | string | null
-    metadata?: JsonFilter<"ActivityLog">
-    createdAt?: DateTimeFilter<"ActivityLog"> | Date | string
-    actor?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
-  }, "id">
-
-  export type ActivityLogOrderByWithAggregationInput = {
-    id?: SortOrder
-    actorId?: SortOrderInput | SortOrder
-    actorLabel?: SortOrderInput | SortOrder
-    actorRole?: SortOrderInput | SortOrder
-    action?: SortOrder
-    resource?: SortOrderInput | SortOrder
-    resourceId?: SortOrderInput | SortOrder
-    severity?: SortOrder
-    message?: SortOrder
-    ip?: SortOrderInput | SortOrder
-    userAgent?: SortOrderInput | SortOrder
-    metadata?: SortOrder
-    createdAt?: SortOrder
-    _count?: ActivityLogCountOrderByAggregateInput
-    _max?: ActivityLogMaxOrderByAggregateInput
-    _min?: ActivityLogMinOrderByAggregateInput
-  }
-
-  export type ActivityLogScalarWhereWithAggregatesInput = {
-    AND?: ActivityLogScalarWhereWithAggregatesInput | ActivityLogScalarWhereWithAggregatesInput[]
-    OR?: ActivityLogScalarWhereWithAggregatesInput[]
-    NOT?: ActivityLogScalarWhereWithAggregatesInput | ActivityLogScalarWhereWithAggregatesInput[]
-    id?: UuidWithAggregatesFilter<"ActivityLog"> | string
-    actorId?: UuidNullableWithAggregatesFilter<"ActivityLog"> | string | null
-    actorLabel?: StringNullableWithAggregatesFilter<"ActivityLog"> | string | null
-    actorRole?: StringNullableWithAggregatesFilter<"ActivityLog"> | string | null
-    action?: StringWithAggregatesFilter<"ActivityLog"> | string
-    resource?: StringNullableWithAggregatesFilter<"ActivityLog"> | string | null
-    resourceId?: StringNullableWithAggregatesFilter<"ActivityLog"> | string | null
-    severity?: EnumActivitySeverityWithAggregatesFilter<"ActivityLog"> | $Enums.ActivitySeverity
-    message?: StringWithAggregatesFilter<"ActivityLog"> | string
-    ip?: StringNullableWithAggregatesFilter<"ActivityLog"> | string | null
-    userAgent?: StringNullableWithAggregatesFilter<"ActivityLog"> | string | null
-    metadata?: JsonWithAggregatesFilter<"ActivityLog">
-    createdAt?: DateTimeWithAggregatesFilter<"ActivityLog"> | Date | string
-  }
-
   export type ShopProductWhereInput = {
     AND?: ShopProductWhereInput | ShopProductWhereInput[]
     OR?: ShopProductWhereInput[]
@@ -53822,7 +52366,6 @@ export namespace Prisma {
     transfersDojoActed?: StudentTransferRequestCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
-    activityLogs?: ActivityLogCreateNestedManyWithoutActorInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -53854,7 +52397,6 @@ export namespace Prisma {
     transfersDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
-    activityLogs?: ActivityLogUncheckedCreateNestedManyWithoutActorInput
   }
 
   export type UserUpdateInput = {
@@ -53886,7 +52428,6 @@ export namespace Prisma {
     transfersDojoActed?: StudentTransferRequestUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
-    activityLogs?: ActivityLogUpdateManyWithoutActorNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -53918,7 +52459,6 @@ export namespace Prisma {
     transfersDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
-    activityLogs?: ActivityLogUncheckedUpdateManyWithoutActorNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -55829,117 +54369,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type ActivityLogCreateInput = {
-    id?: string
-    actorLabel?: string | null
-    actorRole?: string | null
-    action: string
-    resource?: string | null
-    resourceId?: string | null
-    severity?: $Enums.ActivitySeverity
-    message: string
-    ip?: string | null
-    userAgent?: string | null
-    metadata?: JsonNullValueInput | InputJsonValue
-    createdAt?: Date | string
-    actor?: UserCreateNestedOneWithoutActivityLogsInput
-  }
-
-  export type ActivityLogUncheckedCreateInput = {
-    id?: string
-    actorId?: string | null
-    actorLabel?: string | null
-    actorRole?: string | null
-    action: string
-    resource?: string | null
-    resourceId?: string | null
-    severity?: $Enums.ActivitySeverity
-    message: string
-    ip?: string | null
-    userAgent?: string | null
-    metadata?: JsonNullValueInput | InputJsonValue
-    createdAt?: Date | string
-  }
-
-  export type ActivityLogUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    actorLabel?: NullableStringFieldUpdateOperationsInput | string | null
-    actorRole?: NullableStringFieldUpdateOperationsInput | string | null
-    action?: StringFieldUpdateOperationsInput | string
-    resource?: NullableStringFieldUpdateOperationsInput | string | null
-    resourceId?: NullableStringFieldUpdateOperationsInput | string | null
-    severity?: EnumActivitySeverityFieldUpdateOperationsInput | $Enums.ActivitySeverity
-    message?: StringFieldUpdateOperationsInput | string
-    ip?: NullableStringFieldUpdateOperationsInput | string | null
-    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
-    metadata?: JsonNullValueInput | InputJsonValue
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    actor?: UserUpdateOneWithoutActivityLogsNestedInput
-  }
-
-  export type ActivityLogUncheckedUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    actorId?: NullableStringFieldUpdateOperationsInput | string | null
-    actorLabel?: NullableStringFieldUpdateOperationsInput | string | null
-    actorRole?: NullableStringFieldUpdateOperationsInput | string | null
-    action?: StringFieldUpdateOperationsInput | string
-    resource?: NullableStringFieldUpdateOperationsInput | string | null
-    resourceId?: NullableStringFieldUpdateOperationsInput | string | null
-    severity?: EnumActivitySeverityFieldUpdateOperationsInput | $Enums.ActivitySeverity
-    message?: StringFieldUpdateOperationsInput | string
-    ip?: NullableStringFieldUpdateOperationsInput | string | null
-    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
-    metadata?: JsonNullValueInput | InputJsonValue
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ActivityLogCreateManyInput = {
-    id?: string
-    actorId?: string | null
-    actorLabel?: string | null
-    actorRole?: string | null
-    action: string
-    resource?: string | null
-    resourceId?: string | null
-    severity?: $Enums.ActivitySeverity
-    message: string
-    ip?: string | null
-    userAgent?: string | null
-    metadata?: JsonNullValueInput | InputJsonValue
-    createdAt?: Date | string
-  }
-
-  export type ActivityLogUpdateManyMutationInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    actorLabel?: NullableStringFieldUpdateOperationsInput | string | null
-    actorRole?: NullableStringFieldUpdateOperationsInput | string | null
-    action?: StringFieldUpdateOperationsInput | string
-    resource?: NullableStringFieldUpdateOperationsInput | string | null
-    resourceId?: NullableStringFieldUpdateOperationsInput | string | null
-    severity?: EnumActivitySeverityFieldUpdateOperationsInput | $Enums.ActivitySeverity
-    message?: StringFieldUpdateOperationsInput | string
-    ip?: NullableStringFieldUpdateOperationsInput | string | null
-    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
-    metadata?: JsonNullValueInput | InputJsonValue
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ActivityLogUncheckedUpdateManyInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    actorId?: NullableStringFieldUpdateOperationsInput | string | null
-    actorLabel?: NullableStringFieldUpdateOperationsInput | string | null
-    actorRole?: NullableStringFieldUpdateOperationsInput | string | null
-    action?: StringFieldUpdateOperationsInput | string
-    resource?: NullableStringFieldUpdateOperationsInput | string | null
-    resourceId?: NullableStringFieldUpdateOperationsInput | string | null
-    severity?: EnumActivitySeverityFieldUpdateOperationsInput | $Enums.ActivitySeverity
-    message?: StringFieldUpdateOperationsInput | string
-    ip?: NullableStringFieldUpdateOperationsInput | string | null
-    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
-    metadata?: JsonNullValueInput | InputJsonValue
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
   export type ShopProductCreateInput = {
     id?: string
     name: string
@@ -57502,12 +55931,6 @@ export namespace Prisma {
     none?: StudentDojoHistoryWhereInput
   }
 
-  export type ActivityLogListRelationFilter = {
-    every?: ActivityLogWhereInput
-    some?: ActivityLogWhereInput
-    none?: ActivityLogWhereInput
-  }
-
   export type NotificationOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -57545,10 +55968,6 @@ export namespace Prisma {
   }
 
   export type StudentDojoHistoryOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type ActivityLogOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -59052,69 +57471,6 @@ export namespace Prisma {
     _max?: NestedEnumNotificationTypeFilter<$PrismaModel>
   }
 
-  export type EnumActivitySeverityFilter<$PrismaModel = never> = {
-    equals?: $Enums.ActivitySeverity | EnumActivitySeverityFieldRefInput<$PrismaModel>
-    in?: $Enums.ActivitySeverity[] | ListEnumActivitySeverityFieldRefInput<$PrismaModel>
-    notIn?: $Enums.ActivitySeverity[] | ListEnumActivitySeverityFieldRefInput<$PrismaModel>
-    not?: NestedEnumActivitySeverityFilter<$PrismaModel> | $Enums.ActivitySeverity
-  }
-
-  export type ActivityLogCountOrderByAggregateInput = {
-    id?: SortOrder
-    actorId?: SortOrder
-    actorLabel?: SortOrder
-    actorRole?: SortOrder
-    action?: SortOrder
-    resource?: SortOrder
-    resourceId?: SortOrder
-    severity?: SortOrder
-    message?: SortOrder
-    ip?: SortOrder
-    userAgent?: SortOrder
-    metadata?: SortOrder
-    createdAt?: SortOrder
-  }
-
-  export type ActivityLogMaxOrderByAggregateInput = {
-    id?: SortOrder
-    actorId?: SortOrder
-    actorLabel?: SortOrder
-    actorRole?: SortOrder
-    action?: SortOrder
-    resource?: SortOrder
-    resourceId?: SortOrder
-    severity?: SortOrder
-    message?: SortOrder
-    ip?: SortOrder
-    userAgent?: SortOrder
-    createdAt?: SortOrder
-  }
-
-  export type ActivityLogMinOrderByAggregateInput = {
-    id?: SortOrder
-    actorId?: SortOrder
-    actorLabel?: SortOrder
-    actorRole?: SortOrder
-    action?: SortOrder
-    resource?: SortOrder
-    resourceId?: SortOrder
-    severity?: SortOrder
-    message?: SortOrder
-    ip?: SortOrder
-    userAgent?: SortOrder
-    createdAt?: SortOrder
-  }
-
-  export type EnumActivitySeverityWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.ActivitySeverity | EnumActivitySeverityFieldRefInput<$PrismaModel>
-    in?: $Enums.ActivitySeverity[] | ListEnumActivitySeverityFieldRefInput<$PrismaModel>
-    notIn?: $Enums.ActivitySeverity[] | ListEnumActivitySeverityFieldRefInput<$PrismaModel>
-    not?: NestedEnumActivitySeverityWithAggregatesFilter<$PrismaModel> | $Enums.ActivitySeverity
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumActivitySeverityFilter<$PrismaModel>
-    _max?: NestedEnumActivitySeverityFilter<$PrismaModel>
-  }
-
   export type ShopOrderItemListRelationFilter = {
     every?: ShopOrderItemWhereInput
     some?: ShopOrderItemWhereInput
@@ -60224,13 +58580,6 @@ export namespace Prisma {
     connect?: StudentDojoHistoryWhereUniqueInput | StudentDojoHistoryWhereUniqueInput[]
   }
 
-  export type ActivityLogCreateNestedManyWithoutActorInput = {
-    create?: XOR<ActivityLogCreateWithoutActorInput, ActivityLogUncheckedCreateWithoutActorInput> | ActivityLogCreateWithoutActorInput[] | ActivityLogUncheckedCreateWithoutActorInput[]
-    connectOrCreate?: ActivityLogCreateOrConnectWithoutActorInput | ActivityLogCreateOrConnectWithoutActorInput[]
-    createMany?: ActivityLogCreateManyActorInputEnvelope
-    connect?: ActivityLogWhereUniqueInput | ActivityLogWhereUniqueInput[]
-  }
-
   export type StudentUncheckedCreateNestedOneWithoutUserInput = {
     create?: XOR<StudentCreateWithoutUserInput, StudentUncheckedCreateWithoutUserInput>
     connectOrCreate?: StudentCreateOrConnectWithoutUserInput
@@ -60350,13 +58699,6 @@ export namespace Prisma {
     connectOrCreate?: StudentDojoHistoryCreateOrConnectWithoutChangedByInput | StudentDojoHistoryCreateOrConnectWithoutChangedByInput[]
     createMany?: StudentDojoHistoryCreateManyChangedByInputEnvelope
     connect?: StudentDojoHistoryWhereUniqueInput | StudentDojoHistoryWhereUniqueInput[]
-  }
-
-  export type ActivityLogUncheckedCreateNestedManyWithoutActorInput = {
-    create?: XOR<ActivityLogCreateWithoutActorInput, ActivityLogUncheckedCreateWithoutActorInput> | ActivityLogCreateWithoutActorInput[] | ActivityLogUncheckedCreateWithoutActorInput[]
-    connectOrCreate?: ActivityLogCreateOrConnectWithoutActorInput | ActivityLogCreateOrConnectWithoutActorInput[]
-    createMany?: ActivityLogCreateManyActorInputEnvelope
-    connect?: ActivityLogWhereUniqueInput | ActivityLogWhereUniqueInput[]
   }
 
   export type BoolFieldUpdateOperationsInput = {
@@ -60603,20 +58945,6 @@ export namespace Prisma {
     deleteMany?: StudentDojoHistoryScalarWhereInput | StudentDojoHistoryScalarWhereInput[]
   }
 
-  export type ActivityLogUpdateManyWithoutActorNestedInput = {
-    create?: XOR<ActivityLogCreateWithoutActorInput, ActivityLogUncheckedCreateWithoutActorInput> | ActivityLogCreateWithoutActorInput[] | ActivityLogUncheckedCreateWithoutActorInput[]
-    connectOrCreate?: ActivityLogCreateOrConnectWithoutActorInput | ActivityLogCreateOrConnectWithoutActorInput[]
-    upsert?: ActivityLogUpsertWithWhereUniqueWithoutActorInput | ActivityLogUpsertWithWhereUniqueWithoutActorInput[]
-    createMany?: ActivityLogCreateManyActorInputEnvelope
-    set?: ActivityLogWhereUniqueInput | ActivityLogWhereUniqueInput[]
-    disconnect?: ActivityLogWhereUniqueInput | ActivityLogWhereUniqueInput[]
-    delete?: ActivityLogWhereUniqueInput | ActivityLogWhereUniqueInput[]
-    connect?: ActivityLogWhereUniqueInput | ActivityLogWhereUniqueInput[]
-    update?: ActivityLogUpdateWithWhereUniqueWithoutActorInput | ActivityLogUpdateWithWhereUniqueWithoutActorInput[]
-    updateMany?: ActivityLogUpdateManyWithWhereWithoutActorInput | ActivityLogUpdateManyWithWhereWithoutActorInput[]
-    deleteMany?: ActivityLogScalarWhereInput | ActivityLogScalarWhereInput[]
-  }
-
   export type StudentUncheckedUpdateOneWithoutUserNestedInput = {
     create?: XOR<StudentCreateWithoutUserInput, StudentUncheckedCreateWithoutUserInput>
     connectOrCreate?: StudentCreateOrConnectWithoutUserInput
@@ -60847,20 +59175,6 @@ export namespace Prisma {
     update?: StudentDojoHistoryUpdateWithWhereUniqueWithoutChangedByInput | StudentDojoHistoryUpdateWithWhereUniqueWithoutChangedByInput[]
     updateMany?: StudentDojoHistoryUpdateManyWithWhereWithoutChangedByInput | StudentDojoHistoryUpdateManyWithWhereWithoutChangedByInput[]
     deleteMany?: StudentDojoHistoryScalarWhereInput | StudentDojoHistoryScalarWhereInput[]
-  }
-
-  export type ActivityLogUncheckedUpdateManyWithoutActorNestedInput = {
-    create?: XOR<ActivityLogCreateWithoutActorInput, ActivityLogUncheckedCreateWithoutActorInput> | ActivityLogCreateWithoutActorInput[] | ActivityLogUncheckedCreateWithoutActorInput[]
-    connectOrCreate?: ActivityLogCreateOrConnectWithoutActorInput | ActivityLogCreateOrConnectWithoutActorInput[]
-    upsert?: ActivityLogUpsertWithWhereUniqueWithoutActorInput | ActivityLogUpsertWithWhereUniqueWithoutActorInput[]
-    createMany?: ActivityLogCreateManyActorInputEnvelope
-    set?: ActivityLogWhereUniqueInput | ActivityLogWhereUniqueInput[]
-    disconnect?: ActivityLogWhereUniqueInput | ActivityLogWhereUniqueInput[]
-    delete?: ActivityLogWhereUniqueInput | ActivityLogWhereUniqueInput[]
-    connect?: ActivityLogWhereUniqueInput | ActivityLogWhereUniqueInput[]
-    update?: ActivityLogUpdateWithWhereUniqueWithoutActorInput | ActivityLogUpdateWithWhereUniqueWithoutActorInput[]
-    updateMany?: ActivityLogUpdateManyWithWhereWithoutActorInput | ActivityLogUpdateManyWithWhereWithoutActorInput[]
-    deleteMany?: ActivityLogScalarWhereInput | ActivityLogScalarWhereInput[]
   }
 
   export type UserCreateNestedOneWithoutStudentInput = {
@@ -62824,26 +61138,6 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutNotificationsInput, UserUpdateWithoutNotificationsInput>, UserUncheckedUpdateWithoutNotificationsInput>
   }
 
-  export type UserCreateNestedOneWithoutActivityLogsInput = {
-    create?: XOR<UserCreateWithoutActivityLogsInput, UserUncheckedCreateWithoutActivityLogsInput>
-    connectOrCreate?: UserCreateOrConnectWithoutActivityLogsInput
-    connect?: UserWhereUniqueInput
-  }
-
-  export type EnumActivitySeverityFieldUpdateOperationsInput = {
-    set?: $Enums.ActivitySeverity
-  }
-
-  export type UserUpdateOneWithoutActivityLogsNestedInput = {
-    create?: XOR<UserCreateWithoutActivityLogsInput, UserUncheckedCreateWithoutActivityLogsInput>
-    connectOrCreate?: UserCreateOrConnectWithoutActivityLogsInput
-    upsert?: UserUpsertWithoutActivityLogsInput
-    disconnect?: UserWhereInput | boolean
-    delete?: UserWhereInput | boolean
-    connect?: UserWhereUniqueInput
-    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutActivityLogsInput, UserUpdateWithoutActivityLogsInput>, UserUncheckedUpdateWithoutActivityLogsInput>
-  }
-
   export type ShopProductCreatesizesInput = {
     set: string[]
   }
@@ -64472,23 +62766,6 @@ export namespace Prisma {
     _max?: NestedEnumNotificationTypeFilter<$PrismaModel>
   }
 
-  export type NestedEnumActivitySeverityFilter<$PrismaModel = never> = {
-    equals?: $Enums.ActivitySeverity | EnumActivitySeverityFieldRefInput<$PrismaModel>
-    in?: $Enums.ActivitySeverity[] | ListEnumActivitySeverityFieldRefInput<$PrismaModel>
-    notIn?: $Enums.ActivitySeverity[] | ListEnumActivitySeverityFieldRefInput<$PrismaModel>
-    not?: NestedEnumActivitySeverityFilter<$PrismaModel> | $Enums.ActivitySeverity
-  }
-
-  export type NestedEnumActivitySeverityWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.ActivitySeverity | EnumActivitySeverityFieldRefInput<$PrismaModel>
-    in?: $Enums.ActivitySeverity[] | ListEnumActivitySeverityFieldRefInput<$PrismaModel>
-    notIn?: $Enums.ActivitySeverity[] | ListEnumActivitySeverityFieldRefInput<$PrismaModel>
-    not?: NestedEnumActivitySeverityWithAggregatesFilter<$PrismaModel> | $Enums.ActivitySeverity
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumActivitySeverityFilter<$PrismaModel>
-    _max?: NestedEnumActivitySeverityFilter<$PrismaModel>
-  }
-
   export type NestedEnumPaymentStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.PaymentStatus | EnumPaymentStatusFieldRefInput<$PrismaModel>
     in?: $Enums.PaymentStatus[] | ListEnumPaymentStatusFieldRefInput<$PrismaModel>
@@ -64619,7 +62896,6 @@ export namespace Prisma {
     transfersDojoActed?: StudentTransferRequestCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
-    activityLogs?: ActivityLogCreateNestedManyWithoutActorInput
   }
 
   export type UserUncheckedCreateWithoutRoleInput = {
@@ -64650,7 +62926,6 @@ export namespace Prisma {
     transfersDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
-    activityLogs?: ActivityLogUncheckedCreateNestedManyWithoutActorInput
   }
 
   export type UserCreateOrConnectWithoutRoleInput = {
@@ -65592,46 +63867,6 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type ActivityLogCreateWithoutActorInput = {
-    id?: string
-    actorLabel?: string | null
-    actorRole?: string | null
-    action: string
-    resource?: string | null
-    resourceId?: string | null
-    severity?: $Enums.ActivitySeverity
-    message: string
-    ip?: string | null
-    userAgent?: string | null
-    metadata?: JsonNullValueInput | InputJsonValue
-    createdAt?: Date | string
-  }
-
-  export type ActivityLogUncheckedCreateWithoutActorInput = {
-    id?: string
-    actorLabel?: string | null
-    actorRole?: string | null
-    action: string
-    resource?: string | null
-    resourceId?: string | null
-    severity?: $Enums.ActivitySeverity
-    message: string
-    ip?: string | null
-    userAgent?: string | null
-    metadata?: JsonNullValueInput | InputJsonValue
-    createdAt?: Date | string
-  }
-
-  export type ActivityLogCreateOrConnectWithoutActorInput = {
-    where: ActivityLogWhereUniqueInput
-    create: XOR<ActivityLogCreateWithoutActorInput, ActivityLogUncheckedCreateWithoutActorInput>
-  }
-
-  export type ActivityLogCreateManyActorInputEnvelope = {
-    data: ActivityLogCreateManyActorInput | ActivityLogCreateManyActorInput[]
-    skipDuplicates?: boolean
-  }
-
   export type RoleUpsertWithoutUsersInput = {
     update: XOR<RoleUpdateWithoutUsersInput, RoleUncheckedUpdateWithoutUsersInput>
     create: XOR<RoleCreateWithoutUsersInput, RoleUncheckedCreateWithoutUsersInput>
@@ -66222,41 +64457,6 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"StudentDojoHistory"> | Date | string
   }
 
-  export type ActivityLogUpsertWithWhereUniqueWithoutActorInput = {
-    where: ActivityLogWhereUniqueInput
-    update: XOR<ActivityLogUpdateWithoutActorInput, ActivityLogUncheckedUpdateWithoutActorInput>
-    create: XOR<ActivityLogCreateWithoutActorInput, ActivityLogUncheckedCreateWithoutActorInput>
-  }
-
-  export type ActivityLogUpdateWithWhereUniqueWithoutActorInput = {
-    where: ActivityLogWhereUniqueInput
-    data: XOR<ActivityLogUpdateWithoutActorInput, ActivityLogUncheckedUpdateWithoutActorInput>
-  }
-
-  export type ActivityLogUpdateManyWithWhereWithoutActorInput = {
-    where: ActivityLogScalarWhereInput
-    data: XOR<ActivityLogUpdateManyMutationInput, ActivityLogUncheckedUpdateManyWithoutActorInput>
-  }
-
-  export type ActivityLogScalarWhereInput = {
-    AND?: ActivityLogScalarWhereInput | ActivityLogScalarWhereInput[]
-    OR?: ActivityLogScalarWhereInput[]
-    NOT?: ActivityLogScalarWhereInput | ActivityLogScalarWhereInput[]
-    id?: UuidFilter<"ActivityLog"> | string
-    actorId?: UuidNullableFilter<"ActivityLog"> | string | null
-    actorLabel?: StringNullableFilter<"ActivityLog"> | string | null
-    actorRole?: StringNullableFilter<"ActivityLog"> | string | null
-    action?: StringFilter<"ActivityLog"> | string
-    resource?: StringNullableFilter<"ActivityLog"> | string | null
-    resourceId?: StringNullableFilter<"ActivityLog"> | string | null
-    severity?: EnumActivitySeverityFilter<"ActivityLog"> | $Enums.ActivitySeverity
-    message?: StringFilter<"ActivityLog"> | string
-    ip?: StringNullableFilter<"ActivityLog"> | string | null
-    userAgent?: StringNullableFilter<"ActivityLog"> | string | null
-    metadata?: JsonFilter<"ActivityLog">
-    createdAt?: DateTimeFilter<"ActivityLog"> | Date | string
-  }
-
   export type UserCreateWithoutStudentInput = {
     id: string
     email: string
@@ -66285,7 +64485,6 @@ export namespace Prisma {
     transfersDojoActed?: StudentTransferRequestCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
-    activityLogs?: ActivityLogCreateNestedManyWithoutActorInput
   }
 
   export type UserUncheckedCreateWithoutStudentInput = {
@@ -66316,7 +64515,6 @@ export namespace Prisma {
     transfersDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
-    activityLogs?: ActivityLogUncheckedCreateNestedManyWithoutActorInput
   }
 
   export type UserCreateOrConnectWithoutStudentInput = {
@@ -66686,7 +64884,6 @@ export namespace Prisma {
     transfersDojoActed?: StudentTransferRequestUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
-    activityLogs?: ActivityLogUpdateManyWithoutActorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutStudentInput = {
@@ -66717,7 +64914,6 @@ export namespace Prisma {
     transfersDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
-    activityLogs?: ActivityLogUncheckedUpdateManyWithoutActorNestedInput
   }
 
   export type DojoUpsertWithoutStudentsInput = {
@@ -67005,7 +65201,6 @@ export namespace Prisma {
     transfersDojoActed?: StudentTransferRequestCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
-    activityLogs?: ActivityLogCreateNestedManyWithoutActorInput
   }
 
   export type UserUncheckedCreateWithoutInstructorInput = {
@@ -67036,7 +65231,6 @@ export namespace Prisma {
     transfersDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
-    activityLogs?: ActivityLogUncheckedCreateNestedManyWithoutActorInput
   }
 
   export type UserCreateOrConnectWithoutInstructorInput = {
@@ -67158,7 +65352,6 @@ export namespace Prisma {
     transfersDojoActed?: StudentTransferRequestUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
-    activityLogs?: ActivityLogUpdateManyWithoutActorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInstructorInput = {
@@ -67189,7 +65382,6 @@ export namespace Prisma {
     transfersDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
-    activityLogs?: ActivityLogUncheckedUpdateManyWithoutActorNestedInput
   }
 
   export type DojoUpsertWithoutInstructorsInput = {
@@ -67301,7 +65493,6 @@ export namespace Prisma {
     transfersDojoActed?: StudentTransferRequestCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
-    activityLogs?: ActivityLogCreateNestedManyWithoutActorInput
   }
 
   export type UserUncheckedCreateWithoutDojoManagerInput = {
@@ -67332,7 +65523,6 @@ export namespace Prisma {
     transfersDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
-    activityLogs?: ActivityLogUncheckedCreateNestedManyWithoutActorInput
   }
 
   export type UserCreateOrConnectWithoutDojoManagerInput = {
@@ -67454,7 +65644,6 @@ export namespace Prisma {
     transfersDojoActed?: StudentTransferRequestUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
-    activityLogs?: ActivityLogUpdateManyWithoutActorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDojoManagerInput = {
@@ -67485,7 +65674,6 @@ export namespace Prisma {
     transfersDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
-    activityLogs?: ActivityLogUncheckedUpdateManyWithoutActorNestedInput
   }
 
   export type DojoUpsertWithoutManagersInput = {
@@ -67597,7 +65785,6 @@ export namespace Prisma {
     transfersDojoActed?: StudentTransferRequestCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
-    activityLogs?: ActivityLogCreateNestedManyWithoutActorInput
   }
 
   export type UserUncheckedCreateWithoutDojoOwnerInput = {
@@ -67628,7 +65815,6 @@ export namespace Prisma {
     transfersDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
-    activityLogs?: ActivityLogUncheckedCreateNestedManyWithoutActorInput
   }
 
   export type UserCreateOrConnectWithoutDojoOwnerInput = {
@@ -67750,7 +65936,6 @@ export namespace Prisma {
     transfersDojoActed?: StudentTransferRequestUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
-    activityLogs?: ActivityLogUpdateManyWithoutActorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDojoOwnerInput = {
@@ -67781,7 +65966,6 @@ export namespace Prisma {
     transfersDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
-    activityLogs?: ActivityLogUncheckedUpdateManyWithoutActorNestedInput
   }
 
   export type DojoUpsertWithoutOwnerInput = {
@@ -67893,7 +66077,6 @@ export namespace Prisma {
     transfersDojoActed?: StudentTransferRequestCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
-    activityLogs?: ActivityLogCreateNestedManyWithoutActorInput
   }
 
   export type UserUncheckedCreateWithoutAdminInput = {
@@ -67924,7 +66107,6 @@ export namespace Prisma {
     transfersDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
-    activityLogs?: ActivityLogUncheckedCreateNestedManyWithoutActorInput
   }
 
   export type UserCreateOrConnectWithoutAdminInput = {
@@ -67971,7 +66153,6 @@ export namespace Prisma {
     transfersDojoActed?: StudentTransferRequestUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
-    activityLogs?: ActivityLogUpdateManyWithoutActorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAdminInput = {
@@ -68002,7 +66183,6 @@ export namespace Prisma {
     transfersDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
-    activityLogs?: ActivityLogUncheckedUpdateManyWithoutActorNestedInput
   }
 
   export type GradingCreateWithoutFromRankInput = {
@@ -71231,7 +69411,6 @@ export namespace Prisma {
     transfersDojoActed?: StudentTransferRequestCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
-    activityLogs?: ActivityLogCreateNestedManyWithoutActorInput
   }
 
   export type UserUncheckedCreateWithoutEventsPostedInput = {
@@ -71262,7 +69441,6 @@ export namespace Prisma {
     transfersDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
-    activityLogs?: ActivityLogUncheckedCreateNestedManyWithoutActorInput
   }
 
   export type UserCreateOrConnectWithoutEventsPostedInput = {
@@ -71435,7 +69613,6 @@ export namespace Prisma {
     transfersDojoActed?: StudentTransferRequestUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
-    activityLogs?: ActivityLogUpdateManyWithoutActorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEventsPostedInput = {
@@ -71466,7 +69643,6 @@ export namespace Prisma {
     transfersDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
-    activityLogs?: ActivityLogUncheckedUpdateManyWithoutActorNestedInput
   }
 
   export type DojoUpsertWithoutEventsInput = {
@@ -71619,7 +69795,6 @@ export namespace Prisma {
     transfersDojoActed?: StudentTransferRequestCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
-    activityLogs?: ActivityLogCreateNestedManyWithoutActorInput
   }
 
   export type UserUncheckedCreateWithoutAnnouncementsPostedInput = {
@@ -71650,7 +69825,6 @@ export namespace Prisma {
     transfersDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
-    activityLogs?: ActivityLogUncheckedCreateNestedManyWithoutActorInput
   }
 
   export type UserCreateOrConnectWithoutAnnouncementsPostedInput = {
@@ -71772,7 +69946,6 @@ export namespace Prisma {
     transfersDojoActed?: StudentTransferRequestUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
-    activityLogs?: ActivityLogUpdateManyWithoutActorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAnnouncementsPostedInput = {
@@ -71803,7 +69976,6 @@ export namespace Prisma {
     transfersDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
-    activityLogs?: ActivityLogUncheckedUpdateManyWithoutActorNestedInput
   }
 
   export type DojoUpsertWithoutAnnouncementsInput = {
@@ -71966,7 +70138,6 @@ export namespace Prisma {
     transfersDojoActed?: StudentTransferRequestCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
-    activityLogs?: ActivityLogCreateNestedManyWithoutActorInput
   }
 
   export type UserUncheckedCreateWithoutEventRegistrationsInput = {
@@ -71997,7 +70168,6 @@ export namespace Prisma {
     transfersDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
-    activityLogs?: ActivityLogUncheckedCreateNestedManyWithoutActorInput
   }
 
   export type UserCreateOrConnectWithoutEventRegistrationsInput = {
@@ -72033,7 +70203,6 @@ export namespace Prisma {
     transfersDojoActed?: StudentTransferRequestCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
-    activityLogs?: ActivityLogCreateNestedManyWithoutActorInput
   }
 
   export type UserUncheckedCreateWithoutEventCheckInsInput = {
@@ -72064,7 +70233,6 @@ export namespace Prisma {
     transfersDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
-    activityLogs?: ActivityLogUncheckedCreateNestedManyWithoutActorInput
   }
 
   export type UserCreateOrConnectWithoutEventCheckInsInput = {
@@ -72168,7 +70336,6 @@ export namespace Prisma {
     transfersDojoActed?: StudentTransferRequestUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
-    activityLogs?: ActivityLogUpdateManyWithoutActorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEventRegistrationsInput = {
@@ -72199,7 +70366,6 @@ export namespace Prisma {
     transfersDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
-    activityLogs?: ActivityLogUncheckedUpdateManyWithoutActorNestedInput
   }
 
   export type UserUpsertWithoutEventCheckInsInput = {
@@ -72241,7 +70407,6 @@ export namespace Prisma {
     transfersDojoActed?: StudentTransferRequestUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
-    activityLogs?: ActivityLogUpdateManyWithoutActorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEventCheckInsInput = {
@@ -72272,7 +70437,6 @@ export namespace Prisma {
     transfersDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
-    activityLogs?: ActivityLogUncheckedUpdateManyWithoutActorNestedInput
   }
 
   export type UserCreateWithoutNotificationsInput = {
@@ -72303,7 +70467,6 @@ export namespace Prisma {
     transfersDojoActed?: StudentTransferRequestCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
-    activityLogs?: ActivityLogCreateNestedManyWithoutActorInput
   }
 
   export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -72334,7 +70497,6 @@ export namespace Prisma {
     transfersDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
-    activityLogs?: ActivityLogUncheckedCreateNestedManyWithoutActorInput
   }
 
   export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -72381,7 +70543,6 @@ export namespace Prisma {
     transfersDojoActed?: StudentTransferRequestUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
-    activityLogs?: ActivityLogUpdateManyWithoutActorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -72400,147 +70561,6 @@ export namespace Prisma {
     dojoManager?: DojoManagerUncheckedUpdateOneWithoutUserNestedInput
     dojoOwner?: DojoOwnerUncheckedUpdateOneWithoutUserNestedInput
     admin?: AdminUncheckedUpdateOneWithoutUserNestedInput
-    orders?: ShopOrderUncheckedUpdateManyWithoutUserNestedInput
-    eventRegistrations?: EventRegistrationUncheckedUpdateManyWithoutUserNestedInput
-    eventCheckIns?: EventRegistrationUncheckedUpdateManyWithoutCheckedInByNestedInput
-    eventsPosted?: EventUncheckedUpdateManyWithoutPostedByNestedInput
-    announcementsPosted?: AnnouncementUncheckedUpdateManyWithoutPostedByNestedInput
-    dojoSalesAsBuyer?: DojoSaleUncheckedUpdateManyWithoutBuyerNestedInput
-    dojoSalesSold?: DojoSaleUncheckedUpdateManyWithoutSoldByNestedInput
-    achievementsAwarded?: StudentAchievementUncheckedUpdateManyWithoutAwardedByNestedInput
-    tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutUserNestedInput
-    transfersDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
-    transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
-    dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
-    activityLogs?: ActivityLogUncheckedUpdateManyWithoutActorNestedInput
-  }
-
-  export type UserCreateWithoutActivityLogsInput = {
-    id: string
-    email: string
-    phone?: string | null
-    fullName: string
-    avatarUrl?: string | null
-    isActive?: boolean
-    memberNumber?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    role?: RoleCreateNestedOneWithoutUsersInput
-    student?: StudentCreateNestedOneWithoutUserInput
-    instructor?: InstructorCreateNestedOneWithoutUserInput
-    dojoManager?: DojoManagerCreateNestedOneWithoutUserInput
-    dojoOwner?: DojoOwnerCreateNestedOneWithoutUserInput
-    admin?: AdminCreateNestedOneWithoutUserInput
-    notifications?: NotificationCreateNestedManyWithoutUserInput
-    orders?: ShopOrderCreateNestedManyWithoutUserInput
-    eventRegistrations?: EventRegistrationCreateNestedManyWithoutUserInput
-    eventCheckIns?: EventRegistrationCreateNestedManyWithoutCheckedInByInput
-    eventsPosted?: EventCreateNestedManyWithoutPostedByInput
-    announcementsPosted?: AnnouncementCreateNestedManyWithoutPostedByInput
-    dojoSalesAsBuyer?: DojoSaleCreateNestedManyWithoutBuyerInput
-    dojoSalesSold?: DojoSaleCreateNestedManyWithoutSoldByInput
-    achievementsAwarded?: StudentAchievementCreateNestedManyWithoutAwardedByInput
-    tournamentEntries?: TournamentParticipantCreateNestedManyWithoutUserInput
-    transfersDojoActed?: StudentTransferRequestCreateNestedManyWithoutDojoActedByInput
-    transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
-    dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
-  }
-
-  export type UserUncheckedCreateWithoutActivityLogsInput = {
-    id: string
-    email: string
-    phone?: string | null
-    fullName: string
-    avatarUrl?: string | null
-    roleId?: string
-    isActive?: boolean
-    memberNumber?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    student?: StudentUncheckedCreateNestedOneWithoutUserInput
-    instructor?: InstructorUncheckedCreateNestedOneWithoutUserInput
-    dojoManager?: DojoManagerUncheckedCreateNestedOneWithoutUserInput
-    dojoOwner?: DojoOwnerUncheckedCreateNestedOneWithoutUserInput
-    admin?: AdminUncheckedCreateNestedOneWithoutUserInput
-    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
-    orders?: ShopOrderUncheckedCreateNestedManyWithoutUserInput
-    eventRegistrations?: EventRegistrationUncheckedCreateNestedManyWithoutUserInput
-    eventCheckIns?: EventRegistrationUncheckedCreateNestedManyWithoutCheckedInByInput
-    eventsPosted?: EventUncheckedCreateNestedManyWithoutPostedByInput
-    announcementsPosted?: AnnouncementUncheckedCreateNestedManyWithoutPostedByInput
-    dojoSalesAsBuyer?: DojoSaleUncheckedCreateNestedManyWithoutBuyerInput
-    dojoSalesSold?: DojoSaleUncheckedCreateNestedManyWithoutSoldByInput
-    achievementsAwarded?: StudentAchievementUncheckedCreateNestedManyWithoutAwardedByInput
-    tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutUserInput
-    transfersDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutDojoActedByInput
-    transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
-    dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
-  }
-
-  export type UserCreateOrConnectWithoutActivityLogsInput = {
-    where: UserWhereUniqueInput
-    create: XOR<UserCreateWithoutActivityLogsInput, UserUncheckedCreateWithoutActivityLogsInput>
-  }
-
-  export type UserUpsertWithoutActivityLogsInput = {
-    update: XOR<UserUpdateWithoutActivityLogsInput, UserUncheckedUpdateWithoutActivityLogsInput>
-    create: XOR<UserCreateWithoutActivityLogsInput, UserUncheckedCreateWithoutActivityLogsInput>
-    where?: UserWhereInput
-  }
-
-  export type UserUpdateToOneWithWhereWithoutActivityLogsInput = {
-    where?: UserWhereInput
-    data: XOR<UserUpdateWithoutActivityLogsInput, UserUncheckedUpdateWithoutActivityLogsInput>
-  }
-
-  export type UserUpdateWithoutActivityLogsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    fullName?: StringFieldUpdateOperationsInput | string
-    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    role?: RoleUpdateOneRequiredWithoutUsersNestedInput
-    student?: StudentUpdateOneWithoutUserNestedInput
-    instructor?: InstructorUpdateOneWithoutUserNestedInput
-    dojoManager?: DojoManagerUpdateOneWithoutUserNestedInput
-    dojoOwner?: DojoOwnerUpdateOneWithoutUserNestedInput
-    admin?: AdminUpdateOneWithoutUserNestedInput
-    notifications?: NotificationUpdateManyWithoutUserNestedInput
-    orders?: ShopOrderUpdateManyWithoutUserNestedInput
-    eventRegistrations?: EventRegistrationUpdateManyWithoutUserNestedInput
-    eventCheckIns?: EventRegistrationUpdateManyWithoutCheckedInByNestedInput
-    eventsPosted?: EventUpdateManyWithoutPostedByNestedInput
-    announcementsPosted?: AnnouncementUpdateManyWithoutPostedByNestedInput
-    dojoSalesAsBuyer?: DojoSaleUpdateManyWithoutBuyerNestedInput
-    dojoSalesSold?: DojoSaleUpdateManyWithoutSoldByNestedInput
-    achievementsAwarded?: StudentAchievementUpdateManyWithoutAwardedByNestedInput
-    tournamentEntries?: TournamentParticipantUpdateManyWithoutUserNestedInput
-    transfersDojoActed?: StudentTransferRequestUpdateManyWithoutDojoActedByNestedInput
-    transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
-    dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
-  }
-
-  export type UserUncheckedUpdateWithoutActivityLogsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    fullName?: StringFieldUpdateOperationsInput | string
-    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    roleId?: StringFieldUpdateOperationsInput | string
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    student?: StudentUncheckedUpdateOneWithoutUserNestedInput
-    instructor?: InstructorUncheckedUpdateOneWithoutUserNestedInput
-    dojoManager?: DojoManagerUncheckedUpdateOneWithoutUserNestedInput
-    dojoOwner?: DojoOwnerUncheckedUpdateOneWithoutUserNestedInput
-    admin?: AdminUncheckedUpdateOneWithoutUserNestedInput
-    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     orders?: ShopOrderUncheckedUpdateManyWithoutUserNestedInput
     eventRegistrations?: EventRegistrationUncheckedUpdateManyWithoutUserNestedInput
     eventCheckIns?: EventRegistrationUncheckedUpdateManyWithoutCheckedInByNestedInput
@@ -73053,7 +71073,6 @@ export namespace Prisma {
     transfersDojoActed?: StudentTransferRequestCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
-    activityLogs?: ActivityLogCreateNestedManyWithoutActorInput
   }
 
   export type UserUncheckedCreateWithoutDojoSalesAsBuyerInput = {
@@ -73084,7 +71103,6 @@ export namespace Prisma {
     transfersDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
-    activityLogs?: ActivityLogUncheckedCreateNestedManyWithoutActorInput
   }
 
   export type UserCreateOrConnectWithoutDojoSalesAsBuyerInput = {
@@ -73120,7 +71138,6 @@ export namespace Prisma {
     transfersDojoActed?: StudentTransferRequestCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
-    activityLogs?: ActivityLogCreateNestedManyWithoutActorInput
   }
 
   export type UserUncheckedCreateWithoutDojoSalesSoldInput = {
@@ -73151,7 +71168,6 @@ export namespace Prisma {
     transfersDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
-    activityLogs?: ActivityLogUncheckedCreateNestedManyWithoutActorInput
   }
 
   export type UserCreateOrConnectWithoutDojoSalesSoldInput = {
@@ -73307,7 +71323,6 @@ export namespace Prisma {
     transfersDojoActed?: StudentTransferRequestUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
-    activityLogs?: ActivityLogUpdateManyWithoutActorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDojoSalesAsBuyerInput = {
@@ -73338,7 +71353,6 @@ export namespace Prisma {
     transfersDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
-    activityLogs?: ActivityLogUncheckedUpdateManyWithoutActorNestedInput
   }
 
   export type UserUpsertWithoutDojoSalesSoldInput = {
@@ -73380,7 +71394,6 @@ export namespace Prisma {
     transfersDojoActed?: StudentTransferRequestUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
-    activityLogs?: ActivityLogUpdateManyWithoutActorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDojoSalesSoldInput = {
@@ -73411,7 +71424,6 @@ export namespace Prisma {
     transfersDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
-    activityLogs?: ActivityLogUncheckedUpdateManyWithoutActorNestedInput
   }
 
   export type DojoSaleItemUpsertWithWhereUniqueWithoutSaleInput = {
@@ -73622,7 +71634,6 @@ export namespace Prisma {
     transfersDojoActed?: StudentTransferRequestCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
-    activityLogs?: ActivityLogCreateNestedManyWithoutActorInput
   }
 
   export type UserUncheckedCreateWithoutOrdersInput = {
@@ -73653,7 +71664,6 @@ export namespace Prisma {
     transfersDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
-    activityLogs?: ActivityLogUncheckedCreateNestedManyWithoutActorInput
   }
 
   export type UserCreateOrConnectWithoutOrdersInput = {
@@ -73967,7 +71977,6 @@ export namespace Prisma {
     transfersDojoActed?: StudentTransferRequestUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
-    activityLogs?: ActivityLogUpdateManyWithoutActorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOrdersInput = {
@@ -73998,7 +72007,6 @@ export namespace Prisma {
     transfersDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
-    activityLogs?: ActivityLogUncheckedUpdateManyWithoutActorNestedInput
   }
 
   export type DojoUpsertWithoutRenewalOrdersInput = {
@@ -74628,7 +72636,6 @@ export namespace Prisma {
     transfersDojoActed?: StudentTransferRequestCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
-    activityLogs?: ActivityLogCreateNestedManyWithoutActorInput
   }
 
   export type UserUncheckedCreateWithoutTournamentEntriesInput = {
@@ -74659,7 +72666,6 @@ export namespace Prisma {
     transfersDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
-    activityLogs?: ActivityLogUncheckedCreateNestedManyWithoutActorInput
   }
 
   export type UserCreateOrConnectWithoutTournamentEntriesInput = {
@@ -74837,7 +72843,6 @@ export namespace Prisma {
     transfersDojoActed?: StudentTransferRequestUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
-    activityLogs?: ActivityLogUpdateManyWithoutActorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTournamentEntriesInput = {
@@ -74868,7 +72873,6 @@ export namespace Prisma {
     transfersDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
-    activityLogs?: ActivityLogUncheckedUpdateManyWithoutActorNestedInput
   }
 
   export type TournamentMatchUpsertWithWhereUniqueWithoutParticipant1Input = {
@@ -75331,7 +73335,6 @@ export namespace Prisma {
     transfersDojoActed?: StudentTransferRequestCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
-    activityLogs?: ActivityLogCreateNestedManyWithoutActorInput
   }
 
   export type UserUncheckedCreateWithoutAchievementsAwardedInput = {
@@ -75362,7 +73365,6 @@ export namespace Prisma {
     transfersDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
-    activityLogs?: ActivityLogUncheckedCreateNestedManyWithoutActorInput
   }
 
   export type UserCreateOrConnectWithoutAchievementsAwardedInput = {
@@ -75517,7 +73519,6 @@ export namespace Prisma {
     transfersDojoActed?: StudentTransferRequestUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
-    activityLogs?: ActivityLogUpdateManyWithoutActorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAchievementsAwardedInput = {
@@ -75548,7 +73549,6 @@ export namespace Prisma {
     transfersDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
-    activityLogs?: ActivityLogUncheckedUpdateManyWithoutActorNestedInput
   }
 
   export type StudentCreateWithoutTransferRequestsInput = {
@@ -75847,7 +73847,6 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantCreateNestedManyWithoutUserInput
     transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
-    activityLogs?: ActivityLogCreateNestedManyWithoutActorInput
   }
 
   export type UserUncheckedCreateWithoutTransfersDojoActedInput = {
@@ -75878,7 +73877,6 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutUserInput
     transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
-    activityLogs?: ActivityLogUncheckedCreateNestedManyWithoutActorInput
   }
 
   export type UserCreateOrConnectWithoutTransfersDojoActedInput = {
@@ -75914,7 +73912,6 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantCreateNestedManyWithoutUserInput
     transfersDojoActed?: StudentTransferRequestCreateNestedManyWithoutDojoActedByInput
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
-    activityLogs?: ActivityLogCreateNestedManyWithoutActorInput
   }
 
   export type UserUncheckedCreateWithoutTransfersAdminActedInput = {
@@ -75945,7 +73942,6 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutUserInput
     transfersDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutDojoActedByInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
-    activityLogs?: ActivityLogUncheckedCreateNestedManyWithoutActorInput
   }
 
   export type UserCreateOrConnectWithoutTransfersAdminActedInput = {
@@ -76314,7 +74310,6 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUpdateManyWithoutUserNestedInput
     transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
-    activityLogs?: ActivityLogUpdateManyWithoutActorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTransfersDojoActedInput = {
@@ -76345,7 +74340,6 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutUserNestedInput
     transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
-    activityLogs?: ActivityLogUncheckedUpdateManyWithoutActorNestedInput
   }
 
   export type UserUpsertWithoutTransfersAdminActedInput = {
@@ -76387,7 +74381,6 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUpdateManyWithoutUserNestedInput
     transfersDojoActed?: StudentTransferRequestUpdateManyWithoutDojoActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
-    activityLogs?: ActivityLogUpdateManyWithoutActorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTransfersAdminActedInput = {
@@ -76418,7 +74411,6 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutUserNestedInput
     transfersDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
-    activityLogs?: ActivityLogUncheckedUpdateManyWithoutActorNestedInput
   }
 
   export type StudentDojoHistoryUpsertWithWhereUniqueWithoutTransferRequestInput = {
@@ -76719,7 +74711,6 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantCreateNestedManyWithoutUserInput
     transfersDojoActed?: StudentTransferRequestCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
-    activityLogs?: ActivityLogCreateNestedManyWithoutActorInput
   }
 
   export type UserUncheckedCreateWithoutDojoHistoryChangesInput = {
@@ -76750,7 +74741,6 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutUserInput
     transfersDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
-    activityLogs?: ActivityLogUncheckedCreateNestedManyWithoutActorInput
   }
 
   export type UserCreateOrConnectWithoutDojoHistoryChangesInput = {
@@ -77075,7 +75065,6 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUpdateManyWithoutUserNestedInput
     transfersDojoActed?: StudentTransferRequestUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
-    activityLogs?: ActivityLogUpdateManyWithoutActorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDojoHistoryChangesInput = {
@@ -77106,7 +75095,6 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutUserNestedInput
     transfersDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
-    activityLogs?: ActivityLogUncheckedUpdateManyWithoutActorNestedInput
   }
 
   export type UserCreateManyRoleInput = {
@@ -77154,7 +75142,6 @@ export namespace Prisma {
     transfersDojoActed?: StudentTransferRequestUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
-    activityLogs?: ActivityLogUpdateManyWithoutActorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRoleInput = {
@@ -77185,7 +75172,6 @@ export namespace Prisma {
     transfersDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
-    activityLogs?: ActivityLogUncheckedUpdateManyWithoutActorNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutRoleInput = {
@@ -77437,21 +75423,6 @@ export namespace Prisma {
     toDojoId?: string | null
     transferRequestId?: string | null
     reason?: string | null
-    createdAt?: Date | string
-  }
-
-  export type ActivityLogCreateManyActorInput = {
-    id?: string
-    actorLabel?: string | null
-    actorRole?: string | null
-    action: string
-    resource?: string | null
-    resourceId?: string | null
-    severity?: $Enums.ActivitySeverity
-    message: string
-    ip?: string | null
-    userAgent?: string | null
-    metadata?: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
   }
 
@@ -78089,51 +76060,6 @@ export namespace Prisma {
     toDojoId?: NullableStringFieldUpdateOperationsInput | string | null
     transferRequestId?: NullableStringFieldUpdateOperationsInput | string | null
     reason?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ActivityLogUpdateWithoutActorInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    actorLabel?: NullableStringFieldUpdateOperationsInput | string | null
-    actorRole?: NullableStringFieldUpdateOperationsInput | string | null
-    action?: StringFieldUpdateOperationsInput | string
-    resource?: NullableStringFieldUpdateOperationsInput | string | null
-    resourceId?: NullableStringFieldUpdateOperationsInput | string | null
-    severity?: EnumActivitySeverityFieldUpdateOperationsInput | $Enums.ActivitySeverity
-    message?: StringFieldUpdateOperationsInput | string
-    ip?: NullableStringFieldUpdateOperationsInput | string | null
-    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
-    metadata?: JsonNullValueInput | InputJsonValue
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ActivityLogUncheckedUpdateWithoutActorInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    actorLabel?: NullableStringFieldUpdateOperationsInput | string | null
-    actorRole?: NullableStringFieldUpdateOperationsInput | string | null
-    action?: StringFieldUpdateOperationsInput | string
-    resource?: NullableStringFieldUpdateOperationsInput | string | null
-    resourceId?: NullableStringFieldUpdateOperationsInput | string | null
-    severity?: EnumActivitySeverityFieldUpdateOperationsInput | $Enums.ActivitySeverity
-    message?: StringFieldUpdateOperationsInput | string
-    ip?: NullableStringFieldUpdateOperationsInput | string | null
-    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
-    metadata?: JsonNullValueInput | InputJsonValue
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ActivityLogUncheckedUpdateManyWithoutActorInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    actorLabel?: NullableStringFieldUpdateOperationsInput | string | null
-    actorRole?: NullableStringFieldUpdateOperationsInput | string | null
-    action?: StringFieldUpdateOperationsInput | string
-    resource?: NullableStringFieldUpdateOperationsInput | string | null
-    resourceId?: NullableStringFieldUpdateOperationsInput | string | null
-    severity?: EnumActivitySeverityFieldUpdateOperationsInput | $Enums.ActivitySeverity
-    message?: StringFieldUpdateOperationsInput | string
-    ip?: NullableStringFieldUpdateOperationsInput | string | null
-    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
-    metadata?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
