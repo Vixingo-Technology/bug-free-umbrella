@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { prisma } from "@/lib/prisma";
 import { loadCurrentUser } from "@/lib/auth/load-current-user";
-import { TRANSFER_REQUEST_FEE_BDT } from "@/lib/constants";
+import { getFees } from "@/lib/settings/fees";
 
 const OPEN_STATUSES = ["PENDING_PAYMENT", "AWAITING_DOJO", "AWAITING_ADMIN"] as const;
 
@@ -70,6 +70,8 @@ export async function createTransferRequestAction(input: {
         return { error: "You already have an open transfer request." };
     }
 
+    const { transferFeeBDT } = await getFees();
+
     let orderId: string;
     try {
         const result = await prisma.$transaction(async (tx) => {
@@ -79,7 +81,7 @@ export async function createTransferRequestAction(input: {
                     fromDojoId: student.dojoId!,
                     toDojoId,
                     reason: input.reason?.trim() || null,
-                    fee: TRANSFER_REQUEST_FEE_BDT,
+                    fee: transferFeeBDT,
                     status: "PENDING_PAYMENT",
                 },
             });
@@ -87,7 +89,7 @@ export async function createTransferRequestAction(input: {
             const order = await tx.shopOrder.create({
                 data: {
                     userId: user.id,
-                    total: TRANSFER_REQUEST_FEE_BDT,
+                    total: transferFeeBDT,
                     paymentStatus: "PENDING",
                     includesTransferRequest: true,
                     notes: `Transfer request fee`,

@@ -7,7 +7,6 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { assignRole } from "@/lib/auth/assign-role";
 import { sendEmail } from "@/lib/email/resend";
 import { buildDojoOwnerInviteEmail } from "@/lib/email/templates/dojo-owner-invite";
-import { logActivity } from "@/lib/activity/log";
 
 type ActionResult = { ok: true } | { ok: false; error: string };
 
@@ -113,7 +112,7 @@ export async function inviteMemberAction(formData: FormData): Promise<ActionResu
 }
 
 export async function updateMemberRoleAction(formData: FormData): Promise<ActionResult> {
-    const { userId: adminId } = await requireAdmin();
+    await requireAdmin();
 
     const memberId = formData.get("memberId") as string;
     const role = formData.get("role") as Role;
@@ -121,23 +120,7 @@ export async function updateMemberRoleAction(formData: FormData): Promise<Action
     if (!memberId) return { ok: false, error: "Member id is required." };
     if (!ROLES.includes(role)) return { ok: false, error: "Invalid role." };
 
-    const before = await prisma.user.findUnique({
-        where: { id: memberId },
-        select: { roleId: true, email: true, fullName: true },
-    });
-
     await assignRole(memberId, role);
-
-    await logActivity({
-        action: "admin.member.role_change",
-        message: `Role changed for ${before?.fullName ?? memberId}: ${before?.roleId ?? "?"} → ${role}`,
-        severity: role === "ADMIN" ? "WARNING" : "INFO",
-        actorId: adminId,
-        actorRole: "ADMIN",
-        resource: "user",
-        resourceId: memberId,
-        metadata: { from: before?.roleId, to: role, email: before?.email },
-    });
 
     // Keep user_metadata in sync so the JWT role claim stays accurate
     try {
@@ -154,18 +137,13 @@ export async function updateMemberRoleAction(formData: FormData): Promise<Action
 }
 
 export async function updateMemberStatusAction(formData: FormData): Promise<ActionResult> {
-    const { userId: adminId } = await requireAdmin();
+    await requireAdmin();
 
     const memberId = formData.get("memberId") as string;
     const status = formData.get("status") as Status;
 
     if (!memberId) return { ok: false, error: "Member id is required." };
     if (!STATUSES.includes(status)) return { ok: false, error: "Invalid status." };
-
-    const target = await prisma.user.findUnique({
-        where: { id: memberId },
-        select: { fullName: true, email: true },
-    });
 
     await prisma.$transaction([
         prisma.user.update({
@@ -177,17 +155,6 @@ export async function updateMemberStatusAction(formData: FormData): Promise<Acti
             data: { membershipStatus: status },
         }),
     ]);
-
-    await logActivity({
-        action: "admin.member.status_change",
-        message: `${target?.fullName ?? memberId} status → ${status}`,
-        severity: status === "SUSPENDED" ? "WARNING" : "INFO",
-        actorId: adminId,
-        actorRole: "ADMIN",
-        resource: "user",
-        resourceId: memberId,
-        metadata: { status, email: target?.email },
-    });
 
     revalidatePath("/portal/admin/members");
     return { ok: true };
@@ -204,7 +171,7 @@ export async function deleteMemberAction(formData: FormData): Promise<ActionResu
 
     const target = await prisma.user.findUnique({
         where: { id: memberId },
-        select: { id: true, fullName: true, email: true, roleId: true },
+        select: { id: true },
     });
     if (!target) return { ok: false, error: "Member not found." };
 
@@ -230,17 +197,6 @@ export async function deleteMemberAction(formData: FormData): Promise<ActionResu
     // Belt-and-braces: if the DB row is still present (e.g. no auth cascade
     // configured), remove it explicitly. Role-specific rows cascade from `users`.
     await prisma.user.deleteMany({ where: { id: memberId } });
-
-    await logActivity({
-        action: "admin.member.delete",
-        message: `Hard-deleted ${target.fullName} (${target.email})`,
-        severity: "CRITICAL",
-        actorId: adminId,
-        actorRole: "ADMIN",
-        resource: "user",
-        resourceId: memberId,
-        metadata: { role: target.roleId, email: target.email },
-    });
 
     revalidatePath("/portal/admin/members");
     return { ok: true };

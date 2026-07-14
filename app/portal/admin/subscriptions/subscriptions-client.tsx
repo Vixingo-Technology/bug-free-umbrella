@@ -6,6 +6,7 @@ import {
     DOJO_ENLISTMENT_FEE_BDT,
     DOJO_RENEWAL_FEE_BDT,
     MEMBERSHIP_FEE_BDT,
+    TRANSFER_REQUEST_FEE_BDT,
 } from "@/lib/constants";
 import { updateSubscriptionFeesAction } from "./actions";
 
@@ -13,6 +14,7 @@ type FeeState = {
     dojoEnlistmentFeeBDT: string;
     dojoRenewalFeeBDT: string;
     membershipFeeBDT: string;
+    transferFeeBDT: string;
 };
 
 type Props = {
@@ -21,6 +23,7 @@ type Props = {
         dojoEnlistmentFeeBDT: number | null;
         dojoRenewalFeeBDT: number | null;
         membershipFeeBDT: number | null;
+        transferFeeBDT: number | null;
     };
 };
 
@@ -54,6 +57,13 @@ const FIELDS: Array<{
         unit: "৳ / year",
         fallback: MEMBERSHIP_FEE_BDT,
     },
+    {
+        key: "transferFeeBDT",
+        label: "Dojo Transfer Fee",
+        hint: "Non-refundable fee a student pays when requesting a transfer to a different dojo.",
+        unit: "৳ / request",
+        fallback: TRANSFER_REQUEST_FEE_BDT,
+    },
 ];
 
 function toInput(n: number | null): string {
@@ -65,6 +75,7 @@ export default function SubscriptionsClient({ stored }: Props) {
         dojoEnlistmentFeeBDT: toInput(stored.dojoEnlistmentFeeBDT),
         dojoRenewalFeeBDT: toInput(stored.dojoRenewalFeeBDT),
         membershipFeeBDT: toInput(stored.membershipFeeBDT),
+        transferFeeBDT: toInput(stored.transferFeeBDT),
     };
 
     const [values, setValues] = useState<FeeState>(initial);
@@ -76,7 +87,8 @@ export default function SubscriptionsClient({ stored }: Props) {
     const dirty =
         values.dojoEnlistmentFeeBDT !== savedValues.dojoEnlistmentFeeBDT ||
         values.dojoRenewalFeeBDT !== savedValues.dojoRenewalFeeBDT ||
-        values.membershipFeeBDT !== savedValues.membershipFeeBDT;
+        values.membershipFeeBDT !== savedValues.membershipFeeBDT ||
+        values.transferFeeBDT !== savedValues.transferFeeBDT;
 
     function setField(key: FieldKey, v: string) {
         setValues((prev) => ({ ...prev, [key]: v }));
@@ -97,6 +109,7 @@ export default function SubscriptionsClient({ stored }: Props) {
         form.set("dojoEnlistmentFeeBDT", values.dojoEnlistmentFeeBDT);
         form.set("dojoRenewalFeeBDT", values.dojoRenewalFeeBDT);
         form.set("membershipFeeBDT", values.membershipFeeBDT);
+        form.set("transferFeeBDT", values.transferFeeBDT);
 
         startTransition(async () => {
             const result = await updateSubscriptionFeesAction(form);

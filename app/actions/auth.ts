@@ -3,8 +3,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { provisionMemberFromSupabaseUser } from "@/lib/auth/provision-member";
-import { logActivity } from "@/lib/activity/log";
-import { loadCurrentUser } from "@/lib/auth/load-current-user";
 
 export async function loginAction(formData: FormData) {
     const supabase = await createClient();
@@ -16,29 +14,14 @@ export async function loginAction(formData: FormData) {
         return { error: "Email and password are required." };
     }
 
-    const { data, error } = await supabase.auth.signInWithPassword({
+    const { error } = await supabase.auth.signInWithPassword({
         email,
         password,
     });
 
     if (error) {
-        await logActivity({
-            action: "auth.login.failed",
-            message: `Failed login for ${email}`,
-            severity: "WARNING",
-            actorLabel: email,
-            metadata: { reason: error.message },
-        });
         return { error: error.message };
     }
-
-    await logActivity({
-        action: "auth.login",
-        message: `${email} signed in`,
-        severity: "SUCCESS",
-        actorId: data.user?.id ?? null,
-        actorLabel: email,
-    });
 
     redirect("/portal");
 }
@@ -125,19 +108,7 @@ export async function resendSignupOtp(email: string) {
 
 export async function signoutAction() {
     const supabase = await createClient();
-    const { data: { user } } = await supabase.auth.getUser();
-    const me = user ? await loadCurrentUser(user.id) : null;
     await supabase.auth.signOut();
-    if (user) {
-        await logActivity({
-            action: "auth.signout",
-            message: `${user.email ?? user.id} signed out`,
-            severity: "INFO",
-            actorId: user.id,
-            actorLabel: user.email ?? null,
-            actorRole: me?.role ?? null,
-        });
-    }
     redirect("/");
 }
 

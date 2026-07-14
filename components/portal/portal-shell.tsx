@@ -28,7 +28,6 @@ import {
     Trophy,
     ArrowRightLeft,
     CreditCard,
-    Activity,
 } from "lucide-react";
 import Logo from "@/assets/jka_logo.svg";
 import { signoutAction } from "@/app/actions/auth";
@@ -37,7 +36,6 @@ import { playNotificationChime } from "@/lib/notification-sound";
 import { DOJO_NAV, GROUP_LABEL, type DojoNavItem } from "@/lib/dojo-nav";
 import { type DojoRole } from "@/lib/dojo-roles";
 import NotificationBell from "@/components/portal/notification-bell";
-import ActivityMonitor from "@/components/portal/admin/activity-monitor";
 
 const DOJO_ROLE_RANK: Record<DojoRole, number> = {
     INSTRUCTOR: 1,
@@ -78,7 +76,6 @@ const adminNavItems = [
     { label: "Certificates", href: "/portal/admin/certificates", icon: Award },
     { label: "Transfers", href: "/portal/admin/transfers", icon: ArrowRightLeft },
     { label: "Subscriptions", href: "/portal/admin/subscriptions", icon: CreditCard },
-    { label: "Activity Monitor", href: "/portal/admin/activity", icon: Activity },
 ];
 
 // Dojo staff (Instructor / Manager / Dojo Head) share the personal sidebar;
@@ -359,9 +356,6 @@ export default function PortalShell({ userId, initialRole = "STUDENT", children 
                     </button>
                 </form>
             </div>
-
-            {/* Admin-only: real-time activity monitor at the very bottom */}
-            {isAdmin && <ActivityMonitor />}
         </div>
     );
 

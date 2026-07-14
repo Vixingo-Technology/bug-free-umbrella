@@ -5,7 +5,6 @@ import type { Prisma } from "@/prisma/generated/client";
 import { notifyAdmins, notifyMembers } from "@/lib/notify";
 import { findUserIdsByRoles } from "@/lib/notify/recipients";
 import { extendExpiry } from "@/lib/renewals/extend-expiry";
-import { logActivity } from "@/lib/activity/log";
 
 // Landing pages for the buyer after we finish server-side processing. We
 // prefer the page the buyer came from (renew form, dojo renewal card) so
@@ -88,14 +87,6 @@ export async function POST(request: Request) {
             const reason =
                 json.failedreason ||
                 "The payment gateway declined the transaction.";
-            await logActivity({
-                action: "payment.declined",
-                message: `SSLCommerz declined order ${orderId}: ${reason}`,
-                severity: "ERROR",
-                resource: "order",
-                resourceId: orderId,
-                metadata: { gateway: "sslcommerz", status: json.status, valId },
-            });
             return NextResponse.redirect(
                 new URL(
                     failureRedirectFor(orderShell, orderId, reason),
@@ -241,23 +232,6 @@ export async function POST(request: Request) {
                     type: "PAYMENT",
                     link: "/portal/admin/orders",
                 });
-
-                await logActivity({
-                    action: "payment.received",
-                    message: `${updatedUser.fullName} paid ${order.currency} ${Number(order.total).toLocaleString()}`,
-                    severity: "SUCCESS",
-                    actorId: updatedUser.id,
-                    actorLabel: updatedUser.fullName,
-                    resource: "order",
-                    resourceId: orderId,
-                    metadata: {
-                        amount: Number(order.total),
-                        currency: order.currency,
-                        includesMembership: order.includesMembership,
-                        includesDojoRenewal: order.includesDojoRenewal,
-                        includesTransferRequest: order.includesTransferRequest,
-                    },
-                });
             }
         }
 
@@ -273,13 +247,6 @@ export async function POST(request: Request) {
         return NextResponse.redirect(new URL(target, request.url));
     } catch (err) {
         console.error("SSLCommerz success webhook error:", err);
-        await logActivity({
-            action: "payment.webhook.error",
-            message: `SSLCommerz webhook crashed: ${err instanceof Error ? err.message : String(err)}`,
-            severity: "CRITICAL",
-            resource: "payment",
-            metadata: { gateway: "sslcommerz" },
-        });
         return NextResponse.redirect(new URL("/portal", request.url));
     }
 }

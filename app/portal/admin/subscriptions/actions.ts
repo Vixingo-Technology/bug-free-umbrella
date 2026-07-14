@@ -20,6 +20,7 @@ const schema = z.object({
     dojoEnlistmentFeeBDT: feeInput,
     dojoRenewalFeeBDT: feeInput,
     membershipFeeBDT: feeInput,
+    transferFeeBDT: feeInput,
 });
 
 export type UpdateFeesResult =
@@ -35,6 +36,7 @@ export async function updateSubscriptionFeesAction(
         dojoEnlistmentFeeBDT: formData.get("dojoEnlistmentFeeBDT"),
         dojoRenewalFeeBDT: formData.get("dojoRenewalFeeBDT"),
         membershipFeeBDT: formData.get("membershipFeeBDT"),
+        transferFeeBDT: formData.get("transferFeeBDT"),
     });
 
     if (!parsed.success) {
@@ -57,5 +59,6 @@ export async function updateSubscriptionFeesAction(
     revalidatePath("/enlist-dojo/payment");
     revalidatePath("/portal/renew");
     revalidatePath("/portal/dojo/renewals");
+    revalidatePath("/portal/transfer");
     return { ok: true };
 }
