@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { motion } from "motion/react";
 import Image from "next/image";
 import { siteContent } from "@/lib/i18n/site-content";
@@ -7,6 +8,7 @@ import { siteContent } from "@/lib/i18n/site-content";
 export default function Techniques() {
     const copy = siteContent;
     const pillars = copy.techniques.items;
+    const MotionLink = motion(Link);
 
     return (
         <section
@@ -25,42 +27,45 @@ export default function Techniques() {
 
                 <div className="grid lg:grid-cols-3 gap-8 h-auto lg:h-[700px]">
                     {pillars.map((pillar, i) => (
-                        <motion.div
+                        <MotionLink
                             key={pillar.id}
+                            href="/about/karate/techniques"
                             initial={{ opacity: 0, y: 50 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ duration: 0.8, delay: i * 0.2 }}
-                            className="relative group overflow-hidden h-[500px] lg:h-full rounded-sm shadow-md"
+                            className="relative group overflow-hidden h-[500px] lg:h-full rounded-sm shadow-md block focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-red/70 focus-visible:ring-offset-2 focus-visible:ring-offset-bg-deep"
                         >
-                            <div className="absolute inset-0 bg-zinc-950/35 z-10 opacity-70 group-hover:opacity-30 transition-opacity duration-700"></div>
-                            <Image
-                                src={pillar.image}
-                                alt={pillar.name}
-                                fill
-                                className="object-cover grayscale group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-105"
-                                referrerPolicy="no-referrer"
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-t from-zinc-900 via-zinc-900/10 to-transparent z-20"></div>
+                            <div className="relative h-full w-full">
+                                <div className="absolute inset-0 bg-zinc-950/35 z-10 opacity-70 group-hover:opacity-30 transition-opacity duration-700"></div>
+                                <Image
+                                    src={pillar.image}
+                                    alt={pillar.name}
+                                    fill
+                                    className="object-cover grayscale group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-105"
+                                    referrerPolicy="no-referrer"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-zinc-900 via-zinc-900/10 to-transparent z-20"></div>
 
-                            <div className="absolute bottom-0 left-0 p-10 z-30 w-full">
-                                <p className="text-accent-red font-serif text-4xl mb-4 opacity-75 group-hover:opacity-100 transition-opacity duration-500">
-                                    {pillar.kanji}
-                                </p>
-                                <h3 className="text-3xl font-heading font-bold text-white mb-4 tracking-widest">
-                                    {pillar.name}
-                                </h3>
-
-                                <div className="h-0 overflow-hidden group-hover:h-24 transition-all duration-500 ease-in-out">
-                                    <p className="text-zinc-200 font-normal text-sm mt-4 leading-relaxed">
-                                        {pillar.desc}
+                                <div className="absolute bottom-0 left-0 p-10 z-30 w-full">
+                                    <p className="text-accent-red font-serif text-4xl mb-4 opacity-75 group-hover:opacity-100 transition-opacity duration-500">
+                                        {pillar.kanji}
                                     </p>
-                                </div>
-                            </div>
+                                    <h3 className="text-3xl font-heading font-bold text-white mb-4 tracking-widest">
+                                        {pillar.name}
+                                    </h3>
 
-                            {/* Top border accent */}
-                            <div className="absolute top-0 left-0 w-full h-[2px] bg-accent-red scale-x-0 origin-left group-hover:scale-x-100 transition-transform duration-700 z-30"></div>
-                        </motion.div>
+                                    <div className="h-0 overflow-hidden group-hover:h-24 transition-all duration-500 ease-in-out">
+                                        <p className="text-zinc-200 font-normal text-sm mt-4 leading-relaxed">
+                                            {pillar.desc}
+                                        </p>
+                                    </div>
+                                </div>
+
+                                {/* Top border accent */}
+                                <div className="absolute top-0 left-0 w-full h-[2px] bg-accent-red scale-x-0 origin-left group-hover:scale-x-100 transition-transform duration-700 z-30"></div>
+                            </div>
+                        </MotionLink>
                     ))}
                 </div>
             </div>
