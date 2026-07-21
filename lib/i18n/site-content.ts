@@ -1,7 +1,7 @@
 export const siteContent = {
     nav: {
         links: [
-            { name: "About", href: "/about" },
+            { name: "About Us", href: "/about" },
             { name: "Journey", href: "/journey" },
             { name: "Events", href: "/events" },
             { name: "Branches", href: "/branches" },
