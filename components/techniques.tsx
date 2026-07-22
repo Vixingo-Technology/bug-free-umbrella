@@ -29,7 +29,7 @@ export default function Techniques() {
                     {pillars.map((pillar, i) => (
                         <MotionLink
                             key={pillar.id}
-                            href="/about/karate/techniques"
+                            href="/about/karate"
                             initial={{ opacity: 0, y: 50 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}

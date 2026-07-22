@@ -10,7 +10,7 @@ export default function PhilosophyPage() {
   return (
     <div className="max-w-4xl mx-auto space-y-12">
       {/* Header Section */}
-      <div>
+      <div id="way-of-life" className="scroll-mt-28">
         <p className="text-xs tracking-[0.4em] uppercase text-accent-red font-bold mb-4">
           Philosophy
         </p>
@@ -37,7 +37,7 @@ export default function PhilosophyPage() {
         </div>
         <div className="relative z-10">
           <p className="font-serif italic text-xl md:text-2xl text-zinc-800 leading-relaxed mb-4">
-            "The ultimate aim of karate lies not in victory or defeat, but in the perfection of the character of its participants."
+            &quot;The ultimate aim of karate lies not in victory or defeat, but in the perfection of the character of its participants.&quot;
           </p>
           <div className="flex items-center gap-3">
             <div className="h-0.5 w-8 bg-accent-red" />
@@ -49,7 +49,7 @@ export default function PhilosophyPage() {
       </div>
 
       {/* Training Beyond Technique */}
-      <div className="space-y-6">
+      <div id="beyond-technique" className="space-y-6 scroll-mt-28">
         <div className="flex items-center gap-3">
           <Sparkles className="w-5 h-5 text-accent-red" />
           <h2 className="font-serif font-bold text-2xl text-zinc-900">
@@ -96,7 +96,7 @@ export default function PhilosophyPage() {
       </div>
 
       {/* A Lifelong Journey */}
-      <div className="space-y-6 pt-4">
+      <div id="lifelong-journey" className="space-y-6 pt-4 scroll-mt-28">
         <div className="flex items-center gap-3">
           <Compass className="w-5 h-5 text-accent-red" />
           <h2 className="font-serif font-bold text-2xl text-zinc-900">
@@ -104,8 +104,8 @@ export default function PhilosophyPage() {
           </h2>
         </div>
 
-        <p className="text-zinc-700 leading-relaxed">
-          Karate-Do literally means <strong className="text-zinc-900">"The Way of Karate."</strong> It is not a destination or a pursuit of belts alone, but a continuous journey of learning and self-improvement.
+        <p className="text-zinc-700 leading-relaxed font-sans">
+          Karate-Do literally means <strong className="text-zinc-900">&quot;The Way of Karate.&quot;</strong> It is not a destination or a pursuit of belts alone, but a continuous journey of learning and self-improvement.
         </p>
 
         <p className="text-zinc-700 leading-relaxed">
