@@ -2,95 +2,134 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ChevronDown, ChevronRight } from "lucide-react";
 import clsx from "clsx";
+import { motion, AnimatePresence } from "motion/react";
 
-type NavItem = {
+type AnchorItem = {
+    title: string;
+    id: string;
+};
+
+type NavTab = {
     title: string;
     href: string;
+    anchors: AnchorItem[];
 };
 
-type NavSection = {
-    title: string;
-    items: NavItem[];
-};
-
-const navigation: NavSection[] = [
+const navigation: NavTab[] = [
     {
         title: "History",
-        items: [
-            { title: "History", href: "/about/history" },
-            { title: "Chronology", href: "/about/history/chronology" },
+        href: "/about/history",
+        anchors: [
+            { title: "Origins of JKA", id: "origins" },
+            { title: "About JKA WF Bangladesh", id: "jka-bangladesh" },
         ],
     },
     {
-        title: "Organization",
-        items: [
-            {
-                title: "Organizational Structure",
-                href: "/about/organization/structure",
-            },
-        ],
-    },
-    {
-        title: "Masters",
-        items: [
-            {
-                title: "Supreme Master Funakoshi Gichin",
-                href: "/about/masters/funakoshi",
-            },
-            {
-                title: "Master Nakayama Masatoshi",
-                href: "/about/masters/nakayama",
-            },
-            {
-                title: "Master Sugiura Motokuni",
-                href: "/about/masters/sugiura",
-            },
-            { title: "Master Ueki Masaaki", href: "/about/masters/ueki" },
+        title: "Organizational Structure",
+        href: "/about/organization",
+        anchors: [
+            { title: "JKA Organization", id: "structure" },
         ],
     },
     {
         title: "JKA Karate",
-        items: [
-            { title: "Philosophy", href: "/about/karate/philosophy" },
-            { title: "Training System", href: "/about/karate/features" },
-            { title: "Children", href: "/about/karate/children" },
-            { title: "Techniques", href: "/about/karate/techniques" },
+        href: "/about/karate",
+        anchors: [
+            { title: "Authentic Shotokan", id: "tradition" },
+            { title: "Training System", id: "training-system" },
+            { title: "Why Train in JKA?", id: "why-train" },
+        ],
+    },
+    {
+        title: "JKA Karate Philosophy",
+        href: "/about/karate/philosophy",
+        anchors: [
+            { title: "A Way of Life", id: "way-of-life" },
+            { title: "Training Beyond Technique", id: "beyond-technique" },
+            { title: "A Lifelong Journey", id: "lifelong-journey" },
+        ],
+    },
+    {
+        title: "Extra Pages",
+        href: "/about/extras",
+        anchors: [
+            { title: "JKA Masters Series", id: "masters" },
+            { title: "Karate for Children", id: "children" },
+            { title: "JKA Chronology", id: "chronology" },
         ],
     },
 ];
+
+function useScrollSpy(ids: string[], offset = 140) {
+    const [activeId, setActiveId] = useState<string>("");
+
+    useEffect(() => {
+        if (ids.length === 0) return;
+
+        const handleScroll = () => {
+            const scrollPosition = window.scrollY + offset;
+
+            // Check if we are at the very bottom of the page
+            const isBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 50;
+
+            if (isBottom) {
+                setActiveId(ids[ids.length - 1]);
+                return;
+            }
+
+            for (let i = ids.length - 1; i >= 0; i--) {
+                const id = ids[i];
+                const element = document.getElementById(id);
+                if (element) {
+                    if (scrollPosition >= element.offsetTop) {
+                        setActiveId(id);
+                        return;
+                    }
+                }
+            }
+            setActiveId(ids[0]);
+        };
+
+        window.addEventListener("scroll", handleScroll);
+        const timer = setTimeout(handleScroll, 100);
+
+        return () => {
+            window.removeEventListener("scroll", handleScroll);
+            clearTimeout(timer);
+        };
+    }, [ids, offset]);
+
+    return activeId;
+}
 
 export default function AboutSidebar() {
     const pathname = usePathname();
 
     return (
-        <aside className="w-full lg:w-80 flex-shrink-0 bg-white/80 backdrop-blur-md p-6 rounded-xl border border-zinc-200/50 shadow-[0_0_20px_rgba(204,0,0,0.15)] relative overflow-hidden md:sticky md:top-24">
+        <aside className="w-full lg:w-80 flex-shrink-0 bg-white/80 backdrop-blur-md p-6 rounded-xl border border-zinc-200/50 shadow-[0_0_20px_rgba(204,0,0,0.15)] relative overflow-hidden md:sticky md:top-28">
             {/* Red glow ambient light behind */}
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[150%] h-32 bg-accent-red/10 blur-[60px] rounded-full pointer-events-none" />
 
             <h2 className="text-lg font-bold mb-6 text-zinc-900 border-b border-zinc-200 pb-4 relative z-10">
                 <Link
                     href="/about"
-                    className="hover:text-accent-red transition-colors flex items-center justify-between text-sm"
+                    className="hover:text-accent-red transition-colors flex items-center justify-between text-sm uppercase tracking-wider font-karate"
                 >
-                    About the Japan Karate Association
-                    {/* <ChevronDown size={16} className="text-zinc-500" /> */}
+                    About the JKA WF Bangladesh
                 </Link>
             </h2>
 
             <div className="space-y-4 relative z-10">
-                {navigation.map((section, idx) => {
-                    const isChildActive = section.items.some(
-                        (item) => pathname === item.href,
-                    );
+                {navigation.map((tab, idx) => {
+                    const isActive = pathname === tab.href;
                     return (
-                        <AccordionSection
+                        <SidebarTab
                             key={idx}
-                            section={section}
-                            pathname={pathname}
-                            defaultOpen={isChildActive}
+                            tab={tab}
+                            isActive={isActive}
                         />
                     );
                 })}
@@ -99,68 +138,101 @@ export default function AboutSidebar() {
     );
 }
 
-function AccordionSection({
-    section,
-    pathname,
-    defaultOpen,
+function SidebarTab({
+    tab,
+    isActive,
 }: {
-    section: NavSection;
-    pathname: string;
-    defaultOpen: boolean;
+    tab: NavTab;
+    isActive: boolean;
 }) {
-    const [isOpen, setIsOpen] = useState(defaultOpen);
+    const anchorIds = tab.anchors.map((a) => a.id);
+    const activeAnchorId = useScrollSpy(isActive ? anchorIds : []);
+
+    const handleAnchorClick = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
+        e.preventDefault();
+        const element = document.getElementById(id);
+        if (element) {
+            const offset = 112; // safe area height (navbar)
+            const bodyRect = document.body.getBoundingClientRect().top;
+            const elementRect = element.getBoundingClientRect().top;
+            const elementPosition = elementRect - bodyRect;
+            const offsetPosition = elementPosition - offset;
+
+            window.scrollTo({
+                top: offsetPosition,
+                behavior: "smooth",
+            });
+
+            // Update hash without jumping
+            window.history.pushState(null, "", `#${id}`);
+        }
+    };
 
     return (
         <div className="pb-2">
-            <button
-                onClick={() => setIsOpen(!isOpen)}
-                className="w-full flex items-center gap-3 py-2 text-left text-zinc-800 font-serif text-lg hover:text-accent-red transition-colors group"
+            <Link
+                href={tab.href}
+                className={clsx(
+                    "w-full flex items-center gap-3 py-2 text-left font-serif text-lg transition-colors group",
+                    isActive
+                        ? "text-accent-red font-bold"
+                        : "text-zinc-800 hover:text-accent-red"
+                )}
             >
-                <div className="w-5 h-5 bg-accent-red/10 border border-accent-red/30 shadow-[0_0_8px_rgba(204,0,0,0.2)] flex items-center justify-center text-accent-red text-xs rounded-sm flex-shrink-0 transition-shadow group-hover:shadow-[0_0_12px_rgba(204,0,0,0.3)]">
-                    {isOpen ? (
-                        <ChevronDown size={14} />
+                <div className={clsx(
+                    "w-5 h-5 flex items-center justify-center text-xs rounded-sm flex-shrink-0 transition-all duration-300",
+                    isActive 
+                        ? "bg-accent-red text-white shadow-[0_0_8px_rgba(204,0,0,0.3)]"
+                        : "bg-accent-red/10 border border-accent-red/30 text-accent-red group-hover:bg-accent-red/20"
+                )}>
+                    {isActive ? (
+                        <ChevronDown size={12} className="stroke-[3]" />
                     ) : (
-                        <ChevronRight size={14} />
+                        <ChevronRight size={12} className="stroke-[3]" />
                     )}
                 </div>
-                {section.title}
-            </button>
+                <span>{tab.title}</span>
+            </Link>
 
-            {isOpen && (
-                <ul className="mt-2 ml-2.5 space-y-1 border-l border-zinc-300">
-                    {section.items.map((item, itemIdx) => {
-                        const isActive = pathname === item.href;
-                        return (
-                            <li key={itemIdx} className="relative group/link">
-                                {/* Dotted line connector */}
-                                <div className="absolute left-0 top-1/2 w-4 border-t border-zinc-300 -translate-y-1/2 group-hover/link:border-accent-red/50 transition-colors" />
-
-                                <Link
-                                    href={item.href}
-                                    className={clsx(
-                                        "block py-2 pl-6 pr-2 text-[15px] transition-colors border-b border-zinc-100 ml-4",
-                                        isActive
-                                            ? "text-accent-red font-bold bg-zinc-50/50"
-                                            : "text-zinc-600 hover:text-zinc-900 hover:bg-zinc-50/50",
-                                    )}
-                                >
-                                    <span
+            <AnimatePresence initial={false}>
+                {isActive && (
+                    <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                        className="overflow-hidden"
+                    >
+                        <div className="relative mt-2 ml-2.5 pl-6 border-l border-zinc-200/80 space-y-1 py-1">
+                            {tab.anchors.map((anchor) => {
+                                const isAnchorActive = activeAnchorId === anchor.id;
+                                return (
+                                    <a
+                                        key={anchor.id}
+                                        href={`#${anchor.id}`}
+                                        onClick={(e) => handleAnchorClick(e, anchor.id)}
                                         className={clsx(
-                                            "mr-1.5 text-xs transition-colors",
-                                            isActive
-                                                ? "text-accent-red"
-                                                : "text-zinc-400 group-hover/link:text-accent-red",
+                                            "relative block py-1.5 text-[14px] transition-colors leading-snug select-none",
+                                            isAnchorActive
+                                                ? "text-accent-red font-semibold"
+                                                : "text-zinc-500 hover:text-zinc-900"
                                         )}
                                     >
-                                        ›
-                                    </span>
-                                    {item.title}
-                                </Link>
-                            </li>
-                        );
-                    })}
-                </ul>
-            )}
+                                        {isAnchorActive && (
+                                            <motion.span
+                                                layoutId="activeDot"
+                                                className="absolute -left-[28.5px] top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-accent-red shadow-[0_0_6px_rgba(204,0,0,0.6)]"
+                                                transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                                            />
+                                        )}
+                                        {anchor.title}
+                                    </a>
+                                );
+                            })}
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </div>
     );
 }

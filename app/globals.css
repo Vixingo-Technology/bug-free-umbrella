@@ -154,3 +154,8 @@
     print-color-adjust: exact !important;
   }
 }
+
+html {
+  scroll-behavior: smooth;
+}
+

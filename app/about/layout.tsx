@@ -7,9 +7,9 @@ import Breadcrumbs from "@/components/breadcrumbs";
 import AboutHeader from "@/components/about-header";
 
 export const metadata: Metadata = {
-    title: "About the Japan Karate Association | JKA Bangladesh",
+    title: "About the JKA WF Bangladesh| JKA WF Bangladesh",
     description:
-        "About the Japan Karate Association. History, Masters, JKA Karate, and Instructors.",
+        "About the Japan Karate Association World Federation. History, Masters, JKA Karate, and Instructors.",
 };
 
 export default function AboutLayout({
@@ -30,7 +30,6 @@ export default function AboutLayout({
                 </div>
 
                 <div className="order-1 lg:order-2 flex-1 w-full overflow-hidden flex flex-col">
-
                     <div className="bg-white p-1 md:p-12 shadow-sm rounded-sm min-h-[500px]">
                         {children}
                     </div>
