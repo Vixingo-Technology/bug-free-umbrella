@@ -55,7 +55,7 @@ const navigation: NavSection[] = [
         title: "JKA Karate",
         items: [
             { title: "Philosophy", href: "/about/karate/philosophy" },
-            { title: "Features", href: "/about/karate/features" },
+            { title: "Training System", href: "/about/karate/features" },
             { title: "Children", href: "/about/karate/children" },
             { title: "Techniques", href: "/about/karate/techniques" },
         ],

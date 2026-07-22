@@ -13,7 +13,7 @@ const pathnameTitleMap: Record<string, string> = {
     "/about/masters/sugiura": "Master Sugiura Motokuni",
     "/about/masters/ueki": "Master Ueki Masaaki",
     "/about/karate/philosophy": "Philosophy",
-    "/about/karate/features": "Features",
+    "/about/karate/features": "Training System",
     "/about/karate/children": "Children",
     "/about/karate/techniques": "Techniques",
 };
