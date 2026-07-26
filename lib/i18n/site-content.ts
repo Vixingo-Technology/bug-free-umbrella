@@ -163,7 +163,7 @@ export const siteContent = {
                 desktopLabel: "7th Kyu",
                 mobileLabel: "Orange Belt",
                 color: "orange",
-                bg: "bg-amber-500",
+                bg: "bg-[#FFC001]",
                 border: "border-amber-600",
             },
             {
