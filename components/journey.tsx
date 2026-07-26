@@ -2,6 +2,7 @@
 
 import { motion } from "motion/react";
 import { siteContent } from "@/lib/i18n/site-content";
+import Link from "next/link";
 
 export default function Journey() {
     const copy = siteContent;
@@ -134,29 +135,42 @@ export default function Journey() {
 
                                 {/* Kyu-style schedule */}
                                 {"schedule" in info && info.schedule && (
-                                    <div className="flex flex-wrap gap-3">
-                                        {info.schedule.map((period, j) => (
-                                            <span
-                                                key={j}
-                                                className="inline-flex items-center gap-2 bg-zinc-900 text-white text-xs uppercase tracking-widest px-4 py-2.5 rounded-full font-bold"
-                                            >
-                                                <svg
-                                                    className="w-3.5 h-3.5"
-                                                    fill="none"
-                                                    viewBox="0 0 24 24"
-                                                    stroke="currentColor"
-                                                    strokeWidth={2}
+                                    <>
+                                        <div className="flex flex-wrap gap-3">
+                                            {info.schedule.map((period, j) => (
+                                                <span
+                                                    key={j}
+                                                    className="inline-flex items-center gap-2 bg-zinc-900 text-white text-xs uppercase tracking-widest px-4 py-2.5 rounded-full font-bold"
                                                 >
-                                                    <path
-                                                        strokeLinecap="round"
-                                                        strokeLinejoin="round"
-                                                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-                                                    />
+                                                    <svg
+                                                        className="w-3.5 h-3.5"
+                                                        fill="none"
+                                                        viewBox="0 0 24 24"
+                                                        stroke="currentColor"
+                                                        strokeWidth={2}
+                                                    >
+                                                        <path
+                                                            strokeLinecap="round"
+                                                            strokeLinejoin="round"
+                                                            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                                                        />
+                                                    </svg>
+                                                    {period}
+                                                </span>
+                                            ))}
+                                        </div>
+                                        <div className="mt-8">
+                                            <Link 
+                                                href="/about/karate#dan-ranking"
+                                                className="inline-flex items-center gap-2 text-sm font-bold text-accent-red hover:text-red-700 transition-colors group"
+                                            >
+                                                Learn more about grading and ranking
+                                                <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                                                 </svg>
-                                                {period}
-                                            </span>
-                                        ))}
-                                    </div>
+                                            </Link>
+                                        </div>
+                                    </>
                                 )}
                             </motion.div>
                         ))}

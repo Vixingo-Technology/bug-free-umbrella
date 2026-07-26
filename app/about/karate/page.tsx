@@ -344,6 +344,66 @@ export default function JkaKaratePage() {
                     </div>
                 </div>
 
+                {/* Kyu Examination Grading System */}
+                <div className="font-sans space-y-4 pt-4">
+                    <div className="flex items-center gap-2">
+                        <Award className="w-4 h-4 text-accent-red" />
+                        <h4 className="font-serif font-bold text-lg text-zinc-900">
+                            Kyu Examination Grading System
+                        </h4>
+                    </div>
+                    <div className="overflow-x-auto rounded-xl border border-zinc-200">
+                        <table className="w-full text-sm text-left border-collapse">
+                            <thead>
+                                <tr className="bg-zinc-100 text-zinc-900 border-b border-zinc-200">
+                                    <th className="px-4 py-3 font-bold uppercase tracking-wider text-xs">Marks</th>
+                                    <th className="px-4 py-3 font-bold uppercase tracking-wider text-xs">Grade</th>
+                                    <th className="px-4 py-3 font-bold uppercase tracking-wider text-xs">Remarks</th>
+                                    <th className="px-4 py-3 font-bold uppercase tracking-wider text-xs">Recommendation</th>
+                                </tr>
+                            </thead>
+                            <tbody className="text-zinc-700 bg-white">
+                                <tr className="border-b border-zinc-100 hover:bg-zinc-50/50">
+                                    <td className="px-4 py-3 font-medium">90 &amp; Above</td>
+                                    <td className="px-4 py-3">A+</td>
+                                    <td className="px-4 py-3">Excellent</td>
+                                    <td className="px-4 py-3">Direct Double Promotion</td>
+                                </tr>
+                                <tr className="border-b border-zinc-100 hover:bg-zinc-50/50">
+                                    <td className="px-4 py-3 font-medium">80-89</td>
+                                    <td className="px-4 py-3">A</td>
+                                    <td className="px-4 py-3">Very Good</td>
+                                    <td className="px-4 py-3">Probationary Double Promotion</td>
+                                </tr>
+                                <tr className="border-b border-zinc-100 hover:bg-zinc-50/50">
+                                    <td className="px-4 py-3 font-medium">70-79</td>
+                                    <td className="px-4 py-3">A-</td>
+                                    <td className="px-4 py-3">Good</td>
+                                    <td className="px-4 py-3">Pass</td>
+                                </tr>
+                                <tr className="border-b border-zinc-100 hover:bg-zinc-50/50">
+                                    <td className="px-4 py-3 font-medium">60-69</td>
+                                    <td className="px-4 py-3">B</td>
+                                    <td className="px-4 py-3">Average</td>
+                                    <td className="px-4 py-3">Pass</td>
+                                </tr>
+                                <tr className="border-b border-zinc-100 hover:bg-zinc-50/50">
+                                    <td className="px-4 py-3 font-medium">50-59</td>
+                                    <td className="px-4 py-3">C</td>
+                                    <td className="px-4 py-3">Poor</td>
+                                    <td className="px-4 py-3">Probationary Pass</td>
+                                </tr>
+                                <tr className="hover:bg-zinc-50/50">
+                                    <td className="px-4 py-3 font-medium">0-49</td>
+                                    <td className="px-4 py-3">F</td>
+                                    <td className="px-4 py-3">Fail</td>
+                                    <td className="px-4 py-3">Retake</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
                 {/* Official JKA Link */}
                 <div className="p-6 bg-zinc-50 border-l-4 border-accent-red rounded-r-lg shadow-sm font-sans">
                     <p className="text-zinc-700 text-sm md:text-base leading-relaxed mb-4">
