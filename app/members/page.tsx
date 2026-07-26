@@ -39,57 +39,114 @@ const roleLabel: Record<string, string> = {
 export default async function MembersPage({
     searchParams,
 }: {
-    searchParams: Promise<{ q?: string; page?: string }>;
+    searchParams: Promise<{ q?: string; page?: string; tab?: string }>;
 }) {
-    const { q = "", page: pageRaw = "1" } = await searchParams;
+    const { q = "", page: pageRaw = "1", tab = "students" } = await searchParams;
     const query = q.trim();
     const page = Math.max(1, Number.parseInt(pageRaw, 10) || 1);
     const skip = (page - 1) * PAGE_SIZE;
 
-    const where: Prisma.UserWhereInput = { isActive: true };
+    // Validate tab
+    const activeTab = ["students", "dan", "instructors", "clubs"].includes(tab)
+        ? tab
+        : "students";
 
-    if (query) {
-        const asRegNo = query.toUpperCase();
-        if (isRegNo(asRegNo)) {
-            where.memberNumber = asRegNo;
-        } else {
-            where.OR = [
-                { fullName: { contains: query, mode: "insensitive" } },
-                { memberNumber: { contains: asRegNo, mode: "insensitive" } },
+    let total = 0;
+    let members: any[] = [];
+    let dojos: any[] = [];
+
+    if (activeTab === "clubs") {
+        const whereDojo: Prisma.DojoWhereInput = { isActive: true };
+        if (query) {
+            whereDojo.OR = [
+                { name: { contains: query, mode: "insensitive" } },
+                { city: { contains: query, mode: "insensitive" } },
+                { address: { contains: query, mode: "insensitive" } },
             ];
         }
-    }
 
-    const [total, users] = await Promise.all([
-        prisma.user.count({ where }),
-        prisma.user.findMany({
-            where,
-            orderBy: [{ createdAt: "desc" }],
-            skip,
-            take: PAGE_SIZE,
-            include: {
-                student: {
-                    include: { dojo: { select: { id: true, name: true } } },
+        const [count, rows] = await Promise.all([
+            prisma.dojo.count({ where: whereDojo }),
+            prisma.dojo.findMany({
+                where: whereDojo,
+                orderBy: [{ city: "asc" }, { name: "asc" }],
+                skip,
+                take: PAGE_SIZE,
+                include: {
+                    students: {
+                        where: { user: { isActive: true } },
+                        select: { id: true },
+                    },
                 },
-            },
-        }),
-    ]);
+            }),
+        ]);
 
-    const members = users.map((u) => ({
-        id: u.id,
-        fullName: u.fullName,
-        email: u.email,
-        avatarUrl: u.avatarUrl,
-        role: roleLabel[u.roleId] ?? u.roleId,
-        memberNumber: u.memberNumber ?? null,
-        currentRank: u.student?.currentRank ?? "—",
-        dojoName: u.student?.dojo?.name ?? null,
-        joinDate: u.student?.joinDate ?? null,
-        expiryDate: u.student?.expiryDate ?? null,
-        membershipStatus: computeStatus(
-            u.student?.expiryDate ? new Date(u.student.expiryDate) : null,
-        ),
-    }));
+        total = count;
+        dojos = rows.map((d) => ({
+            id: d.id,
+            name: d.name,
+            city: d.city,
+            address: d.address,
+            logoUrl: d.logoUrl,
+            studentCount: d.students.length,
+        }));
+    } else {
+        const where: Prisma.UserWhereInput = { isActive: true };
+
+        if (activeTab === "students") {
+            where.roleId = "STUDENT";
+        } else if (activeTab === "dan") {
+            where.student = {
+                currentRank: { contains: "Dan", mode: "insensitive" },
+            };
+        } else if (activeTab === "instructors") {
+            where.roleId = "INSTRUCTOR";
+        }
+
+        if (query) {
+            const asRegNo = query.toUpperCase();
+            if (isRegNo(asRegNo)) {
+                where.memberNumber = asRegNo;
+            } else {
+                where.OR = [
+                    { fullName: { contains: query, mode: "insensitive" } },
+                    { memberNumber: { contains: asRegNo, mode: "insensitive" } },
+                ];
+            }
+        }
+
+        const [count, users] = await Promise.all([
+            prisma.user.count({ where }),
+            prisma.user.findMany({
+                where,
+                orderBy: [{ createdAt: "desc" }],
+                skip,
+                take: PAGE_SIZE,
+                include: {
+                    student: {
+                        include: { dojo: { select: { id: true, name: true } } },
+                    },
+                },
+            }),
+        ]);
+
+        total = count;
+        members = users.map((u) => ({
+            id: u.id,
+            fullName: u.fullName,
+            email: u.email,
+            avatarUrl: u.avatarUrl,
+            role: roleLabel[u.roleId] ?? u.roleId,
+            memberNumber: u.memberNumber ?? null,
+            currentRank: u.student?.currentRank ?? "—",
+            dojoName: u.student?.dojo?.name ?? null,
+            joinDate: u.student?.joinDate ?? null,
+            expiryDate: u.student?.expiryDate ?? null,
+            membershipStatus: computeStatus(
+                u.student?.expiryDate ? new Date(u.student.expiryDate) : null,
+            ),
+        }));
+    }
 
     const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
 
@@ -103,13 +160,12 @@ export default async function MembersPage({
                         Directory
                     </p>
                     <h1 className="font-karate text-3xl md:text-5xl text-zinc-900 uppercase tracking-wider font-bold leading-tight">
-                        Members
+                        Members & Dojo Directory
                     </h1>
                     <div className="h-px w-16 bg-accent-red mt-4 mb-4" />
                     <p className="text-zinc-600 max-w-2xl text-sm md:text-base">
                         Search verified JKA Bangladesh members by full name or by Reg
-                        No (format <span className="font-mono">JKA-BD-26071111</span>).
-                        Tap a member to open their digital membership card.
+                        No, or explore active dojo branches.
                     </p>
                 </div>
             </section>
@@ -121,6 +177,8 @@ export default async function MembersPage({
                 total={total}
                 pageSize={PAGE_SIZE}
                 members={serialize(members) as never}
+                dojos={serialize(dojos) as never}
+                activeTab={activeTab}
             />
 
             <Footer />

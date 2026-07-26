@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState, useTransition } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { motion } from "motion/react";
-import { Search, ChevronLeft, ChevronRight, IdCard, X } from "lucide-react";
+import { Search, ChevronLeft, ChevronRight, IdCard, X, MapPin, Users } from "lucide-react";
 import DigitalCardModal from "@/components/portal/digital-card-modal";
 import type { MembershipStatusLabel } from "@/components/portal/digital-card";
 
@@ -21,6 +21,15 @@ export interface DirectoryMember {
     membershipStatus: MembershipStatusLabel;
 }
 
+export interface DirectoryDojo {
+    id: string;
+    name: string;
+    city: string | null;
+    address: string | null;
+    logoUrl: string | null;
+    studentCount: number;
+}
+
 interface Props {
     initialQuery: string;
     page: number;
@@ -28,6 +37,8 @@ interface Props {
     total: number;
     pageSize: number;
     members: DirectoryMember[];
+    dojos: DirectoryDojo[];
+    activeTab: string;
 }
 
 const statusStyles: Record<MembershipStatusLabel, string> = {
@@ -44,6 +55,8 @@ export default function MembersDirectoryClient({
     total,
     pageSize,
     members,
+    dojos,
+    activeTab,
 }: Props) {
     const router = useRouter();
     const params = useSearchParams();
@@ -70,6 +83,17 @@ export default function MembersDirectoryClient({
         });
     };
 
+    const handleTabChange = (nextTab: string) => {
+        const p = new URLSearchParams(params.toString());
+        p.set("tab", nextTab);
+        p.delete("page");
+        p.delete("q");
+        setTerm("");
+        startTransition(() => {
+            router.push(`/members?${p.toString()}`);
+        });
+    };
+
     const goToPage = (target: number) => {
         const p = new URLSearchParams(params.toString());
         if (target <= 1) p.delete("page");
@@ -82,15 +106,19 @@ export default function MembersDirectoryClient({
     const from = total === 0 ? 0 : (page - 1) * pageSize + 1;
     const to = Math.min(total, page * pageSize);
 
+    const searchPlaceholder = activeTab === "clubs"
+        ? "Search dojos by name, city, or address..."
+        : "Search by name or Reg No (e.g. JKA-BD-000001)...";
+
     return (
-        <section className="py-14">
+        <section className="py-14 bg-bg-deep">
             <div className="max-w-6xl mx-auto px-6 lg:px-12">
                 <form
                     onSubmit={(e) => {
                         e.preventDefault();
                         commitSearch(term.trim());
                     }}
-                    className="relative mb-8"
+                    className="relative mb-6"
                 >
                     <div className="flex items-center gap-2 rounded-sm border border-zinc-300 bg-white shadow-sm focus-within:border-accent-red transition-colors">
                         <Search size={16} className="ml-4 text-zinc-500 shrink-0" />
@@ -98,7 +126,7 @@ export default function MembersDirectoryClient({
                             type="text"
                             value={term}
                             onChange={(e) => setTerm(e.target.value)}
-                            placeholder="Search by name or Reg No (e.g. JKA-BD-26071111)"
+                            placeholder={searchPlaceholder}
                             className="flex-1 py-3 pr-2 outline-none bg-transparent text-sm placeholder:text-zinc-400"
                         />
                         {term && (
@@ -123,9 +151,33 @@ export default function MembersDirectoryClient({
                     </div>
                 </form>
 
+                {/* Tabs Selector */}
+                <div className="flex flex-wrap items-center gap-2 mb-8 bg-zinc-50 p-1.5 rounded-md border border-zinc-200">
+                    <TabPill
+                        active={activeTab === "students"}
+                        onClick={() => handleTabChange("students")}
+                        label="Students"
+                    />
+                    <TabPill
+                        active={activeTab === "dan"}
+                        onClick={() => handleTabChange("dan")}
+                        label="Dan Ranks"
+                    />
+                    <TabPill
+                        active={activeTab === "instructors"}
+                        onClick={() => handleTabChange("instructors")}
+                        label="Instructors"
+                    />
+                    <TabPill
+                        active={activeTab === "clubs"}
+                        onClick={() => handleTabChange("clubs")}
+                        label="Dojo Clubs"
+                    />
+                </div>
+
                 <div className="flex items-center justify-between mb-6 text-xs uppercase tracking-widest text-zinc-500">
                     <span>
-                        {total} member{total === 1 ? "" : "s"}
+                        {total} {activeTab === "clubs" ? `dojo${total === 1 ? "" : "s"}` : `member${total === 1 ? "" : "s"}`}
                         {initialQuery ? ` · matching "${initialQuery}"` : ""}
                     </span>
                     <span>
@@ -133,74 +185,151 @@ export default function MembersDirectoryClient({
                     </span>
                 </div>
 
-                {members.length === 0 ? (
-                    <div className="border border-dashed border-zinc-300 rounded-sm py-16 text-center">
-                        <p className="text-sm text-zinc-500">
-                            No members matched your search.
-                        </p>
-                    </div>
-                ) : (
-                    <div
-                        className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 transition-opacity ${isPending ? "opacity-50" : ""}`}
-                    >
-                        {members.map((m, i) => (
-                            <motion.article
-                                key={m.id}
-                                initial={{ opacity: 0, y: 12 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.35, delay: i * 0.03 }}
-                                className="group relative bg-white border border-zinc-200 rounded-sm p-5 shadow-sm hover:shadow-lg hover:-translate-y-1 hover:border-accent-red transition-all duration-300"
-                                style={{ transformStyle: "preserve-3d" }}
-                            >
-                                <div className="flex items-center gap-4">
-                                    <div className="w-14 h-14 rounded-full overflow-hidden bg-gradient-to-br from-zinc-800 to-zinc-950 border border-zinc-200 flex items-center justify-center text-white font-bold shrink-0">
-                                        {m.avatarUrl ? (
-                                            /* eslint-disable-next-line @next/next/no-img-element */
-                                            <img
-                                                src={m.avatarUrl}
-                                                alt={m.fullName}
-                                                className="w-full h-full object-cover"
-                                            />
-                                        ) : (
-                                            <span>{m.fullName.charAt(0).toUpperCase()}</span>
-                                        )}
+                {activeTab === "clubs" ? (
+                    dojos.length === 0 ? (
+                        <div className="border border-dashed border-zinc-300 rounded-sm py-16 text-center">
+                            <p className="text-sm text-zinc-500">
+                                No dojos matched your search.
+                            </p>
+                        </div>
+                    ) : (
+                        <div
+                            className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 transition-opacity ${isPending ? "opacity-50" : ""}`}
+                        >
+                            {dojos.map((d, i) => (
+                                <motion.article
+                                    key={d.id}
+                                    initial={{ opacity: 0, y: 12 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ duration: 0.35, delay: i * 0.03 }}
+                                    className="group relative bg-white border border-zinc-200 rounded-sm p-5 shadow-sm hover:shadow-lg hover:-translate-y-1 hover:border-accent-red transition-all duration-300 flex flex-col"
+                                >
+                                    <div className="relative h-28 bg-gradient-to-br from-zinc-900 via-zinc-800 to-zinc-900 flex items-center justify-center rounded-sm overflow-hidden mb-4">
+                                        <div className="absolute inset-0 bg-accent-red/10" />
+                                        <div className="relative w-16 h-16 rounded-full bg-white border-2 border-white shadow-md flex items-center justify-center overflow-hidden">
+                                            {d.logoUrl ? (
+                                                /* eslint-disable-next-line @next/next/no-img-element */
+                                                <img
+                                                    src={d.logoUrl}
+                                                    alt={`${d.name} logo`}
+                                                    className="w-full h-full object-cover"
+                                                />
+                                            ) : (
+                                                <span className="text-xl font-karate font-bold text-zinc-900">
+                                                    {d.name.charAt(0).toUpperCase()}
+                                                </span>
+                                            )}
+                                        </div>
                                     </div>
-                                    <div className="min-w-0 flex-1">
-                                        <h3 className="font-bold text-zinc-900 truncate group-hover:text-accent-red transition-colors">
-                                            {m.fullName}
-                                        </h3>
-                                        <p className="text-[10px] tracking-widest uppercase text-zinc-500 mt-0.5 font-mono truncate">
-                                            {m.memberNumber ?? "Reg No pending"}
+
+                                    <h3 className="font-karate text-lg font-bold text-zinc-900 uppercase tracking-wide leading-tight group-hover:text-accent-red transition-colors">
+                                        {d.name}
+                                    </h3>
+
+                                    {d.city && (
+                                        <p className="flex items-center gap-1.5 text-[10px] text-zinc-500 mt-2 tracking-widest uppercase font-bold">
+                                            <MapPin size={10} className="text-accent-red shrink-0" />
+                                            {d.city}
                                         </p>
+                                    )}
+
+                                    {d.address && (
+                                        <p className="text-xs text-zinc-600 mt-1 line-clamp-2 leading-relaxed">
+                                            {d.address}
+                                        </p>
+                                    )}
+
+                                    <div className="mt-auto pt-4 flex items-center justify-between border-t border-zinc-100 mt-4 text-xs text-zinc-500">
+                                        <span className="flex items-center gap-1">
+                                            <Users size={12} />
+                                            <span className="font-mono font-bold text-zinc-700">
+                                                {d.studentCount}
+                                            </span>
+                                            {d.studentCount === 1 ? "student" : "students"}
+                                        </span>
+                                        <a
+                                            href={`/branches/${d.id}`}
+                                            className="text-[10px] font-bold tracking-widest uppercase text-accent-red inline-flex items-center gap-1 group-hover:gap-1.5 transition-all"
+                                        >
+                                            View Branch
+                                            <ChevronRight size={12} />
+                                        </a>
                                     </div>
-                                </div>
+                                    <span className="pointer-events-none absolute inset-x-0 -bottom-px h-px bg-accent-red scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-500" />
+                                </motion.article>
+                            ))}
+                        </div>
+                    )
+                ) : (
+                    members.length === 0 ? (
+                        <div className="border border-dashed border-zinc-300 rounded-sm py-16 text-center">
+                            <p className="text-sm text-zinc-500">
+                                No members matched your search.
+                            </p>
+                        </div>
+                    ) : (
+                        <div
+                            className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 transition-opacity ${isPending ? "opacity-50" : ""}`}
+                        >
+                            {members.map((m, i) => (
+                                <motion.article
+                                    key={m.id}
+                                    initial={{ opacity: 0, y: 12 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ duration: 0.35, delay: i * 0.03 }}
+                                    className="group relative bg-white border border-zinc-200 rounded-sm p-5 shadow-sm hover:shadow-lg hover:-translate-y-1 hover:border-accent-red transition-all duration-300"
+                                    style={{ transformStyle: "preserve-3d" }}
+                                >
+                                    <div className="flex items-center gap-4">
+                                        <div className="w-14 h-14 rounded-full overflow-hidden bg-gradient-to-br from-zinc-800 to-zinc-950 border border-zinc-200 flex items-center justify-center text-white font-bold shrink-0">
+                                            {m.avatarUrl ? (
+                                                /* eslint-disable-next-line @next/next/no-img-element */
+                                                <img
+                                                    src={m.avatarUrl}
+                                                    alt={m.fullName}
+                                                    className="w-full h-full object-cover"
+                                                />
+                                            ) : (
+                                                <span>{m.fullName.charAt(0).toUpperCase()}</span>
+                                            )}
+                                        </div>
+                                        <div className="min-w-0 flex-1">
+                                            <h3 className="font-bold text-zinc-900 truncate group-hover:text-accent-red transition-colors">
+                                                {m.fullName}
+                                            </h3>
+                                            <p className="text-[10px] tracking-widest uppercase text-zinc-500 mt-0.5 font-mono truncate">
+                                                {m.memberNumber ?? "Reg No pending"}
+                                            </p>
+                                        </div>
+                                    </div>
 
-                                <dl className="mt-5 space-y-1.5 text-[11px]">
-                                    <Row label="Rank" value={m.currentRank} />
-                                    <Row label="Dojo" value={m.dojoName ?? "—"} />
-                                    <Row label="Role" value={m.role} />
-                                </dl>
+                                    <dl className="mt-5 space-y-1.5 text-[11px]">
+                                        <Row label="Rank" value={m.currentRank} />
+                                        <Row label="Dojo" value={m.dojoName ?? "—"} />
+                                        <Row label="Role" value={m.role} />
+                                    </dl>
 
-                                <div className="mt-4 flex items-center justify-between">
-                                    <span
-                                        className={`inline-flex items-center gap-1 text-[10px] font-bold tracking-widest uppercase px-2 py-1 rounded-sm ${statusStyles[m.membershipStatus]}`}
-                                    >
-                                        {m.membershipStatus}
-                                    </span>
-                                    <button
-                                        type="button"
-                                        onClick={() => setOpenId(m.id)}
-                                        className="inline-flex items-center gap-1.5 text-[10px] font-bold tracking-widest uppercase px-3 py-1.5 rounded-sm bg-zinc-900 hover:bg-accent-red text-white transition-colors"
-                                    >
-                                        <IdCard size={12} />
-                                        View Card
-                                    </button>
-                                </div>
+                                    <div className="mt-4 flex items-center justify-between">
+                                        <span
+                                            className={`inline-flex items-center gap-1 text-[10px] font-bold tracking-widest uppercase px-2 py-1 rounded-sm ${statusStyles[m.membershipStatus]}`}
+                                        >
+                                            {m.membershipStatus}
+                                        </span>
+                                        <button
+                                            type="button"
+                                            onClick={() => setOpenId(m.id)}
+                                            className="inline-flex items-center gap-1.5 text-[10px] font-bold tracking-widest uppercase px-3 py-1.5 rounded-sm bg-zinc-900 hover:bg-accent-red text-white transition-colors"
+                                        >
+                                            <IdCard size={12} />
+                                            View Card
+                                        </button>
+                                    </div>
 
-                                <span className="pointer-events-none absolute inset-x-0 -bottom-px h-px bg-accent-red scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-500" />
-                            </motion.article>
-                        ))}
-                    </div>
+                                    <span className="pointer-events-none absolute inset-x-0 -bottom-px h-px bg-accent-red scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-500" />
+                                </motion.article>
+                            ))}
+                        </div>
+                    )
                 )}
 
                 {totalPages > 1 && (
@@ -277,6 +406,30 @@ export default function MembersDirectoryClient({
     );
 }
 
+function TabPill({
+    active,
+    onClick,
+    label,
+}: {
+    active: boolean;
+    onClick: () => void;
+    label: string;
+}) {
+    return (
+        <button
+            type="button"
+            onClick={onClick}
+            className={`inline-flex items-center px-4 py-2 text-xs font-bold tracking-widest uppercase rounded-sm transition-all duration-200 border shrink-0 ${
+                active
+                    ? "bg-accent-red text-white border-accent-red shadow-sm"
+                    : "bg-white text-zinc-700 border-zinc-200 hover:border-accent-red hover:text-accent-red"
+            }`}
+        >
+            {label}
+        </button>
+    );
+}
+
 function Row({ label, value }: { label: string; value: string }) {
     return (
         <div className="flex items-center justify-between gap-3">
@@ -311,3 +464,4 @@ function pageButtons(current: number, total: number): Array<number | "…"> {
     }
     return out;
 }
+

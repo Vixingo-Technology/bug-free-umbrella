@@ -97,7 +97,7 @@ export async function provisionMemberFromSupabaseUser(user: User): Promise<void>
                 break;
         }
 
-        // Every role gets a Reg No (JKA-BD-YYMMxxxx) on the users row.
+        // Every role gets a Reg No (JKA-BD-xxxxxx) on the users row.
         await ensureRegNo(user.id);
 
         if (!wasExisting) {
