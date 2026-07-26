@@ -74,7 +74,18 @@ export default function Journey() {
                         >
                             <div
                                 className={`absolute -left-[41px] w-8 h-8 rounded-full border-2 ${belt.border} ${belt.bg} shadow-sm`}
-                            ></div>
+                            >
+                                {belt.color === "stripe-yellow" && (
+                                    <div className="w-7 h-[2px] bg-yellow-300 top-[50%] absolute"></div>
+                                )}
+                                {belt.color === "brown-white" && (
+                                    <div className="w-7 h-[2px] bg-white top-[50%] absolute"></div>
+                                )}
+                                {belt.color === "brown-black" && (
+                                    <div className="w-7 h-[2px] bg-black top-[50%] absolute"></div>
+                                )}
+
+                            </div>
                             <div>
                                 <h4 className="text-zinc-800 font-heading tracking-widest uppercase text-sm mb-1 font-bold">
                                     {belt.mobileLabel}
@@ -160,9 +171,9 @@ export default function Journey() {
                                             ))}
                                         </div>
                                         <div className="mt-8">
-                                            <Link 
+                                            <Link
                                                 href="/about/karate#dan-ranking"
-                                                className="inline-flex items-center gap-2 text-sm font-bold text-accent-red hover:text-red-700 transition-colors group"
+                                                className="w-full flex justify-center items-center gap-2 text-sm font-bold text-white bg-accent-red hover:bg-red-700 px-6 py-4 rounded-xl transition-colors group shadow-sm"
                                             >
                                                 Learn more about grading and ranking
                                                 <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
