@@ -6,7 +6,6 @@ export const siteContent = {
             { name: "Events", href: "/events" },
             { name: "Branches", href: "/branches" },
             { name: "Members", href: "/members" },
-            { name: "Shop", href: "/shop" },
         ],
         membership: "Membership",
     },
@@ -239,6 +238,7 @@ export const siteContent = {
             { label: "Events & Championships", href: "/events" },
             { label: "Find a Dojo", href: "/branches" },
             { label: "Enlist Your Dojo", href: "/enlist-dojo" },
+            { label: "Merchandise", href: "/shop" },
         ],
         dojoKun: [
             "Seek perfection of character",
