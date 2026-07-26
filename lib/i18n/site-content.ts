@@ -114,27 +114,57 @@ export const siteContent = {
         heading: "The Path to Mastery",
         description:
             "Progress through the rigorous JKA ranking system, earning each rank through discipline, dedication, and technical perfection.",
+        gradingInfo: [
+            {
+                title: "Kari (Grading)",
+                description:
+                    "Kari is used in two ways depending on the student's age:",
+                details: [
+                    {
+                        label: "Kids (Under 13)",
+                        text: "Kari is used as a grading level to promote encouragement.",
+                    },
+                    {
+                        label: "Students (13 & Above)",
+                        text: "If for any reason a student doesn't pass their grading, they can receive a Kari level rather than failing them.",
+                    },
+                ],
+            },
+            {
+                title: "Kyu Grading",
+                description:
+                    "Kyu gradings are recommended to be carried out 3 times a year:",
+                schedule: ["Last week of April", "Last week of August", "Last week of December"],
+            },
+        ],
         belts: [
             {
-                desktopLabel: "10th - 9th Kyu",
+                desktopLabel: "10th Kyu",
                 mobileLabel: "White Belt",
                 color: "white",
                 bg: "bg-white",
                 border: "border-zinc-300",
             },
             {
+                desktopLabel: "9th Kyu",
+                mobileLabel: "Stripe Yellow Belt",
+                color: "stripe-yellow",
+                bg: "bg-gray-100",
+                border: "border-zinc-300",
+            },
+            {
                 desktopLabel: "8th Kyu",
                 mobileLabel: "Yellow Belt",
                 color: "yellow",
-                bg: "bg-yellow-400",
-                border: "border-yellow-500",
+                bg: "bg-yellow-300",
+                border: "border-yellow-400",
             },
             {
                 desktopLabel: "7th Kyu",
                 mobileLabel: "Orange Belt",
                 color: "orange",
-                bg: "bg-orange-500",
-                border: "border-orange-600",
+                bg: "bg-amber-500",
+                border: "border-amber-600",
             },
             {
                 desktopLabel: "6th Kyu",
@@ -158,14 +188,28 @@ export const siteContent = {
                 border: "border-purple-700",
             },
             {
-                desktopLabel: "3rd - 1st Kyu",
+                desktopLabel: "3rd Kyu",
+                mobileLabel: "Brown-White Belt",
+                color: "brown-white",
+                bg: "bg-amber-800",
+                border: "border-amber-900",
+            },
+            {
+                desktopLabel: "2nd Kyu",
                 mobileLabel: "Brown Belt",
                 color: "brown",
                 bg: "bg-amber-800",
                 border: "border-amber-900",
             },
             {
-                desktopLabel: "Dan (Black)",
+                desktopLabel: "1st Kyu",
+                mobileLabel: "Brown-black Belt",
+                color: "brown-black",
+                bg: "bg-amber-800",
+                border: "border-amber-900",
+            },
+            {
+                desktopLabel: "1st Dan (Black)",
                 mobileLabel: "Black Belt",
                 color: "black",
                 bg: "bg-zinc-950",

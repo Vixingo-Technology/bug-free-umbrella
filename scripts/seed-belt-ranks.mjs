@@ -31,17 +31,17 @@ const pool = new Pool({ connectionString: envVars["DIRECT_URL"] || envVars["DATA
 
 // ── Belt ranks data ───────────────────────────────────────────────────────────
 const BELT_RANKS = [
-  { name: "White Belt", kyuDan: "10th Kyu", colorHex: "#FFFFFF", orderIndex: 1 },
-  { name: "Yellow Belt", kyuDan: "9th Kyu", colorHex: "#FFD700", orderIndex: 2 },
-  { name: "Orange Belt", kyuDan: "8th Kyu", colorHex: "#FF8C00", orderIndex: 3 },
-  { name: "Green Belt", kyuDan: "7th Kyu", colorHex: "#228B22", orderIndex: 4 },
-  { name: "Blue Belt", kyuDan: "6th Kyu", colorHex: "#0000CD", orderIndex: 5 },
-  { name: "Brown Belt", kyuDan: "3rd–5th Kyu", colorHex: "#8B4513", orderIndex: 6 },
-  { name: "Black Belt 1st Dan", kyuDan: "Shodan", colorHex: "#1a1a1a", orderIndex: 7 },
-  { name: "Black Belt 2nd Dan", kyuDan: "Nidan", colorHex: "#1a1a1a", orderIndex: 8 },
-  { name: "Black Belt 3rd Dan", kyuDan: "Sandan", colorHex: "#1a1a1a", orderIndex: 9 },
-  { name: "Black Belt 4th Dan", kyuDan: "Yondan", colorHex: "#1a1a1a", orderIndex: 10 },
-  { name: "Black Belt 5th Dan", kyuDan: "Godan", colorHex: "#1a1a1a", orderIndex: 11 },
+  { name: "White Belt", kyuDan: "10th Kyu", colorHex: "#FFFFFF", orderIndex: 0 },
+  { name: "Stripe Yellow Belt", kyuDan: "9th Kyu", colorHex: "#FFD700", orderIndex: 1 },
+  { name: "Yellow Belt", kyuDan: "8th Kyu", colorHex: "#FFD700", orderIndex: 2 },
+  { name: "Orange Belt", kyuDan: "7th Kyu", colorHex: "#FF8C00", orderIndex: 3 },
+  { name: "Green Belt", kyuDan: "6th Kyu", colorHex: "#228B22", orderIndex: 4 },
+  { name: "Blue Belt", kyuDan: "5th Kyu", colorHex: "#0000CD", orderIndex: 5 },
+  { name: "Purple Belt", kyuDan: "4th Kyu", colorHex: "#7C3AED", orderIndex: 6 },
+  { name: "Brown Belt 3rd Kyu", kyuDan: "3rd Kyu", colorHex: "#8B4513", orderIndex: 7 },
+  { name: "Brown Belt 2nd Kyu", kyuDan: "2nd Kyu", colorHex: "#8B4513", orderIndex: 8 },
+  { name: "Brown Belt 1st Kyu", kyuDan: "1st Kyu", colorHex: "#8B4513", orderIndex: 9 },
+  { name: "Black Belt 1st Dan", kyuDan: "Shodan", colorHex: "#1a1a1a", orderIndex: 10 },
 ];
 
 // ── Main ──────────────────────────────────────────────────────────────────────

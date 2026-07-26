@@ -41,6 +41,7 @@ const navigation: NavTab[] = [
             { title: "Authentic Shotokan", id: "tradition" },
             { title: "Training System", id: "training-system" },
             { title: "Why Train in JKA?", id: "why-train" },
+            { title: "Dan Ranking & Grading", id: "dan-ranking" },
         ],
     },
     {

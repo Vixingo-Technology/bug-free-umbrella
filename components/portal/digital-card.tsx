@@ -21,14 +21,17 @@ const statusIcon: Record<MembershipStatusLabel, any> = {
 };
 
 const beltColors: Record<string, string> = {
-    "White Belt": "#FFFFFF",
-    "Yellow Belt": "#FFD700",
-    "Orange Belt": "#FF8C00",
-    "Green Belt": "#228B22",
-    "Blue Belt": "#0000CD",
-    "Purple Belt": "#7C3AED",
-    "Brown Belt": "#8B4513",
-    "Black Belt": "#1a1a1a",
+    "White Belt":          "#FFFFFF",
+    "Stripe Yellow Belt":  "#FFD700",
+    "Yellow Belt":         "#FFD700",
+    "Orange Belt":         "#FF8C00",
+    "Green Belt":          "#228B22",
+    "Blue Belt":           "#0000CD",
+    "Purple Belt":         "#7C3AED",
+    "Brown Belt 3rd Kyu":  "#8B4513",
+    "Brown Belt 2nd Kyu":  "#8B4513",
+    "Brown Belt 1st Kyu":  "#8B4513",
+    "Black Belt 1st Dan":  "#1a1a1a",
 };
 
 function isLightColor(hex: string): boolean {

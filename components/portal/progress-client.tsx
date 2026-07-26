@@ -24,14 +24,17 @@ interface Props {
 }
 
 const beltBg: Record<string, string> = {
-    "White Belt":  "bg-white border-2 border-zinc-300",
-    "Yellow Belt": "bg-yellow-400",
-    "Orange Belt": "bg-orange-500",
-    "Green Belt":  "bg-green-600",
-    "Blue Belt":   "bg-blue-600",
-    "Purple Belt": "bg-purple-600",
-    "Brown Belt":  "bg-amber-800",
-    "Black Belt":  "bg-zinc-950",
+    "White Belt":          "bg-white border-2 border-zinc-300",
+    "Stripe Yellow Belt":  "bg-gradient-to-r from-white via-yellow-300 to-white border-2 border-yellow-400",
+    "Yellow Belt":         "bg-yellow-400",
+    "Orange Belt":         "bg-orange-500",
+    "Green Belt":          "bg-green-600",
+    "Blue Belt":           "bg-blue-600",
+    "Purple Belt":         "bg-purple-600",
+    "Brown Belt 3rd Kyu":  "bg-amber-800",
+    "Brown Belt 2nd Kyu":  "bg-amber-800",
+    "Brown Belt 1st Kyu":  "bg-amber-800",
+    "Black Belt 1st Dan":  "bg-zinc-950",
 };
 
 /** Render-time helper so we tolerate either `name` (current schema) or `nameEn` (older queries). */

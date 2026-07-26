@@ -23,32 +23,30 @@ export const TRANSFER_REQUEST_FEE_BDT = 1000;
 /** Belt rank names in order (matches belt_ranks.name in DB) */
 export const BELT_RANKS_ORDERED = [
   "White Belt",
+  "Stripe Yellow Belt",
   "Yellow Belt",
   "Orange Belt",
   "Green Belt",
   "Blue Belt",
   "Purple Belt",
-  "Brown Belt",
+  "Brown Belt 3rd Kyu",
+  "Brown Belt 2nd Kyu",
+  "Brown Belt 1st Kyu",
   "Black Belt 1st Dan",
-  "Black Belt 2nd Dan",
-  "Black Belt 3rd Dan",
-  "Black Belt 4th Dan",
-  "Black Belt 5th Dan",
 ] as const;
 
 export const BELT_COLORS: Record<string, string> = {
-  "White Belt":         "#FFFFFF",
-  "Yellow Belt":        "#FFD700",
-  "Orange Belt":        "#FF8C00",
-  "Green Belt":         "#228B22",
-  "Blue Belt":          "#0000CD",
-  "Purple Belt":        "#7C3AED",
-  "Brown Belt":         "#8B4513",
-  "Black Belt 1st Dan": "#1a1a1a",
-  "Black Belt 2nd Dan": "#1a1a1a",
-  "Black Belt 3rd Dan": "#1a1a1a",
-  "Black Belt 4th Dan": "#1a1a1a",
-  "Black Belt 5th Dan": "#1a1a1a",
+  "White Belt":           "#FFFFFF",
+  "Stripe Yellow Belt":   "#FFD700",
+  "Yellow Belt":          "#FFD700",
+  "Orange Belt":          "#FF8C00",
+  "Green Belt":           "#228B22",
+  "Blue Belt":            "#0000CD",
+  "Purple Belt":          "#7C3AED",
+  "Brown Belt 3rd Kyu":   "#8B4513",
+  "Brown Belt 2nd Kyu":   "#8B4513",
+  "Brown Belt 1st Kyu":   "#8B4513",
+  "Black Belt 1st Dan":   "#1a1a1a",
 };
 
 export const BLOOD_GROUPS = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"] as const;

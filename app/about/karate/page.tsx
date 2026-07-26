@@ -10,7 +10,9 @@ import {
     Layers3,
     Mountain,
     Zap,
-    ArrowRight
+    ArrowRight,
+    ExternalLink,
+    Calendar
 } from "lucide-react";
 
 export const metadata: Metadata = {
@@ -267,6 +269,95 @@ export default function JkaKaratePage() {
 
                 <div className="p-6 bg-zinc-50 border-l-4 border-accent-red text-zinc-700 text-sm md:text-base leading-relaxed font-sans rounded-r-lg shadow-sm">
                     JKA Karate measures success not simply by victory in competition, but by continuous improvement in both technique and character. The ultimate objective is the harmonious development of body, mind, and spirit.
+                </div>
+            </section>
+
+            {/* Section 4: Dan Ranking & Grading System */}
+            <section id="dan-ranking" className="scroll-mt-28 space-y-8 pt-8 border-t border-zinc-200">
+                <h2 className="font-serif font-bold text-2xl text-zinc-900 flex items-center gap-3">
+                    <Award className="w-5 h-5 text-accent-red" />
+                    Dan Ranking &amp; Grading System
+                </h2>
+
+                <p className="text-zinc-700 leading-relaxed font-sans">
+                    The JKA grading system provides a structured framework for measuring progress and recognising achievement. Understanding the grading process helps students set clear goals and train with purpose.
+                </p>
+
+                {/* Kari Grading */}
+                <div className="font-sans space-y-4">
+                    <div className="flex items-center gap-2">
+                        <Sparkles className="w-4 h-4 text-accent-red" />
+                        <h4 className="font-serif font-bold text-lg text-zinc-900">
+                            Kari (Grading)
+                        </h4>
+                    </div>
+                    <p className="text-zinc-700 text-sm leading-relaxed">
+                        Kari is used in two ways depending on the student&apos;s age:
+                    </p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="rounded-xl border border-zinc-150 bg-zinc-50/50 p-5 shadow-sm">
+                            <span className="inline-block text-xs uppercase tracking-[0.2em] text-accent-red font-bold mb-2">
+                                Kids (Under 13)
+                            </span>
+                            <p className="text-zinc-700 text-sm leading-relaxed">
+                                Kari is used as a grading level to promote encouragement. This approach supports younger students by recognising their effort and progress, keeping them motivated on their karate journey.
+                            </p>
+                        </div>
+                        <div className="rounded-xl border border-zinc-150 bg-zinc-50/50 p-5 shadow-sm">
+                            <span className="inline-block text-xs uppercase tracking-[0.2em] text-accent-red font-bold mb-2">
+                                Students (13 &amp; Above)
+                            </span>
+                            <p className="text-zinc-700 text-sm leading-relaxed">
+                                For students aged 13 and above, including adults, if for any reason a student doesn&apos;t pass their grading, they can receive a Kari level rather than failing them. This ensures continued progress and recognition of effort.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Kyu Grading Schedule */}
+                <div className="font-sans space-y-4">
+                    <div className="flex items-center gap-2">
+                        <Calendar className="w-4 h-4 text-accent-red" />
+                        <h4 className="font-serif font-bold text-lg text-zinc-900">
+                            Kyu Grading Schedule
+                        </h4>
+                    </div>
+                    <p className="text-zinc-700 text-sm leading-relaxed">
+                        Kyu gradings are recommended to be carried out 3 times a year:
+                    </p>
+                    <div className="flex flex-wrap gap-3">
+                        {[
+                            { month: "April", detail: "Last week of April" },
+                            { month: "August", detail: "Last week of August" },
+                            { month: "December", detail: "Last week of December" },
+                        ].map((period) => (
+                            <div
+                                key={period.month}
+                                className="flex items-center gap-3 bg-zinc-900 text-white px-5 py-3 rounded-xl shadow-sm"
+                            >
+                                <Calendar className="w-4 h-4 text-accent-red flex-shrink-0" />
+                                <span className="text-sm font-bold uppercase tracking-wider">
+                                    {period.detail}
+                                </span>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                {/* Official JKA Link */}
+                <div className="p-6 bg-zinc-50 border-l-4 border-accent-red rounded-r-lg shadow-sm font-sans">
+                    <p className="text-zinc-700 text-sm md:text-base leading-relaxed mb-4">
+                        For a comprehensive overview of the official certification system, including Dan rank requirements and examination criteria, visit the official JKA website.
+                    </p>
+                    <a
+                        href="https://www.jka.or.jp/en/about-jka/dan-ranking/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 bg-accent-red text-white text-sm font-bold uppercase tracking-wider px-6 py-3 rounded-lg hover:bg-red-700 transition-colors shadow-sm"
+                    >
+                        JKA Kyu &amp; Dan Rank Certification System
+                        <ExternalLink className="w-4 h-4" />
+                    </a>
                 </div>
             </section>
         </div>
