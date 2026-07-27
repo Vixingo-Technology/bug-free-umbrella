@@ -126,12 +126,12 @@ export default async function MembersPage({
                         Directory
                     </p>
                     <h1 className="font-karate text-3xl md:text-5xl text-zinc-900 uppercase tracking-wider font-bold leading-tight">
-                        Members & Dojo Directory
+                        Members Directory
                     </h1>
                     <div className="h-px w-16 bg-accent-red mt-4 mb-4" />
                     <p className="text-zinc-600 max-w-2xl text-sm md:text-base">
                         Search verified JKA Bangladesh members by full name or by Reg
-                        No, or explore active dojo branches.
+                        No.
                     </p>
                 </div>
             </section>
