@@ -34,6 +34,11 @@ export type RolePermission = $Result.DefaultSelection<Prisma.$RolePermissionPayl
  */
 export type User = $Result.DefaultSelection<Prisma.$UserPayload>
 /**
+ * Model Profile
+ * 
+ */
+export type Profile = $Result.DefaultSelection<Prisma.$ProfilePayload>
+/**
  * Model Student
  * 
  */
@@ -574,6 +579,16 @@ export class PrismaClient<
     * ```
     */
   get user(): Prisma.UserDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.profile`: Exposes CRUD operations for the **Profile** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Profiles
+    * const profiles = await prisma.profile.findMany()
+    * ```
+    */
+  get profile(): Prisma.ProfileDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.student`: Exposes CRUD operations for the **Student** model.
@@ -1322,6 +1337,7 @@ export namespace Prisma {
     Permission: 'Permission',
     RolePermission: 'RolePermission',
     User: 'User',
+    Profile: 'Profile',
     Student: 'Student',
     Instructor: 'Instructor',
     DojoManager: 'DojoManager',
@@ -1368,7 +1384,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "role" | "permission" | "rolePermission" | "user" | "student" | "instructor" | "dojoManager" | "dojoOwner" | "admin" | "beltRank" | "dojo" | "dojoApplication" | "attendance" | "gradingEvent" | "gradingApplication" | "grading" | "certificateRequest" | "systemSettings" | "event" | "announcement" | "eventRegistration" | "notification" | "shopProduct" | "dojoInventoryItem" | "dojoSale" | "dojoSaleItem" | "shopOrder" | "shopOrderItem" | "tournament" | "tournamentParticipant" | "tournamentMatch" | "achievement" | "studentAchievement" | "studentTransferRequest" | "studentDojoHistory"
+      modelProps: "role" | "permission" | "rolePermission" | "user" | "profile" | "student" | "instructor" | "dojoManager" | "dojoOwner" | "admin" | "beltRank" | "dojo" | "dojoApplication" | "attendance" | "gradingEvent" | "gradingApplication" | "grading" | "certificateRequest" | "systemSettings" | "event" | "announcement" | "eventRegistration" | "notification" | "shopProduct" | "dojoInventoryItem" | "dojoSale" | "dojoSaleItem" | "shopOrder" | "shopOrderItem" | "tournament" | "tournamentParticipant" | "tournamentMatch" | "achievement" | "studentAchievement" | "studentTransferRequest" | "studentDojoHistory"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1665,6 +1681,80 @@ export namespace Prisma {
           count: {
             args: Prisma.UserCountArgs<ExtArgs>
             result: $Utils.Optional<UserCountAggregateOutputType> | number
+          }
+        }
+      }
+      Profile: {
+        payload: Prisma.$ProfilePayload<ExtArgs>
+        fields: Prisma.ProfileFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ProfileFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProfilePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ProfileFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProfilePayload>
+          }
+          findFirst: {
+            args: Prisma.ProfileFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProfilePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ProfileFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProfilePayload>
+          }
+          findMany: {
+            args: Prisma.ProfileFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProfilePayload>[]
+          }
+          create: {
+            args: Prisma.ProfileCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProfilePayload>
+          }
+          createMany: {
+            args: Prisma.ProfileCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ProfileCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProfilePayload>[]
+          }
+          delete: {
+            args: Prisma.ProfileDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProfilePayload>
+          }
+          update: {
+            args: Prisma.ProfileUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProfilePayload>
+          }
+          deleteMany: {
+            args: Prisma.ProfileDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ProfileUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ProfileUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProfilePayload>[]
+          }
+          upsert: {
+            args: Prisma.ProfileUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProfilePayload>
+          }
+          aggregate: {
+            args: Prisma.ProfileAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateProfile>
+          }
+          groupBy: {
+            args: Prisma.ProfileGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ProfileGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ProfileCountArgs<ExtArgs>
+            result: $Utils.Optional<ProfileCountAggregateOutputType> | number
           }
         }
       }
@@ -4074,6 +4164,7 @@ export namespace Prisma {
     permission?: PermissionOmit
     rolePermission?: RolePermissionOmit
     user?: UserOmit
+    profile?: ProfileOmit
     student?: StudentOmit
     instructor?: InstructorOmit
     dojoManager?: DojoManagerOmit
@@ -8504,6 +8595,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     role?: boolean | RoleDefaultArgs<ExtArgs>
+    profile?: boolean | User$profileArgs<ExtArgs>
     student?: boolean | User$studentArgs<ExtArgs>
     instructor?: boolean | User$instructorArgs<ExtArgs>
     dojoManager?: boolean | User$dojoManagerArgs<ExtArgs>
@@ -8569,6 +8661,7 @@ export namespace Prisma {
   export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "phone" | "fullName" | "avatarUrl" | "roleId" | "isActive" | "memberNumber" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     role?: boolean | RoleDefaultArgs<ExtArgs>
+    profile?: boolean | User$profileArgs<ExtArgs>
     student?: boolean | User$studentArgs<ExtArgs>
     instructor?: boolean | User$instructorArgs<ExtArgs>
     dojoManager?: boolean | User$dojoManagerArgs<ExtArgs>
@@ -8600,6 +8693,7 @@ export namespace Prisma {
     name: "User"
     objects: {
       role: Prisma.$RolePayload<ExtArgs>
+      profile: Prisma.$ProfilePayload<ExtArgs> | null
       student: Prisma.$StudentPayload<ExtArgs> | null
       instructor: Prisma.$InstructorPayload<ExtArgs> | null
       dojoManager: Prisma.$DojoManagerPayload<ExtArgs> | null
@@ -9025,6 +9119,7 @@ export namespace Prisma {
   export interface Prisma__UserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     role<T extends RoleDefaultArgs<ExtArgs> = {}>(args?: Subset<T, RoleDefaultArgs<ExtArgs>>): Prisma__RoleClient<$Result.GetResult<Prisma.$RolePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    profile<T extends User$profileArgs<ExtArgs> = {}>(args?: Subset<T, User$profileArgs<ExtArgs>>): Prisma__ProfileClient<$Result.GetResult<Prisma.$ProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     student<T extends User$studentArgs<ExtArgs> = {}>(args?: Subset<T, User$studentArgs<ExtArgs>>): Prisma__StudentClient<$Result.GetResult<Prisma.$StudentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     instructor<T extends User$instructorArgs<ExtArgs> = {}>(args?: Subset<T, User$instructorArgs<ExtArgs>>): Prisma__InstructorClient<$Result.GetResult<Prisma.$InstructorPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     dojoManager<T extends User$dojoManagerArgs<ExtArgs> = {}>(args?: Subset<T, User$dojoManagerArgs<ExtArgs>>): Prisma__DojoManagerClient<$Result.GetResult<Prisma.$DojoManagerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
@@ -9483,6 +9578,25 @@ export namespace Prisma {
   }
 
   /**
+   * User.profile
+   */
+  export type User$profileArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Profile
+     */
+    select?: ProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Profile
+     */
+    omit?: ProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProfileInclude<ExtArgs> | null
+    where?: ProfileWhereInput
+  }
+
+  /**
    * User.student
    */
   export type User$studentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -9909,6 +10023,1147 @@ export namespace Prisma {
 
 
   /**
+   * Model Profile
+   */
+
+  export type AggregateProfile = {
+    _count: ProfileCountAggregateOutputType | null
+    _min: ProfileMinAggregateOutputType | null
+    _max: ProfileMaxAggregateOutputType | null
+  }
+
+  export type ProfileMinAggregateOutputType = {
+    id: string | null
+    dateOfBirth: Date | null
+    bloodGroup: string | null
+    address: string | null
+    nationalId: string | null
+    fatherName: string | null
+    motherName: string | null
+    emergencyContactName: string | null
+    emergencyContactPhone: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ProfileMaxAggregateOutputType = {
+    id: string | null
+    dateOfBirth: Date | null
+    bloodGroup: string | null
+    address: string | null
+    nationalId: string | null
+    fatherName: string | null
+    motherName: string | null
+    emergencyContactName: string | null
+    emergencyContactPhone: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ProfileCountAggregateOutputType = {
+    id: number
+    dateOfBirth: number
+    bloodGroup: number
+    address: number
+    nationalId: number
+    fatherName: number
+    motherName: number
+    emergencyContactName: number
+    emergencyContactPhone: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type ProfileMinAggregateInputType = {
+    id?: true
+    dateOfBirth?: true
+    bloodGroup?: true
+    address?: true
+    nationalId?: true
+    fatherName?: true
+    motherName?: true
+    emergencyContactName?: true
+    emergencyContactPhone?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ProfileMaxAggregateInputType = {
+    id?: true
+    dateOfBirth?: true
+    bloodGroup?: true
+    address?: true
+    nationalId?: true
+    fatherName?: true
+    motherName?: true
+    emergencyContactName?: true
+    emergencyContactPhone?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ProfileCountAggregateInputType = {
+    id?: true
+    dateOfBirth?: true
+    bloodGroup?: true
+    address?: true
+    nationalId?: true
+    fatherName?: true
+    motherName?: true
+    emergencyContactName?: true
+    emergencyContactPhone?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type ProfileAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Profile to aggregate.
+     */
+    where?: ProfileWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Profiles to fetch.
+     */
+    orderBy?: ProfileOrderByWithRelationInput | ProfileOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ProfileWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Profiles from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Profiles.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Profiles
+    **/
+    _count?: true | ProfileCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ProfileMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ProfileMaxAggregateInputType
+  }
+
+  export type GetProfileAggregateType<T extends ProfileAggregateArgs> = {
+        [P in keyof T & keyof AggregateProfile]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateProfile[P]>
+      : GetScalarType<T[P], AggregateProfile[P]>
+  }
+
+
+
+
+  export type ProfileGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProfileWhereInput
+    orderBy?: ProfileOrderByWithAggregationInput | ProfileOrderByWithAggregationInput[]
+    by: ProfileScalarFieldEnum[] | ProfileScalarFieldEnum
+    having?: ProfileScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ProfileCountAggregateInputType | true
+    _min?: ProfileMinAggregateInputType
+    _max?: ProfileMaxAggregateInputType
+  }
+
+  export type ProfileGroupByOutputType = {
+    id: string
+    dateOfBirth: Date | null
+    bloodGroup: string | null
+    address: string | null
+    nationalId: string | null
+    fatherName: string | null
+    motherName: string | null
+    emergencyContactName: string | null
+    emergencyContactPhone: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: ProfileCountAggregateOutputType | null
+    _min: ProfileMinAggregateOutputType | null
+    _max: ProfileMaxAggregateOutputType | null
+  }
+
+  type GetProfileGroupByPayload<T extends ProfileGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ProfileGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ProfileGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ProfileGroupByOutputType[P]>
+            : GetScalarType<T[P], ProfileGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ProfileSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    dateOfBirth?: boolean
+    bloodGroup?: boolean
+    address?: boolean
+    nationalId?: boolean
+    fatherName?: boolean
+    motherName?: boolean
+    emergencyContactName?: boolean
+    emergencyContactPhone?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["profile"]>
+
+  export type ProfileSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    dateOfBirth?: boolean
+    bloodGroup?: boolean
+    address?: boolean
+    nationalId?: boolean
+    fatherName?: boolean
+    motherName?: boolean
+    emergencyContactName?: boolean
+    emergencyContactPhone?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["profile"]>
+
+  export type ProfileSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    dateOfBirth?: boolean
+    bloodGroup?: boolean
+    address?: boolean
+    nationalId?: boolean
+    fatherName?: boolean
+    motherName?: boolean
+    emergencyContactName?: boolean
+    emergencyContactPhone?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["profile"]>
+
+  export type ProfileSelectScalar = {
+    id?: boolean
+    dateOfBirth?: boolean
+    bloodGroup?: boolean
+    address?: boolean
+    nationalId?: boolean
+    fatherName?: boolean
+    motherName?: boolean
+    emergencyContactName?: boolean
+    emergencyContactPhone?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type ProfileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "dateOfBirth" | "bloodGroup" | "address" | "nationalId" | "fatherName" | "motherName" | "emergencyContactName" | "emergencyContactPhone" | "createdAt" | "updatedAt", ExtArgs["result"]["profile"]>
+  export type ProfileInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type ProfileIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type ProfileIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $ProfilePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Profile"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      dateOfBirth: Date | null
+      bloodGroup: string | null
+      address: string | null
+      nationalId: string | null
+      fatherName: string | null
+      motherName: string | null
+      emergencyContactName: string | null
+      emergencyContactPhone: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["profile"]>
+    composites: {}
+  }
+
+  type ProfileGetPayload<S extends boolean | null | undefined | ProfileDefaultArgs> = $Result.GetResult<Prisma.$ProfilePayload, S>
+
+  type ProfileCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ProfileFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ProfileCountAggregateInputType | true
+    }
+
+  export interface ProfileDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Profile'], meta: { name: 'Profile' } }
+    /**
+     * Find zero or one Profile that matches the filter.
+     * @param {ProfileFindUniqueArgs} args - Arguments to find a Profile
+     * @example
+     * // Get one Profile
+     * const profile = await prisma.profile.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ProfileFindUniqueArgs>(args: SelectSubset<T, ProfileFindUniqueArgs<ExtArgs>>): Prisma__ProfileClient<$Result.GetResult<Prisma.$ProfilePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Profile that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ProfileFindUniqueOrThrowArgs} args - Arguments to find a Profile
+     * @example
+     * // Get one Profile
+     * const profile = await prisma.profile.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ProfileFindUniqueOrThrowArgs>(args: SelectSubset<T, ProfileFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ProfileClient<$Result.GetResult<Prisma.$ProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Profile that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProfileFindFirstArgs} args - Arguments to find a Profile
+     * @example
+     * // Get one Profile
+     * const profile = await prisma.profile.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ProfileFindFirstArgs>(args?: SelectSubset<T, ProfileFindFirstArgs<ExtArgs>>): Prisma__ProfileClient<$Result.GetResult<Prisma.$ProfilePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Profile that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProfileFindFirstOrThrowArgs} args - Arguments to find a Profile
+     * @example
+     * // Get one Profile
+     * const profile = await prisma.profile.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ProfileFindFirstOrThrowArgs>(args?: SelectSubset<T, ProfileFindFirstOrThrowArgs<ExtArgs>>): Prisma__ProfileClient<$Result.GetResult<Prisma.$ProfilePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Profiles that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProfileFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Profiles
+     * const profiles = await prisma.profile.findMany()
+     * 
+     * // Get first 10 Profiles
+     * const profiles = await prisma.profile.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const profileWithIdOnly = await prisma.profile.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ProfileFindManyArgs>(args?: SelectSubset<T, ProfileFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProfilePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Profile.
+     * @param {ProfileCreateArgs} args - Arguments to create a Profile.
+     * @example
+     * // Create one Profile
+     * const Profile = await prisma.profile.create({
+     *   data: {
+     *     // ... data to create a Profile
+     *   }
+     * })
+     * 
+     */
+    create<T extends ProfileCreateArgs>(args: SelectSubset<T, ProfileCreateArgs<ExtArgs>>): Prisma__ProfileClient<$Result.GetResult<Prisma.$ProfilePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Profiles.
+     * @param {ProfileCreateManyArgs} args - Arguments to create many Profiles.
+     * @example
+     * // Create many Profiles
+     * const profile = await prisma.profile.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ProfileCreateManyArgs>(args?: SelectSubset<T, ProfileCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Profiles and returns the data saved in the database.
+     * @param {ProfileCreateManyAndReturnArgs} args - Arguments to create many Profiles.
+     * @example
+     * // Create many Profiles
+     * const profile = await prisma.profile.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Profiles and only return the `id`
+     * const profileWithIdOnly = await prisma.profile.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ProfileCreateManyAndReturnArgs>(args?: SelectSubset<T, ProfileCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProfilePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Profile.
+     * @param {ProfileDeleteArgs} args - Arguments to delete one Profile.
+     * @example
+     * // Delete one Profile
+     * const Profile = await prisma.profile.delete({
+     *   where: {
+     *     // ... filter to delete one Profile
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ProfileDeleteArgs>(args: SelectSubset<T, ProfileDeleteArgs<ExtArgs>>): Prisma__ProfileClient<$Result.GetResult<Prisma.$ProfilePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Profile.
+     * @param {ProfileUpdateArgs} args - Arguments to update one Profile.
+     * @example
+     * // Update one Profile
+     * const profile = await prisma.profile.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ProfileUpdateArgs>(args: SelectSubset<T, ProfileUpdateArgs<ExtArgs>>): Prisma__ProfileClient<$Result.GetResult<Prisma.$ProfilePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Profiles.
+     * @param {ProfileDeleteManyArgs} args - Arguments to filter Profiles to delete.
+     * @example
+     * // Delete a few Profiles
+     * const { count } = await prisma.profile.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ProfileDeleteManyArgs>(args?: SelectSubset<T, ProfileDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Profiles.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProfileUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Profiles
+     * const profile = await prisma.profile.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ProfileUpdateManyArgs>(args: SelectSubset<T, ProfileUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Profiles and returns the data updated in the database.
+     * @param {ProfileUpdateManyAndReturnArgs} args - Arguments to update many Profiles.
+     * @example
+     * // Update many Profiles
+     * const profile = await prisma.profile.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Profiles and only return the `id`
+     * const profileWithIdOnly = await prisma.profile.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ProfileUpdateManyAndReturnArgs>(args: SelectSubset<T, ProfileUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProfilePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Profile.
+     * @param {ProfileUpsertArgs} args - Arguments to update or create a Profile.
+     * @example
+     * // Update or create a Profile
+     * const profile = await prisma.profile.upsert({
+     *   create: {
+     *     // ... data to create a Profile
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Profile we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ProfileUpsertArgs>(args: SelectSubset<T, ProfileUpsertArgs<ExtArgs>>): Prisma__ProfileClient<$Result.GetResult<Prisma.$ProfilePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Profiles.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProfileCountArgs} args - Arguments to filter Profiles to count.
+     * @example
+     * // Count the number of Profiles
+     * const count = await prisma.profile.count({
+     *   where: {
+     *     // ... the filter for the Profiles we want to count
+     *   }
+     * })
+    **/
+    count<T extends ProfileCountArgs>(
+      args?: Subset<T, ProfileCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ProfileCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Profile.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProfileAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ProfileAggregateArgs>(args: Subset<T, ProfileAggregateArgs>): Prisma.PrismaPromise<GetProfileAggregateType<T>>
+
+    /**
+     * Group by Profile.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProfileGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ProfileGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ProfileGroupByArgs['orderBy'] }
+        : { orderBy?: ProfileGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ProfileGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetProfileGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Profile model
+   */
+  readonly fields: ProfileFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Profile.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ProfileClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Profile model
+   */
+  interface ProfileFieldRefs {
+    readonly id: FieldRef<"Profile", 'String'>
+    readonly dateOfBirth: FieldRef<"Profile", 'DateTime'>
+    readonly bloodGroup: FieldRef<"Profile", 'String'>
+    readonly address: FieldRef<"Profile", 'String'>
+    readonly nationalId: FieldRef<"Profile", 'String'>
+    readonly fatherName: FieldRef<"Profile", 'String'>
+    readonly motherName: FieldRef<"Profile", 'String'>
+    readonly emergencyContactName: FieldRef<"Profile", 'String'>
+    readonly emergencyContactPhone: FieldRef<"Profile", 'String'>
+    readonly createdAt: FieldRef<"Profile", 'DateTime'>
+    readonly updatedAt: FieldRef<"Profile", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Profile findUnique
+   */
+  export type ProfileFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Profile
+     */
+    select?: ProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Profile
+     */
+    omit?: ProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProfileInclude<ExtArgs> | null
+    /**
+     * Filter, which Profile to fetch.
+     */
+    where: ProfileWhereUniqueInput
+  }
+
+  /**
+   * Profile findUniqueOrThrow
+   */
+  export type ProfileFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Profile
+     */
+    select?: ProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Profile
+     */
+    omit?: ProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProfileInclude<ExtArgs> | null
+    /**
+     * Filter, which Profile to fetch.
+     */
+    where: ProfileWhereUniqueInput
+  }
+
+  /**
+   * Profile findFirst
+   */
+  export type ProfileFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Profile
+     */
+    select?: ProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Profile
+     */
+    omit?: ProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProfileInclude<ExtArgs> | null
+    /**
+     * Filter, which Profile to fetch.
+     */
+    where?: ProfileWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Profiles to fetch.
+     */
+    orderBy?: ProfileOrderByWithRelationInput | ProfileOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Profiles.
+     */
+    cursor?: ProfileWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Profiles from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Profiles.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Profiles.
+     */
+    distinct?: ProfileScalarFieldEnum | ProfileScalarFieldEnum[]
+  }
+
+  /**
+   * Profile findFirstOrThrow
+   */
+  export type ProfileFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Profile
+     */
+    select?: ProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Profile
+     */
+    omit?: ProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProfileInclude<ExtArgs> | null
+    /**
+     * Filter, which Profile to fetch.
+     */
+    where?: ProfileWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Profiles to fetch.
+     */
+    orderBy?: ProfileOrderByWithRelationInput | ProfileOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Profiles.
+     */
+    cursor?: ProfileWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Profiles from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Profiles.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Profiles.
+     */
+    distinct?: ProfileScalarFieldEnum | ProfileScalarFieldEnum[]
+  }
+
+  /**
+   * Profile findMany
+   */
+  export type ProfileFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Profile
+     */
+    select?: ProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Profile
+     */
+    omit?: ProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProfileInclude<ExtArgs> | null
+    /**
+     * Filter, which Profiles to fetch.
+     */
+    where?: ProfileWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Profiles to fetch.
+     */
+    orderBy?: ProfileOrderByWithRelationInput | ProfileOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Profiles.
+     */
+    cursor?: ProfileWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Profiles from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Profiles.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Profiles.
+     */
+    distinct?: ProfileScalarFieldEnum | ProfileScalarFieldEnum[]
+  }
+
+  /**
+   * Profile create
+   */
+  export type ProfileCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Profile
+     */
+    select?: ProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Profile
+     */
+    omit?: ProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProfileInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Profile.
+     */
+    data: XOR<ProfileCreateInput, ProfileUncheckedCreateInput>
+  }
+
+  /**
+   * Profile createMany
+   */
+  export type ProfileCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Profiles.
+     */
+    data: ProfileCreateManyInput | ProfileCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Profile createManyAndReturn
+   */
+  export type ProfileCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Profile
+     */
+    select?: ProfileSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Profile
+     */
+    omit?: ProfileOmit<ExtArgs> | null
+    /**
+     * The data used to create many Profiles.
+     */
+    data: ProfileCreateManyInput | ProfileCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProfileIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Profile update
+   */
+  export type ProfileUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Profile
+     */
+    select?: ProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Profile
+     */
+    omit?: ProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProfileInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Profile.
+     */
+    data: XOR<ProfileUpdateInput, ProfileUncheckedUpdateInput>
+    /**
+     * Choose, which Profile to update.
+     */
+    where: ProfileWhereUniqueInput
+  }
+
+  /**
+   * Profile updateMany
+   */
+  export type ProfileUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Profiles.
+     */
+    data: XOR<ProfileUpdateManyMutationInput, ProfileUncheckedUpdateManyInput>
+    /**
+     * Filter which Profiles to update
+     */
+    where?: ProfileWhereInput
+    /**
+     * Limit how many Profiles to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Profile updateManyAndReturn
+   */
+  export type ProfileUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Profile
+     */
+    select?: ProfileSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Profile
+     */
+    omit?: ProfileOmit<ExtArgs> | null
+    /**
+     * The data used to update Profiles.
+     */
+    data: XOR<ProfileUpdateManyMutationInput, ProfileUncheckedUpdateManyInput>
+    /**
+     * Filter which Profiles to update
+     */
+    where?: ProfileWhereInput
+    /**
+     * Limit how many Profiles to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProfileIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Profile upsert
+   */
+  export type ProfileUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Profile
+     */
+    select?: ProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Profile
+     */
+    omit?: ProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProfileInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Profile to update in case it exists.
+     */
+    where: ProfileWhereUniqueInput
+    /**
+     * In case the Profile found by the `where` argument doesn't exist, create a new Profile with this data.
+     */
+    create: XOR<ProfileCreateInput, ProfileUncheckedCreateInput>
+    /**
+     * In case the Profile was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ProfileUpdateInput, ProfileUncheckedUpdateInput>
+  }
+
+  /**
+   * Profile delete
+   */
+  export type ProfileDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Profile
+     */
+    select?: ProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Profile
+     */
+    omit?: ProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProfileInclude<ExtArgs> | null
+    /**
+     * Filter which Profile to delete.
+     */
+    where: ProfileWhereUniqueInput
+  }
+
+  /**
+   * Profile deleteMany
+   */
+  export type ProfileDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Profiles to delete
+     */
+    where?: ProfileWhereInput
+    /**
+     * Limit how many Profiles to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Profile without action
+   */
+  export type ProfileDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Profile
+     */
+    select?: ProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Profile
+     */
+    omit?: ProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProfileInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model Student
    */
 
@@ -9926,14 +11181,6 @@ export namespace Prisma {
     dojoId: string | null
     onboardingComplete: boolean | null
     membershipStatus: $Enums.MembershipStatus | null
-    dateOfBirth: Date | null
-    bloodGroup: string | null
-    address: string | null
-    nationalId: string | null
-    fatherName: string | null
-    motherName: string | null
-    emergencyContactName: string | null
-    emergencyContactPhone: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -9946,14 +11193,6 @@ export namespace Prisma {
     dojoId: string | null
     onboardingComplete: boolean | null
     membershipStatus: $Enums.MembershipStatus | null
-    dateOfBirth: Date | null
-    bloodGroup: string | null
-    address: string | null
-    nationalId: string | null
-    fatherName: string | null
-    motherName: string | null
-    emergencyContactName: string | null
-    emergencyContactPhone: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -9966,14 +11205,6 @@ export namespace Prisma {
     dojoId: number
     onboardingComplete: number
     membershipStatus: number
-    dateOfBirth: number
-    bloodGroup: number
-    address: number
-    nationalId: number
-    fatherName: number
-    motherName: number
-    emergencyContactName: number
-    emergencyContactPhone: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -9988,14 +11219,6 @@ export namespace Prisma {
     dojoId?: true
     onboardingComplete?: true
     membershipStatus?: true
-    dateOfBirth?: true
-    bloodGroup?: true
-    address?: true
-    nationalId?: true
-    fatherName?: true
-    motherName?: true
-    emergencyContactName?: true
-    emergencyContactPhone?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -10008,14 +11231,6 @@ export namespace Prisma {
     dojoId?: true
     onboardingComplete?: true
     membershipStatus?: true
-    dateOfBirth?: true
-    bloodGroup?: true
-    address?: true
-    nationalId?: true
-    fatherName?: true
-    motherName?: true
-    emergencyContactName?: true
-    emergencyContactPhone?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -10028,14 +11243,6 @@ export namespace Prisma {
     dojoId?: true
     onboardingComplete?: true
     membershipStatus?: true
-    dateOfBirth?: true
-    bloodGroup?: true
-    address?: true
-    nationalId?: true
-    fatherName?: true
-    motherName?: true
-    emergencyContactName?: true
-    emergencyContactPhone?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -10121,14 +11328,6 @@ export namespace Prisma {
     dojoId: string | null
     onboardingComplete: boolean
     membershipStatus: $Enums.MembershipStatus
-    dateOfBirth: Date | null
-    bloodGroup: string | null
-    address: string | null
-    nationalId: string | null
-    fatherName: string | null
-    motherName: string | null
-    emergencyContactName: string | null
-    emergencyContactPhone: string | null
     createdAt: Date
     updatedAt: Date
     _count: StudentCountAggregateOutputType | null
@@ -10158,14 +11357,6 @@ export namespace Prisma {
     dojoId?: boolean
     onboardingComplete?: boolean
     membershipStatus?: boolean
-    dateOfBirth?: boolean
-    bloodGroup?: boolean
-    address?: boolean
-    nationalId?: boolean
-    fatherName?: boolean
-    motherName?: boolean
-    emergencyContactName?: boolean
-    emergencyContactPhone?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -10188,14 +11379,6 @@ export namespace Prisma {
     dojoId?: boolean
     onboardingComplete?: boolean
     membershipStatus?: boolean
-    dateOfBirth?: boolean
-    bloodGroup?: boolean
-    address?: boolean
-    nationalId?: boolean
-    fatherName?: boolean
-    motherName?: boolean
-    emergencyContactName?: boolean
-    emergencyContactPhone?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -10210,14 +11393,6 @@ export namespace Prisma {
     dojoId?: boolean
     onboardingComplete?: boolean
     membershipStatus?: boolean
-    dateOfBirth?: boolean
-    bloodGroup?: boolean
-    address?: boolean
-    nationalId?: boolean
-    fatherName?: boolean
-    motherName?: boolean
-    emergencyContactName?: boolean
-    emergencyContactPhone?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -10232,19 +11407,11 @@ export namespace Prisma {
     dojoId?: boolean
     onboardingComplete?: boolean
     membershipStatus?: boolean
-    dateOfBirth?: boolean
-    bloodGroup?: boolean
-    address?: boolean
-    nationalId?: boolean
-    fatherName?: boolean
-    motherName?: boolean
-    emergencyContactName?: boolean
-    emergencyContactPhone?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type StudentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "currentRank" | "joinDate" | "expiryDate" | "dojoId" | "onboardingComplete" | "membershipStatus" | "dateOfBirth" | "bloodGroup" | "address" | "nationalId" | "fatherName" | "motherName" | "emergencyContactName" | "emergencyContactPhone" | "createdAt" | "updatedAt", ExtArgs["result"]["student"]>
+  export type StudentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "currentRank" | "joinDate" | "expiryDate" | "dojoId" | "onboardingComplete" | "membershipStatus" | "createdAt" | "updatedAt", ExtArgs["result"]["student"]>
   export type StudentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     dojo?: boolean | Student$dojoArgs<ExtArgs>
@@ -10287,14 +11454,6 @@ export namespace Prisma {
       dojoId: string | null
       onboardingComplete: boolean
       membershipStatus: $Enums.MembershipStatus
-      dateOfBirth: Date | null
-      bloodGroup: string | null
-      address: string | null
-      nationalId: string | null
-      fatherName: string | null
-      motherName: string | null
-      emergencyContactName: string | null
-      emergencyContactPhone: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["student"]>
@@ -10736,14 +11895,6 @@ export namespace Prisma {
     readonly dojoId: FieldRef<"Student", 'String'>
     readonly onboardingComplete: FieldRef<"Student", 'Boolean'>
     readonly membershipStatus: FieldRef<"Student", 'MembershipStatus'>
-    readonly dateOfBirth: FieldRef<"Student", 'DateTime'>
-    readonly bloodGroup: FieldRef<"Student", 'String'>
-    readonly address: FieldRef<"Student", 'String'>
-    readonly nationalId: FieldRef<"Student", 'String'>
-    readonly fatherName: FieldRef<"Student", 'String'>
-    readonly motherName: FieldRef<"Student", 'String'>
-    readonly emergencyContactName: FieldRef<"Student", 'String'>
-    readonly emergencyContactPhone: FieldRef<"Student", 'String'>
     readonly createdAt: FieldRef<"Student", 'DateTime'>
     readonly updatedAt: FieldRef<"Student", 'DateTime'>
   }
@@ -48117,14 +49268,8 @@ export namespace Prisma {
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
-  export const StudentScalarFieldEnum: {
+  export const ProfileScalarFieldEnum: {
     id: 'id',
-    currentRank: 'currentRank',
-    joinDate: 'joinDate',
-    expiryDate: 'expiryDate',
-    dojoId: 'dojoId',
-    onboardingComplete: 'onboardingComplete',
-    membershipStatus: 'membershipStatus',
     dateOfBirth: 'dateOfBirth',
     bloodGroup: 'bloodGroup',
     address: 'address',
@@ -48133,6 +49278,21 @@ export namespace Prisma {
     motherName: 'motherName',
     emergencyContactName: 'emergencyContactName',
     emergencyContactPhone: 'emergencyContactPhone',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type ProfileScalarFieldEnum = (typeof ProfileScalarFieldEnum)[keyof typeof ProfileScalarFieldEnum]
+
+
+  export const StudentScalarFieldEnum: {
+    id: 'id',
+    currentRank: 'currentRank',
+    joinDate: 'joinDate',
+    expiryDate: 'expiryDate',
+    dojoId: 'dojoId',
+    onboardingComplete: 'onboardingComplete',
+    membershipStatus: 'membershipStatus',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -49175,6 +50335,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     role?: XOR<RoleScalarRelationFilter, RoleWhereInput>
+    profile?: XOR<ProfileNullableScalarRelationFilter, ProfileWhereInput> | null
     student?: XOR<StudentNullableScalarRelationFilter, StudentWhereInput> | null
     instructor?: XOR<InstructorNullableScalarRelationFilter, InstructorWhereInput> | null
     dojoManager?: XOR<DojoManagerNullableScalarRelationFilter, DojoManagerWhereInput> | null
@@ -49207,6 +50368,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     role?: RoleOrderByWithRelationInput
+    profile?: ProfileOrderByWithRelationInput
     student?: StudentOrderByWithRelationInput
     instructor?: InstructorOrderByWithRelationInput
     dojoManager?: DojoManagerOrderByWithRelationInput
@@ -49242,6 +50404,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     role?: XOR<RoleScalarRelationFilter, RoleWhereInput>
+    profile?: XOR<ProfileNullableScalarRelationFilter, ProfileWhereInput> | null
     student?: XOR<StudentNullableScalarRelationFilter, StudentWhereInput> | null
     instructor?: XOR<InstructorNullableScalarRelationFilter, InstructorWhereInput> | null
     dojoManager?: XOR<DojoManagerNullableScalarRelationFilter, DojoManagerWhereInput> | null
@@ -49294,6 +50457,91 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
   }
 
+  export type ProfileWhereInput = {
+    AND?: ProfileWhereInput | ProfileWhereInput[]
+    OR?: ProfileWhereInput[]
+    NOT?: ProfileWhereInput | ProfileWhereInput[]
+    id?: UuidFilter<"Profile"> | string
+    dateOfBirth?: DateTimeNullableFilter<"Profile"> | Date | string | null
+    bloodGroup?: StringNullableFilter<"Profile"> | string | null
+    address?: StringNullableFilter<"Profile"> | string | null
+    nationalId?: StringNullableFilter<"Profile"> | string | null
+    fatherName?: StringNullableFilter<"Profile"> | string | null
+    motherName?: StringNullableFilter<"Profile"> | string | null
+    emergencyContactName?: StringNullableFilter<"Profile"> | string | null
+    emergencyContactPhone?: StringNullableFilter<"Profile"> | string | null
+    createdAt?: DateTimeFilter<"Profile"> | Date | string
+    updatedAt?: DateTimeFilter<"Profile"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type ProfileOrderByWithRelationInput = {
+    id?: SortOrder
+    dateOfBirth?: SortOrderInput | SortOrder
+    bloodGroup?: SortOrderInput | SortOrder
+    address?: SortOrderInput | SortOrder
+    nationalId?: SortOrderInput | SortOrder
+    fatherName?: SortOrderInput | SortOrder
+    motherName?: SortOrderInput | SortOrder
+    emergencyContactName?: SortOrderInput | SortOrder
+    emergencyContactPhone?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type ProfileWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: ProfileWhereInput | ProfileWhereInput[]
+    OR?: ProfileWhereInput[]
+    NOT?: ProfileWhereInput | ProfileWhereInput[]
+    dateOfBirth?: DateTimeNullableFilter<"Profile"> | Date | string | null
+    bloodGroup?: StringNullableFilter<"Profile"> | string | null
+    address?: StringNullableFilter<"Profile"> | string | null
+    nationalId?: StringNullableFilter<"Profile"> | string | null
+    fatherName?: StringNullableFilter<"Profile"> | string | null
+    motherName?: StringNullableFilter<"Profile"> | string | null
+    emergencyContactName?: StringNullableFilter<"Profile"> | string | null
+    emergencyContactPhone?: StringNullableFilter<"Profile"> | string | null
+    createdAt?: DateTimeFilter<"Profile"> | Date | string
+    updatedAt?: DateTimeFilter<"Profile"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id">
+
+  export type ProfileOrderByWithAggregationInput = {
+    id?: SortOrder
+    dateOfBirth?: SortOrderInput | SortOrder
+    bloodGroup?: SortOrderInput | SortOrder
+    address?: SortOrderInput | SortOrder
+    nationalId?: SortOrderInput | SortOrder
+    fatherName?: SortOrderInput | SortOrder
+    motherName?: SortOrderInput | SortOrder
+    emergencyContactName?: SortOrderInput | SortOrder
+    emergencyContactPhone?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: ProfileCountOrderByAggregateInput
+    _max?: ProfileMaxOrderByAggregateInput
+    _min?: ProfileMinOrderByAggregateInput
+  }
+
+  export type ProfileScalarWhereWithAggregatesInput = {
+    AND?: ProfileScalarWhereWithAggregatesInput | ProfileScalarWhereWithAggregatesInput[]
+    OR?: ProfileScalarWhereWithAggregatesInput[]
+    NOT?: ProfileScalarWhereWithAggregatesInput | ProfileScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"Profile"> | string
+    dateOfBirth?: DateTimeNullableWithAggregatesFilter<"Profile"> | Date | string | null
+    bloodGroup?: StringNullableWithAggregatesFilter<"Profile"> | string | null
+    address?: StringNullableWithAggregatesFilter<"Profile"> | string | null
+    nationalId?: StringNullableWithAggregatesFilter<"Profile"> | string | null
+    fatherName?: StringNullableWithAggregatesFilter<"Profile"> | string | null
+    motherName?: StringNullableWithAggregatesFilter<"Profile"> | string | null
+    emergencyContactName?: StringNullableWithAggregatesFilter<"Profile"> | string | null
+    emergencyContactPhone?: StringNullableWithAggregatesFilter<"Profile"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"Profile"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Profile"> | Date | string
+  }
+
   export type StudentWhereInput = {
     AND?: StudentWhereInput | StudentWhereInput[]
     OR?: StudentWhereInput[]
@@ -49305,14 +50553,6 @@ export namespace Prisma {
     dojoId?: UuidNullableFilter<"Student"> | string | null
     onboardingComplete?: BoolFilter<"Student"> | boolean
     membershipStatus?: EnumMembershipStatusFilter<"Student"> | $Enums.MembershipStatus
-    dateOfBirth?: DateTimeNullableFilter<"Student"> | Date | string | null
-    bloodGroup?: StringNullableFilter<"Student"> | string | null
-    address?: StringNullableFilter<"Student"> | string | null
-    nationalId?: StringNullableFilter<"Student"> | string | null
-    fatherName?: StringNullableFilter<"Student"> | string | null
-    motherName?: StringNullableFilter<"Student"> | string | null
-    emergencyContactName?: StringNullableFilter<"Student"> | string | null
-    emergencyContactPhone?: StringNullableFilter<"Student"> | string | null
     createdAt?: DateTimeFilter<"Student"> | Date | string
     updatedAt?: DateTimeFilter<"Student"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
@@ -49334,14 +50574,6 @@ export namespace Prisma {
     dojoId?: SortOrderInput | SortOrder
     onboardingComplete?: SortOrder
     membershipStatus?: SortOrder
-    dateOfBirth?: SortOrderInput | SortOrder
-    bloodGroup?: SortOrderInput | SortOrder
-    address?: SortOrderInput | SortOrder
-    nationalId?: SortOrderInput | SortOrder
-    fatherName?: SortOrderInput | SortOrder
-    motherName?: SortOrderInput | SortOrder
-    emergencyContactName?: SortOrderInput | SortOrder
-    emergencyContactPhone?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     user?: UserOrderByWithRelationInput
@@ -49366,14 +50598,6 @@ export namespace Prisma {
     dojoId?: UuidNullableFilter<"Student"> | string | null
     onboardingComplete?: BoolFilter<"Student"> | boolean
     membershipStatus?: EnumMembershipStatusFilter<"Student"> | $Enums.MembershipStatus
-    dateOfBirth?: DateTimeNullableFilter<"Student"> | Date | string | null
-    bloodGroup?: StringNullableFilter<"Student"> | string | null
-    address?: StringNullableFilter<"Student"> | string | null
-    nationalId?: StringNullableFilter<"Student"> | string | null
-    fatherName?: StringNullableFilter<"Student"> | string | null
-    motherName?: StringNullableFilter<"Student"> | string | null
-    emergencyContactName?: StringNullableFilter<"Student"> | string | null
-    emergencyContactPhone?: StringNullableFilter<"Student"> | string | null
     createdAt?: DateTimeFilter<"Student"> | Date | string
     updatedAt?: DateTimeFilter<"Student"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
@@ -49395,14 +50619,6 @@ export namespace Prisma {
     dojoId?: SortOrderInput | SortOrder
     onboardingComplete?: SortOrder
     membershipStatus?: SortOrder
-    dateOfBirth?: SortOrderInput | SortOrder
-    bloodGroup?: SortOrderInput | SortOrder
-    address?: SortOrderInput | SortOrder
-    nationalId?: SortOrderInput | SortOrder
-    fatherName?: SortOrderInput | SortOrder
-    motherName?: SortOrderInput | SortOrder
-    emergencyContactName?: SortOrderInput | SortOrder
-    emergencyContactPhone?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: StudentCountOrderByAggregateInput
@@ -49421,14 +50637,6 @@ export namespace Prisma {
     dojoId?: UuidNullableWithAggregatesFilter<"Student"> | string | null
     onboardingComplete?: BoolWithAggregatesFilter<"Student"> | boolean
     membershipStatus?: EnumMembershipStatusWithAggregatesFilter<"Student"> | $Enums.MembershipStatus
-    dateOfBirth?: DateTimeNullableWithAggregatesFilter<"Student"> | Date | string | null
-    bloodGroup?: StringNullableWithAggregatesFilter<"Student"> | string | null
-    address?: StringNullableWithAggregatesFilter<"Student"> | string | null
-    nationalId?: StringNullableWithAggregatesFilter<"Student"> | string | null
-    fatherName?: StringNullableWithAggregatesFilter<"Student"> | string | null
-    motherName?: StringNullableWithAggregatesFilter<"Student"> | string | null
-    emergencyContactName?: StringNullableWithAggregatesFilter<"Student"> | string | null
-    emergencyContactPhone?: StringNullableWithAggregatesFilter<"Student"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Student"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Student"> | Date | string
   }
@@ -52371,6 +53579,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     role?: RoleCreateNestedOneWithoutUsersInput
+    profile?: ProfileCreateNestedOneWithoutUserInput
     student?: StudentCreateNestedOneWithoutUserInput
     instructor?: InstructorCreateNestedOneWithoutUserInput
     dojoManager?: DojoManagerCreateNestedOneWithoutUserInput
@@ -52402,6 +53611,7 @@ export namespace Prisma {
     memberNumber?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    profile?: ProfileUncheckedCreateNestedOneWithoutUserInput
     student?: StudentUncheckedCreateNestedOneWithoutUserInput
     instructor?: InstructorUncheckedCreateNestedOneWithoutUserInput
     dojoManager?: DojoManagerUncheckedCreateNestedOneWithoutUserInput
@@ -52433,6 +53643,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
+    profile?: ProfileUpdateOneWithoutUserNestedInput
     student?: StudentUpdateOneWithoutUserNestedInput
     instructor?: InstructorUpdateOneWithoutUserNestedInput
     dojoManager?: DojoManagerUpdateOneWithoutUserNestedInput
@@ -52464,6 +53675,7 @@ export namespace Prisma {
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    profile?: ProfileUncheckedUpdateOneWithoutUserNestedInput
     student?: StudentUncheckedUpdateOneWithoutUserNestedInput
     instructor?: InstructorUncheckedUpdateOneWithoutUserNestedInput
     dojoManager?: DojoManagerUncheckedUpdateOneWithoutUserNestedInput
@@ -52522,12 +53734,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type StudentCreateInput = {
-    currentRank?: string
-    joinDate?: Date | string
-    expiryDate?: Date | string | null
-    onboardingComplete?: boolean
-    membershipStatus?: $Enums.MembershipStatus
+  export type ProfileCreateInput = {
     dateOfBirth?: Date | string | null
     bloodGroup?: string | null
     address?: string | null
@@ -52536,6 +53743,100 @@ export namespace Prisma {
     motherName?: string | null
     emergencyContactName?: string | null
     emergencyContactPhone?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutProfileInput
+  }
+
+  export type ProfileUncheckedCreateInput = {
+    id: string
+    dateOfBirth?: Date | string | null
+    bloodGroup?: string | null
+    address?: string | null
+    nationalId?: string | null
+    fatherName?: string | null
+    motherName?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ProfileUpdateInput = {
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutProfileNestedInput
+  }
+
+  export type ProfileUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProfileCreateManyInput = {
+    id: string
+    dateOfBirth?: Date | string | null
+    bloodGroup?: string | null
+    address?: string | null
+    nationalId?: string | null
+    fatherName?: string | null
+    motherName?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ProfileUpdateManyMutationInput = {
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProfileUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type StudentCreateInput = {
+    currentRank?: string
+    joinDate?: Date | string
+    expiryDate?: Date | string | null
+    onboardingComplete?: boolean
+    membershipStatus?: $Enums.MembershipStatus
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutStudentInput
@@ -52557,14 +53858,6 @@ export namespace Prisma {
     dojoId?: string | null
     onboardingComplete?: boolean
     membershipStatus?: $Enums.MembershipStatus
-    dateOfBirth?: Date | string | null
-    bloodGroup?: string | null
-    address?: string | null
-    nationalId?: string | null
-    fatherName?: string | null
-    motherName?: string | null
-    emergencyContactName?: string | null
-    emergencyContactPhone?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     attendance?: AttendanceUncheckedCreateNestedManyWithoutStudentInput
@@ -52582,14 +53875,6 @@ export namespace Prisma {
     expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     onboardingComplete?: BoolFieldUpdateOperationsInput | boolean
     membershipStatus?: EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
-    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
-    motherName?: NullableStringFieldUpdateOperationsInput | string | null
-    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
-    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutStudentNestedInput
@@ -52611,14 +53896,6 @@ export namespace Prisma {
     dojoId?: NullableStringFieldUpdateOperationsInput | string | null
     onboardingComplete?: BoolFieldUpdateOperationsInput | boolean
     membershipStatus?: EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
-    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
-    motherName?: NullableStringFieldUpdateOperationsInput | string | null
-    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
-    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     attendance?: AttendanceUncheckedUpdateManyWithoutStudentNestedInput
@@ -52638,14 +53915,6 @@ export namespace Prisma {
     dojoId?: string | null
     onboardingComplete?: boolean
     membershipStatus?: $Enums.MembershipStatus
-    dateOfBirth?: Date | string | null
-    bloodGroup?: string | null
-    address?: string | null
-    nationalId?: string | null
-    fatherName?: string | null
-    motherName?: string | null
-    emergencyContactName?: string | null
-    emergencyContactPhone?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -52656,14 +53925,6 @@ export namespace Prisma {
     expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     onboardingComplete?: BoolFieldUpdateOperationsInput | boolean
     membershipStatus?: EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
-    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
-    motherName?: NullableStringFieldUpdateOperationsInput | string | null
-    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
-    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -52676,14 +53937,6 @@ export namespace Prisma {
     dojoId?: NullableStringFieldUpdateOperationsInput | string | null
     onboardingComplete?: BoolFieldUpdateOperationsInput | boolean
     membershipStatus?: EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
-    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
-    motherName?: NullableStringFieldUpdateOperationsInput | string | null
-    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
-    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -55876,6 +57129,11 @@ export namespace Prisma {
     not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
+  export type ProfileNullableScalarRelationFilter = {
+    is?: ProfileWhereInput | null
+    isNot?: ProfileWhereInput | null
+  }
+
   export type StudentNullableScalarRelationFilter = {
     is?: StudentWhereInput | null
     isNot?: StudentWhereInput | null
@@ -56074,6 +57332,67 @@ export namespace Prisma {
     not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
+  export type UserScalarRelationFilter = {
+    is?: UserWhereInput
+    isNot?: UserWhereInput
+  }
+
+  export type ProfileCountOrderByAggregateInput = {
+    id?: SortOrder
+    dateOfBirth?: SortOrder
+    bloodGroup?: SortOrder
+    address?: SortOrder
+    nationalId?: SortOrder
+    fatherName?: SortOrder
+    motherName?: SortOrder
+    emergencyContactName?: SortOrder
+    emergencyContactPhone?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ProfileMaxOrderByAggregateInput = {
+    id?: SortOrder
+    dateOfBirth?: SortOrder
+    bloodGroup?: SortOrder
+    address?: SortOrder
+    nationalId?: SortOrder
+    fatherName?: SortOrder
+    motherName?: SortOrder
+    emergencyContactName?: SortOrder
+    emergencyContactPhone?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ProfileMinOrderByAggregateInput = {
+    id?: SortOrder
+    dateOfBirth?: SortOrder
+    bloodGroup?: SortOrder
+    address?: SortOrder
+    nationalId?: SortOrder
+    fatherName?: SortOrder
+    motherName?: SortOrder
+    emergencyContactName?: SortOrder
+    emergencyContactPhone?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
   export type UuidNullableFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
     in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
@@ -56091,11 +57410,6 @@ export namespace Prisma {
     in?: $Enums.MembershipStatus[] | ListEnumMembershipStatusFieldRefInput<$PrismaModel>
     notIn?: $Enums.MembershipStatus[] | ListEnumMembershipStatusFieldRefInput<$PrismaModel>
     not?: NestedEnumMembershipStatusFilter<$PrismaModel> | $Enums.MembershipStatus
-  }
-
-  export type UserScalarRelationFilter = {
-    is?: UserWhereInput
-    isNot?: UserWhereInput
   }
 
   export type DojoNullableScalarRelationFilter = {
@@ -56151,14 +57465,6 @@ export namespace Prisma {
     dojoId?: SortOrder
     onboardingComplete?: SortOrder
     membershipStatus?: SortOrder
-    dateOfBirth?: SortOrder
-    bloodGroup?: SortOrder
-    address?: SortOrder
-    nationalId?: SortOrder
-    fatherName?: SortOrder
-    motherName?: SortOrder
-    emergencyContactName?: SortOrder
-    emergencyContactPhone?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -56171,14 +57477,6 @@ export namespace Prisma {
     dojoId?: SortOrder
     onboardingComplete?: SortOrder
     membershipStatus?: SortOrder
-    dateOfBirth?: SortOrder
-    bloodGroup?: SortOrder
-    address?: SortOrder
-    nationalId?: SortOrder
-    fatherName?: SortOrder
-    motherName?: SortOrder
-    emergencyContactName?: SortOrder
-    emergencyContactPhone?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -56191,30 +57489,8 @@ export namespace Prisma {
     dojoId?: SortOrder
     onboardingComplete?: SortOrder
     membershipStatus?: SortOrder
-    dateOfBirth?: SortOrder
-    bloodGroup?: SortOrder
-    address?: SortOrder
-    nationalId?: SortOrder
-    fatherName?: SortOrder
-    motherName?: SortOrder
-    emergencyContactName?: SortOrder
-    emergencyContactPhone?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-  }
-
-  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedDateTimeNullableFilter<$PrismaModel>
-    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type UuidNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -58494,6 +59770,12 @@ export namespace Prisma {
     connect?: RoleWhereUniqueInput
   }
 
+  export type ProfileCreateNestedOneWithoutUserInput = {
+    create?: XOR<ProfileCreateWithoutUserInput, ProfileUncheckedCreateWithoutUserInput>
+    connectOrCreate?: ProfileCreateOrConnectWithoutUserInput
+    connect?: ProfileWhereUniqueInput
+  }
+
   export type StudentCreateNestedOneWithoutUserInput = {
     create?: XOR<StudentCreateWithoutUserInput, StudentUncheckedCreateWithoutUserInput>
     connectOrCreate?: StudentCreateOrConnectWithoutUserInput
@@ -58613,6 +59895,12 @@ export namespace Prisma {
     connectOrCreate?: StudentDojoHistoryCreateOrConnectWithoutChangedByInput | StudentDojoHistoryCreateOrConnectWithoutChangedByInput[]
     createMany?: StudentDojoHistoryCreateManyChangedByInputEnvelope
     connect?: StudentDojoHistoryWhereUniqueInput | StudentDojoHistoryWhereUniqueInput[]
+  }
+
+  export type ProfileUncheckedCreateNestedOneWithoutUserInput = {
+    create?: XOR<ProfileCreateWithoutUserInput, ProfileUncheckedCreateWithoutUserInput>
+    connectOrCreate?: ProfileCreateOrConnectWithoutUserInput
+    connect?: ProfileWhereUniqueInput
   }
 
   export type StudentUncheckedCreateNestedOneWithoutUserInput = {
@@ -58746,6 +60034,16 @@ export namespace Prisma {
     upsert?: RoleUpsertWithoutUsersInput
     connect?: RoleWhereUniqueInput
     update?: XOR<XOR<RoleUpdateToOneWithWhereWithoutUsersInput, RoleUpdateWithoutUsersInput>, RoleUncheckedUpdateWithoutUsersInput>
+  }
+
+  export type ProfileUpdateOneWithoutUserNestedInput = {
+    create?: XOR<ProfileCreateWithoutUserInput, ProfileUncheckedCreateWithoutUserInput>
+    connectOrCreate?: ProfileCreateOrConnectWithoutUserInput
+    upsert?: ProfileUpsertWithoutUserInput
+    disconnect?: ProfileWhereInput | boolean
+    delete?: ProfileWhereInput | boolean
+    connect?: ProfileWhereUniqueInput
+    update?: XOR<XOR<ProfileUpdateToOneWithWhereWithoutUserInput, ProfileUpdateWithoutUserInput>, ProfileUncheckedUpdateWithoutUserInput>
   }
 
   export type StudentUpdateOneWithoutUserNestedInput = {
@@ -58980,6 +60278,16 @@ export namespace Prisma {
     deleteMany?: StudentDojoHistoryScalarWhereInput | StudentDojoHistoryScalarWhereInput[]
   }
 
+  export type ProfileUncheckedUpdateOneWithoutUserNestedInput = {
+    create?: XOR<ProfileCreateWithoutUserInput, ProfileUncheckedCreateWithoutUserInput>
+    connectOrCreate?: ProfileCreateOrConnectWithoutUserInput
+    upsert?: ProfileUpsertWithoutUserInput
+    disconnect?: ProfileWhereInput | boolean
+    delete?: ProfileWhereInput | boolean
+    connect?: ProfileWhereUniqueInput
+    update?: XOR<XOR<ProfileUpdateToOneWithWhereWithoutUserInput, ProfileUpdateWithoutUserInput>, ProfileUncheckedUpdateWithoutUserInput>
+  }
+
   export type StudentUncheckedUpdateOneWithoutUserNestedInput = {
     create?: XOR<StudentCreateWithoutUserInput, StudentUncheckedCreateWithoutUserInput>
     connectOrCreate?: StudentCreateOrConnectWithoutUserInput
@@ -59212,6 +60520,24 @@ export namespace Prisma {
     deleteMany?: StudentDojoHistoryScalarWhereInput | StudentDojoHistoryScalarWhereInput[]
   }
 
+  export type UserCreateNestedOneWithoutProfileInput = {
+    create?: XOR<UserCreateWithoutProfileInput, UserUncheckedCreateWithoutProfileInput>
+    connectOrCreate?: UserCreateOrConnectWithoutProfileInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type NullableDateTimeFieldUpdateOperationsInput = {
+    set?: Date | string | null
+  }
+
+  export type UserUpdateOneRequiredWithoutProfileNestedInput = {
+    create?: XOR<UserCreateWithoutProfileInput, UserUncheckedCreateWithoutProfileInput>
+    connectOrCreate?: UserCreateOrConnectWithoutProfileInput
+    upsert?: UserUpsertWithoutProfileInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutProfileInput, UserUpdateWithoutProfileInput>, UserUncheckedUpdateWithoutProfileInput>
+  }
+
   export type UserCreateNestedOneWithoutStudentInput = {
     create?: XOR<UserCreateWithoutStudentInput, UserUncheckedCreateWithoutStudentInput>
     connectOrCreate?: UserCreateOrConnectWithoutStudentInput
@@ -59320,10 +60646,6 @@ export namespace Prisma {
     connectOrCreate?: StudentDojoHistoryCreateOrConnectWithoutStudentInput | StudentDojoHistoryCreateOrConnectWithoutStudentInput[]
     createMany?: StudentDojoHistoryCreateManyStudentInputEnvelope
     connect?: StudentDojoHistoryWhereUniqueInput | StudentDojoHistoryWhereUniqueInput[]
-  }
-
-  export type NullableDateTimeFieldUpdateOperationsInput = {
-    set?: Date | string | null
   }
 
   export type EnumMembershipStatusFieldUpdateOperationsInput = {
@@ -62422,6 +63744,20 @@ export namespace Prisma {
     not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
+  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
   export type NestedUuidNullableFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
     in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
@@ -62438,20 +63774,6 @@ export namespace Prisma {
     in?: $Enums.MembershipStatus[] | ListEnumMembershipStatusFieldRefInput<$PrismaModel>
     notIn?: $Enums.MembershipStatus[] | ListEnumMembershipStatusFieldRefInput<$PrismaModel>
     not?: NestedEnumMembershipStatusFilter<$PrismaModel> | $Enums.MembershipStatus
-  }
-
-  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedDateTimeNullableFilter<$PrismaModel>
-    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type NestedUuidNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -62913,6 +64235,7 @@ export namespace Prisma {
     memberNumber?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    profile?: ProfileCreateNestedOneWithoutUserInput
     student?: StudentCreateNestedOneWithoutUserInput
     instructor?: InstructorCreateNestedOneWithoutUserInput
     dojoManager?: DojoManagerCreateNestedOneWithoutUserInput
@@ -62943,6 +64266,7 @@ export namespace Prisma {
     memberNumber?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    profile?: ProfileUncheckedCreateNestedOneWithoutUserInput
     student?: StudentUncheckedCreateNestedOneWithoutUserInput
     instructor?: InstructorUncheckedCreateNestedOneWithoutUserInput
     dojoManager?: DojoManagerUncheckedCreateNestedOneWithoutUserInput
@@ -63209,12 +64533,7 @@ export namespace Prisma {
     create: XOR<RoleCreateWithoutUsersInput, RoleUncheckedCreateWithoutUsersInput>
   }
 
-  export type StudentCreateWithoutUserInput = {
-    currentRank?: string
-    joinDate?: Date | string
-    expiryDate?: Date | string | null
-    onboardingComplete?: boolean
-    membershipStatus?: $Enums.MembershipStatus
+  export type ProfileCreateWithoutUserInput = {
     dateOfBirth?: Date | string | null
     bloodGroup?: string | null
     address?: string | null
@@ -63223,6 +64542,34 @@ export namespace Prisma {
     motherName?: string | null
     emergencyContactName?: string | null
     emergencyContactPhone?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ProfileUncheckedCreateWithoutUserInput = {
+    dateOfBirth?: Date | string | null
+    bloodGroup?: string | null
+    address?: string | null
+    nationalId?: string | null
+    fatherName?: string | null
+    motherName?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ProfileCreateOrConnectWithoutUserInput = {
+    where: ProfileWhereUniqueInput
+    create: XOR<ProfileCreateWithoutUserInput, ProfileUncheckedCreateWithoutUserInput>
+  }
+
+  export type StudentCreateWithoutUserInput = {
+    currentRank?: string
+    joinDate?: Date | string
+    expiryDate?: Date | string | null
+    onboardingComplete?: boolean
+    membershipStatus?: $Enums.MembershipStatus
     createdAt?: Date | string
     updatedAt?: Date | string
     dojo?: DojoCreateNestedOneWithoutStudentsInput
@@ -63242,14 +64589,6 @@ export namespace Prisma {
     dojoId?: string | null
     onboardingComplete?: boolean
     membershipStatus?: $Enums.MembershipStatus
-    dateOfBirth?: Date | string | null
-    bloodGroup?: string | null
-    address?: string | null
-    nationalId?: string | null
-    fatherName?: string | null
-    motherName?: string | null
-    emergencyContactName?: string | null
-    emergencyContactPhone?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     attendance?: AttendanceUncheckedCreateNestedManyWithoutStudentInput
@@ -63931,6 +65270,43 @@ export namespace Prisma {
     rolePermissions?: RolePermissionUncheckedUpdateManyWithoutRoleNestedInput
   }
 
+  export type ProfileUpsertWithoutUserInput = {
+    update: XOR<ProfileUpdateWithoutUserInput, ProfileUncheckedUpdateWithoutUserInput>
+    create: XOR<ProfileCreateWithoutUserInput, ProfileUncheckedCreateWithoutUserInput>
+    where?: ProfileWhereInput
+  }
+
+  export type ProfileUpdateToOneWithWhereWithoutUserInput = {
+    where?: ProfileWhereInput
+    data: XOR<ProfileUpdateWithoutUserInput, ProfileUncheckedUpdateWithoutUserInput>
+  }
+
+  export type ProfileUpdateWithoutUserInput = {
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProfileUncheckedUpdateWithoutUserInput = {
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StudentUpsertWithoutUserInput = {
     update: XOR<StudentUpdateWithoutUserInput, StudentUncheckedUpdateWithoutUserInput>
     create: XOR<StudentCreateWithoutUserInput, StudentUncheckedCreateWithoutUserInput>
@@ -63948,14 +65324,6 @@ export namespace Prisma {
     expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     onboardingComplete?: BoolFieldUpdateOperationsInput | boolean
     membershipStatus?: EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
-    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
-    motherName?: NullableStringFieldUpdateOperationsInput | string | null
-    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
-    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dojo?: DojoUpdateOneWithoutStudentsNestedInput
@@ -63975,14 +65343,6 @@ export namespace Prisma {
     dojoId?: NullableStringFieldUpdateOperationsInput | string | null
     onboardingComplete?: BoolFieldUpdateOperationsInput | boolean
     membershipStatus?: EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
-    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
-    motherName?: NullableStringFieldUpdateOperationsInput | string | null
-    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
-    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     attendance?: AttendanceUncheckedUpdateManyWithoutStudentNestedInput
@@ -64492,6 +65852,146 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"StudentDojoHistory"> | Date | string
   }
 
+  export type UserCreateWithoutProfileInput = {
+    id: string
+    email: string
+    phone?: string | null
+    fullName: string
+    avatarUrl?: string | null
+    isActive?: boolean
+    memberNumber?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    role?: RoleCreateNestedOneWithoutUsersInput
+    student?: StudentCreateNestedOneWithoutUserInput
+    instructor?: InstructorCreateNestedOneWithoutUserInput
+    dojoManager?: DojoManagerCreateNestedOneWithoutUserInput
+    dojoOwner?: DojoOwnerCreateNestedOneWithoutUserInput
+    admin?: AdminCreateNestedOneWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    orders?: ShopOrderCreateNestedManyWithoutUserInput
+    eventRegistrations?: EventRegistrationCreateNestedManyWithoutUserInput
+    eventCheckIns?: EventRegistrationCreateNestedManyWithoutCheckedInByInput
+    eventsPosted?: EventCreateNestedManyWithoutPostedByInput
+    announcementsPosted?: AnnouncementCreateNestedManyWithoutPostedByInput
+    dojoSalesAsBuyer?: DojoSaleCreateNestedManyWithoutBuyerInput
+    dojoSalesSold?: DojoSaleCreateNestedManyWithoutSoldByInput
+    achievementsAwarded?: StudentAchievementCreateNestedManyWithoutAwardedByInput
+    tournamentEntries?: TournamentParticipantCreateNestedManyWithoutUserInput
+    transfersDojoActed?: StudentTransferRequestCreateNestedManyWithoutDojoActedByInput
+    transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
+    dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
+  }
+
+  export type UserUncheckedCreateWithoutProfileInput = {
+    id: string
+    email: string
+    phone?: string | null
+    fullName: string
+    avatarUrl?: string | null
+    roleId?: string
+    isActive?: boolean
+    memberNumber?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    student?: StudentUncheckedCreateNestedOneWithoutUserInput
+    instructor?: InstructorUncheckedCreateNestedOneWithoutUserInput
+    dojoManager?: DojoManagerUncheckedCreateNestedOneWithoutUserInput
+    dojoOwner?: DojoOwnerUncheckedCreateNestedOneWithoutUserInput
+    admin?: AdminUncheckedCreateNestedOneWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    orders?: ShopOrderUncheckedCreateNestedManyWithoutUserInput
+    eventRegistrations?: EventRegistrationUncheckedCreateNestedManyWithoutUserInput
+    eventCheckIns?: EventRegistrationUncheckedCreateNestedManyWithoutCheckedInByInput
+    eventsPosted?: EventUncheckedCreateNestedManyWithoutPostedByInput
+    announcementsPosted?: AnnouncementUncheckedCreateNestedManyWithoutPostedByInput
+    dojoSalesAsBuyer?: DojoSaleUncheckedCreateNestedManyWithoutBuyerInput
+    dojoSalesSold?: DojoSaleUncheckedCreateNestedManyWithoutSoldByInput
+    achievementsAwarded?: StudentAchievementUncheckedCreateNestedManyWithoutAwardedByInput
+    tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutUserInput
+    transfersDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutDojoActedByInput
+    transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
+    dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
+  }
+
+  export type UserCreateOrConnectWithoutProfileInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutProfileInput, UserUncheckedCreateWithoutProfileInput>
+  }
+
+  export type UserUpsertWithoutProfileInput = {
+    update: XOR<UserUpdateWithoutProfileInput, UserUncheckedUpdateWithoutProfileInput>
+    create: XOR<UserCreateWithoutProfileInput, UserUncheckedCreateWithoutProfileInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutProfileInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutProfileInput, UserUncheckedUpdateWithoutProfileInput>
+  }
+
+  export type UserUpdateWithoutProfileInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    fullName?: StringFieldUpdateOperationsInput | string
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: RoleUpdateOneRequiredWithoutUsersNestedInput
+    student?: StudentUpdateOneWithoutUserNestedInput
+    instructor?: InstructorUpdateOneWithoutUserNestedInput
+    dojoManager?: DojoManagerUpdateOneWithoutUserNestedInput
+    dojoOwner?: DojoOwnerUpdateOneWithoutUserNestedInput
+    admin?: AdminUpdateOneWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    orders?: ShopOrderUpdateManyWithoutUserNestedInput
+    eventRegistrations?: EventRegistrationUpdateManyWithoutUserNestedInput
+    eventCheckIns?: EventRegistrationUpdateManyWithoutCheckedInByNestedInput
+    eventsPosted?: EventUpdateManyWithoutPostedByNestedInput
+    announcementsPosted?: AnnouncementUpdateManyWithoutPostedByNestedInput
+    dojoSalesAsBuyer?: DojoSaleUpdateManyWithoutBuyerNestedInput
+    dojoSalesSold?: DojoSaleUpdateManyWithoutSoldByNestedInput
+    achievementsAwarded?: StudentAchievementUpdateManyWithoutAwardedByNestedInput
+    tournamentEntries?: TournamentParticipantUpdateManyWithoutUserNestedInput
+    transfersDojoActed?: StudentTransferRequestUpdateManyWithoutDojoActedByNestedInput
+    transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
+    dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutProfileInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    fullName?: StringFieldUpdateOperationsInput | string
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    roleId?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    student?: StudentUncheckedUpdateOneWithoutUserNestedInput
+    instructor?: InstructorUncheckedUpdateOneWithoutUserNestedInput
+    dojoManager?: DojoManagerUncheckedUpdateOneWithoutUserNestedInput
+    dojoOwner?: DojoOwnerUncheckedUpdateOneWithoutUserNestedInput
+    admin?: AdminUncheckedUpdateOneWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    orders?: ShopOrderUncheckedUpdateManyWithoutUserNestedInput
+    eventRegistrations?: EventRegistrationUncheckedUpdateManyWithoutUserNestedInput
+    eventCheckIns?: EventRegistrationUncheckedUpdateManyWithoutCheckedInByNestedInput
+    eventsPosted?: EventUncheckedUpdateManyWithoutPostedByNestedInput
+    announcementsPosted?: AnnouncementUncheckedUpdateManyWithoutPostedByNestedInput
+    dojoSalesAsBuyer?: DojoSaleUncheckedUpdateManyWithoutBuyerNestedInput
+    dojoSalesSold?: DojoSaleUncheckedUpdateManyWithoutSoldByNestedInput
+    achievementsAwarded?: StudentAchievementUncheckedUpdateManyWithoutAwardedByNestedInput
+    tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutUserNestedInput
+    transfersDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
+    transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
+    dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+  }
+
   export type UserCreateWithoutStudentInput = {
     id: string
     email: string
@@ -64503,6 +66003,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     role?: RoleCreateNestedOneWithoutUsersInput
+    profile?: ProfileCreateNestedOneWithoutUserInput
     instructor?: InstructorCreateNestedOneWithoutUserInput
     dojoManager?: DojoManagerCreateNestedOneWithoutUserInput
     dojoOwner?: DojoOwnerCreateNestedOneWithoutUserInput
@@ -64533,6 +66034,7 @@ export namespace Prisma {
     memberNumber?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    profile?: ProfileUncheckedCreateNestedOneWithoutUserInput
     instructor?: InstructorUncheckedCreateNestedOneWithoutUserInput
     dojoManager?: DojoManagerUncheckedCreateNestedOneWithoutUserInput
     dojoOwner?: DojoOwnerUncheckedCreateNestedOneWithoutUserInput
@@ -64902,6 +66404,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
+    profile?: ProfileUpdateOneWithoutUserNestedInput
     instructor?: InstructorUpdateOneWithoutUserNestedInput
     dojoManager?: DojoManagerUpdateOneWithoutUserNestedInput
     dojoOwner?: DojoOwnerUpdateOneWithoutUserNestedInput
@@ -64932,6 +66435,7 @@ export namespace Prisma {
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    profile?: ProfileUncheckedUpdateOneWithoutUserNestedInput
     instructor?: InstructorUncheckedUpdateOneWithoutUserNestedInput
     dojoManager?: DojoManagerUncheckedUpdateOneWithoutUserNestedInput
     dojoOwner?: DojoOwnerUncheckedUpdateOneWithoutUserNestedInput
@@ -65219,6 +66723,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     role?: RoleCreateNestedOneWithoutUsersInput
+    profile?: ProfileCreateNestedOneWithoutUserInput
     student?: StudentCreateNestedOneWithoutUserInput
     dojoManager?: DojoManagerCreateNestedOneWithoutUserInput
     dojoOwner?: DojoOwnerCreateNestedOneWithoutUserInput
@@ -65249,6 +66754,7 @@ export namespace Prisma {
     memberNumber?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    profile?: ProfileUncheckedCreateNestedOneWithoutUserInput
     student?: StudentUncheckedCreateNestedOneWithoutUserInput
     dojoManager?: DojoManagerUncheckedCreateNestedOneWithoutUserInput
     dojoOwner?: DojoOwnerUncheckedCreateNestedOneWithoutUserInput
@@ -65370,6 +66876,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
+    profile?: ProfileUpdateOneWithoutUserNestedInput
     student?: StudentUpdateOneWithoutUserNestedInput
     dojoManager?: DojoManagerUpdateOneWithoutUserNestedInput
     dojoOwner?: DojoOwnerUpdateOneWithoutUserNestedInput
@@ -65400,6 +66907,7 @@ export namespace Prisma {
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    profile?: ProfileUncheckedUpdateOneWithoutUserNestedInput
     student?: StudentUncheckedUpdateOneWithoutUserNestedInput
     dojoManager?: DojoManagerUncheckedUpdateOneWithoutUserNestedInput
     dojoOwner?: DojoOwnerUncheckedUpdateOneWithoutUserNestedInput
@@ -65511,6 +67019,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     role?: RoleCreateNestedOneWithoutUsersInput
+    profile?: ProfileCreateNestedOneWithoutUserInput
     student?: StudentCreateNestedOneWithoutUserInput
     instructor?: InstructorCreateNestedOneWithoutUserInput
     dojoOwner?: DojoOwnerCreateNestedOneWithoutUserInput
@@ -65541,6 +67050,7 @@ export namespace Prisma {
     memberNumber?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    profile?: ProfileUncheckedCreateNestedOneWithoutUserInput
     student?: StudentUncheckedCreateNestedOneWithoutUserInput
     instructor?: InstructorUncheckedCreateNestedOneWithoutUserInput
     dojoOwner?: DojoOwnerUncheckedCreateNestedOneWithoutUserInput
@@ -65662,6 +67172,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
+    profile?: ProfileUpdateOneWithoutUserNestedInput
     student?: StudentUpdateOneWithoutUserNestedInput
     instructor?: InstructorUpdateOneWithoutUserNestedInput
     dojoOwner?: DojoOwnerUpdateOneWithoutUserNestedInput
@@ -65692,6 +67203,7 @@ export namespace Prisma {
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    profile?: ProfileUncheckedUpdateOneWithoutUserNestedInput
     student?: StudentUncheckedUpdateOneWithoutUserNestedInput
     instructor?: InstructorUncheckedUpdateOneWithoutUserNestedInput
     dojoOwner?: DojoOwnerUncheckedUpdateOneWithoutUserNestedInput
@@ -65803,6 +67315,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     role?: RoleCreateNestedOneWithoutUsersInput
+    profile?: ProfileCreateNestedOneWithoutUserInput
     student?: StudentCreateNestedOneWithoutUserInput
     instructor?: InstructorCreateNestedOneWithoutUserInput
     dojoManager?: DojoManagerCreateNestedOneWithoutUserInput
@@ -65833,6 +67346,7 @@ export namespace Prisma {
     memberNumber?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    profile?: ProfileUncheckedCreateNestedOneWithoutUserInput
     student?: StudentUncheckedCreateNestedOneWithoutUserInput
     instructor?: InstructorUncheckedCreateNestedOneWithoutUserInput
     dojoManager?: DojoManagerUncheckedCreateNestedOneWithoutUserInput
@@ -65954,6 +67468,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
+    profile?: ProfileUpdateOneWithoutUserNestedInput
     student?: StudentUpdateOneWithoutUserNestedInput
     instructor?: InstructorUpdateOneWithoutUserNestedInput
     dojoManager?: DojoManagerUpdateOneWithoutUserNestedInput
@@ -65984,6 +67499,7 @@ export namespace Prisma {
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    profile?: ProfileUncheckedUpdateOneWithoutUserNestedInput
     student?: StudentUncheckedUpdateOneWithoutUserNestedInput
     instructor?: InstructorUncheckedUpdateOneWithoutUserNestedInput
     dojoManager?: DojoManagerUncheckedUpdateOneWithoutUserNestedInput
@@ -66095,6 +67611,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     role?: RoleCreateNestedOneWithoutUsersInput
+    profile?: ProfileCreateNestedOneWithoutUserInput
     student?: StudentCreateNestedOneWithoutUserInput
     instructor?: InstructorCreateNestedOneWithoutUserInput
     dojoManager?: DojoManagerCreateNestedOneWithoutUserInput
@@ -66125,6 +67642,7 @@ export namespace Prisma {
     memberNumber?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    profile?: ProfileUncheckedCreateNestedOneWithoutUserInput
     student?: StudentUncheckedCreateNestedOneWithoutUserInput
     instructor?: InstructorUncheckedCreateNestedOneWithoutUserInput
     dojoManager?: DojoManagerUncheckedCreateNestedOneWithoutUserInput
@@ -66171,6 +67689,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
+    profile?: ProfileUpdateOneWithoutUserNestedInput
     student?: StudentUpdateOneWithoutUserNestedInput
     instructor?: InstructorUpdateOneWithoutUserNestedInput
     dojoManager?: DojoManagerUpdateOneWithoutUserNestedInput
@@ -66201,6 +67720,7 @@ export namespace Prisma {
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    profile?: ProfileUncheckedUpdateOneWithoutUserNestedInput
     student?: StudentUncheckedUpdateOneWithoutUserNestedInput
     instructor?: InstructorUncheckedUpdateOneWithoutUserNestedInput
     dojoManager?: DojoManagerUncheckedUpdateOneWithoutUserNestedInput
@@ -66700,14 +68220,6 @@ export namespace Prisma {
     expiryDate?: Date | string | null
     onboardingComplete?: boolean
     membershipStatus?: $Enums.MembershipStatus
-    dateOfBirth?: Date | string | null
-    bloodGroup?: string | null
-    address?: string | null
-    nationalId?: string | null
-    fatherName?: string | null
-    motherName?: string | null
-    emergencyContactName?: string | null
-    emergencyContactPhone?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutStudentInput
@@ -66727,14 +68239,6 @@ export namespace Prisma {
     expiryDate?: Date | string | null
     onboardingComplete?: boolean
     membershipStatus?: $Enums.MembershipStatus
-    dateOfBirth?: Date | string | null
-    bloodGroup?: string | null
-    address?: string | null
-    nationalId?: string | null
-    fatherName?: string | null
-    motherName?: string | null
-    emergencyContactName?: string | null
-    emergencyContactPhone?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     attendance?: AttendanceUncheckedCreateNestedManyWithoutStudentInput
@@ -67303,14 +68807,6 @@ export namespace Prisma {
     dojoId?: UuidNullableFilter<"Student"> | string | null
     onboardingComplete?: BoolFilter<"Student"> | boolean
     membershipStatus?: EnumMembershipStatusFilter<"Student"> | $Enums.MembershipStatus
-    dateOfBirth?: DateTimeNullableFilter<"Student"> | Date | string | null
-    bloodGroup?: StringNullableFilter<"Student"> | string | null
-    address?: StringNullableFilter<"Student"> | string | null
-    nationalId?: StringNullableFilter<"Student"> | string | null
-    fatherName?: StringNullableFilter<"Student"> | string | null
-    motherName?: StringNullableFilter<"Student"> | string | null
-    emergencyContactName?: StringNullableFilter<"Student"> | string | null
-    emergencyContactPhone?: StringNullableFilter<"Student"> | string | null
     createdAt?: DateTimeFilter<"Student"> | Date | string
     updatedAt?: DateTimeFilter<"Student"> | Date | string
   }
@@ -67768,14 +69264,6 @@ export namespace Prisma {
     expiryDate?: Date | string | null
     onboardingComplete?: boolean
     membershipStatus?: $Enums.MembershipStatus
-    dateOfBirth?: Date | string | null
-    bloodGroup?: string | null
-    address?: string | null
-    nationalId?: string | null
-    fatherName?: string | null
-    motherName?: string | null
-    emergencyContactName?: string | null
-    emergencyContactPhone?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutStudentInput
@@ -67796,14 +69284,6 @@ export namespace Prisma {
     dojoId?: string | null
     onboardingComplete?: boolean
     membershipStatus?: $Enums.MembershipStatus
-    dateOfBirth?: Date | string | null
-    bloodGroup?: string | null
-    address?: string | null
-    nationalId?: string | null
-    fatherName?: string | null
-    motherName?: string | null
-    emergencyContactName?: string | null
-    emergencyContactPhone?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     gradings?: GradingUncheckedCreateNestedManyWithoutStudentInput
@@ -67911,14 +69391,6 @@ export namespace Prisma {
     expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     onboardingComplete?: BoolFieldUpdateOperationsInput | boolean
     membershipStatus?: EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
-    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
-    motherName?: NullableStringFieldUpdateOperationsInput | string | null
-    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
-    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutStudentNestedInput
@@ -67939,14 +69411,6 @@ export namespace Prisma {
     dojoId?: NullableStringFieldUpdateOperationsInput | string | null
     onboardingComplete?: BoolFieldUpdateOperationsInput | boolean
     membershipStatus?: EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
-    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
-    motherName?: NullableStringFieldUpdateOperationsInput | string | null
-    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
-    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     gradings?: GradingUncheckedUpdateManyWithoutStudentNestedInput
@@ -68218,14 +69682,6 @@ export namespace Prisma {
     expiryDate?: Date | string | null
     onboardingComplete?: boolean
     membershipStatus?: $Enums.MembershipStatus
-    dateOfBirth?: Date | string | null
-    bloodGroup?: string | null
-    address?: string | null
-    nationalId?: string | null
-    fatherName?: string | null
-    motherName?: string | null
-    emergencyContactName?: string | null
-    emergencyContactPhone?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutStudentInput
@@ -68246,14 +69702,6 @@ export namespace Prisma {
     dojoId?: string | null
     onboardingComplete?: boolean
     membershipStatus?: $Enums.MembershipStatus
-    dateOfBirth?: Date | string | null
-    bloodGroup?: string | null
-    address?: string | null
-    nationalId?: string | null
-    fatherName?: string | null
-    motherName?: string | null
-    emergencyContactName?: string | null
-    emergencyContactPhone?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     attendance?: AttendanceUncheckedCreateNestedManyWithoutStudentInput
@@ -68358,14 +69806,6 @@ export namespace Prisma {
     expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     onboardingComplete?: BoolFieldUpdateOperationsInput | boolean
     membershipStatus?: EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
-    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
-    motherName?: NullableStringFieldUpdateOperationsInput | string | null
-    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
-    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutStudentNestedInput
@@ -68386,14 +69826,6 @@ export namespace Prisma {
     dojoId?: NullableStringFieldUpdateOperationsInput | string | null
     onboardingComplete?: BoolFieldUpdateOperationsInput | boolean
     membershipStatus?: EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
-    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
-    motherName?: NullableStringFieldUpdateOperationsInput | string | null
-    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
-    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     attendance?: AttendanceUncheckedUpdateManyWithoutStudentNestedInput
@@ -68494,14 +69926,6 @@ export namespace Prisma {
     expiryDate?: Date | string | null
     onboardingComplete?: boolean
     membershipStatus?: $Enums.MembershipStatus
-    dateOfBirth?: Date | string | null
-    bloodGroup?: string | null
-    address?: string | null
-    nationalId?: string | null
-    fatherName?: string | null
-    motherName?: string | null
-    emergencyContactName?: string | null
-    emergencyContactPhone?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutStudentInput
@@ -68522,14 +69946,6 @@ export namespace Prisma {
     dojoId?: string | null
     onboardingComplete?: boolean
     membershipStatus?: $Enums.MembershipStatus
-    dateOfBirth?: Date | string | null
-    bloodGroup?: string | null
-    address?: string | null
-    nationalId?: string | null
-    fatherName?: string | null
-    motherName?: string | null
-    emergencyContactName?: string | null
-    emergencyContactPhone?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     attendance?: AttendanceUncheckedCreateNestedManyWithoutStudentInput
@@ -68713,14 +70129,6 @@ export namespace Prisma {
     expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     onboardingComplete?: BoolFieldUpdateOperationsInput | boolean
     membershipStatus?: EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
-    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
-    motherName?: NullableStringFieldUpdateOperationsInput | string | null
-    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
-    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutStudentNestedInput
@@ -68741,14 +70149,6 @@ export namespace Prisma {
     dojoId?: NullableStringFieldUpdateOperationsInput | string | null
     onboardingComplete?: BoolFieldUpdateOperationsInput | boolean
     membershipStatus?: EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
-    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
-    motherName?: NullableStringFieldUpdateOperationsInput | string | null
-    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
-    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     attendance?: AttendanceUncheckedUpdateManyWithoutStudentNestedInput
@@ -68937,14 +70337,6 @@ export namespace Prisma {
     expiryDate?: Date | string | null
     onboardingComplete?: boolean
     membershipStatus?: $Enums.MembershipStatus
-    dateOfBirth?: Date | string | null
-    bloodGroup?: string | null
-    address?: string | null
-    nationalId?: string | null
-    fatherName?: string | null
-    motherName?: string | null
-    emergencyContactName?: string | null
-    emergencyContactPhone?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutStudentInput
@@ -68965,14 +70357,6 @@ export namespace Prisma {
     dojoId?: string | null
     onboardingComplete?: boolean
     membershipStatus?: $Enums.MembershipStatus
-    dateOfBirth?: Date | string | null
-    bloodGroup?: string | null
-    address?: string | null
-    nationalId?: string | null
-    fatherName?: string | null
-    motherName?: string | null
-    emergencyContactName?: string | null
-    emergencyContactPhone?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     attendance?: AttendanceUncheckedCreateNestedManyWithoutStudentInput
@@ -69178,14 +70562,6 @@ export namespace Prisma {
     expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     onboardingComplete?: BoolFieldUpdateOperationsInput | boolean
     membershipStatus?: EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
-    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
-    motherName?: NullableStringFieldUpdateOperationsInput | string | null
-    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
-    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutStudentNestedInput
@@ -69206,14 +70582,6 @@ export namespace Prisma {
     dojoId?: NullableStringFieldUpdateOperationsInput | string | null
     onboardingComplete?: BoolFieldUpdateOperationsInput | boolean
     membershipStatus?: EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
-    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
-    motherName?: NullableStringFieldUpdateOperationsInput | string | null
-    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
-    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     attendance?: AttendanceUncheckedUpdateManyWithoutStudentNestedInput
@@ -69429,6 +70797,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     role?: RoleCreateNestedOneWithoutUsersInput
+    profile?: ProfileCreateNestedOneWithoutUserInput
     student?: StudentCreateNestedOneWithoutUserInput
     instructor?: InstructorCreateNestedOneWithoutUserInput
     dojoManager?: DojoManagerCreateNestedOneWithoutUserInput
@@ -69459,6 +70828,7 @@ export namespace Prisma {
     memberNumber?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    profile?: ProfileUncheckedCreateNestedOneWithoutUserInput
     student?: StudentUncheckedCreateNestedOneWithoutUserInput
     instructor?: InstructorUncheckedCreateNestedOneWithoutUserInput
     dojoManager?: DojoManagerUncheckedCreateNestedOneWithoutUserInput
@@ -69631,6 +71001,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
+    profile?: ProfileUpdateOneWithoutUserNestedInput
     student?: StudentUpdateOneWithoutUserNestedInput
     instructor?: InstructorUpdateOneWithoutUserNestedInput
     dojoManager?: DojoManagerUpdateOneWithoutUserNestedInput
@@ -69661,6 +71032,7 @@ export namespace Prisma {
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    profile?: ProfileUncheckedUpdateOneWithoutUserNestedInput
     student?: StudentUncheckedUpdateOneWithoutUserNestedInput
     instructor?: InstructorUncheckedUpdateOneWithoutUserNestedInput
     dojoManager?: DojoManagerUncheckedUpdateOneWithoutUserNestedInput
@@ -69813,6 +71185,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     role?: RoleCreateNestedOneWithoutUsersInput
+    profile?: ProfileCreateNestedOneWithoutUserInput
     student?: StudentCreateNestedOneWithoutUserInput
     instructor?: InstructorCreateNestedOneWithoutUserInput
     dojoManager?: DojoManagerCreateNestedOneWithoutUserInput
@@ -69843,6 +71216,7 @@ export namespace Prisma {
     memberNumber?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    profile?: ProfileUncheckedCreateNestedOneWithoutUserInput
     student?: StudentUncheckedCreateNestedOneWithoutUserInput
     instructor?: InstructorUncheckedCreateNestedOneWithoutUserInput
     dojoManager?: DojoManagerUncheckedCreateNestedOneWithoutUserInput
@@ -69964,6 +71338,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
+    profile?: ProfileUpdateOneWithoutUserNestedInput
     student?: StudentUpdateOneWithoutUserNestedInput
     instructor?: InstructorUpdateOneWithoutUserNestedInput
     dojoManager?: DojoManagerUpdateOneWithoutUserNestedInput
@@ -69994,6 +71369,7 @@ export namespace Prisma {
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    profile?: ProfileUncheckedUpdateOneWithoutUserNestedInput
     student?: StudentUncheckedUpdateOneWithoutUserNestedInput
     instructor?: InstructorUncheckedUpdateOneWithoutUserNestedInput
     dojoManager?: DojoManagerUncheckedUpdateOneWithoutUserNestedInput
@@ -70156,6 +71532,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     role?: RoleCreateNestedOneWithoutUsersInput
+    profile?: ProfileCreateNestedOneWithoutUserInput
     student?: StudentCreateNestedOneWithoutUserInput
     instructor?: InstructorCreateNestedOneWithoutUserInput
     dojoManager?: DojoManagerCreateNestedOneWithoutUserInput
@@ -70186,6 +71563,7 @@ export namespace Prisma {
     memberNumber?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    profile?: ProfileUncheckedCreateNestedOneWithoutUserInput
     student?: StudentUncheckedCreateNestedOneWithoutUserInput
     instructor?: InstructorUncheckedCreateNestedOneWithoutUserInput
     dojoManager?: DojoManagerUncheckedCreateNestedOneWithoutUserInput
@@ -70221,6 +71599,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     role?: RoleCreateNestedOneWithoutUsersInput
+    profile?: ProfileCreateNestedOneWithoutUserInput
     student?: StudentCreateNestedOneWithoutUserInput
     instructor?: InstructorCreateNestedOneWithoutUserInput
     dojoManager?: DojoManagerCreateNestedOneWithoutUserInput
@@ -70251,6 +71630,7 @@ export namespace Prisma {
     memberNumber?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    profile?: ProfileUncheckedCreateNestedOneWithoutUserInput
     student?: StudentUncheckedCreateNestedOneWithoutUserInput
     instructor?: InstructorUncheckedCreateNestedOneWithoutUserInput
     dojoManager?: DojoManagerUncheckedCreateNestedOneWithoutUserInput
@@ -70354,6 +71734,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
+    profile?: ProfileUpdateOneWithoutUserNestedInput
     student?: StudentUpdateOneWithoutUserNestedInput
     instructor?: InstructorUpdateOneWithoutUserNestedInput
     dojoManager?: DojoManagerUpdateOneWithoutUserNestedInput
@@ -70384,6 +71765,7 @@ export namespace Prisma {
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    profile?: ProfileUncheckedUpdateOneWithoutUserNestedInput
     student?: StudentUncheckedUpdateOneWithoutUserNestedInput
     instructor?: InstructorUncheckedUpdateOneWithoutUserNestedInput
     dojoManager?: DojoManagerUncheckedUpdateOneWithoutUserNestedInput
@@ -70425,6 +71807,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
+    profile?: ProfileUpdateOneWithoutUserNestedInput
     student?: StudentUpdateOneWithoutUserNestedInput
     instructor?: InstructorUpdateOneWithoutUserNestedInput
     dojoManager?: DojoManagerUpdateOneWithoutUserNestedInput
@@ -70455,6 +71838,7 @@ export namespace Prisma {
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    profile?: ProfileUncheckedUpdateOneWithoutUserNestedInput
     student?: StudentUncheckedUpdateOneWithoutUserNestedInput
     instructor?: InstructorUncheckedUpdateOneWithoutUserNestedInput
     dojoManager?: DojoManagerUncheckedUpdateOneWithoutUserNestedInput
@@ -70485,6 +71869,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     role?: RoleCreateNestedOneWithoutUsersInput
+    profile?: ProfileCreateNestedOneWithoutUserInput
     student?: StudentCreateNestedOneWithoutUserInput
     instructor?: InstructorCreateNestedOneWithoutUserInput
     dojoManager?: DojoManagerCreateNestedOneWithoutUserInput
@@ -70515,6 +71900,7 @@ export namespace Prisma {
     memberNumber?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    profile?: ProfileUncheckedCreateNestedOneWithoutUserInput
     student?: StudentUncheckedCreateNestedOneWithoutUserInput
     instructor?: InstructorUncheckedCreateNestedOneWithoutUserInput
     dojoManager?: DojoManagerUncheckedCreateNestedOneWithoutUserInput
@@ -70561,6 +71947,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
+    profile?: ProfileUpdateOneWithoutUserNestedInput
     student?: StudentUpdateOneWithoutUserNestedInput
     instructor?: InstructorUpdateOneWithoutUserNestedInput
     dojoManager?: DojoManagerUpdateOneWithoutUserNestedInput
@@ -70591,6 +71978,7 @@ export namespace Prisma {
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    profile?: ProfileUncheckedUpdateOneWithoutUserNestedInput
     student?: StudentUncheckedUpdateOneWithoutUserNestedInput
     instructor?: InstructorUncheckedUpdateOneWithoutUserNestedInput
     dojoManager?: DojoManagerUncheckedUpdateOneWithoutUserNestedInput
@@ -71091,6 +72479,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     role?: RoleCreateNestedOneWithoutUsersInput
+    profile?: ProfileCreateNestedOneWithoutUserInput
     student?: StudentCreateNestedOneWithoutUserInput
     instructor?: InstructorCreateNestedOneWithoutUserInput
     dojoManager?: DojoManagerCreateNestedOneWithoutUserInput
@@ -71121,6 +72510,7 @@ export namespace Prisma {
     memberNumber?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    profile?: ProfileUncheckedCreateNestedOneWithoutUserInput
     student?: StudentUncheckedCreateNestedOneWithoutUserInput
     instructor?: InstructorUncheckedCreateNestedOneWithoutUserInput
     dojoManager?: DojoManagerUncheckedCreateNestedOneWithoutUserInput
@@ -71156,6 +72546,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     role?: RoleCreateNestedOneWithoutUsersInput
+    profile?: ProfileCreateNestedOneWithoutUserInput
     student?: StudentCreateNestedOneWithoutUserInput
     instructor?: InstructorCreateNestedOneWithoutUserInput
     dojoManager?: DojoManagerCreateNestedOneWithoutUserInput
@@ -71186,6 +72577,7 @@ export namespace Prisma {
     memberNumber?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    profile?: ProfileUncheckedCreateNestedOneWithoutUserInput
     student?: StudentUncheckedCreateNestedOneWithoutUserInput
     instructor?: InstructorUncheckedCreateNestedOneWithoutUserInput
     dojoManager?: DojoManagerUncheckedCreateNestedOneWithoutUserInput
@@ -71341,6 +72733,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
+    profile?: ProfileUpdateOneWithoutUserNestedInput
     student?: StudentUpdateOneWithoutUserNestedInput
     instructor?: InstructorUpdateOneWithoutUserNestedInput
     dojoManager?: DojoManagerUpdateOneWithoutUserNestedInput
@@ -71371,6 +72764,7 @@ export namespace Prisma {
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    profile?: ProfileUncheckedUpdateOneWithoutUserNestedInput
     student?: StudentUncheckedUpdateOneWithoutUserNestedInput
     instructor?: InstructorUncheckedUpdateOneWithoutUserNestedInput
     dojoManager?: DojoManagerUncheckedUpdateOneWithoutUserNestedInput
@@ -71412,6 +72806,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
+    profile?: ProfileUpdateOneWithoutUserNestedInput
     student?: StudentUpdateOneWithoutUserNestedInput
     instructor?: InstructorUpdateOneWithoutUserNestedInput
     dojoManager?: DojoManagerUpdateOneWithoutUserNestedInput
@@ -71442,6 +72837,7 @@ export namespace Prisma {
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    profile?: ProfileUncheckedUpdateOneWithoutUserNestedInput
     student?: StudentUncheckedUpdateOneWithoutUserNestedInput
     instructor?: InstructorUncheckedUpdateOneWithoutUserNestedInput
     dojoManager?: DojoManagerUncheckedUpdateOneWithoutUserNestedInput
@@ -71652,6 +73048,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     role?: RoleCreateNestedOneWithoutUsersInput
+    profile?: ProfileCreateNestedOneWithoutUserInput
     student?: StudentCreateNestedOneWithoutUserInput
     instructor?: InstructorCreateNestedOneWithoutUserInput
     dojoManager?: DojoManagerCreateNestedOneWithoutUserInput
@@ -71682,6 +73079,7 @@ export namespace Prisma {
     memberNumber?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    profile?: ProfileUncheckedCreateNestedOneWithoutUserInput
     student?: StudentUncheckedCreateNestedOneWithoutUserInput
     instructor?: InstructorUncheckedCreateNestedOneWithoutUserInput
     dojoManager?: DojoManagerUncheckedCreateNestedOneWithoutUserInput
@@ -71995,6 +73393,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
+    profile?: ProfileUpdateOneWithoutUserNestedInput
     student?: StudentUpdateOneWithoutUserNestedInput
     instructor?: InstructorUpdateOneWithoutUserNestedInput
     dojoManager?: DojoManagerUpdateOneWithoutUserNestedInput
@@ -72025,6 +73424,7 @@ export namespace Prisma {
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    profile?: ProfileUncheckedUpdateOneWithoutUserNestedInput
     student?: StudentUncheckedUpdateOneWithoutUserNestedInput
     instructor?: InstructorUncheckedUpdateOneWithoutUserNestedInput
     dojoManager?: DojoManagerUncheckedUpdateOneWithoutUserNestedInput
@@ -72654,6 +74054,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     role?: RoleCreateNestedOneWithoutUsersInput
+    profile?: ProfileCreateNestedOneWithoutUserInput
     student?: StudentCreateNestedOneWithoutUserInput
     instructor?: InstructorCreateNestedOneWithoutUserInput
     dojoManager?: DojoManagerCreateNestedOneWithoutUserInput
@@ -72684,6 +74085,7 @@ export namespace Prisma {
     memberNumber?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    profile?: ProfileUncheckedCreateNestedOneWithoutUserInput
     student?: StudentUncheckedCreateNestedOneWithoutUserInput
     instructor?: InstructorUncheckedCreateNestedOneWithoutUserInput
     dojoManager?: DojoManagerUncheckedCreateNestedOneWithoutUserInput
@@ -72861,6 +74263,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
+    profile?: ProfileUpdateOneWithoutUserNestedInput
     student?: StudentUpdateOneWithoutUserNestedInput
     instructor?: InstructorUpdateOneWithoutUserNestedInput
     dojoManager?: DojoManagerUpdateOneWithoutUserNestedInput
@@ -72891,6 +74294,7 @@ export namespace Prisma {
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    profile?: ProfileUncheckedUpdateOneWithoutUserNestedInput
     student?: StudentUncheckedUpdateOneWithoutUserNestedInput
     instructor?: InstructorUncheckedUpdateOneWithoutUserNestedInput
     dojoManager?: DojoManagerUncheckedUpdateOneWithoutUserNestedInput
@@ -73252,14 +74656,6 @@ export namespace Prisma {
     expiryDate?: Date | string | null
     onboardingComplete?: boolean
     membershipStatus?: $Enums.MembershipStatus
-    dateOfBirth?: Date | string | null
-    bloodGroup?: string | null
-    address?: string | null
-    nationalId?: string | null
-    fatherName?: string | null
-    motherName?: string | null
-    emergencyContactName?: string | null
-    emergencyContactPhone?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutStudentInput
@@ -73280,14 +74676,6 @@ export namespace Prisma {
     dojoId?: string | null
     onboardingComplete?: boolean
     membershipStatus?: $Enums.MembershipStatus
-    dateOfBirth?: Date | string | null
-    bloodGroup?: string | null
-    address?: string | null
-    nationalId?: string | null
-    fatherName?: string | null
-    motherName?: string | null
-    emergencyContactName?: string | null
-    emergencyContactPhone?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     attendance?: AttendanceUncheckedCreateNestedManyWithoutStudentInput
@@ -73353,6 +74741,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     role?: RoleCreateNestedOneWithoutUsersInput
+    profile?: ProfileCreateNestedOneWithoutUserInput
     student?: StudentCreateNestedOneWithoutUserInput
     instructor?: InstructorCreateNestedOneWithoutUserInput
     dojoManager?: DojoManagerCreateNestedOneWithoutUserInput
@@ -73383,6 +74772,7 @@ export namespace Prisma {
     memberNumber?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    profile?: ProfileUncheckedCreateNestedOneWithoutUserInput
     student?: StudentUncheckedCreateNestedOneWithoutUserInput
     instructor?: InstructorUncheckedCreateNestedOneWithoutUserInput
     dojoManager?: DojoManagerUncheckedCreateNestedOneWithoutUserInput
@@ -73424,14 +74814,6 @@ export namespace Prisma {
     expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     onboardingComplete?: BoolFieldUpdateOperationsInput | boolean
     membershipStatus?: EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
-    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
-    motherName?: NullableStringFieldUpdateOperationsInput | string | null
-    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
-    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutStudentNestedInput
@@ -73452,14 +74834,6 @@ export namespace Prisma {
     dojoId?: NullableStringFieldUpdateOperationsInput | string | null
     onboardingComplete?: BoolFieldUpdateOperationsInput | boolean
     membershipStatus?: EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
-    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
-    motherName?: NullableStringFieldUpdateOperationsInput | string | null
-    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
-    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     attendance?: AttendanceUncheckedUpdateManyWithoutStudentNestedInput
@@ -73537,6 +74911,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
+    profile?: ProfileUpdateOneWithoutUserNestedInput
     student?: StudentUpdateOneWithoutUserNestedInput
     instructor?: InstructorUpdateOneWithoutUserNestedInput
     dojoManager?: DojoManagerUpdateOneWithoutUserNestedInput
@@ -73567,6 +74942,7 @@ export namespace Prisma {
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    profile?: ProfileUncheckedUpdateOneWithoutUserNestedInput
     student?: StudentUncheckedUpdateOneWithoutUserNestedInput
     instructor?: InstructorUncheckedUpdateOneWithoutUserNestedInput
     dojoManager?: DojoManagerUncheckedUpdateOneWithoutUserNestedInput
@@ -73592,14 +74968,6 @@ export namespace Prisma {
     expiryDate?: Date | string | null
     onboardingComplete?: boolean
     membershipStatus?: $Enums.MembershipStatus
-    dateOfBirth?: Date | string | null
-    bloodGroup?: string | null
-    address?: string | null
-    nationalId?: string | null
-    fatherName?: string | null
-    motherName?: string | null
-    emergencyContactName?: string | null
-    emergencyContactPhone?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutStudentInput
@@ -73620,14 +74988,6 @@ export namespace Prisma {
     dojoId?: string | null
     onboardingComplete?: boolean
     membershipStatus?: $Enums.MembershipStatus
-    dateOfBirth?: Date | string | null
-    bloodGroup?: string | null
-    address?: string | null
-    nationalId?: string | null
-    fatherName?: string | null
-    motherName?: string | null
-    emergencyContactName?: string | null
-    emergencyContactPhone?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     attendance?: AttendanceUncheckedCreateNestedManyWithoutStudentInput
@@ -73865,6 +75225,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     role?: RoleCreateNestedOneWithoutUsersInput
+    profile?: ProfileCreateNestedOneWithoutUserInput
     student?: StudentCreateNestedOneWithoutUserInput
     instructor?: InstructorCreateNestedOneWithoutUserInput
     dojoManager?: DojoManagerCreateNestedOneWithoutUserInput
@@ -73895,6 +75256,7 @@ export namespace Prisma {
     memberNumber?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    profile?: ProfileUncheckedCreateNestedOneWithoutUserInput
     student?: StudentUncheckedCreateNestedOneWithoutUserInput
     instructor?: InstructorUncheckedCreateNestedOneWithoutUserInput
     dojoManager?: DojoManagerUncheckedCreateNestedOneWithoutUserInput
@@ -73930,6 +75292,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     role?: RoleCreateNestedOneWithoutUsersInput
+    profile?: ProfileCreateNestedOneWithoutUserInput
     student?: StudentCreateNestedOneWithoutUserInput
     instructor?: InstructorCreateNestedOneWithoutUserInput
     dojoManager?: DojoManagerCreateNestedOneWithoutUserInput
@@ -73960,6 +75323,7 @@ export namespace Prisma {
     memberNumber?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    profile?: ProfileUncheckedCreateNestedOneWithoutUserInput
     student?: StudentUncheckedCreateNestedOneWithoutUserInput
     instructor?: InstructorUncheckedCreateNestedOneWithoutUserInput
     dojoManager?: DojoManagerUncheckedCreateNestedOneWithoutUserInput
@@ -74031,14 +75395,6 @@ export namespace Prisma {
     expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     onboardingComplete?: BoolFieldUpdateOperationsInput | boolean
     membershipStatus?: EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
-    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
-    motherName?: NullableStringFieldUpdateOperationsInput | string | null
-    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
-    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutStudentNestedInput
@@ -74059,14 +75415,6 @@ export namespace Prisma {
     dojoId?: NullableStringFieldUpdateOperationsInput | string | null
     onboardingComplete?: BoolFieldUpdateOperationsInput | boolean
     membershipStatus?: EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
-    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
-    motherName?: NullableStringFieldUpdateOperationsInput | string | null
-    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
-    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     attendance?: AttendanceUncheckedUpdateManyWithoutStudentNestedInput
@@ -74328,6 +75676,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
+    profile?: ProfileUpdateOneWithoutUserNestedInput
     student?: StudentUpdateOneWithoutUserNestedInput
     instructor?: InstructorUpdateOneWithoutUserNestedInput
     dojoManager?: DojoManagerUpdateOneWithoutUserNestedInput
@@ -74358,6 +75707,7 @@ export namespace Prisma {
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    profile?: ProfileUncheckedUpdateOneWithoutUserNestedInput
     student?: StudentUncheckedUpdateOneWithoutUserNestedInput
     instructor?: InstructorUncheckedUpdateOneWithoutUserNestedInput
     dojoManager?: DojoManagerUncheckedUpdateOneWithoutUserNestedInput
@@ -74399,6 +75749,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
+    profile?: ProfileUpdateOneWithoutUserNestedInput
     student?: StudentUpdateOneWithoutUserNestedInput
     instructor?: InstructorUpdateOneWithoutUserNestedInput
     dojoManager?: DojoManagerUpdateOneWithoutUserNestedInput
@@ -74429,6 +75780,7 @@ export namespace Prisma {
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    profile?: ProfileUncheckedUpdateOneWithoutUserNestedInput
     student?: StudentUncheckedUpdateOneWithoutUserNestedInput
     instructor?: InstructorUncheckedUpdateOneWithoutUserNestedInput
     dojoManager?: DojoManagerUncheckedUpdateOneWithoutUserNestedInput
@@ -74470,14 +75822,6 @@ export namespace Prisma {
     expiryDate?: Date | string | null
     onboardingComplete?: boolean
     membershipStatus?: $Enums.MembershipStatus
-    dateOfBirth?: Date | string | null
-    bloodGroup?: string | null
-    address?: string | null
-    nationalId?: string | null
-    fatherName?: string | null
-    motherName?: string | null
-    emergencyContactName?: string | null
-    emergencyContactPhone?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutStudentInput
@@ -74498,14 +75842,6 @@ export namespace Prisma {
     dojoId?: string | null
     onboardingComplete?: boolean
     membershipStatus?: $Enums.MembershipStatus
-    dateOfBirth?: Date | string | null
-    bloodGroup?: string | null
-    address?: string | null
-    nationalId?: string | null
-    fatherName?: string | null
-    motherName?: string | null
-    emergencyContactName?: string | null
-    emergencyContactPhone?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     attendance?: AttendanceUncheckedCreateNestedManyWithoutStudentInput
@@ -74729,6 +76065,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     role?: RoleCreateNestedOneWithoutUsersInput
+    profile?: ProfileCreateNestedOneWithoutUserInput
     student?: StudentCreateNestedOneWithoutUserInput
     instructor?: InstructorCreateNestedOneWithoutUserInput
     dojoManager?: DojoManagerCreateNestedOneWithoutUserInput
@@ -74759,6 +76096,7 @@ export namespace Prisma {
     memberNumber?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    profile?: ProfileUncheckedCreateNestedOneWithoutUserInput
     student?: StudentUncheckedCreateNestedOneWithoutUserInput
     instructor?: InstructorUncheckedCreateNestedOneWithoutUserInput
     dojoManager?: DojoManagerUncheckedCreateNestedOneWithoutUserInput
@@ -74800,14 +76138,6 @@ export namespace Prisma {
     expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     onboardingComplete?: BoolFieldUpdateOperationsInput | boolean
     membershipStatus?: EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
-    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
-    motherName?: NullableStringFieldUpdateOperationsInput | string | null
-    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
-    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutStudentNestedInput
@@ -74828,14 +76158,6 @@ export namespace Prisma {
     dojoId?: NullableStringFieldUpdateOperationsInput | string | null
     onboardingComplete?: BoolFieldUpdateOperationsInput | boolean
     membershipStatus?: EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
-    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
-    motherName?: NullableStringFieldUpdateOperationsInput | string | null
-    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
-    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     attendance?: AttendanceUncheckedUpdateManyWithoutStudentNestedInput
@@ -75083,6 +76405,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
+    profile?: ProfileUpdateOneWithoutUserNestedInput
     student?: StudentUpdateOneWithoutUserNestedInput
     instructor?: InstructorUpdateOneWithoutUserNestedInput
     dojoManager?: DojoManagerUpdateOneWithoutUserNestedInput
@@ -75113,6 +76436,7 @@ export namespace Prisma {
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    profile?: ProfileUncheckedUpdateOneWithoutUserNestedInput
     student?: StudentUncheckedUpdateOneWithoutUserNestedInput
     instructor?: InstructorUncheckedUpdateOneWithoutUserNestedInput
     dojoManager?: DojoManagerUncheckedUpdateOneWithoutUserNestedInput
@@ -75159,6 +76483,7 @@ export namespace Prisma {
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    profile?: ProfileUpdateOneWithoutUserNestedInput
     student?: StudentUpdateOneWithoutUserNestedInput
     instructor?: InstructorUpdateOneWithoutUserNestedInput
     dojoManager?: DojoManagerUpdateOneWithoutUserNestedInput
@@ -75189,6 +76514,7 @@ export namespace Prisma {
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    profile?: ProfileUncheckedUpdateOneWithoutUserNestedInput
     student?: StudentUncheckedUpdateOneWithoutUserNestedInput
     instructor?: InstructorUncheckedUpdateOneWithoutUserNestedInput
     dojoManager?: DojoManagerUncheckedUpdateOneWithoutUserNestedInput
@@ -76814,14 +78140,6 @@ export namespace Prisma {
     expiryDate?: Date | string | null
     onboardingComplete?: boolean
     membershipStatus?: $Enums.MembershipStatus
-    dateOfBirth?: Date | string | null
-    bloodGroup?: string | null
-    address?: string | null
-    nationalId?: string | null
-    fatherName?: string | null
-    motherName?: string | null
-    emergencyContactName?: string | null
-    emergencyContactPhone?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -77188,14 +78506,6 @@ export namespace Prisma {
     expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     onboardingComplete?: BoolFieldUpdateOperationsInput | boolean
     membershipStatus?: EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
-    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
-    motherName?: NullableStringFieldUpdateOperationsInput | string | null
-    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
-    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutStudentNestedInput
@@ -77215,14 +78525,6 @@ export namespace Prisma {
     expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     onboardingComplete?: BoolFieldUpdateOperationsInput | boolean
     membershipStatus?: EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
-    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
-    motherName?: NullableStringFieldUpdateOperationsInput | string | null
-    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
-    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     attendance?: AttendanceUncheckedUpdateManyWithoutStudentNestedInput
@@ -77241,14 +78543,6 @@ export namespace Prisma {
     expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     onboardingComplete?: BoolFieldUpdateOperationsInput | boolean
     membershipStatus?: EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
-    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
-    motherName?: NullableStringFieldUpdateOperationsInput | string | null
-    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
-    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

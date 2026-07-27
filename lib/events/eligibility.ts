@@ -83,7 +83,7 @@ export async function loadViewerContext(
     if (me.role === "STUDENT") {
         const s = await prisma.student.findUnique({
             where: { id: userId },
-            select: { currentRank: true, dateOfBirth: true },
+            select: { currentRank: true, user: { select: { profile: { select: { dateOfBirth: true } } } } },
         });
         if (s) {
             const rank = await prisma.beltRank.findUnique({
@@ -93,7 +93,7 @@ export async function loadViewerContext(
             student = {
                 currentRank: s.currentRank,
                 rankOrderIndex: rank?.orderIndex ?? null,
-                dateOfBirth: s.dateOfBirth,
+                dateOfBirth: s.user.profile?.dateOfBirth ?? null,
             };
         }
     }

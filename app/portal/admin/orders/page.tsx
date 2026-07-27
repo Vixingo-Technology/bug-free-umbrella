@@ -14,7 +14,7 @@ export default async function AdminOrdersPage() {
             user: {
                 select: {
                     id: true, fullName: true, email: true, phone: true, memberNumber: true,
-                    student: { select: { address: true } },
+                    profile: { select: { address: true } },
                 },
             },
             orderItems: {
@@ -40,7 +40,7 @@ export default async function AdminOrdersPage() {
                 fullName: o.user.fullName,
                 email: o.user.email,
                 phone: o.user.phone,
-                address: o.user.student?.address ?? null,
+                address: o.user.profile?.address ?? null,
                 memberNumber: o.user.memberNumber ?? null,
                 isGuest: false,
             }

@@ -58,9 +58,7 @@ export async function generateCertificatePdf(
             student: {
                 select: {
                     id: true,
-                    fatherName: true,
-                    motherName: true,
-                    user: { select: { fullName: true } },
+                    user: { select: { fullName: true, profile: { select: { fatherName: true, motherName: true } } } },
                 },
             },
             dojo: {

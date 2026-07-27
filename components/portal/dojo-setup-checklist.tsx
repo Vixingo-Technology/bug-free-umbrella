@@ -198,12 +198,12 @@ function ChecklistRow({ item }: { item: Item }) {
 
 async function loadChecklistData(userId: string, dojoId: string | null) {
     try {
-        const [u, student, dojo, instructorCount, managerCount, orderCount] = await Promise.all([
+        const [u, profile, dojo, instructorCount, managerCount, orderCount] = await Promise.all([
             prisma.user.findUnique({
                 where: { id: userId },
                 select: { phone: true },
             }),
-            prisma.student.findUnique({
+            prisma.profile.findUnique({
                 where: { id: userId },
                 select: { dateOfBirth: true, address: true },
             }),
@@ -225,7 +225,7 @@ async function loadChecklistData(userId: string, dojoId: string | null) {
 
         return {
             profileDone: Boolean(
-                u?.phone && student?.dateOfBirth && student?.address
+                u?.phone && profile?.dateOfBirth && profile?.address
             ),
             logoDone: Boolean(dojo?.logoUrl),
             scheduleDone: hasSchedule(dojo?.schedule),

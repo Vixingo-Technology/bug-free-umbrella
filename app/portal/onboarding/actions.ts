@@ -73,6 +73,9 @@ export async function saveProfileAction(formData: FormData) {
 
     const studentData = {
         dojoId,
+    };
+
+    const profileData = {
         dateOfBirth: dateOfBirth ? new Date(dateOfBirth) : null,
         bloodGroup,
         address,
@@ -94,6 +97,12 @@ export async function saveProfileAction(formData: FormData) {
                 roleId: role,
             },
             update: { fullName, phone, roleId: role },
+        });
+
+        await prisma.profile.upsert({
+            where: { id: user.id },
+            create: { id: user.id, ...profileData },
+            update: profileData,
         });
 
         if (role === "STUDENT") {

@@ -155,14 +155,8 @@ exports.Prisma.UserScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
-exports.Prisma.StudentScalarFieldEnum = {
+exports.Prisma.ProfileScalarFieldEnum = {
   id: 'id',
-  currentRank: 'currentRank',
-  joinDate: 'joinDate',
-  expiryDate: 'expiryDate',
-  dojoId: 'dojoId',
-  onboardingComplete: 'onboardingComplete',
-  membershipStatus: 'membershipStatus',
   dateOfBirth: 'dateOfBirth',
   bloodGroup: 'bloodGroup',
   address: 'address',
@@ -171,6 +165,18 @@ exports.Prisma.StudentScalarFieldEnum = {
   motherName: 'motherName',
   emergencyContactName: 'emergencyContactName',
   emergencyContactPhone: 'emergencyContactPhone',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.StudentScalarFieldEnum = {
+  id: 'id',
+  currentRank: 'currentRank',
+  joinDate: 'joinDate',
+  expiryDate: 'expiryDate',
+  dojoId: 'dojoId',
+  onboardingComplete: 'onboardingComplete',
+  membershipStatus: 'membershipStatus',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -735,6 +741,7 @@ exports.Prisma.ModelName = {
   Permission: 'Permission',
   RolePermission: 'RolePermission',
   User: 'User',
+  Profile: 'Profile',
   Student: 'Student',
   Instructor: 'Instructor',
   DojoManager: 'DojoManager',

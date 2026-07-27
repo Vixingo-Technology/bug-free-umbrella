@@ -64,9 +64,7 @@ export default async function DojoCertificatesPage({
                 student: {
                     select: {
                         id: true,
-                        fatherName: true,
-                        motherName: true,
-                        user: { select: { fullName: true, memberNumber: true } },
+                        user: { select: { fullName: true, memberNumber: true, profile: { select: { fatherName: true, motherName: true } } } },
                     },
                 },
                 toRank: {
@@ -86,8 +84,8 @@ export default async function DojoCertificatesPage({
                 id: g.student.id,
                 fullName: g.student.user.fullName,
                 memberNumber: g.student.user.memberNumber,
-                fatherName: g.student.fatherName,
-                motherName: g.student.motherName,
+                fatherName: g.student.user.profile?.fatherName ?? null,
+                motherName: g.student.user.profile?.motherName ?? null,
             },
         }))),
         prisma.certificateRequest.findMany({

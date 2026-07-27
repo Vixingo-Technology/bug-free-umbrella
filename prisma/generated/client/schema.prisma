@@ -210,6 +210,7 @@ model User {
   memberNumber String? @unique @map("member_number")
 
   role        Role         @relation(fields: [roleId], references: [id])
+  profile     Profile?
   student     Student?
   instructor  Instructor?
   dojoManager DojoManager?
@@ -238,6 +239,29 @@ model User {
 }
 
 // ─────────────────────────────────────────────
+// PROFILE  — shared personal details (1:1 with User)
+// ─────────────────────────────────────────────
+
+model Profile {
+  id                    String    @id @db.Uuid // = users.id
+  dateOfBirth           DateTime? @map("date_of_birth") @db.Date
+  bloodGroup            String?   @map("blood_group")
+  address               String?
+  nationalId            String?   @map("national_id")
+  fatherName            String?   @map("father_name")
+  motherName            String?   @map("mother_name")
+  emergencyContactName  String?   @map("emergency_contact_name")
+  emergencyContactPhone String?   @map("emergency_contact_phone")
+
+  user User @relation(fields: [id], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("profiles")
+}
+
+// ─────────────────────────────────────────────
 // STUDENT  — student-specific profile (1:1 with User)
 // ─────────────────────────────────────────────
 
@@ -250,15 +274,6 @@ model Student {
 
   onboardingComplete Boolean          @default(false) @map("onboarding_complete")
   membershipStatus   MembershipStatus @default(PENDING) @map("membership_status")
-
-  dateOfBirth           DateTime? @map("date_of_birth") @db.Date
-  bloodGroup            String?   @map("blood_group")
-  address               String?
-  nationalId            String?   @map("national_id")
-  fatherName            String?   @map("father_name")
-  motherName            String?   @map("mother_name")
-  emergencyContactName  String?   @map("emergency_contact_name")
-  emergencyContactPhone String?   @map("emergency_contact_phone")
 
   user User  @relation(fields: [id], references: [id], onDelete: Cascade)
   dojo Dojo? @relation("DojoStudents", fields: [dojoId], references: [id])

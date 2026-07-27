@@ -11,7 +11,6 @@ export async function updateProfileAction(formData: FormData) {
 
     const fullName              = (formData.get("fullName") as string)?.trim();
     const phone                 = (formData.get("phone") as string)?.trim() || null;
-    const dojoId                = (formData.get("dojoId") as string) || null;
     const bloodGroup            = (formData.get("bloodGroup") as string) || null;
     const address               = (formData.get("address") as string)?.trim() || null;
     const nationalId            = (formData.get("nationalId") as string)?.trim() || null;
@@ -32,10 +31,9 @@ export async function updateProfileAction(formData: FormData) {
                 where: { id: user.id },
                 data: { fullName, phone },
             }),
-            prisma.student.update({
+            prisma.profile.upsert({
                 where: { id: user.id },
-                data: {
-                    dojoId: dojoId || null,
+                update: {
                     bloodGroup,
                     address,
                     nationalId,
@@ -45,6 +43,17 @@ export async function updateProfileAction(formData: FormData) {
                     emergencyContactPhone,
                     dateOfBirth,
                 },
+                create: {
+                    id: user.id,
+                    bloodGroup,
+                    address,
+                    nationalId,
+                    fatherName,
+                    motherName,
+                    emergencyContactName,
+                    emergencyContactPhone,
+                    dateOfBirth,
+                }
             }),
         ]);
 

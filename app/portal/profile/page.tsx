@@ -14,7 +14,7 @@ export default async function ProfilePage() {
     try {
         const u = await prisma.user.findUnique({
             where: { id: user.id },
-            include: { student: { include: { dojo: true } } },
+            include: { profile: true, student: { include: { dojo: true } } },
         });
         if (u) {
             member = {
@@ -26,6 +26,7 @@ export default async function ProfilePage() {
                 role: u.roleId,
                 memberNumber: u.memberNumber,
                 ...(u.student ?? {}),
+                ...(u.profile ?? {}),
                 dojo: u.student?.dojo ?? null,
             };
         }

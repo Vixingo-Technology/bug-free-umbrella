@@ -30,7 +30,7 @@ export default async function OnboardingPage() {
     try {
         const u = await prisma.user.findUnique({
             where: { id: user.id },
-            include: { student: true },
+            include: { student: true, profile: true },
         });
         if (u) {
             member = {
@@ -43,14 +43,14 @@ export default async function OnboardingPage() {
                 memberNumber: u.memberNumber,
                 onboardingComplete: u.student?.onboardingComplete ?? false,
                 dojoId: u.student?.dojoId ?? null,
-                dateOfBirth: u.student?.dateOfBirth ?? null,
-                bloodGroup: u.student?.bloodGroup ?? null,
-                address: u.student?.address ?? null,
-                nationalId: u.student?.nationalId ?? null,
-                fatherName: u.student?.fatherName ?? null,
-                motherName: u.student?.motherName ?? null,
-                emergencyContactName: u.student?.emergencyContactName ?? null,
-                emergencyContactPhone: u.student?.emergencyContactPhone ?? null,
+                dateOfBirth: u.profile?.dateOfBirth ?? null,
+                bloodGroup: u.profile?.bloodGroup ?? null,
+                address: u.profile?.address ?? null,
+                nationalId: u.profile?.nationalId ?? null,
+                fatherName: u.profile?.fatherName ?? null,
+                motherName: u.profile?.motherName ?? null,
+                emergencyContactName: u.profile?.emergencyContactName ?? null,
+                emergencyContactPhone: u.profile?.emergencyContactPhone ?? null,
             };
         }
 

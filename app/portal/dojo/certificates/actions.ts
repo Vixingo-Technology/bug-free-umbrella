@@ -66,7 +66,7 @@ export async function createCertificateOrderAction(input: {
         },
         include: {
             student: {
-                include: { user: { select: { fullName: true } } },
+                include: { user: { select: { fullName: true, profile: true } } },
             },
             toRank: {
                 select: { name: true, certificatePrice: true },
@@ -80,7 +80,7 @@ export async function createCertificateOrderAction(input: {
 
     // Reject any students missing parent names — needed for the certificate.
     const missingParents = gradings.filter(
-        (g) => !g.student.fatherName?.trim() || !g.student.motherName?.trim(),
+        (g) => !g.student.user.profile?.fatherName?.trim() || !g.student.user.profile?.motherName?.trim(),
     );
     if (missingParents.length > 0) {
         return {
@@ -118,8 +118,8 @@ export async function createCertificateOrderAction(input: {
             studentId: g.student.id,
             rankName: g.toRank?.name ?? "Unknown rank",
             memberName: g.student.user.fullName,
-            fatherName: g.student.fatherName ?? null,
-            motherName: g.student.motherName ?? null,
+            fatherName: g.student.user.profile?.fatherName ?? null,
+            motherName: g.student.user.profile?.motherName ?? null,
             price,
         };
     });

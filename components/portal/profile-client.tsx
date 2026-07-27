@@ -70,7 +70,6 @@ export default function ProfileClient({ member, dojos, userId }: Props) {
     /* ── Personal info state ─────────────────────────────────────────────── */
     const [fullName,              setFullName]              = useState(member?.fullName ?? "");
     const [phone,                 setPhone]                 = useState(member?.phone ?? "");
-    const [dojoId,                setDojoId]                = useState(member?.dojoId ?? "");
     const [dateOfBirth,           setDateOfBirth]           = useState(toDateInputValue(member?.dateOfBirth));
     const [bloodGroup,            setBloodGroup]            = useState(member?.bloodGroup ?? "");
     const [address,               setAddress]               = useState(member?.address ?? "");
@@ -434,24 +433,6 @@ export default function ProfileClient({ member, dojos, userId }: Props) {
                                     placeholder="01XXXXXXXXX"
                                     className={inputCls}
                                 />
-                            </div>
-                        </div>
-
-                        <div>
-                            <label className={labelCls}>Dojo *</label>
-                            <div className="relative">
-                                <MapPin size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400" />
-                                <select
-                                    name="dojoId"
-                                    value={dojoId}
-                                    onChange={(e) => setDojoId(e.target.value)}
-                                    className={`${inputCls} appearance-none`}
-                                >
-                                    <option value="">Select a dojo…</option>
-                                    {dojos.map((d: any) => (
-                                        <option key={d.id} value={d.id}>{d.name} — {d.city}</option>
-                                    ))}
-                                </select>
                             </div>
                         </div>
                     </div>
