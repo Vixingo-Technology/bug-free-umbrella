@@ -88,6 +88,14 @@ export default function Navbar() {
               </Link>
             ))}
 
+            {/* Portal Link - always visible */}
+            <Link
+              href="/login"
+              className="inline-flex items-center gap-1.5 text-zinc-800 hover:text-accent-red transition-all duration-300"
+            >
+              Portal
+            </Link>
+
             {/* Auth Links */}
             {user ? (
               <>
@@ -152,6 +160,15 @@ export default function Navbar() {
               {link.name}
             </Link>
           ))}
+
+          {/* Portal Link - Mobile, always visible */}
+          <Link
+            href="/login"
+            onClick={() => setMobileMenuOpen(false)}
+            className="text-2xl font-serif text-zinc-900 hover:text-accent-red transition-colors"
+          >
+            Portal
+          </Link>
 
           {/* Auth Links - Mobile */}
           {user ? (

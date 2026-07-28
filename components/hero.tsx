@@ -157,7 +157,7 @@ export default function Hero() {
                         className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start hover:z-30 relative"
                     >
                         <Link
-                            href="#membership"
+                            href="/signup"
                             className="px-8 py-4 bg-accent-red hover:bg-accent-red/90 text-white text-[10px] tracking-widest uppercase font-bold transition-colors shadow-sm"
                         >
                             {copy.hero.primaryCta}
