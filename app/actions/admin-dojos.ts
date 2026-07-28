@@ -21,12 +21,6 @@ function parseFloatOrNull(v: FormDataEntryValue | null): number | null {
     return Number.isFinite(n) ? n : null;
 }
 
-function parseSchedule(raw: string): unknown {
-    const trimmed = raw.trim();
-    if (!trimmed) return null;
-    try { return JSON.parse(trimmed); }
-    catch { return raw; } // fall back to plain text if not JSON
-}
 
 function buildData(formData: FormData) {
     const name = ((formData.get("name") as string) ?? "").trim();
@@ -38,10 +32,8 @@ function buildData(formData: FormData) {
     const longitude = parseFloatOrNull(formData.get("longitude"));
     const headInstructorId = ((formData.get("headInstructorId") as string) ?? "").trim() || null;
     const isActive = formData.get("isActive") === "on" || formData.get("isActive") === "true";
-    const scheduleRaw = ((formData.get("schedule") as string) ?? "");
-    const schedule = parseSchedule(scheduleRaw);
 
-    return { name, address, city, phone, email, latitude, longitude, headInstructorId, isActive, schedule };
+    return { name, address, city, phone, email, latitude, longitude, headInstructorId, isActive };
 }
 
 /**
@@ -106,7 +98,6 @@ export async function createDojoAction(formData: FormData): Promise<ActionResult
                 latitude: data.latitude,
                 longitude: data.longitude,
                 isActive: data.isActive,
-                schedule: data.schedule as never,
             },
             select: { id: true },
         });
@@ -137,7 +128,6 @@ export async function updateDojoAction(formData: FormData): Promise<ActionResult
                 latitude: data.latitude,
                 longitude: data.longitude,
                 isActive: data.isActive,
-                schedule: data.schedule as never,
             },
         });
         await setDojoHead(tx, id, data.headInstructorId);

@@ -14,37 +14,9 @@ export type UnlockedAchievement = {
     tier: string;
 };
 
-/** Count the longest current attendance streak (looking back from today). */
-async function getConsecutiveAttendance(studentId: string): Promise<number> {
-    const rows = await prisma.attendance.findMany({
-        where: { studentId, present: true },
-        orderBy: { date: "desc" },
-        take: 60,
-        select: { date: true },
-    });
-    if (rows.length === 0) return 0;
-
-    const days = rows
-        .map((r) => {
-            const d = new Date(r.date);
-            d.setHours(0, 0, 0, 0);
-            return d.getTime();
-        })
-        .sort((a, b) => b - a);
-
-    let streak = 1;
-    for (let i = 1; i < days.length; i++) {
-        const diffDays = (days[i - 1] - days[i]) / (24 * 60 * 60 * 1000);
-        if (diffDays <= 3) streak++;
-        else break;
-    }
-    return streak;
-}
-
 async function gatherMetrics(studentId: string): Promise<Record<string, number>> {
-    const [attendanceCount, gradingsPassed, eventsAttended, tournaments, tournamentWins, certificates, streak] =
+    const [gradingsPassed, eventsAttended, tournaments, tournamentWins, certificates] =
         await Promise.all([
-            prisma.attendance.count({ where: { studentId, present: true } }),
             prisma.grading.count({ where: { studentId, result: "PASSED" } }),
             prisma.eventRegistration.count({
                 where: { userId: studentId, checkedInAt: { not: null } },
@@ -62,12 +34,9 @@ async function gatherMetrics(studentId: string): Promise<Record<string, number>>
             prisma.grading.count({
                 where: { studentId, result: "PASSED", certificateUrl: { not: null } },
             }),
-            getConsecutiveAttendance(studentId),
         ]);
 
     return {
-        ATTENDANCE_COUNT: attendanceCount,
-        CONSECUTIVE_ATTENDANCE: streak,
         GRADINGS_PASSED: gradingsPassed,
         EVENTS_ATTENDED: eventsAttended,
         TOURNAMENTS_PARTICIPATED: tournaments,

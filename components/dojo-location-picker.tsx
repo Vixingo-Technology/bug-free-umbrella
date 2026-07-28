@@ -65,7 +65,7 @@ export default function DojoLocationPicker({
 
     return (
         <div className="space-y-3">
-            <div className="relative w-full h-80 rounded-sm overflow-hidden border border-zinc-200">
+            <div className="relative isolate z-0 w-full h-80 rounded-sm overflow-hidden border border-zinc-200">
                 <MapContainer
                     center={center}
                     zoom={parsed ? 15 : 11}

@@ -18,7 +18,7 @@ const ROLE_OPTIONS: Record<
     },
     INSTRUCTOR: {
         label: "Instructor",
-        hint: "Runs classes, takes attendance, grades students.",
+        hint: "Runs classes, grades students.",
     },
     DOJO_MANAGER: {
         label: "Manager",

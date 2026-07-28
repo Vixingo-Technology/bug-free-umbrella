@@ -45,17 +45,7 @@ export default async function DojoSetupChecklist({
                   ? "done"
                   : "todo",
         },
-        {
-            key: "schedule",
-            title: "Set your weekly schedule",
-            body: "Publish your class times so students can find and join your dojo.",
-            href: "/portal/dojo/schedule",
-            status: pendingApproval
-                ? "locked"
-                : data.scheduleDone
-                  ? "done"
-                  : "todo",
-        },
+
         {
             key: "staff",
             title: "Invite your first staff member",
@@ -210,7 +200,7 @@ async function loadChecklistData(userId: string, dojoId: string | null) {
             dojoId
                 ? prisma.dojo.findUnique({
                       where: { id: dojoId },
-                      select: { logoUrl: true, schedule: true },
+                      select: { logoUrl: true },
                   })
                 : Promise.resolve(null),
             dojoId
@@ -228,7 +218,6 @@ async function loadChecklistData(userId: string, dojoId: string | null) {
                 u?.phone && profile?.dateOfBirth && profile?.address
             ),
             logoDone: Boolean(dojo?.logoUrl),
-            scheduleDone: hasSchedule(dojo?.schedule),
             staffDone: staffCount > 0,
             gearDone: orderCount > 0,
         };
@@ -238,11 +227,3 @@ async function loadChecklistData(userId: string, dojoId: string | null) {
     }
 }
 
-function hasSchedule(schedule: unknown): boolean {
-    if (!schedule) return false;
-    if (Array.isArray(schedule)) return schedule.length > 0;
-    if (typeof schedule === "object") {
-        return Object.keys(schedule as Record<string, unknown>).length > 0;
-    }
-    return false;
-}

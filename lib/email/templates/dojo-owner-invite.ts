@@ -89,7 +89,7 @@ export async function buildDojoOwnerInviteEmail(opts: {
                     </div>
                     <ul style="margin:12px 0 0 18px;padding:0;font-size:14px;line-height:1.7;color:#27272a;">
                       <li>Official federation listing on the public dojo locator (GPS + address)</li>
-                      <li>Owner dashboard to manage members, gradings, attendance and inventory</li>
+                      <li>Owner dashboard to manage members, gradings and inventory</li>
                       <li>Invite your instructors, managers and students directly from your dojo panel</li>
                       <li>Access to federation-run tournaments, grading events and certification</li>
                       <li>Digital membership cards and QR-verified certificates for every student</li>
@@ -185,7 +185,7 @@ export async function buildDojoOwnerInviteEmail(opts: {
         ``,
         `What you get:`,
         `  • Official federation listing on the public dojo locator`,
-        `  • Owner dashboard to manage members, gradings and attendance`,
+        `  • Owner dashboard to manage members, gradings and inventory`,
         `  • Invite your instructors, managers and students`,
         `  • Access to tournaments, grading events and certification`,
         `  • Digital membership cards and QR-verified certificates`,

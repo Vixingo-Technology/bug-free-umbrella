@@ -81,6 +81,36 @@ export default async function SettingsPage() {
             />
 
             <div className="grid lg:grid-cols-2 gap-6">
+                <div id="logo" className="scroll-mt-24">
+                    <Card title="Dojo logo">
+                        {dojo ? (
+                            <LogoUploader
+                                currentUrl={dojoBase?.logoUrl ?? null}
+                            />
+                        ) : (
+                            <p className="text-sm text-zinc-500">
+                                Logo upload becomes available once your dojo is
+                                approved.
+                            </p>
+                        )}
+                    </Card>
+                </div>
+
+                <div id="signature" className="scroll-mt-24">
+                    <Card title="Owner signature">
+                        {dojo ? (
+                            <SignatureUploader
+                                currentUrl={dojoBase?.ownerSignatureUrl ?? null}
+                            />
+                        ) : (
+                            <p className="text-sm text-zinc-500">
+                                Signature upload becomes available once your
+                                dojo is approved.
+                            </p>
+                        )}
+                    </Card>
+                </div>
+
                 <Card title="Public profile">
                     <Field
                         label="Dojo name"
@@ -96,30 +126,28 @@ export default async function SettingsPage() {
                     />
                 </Card>
 
-                <div className="lg:col-span-2">
-                    <Card title="Location">
-                        {dojo ? (
-                            <LocationEditor
-                                initialAddress={dojo.address ?? ""}
-                                initialLatitude={
-                                    dojo.latitude != null
-                                        ? dojo.latitude.toString()
-                                        : ""
-                                }
-                                initialLongitude={
-                                    dojo.longitude != null
-                                        ? dojo.longitude.toString()
-                                        : ""
-                                }
-                            />
-                        ) : (
-                            <p className="text-sm text-zinc-500">
-                                Location editing becomes available once your
-                                dojo is approved.
-                            </p>
-                        )}
-                    </Card>
-                </div>
+                <Card title="Location">
+                    {dojo ? (
+                        <LocationEditor
+                            initialAddress={dojo.address ?? ""}
+                            initialLatitude={
+                                dojo.latitude != null
+                                    ? dojo.latitude.toString()
+                                    : ""
+                            }
+                            initialLongitude={
+                                dojo.longitude != null
+                                    ? dojo.longitude.toString()
+                                    : ""
+                            }
+                        />
+                    ) : (
+                        <p className="text-sm text-zinc-500">
+                            Location editing becomes available once your
+                            dojo is approved.
+                        </p>
+                    )}
+                </Card>
 
                 <Card title="Head instructor">
                     {dojo?.headInstructor ? (
@@ -176,36 +204,6 @@ export default async function SettingsPage() {
                         }
                     />
                 </Card>
-
-                <div id="logo" className="lg:col-span-2 scroll-mt-24">
-                    <Card title="Dojo logo">
-                        {dojo ? (
-                            <LogoUploader
-                                currentUrl={dojoBase?.logoUrl ?? null}
-                            />
-                        ) : (
-                            <p className="text-sm text-zinc-500">
-                                Logo upload becomes available once your dojo is
-                                approved.
-                            </p>
-                        )}
-                    </Card>
-                </div>
-
-                <div id="signature" className="lg:col-span-2 scroll-mt-24">
-                    <Card title="Owner signature">
-                        {dojo ? (
-                            <SignatureUploader
-                                currentUrl={dojoBase?.ownerSignatureUrl ?? null}
-                            />
-                        ) : (
-                            <p className="text-sm text-zinc-500">
-                                Signature upload becomes available once your
-                                dojo is approved.
-                            </p>
-                        )}
-                    </Card>
-                </div>
 
             </div>
         </>

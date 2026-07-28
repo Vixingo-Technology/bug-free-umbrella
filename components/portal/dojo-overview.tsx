@@ -1,10 +1,8 @@
 import Link from "next/link";
 import {
-    Activity,
     AlertCircle,
     AlertTriangle,
     ArrowRight,
-    CalendarClock,
     CreditCard,
     GraduationCap,
     Megaphone,
@@ -24,8 +22,6 @@ const WEEK_MS = 7 * 24 * 60 * 60 * 1000;
 type Stats = {
     activeStudents: number;
     recentJoins: number;
-    weeklyAttendanceRate: number | null;
-    weeklyCheckins: number;
     beltTestsPending: number;
     expiringSoon: number;
     expired: number;
@@ -123,7 +119,7 @@ export default async function DojoOverview({
                 }.`}
             />
 
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
+            <div className="grid sm:grid-cols-2 gap-4 mb-10">
                 <StatCard
                     label="Active students"
                     value={stats.activeStudents.toString()}
@@ -135,26 +131,10 @@ export default async function DojoOverview({
                     icon={Users}
                 />
                 <StatCard
-                    label="Attendance this week"
-                    value={
-                        stats.weeklyAttendanceRate != null
-                            ? `${stats.weeklyAttendanceRate}%`
-                            : "—"
-                    }
-                    sub={`${stats.weeklyCheckins} check-ins`}
-                    icon={Activity}
-                />
-                <StatCard
                     label="Belt tests pending"
                     value={stats.beltTestsPending.toString()}
                     sub="In federation pipeline"
                     icon={GraduationCap}
-                />
-                <StatCard
-                    label="Next class"
-                    value="Today · 6 PM"
-                    sub="Set in Schedule"
-                    icon={CalendarClock}
                 />
             </div>
 
@@ -214,15 +194,12 @@ async function loadStats(dojoId: string | null): Promise<Stats> {
         return {
             activeStudents: 48,
             recentJoins: 3,
-            weeklyAttendanceRate: 86,
-            weeklyCheckins: 140,
             beltTestsPending: 7,
             expiringSoon: 6,
             expired: 3,
         };
     }
 
-    const weekAgo = new Date(Date.now() - WEEK_MS);
     const monthAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
     const in30Days = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
     const today = new Date();
@@ -230,18 +207,12 @@ async function loadStats(dojoId: string | null): Promise<Stats> {
     const [
         activeStudents,
         recentJoins,
-        weeklyCheckins,
-        weeklyPresent,
         beltTestsPending,
         expiringSoon,
         expired,
     ] = await Promise.all([
         prisma.student.count({ where: { dojoId, user: { isActive: true } } }),
         prisma.student.count({ where: { dojoId, joinDate: { gte: monthAgo } } }),
-        prisma.attendance.count({ where: { dojoId, date: { gte: weekAgo } } }),
-        prisma.attendance.count({
-            where: { dojoId, date: { gte: weekAgo }, present: true },
-        }),
         prisma.gradingApplication.count({
             where: { status: "SUBMITTED", student: { dojoId } },
         }),
@@ -251,16 +222,9 @@ async function loadStats(dojoId: string | null): Promise<Stats> {
         prisma.student.count({ where: { dojoId, expiryDate: { lt: today } } }),
     ]);
 
-    const rate =
-        weeklyCheckins > 0
-            ? Math.round((weeklyPresent / weeklyCheckins) * 100)
-            : null;
-
     return {
         activeStudents,
         recentJoins,
-        weeklyAttendanceRate: rate,
-        weeklyCheckins,
         beltTestsPending,
         expiringSoon,
         expired,
@@ -510,7 +474,6 @@ function BeltPipelinePreview({ pending }: { pending: number }) {
 function QuickActions({ role }: { role: string }) {
     const actions: { href: string; label: string; min: number }[] = [
         { href: "/portal/dojo/members", label: "Invite a member", min: 1 },
-        { href: "/portal/dojo/attendance", label: "Take attendance", min: 1 },
         { href: "/portal/dojo/gradings", label: "Schedule a belt test", min: 1 },
         { href: "/portal/dojo/renewals", label: "Renew dojo membership", min: 2 },
         { href: "/portal/dojo/announcements", label: "Post an announcement", min: 3 },

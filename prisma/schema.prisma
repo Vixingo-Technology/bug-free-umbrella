@@ -278,7 +278,6 @@ model Student {
   user User  @relation(fields: [id], references: [id], onDelete: Cascade)
   dojo Dojo? @relation("DojoStudents", fields: [dojoId], references: [id])
 
-  attendance          Attendance[]
   gradings            Grading[]
   gradingApplications GradingApplication[]
   certificateRequests CertificateRequest[]
@@ -405,7 +404,6 @@ model Dojo {
   longitude Float?
   phone     String?
   email     String?
-  schedule  Json?
   isActive  Boolean @default(true) @map("is_active")
 
   annualFee  Decimal?  @map("annual_fee") @db.Decimal(10, 2)
@@ -424,7 +422,6 @@ model Dojo {
   managers       DojoManager[]            @relation("DojoManagers")
   owner          DojoOwner?               @relation("DojoOwner")
   application    DojoApplication?         @relation("DojoApplicationDojo")
-  attendance     Attendance[]
   events         Event[]                  @relation("DojoEvents")
   announcements  Announcement[]           @relation("DojoAnnouncements")
   inventoryItems DojoInventoryItem[]      @relation("DojoInventoryItems")
@@ -483,27 +480,6 @@ model DojoApplication {
   @@index([userId])
   @@index([status])
   @@map("dojo_applications")
-}
-
-// ─────────────────────────────────────────────
-// ATTENDANCE — students only
-// ─────────────────────────────────────────────
-
-model Attendance {
-  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  studentId String   @map("student_id") @db.Uuid
-  dojoId    String?  @map("dojo_id") @db.Uuid
-  date      DateTime @db.Date
-  present   Boolean  @default(true)
-  notes     String?
-
-  student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
-  dojo    Dojo?   @relation(fields: [dojoId], references: [id])
-
-  createdAt DateTime @default(now()) @map("created_at")
-
-  @@unique([studentId, date])
-  @@map("attendance")
 }
 
 // ─────────────────────────────────────────────

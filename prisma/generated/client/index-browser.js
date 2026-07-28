@@ -232,7 +232,6 @@ exports.Prisma.DojoScalarFieldEnum = {
   longitude: 'longitude',
   phone: 'phone',
   email: 'email',
-  schedule: 'schedule',
   isActive: 'isActive',
   annualFee: 'annualFee',
   expiryDate: 'expiryDate',
@@ -263,16 +262,6 @@ exports.Prisma.DojoApplicationScalarFieldEnum = {
   dojoId: 'dojoId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
-};
-
-exports.Prisma.AttendanceScalarFieldEnum = {
-  id: 'id',
-  studentId: 'studentId',
-  dojoId: 'dojoId',
-  date: 'date',
-  present: 'present',
-  notes: 'notes',
-  createdAt: 'createdAt'
 };
 
 exports.Prisma.GradingEventScalarFieldEnum = {
@@ -597,11 +586,6 @@ exports.Prisma.SortOrder = {
   desc: 'desc'
 };
 
-exports.Prisma.NullableJsonNullValueInput = {
-  DbNull: Prisma.DbNull,
-  JsonNull: Prisma.JsonNull
-};
-
 exports.Prisma.JsonNullValueInput = {
   JsonNull: Prisma.JsonNull
 };
@@ -750,7 +734,6 @@ exports.Prisma.ModelName = {
   BeltRank: 'BeltRank',
   Dojo: 'Dojo',
   DojoApplication: 'DojoApplication',
-  Attendance: 'Attendance',
   GradingEvent: 'GradingEvent',
   GradingApplication: 'GradingApplication',
   Grading: 'Grading',

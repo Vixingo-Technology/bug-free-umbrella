@@ -63,7 +63,6 @@ const adminPersonalNavItems = [
     { label: "Dashboard",    href: "/portal",              icon: LayoutDashboard },
     { label: "Events",       href: "/portal/events",       icon: CalendarDays },
     { label: "Notifications",href: "/portal/notifications",icon: Bell },
-    { label: "My Profile",   href: "/portal/profile",      icon: User },
 ];
 
 const adminNavItems = [
@@ -83,7 +82,6 @@ const adminNavItems = [
 const dojoPersonalNavItems = [
     { label: "Events",        href: "/portal/events",       icon: CalendarDays },
     { label: "Notifications", href: "/portal/notifications",icon: Bell },
-    { label: "My Profile",    href: "/portal/profile",      icon: User },
 ];
 
 interface PortalShellProps {
