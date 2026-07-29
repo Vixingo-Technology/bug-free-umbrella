@@ -438,29 +438,6 @@ function DojoFormModal({
                         />
                     </Field>
 
-                    <div className="grid grid-cols-2 gap-4">
-                        <Field label="Latitude">
-                            <input
-                                type="number"
-                                step="any"
-                                value={form.latitude}
-                                onChange={(e) => setForm({ ...form, latitude: e.target.value })}
-                                placeholder="e.g. 23.8103"
-                                className={inputCls}
-                            />
-                        </Field>
-                        <Field label="Longitude">
-                            <input
-                                type="number"
-                                step="any"
-                                value={form.longitude}
-                                onChange={(e) => setForm({ ...form, longitude: e.target.value })}
-                                placeholder="e.g. 90.4125"
-                                className={inputCls}
-                            />
-                        </Field>
-                    </div>
-
                     <Field label="Head instructor">
                         <div className="relative">
                             <select

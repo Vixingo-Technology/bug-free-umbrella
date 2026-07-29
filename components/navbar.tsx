@@ -2,13 +2,12 @@
 
 import { motion } from "motion/react";
 import { useEffect, useState } from "react";
-import { Menu, X, LogIn, LayoutDashboard, LogOut } from "lucide-react";
+import { Menu, X, LogIn, LayoutDashboard } from "lucide-react";
 import { siteContent } from "@/lib/i18n/site-content";
 import Image from "next/image";
 import Link from "next/link";
 import Logo from "@/assets/jka_logo.svg";
 import { createClient } from "@/lib/supabase/client";
-import { signoutAction } from "@/app/actions/auth";
 import type { User } from "@supabase/supabase-js";
 
 export default function Navbar() {
@@ -88,42 +87,30 @@ export default function Navbar() {
               </Link>
             ))}
 
-            {/* Portal Link - always visible */}
-            <Link
-              href="/login"
-              className="inline-flex items-center gap-1.5 text-zinc-800 hover:text-accent-red transition-all duration-300"
-            >
-              Portal
-            </Link>
-
-            {/* Auth Links */}
             {user ? (
-              <>
-                <Link
-                  href="/portal"
-                  className="inline-flex items-center gap-1.5 text-accent-red hover:text-accent-gold transition-all duration-300"
-                >
-                  <LayoutDashboard size={14} />
-                  Dashboard
-                </Link>
-                <form action={signoutAction}>
-                  <button
-                    type="submit"
-                    className="inline-flex items-center gap-1.5 text-zinc-500 hover:text-accent-red transition-all duration-300 cursor-pointer"
-                  >
-                    <LogOut size={14} />
-                    Sign Out
-                  </button>
-                </form>
-              </>
-            ) : (
               <Link
-                href="/signup"
+                href="/portal"
                 className="inline-flex items-center gap-1.5 text-accent-red hover:text-accent-gold transition-all duration-300"
               >
-                <LogIn size={14} />
-                Join Us
+                <LayoutDashboard size={14} />
+                Dashboard
               </Link>
+            ) : (
+              <>
+                <Link
+                  href="/login"
+                  className="inline-flex items-center gap-1.5 text-zinc-800 hover:text-accent-red transition-all duration-300"
+                >
+                  Portal
+                </Link>
+                <Link
+                  href="/signup"
+                  className="inline-flex items-center gap-1.5 text-accent-red hover:text-accent-gold transition-all duration-300"
+                >
+                  <LogIn size={14} />
+                  Join Us
+                </Link>
+              </>
             )}
           </nav>
 
@@ -161,46 +148,33 @@ export default function Navbar() {
             </Link>
           ))}
 
-          {/* Portal Link - Mobile, always visible */}
-          <Link
-            href="/login"
-            onClick={() => setMobileMenuOpen(false)}
-            className="text-2xl font-serif text-zinc-900 hover:text-accent-red transition-colors"
-          >
-            Portal
-          </Link>
-
-          {/* Auth Links - Mobile */}
           {user ? (
-            <>
-              <Link
-                href="/portal"
-                onClick={() => setMobileMenuOpen(false)}
-                className="mt-6 px-8 py-3 bg-accent-red hover:bg-accent-red/90 text-white font-semibold tracking-widest uppercase transition-colors inline-flex items-center gap-2"
-              >
-                <LayoutDashboard size={16} />
-                Dashboard
-              </Link>
-              <form action={signoutAction}>
-                <button
-                  type="submit"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="px-8 py-3 border border-zinc-300 text-zinc-700 hover:border-accent-red hover:text-accent-red font-semibold tracking-widest uppercase transition-colors inline-flex items-center gap-2 cursor-pointer"
-                >
-                  <LogOut size={16} />
-                  Sign Out
-                </button>
-              </form>
-            </>
-          ) : (
             <Link
-              href="/signup"
+              href="/portal"
               onClick={() => setMobileMenuOpen(false)}
               className="mt-6 px-8 py-3 bg-accent-red hover:bg-accent-red/90 text-white font-semibold tracking-widest uppercase transition-colors inline-flex items-center gap-2"
             >
-              <LogIn size={16} />
-              Join Us
+              <LayoutDashboard size={16} />
+              Dashboard
             </Link>
+          ) : (
+            <>
+              <Link
+                href="/login"
+                onClick={() => setMobileMenuOpen(false)}
+                className="text-2xl font-serif text-zinc-900 hover:text-accent-red transition-colors"
+              >
+                Portal
+              </Link>
+              <Link
+                href="/signup"
+                onClick={() => setMobileMenuOpen(false)}
+                className="mt-6 px-8 py-3 bg-accent-red hover:bg-accent-red/90 text-white font-semibold tracking-widest uppercase transition-colors inline-flex items-center gap-2"
+              >
+                <LogIn size={16} />
+                Join Us
+              </Link>
+            </>
           )}
         </div>
       </motion.div>

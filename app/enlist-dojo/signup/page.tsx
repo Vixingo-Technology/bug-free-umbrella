@@ -650,29 +650,6 @@ function LocationStep({
                     onChange={setLatLng}
                 />
             </div>
-
-            <div className="grid md:grid-cols-2 gap-4">
-                <div>
-                    <Label>Latitude</Label>
-                    <input
-                        type="text"
-                        value={form.latitude}
-                        onChange={(e) => update("latitude", e.target.value)}
-                        placeholder="23.7806"
-                        className={inputClass()}
-                    />
-                </div>
-                <div>
-                    <Label>Longitude</Label>
-                    <input
-                        type="text"
-                        value={form.longitude}
-                        onChange={(e) => update("longitude", e.target.value)}
-                        placeholder="90.4193"
-                        className={inputClass()}
-                    />
-                </div>
-            </div>
         </div>
     );
 }

@@ -19,11 +19,21 @@ const annualFeeSchema = z.object({
     .nullable(),
 });
 
-const locationSchema = z.object({
-  address: z
+const settingsSchema = z.object({
+  name: z.string().min(1, "Dojo name is required.").max(200, "Name is too long."),
+  phone: z
     .string()
-    .max(500, "Address is too long.")
+    .max(50, "Phone is too long.")
+    .refine((v) => v.replace(/\D/g, "").length === 11, {
+      message: "Phone must be 11 digits.",
+    })
     .nullable(),
+  email: z
+    .string()
+    .max(200, "Email is too long.")
+    .email("Enter a valid email.")
+    .nullable(),
+  address: z.string().max(500, "Address is too long.").nullable(),
   latitude: z
     .number()
     .min(-90, "Latitude must be between -90 and 90.")
@@ -36,7 +46,10 @@ const locationSchema = z.object({
     .nullable(),
 });
 
-export async function saveDojoLocationAction(input: {
+export async function saveDojoSettingsAction(input: {
+  name: string;
+  phone: string | null;
+  email: string | null;
   address: string | null;
   latitude: number | null;
   longitude: number | null;
@@ -44,7 +57,7 @@ export async function saveDojoLocationAction(input: {
   const session = await requireDojoRole("DOJO_MANAGER");
   if (!session.dojo) return { error: "Your dojo is not set up yet." };
 
-  const parsed = locationSchema.safeParse(input);
+  const parsed = settingsSchema.safeParse(input);
   if (!parsed.success) {
     return { error: parsed.error.issues[0]?.message ?? "Invalid input." };
   }
@@ -53,14 +66,17 @@ export async function saveDojoLocationAction(input: {
     await prisma.dojo.update({
       where: { id: session.dojo.id },
       data: {
+        name: parsed.data.name,
+        phone: parsed.data.phone,
+        email: parsed.data.email,
         address: parsed.data.address,
         latitude: parsed.data.latitude,
         longitude: parsed.data.longitude,
       },
     });
   } catch (e) {
-    console.error("[saveDojoLocation] update failed", e);
-    return { error: "Could not save location. Try again." };
+    console.error("[saveDojoSettings] update failed", e);
+    return { error: "Could not save settings. Try again." };
   }
 
   revalidatePath("/portal/dojo/settings");
