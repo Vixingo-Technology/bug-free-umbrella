@@ -13,6 +13,8 @@ function successRedirectFor(order: {
     includesMembership: boolean;
     includesDojoRenewal: boolean;
     includesTransferRequest: boolean;
+    includesPastBeltFee: boolean;
+    joinAdvanceForFeeUnpaid: boolean;
 }, orderId: string, expiryIso: string | null): string {
     if (order.includesDojoRenewal) {
         const params = new URLSearchParams({
@@ -21,6 +23,13 @@ function successRedirectFor(order: {
             ...(expiryIso ? { expiry: expiryIso } : {}),
         });
         return `/portal/dojo/renewals?${params.toString()}`;
+    }
+    if (order.includesPastBeltFee) {
+        return `/portal/joining?status=success&orderId=${orderId}`;
+    }
+    // First JKA fee lands on the joining page to continue the flow.
+    if (order.joinAdvanceForFeeUnpaid) {
+        return `/portal/joining?status=success&orderId=${orderId}`;
     }
     if (order.includesMembership) {
         const params = new URLSearchParams({
@@ -37,10 +46,14 @@ function failureRedirectFor(order: {
     includesMembership: boolean;
     includesDojoRenewal: boolean;
     includesTransferRequest: boolean;
+    includesPastBeltFee: boolean;
 } | null, orderId: string, reason: string): string {
     const reasonParam = encodeURIComponent(reason);
     if (order?.includesDojoRenewal) {
         return `/portal/dojo/renewals?status=failed&orderId=${orderId}&reason=${reasonParam}`;
+    }
+    if (order?.includesPastBeltFee) {
+        return `/portal/joining?status=failed&orderId=${orderId}&reason=${reasonParam}`;
     }
     if (order?.includesMembership) {
         return `/portal/renew?status=failed&orderId=${orderId}&reason=${reasonParam}`;
@@ -80,6 +93,7 @@ export async function POST(request: Request) {
                 includesMembership: true,
                 includesDojoRenewal: true,
                 includesTransferRequest: true,
+                includesPastBeltFee: true,
             },
         });
 
@@ -104,6 +118,7 @@ export async function POST(request: Request) {
             },
         });
         let renewedExpiryIso: string | null = null;
+        let joinAdvanceForFeeUnpaid = false;
         if (order && order.paymentStatus !== "PAID" && order.userId) {
             const writes: Prisma.PrismaPromise<unknown>[] = [
                 prisma.shopOrder.update({
@@ -114,13 +129,19 @@ export async function POST(request: Request) {
 
             // Member-level renewal (onboarding fee or /portal/renew) — extends
             // the buyer's own membership. Membership lives on Student now.
+            //
+            // The very first JKA payment also moves the joining flow from
+            // FEE_UNPAID → AWAITING_APPROVAL so the dojo owner can accept the
+            // student and confirm their rank. Later renewals leave joinStage
+            // untouched (already JOINED for existing members).
             let memberExpiry: Date | null = null;
             if (order.includesMembership) {
                 const existing = await prisma.student.findUnique({
                     where: { id: order.userId },
-                    select: { expiryDate: true },
+                    select: { expiryDate: true, joinStage: true },
                 });
                 memberExpiry = extendExpiry(existing?.expiryDate ?? null);
+                joinAdvanceForFeeUnpaid = existing?.joinStage === "FEE_UNPAID";
                 writes.push(
                     prisma.student.update({
                         where: { id: order.userId },
@@ -128,6 +149,9 @@ export async function POST(request: Request) {
                             membershipStatus: "ACTIVE",
                             onboardingComplete: true,
                             expiryDate: memberExpiry,
+                            ...(joinAdvanceForFeeUnpaid
+                                ? { joinStage: "AWAITING_APPROVAL" as const }
+                                : {}),
                         },
                     }),
                 );
@@ -156,6 +180,31 @@ export async function POST(request: Request) {
             renewedExpiryIso =
                 (dojoExpiry ?? memberExpiry)?.toISOString() ?? null;
 
+            // Past-belt catch-up fee — finalize the joining flow.
+            // Student's rank was already set at approval time; this payment
+            // just unlocks JOINED. Sending the completion notifications
+            // happens after $transaction commits, below.
+            let pastBeltFinalizedForUser: string | null = null;
+            if (order.includesPastBeltFee) {
+                const existing = await prisma.student.findUnique({
+                    where: { id: order.userId },
+                    select: { assignedRank: true, joinStage: true, dojoId: true },
+                });
+                if (existing?.joinStage === "PAST_BELT_UNPAID") {
+                    writes.push(
+                        prisma.student.update({
+                            where: { id: order.userId },
+                            data: {
+                                joinStage: "JOINED",
+                                joinedAt: new Date(),
+                                currentRank: existing.assignedRank ?? undefined,
+                            },
+                        }),
+                    );
+                    pastBeltFinalizedForUser = order.userId;
+                }
+            }
+
             // Transfer request fee — move the linked request to AWAITING_DOJO.
             if (order.includesTransferRequest && order.transferRequest) {
                 writes.push(
@@ -170,6 +219,62 @@ export async function POST(request: Request) {
             }
 
             await prisma.$transaction(writes);
+
+            // Joining-flow — first JKA payment: alert the assigned dojo owner
+            // (if any) that a new student is waiting for approval.
+            if (joinAdvanceForFeeUnpaid) {
+                const stu = await prisma.student.findUnique({
+                    where: { id: order.userId },
+                    select: {
+                        dojoId: true,
+                        requestedRank: true,
+                        user: { select: { fullName: true } },
+                    },
+                });
+                await notifyMembers([order.userId], {
+                    title: "Membership fee received",
+                    message:
+                        "Great — your JKA membership fee is confirmed. Please download your joining slip and visit your dojo with the required documents.",
+                    type: "PAYMENT",
+                    link: "/portal/joining",
+                });
+                if (stu?.dojoId) {
+                    const ownerIds = await findUserIdsByRoles(["DOJO_OWNER"], { dojoId: stu.dojoId });
+                    await notifyMembers(ownerIds, {
+                        title: "New join request",
+                        message: `${stu.user?.fullName ?? "A new student"} has paid the JKA fee and requested to join your dojo (requested rank: ${stu.requestedRank ?? "White Belt"}). Please review and confirm their rank.`,
+                        type: "INFO",
+                        link: "/portal/dojo/join-requests",
+                    });
+                }
+            }
+
+            // Joining-flow — past-belt payment: both parties get "Student joined".
+            if (pastBeltFinalizedForUser) {
+                const stu = await prisma.student.findUnique({
+                    where: { id: pastBeltFinalizedForUser },
+                    select: {
+                        dojoId: true,
+                        assignedRank: true,
+                        user: { select: { fullName: true } },
+                    },
+                });
+                await notifyMembers([pastBeltFinalizedForUser], {
+                    title: "You've joined JKA Bangladesh",
+                    message: `Welcome! Your rank is set to ${stu?.assignedRank ?? "White Belt"} and your dojo has confirmed you. Full portal access is unlocked.`,
+                    type: "INFO",
+                    link: "/portal",
+                });
+                if (stu?.dojoId) {
+                    const ownerIds = await findUserIdsByRoles(["DOJO_OWNER"], { dojoId: stu.dojoId });
+                    await notifyMembers(ownerIds, {
+                        title: "Student joined successfully",
+                        message: `${stu.user?.fullName ?? "A new student"} has completed joining at ${stu.assignedRank ?? "White Belt"}.`,
+                        type: "INFO",
+                        link: "/portal/dojo/join-requests",
+                    });
+                }
+            }
 
             // Notify current dojo owner + student now that the request is live.
             if (order.includesTransferRequest && order.transferRequest) {
@@ -240,6 +345,8 @@ export async function POST(request: Request) {
                 includesMembership: order?.includesMembership ?? false,
                 includesDojoRenewal: order?.includesDojoRenewal ?? false,
                 includesTransferRequest: order?.includesTransferRequest ?? false,
+                includesPastBeltFee: order?.includesPastBeltFee ?? false,
+                joinAdvanceForFeeUnpaid,
             },
             orderId,
             renewedExpiryIso,

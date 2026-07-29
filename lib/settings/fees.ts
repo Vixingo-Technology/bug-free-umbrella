@@ -3,6 +3,7 @@ import {
     DOJO_ENLISTMENT_FEE_BDT,
     DOJO_RENEWAL_FEE_BDT,
     MEMBERSHIP_FEE_BDT,
+    PAST_BELT_FEE_PER_RANK_BDT,
     TRANSFER_REQUEST_FEE_BDT,
 } from "@/lib/constants";
 
@@ -11,6 +12,7 @@ export type Fees = {
     dojoRenewalFeeBDT: number;
     membershipFeeBDT: number;
     transferFeeBDT: number;
+    pastBeltFeePerRankBDT: number;
 };
 
 /**
@@ -32,6 +34,7 @@ export async function getFees(): Promise<Fees> {
             dojoRenewalFeeBDT: true,
             membershipFeeBDT: true,
             transferFeeBDT: true,
+            pastBeltFeePerRankBDT: true,
         },
     });
 
@@ -52,5 +55,9 @@ export async function getFees(): Promise<Fees> {
             row.transferFeeBDT != null
                 ? Number(row.transferFeeBDT)
                 : TRANSFER_REQUEST_FEE_BDT,
+        pastBeltFeePerRankBDT:
+            row.pastBeltFeePerRankBDT != null
+                ? Number(row.pastBeltFeePerRankBDT)
+                : PAST_BELT_FEE_PER_RANK_BDT,
     };
 }

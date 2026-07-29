@@ -34,18 +34,18 @@ type Notif = {
 };
 
 const typeConfig: Record<string, { icon: any; color: string; bg: string }> = {
-    INFO:        { icon: Info,         color: "text-blue-600",    bg: "bg-blue-50" },
-    WARNING:     { icon: AlertTriangle, color: "text-amber-600",  bg: "bg-amber-50" },
-    SUCCESS:     { icon: CheckCircle2, color: "text-emerald-600", bg: "bg-emerald-50" },
-    PAYMENT:     { icon: CreditCard,   color: "text-violet-600",  bg: "bg-violet-50" },
-    GRADING:     { icon: Award,        color: "text-rose-600",    bg: "bg-rose-50" },
-    EVENT:       { icon: CalendarDays, color: "text-sky-600",     bg: "bg-sky-50" },
-    RENEWAL:     { icon: AlertTriangle, color: "text-amber-600",  bg: "bg-amber-50" },
-    CERTIFICATE: { icon: FileText,     color: "text-indigo-600",  bg: "bg-indigo-50" },
-    TRANSFER:    { icon: ArrowRightLeft, color: "text-teal-700",   bg: "bg-teal-50" },
-    REMINDER:    { icon: AlertTriangle, color: "text-amber-600",  bg: "bg-amber-50" },
-    ALERT:       { icon: AlertTriangle, color: "text-red-600",    bg: "bg-red-50" },
-    WELCOME:     { icon: Gift,         color: "text-emerald-600", bg: "bg-emerald-50" },
+    INFO: { icon: Info, color: "text-blue-600", bg: "bg-blue-50" },
+    WARNING: { icon: AlertTriangle, color: "text-amber-600", bg: "bg-amber-50" },
+    SUCCESS: { icon: CheckCircle2, color: "text-emerald-600", bg: "bg-emerald-50" },
+    PAYMENT: { icon: CreditCard, color: "text-violet-600", bg: "bg-violet-50" },
+    GRADING: { icon: Award, color: "text-rose-600", bg: "bg-rose-50" },
+    EVENT: { icon: CalendarDays, color: "text-sky-600", bg: "bg-sky-50" },
+    RENEWAL: { icon: AlertTriangle, color: "text-amber-600", bg: "bg-amber-50" },
+    CERTIFICATE: { icon: FileText, color: "text-indigo-600", bg: "bg-indigo-50" },
+    TRANSFER: { icon: ArrowRightLeft, color: "text-teal-700", bg: "bg-teal-50" },
+    REMINDER: { icon: AlertTriangle, color: "text-amber-600", bg: "bg-amber-50" },
+    ALERT: { icon: AlertTriangle, color: "text-red-600", bg: "bg-red-50" },
+    WELCOME: { icon: Gift, color: "text-emerald-600", bg: "bg-emerald-50" },
 };
 
 function cfgFor(type: string) {
@@ -186,11 +186,10 @@ export default function NotificationBell({
                 onClick={toggle}
                 aria-label="Notifications"
                 aria-expanded={open}
-                className={`relative p-2 rounded-lg transition-colors ${
-                    open
-                        ? "bg-zinc-100 text-zinc-900"
-                        : "text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900"
-                }`}
+                className={`relative px-2 pt-2 rounded-lg transition-colors ${open
+                    ? "bg-zinc-100 text-zinc-900"
+                    : "text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900"
+                    }`}
             >
                 {pulse && (
                     <span
@@ -226,9 +225,8 @@ export default function NotificationBell({
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: -6, scale: 0.98 }}
                         transition={{ duration: 0.14, ease: "easeOut" }}
-                        className={`absolute top-full mt-2 w-[360px] max-w-[calc(100vw-2rem)] rounded-2xl bg-white border border-zinc-200 shadow-xl shadow-zinc-900/5 z-50 overflow-hidden ${
-                            align === "right" ? "right-0" : "left-0"
-                        }`}
+                        className={`absolute top-full mt-2 w-[360px] max-w-[calc(100vw-2rem)] rounded-2xl bg-white border border-zinc-200 shadow-xl shadow-zinc-900/5 z-50 overflow-hidden ${align === "right" ? "right-0" : "left-0"
+                            }`}
                     >
                         {/* Header */}
                         <div className="flex items-center justify-between px-4 py-3 border-b border-zinc-100">
@@ -286,11 +284,10 @@ export default function NotificationBell({
                                         const isRead = n.is_read;
                                         const inner = (
                                             <div
-                                                className={`relative flex items-start gap-3 px-4 py-3 transition-colors cursor-pointer ${
-                                                    isRead
-                                                        ? "hover:bg-zinc-50"
-                                                        : "bg-accent-red/[0.025] hover:bg-accent-red/[0.05]"
-                                                }`}
+                                                className={`relative flex items-start gap-3 px-4 py-3 transition-colors cursor-pointer ${isRead
+                                                    ? "hover:bg-zinc-50"
+                                                    : "bg-accent-red/[0.025] hover:bg-accent-red/[0.05]"
+                                                    }`}
                                                 onClick={() => {
                                                     if (!isRead) markOneRead(n.id);
                                                 }}
@@ -309,11 +306,10 @@ export default function NotificationBell({
                                                 <div className="flex-1 min-w-0">
                                                     <div className="flex items-start justify-between gap-2">
                                                         <p
-                                                            className={`text-[13px] leading-snug truncate ${
-                                                                isRead
-                                                                    ? "font-medium text-zinc-700"
-                                                                    : "font-bold text-zinc-900"
-                                                            }`}
+                                                            className={`text-[13px] leading-snug truncate ${isRead
+                                                                ? "font-medium text-zinc-700"
+                                                                : "font-bold text-zinc-900"
+                                                                }`}
                                                         >
                                                             {n.title}
                                                         </p>
@@ -322,9 +318,8 @@ export default function NotificationBell({
                                                         )}
                                                     </div>
                                                     <p
-                                                        className={`text-[11px] mt-0.5 line-clamp-2 leading-relaxed ${
-                                                            isRead ? "text-zinc-500" : "text-zinc-600"
-                                                        }`}
+                                                        className={`text-[11px] mt-0.5 line-clamp-2 leading-relaxed ${isRead ? "text-zinc-500" : "text-zinc-600"
+                                                            }`}
                                                     >
                                                         {n.message}
                                                     </p>

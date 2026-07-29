@@ -177,6 +177,12 @@ exports.Prisma.StudentScalarFieldEnum = {
   dojoId: 'dojoId',
   onboardingComplete: 'onboardingComplete',
   membershipStatus: 'membershipStatus',
+  joinStage: 'joinStage',
+  requestedRank: 'requestedRank',
+  assignedRank: 'assignedRank',
+  pastBeltFeeBDT: 'pastBeltFeeBDT',
+  joinPdfUrl: 'joinPdfUrl',
+  joinedAt: 'joinedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -332,6 +338,7 @@ exports.Prisma.SystemSettingsScalarFieldEnum = {
   dojoRenewalFeeBDT: 'dojoRenewalFeeBDT',
   membershipFeeBDT: 'membershipFeeBDT',
   transferFeeBDT: 'transferFeeBDT',
+  pastBeltFeePerRankBDT: 'pastBeltFeePerRankBDT',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -478,6 +485,7 @@ exports.Prisma.ShopOrderScalarFieldEnum = {
   includesCertificates: 'includesCertificates',
   certDojoId: 'certDojoId',
   includesTransferRequest: 'includesTransferRequest',
+  includesPastBeltFee: 'includesPastBeltFee',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -611,6 +619,13 @@ exports.MembershipStatus = exports.$Enums.MembershipStatus = {
   ACTIVE: 'ACTIVE',
   EXPIRED: 'EXPIRED',
   SUSPENDED: 'SUSPENDED'
+};
+
+exports.JoinStage = exports.$Enums.JoinStage = {
+  FEE_UNPAID: 'FEE_UNPAID',
+  AWAITING_APPROVAL: 'AWAITING_APPROVAL',
+  PAST_BELT_UNPAID: 'PAST_BELT_UNPAID',
+  JOINED: 'JOINED'
 };
 
 exports.DojoApplicationStatus = exports.$Enums.DojoApplicationStatus = {

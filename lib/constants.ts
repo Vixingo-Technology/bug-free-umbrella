@@ -20,6 +20,10 @@ export const MEMBERSHIP_DURATION_YEARS = 1;
 /** Dojo transfer request fee in BDT (non-refundable once paid) */
 export const TRANSFER_REQUEST_FEE_BDT = 1000;
 
+/** Flat catch-up fee (BDT) per belt when a new student starts above White Belt.
+ *  Charged during the joining flow after the dojo owner assigns the rank. */
+export const PAST_BELT_FEE_PER_RANK_BDT = 500;
+
 /** Belt rank names in order (matches belt_ranks.name in DB) */
 export const BELT_RANKS_ORDERED = [
   "White Belt",

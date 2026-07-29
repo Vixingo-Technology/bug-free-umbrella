@@ -26,6 +26,20 @@ const FULLSCREEN_PATHS = [
     "/portal/payment-success",
 ];
 
+// Pages a student can reach while joinStage !== JOINED. Everything else
+// is redirected to /portal (the locked dashboard view — blurred content
+// with a big lock overlay and a "Complete joining" CTA).
+const JOINING_ALLOW = [
+    "/portal",            // exact — dashboard renders in locked mode
+    "/portal/joining",
+    "/portal/notifications",
+    "/portal/renew",
+    "/portal/profile",
+    "/portal/checkout",
+    "/portal/payment-success",
+    "/portal/payment-failed",
+];
+
 export default async function PortalLayout({
     children,
 }: {
@@ -49,8 +63,11 @@ export default async function PortalLayout({
 
     let role: RoleId = "STUDENT";
 
+    let initialJoinStage: "FEE_UNPAID" | "AWAITING_APPROVAL" | "PAST_BELT_UNPAID" | "JOINED" | null = null;
+
     if (!isExempt) {
         let needsOnboarding = false;
+        let needsJoining = false;
 
         try {
             let appUser = await prisma.user.findUnique({
@@ -71,7 +88,11 @@ export default async function PortalLayout({
             if (role === "STUDENT") {
                 const student = await prisma.student.findUnique({
                     where: { id: user.id },
-                    select: { onboardingComplete: true, dojoId: true },
+                    select: {
+                        onboardingComplete: true,
+                        dojoId: true,
+                        joinStage: true,
+                    },
                 });
                 needsOnboarding =
                     !student ||
@@ -80,12 +101,40 @@ export default async function PortalLayout({
                         phone: appUser?.phone ?? null,
                         dojoId: student.dojoId,
                     });
+                initialJoinStage = student?.joinStage ?? null;
+
+                // Second gate: joining-flow. Onboarded students who haven't
+                // finished the join flow are only allowed on a short whitelist
+                // (Dashboard, Joining, Renew, Notifications, payment pages).
+                // The dashboard itself renders locked (blurred + overlay).
+                //
+                // Match `/portal` exactly, and other allow-list entries by
+                // exact path or subtree — so `/portal` doesn't accidentally
+                // whitelist every child of it.
+                if (
+                    !needsOnboarding &&
+                    student &&
+                    student.joinStage !== "JOINED" &&
+                    !JOINING_ALLOW.some((p) =>
+                        p === "/portal"
+                            ? pathname === "/portal"
+                            : pathname === p || pathname.startsWith(p + "/"),
+                    )
+                ) {
+                    needsJoining = true;
+                }
             }
         } catch {
             // DB not configured — allow through
         }
 
+        // redirect() throws NEXT_REDIRECT — must run OUTSIDE the try/catch
+        // above, otherwise the throw is swallowed and the page renders
+        // instead of redirecting.
         if (needsOnboarding) redirect("/portal/onboarding");
+        // Locked students trying to reach a non-allow-listed page get
+        // bounced to the dashboard, where the lock overlay lives.
+        if (needsJoining) redirect("/portal");
     } else {
         try {
             const u = await prisma.user.findUnique({
@@ -100,5 +149,13 @@ export default async function PortalLayout({
 
     if (FULLSCREEN_PATHS.some((p) => pathname.startsWith(p))) return <>{children}</>;
 
-    return <PortalShell userId={user.id} initialRole={role}>{children}</PortalShell>;
+    return (
+        <PortalShell
+            userId={user.id}
+            initialRole={role}
+            initialJoinStage={initialJoinStage}
+        >
+            {children}
+        </PortalShell>
+    );
 }

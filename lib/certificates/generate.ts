@@ -70,7 +70,7 @@ export async function generateCertificatePdf(
             },
             grading: {
                 include: {
-                    toRank: true,
+                    toRank: { select: { kyuDan: true } },
                     gradingEvent: true,
                 },
             },
@@ -94,6 +94,7 @@ export async function generateCertificatePdf(
             // Stable for the life of the request; safe to print on the PDF.
             certificateNumber: req.id.slice(0, 8).toUpperCase(),
             rankName: req.rankName,
+            kyuDan: req.grading?.toRank?.kyuDan ?? null,
             issuedDate: new Date(),
             dojoName: req.dojo.name,
             dojoOwnerSignatureUrl: req.dojo.ownerSignatureUrl ?? null,
@@ -153,6 +154,7 @@ type RenderInput = {
     memberName: string;
     certificateNumber: string;
     rankName: string;
+    kyuDan: string | null;
     issuedDate: Date;
     dojoName: string;
     dojoOwnerSignatureUrl: string | null;
@@ -173,7 +175,7 @@ async function renderPdfBytes(input: RenderInput): Promise<Uint8Array> {
     const page = pdf.getPages()[0];
     const pageH = page.getHeight();
     const ink = rgb(0.094, 0.094, 0.106);
-    const kyuDigit = extractKyuDigit(input.rankName);
+    const kyuDigit = extractKyuDigit(input.kyuDan) ?? extractKyuDigit(input.rankName);
     const jp = jpDateParts(input.issuedDate);
 
     if (kyuDigit) drawText(page, shojumaru, kyuDigit, layout.kyuDigit, pageH, ink);
@@ -323,10 +325,10 @@ function formatEnglishDate(d: Date): string {
     }).format(d);
 }
 
-// Pulls the leading kyu number out of names like "1st Kyu", "8th Kyu (White)".
-// Returns null for Dan ranks or anything without a digit.
-function extractKyuDigit(rankName: string): string | null {
-    if (!/kyu/i.test(rankName)) return null;
-    const m = rankName.match(/(\d+)/);
+// Pulls the leading kyu number out of strings like "8th Kyu" or "1st Kyu".
+// Returns null for Dan ranks or anything without a Kyu digit.
+function extractKyuDigit(value: string | null | undefined): string | null {
+    if (!value || !/kyu/i.test(value)) return null;
+    const m = value.match(/(\d+)/);
     return m ? m[1] : null;
 }

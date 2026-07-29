@@ -7,6 +7,7 @@ import {
     Megaphone,
     RefreshCw,
     Settings,
+    UserPlus,
     Users,
 } from "lucide-react";
 import type { DojoRole } from "@/lib/dojo-roles";
@@ -32,6 +33,13 @@ export const DOJO_NAV: DojoNavItem[] = [
         label: "Members",
         icon: Users,
         min: "INSTRUCTOR",
+        group: "operations",
+    },
+    {
+        href: "/portal/dojo/join-requests",
+        label: "Join requests",
+        icon: UserPlus,
+        min: "DOJO_OWNER",
         group: "operations",
     },
     {

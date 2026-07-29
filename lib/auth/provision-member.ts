@@ -54,14 +54,23 @@ export async function provisionMemberFromSupabaseUser(user: User): Promise<void>
         // so an already-onboarded student isn't reset.
         switch (role) {
             case "STUDENT": {
+                // currentRank stays at White Belt until the dojo owner confirms.
+                // What the student picked at signup is stashed as requestedRank
+                // so the owner sees it during approval and can up/downgrade.
+                const requestedRank: string =
+                    typeof meta.current_rank === "string" && meta.current_rank
+                        ? meta.current_rank
+                        : "White Belt";
                 await prisma.student.upsert({
                     where: { id: user.id },
                     create: {
                         id: user.id,
-                        currentRank: meta.current_rank ?? "White Belt",
+                        currentRank: "White Belt",
+                        requestedRank,
                         dojoId,
                         onboardingComplete: false,
                         membershipStatus: "PENDING",
+                        joinStage: "FEE_UNPAID",
                     },
                     update: {},
                 });

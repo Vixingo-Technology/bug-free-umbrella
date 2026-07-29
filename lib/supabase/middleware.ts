@@ -70,6 +70,8 @@ export async function updateSession(request: NextRequest) {
         (pathname === "/portal/renew" &&
             request.nextUrl.searchParams.has("status")) ||
         (pathname === "/portal/dojo/renewals" &&
+            request.nextUrl.searchParams.has("status")) ||
+        (pathname === "/portal/joining" &&
             request.nextUrl.searchParams.has("status"));
 
     // Signal downstream layouts (which can't read searchParams directly) to

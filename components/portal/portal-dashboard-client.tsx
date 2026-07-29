@@ -16,6 +16,7 @@ import {
     ChevronRight,
     FileText,
     CalendarDays,
+    Lock,
 } from "lucide-react";
 import TiltCard from "./tilt-card";
 import DigitalCard from "./digital-card";
@@ -65,6 +66,51 @@ function StatCard({ icon: Icon, label, value, sub, href, delay, accentClass }: {
     );
 }
 
+type JoinStage = "FEE_UNPAID" | "AWAITING_APPROVAL" | "PAST_BELT_UNPAID" | "JOINED";
+
+/** Copy for the joining banner + lock overlay, keyed by joinStage. */
+const JOIN_COPY: Record<Exclude<JoinStage, "JOINED">, {
+    banner: { title: string; sub: string; cta: string };
+    lock:   { title: string; sub: string; cta: string };
+}> = {
+    FEE_UNPAID: {
+        banner: {
+            title: "Pay your JKA membership fee to begin joining.",
+            sub:   "Your dashboard unlocks once your dojo accepts your join request.",
+            cta:   "Pay Now →",
+        },
+        lock: {
+            title: "Membership fee pending",
+            sub:   "Pay the annual JKA membership fee to start the joining process. Your dashboard unlocks after your dojo accepts you.",
+            cta:   "Continue joining",
+        },
+    },
+    AWAITING_APPROVAL: {
+        banner: {
+            title: "Please visit your Dojo with the required documents.",
+            sub:   "Your dashboard unlocks as soon as your dojo accepts your join request.",
+            cta:   "View joining slip →",
+        },
+        lock: {
+            title: "Waiting for dojo approval",
+            sub:   "Take the joining slip and your documents to your dojo. Once your dojo accepts your join request, this dashboard unlocks automatically.",
+            cta:   "Open joining page",
+        },
+    },
+    PAST_BELT_UNPAID: {
+        banner: {
+            title: "Your dojo accepted your join request.",
+            sub:   "Pay the past-belt fee to finish joining and unlock your dashboard.",
+            cta:   "Pay past-belt fee →",
+        },
+        lock: {
+            title: "One more step — past-belt fee",
+            sub:   "Your dojo has confirmed your rank. Pay the catch-up fee for the belts you already hold to unlock full portal access.",
+            cta:   "Pay past-belt fee",
+        },
+    },
+};
+
 export default function PortalDashboardClient({ member, membershipStatus, unreadNotifications, upcomingItems, achievements, achievementsSummary }: Props) {
     const dojo = member?.dojo;
     const statusCfg = statusConfig[membershipStatus];
@@ -76,6 +122,12 @@ export default function PortalDashboardClient({ member, membershipStatus, unread
         ? new Date(member.expiryDate).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })
         : null;
 
+    // While the student is still working through the joining flow the whole
+    // dashboard is inert: banner on top, body blurred, giant lock overlay.
+    const joinStage: JoinStage | null = (member?.joinStage as JoinStage | undefined) ?? null;
+    const isLocked = !!joinStage && joinStage !== "JOINED";
+    const joinCopy = isLocked ? JOIN_COPY[joinStage as Exclude<JoinStage, "JOINED">] : null;
+
     return (
         <div className="space-y-6 max-w-5xl">
             {/* Page header */}
@@ -86,8 +138,28 @@ export default function PortalDashboardClient({ member, membershipStatus, unread
                 <p className="text-zinc-500 mt-1 text-sm">Here&apos;s your membership overview.</p>
             </div>
 
-            {/* Pending membership activation banner */}
-            {member?.membershipStatus === "PENDING" && (
+            {/* Joining-flow banner — takes priority over the membership-pending banner. */}
+            {isLocked && joinCopy && (
+                <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="flex items-center gap-4 p-4 rounded-xl border border-amber-300 bg-amber-50"
+                >
+                    <div className="flex-1 min-w-0">
+                        <p className="text-sm font-bold text-amber-800">{joinCopy.banner.title}</p>
+                        <p className="text-xs text-amber-700 mt-0.5 opacity-80">{joinCopy.banner.sub}</p>
+                    </div>
+                    <Link
+                        href="/portal/joining"
+                        className="flex-shrink-0 flex items-center gap-1.5 bg-amber-500 hover:bg-amber-400 text-white text-xs font-bold tracking-widest uppercase px-4 py-2 rounded-lg transition-colors"
+                    >
+                        {joinCopy.banner.cta}
+                    </Link>
+                </motion.div>
+            )}
+
+            {/* Pending membership activation banner (only when not in the joining flow). */}
+            {!isLocked && member?.membershipStatus === "PENDING" && (
                 <motion.div
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -108,8 +180,21 @@ export default function PortalDashboardClient({ member, membershipStatus, unread
                 </motion.div>
             )}
 
+            {/* Locked-body wrapper — everything below is blurred + inert
+                while the student is in the joining flow, with a large lock
+                overlay on top. */}
+            <div className="relative">
+                <div
+                    className={
+                        isLocked
+                            ? "pointer-events-none select-none blur-sm opacity-60 space-y-6"
+                            : "space-y-6"
+                    }
+                    aria-hidden={isLocked}
+                >
+
             {/* Expiry warning banner */}
-            {(membershipStatus === "Expired" || membershipStatus === "Expiring Soon") && (
+            {!isLocked && (membershipStatus === "Expired" || membershipStatus === "Expiring Soon") && (
                 <motion.div
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -259,6 +344,41 @@ export default function PortalDashboardClient({ member, membershipStatus, unread
                         </div>
                     </TiltCard>
                 ))}
+            </div>
+
+                </div>
+
+                {/* Large lock overlay */}
+                {isLocked && joinCopy && (
+                    <div className="absolute inset-0 flex items-start justify-center pt-16 sm:pt-24 pointer-events-none">
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.96, y: 8 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            transition={{ duration: 0.35, ease: [0.2, 0.8, 0.2, 1] }}
+                            className="pointer-events-auto max-w-md w-[92%] rounded-2xl border border-zinc-200 bg-white shadow-2xl px-6 py-7 sm:px-8 sm:py-9 text-center"
+                        >
+                            <div className="mx-auto w-14 h-14 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-center mb-4">
+                                <Lock size={26} className="text-amber-600" />
+                            </div>
+                            <p className="text-[10px] font-bold tracking-widest uppercase text-zinc-400">
+                                Portal locked
+                            </p>
+                            <h2 className="mt-1 text-lg sm:text-xl font-bold text-zinc-900">
+                                {joinCopy.lock.title}
+                            </h2>
+                            <p className="mt-2 text-sm text-zinc-500 leading-relaxed">
+                                {joinCopy.lock.sub}
+                            </p>
+                            <Link
+                                href="/portal/joining"
+                                className="mt-6 inline-flex items-center gap-2 bg-accent-red hover:bg-zinc-900 text-white font-bold tracking-widest uppercase text-xs px-5 py-3 rounded-xl transition-colors"
+                            >
+                                {joinCopy.lock.cta}
+                                <ChevronRight size={14} />
+                            </Link>
+                        </motion.div>
+                    </div>
+                )}
             </div>
 
             <MembershipCardDialog

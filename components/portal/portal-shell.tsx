@@ -28,6 +28,8 @@ import {
     Trophy,
     ArrowRightLeft,
     CreditCard,
+    Lock,
+    UserPlus,
 } from "lucide-react";
 import Logo from "@/assets/jka_logo.svg";
 import { signoutAction } from "@/app/actions/auth";
@@ -43,6 +45,9 @@ const DOJO_ROLE_RANK: Record<DojoRole, number> = {
     DOJO_OWNER: 3,
 };
 
+// "My Profile" intentionally omitted — it lives in the top-right header
+// next to the notification bell, and is always accessible (even while the
+// student is still in the joining flow).
 const studentNavItems = [
     { label: "Dashboard",    href: "/portal",              icon: LayoutDashboard },
     { label: "My Progress",  href: "/portal/progress",     icon: TrendingUp },
@@ -54,8 +59,16 @@ const studentNavItems = [
     { label: "Shop Orders",  href: "/portal/orders",       icon: ShoppingBag },
     { label: "Renew",        href: "/portal/renew",        icon: RefreshCw },
     { label: "Transfer Dojo",href: "/portal/transfer",     icon: ArrowRightLeft },
-    { label: "My Profile",   href: "/portal/profile",      icon: User },
 ];
+
+// While the student is still in the joining flow (joinStage !== JOINED),
+// only these paths are reachable. Everything else in the sidebar renders
+// as locked and clicks are swallowed.
+const JOINING_UNLOCKED = new Set<string>([
+    "/portal/joining",
+    "/portal/notifications",
+    "/portal/renew",
+]);
 
 // Admins skip the personal-membership flows (progress, gradings,
 // certificates, renewal, personal shop orders).
@@ -87,10 +100,19 @@ const dojoPersonalNavItems = [
 interface PortalShellProps {
     userId: string;
     initialRole?: "STUDENT" | "INSTRUCTOR" | "DOJO_MANAGER" | "DOJO_OWNER" | "ADMIN";
+    /** Server-known joinStage for students. Prevents the sidebar lock
+     *  from depending on a client-side Supabase query that may lag or
+     *  fail silently under RLS. */
+    initialJoinStage?: "FEE_UNPAID" | "AWAITING_APPROVAL" | "PAST_BELT_UNPAID" | "JOINED" | null;
     children: React.ReactNode;
 }
 
-export default function PortalShell({ userId, initialRole = "STUDENT", children }: PortalShellProps) {
+export default function PortalShell({
+    userId,
+    initialRole = "STUDENT",
+    initialJoinStage = null,
+    children,
+}: PortalShellProps) {
     const pathname = usePathname();
     const router = useRouter();
     const [isPending, startTransition] = useTransition();
@@ -125,9 +147,17 @@ export default function PortalShell({ userId, initialRole = "STUDENT", children 
             navigateTo(href);
         };
     }
-    const [member, setMember] = useState<{ fullName: string; email: string; currentRank: string | null; role: string } | null>(
-        // Seed with the server-known role so admin nav renders on first paint.
-        { fullName: "", email: "", currentRank: null, role: initialRole }
+    const [member, setMember] = useState<{
+        fullName: string;
+        email: string;
+        currentRank: string | null;
+        role: string;
+        joinStage: "FEE_UNPAID" | "AWAITING_APPROVAL" | "PAST_BELT_UNPAID" | "JOINED" | null;
+    } | null>(
+        // Seed with the server-known role + joinStage so admin nav renders
+        // AND the student sidebar lock resolves correctly on first paint,
+        // without depending on the client-side Supabase query completing.
+        { fullName: "", email: "", currentRank: null, role: initialRole, joinStage: initialJoinStage }
     );
     const [dojoLogoUrl, setDojoLogoUrl] = useState<string | null>(null);
     const [unreadCount, setUnreadCount] = useState(0);
@@ -138,22 +168,34 @@ export default function PortalShell({ userId, initialRole = "STUDENT", children 
         async function fetchMember() {
             const { data } = await supabase
                 .from("users")
-                .select("full_name, email, role_id, students(current_rank)")
+                .select("full_name, email, role_id, students(current_rank, join_stage)")
                 .eq("id", userId)
                 .single<{
                     full_name: string;
                     email: string;
                     role_id: string;
-                    students: { current_rank: string | null } | null;
+                    students: {
+                        current_rank: string | null;
+                        join_stage:
+                            | "FEE_UNPAID"
+                            | "AWAITING_APPROVAL"
+                            | "PAST_BELT_UNPAID"
+                            | "JOINED"
+                            | null;
+                    } | null;
                 }>();
 
             if (data) {
-                setMember({
+                setMember((prev) => ({
                     fullName: data.full_name,
                     email: data.email,
                     currentRank: data.students?.current_rank ?? null,
                     role: data.role_id,
-                });
+                    // Prefer the fresh browser value, but if postgrest didn't
+                    // return a students row (RLS or missing join), keep the
+                    // server-seeded stage rather than dropping it to null.
+                    joinStage: data.students?.join_stage ?? prev?.joinStage ?? null,
+                }));
 
                 // For dojo staff, resolve their dojo's logo (if any) to render
                 // in the top-right corner of the portal shell.
@@ -254,11 +296,28 @@ export default function PortalShell({ userId, initialRole = "STUDENT", children 
         member?.role === "INSTRUCTOR" ||
         member?.role === "DOJO_MANAGER" ||
         member?.role === "DOJO_OWNER";
-    const navItems = isAdmin
+    const isStudent = !isAdmin && !isDojoStaff;
+    const isStudentLocked = isStudent && !!member?.joinStage && member.joinStage !== "JOINED";
+
+    // While the student is still joining, prepend a Joining entry and
+    // mark everything they can't visit yet with a `locked` flag so the
+    // sidebar shows a padlock + swallows clicks.
+    type NavItem = { label: string; href: string; icon: typeof LayoutDashboard; locked?: boolean };
+    const studentNavRendered: NavItem[] = isStudentLocked
+        ? [
+              { label: "Joining", href: "/portal/joining", icon: UserPlus },
+              ...studentNavItems.map((n) => ({
+                  ...n,
+                  locked: !JOINING_UNLOCKED.has(n.href),
+              })),
+          ]
+        : studentNavItems;
+
+    const navItems: NavItem[] = isAdmin
         ? adminPersonalNavItems
         : isDojoStaff
             ? dojoPersonalNavItems
-            : studentNavItems;
+            : studentNavRendered;
     const portalLabel = isAdmin
         ? "Admin Portal"
         : isDojoStaff
@@ -325,11 +384,26 @@ export default function PortalShell({ userId, initialRole = "STUDENT", children 
 
             {/* Nav */}
             <nav className="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto">
-                {navItems.map(({ label, href, icon: Icon }) => {
+                {navItems.map(({ label, href, icon: Icon, locked }) => {
                     const isActive = href === "/portal"
                         ? activePath === "/portal"
                         : activePath === href || activePath.startsWith(href + "/");
                     const isNotif = href === "/portal/notifications";
+
+                    if (locked) {
+                        return (
+                            <div
+                                key={href}
+                                aria-disabled="true"
+                                title="Unlocks once your dojo accepts your join request."
+                                className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-zinc-400 cursor-not-allowed select-none"
+                            >
+                                <Icon size={17} className="flex-shrink-0 opacity-60" />
+                                <span className="flex-1">{label}</span>
+                                <Lock size={13} className="opacity-60" />
+                            </div>
+                        );
+                    }
 
                     return (
                         <Link
@@ -483,13 +557,22 @@ export default function PortalShell({ userId, initialRole = "STUDENT", children 
                         </span>
                     </Link>
 
-                    <NotificationBell
-                        userId={userId}
-                        unreadCount={unreadCount}
-                        onUnreadChange={setUnreadCount}
-                        align="right"
-                        iconSize={20}
-                    />
+                    <div className="flex items-center">
+                        <NotificationBell
+                            userId={userId}
+                            unreadCount={unreadCount}
+                            onUnreadChange={setUnreadCount}
+                            align="right"
+                            iconSize={20}
+                        />
+                        <Link
+                            href="/portal/profile"
+                            aria-label="My profile"
+                            className="relative p-2 rounded-lg transition-colors text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900"
+                        >
+                            <User size={20} />
+                        </Link>
+                    </div>
                 </header>
 
                 {/* Desktop topbar */}
@@ -498,7 +581,14 @@ export default function PortalShell({ userId, initialRole = "STUDENT", children 
                         <Link href="/" className="hover:text-zinc-900 transition-colors">Home</Link>
                         <ChevronRight size={14} />
                         <span className="text-zinc-900 font-medium">
-                            {[...studentNavItems, ...adminPersonalNavItems, ...adminNavItems, ...dojoPersonalNavItems, ...DOJO_NAV].find(n => n.href === activePath || (n.href !== "/portal" && activePath.startsWith(n.href)))?.label ?? "Portal"}
+                            {[
+                                ...studentNavItems,
+                                { label: "Joining", href: "/portal/joining" },
+                                ...adminPersonalNavItems,
+                                ...adminNavItems,
+                                ...dojoPersonalNavItems,
+                                ...DOJO_NAV,
+                            ].find(n => n.href === activePath || (n.href !== "/portal" && activePath.startsWith(n.href)))?.label ?? "Portal"}
                         </span>
                     </div>
 
@@ -515,6 +605,13 @@ export default function PortalShell({ userId, initialRole = "STUDENT", children 
                             align="right"
                             iconSize={18}
                         />
+                        <Link
+                            href="/portal/profile"
+                            aria-label="My profile"
+                            className="relative p-2 rounded-lg transition-colors text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900"
+                        >
+                            <User size={18} />
+                        </Link>
                     </div>
                 </header>
 

@@ -21,6 +21,7 @@ export default async function AdminSubscriptionsPage() {
             dojoRenewalFeeBDT: true,
             membershipFeeBDT: true,
             transferFeeBDT: true,
+            pastBeltFeePerRankBDT: true,
         },
     });
 
@@ -56,6 +57,10 @@ export default async function AdminSubscriptionsPage() {
                     transferFeeBDT:
                         row.transferFeeBDT != null
                             ? Number(row.transferFeeBDT)
+                            : null,
+                    pastBeltFeePerRankBDT:
+                        row.pastBeltFeePerRankBDT != null
+                            ? Number(row.pastBeltFeePerRankBDT)
                             : null,
                 }}
             />

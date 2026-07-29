@@ -82,6 +82,20 @@ export default function CheckoutClient({ order, member, paymentFailed }: Props) 
                         </div>
                     )}
 
+                    {/* Past-belt catch-up fee */}
+                    {order?.includesPastBeltFee && (
+                        <div className="flex items-center gap-4 px-5 py-4 border-b border-white/5">
+                            <div className="w-10 h-10 rounded-xl bg-amber-600/20 flex items-center justify-center flex-shrink-0">
+                                <Star size={18} className="text-amber-400" />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                                <p className="text-sm font-semibold text-white">Past-belt catch-up fee</p>
+                                <p className="text-xs text-white/40 mt-0.5">Belts already achieved before joining</p>
+                            </div>
+                            <p className="text-sm font-bold text-white flex-shrink-0">৳{grandTotal.toLocaleString()}</p>
+                        </div>
+                    )}
+
                     {/* Product items */}
                     {productItems.map((item: any, i: number) => (
                         <div key={item.id} className={`flex items-center gap-4 px-5 py-4 ${i < productItems.length - 1 ? "border-b border-white/5" : ""}`}>

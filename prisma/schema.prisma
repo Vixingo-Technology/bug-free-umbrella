@@ -43,6 +43,15 @@ enum MembershipStatus {
   SUSPENDED // Admin-suspended
 }
 
+// Multi-step joining flow for new students. Independent of MembershipStatus
+// (which tracks whether the annual JKA fee is currently in good standing).
+enum JoinStage {
+  FEE_UNPAID       // Step 1: pay JKA membership fee
+  AWAITING_APPROVAL // Step 2: dojo owner accepts + confirms rank
+  PAST_BELT_UNPAID // Step 3: pay for previous belts (non-white only)
+  JOINED           // Step 4: complete — full portal access
+}
+
 enum GradingResult {
   PASSED
   FAILED
@@ -274,6 +283,14 @@ model Student {
 
   onboardingComplete Boolean          @default(false) @map("onboarding_complete")
   membershipStatus   MembershipStatus @default(PENDING) @map("membership_status")
+
+  // Multi-step joining flow — see JoinStage enum.
+  joinStage      JoinStage @default(FEE_UNPAID) @map("join_stage")
+  requestedRank  String?   @map("requested_rank")           // Rank student picked at signup
+  assignedRank   String?   @map("assigned_rank")            // Rank the dojo owner confirmed on approval
+  pastBeltFeeBDT Int?      @map("past_belt_fee_bdt")        // Calculated at approval; null when white belt
+  joinPdfUrl     String?   @map("join_pdf_url")             // "Bring this to your dojo" printable doc
+  joinedAt       DateTime? @map("joined_at")
 
   user User  @relation(fields: [id], references: [id], onDelete: Cascade)
   dojo Dojo? @relation("DojoStudents", fields: [dojoId], references: [id])
@@ -609,10 +626,11 @@ model SystemSettings {
 
   // Subscription / affiliation fees (BDT). Editable from the admin
   // subscriptions page; NULL means "fall back to the built-in default".
-  dojoEnlistmentFeeBDT Decimal? @map("dojo_enlistment_fee_bdt") @db.Decimal(10, 2)
-  dojoRenewalFeeBDT    Decimal? @map("dojo_renewal_fee_bdt")    @db.Decimal(10, 2)
-  membershipFeeBDT     Decimal? @map("membership_fee_bdt")      @db.Decimal(10, 2)
-  transferFeeBDT       Decimal? @map("transfer_fee_bdt")        @db.Decimal(10, 2)
+  dojoEnlistmentFeeBDT   Decimal? @map("dojo_enlistment_fee_bdt")   @db.Decimal(10, 2)
+  dojoRenewalFeeBDT      Decimal? @map("dojo_renewal_fee_bdt")      @db.Decimal(10, 2)
+  membershipFeeBDT       Decimal? @map("membership_fee_bdt")        @db.Decimal(10, 2)
+  transferFeeBDT         Decimal? @map("transfer_fee_bdt")          @db.Decimal(10, 2)
+  pastBeltFeePerRankBDT  Decimal? @map("past_belt_fee_per_rank_bdt") @db.Decimal(10, 2)
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -881,6 +899,10 @@ model ShopOrder {
   certDojoId           String? @map("cert_dojo_id") @db.Uuid
 
   includesTransferRequest Boolean @default(false) @map("includes_transfer_request")
+
+  // Past-belt catch-up fee paid when a new student is accepted at a rank
+  // above White Belt. Consumed by the joining flow — see JoinStage.
+  includesPastBeltFee Boolean @default(false) @map("includes_past_belt_fee")
 
   user                User?                   @relation(fields: [userId], references: [id], onDelete: SetNull)
   dojo                Dojo?                   @relation("DojoRenewalOrders", fields: [dojoId], references: [id])

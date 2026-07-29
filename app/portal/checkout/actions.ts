@@ -38,6 +38,9 @@ export async function initiatePaymentAction(orderId: string) {
             if (order.includesDojoRenewal) {
                 redirect(`/portal/dojo/renewals?status=success&orderId=${orderId}&dev=1`);
             }
+            if (order.includesPastBeltFee) {
+                redirect(`/portal/joining?status=success&orderId=${orderId}&dev=1`);
+            }
             if (order.includesMembership && !order.orderItems.length) {
                 redirect(`/portal/renew?status=success&orderId=${orderId}&dev=1`);
             }
@@ -54,9 +57,11 @@ export async function initiatePaymentAction(orderId: string) {
         // show a contextual popup (success or failed) with fresh data.
         const renewFailBase = order.includesDojoRenewal
             ? `${appUrl}/portal/dojo/renewals?status=failed&orderId=${orderId}`
-            : order.includesMembership
-                ? `${appUrl}/portal/renew?status=failed&orderId=${orderId}`
-                : null;
+            : order.includesPastBeltFee
+                ? `${appUrl}/portal/joining?status=failed&orderId=${orderId}`
+                : order.includesMembership
+                    ? `${appUrl}/portal/renew?status=failed&orderId=${orderId}`
+                    : null;
         const failUrl = order.includesTransferRequest && transferReqId
             ? `${appUrl}/portal/transfer/failed?requestId=${transferReqId}`
             : renewFailBase ?? `${appUrl}/portal/payment-failed?orderId=${orderId}`;
@@ -135,6 +140,13 @@ export async function markOrderPaidAction(orderId: string) {
         const expiry = new Date();
         expiry.setFullYear(expiry.getFullYear() + 1);
 
+        // Advance the joining flow only when it's the first JKA payment.
+        const existing = await prisma.student.findUnique({
+            where: { id: user.id },
+            select: { joinStage: true },
+        });
+        const advanceJoin = existing?.joinStage === "FEE_UNPAID";
+
         await prisma.$transaction([
             prisma.shopOrder.update({
                 where: { id: orderId },
@@ -146,6 +158,7 @@ export async function markOrderPaidAction(orderId: string) {
                     membershipStatus: "ACTIVE",
                     onboardingComplete: true,
                     expiryDate: expiry,
+                    ...(advanceJoin ? { joinStage: "AWAITING_APPROVAL" as const } : {}),
                 },
             }),
         ]);
