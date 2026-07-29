@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useTransition } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "motion/react";
 import {
     LayoutDashboard,
@@ -92,7 +92,39 @@ interface PortalShellProps {
 
 export default function PortalShell({ userId, initialRole = "STUDENT", children }: PortalShellProps) {
     const pathname = usePathname();
+    const router = useRouter();
+    const [isPending, startTransition] = useTransition();
+    const [pendingHref, setPendingHref] = useState<string | null>(null);
     const [sidebarOpen, setSidebarOpen] = useState(false);
+
+    // Clear optimistic target once the URL catches up.
+    useEffect(() => {
+        if (pendingHref && pathname === pendingHref) {
+            setPendingHref(null);
+        }
+    }, [pathname, pendingHref]);
+
+    // Effective path used to decide which sidebar item shows as active. When
+    // a nav item is clicked we flip this to the target href immediately so the
+    // sidebar highlight (and content skeleton) update on the same paint —
+    // before the server component for the new page has finished streaming.
+    const activePath = pendingHref ?? pathname;
+
+    function navigateTo(href: string) {
+        if (href === pathname) return;
+        setPendingHref(href);
+        setSidebarOpen(false);
+        startTransition(() => router.push(href));
+    }
+
+    function handleNavClick(href: string) {
+        return (e: React.MouseEvent<HTMLAnchorElement>) => {
+            // Let modifier clicks (new tab, etc.) behave normally.
+            if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+            e.preventDefault();
+            navigateTo(href);
+        };
+    }
     const [member, setMember] = useState<{ fullName: string; email: string; currentRank: string | null; role: string } | null>(
         // Seed with the server-known role so admin nav renders on first paint.
         { fullName: "", email: "", currentRank: null, role: initialRole }
@@ -295,14 +327,15 @@ export default function PortalShell({ userId, initialRole = "STUDENT", children 
             <nav className="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto">
                 {navItems.map(({ label, href, icon: Icon }) => {
                     const isActive = href === "/portal"
-                        ? pathname === "/portal"
-                        : pathname === href || pathname.startsWith(href + "/");
+                        ? activePath === "/portal"
+                        : activePath === href || activePath.startsWith(href + "/");
                     const isNotif = href === "/portal/notifications";
 
                     return (
                         <Link
                             key={href}
                             href={href}
+                            onClick={handleNavClick(href)}
                             className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all group relative ${
                                 isActive
                                     ? "bg-accent-red text-white shadow-sm"
@@ -327,11 +360,12 @@ export default function PortalShell({ userId, initialRole = "STUDENT", children 
                             <ShieldCheck size={11} /> Administration
                         </div>
                         {adminNavItems.map(({ label, href, icon: Icon }) => {
-                            const isActive = pathname === href || pathname.startsWith(href + "/");
+                            const isActive = activePath === href || activePath.startsWith(href + "/");
                             return (
                                 <Link
                                     key={href}
                                     href={href}
+                                    onClick={handleNavClick(href)}
                                     className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all group relative ${
                                         isActive
                                             ? "bg-zinc-900 text-white shadow-sm"
@@ -355,12 +389,13 @@ export default function PortalShell({ userId, initialRole = "STUDENT", children 
                             </div>
                             {groupedDojo[group].map(({ label, href, icon: Icon }) => {
                                 const isActive = href === "/portal"
-                                    ? pathname === "/portal"
-                                    : pathname === href || pathname.startsWith(href + "/");
+                                    ? activePath === "/portal"
+                                    : activePath === href || activePath.startsWith(href + "/");
                                 return (
                                     <Link
                                         key={href}
                                         href={href}
+                                        onClick={handleNavClick(href)}
                                         className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all group relative ${
                                             isActive
                                                 ? "bg-zinc-900 text-white shadow-sm"
@@ -463,7 +498,7 @@ export default function PortalShell({ userId, initialRole = "STUDENT", children 
                         <Link href="/" className="hover:text-zinc-900 transition-colors">Home</Link>
                         <ChevronRight size={14} />
                         <span className="text-zinc-900 font-medium">
-                            {[...studentNavItems, ...adminPersonalNavItems, ...adminNavItems, ...dojoPersonalNavItems, ...DOJO_NAV].find(n => n.href === pathname || (n.href !== "/portal" && pathname.startsWith(n.href)))?.label ?? "Portal"}
+                            {[...studentNavItems, ...adminPersonalNavItems, ...adminNavItems, ...dojoPersonalNavItems, ...DOJO_NAV].find(n => n.href === activePath || (n.href !== "/portal" && activePath.startsWith(n.href)))?.label ?? "Portal"}
                         </span>
                     </div>
 
@@ -485,14 +520,41 @@ export default function PortalShell({ userId, initialRole = "STUDENT", children 
 
                 {/* Page content */}
                 <main className="flex-1 px-4 sm:px-6 lg:px-8 py-6 lg:py-8">
-                    <motion.div
-                        initial={{ opacity: 0, y: 16 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.4 }}
-                    >
-                        {children}
-                    </motion.div>
+                    {isPending && pendingHref ? (
+                        <PortalPageSkeleton />
+                    ) : (
+                        <motion.div
+                            key={pathname}
+                            initial={{ opacity: 0, y: 16 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.4 }}
+                        >
+                            {children}
+                        </motion.div>
+                    )}
                 </main>
+            </div>
+        </div>
+    );
+}
+
+function PortalPageSkeleton() {
+    return (
+        <div className="animate-pulse space-y-6">
+            <div className="h-8 w-56 rounded-lg bg-zinc-200/70" />
+            <div className="h-4 w-80 max-w-full rounded bg-zinc-200/60" />
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {Array.from({ length: 6 }).map((_, i) => (
+                    <div
+                        key={i}
+                        className="h-32 rounded-2xl border border-zinc-100 bg-white shadow-sm"
+                    >
+                        <div className="h-full w-full rounded-2xl bg-gradient-to-br from-zinc-100 to-zinc-50" />
+                    </div>
+                ))}
+            </div>
+            <div className="h-64 rounded-2xl border border-zinc-100 bg-white shadow-sm">
+                <div className="h-full w-full rounded-2xl bg-gradient-to-br from-zinc-100 to-zinc-50" />
             </div>
         </div>
     );
