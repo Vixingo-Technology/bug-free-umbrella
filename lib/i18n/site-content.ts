@@ -130,12 +130,6 @@ export const siteContent = {
                     },
                 ],
             },
-            {
-                title: "Kyu Grading",
-                description:
-                    "Kyu gradings are recommended to be carried out 3 times a year:",
-                schedule: ["Last week of April", "Last week of August", "Last week of December"],
-            },
         ],
         belts: [
             {

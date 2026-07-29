@@ -100,7 +100,7 @@ export default function Journey() {
 
                 {/* Grading Information */}
                 {copy.journey.gradingInfo && (
-                    <div className="mt-24 grid md:grid-cols-2 gap-8">
+                    <div className="mt-24 grid md:grid-cols-2 gap-8 items-stretch">
                         {copy.journey.gradingInfo.map((info, i) => (
                             <motion.div
                                 key={i}
@@ -108,7 +108,7 @@ export default function Journey() {
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
                                 transition={{ duration: 0.6, delay: i * 0.15 }}
-                                className="bg-white/80 backdrop-blur-sm border border-zinc-200 rounded-2xl p-8 shadow-sm hover:shadow-md transition-shadow duration-300"
+                                className="bg-white/80 backdrop-blur-sm border border-zinc-200 rounded-2xl p-8 shadow-sm hover:shadow-md transition-shadow duration-300 flex flex-col"
                             >
                                 <div className="flex items-center gap-3 mb-4">
                                     <div className="w-10 h-10 rounded-full bg-accent-red/10 flex items-center justify-center">
@@ -125,7 +125,6 @@ export default function Journey() {
                                     {info.description}
                                 </p>
 
-                                {/* Kari-style details */}
                                 {"details" in info && info.details && (
                                     <div className="space-y-4">
                                         {info.details.map((detail, j) => (
@@ -143,48 +142,30 @@ export default function Journey() {
                                         ))}
                                     </div>
                                 )}
-
-                                {/* Kyu-style schedule */}
-                                {"schedule" in info && info.schedule && (
-                                    <>
-                                        <div className="flex flex-wrap gap-3">
-                                            {info.schedule.map((period, j) => (
-                                                <span
-                                                    key={j}
-                                                    className="inline-flex items-center gap-2 bg-zinc-900 text-white text-xs uppercase tracking-widest px-4 py-2.5 rounded-full font-bold"
-                                                >
-                                                    <svg
-                                                        className="w-3.5 h-3.5"
-                                                        fill="none"
-                                                        viewBox="0 0 24 24"
-                                                        stroke="currentColor"
-                                                        strokeWidth={2}
-                                                    >
-                                                        <path
-                                                            strokeLinecap="round"
-                                                            strokeLinejoin="round"
-                                                            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-                                                        />
-                                                    </svg>
-                                                    {period}
-                                                </span>
-                                            ))}
-                                        </div>
-                                        <div className="mt-8">
-                                            <Link
-                                                href="/about/karate#dan-ranking"
-                                                className="w-full flex justify-center items-center gap-2 text-sm font-bold text-white bg-accent-red hover:bg-red-700 px-6 py-4 rounded-xl transition-colors group shadow-sm"
-                                            >
-                                                Learn more about grading and ranking
-                                                <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                                                </svg>
-                                            </Link>
-                                        </div>
-                                    </>
-                                )}
                             </motion.div>
                         ))}
+
+                        <motion.div
+                            initial={{ opacity: 0, y: 30 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.6, delay: 0.15 }}
+                            className="flex flex-col justify-between gap-8 p-8"
+                        >
+                            <h3 className="font-karate text-3xl md:text-4xl lg:text-5xl text-zinc-900 uppercase tracking-widest font-bold leading-tight">
+                                Learn more about our <span className="text-accent-red">Universal</span> Grading system
+                            </h3>
+
+                            <Link
+                                href="/about/karate#dan-ranking"
+                                className="inline-flex items-center justify-center gap-2 text-sm font-bold text-white bg-accent-red hover:bg-red-700 px-6 py-4 rounded-xl transition-colors group shadow-sm self-start"
+                            >
+                                Learn more about grading and ranking
+                                <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                </svg>
+                            </Link>
+                        </motion.div>
                     </div>
                 )}
             </div>

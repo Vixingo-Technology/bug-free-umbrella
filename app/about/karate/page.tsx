@@ -12,7 +12,6 @@ import {
     Zap,
     ArrowRight,
     ExternalLink,
-    Calendar
 } from "lucide-react";
 
 export const metadata: Metadata = {
@@ -311,36 +310,6 @@ export default function JkaKaratePage() {
                                 For students aged 13 and above, including adults, if for any reason a student doesn&apos;t pass their grading, they can receive a Kari level rather than failing them. This ensures continued progress and recognition of effort.
                             </p>
                         </div>
-                    </div>
-                </div>
-
-                {/* Kyu Grading Schedule */}
-                <div className="font-sans space-y-4">
-                    <div className="flex items-center gap-2">
-                        <Calendar className="w-4 h-4 text-accent-red" />
-                        <h4 className="font-serif font-bold text-lg text-zinc-900">
-                            Kyu Grading Schedule
-                        </h4>
-                    </div>
-                    <p className="text-zinc-700 text-sm leading-relaxed">
-                        Kyu gradings are recommended to be carried out 3 times a year:
-                    </p>
-                    <div className="flex flex-wrap gap-3">
-                        {[
-                            { month: "April", detail: "Last week of April" },
-                            { month: "August", detail: "Last week of August" },
-                            { month: "December", detail: "Last week of December" },
-                        ].map((period) => (
-                            <div
-                                key={period.month}
-                                className="flex items-center gap-3 bg-zinc-900 text-white px-5 py-3 rounded-xl shadow-sm"
-                            >
-                                <Calendar className="w-4 h-4 text-accent-red flex-shrink-0" />
-                                <span className="text-sm font-bold uppercase tracking-wider">
-                                    {period.detail}
-                                </span>
-                            </div>
-                        ))}
                     </div>
                 </div>
 
