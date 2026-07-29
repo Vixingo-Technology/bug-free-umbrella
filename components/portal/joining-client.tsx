@@ -1,10 +1,11 @@
 "use client";
 
-import { useTransition } from "react";
-import { motion } from "motion/react";
+import { useTransition, useState } from "react";
+import { motion, AnimatePresence } from "motion/react";
 import Link from "next/link";
 import {
-    AlertTriangle,
+    Award,
+    Calendar,
     CheckCircle2,
     Circle,
     Clock,
@@ -12,8 +13,11 @@ import {
     Download,
     FileText,
     MapPin,
+    RefreshCw,
     Shield,
     Loader2,
+    XCircle,
+    X,
 } from "lucide-react";
 import TiltCard from "./tilt-card";
 import {
@@ -22,6 +26,11 @@ import {
 } from "@/app/portal/joining/actions";
 
 type JoinStage = "FEE_UNPAID" | "AWAITING_APPROVAL" | "PAST_BELT_UNPAID" | "JOINED";
+
+type Feedback =
+    | { kind: "success"; joinStage: JoinStage | null; authenticated: boolean }
+    | { kind: "failed"; reason: string }
+    | null;
 
 type Member = {
     fullName: string;
@@ -32,7 +41,14 @@ type Member = {
     requestedRank: string | null;
     assignedRank: string | null;
     pastBeltFeeBDT: number | null;
-    dojo: { id: string; name: string; city: string | null; address: string | null } | null;
+    dojo: {
+        id: string;
+        name: string;
+        city: string | null;
+        address: string | null;
+        latitude: number | null;
+        longitude: number | null;
+    } | null;
 };
 
 const STEPS: { key: JoinStage; label: string; desc: string }[] = [
@@ -56,45 +72,68 @@ export default function JoiningClient({
     membershipFeeBDT,
     postPaymentStatus = null,
     postPaymentReason = null,
+    authenticated = true,
 }: {
     member: Member | null;
     membershipFeeBDT: number;
     postPaymentStatus?: "success" | "failed" | null;
     postPaymentReason?: string | null;
+    authenticated?: boolean;
 }) {
     const [payingMembership, startMembership] = useTransition();
     const [payingPastBelt, startPastBelt] = useTransition();
 
-    // Post-payment fallback: shown when the user came back from SSLCommerz
-    // without a valid session (cross-site redirect cookie loss). The webhook
-    // has already run server-side, so we just acknowledge and prompt login.
+    const feedback: Feedback =
+        postPaymentStatus === "success"
+            ? { kind: "success", joinStage: member?.joinStage ?? null, authenticated }
+            : postPaymentStatus === "failed"
+                ? {
+                      kind: "failed",
+                      reason:
+                          postPaymentReason ??
+                          "The payment gateway declined the transaction.",
+                  }
+                : null;
+
+    const [popup, setPopup] = useState<Feedback>(feedback);
+
+    function closePopup() {
+        setPopup(null);
+        if (typeof window === "undefined") return;
+        const url = new URL(window.location.href);
+        ["status", "reason", "orderId", "dev"].forEach((k) =>
+            url.searchParams.delete(k),
+        );
+        // Full navigation (not replaceState) so the layout re-renders WITH
+        // the auth cookie attached — SSLCommerz's cross-site redirect chain
+        // can drop SameSite=Lax cookies on the first hop, which leaves the
+        // portal sidebar hidden until we do a real GET.
+        window.location.replace(url.pathname + (url.search ? url.search : ""));
+    }
+
+    // Post-payment fallback: we couldn't resolve the buyer at all (no session
+    // and no usable order). The webhook has already run server-side, so we
+    // just acknowledge and prompt login.
     if (!member) {
-        const isSuccess = postPaymentStatus === "success";
         return (
             <div className="min-h-screen bg-zinc-50 flex items-center justify-center px-4 py-12">
-                <div className="w-full max-w-md bg-white rounded-2xl shadow-xl border border-zinc-100 p-8 text-center">
-                    <div className={`mx-auto w-14 h-14 rounded-2xl border flex items-center justify-center mb-4 ${
-                        isSuccess ? "bg-emerald-50 border-emerald-200" : "bg-red-50 border-red-200"
-                    }`}>
-                        {isSuccess
-                            ? <CheckCircle2 size={26} className="text-emerald-600" />
-                            : <AlertTriangle size={26} className="text-red-600" />}
+                <JoiningPopup popup={popup} onClose={() => setPopup(null)} standalone />
+                {!popup && (
+                    <div className="w-full max-w-md bg-white rounded-2xl shadow-xl border border-zinc-100 p-8 text-center">
+                        <h1 className="text-lg font-bold text-zinc-900">
+                            Sign in to continue
+                        </h1>
+                        <p className="text-sm text-zinc-500 mt-2 leading-relaxed">
+                            Sign in again to see your updated joining status.
+                        </p>
+                        <Link
+                            href="/login"
+                            className="mt-6 inline-flex items-center gap-2 bg-accent-red hover:bg-zinc-900 text-white font-bold tracking-widest uppercase text-xs px-5 py-3 rounded-xl transition-colors"
+                        >
+                            Sign in
+                        </Link>
                     </div>
-                    <h1 className="text-lg font-bold text-zinc-900">
-                        {isSuccess ? "Payment received" : "Payment could not be completed"}
-                    </h1>
-                    <p className="text-sm text-zinc-500 mt-2 leading-relaxed">
-                        {isSuccess
-                            ? "Your payment was successful. Please sign in again to see your updated joining status."
-                            : (postPaymentReason ?? "Please sign in and try again.")}
-                    </p>
-                    <Link
-                        href="/login"
-                        className="mt-6 inline-flex items-center gap-2 bg-accent-red hover:bg-zinc-900 text-white font-bold tracking-widest uppercase text-xs px-5 py-3 rounded-xl transition-colors"
-                    >
-                        Sign in
-                    </Link>
-                </div>
+                )}
             </div>
         );
     }
@@ -110,39 +149,7 @@ export default function JoiningClient({
                 </p>
             </div>
 
-            {/* Post-payment banner */}
-            {postPaymentStatus === "success" && (
-                <motion.div
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="flex items-start gap-3 p-4 rounded-xl border border-emerald-300 bg-emerald-50"
-                >
-                    <CheckCircle2 size={18} className="flex-shrink-0 mt-0.5 text-emerald-700" />
-                    <div className="flex-1 min-w-0">
-                        <p className="text-sm font-bold text-emerald-800">Payment received.</p>
-                        <p className="text-xs text-emerald-700 mt-0.5 opacity-80">
-                            {member.joinStage === "JOINED"
-                                ? "You've joined JKA Bangladesh — full portal access is unlocked."
-                                : "Your fee is confirmed. See the next step below."}
-                        </p>
-                    </div>
-                </motion.div>
-            )}
-            {postPaymentStatus === "failed" && (
-                <motion.div
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="flex items-start gap-3 p-4 rounded-xl border border-red-300 bg-red-50"
-                >
-                    <AlertTriangle size={18} className="flex-shrink-0 mt-0.5 text-red-700" />
-                    <div className="flex-1 min-w-0">
-                        <p className="text-sm font-bold text-red-800">Payment could not be completed.</p>
-                        <p className="text-xs text-red-700 mt-0.5 opacity-80">
-                            {postPaymentReason ?? "Please try again."}
-                        </p>
-                    </div>
-                </motion.div>
-            )}
+            <JoiningPopup popup={popup} onClose={closePopup} />
 
             {/* Contextual alert */}
             {member.joinStage === "AWAITING_APPROVAL" && (
@@ -218,32 +225,15 @@ export default function JoiningClient({
 
             {/* Actions for the current step */}
             {member.joinStage === "FEE_UNPAID" && (
-                <TiltCard className="p-6">
-                    <div className="flex items-start gap-3">
-                        <CreditCard size={20} className="text-accent-red mt-1" />
-                        <div className="flex-1">
-                            <p className="text-sm font-bold text-zinc-900">
-                                Pay JKA membership fee — ৳{membershipFeeBDT.toLocaleString()}
-                            </p>
-                            <p className="text-xs text-zinc-500 mt-1">
-                                One-year membership. You&apos;ll be redirected to secure payment.
-                            </p>
-                            <form
-                                action={() => startMembership(async () => { await startMembershipPaymentAction(); })}
-                                className="mt-4"
-                            >
-                                <button
-                                    type="submit"
-                                    disabled={payingMembership}
-                                    className="inline-flex items-center gap-2 bg-accent-red hover:bg-zinc-900 text-white font-bold tracking-widest uppercase text-xs px-5 py-3 rounded-xl transition-colors disabled:opacity-60"
-                                >
-                                    {payingMembership ? <Loader2 size={14} className="animate-spin" /> : <CreditCard size={14} />}
-                                    Pay Now
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                </TiltCard>
+                <MembershipFeeCard
+                    membershipFeeBDT={membershipFeeBDT}
+                    paying={payingMembership}
+                    onPay={() =>
+                        startMembership(async () => {
+                            await startMembershipPaymentAction();
+                        })
+                    }
+                />
             )}
 
             {member.joinStage === "AWAITING_APPROVAL" && (
@@ -269,7 +259,7 @@ export default function JoiningClient({
                                 </a>
                                 {member.dojo && (
                                     <Link
-                                        href={`/dojos/${member.dojo.id}`}
+                                        href={`/branches/${member.dojo.id}`}
                                         className="inline-flex items-center gap-2 border border-zinc-200 hover:border-accent-red/30 text-zinc-700 font-bold tracking-widest uppercase text-xs px-5 py-3 rounded-xl transition-colors"
                                     >
                                         <MapPin size={14} />
@@ -283,34 +273,327 @@ export default function JoiningClient({
             )}
 
             {member.joinStage === "PAST_BELT_UNPAID" && (
-                <TiltCard className="p-6">
-                    <div className="flex items-start gap-3">
-                        <CreditCard size={20} className="text-accent-red mt-1" />
-                        <div className="flex-1">
-                            <p className="text-sm font-bold text-zinc-900">
-                                Pay past-belt fee — ৳{Number(member.pastBeltFeeBDT ?? 0).toLocaleString()}
-                            </p>
-                            <p className="text-xs text-zinc-500 mt-1">
-                                Requested rank: <span className="font-semibold">{member.requestedRank ?? "White Belt"}</span>
-                                {" · "}Confirmed by your dojo: <span className="font-semibold">{member.assignedRank ?? "White Belt"}</span>.
-                            </p>
-                            <form
-                                action={() => startPastBelt(async () => { await startPastBeltPaymentAction(); })}
-                                className="mt-4"
-                            >
-                                <button
-                                    type="submit"
-                                    disabled={payingPastBelt}
-                                    className="inline-flex items-center gap-2 bg-accent-red hover:bg-zinc-900 text-white font-bold tracking-widest uppercase text-xs px-5 py-3 rounded-xl transition-colors disabled:opacity-60"
-                                >
-                                    {payingPastBelt ? <Loader2 size={14} className="animate-spin" /> : <CreditCard size={14} />}
-                                    Pay Now
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                </TiltCard>
+                <PastBeltFeeCard
+                    pastBeltFeeBDT={Number(member.pastBeltFeeBDT ?? 0)}
+                    requestedRank={member.requestedRank}
+                    assignedRank={member.assignedRank}
+                    paying={payingPastBelt}
+                    onPay={() =>
+                        startPastBelt(async () => {
+                            await startPastBeltPaymentAction();
+                        })
+                    }
+                />
             )}
+        </div>
+    );
+}
+
+function successCopy(popup: { joinStage: JoinStage | null; authenticated: boolean }) {
+    if (!popup.authenticated) {
+        return {
+            eyebrow: "Payment successful",
+            heading: "Thank you!",
+            body: "Your payment was received. Sign in again to see your updated joining status.",
+        };
+    }
+    if (popup.joinStage === "JOINED") {
+        return {
+            eyebrow: "Payment successful",
+            heading: "You've joined JKA Bangladesh!",
+            body: "Your past-belt fee is confirmed and full portal access is now unlocked.",
+        };
+    }
+    if (popup.joinStage === "AWAITING_APPROVAL") {
+        return {
+            eyebrow: "Payment successful",
+            heading: "Thank you!",
+            body: "Your membership fee is confirmed. Download your joining slip and visit your dojo to continue.",
+        };
+    }
+    return {
+        eyebrow: "Payment successful",
+        heading: "Thank you!",
+        body: "Your fee is confirmed. See the next step below.",
+    };
+}
+
+function JoiningPopup({
+    popup,
+    onClose,
+    standalone = false,
+}: {
+    popup: Feedback;
+    onClose: () => void;
+    standalone?: boolean;
+}) {
+    return (
+        <AnimatePresence>
+            {popup && (
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="fixed inset-0 z-50 flex items-center justify-center bg-zinc-950/60 backdrop-blur-sm px-4"
+                    onClick={onClose}
+                >
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                        exit={{ opacity: 0, scale: 0.95 }}
+                        transition={{ type: "spring", stiffness: 220, damping: 22 }}
+                        className="relative w-full max-w-md rounded-2xl bg-white shadow-2xl overflow-hidden"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <button
+                            type="button"
+                            onClick={onClose}
+                            className="absolute top-3 right-3 p-1.5 rounded-full text-zinc-400 hover:text-zinc-900 hover:bg-zinc-100 transition"
+                            aria-label="Close"
+                        >
+                            <X size={16} />
+                        </button>
+                        {popup.kind === "success" ? (
+                            (() => {
+                                const copy = successCopy(popup);
+                                return (
+                                    <div className="p-8 text-center">
+                                        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 text-emerald-600 mb-4">
+                                            <CheckCircle2 size={36} />
+                                        </div>
+                                        <p className="text-[11px] uppercase tracking-[0.35em] text-emerald-600 mb-2">
+                                            {copy.eyebrow}
+                                        </p>
+                                        <h2 className="text-2xl font-bold text-zinc-900">
+                                            {copy.heading}
+                                        </h2>
+                                        <p className="mt-2 text-sm text-zinc-500">{copy.body}</p>
+                                        {standalone ? (
+                                            <Link
+                                                href="/login"
+                                                className="mt-6 w-full inline-flex items-center justify-center bg-zinc-900 hover:bg-accent-red text-white font-bold text-sm py-3 rounded-xl transition-colors"
+                                            >
+                                                Sign in
+                                            </Link>
+                                        ) : (
+                                            <button
+                                                type="button"
+                                                onClick={onClose}
+                                                className="mt-6 w-full inline-flex items-center justify-center bg-zinc-900 hover:bg-accent-red text-white font-bold text-sm py-3 rounded-xl transition-colors"
+                                            >
+                                                Done
+                                            </button>
+                                        )}
+                                    </div>
+                                );
+                            })()
+                        ) : (
+                            <div className="p-8 text-center">
+                                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-red-100 text-red-600 mb-4">
+                                    <XCircle size={36} />
+                                </div>
+                                <p className="text-[11px] uppercase tracking-[0.35em] text-red-600 mb-2">
+                                    Payment failed
+                                </p>
+                                <h2 className="text-2xl font-bold text-zinc-900">
+                                    Payment did not go through
+                                </h2>
+                                <p className="mt-2 text-sm text-zinc-500">{popup.reason}</p>
+                                {standalone ? (
+                                    <Link
+                                        href="/login"
+                                        className="mt-6 w-full inline-flex items-center justify-center bg-zinc-900 hover:bg-accent-red text-white font-bold text-sm py-3 rounded-xl transition-colors"
+                                    >
+                                        Sign in
+                                    </Link>
+                                ) : (
+                                    <button
+                                        type="button"
+                                        onClick={onClose}
+                                        className="mt-6 w-full inline-flex items-center justify-center bg-zinc-900 hover:bg-accent-red text-white font-bold text-sm py-3 rounded-xl transition-colors"
+                                    >
+                                        Try again
+                                    </button>
+                                )}
+                            </div>
+                        )}
+                    </motion.div>
+                </motion.div>
+            )}
+        </AnimatePresence>
+    );
+}
+
+function SecurityFooter() {
+    return (
+        <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.2 }}
+            className="flex items-center justify-center gap-2 text-xs text-zinc-400"
+        >
+            <Shield size={13} />
+            Secured by SSLCommerz · bKash · Nagad · Cards
+        </motion.div>
+    );
+}
+
+function MembershipFeeCard({
+    membershipFeeBDT,
+    paying,
+    onPay,
+}: {
+    membershipFeeBDT: number;
+    paying: boolean;
+    onPay: () => void;
+}) {
+    const validUntil = new Date();
+    validUntil.setFullYear(validUntil.getFullYear() + 1);
+
+    return (
+        <div className="space-y-6 max-w-lg">
+            <TiltCard delay={0.1} className="overflow-hidden">
+                <div className="px-6 py-5 border-b border-zinc-100">
+                    <h2 className="text-sm font-bold text-zinc-900 flex items-center gap-2">
+                        <RefreshCw size={15} className="text-accent-red" />
+                        Membership Summary
+                    </h2>
+                </div>
+
+                <div className="px-6 py-5 space-y-4">
+                    <div className="flex justify-between items-center text-sm">
+                        <span className="text-zinc-500">Annual Membership Fee</span>
+                        <span className="font-bold text-zinc-900">
+                            ৳{membershipFeeBDT.toLocaleString()}
+                        </span>
+                    </div>
+
+                    <div className="flex justify-between items-center text-sm">
+                        <span className="text-zinc-500 flex items-center gap-1.5">
+                            <Calendar size={13} /> Valid Until
+                        </span>
+                        <span className="font-semibold text-zinc-900">
+                            {validUntil.toLocaleDateString("en-GB", {
+                                day: "numeric",
+                                month: "long",
+                                year: "numeric",
+                            })}
+                        </span>
+                    </div>
+
+                    <div className="pt-2 border-t border-zinc-100 flex justify-between items-center">
+                        <span className="text-sm font-bold text-zinc-900">Total</span>
+                        <span className="text-lg font-bold text-accent-red">
+                            ৳{membershipFeeBDT.toLocaleString()}
+                        </span>
+                    </div>
+                </div>
+
+                <div className="px-6 pb-6">
+                    <form action={onPay}>
+                        <button
+                            type="submit"
+                            disabled={paying}
+                            className="w-full flex items-center justify-center gap-2.5 bg-zinc-900 hover:bg-accent-red text-white font-bold text-sm py-3.5 rounded-xl transition-colors disabled:opacity-60 shadow-sm"
+                        >
+                            {paying ? (
+                                <>
+                                    <Loader2 size={16} className="animate-spin" />
+                                    Preparing checkout…
+                                </>
+                            ) : (
+                                <>
+                                    <CreditCard size={16} />
+                                    Proceed to Payment
+                                </>
+                            )}
+                        </button>
+                    </form>
+                </div>
+            </TiltCard>
+
+            <SecurityFooter />
+        </div>
+    );
+}
+
+function PastBeltFeeCard({
+    pastBeltFeeBDT,
+    requestedRank,
+    assignedRank,
+    paying,
+    onPay,
+}: {
+    pastBeltFeeBDT: number;
+    requestedRank: string | null;
+    assignedRank: string | null;
+    paying: boolean;
+    onPay: () => void;
+}) {
+    return (
+        <div className="space-y-6 max-w-lg">
+            <TiltCard delay={0.1} className="overflow-hidden">
+                <div className="px-6 py-5 border-b border-zinc-100">
+                    <h2 className="text-sm font-bold text-zinc-900 flex items-center gap-2">
+                        <Award size={15} className="text-accent-red" />
+                        Past-belt Fee Summary
+                    </h2>
+                </div>
+
+                <div className="px-6 py-5 space-y-4">
+                    <div className="flex justify-between items-center text-sm">
+                        <span className="text-zinc-500">Requested Rank</span>
+                        <span className="font-semibold text-zinc-900">
+                            {requestedRank ?? "White Belt"}
+                        </span>
+                    </div>
+
+                    <div className="flex justify-between items-center text-sm">
+                        <span className="text-zinc-500">Confirmed by Dojo</span>
+                        <span className="font-semibold text-zinc-900">
+                            {assignedRank ?? "White Belt"}
+                        </span>
+                    </div>
+
+                    <div className="flex justify-between items-center text-sm">
+                        <span className="text-zinc-500">Past-belt Fee</span>
+                        <span className="font-bold text-zinc-900">
+                            ৳{pastBeltFeeBDT.toLocaleString()}
+                        </span>
+                    </div>
+
+                    <div className="pt-2 border-t border-zinc-100 flex justify-between items-center">
+                        <span className="text-sm font-bold text-zinc-900">Total</span>
+                        <span className="text-lg font-bold text-accent-red">
+                            ৳{pastBeltFeeBDT.toLocaleString()}
+                        </span>
+                    </div>
+                </div>
+
+                <div className="px-6 pb-6">
+                    <form action={onPay}>
+                        <button
+                            type="submit"
+                            disabled={paying}
+                            className="w-full flex items-center justify-center gap-2.5 bg-zinc-900 hover:bg-accent-red text-white font-bold text-sm py-3.5 rounded-xl transition-colors disabled:opacity-60 shadow-sm"
+                        >
+                            {paying ? (
+                                <>
+                                    <Loader2 size={16} className="animate-spin" />
+                                    Preparing checkout…
+                                </>
+                            ) : (
+                                <>
+                                    <CreditCard size={16} />
+                                    Proceed to Payment
+                                </>
+                            )}
+                        </button>
+                    </form>
+                </div>
+            </TiltCard>
+
+            <SecurityFooter />
         </div>
     );
 }

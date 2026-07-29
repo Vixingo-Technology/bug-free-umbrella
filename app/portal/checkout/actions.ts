@@ -42,7 +42,13 @@ export async function initiatePaymentAction(orderId: string) {
                 redirect(`/portal/joining?status=success&orderId=${orderId}&dev=1`);
             }
             if (order.includesMembership && !order.orderItems.length) {
-                redirect(`/portal/renew?status=success&orderId=${orderId}&dev=1`);
+                // The very first JKA fee continues the joining flow; later
+                // renewals land back on the renew page.
+                redirect(
+                    order.user.student?.joinStage === "FEE_UNPAID"
+                        ? `/portal/joining?status=success&orderId=${orderId}&dev=1`
+                        : `/portal/renew?status=success&orderId=${orderId}&dev=1`,
+                );
             }
             redirect(`/portal/payment-success?orderId=${orderId}&dev=1`);
         }
@@ -60,7 +66,9 @@ export async function initiatePaymentAction(orderId: string) {
             : order.includesPastBeltFee
                 ? `${appUrl}/portal/joining?status=failed&orderId=${orderId}`
                 : order.includesMembership
-                    ? `${appUrl}/portal/renew?status=failed&orderId=${orderId}`
+                    ? order.user.student?.joinStage === "FEE_UNPAID"
+                        ? `${appUrl}/portal/joining?status=failed&orderId=${orderId}`
+                        : `${appUrl}/portal/renew?status=failed&orderId=${orderId}`
                     : null;
         const failUrl = order.includesTransferRequest && transferReqId
             ? `${appUrl}/portal/transfer/failed?requestId=${transferReqId}`
