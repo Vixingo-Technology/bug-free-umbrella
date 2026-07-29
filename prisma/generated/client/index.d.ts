@@ -23307,8 +23307,18 @@ export namespace Prisma {
 
   export type AggregateGrading = {
     _count: GradingCountAggregateOutputType | null
+    _avg: GradingAvgAggregateOutputType | null
+    _sum: GradingSumAggregateOutputType | null
     _min: GradingMinAggregateOutputType | null
     _max: GradingMaxAggregateOutputType | null
+  }
+
+  export type GradingAvgAggregateOutputType = {
+    marks: number | null
+  }
+
+  export type GradingSumAggregateOutputType = {
+    marks: number | null
   }
 
   export type GradingMinAggregateOutputType = {
@@ -23318,6 +23328,7 @@ export namespace Prisma {
     fromRankId: string | null
     toRankId: string | null
     result: $Enums.GradingResult | null
+    marks: number | null
     certificateUrl: string | null
     notes: string | null
     createdAt: Date | null
@@ -23331,6 +23342,7 @@ export namespace Prisma {
     fromRankId: string | null
     toRankId: string | null
     result: $Enums.GradingResult | null
+    marks: number | null
     certificateUrl: string | null
     notes: string | null
     createdAt: Date | null
@@ -23344,6 +23356,7 @@ export namespace Prisma {
     fromRankId: number
     toRankId: number
     result: number
+    marks: number
     certificateUrl: number
     notes: number
     createdAt: number
@@ -23352,6 +23365,14 @@ export namespace Prisma {
   }
 
 
+  export type GradingAvgAggregateInputType = {
+    marks?: true
+  }
+
+  export type GradingSumAggregateInputType = {
+    marks?: true
+  }
+
   export type GradingMinAggregateInputType = {
     id?: true
     studentId?: true
@@ -23359,6 +23380,7 @@ export namespace Prisma {
     fromRankId?: true
     toRankId?: true
     result?: true
+    marks?: true
     certificateUrl?: true
     notes?: true
     createdAt?: true
@@ -23372,6 +23394,7 @@ export namespace Prisma {
     fromRankId?: true
     toRankId?: true
     result?: true
+    marks?: true
     certificateUrl?: true
     notes?: true
     createdAt?: true
@@ -23385,6 +23408,7 @@ export namespace Prisma {
     fromRankId?: true
     toRankId?: true
     result?: true
+    marks?: true
     certificateUrl?: true
     notes?: true
     createdAt?: true
@@ -23430,6 +23454,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: GradingAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: GradingSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: GradingMinAggregateInputType
@@ -23460,6 +23496,8 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: GradingCountAggregateInputType | true
+    _avg?: GradingAvgAggregateInputType
+    _sum?: GradingSumAggregateInputType
     _min?: GradingMinAggregateInputType
     _max?: GradingMaxAggregateInputType
   }
@@ -23471,11 +23509,14 @@ export namespace Prisma {
     fromRankId: string | null
     toRankId: string | null
     result: $Enums.GradingResult
+    marks: number | null
     certificateUrl: string | null
     notes: string | null
     createdAt: Date
     updatedAt: Date
     _count: GradingCountAggregateOutputType | null
+    _avg: GradingAvgAggregateOutputType | null
+    _sum: GradingSumAggregateOutputType | null
     _min: GradingMinAggregateOutputType | null
     _max: GradingMaxAggregateOutputType | null
   }
@@ -23501,6 +23542,7 @@ export namespace Prisma {
     fromRankId?: boolean
     toRankId?: boolean
     result?: boolean
+    marks?: boolean
     certificateUrl?: boolean
     notes?: boolean
     createdAt?: boolean
@@ -23520,6 +23562,7 @@ export namespace Prisma {
     fromRankId?: boolean
     toRankId?: boolean
     result?: boolean
+    marks?: boolean
     certificateUrl?: boolean
     notes?: boolean
     createdAt?: boolean
@@ -23537,6 +23580,7 @@ export namespace Prisma {
     fromRankId?: boolean
     toRankId?: boolean
     result?: boolean
+    marks?: boolean
     certificateUrl?: boolean
     notes?: boolean
     createdAt?: boolean
@@ -23554,13 +23598,14 @@ export namespace Prisma {
     fromRankId?: boolean
     toRankId?: boolean
     result?: boolean
+    marks?: boolean
     certificateUrl?: boolean
     notes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type GradingOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "studentId" | "gradingEventId" | "fromRankId" | "toRankId" | "result" | "certificateUrl" | "notes" | "createdAt" | "updatedAt", ExtArgs["result"]["grading"]>
+  export type GradingOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "studentId" | "gradingEventId" | "fromRankId" | "toRankId" | "result" | "marks" | "certificateUrl" | "notes" | "createdAt" | "updatedAt", ExtArgs["result"]["grading"]>
   export type GradingInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     student?: boolean | StudentDefaultArgs<ExtArgs>
     gradingEvent?: boolean | Grading$gradingEventArgs<ExtArgs>
@@ -23598,6 +23643,7 @@ export namespace Prisma {
       fromRankId: string | null
       toRankId: string | null
       result: $Enums.GradingResult
+      marks: number | null
       certificateUrl: string | null
       notes: string | null
       createdAt: Date
@@ -24036,6 +24082,7 @@ export namespace Prisma {
     readonly fromRankId: FieldRef<"Grading", 'String'>
     readonly toRankId: FieldRef<"Grading", 'String'>
     readonly result: FieldRef<"Grading", 'GradingResult'>
+    readonly marks: FieldRef<"Grading", 'Int'>
     readonly certificateUrl: FieldRef<"Grading", 'String'>
     readonly notes: FieldRef<"Grading", 'String'>
     readonly createdAt: FieldRef<"Grading", 'DateTime'>
@@ -48153,6 +48200,7 @@ export namespace Prisma {
     fromRankId: 'fromRankId',
     toRankId: 'toRankId',
     result: 'result',
+    marks: 'marks',
     certificateUrl: 'certificateUrl',
     notes: 'notes',
     createdAt: 'createdAt',
@@ -50100,6 +50148,7 @@ export namespace Prisma {
     fromRankId?: UuidNullableFilter<"Grading"> | string | null
     toRankId?: UuidNullableFilter<"Grading"> | string | null
     result?: EnumGradingResultFilter<"Grading"> | $Enums.GradingResult
+    marks?: IntNullableFilter<"Grading"> | number | null
     certificateUrl?: StringNullableFilter<"Grading"> | string | null
     notes?: StringNullableFilter<"Grading"> | string | null
     createdAt?: DateTimeFilter<"Grading"> | Date | string
@@ -50118,6 +50167,7 @@ export namespace Prisma {
     fromRankId?: SortOrderInput | SortOrder
     toRankId?: SortOrderInput | SortOrder
     result?: SortOrder
+    marks?: SortOrderInput | SortOrder
     certificateUrl?: SortOrderInput | SortOrder
     notes?: SortOrderInput | SortOrder
     createdAt?: SortOrder
@@ -50139,6 +50189,7 @@ export namespace Prisma {
     fromRankId?: UuidNullableFilter<"Grading"> | string | null
     toRankId?: UuidNullableFilter<"Grading"> | string | null
     result?: EnumGradingResultFilter<"Grading"> | $Enums.GradingResult
+    marks?: IntNullableFilter<"Grading"> | number | null
     certificateUrl?: StringNullableFilter<"Grading"> | string | null
     notes?: StringNullableFilter<"Grading"> | string | null
     createdAt?: DateTimeFilter<"Grading"> | Date | string
@@ -50157,13 +50208,16 @@ export namespace Prisma {
     fromRankId?: SortOrderInput | SortOrder
     toRankId?: SortOrderInput | SortOrder
     result?: SortOrder
+    marks?: SortOrderInput | SortOrder
     certificateUrl?: SortOrderInput | SortOrder
     notes?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: GradingCountOrderByAggregateInput
+    _avg?: GradingAvgOrderByAggregateInput
     _max?: GradingMaxOrderByAggregateInput
     _min?: GradingMinOrderByAggregateInput
+    _sum?: GradingSumOrderByAggregateInput
   }
 
   export type GradingScalarWhereWithAggregatesInput = {
@@ -50176,6 +50230,7 @@ export namespace Prisma {
     fromRankId?: UuidNullableWithAggregatesFilter<"Grading"> | string | null
     toRankId?: UuidNullableWithAggregatesFilter<"Grading"> | string | null
     result?: EnumGradingResultWithAggregatesFilter<"Grading"> | $Enums.GradingResult
+    marks?: IntNullableWithAggregatesFilter<"Grading"> | number | null
     certificateUrl?: StringNullableWithAggregatesFilter<"Grading"> | string | null
     notes?: StringNullableWithAggregatesFilter<"Grading"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Grading"> | Date | string
@@ -53391,6 +53446,7 @@ export namespace Prisma {
   export type GradingCreateInput = {
     id?: string
     result?: $Enums.GradingResult
+    marks?: number | null
     certificateUrl?: string | null
     notes?: string | null
     createdAt?: Date | string
@@ -53409,6 +53465,7 @@ export namespace Prisma {
     fromRankId?: string | null
     toRankId?: string | null
     result?: $Enums.GradingResult
+    marks?: number | null
     certificateUrl?: string | null
     notes?: string | null
     createdAt?: Date | string
@@ -53419,6 +53476,7 @@ export namespace Prisma {
   export type GradingUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     result?: EnumGradingResultFieldUpdateOperationsInput | $Enums.GradingResult
+    marks?: NullableIntFieldUpdateOperationsInput | number | null
     certificateUrl?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -53437,6 +53495,7 @@ export namespace Prisma {
     fromRankId?: NullableStringFieldUpdateOperationsInput | string | null
     toRankId?: NullableStringFieldUpdateOperationsInput | string | null
     result?: EnumGradingResultFieldUpdateOperationsInput | $Enums.GradingResult
+    marks?: NullableIntFieldUpdateOperationsInput | number | null
     certificateUrl?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -53451,6 +53510,7 @@ export namespace Prisma {
     fromRankId?: string | null
     toRankId?: string | null
     result?: $Enums.GradingResult
+    marks?: number | null
     certificateUrl?: string | null
     notes?: string | null
     createdAt?: Date | string
@@ -53460,6 +53520,7 @@ export namespace Prisma {
   export type GradingUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     result?: EnumGradingResultFieldUpdateOperationsInput | $Enums.GradingResult
+    marks?: NullableIntFieldUpdateOperationsInput | number | null
     certificateUrl?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -53473,6 +53534,7 @@ export namespace Prisma {
     fromRankId?: NullableStringFieldUpdateOperationsInput | string | null
     toRankId?: NullableStringFieldUpdateOperationsInput | string | null
     result?: EnumGradingResultFieldUpdateOperationsInput | $Enums.GradingResult
+    marks?: NullableIntFieldUpdateOperationsInput | number | null
     certificateUrl?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -56637,6 +56699,17 @@ export namespace Prisma {
     not?: NestedEnumGradingResultFilter<$PrismaModel> | $Enums.GradingResult
   }
 
+  export type IntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
   export type GradingCountOrderByAggregateInput = {
     id?: SortOrder
     studentId?: SortOrder
@@ -56644,10 +56717,15 @@ export namespace Prisma {
     fromRankId?: SortOrder
     toRankId?: SortOrder
     result?: SortOrder
+    marks?: SortOrder
     certificateUrl?: SortOrder
     notes?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type GradingAvgOrderByAggregateInput = {
+    marks?: SortOrder
   }
 
   export type GradingMaxOrderByAggregateInput = {
@@ -56657,6 +56735,7 @@ export namespace Prisma {
     fromRankId?: SortOrder
     toRankId?: SortOrder
     result?: SortOrder
+    marks?: SortOrder
     certificateUrl?: SortOrder
     notes?: SortOrder
     createdAt?: SortOrder
@@ -56670,10 +56749,15 @@ export namespace Prisma {
     fromRankId?: SortOrder
     toRankId?: SortOrder
     result?: SortOrder
+    marks?: SortOrder
     certificateUrl?: SortOrder
     notes?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type GradingSumOrderByAggregateInput = {
+    marks?: SortOrder
   }
 
   export type EnumGradingResultWithAggregatesFilter<$PrismaModel = never> = {
@@ -56684,6 +56768,22 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumGradingResultFilter<$PrismaModel>
     _max?: NestedEnumGradingResultFilter<$PrismaModel>
+  }
+
+  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
   export type EnumCertificateRequestStatusFilter<$PrismaModel = never> = {
@@ -56863,17 +56963,6 @@ export namespace Prisma {
     transferFeeBDT?: SortOrder
   }
 
-  export type IntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
-  }
-
   export type EnumEventCategoryFilter<$PrismaModel = never> = {
     equals?: $Enums.EventCategory | EnumEventCategoryFieldRefInput<$PrismaModel>
     in?: $Enums.EventCategory[] | ListEnumEventCategoryFieldRefInput<$PrismaModel>
@@ -56979,22 +57068,6 @@ export namespace Prisma {
     maxCapacity?: SortOrder
     ticketPrice?: SortOrder
     minAge?: SortOrder
-  }
-
-  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
   export type EnumEventCategoryWithAggregatesFilter<$PrismaModel = never> = {
@@ -60465,6 +60538,14 @@ export namespace Prisma {
     set?: $Enums.GradingResult
   }
 
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
   export type StudentUpdateOneRequiredWithoutGradingsNestedInput = {
     create?: XOR<StudentCreateWithoutGradingsInput, StudentUncheckedCreateWithoutGradingsInput>
     connectOrCreate?: StudentCreateOrConnectWithoutGradingsInput
@@ -60631,14 +60712,6 @@ export namespace Prisma {
     connectOrCreate?: EventRegistrationCreateOrConnectWithoutEventInput | EventRegistrationCreateOrConnectWithoutEventInput[]
     createMany?: EventRegistrationCreateManyEventInputEnvelope
     connect?: EventRegistrationWhereUniqueInput | EventRegistrationWhereUniqueInput[]
-  }
-
-  export type NullableIntFieldUpdateOperationsInput = {
-    set?: number | null
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
   }
 
   export type EnumEventCategoryFieldUpdateOperationsInput = {
@@ -62271,6 +62344,22 @@ export namespace Prisma {
     _max?: NestedEnumGradingResultFilter<$PrismaModel>
   }
 
+  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
   export type NestedEnumCertificateRequestStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.CertificateRequestStatus | EnumCertificateRequestStatusFieldRefInput<$PrismaModel>
     in?: $Enums.CertificateRequestStatus[] | ListEnumCertificateRequestStatusFieldRefInput<$PrismaModel>
@@ -62334,22 +62423,6 @@ export namespace Prisma {
     in?: $Enums.EventParticipantType[] | ListEnumEventParticipantTypeFieldRefInput<$PrismaModel>
     notIn?: $Enums.EventParticipantType[] | ListEnumEventParticipantTypeFieldRefInput<$PrismaModel>
     not?: NestedEnumEventParticipantTypeFilter<$PrismaModel> | $Enums.EventParticipantType
-  }
-
-  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
   export type NestedEnumEventCategoryWithAggregatesFilter<$PrismaModel = never> = {
@@ -64422,6 +64495,7 @@ export namespace Prisma {
   export type GradingCreateWithoutStudentInput = {
     id?: string
     result?: $Enums.GradingResult
+    marks?: number | null
     certificateUrl?: string | null
     notes?: string | null
     createdAt?: Date | string
@@ -64438,6 +64512,7 @@ export namespace Prisma {
     fromRankId?: string | null
     toRankId?: string | null
     result?: $Enums.GradingResult
+    marks?: number | null
     certificateUrl?: string | null
     notes?: string | null
     createdAt?: Date | string
@@ -64815,6 +64890,7 @@ export namespace Prisma {
     fromRankId?: UuidNullableFilter<"Grading"> | string | null
     toRankId?: UuidNullableFilter<"Grading"> | string | null
     result?: EnumGradingResultFilter<"Grading"> | $Enums.GradingResult
+    marks?: IntNullableFilter<"Grading"> | number | null
     certificateUrl?: StringNullableFilter<"Grading"> | string | null
     notes?: StringNullableFilter<"Grading"> | string | null
     createdAt?: DateTimeFilter<"Grading"> | Date | string
@@ -65943,6 +66019,7 @@ export namespace Prisma {
   export type GradingCreateWithoutFromRankInput = {
     id?: string
     result?: $Enums.GradingResult
+    marks?: number | null
     certificateUrl?: string | null
     notes?: string | null
     createdAt?: Date | string
@@ -65959,6 +66036,7 @@ export namespace Prisma {
     gradingEventId?: string | null
     toRankId?: string | null
     result?: $Enums.GradingResult
+    marks?: number | null
     certificateUrl?: string | null
     notes?: string | null
     createdAt?: Date | string
@@ -65979,6 +66057,7 @@ export namespace Prisma {
   export type GradingCreateWithoutToRankInput = {
     id?: string
     result?: $Enums.GradingResult
+    marks?: number | null
     certificateUrl?: string | null
     notes?: string | null
     createdAt?: Date | string
@@ -65995,6 +66074,7 @@ export namespace Prisma {
     gradingEventId?: string | null
     fromRankId?: string | null
     result?: $Enums.GradingResult
+    marks?: number | null
     certificateUrl?: string | null
     notes?: string | null
     createdAt?: Date | string
@@ -67442,6 +67522,7 @@ export namespace Prisma {
   export type GradingCreateWithoutGradingEventInput = {
     id?: string
     result?: $Enums.GradingResult
+    marks?: number | null
     certificateUrl?: string | null
     notes?: string | null
     createdAt?: Date | string
@@ -67458,6 +67539,7 @@ export namespace Prisma {
     fromRankId?: string | null
     toRankId?: string | null
     result?: $Enums.GradingResult
+    marks?: number | null
     certificateUrl?: string | null
     notes?: string | null
     createdAt?: Date | string
@@ -68197,6 +68279,7 @@ export namespace Prisma {
   export type GradingCreateWithoutCertificateRequestsInput = {
     id?: string
     result?: $Enums.GradingResult
+    marks?: number | null
     certificateUrl?: string | null
     notes?: string | null
     createdAt?: Date | string
@@ -68214,6 +68297,7 @@ export namespace Prisma {
     fromRankId?: string | null
     toRankId?: string | null
     result?: $Enums.GradingResult
+    marks?: number | null
     certificateUrl?: string | null
     notes?: string | null
     createdAt?: Date | string
@@ -68410,6 +68494,7 @@ export namespace Prisma {
   export type GradingUpdateWithoutCertificateRequestsInput = {
     id?: StringFieldUpdateOperationsInput | string
     result?: EnumGradingResultFieldUpdateOperationsInput | $Enums.GradingResult
+    marks?: NullableIntFieldUpdateOperationsInput | number | null
     certificateUrl?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -68427,6 +68512,7 @@ export namespace Prisma {
     fromRankId?: NullableStringFieldUpdateOperationsInput | string | null
     toRankId?: NullableStringFieldUpdateOperationsInput | string | null
     result?: EnumGradingResultFieldUpdateOperationsInput | $Enums.GradingResult
+    marks?: NullableIntFieldUpdateOperationsInput | number | null
     certificateUrl?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -75220,6 +75306,7 @@ export namespace Prisma {
     fromRankId?: string | null
     toRankId?: string | null
     result?: $Enums.GradingResult
+    marks?: number | null
     certificateUrl?: string | null
     notes?: string | null
     createdAt?: Date | string
@@ -75295,6 +75382,7 @@ export namespace Prisma {
   export type GradingUpdateWithoutStudentInput = {
     id?: StringFieldUpdateOperationsInput | string
     result?: EnumGradingResultFieldUpdateOperationsInput | $Enums.GradingResult
+    marks?: NullableIntFieldUpdateOperationsInput | number | null
     certificateUrl?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -75311,6 +75399,7 @@ export namespace Prisma {
     fromRankId?: NullableStringFieldUpdateOperationsInput | string | null
     toRankId?: NullableStringFieldUpdateOperationsInput | string | null
     result?: EnumGradingResultFieldUpdateOperationsInput | $Enums.GradingResult
+    marks?: NullableIntFieldUpdateOperationsInput | number | null
     certificateUrl?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -75324,6 +75413,7 @@ export namespace Prisma {
     fromRankId?: NullableStringFieldUpdateOperationsInput | string | null
     toRankId?: NullableStringFieldUpdateOperationsInput | string | null
     result?: EnumGradingResultFieldUpdateOperationsInput | $Enums.GradingResult
+    marks?: NullableIntFieldUpdateOperationsInput | number | null
     certificateUrl?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -75536,6 +75626,7 @@ export namespace Prisma {
     gradingEventId?: string | null
     toRankId?: string | null
     result?: $Enums.GradingResult
+    marks?: number | null
     certificateUrl?: string | null
     notes?: string | null
     createdAt?: Date | string
@@ -75548,6 +75639,7 @@ export namespace Prisma {
     gradingEventId?: string | null
     fromRankId?: string | null
     result?: $Enums.GradingResult
+    marks?: number | null
     certificateUrl?: string | null
     notes?: string | null
     createdAt?: Date | string
@@ -75603,6 +75695,7 @@ export namespace Prisma {
   export type GradingUpdateWithoutFromRankInput = {
     id?: StringFieldUpdateOperationsInput | string
     result?: EnumGradingResultFieldUpdateOperationsInput | $Enums.GradingResult
+    marks?: NullableIntFieldUpdateOperationsInput | number | null
     certificateUrl?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -75619,6 +75712,7 @@ export namespace Prisma {
     gradingEventId?: NullableStringFieldUpdateOperationsInput | string | null
     toRankId?: NullableStringFieldUpdateOperationsInput | string | null
     result?: EnumGradingResultFieldUpdateOperationsInput | $Enums.GradingResult
+    marks?: NullableIntFieldUpdateOperationsInput | number | null
     certificateUrl?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -75632,6 +75726,7 @@ export namespace Prisma {
     gradingEventId?: NullableStringFieldUpdateOperationsInput | string | null
     toRankId?: NullableStringFieldUpdateOperationsInput | string | null
     result?: EnumGradingResultFieldUpdateOperationsInput | $Enums.GradingResult
+    marks?: NullableIntFieldUpdateOperationsInput | number | null
     certificateUrl?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -75641,6 +75736,7 @@ export namespace Prisma {
   export type GradingUpdateWithoutToRankInput = {
     id?: StringFieldUpdateOperationsInput | string
     result?: EnumGradingResultFieldUpdateOperationsInput | $Enums.GradingResult
+    marks?: NullableIntFieldUpdateOperationsInput | number | null
     certificateUrl?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -75657,6 +75753,7 @@ export namespace Prisma {
     gradingEventId?: NullableStringFieldUpdateOperationsInput | string | null
     fromRankId?: NullableStringFieldUpdateOperationsInput | string | null
     result?: EnumGradingResultFieldUpdateOperationsInput | $Enums.GradingResult
+    marks?: NullableIntFieldUpdateOperationsInput | number | null
     certificateUrl?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -75670,6 +75767,7 @@ export namespace Prisma {
     gradingEventId?: NullableStringFieldUpdateOperationsInput | string | null
     fromRankId?: NullableStringFieldUpdateOperationsInput | string | null
     result?: EnumGradingResultFieldUpdateOperationsInput | $Enums.GradingResult
+    marks?: NullableIntFieldUpdateOperationsInput | number | null
     certificateUrl?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -76706,6 +76804,7 @@ export namespace Prisma {
     fromRankId?: string | null
     toRankId?: string | null
     result?: $Enums.GradingResult
+    marks?: number | null
     certificateUrl?: string | null
     notes?: string | null
     createdAt?: Date | string
@@ -76725,6 +76824,7 @@ export namespace Prisma {
   export type GradingUpdateWithoutGradingEventInput = {
     id?: StringFieldUpdateOperationsInput | string
     result?: EnumGradingResultFieldUpdateOperationsInput | $Enums.GradingResult
+    marks?: NullableIntFieldUpdateOperationsInput | number | null
     certificateUrl?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -76741,6 +76841,7 @@ export namespace Prisma {
     fromRankId?: NullableStringFieldUpdateOperationsInput | string | null
     toRankId?: NullableStringFieldUpdateOperationsInput | string | null
     result?: EnumGradingResultFieldUpdateOperationsInput | $Enums.GradingResult
+    marks?: NullableIntFieldUpdateOperationsInput | number | null
     certificateUrl?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -76754,6 +76855,7 @@ export namespace Prisma {
     fromRankId?: NullableStringFieldUpdateOperationsInput | string | null
     toRankId?: NullableStringFieldUpdateOperationsInput | string | null
     result?: EnumGradingResultFieldUpdateOperationsInput | $Enums.GradingResult
+    marks?: NullableIntFieldUpdateOperationsInput | number | null
     certificateUrl?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string

@@ -32,6 +32,7 @@ export default async function EventDetailPage({
           id: true,
           studentId: true,
           result: true,
+          marks: true,
           notes: true,
           toRankId: true,
           fromRankId: true,
@@ -43,6 +44,7 @@ export default async function EventDetailPage({
 
   return (
     <EventDetailClient
+      viewerRole={session.role}
       event={{
         id: event.id,
         name: event.name,

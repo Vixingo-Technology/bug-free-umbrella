@@ -254,9 +254,25 @@ export async function updateScheduledExamAction(input: {
 
 export type DraftResultRow = {
   studentId: string;
-  result: GradingResult; // PASSED | FAILED | ABSENT
+  /** Marks 0..100, or null when the candidate was ABSENT. */
+  marks: number | null;
+  /** ABSENT overrides marks; PASSED/FAILED are derived from marks otherwise. */
+  absent?: boolean;
   reviewNotes?: string | null;
 };
+
+function resultForRow(row: DraftResultRow): GradingResult {
+  if (row.absent) return "ABSENT";
+  if (row.marks == null) return "ABSENT";
+  return row.marks >= 50 ? "PASSED" : "FAILED";
+}
+
+function normalizeMarks(row: DraftResultRow): number | null {
+  if (row.absent) return null;
+  if (row.marks == null) return null;
+  if (Number.isNaN(row.marks)) return null;
+  return Math.max(0, Math.min(100, Math.round(row.marks)));
+}
 
 /**
  * Upsert per-student draft Gradings on a scheduled (and not-yet-published)
@@ -288,8 +304,10 @@ export async function upsertDraftResultsAction(input: {
           where: { name: app.student.currentRank },
         });
 
+        const result = resultForRow(row);
+        const marks = normalizeMarks(row);
         const toRankId =
-          row.result === "PASSED" ? app.targetRankId : fromRank?.id ?? null;
+          result === "PASSED" ? app.targetRankId : fromRank?.id ?? null;
 
         // One Grading per (student, event). Find existing draft if any.
         const existing = await tx.grading.findFirst({
@@ -300,7 +318,8 @@ export async function upsertDraftResultsAction(input: {
           await tx.grading.update({
             where: { id: existing.id },
             data: {
-              result: row.result,
+              result,
+              marks,
               fromRankId: fromRank?.id ?? null,
               toRankId,
               notes: row.reviewNotes?.trim() || null,
@@ -311,7 +330,8 @@ export async function upsertDraftResultsAction(input: {
             data: {
               studentId: row.studentId,
               gradingEventId: event.id,
-              result: row.result,
+              result,
+              marks,
               fromRankId: fromRank?.id ?? null,
               toRankId,
               notes: row.reviewNotes?.trim() || null,
@@ -365,6 +385,13 @@ export async function publishResultsAction(input: {
         }
       }
 
+      // Non-absent rows must carry marks 0..100.
+      for (const g of gradings) {
+        if (g.result !== "ABSENT" && (g.marks == null || g.marks < 0 || g.marks > 100)) {
+          throw new Error("Enter marks (0-100) for every present candidate before publishing.");
+        }
+      }
+
       // Apply rank changes for PASSED + build the in-app notification fan-out.
       const notifData: Array<{
         userId: string;
@@ -412,4 +439,111 @@ export async function publishResultsAction(input: {
   revalidatePath("/portal/grading");
   revalidatePath("/portal");
   return { success: true, published: publishedCount };
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Post-publish mark override (DOJO_OWNER only)
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Amend a graded row after results have been published. Restricted to the
+ * Dojo Owner. Rebuilds toRank / student.currentRank when the pass/fail flips.
+ *
+ * The event's `resultsPublishedAt` is left in place — this is an amendment,
+ * not a re-publish — and no student notification is sent (kept as a manual
+ * correction workflow).
+ */
+export async function updatePublishedMarksAction(input: {
+  eventId: string;
+  rows: DraftResultRow[];
+}): Promise<{ success: true; updated: number } | { error: string }> {
+  const session = await requireDojoRole("DOJO_OWNER");
+  if (!session.dojo) return { error: "Your dojo is not set up yet." };
+
+  let updatedCount = 0;
+
+  try {
+    updatedCount = await prisma.$transaction(async (tx) => {
+      const event = await tx.gradingEvent.findFirst({
+        where: {
+          id: input.eventId,
+          applications: { some: { student: { dojoId: session.dojo!.id } } },
+        },
+        include: {
+          applications: { include: { student: { include: { user: true } }, targetRank: true } },
+        },
+      });
+      if (!event) throw new Error("Belt test not found in your dojo.");
+
+      const appByStudent = new Map(event.applications.map((a) => [a.studentId, a]));
+      let count = 0;
+
+      for (const row of input.rows) {
+        const app = appByStudent.get(row.studentId);
+        if (!app) continue;
+
+        const existing = await tx.grading.findFirst({
+          where: { studentId: row.studentId, gradingEventId: event.id },
+          include: { toRank: true, fromRank: true },
+        });
+        if (!existing) continue;
+
+        const result = resultForRow(row);
+        const marks = normalizeMarks(row);
+
+        // Rebuild toRank: PASSED promotes to the app's target, otherwise stays
+        // on fromRank. If we can't resolve a fromRank, fall back to whatever
+        // the row already carried.
+        let fromRankId = existing.fromRankId;
+        if (!fromRankId) {
+          const fromRank = await tx.beltRank.findUnique({ where: { name: app.student.currentRank } });
+          fromRankId = fromRank?.id ?? null;
+        }
+        const toRankId = result === "PASSED" ? app.targetRankId : fromRankId;
+
+        await tx.grading.update({
+          where: { id: existing.id },
+          data: {
+            result,
+            marks,
+            toRankId,
+            notes: row.reviewNotes?.trim() || null,
+          },
+        });
+
+        // If the pass/fail flipped, correct the student's currentRank.
+        const wasPassed = existing.result === "PASSED";
+        const nowPassed = result === "PASSED";
+        if (wasPassed && !nowPassed) {
+          // Revert to the from-rank if we know it.
+          if (existing.fromRank?.name) {
+            await tx.student.update({
+              where: { id: row.studentId },
+              data: { currentRank: existing.fromRank.name },
+            });
+          }
+        } else if (!wasPassed && nowPassed && toRankId) {
+          const toRank = await tx.beltRank.findUnique({ where: { id: toRankId } });
+          if (toRank?.name) {
+            await tx.student.update({
+              where: { id: row.studentId },
+              data: { currentRank: toRank.name },
+            });
+          }
+        }
+
+        count += 1;
+      }
+
+      return count;
+    });
+  } catch (err: unknown) {
+    return { error: err instanceof Error ? err.message : "Failed to update results." };
+  }
+
+  revalidatePath("/portal/dojo/gradings");
+  revalidatePath(`/portal/dojo/gradings/${input.eventId}`);
+  revalidatePath("/portal/grading");
+  revalidatePath("/portal");
+  return { success: true, updated: updatedCount };
 }

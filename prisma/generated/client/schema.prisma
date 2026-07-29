@@ -544,6 +544,7 @@ model Grading {
   fromRankId     String?       @map("from_rank_id") @db.Uuid
   toRankId       String?       @map("to_rank_id") @db.Uuid
   result         GradingResult @default(PASSED)
+  marks          Int?          @db.SmallInt
   certificateUrl String?       @map("certificate_url")
   notes          String?
 

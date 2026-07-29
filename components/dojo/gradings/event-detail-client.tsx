@@ -11,13 +11,17 @@ import {
   CalendarSync,
   Save,
   Send,
+  ShieldCheck,
   XCircle,
 } from "lucide-react";
 import {
   updateScheduledExamAction,
   upsertDraftResultsAction,
   publishResultsAction,
+  updatePublishedMarksAction,
 } from "@/app/portal/dojo/gradings/actions";
+import { bandForMarks } from "@/lib/grading-marks";
+import type { DojoRole } from "@/lib/dojo-roles";
 
 type Event = {
   id: string;
@@ -44,25 +48,38 @@ type Grading = {
   id: string;
   memberId: string;
   result: "PASSED" | "FAILED" | "ABSENT";
+  marks: number | null;
   notes: string | null;
   toRankId: string | null;
   fromRankId: string | null;
 };
 
-type ResultDraft = Record<string, { result: "PASSED" | "FAILED" | "ABSENT"; reviewNotes: string }>;
+type RowDraft = {
+  marks: number | null;
+  absent: boolean;
+  reviewNotes: string;
+};
+
+type ResultDraft = Record<string, RowDraft>;
 
 export default function EventDetailClient({
+  viewerRole,
   event,
   applications,
   gradings,
 }: {
+  viewerRole: DojoRole;
   event: Event;
   applications: Application[];
   gradings: Grading[];
 }) {
   const isCancelled = !!event.cancelledAt;
   const isPublished = !!event.resultsPublishedAt;
-  const readOnly = isCancelled || isPublished;
+  const isOwner = viewerRole === "DOJO_OWNER";
+
+  // Cancelled events are always read-only. Published events are read-only for
+  // everyone except the Dojo Owner, who can amend marks after the fact.
+  const readOnly = isCancelled || (isPublished && !isOwner);
 
   const enrolled = applications.filter((a) => a.status === "APPROVED" || a.status === "CANCELLED");
 
@@ -71,7 +88,8 @@ export default function EventDetailClient({
     for (const a of enrolled) {
       const g = gradings.find((x) => x.memberId === a.memberId);
       m[a.memberId] = {
-        result: g?.result ?? "PASSED",
+        marks: g?.marks ?? null,
+        absent: g?.result === "ABSENT",
         reviewNotes: g?.notes ?? "",
       };
     }
@@ -93,7 +111,7 @@ export default function EventDetailClient({
         </Link>
       </div>
 
-      <EventHeaderCard event={event} readOnly={readOnly} />
+      <EventHeaderCard event={event} readOnly={readOnly || isPublished} />
 
       {isCancelled && (
         <Banner kind="muted">
@@ -101,9 +119,14 @@ export default function EventDetailClient({
           {event.cancelReason ? ` — ${event.cancelReason}` : ""}.
         </Banner>
       )}
-      {isPublished && (
+      {isPublished && !isOwner && (
         <Banner kind="ok">
           Results published on {fmtDateTime(event.resultsPublishedAt!)}. No further edits allowed.
+        </Banner>
+      )}
+      {isPublished && isOwner && (
+        <Banner kind="owner">
+          Results published on {fmtDateTime(event.resultsPublishedAt!)}. As Dojo Head, you can still amend marks.
         </Banner>
       )}
 
@@ -113,6 +136,8 @@ export default function EventDetailClient({
         setDraft={setDraft}
         eventId={event.id}
         readOnly={readOnly}
+        isPublished={isPublished}
+        isOwner={isOwner}
       />
     </>
   );
@@ -236,33 +261,56 @@ function ResultsSection({
   setDraft,
   eventId,
   readOnly,
+  isPublished,
+  isOwner,
 }: {
   applications: Application[];
   draft: ResultDraft;
   setDraft: (next: ResultDraft) => void;
   eventId: string;
   readOnly: boolean;
+  isPublished: boolean;
+  isOwner: boolean;
 }) {
   const [savingDraft, startSavingDraft] = useTransition();
+  const [savingAmend, startSavingAmend] = useTransition();
   const [publishing, setPublishing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [savedAt, setSavedAt] = useState<Date | null>(null);
 
-  function setRow(memberId: string, patch: Partial<{ result: "PASSED" | "FAILED" | "ABSENT"; reviewNotes: string }>) {
+  const canAmendPublished = isPublished && isOwner;
+
+  function setRow(memberId: string, patch: Partial<RowDraft>) {
     setDraft({ ...draft, [memberId]: { ...draft[memberId], ...patch } });
+  }
+
+  function buildRows() {
+    return applications.map((a) => ({
+      studentId: a.memberId,
+      marks: draft[a.memberId].absent ? null : draft[a.memberId].marks,
+      absent: draft[a.memberId].absent,
+      reviewNotes: draft[a.memberId].reviewNotes,
+    }));
   }
 
   function saveDraft() {
     setError(null);
-    const rows = applications.map((a) => ({
-      studentId: a.memberId,
-      result: draft[a.memberId].result,
-      reviewNotes: draft[a.memberId].reviewNotes,
-    }));
     startSavingDraft(async () => {
-      const res = await upsertDraftResultsAction({ eventId, rows });
+      const res = await upsertDraftResultsAction({ eventId, rows: buildRows() });
       if ("error" in res) setError(res.error);
       else setSavedAt(new Date());
+    });
+  }
+
+  function saveAmendments() {
+    setError(null);
+    startSavingAmend(async () => {
+      const res = await updatePublishedMarksAction({ eventId, rows: buildRows() });
+      if ("error" in res) setError(res.error);
+      else {
+        setSavedAt(new Date());
+        window.location.reload();
+      }
     });
   }
 
@@ -274,83 +322,108 @@ function ResultsSection({
     );
   }
 
+  const rowsInteractive = !readOnly || canAmendPublished;
+
   return (
     <section className="bg-white border border-zinc-200 rounded-sm shadow-sm mb-6">
       <div className="px-5 py-4 border-b border-zinc-200 flex items-center justify-between gap-3">
         <div>
           <h2 className="text-sm font-bold text-zinc-900">Candidate results</h2>
           <p className="text-xs text-zinc-500 mt-0.5">
-            {readOnly
+            {readOnly && !canAmendPublished
               ? "Read only — results have been published or the test was cancelled."
-              : "Draft each candidate's result. Nothing reaches the student until you publish."}
+              : canAmendPublished
+                ? "Results are published. Any marks change will re-evaluate the pass/fail band and student rank."
+                : "Enter marks (0–100). Grade + recommendation compute automatically."}
           </p>
         </div>
-        {!readOnly && (
-          <div className="flex items-center gap-2">
-            {savedAt && (
-              <span className="text-[10px] tracking-widest uppercase font-bold text-emerald-600">
-                Saved {savedAt.toLocaleTimeString()}
-              </span>
-            )}
+        <div className="flex items-center gap-2">
+          {savedAt && (
+            <span className="text-[10px] tracking-widest uppercase font-bold text-emerald-600">
+              Saved {savedAt.toLocaleTimeString()}
+            </span>
+          )}
+          {!readOnly && (
+            <>
+              <SmallBtn
+                onClick={saveDraft}
+                disabled={savingDraft}
+                variant="ghost"
+                icon={savingDraft ? <Loader2 size={12} className="animate-spin" /> : <Save size={12} />}
+              >
+                Save draft
+              </SmallBtn>
+              <SmallBtn
+                onClick={() => setPublishing(true)}
+                icon={<Send size={12} />}
+              >
+                Publish results
+              </SmallBtn>
+            </>
+          )}
+          {canAmendPublished && (
             <SmallBtn
-              onClick={saveDraft}
-              disabled={savingDraft}
-              variant="ghost"
-              icon={savingDraft ? <Loader2 size={12} className="animate-spin" /> : <Save size={12} />}
+              onClick={saveAmendments}
+              disabled={savingAmend}
+              icon={savingAmend ? <Loader2 size={12} className="animate-spin" /> : <ShieldCheck size={12} />}
             >
-              Save draft
+              Save amendments
             </SmallBtn>
-            <SmallBtn
-              onClick={() => setPublishing(true)}
-              icon={<Send size={12} />}
-            >
-              Publish results
-            </SmallBtn>
-          </div>
-        )}
+          )}
+        </div>
+      </div>
+
+      <div className="hidden md:grid grid-cols-[1.4fr_140px_1.6fr_1.4fr] gap-3 px-5 py-2 text-[10px] tracking-widest uppercase font-bold text-zinc-500 bg-zinc-50 border-b border-zinc-200">
+        <span>Candidate</span>
+        <span>Marks / Absent</span>
+        <span>Grade &amp; recommendation</span>
+        <span>Review notes</span>
       </div>
 
       <ul className="divide-y divide-zinc-200">
-        {applications.map((a) => (
-          <li key={a.memberId} className="px-5 py-4 grid grid-cols-1 lg:grid-cols-[1fr_auto_2fr] gap-3 items-start">
-            <div>
-              <p className="font-semibold text-sm text-zinc-900">{a.memberName}</p>
-              <p className="text-xs text-zinc-500 mt-0.5">
-                {a.currentRank}
-                {a.targetRankName && (
-                  <>
-                    {" → "}
-                    <span className="text-accent-red font-semibold">{a.targetRankName}</span>
-                  </>
-                )}
-              </p>
-              {a.status === "CANCELLED" && (
-                <p className="text-[10px] tracking-widest uppercase font-bold text-zinc-400 mt-1">
-                  Was cancelled
+        {applications.map((a) => {
+          const row = draft[a.memberId];
+          return (
+            <li key={a.memberId} className="px-5 py-4 grid grid-cols-1 md:grid-cols-[1.4fr_140px_1.6fr_1.4fr] gap-3 items-start">
+              <div>
+                <p className="font-semibold text-sm text-zinc-900">{a.memberName}</p>
+                <p className="text-xs text-zinc-500 mt-0.5">
+                  {a.currentRank}
+                  {a.targetRankName && (
+                    <>
+                      {" → "}
+                      <span className="text-accent-red font-semibold">{a.targetRankName}</span>
+                    </>
+                  )}
                 </p>
-              )}
-            </div>
+                {a.status === "CANCELLED" && (
+                  <p className="text-[10px] tracking-widest uppercase font-bold text-zinc-400 mt-1">
+                    Was cancelled
+                  </p>
+                )}
+              </div>
 
-            <div>
-              <ResultPicker
-                value={draft[a.memberId]?.result ?? "PASSED"}
-                onChange={(v) => setRow(a.memberId, { result: v })}
-                disabled={readOnly}
+              <MarksInput
+                value={row?.marks ?? null}
+                absent={row?.absent ?? false}
+                onMarks={(v) => setRow(a.memberId, { marks: v })}
+                onAbsent={(v) => setRow(a.memberId, { absent: v, marks: v ? null : row?.marks ?? null })}
+                disabled={!rowsInteractive}
               />
-            </div>
 
-            <div>
+              <GradeBadge marks={row?.marks ?? null} absent={row?.absent ?? false} />
+
               <textarea
-                value={draft[a.memberId]?.reviewNotes ?? ""}
+                value={row?.reviewNotes ?? ""}
                 onChange={(e) => setRow(a.memberId, { reviewNotes: e.target.value })}
                 placeholder="Review notes (optional) — shared with the student on publish."
                 rows={2}
-                disabled={readOnly}
+                disabled={!rowsInteractive}
                 className={`${input} disabled:bg-zinc-50 disabled:text-zinc-500`}
               />
-            </div>
-          </li>
-        ))}
+            </li>
+          );
+        })}
       </ul>
 
       {error && (
@@ -369,38 +442,81 @@ function ResultsSection({
   );
 }
 
-function ResultPicker({
+function MarksInput({
   value,
-  onChange,
+  absent,
+  onMarks,
+  onAbsent,
   disabled,
 }: {
-  value: "PASSED" | "FAILED" | "ABSENT";
-  onChange: (v: "PASSED" | "FAILED" | "ABSENT") => void;
+  value: number | null;
+  absent: boolean;
+  onMarks: (v: number | null) => void;
+  onAbsent: (v: boolean) => void;
   disabled: boolean;
 }) {
-  const opts: Array<{ value: "PASSED" | "FAILED" | "ABSENT"; label: string; cls: string }> = [
-    { value: "PASSED", label: "Passed", cls: "bg-emerald-50 text-emerald-700 border-emerald-200" },
-    { value: "FAILED", label: "Failed", cls: "bg-amber-50 text-amber-700 border-amber-200" },
-    { value: "ABSENT", label: "Absent", cls: "bg-zinc-50 text-zinc-600 border-zinc-200" },
-  ];
   return (
-    <div className="inline-flex rounded-sm border border-zinc-200 overflow-hidden">
-      {opts.map((o) => {
-        const active = value === o.value;
-        return (
-          <button
-            key={o.value}
-            type="button"
-            disabled={disabled}
-            onClick={() => onChange(o.value)}
-            className={`text-[10px] tracking-widest uppercase font-bold px-3 py-1.5 transition-colors disabled:opacity-50 ${
-              active ? o.cls : "text-zinc-500 hover:bg-zinc-50"
-            } ${o !== opts[0] ? "border-l border-zinc-200" : ""}`}
-          >
-            {o.label}
-          </button>
-        );
-      })}
+    <div className="flex flex-col gap-1.5">
+      <input
+        type="number"
+        min={0}
+        max={100}
+        step={1}
+        inputMode="numeric"
+        value={absent ? "" : value ?? ""}
+        onChange={(e) => {
+          const raw = e.target.value;
+          if (raw === "") {
+            onMarks(null);
+            return;
+          }
+          const n = Number(raw);
+          if (Number.isNaN(n)) return;
+          onMarks(Math.max(0, Math.min(100, Math.round(n))));
+        }}
+        placeholder="0–100"
+        disabled={disabled || absent}
+        className={`${input} disabled:bg-zinc-50 disabled:text-zinc-400 w-full`}
+        aria-label="Marks"
+      />
+      <label className="inline-flex items-center gap-1.5 text-[10px] tracking-widest uppercase font-bold text-zinc-500 select-none">
+        <input
+          type="checkbox"
+          checked={absent}
+          onChange={(e) => onAbsent(e.target.checked)}
+          disabled={disabled}
+          className="rounded-sm border-zinc-300 text-accent-red focus:ring-accent-red disabled:opacity-40"
+        />
+        Absent
+      </label>
+    </div>
+  );
+}
+
+function GradeBadge({ marks, absent }: { marks: number | null; absent: boolean }) {
+  if (absent) {
+    return (
+      <div className="flex items-start">
+        <span className="inline-flex items-center gap-1.5 text-[10px] tracking-widest uppercase font-bold px-2 py-1 rounded-full border bg-zinc-50 text-zinc-600 border-zinc-200">
+          Absent · No score
+        </span>
+      </div>
+    );
+  }
+  if (marks == null) {
+    return (
+      <div className="text-[11px] text-zinc-400 italic pt-1">Awaiting marks…</div>
+    );
+  }
+  const band = bandForMarks(marks);
+  return (
+    <div className="flex flex-col gap-1">
+      <span className={`inline-flex items-center gap-1.5 text-[10px] tracking-widest uppercase font-bold px-2 py-1 rounded-full border w-max ${band.color}`}>
+        {band.letter} · {band.remark}
+      </span>
+      <span className="text-[11px] text-zinc-600">
+        {band.recommendation}
+      </span>
     </div>
   );
 }
@@ -425,7 +541,7 @@ function PublishDialog({ eventId, onClose }: { eventId: string; onClose: () => v
     <Modal title="Publish results" onClose={onClose}>
       <p className="text-sm text-zinc-600">
         Members will be notified and emailed with their result. Ranks on PASSED grades will update immediately.
-        This can't be undone.
+        The Dojo Head can still amend marks afterwards.
       </p>
       {error && <p className="text-xs text-red-600 mt-2">{error}</p>}
       <div className="flex justify-end gap-2 mt-4">
@@ -503,11 +619,13 @@ function Modal({ title, children, onClose }: { title: string; children: React.Re
   );
 }
 
-function Banner({ kind, children }: { kind: "muted" | "ok"; children: React.ReactNode }) {
+function Banner({ kind, children }: { kind: "muted" | "ok" | "owner"; children: React.ReactNode }) {
   const cls =
     kind === "ok"
       ? "bg-emerald-50 border-emerald-200 text-emerald-800"
-      : "bg-zinc-50 border-zinc-200 text-zinc-700";
+      : kind === "owner"
+        ? "bg-amber-50 border-amber-200 text-amber-800"
+        : "bg-zinc-50 border-zinc-200 text-zinc-700";
   return <div className={`border rounded-sm px-4 py-3 mb-6 text-sm ${cls}`}>{children}</div>;
 }
 

@@ -297,6 +297,7 @@ exports.Prisma.GradingScalarFieldEnum = {
   fromRankId: 'fromRankId',
   toRankId: 'toRankId',
   result: 'result',
+  marks: 'marks',
   certificateUrl: 'certificateUrl',
   notes: 'notes',
   createdAt: 'createdAt',

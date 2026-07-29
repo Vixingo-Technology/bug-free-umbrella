@@ -2,16 +2,15 @@ import type { Metadata } from "next";
 import {
     AlertCircle,
     Award,
-    CalendarPlus,
     CheckCircle2,
     Clock,
     CreditCard,
     Send,
-    XCircle,
 } from "lucide-react";
 import DojoPageHeader from "@/components/dojo/page-header";
 import AppliedStage from "@/components/dojo/gradings/applied-stage";
 import ScheduledList from "@/components/dojo/gradings/scheduled-list";
+import PipelineTabs, { type PipelineTab } from "@/components/dojo/gradings/pipeline-tabs";
 import { hasAtLeast, ROLE_LABEL } from "@/lib/dojo-roles";
 import { requireDojoRole } from "@/lib/dojo-session";
 import { prisma } from "@/lib/prisma";
@@ -83,60 +82,56 @@ export default async function GradingsPage() {
     const session = await requireDojoRole("INSTRUCTOR");
     const role = session.role;
 
-    const candidates = session.dojo
-        ? await loadRealCandidates(session.dojo.id)
-        : SAMPLE;
+    const [candidates, scheduledCount] = await Promise.all([
+        session.dojo ? loadRealCandidates(session.dojo.id) : Promise.resolve(SAMPLE),
+        session.dojo
+            ? prisma.gradingEvent.count({
+                  where: {
+                      applications: {
+                          some: { student: { dojoId: session.dojo.id } },
+                      },
+                  },
+              })
+            : Promise.resolve(0),
+    ]);
 
     const applied = candidates.filter((c) => c.stage === "APPLIED");
     const qualified = candidates.filter((c) => c.stage === "QUALIFIED");
     const verified = candidates.filter((c) => c.stage === "VERIFIED");
     const submitted = candidates.filter((c) => c.stage === "SUBMITTED");
 
-    return (
-        <>
-            <DojoPageHeader
-                eyebrow="Belt tests"
-                title="Grading pipeline"
-                description={`Track every candidate from application to JKA certificate. You're acting as ${ROLE_LABEL[role]}.`}
-                actions={
-                    <span className="text-xs tracking-widest uppercase font-bold text-zinc-500">
-                        {candidates.length} candidates in pipeline
-                    </span>
-                }
-            />
-
-            <Stage
-                title="1 · Applied"
-                actor="Instructor schedules the test"
-                count={applied.length}
-            >
+    const tabs: PipelineTab[] = [
+        {
+            key: "applied",
+            label: "1 · Applied",
+            count: applied.length,
+            actor: "Instructor schedules the test.",
+            body: (
                 <AppliedStage
                     candidates={applied}
                     canSchedule={hasAtLeast(role, "INSTRUCTOR")}
                     dojoAddress={session.dojo?.address ?? null}
                 />
-            </Stage>
-
-            {session.dojo && (
-                <section className="bg-white border border-zinc-200 rounded-sm shadow-sm mb-6">
-                    <div className="px-5 py-4 border-b border-zinc-200">
-                        <h2 className="text-sm font-bold text-zinc-900">Scheduled belt tests</h2>
-                        <p className="text-xs text-zinc-500 mt-0.5">
-                            Reschedule, draft results, and publish.
-                        </p>
-                    </div>
-                    <div className="px-5">
-                        <ScheduledList dojoId={session.dojo.id} />
-                    </div>
-                </section>
-            )}
-
-            <Stage
-                title="2 · Qualified after test"
-                actor="Manager verifies dues & membership"
-                count={qualified.length}
-            >
-                {qualified.length === 0 ? (
+            ),
+        },
+        {
+            key: "scheduled",
+            label: "2 · Scheduled tests",
+            count: scheduledCount,
+            actor: "Reschedule, draft results with marks, and publish.",
+            body: session.dojo ? (
+                <ScheduledList dojoId={session.dojo.id} />
+            ) : (
+                <Empty>Set up your dojo to see scheduled belt tests.</Empty>
+            ),
+        },
+        {
+            key: "qualified",
+            label: "3 · Qualified",
+            count: qualified.length,
+            actor: "Manager verifies dues & membership.",
+            body:
+                qualified.length === 0 ? (
                     <Empty>No qualified candidates awaiting review.</Empty>
                 ) : (
                     <ul className="divide-y divide-zinc-200">
@@ -149,15 +144,11 @@ export default async function GradingsPage() {
                                 {hasAtLeast(role, "DOJO_MANAGER") ? (
                                     <div className="flex items-center gap-2">
                                         {c.paymentStatus !== "PAID" && (
-                                            <PaymentBadge
-                                                status={c.paymentStatus}
-                                            />
+                                            <PaymentBadge status={c.paymentStatus} />
                                         )}
                                         <Btn
                                             icon={<CheckCircle2 size={14} />}
-                                            disabled={
-                                                c.paymentStatus !== "PAID"
-                                            }
+                                            disabled={c.paymentStatus !== "PAID"}
                                         >
                                             Mark verified
                                         </Btn>
@@ -168,15 +159,15 @@ export default async function GradingsPage() {
                             </li>
                         ))}
                     </ul>
-                )}
-            </Stage>
-
-            <Stage
-                title="3 · Verified by Manager"
-                actor="Dojo Head submits to JKA"
-                count={verified.length}
-            >
-                {verified.length === 0 ? (
+                ),
+        },
+        {
+            key: "verified",
+            label: "4 · Verified",
+            count: verified.length,
+            actor: "Dojo Head submits to JKA.",
+            body:
+                verified.length === 0 ? (
                     <Empty>No candidates ready to submit.</Empty>
                 ) : (
                     <ul className="divide-y divide-zinc-200">
@@ -187,24 +178,22 @@ export default async function GradingsPage() {
                             >
                                 <CandidateInfo c={c} />
                                 {hasAtLeast(role, "DOJO_OWNER") ? (
-                                    <Btn icon={<Send size={14} />}>
-                                        Submit to JKA HQ
-                                    </Btn>
+                                    <Btn icon={<Send size={14} />}>Submit to JKA HQ</Btn>
                                 ) : (
                                     <RoleNote requires="Dojo Head" />
                                 )}
                             </li>
                         ))}
                     </ul>
-                )}
-            </Stage>
-
-            <Stage
-                title="4 · Submitted to JKA"
-                actor="Federation issues the certificate"
-                count={submitted.length}
-            >
-                {submitted.length === 0 ? (
+                ),
+        },
+        {
+            key: "submitted",
+            label: "5 · Submitted",
+            count: submitted.length,
+            actor: "Federation issues the certificate.",
+            body:
+                submitted.length === 0 ? (
                     <Empty>No outstanding federation submissions.</Empty>
                 ) : (
                     <ul className="divide-y divide-zinc-200">
@@ -221,8 +210,24 @@ export default async function GradingsPage() {
                             </li>
                         ))}
                     </ul>
-                )}
-            </Stage>
+                ),
+        },
+    ];
+
+    return (
+        <>
+            <DojoPageHeader
+                eyebrow="Belt tests"
+                title="Grading pipeline"
+                description={`Track every candidate from application to JKA certificate. You're acting as ${ROLE_LABEL[role]}.`}
+                actions={
+                    <span className="text-xs tracking-widest uppercase font-bold text-zinc-500">
+                        {candidates.length} candidates in pipeline
+                    </span>
+                }
+            />
+
+            <PipelineTabs tabs={tabs} />
         </>
     );
 }
@@ -256,33 +261,6 @@ async function loadRealCandidates(dojoId: string): Promise<Candidate[]> {
         paymentStatus: "PAID" as const,
         notes: a.notes,
     }));
-}
-
-function Stage({
-    title,
-    actor,
-    count,
-    children,
-}: {
-    title: string;
-    actor: string;
-    count: number;
-    children: React.ReactNode;
-}) {
-    return (
-        <section className="bg-white border border-zinc-200 rounded-sm shadow-sm mb-6">
-            <div className="px-5 py-4 border-b border-zinc-200 flex items-center justify-between gap-4">
-                <div>
-                    <h2 className="text-sm font-bold text-zinc-900">{title}</h2>
-                    <p className="text-xs text-zinc-500 mt-0.5">{actor}</p>
-                </div>
-                <span className="text-[10px] tracking-widest uppercase font-bold text-zinc-500 bg-zinc-100 px-2.5 py-1 rounded-full">
-                    {count} {count === 1 ? "candidate" : "candidates"}
-                </span>
-            </div>
-            <div className="px-5">{children}</div>
-        </section>
-    );
 }
 
 function CandidateInfo({ c }: { c: Candidate }) {
