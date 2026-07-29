@@ -97,6 +97,7 @@ export default function PortalShell({ userId, initialRole = "STUDENT", children 
         // Seed with the server-known role so admin nav renders on first paint.
         { fullName: "", email: "", currentRank: null, role: initialRole }
     );
+    const [dojoLogoUrl, setDojoLogoUrl] = useState<string | null>(null);
     const [unreadCount, setUnreadCount] = useState(0);
 
     useEffect(() => {
@@ -121,6 +122,29 @@ export default function PortalShell({ userId, initialRole = "STUDENT", children 
                     currentRank: data.students?.current_rank ?? null,
                     role: data.role_id,
                 });
+
+                // For dojo staff, resolve their dojo's logo (if any) to render
+                // in the top-right corner of the portal shell.
+                const roleId = data.role_id;
+                const staffTable =
+                    roleId === "INSTRUCTOR"
+                        ? "instructors"
+                        : roleId === "DOJO_MANAGER"
+                            ? "dojo_managers"
+                            : roleId === "DOJO_OWNER"
+                                ? "dojo_owners"
+                                : null;
+
+                if (staffTable) {
+                    const { data: staffRow } = await supabase
+                        .from(staffTable)
+                        .select("dojos(logo_url)")
+                        .eq("id", userId)
+                        .single<{ dojos: { logo_url: string | null } | null }>();
+                    setDojoLogoUrl(staffRow?.dojos?.logo_url ?? null);
+                } else {
+                    setDojoLogoUrl(null);
+                }
             }
 
             const { count } = await supabase
@@ -228,8 +252,19 @@ export default function PortalShell({ userId, initialRole = "STUDENT", children 
         <div className="flex flex-col h-full">
             {/* Logo */}
             <div className="px-6 py-5 border-b border-zinc-100 flex items-center gap-3">
-                <Link href="/" className="flex items-center gap-2.5">
-                    <Image src={Logo} alt="JKA Logo" width={36} height={36} />
+                <Link href="/portal" className="flex items-center gap-2.5">
+                    {isDojoStaff ? (
+                        <Image
+                            src={dojoLogoUrl || Logo}
+                            alt="Dojo Logo"
+                            width={36}
+                            height={36}
+                            unoptimized={!!dojoLogoUrl}
+                            className="rounded-full object-cover w-9 h-9"
+                        />
+                    ) : (
+                        <Image src={Logo} alt="JKA Logo" width={36} height={36} />
+                    )}
                     <div>
                         <p className="font-karate text-xs tracking-[0.3em] text-zinc-900 leading-tight">
                             JKA <span className="text-accent-red">BD</span>
@@ -406,7 +441,7 @@ export default function PortalShell({ userId, initialRole = "STUDENT", children 
                         <Menu size={20} />
                     </button>
 
-                    <Link href="/" className="flex items-center gap-2">
+                    <Link href="/portal" className="flex items-center gap-2">
                         <Image src={Logo} alt="JKA Logo" width={28} height={28} />
                         <span className="font-karate text-xs tracking-[0.3em] text-zinc-900">
                             JKA <span className="text-accent-red">BD</span>
