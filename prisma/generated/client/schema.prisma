@@ -250,6 +250,7 @@ model User {
   phone        String?
   fullName     String  @map("full_name")
   avatarUrl    String? @map("avatar_url")
+  bio          String?
   roleId       String  @default("STUDENT") @map("role_id")
   isActive     Boolean @default(true) @map("is_active")
   memberNumber String? @unique @map("member_number")
@@ -262,20 +263,21 @@ model User {
   dojoOwner   DojoOwner?
   admin       Admin?
 
-  notifications       Notification[]
-  orders              ShopOrder[]
-  eventRegistrations  EventRegistration[]
-  eventCheckIns       EventRegistration[]      @relation("EventCheckIns")
-  eventsPosted        Event[]                  @relation("EventsPosted")
-  announcementsPosted Announcement[]           @relation("AnnouncementsPosted")
-  dojoSalesAsBuyer    DojoSale[]               @relation("DojoSaleBuyer")
-  dojoSalesSold       DojoSale[]               @relation("DojoSaleSeller")
-  achievementsAwarded StudentAchievement[]     @relation("StudentAchievementsAwarded")
-  tournamentEntries   TournamentParticipant[]  @relation("TournamentEntries")
-  transfersDojoActed  StudentTransferRequest[] @relation("TransferDojoActor")
-  transfersAdminActed StudentTransferRequest[] @relation("TransferAdminActor")
-  dojoHistoryChanges  StudentDojoHistory[]     @relation("HistoryChangedBy")
-  paymentTransactions PaymentTransaction[]     @relation("UserTransactions")
+  notifications        Notification[]
+  orders               ShopOrder[]
+  eventRegistrations   EventRegistration[]
+  eventCheckIns        EventRegistration[]      @relation("EventCheckIns")
+  eventsPosted         Event[]                  @relation("EventsPosted")
+  announcementsPosted  Announcement[]           @relation("AnnouncementsPosted")
+  dojoSalesAsBuyer     DojoSale[]               @relation("DojoSaleBuyer")
+  dojoSalesSold        DojoSale[]               @relation("DojoSaleSeller")
+  achievementsAwarded  StudentAchievement[]     @relation("StudentAchievementsAwarded")
+  tournamentEntries    TournamentParticipant[]  @relation("TournamentEntries")
+  transfersDojoActed   StudentTransferRequest[] @relation("TransferDojoActor")
+  transfersAdminActed  StudentTransferRequest[] @relation("TransferAdminActor")
+  dojoHistoryChanges   StudentDojoHistory[]     @relation("HistoryChangedBy")
+  paymentTransactions  PaymentTransaction[]     @relation("UserTransactions")
+  dojoOwnerInvitesSent DojoOwnerInvite[]        @relation("DojoOwnerInvites")
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -537,6 +539,30 @@ model DojoApplication {
 }
 
 // ─────────────────────────────────────────────
+// DOJO OWNER INVITES
+//
+// Admin-issued invitations to prospective Dojo Owners. The invite is a
+// promise sent by email — the invitee completes /enlist-dojo/signup on
+// their own; `acceptedAt` is stamped when a matching email finishes that
+// flow. Distinct from `dojo_applications`, which is the payload the
+// invitee submits.
+// ─────────────────────────────────────────────
+
+model DojoOwnerInvite {
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email       String    @unique
+  fullName    String?   @map("full_name")
+  invitedById String    @map("invited_by_id") @db.Uuid
+  invitedAt   DateTime  @default(now()) @map("invited_at")
+  acceptedAt  DateTime? @map("accepted_at")
+
+  invitedBy User @relation("DojoOwnerInvites", fields: [invitedById], references: [id], onDelete: Cascade)
+
+  @@index([invitedById])
+  @@map("dojo_owner_invites")
+}
+
+// ─────────────────────────────────────────────
 // GRADING EVENTS
 // ─────────────────────────────────────────────
 
@@ -708,6 +734,10 @@ model Event {
   isPremium   Boolean  @default(false) @map("is_premium")
   ticketPrice Decimal? @map("ticket_price") @db.Decimal(10, 2)
 
+  // Discount percentage (0–100) applied to the ticket price for signed-in
+  // JKA members with an ACTIVE membership. Zero = no discount.
+  memberDiscountPercent Int @default(0) @map("member_discount_percent")
+
   // Optional participation gates.
   minAge          Int?                 @map("min_age")
   minRankId       String?              @map("min_rank_id") @db.Uuid
@@ -837,6 +867,10 @@ model ShopProduct {
   // (S/M/L, 32/34/36, kids/adult, etc.).
   hasSizes Boolean  @default(false) @map("has_sizes")
   sizes    String[] @default([])
+
+  // Discount percentage (0–100) applied to signed-in JKA members with an
+  // ACTIVE membership. Zero = no discount.
+  memberDiscountPercent Int @default(0) @map("member_discount_percent")
 
   orderItems    ShopOrderItem[]
   dojoInventory DojoInventoryItem[] @relation("InventoryProduct")

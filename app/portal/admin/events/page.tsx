@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { MapPin, Users, ArrowRight } from "lucide-react";
+import { MapPin, Users, ArrowRight, Pencil } from "lucide-react";
 import EventForm from "@/components/dojo/events/event-form";
 import DeleteEventButton from "@/components/dojo/events/delete-button";
 import PostedNewTabs, { type TabValue } from "@/components/portal/posted-new-tabs";
@@ -121,7 +121,16 @@ export default async function AdminEventsPage({
                                 <h3 className="font-serif font-bold text-lg text-zinc-900 flex-1">
                                     {e.title}
                                 </h3>
-                                <DeleteEventButton id={e.id} />
+                                <div className="flex items-center gap-2 shrink-0">
+                                    <Link
+                                        href={`/portal/admin/events/${e.id}/edit`}
+                                        aria-label="Edit event"
+                                        className="p-1.5 rounded-sm text-zinc-500 hover:text-accent-red hover:bg-accent-red/5 border border-transparent hover:border-accent-red/20 transition-colors"
+                                    >
+                                        <Pencil size={14} />
+                                    </Link>
+                                    <DeleteEventButton id={e.id} />
+                                </div>
                             </div>
                             <div className="flex flex-wrap items-center gap-2 mb-3">
                                 <span className="text-[10px] tracking-widest uppercase font-bold px-2 py-1 rounded-full border border-accent-red/20 bg-accent-red/5 text-accent-red">
@@ -148,6 +157,11 @@ export default async function AdminEventsPage({
                                 {e.isPremium && (
                                     <span className="text-[10px] tracking-widest uppercase font-bold px-2 py-1 rounded-full border bg-amber-50 text-amber-700 border-amber-200">
                                         Premium · ৳{Number(e.ticketPrice ?? 0).toLocaleString()}
+                                    </span>
+                                )}
+                                {e.isPremium && e.memberDiscountPercent > 0 && (
+                                    <span className="text-[10px] tracking-widest uppercase font-bold px-2 py-1 rounded-full border bg-emerald-50 text-emerald-700 border-emerald-200">
+                                        Member −{e.memberDiscountPercent}%
                                     </span>
                                 )}
                             </div>

@@ -29,7 +29,7 @@ export default async function AdminDojosPage() {
         );
     }
 
-    const [dojosRaw, instructors] = await Promise.all([
+    const [dojosRaw, instructors, invitesRaw] = await Promise.all([
         prisma.dojo.findMany({
             orderBy: { createdAt: "desc" },
             include: {
@@ -44,6 +44,12 @@ export default async function AdminDojosPage() {
             select: { id: true, fullName: true, email: true, roleId: true },
             orderBy: { fullName: "asc" },
         }).then((rows) => rows.map((r) => ({ ...r, role: r.roleId }))),
+        prisma.dojoOwnerInvite.findMany({
+            orderBy: { invitedAt: "desc" },
+            include: {
+                invitedBy: { select: { fullName: true, email: true } },
+            },
+        }),
     ]);
 
     const dojos = dojosRaw.map((d) => {
@@ -57,10 +63,19 @@ export default async function AdminDojosPage() {
         };
     });
 
+    const invites = invitesRaw.map((i) => ({
+        email: i.email,
+        fullName: i.fullName,
+        invitedAt: i.invitedAt.toISOString(),
+        acceptedAt: i.acceptedAt ? i.acceptedAt.toISOString() : null,
+        invitedByName: i.invitedBy?.fullName ?? null,
+    }));
+
     return (
         <DojosAdminClient
             dojos={serialize(dojos) as never}
             instructors={instructors}
+            invites={invites}
         />
     );
 }

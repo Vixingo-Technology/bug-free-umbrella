@@ -79,6 +79,11 @@ export type Dojo = $Result.DefaultSelection<Prisma.$DojoPayload>
  */
 export type DojoApplication = $Result.DefaultSelection<Prisma.$DojoApplicationPayload>
 /**
+ * Model DojoOwnerInvite
+ * 
+ */
+export type DojoOwnerInvite = $Result.DefaultSelection<Prisma.$DojoOwnerInvitePayload>
+/**
  * Model GradingEvent
  * 
  */
@@ -742,6 +747,16 @@ export class PrismaClient<
     * ```
     */
   get dojoApplication(): Prisma.DojoApplicationDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.dojoOwnerInvite`: Exposes CRUD operations for the **DojoOwnerInvite** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more DojoOwnerInvites
+    * const dojoOwnerInvites = await prisma.dojoOwnerInvite.findMany()
+    * ```
+    */
+  get dojoOwnerInvite(): Prisma.DojoOwnerInviteDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.gradingEvent`: Exposes CRUD operations for the **GradingEvent** model.
@@ -1419,6 +1434,7 @@ export namespace Prisma {
     BeltRank: 'BeltRank',
     Dojo: 'Dojo',
     DojoApplication: 'DojoApplication',
+    DojoOwnerInvite: 'DojoOwnerInvite',
     GradingEvent: 'GradingEvent',
     GradingApplication: 'GradingApplication',
     Grading: 'Grading',
@@ -1457,7 +1473,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "role" | "permission" | "rolePermission" | "user" | "profile" | "student" | "instructor" | "dojoManager" | "dojoOwner" | "admin" | "beltRank" | "dojo" | "dojoApplication" | "gradingEvent" | "gradingApplication" | "grading" | "certificateRequest" | "systemSettings" | "event" | "announcement" | "eventRegistration" | "notification" | "shopProduct" | "dojoInventoryItem" | "dojoSale" | "dojoSaleItem" | "shopOrder" | "shopOrderItem" | "tournament" | "tournamentParticipant" | "tournamentMatch" | "achievement" | "studentAchievement" | "studentTransferRequest" | "paymentTransaction" | "studentDojoHistory"
+      modelProps: "role" | "permission" | "rolePermission" | "user" | "profile" | "student" | "instructor" | "dojoManager" | "dojoOwner" | "admin" | "beltRank" | "dojo" | "dojoApplication" | "dojoOwnerInvite" | "gradingEvent" | "gradingApplication" | "grading" | "certificateRequest" | "systemSettings" | "event" | "announcement" | "eventRegistration" | "notification" | "shopProduct" | "dojoInventoryItem" | "dojoSale" | "dojoSaleItem" | "shopOrder" | "shopOrderItem" | "tournament" | "tournamentParticipant" | "tournamentMatch" | "achievement" | "studentAchievement" | "studentTransferRequest" | "paymentTransaction" | "studentDojoHistory"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2420,6 +2436,80 @@ export namespace Prisma {
           count: {
             args: Prisma.DojoApplicationCountArgs<ExtArgs>
             result: $Utils.Optional<DojoApplicationCountAggregateOutputType> | number
+          }
+        }
+      }
+      DojoOwnerInvite: {
+        payload: Prisma.$DojoOwnerInvitePayload<ExtArgs>
+        fields: Prisma.DojoOwnerInviteFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.DojoOwnerInviteFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DojoOwnerInvitePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.DojoOwnerInviteFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DojoOwnerInvitePayload>
+          }
+          findFirst: {
+            args: Prisma.DojoOwnerInviteFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DojoOwnerInvitePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.DojoOwnerInviteFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DojoOwnerInvitePayload>
+          }
+          findMany: {
+            args: Prisma.DojoOwnerInviteFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DojoOwnerInvitePayload>[]
+          }
+          create: {
+            args: Prisma.DojoOwnerInviteCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DojoOwnerInvitePayload>
+          }
+          createMany: {
+            args: Prisma.DojoOwnerInviteCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.DojoOwnerInviteCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DojoOwnerInvitePayload>[]
+          }
+          delete: {
+            args: Prisma.DojoOwnerInviteDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DojoOwnerInvitePayload>
+          }
+          update: {
+            args: Prisma.DojoOwnerInviteUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DojoOwnerInvitePayload>
+          }
+          deleteMany: {
+            args: Prisma.DojoOwnerInviteDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.DojoOwnerInviteUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.DojoOwnerInviteUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DojoOwnerInvitePayload>[]
+          }
+          upsert: {
+            args: Prisma.DojoOwnerInviteUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DojoOwnerInvitePayload>
+          }
+          aggregate: {
+            args: Prisma.DojoOwnerInviteAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateDojoOwnerInvite>
+          }
+          groupBy: {
+            args: Prisma.DojoOwnerInviteGroupByArgs<ExtArgs>
+            result: $Utils.Optional<DojoOwnerInviteGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.DojoOwnerInviteCountArgs<ExtArgs>
+            result: $Utils.Optional<DojoOwnerInviteCountAggregateOutputType> | number
           }
         }
       }
@@ -4246,6 +4336,7 @@ export namespace Prisma {
     beltRank?: BeltRankOmit
     dojo?: DojoOmit
     dojoApplication?: DojoApplicationOmit
+    dojoOwnerInvite?: DojoOwnerInviteOmit
     gradingEvent?: GradingEventOmit
     gradingApplication?: GradingApplicationOmit
     grading?: GradingOmit
@@ -4434,6 +4525,7 @@ export namespace Prisma {
     transfersAdminActed: number
     dojoHistoryChanges: number
     paymentTransactions: number
+    dojoOwnerInvitesSent: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4451,6 +4543,7 @@ export namespace Prisma {
     transfersAdminActed?: boolean | UserCountOutputTypeCountTransfersAdminActedArgs
     dojoHistoryChanges?: boolean | UserCountOutputTypeCountDojoHistoryChangesArgs
     paymentTransactions?: boolean | UserCountOutputTypeCountPaymentTransactionsArgs
+    dojoOwnerInvitesSent?: boolean | UserCountOutputTypeCountDojoOwnerInvitesSentArgs
   }
 
   // Custom InputTypes
@@ -4560,6 +4653,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountPaymentTransactionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: PaymentTransactionWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountDojoOwnerInvitesSentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DojoOwnerInviteWhereInput
   }
 
 
@@ -8510,6 +8610,7 @@ export namespace Prisma {
     phone: string | null
     fullName: string | null
     avatarUrl: string | null
+    bio: string | null
     roleId: string | null
     isActive: boolean | null
     memberNumber: string | null
@@ -8523,6 +8624,7 @@ export namespace Prisma {
     phone: string | null
     fullName: string | null
     avatarUrl: string | null
+    bio: string | null
     roleId: string | null
     isActive: boolean | null
     memberNumber: string | null
@@ -8536,6 +8638,7 @@ export namespace Prisma {
     phone: number
     fullName: number
     avatarUrl: number
+    bio: number
     roleId: number
     isActive: number
     memberNumber: number
@@ -8551,6 +8654,7 @@ export namespace Prisma {
     phone?: true
     fullName?: true
     avatarUrl?: true
+    bio?: true
     roleId?: true
     isActive?: true
     memberNumber?: true
@@ -8564,6 +8668,7 @@ export namespace Prisma {
     phone?: true
     fullName?: true
     avatarUrl?: true
+    bio?: true
     roleId?: true
     isActive?: true
     memberNumber?: true
@@ -8577,6 +8682,7 @@ export namespace Prisma {
     phone?: true
     fullName?: true
     avatarUrl?: true
+    bio?: true
     roleId?: true
     isActive?: true
     memberNumber?: true
@@ -8663,6 +8769,7 @@ export namespace Prisma {
     phone: string | null
     fullName: string
     avatarUrl: string | null
+    bio: string | null
     roleId: string
     isActive: boolean
     memberNumber: string | null
@@ -8693,6 +8800,7 @@ export namespace Prisma {
     phone?: boolean
     fullName?: boolean
     avatarUrl?: boolean
+    bio?: boolean
     roleId?: boolean
     isActive?: boolean
     memberNumber?: boolean
@@ -8719,6 +8827,7 @@ export namespace Prisma {
     transfersAdminActed?: boolean | User$transfersAdminActedArgs<ExtArgs>
     dojoHistoryChanges?: boolean | User$dojoHistoryChangesArgs<ExtArgs>
     paymentTransactions?: boolean | User$paymentTransactionsArgs<ExtArgs>
+    dojoOwnerInvitesSent?: boolean | User$dojoOwnerInvitesSentArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -8728,6 +8837,7 @@ export namespace Prisma {
     phone?: boolean
     fullName?: boolean
     avatarUrl?: boolean
+    bio?: boolean
     roleId?: boolean
     isActive?: boolean
     memberNumber?: boolean
@@ -8742,6 +8852,7 @@ export namespace Prisma {
     phone?: boolean
     fullName?: boolean
     avatarUrl?: boolean
+    bio?: boolean
     roleId?: boolean
     isActive?: boolean
     memberNumber?: boolean
@@ -8756,6 +8867,7 @@ export namespace Prisma {
     phone?: boolean
     fullName?: boolean
     avatarUrl?: boolean
+    bio?: boolean
     roleId?: boolean
     isActive?: boolean
     memberNumber?: boolean
@@ -8763,7 +8875,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "phone" | "fullName" | "avatarUrl" | "roleId" | "isActive" | "memberNumber" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "phone" | "fullName" | "avatarUrl" | "bio" | "roleId" | "isActive" | "memberNumber" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     role?: boolean | RoleDefaultArgs<ExtArgs>
     profile?: boolean | User$profileArgs<ExtArgs>
@@ -8786,6 +8898,7 @@ export namespace Prisma {
     transfersAdminActed?: boolean | User$transfersAdminActedArgs<ExtArgs>
     dojoHistoryChanges?: boolean | User$dojoHistoryChangesArgs<ExtArgs>
     paymentTransactions?: boolean | User$paymentTransactionsArgs<ExtArgs>
+    dojoOwnerInvitesSent?: boolean | User$dojoOwnerInvitesSentArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -8819,6 +8932,7 @@ export namespace Prisma {
       transfersAdminActed: Prisma.$StudentTransferRequestPayload<ExtArgs>[]
       dojoHistoryChanges: Prisma.$StudentDojoHistoryPayload<ExtArgs>[]
       paymentTransactions: Prisma.$PaymentTransactionPayload<ExtArgs>[]
+      dojoOwnerInvitesSent: Prisma.$DojoOwnerInvitePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -8826,6 +8940,7 @@ export namespace Prisma {
       phone: string | null
       fullName: string
       avatarUrl: string | null
+      bio: string | null
       roleId: string
       isActive: boolean
       memberNumber: string | null
@@ -9246,6 +9361,7 @@ export namespace Prisma {
     transfersAdminActed<T extends User$transfersAdminActedArgs<ExtArgs> = {}>(args?: Subset<T, User$transfersAdminActedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentTransferRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     dojoHistoryChanges<T extends User$dojoHistoryChangesArgs<ExtArgs> = {}>(args?: Subset<T, User$dojoHistoryChangesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentDojoHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     paymentTransactions<T extends User$paymentTransactionsArgs<ExtArgs> = {}>(args?: Subset<T, User$paymentTransactionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PaymentTransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    dojoOwnerInvitesSent<T extends User$dojoOwnerInvitesSentArgs<ExtArgs> = {}>(args?: Subset<T, User$dojoOwnerInvitesSentArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DojoOwnerInvitePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -9280,6 +9396,7 @@ export namespace Prisma {
     readonly phone: FieldRef<"User", 'String'>
     readonly fullName: FieldRef<"User", 'String'>
     readonly avatarUrl: FieldRef<"User", 'String'>
+    readonly bio: FieldRef<"User", 'String'>
     readonly roleId: FieldRef<"User", 'String'>
     readonly isActive: FieldRef<"User", 'Boolean'>
     readonly memberNumber: FieldRef<"User", 'String'>
@@ -10133,6 +10250,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: PaymentTransactionScalarFieldEnum | PaymentTransactionScalarFieldEnum[]
+  }
+
+  /**
+   * User.dojoOwnerInvitesSent
+   */
+  export type User$dojoOwnerInvitesSentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DojoOwnerInvite
+     */
+    select?: DojoOwnerInviteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DojoOwnerInvite
+     */
+    omit?: DojoOwnerInviteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DojoOwnerInviteInclude<ExtArgs> | null
+    where?: DojoOwnerInviteWhereInput
+    orderBy?: DojoOwnerInviteOrderByWithRelationInput | DojoOwnerInviteOrderByWithRelationInput[]
+    cursor?: DojoOwnerInviteWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: DojoOwnerInviteScalarFieldEnum | DojoOwnerInviteScalarFieldEnum[]
   }
 
   /**
@@ -21268,6 +21409,1082 @@ export namespace Prisma {
 
 
   /**
+   * Model DojoOwnerInvite
+   */
+
+  export type AggregateDojoOwnerInvite = {
+    _count: DojoOwnerInviteCountAggregateOutputType | null
+    _min: DojoOwnerInviteMinAggregateOutputType | null
+    _max: DojoOwnerInviteMaxAggregateOutputType | null
+  }
+
+  export type DojoOwnerInviteMinAggregateOutputType = {
+    id: string | null
+    email: string | null
+    fullName: string | null
+    invitedById: string | null
+    invitedAt: Date | null
+    acceptedAt: Date | null
+  }
+
+  export type DojoOwnerInviteMaxAggregateOutputType = {
+    id: string | null
+    email: string | null
+    fullName: string | null
+    invitedById: string | null
+    invitedAt: Date | null
+    acceptedAt: Date | null
+  }
+
+  export type DojoOwnerInviteCountAggregateOutputType = {
+    id: number
+    email: number
+    fullName: number
+    invitedById: number
+    invitedAt: number
+    acceptedAt: number
+    _all: number
+  }
+
+
+  export type DojoOwnerInviteMinAggregateInputType = {
+    id?: true
+    email?: true
+    fullName?: true
+    invitedById?: true
+    invitedAt?: true
+    acceptedAt?: true
+  }
+
+  export type DojoOwnerInviteMaxAggregateInputType = {
+    id?: true
+    email?: true
+    fullName?: true
+    invitedById?: true
+    invitedAt?: true
+    acceptedAt?: true
+  }
+
+  export type DojoOwnerInviteCountAggregateInputType = {
+    id?: true
+    email?: true
+    fullName?: true
+    invitedById?: true
+    invitedAt?: true
+    acceptedAt?: true
+    _all?: true
+  }
+
+  export type DojoOwnerInviteAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which DojoOwnerInvite to aggregate.
+     */
+    where?: DojoOwnerInviteWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DojoOwnerInvites to fetch.
+     */
+    orderBy?: DojoOwnerInviteOrderByWithRelationInput | DojoOwnerInviteOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: DojoOwnerInviteWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DojoOwnerInvites from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DojoOwnerInvites.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned DojoOwnerInvites
+    **/
+    _count?: true | DojoOwnerInviteCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: DojoOwnerInviteMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: DojoOwnerInviteMaxAggregateInputType
+  }
+
+  export type GetDojoOwnerInviteAggregateType<T extends DojoOwnerInviteAggregateArgs> = {
+        [P in keyof T & keyof AggregateDojoOwnerInvite]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateDojoOwnerInvite[P]>
+      : GetScalarType<T[P], AggregateDojoOwnerInvite[P]>
+  }
+
+
+
+
+  export type DojoOwnerInviteGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DojoOwnerInviteWhereInput
+    orderBy?: DojoOwnerInviteOrderByWithAggregationInput | DojoOwnerInviteOrderByWithAggregationInput[]
+    by: DojoOwnerInviteScalarFieldEnum[] | DojoOwnerInviteScalarFieldEnum
+    having?: DojoOwnerInviteScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: DojoOwnerInviteCountAggregateInputType | true
+    _min?: DojoOwnerInviteMinAggregateInputType
+    _max?: DojoOwnerInviteMaxAggregateInputType
+  }
+
+  export type DojoOwnerInviteGroupByOutputType = {
+    id: string
+    email: string
+    fullName: string | null
+    invitedById: string
+    invitedAt: Date
+    acceptedAt: Date | null
+    _count: DojoOwnerInviteCountAggregateOutputType | null
+    _min: DojoOwnerInviteMinAggregateOutputType | null
+    _max: DojoOwnerInviteMaxAggregateOutputType | null
+  }
+
+  type GetDojoOwnerInviteGroupByPayload<T extends DojoOwnerInviteGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<DojoOwnerInviteGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof DojoOwnerInviteGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], DojoOwnerInviteGroupByOutputType[P]>
+            : GetScalarType<T[P], DojoOwnerInviteGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type DojoOwnerInviteSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    email?: boolean
+    fullName?: boolean
+    invitedById?: boolean
+    invitedAt?: boolean
+    acceptedAt?: boolean
+    invitedBy?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["dojoOwnerInvite"]>
+
+  export type DojoOwnerInviteSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    email?: boolean
+    fullName?: boolean
+    invitedById?: boolean
+    invitedAt?: boolean
+    acceptedAt?: boolean
+    invitedBy?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["dojoOwnerInvite"]>
+
+  export type DojoOwnerInviteSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    email?: boolean
+    fullName?: boolean
+    invitedById?: boolean
+    invitedAt?: boolean
+    acceptedAt?: boolean
+    invitedBy?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["dojoOwnerInvite"]>
+
+  export type DojoOwnerInviteSelectScalar = {
+    id?: boolean
+    email?: boolean
+    fullName?: boolean
+    invitedById?: boolean
+    invitedAt?: boolean
+    acceptedAt?: boolean
+  }
+
+  export type DojoOwnerInviteOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "fullName" | "invitedById" | "invitedAt" | "acceptedAt", ExtArgs["result"]["dojoOwnerInvite"]>
+  export type DojoOwnerInviteInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    invitedBy?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type DojoOwnerInviteIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    invitedBy?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type DojoOwnerInviteIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    invitedBy?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $DojoOwnerInvitePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "DojoOwnerInvite"
+    objects: {
+      invitedBy: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      email: string
+      fullName: string | null
+      invitedById: string
+      invitedAt: Date
+      acceptedAt: Date | null
+    }, ExtArgs["result"]["dojoOwnerInvite"]>
+    composites: {}
+  }
+
+  type DojoOwnerInviteGetPayload<S extends boolean | null | undefined | DojoOwnerInviteDefaultArgs> = $Result.GetResult<Prisma.$DojoOwnerInvitePayload, S>
+
+  type DojoOwnerInviteCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<DojoOwnerInviteFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: DojoOwnerInviteCountAggregateInputType | true
+    }
+
+  export interface DojoOwnerInviteDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['DojoOwnerInvite'], meta: { name: 'DojoOwnerInvite' } }
+    /**
+     * Find zero or one DojoOwnerInvite that matches the filter.
+     * @param {DojoOwnerInviteFindUniqueArgs} args - Arguments to find a DojoOwnerInvite
+     * @example
+     * // Get one DojoOwnerInvite
+     * const dojoOwnerInvite = await prisma.dojoOwnerInvite.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends DojoOwnerInviteFindUniqueArgs>(args: SelectSubset<T, DojoOwnerInviteFindUniqueArgs<ExtArgs>>): Prisma__DojoOwnerInviteClient<$Result.GetResult<Prisma.$DojoOwnerInvitePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one DojoOwnerInvite that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {DojoOwnerInviteFindUniqueOrThrowArgs} args - Arguments to find a DojoOwnerInvite
+     * @example
+     * // Get one DojoOwnerInvite
+     * const dojoOwnerInvite = await prisma.dojoOwnerInvite.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends DojoOwnerInviteFindUniqueOrThrowArgs>(args: SelectSubset<T, DojoOwnerInviteFindUniqueOrThrowArgs<ExtArgs>>): Prisma__DojoOwnerInviteClient<$Result.GetResult<Prisma.$DojoOwnerInvitePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first DojoOwnerInvite that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DojoOwnerInviteFindFirstArgs} args - Arguments to find a DojoOwnerInvite
+     * @example
+     * // Get one DojoOwnerInvite
+     * const dojoOwnerInvite = await prisma.dojoOwnerInvite.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends DojoOwnerInviteFindFirstArgs>(args?: SelectSubset<T, DojoOwnerInviteFindFirstArgs<ExtArgs>>): Prisma__DojoOwnerInviteClient<$Result.GetResult<Prisma.$DojoOwnerInvitePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first DojoOwnerInvite that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DojoOwnerInviteFindFirstOrThrowArgs} args - Arguments to find a DojoOwnerInvite
+     * @example
+     * // Get one DojoOwnerInvite
+     * const dojoOwnerInvite = await prisma.dojoOwnerInvite.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends DojoOwnerInviteFindFirstOrThrowArgs>(args?: SelectSubset<T, DojoOwnerInviteFindFirstOrThrowArgs<ExtArgs>>): Prisma__DojoOwnerInviteClient<$Result.GetResult<Prisma.$DojoOwnerInvitePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more DojoOwnerInvites that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DojoOwnerInviteFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all DojoOwnerInvites
+     * const dojoOwnerInvites = await prisma.dojoOwnerInvite.findMany()
+     * 
+     * // Get first 10 DojoOwnerInvites
+     * const dojoOwnerInvites = await prisma.dojoOwnerInvite.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const dojoOwnerInviteWithIdOnly = await prisma.dojoOwnerInvite.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends DojoOwnerInviteFindManyArgs>(args?: SelectSubset<T, DojoOwnerInviteFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DojoOwnerInvitePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a DojoOwnerInvite.
+     * @param {DojoOwnerInviteCreateArgs} args - Arguments to create a DojoOwnerInvite.
+     * @example
+     * // Create one DojoOwnerInvite
+     * const DojoOwnerInvite = await prisma.dojoOwnerInvite.create({
+     *   data: {
+     *     // ... data to create a DojoOwnerInvite
+     *   }
+     * })
+     * 
+     */
+    create<T extends DojoOwnerInviteCreateArgs>(args: SelectSubset<T, DojoOwnerInviteCreateArgs<ExtArgs>>): Prisma__DojoOwnerInviteClient<$Result.GetResult<Prisma.$DojoOwnerInvitePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many DojoOwnerInvites.
+     * @param {DojoOwnerInviteCreateManyArgs} args - Arguments to create many DojoOwnerInvites.
+     * @example
+     * // Create many DojoOwnerInvites
+     * const dojoOwnerInvite = await prisma.dojoOwnerInvite.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends DojoOwnerInviteCreateManyArgs>(args?: SelectSubset<T, DojoOwnerInviteCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many DojoOwnerInvites and returns the data saved in the database.
+     * @param {DojoOwnerInviteCreateManyAndReturnArgs} args - Arguments to create many DojoOwnerInvites.
+     * @example
+     * // Create many DojoOwnerInvites
+     * const dojoOwnerInvite = await prisma.dojoOwnerInvite.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many DojoOwnerInvites and only return the `id`
+     * const dojoOwnerInviteWithIdOnly = await prisma.dojoOwnerInvite.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends DojoOwnerInviteCreateManyAndReturnArgs>(args?: SelectSubset<T, DojoOwnerInviteCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DojoOwnerInvitePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a DojoOwnerInvite.
+     * @param {DojoOwnerInviteDeleteArgs} args - Arguments to delete one DojoOwnerInvite.
+     * @example
+     * // Delete one DojoOwnerInvite
+     * const DojoOwnerInvite = await prisma.dojoOwnerInvite.delete({
+     *   where: {
+     *     // ... filter to delete one DojoOwnerInvite
+     *   }
+     * })
+     * 
+     */
+    delete<T extends DojoOwnerInviteDeleteArgs>(args: SelectSubset<T, DojoOwnerInviteDeleteArgs<ExtArgs>>): Prisma__DojoOwnerInviteClient<$Result.GetResult<Prisma.$DojoOwnerInvitePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one DojoOwnerInvite.
+     * @param {DojoOwnerInviteUpdateArgs} args - Arguments to update one DojoOwnerInvite.
+     * @example
+     * // Update one DojoOwnerInvite
+     * const dojoOwnerInvite = await prisma.dojoOwnerInvite.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends DojoOwnerInviteUpdateArgs>(args: SelectSubset<T, DojoOwnerInviteUpdateArgs<ExtArgs>>): Prisma__DojoOwnerInviteClient<$Result.GetResult<Prisma.$DojoOwnerInvitePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more DojoOwnerInvites.
+     * @param {DojoOwnerInviteDeleteManyArgs} args - Arguments to filter DojoOwnerInvites to delete.
+     * @example
+     * // Delete a few DojoOwnerInvites
+     * const { count } = await prisma.dojoOwnerInvite.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends DojoOwnerInviteDeleteManyArgs>(args?: SelectSubset<T, DojoOwnerInviteDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more DojoOwnerInvites.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DojoOwnerInviteUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many DojoOwnerInvites
+     * const dojoOwnerInvite = await prisma.dojoOwnerInvite.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends DojoOwnerInviteUpdateManyArgs>(args: SelectSubset<T, DojoOwnerInviteUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more DojoOwnerInvites and returns the data updated in the database.
+     * @param {DojoOwnerInviteUpdateManyAndReturnArgs} args - Arguments to update many DojoOwnerInvites.
+     * @example
+     * // Update many DojoOwnerInvites
+     * const dojoOwnerInvite = await prisma.dojoOwnerInvite.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more DojoOwnerInvites and only return the `id`
+     * const dojoOwnerInviteWithIdOnly = await prisma.dojoOwnerInvite.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends DojoOwnerInviteUpdateManyAndReturnArgs>(args: SelectSubset<T, DojoOwnerInviteUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DojoOwnerInvitePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one DojoOwnerInvite.
+     * @param {DojoOwnerInviteUpsertArgs} args - Arguments to update or create a DojoOwnerInvite.
+     * @example
+     * // Update or create a DojoOwnerInvite
+     * const dojoOwnerInvite = await prisma.dojoOwnerInvite.upsert({
+     *   create: {
+     *     // ... data to create a DojoOwnerInvite
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the DojoOwnerInvite we want to update
+     *   }
+     * })
+     */
+    upsert<T extends DojoOwnerInviteUpsertArgs>(args: SelectSubset<T, DojoOwnerInviteUpsertArgs<ExtArgs>>): Prisma__DojoOwnerInviteClient<$Result.GetResult<Prisma.$DojoOwnerInvitePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of DojoOwnerInvites.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DojoOwnerInviteCountArgs} args - Arguments to filter DojoOwnerInvites to count.
+     * @example
+     * // Count the number of DojoOwnerInvites
+     * const count = await prisma.dojoOwnerInvite.count({
+     *   where: {
+     *     // ... the filter for the DojoOwnerInvites we want to count
+     *   }
+     * })
+    **/
+    count<T extends DojoOwnerInviteCountArgs>(
+      args?: Subset<T, DojoOwnerInviteCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], DojoOwnerInviteCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a DojoOwnerInvite.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DojoOwnerInviteAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends DojoOwnerInviteAggregateArgs>(args: Subset<T, DojoOwnerInviteAggregateArgs>): Prisma.PrismaPromise<GetDojoOwnerInviteAggregateType<T>>
+
+    /**
+     * Group by DojoOwnerInvite.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DojoOwnerInviteGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends DojoOwnerInviteGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: DojoOwnerInviteGroupByArgs['orderBy'] }
+        : { orderBy?: DojoOwnerInviteGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, DojoOwnerInviteGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetDojoOwnerInviteGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the DojoOwnerInvite model
+   */
+  readonly fields: DojoOwnerInviteFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for DojoOwnerInvite.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__DojoOwnerInviteClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    invitedBy<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the DojoOwnerInvite model
+   */
+  interface DojoOwnerInviteFieldRefs {
+    readonly id: FieldRef<"DojoOwnerInvite", 'String'>
+    readonly email: FieldRef<"DojoOwnerInvite", 'String'>
+    readonly fullName: FieldRef<"DojoOwnerInvite", 'String'>
+    readonly invitedById: FieldRef<"DojoOwnerInvite", 'String'>
+    readonly invitedAt: FieldRef<"DojoOwnerInvite", 'DateTime'>
+    readonly acceptedAt: FieldRef<"DojoOwnerInvite", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * DojoOwnerInvite findUnique
+   */
+  export type DojoOwnerInviteFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DojoOwnerInvite
+     */
+    select?: DojoOwnerInviteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DojoOwnerInvite
+     */
+    omit?: DojoOwnerInviteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DojoOwnerInviteInclude<ExtArgs> | null
+    /**
+     * Filter, which DojoOwnerInvite to fetch.
+     */
+    where: DojoOwnerInviteWhereUniqueInput
+  }
+
+  /**
+   * DojoOwnerInvite findUniqueOrThrow
+   */
+  export type DojoOwnerInviteFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DojoOwnerInvite
+     */
+    select?: DojoOwnerInviteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DojoOwnerInvite
+     */
+    omit?: DojoOwnerInviteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DojoOwnerInviteInclude<ExtArgs> | null
+    /**
+     * Filter, which DojoOwnerInvite to fetch.
+     */
+    where: DojoOwnerInviteWhereUniqueInput
+  }
+
+  /**
+   * DojoOwnerInvite findFirst
+   */
+  export type DojoOwnerInviteFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DojoOwnerInvite
+     */
+    select?: DojoOwnerInviteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DojoOwnerInvite
+     */
+    omit?: DojoOwnerInviteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DojoOwnerInviteInclude<ExtArgs> | null
+    /**
+     * Filter, which DojoOwnerInvite to fetch.
+     */
+    where?: DojoOwnerInviteWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DojoOwnerInvites to fetch.
+     */
+    orderBy?: DojoOwnerInviteOrderByWithRelationInput | DojoOwnerInviteOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for DojoOwnerInvites.
+     */
+    cursor?: DojoOwnerInviteWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DojoOwnerInvites from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DojoOwnerInvites.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DojoOwnerInvites.
+     */
+    distinct?: DojoOwnerInviteScalarFieldEnum | DojoOwnerInviteScalarFieldEnum[]
+  }
+
+  /**
+   * DojoOwnerInvite findFirstOrThrow
+   */
+  export type DojoOwnerInviteFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DojoOwnerInvite
+     */
+    select?: DojoOwnerInviteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DojoOwnerInvite
+     */
+    omit?: DojoOwnerInviteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DojoOwnerInviteInclude<ExtArgs> | null
+    /**
+     * Filter, which DojoOwnerInvite to fetch.
+     */
+    where?: DojoOwnerInviteWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DojoOwnerInvites to fetch.
+     */
+    orderBy?: DojoOwnerInviteOrderByWithRelationInput | DojoOwnerInviteOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for DojoOwnerInvites.
+     */
+    cursor?: DojoOwnerInviteWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DojoOwnerInvites from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DojoOwnerInvites.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DojoOwnerInvites.
+     */
+    distinct?: DojoOwnerInviteScalarFieldEnum | DojoOwnerInviteScalarFieldEnum[]
+  }
+
+  /**
+   * DojoOwnerInvite findMany
+   */
+  export type DojoOwnerInviteFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DojoOwnerInvite
+     */
+    select?: DojoOwnerInviteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DojoOwnerInvite
+     */
+    omit?: DojoOwnerInviteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DojoOwnerInviteInclude<ExtArgs> | null
+    /**
+     * Filter, which DojoOwnerInvites to fetch.
+     */
+    where?: DojoOwnerInviteWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DojoOwnerInvites to fetch.
+     */
+    orderBy?: DojoOwnerInviteOrderByWithRelationInput | DojoOwnerInviteOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing DojoOwnerInvites.
+     */
+    cursor?: DojoOwnerInviteWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DojoOwnerInvites from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DojoOwnerInvites.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DojoOwnerInvites.
+     */
+    distinct?: DojoOwnerInviteScalarFieldEnum | DojoOwnerInviteScalarFieldEnum[]
+  }
+
+  /**
+   * DojoOwnerInvite create
+   */
+  export type DojoOwnerInviteCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DojoOwnerInvite
+     */
+    select?: DojoOwnerInviteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DojoOwnerInvite
+     */
+    omit?: DojoOwnerInviteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DojoOwnerInviteInclude<ExtArgs> | null
+    /**
+     * The data needed to create a DojoOwnerInvite.
+     */
+    data: XOR<DojoOwnerInviteCreateInput, DojoOwnerInviteUncheckedCreateInput>
+  }
+
+  /**
+   * DojoOwnerInvite createMany
+   */
+  export type DojoOwnerInviteCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many DojoOwnerInvites.
+     */
+    data: DojoOwnerInviteCreateManyInput | DojoOwnerInviteCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * DojoOwnerInvite createManyAndReturn
+   */
+  export type DojoOwnerInviteCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DojoOwnerInvite
+     */
+    select?: DojoOwnerInviteSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the DojoOwnerInvite
+     */
+    omit?: DojoOwnerInviteOmit<ExtArgs> | null
+    /**
+     * The data used to create many DojoOwnerInvites.
+     */
+    data: DojoOwnerInviteCreateManyInput | DojoOwnerInviteCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DojoOwnerInviteIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * DojoOwnerInvite update
+   */
+  export type DojoOwnerInviteUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DojoOwnerInvite
+     */
+    select?: DojoOwnerInviteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DojoOwnerInvite
+     */
+    omit?: DojoOwnerInviteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DojoOwnerInviteInclude<ExtArgs> | null
+    /**
+     * The data needed to update a DojoOwnerInvite.
+     */
+    data: XOR<DojoOwnerInviteUpdateInput, DojoOwnerInviteUncheckedUpdateInput>
+    /**
+     * Choose, which DojoOwnerInvite to update.
+     */
+    where: DojoOwnerInviteWhereUniqueInput
+  }
+
+  /**
+   * DojoOwnerInvite updateMany
+   */
+  export type DojoOwnerInviteUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update DojoOwnerInvites.
+     */
+    data: XOR<DojoOwnerInviteUpdateManyMutationInput, DojoOwnerInviteUncheckedUpdateManyInput>
+    /**
+     * Filter which DojoOwnerInvites to update
+     */
+    where?: DojoOwnerInviteWhereInput
+    /**
+     * Limit how many DojoOwnerInvites to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * DojoOwnerInvite updateManyAndReturn
+   */
+  export type DojoOwnerInviteUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DojoOwnerInvite
+     */
+    select?: DojoOwnerInviteSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the DojoOwnerInvite
+     */
+    omit?: DojoOwnerInviteOmit<ExtArgs> | null
+    /**
+     * The data used to update DojoOwnerInvites.
+     */
+    data: XOR<DojoOwnerInviteUpdateManyMutationInput, DojoOwnerInviteUncheckedUpdateManyInput>
+    /**
+     * Filter which DojoOwnerInvites to update
+     */
+    where?: DojoOwnerInviteWhereInput
+    /**
+     * Limit how many DojoOwnerInvites to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DojoOwnerInviteIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * DojoOwnerInvite upsert
+   */
+  export type DojoOwnerInviteUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DojoOwnerInvite
+     */
+    select?: DojoOwnerInviteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DojoOwnerInvite
+     */
+    omit?: DojoOwnerInviteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DojoOwnerInviteInclude<ExtArgs> | null
+    /**
+     * The filter to search for the DojoOwnerInvite to update in case it exists.
+     */
+    where: DojoOwnerInviteWhereUniqueInput
+    /**
+     * In case the DojoOwnerInvite found by the `where` argument doesn't exist, create a new DojoOwnerInvite with this data.
+     */
+    create: XOR<DojoOwnerInviteCreateInput, DojoOwnerInviteUncheckedCreateInput>
+    /**
+     * In case the DojoOwnerInvite was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<DojoOwnerInviteUpdateInput, DojoOwnerInviteUncheckedUpdateInput>
+  }
+
+  /**
+   * DojoOwnerInvite delete
+   */
+  export type DojoOwnerInviteDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DojoOwnerInvite
+     */
+    select?: DojoOwnerInviteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DojoOwnerInvite
+     */
+    omit?: DojoOwnerInviteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DojoOwnerInviteInclude<ExtArgs> | null
+    /**
+     * Filter which DojoOwnerInvite to delete.
+     */
+    where: DojoOwnerInviteWhereUniqueInput
+  }
+
+  /**
+   * DojoOwnerInvite deleteMany
+   */
+  export type DojoOwnerInviteDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which DojoOwnerInvites to delete
+     */
+    where?: DojoOwnerInviteWhereInput
+    /**
+     * Limit how many DojoOwnerInvites to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * DojoOwnerInvite without action
+   */
+  export type DojoOwnerInviteDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DojoOwnerInvite
+     */
+    select?: DojoOwnerInviteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DojoOwnerInvite
+     */
+    omit?: DojoOwnerInviteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DojoOwnerInviteInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model GradingEvent
    */
 
@@ -27451,12 +28668,14 @@ export namespace Prisma {
   export type EventAvgAggregateOutputType = {
     maxCapacity: number | null
     ticketPrice: Decimal | null
+    memberDiscountPercent: number | null
     minAge: number | null
   }
 
   export type EventSumAggregateOutputType = {
     maxCapacity: number | null
     ticketPrice: Decimal | null
+    memberDiscountPercent: number | null
     minAge: number | null
   }
 
@@ -27474,6 +28693,7 @@ export namespace Prisma {
     attachmentType: $Enums.AttachmentType | null
     isPremium: boolean | null
     ticketPrice: Decimal | null
+    memberDiscountPercent: number | null
     minAge: number | null
     minRankId: string | null
     participantType: $Enums.EventParticipantType | null
@@ -27497,6 +28717,7 @@ export namespace Prisma {
     attachmentType: $Enums.AttachmentType | null
     isPremium: boolean | null
     ticketPrice: Decimal | null
+    memberDiscountPercent: number | null
     minAge: number | null
     minRankId: string | null
     participantType: $Enums.EventParticipantType | null
@@ -27520,6 +28741,7 @@ export namespace Prisma {
     attachmentType: number
     isPremium: number
     ticketPrice: number
+    memberDiscountPercent: number
     minAge: number
     minRankId: number
     participantType: number
@@ -27534,12 +28756,14 @@ export namespace Prisma {
   export type EventAvgAggregateInputType = {
     maxCapacity?: true
     ticketPrice?: true
+    memberDiscountPercent?: true
     minAge?: true
   }
 
   export type EventSumAggregateInputType = {
     maxCapacity?: true
     ticketPrice?: true
+    memberDiscountPercent?: true
     minAge?: true
   }
 
@@ -27557,6 +28781,7 @@ export namespace Prisma {
     attachmentType?: true
     isPremium?: true
     ticketPrice?: true
+    memberDiscountPercent?: true
     minAge?: true
     minRankId?: true
     participantType?: true
@@ -27580,6 +28805,7 @@ export namespace Prisma {
     attachmentType?: true
     isPremium?: true
     ticketPrice?: true
+    memberDiscountPercent?: true
     minAge?: true
     minRankId?: true
     participantType?: true
@@ -27603,6 +28829,7 @@ export namespace Prisma {
     attachmentType?: true
     isPremium?: true
     ticketPrice?: true
+    memberDiscountPercent?: true
     minAge?: true
     minRankId?: true
     participantType?: true
@@ -27713,6 +28940,7 @@ export namespace Prisma {
     attachmentType: $Enums.AttachmentType | null
     isPremium: boolean
     ticketPrice: Decimal | null
+    memberDiscountPercent: number
     minAge: number | null
     minRankId: string | null
     participantType: $Enums.EventParticipantType
@@ -27755,6 +28983,7 @@ export namespace Prisma {
     attachmentType?: boolean
     isPremium?: boolean
     ticketPrice?: boolean
+    memberDiscountPercent?: boolean
     minAge?: boolean
     minRankId?: boolean
     participantType?: boolean
@@ -27783,6 +29012,7 @@ export namespace Prisma {
     attachmentType?: boolean
     isPremium?: boolean
     ticketPrice?: boolean
+    memberDiscountPercent?: boolean
     minAge?: boolean
     minRankId?: boolean
     participantType?: boolean
@@ -27809,6 +29039,7 @@ export namespace Prisma {
     attachmentType?: boolean
     isPremium?: boolean
     ticketPrice?: boolean
+    memberDiscountPercent?: boolean
     minAge?: boolean
     minRankId?: boolean
     participantType?: boolean
@@ -27835,6 +29066,7 @@ export namespace Prisma {
     attachmentType?: boolean
     isPremium?: boolean
     ticketPrice?: boolean
+    memberDiscountPercent?: boolean
     minAge?: boolean
     minRankId?: boolean
     participantType?: boolean
@@ -27844,7 +29076,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type EventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "eventDate" | "location" | "imageUrl" | "isPublished" | "maxCapacity" | "category" | "attachmentUrl" | "attachmentType" | "isPremium" | "ticketPrice" | "minAge" | "minRankId" | "participantType" | "postedById" | "dojoId" | "createdAt" | "updatedAt", ExtArgs["result"]["event"]>
+  export type EventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "eventDate" | "location" | "imageUrl" | "isPublished" | "maxCapacity" | "category" | "attachmentUrl" | "attachmentType" | "isPremium" | "ticketPrice" | "memberDiscountPercent" | "minAge" | "minRankId" | "participantType" | "postedById" | "dojoId" | "createdAt" | "updatedAt", ExtArgs["result"]["event"]>
   export type EventInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     registrations?: boolean | Event$registrationsArgs<ExtArgs>
     postedBy?: boolean | Event$postedByArgs<ExtArgs>
@@ -27885,6 +29117,7 @@ export namespace Prisma {
       attachmentType: $Enums.AttachmentType | null
       isPremium: boolean
       ticketPrice: Prisma.Decimal | null
+      memberDiscountPercent: number
       minAge: number | null
       minRankId: string | null
       participantType: $Enums.EventParticipantType
@@ -28332,6 +29565,7 @@ export namespace Prisma {
     readonly attachmentType: FieldRef<"Event", 'AttachmentType'>
     readonly isPremium: FieldRef<"Event", 'Boolean'>
     readonly ticketPrice: FieldRef<"Event", 'Decimal'>
+    readonly memberDiscountPercent: FieldRef<"Event", 'Int'>
     readonly minAge: FieldRef<"Event", 'Int'>
     readonly minRankId: FieldRef<"Event", 'String'>
     readonly participantType: FieldRef<"Event", 'EventParticipantType'>
@@ -32493,11 +33727,13 @@ export namespace Prisma {
   export type ShopProductAvgAggregateOutputType = {
     price: Decimal | null
     stock: number | null
+    memberDiscountPercent: number | null
   }
 
   export type ShopProductSumAggregateOutputType = {
     price: Decimal | null
     stock: number | null
+    memberDiscountPercent: number | null
   }
 
   export type ShopProductMinAggregateOutputType = {
@@ -32510,6 +33746,7 @@ export namespace Prisma {
     category: string | null
     isActive: boolean | null
     hasSizes: boolean | null
+    memberDiscountPercent: number | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -32524,6 +33761,7 @@ export namespace Prisma {
     category: string | null
     isActive: boolean | null
     hasSizes: boolean | null
+    memberDiscountPercent: number | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -32539,6 +33777,7 @@ export namespace Prisma {
     isActive: number
     hasSizes: number
     sizes: number
+    memberDiscountPercent: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -32548,11 +33787,13 @@ export namespace Prisma {
   export type ShopProductAvgAggregateInputType = {
     price?: true
     stock?: true
+    memberDiscountPercent?: true
   }
 
   export type ShopProductSumAggregateInputType = {
     price?: true
     stock?: true
+    memberDiscountPercent?: true
   }
 
   export type ShopProductMinAggregateInputType = {
@@ -32565,6 +33806,7 @@ export namespace Prisma {
     category?: true
     isActive?: true
     hasSizes?: true
+    memberDiscountPercent?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -32579,6 +33821,7 @@ export namespace Prisma {
     category?: true
     isActive?: true
     hasSizes?: true
+    memberDiscountPercent?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -32594,6 +33837,7 @@ export namespace Prisma {
     isActive?: true
     hasSizes?: true
     sizes?: true
+    memberDiscountPercent?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -32696,6 +33940,7 @@ export namespace Prisma {
     isActive: boolean
     hasSizes: boolean
     sizes: string[]
+    memberDiscountPercent: number
     createdAt: Date
     updatedAt: Date
     _count: ShopProductCountAggregateOutputType | null
@@ -32730,6 +33975,7 @@ export namespace Prisma {
     isActive?: boolean
     hasSizes?: boolean
     sizes?: boolean
+    memberDiscountPercent?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     orderItems?: boolean | ShopProduct$orderItemsArgs<ExtArgs>
@@ -32749,6 +33995,7 @@ export namespace Prisma {
     isActive?: boolean
     hasSizes?: boolean
     sizes?: boolean
+    memberDiscountPercent?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["shopProduct"]>
@@ -32764,6 +34011,7 @@ export namespace Prisma {
     isActive?: boolean
     hasSizes?: boolean
     sizes?: boolean
+    memberDiscountPercent?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["shopProduct"]>
@@ -32779,11 +34027,12 @@ export namespace Prisma {
     isActive?: boolean
     hasSizes?: boolean
     sizes?: boolean
+    memberDiscountPercent?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type ShopProductOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "price" | "stock" | "imageUrl" | "category" | "isActive" | "hasSizes" | "sizes" | "createdAt" | "updatedAt", ExtArgs["result"]["shopProduct"]>
+  export type ShopProductOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "price" | "stock" | "imageUrl" | "category" | "isActive" | "hasSizes" | "sizes" | "memberDiscountPercent" | "createdAt" | "updatedAt", ExtArgs["result"]["shopProduct"]>
   export type ShopProductInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     orderItems?: boolean | ShopProduct$orderItemsArgs<ExtArgs>
     dojoInventory?: boolean | ShopProduct$dojoInventoryArgs<ExtArgs>
@@ -32811,6 +34060,7 @@ export namespace Prisma {
       isActive: boolean
       hasSizes: boolean
       sizes: string[]
+      memberDiscountPercent: number
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["shopProduct"]>
@@ -33249,6 +34499,7 @@ export namespace Prisma {
     readonly isActive: FieldRef<"ShopProduct", 'Boolean'>
     readonly hasSizes: FieldRef<"ShopProduct", 'Boolean'>
     readonly sizes: FieldRef<"ShopProduct", 'String[]'>
+    readonly memberDiscountPercent: FieldRef<"ShopProduct", 'Int'>
     readonly createdAt: FieldRef<"ShopProduct", 'DateTime'>
     readonly updatedAt: FieldRef<"ShopProduct", 'DateTime'>
   }
@@ -49854,6 +51105,7 @@ export namespace Prisma {
     phone: 'phone',
     fullName: 'fullName',
     avatarUrl: 'avatarUrl',
+    bio: 'bio',
     roleId: 'roleId',
     isActive: 'isActive',
     memberNumber: 'memberNumber',
@@ -50006,6 +51258,18 @@ export namespace Prisma {
   export type DojoApplicationScalarFieldEnum = (typeof DojoApplicationScalarFieldEnum)[keyof typeof DojoApplicationScalarFieldEnum]
 
 
+  export const DojoOwnerInviteScalarFieldEnum: {
+    id: 'id',
+    email: 'email',
+    fullName: 'fullName',
+    invitedById: 'invitedById',
+    invitedAt: 'invitedAt',
+    acceptedAt: 'acceptedAt'
+  };
+
+  export type DojoOwnerInviteScalarFieldEnum = (typeof DojoOwnerInviteScalarFieldEnum)[keyof typeof DojoOwnerInviteScalarFieldEnum]
+
+
   export const GradingEventScalarFieldEnum: {
     id: 'id',
     name: 'name',
@@ -50114,6 +51378,7 @@ export namespace Prisma {
     attachmentType: 'attachmentType',
     isPremium: 'isPremium',
     ticketPrice: 'ticketPrice',
+    memberDiscountPercent: 'memberDiscountPercent',
     minAge: 'minAge',
     minRankId: 'minRankId',
     participantType: 'participantType',
@@ -50192,6 +51457,7 @@ export namespace Prisma {
     isActive: 'isActive',
     hasSizes: 'hasSizes',
     sizes: 'sizes',
+    memberDiscountPercent: 'memberDiscountPercent',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -51010,6 +52276,7 @@ export namespace Prisma {
     phone?: StringNullableFilter<"User"> | string | null
     fullName?: StringFilter<"User"> | string
     avatarUrl?: StringNullableFilter<"User"> | string | null
+    bio?: StringNullableFilter<"User"> | string | null
     roleId?: StringFilter<"User"> | string
     isActive?: BoolFilter<"User"> | boolean
     memberNumber?: StringNullableFilter<"User"> | string | null
@@ -51036,6 +52303,7 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestListRelationFilter
     dojoHistoryChanges?: StudentDojoHistoryListRelationFilter
     paymentTransactions?: PaymentTransactionListRelationFilter
+    dojoOwnerInvitesSent?: DojoOwnerInviteListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -51044,6 +52312,7 @@ export namespace Prisma {
     phone?: SortOrderInput | SortOrder
     fullName?: SortOrder
     avatarUrl?: SortOrderInput | SortOrder
+    bio?: SortOrderInput | SortOrder
     roleId?: SortOrder
     isActive?: SortOrder
     memberNumber?: SortOrderInput | SortOrder
@@ -51070,6 +52339,7 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestOrderByRelationAggregateInput
     dojoHistoryChanges?: StudentDojoHistoryOrderByRelationAggregateInput
     paymentTransactions?: PaymentTransactionOrderByRelationAggregateInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -51082,6 +52352,7 @@ export namespace Prisma {
     phone?: StringNullableFilter<"User"> | string | null
     fullName?: StringFilter<"User"> | string
     avatarUrl?: StringNullableFilter<"User"> | string | null
+    bio?: StringNullableFilter<"User"> | string | null
     roleId?: StringFilter<"User"> | string
     isActive?: BoolFilter<"User"> | boolean
     createdAt?: DateTimeFilter<"User"> | Date | string
@@ -51107,6 +52378,7 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestListRelationFilter
     dojoHistoryChanges?: StudentDojoHistoryListRelationFilter
     paymentTransactions?: PaymentTransactionListRelationFilter
+    dojoOwnerInvitesSent?: DojoOwnerInviteListRelationFilter
   }, "id" | "email" | "memberNumber">
 
   export type UserOrderByWithAggregationInput = {
@@ -51115,6 +52387,7 @@ export namespace Prisma {
     phone?: SortOrderInput | SortOrder
     fullName?: SortOrder
     avatarUrl?: SortOrderInput | SortOrder
+    bio?: SortOrderInput | SortOrder
     roleId?: SortOrder
     isActive?: SortOrder
     memberNumber?: SortOrderInput | SortOrder
@@ -51134,6 +52407,7 @@ export namespace Prisma {
     phone?: StringNullableWithAggregatesFilter<"User"> | string | null
     fullName?: StringWithAggregatesFilter<"User"> | string
     avatarUrl?: StringNullableWithAggregatesFilter<"User"> | string | null
+    bio?: StringNullableWithAggregatesFilter<"User"> | string | null
     roleId?: StringWithAggregatesFilter<"User"> | string
     isActive?: BoolWithAggregatesFilter<"User"> | boolean
     memberNumber?: StringNullableWithAggregatesFilter<"User"> | string | null
@@ -51946,6 +53220,66 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"DojoApplication"> | Date | string
   }
 
+  export type DojoOwnerInviteWhereInput = {
+    AND?: DojoOwnerInviteWhereInput | DojoOwnerInviteWhereInput[]
+    OR?: DojoOwnerInviteWhereInput[]
+    NOT?: DojoOwnerInviteWhereInput | DojoOwnerInviteWhereInput[]
+    id?: UuidFilter<"DojoOwnerInvite"> | string
+    email?: StringFilter<"DojoOwnerInvite"> | string
+    fullName?: StringNullableFilter<"DojoOwnerInvite"> | string | null
+    invitedById?: UuidFilter<"DojoOwnerInvite"> | string
+    invitedAt?: DateTimeFilter<"DojoOwnerInvite"> | Date | string
+    acceptedAt?: DateTimeNullableFilter<"DojoOwnerInvite"> | Date | string | null
+    invitedBy?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type DojoOwnerInviteOrderByWithRelationInput = {
+    id?: SortOrder
+    email?: SortOrder
+    fullName?: SortOrderInput | SortOrder
+    invitedById?: SortOrder
+    invitedAt?: SortOrder
+    acceptedAt?: SortOrderInput | SortOrder
+    invitedBy?: UserOrderByWithRelationInput
+  }
+
+  export type DojoOwnerInviteWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    email?: string
+    AND?: DojoOwnerInviteWhereInput | DojoOwnerInviteWhereInput[]
+    OR?: DojoOwnerInviteWhereInput[]
+    NOT?: DojoOwnerInviteWhereInput | DojoOwnerInviteWhereInput[]
+    fullName?: StringNullableFilter<"DojoOwnerInvite"> | string | null
+    invitedById?: UuidFilter<"DojoOwnerInvite"> | string
+    invitedAt?: DateTimeFilter<"DojoOwnerInvite"> | Date | string
+    acceptedAt?: DateTimeNullableFilter<"DojoOwnerInvite"> | Date | string | null
+    invitedBy?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id" | "email">
+
+  export type DojoOwnerInviteOrderByWithAggregationInput = {
+    id?: SortOrder
+    email?: SortOrder
+    fullName?: SortOrderInput | SortOrder
+    invitedById?: SortOrder
+    invitedAt?: SortOrder
+    acceptedAt?: SortOrderInput | SortOrder
+    _count?: DojoOwnerInviteCountOrderByAggregateInput
+    _max?: DojoOwnerInviteMaxOrderByAggregateInput
+    _min?: DojoOwnerInviteMinOrderByAggregateInput
+  }
+
+  export type DojoOwnerInviteScalarWhereWithAggregatesInput = {
+    AND?: DojoOwnerInviteScalarWhereWithAggregatesInput | DojoOwnerInviteScalarWhereWithAggregatesInput[]
+    OR?: DojoOwnerInviteScalarWhereWithAggregatesInput[]
+    NOT?: DojoOwnerInviteScalarWhereWithAggregatesInput | DojoOwnerInviteScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"DojoOwnerInvite"> | string
+    email?: StringWithAggregatesFilter<"DojoOwnerInvite"> | string
+    fullName?: StringNullableWithAggregatesFilter<"DojoOwnerInvite"> | string | null
+    invitedById?: UuidWithAggregatesFilter<"DojoOwnerInvite"> | string
+    invitedAt?: DateTimeWithAggregatesFilter<"DojoOwnerInvite"> | Date | string
+    acceptedAt?: DateTimeNullableWithAggregatesFilter<"DojoOwnerInvite"> | Date | string | null
+  }
+
   export type GradingEventWhereInput = {
     AND?: GradingEventWhereInput | GradingEventWhereInput[]
     OR?: GradingEventWhereInput[]
@@ -52469,6 +53803,7 @@ export namespace Prisma {
     attachmentType?: EnumAttachmentTypeNullableFilter<"Event"> | $Enums.AttachmentType | null
     isPremium?: BoolFilter<"Event"> | boolean
     ticketPrice?: DecimalNullableFilter<"Event"> | Decimal | DecimalJsLike | number | string | null
+    memberDiscountPercent?: IntFilter<"Event"> | number
     minAge?: IntNullableFilter<"Event"> | number | null
     minRankId?: UuidNullableFilter<"Event"> | string | null
     participantType?: EnumEventParticipantTypeFilter<"Event"> | $Enums.EventParticipantType
@@ -52496,6 +53831,7 @@ export namespace Prisma {
     attachmentType?: SortOrderInput | SortOrder
     isPremium?: SortOrder
     ticketPrice?: SortOrderInput | SortOrder
+    memberDiscountPercent?: SortOrder
     minAge?: SortOrderInput | SortOrder
     minRankId?: SortOrderInput | SortOrder
     participantType?: SortOrder
@@ -52526,6 +53862,7 @@ export namespace Prisma {
     attachmentType?: EnumAttachmentTypeNullableFilter<"Event"> | $Enums.AttachmentType | null
     isPremium?: BoolFilter<"Event"> | boolean
     ticketPrice?: DecimalNullableFilter<"Event"> | Decimal | DecimalJsLike | number | string | null
+    memberDiscountPercent?: IntFilter<"Event"> | number
     minAge?: IntNullableFilter<"Event"> | number | null
     minRankId?: UuidNullableFilter<"Event"> | string | null
     participantType?: EnumEventParticipantTypeFilter<"Event"> | $Enums.EventParticipantType
@@ -52553,6 +53890,7 @@ export namespace Prisma {
     attachmentType?: SortOrderInput | SortOrder
     isPremium?: SortOrder
     ticketPrice?: SortOrderInput | SortOrder
+    memberDiscountPercent?: SortOrder
     minAge?: SortOrderInput | SortOrder
     minRankId?: SortOrderInput | SortOrder
     participantType?: SortOrder
@@ -52584,6 +53922,7 @@ export namespace Prisma {
     attachmentType?: EnumAttachmentTypeNullableWithAggregatesFilter<"Event"> | $Enums.AttachmentType | null
     isPremium?: BoolWithAggregatesFilter<"Event"> | boolean
     ticketPrice?: DecimalNullableWithAggregatesFilter<"Event"> | Decimal | DecimalJsLike | number | string | null
+    memberDiscountPercent?: IntWithAggregatesFilter<"Event"> | number
     minAge?: IntNullableWithAggregatesFilter<"Event"> | number | null
     minRankId?: UuidNullableWithAggregatesFilter<"Event"> | string | null
     participantType?: EnumEventParticipantTypeWithAggregatesFilter<"Event"> | $Enums.EventParticipantType
@@ -52896,6 +54235,7 @@ export namespace Prisma {
     isActive?: BoolFilter<"ShopProduct"> | boolean
     hasSizes?: BoolFilter<"ShopProduct"> | boolean
     sizes?: StringNullableListFilter<"ShopProduct">
+    memberDiscountPercent?: IntFilter<"ShopProduct"> | number
     createdAt?: DateTimeFilter<"ShopProduct"> | Date | string
     updatedAt?: DateTimeFilter<"ShopProduct"> | Date | string
     orderItems?: ShopOrderItemListRelationFilter
@@ -52914,6 +54254,7 @@ export namespace Prisma {
     isActive?: SortOrder
     hasSizes?: SortOrder
     sizes?: SortOrder
+    memberDiscountPercent?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     orderItems?: ShopOrderItemOrderByRelationAggregateInput
@@ -52935,6 +54276,7 @@ export namespace Prisma {
     isActive?: BoolFilter<"ShopProduct"> | boolean
     hasSizes?: BoolFilter<"ShopProduct"> | boolean
     sizes?: StringNullableListFilter<"ShopProduct">
+    memberDiscountPercent?: IntFilter<"ShopProduct"> | number
     createdAt?: DateTimeFilter<"ShopProduct"> | Date | string
     updatedAt?: DateTimeFilter<"ShopProduct"> | Date | string
     orderItems?: ShopOrderItemListRelationFilter
@@ -52953,6 +54295,7 @@ export namespace Prisma {
     isActive?: SortOrder
     hasSizes?: SortOrder
     sizes?: SortOrder
+    memberDiscountPercent?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: ShopProductCountOrderByAggregateInput
@@ -52976,6 +54319,7 @@ export namespace Prisma {
     isActive?: BoolWithAggregatesFilter<"ShopProduct"> | boolean
     hasSizes?: BoolWithAggregatesFilter<"ShopProduct"> | boolean
     sizes?: StringNullableListFilter<"ShopProduct">
+    memberDiscountPercent?: IntWithAggregatesFilter<"ShopProduct"> | number
     createdAt?: DateTimeWithAggregatesFilter<"ShopProduct"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"ShopProduct"> | Date | string
   }
@@ -54381,6 +55725,7 @@ export namespace Prisma {
     phone?: string | null
     fullName: string
     avatarUrl?: string | null
+    bio?: string | null
     isActive?: boolean
     memberNumber?: string | null
     createdAt?: Date | string
@@ -54406,6 +55751,7 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutUserInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteCreateNestedManyWithoutInvitedByInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -54414,6 +55760,7 @@ export namespace Prisma {
     phone?: string | null
     fullName: string
     avatarUrl?: string | null
+    bio?: string | null
     roleId?: string
     isActive?: boolean
     memberNumber?: string | null
@@ -54439,6 +55786,7 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutUserInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedCreateNestedManyWithoutInvitedByInput
   }
 
   export type UserUpdateInput = {
@@ -54447,6 +55795,7 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     fullName?: StringFieldUpdateOperationsInput | string
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -54472,6 +55821,7 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUpdateManyWithoutUserNestedInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteUpdateManyWithoutInvitedByNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -54480,6 +55830,7 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     fullName?: StringFieldUpdateOperationsInput | string
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
     roleId?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
@@ -54505,6 +55856,7 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutUserNestedInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedUpdateManyWithoutInvitedByNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -54513,6 +55865,7 @@ export namespace Prisma {
     phone?: string | null
     fullName: string
     avatarUrl?: string | null
+    bio?: string | null
     roleId?: string
     isActive?: boolean
     memberNumber?: string | null
@@ -54526,6 +55879,7 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     fullName?: StringFieldUpdateOperationsInput | string
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -54538,6 +55892,7 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     fullName?: StringFieldUpdateOperationsInput | string
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
     roleId?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
@@ -55447,6 +56802,68 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type DojoOwnerInviteCreateInput = {
+    id?: string
+    email: string
+    fullName?: string | null
+    invitedAt?: Date | string
+    acceptedAt?: Date | string | null
+    invitedBy: UserCreateNestedOneWithoutDojoOwnerInvitesSentInput
+  }
+
+  export type DojoOwnerInviteUncheckedCreateInput = {
+    id?: string
+    email: string
+    fullName?: string | null
+    invitedById: string
+    invitedAt?: Date | string
+    acceptedAt?: Date | string | null
+  }
+
+  export type DojoOwnerInviteUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    fullName?: NullableStringFieldUpdateOperationsInput | string | null
+    invitedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    acceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    invitedBy?: UserUpdateOneRequiredWithoutDojoOwnerInvitesSentNestedInput
+  }
+
+  export type DojoOwnerInviteUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    fullName?: NullableStringFieldUpdateOperationsInput | string | null
+    invitedById?: StringFieldUpdateOperationsInput | string
+    invitedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    acceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type DojoOwnerInviteCreateManyInput = {
+    id?: string
+    email: string
+    fullName?: string | null
+    invitedById: string
+    invitedAt?: Date | string
+    acceptedAt?: Date | string | null
+  }
+
+  export type DojoOwnerInviteUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    fullName?: NullableStringFieldUpdateOperationsInput | string | null
+    invitedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    acceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type DojoOwnerInviteUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    fullName?: NullableStringFieldUpdateOperationsInput | string | null
+    invitedById?: StringFieldUpdateOperationsInput | string
+    invitedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    acceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
   export type GradingEventCreateInput = {
     id?: string
     name: string
@@ -56014,6 +57431,7 @@ export namespace Prisma {
     attachmentType?: $Enums.AttachmentType | null
     isPremium?: boolean
     ticketPrice?: Decimal | DecimalJsLike | number | string | null
+    memberDiscountPercent?: number
     minAge?: number | null
     participantType?: $Enums.EventParticipantType
     createdAt?: Date | string
@@ -56038,6 +57456,7 @@ export namespace Prisma {
     attachmentType?: $Enums.AttachmentType | null
     isPremium?: boolean
     ticketPrice?: Decimal | DecimalJsLike | number | string | null
+    memberDiscountPercent?: number
     minAge?: number | null
     minRankId?: string | null
     participantType?: $Enums.EventParticipantType
@@ -56062,6 +57481,7 @@ export namespace Prisma {
     attachmentType?: NullableEnumAttachmentTypeFieldUpdateOperationsInput | $Enums.AttachmentType | null
     isPremium?: BoolFieldUpdateOperationsInput | boolean
     ticketPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    memberDiscountPercent?: IntFieldUpdateOperationsInput | number
     minAge?: NullableIntFieldUpdateOperationsInput | number | null
     participantType?: EnumEventParticipantTypeFieldUpdateOperationsInput | $Enums.EventParticipantType
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -56086,6 +57506,7 @@ export namespace Prisma {
     attachmentType?: NullableEnumAttachmentTypeFieldUpdateOperationsInput | $Enums.AttachmentType | null
     isPremium?: BoolFieldUpdateOperationsInput | boolean
     ticketPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    memberDiscountPercent?: IntFieldUpdateOperationsInput | number
     minAge?: NullableIntFieldUpdateOperationsInput | number | null
     minRankId?: NullableStringFieldUpdateOperationsInput | string | null
     participantType?: EnumEventParticipantTypeFieldUpdateOperationsInput | $Enums.EventParticipantType
@@ -56110,6 +57531,7 @@ export namespace Prisma {
     attachmentType?: $Enums.AttachmentType | null
     isPremium?: boolean
     ticketPrice?: Decimal | DecimalJsLike | number | string | null
+    memberDiscountPercent?: number
     minAge?: number | null
     minRankId?: string | null
     participantType?: $Enums.EventParticipantType
@@ -56133,6 +57555,7 @@ export namespace Prisma {
     attachmentType?: NullableEnumAttachmentTypeFieldUpdateOperationsInput | $Enums.AttachmentType | null
     isPremium?: BoolFieldUpdateOperationsInput | boolean
     ticketPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    memberDiscountPercent?: IntFieldUpdateOperationsInput | number
     minAge?: NullableIntFieldUpdateOperationsInput | number | null
     participantType?: EnumEventParticipantTypeFieldUpdateOperationsInput | $Enums.EventParticipantType
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -56153,6 +57576,7 @@ export namespace Prisma {
     attachmentType?: NullableEnumAttachmentTypeFieldUpdateOperationsInput | $Enums.AttachmentType | null
     isPremium?: BoolFieldUpdateOperationsInput | boolean
     ticketPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    memberDiscountPercent?: IntFieldUpdateOperationsInput | number
     minAge?: NullableIntFieldUpdateOperationsInput | number | null
     minRankId?: NullableStringFieldUpdateOperationsInput | string | null
     participantType?: EnumEventParticipantTypeFieldUpdateOperationsInput | $Enums.EventParticipantType
@@ -56493,6 +57917,7 @@ export namespace Prisma {
     isActive?: boolean
     hasSizes?: boolean
     sizes?: ShopProductCreatesizesInput | string[]
+    memberDiscountPercent?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     orderItems?: ShopOrderItemCreateNestedManyWithoutProductInput
@@ -56511,6 +57936,7 @@ export namespace Prisma {
     isActive?: boolean
     hasSizes?: boolean
     sizes?: ShopProductCreatesizesInput | string[]
+    memberDiscountPercent?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     orderItems?: ShopOrderItemUncheckedCreateNestedManyWithoutProductInput
@@ -56529,6 +57955,7 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     hasSizes?: BoolFieldUpdateOperationsInput | boolean
     sizes?: ShopProductUpdatesizesInput | string[]
+    memberDiscountPercent?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     orderItems?: ShopOrderItemUpdateManyWithoutProductNestedInput
@@ -56547,6 +57974,7 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     hasSizes?: BoolFieldUpdateOperationsInput | boolean
     sizes?: ShopProductUpdatesizesInput | string[]
+    memberDiscountPercent?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     orderItems?: ShopOrderItemUncheckedUpdateManyWithoutProductNestedInput
@@ -56565,6 +57993,7 @@ export namespace Prisma {
     isActive?: boolean
     hasSizes?: boolean
     sizes?: ShopProductCreatesizesInput | string[]
+    memberDiscountPercent?: number
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -56580,6 +58009,7 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     hasSizes?: BoolFieldUpdateOperationsInput | boolean
     sizes?: ShopProductUpdatesizesInput | string[]
+    memberDiscountPercent?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -56595,6 +58025,7 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     hasSizes?: BoolFieldUpdateOperationsInput | boolean
     sizes?: ShopProductUpdatesizesInput | string[]
+    memberDiscountPercent?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -58196,6 +59627,12 @@ export namespace Prisma {
     none?: PaymentTransactionWhereInput
   }
 
+  export type DojoOwnerInviteListRelationFilter = {
+    every?: DojoOwnerInviteWhereInput
+    some?: DojoOwnerInviteWhereInput
+    none?: DojoOwnerInviteWhereInput
+  }
+
   export type NotificationOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -58240,12 +59677,17 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
+  export type DojoOwnerInviteOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type UserCountOrderByAggregateInput = {
     id?: SortOrder
     email?: SortOrder
     phone?: SortOrder
     fullName?: SortOrder
     avatarUrl?: SortOrder
+    bio?: SortOrder
     roleId?: SortOrder
     isActive?: SortOrder
     memberNumber?: SortOrder
@@ -58259,6 +59701,7 @@ export namespace Prisma {
     phone?: SortOrder
     fullName?: SortOrder
     avatarUrl?: SortOrder
+    bio?: SortOrder
     roleId?: SortOrder
     isActive?: SortOrder
     memberNumber?: SortOrder
@@ -58272,6 +59715,7 @@ export namespace Prisma {
     phone?: SortOrder
     fullName?: SortOrder
     avatarUrl?: SortOrder
+    bio?: SortOrder
     roleId?: SortOrder
     isActive?: SortOrder
     memberNumber?: SortOrder
@@ -59046,6 +60490,33 @@ export namespace Prisma {
     _max?: NestedEnumDojoApplicationStatusFilter<$PrismaModel>
   }
 
+  export type DojoOwnerInviteCountOrderByAggregateInput = {
+    id?: SortOrder
+    email?: SortOrder
+    fullName?: SortOrder
+    invitedById?: SortOrder
+    invitedAt?: SortOrder
+    acceptedAt?: SortOrder
+  }
+
+  export type DojoOwnerInviteMaxOrderByAggregateInput = {
+    id?: SortOrder
+    email?: SortOrder
+    fullName?: SortOrder
+    invitedById?: SortOrder
+    invitedAt?: SortOrder
+    acceptedAt?: SortOrder
+  }
+
+  export type DojoOwnerInviteMinOrderByAggregateInput = {
+    id?: SortOrder
+    email?: SortOrder
+    fullName?: SortOrder
+    invitedById?: SortOrder
+    invitedAt?: SortOrder
+    acceptedAt?: SortOrder
+  }
+
   export type BeltRankNullableScalarRelationFilter = {
     is?: BeltRankWhereInput | null
     isNot?: BeltRankWhereInput | null
@@ -59480,6 +60951,7 @@ export namespace Prisma {
     attachmentType?: SortOrder
     isPremium?: SortOrder
     ticketPrice?: SortOrder
+    memberDiscountPercent?: SortOrder
     minAge?: SortOrder
     minRankId?: SortOrder
     participantType?: SortOrder
@@ -59492,6 +60964,7 @@ export namespace Prisma {
   export type EventAvgOrderByAggregateInput = {
     maxCapacity?: SortOrder
     ticketPrice?: SortOrder
+    memberDiscountPercent?: SortOrder
     minAge?: SortOrder
   }
 
@@ -59509,6 +60982,7 @@ export namespace Prisma {
     attachmentType?: SortOrder
     isPremium?: SortOrder
     ticketPrice?: SortOrder
+    memberDiscountPercent?: SortOrder
     minAge?: SortOrder
     minRankId?: SortOrder
     participantType?: SortOrder
@@ -59532,6 +61006,7 @@ export namespace Prisma {
     attachmentType?: SortOrder
     isPremium?: SortOrder
     ticketPrice?: SortOrder
+    memberDiscountPercent?: SortOrder
     minAge?: SortOrder
     minRankId?: SortOrder
     participantType?: SortOrder
@@ -59544,6 +61019,7 @@ export namespace Prisma {
   export type EventSumOrderByAggregateInput = {
     maxCapacity?: SortOrder
     ticketPrice?: SortOrder
+    memberDiscountPercent?: SortOrder
     minAge?: SortOrder
   }
 
@@ -59793,6 +61269,7 @@ export namespace Prisma {
     isActive?: SortOrder
     hasSizes?: SortOrder
     sizes?: SortOrder
+    memberDiscountPercent?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -59800,6 +61277,7 @@ export namespace Prisma {
   export type ShopProductAvgOrderByAggregateInput = {
     price?: SortOrder
     stock?: SortOrder
+    memberDiscountPercent?: SortOrder
   }
 
   export type ShopProductMaxOrderByAggregateInput = {
@@ -59812,6 +61290,7 @@ export namespace Prisma {
     category?: SortOrder
     isActive?: SortOrder
     hasSizes?: SortOrder
+    memberDiscountPercent?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -59826,6 +61305,7 @@ export namespace Prisma {
     category?: SortOrder
     isActive?: SortOrder
     hasSizes?: SortOrder
+    memberDiscountPercent?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -59833,6 +61313,7 @@ export namespace Prisma {
   export type ShopProductSumOrderByAggregateInput = {
     price?: SortOrder
     stock?: SortOrder
+    memberDiscountPercent?: SortOrder
   }
 
   export type ShopProductScalarRelationFilter = {
@@ -61008,6 +62489,13 @@ export namespace Prisma {
     connect?: PaymentTransactionWhereUniqueInput | PaymentTransactionWhereUniqueInput[]
   }
 
+  export type DojoOwnerInviteCreateNestedManyWithoutInvitedByInput = {
+    create?: XOR<DojoOwnerInviteCreateWithoutInvitedByInput, DojoOwnerInviteUncheckedCreateWithoutInvitedByInput> | DojoOwnerInviteCreateWithoutInvitedByInput[] | DojoOwnerInviteUncheckedCreateWithoutInvitedByInput[]
+    connectOrCreate?: DojoOwnerInviteCreateOrConnectWithoutInvitedByInput | DojoOwnerInviteCreateOrConnectWithoutInvitedByInput[]
+    createMany?: DojoOwnerInviteCreateManyInvitedByInputEnvelope
+    connect?: DojoOwnerInviteWhereUniqueInput | DojoOwnerInviteWhereUniqueInput[]
+  }
+
   export type ProfileUncheckedCreateNestedOneWithoutUserInput = {
     create?: XOR<ProfileCreateWithoutUserInput, ProfileUncheckedCreateWithoutUserInput>
     connectOrCreate?: ProfileCreateOrConnectWithoutUserInput
@@ -61140,6 +62628,13 @@ export namespace Prisma {
     connectOrCreate?: PaymentTransactionCreateOrConnectWithoutUserInput | PaymentTransactionCreateOrConnectWithoutUserInput[]
     createMany?: PaymentTransactionCreateManyUserInputEnvelope
     connect?: PaymentTransactionWhereUniqueInput | PaymentTransactionWhereUniqueInput[]
+  }
+
+  export type DojoOwnerInviteUncheckedCreateNestedManyWithoutInvitedByInput = {
+    create?: XOR<DojoOwnerInviteCreateWithoutInvitedByInput, DojoOwnerInviteUncheckedCreateWithoutInvitedByInput> | DojoOwnerInviteCreateWithoutInvitedByInput[] | DojoOwnerInviteUncheckedCreateWithoutInvitedByInput[]
+    connectOrCreate?: DojoOwnerInviteCreateOrConnectWithoutInvitedByInput | DojoOwnerInviteCreateOrConnectWithoutInvitedByInput[]
+    createMany?: DojoOwnerInviteCreateManyInvitedByInputEnvelope
+    connect?: DojoOwnerInviteWhereUniqueInput | DojoOwnerInviteWhereUniqueInput[]
   }
 
   export type BoolFieldUpdateOperationsInput = {
@@ -61410,6 +62905,20 @@ export namespace Prisma {
     deleteMany?: PaymentTransactionScalarWhereInput | PaymentTransactionScalarWhereInput[]
   }
 
+  export type DojoOwnerInviteUpdateManyWithoutInvitedByNestedInput = {
+    create?: XOR<DojoOwnerInviteCreateWithoutInvitedByInput, DojoOwnerInviteUncheckedCreateWithoutInvitedByInput> | DojoOwnerInviteCreateWithoutInvitedByInput[] | DojoOwnerInviteUncheckedCreateWithoutInvitedByInput[]
+    connectOrCreate?: DojoOwnerInviteCreateOrConnectWithoutInvitedByInput | DojoOwnerInviteCreateOrConnectWithoutInvitedByInput[]
+    upsert?: DojoOwnerInviteUpsertWithWhereUniqueWithoutInvitedByInput | DojoOwnerInviteUpsertWithWhereUniqueWithoutInvitedByInput[]
+    createMany?: DojoOwnerInviteCreateManyInvitedByInputEnvelope
+    set?: DojoOwnerInviteWhereUniqueInput | DojoOwnerInviteWhereUniqueInput[]
+    disconnect?: DojoOwnerInviteWhereUniqueInput | DojoOwnerInviteWhereUniqueInput[]
+    delete?: DojoOwnerInviteWhereUniqueInput | DojoOwnerInviteWhereUniqueInput[]
+    connect?: DojoOwnerInviteWhereUniqueInput | DojoOwnerInviteWhereUniqueInput[]
+    update?: DojoOwnerInviteUpdateWithWhereUniqueWithoutInvitedByInput | DojoOwnerInviteUpdateWithWhereUniqueWithoutInvitedByInput[]
+    updateMany?: DojoOwnerInviteUpdateManyWithWhereWithoutInvitedByInput | DojoOwnerInviteUpdateManyWithWhereWithoutInvitedByInput[]
+    deleteMany?: DojoOwnerInviteScalarWhereInput | DojoOwnerInviteScalarWhereInput[]
+  }
+
   export type ProfileUncheckedUpdateOneWithoutUserNestedInput = {
     create?: XOR<ProfileCreateWithoutUserInput, ProfileUncheckedCreateWithoutUserInput>
     connectOrCreate?: ProfileCreateOrConnectWithoutUserInput
@@ -61664,6 +63173,20 @@ export namespace Prisma {
     update?: PaymentTransactionUpdateWithWhereUniqueWithoutUserInput | PaymentTransactionUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: PaymentTransactionUpdateManyWithWhereWithoutUserInput | PaymentTransactionUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: PaymentTransactionScalarWhereInput | PaymentTransactionScalarWhereInput[]
+  }
+
+  export type DojoOwnerInviteUncheckedUpdateManyWithoutInvitedByNestedInput = {
+    create?: XOR<DojoOwnerInviteCreateWithoutInvitedByInput, DojoOwnerInviteUncheckedCreateWithoutInvitedByInput> | DojoOwnerInviteCreateWithoutInvitedByInput[] | DojoOwnerInviteUncheckedCreateWithoutInvitedByInput[]
+    connectOrCreate?: DojoOwnerInviteCreateOrConnectWithoutInvitedByInput | DojoOwnerInviteCreateOrConnectWithoutInvitedByInput[]
+    upsert?: DojoOwnerInviteUpsertWithWhereUniqueWithoutInvitedByInput | DojoOwnerInviteUpsertWithWhereUniqueWithoutInvitedByInput[]
+    createMany?: DojoOwnerInviteCreateManyInvitedByInputEnvelope
+    set?: DojoOwnerInviteWhereUniqueInput | DojoOwnerInviteWhereUniqueInput[]
+    disconnect?: DojoOwnerInviteWhereUniqueInput | DojoOwnerInviteWhereUniqueInput[]
+    delete?: DojoOwnerInviteWhereUniqueInput | DojoOwnerInviteWhereUniqueInput[]
+    connect?: DojoOwnerInviteWhereUniqueInput | DojoOwnerInviteWhereUniqueInput[]
+    update?: DojoOwnerInviteUpdateWithWhereUniqueWithoutInvitedByInput | DojoOwnerInviteUpdateWithWhereUniqueWithoutInvitedByInput[]
+    updateMany?: DojoOwnerInviteUpdateManyWithWhereWithoutInvitedByInput | DojoOwnerInviteUpdateManyWithWhereWithoutInvitedByInput[]
+    deleteMany?: DojoOwnerInviteScalarWhereInput | DojoOwnerInviteScalarWhereInput[]
   }
 
   export type UserCreateNestedOneWithoutProfileInput = {
@@ -62999,6 +64522,20 @@ export namespace Prisma {
     delete?: DojoWhereInput | boolean
     connect?: DojoWhereUniqueInput
     update?: XOR<XOR<DojoUpdateToOneWithWhereWithoutApplicationInput, DojoUpdateWithoutApplicationInput>, DojoUncheckedUpdateWithoutApplicationInput>
+  }
+
+  export type UserCreateNestedOneWithoutDojoOwnerInvitesSentInput = {
+    create?: XOR<UserCreateWithoutDojoOwnerInvitesSentInput, UserUncheckedCreateWithoutDojoOwnerInvitesSentInput>
+    connectOrCreate?: UserCreateOrConnectWithoutDojoOwnerInvitesSentInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserUpdateOneRequiredWithoutDojoOwnerInvitesSentNestedInput = {
+    create?: XOR<UserCreateWithoutDojoOwnerInvitesSentInput, UserUncheckedCreateWithoutDojoOwnerInvitesSentInput>
+    connectOrCreate?: UserCreateOrConnectWithoutDojoOwnerInvitesSentInput
+    upsert?: UserUpsertWithoutDojoOwnerInvitesSentInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutDojoOwnerInvitesSentInput, UserUpdateWithoutDojoOwnerInvitesSentInput>, UserUncheckedUpdateWithoutDojoOwnerInvitesSentInput>
   }
 
   export type BeltRankCreateNestedOneWithoutGradingEventsInput = {
@@ -65477,6 +67014,7 @@ export namespace Prisma {
     phone?: string | null
     fullName: string
     avatarUrl?: string | null
+    bio?: string | null
     isActive?: boolean
     memberNumber?: string | null
     createdAt?: Date | string
@@ -65501,6 +67039,7 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutUserInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteCreateNestedManyWithoutInvitedByInput
   }
 
   export type UserUncheckedCreateWithoutRoleInput = {
@@ -65509,6 +67048,7 @@ export namespace Prisma {
     phone?: string | null
     fullName: string
     avatarUrl?: string | null
+    bio?: string | null
     isActive?: boolean
     memberNumber?: string | null
     createdAt?: Date | string
@@ -65533,6 +67073,7 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutUserInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedCreateNestedManyWithoutInvitedByInput
   }
 
   export type UserCreateOrConnectWithoutRoleInput = {
@@ -65590,6 +67131,7 @@ export namespace Prisma {
     phone?: StringNullableFilter<"User"> | string | null
     fullName?: StringFilter<"User"> | string
     avatarUrl?: StringNullableFilter<"User"> | string | null
+    bio?: StringNullableFilter<"User"> | string | null
     roleId?: StringFilter<"User"> | string
     isActive?: BoolFilter<"User"> | boolean
     memberNumber?: StringNullableFilter<"User"> | string | null
@@ -66149,6 +67691,7 @@ export namespace Prisma {
     attachmentType?: $Enums.AttachmentType | null
     isPremium?: boolean
     ticketPrice?: Decimal | DecimalJsLike | number | string | null
+    memberDiscountPercent?: number
     minAge?: number | null
     participantType?: $Enums.EventParticipantType
     createdAt?: Date | string
@@ -66172,6 +67715,7 @@ export namespace Prisma {
     attachmentType?: $Enums.AttachmentType | null
     isPremium?: boolean
     ticketPrice?: Decimal | DecimalJsLike | number | string | null
+    memberDiscountPercent?: number
     minAge?: number | null
     minRankId?: string | null
     participantType?: $Enums.EventParticipantType
@@ -66550,6 +68094,32 @@ export namespace Prisma {
 
   export type PaymentTransactionCreateManyUserInputEnvelope = {
     data: PaymentTransactionCreateManyUserInput | PaymentTransactionCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type DojoOwnerInviteCreateWithoutInvitedByInput = {
+    id?: string
+    email: string
+    fullName?: string | null
+    invitedAt?: Date | string
+    acceptedAt?: Date | string | null
+  }
+
+  export type DojoOwnerInviteUncheckedCreateWithoutInvitedByInput = {
+    id?: string
+    email: string
+    fullName?: string | null
+    invitedAt?: Date | string
+    acceptedAt?: Date | string | null
+  }
+
+  export type DojoOwnerInviteCreateOrConnectWithoutInvitedByInput = {
+    where: DojoOwnerInviteWhereUniqueInput
+    create: XOR<DojoOwnerInviteCreateWithoutInvitedByInput, DojoOwnerInviteUncheckedCreateWithoutInvitedByInput>
+  }
+
+  export type DojoOwnerInviteCreateManyInvitedByInputEnvelope = {
+    data: DojoOwnerInviteCreateManyInvitedByInput | DojoOwnerInviteCreateManyInvitedByInput[]
     skipDuplicates?: boolean
   }
 
@@ -66938,6 +68508,7 @@ export namespace Prisma {
     attachmentType?: EnumAttachmentTypeNullableFilter<"Event"> | $Enums.AttachmentType | null
     isPremium?: BoolFilter<"Event"> | boolean
     ticketPrice?: DecimalNullableFilter<"Event"> | Decimal | DecimalJsLike | number | string | null
+    memberDiscountPercent?: IntFilter<"Event"> | number
     minAge?: IntNullableFilter<"Event"> | number | null
     minRankId?: UuidNullableFilter<"Event"> | string | null
     participantType?: EnumEventParticipantTypeFilter<"Event"> | $Enums.EventParticipantType
@@ -67213,12 +68784,41 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"PaymentTransaction"> | Date | string
   }
 
+  export type DojoOwnerInviteUpsertWithWhereUniqueWithoutInvitedByInput = {
+    where: DojoOwnerInviteWhereUniqueInput
+    update: XOR<DojoOwnerInviteUpdateWithoutInvitedByInput, DojoOwnerInviteUncheckedUpdateWithoutInvitedByInput>
+    create: XOR<DojoOwnerInviteCreateWithoutInvitedByInput, DojoOwnerInviteUncheckedCreateWithoutInvitedByInput>
+  }
+
+  export type DojoOwnerInviteUpdateWithWhereUniqueWithoutInvitedByInput = {
+    where: DojoOwnerInviteWhereUniqueInput
+    data: XOR<DojoOwnerInviteUpdateWithoutInvitedByInput, DojoOwnerInviteUncheckedUpdateWithoutInvitedByInput>
+  }
+
+  export type DojoOwnerInviteUpdateManyWithWhereWithoutInvitedByInput = {
+    where: DojoOwnerInviteScalarWhereInput
+    data: XOR<DojoOwnerInviteUpdateManyMutationInput, DojoOwnerInviteUncheckedUpdateManyWithoutInvitedByInput>
+  }
+
+  export type DojoOwnerInviteScalarWhereInput = {
+    AND?: DojoOwnerInviteScalarWhereInput | DojoOwnerInviteScalarWhereInput[]
+    OR?: DojoOwnerInviteScalarWhereInput[]
+    NOT?: DojoOwnerInviteScalarWhereInput | DojoOwnerInviteScalarWhereInput[]
+    id?: UuidFilter<"DojoOwnerInvite"> | string
+    email?: StringFilter<"DojoOwnerInvite"> | string
+    fullName?: StringNullableFilter<"DojoOwnerInvite"> | string | null
+    invitedById?: UuidFilter<"DojoOwnerInvite"> | string
+    invitedAt?: DateTimeFilter<"DojoOwnerInvite"> | Date | string
+    acceptedAt?: DateTimeNullableFilter<"DojoOwnerInvite"> | Date | string | null
+  }
+
   export type UserCreateWithoutProfileInput = {
     id: string
     email: string
     phone?: string | null
     fullName: string
     avatarUrl?: string | null
+    bio?: string | null
     isActive?: boolean
     memberNumber?: string | null
     createdAt?: Date | string
@@ -67243,6 +68843,7 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutUserInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteCreateNestedManyWithoutInvitedByInput
   }
 
   export type UserUncheckedCreateWithoutProfileInput = {
@@ -67251,6 +68852,7 @@ export namespace Prisma {
     phone?: string | null
     fullName: string
     avatarUrl?: string | null
+    bio?: string | null
     roleId?: string
     isActive?: boolean
     memberNumber?: string | null
@@ -67275,6 +68877,7 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutUserInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedCreateNestedManyWithoutInvitedByInput
   }
 
   export type UserCreateOrConnectWithoutProfileInput = {
@@ -67299,6 +68902,7 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     fullName?: StringFieldUpdateOperationsInput | string
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -67323,6 +68927,7 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUpdateManyWithoutUserNestedInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteUpdateManyWithoutInvitedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutProfileInput = {
@@ -67331,6 +68936,7 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     fullName?: StringFieldUpdateOperationsInput | string
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
     roleId?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
@@ -67355,6 +68961,7 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutUserNestedInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedUpdateManyWithoutInvitedByNestedInput
   }
 
   export type UserCreateWithoutStudentInput = {
@@ -67363,6 +68970,7 @@ export namespace Prisma {
     phone?: string | null
     fullName: string
     avatarUrl?: string | null
+    bio?: string | null
     isActive?: boolean
     memberNumber?: string | null
     createdAt?: Date | string
@@ -67387,6 +68995,7 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutUserInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteCreateNestedManyWithoutInvitedByInput
   }
 
   export type UserUncheckedCreateWithoutStudentInput = {
@@ -67395,6 +69004,7 @@ export namespace Prisma {
     phone?: string | null
     fullName: string
     avatarUrl?: string | null
+    bio?: string | null
     roleId?: string
     isActive?: boolean
     memberNumber?: string | null
@@ -67419,6 +69029,7 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutUserInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedCreateNestedManyWithoutInvitedByInput
   }
 
   export type UserCreateOrConnectWithoutStudentInput = {
@@ -67748,6 +69359,7 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     fullName?: StringFieldUpdateOperationsInput | string
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -67772,6 +69384,7 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUpdateManyWithoutUserNestedInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteUpdateManyWithoutInvitedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutStudentInput = {
@@ -67780,6 +69393,7 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     fullName?: StringFieldUpdateOperationsInput | string
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
     roleId?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
@@ -67804,6 +69418,7 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutUserNestedInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedUpdateManyWithoutInvitedByNestedInput
   }
 
   export type DojoUpsertWithoutStudentsInput = {
@@ -68043,6 +69658,7 @@ export namespace Prisma {
     phone?: string | null
     fullName: string
     avatarUrl?: string | null
+    bio?: string | null
     isActive?: boolean
     memberNumber?: string | null
     createdAt?: Date | string
@@ -68067,6 +69683,7 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutUserInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteCreateNestedManyWithoutInvitedByInput
   }
 
   export type UserUncheckedCreateWithoutInstructorInput = {
@@ -68075,6 +69692,7 @@ export namespace Prisma {
     phone?: string | null
     fullName: string
     avatarUrl?: string | null
+    bio?: string | null
     roleId?: string
     isActive?: boolean
     memberNumber?: string | null
@@ -68099,6 +69717,7 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutUserInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedCreateNestedManyWithoutInvitedByInput
   }
 
   export type UserCreateOrConnectWithoutInstructorInput = {
@@ -68194,6 +69813,7 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     fullName?: StringFieldUpdateOperationsInput | string
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -68218,6 +69838,7 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUpdateManyWithoutUserNestedInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteUpdateManyWithoutInvitedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInstructorInput = {
@@ -68226,6 +69847,7 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     fullName?: StringFieldUpdateOperationsInput | string
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
     roleId?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
@@ -68250,6 +69872,7 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutUserNestedInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedUpdateManyWithoutInvitedByNestedInput
   }
 
   export type DojoUpsertWithoutInstructorsInput = {
@@ -68335,6 +69958,7 @@ export namespace Prisma {
     phone?: string | null
     fullName: string
     avatarUrl?: string | null
+    bio?: string | null
     isActive?: boolean
     memberNumber?: string | null
     createdAt?: Date | string
@@ -68359,6 +69983,7 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutUserInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteCreateNestedManyWithoutInvitedByInput
   }
 
   export type UserUncheckedCreateWithoutDojoManagerInput = {
@@ -68367,6 +69992,7 @@ export namespace Prisma {
     phone?: string | null
     fullName: string
     avatarUrl?: string | null
+    bio?: string | null
     roleId?: string
     isActive?: boolean
     memberNumber?: string | null
@@ -68391,6 +70017,7 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutUserInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedCreateNestedManyWithoutInvitedByInput
   }
 
   export type UserCreateOrConnectWithoutDojoManagerInput = {
@@ -68486,6 +70113,7 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     fullName?: StringFieldUpdateOperationsInput | string
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -68510,6 +70138,7 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUpdateManyWithoutUserNestedInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteUpdateManyWithoutInvitedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDojoManagerInput = {
@@ -68518,6 +70147,7 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     fullName?: StringFieldUpdateOperationsInput | string
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
     roleId?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
@@ -68542,6 +70172,7 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutUserNestedInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedUpdateManyWithoutInvitedByNestedInput
   }
 
   export type DojoUpsertWithoutManagersInput = {
@@ -68627,6 +70258,7 @@ export namespace Prisma {
     phone?: string | null
     fullName: string
     avatarUrl?: string | null
+    bio?: string | null
     isActive?: boolean
     memberNumber?: string | null
     createdAt?: Date | string
@@ -68651,6 +70283,7 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutUserInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteCreateNestedManyWithoutInvitedByInput
   }
 
   export type UserUncheckedCreateWithoutDojoOwnerInput = {
@@ -68659,6 +70292,7 @@ export namespace Prisma {
     phone?: string | null
     fullName: string
     avatarUrl?: string | null
+    bio?: string | null
     roleId?: string
     isActive?: boolean
     memberNumber?: string | null
@@ -68683,6 +70317,7 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutUserInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedCreateNestedManyWithoutInvitedByInput
   }
 
   export type UserCreateOrConnectWithoutDojoOwnerInput = {
@@ -68778,6 +70413,7 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     fullName?: StringFieldUpdateOperationsInput | string
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -68802,6 +70438,7 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUpdateManyWithoutUserNestedInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteUpdateManyWithoutInvitedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDojoOwnerInput = {
@@ -68810,6 +70447,7 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     fullName?: StringFieldUpdateOperationsInput | string
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
     roleId?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
@@ -68834,6 +70472,7 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutUserNestedInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedUpdateManyWithoutInvitedByNestedInput
   }
 
   export type DojoUpsertWithoutOwnerInput = {
@@ -68919,6 +70558,7 @@ export namespace Prisma {
     phone?: string | null
     fullName: string
     avatarUrl?: string | null
+    bio?: string | null
     isActive?: boolean
     memberNumber?: string | null
     createdAt?: Date | string
@@ -68943,6 +70583,7 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutUserInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteCreateNestedManyWithoutInvitedByInput
   }
 
   export type UserUncheckedCreateWithoutAdminInput = {
@@ -68951,6 +70592,7 @@ export namespace Prisma {
     phone?: string | null
     fullName: string
     avatarUrl?: string | null
+    bio?: string | null
     roleId?: string
     isActive?: boolean
     memberNumber?: string | null
@@ -68975,6 +70617,7 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutUserInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedCreateNestedManyWithoutInvitedByInput
   }
 
   export type UserCreateOrConnectWithoutAdminInput = {
@@ -68999,6 +70642,7 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     fullName?: StringFieldUpdateOperationsInput | string
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -69023,6 +70667,7 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUpdateManyWithoutUserNestedInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteUpdateManyWithoutInvitedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAdminInput = {
@@ -69031,6 +70676,7 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     fullName?: StringFieldUpdateOperationsInput | string
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
     roleId?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
@@ -69055,6 +70701,7 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutUserNestedInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedUpdateManyWithoutInvitedByNestedInput
   }
 
   export type GradingCreateWithoutFromRankInput = {
@@ -69243,6 +70890,7 @@ export namespace Prisma {
     attachmentType?: $Enums.AttachmentType | null
     isPremium?: boolean
     ticketPrice?: Decimal | DecimalJsLike | number | string | null
+    memberDiscountPercent?: number
     minAge?: number | null
     participantType?: $Enums.EventParticipantType
     createdAt?: Date | string
@@ -69266,6 +70914,7 @@ export namespace Prisma {
     attachmentType?: $Enums.AttachmentType | null
     isPremium?: boolean
     ticketPrice?: Decimal | DecimalJsLike | number | string | null
+    memberDiscountPercent?: number
     minAge?: number | null
     participantType?: $Enums.EventParticipantType
     postedById?: string | null
@@ -69753,6 +71402,7 @@ export namespace Prisma {
     attachmentType?: $Enums.AttachmentType | null
     isPremium?: boolean
     ticketPrice?: Decimal | DecimalJsLike | number | string | null
+    memberDiscountPercent?: number
     minAge?: number | null
     participantType?: $Enums.EventParticipantType
     createdAt?: Date | string
@@ -69776,6 +71426,7 @@ export namespace Prisma {
     attachmentType?: $Enums.AttachmentType | null
     isPremium?: boolean
     ticketPrice?: Decimal | DecimalJsLike | number | string | null
+    memberDiscountPercent?: number
     minAge?: number | null
     minRankId?: string | null
     participantType?: $Enums.EventParticipantType
@@ -70573,6 +72224,158 @@ export namespace Prisma {
     transfersIn?: StudentTransferRequestUncheckedUpdateManyWithoutToDojoNestedInput
     historyFrom?: StudentDojoHistoryUncheckedUpdateManyWithoutFromDojoNestedInput
     historyTo?: StudentDojoHistoryUncheckedUpdateManyWithoutToDojoNestedInput
+  }
+
+  export type UserCreateWithoutDojoOwnerInvitesSentInput = {
+    id: string
+    email: string
+    phone?: string | null
+    fullName: string
+    avatarUrl?: string | null
+    bio?: string | null
+    isActive?: boolean
+    memberNumber?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    role?: RoleCreateNestedOneWithoutUsersInput
+    profile?: ProfileCreateNestedOneWithoutUserInput
+    student?: StudentCreateNestedOneWithoutUserInput
+    instructor?: InstructorCreateNestedOneWithoutUserInput
+    dojoManager?: DojoManagerCreateNestedOneWithoutUserInput
+    dojoOwner?: DojoOwnerCreateNestedOneWithoutUserInput
+    admin?: AdminCreateNestedOneWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    orders?: ShopOrderCreateNestedManyWithoutUserInput
+    eventRegistrations?: EventRegistrationCreateNestedManyWithoutUserInput
+    eventCheckIns?: EventRegistrationCreateNestedManyWithoutCheckedInByInput
+    eventsPosted?: EventCreateNestedManyWithoutPostedByInput
+    announcementsPosted?: AnnouncementCreateNestedManyWithoutPostedByInput
+    dojoSalesAsBuyer?: DojoSaleCreateNestedManyWithoutBuyerInput
+    dojoSalesSold?: DojoSaleCreateNestedManyWithoutSoldByInput
+    achievementsAwarded?: StudentAchievementCreateNestedManyWithoutAwardedByInput
+    tournamentEntries?: TournamentParticipantCreateNestedManyWithoutUserInput
+    transfersDojoActed?: StudentTransferRequestCreateNestedManyWithoutDojoActedByInput
+    transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
+    dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
+    paymentTransactions?: PaymentTransactionCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutDojoOwnerInvitesSentInput = {
+    id: string
+    email: string
+    phone?: string | null
+    fullName: string
+    avatarUrl?: string | null
+    bio?: string | null
+    roleId?: string
+    isActive?: boolean
+    memberNumber?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    profile?: ProfileUncheckedCreateNestedOneWithoutUserInput
+    student?: StudentUncheckedCreateNestedOneWithoutUserInput
+    instructor?: InstructorUncheckedCreateNestedOneWithoutUserInput
+    dojoManager?: DojoManagerUncheckedCreateNestedOneWithoutUserInput
+    dojoOwner?: DojoOwnerUncheckedCreateNestedOneWithoutUserInput
+    admin?: AdminUncheckedCreateNestedOneWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    orders?: ShopOrderUncheckedCreateNestedManyWithoutUserInput
+    eventRegistrations?: EventRegistrationUncheckedCreateNestedManyWithoutUserInput
+    eventCheckIns?: EventRegistrationUncheckedCreateNestedManyWithoutCheckedInByInput
+    eventsPosted?: EventUncheckedCreateNestedManyWithoutPostedByInput
+    announcementsPosted?: AnnouncementUncheckedCreateNestedManyWithoutPostedByInput
+    dojoSalesAsBuyer?: DojoSaleUncheckedCreateNestedManyWithoutBuyerInput
+    dojoSalesSold?: DojoSaleUncheckedCreateNestedManyWithoutSoldByInput
+    achievementsAwarded?: StudentAchievementUncheckedCreateNestedManyWithoutAwardedByInput
+    tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutUserInput
+    transfersDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutDojoActedByInput
+    transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
+    dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
+    paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutDojoOwnerInvitesSentInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutDojoOwnerInvitesSentInput, UserUncheckedCreateWithoutDojoOwnerInvitesSentInput>
+  }
+
+  export type UserUpsertWithoutDojoOwnerInvitesSentInput = {
+    update: XOR<UserUpdateWithoutDojoOwnerInvitesSentInput, UserUncheckedUpdateWithoutDojoOwnerInvitesSentInput>
+    create: XOR<UserCreateWithoutDojoOwnerInvitesSentInput, UserUncheckedCreateWithoutDojoOwnerInvitesSentInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutDojoOwnerInvitesSentInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutDojoOwnerInvitesSentInput, UserUncheckedUpdateWithoutDojoOwnerInvitesSentInput>
+  }
+
+  export type UserUpdateWithoutDojoOwnerInvitesSentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    fullName?: StringFieldUpdateOperationsInput | string
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: RoleUpdateOneRequiredWithoutUsersNestedInput
+    profile?: ProfileUpdateOneWithoutUserNestedInput
+    student?: StudentUpdateOneWithoutUserNestedInput
+    instructor?: InstructorUpdateOneWithoutUserNestedInput
+    dojoManager?: DojoManagerUpdateOneWithoutUserNestedInput
+    dojoOwner?: DojoOwnerUpdateOneWithoutUserNestedInput
+    admin?: AdminUpdateOneWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    orders?: ShopOrderUpdateManyWithoutUserNestedInput
+    eventRegistrations?: EventRegistrationUpdateManyWithoutUserNestedInput
+    eventCheckIns?: EventRegistrationUpdateManyWithoutCheckedInByNestedInput
+    eventsPosted?: EventUpdateManyWithoutPostedByNestedInput
+    announcementsPosted?: AnnouncementUpdateManyWithoutPostedByNestedInput
+    dojoSalesAsBuyer?: DojoSaleUpdateManyWithoutBuyerNestedInput
+    dojoSalesSold?: DojoSaleUpdateManyWithoutSoldByNestedInput
+    achievementsAwarded?: StudentAchievementUpdateManyWithoutAwardedByNestedInput
+    tournamentEntries?: TournamentParticipantUpdateManyWithoutUserNestedInput
+    transfersDojoActed?: StudentTransferRequestUpdateManyWithoutDojoActedByNestedInput
+    transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
+    dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
+    paymentTransactions?: PaymentTransactionUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutDojoOwnerInvitesSentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    fullName?: StringFieldUpdateOperationsInput | string
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    roleId?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    profile?: ProfileUncheckedUpdateOneWithoutUserNestedInput
+    student?: StudentUncheckedUpdateOneWithoutUserNestedInput
+    instructor?: InstructorUncheckedUpdateOneWithoutUserNestedInput
+    dojoManager?: DojoManagerUncheckedUpdateOneWithoutUserNestedInput
+    dojoOwner?: DojoOwnerUncheckedUpdateOneWithoutUserNestedInput
+    admin?: AdminUncheckedUpdateOneWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    orders?: ShopOrderUncheckedUpdateManyWithoutUserNestedInput
+    eventRegistrations?: EventRegistrationUncheckedUpdateManyWithoutUserNestedInput
+    eventCheckIns?: EventRegistrationUncheckedUpdateManyWithoutCheckedInByNestedInput
+    eventsPosted?: EventUncheckedUpdateManyWithoutPostedByNestedInput
+    announcementsPosted?: AnnouncementUncheckedUpdateManyWithoutPostedByNestedInput
+    dojoSalesAsBuyer?: DojoSaleUncheckedUpdateManyWithoutBuyerNestedInput
+    dojoSalesSold?: DojoSaleUncheckedUpdateManyWithoutSoldByNestedInput
+    achievementsAwarded?: StudentAchievementUncheckedUpdateManyWithoutAwardedByNestedInput
+    tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutUserNestedInput
+    transfersDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
+    transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
+    dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+    paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type BeltRankCreateWithoutGradingEventsInput = {
@@ -71969,6 +73772,7 @@ export namespace Prisma {
     phone?: string | null
     fullName: string
     avatarUrl?: string | null
+    bio?: string | null
     isActive?: boolean
     memberNumber?: string | null
     createdAt?: Date | string
@@ -71993,6 +73797,7 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutUserInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteCreateNestedManyWithoutInvitedByInput
   }
 
   export type UserUncheckedCreateWithoutEventsPostedInput = {
@@ -72001,6 +73806,7 @@ export namespace Prisma {
     phone?: string | null
     fullName: string
     avatarUrl?: string | null
+    bio?: string | null
     roleId?: string
     isActive?: boolean
     memberNumber?: string | null
@@ -72025,6 +73831,7 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutUserInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedCreateNestedManyWithoutInvitedByInput
   }
 
   export type UserCreateOrConnectWithoutEventsPostedInput = {
@@ -72171,6 +73978,7 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     fullName?: StringFieldUpdateOperationsInput | string
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -72195,6 +74003,7 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUpdateManyWithoutUserNestedInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteUpdateManyWithoutInvitedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEventsPostedInput = {
@@ -72203,6 +74012,7 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     fullName?: StringFieldUpdateOperationsInput | string
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
     roleId?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
@@ -72227,6 +74037,7 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutUserNestedInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedUpdateManyWithoutInvitedByNestedInput
   }
 
   export type DojoUpsertWithoutEventsInput = {
@@ -72353,6 +74164,7 @@ export namespace Prisma {
     phone?: string | null
     fullName: string
     avatarUrl?: string | null
+    bio?: string | null
     isActive?: boolean
     memberNumber?: string | null
     createdAt?: Date | string
@@ -72377,6 +74189,7 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutUserInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteCreateNestedManyWithoutInvitedByInput
   }
 
   export type UserUncheckedCreateWithoutAnnouncementsPostedInput = {
@@ -72385,6 +74198,7 @@ export namespace Prisma {
     phone?: string | null
     fullName: string
     avatarUrl?: string | null
+    bio?: string | null
     roleId?: string
     isActive?: boolean
     memberNumber?: string | null
@@ -72409,6 +74223,7 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutUserInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedCreateNestedManyWithoutInvitedByInput
   }
 
   export type UserCreateOrConnectWithoutAnnouncementsPostedInput = {
@@ -72504,6 +74319,7 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     fullName?: StringFieldUpdateOperationsInput | string
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -72528,6 +74344,7 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUpdateManyWithoutUserNestedInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteUpdateManyWithoutInvitedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAnnouncementsPostedInput = {
@@ -72536,6 +74353,7 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     fullName?: StringFieldUpdateOperationsInput | string
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
     roleId?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
@@ -72560,6 +74378,7 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutUserNestedInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedUpdateManyWithoutInvitedByNestedInput
   }
 
   export type DojoUpsertWithoutAnnouncementsInput = {
@@ -72653,6 +74472,7 @@ export namespace Prisma {
     attachmentType?: $Enums.AttachmentType | null
     isPremium?: boolean
     ticketPrice?: Decimal | DecimalJsLike | number | string | null
+    memberDiscountPercent?: number
     minAge?: number | null
     participantType?: $Enums.EventParticipantType
     createdAt?: Date | string
@@ -72676,6 +74496,7 @@ export namespace Prisma {
     attachmentType?: $Enums.AttachmentType | null
     isPremium?: boolean
     ticketPrice?: Decimal | DecimalJsLike | number | string | null
+    memberDiscountPercent?: number
     minAge?: number | null
     minRankId?: string | null
     participantType?: $Enums.EventParticipantType
@@ -72696,6 +74517,7 @@ export namespace Prisma {
     phone?: string | null
     fullName: string
     avatarUrl?: string | null
+    bio?: string | null
     isActive?: boolean
     memberNumber?: string | null
     createdAt?: Date | string
@@ -72720,6 +74542,7 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutUserInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteCreateNestedManyWithoutInvitedByInput
   }
 
   export type UserUncheckedCreateWithoutEventRegistrationsInput = {
@@ -72728,6 +74551,7 @@ export namespace Prisma {
     phone?: string | null
     fullName: string
     avatarUrl?: string | null
+    bio?: string | null
     roleId?: string
     isActive?: boolean
     memberNumber?: string | null
@@ -72752,6 +74576,7 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutUserInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedCreateNestedManyWithoutInvitedByInput
   }
 
   export type UserCreateOrConnectWithoutEventRegistrationsInput = {
@@ -72765,6 +74590,7 @@ export namespace Prisma {
     phone?: string | null
     fullName: string
     avatarUrl?: string | null
+    bio?: string | null
     isActive?: boolean
     memberNumber?: string | null
     createdAt?: Date | string
@@ -72789,6 +74615,7 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutUserInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteCreateNestedManyWithoutInvitedByInput
   }
 
   export type UserUncheckedCreateWithoutEventCheckInsInput = {
@@ -72797,6 +74624,7 @@ export namespace Prisma {
     phone?: string | null
     fullName: string
     avatarUrl?: string | null
+    bio?: string | null
     roleId?: string
     isActive?: boolean
     memberNumber?: string | null
@@ -72821,6 +74649,7 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutUserInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedCreateNestedManyWithoutInvitedByInput
   }
 
   export type UserCreateOrConnectWithoutEventCheckInsInput = {
@@ -72899,6 +74728,7 @@ export namespace Prisma {
     attachmentType?: NullableEnumAttachmentTypeFieldUpdateOperationsInput | $Enums.AttachmentType | null
     isPremium?: BoolFieldUpdateOperationsInput | boolean
     ticketPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    memberDiscountPercent?: IntFieldUpdateOperationsInput | number
     minAge?: NullableIntFieldUpdateOperationsInput | number | null
     participantType?: EnumEventParticipantTypeFieldUpdateOperationsInput | $Enums.EventParticipantType
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -72922,6 +74752,7 @@ export namespace Prisma {
     attachmentType?: NullableEnumAttachmentTypeFieldUpdateOperationsInput | $Enums.AttachmentType | null
     isPremium?: BoolFieldUpdateOperationsInput | boolean
     ticketPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    memberDiscountPercent?: IntFieldUpdateOperationsInput | number
     minAge?: NullableIntFieldUpdateOperationsInput | number | null
     minRankId?: NullableStringFieldUpdateOperationsInput | string | null
     participantType?: EnumEventParticipantTypeFieldUpdateOperationsInput | $Enums.EventParticipantType
@@ -72948,6 +74779,7 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     fullName?: StringFieldUpdateOperationsInput | string
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -72972,6 +74804,7 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUpdateManyWithoutUserNestedInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteUpdateManyWithoutInvitedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEventRegistrationsInput = {
@@ -72980,6 +74813,7 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     fullName?: StringFieldUpdateOperationsInput | string
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
     roleId?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
@@ -73004,6 +74838,7 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutUserNestedInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedUpdateManyWithoutInvitedByNestedInput
   }
 
   export type UserUpsertWithoutEventCheckInsInput = {
@@ -73023,6 +74858,7 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     fullName?: StringFieldUpdateOperationsInput | string
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -73047,6 +74883,7 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUpdateManyWithoutUserNestedInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteUpdateManyWithoutInvitedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEventCheckInsInput = {
@@ -73055,6 +74892,7 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     fullName?: StringFieldUpdateOperationsInput | string
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
     roleId?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
@@ -73079,6 +74917,7 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutUserNestedInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedUpdateManyWithoutInvitedByNestedInput
   }
 
   export type PaymentTransactionUpsertWithWhereUniqueWithoutEventRegistrationInput = {
@@ -73103,6 +74942,7 @@ export namespace Prisma {
     phone?: string | null
     fullName: string
     avatarUrl?: string | null
+    bio?: string | null
     isActive?: boolean
     memberNumber?: string | null
     createdAt?: Date | string
@@ -73127,6 +74967,7 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutUserInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteCreateNestedManyWithoutInvitedByInput
   }
 
   export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -73135,6 +74976,7 @@ export namespace Prisma {
     phone?: string | null
     fullName: string
     avatarUrl?: string | null
+    bio?: string | null
     roleId?: string
     isActive?: boolean
     memberNumber?: string | null
@@ -73159,6 +75001,7 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutUserInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedCreateNestedManyWithoutInvitedByInput
   }
 
   export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -73183,6 +75026,7 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     fullName?: StringFieldUpdateOperationsInput | string
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -73207,6 +75051,7 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUpdateManyWithoutUserNestedInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteUpdateManyWithoutInvitedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -73215,6 +75060,7 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     fullName?: StringFieldUpdateOperationsInput | string
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
     roleId?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
@@ -73239,6 +75085,7 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutUserNestedInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedUpdateManyWithoutInvitedByNestedInput
   }
 
   export type ShopOrderItemCreateWithoutProductInput = {
@@ -73478,6 +75325,7 @@ export namespace Prisma {
     isActive?: boolean
     hasSizes?: boolean
     sizes?: ShopProductCreatesizesInput | string[]
+    memberDiscountPercent?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     orderItems?: ShopOrderItemCreateNestedManyWithoutProductInput
@@ -73495,6 +75343,7 @@ export namespace Prisma {
     isActive?: boolean
     hasSizes?: boolean
     sizes?: ShopProductCreatesizesInput | string[]
+    memberDiscountPercent?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     orderItems?: ShopOrderItemUncheckedCreateNestedManyWithoutProductInput
@@ -73605,6 +75454,7 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     hasSizes?: BoolFieldUpdateOperationsInput | boolean
     sizes?: ShopProductUpdatesizesInput | string[]
+    memberDiscountPercent?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     orderItems?: ShopOrderItemUpdateManyWithoutProductNestedInput
@@ -73622,6 +75472,7 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     hasSizes?: BoolFieldUpdateOperationsInput | boolean
     sizes?: ShopProductUpdatesizesInput | string[]
+    memberDiscountPercent?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     orderItems?: ShopOrderItemUncheckedUpdateManyWithoutProductNestedInput
@@ -73705,6 +75556,7 @@ export namespace Prisma {
     phone?: string | null
     fullName: string
     avatarUrl?: string | null
+    bio?: string | null
     isActive?: boolean
     memberNumber?: string | null
     createdAt?: Date | string
@@ -73729,6 +75581,7 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutUserInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteCreateNestedManyWithoutInvitedByInput
   }
 
   export type UserUncheckedCreateWithoutDojoSalesAsBuyerInput = {
@@ -73737,6 +75590,7 @@ export namespace Prisma {
     phone?: string | null
     fullName: string
     avatarUrl?: string | null
+    bio?: string | null
     roleId?: string
     isActive?: boolean
     memberNumber?: string | null
@@ -73761,6 +75615,7 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutUserInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedCreateNestedManyWithoutInvitedByInput
   }
 
   export type UserCreateOrConnectWithoutDojoSalesAsBuyerInput = {
@@ -73774,6 +75629,7 @@ export namespace Prisma {
     phone?: string | null
     fullName: string
     avatarUrl?: string | null
+    bio?: string | null
     isActive?: boolean
     memberNumber?: string | null
     createdAt?: Date | string
@@ -73798,6 +75654,7 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutUserInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteCreateNestedManyWithoutInvitedByInput
   }
 
   export type UserUncheckedCreateWithoutDojoSalesSoldInput = {
@@ -73806,6 +75663,7 @@ export namespace Prisma {
     phone?: string | null
     fullName: string
     avatarUrl?: string | null
+    bio?: string | null
     roleId?: string
     isActive?: boolean
     memberNumber?: string | null
@@ -73830,6 +75688,7 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutUserInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedCreateNestedManyWithoutInvitedByInput
   }
 
   export type UserCreateOrConnectWithoutDojoSalesSoldInput = {
@@ -73959,6 +75818,7 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     fullName?: StringFieldUpdateOperationsInput | string
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -73983,6 +75843,7 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUpdateManyWithoutUserNestedInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteUpdateManyWithoutInvitedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDojoSalesAsBuyerInput = {
@@ -73991,6 +75852,7 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     fullName?: StringFieldUpdateOperationsInput | string
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
     roleId?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
@@ -74015,6 +75877,7 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutUserNestedInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedUpdateManyWithoutInvitedByNestedInput
   }
 
   export type UserUpsertWithoutDojoSalesSoldInput = {
@@ -74034,6 +75897,7 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     fullName?: StringFieldUpdateOperationsInput | string
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -74058,6 +75922,7 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUpdateManyWithoutUserNestedInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteUpdateManyWithoutInvitedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDojoSalesSoldInput = {
@@ -74066,6 +75931,7 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     fullName?: StringFieldUpdateOperationsInput | string
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
     roleId?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
@@ -74090,6 +75956,7 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutUserNestedInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedUpdateManyWithoutInvitedByNestedInput
   }
 
   export type DojoSaleItemUpsertWithWhereUniqueWithoutSaleInput = {
@@ -74156,6 +76023,7 @@ export namespace Prisma {
     isActive?: boolean
     hasSizes?: boolean
     sizes?: ShopProductCreatesizesInput | string[]
+    memberDiscountPercent?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     orderItems?: ShopOrderItemCreateNestedManyWithoutProductInput
@@ -74173,6 +76041,7 @@ export namespace Prisma {
     isActive?: boolean
     hasSizes?: boolean
     sizes?: ShopProductCreatesizesInput | string[]
+    memberDiscountPercent?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     orderItems?: ShopOrderItemUncheckedCreateNestedManyWithoutProductInput
@@ -74249,6 +76118,7 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     hasSizes?: BoolFieldUpdateOperationsInput | boolean
     sizes?: ShopProductUpdatesizesInput | string[]
+    memberDiscountPercent?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     orderItems?: ShopOrderItemUpdateManyWithoutProductNestedInput
@@ -74266,6 +76136,7 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     hasSizes?: BoolFieldUpdateOperationsInput | boolean
     sizes?: ShopProductUpdatesizesInput | string[]
+    memberDiscountPercent?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     orderItems?: ShopOrderItemUncheckedUpdateManyWithoutProductNestedInput
@@ -74278,6 +76149,7 @@ export namespace Prisma {
     phone?: string | null
     fullName: string
     avatarUrl?: string | null
+    bio?: string | null
     isActive?: boolean
     memberNumber?: string | null
     createdAt?: Date | string
@@ -74302,6 +76174,7 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutUserInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteCreateNestedManyWithoutInvitedByInput
   }
 
   export type UserUncheckedCreateWithoutOrdersInput = {
@@ -74310,6 +76183,7 @@ export namespace Prisma {
     phone?: string | null
     fullName: string
     avatarUrl?: string | null
+    bio?: string | null
     roleId?: string
     isActive?: boolean
     memberNumber?: string | null
@@ -74334,6 +76208,7 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutUserInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedCreateNestedManyWithoutInvitedByInput
   }
 
   export type UserCreateOrConnectWithoutOrdersInput = {
@@ -74663,6 +76538,7 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     fullName?: StringFieldUpdateOperationsInput | string
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -74687,6 +76563,7 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUpdateManyWithoutUserNestedInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteUpdateManyWithoutInvitedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOrdersInput = {
@@ -74695,6 +76572,7 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     fullName?: StringFieldUpdateOperationsInput | string
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
     roleId?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
@@ -74719,6 +76597,7 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutUserNestedInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedUpdateManyWithoutInvitedByNestedInput
   }
 
   export type DojoUpsertWithoutRenewalOrdersInput = {
@@ -75052,6 +76931,7 @@ export namespace Prisma {
     isActive?: boolean
     hasSizes?: boolean
     sizes?: ShopProductCreatesizesInput | string[]
+    memberDiscountPercent?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     dojoInventory?: DojoInventoryItemCreateNestedManyWithoutProductInput
@@ -75069,6 +76949,7 @@ export namespace Prisma {
     isActive?: boolean
     hasSizes?: boolean
     sizes?: ShopProductCreatesizesInput | string[]
+    memberDiscountPercent?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     dojoInventory?: DojoInventoryItemUncheckedCreateNestedManyWithoutProductInput
@@ -75173,6 +77054,7 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     hasSizes?: BoolFieldUpdateOperationsInput | boolean
     sizes?: ShopProductUpdatesizesInput | string[]
+    memberDiscountPercent?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dojoInventory?: DojoInventoryItemUpdateManyWithoutProductNestedInput
@@ -75190,6 +77072,7 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     hasSizes?: BoolFieldUpdateOperationsInput | boolean
     sizes?: ShopProductUpdatesizesInput | string[]
+    memberDiscountPercent?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dojoInventory?: DojoInventoryItemUncheckedUpdateManyWithoutProductNestedInput
@@ -75342,6 +77225,7 @@ export namespace Prisma {
     phone?: string | null
     fullName: string
     avatarUrl?: string | null
+    bio?: string | null
     isActive?: boolean
     memberNumber?: string | null
     createdAt?: Date | string
@@ -75366,6 +77250,7 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutUserInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteCreateNestedManyWithoutInvitedByInput
   }
 
   export type UserUncheckedCreateWithoutTournamentEntriesInput = {
@@ -75374,6 +77259,7 @@ export namespace Prisma {
     phone?: string | null
     fullName: string
     avatarUrl?: string | null
+    bio?: string | null
     roleId?: string
     isActive?: boolean
     memberNumber?: string | null
@@ -75398,6 +77284,7 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutUserInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedCreateNestedManyWithoutInvitedByInput
   }
 
   export type UserCreateOrConnectWithoutTournamentEntriesInput = {
@@ -75553,6 +77440,7 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     fullName?: StringFieldUpdateOperationsInput | string
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -75577,6 +77465,7 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUpdateManyWithoutUserNestedInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteUpdateManyWithoutInvitedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTournamentEntriesInput = {
@@ -75585,6 +77474,7 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     fullName?: StringFieldUpdateOperationsInput | string
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
     roleId?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
@@ -75609,6 +77499,7 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutUserNestedInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedUpdateManyWithoutInvitedByNestedInput
   }
 
   export type TournamentMatchUpsertWithWhereUniqueWithoutParticipant1Input = {
@@ -76043,6 +77934,7 @@ export namespace Prisma {
     phone?: string | null
     fullName: string
     avatarUrl?: string | null
+    bio?: string | null
     isActive?: boolean
     memberNumber?: string | null
     createdAt?: Date | string
@@ -76067,6 +77959,7 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutUserInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteCreateNestedManyWithoutInvitedByInput
   }
 
   export type UserUncheckedCreateWithoutAchievementsAwardedInput = {
@@ -76075,6 +77968,7 @@ export namespace Prisma {
     phone?: string | null
     fullName: string
     avatarUrl?: string | null
+    bio?: string | null
     roleId?: string
     isActive?: boolean
     memberNumber?: string | null
@@ -76099,6 +77993,7 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutUserInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedCreateNestedManyWithoutInvitedByInput
   }
 
   export type UserCreateOrConnectWithoutAchievementsAwardedInput = {
@@ -76225,6 +78120,7 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     fullName?: StringFieldUpdateOperationsInput | string
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -76249,6 +78145,7 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUpdateManyWithoutUserNestedInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteUpdateManyWithoutInvitedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAchievementsAwardedInput = {
@@ -76257,6 +78154,7 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     fullName?: StringFieldUpdateOperationsInput | string
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
     roleId?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
@@ -76281,6 +78179,7 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutUserNestedInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedUpdateManyWithoutInvitedByNestedInput
   }
 
   export type StudentCreateWithoutTransferRequestsInput = {
@@ -76547,6 +78446,7 @@ export namespace Prisma {
     phone?: string | null
     fullName: string
     avatarUrl?: string | null
+    bio?: string | null
     isActive?: boolean
     memberNumber?: string | null
     createdAt?: Date | string
@@ -76571,6 +78471,7 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutUserInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteCreateNestedManyWithoutInvitedByInput
   }
 
   export type UserUncheckedCreateWithoutTransfersDojoActedInput = {
@@ -76579,6 +78480,7 @@ export namespace Prisma {
     phone?: string | null
     fullName: string
     avatarUrl?: string | null
+    bio?: string | null
     roleId?: string
     isActive?: boolean
     memberNumber?: string | null
@@ -76603,6 +78505,7 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutUserInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedCreateNestedManyWithoutInvitedByInput
   }
 
   export type UserCreateOrConnectWithoutTransfersDojoActedInput = {
@@ -76616,6 +78519,7 @@ export namespace Prisma {
     phone?: string | null
     fullName: string
     avatarUrl?: string | null
+    bio?: string | null
     isActive?: boolean
     memberNumber?: string | null
     createdAt?: Date | string
@@ -76640,6 +78544,7 @@ export namespace Prisma {
     transfersDojoActed?: StudentTransferRequestCreateNestedManyWithoutDojoActedByInput
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutUserInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteCreateNestedManyWithoutInvitedByInput
   }
 
   export type UserUncheckedCreateWithoutTransfersAdminActedInput = {
@@ -76648,6 +78553,7 @@ export namespace Prisma {
     phone?: string | null
     fullName: string
     avatarUrl?: string | null
+    bio?: string | null
     roleId?: string
     isActive?: boolean
     memberNumber?: string | null
@@ -76672,6 +78578,7 @@ export namespace Prisma {
     transfersDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutDojoActedByInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutUserInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedCreateNestedManyWithoutInvitedByInput
   }
 
   export type UserCreateOrConnectWithoutTransfersAdminActedInput = {
@@ -77008,6 +78915,7 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     fullName?: StringFieldUpdateOperationsInput | string
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -77032,6 +78940,7 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUpdateManyWithoutUserNestedInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteUpdateManyWithoutInvitedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTransfersDojoActedInput = {
@@ -77040,6 +78949,7 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     fullName?: StringFieldUpdateOperationsInput | string
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
     roleId?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
@@ -77064,6 +78974,7 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutUserNestedInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedUpdateManyWithoutInvitedByNestedInput
   }
 
   export type UserUpsertWithoutTransfersAdminActedInput = {
@@ -77083,6 +78994,7 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     fullName?: StringFieldUpdateOperationsInput | string
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -77107,6 +79019,7 @@ export namespace Prisma {
     transfersDojoActed?: StudentTransferRequestUpdateManyWithoutDojoActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUpdateManyWithoutUserNestedInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteUpdateManyWithoutInvitedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTransfersAdminActedInput = {
@@ -77115,6 +79028,7 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     fullName?: StringFieldUpdateOperationsInput | string
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
     roleId?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
@@ -77139,6 +79053,7 @@ export namespace Prisma {
     transfersDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutUserNestedInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedUpdateManyWithoutInvitedByNestedInput
   }
 
   export type StudentDojoHistoryUpsertWithWhereUniqueWithoutTransferRequestInput = {
@@ -77271,6 +79186,7 @@ export namespace Prisma {
     phone?: string | null
     fullName: string
     avatarUrl?: string | null
+    bio?: string | null
     isActive?: boolean
     memberNumber?: string | null
     createdAt?: Date | string
@@ -77295,6 +79211,7 @@ export namespace Prisma {
     transfersDojoActed?: StudentTransferRequestCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteCreateNestedManyWithoutInvitedByInput
   }
 
   export type UserUncheckedCreateWithoutPaymentTransactionsInput = {
@@ -77303,6 +79220,7 @@ export namespace Prisma {
     phone?: string | null
     fullName: string
     avatarUrl?: string | null
+    bio?: string | null
     roleId?: string
     isActive?: boolean
     memberNumber?: string | null
@@ -77327,6 +79245,7 @@ export namespace Prisma {
     transfersDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedCreateNestedManyWithoutInvitedByInput
   }
 
   export type UserCreateOrConnectWithoutPaymentTransactionsInput = {
@@ -77471,6 +79390,7 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     fullName?: StringFieldUpdateOperationsInput | string
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -77495,6 +79415,7 @@ export namespace Prisma {
     transfersDojoActed?: StudentTransferRequestUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteUpdateManyWithoutInvitedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPaymentTransactionsInput = {
@@ -77503,6 +79424,7 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     fullName?: StringFieldUpdateOperationsInput | string
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
     roleId?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
@@ -77527,6 +79449,7 @@ export namespace Prisma {
     transfersDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedUpdateManyWithoutInvitedByNestedInput
   }
 
   export type StudentCreateWithoutDojoHistoryInput = {
@@ -77775,6 +79698,7 @@ export namespace Prisma {
     phone?: string | null
     fullName: string
     avatarUrl?: string | null
+    bio?: string | null
     isActive?: boolean
     memberNumber?: string | null
     createdAt?: Date | string
@@ -77799,6 +79723,7 @@ export namespace Prisma {
     transfersDojoActed?: StudentTransferRequestCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutUserInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteCreateNestedManyWithoutInvitedByInput
   }
 
   export type UserUncheckedCreateWithoutDojoHistoryChangesInput = {
@@ -77807,6 +79732,7 @@ export namespace Prisma {
     phone?: string | null
     fullName: string
     avatarUrl?: string | null
+    bio?: string | null
     roleId?: string
     isActive?: boolean
     memberNumber?: string | null
@@ -77831,6 +79757,7 @@ export namespace Prisma {
     transfersDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutUserInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedCreateNestedManyWithoutInvitedByInput
   }
 
   export type UserCreateOrConnectWithoutDojoHistoryChangesInput = {
@@ -78119,6 +80046,7 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     fullName?: StringFieldUpdateOperationsInput | string
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -78143,6 +80071,7 @@ export namespace Prisma {
     transfersDojoActed?: StudentTransferRequestUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
     paymentTransactions?: PaymentTransactionUpdateManyWithoutUserNestedInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteUpdateManyWithoutInvitedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDojoHistoryChangesInput = {
@@ -78151,6 +80080,7 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     fullName?: StringFieldUpdateOperationsInput | string
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
     roleId?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
@@ -78175,6 +80105,7 @@ export namespace Prisma {
     transfersDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutUserNestedInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedUpdateManyWithoutInvitedByNestedInput
   }
 
   export type UserCreateManyRoleInput = {
@@ -78183,6 +80114,7 @@ export namespace Prisma {
     phone?: string | null
     fullName: string
     avatarUrl?: string | null
+    bio?: string | null
     isActive?: boolean
     memberNumber?: string | null
     createdAt?: Date | string
@@ -78200,6 +80132,7 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     fullName?: StringFieldUpdateOperationsInput | string
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -78224,6 +80157,7 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUpdateManyWithoutUserNestedInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteUpdateManyWithoutInvitedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRoleInput = {
@@ -78232,6 +80166,7 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     fullName?: StringFieldUpdateOperationsInput | string
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -78256,6 +80191,7 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutUserNestedInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedUpdateManyWithoutInvitedByNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutRoleInput = {
@@ -78264,6 +80200,7 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     fullName?: StringFieldUpdateOperationsInput | string
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -78392,6 +80329,7 @@ export namespace Prisma {
     attachmentType?: $Enums.AttachmentType | null
     isPremium?: boolean
     ticketPrice?: Decimal | DecimalJsLike | number | string | null
+    memberDiscountPercent?: number
     minAge?: number | null
     minRankId?: string | null
     participantType?: $Enums.EventParticipantType
@@ -78527,6 +80465,14 @@ export namespace Prisma {
     buyerPhone?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+  }
+
+  export type DojoOwnerInviteCreateManyInvitedByInput = {
+    id?: string
+    email: string
+    fullName?: string | null
+    invitedAt?: Date | string
+    acceptedAt?: Date | string | null
   }
 
   export type NotificationUpdateWithoutUserInput = {
@@ -78774,6 +80720,7 @@ export namespace Prisma {
     attachmentType?: NullableEnumAttachmentTypeFieldUpdateOperationsInput | $Enums.AttachmentType | null
     isPremium?: BoolFieldUpdateOperationsInput | boolean
     ticketPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    memberDiscountPercent?: IntFieldUpdateOperationsInput | number
     minAge?: NullableIntFieldUpdateOperationsInput | number | null
     participantType?: EnumEventParticipantTypeFieldUpdateOperationsInput | $Enums.EventParticipantType
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -78797,6 +80744,7 @@ export namespace Prisma {
     attachmentType?: NullableEnumAttachmentTypeFieldUpdateOperationsInput | $Enums.AttachmentType | null
     isPremium?: BoolFieldUpdateOperationsInput | boolean
     ticketPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    memberDiscountPercent?: IntFieldUpdateOperationsInput | number
     minAge?: NullableIntFieldUpdateOperationsInput | number | null
     minRankId?: NullableStringFieldUpdateOperationsInput | string | null
     participantType?: EnumEventParticipantTypeFieldUpdateOperationsInput | $Enums.EventParticipantType
@@ -78820,6 +80768,7 @@ export namespace Prisma {
     attachmentType?: NullableEnumAttachmentTypeFieldUpdateOperationsInput | $Enums.AttachmentType | null
     isPremium?: BoolFieldUpdateOperationsInput | boolean
     ticketPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    memberDiscountPercent?: IntFieldUpdateOperationsInput | number
     minAge?: NullableIntFieldUpdateOperationsInput | number | null
     minRankId?: NullableStringFieldUpdateOperationsInput | string | null
     participantType?: EnumEventParticipantTypeFieldUpdateOperationsInput | $Enums.EventParticipantType
@@ -79227,6 +81176,30 @@ export namespace Prisma {
     buyerPhone?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DojoOwnerInviteUpdateWithoutInvitedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    fullName?: NullableStringFieldUpdateOperationsInput | string | null
+    invitedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    acceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type DojoOwnerInviteUncheckedUpdateWithoutInvitedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    fullName?: NullableStringFieldUpdateOperationsInput | string | null
+    invitedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    acceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type DojoOwnerInviteUncheckedUpdateManyWithoutInvitedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    fullName?: NullableStringFieldUpdateOperationsInput | string | null
+    invitedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    acceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type GradingCreateManyStudentInput = {
@@ -79649,6 +81622,7 @@ export namespace Prisma {
     attachmentType?: $Enums.AttachmentType | null
     isPremium?: boolean
     ticketPrice?: Decimal | DecimalJsLike | number | string | null
+    memberDiscountPercent?: number
     minAge?: number | null
     participantType?: $Enums.EventParticipantType
     postedById?: string | null
@@ -79865,6 +81839,7 @@ export namespace Prisma {
     attachmentType?: NullableEnumAttachmentTypeFieldUpdateOperationsInput | $Enums.AttachmentType | null
     isPremium?: BoolFieldUpdateOperationsInput | boolean
     ticketPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    memberDiscountPercent?: IntFieldUpdateOperationsInput | number
     minAge?: NullableIntFieldUpdateOperationsInput | number | null
     participantType?: EnumEventParticipantTypeFieldUpdateOperationsInput | $Enums.EventParticipantType
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -79888,6 +81863,7 @@ export namespace Prisma {
     attachmentType?: NullableEnumAttachmentTypeFieldUpdateOperationsInput | $Enums.AttachmentType | null
     isPremium?: BoolFieldUpdateOperationsInput | boolean
     ticketPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    memberDiscountPercent?: IntFieldUpdateOperationsInput | number
     minAge?: NullableIntFieldUpdateOperationsInput | number | null
     participantType?: EnumEventParticipantTypeFieldUpdateOperationsInput | $Enums.EventParticipantType
     postedById?: NullableStringFieldUpdateOperationsInput | string | null
@@ -79911,6 +81887,7 @@ export namespace Prisma {
     attachmentType?: NullableEnumAttachmentTypeFieldUpdateOperationsInput | $Enums.AttachmentType | null
     isPremium?: BoolFieldUpdateOperationsInput | boolean
     ticketPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    memberDiscountPercent?: IntFieldUpdateOperationsInput | number
     minAge?: NullableIntFieldUpdateOperationsInput | number | null
     participantType?: EnumEventParticipantTypeFieldUpdateOperationsInput | $Enums.EventParticipantType
     postedById?: NullableStringFieldUpdateOperationsInput | string | null
@@ -80033,6 +82010,7 @@ export namespace Prisma {
     attachmentType?: $Enums.AttachmentType | null
     isPremium?: boolean
     ticketPrice?: Decimal | DecimalJsLike | number | string | null
+    memberDiscountPercent?: number
     minAge?: number | null
     minRankId?: string | null
     participantType?: $Enums.EventParticipantType
@@ -80481,6 +82459,7 @@ export namespace Prisma {
     attachmentType?: NullableEnumAttachmentTypeFieldUpdateOperationsInput | $Enums.AttachmentType | null
     isPremium?: BoolFieldUpdateOperationsInput | boolean
     ticketPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    memberDiscountPercent?: IntFieldUpdateOperationsInput | number
     minAge?: NullableIntFieldUpdateOperationsInput | number | null
     participantType?: EnumEventParticipantTypeFieldUpdateOperationsInput | $Enums.EventParticipantType
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -80504,6 +82483,7 @@ export namespace Prisma {
     attachmentType?: NullableEnumAttachmentTypeFieldUpdateOperationsInput | $Enums.AttachmentType | null
     isPremium?: BoolFieldUpdateOperationsInput | boolean
     ticketPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    memberDiscountPercent?: IntFieldUpdateOperationsInput | number
     minAge?: NullableIntFieldUpdateOperationsInput | number | null
     minRankId?: NullableStringFieldUpdateOperationsInput | string | null
     participantType?: EnumEventParticipantTypeFieldUpdateOperationsInput | $Enums.EventParticipantType
@@ -80527,6 +82507,7 @@ export namespace Prisma {
     attachmentType?: NullableEnumAttachmentTypeFieldUpdateOperationsInput | $Enums.AttachmentType | null
     isPremium?: BoolFieldUpdateOperationsInput | boolean
     ticketPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    memberDiscountPercent?: IntFieldUpdateOperationsInput | number
     minAge?: NullableIntFieldUpdateOperationsInput | number | null
     minRankId?: NullableStringFieldUpdateOperationsInput | string | null
     participantType?: EnumEventParticipantTypeFieldUpdateOperationsInput | $Enums.EventParticipantType

@@ -3,20 +3,28 @@
 import { useMemo, useState, useTransition } from "react";
 import { motion } from "motion/react";
 import {
-    Building2, Plus, Search, X, Pencil, Trash2, MapPin, Phone, Mail,
+    Building2, Search, X, Pencil, Trash2, MapPin, Phone, Mail,
     Users, UserCheck, AlertCircle, CheckCircle2, ChevronDown, Power,
-    Calendar, Send, Loader2,
+    Calendar, Send, Loader2, UserPlus,
 } from "lucide-react";
 import {
-    createDojoAction,
     updateDojoAction,
     deleteDojoAction,
     assignDojoInstructorAction,
     sendDojoRenewalReminderAction,
 } from "@/app/actions/admin-dojos";
+import { inviteMemberAction, revokeDojoOwnerInviteAction } from "@/app/actions/admin-members";
 import { validatePhone } from "@/lib/validation/phone";
 
 type Instructor = { id: string; fullName: string; email: string; role: string };
+
+type DojoOwnerInvite = {
+    email: string;
+    fullName: string | null;
+    invitedAt: string;
+    acceptedAt: string | null;
+    invitedByName: string | null;
+};
 
 type Dojo = {
     id: string;
@@ -50,14 +58,15 @@ function daysUntil(iso: string | null): number | null {
 }
 
 export default function DojosAdminClient({
-    dojos, instructors,
+    dojos, instructors, invites,
 }: {
     dojos: Dojo[];
     instructors: Instructor[];
+    invites: DojoOwnerInvite[];
 }) {
     const [search, setSearch] = useState("");
     const [activeFilter, setActiveFilter] = useState<"ALL" | "ACTIVE" | "INACTIVE">("ALL");
-    const [creating, setCreating] = useState(false);
+    const [inviting, setInviting] = useState(false);
     const [editing, setEditing] = useState<Dojo | null>(null);
     const [toast, setToast] = useState<{ kind: "ok" | "err"; msg: string } | null>(null);
 
@@ -98,11 +107,11 @@ export default function DojosAdminClient({
                         Review applications
                     </a>
                     <button
-                        onClick={() => setCreating(true)}
+                        onClick={() => setInviting(true)}
                         className="inline-flex items-center gap-2 bg-accent-red hover:bg-accent-red/90 text-white text-sm font-semibold px-4 py-2.5 rounded-xl shadow-sm transition-all"
                     >
-                        <Plus size={16} />
-                        Add Dojo
+                        <UserPlus size={16} />
+                        Invite Dojo
                     </button>
                 </div>
             </div>
@@ -132,6 +141,8 @@ export default function DojosAdminClient({
                 </div>
             </div>
 
+            <InvitesPanel invites={invites} onFlash={flash} />
+
             {/* Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
                 {filtered.map((d) => (
@@ -150,11 +161,18 @@ export default function DojosAdminClient({
                 )}
             </div>
 
-            {(creating || editing) && (
+            {editing && (
                 <DojoFormModal
                     dojo={editing}
                     instructors={instructors}
-                    onClose={() => { setCreating(false); setEditing(null); }}
+                    onClose={() => setEditing(null)}
+                    onFlash={flash}
+                />
+            )}
+
+            {inviting && (
+                <InviteDojoModal
+                    onClose={() => setInviting(false)}
                     onFlash={flash}
                 />
             )}
@@ -170,6 +188,109 @@ export default function DojosAdminClient({
                     {toast.kind === "ok" ? <CheckCircle2 size={16} /> : <AlertCircle size={16} />}
                     {toast.msg}
                 </motion.div>
+            )}
+        </div>
+    );
+}
+
+function InvitesPanel({
+    invites, onFlash,
+}: {
+    invites: DojoOwnerInvite[];
+    onFlash: (k: "ok" | "err", m: string) => void;
+}) {
+    const [isPending, startTransition] = useTransition();
+    const [expanded, setExpanded] = useState(false);
+    const pendingCount = invites.filter((i) => !i.acceptedAt).length;
+
+    function revoke(email: string) {
+        if (!confirm(`Revoke invite for ${email}?`)) return;
+        const fd = new FormData();
+        fd.set("email", email);
+        startTransition(async () => {
+            const res = await revokeDojoOwnerInviteAction(fd);
+            if (res.ok) onFlash("ok", "Invite revoked.");
+            else onFlash("err", res.error);
+        });
+    }
+
+    if (invites.length === 0) return null;
+
+    return (
+        <div className="mb-6 bg-white border border-zinc-100 rounded-2xl overflow-hidden shadow-sm">
+            <button
+                type="button"
+                onClick={() => setExpanded((v) => !v)}
+                className="w-full flex items-center justify-between gap-3 px-5 py-4 hover:bg-zinc-50 transition-colors"
+            >
+                <div className="flex items-center gap-3 min-w-0">
+                    <div className="p-2 bg-accent-red/10 rounded-xl">
+                        <UserPlus size={16} className="text-accent-red" />
+                    </div>
+                    <div className="text-left min-w-0">
+                        <p className="text-sm font-bold text-zinc-900">
+                            Dojo owner invites
+                        </p>
+                        <p className="text-xs text-zinc-500">
+                            {invites.length} sent · {pendingCount} pending · {invites.length - pendingCount} accepted
+                        </p>
+                    </div>
+                </div>
+                <ChevronDown
+                    size={16}
+                    className={`text-zinc-400 transition-transform ${expanded ? "rotate-180" : ""}`}
+                />
+            </button>
+
+            {expanded && (
+                <div className="border-t border-zinc-100 divide-y divide-zinc-100">
+                    {invites.map((invite) => {
+                        const accepted = !!invite.acceptedAt;
+                        return (
+                            <div
+                                key={invite.email}
+                                className={`flex items-center justify-between gap-3 px-5 py-3 ${isPending ? "opacity-60" : ""}`}
+                            >
+                                <div className="min-w-0 flex-1">
+                                    <p className="text-sm font-semibold text-zinc-900 truncate">
+                                        {invite.fullName || invite.email}
+                                    </p>
+                                    {invite.fullName && (
+                                        <p className="text-xs text-zinc-500 truncate">
+                                            {invite.email}
+                                        </p>
+                                    )}
+                                    <p className="text-[11px] text-zinc-400 mt-0.5">
+                                        Invited {fmtDate.format(new Date(invite.invitedAt))}
+                                        {invite.invitedByName && ` · by ${invite.invitedByName}`}
+                                    </p>
+                                </div>
+                                <div className="flex items-center gap-2 shrink-0">
+                                    <span
+                                        className={`text-[10px] font-bold tracking-widest uppercase px-2 py-0.5 rounded-full border ${
+                                            accepted
+                                                ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+                                                : "bg-amber-50 text-amber-700 border-amber-200"
+                                        }`}
+                                    >
+                                        {accepted ? "Accepted" : "Pending"}
+                                    </span>
+                                    {!accepted && (
+                                        <button
+                                            type="button"
+                                            onClick={() => revoke(invite.email)}
+                                            disabled={isPending}
+                                            title="Revoke invite"
+                                            className="p-1.5 rounded-lg text-red-600 hover:bg-red-50 border border-red-100"
+                                        >
+                                            <Trash2 size={12} />
+                                        </button>
+                                    )}
+                                </div>
+                            </div>
+                        );
+                    })}
+                </div>
             )}
         </div>
     );
@@ -312,25 +433,24 @@ function DojoCard({
 function DojoFormModal({
     dojo, instructors, onClose, onFlash,
 }: {
-    dojo: Dojo | null;
+    dojo: Dojo;
     instructors: Instructor[];
     onClose: () => void;
     onFlash: (k: "ok" | "err", m: string) => void;
 }) {
     const [isPending, startTransition] = useTransition();
-    const isEdit = !!dojo;
 
     const [form, setForm] = useState({
-        name: dojo?.name ?? "",
-        address: dojo?.address ?? "",
-        city: dojo?.city ?? "",
-        phone: dojo?.phone ?? "",
-        email: dojo?.email ?? "",
-        latitude: dojo?.latitude != null ? String(dojo.latitude) : "",
-        longitude: dojo?.longitude != null ? String(dojo.longitude) : "",
-        headInstructorId: dojo?.headInstructorId ?? "",
-        isActive: dojo?.isActive ?? true,
-        schedule: dojo?.schedule
+        name: dojo.name,
+        address: dojo.address ?? "",
+        city: dojo.city ?? "",
+        phone: dojo.phone ?? "",
+        email: dojo.email ?? "",
+        latitude: dojo.latitude != null ? String(dojo.latitude) : "",
+        longitude: dojo.longitude != null ? String(dojo.longitude) : "",
+        headInstructorId: dojo.headInstructorId ?? "",
+        isActive: dojo.isActive,
+        schedule: dojo.schedule
             ? (typeof dojo.schedule === "string" ? dojo.schedule : JSON.stringify(dojo.schedule, null, 2))
             : "",
     });
@@ -345,7 +465,7 @@ function DojoFormModal({
             }
         }
         const fd = new FormData();
-        if (dojo) fd.set("id", dojo.id);
+        fd.set("id", dojo.id);
         Object.entries(form).forEach(([k, v]) => {
             if (k === "isActive") {
                 if (v) fd.set(k, "true");
@@ -355,9 +475,9 @@ function DojoFormModal({
         });
 
         startTransition(async () => {
-            const res = isEdit ? await updateDojoAction(fd) : await createDojoAction(fd);
+            const res = await updateDojoAction(fd);
             if (res.ok) {
-                onFlash("ok", isEdit ? "Dojo updated." : "Dojo created.");
+                onFlash("ok", "Dojo updated.");
                 onClose();
             } else onFlash("err", res.error);
         });
@@ -376,9 +496,7 @@ function DojoFormModal({
                         <div className="p-2 bg-accent-red/10 rounded-xl">
                             <Building2 size={18} className="text-accent-red" />
                         </div>
-                        <h2 className="text-lg font-bold text-zinc-900">
-                            {isEdit ? "Edit dojo" : "New dojo"}
-                        </h2>
+                        <h2 className="text-lg font-bold text-zinc-900">Edit dojo</h2>
                     </div>
                     <button onClick={onClose} className="p-1.5 rounded-lg text-zinc-400 hover:bg-zinc-100">
                         <X size={16} />
@@ -489,7 +607,105 @@ function DojoFormModal({
                             disabled={isPending}
                             className="flex-1 px-4 py-2.5 text-sm font-semibold text-white bg-accent-red hover:bg-accent-red/90 disabled:opacity-50 rounded-xl transition-colors"
                         >
-                            {isPending ? "Saving…" : isEdit ? "Save changes" : "Create dojo"}
+                            {isPending ? "Saving…" : "Save changes"}
+                        </button>
+                    </div>
+                </form>
+            </motion.div>
+        </div>
+    );
+}
+
+function InviteDojoModal({
+    onClose, onFlash,
+}: {
+    onClose: () => void;
+    onFlash: (k: "ok" | "err", m: string) => void;
+}) {
+    const [isPending, startTransition] = useTransition();
+    const [email, setEmail] = useState("");
+    const [fullName, setFullName] = useState("");
+
+    function submit(e: React.FormEvent) {
+        e.preventDefault();
+        const fd = new FormData();
+        fd.set("email", email);
+        fd.set("fullName", fullName);
+        fd.set("role", "DOJO_OWNER");
+        startTransition(async () => {
+            const res = await inviteMemberAction(fd);
+            if (res.ok) {
+                onFlash("ok", "Invite sent. The dojo owner will receive an email.");
+                onClose();
+            } else {
+                onFlash("err", res.error);
+            }
+        });
+    }
+
+    return (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm" onClick={onClose}>
+            <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                onClick={(e) => e.stopPropagation()}
+                className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden"
+            >
+                <div className="px-6 py-5 border-b border-zinc-100 flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                        <div className="p-2 bg-accent-red/10 rounded-xl">
+                            <UserPlus size={18} className="text-accent-red" />
+                        </div>
+                        <div>
+                            <h2 className="text-lg font-bold text-zinc-900">Invite a new dojo</h2>
+                            <p className="text-xs text-zinc-500">The owner will receive an email with the enlistment link.</p>
+                        </div>
+                    </div>
+                    <button onClick={onClose} className="p-1.5 rounded-lg text-zinc-400 hover:bg-zinc-100">
+                        <X size={16} />
+                    </button>
+                </div>
+
+                <form onSubmit={submit} className="p-6 space-y-4">
+                    <Field label="Owner email" required>
+                        <input
+                            type="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                            placeholder="owner@example.com"
+                            className={inputCls}
+                        />
+                    </Field>
+
+                    <Field label="Owner name (optional)">
+                        <input
+                            type="text"
+                            value={fullName}
+                            onChange={(e) => setFullName(e.target.value)}
+                            placeholder="Jane Doe"
+                            className={inputCls}
+                        />
+                    </Field>
+
+                    <p className="text-[11px] leading-relaxed text-zinc-500">
+                        The owner will receive a branded invite email with the enlistment link and fee breakdown. They complete the /enlist-dojo/signup flow themselves — creating their dojo and paying the one-time enlistment fee.
+                    </p>
+
+                    <div className="flex items-center gap-3 pt-2">
+                        <button
+                            type="button"
+                            onClick={onClose}
+                            className="flex-1 px-4 py-2.5 text-sm font-semibold text-zinc-700 hover:bg-zinc-100 rounded-xl transition-colors"
+                        >
+                            Cancel
+                        </button>
+                        <button
+                            type="submit"
+                            disabled={isPending || !email}
+                            className="flex-1 px-4 py-2.5 text-sm font-semibold text-white bg-accent-red hover:bg-accent-red/90 disabled:opacity-50 disabled:cursor-not-allowed rounded-xl transition-colors"
+                        >
+                            {isPending ? "Sending…" : "Send Invite"}
                         </button>
                     </div>
                 </form>

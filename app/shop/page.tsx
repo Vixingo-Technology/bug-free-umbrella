@@ -4,6 +4,7 @@ import { serialize } from "@/lib/serialize";
 import ProductCard, {
     type ProductCardData,
 } from "@/components/shop/product-card";
+import { currentUserIsJkaMember } from "@/lib/auth/is-jka-member";
 
 export const metadata: Metadata = {
     title: "Shop — JKA Bangladesh",
@@ -24,6 +25,8 @@ export default async function ShopPage() {
     } catch {
         products = [];
     }
+
+    const isMember = await currentUserIsJkaMember().catch(() => false);
 
     return (
         <main className="min-h-screen bg-white pb-24">
@@ -65,9 +68,14 @@ export default async function ShopPage() {
                                 {products.length === 1 ? "item" : "items"}
                             </span>
                         </div>
+                        {isMember && (
+                            <div className="mb-6 rounded-sm border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
+                                Member pricing active — discounts are applied automatically at checkout.
+                            </div>
+                        )}
                         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                             {products.map((p) => (
-                                <ProductCard key={p.id} product={p} />
+                                <ProductCard key={p.id} product={p} isMember={isMember} />
                             ))}
                         </div>
                     </>

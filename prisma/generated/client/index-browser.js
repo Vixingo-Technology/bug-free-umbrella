@@ -148,6 +148,7 @@ exports.Prisma.UserScalarFieldEnum = {
   phone: 'phone',
   fullName: 'fullName',
   avatarUrl: 'avatarUrl',
+  bio: 'bio',
   roleId: 'roleId',
   isActive: 'isActive',
   memberNumber: 'memberNumber',
@@ -270,6 +271,15 @@ exports.Prisma.DojoApplicationScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.DojoOwnerInviteScalarFieldEnum = {
+  id: 'id',
+  email: 'email',
+  fullName: 'fullName',
+  invitedById: 'invitedById',
+  invitedAt: 'invitedAt',
+  acceptedAt: 'acceptedAt'
+};
+
 exports.Prisma.GradingEventScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -363,6 +373,7 @@ exports.Prisma.EventScalarFieldEnum = {
   attachmentType: 'attachmentType',
   isPremium: 'isPremium',
   ticketPrice: 'ticketPrice',
+  memberDiscountPercent: 'memberDiscountPercent',
   minAge: 'minAge',
   minRankId: 'minRankId',
   participantType: 'participantType',
@@ -429,6 +440,7 @@ exports.Prisma.ShopProductScalarFieldEnum = {
   isActive: 'isActive',
   hasSizes: 'hasSizes',
   sizes: 'sizes',
+  memberDiscountPercent: 'memberDiscountPercent',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -806,6 +818,7 @@ exports.Prisma.ModelName = {
   BeltRank: 'BeltRank',
   Dojo: 'Dojo',
   DojoApplication: 'DojoApplication',
+  DojoOwnerInvite: 'DojoOwnerInvite',
   GradingEvent: 'GradingEvent',
   GradingApplication: 'GradingApplication',
   Grading: 'Grading',

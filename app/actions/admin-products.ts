@@ -62,6 +62,13 @@ function parseInt(v: FormDataEntryValue | null): number | null {
     return Number.isFinite(n) ? n : null;
 }
 
+function parseDiscountPercent(v: FormDataEntryValue | null): number | null {
+    if (v === null || String(v).trim() === "") return 0;
+    const n = Number.parseInt(String(v).trim(), 10);
+    if (!Number.isFinite(n) || n < 0 || n > 100) return null;
+    return n;
+}
+
 function parseSizes(v: FormDataEntryValue | null): string[] {
     if (!v) return [];
     return String(v)
@@ -82,14 +89,28 @@ export async function createProductAction(formData: FormData): Promise<ActionRes
     const isActive = formData.get("isActive") === "on" || formData.get("isActive") === "true";
     const hasSizes = formData.get("hasSizes") === "on" || formData.get("hasSizes") === "true";
     const sizes = hasSizes ? parseSizes(formData.get("sizes")) : [];
+    const memberDiscountPercent = parseDiscountPercent(formData.get("memberDiscountPercent"));
 
     if (!name) return { ok: false, error: "Name is required." };
     if (price === null || price < 0) return { ok: false, error: "Valid price is required." };
     if (hasSizes && sizes.length === 0)
         return { ok: false, error: "Add at least one size, or turn off sizing." };
+    if (memberDiscountPercent === null)
+        return { ok: false, error: "Member discount must be a whole number between 0 and 100." };
 
     const product = await prisma.shopProduct.create({
-        data: { name, description, price, stock, imageUrl, category, isActive, hasSizes, sizes },
+        data: {
+            name,
+            description,
+            price,
+            stock,
+            imageUrl,
+            category,
+            isActive,
+            hasSizes,
+            sizes,
+            memberDiscountPercent,
+        },
     });
 
     revalidatePath("/portal/admin/products");
@@ -111,15 +132,29 @@ export async function updateProductAction(formData: FormData): Promise<ActionRes
     const isActive = formData.get("isActive") === "on" || formData.get("isActive") === "true";
     const hasSizes = formData.get("hasSizes") === "on" || formData.get("hasSizes") === "true";
     const sizes = hasSizes ? parseSizes(formData.get("sizes")) : [];
+    const memberDiscountPercent = parseDiscountPercent(formData.get("memberDiscountPercent"));
 
     if (!name) return { ok: false, error: "Name is required." };
     if (price === null || price < 0) return { ok: false, error: "Valid price is required." };
     if (hasSizes && sizes.length === 0)
         return { ok: false, error: "Add at least one size, or turn off sizing." };
+    if (memberDiscountPercent === null)
+        return { ok: false, error: "Member discount must be a whole number between 0 and 100." };
 
     await prisma.shopProduct.update({
         where: { id },
-        data: { name, description, price, stock, imageUrl, category, isActive, hasSizes, sizes },
+        data: {
+            name,
+            description,
+            price,
+            stock,
+            imageUrl,
+            category,
+            isActive,
+            hasSizes,
+            sizes,
+            memberDiscountPercent,
+        },
     });
 
     revalidatePath("/portal/admin/products");

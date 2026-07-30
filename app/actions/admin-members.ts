@@ -70,6 +70,26 @@ export async function inviteMemberAction(formData: FormData): Promise<ActionResu
             text: email_.text,
         });
         if (!res.ok) return { ok: false, error: res.error };
+
+        // Record the invite so the admin dojos page can list pending owners
+        // who haven't completed enlistment yet. Re-inviting the same email
+        // refreshes invited_at and clears any prior acceptance.
+        await prisma.dojoOwnerInvite.upsert({
+            where: { email },
+            create: {
+                email,
+                fullName: fullName || null,
+                invitedById: adminId,
+            },
+            update: {
+                fullName: fullName || null,
+                invitedById: adminId,
+                invitedAt: new Date(),
+                acceptedAt: null,
+            },
+        });
+
+        revalidatePath("/portal/admin/dojos");
         return { ok: true };
     }
 
@@ -119,6 +139,32 @@ export async function updateMemberRoleAction(formData: FormData): Promise<Action
 
     if (!memberId) return { ok: false, error: "Member id is required." };
     if (!ROLES.includes(role)) return { ok: false, error: "Invalid role." };
+
+    const current = await prisma.user.findUnique({
+        where: { id: memberId },
+        select: { roleId: true },
+    });
+    if (!current) return { ok: false, error: "Member not found." };
+    const CHANGEABLE_ROLES = ["INSTRUCTOR", "DOJO_MANAGER", "DOJO_OWNER"] as const;
+    type ChangeableRole = (typeof CHANGEABLE_ROLES)[number];
+    const isChangeable = (r: string): r is ChangeableRole =>
+        (CHANGEABLE_ROLES as readonly string[]).includes(r);
+
+    if (!isChangeable(current.roleId)) {
+        return {
+            ok: false,
+            error:
+                current.roleId === "STUDENT"
+                    ? "Student roles can't be changed here — it would erase their gradings, achievements, and transfer history."
+                    : "Admin roles can't be changed here.",
+        };
+    }
+    if (!isChangeable(role)) {
+        return {
+            ok: false,
+            error: "Admins can only switch between Instructor, Dojo Manager and Dojo Owner.",
+        };
+    }
 
     await assignRole(memberId, role);
 
@@ -199,6 +245,29 @@ export async function deleteMemberAction(formData: FormData): Promise<ActionResu
     await prisma.user.deleteMany({ where: { id: memberId } });
 
     revalidatePath("/portal/admin/members");
+    return { ok: true };
+}
+
+export async function revokeDojoOwnerInviteAction(
+    formData: FormData
+): Promise<ActionResult> {
+    await requireAdmin();
+
+    const email = ((formData.get("email") as string) ?? "").trim().toLowerCase();
+    if (!email) return { ok: false, error: "Email is required." };
+
+    const invite = await prisma.dojoOwnerInvite.findUnique({ where: { email } });
+    if (!invite) return { ok: false, error: "Invite not found." };
+    if (invite.acceptedAt) {
+        return {
+            ok: false,
+            error: "This owner has already accepted the invite — manage them from the members list instead.",
+        };
+    }
+
+    await prisma.dojoOwnerInvite.delete({ where: { email } });
+
+    revalidatePath("/portal/admin/dojos");
     return { ok: true };
 }
 

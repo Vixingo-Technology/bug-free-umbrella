@@ -299,6 +299,9 @@ export default function PortalShell({
         member?.role === "DOJO_MANAGER" ||
         member?.role === "DOJO_OWNER";
     const isStudent = !isAdmin && !isDojoStaff;
+    // Admin + dojo staff get a compact users-table + password page.
+    // Students keep the richer profile page (student-specific fields).
+    const profileHref = isAdmin || isDojoStaff ? "/portal/account" : "/portal/profile";
     const isStudentLocked = isStudent && !!member?.joinStage && member.joinStage !== "JOINED";
 
     // While the student is still joining, prepend a Joining entry and
@@ -568,8 +571,8 @@ export default function PortalShell({
                             iconSize={20}
                         />
                         <Link
-                            href="/portal/profile"
-                            aria-label="My profile"
+                            href={profileHref}
+                            aria-label={isAdmin || isDojoStaff ? "My account" : "My profile"}
                             className="relative p-2 rounded-lg transition-colors text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900"
                         >
                             <User size={20} />
@@ -608,8 +611,8 @@ export default function PortalShell({
                             iconSize={18}
                         />
                         <Link
-                            href="/portal/profile"
-                            aria-label="My profile"
+                            href={profileHref}
+                            aria-label={isAdmin || isDojoStaff ? "My account" : "My profile"}
                             className="relative p-2 rounded-lg transition-colors text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900"
                         >
                             <User size={18} />

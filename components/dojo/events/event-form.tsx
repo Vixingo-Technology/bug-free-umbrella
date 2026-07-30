@@ -2,8 +2,8 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { Loader2, CalendarPlus } from "lucide-react";
-import { createEventAction } from "@/app/actions/events";
+import { Loader2, CalendarPlus, Save } from "lucide-react";
+import { createEventAction, updateEventAction } from "@/app/actions/events";
 
 const CATEGORIES = [
     { value: "BELT_TEST", label: "Belt Test" },
@@ -23,36 +23,67 @@ const PARTICIPANT_TYPES = [
 
 export type BeltRankOption = { id: string; name: string };
 
+export type EventFormInitialValues = {
+    id: string;
+    title: string;
+    description: string | null;
+    location: string | null;
+    eventDate: string;
+    category: string;
+    maxCapacity: number | null;
+    isPremium: boolean;
+    ticketPrice: string | null;
+    memberDiscountPercent: number;
+    participantType: string;
+    minAge: number | null;
+    minRankId: string | null;
+    isPublished: boolean;
+    attachmentUrl: string | null;
+    attachmentType: "IMAGE" | "PDF" | null;
+};
+
 export default function EventForm({
     eyebrow = "New event",
     submitLabel = "Publish event",
     redirectAfter,
     beltRanks = [],
+    initial,
 }: {
     eyebrow?: string;
     submitLabel?: string;
     redirectAfter?: string;
     beltRanks?: BeltRankOption[];
+    initial?: EventFormInitialValues;
 }) {
-    const [isPremium, setIsPremium] = useState(false);
+    const isEdit = !!initial;
+    const [isPremium, setIsPremium] = useState(initial?.isPremium ?? false);
+    const [isPublished, setIsPublished] = useState(initial?.isPublished ?? true);
     const [error, setError] = useState<string | null>(null);
     const [isPending, startTransition] = useTransition();
     const router = useRouter();
 
     function submit(formData: FormData) {
         setError(null);
+        if (initial?.id) formData.set("id", initial.id);
         startTransition(async () => {
-            const res = await createEventAction(formData);
+            const res = isEdit
+                ? await updateEventAction(formData)
+                : await createEventAction(formData);
             if (!res.ok) {
                 setError(res.error);
                 return;
             }
-            const form = document.getElementById(
-                "event-form",
-            ) as HTMLFormElement | null;
-            form?.reset();
-            setIsPremium(false);
-            if (redirectAfter) router.push(redirectAfter);
+            if (!isEdit) {
+                const form = document.getElementById(
+                    "event-form",
+                ) as HTMLFormElement | null;
+                form?.reset();
+                setIsPremium(false);
+            }
+            if (redirectAfter) {
+                router.push(redirectAfter);
+                router.refresh();
+            }
         });
     }
 
@@ -71,6 +102,7 @@ export default function EventForm({
                     name="title"
                     required
                     type="text"
+                    defaultValue={initial?.title ?? ""}
                     placeholder="e.g. Summer kata seminar"
                     className="w-full bg-zinc-50 border border-zinc-200 text-zinc-900 px-3 py-2 focus:outline-none focus:border-accent-red text-sm transition-colors rounded-sm"
                 />
@@ -80,7 +112,7 @@ export default function EventForm({
                 <Field label="Category">
                     <select
                         name="category"
-                        defaultValue="OTHER"
+                        defaultValue={initial?.category ?? "OTHER"}
                         className="w-full bg-zinc-50 border border-zinc-200 text-zinc-900 px-3 py-2 focus:outline-none focus:border-accent-red text-sm transition-colors rounded-sm"
                     >
                         {CATEGORIES.map((c) => (
@@ -95,6 +127,7 @@ export default function EventForm({
                         name="eventDate"
                         required
                         type="datetime-local"
+                        defaultValue={initial?.eventDate ?? ""}
                         className="w-full bg-zinc-50 border border-zinc-200 text-zinc-900 px-3 py-2 focus:outline-none focus:border-accent-red text-sm transition-colors rounded-sm"
                     />
                 </Field>
@@ -105,6 +138,7 @@ export default function EventForm({
                     <input
                         name="location"
                         type="text"
+                        defaultValue={initial?.location ?? ""}
                         placeholder="e.g. Main floor"
                         className="w-full bg-zinc-50 border border-zinc-200 text-zinc-900 px-3 py-2 focus:outline-none focus:border-accent-red text-sm transition-colors rounded-sm"
                     />
@@ -116,6 +150,7 @@ export default function EventForm({
                     <textarea
                         name="description"
                         rows={3}
+                        defaultValue={initial?.description ?? ""}
                         className="w-full bg-zinc-50 border border-zinc-200 text-zinc-900 px-3 py-2 focus:outline-none focus:border-accent-red text-sm transition-colors rounded-sm"
                     />
                 </Field>
@@ -127,10 +162,32 @@ export default function EventForm({
                         name="maxCapacity"
                         type="number"
                         min={0}
+                        defaultValue={initial?.maxCapacity ?? ""}
                         className="w-full bg-zinc-50 border border-zinc-200 text-zinc-900 px-3 py-2 focus:outline-none focus:border-accent-red text-sm transition-colors rounded-sm"
                     />
                 </Field>
             </div>
+
+            {isEdit && (
+                <div className="mt-3">
+                    <label className="flex items-center gap-2.5 cursor-pointer select-none">
+                        <input
+                            type="checkbox"
+                            checked={isPublished}
+                            onChange={(e) => setIsPublished(e.target.checked)}
+                            className="h-4 w-4 accent-red-600"
+                        />
+                        <span className="text-sm text-zinc-700 font-semibold">
+                            Published (visible on landing page)
+                        </span>
+                    </label>
+                    <input
+                        type="hidden"
+                        name="isPublished"
+                        value={isPublished ? "true" : "false"}
+                    />
+                </div>
+            )}
 
             {/* ── Ticketing ─────────────────────────────────────────── */}
             <div className="mt-5 border-t border-zinc-200 pt-4">
@@ -154,7 +211,7 @@ export default function EventForm({
                     value={isPremium ? "true" : "false"}
                 />
                 {isPremium && (
-                    <div className="mt-3">
+                    <div className="mt-3 space-y-3">
                         <Field label="Ticket price (BDT)">
                             <input
                                 name="ticketPrice"
@@ -162,14 +219,26 @@ export default function EventForm({
                                 min={1}
                                 step="0.01"
                                 required
+                                defaultValue={initial?.ticketPrice ?? ""}
                                 placeholder="e.g. 500"
                                 className="w-full bg-zinc-50 border border-zinc-200 text-zinc-900 px-3 py-2 focus:outline-none focus:border-accent-red text-sm transition-colors rounded-sm"
                             />
                         </Field>
-                        <p className="text-[11px] text-zinc-500 mt-1.5">
-                            Participants pay via SSLCommerz before their
-                            participation card is issued.
-                        </p>
+                        <Field label="JKA member discount (%)">
+                            <input
+                                name="memberDiscountPercent"
+                                type="number"
+                                min={0}
+                                max={100}
+                                step="1"
+                                defaultValue={initial?.memberDiscountPercent ?? 0}
+                                placeholder="0"
+                                className="w-full bg-zinc-50 border border-zinc-200 text-zinc-900 px-3 py-2 focus:outline-none focus:border-accent-red text-sm transition-colors rounded-sm"
+                            />
+                            <p className="text-[11px] text-zinc-500 mt-1.5">
+                                Signed-in members with an active membership pay this % less on the ticket. Leave 0 for no discount.
+                            </p>
+                        </Field>
                     </div>
                 )}
             </div>
@@ -182,7 +251,7 @@ export default function EventForm({
                 <Field label="Who can register">
                     <select
                         name="participantType"
-                        defaultValue="PUBLIC"
+                        defaultValue={initial?.participantType ?? "PUBLIC"}
                         className="w-full bg-zinc-50 border border-zinc-200 text-zinc-900 px-3 py-2 focus:outline-none focus:border-accent-red text-sm transition-colors rounded-sm"
                     >
                         {PARTICIPANT_TYPES.map((t) => (
@@ -199,6 +268,7 @@ export default function EventForm({
                             type="number"
                             min={1}
                             max={100}
+                            defaultValue={initial?.minAge ?? ""}
                             placeholder="Any age"
                             className="w-full bg-zinc-50 border border-zinc-200 text-zinc-900 px-3 py-2 focus:outline-none focus:border-accent-red text-sm transition-colors rounded-sm"
                         />
@@ -206,7 +276,7 @@ export default function EventForm({
                     <Field label="Minimum belt rank">
                         <select
                             name="minRankId"
-                            defaultValue=""
+                            defaultValue={initial?.minRankId ?? ""}
                             className="w-full bg-zinc-50 border border-zinc-200 text-zinc-900 px-3 py-2 focus:outline-none focus:border-accent-red text-sm transition-colors rounded-sm"
                         >
                             <option value="">Any rank</option>
@@ -221,13 +291,33 @@ export default function EventForm({
             </div>
 
             <div className="mt-3">
-                <Field label="Attachment (optional · PDF or image)">
+                <Field
+                    label={
+                        isEdit && initial?.attachmentUrl
+                            ? "Replace attachment (optional · PDF or image)"
+                            : "Attachment (optional · PDF or image)"
+                    }
+                >
                     <input
                         name="attachment"
                         type="file"
                         accept="application/pdf,image/jpeg,image/png,image/webp,image/heic,image/avif"
                         className="w-full text-xs text-zinc-600 file:mr-3 file:py-2 file:px-3 file:rounded-sm file:border file:border-zinc-200 file:bg-zinc-50 file:text-zinc-700 file:text-[10px] file:font-bold file:uppercase file:tracking-widest hover:file:bg-zinc-100 cursor-pointer"
                     />
+                    {isEdit && initial?.attachmentUrl && (
+                        <p className="text-[11px] text-zinc-500 mt-1.5">
+                            Current attachment:{" "}
+                            <a
+                                href={initial.attachmentUrl}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="underline text-accent-red"
+                            >
+                                view
+                            </a>
+                            . Leave empty to keep it.
+                        </p>
+                    )}
                 </Field>
             </div>
 
@@ -240,10 +330,12 @@ export default function EventForm({
             >
                 {isPending ? (
                     <Loader2 size={14} className="animate-spin" />
+                ) : isEdit ? (
+                    <Save size={14} />
                 ) : (
                     <CalendarPlus size={14} />
                 )}
-                {submitLabel}
+                {isEdit ? "Save changes" : submitLabel}
             </button>
         </form>
     );

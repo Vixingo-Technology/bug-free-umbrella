@@ -2,18 +2,16 @@
 
 import { useMemo, useState, useTransition } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { motion } from "motion/react";
 import {
-    Package, Plus, Search, X, Pencil, Trash2, ImageOff,
+    Plus, Search, Pencil, Trash2, ImageOff,
     ToggleRight, ToggleLeft, AlertCircle, CheckCircle2, ChevronDown,
 } from "lucide-react";
 import {
-    createProductAction,
-    updateProductAction,
     deleteProductAction,
     toggleProductActiveAction,
 } from "@/app/actions/admin-products";
-import ProductImageUploader from "@/components/portal/admin/product-image-uploader";
 
 type Product = {
     id: string;
@@ -26,6 +24,7 @@ type Product = {
     isActive: boolean;
     hasSizes: boolean;
     sizes: string[];
+    memberDiscountPercent: number;
     createdAt: string | Date;
 };
 
@@ -37,8 +36,6 @@ export default function ProductsAdminClient({
 }) {
     const [search, setSearch] = useState("");
     const [activeFilter, setActiveFilter] = useState<"ALL" | "ACTIVE" | "INACTIVE">("ALL");
-    const [editing, setEditing] = useState<Product | null>(null);
-    const [creating, setCreating] = useState(false);
     const [toast, setToast] = useState<{ kind: "ok" | "err"; msg: string } | null>(null);
 
     const categories = useMemo(() => {
@@ -73,13 +70,13 @@ export default function ProductsAdminClient({
                         {filtered.length} of {products.length} products
                     </p>
                 </div>
-                <button
-                    onClick={() => setCreating(true)}
+                <Link
+                    href="/portal/admin/products/new"
                     className="inline-flex items-center gap-2 bg-accent-red hover:bg-accent-red/90 text-white text-sm font-semibold px-4 py-2.5 rounded-xl shadow-sm transition-all"
                 >
                     <Plus size={16} />
                     Add Product
-                </button>
+                </Link>
             </div>
 
             {/* Filters */}
@@ -121,7 +118,6 @@ export default function ProductsAdminClient({
                         key={p.id}
                         product={p}
                         sold={soldByProduct[p.id] ?? 0}
-                        onEdit={() => setEditing(p)}
                         onFlash={flash}
                     />
                 ))}
@@ -131,14 +127,6 @@ export default function ProductsAdminClient({
                     </div>
                 )}
             </div>
-
-            {(creating || editing) && (
-                <ProductFormModal
-                    product={editing}
-                    onClose={() => { setCreating(false); setEditing(null); }}
-                    onFlash={flash}
-                />
-            )}
 
             {toast && (
                 <motion.div
@@ -178,11 +166,10 @@ function FilterSelect({
 }
 
 function ProductCard({
-    product, sold, onEdit, onFlash,
+    product, sold, onFlash,
 }: {
     product: Product;
     sold: number;
-    onEdit: () => void;
     onFlash: (k: "ok" | "err", m: string) => void;
 }) {
     const [isPending, startTransition] = useTransition();
@@ -256,16 +243,21 @@ function ProductCard({
                             Stock: <span className="font-medium text-zinc-700">{product.stock}</span>
                             {sold > 0 && <> · <span className="text-zinc-700">{sold} sold</span></>}
                         </p>
+                        {product.memberDiscountPercent > 0 && (
+                            <p className="text-[11px] font-semibold text-emerald-700 mt-0.5">
+                                Member discount: {product.memberDiscountPercent}%
+                            </p>
+                        )}
                     </div>
                 </div>
 
                 <div className="flex items-center gap-2 mt-4 pt-3 border-t border-zinc-100">
-                    <button
-                        onClick={onEdit}
+                    <Link
+                        href={`/portal/admin/products/${product.id}/edit`}
                         className="flex-1 inline-flex items-center justify-center gap-1.5 text-xs font-semibold text-zinc-700 hover:text-zinc-900 hover:bg-zinc-100 px-2 py-1.5 rounded-lg transition-colors"
                     >
                         <Pencil size={12} /> Edit
-                    </button>
+                    </Link>
                     <button
                         onClick={toggleActive}
                         disabled={isPending}
@@ -283,215 +275,5 @@ function ProductCard({
                 </div>
             </div>
         </motion.div>
-    );
-}
-
-function ProductFormModal({
-    product, onClose, onFlash,
-}: {
-    product: Product | null;
-    onClose: () => void;
-    onFlash: (k: "ok" | "err", m: string) => void;
-}) {
-    const [isPending, startTransition] = useTransition();
-    const isEdit = !!product;
-
-    const [form, setForm] = useState({
-        name: product?.name ?? "",
-        description: product?.description ?? "",
-        price: product ? String(product.price) : "",
-        stock: product ? String(product.stock) : "0",
-        imageUrl: product?.imageUrl ?? "",
-        category: product?.category ?? "",
-        isActive: product?.isActive ?? true,
-        hasSizes: product?.hasSizes ?? false,
-        sizes: product?.sizes?.join(", ") ?? "",
-    });
-
-    function submit(e: React.FormEvent) {
-        e.preventDefault();
-        const fd = new FormData();
-        if (product) fd.set("id", product.id);
-        fd.set("name", form.name);
-        fd.set("description", form.description);
-        fd.set("price", form.price);
-        fd.set("stock", form.stock);
-        fd.set("imageUrl", form.imageUrl);
-        fd.set("category", form.category);
-        if (form.isActive) fd.set("isActive", "true");
-        if (form.hasSizes) fd.set("hasSizes", "true");
-        fd.set("sizes", form.sizes);
-
-        startTransition(async () => {
-            const res = isEdit ? await updateProductAction(fd) : await createProductAction(fd);
-            if (res.ok) {
-                onFlash("ok", isEdit ? "Product updated." : "Product created.");
-                onClose();
-            } else {
-                onFlash("err", res.error);
-            }
-        });
-    }
-
-    return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm overflow-y-auto" onClick={onClose}>
-            <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                onClick={(e) => e.stopPropagation()}
-                className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl overflow-hidden my-8"
-            >
-                <div className="px-6 py-5 border-b border-zinc-100 flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                        <div className="p-2 bg-accent-red/10 rounded-xl">
-                            <Package size={18} className="text-accent-red" />
-                        </div>
-                        <h2 className="text-lg font-bold text-zinc-900">
-                            {isEdit ? "Edit product" : "New product"}
-                        </h2>
-                    </div>
-                    <button onClick={onClose} className="p-1.5 rounded-lg text-zinc-400 hover:bg-zinc-100">
-                        <X size={16} />
-                    </button>
-                </div>
-
-                <form onSubmit={submit} className="p-6 space-y-4">
-                    <Field label="Name" required>
-                        <input
-                            type="text"
-                            value={form.name}
-                            onChange={(e) => setForm({ ...form, name: e.target.value })}
-                            required
-                            className={inputCls}
-                        />
-                    </Field>
-
-                    <Field label="Description">
-                        <textarea
-                            value={form.description}
-                            onChange={(e) => setForm({ ...form, description: e.target.value })}
-                            rows={3}
-                            className={inputCls}
-                        />
-                    </Field>
-
-                    <div className="grid grid-cols-2 gap-4">
-                        <Field label="Price (BDT)" required>
-                            <input
-                                type="number"
-                                step="0.01"
-                                min="0"
-                                value={form.price}
-                                onChange={(e) => setForm({ ...form, price: e.target.value })}
-                                required
-                                className={inputCls}
-                            />
-                        </Field>
-                        <Field label="Stock">
-                            <input
-                                type="number"
-                                min="0"
-                                value={form.stock}
-                                onChange={(e) => setForm({ ...form, stock: e.target.value })}
-                                className={inputCls}
-                            />
-                        </Field>
-                    </div>
-
-                    <Field label="Category">
-                        <input
-                            type="text"
-                            value={form.category}
-                            onChange={(e) => setForm({ ...form, category: e.target.value })}
-                            placeholder="e.g. gear, apparel, equipment"
-                            className={inputCls}
-                        />
-                    </Field>
-
-                    <Field label="Product image">
-                        <ProductImageUploader
-                            value={form.imageUrl}
-                            onChange={(url) => setForm({ ...form, imageUrl: url })}
-                        />
-                    </Field>
-
-                    <div className="rounded-xl border border-zinc-200 bg-zinc-50/50 p-4 space-y-3">
-                        <label className="flex items-center gap-3 cursor-pointer">
-                            <input
-                                type="checkbox"
-                                checked={form.hasSizes}
-                                onChange={(e) =>
-                                    setForm({ ...form, hasSizes: e.target.checked })
-                                }
-                                className="w-4 h-4 rounded text-accent-red focus:ring-accent-red"
-                            />
-                            <span className="text-sm font-medium text-zinc-700">
-                                This product has sizes
-                            </span>
-                        </label>
-                        {form.hasSizes && (
-                            <div>
-                                <label className="text-xs font-semibold text-zinc-600 uppercase tracking-widest">
-                                    Available sizes
-                                </label>
-                                <input
-                                    type="text"
-                                    value={form.sizes}
-                                    onChange={(e) =>
-                                        setForm({ ...form, sizes: e.target.value })
-                                    }
-                                    placeholder="e.g. S, M, L, XL"
-                                    className={inputCls + " mt-1"}
-                                />
-                                <p className="text-[11px] text-zinc-500 mt-1.5">
-                                    Comma-separated labels. Customers must pick one
-                                    before adding to cart.
-                                </p>
-                            </div>
-                        )}
-                    </div>
-
-                    <label className="flex items-center gap-3 cursor-pointer">
-                        <input
-                            type="checkbox"
-                            checked={form.isActive}
-                            onChange={(e) => setForm({ ...form, isActive: e.target.checked })}
-                            className="w-4 h-4 rounded text-accent-red focus:ring-accent-red"
-                        />
-                        <span className="text-sm font-medium text-zinc-700">Visible in the shop</span>
-                    </label>
-
-                    <div className="flex items-center gap-3 pt-2">
-                        <button
-                            type="button"
-                            onClick={onClose}
-                            className="flex-1 px-4 py-2.5 text-sm font-semibold text-zinc-700 hover:bg-zinc-100 rounded-xl transition-colors"
-                        >
-                            Cancel
-                        </button>
-                        <button
-                            type="submit"
-                            disabled={isPending}
-                            className="flex-1 px-4 py-2.5 text-sm font-semibold text-white bg-accent-red hover:bg-accent-red/90 disabled:opacity-50 rounded-xl transition-colors"
-                        >
-                            {isPending ? "Saving…" : isEdit ? "Save changes" : "Create product"}
-                        </button>
-                    </div>
-                </form>
-            </motion.div>
-        </div>
-    );
-}
-
-const inputCls = "w-full px-3 py-2.5 text-sm bg-zinc-50 border border-zinc-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-accent-red/30 focus:border-accent-red focus:bg-white";
-
-function Field({ label, children, required }: { label: string; children: React.ReactNode; required?: boolean }) {
-    return (
-        <div>
-            <label className="block text-xs font-bold tracking-widest uppercase text-zinc-500 mb-2">
-                {label}{required && <span className="text-accent-red ml-1">*</span>}
-            </label>
-            {children}
-        </div>
     );
 }

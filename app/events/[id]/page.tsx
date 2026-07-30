@@ -6,6 +6,7 @@ import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import AttachmentViewer from "@/components/attachment-viewer";
 import { prisma } from "@/lib/prisma";
+import { applyDiscount, currentUserIsJkaMember } from "@/lib/auth/is-jka-member";
 
 type Props = { params: Promise<{ id: string }> };
 
@@ -63,8 +64,14 @@ export default async function EventDetailPage({ params }: Props) {
 
     if (!e || !e.isPublished) notFound();
 
-    const ticketPrice = e.ticketPrice ? Number(e.ticketPrice) : null;
-    const isPremium = e.isPremium && ticketPrice !== null && ticketPrice > 0;
+    const baseTicketPrice = e.ticketPrice ? Number(e.ticketPrice) : null;
+    const isPremium = e.isPremium && baseTicketPrice !== null && baseTicketPrice > 0;
+    const isMember = await currentUserIsJkaMember().catch(() => false);
+    const memberDiscountActive =
+        isPremium && isMember && e.memberDiscountPercent > 0;
+    const ticketPrice = memberDiscountActive
+        ? applyDiscount(baseTicketPrice!, e.memberDiscountPercent)
+        : baseTicketPrice;
     const requirements: string[] = [];
     if (e.participantType !== "PUBLIC") {
         requirements.push(PARTICIPANT_LABEL[e.participantType] ?? e.participantType);
@@ -100,10 +107,27 @@ export default async function EventDetailPage({ params }: Props) {
                             </span>
                         )}
                         {isPremium ? (
-                            <span className="inline-flex items-center gap-1.5 text-[10px] tracking-widest uppercase font-bold px-3 py-1 rounded-full border border-amber-200 bg-amber-50 text-amber-700">
-                                <Ticket size={12} />
-                                ৳{ticketPrice?.toLocaleString()}
-                            </span>
+                            <>
+                                <span className="inline-flex items-center gap-1.5 text-[10px] tracking-widest uppercase font-bold px-3 py-1 rounded-full border border-amber-200 bg-amber-50 text-amber-700">
+                                    <Ticket size={12} />
+                                    ৳{ticketPrice?.toLocaleString()}
+                                    {memberDiscountActive && baseTicketPrice !== null && (
+                                        <span className="ml-1 text-zinc-400 line-through font-normal">
+                                            ৳{baseTicketPrice.toLocaleString()}
+                                        </span>
+                                    )}
+                                </span>
+                                {memberDiscountActive && (
+                                    <span className="text-[10px] tracking-widest uppercase font-bold px-3 py-1 rounded-full border border-emerald-200 bg-emerald-50 text-emerald-700">
+                                        Member −{e.memberDiscountPercent}%
+                                    </span>
+                                )}
+                                {!isMember && e.memberDiscountPercent > 0 && (
+                                    <span className="text-[10px] tracking-widest uppercase font-bold px-3 py-1 rounded-full border border-emerald-200 bg-emerald-50 text-emerald-700">
+                                        Members save {e.memberDiscountPercent}%
+                                    </span>
+                                )}
+                            </>
                         ) : (
                             <span className="text-[10px] tracking-widest uppercase font-bold px-3 py-1 rounded-full border border-emerald-200 bg-emerald-50 text-emerald-700">
                                 Free entry
@@ -213,7 +237,11 @@ export default async function EventDetailPage({ params }: Props) {
                                 </h3>
                                 <p className="text-sm text-zinc-600">
                                     {isPremium
-                                        ? `Register and pay the ৳${ticketPrice?.toLocaleString()} ticket to get your participation card with a QR code to show at the door.`
+                                        ? `Register and pay the ৳${ticketPrice?.toLocaleString()} ticket${
+                                              memberDiscountActive
+                                                  ? " (member price)"
+                                                  : ""
+                                          } to get your participation card with a QR code to show at the door.`
                                         : "Register in under a minute. You'll get a participation card with a QR code to show at the door."}
                                 </p>
                             </div>

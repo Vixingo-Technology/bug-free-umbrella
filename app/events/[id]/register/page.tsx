@@ -14,6 +14,7 @@ import Footer from "@/components/footer";
 import { prisma } from "@/lib/prisma";
 import { createClient } from "@/lib/supabase/server";
 import { registerForEventAndRedirect } from "@/app/actions/event-registration";
+import { applyDiscount, isJkaMember } from "@/lib/auth/is-jka-member";
 import {
     checkEligibility,
     loadViewerContext,
@@ -57,6 +58,7 @@ export default async function RegisterPage({ params, searchParams }: Props) {
             dojoId: true,
             isPremium: true,
             ticketPrice: true,
+            memberDiscountPercent: true,
             minAge: true,
             participantType: true,
             minRank: { select: { id: true, name: true, orderIndex: true } },
@@ -65,9 +67,25 @@ export default async function RegisterPage({ params, searchParams }: Props) {
     });
     if (!event || !event.isPublished) notFound();
 
-    const ticketPrice = event.ticketPrice ? Number(event.ticketPrice) : null;
+    const baseTicketPrice = event.ticketPrice ? Number(event.ticketPrice) : null;
     const isPremium =
-        event.isPremium && ticketPrice !== null && ticketPrice > 0;
+        event.isPremium && baseTicketPrice !== null && baseTicketPrice > 0;
+
+    // If signed in already, check whether this member is already registered;
+    // skip the form and send them straight to their card (the card handles
+    // the unpaid-ticket state).
+    const supabase = await createClient();
+    const {
+        data: { user },
+    } = await supabase.auth.getUser();
+
+    const registrantIsMember =
+        isPremium && user ? await isJkaMember(user.id) : false;
+    const memberDiscountActive =
+        registrantIsMember && event.memberDiscountPercent > 0;
+    const ticketPrice = memberDiscountActive
+        ? applyDiscount(baseTicketPrice!, event.memberDiscountPercent)
+        : baseTicketPrice;
 
     const gates: EventGates = {
         id: event.id,
@@ -79,14 +97,6 @@ export default async function RegisterPage({ params, searchParams }: Props) {
         isPremium,
         ticketPrice,
     };
-
-    // If signed in already, check whether this member is already registered;
-    // skip the form and send them straight to their card (the card handles
-    // the unpaid-ticket state).
-    const supabase = await createClient();
-    const {
-        data: { user },
-    } = await supabase.auth.getUser();
 
     const viewer = await loadViewerContext(user?.id ?? null);
     if (viewer.userId) {
@@ -155,6 +165,16 @@ export default async function RegisterPage({ params, searchParams }: Props) {
                                 <span className="inline-flex items-center gap-1.5 text-[10px] tracking-widest uppercase font-bold px-3 py-1 rounded-full border border-amber-200 bg-amber-50 text-amber-700">
                                     <Ticket size={12} />
                                     Ticket ৳{ticketPrice?.toLocaleString()}
+                                    {memberDiscountActive && baseTicketPrice !== null && (
+                                        <span className="ml-1 text-zinc-400 line-through font-normal">
+                                            ৳{baseTicketPrice.toLocaleString()}
+                                        </span>
+                                    )}
+                                </span>
+                            )}
+                            {memberDiscountActive && (
+                                <span className="text-[10px] tracking-widest uppercase font-bold px-3 py-1 rounded-full border border-emerald-200 bg-emerald-50 text-emerald-700">
+                                    Member −{event.memberDiscountPercent}%
                                 </span>
                             )}
                             {requirements.map((r) => (
@@ -295,10 +315,15 @@ export default async function RegisterPage({ params, searchParams }: Props) {
                                 <>
                                     <div className="flex items-center justify-between text-sm text-zinc-700 border-t border-zinc-200 pt-4 mb-4">
                                         <span className="font-semibold">
-                                            Ticket price
+                                            {memberDiscountActive ? "Member ticket price" : "Ticket price"}
                                         </span>
                                         <span className="font-bold text-zinc-900">
                                             ৳{ticketPrice?.toLocaleString()}
+                                            {memberDiscountActive && baseTicketPrice !== null && (
+                                                <span className="ml-2 text-zinc-400 text-xs line-through font-normal">
+                                                    ৳{baseTicketPrice.toLocaleString()}
+                                                </span>
+                                            )}
                                         </span>
                                     </div>
                                     <button

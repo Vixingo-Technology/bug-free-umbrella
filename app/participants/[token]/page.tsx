@@ -143,8 +143,14 @@ export default async function ParticipationCardPage({
 
     return (
         <main className="min-h-screen bg-bg-deep w-full overflow-hidden print:bg-white print:min-h-0">
+            <style>{`
+                @media print {
+                    @page { size: A5; margin: 8mm; }
+                    html, body { background: white !important; }
+                }
+            `}</style>
             <section className="py-12 md:py-20 print:py-0">
-                <div className="max-w-2xl mx-auto px-6 lg:px-12 print:px-0">
+                <div className="max-w-2xl mx-auto px-6 lg:px-12 print:px-0 print:max-w-full">
                     <Link
                         href={`/events/${registration.event.id}`}
                         className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-zinc-500 hover:text-accent-red transition-colors mb-8 print:hidden"
@@ -166,9 +172,9 @@ export default async function ParticipationCardPage({
                         </div>
                     )}
 
-                    <div className="bg-white border-2 border-zinc-900 shadow-xl rounded-sm overflow-hidden print:shadow-none">
+                    <div className="bg-white border-2 border-zinc-900 shadow-xl rounded-sm overflow-hidden print:shadow-none print:border">
                         {/* Header strip */}
-                        <div className="bg-white border-b border-zinc-200 px-6 py-4 flex items-center justify-between">
+                        <div className="bg-white border-b border-zinc-200 px-6 py-4 flex items-center justify-between print:px-3 print:py-2">
                             <div className="flex items-center gap-3">
                                 <Image
                                     src={Logo}
@@ -199,16 +205,16 @@ export default async function ParticipationCardPage({
                         </div>
 
                         {/* Body */}
-                        <div className="p-6 md:p-8 grid md:grid-cols-[1fr_auto] gap-8 items-start">
+                        <div className="p-6 md:p-8 grid md:grid-cols-[1fr_auto] gap-8 items-start print:p-3 print:gap-4 print:grid-cols-[1fr_auto]">
                             <div className="min-w-0">
-                                <p className="text-[10px] tracking-widest uppercase font-bold text-accent-red mb-2">
+                                <p className="text-[10px] tracking-widest uppercase font-bold text-accent-red mb-2 print:mb-1">
                                     Event
                                 </p>
-                                <h2 className="font-karate text-xl md:text-2xl text-zinc-900 uppercase tracking-wider font-bold leading-tight mb-4">
+                                <h2 className="font-karate text-xl md:text-2xl text-zinc-900 uppercase tracking-wider font-bold leading-tight mb-4 print:text-base print:mb-2">
                                     {registration.event.title}
                                 </h2>
 
-                                <ul className="space-y-2 text-xs text-zinc-600 mb-6">
+                                <ul className="space-y-2 text-xs text-zinc-600 mb-6 print:space-y-1 print:mb-3 print:text-[10px]">
                                     <li className="flex items-center gap-2">
                                         <Calendar
                                             size={12}
@@ -232,20 +238,20 @@ export default async function ParticipationCardPage({
                                     )}
                                 </ul>
 
-                                <div className="border-t border-zinc-200 pt-4">
+                                <div className="border-t border-zinc-200 pt-4 print:pt-2">
                                     <p className="text-[10px] tracking-widest uppercase font-bold text-zinc-400 mb-1">
                                         Participant
                                     </p>
-                                    <p className="text-base font-bold text-zinc-900 mb-1">
+                                    <p className="text-base font-bold text-zinc-900 mb-1 print:text-sm print:mb-0.5">
                                         {participantName}
                                     </p>
                                     {participantEmail && (
-                                        <p className="text-xs text-zinc-500">
+                                        <p className="text-xs text-zinc-500 print:text-[10px]">
                                             {participantEmail}
                                         </p>
                                     )}
                                     {participantPhone && (
-                                        <p className="text-xs text-zinc-500">
+                                        <p className="text-xs text-zinc-500 print:text-[10px]">
                                             {participantPhone}
                                         </p>
                                     )}
@@ -275,15 +281,15 @@ export default async function ParticipationCardPage({
                                     </p>
                                 </div>
                             ) : (
-                                <div className="flex flex-col items-center md:items-end">
+                                <div className="flex flex-col items-center md:items-end print:items-end">
                                     <div
-                                        className="bg-white p-3 border border-zinc-200 rounded-sm"
+                                        className="bg-white p-3 border border-zinc-200 rounded-sm print:p-1 print:border-0 print:[&_svg]:w-[110px] print:[&_svg]:h-[110px]"
                                         dangerouslySetInnerHTML={{ __html: qrSvg }}
                                     />
-                                    <p className="text-[10px] tracking-widest uppercase font-bold text-zinc-400 mt-3 text-center md:text-right">
+                                    <p className="text-[10px] tracking-widest uppercase font-bold text-zinc-400 mt-3 text-center md:text-right print:mt-1 print:text-[8px]">
                                         Show this at the door
                                     </p>
-                                    <p className="text-[10px] font-mono text-zinc-400 mt-1 select-all break-all max-w-[180px] text-center md:text-right">
+                                    <p className="text-[10px] font-mono text-zinc-400 mt-1 select-all break-all max-w-[180px] text-center md:text-right print:hidden">
                                         {token}
                                     </p>
                                 </div>

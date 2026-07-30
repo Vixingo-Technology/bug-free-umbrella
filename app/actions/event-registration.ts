@@ -13,6 +13,7 @@ import {
     type EventGates,
 } from "@/lib/events/eligibility";
 import { initiateTicketPayment } from "@/lib/events/ticket-payment";
+import { applyDiscount, isJkaMember } from "@/lib/auth/is-jka-member";
 
 type ActionResult =
     | { ok: true; token: string; payUrl?: string }
@@ -62,6 +63,7 @@ export async function registerForEventAction(
             dojoId: true,
             isPremium: true,
             ticketPrice: true,
+            memberDiscountPercent: true,
             minAge: true,
             participantType: true,
             minRank: { select: { id: true, name: true, orderIndex: true } },
@@ -79,8 +81,23 @@ export async function registerForEventAction(
         return { ok: false, error: "This event is fully booked." };
     }
 
-    const ticketPrice = event.ticketPrice ? Number(event.ticketPrice) : null;
-    const isPremium = event.isPremium && ticketPrice !== null && ticketPrice > 0;
+    const baseTicketPrice = event.ticketPrice ? Number(event.ticketPrice) : null;
+    const isPremium = event.isPremium && baseTicketPrice !== null && baseTicketPrice > 0;
+
+    const supabase = await createClient();
+    const {
+        data: { user },
+    } = await supabase.auth.getUser();
+
+    // Signed-in JKA members get the admin-set discount on premium tickets.
+    const registrantIsMember =
+        isPremium && user ? await isJkaMember(user.id) : false;
+    const ticketPrice =
+        isPremium && baseTicketPrice !== null
+            ? registrantIsMember
+                ? applyDiscount(baseTicketPrice, event.memberDiscountPercent)
+                : baseTicketPrice
+            : baseTicketPrice;
 
     const gates: EventGates = {
         id: event.id,
@@ -92,11 +109,6 @@ export async function registerForEventAction(
         isPremium,
         ticketPrice,
     };
-
-    const supabase = await createClient();
-    const {
-        data: { user },
-    } = await supabase.auth.getUser();
 
     const viewer = await loadViewerContext(user?.id ?? null);
     const eligibility = checkEligibility(gates, viewer);

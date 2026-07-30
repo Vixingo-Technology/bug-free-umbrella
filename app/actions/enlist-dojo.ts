@@ -516,6 +516,13 @@ export async function commitDojoEnlistment(
 
     await assignRole(user.id, "DOJO_OWNER", { dojoId });
 
+    // If this owner arrived via an admin-issued invite, stamp acceptedAt so
+    // the admin dojos page can tell "invited" apart from "pending".
+    await prisma.dojoOwnerInvite.updateMany({
+        where: { email: input.email.trim().toLowerCase(), acceptedAt: null },
+        data: { acceptedAt: new Date() },
+    });
+
     await notifyAdmins({
         title: "New dojo enlistment",
         message: `${input.dojoName.trim()} — submitted by ${input.contactName.trim()}. Review and approve.`,

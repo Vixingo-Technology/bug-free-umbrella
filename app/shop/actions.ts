@@ -2,6 +2,8 @@
 
 import { prisma } from "@/lib/prisma";
 import { notifyAdmins } from "@/lib/notify";
+import { createClient } from "@/lib/supabase/server";
+import { applyDiscount, isJkaMember } from "@/lib/auth/is-jka-member";
 
 export type CheckoutItem = {
     productId: string;
@@ -52,13 +54,24 @@ export async function placeGuestOrderAction(
         return { error: "One or more items are no longer available." };
     }
 
+    // Read the auth cookie so a signed-in JKA member gets the admin-set
+    // discount applied on the server — never trust the client to price items.
+    const supabase = await createClient();
+    const {
+        data: { user },
+    } = await supabase.auth.getUser();
+    const buyerIsMember = user ? await isJkaMember(user.id) : false;
+
     let total = 0;
     let sizeMissing = false;
     let sizeInvalid = false;
     const itemRows = input.items.map((it) => {
         const product = products.find((p) => p.id === it.productId)!;
         const qty = Math.max(1, Math.floor(it.quantity));
-        const unitPrice = Number(product.price);
+        const basePrice = Number(product.price);
+        const unitPrice = buyerIsMember
+            ? applyDiscount(basePrice, product.memberDiscountPercent)
+            : basePrice;
         total += unitPrice * qty;
 
         let size: string | null = null;

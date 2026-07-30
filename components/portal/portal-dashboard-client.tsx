@@ -121,6 +121,9 @@ export default function PortalDashboardClient({ member, membershipStatus, unread
     const expiryDate = member?.expiryDate
         ? new Date(member.expiryDate).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })
         : null;
+    const joinedDate = member?.joinedDate
+        ? new Date(member.joinedDate).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })
+        : null;
 
     // While the student is still working through the joining flow the whole
     // dashboard is inert: banner on top, body blurred, giant lock overlay.
@@ -393,6 +396,8 @@ export default function PortalDashboardClient({ member, membershipStatus, unread
                 membershipStatus={membershipStatus}
                 memberNumber={member?.memberNumber}
                 avatarUrl={member?.avatarUrl}
+                joinedLabel={joinedDate}
+                expiresLabel={expiryDate}
             />
         </div>
     );

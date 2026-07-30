@@ -26,6 +26,11 @@ const ROLE_LABELS: Record<Role, string> = {
 
 const ROLE_VALUES: Role[] = ["STUDENT", "INSTRUCTOR", "DOJO_MANAGER", "DOJO_OWNER", "ADMIN"];
 
+// Admins can only switch a member between these three staff-level roles.
+// Promoting to/from STUDENT would destroy grading history (cascade delete),
+// and ADMIN promotion is a federation-level decision handled elsewhere.
+const CHANGEABLE_ROLE_VALUES: Role[] = ["INSTRUCTOR", "DOJO_MANAGER", "DOJO_OWNER"];
+
 // Admins can only issue federation-level invites. Instructor / Manager /
 // Student invites are the Dojo Owner's job, from inside their dojo panel.
 const INVITABLE_ROLES: Role[] = ["DOJO_OWNER", "ADMIN"];
@@ -316,8 +321,14 @@ function Row({ member, onFlash }: { member: Member; onFlash: (k: "ok" | "err", m
                 <InlineSelect
                     value={role}
                     onChange={(v) => changeRole(v as Role)}
-                    options={ROLE_VALUES.map((r) => ({ v: r, l: ROLE_LABELS[r] }))}
+                    options={CHANGEABLE_ROLE_VALUES.map((r) => ({ v: r, l: ROLE_LABELS[r] }))}
                     badgeClass={roleStyles[role]}
+                    disabled={role === "STUDENT" || role === "ADMIN"}
+                    disabledTitle={
+                        role === "STUDENT"
+                            ? "Student roles can't be changed here — it would erase their gradings, achievements and transfer history."
+                            : "Admin roles can't be changed here."
+                    }
                 />
             </td>
             <td className="px-5 py-4">
@@ -480,13 +491,26 @@ function DeleteConfirmModal({
 }
 
 function InlineSelect({
-    value, onChange, options, badgeClass,
+    value, onChange, options, badgeClass, disabled, disabledTitle,
 }: {
     value: string;
     onChange: (v: string) => void;
     options: { v: string; l: string }[];
     badgeClass: string;
+    disabled?: boolean;
+    disabledTitle?: string;
 }) {
+    if (disabled) {
+        const label = options.find((o) => o.v === value)?.l ?? value;
+        return (
+            <span
+                title={disabledTitle}
+                className={`inline-flex items-center pl-2.5 pr-2.5 py-1 text-[11px] font-bold tracking-widest uppercase border rounded-full cursor-not-allowed ${badgeClass}`}
+            >
+                {label}
+            </span>
+        );
+    }
     return (
         <div className="relative inline-block">
             <select
