@@ -473,6 +473,12 @@ model Dojo {
   ownerSignatureUrl String? @map("owner_signature_url")
   logoUrl           String? @map("logo_url")
 
+  // Feature keys the JKA admin has explicitly locked for this dojo. Union
+  // with the automatic milestone locks (dojos with <30 active students get
+  // certificates/announcements/transfers/invite-staff auto-locked).
+  // Values are from lib/dojo/feature-locks.ts FEATURE_KEYS.
+  lockedFeatures String[] @default([]) @map("locked_features")
+
   students       Student[]                @relation("DojoStudents")
   instructors    Instructor[]             @relation("DojoInstructors")
   managers       DojoManager[]            @relation("DojoManagers")

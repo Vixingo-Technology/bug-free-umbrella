@@ -60,6 +60,7 @@ export default async function AdminDojosPage() {
             _count: { members: _count.students },
             headInstructorId: head?.id ?? null,
             headInstructor: head,
+            lockedFeatures: d.lockedFeatures ?? [],
         };
     });
 

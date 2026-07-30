@@ -12,6 +12,7 @@ import {
     type DojoRole,
     type InvitableRole,
 } from "@/lib/dojo-roles";
+import { resolveDojoFeatureLocks } from "@/lib/dojo/feature-locks.server";
 
 export const metadata: Metadata = {
     title: "Members — Dojo Dashboard",
@@ -63,8 +64,19 @@ export default async function MembersPage({
     searchParams: Promise<{ tab?: string }>;
 }) {
     const session = await requireDojoRole("INSTRUCTOR");
-    const canInvite = invitableRolesFor(session.role).length > 0;
+    const rawInvitableRoles = invitableRolesFor(session.role);
     const dojoIsActivated = session.dojo?.isActive ?? false;
+
+    const featureLocks = session.dojo
+        ? await resolveDojoFeatureLocks(session.dojo.id)
+        : null;
+    const inviteStaffLocked = featureLocks?.locked.has("invite-staff") ?? false;
+    // Drop INSTRUCTOR and DOJO_MANAGER when the staff-invite feature is
+    // locked (milestone <30 students, or admin-locked).
+    const invitableRoles: InvitableRole[] = inviteStaffLocked
+        ? rawInvitableRoles.filter((r) => r === "STUDENT")
+        : rawInvitableRoles;
+    const canInvite = invitableRoles.length > 0;
 
     const { tab: tabParam } = await searchParams;
     const activeTab = parseTab(tabParam);
@@ -213,6 +225,15 @@ export default async function MembersPage({
           ? "Activate your dojo (complete the enlistment payment) before inviting members."
           : undefined;
 
+    // Milestone banner shown when staff invites are locked but the owner
+    // can still invite students.
+    const staffLockNotice =
+        inviteStaffLocked && featureLocks
+            ? featureLocks.milestoneLocked.has("invite-staff")
+                ? `Instructor and manager invites unlock once your dojo has ${featureLocks.milestone} active students (currently ${featureLocks.studentCount}). Students remain unlimited.`
+                : "Instructor and manager invites are currently locked for this dojo by JKA admin."
+            : null;
+
     const allInvited = [
         ...invited.STUDENT,
         ...invited.INSTRUCTOR,
@@ -228,7 +249,7 @@ export default async function MembersPage({
                 actions={
                     canInvite ? (
                         <InviteMemberModal
-                            allowedRoles={invitableRolesFor(session.role)}
+                            allowedRoles={invitableRoles}
                             staffCount={
                                 rosters.INSTRUCTOR.length +
                                 rosters.DOJO_MANAGER.length +
@@ -244,6 +265,12 @@ export default async function MembersPage({
                     ) : undefined
                 }
             />
+
+            {staffLockNotice && (
+                <div className="mb-6 rounded-sm border border-amber-200 bg-amber-50 text-amber-900 p-4 text-sm leading-relaxed">
+                    {staffLockNotice}
+                </div>
+            )}
 
             <TabBar
                 activeTab={activeTab}

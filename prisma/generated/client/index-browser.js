@@ -244,6 +244,7 @@ exports.Prisma.DojoScalarFieldEnum = {
   expiryDate: 'expiryDate',
   ownerSignatureUrl: 'ownerSignatureUrl',
   logoUrl: 'logoUrl',
+  lockedFeatures: 'lockedFeatures',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };

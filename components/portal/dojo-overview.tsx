@@ -5,6 +5,7 @@ import {
     ArrowRight,
     CreditCard,
     GraduationCap,
+    Lock,
     Megaphone,
     PartyPopper,
     ShieldAlert,
@@ -56,18 +57,44 @@ export default async function DojoOverview({
 }: Props) {
     const stats = await loadStats(dojoId);
     const renewal = dojoId ? await loadRenewalStatus(dojoId) : null;
-    const activation =
-        role === "DOJO_OWNER" ? await loadActivation(userId) : null;
+    const application =
+        role === "DOJO_OWNER" ? await loadApplicationLock(userId) : null;
+    const lockState: "UNPAID" | "AWAITING_APPROVAL" | null =
+        application?.status === "PENDING_PAYMENT"
+            ? "UNPAID"
+            : application?.status === "PAID"
+                ? "AWAITING_APPROVAL"
+                : null;
+
+    const isLocked = lockState !== null;
 
     return (
         <>
-            {activation && (
+            {lockState === "UNPAID" && application && (
                 <ActivationBanner
-                    applicationId={activation.applicationId}
-                    email={activation.email}
+                    applicationId={application.id}
+                    email={application.email}
                 />
             )}
-            {pendingApproval && !activation && (
+            {lockState === "AWAITING_APPROVAL" && (
+                <div className="mb-6 rounded-sm border border-amber-200 bg-amber-50 text-amber-900 p-4 flex items-start gap-3">
+                    <div className="w-9 h-9 rounded-full bg-amber-500 text-white flex items-center justify-center shrink-0 text-xs font-bold">
+                        !
+                    </div>
+                    <div className="text-sm leading-relaxed">
+                        <p className="font-semibold mb-0.5">
+                            Payment received — awaiting JKA approval
+                        </p>
+                        <p>
+                            Federation staff are reviewing your application.
+                            You can polish your Dojo Settings while you wait —
+                            the rest of the console unlocks as soon as your
+                            dojo is approved (usually 1–2 working days).
+                        </p>
+                    </div>
+                </div>
+            )}
+            {pendingApproval && !isLocked && (
                 <div className="mb-6 rounded-sm border border-amber-200 bg-amber-50 text-amber-900 p-4 flex items-start gap-3">
                     <div className="w-9 h-9 rounded-full bg-amber-500 text-white flex items-center justify-center shrink-0 text-xs font-bold">
                         !
@@ -85,8 +112,8 @@ export default async function DojoOverview({
                     </div>
                 </div>
             )}
-            {renewal && <RenewalBanner status={renewal} />}
-            {showWelcome && (
+            {renewal && !isLocked && <RenewalBanner status={renewal} />}
+            {showWelcome && !isLocked && (
                 <Banner
                     tone="success"
                     icon={<PartyPopper size={20} />}
@@ -94,7 +121,7 @@ export default async function DojoOverview({
                     body="Your dojo enlistment is complete. Federation staff will review your application within two working days."
                 />
             )}
-            {showDenied && (
+            {showDenied && !isLocked && (
                 <Banner
                     tone="warn"
                     icon={<ShieldAlert size={20} />}
@@ -103,7 +130,7 @@ export default async function DojoOverview({
                 />
             )}
 
-            {role === "DOJO_OWNER" && (
+            {role === "DOJO_OWNER" && !isLocked && (
                 <DojoSetupChecklist
                     userId={userId}
                     dojoId={dojoId}
@@ -111,15 +138,24 @@ export default async function DojoOverview({
                 />
             )}
 
-            <DojoPageHeader
-                eyebrow="Overview"
-                title={`Welcome back, ${firstName(fullName)}`}
-                description={`You're signed in as ${ROLE_LABEL[role]}${
-                    dojoName ? ` at ${dojoName}` : ""
-                }.`}
-            />
+            <div className="relative">
+                <div
+                    className={
+                        isLocked
+                            ? "pointer-events-none select-none blur-sm opacity-60"
+                            : ""
+                    }
+                    aria-hidden={isLocked}
+                >
+                    <DojoPageHeader
+                        eyebrow="Overview"
+                        title={`Welcome back, ${firstName(fullName)}`}
+                        description={`You're signed in as ${ROLE_LABEL[role]}${
+                            dojoName ? ` at ${dojoName}` : ""
+                        }.`}
+                    />
 
-            <div className="grid sm:grid-cols-2 gap-4 mb-10">
+                    <div className="grid sm:grid-cols-2 gap-4 mb-10">
                 <StatCard
                     label="Active students"
                     value={stats.activeStudents.toString()}
@@ -185,7 +221,88 @@ export default async function DojoOverview({
                     </ul>
                 </Card>
             )}
+                </div>
+
+                {lockState === "UNPAID" && application && (
+                    <UnpaidLockOverlay
+                        applicationId={application.id}
+                        email={application.email}
+                    />
+                )}
+                {lockState === "AWAITING_APPROVAL" && (
+                    <AwaitingApprovalOverlay />
+                )}
+            </div>
         </>
+    );
+}
+
+function UnpaidLockOverlay({
+    applicationId,
+    email,
+}: {
+    applicationId: string;
+    email: string;
+}) {
+    const href = `/enlist-dojo/payment?applicationId=${encodeURIComponent(
+        applicationId
+    )}&email=${encodeURIComponent(email)}`;
+    return (
+        <div className="absolute inset-0 flex items-start justify-center pt-16 sm:pt-24 pointer-events-none">
+            <div className="pointer-events-auto max-w-md w-[92%] rounded-2xl border border-zinc-200 bg-white shadow-2xl px-6 py-7 sm:px-8 sm:py-9 text-center">
+                <div className="mx-auto w-14 h-14 rounded-2xl bg-accent-red/10 border border-accent-red/30 flex items-center justify-center mb-4">
+                    <Lock size={26} className="text-accent-red" />
+                </div>
+                <p className="text-[10px] font-bold tracking-widest uppercase text-zinc-400">
+                    Dojo console locked
+                </p>
+                <h2 className="mt-1 text-lg sm:text-xl font-bold text-zinc-900">
+                    Activation fee unpaid
+                </h2>
+                <p className="mt-2 text-sm text-zinc-500 leading-relaxed">
+                    Pay the one-time enlistment fee to activate your dojo and
+                    unlock members, gradings, certificates, renewals, and the
+                    rest of the console.
+                </p>
+                <Link
+                    href={href}
+                    className="mt-6 inline-flex items-center gap-2 bg-accent-red hover:bg-zinc-900 text-white font-bold tracking-widest uppercase text-xs px-5 py-3 rounded-xl transition-colors"
+                >
+                    <CreditCard size={12} />
+                    Pay activation fee
+                </Link>
+            </div>
+        </div>
+    );
+}
+
+function AwaitingApprovalOverlay() {
+    return (
+        <div className="absolute inset-0 flex items-start justify-center pt-16 sm:pt-24 pointer-events-none">
+            <div className="pointer-events-auto max-w-md w-[92%] rounded-2xl border border-zinc-200 bg-white shadow-2xl px-6 py-7 sm:px-8 sm:py-9 text-center">
+                <div className="mx-auto w-14 h-14 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-center mb-4">
+                    <Lock size={26} className="text-amber-600" />
+                </div>
+                <p className="text-[10px] font-bold tracking-widest uppercase text-zinc-400">
+                    Dojo console locked
+                </p>
+                <h2 className="mt-1 text-lg sm:text-xl font-bold text-zinc-900">
+                    Awaiting JKA approval
+                </h2>
+                <p className="mt-2 text-sm text-zinc-500 leading-relaxed">
+                    Your payment is in. Federation staff usually approve new
+                    dojos within 1–2 working days. Meanwhile, you can finish
+                    setting up your dojo profile in Dojo Settings.
+                </p>
+                <Link
+                    href="/portal/dojo/settings"
+                    className="mt-6 inline-flex items-center gap-2 bg-accent-red hover:bg-zinc-900 text-white font-bold tracking-widest uppercase text-xs px-5 py-3 rounded-xl transition-colors"
+                >
+                    Open Dojo Settings
+                    <ArrowRight size={12} />
+                </Link>
+            </div>
+        </div>
     );
 }
 
@@ -231,15 +348,20 @@ async function loadStats(dojoId: string | null): Promise<Stats> {
     };
 }
 
-async function loadActivation(
+async function loadApplicationLock(
     userId: string
-): Promise<{ applicationId: string; email: string } | null> {
+): Promise<{ id: string; email: string; status: "PENDING_PAYMENT" | "PAID" } | null> {
     const app = await prisma.dojoApplication.findFirst({
-        where: { userId, status: "PENDING_PAYMENT" },
+        where: { userId, status: { in: ["PENDING_PAYMENT", "PAID"] } },
         orderBy: { createdAt: "desc" },
-        select: { id: true, email: true },
+        select: { id: true, email: true, status: true },
     });
-    return app ? { applicationId: app.id, email: app.email } : null;
+    if (!app) return null;
+    return {
+        id: app.id,
+        email: app.email,
+        status: app.status as "PENDING_PAYMENT" | "PAID",
+    };
 }
 
 function ActivationBanner({

@@ -6,6 +6,7 @@ import { requireAdmin } from "@/lib/admin-guard";
 import { emitWebhook } from "@/lib/n8n";
 import { notifyMembers } from "@/lib/notify";
 import type { Prisma } from "@/prisma/generated/client";
+import { FEATURE_KEYS, isFeatureKey } from "@/lib/dojo/feature-locks";
 
 const fmtDate = new Intl.DateTimeFormat("en-GB", {
     day: "numeric",
@@ -151,6 +152,44 @@ export async function deleteDojoAction(formData: FormData): Promise<ActionResult
 
     await prisma.dojo.delete({ where: { id } });
     revalidatePath("/portal/admin/dojos");
+    return { ok: true };
+}
+
+/**
+ * Persist the admin-controlled feature lock list for a dojo. Accepts the
+ * repeated `feature=<key>` entries produced by the checkbox group; unknown
+ * keys are dropped silently.
+ */
+export async function updateDojoLockedFeaturesAction(
+    formData: FormData
+): Promise<ActionResult> {
+    await requireAdmin();
+    const id = formData.get("id") as string;
+    if (!id) return { ok: false, error: "Dojo id is required." };
+
+    const submitted = formData.getAll("feature").map(String);
+    const locked = Array.from(new Set(submitted.filter(isFeatureKey)));
+
+    // Guard against arbitrary strings sneaking in via a crafted form.
+    const invalid = submitted.find((v) => !FEATURE_KEYS.includes(v as never));
+    if (invalid) {
+        return { ok: false, error: `Unknown feature key: ${invalid}` };
+    }
+
+    try {
+        await prisma.dojo.update({
+            where: { id },
+            data: { lockedFeatures: locked },
+        });
+    } catch (e) {
+        return {
+            ok: false,
+            error: e instanceof Error ? e.message : "Could not update locks.",
+        };
+    }
+
+    revalidatePath("/portal/admin/dojos");
+    revalidatePath("/portal");
     return { ok: true };
 }
 

@@ -12,9 +12,15 @@ import {
     deleteDojoAction,
     assignDojoInstructorAction,
     sendDojoRenewalReminderAction,
+    updateDojoLockedFeaturesAction,
 } from "@/app/actions/admin-dojos";
 import { inviteMemberAction, revokeDojoOwnerInviteAction } from "@/app/actions/admin-members";
 import { validatePhone } from "@/lib/validation/phone";
+import {
+    FEATURE_KEYS,
+    FEATURE_LABEL,
+    type FeatureKey,
+} from "@/lib/dojo/feature-locks";
 
 type Instructor = { id: string; fullName: string; email: string; role: string };
 
@@ -42,6 +48,7 @@ type Dojo = {
     headInstructorId: string | null;
     headInstructor: { id: string; fullName: string; email: string } | null;
     _count: { members: number };
+    lockedFeatures: string[];
 };
 
 const fmtDate = new Intl.DateTimeFormat("en-GB", {
@@ -455,6 +462,21 @@ function DojoFormModal({
             : "",
     });
 
+    const [locked, setLocked] = useState<Set<FeatureKey>>(
+        () => new Set(dojo.lockedFeatures.filter(
+            (v): v is FeatureKey => (FEATURE_KEYS as readonly string[]).includes(v),
+        )),
+    );
+
+    function toggleFeature(key: FeatureKey) {
+        setLocked((prev) => {
+            const next = new Set(prev);
+            if (next.has(key)) next.delete(key);
+            else next.add(key);
+            return next;
+        });
+    }
+
     function submit(e: React.FormEvent) {
         e.preventDefault();
         if (form.phone && form.phone.trim()) {
@@ -474,12 +496,31 @@ function DojoFormModal({
             }
         });
 
+        // Snapshot feature-lock selection for the second call.
+        const nextLocked = Array.from(locked);
+        const prevLocked = new Set(dojo.lockedFeatures);
+        const locksChanged =
+            nextLocked.length !== prevLocked.size ||
+            nextLocked.some((k) => !prevLocked.has(k));
+
         startTransition(async () => {
             const res = await updateDojoAction(fd);
-            if (res.ok) {
-                onFlash("ok", "Dojo updated.");
-                onClose();
-            } else onFlash("err", res.error);
+            if (!res.ok) {
+                onFlash("err", res.error);
+                return;
+            }
+            if (locksChanged) {
+                const lockFd = new FormData();
+                lockFd.set("id", dojo.id);
+                nextLocked.forEach((k) => lockFd.append("feature", k));
+                const lockRes = await updateDojoLockedFeaturesAction(lockFd);
+                if (!lockRes.ok) {
+                    onFlash("err", lockRes.error);
+                    return;
+                }
+            }
+            onFlash("ok", "Dojo updated.");
+            onClose();
         });
     }
 
@@ -593,6 +634,43 @@ function DojoFormModal({
                         />
                         <span className="text-sm font-medium text-zinc-700">Dojo is active</span>
                     </label>
+
+                    <div className="pt-2 border-t border-zinc-100">
+                        <p className="text-sm font-semibold text-zinc-900 mb-1">
+                            Locked features
+                        </p>
+                        <p className="text-xs text-zinc-500 mb-3">
+                            Checking a feature locks its page for this dojo.
+                            Dojos below the 30-active-student milestone already
+                            auto-lock certificates, announcements, transfers,
+                            and staff invites.
+                        </p>
+                        <div className="grid grid-cols-2 gap-2">
+                            {FEATURE_KEYS.map((key) => {
+                                const isLocked = locked.has(key);
+                                return (
+                                    <label
+                                        key={key}
+                                        className={`flex items-center gap-2 px-3 py-2 border rounded-lg cursor-pointer transition-colors ${
+                                            isLocked
+                                                ? "border-accent-red/40 bg-accent-red/5"
+                                                : "border-zinc-200 hover:border-zinc-300"
+                                        }`}
+                                    >
+                                        <input
+                                            type="checkbox"
+                                            checked={isLocked}
+                                            onChange={() => toggleFeature(key)}
+                                            className="w-4 h-4 rounded text-accent-red focus:ring-accent-red"
+                                        />
+                                        <span className="text-xs font-medium text-zinc-700">
+                                            {FEATURE_LABEL[key]}
+                                        </span>
+                                    </label>
+                                );
+                            })}
+                        </div>
+                    </div>
 
                     <div className="flex items-center gap-3 pt-2">
                         <button

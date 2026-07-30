@@ -38,6 +38,7 @@ import { createClient } from "@/lib/supabase/client";
 import { playNotificationChime } from "@/lib/notification-sound";
 import { DOJO_NAV, GROUP_LABEL, type DojoNavItem } from "@/lib/dojo-nav";
 import { type DojoRole } from "@/lib/dojo-roles";
+import type { FeatureKey } from "@/lib/dojo/feature-locks";
 import NotificationBell from "@/components/portal/notification-bell";
 
 const DOJO_ROLE_RANK: Record<DojoRole, number> = {
@@ -99,6 +100,8 @@ const dojoPersonalNavItems = [
     { label: "Notifications", href: "/portal/notifications",icon: Bell },
 ];
 
+export type DojoLockState = "UNPAID" | "AWAITING_APPROVAL" | null;
+
 interface PortalShellProps {
     userId: string;
     initialRole?: "STUDENT" | "INSTRUCTOR" | "DOJO_MANAGER" | "DOJO_OWNER" | "ADMIN";
@@ -106,15 +109,46 @@ interface PortalShellProps {
      *  from depending on a client-side Supabase query that may lag or
      *  fail silently under RLS. */
     initialJoinStage?: "FEE_UNPAID" | "AWAITING_APPROVAL" | "PAST_BELT_UNPAID" | "JOINED" | null;
+    /** Dojo-console lock state.
+     *  - "UNPAID" — enlistment fee unpaid; everything except Overview locked.
+     *  - "AWAITING_APPROVAL" — fee paid, JKA approval pending; everything
+     *    except Overview + Dojo Settings locked.
+     *  - null — no lock. */
+    initialDojoLock?: DojoLockState;
+    /** For fully approved dojos, the union of milestone-locked and admin-
+     *  locked feature keys. Ignored while initialDojoLock is set (that
+     *  gate already covers everything). */
+    initialLockedFeatures?: FeatureKey[];
     children: React.ReactNode;
 }
+
+const DOJO_UNLOCKED_WHEN_AWAITING = new Set<string>([
+    "/portal",
+    "/portal/dojo/settings",
+]);
+
+// Map dojo-nav hrefs back to their feature key. Kept inline (rather than
+// importing FEATURE_PATH) so the sidebar stays a client component.
+const HREF_TO_FEATURE: Record<string, FeatureKey> = {
+    "/portal/dojo/members":       "members",
+    "/portal/dojo/join-requests": "join-requests",
+    "/portal/dojo/gradings":      "gradings",
+    "/portal/dojo/certificates":  "certificates",
+    "/portal/dojo/announcements": "announcements",
+    "/portal/dojo/transfers":     "transfers",
+    "/portal/dojo/renewals":      "renewals",
+    "/portal/dojo/settings":      "settings",
+};
 
 export default function PortalShell({
     userId,
     initialRole = "STUDENT",
     initialJoinStage = null,
+    initialDojoLock = null,
+    initialLockedFeatures = [],
     children,
 }: PortalShellProps) {
+    const featureLockSet = new Set<FeatureKey>(initialLockedFeatures);
     const pathname = usePathname();
     const router = useRouter();
     const [isPending, startTransition] = useTransition();
@@ -470,6 +504,37 @@ export default function PortalShell({
                                 const isActive = href === "/portal"
                                     ? activePath === "/portal"
                                     : activePath === href || activePath.startsWith(href + "/");
+                                const featureKey = HREF_TO_FEATURE[href];
+                                const featureLocked =
+                                    !initialDojoLock &&
+                                    !!featureKey &&
+                                    featureLockSet.has(featureKey);
+                                const isLocked =
+                                    initialDojoLock === "UNPAID"
+                                        ? href !== "/portal"
+                                        : initialDojoLock === "AWAITING_APPROVAL"
+                                            ? !DOJO_UNLOCKED_WHEN_AWAITING.has(href)
+                                            : featureLocked;
+                                if (isLocked) {
+                                    const tip =
+                                        initialDojoLock === "AWAITING_APPROVAL"
+                                            ? "Unlocks once JKA approves your dojo"
+                                            : initialDojoLock === "UNPAID"
+                                                ? "Pay the enlistment fee to unlock"
+                                                : "Locked — reach 30 active students or ask JKA admin to unlock";
+                                    return (
+                                        <div
+                                            key={href}
+                                            aria-disabled="true"
+                                            title={tip}
+                                            className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-zinc-400 cursor-not-allowed select-none"
+                                        >
+                                            <Icon size={17} className="flex-shrink-0 opacity-60" />
+                                            <span className="flex-1 opacity-70">{label}</span>
+                                            <Lock size={13} className="opacity-60" />
+                                        </div>
+                                    );
+                                }
                                 return (
                                     <Link
                                         key={href}

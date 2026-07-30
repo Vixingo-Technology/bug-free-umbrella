@@ -11,6 +11,7 @@ import {
     isStaffRole,
     type InvitableRole,
 } from "@/lib/dojo-roles";
+import { resolveDojoFeatureLocks } from "@/lib/dojo/feature-locks.server";
 
 const ROLE_LABEL: Record<InvitableRole, string> = {
     STUDENT: "student",
@@ -76,6 +77,16 @@ export async function inviteDojoMemberAction(
     }
 
     if (isStaffRole(role)) {
+        // Feature-lock gate — invite-staff is locked until the dojo hits
+        // the student milestone (or the JKA admin unlocks it manually).
+        const locks = await resolveDojoFeatureLocks(session.dojo.id);
+        if (locks.locked.has("invite-staff")) {
+            const reason = locks.milestoneLocked.has("invite-staff")
+                ? `Instructor and manager invites unlock once your dojo has ${locks.milestone} active students (currently ${locks.studentCount}). You can keep inviting students meanwhile.`
+                : "Instructor and manager invites are currently locked for this dojo. Contact the JKA admin to unlock.";
+            return { ok: false, error: reason };
+        }
+
         const [instructorCount, managerCount] = await Promise.all([
             prisma.instructor.count({ where: { dojoId: session.dojo.id } }),
             prisma.dojoManager.count({ where: { dojoId: session.dojo.id } }),
