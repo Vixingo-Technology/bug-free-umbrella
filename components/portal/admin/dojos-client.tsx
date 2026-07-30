@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState, useTransition } from "react";
+import Link from "next/link";
 import { motion } from "motion/react";
 import {
     Building2, Search, X, Pencil, Trash2, MapPin, Phone, Mail,
@@ -8,19 +9,11 @@ import {
     Calendar, Send, Loader2, UserPlus,
 } from "lucide-react";
 import {
-    updateDojoAction,
     deleteDojoAction,
     assignDojoInstructorAction,
     sendDojoRenewalReminderAction,
-    updateDojoLockedFeaturesAction,
 } from "@/app/actions/admin-dojos";
 import { inviteMemberAction, revokeDojoOwnerInviteAction } from "@/app/actions/admin-members";
-import { validatePhone } from "@/lib/validation/phone";
-import {
-    FEATURE_KEYS,
-    FEATURE_LABEL,
-    type FeatureKey,
-} from "@/lib/dojo/feature-locks";
 
 type Instructor = { id: string; fullName: string; email: string; role: string };
 
@@ -41,7 +34,6 @@ type Dojo = {
     longitude: number | null;
     phone: string | null;
     email: string | null;
-    schedule: unknown;
     isActive: boolean;
     annualFee: number | null;
     expiryDate: string | null;
@@ -74,7 +66,6 @@ export default function DojosAdminClient({
     const [search, setSearch] = useState("");
     const [activeFilter, setActiveFilter] = useState<"ALL" | "ACTIVE" | "INACTIVE">("ALL");
     const [inviting, setInviting] = useState(false);
-    const [editing, setEditing] = useState<Dojo | null>(null);
     const [toast, setToast] = useState<{ kind: "ok" | "err"; msg: string } | null>(null);
 
     const filtered = useMemo(() => {
@@ -157,7 +148,6 @@ export default function DojosAdminClient({
                         key={d.id}
                         dojo={d}
                         instructors={instructors}
-                        onEdit={() => setEditing(d)}
                         onFlash={flash}
                     />
                 ))}
@@ -167,15 +157,6 @@ export default function DojosAdminClient({
                     </div>
                 )}
             </div>
-
-            {editing && (
-                <DojoFormModal
-                    dojo={editing}
-                    instructors={instructors}
-                    onClose={() => setEditing(null)}
-                    onFlash={flash}
-                />
-            )}
 
             {inviting && (
                 <InviteDojoModal
@@ -304,11 +285,10 @@ function InvitesPanel({
 }
 
 function DojoCard({
-    dojo, instructors, onEdit, onFlash,
+    dojo, instructors, onFlash,
 }: {
     dojo: Dojo;
     instructors: Instructor[];
-    onEdit: () => void;
     onFlash: (k: "ok" | "err", m: string) => void;
 }) {
     const [isPending, startTransition] = useTransition();
@@ -418,12 +398,12 @@ function DojoCard({
                 </div>
 
                 <div className="flex items-center gap-2 mt-4">
-                    <button
-                        onClick={onEdit}
+                    <Link
+                        href={`/portal/admin/dojos/${dojo.id}/edit`}
                         className="flex-1 inline-flex items-center justify-center gap-1.5 text-xs font-semibold text-zinc-700 hover:text-zinc-900 hover:bg-zinc-100 px-3 py-2 rounded-lg transition-colors border border-zinc-200"
                     >
                         <Pencil size={12} /> Edit
-                    </button>
+                    </Link>
                     <button
                         onClick={handleDelete}
                         disabled={isPending}
@@ -437,262 +417,6 @@ function DojoCard({
     );
 }
 
-function DojoFormModal({
-    dojo, instructors, onClose, onFlash,
-}: {
-    dojo: Dojo;
-    instructors: Instructor[];
-    onClose: () => void;
-    onFlash: (k: "ok" | "err", m: string) => void;
-}) {
-    const [isPending, startTransition] = useTransition();
-
-    const [form, setForm] = useState({
-        name: dojo.name,
-        address: dojo.address ?? "",
-        city: dojo.city ?? "",
-        phone: dojo.phone ?? "",
-        email: dojo.email ?? "",
-        latitude: dojo.latitude != null ? String(dojo.latitude) : "",
-        longitude: dojo.longitude != null ? String(dojo.longitude) : "",
-        headInstructorId: dojo.headInstructorId ?? "",
-        isActive: dojo.isActive,
-        schedule: dojo.schedule
-            ? (typeof dojo.schedule === "string" ? dojo.schedule : JSON.stringify(dojo.schedule, null, 2))
-            : "",
-    });
-
-    const [locked, setLocked] = useState<Set<FeatureKey>>(
-        () => new Set(dojo.lockedFeatures.filter(
-            (v): v is FeatureKey => (FEATURE_KEYS as readonly string[]).includes(v),
-        )),
-    );
-
-    function toggleFeature(key: FeatureKey) {
-        setLocked((prev) => {
-            const next = new Set(prev);
-            if (next.has(key)) next.delete(key);
-            else next.add(key);
-            return next;
-        });
-    }
-
-    function submit(e: React.FormEvent) {
-        e.preventDefault();
-        if (form.phone && form.phone.trim()) {
-            const phoneError = validatePhone(form.phone);
-            if (phoneError) {
-                onFlash("err", phoneError);
-                return;
-            }
-        }
-        const fd = new FormData();
-        fd.set("id", dojo.id);
-        Object.entries(form).forEach(([k, v]) => {
-            if (k === "isActive") {
-                if (v) fd.set(k, "true");
-            } else {
-                fd.set(k, String(v ?? ""));
-            }
-        });
-
-        // Snapshot feature-lock selection for the second call.
-        const nextLocked = Array.from(locked);
-        const prevLocked = new Set(dojo.lockedFeatures);
-        const locksChanged =
-            nextLocked.length !== prevLocked.size ||
-            nextLocked.some((k) => !prevLocked.has(k));
-
-        startTransition(async () => {
-            const res = await updateDojoAction(fd);
-            if (!res.ok) {
-                onFlash("err", res.error);
-                return;
-            }
-            if (locksChanged) {
-                const lockFd = new FormData();
-                lockFd.set("id", dojo.id);
-                nextLocked.forEach((k) => lockFd.append("feature", k));
-                const lockRes = await updateDojoLockedFeaturesAction(lockFd);
-                if (!lockRes.ok) {
-                    onFlash("err", lockRes.error);
-                    return;
-                }
-            }
-            onFlash("ok", "Dojo updated.");
-            onClose();
-        });
-    }
-
-    return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm overflow-y-auto" onClick={onClose}>
-            <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                onClick={(e) => e.stopPropagation()}
-                className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl overflow-hidden my-8"
-            >
-                <div className="px-6 py-5 border-b border-zinc-100 flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                        <div className="p-2 bg-accent-red/10 rounded-xl">
-                            <Building2 size={18} className="text-accent-red" />
-                        </div>
-                        <h2 className="text-lg font-bold text-zinc-900">Edit dojo</h2>
-                    </div>
-                    <button onClick={onClose} className="p-1.5 rounded-lg text-zinc-400 hover:bg-zinc-100">
-                        <X size={16} />
-                    </button>
-                </div>
-
-                <form onSubmit={submit} className="p-6 space-y-4">
-                    <Field label="Dojo name" required>
-                        <input
-                            type="text"
-                            value={form.name}
-                            onChange={(e) => setForm({ ...form, name: e.target.value })}
-                            required
-                            className={inputCls}
-                        />
-                    </Field>
-
-                    <Field label="Address">
-                        <textarea
-                            value={form.address}
-                            onChange={(e) => setForm({ ...form, address: e.target.value })}
-                            rows={2}
-                            className={inputCls}
-                        />
-                    </Field>
-
-                    <div className="grid grid-cols-2 gap-4">
-                        <Field label="City">
-                            <input
-                                type="text"
-                                value={form.city}
-                                onChange={(e) => setForm({ ...form, city: e.target.value })}
-                                className={inputCls}
-                            />
-                        </Field>
-                        <Field label="Phone">
-                            <input
-                                type="tel"
-                                inputMode="numeric"
-                                pattern="\d{11}"
-                                maxLength={11}
-                                title="Phone number must be exactly 11 digits."
-                                placeholder="01XXXXXXXXX"
-                                value={form.phone}
-                                onChange={(e) => setForm({ ...form, phone: e.target.value.replace(/\D/g, "").slice(0, 11) })}
-                                className={inputCls}
-                            />
-                        </Field>
-                    </div>
-
-                    <Field label="Email">
-                        <input
-                            type="email"
-                            value={form.email}
-                            onChange={(e) => setForm({ ...form, email: e.target.value })}
-                            className={inputCls}
-                        />
-                    </Field>
-
-                    <Field label="Head instructor">
-                        <div className="relative">
-                            <select
-                                value={form.headInstructorId}
-                                onChange={(e) => setForm({ ...form, headInstructorId: e.target.value })}
-                                className={`appearance-none ${inputCls} pr-9`}
-                            >
-                                <option value="">— Unassigned —</option>
-                                {instructors.map((i) => (
-                                    <option key={i.id} value={i.id}>
-                                        {i.fullName} {i.role === "ADMIN" ? "(Admin)" : "(Instructor)"}
-                                    </option>
-                                ))}
-                            </select>
-                            <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 pointer-events-none" />
-                        </div>
-                    </Field>
-
-                    <Field label="Schedule (JSON or freeform)">
-                        <textarea
-                            value={form.schedule}
-                            onChange={(e) => setForm({ ...form, schedule: e.target.value })}
-                            rows={4}
-                            placeholder={`e.g. { "monday": "6–8pm", "wednesday": "6–8pm" }`}
-                            className={`${inputCls} font-mono text-xs`}
-                        />
-                    </Field>
-
-                    <label className="flex items-center gap-3 cursor-pointer">
-                        <input
-                            type="checkbox"
-                            checked={form.isActive}
-                            onChange={(e) => setForm({ ...form, isActive: e.target.checked })}
-                            className="w-4 h-4 rounded text-accent-red focus:ring-accent-red"
-                        />
-                        <span className="text-sm font-medium text-zinc-700">Dojo is active</span>
-                    </label>
-
-                    <div className="pt-2 border-t border-zinc-100">
-                        <p className="text-sm font-semibold text-zinc-900 mb-1">
-                            Locked features
-                        </p>
-                        <p className="text-xs text-zinc-500 mb-3">
-                            Checking a feature locks its page for this dojo.
-                            Dojos below the 30-active-student milestone already
-                            auto-lock certificates, announcements, transfers,
-                            and staff invites.
-                        </p>
-                        <div className="grid grid-cols-2 gap-2">
-                            {FEATURE_KEYS.map((key) => {
-                                const isLocked = locked.has(key);
-                                return (
-                                    <label
-                                        key={key}
-                                        className={`flex items-center gap-2 px-3 py-2 border rounded-lg cursor-pointer transition-colors ${
-                                            isLocked
-                                                ? "border-accent-red/40 bg-accent-red/5"
-                                                : "border-zinc-200 hover:border-zinc-300"
-                                        }`}
-                                    >
-                                        <input
-                                            type="checkbox"
-                                            checked={isLocked}
-                                            onChange={() => toggleFeature(key)}
-                                            className="w-4 h-4 rounded text-accent-red focus:ring-accent-red"
-                                        />
-                                        <span className="text-xs font-medium text-zinc-700">
-                                            {FEATURE_LABEL[key]}
-                                        </span>
-                                    </label>
-                                );
-                            })}
-                        </div>
-                    </div>
-
-                    <div className="flex items-center gap-3 pt-2">
-                        <button
-                            type="button"
-                            onClick={onClose}
-                            className="flex-1 px-4 py-2.5 text-sm font-semibold text-zinc-700 hover:bg-zinc-100 rounded-xl transition-colors"
-                        >
-                            Cancel
-                        </button>
-                        <button
-                            type="submit"
-                            disabled={isPending}
-                            className="flex-1 px-4 py-2.5 text-sm font-semibold text-white bg-accent-red hover:bg-accent-red/90 disabled:opacity-50 rounded-xl transition-colors"
-                        >
-                            {isPending ? "Saving…" : "Save changes"}
-                        </button>
-                    </div>
-                </form>
-            </motion.div>
-        </div>
-    );
-}
 
 function InviteDojoModal({
     onClose, onFlash,
