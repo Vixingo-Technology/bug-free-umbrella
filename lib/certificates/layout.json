@@ -1,9 +1,9 @@
 {
   "kyuDigit": {
     "kind": "text",
-    "cx": 468.2,
-    "y": 157.2,
-    "size": 11
+    "cx": 318.9,
+    "y": 184.3,
+    "size": 15
   },
   "jpYear": {
     "kind": "text",
@@ -55,13 +55,13 @@
     "kind": "text",
     "cx": 300.8,
     "y": 482,
-    "size": 9,
+    "size": 11,
     "maxWidth": 119
   },
   "ownerSignature": {
     "kind": "image",
-    "x": 298,
-    "y": 630,
+    "x": 298.7,
+    "y": 620.7,
     "w": 120,
     "h": 42,
     "centered": true

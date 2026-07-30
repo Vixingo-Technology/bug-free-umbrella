@@ -29,6 +29,7 @@ import {
     ArrowRightLeft,
     CreditCard,
     Lock,
+    Receipt,
     UserPlus,
 } from "lucide-react";
 import Logo from "@/assets/jka_logo.svg";
@@ -84,6 +85,7 @@ const adminNavItems = [
     { label: "Events",   href: "/portal/admin/events",   icon: CalendarDays },
     { label: "Products", href: "/portal/admin/products", icon: Package },
     { label: "Orders",   href: "/portal/admin/orders",   icon: ShoppingBag },
+    { label: "Transactions", href: "/portal/admin/transactions", icon: Receipt },
     { label: "Dojos",    href: "/portal/admin/dojos",    icon: Building2 },
     { label: "Certificates", href: "/portal/admin/certificates", icon: Award },
     { label: "Transfers", href: "/portal/admin/transfers", icon: ArrowRightLeft },

@@ -42,6 +42,22 @@ export default async function EventDetailPage({
   });
   if (!event) notFound();
 
+  // Belt chart, used to name the rank a candidate lands on at 80+ marks
+  // (one step beyond the rank they applied for). Mirrors lib/grading-promotion.ts.
+  const ranks = await prisma.beltRank.findMany({
+    select: { id: true, name: true, orderIndex: true },
+    orderBy: { orderIndex: "asc" },
+  });
+  const rankByOrder = new Map(ranks.map((r) => [r.orderIndex, r]));
+  const rankById = new Map(ranks.map((r) => [r.id, r]));
+
+  function doublePromotionRankName(targetRankId: string | null): string | null {
+    if (!targetRankId) return null;
+    const target = rankById.get(targetRankId);
+    if (!target) return null;
+    return rankByOrder.get(target.orderIndex + 1)?.name ?? null;
+  }
+
   return (
     <EventDetailClient
       viewerRole={session.role}
@@ -62,6 +78,7 @@ export default async function EventDetailPage({
         currentRank: a.student.currentRank,
         targetRankId: a.targetRankId,
         targetRankName: a.targetRank?.name ?? null,
+        doubleRankName: doublePromotionRankName(a.targetRankId),
         status: a.status,
       }))}
       gradings={event.gradings.map((g) => ({ ...g, memberId: g.studentId }))}

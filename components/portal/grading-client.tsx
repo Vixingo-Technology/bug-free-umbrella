@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "motion/react";
 import TiltCard from "@/components/portal/tilt-card";
 import {
   Award, Calendar, MapPin, CheckCircle2, Clock,
-  XCircle, Loader2, AlertCircle, FileText, Send,
+  XCircle, Loader2, AlertCircle, FileText, Send, ChevronsUp,
 } from "lucide-react";
 import {
   requestBeltTestAction,
@@ -141,8 +141,13 @@ export default function GradingClient({
               <li key={g.id} className="px-4 py-3 space-y-1.5">
                 <div className="flex items-center justify-between gap-3">
                   <div>
-                    <p className="text-sm font-semibold text-zinc-900">
+                    <p className="text-sm font-semibold text-zinc-900 flex items-center gap-2">
                       {g.fromRank?.name ?? "—"} → {g.toRank?.name ?? "—"}
+                      {g.isDoublePromotion && (
+                        <span className="inline-flex items-center gap-1 text-[10px] uppercase tracking-widest font-bold px-2 py-0.5 rounded-full bg-violet-100 text-violet-700">
+                          <ChevronsUp size={11} /> Double
+                        </span>
+                      )}
                     </p>
                     <p className="text-xs text-zinc-500">
                       {new Date(g.createdAt).toLocaleDateString("en-GB", {

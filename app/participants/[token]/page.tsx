@@ -144,7 +144,7 @@ export default async function ParticipationCardPage({
     return (
         <main className="min-h-screen bg-bg-deep w-full overflow-hidden print:bg-white print:min-h-0">
             <section className="py-12 md:py-20 print:py-0">
-                <div className="max-w-2xl mx-auto px-6 lg:px-12 print:px-0 print:max-w-none">
+                <div className="max-w-2xl mx-auto px-6 lg:px-12 print:px-0">
                     <Link
                         href={`/events/${registration.event.id}`}
                         className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-zinc-500 hover:text-accent-red transition-colors mb-8 print:hidden"
@@ -166,7 +166,7 @@ export default async function ParticipationCardPage({
                         </div>
                     )}
 
-                    <div className="bg-white border-2 border-zinc-900 shadow-xl rounded-sm overflow-hidden print:shadow-none print:border print:rounded-none">
+                    <div className="bg-white border-2 border-zinc-900 shadow-xl rounded-sm overflow-hidden print:shadow-none">
                         {/* Header strip */}
                         <div className="bg-white border-b border-zinc-200 px-6 py-4 flex items-center justify-between">
                             <div className="flex items-center gap-3">

@@ -10,6 +10,9 @@
  *
  * PASSED = marks >= 50, FAILED = marks < 50. ABSENT is a separate result
  * carried alongside marks = null.
+ *
+ * 80+ earns a DOUBLE PROMOTION: the student skips the rank they tested for
+ * and lands on the one above it. Resolved in lib/grading-promotion.ts.
  */
 
 export type LetterGrade = "A+" | "A" | "A-" | "B" | "C" | "F";
@@ -94,3 +97,12 @@ export function marksPassed(marks: number | null | undefined): boolean {
 }
 
 export const PASS_THRESHOLD = 50;
+
+/** Marks at or above this skip a rank (A and A+ bands). */
+export const DOUBLE_PROMOTION_THRESHOLD = 80;
+
+/** True iff the score earns a double promotion (80..100). */
+export function marksEarnDoublePromotion(marks: number | null | undefined): boolean {
+    if (marks == null) return false;
+    return marks >= DOUBLE_PROMOTION_THRESHOLD && marks <= 100;
+}

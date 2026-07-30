@@ -6,6 +6,8 @@ import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/admin-guard";
 import { uploadToCloudinary, CLOUDINARY_FOLDERS } from "@/lib/cloudinary";
 import { generateCertificatePdf } from "@/lib/certificates/generate";
+import { notifyMembers } from "@/lib/notify";
+import { findUserIdsByRoles } from "@/lib/notify/recipients";
 
 const settingsSchema = z.object({
     adminSignerName: z.string().trim().max(200).nullable().optional(),
@@ -128,4 +130,57 @@ export async function saveRankCertificatePriceAction(
 
     revalidatePath("/portal/admin/certificates");
     return { success: true };
+}
+
+const approveSchema = z.object({
+    certificateRequestId: z.string().uuid(),
+});
+
+/**
+ * JKA admin approval for a certificate request submitted by a dojo. Only
+ * requests that are PAID (i.e. the dojo has paid but no PDF has been rendered
+ * yet) can be approved. Generates the PDF, marks the request ISSUED, and
+ * notifies the dojo owner that the certificate is ready to download.
+ */
+export async function approveCertificateRequestAction(
+    input: z.infer<typeof approveSchema>,
+): Promise<{ success: true; url: string } | { error: string }> {
+    await requireAdmin();
+    const parsed = approveSchema.safeParse(input);
+    if (!parsed.success) {
+        return { error: parsed.error.issues[0]?.message ?? "Invalid input." };
+    }
+
+    const req = await prisma.certificateRequest.findUnique({
+        where: { id: parsed.data.certificateRequestId },
+        select: { id: true, status: true, dojoId: true, memberName: true, rankName: true, dojo: { select: { name: true } } },
+    });
+    if (!req) return { error: "Certificate request not found." };
+    if (req.status !== "PAID") {
+        return {
+            error:
+                req.status === "ISSUED"
+                    ? "This certificate is already issued."
+                    : `Cannot approve a request in state ${req.status}.`,
+        };
+    }
+
+    const res = await generateCertificatePdf({
+        certificateRequestId: parsed.data.certificateRequestId,
+    });
+    if (!res.ok) return { error: res.reason };
+
+    // Ping the dojo owner(s) so they know the certificate is ready.
+    const ownerIds = await findUserIdsByRoles(["DOJO_OWNER"], { dojoId: req.dojoId });
+    await notifyMembers(ownerIds, {
+        title: "Certificate approved by JKA HQ",
+        message: `${req.memberName}'s ${req.rankName ?? "certificate"} has been approved. The online copy is ready to download.`,
+        type: "GRADING",
+        link: "/portal/dojo/gradings",
+    });
+
+    revalidatePath("/portal/admin/certificates");
+    revalidatePath("/portal/dojo/certificates");
+    revalidatePath("/portal/dojo/gradings");
+    return { success: true, url: res.url };
 }

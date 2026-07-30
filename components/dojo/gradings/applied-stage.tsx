@@ -50,7 +50,7 @@ export default function AppliedStage({
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 p-6">
       {grouped.map(([rankName, rows]) => (
         <div key={rankName}>
           <h3 className="text-[10px] tracking-widest uppercase font-bold text-zinc-500 mb-2">

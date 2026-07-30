@@ -71,6 +71,8 @@ export async function updateSession(request: NextRequest) {
             request.nextUrl.searchParams.has("status")) ||
         (pathname === "/portal/dojo/renewals" &&
             request.nextUrl.searchParams.has("status")) ||
+        (pathname === "/portal/dojo/certificates" &&
+            request.nextUrl.searchParams.has("status")) ||
         (pathname === "/portal/joining" &&
             request.nextUrl.searchParams.has("status"));
 

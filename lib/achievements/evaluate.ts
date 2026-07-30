@@ -7,6 +7,7 @@
 
 import { prisma } from "@/lib/prisma";
 import { ACHIEVEMENT_CATALOG } from "@/lib/achievements/catalog";
+import { DOUBLE_PROMOTION_THRESHOLD } from "@/lib/grading-marks";
 
 export type UnlockedAchievement = {
     slug: string;
@@ -15,26 +16,46 @@ export type UnlockedAchievement = {
 };
 
 async function gatherMetrics(studentId: string): Promise<Record<string, number>> {
-    const [gradingsPassed, eventsAttended, tournaments, tournamentWins, certificates] =
-        await Promise.all([
-            prisma.grading.count({ where: { studentId, result: "PASSED" } }),
-            prisma.eventRegistration.count({
-                where: { userId: studentId, checkedInAt: { not: null } },
-            }),
-            prisma.tournamentParticipant.count({ where: { userId: studentId } }),
-            prisma.tournamentMatch.count({
-                where: {
-                    OR: [
-                        { participant1: { userId: studentId } },
-                        { participant2: { userId: studentId } },
-                    ],
-                    winner: { userId: studentId },
-                },
-            }),
-            prisma.grading.count({
-                where: { studentId, result: "PASSED", certificateUrl: { not: null } },
-            }),
-        ]);
+    const [
+        gradingsPassed,
+        eventsAttended,
+        tournaments,
+        tournamentWins,
+        certificates,
+        highMarkGradings,
+    ] = await Promise.all([
+        prisma.grading.count({ where: { studentId, result: "PASSED" } }),
+        prisma.eventRegistration.count({
+            where: { userId: studentId, checkedInAt: { not: null } },
+        }),
+        prisma.tournamentParticipant.count({ where: { userId: studentId } }),
+        prisma.tournamentMatch.count({
+            where: {
+                OR: [
+                    { participant1: { userId: studentId } },
+                    { participant2: { userId: studentId } },
+                ],
+                winner: { userId: studentId },
+            },
+        }),
+        prisma.grading.count({
+            where: { studentId, result: "PASSED", certificateUrl: { not: null } },
+        }),
+        // 80+ on a belt test — the double-promotion band. Counted from marks
+        // rather than isDoublePromotion so a top-rank student who scores 80+
+        // (and so cannot skip) still earns the badge.
+        prisma.grading.count({
+            where: {
+                studentId,
+                result: "PASSED",
+                marks: { gte: DOUBLE_PROMOTION_THRESHOLD },
+                OR: [
+                    { gradingEventId: null },
+                    { gradingEvent: { resultsPublishedAt: { not: null } } },
+                ],
+            },
+        }),
+    ]);
 
     return {
         GRADINGS_PASSED: gradingsPassed,
@@ -42,6 +63,7 @@ async function gatherMetrics(studentId: string): Promise<Record<string, number>>
         TOURNAMENTS_PARTICIPATED: tournaments,
         TOURNAMENT_WINS: tournamentWins,
         CERTIFICATES_EARNED: certificates,
+        HIGH_MARK_GRADINGS: highMarkGradings,
     };
 }
 

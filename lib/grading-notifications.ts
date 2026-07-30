@@ -69,7 +69,21 @@ export function buildExamUpdatedNotification(args: {
 export function buildResultPublishedNotification(args: {
   passed: boolean;
   toRankName: string | null;
+  /** 80+ marks — the student skipped a rank. */
+  doublePromotion?: boolean;
+  fromRankName?: string | null;
 }): NotificationPayload {
+  if (args.passed && args.toRankName && args.doublePromotion) {
+    const journey = args.fromRankName
+      ? `from ${args.fromRankName} straight to ${args.toRankName}`
+      : `straight to ${args.toRankName}`;
+    return {
+      title: "Double promotion — outstanding!",
+      message: `You scored 80 or above and skipped a rank, going ${journey}.`,
+      type: "GRADING",
+      link: "/portal/grading",
+    };
+  }
   if (args.passed && args.toRankName) {
     return {
       title: "Congratulations — you've passed!",

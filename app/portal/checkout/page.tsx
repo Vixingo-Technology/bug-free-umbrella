@@ -41,6 +41,14 @@ export default async function CheckoutPage({
                     orderItems: {
                         include: { product: true },
                     },
+                    certificateRequests: {
+                        select: {
+                            id: true,
+                            memberName: true,
+                            rankName: true,
+                            price: true,
+                        },
+                    },
                 },
             });
         }

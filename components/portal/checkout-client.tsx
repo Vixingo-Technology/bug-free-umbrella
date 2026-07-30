@@ -3,7 +3,7 @@
 import { useTransition, useState } from "react";
 import { motion } from "motion/react";
 import {
-    ShieldCheck, CreditCard, Package, Star,
+    ShieldCheck, CreditCard, Package, Star, Award,
     AlertCircle, Loader2, ChevronRight, MapPin,
 } from "lucide-react";
 import { initiatePaymentAction } from "@/app/portal/checkout/actions";
@@ -19,8 +19,10 @@ export default function CheckoutClient({ order, member, paymentFailed }: Props) 
     const [error, setError] = useState<string | null>(paymentFailed ? "Your previous payment attempt failed. Please try again." : null);
 
     const productItems: any[] = order?.orderItems ?? [];
+    const certificateItems: any[] = order?.certificateRequests ?? [];
     const membershipFee = Number(order?.membershipFee ?? 0);
     const productTotal = productItems.reduce((s: number, i: any) => s + Number(i.unitPrice) * i.quantity, 0);
+    const certificateTotal = certificateItems.reduce((s: number, c: any) => s + Number(c.price), 0);
     const grandTotal = Number(order?.total ?? 0);
 
     function handlePay() {
@@ -96,6 +98,33 @@ export default function CheckoutClient({ order, member, paymentFailed }: Props) 
                         </div>
                     )}
 
+                    {/* Certificate requests — one line per student */}
+                    {certificateItems.map((c: any, i: number) => (
+                        <div
+                            key={c.id}
+                            className={`flex items-center gap-4 px-5 py-4 ${
+                                i < certificateItems.length - 1 || productItems.length > 0
+                                    ? "border-b border-white/5"
+                                    : ""
+                            }`}
+                        >
+                            <div className="w-10 h-10 rounded-xl bg-amber-600/20 flex items-center justify-center flex-shrink-0">
+                                <Award size={16} className="text-amber-400" />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                                <p className="text-sm font-semibold text-white truncate">
+                                    {c.memberName}
+                                </p>
+                                <p className="text-xs text-white/40 mt-0.5 truncate">
+                                    {c.rankName} · Printed certificate
+                                </p>
+                            </div>
+                            <p className="text-sm font-bold text-white flex-shrink-0">
+                                ৳{Number(c.price).toLocaleString()}
+                            </p>
+                        </div>
+                    ))}
+
                     {/* Product items */}
                     {productItems.map((item: any, i: number) => (
                         <div key={item.id} className={`flex items-center gap-4 px-5 py-4 ${i < productItems.length - 1 ? "border-b border-white/5" : ""}`}>
@@ -124,6 +153,12 @@ export default function CheckoutClient({ order, member, paymentFailed }: Props) 
                         <div className="flex justify-between text-white/50">
                             <span>Membership</span>
                             <span>৳{membershipFee.toLocaleString()}</span>
+                        </div>
+                    )}
+                    {certificateTotal > 0 && (
+                        <div className="flex justify-between text-white/50">
+                            <span>Certificates ({certificateItems.length})</span>
+                            <span>৳{certificateTotal.toLocaleString()}</span>
                         </div>
                     )}
                     {productTotal > 0 && (

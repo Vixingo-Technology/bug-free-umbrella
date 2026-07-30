@@ -3,6 +3,11 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { prisma } from "@/lib/prisma";
+import {
+    kindForOrder,
+    recordPaymentAttempt,
+    recordPaymentOutcome,
+} from "@/lib/payments/log";
 
 // ─── Initiate SSLCommerz payment ─────────────────────────────────────────────
 
@@ -19,6 +24,7 @@ export async function initiatePaymentAction(orderId: string) {
                 orderItems: { include: { product: true } },
                 transferRequest: { select: { id: true } },
                 dojo: { select: { id: true } },
+                certificateRequests: { select: { id: true } },
             },
         });
 
@@ -30,13 +36,36 @@ export async function initiatePaymentAction(orderId: string) {
         const storePassword = process.env.SSLCOMMERZ_STORE_PASSWORD;
         const isSandbox = process.env.SSLCOMMERZ_ENV !== "live";
 
+        const kind = kindForOrder(order);
+        const buyer = {
+            userId: order.userId,
+            name: order.user.fullName,
+            email: order.user.email,
+            phone: order.user.phone,
+        };
+
         // If SSLCommerz not configured, use dev bypass
         if (!storeId || storeId === "your-sslcommerz-store-id") {
+            // Dev bypass counts as a SUCCESS attempt so admins still see it
+            // in the audit log with the right provider.
+            await recordPaymentOutcome({
+                orderId,
+                status: "SUCCESS",
+                provider: "DEV_BYPASS",
+                kind,
+                amount: Number(order.total),
+                currency: order.currency,
+                buyer,
+            });
+
             // Dev mode: simulate payment success. Renewal orders route to
             // their originating page so we hit the same success handler as
             // production.
             if (order.includesDojoRenewal) {
                 redirect(`/portal/dojo/renewals?status=success&orderId=${orderId}&dev=1`);
+            }
+            if (order.includesCertificates) {
+                redirect(`/portal/dojo/certificates?status=success&orderId=${orderId}&dev=1`);
             }
             if (order.includesPastBeltFee) {
                 redirect(`/portal/joining?status=success&orderId=${orderId}&dev=1`);
@@ -63,6 +92,8 @@ export async function initiatePaymentAction(orderId: string) {
         // show a contextual popup (success or failed) with fresh data.
         const renewFailBase = order.includesDojoRenewal
             ? `${appUrl}/portal/dojo/renewals?status=failed&orderId=${orderId}`
+            : order.includesCertificates
+            ? `${appUrl}/portal/dojo/certificates?status=failed&orderId=${orderId}`
             : order.includesPastBeltFee
                 ? `${appUrl}/portal/joining?status=failed&orderId=${orderId}`
                 : order.includesMembership
@@ -70,19 +101,26 @@ export async function initiatePaymentAction(orderId: string) {
                         ? `${appUrl}/portal/joining?status=failed&orderId=${orderId}`
                         : `${appUrl}/portal/renew?status=failed&orderId=${orderId}`
                     : null;
-        const failUrl = order.includesTransferRequest && transferReqId
+        const failNext = order.includesTransferRequest && transferReqId
             ? `${appUrl}/portal/transfer/failed?requestId=${transferReqId}`
             : renewFailBase ?? `${appUrl}/portal/payment-failed?orderId=${orderId}`;
-        const cancelUrl = order.includesTransferRequest && transferReqId
+        const cancelNext = order.includesTransferRequest && transferReqId
             ? `${appUrl}/portal/transfer/failed?requestId=${transferReqId}`
             : renewFailBase
                 ? `${renewFailBase}&reason=${encodeURIComponent("You cancelled the payment before it was completed.")}`
                 : `${appUrl}/portal/payment-failed?orderId=${orderId}&cancelled=1`;
+        // Route non-success outcomes through our own webhook so the
+        // transaction log captures FAILED / CANCELLED events — SSLCommerz
+        // only sends an IPN on success.
+        const failUrl = `${appUrl}/api/webhooks/sslcommerz/fail?orderId=${orderId}&kind=failed&next=${encodeURIComponent(failNext)}`;
+        const cancelUrl = `${appUrl}/api/webhooks/sslcommerz/fail?orderId=${orderId}&kind=cancelled&next=${encodeURIComponent(cancelNext)}`;
         const productName = order.includesTransferRequest
             ? "JKA Dojo Transfer Fee"
-            : order.includesMembership
-                ? "JKA Membership + Gear"
-                : "JKA Shop Order";
+            : order.includesCertificates
+                ? "JKA Grading Certificates"
+                : order.includesMembership
+                    ? "JKA Membership + Gear"
+                    : "JKA Shop Order";
 
         const params = new URLSearchParams({
             store_id: storeId,
@@ -108,9 +146,20 @@ export async function initiatePaymentAction(orderId: string) {
             ship_postcode: "1000",
             ship_country: "Bangladesh",
             product_name: productName,
-            product_category: order.includesTransferRequest ? "Service" : "Membership",
+            product_category:
+                order.includesTransferRequest || order.includesCertificates
+                    ? "Service"
+                    : "Membership",
             product_profile: "non-physical-goods",
-            num_of_item: String(order.orderItems.length + (order.includesMembership ? 1 : 0) + (order.includesTransferRequest ? 1 : 0)),
+            num_of_item: String(
+                Math.max(
+                    1,
+                    order.orderItems.length +
+                        order.certificateRequests.length +
+                        (order.includesMembership ? 1 : 0) +
+                        (order.includesTransferRequest ? 1 : 0),
+                ),
+            ),
         });
 
         const res = await fetch(baseUrl, {
@@ -121,6 +170,17 @@ export async function initiatePaymentAction(orderId: string) {
         const json = await res.json();
 
         if (json.status === "SUCCESS" && json.GatewayPageURL) {
+            // The buyer is about to be handed off to the gateway — log the
+            // PENDING attempt so the audit trail begins here. Webhooks
+            // (success / fail / cancel) later flip this row's status.
+            await recordPaymentAttempt({
+                orderId,
+                kind,
+                provider: "SSLCOMMERZ",
+                amount: Number(order.total),
+                currency: order.currency,
+                buyer,
+            });
             redirect(json.GatewayPageURL);
         }
 

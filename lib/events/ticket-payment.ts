@@ -3,6 +3,7 @@ import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { emitEventRegistered } from "@/lib/n8n";
 import { notifyMembers } from "@/lib/notify";
+import { recordPaymentAttempt, recordPaymentOutcome } from "@/lib/payments/log";
 
 export type TicketPaymentInit =
     | { kind: "gateway"; url: string }
@@ -39,6 +40,18 @@ export async function initiateTicketPayment(input: {
     if (!storeId || storeId === "your-sslcommerz-store-id") {
         // Dev mode: simulate a successful payment.
         await markRegistrationPaid(input.registrationId, "DEV-BYPASS");
+        await recordPaymentOutcome({
+            eventRegistrationId: input.registrationId,
+            status: "SUCCESS",
+            provider: "DEV_BYPASS",
+            kind: "EVENT_TICKET",
+            amount: input.amount,
+            buyer: {
+                name: input.customerName,
+                email: input.customerEmail,
+                phone: input.customerPhone,
+            },
+        });
         return { kind: "devPaid" };
     }
 
@@ -84,6 +97,16 @@ export async function initiateTicketPayment(input: {
         });
         const json = await res.json();
         if (json.status === "SUCCESS" && json.GatewayPageURL) {
+            await recordPaymentAttempt({
+                eventRegistrationId: input.registrationId,
+                kind: "EVENT_TICKET",
+                amount: input.amount,
+                buyer: {
+                    name: input.customerName,
+                    email: input.customerEmail,
+                    phone: input.customerPhone,
+                },
+            });
             return { kind: "gateway", url: json.GatewayPageURL };
         }
         return {

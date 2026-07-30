@@ -17,9 +17,11 @@ import {
     ChevronRight,
 } from "lucide-react";
 import {
+    approveCertificateRequestAction,
     saveCertificateSettingsAction,
     saveRankCertificatePriceAction,
 } from "@/app/portal/admin/certificates/actions";
+import { useRouter } from "next/navigation";
 
 type Settings = {
     adminSignatureUrl: string | null;
@@ -356,8 +358,23 @@ function certNumber(id: string) {
 }
 
 function RecentRequestsCard({ requests }: { requests: RecentRequest[] }) {
+    const router = useRouter();
     const [query, setQuery] = useState("");
     const [page, setPage] = useState(1);
+    const [approvingId, setApprovingId] = useState<string | null>(null);
+    const [approveError, setApproveError] = useState<string | null>(null);
+
+    async function handleApprove(id: string) {
+        setApprovingId(id);
+        setApproveError(null);
+        const res = await approveCertificateRequestAction({ certificateRequestId: id });
+        setApprovingId(null);
+        if ("error" in res) {
+            setApproveError(res.error);
+            return;
+        }
+        router.refresh();
+    }
 
     const filtered = useMemo(() => {
         const q = query.trim().toLowerCase();
@@ -412,6 +429,11 @@ function RecentRequestsCard({ requests }: { requests: RecentRequest[] }) {
                     />
                 </div>
             </header>
+            {approveError && (
+                <div className="px-5 py-2 bg-red-50 border-b border-red-200 text-xs text-red-700">
+                    {approveError}
+                </div>
+            )}
             <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                     <thead>
@@ -468,6 +490,16 @@ function RecentRequestsCard({ requests }: { requests: RecentRequest[] }) {
                                     </td>
                                     <td className="px-5 py-3 text-right">
                                         <div className="inline-flex items-center gap-2">
+                                            {r.status === "PAID" && (
+                                                <button
+                                                    type="button"
+                                                    onClick={() => handleApprove(r.id)}
+                                                    disabled={approvingId === r.id}
+                                                    className="text-[10px] font-bold tracking-widest uppercase px-2 py-1 rounded-sm bg-emerald-600 text-white hover:bg-emerald-700 disabled:opacity-40"
+                                                >
+                                                    {approvingId === r.id ? "Approving…" : "Approve"}
+                                                </button>
+                                            )}
                                             <a
                                                 href={`/certificates/${r.id}`}
                                                 target="_blank"

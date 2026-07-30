@@ -24,7 +24,7 @@ type ActionResult =
 export async function createCertificateOrderAction(input: {
     gradingIds: string[];
 }): Promise<ActionResult | never> {
-    const session = await requireDojoRole("DOJO_MANAGER");
+    const session = await requireDojoRole("DOJO_OWNER");
     if (!session.dojo) {
         return { error: "Your dojo is not set up yet." };
     }
@@ -46,6 +46,7 @@ export async function createCertificateOrderAction(input: {
         };
     }
 
+    // The owner row must exist — their signature is stamped on every PDF.
     const owner = await prisma.dojoOwner.findUnique({
         where: { dojoId },
         select: { id: true },
@@ -62,6 +63,7 @@ export async function createCertificateOrderAction(input: {
         where: {
             id: { in: parsed.data.gradingIds },
             result: "PASSED",
+            pipelineStage: "VERIFIED",
             student: { dojoId },
         },
         include: {
@@ -90,12 +92,14 @@ export async function createCertificateOrderAction(input: {
         };
     }
 
-    // Skip gradings that already have an open (not-yet-ISSUED) request to
-    // avoid double-charging.
+    // Skip gradings that already have a paid-or-later request — those are
+    // in flight with JKA HQ and re-charging would be a bug. Stale
+    // PENDING_PAYMENT rows (previous failed / abandoned attempts) are
+    // superseded inside the create transaction below.
     const existingOpen = await prisma.certificateRequest.findMany({
         where: {
             gradingId: { in: gradings.map((g) => g.id) },
-            status: { in: ["PENDING_PAYMENT", "PAID", "GENERATING", "ISSUED"] },
+            status: { in: ["PAID", "GENERATING", "ISSUED"] },
         },
         select: { gradingId: true, status: true },
     });
@@ -135,9 +139,23 @@ export async function createCertificateOrderAction(input: {
     try {
         const { orderId, requestIds } = await prisma.$transaction(
             async (tx) => {
+                // Supersede stale PENDING_PAYMENT requests for these gradings
+                // (previous attempts that never paid). Deleting keeps history
+                // clean — the buyer only ever sees the one they're paying now.
+                await tx.certificateRequest.deleteMany({
+                    where: {
+                        gradingId: { in: eligible.map((g) => g.id) },
+                        dojoId,
+                        status: "PENDING_PAYMENT",
+                    },
+                });
+
                 const order = await tx.shopOrder.create({
                     data: {
-                        userId: owner.id,
+                        // The order belongs to whoever placed it — checkout
+                        // scopes lookups by userId, so a manager acting for
+                        // the dojo must own their own order.
+                        userId: session.userId,
                         certDojoId: dojoId,
                         includesCertificates: true,
                         total,

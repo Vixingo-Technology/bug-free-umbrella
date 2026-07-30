@@ -306,6 +306,12 @@ exports.Prisma.GradingScalarFieldEnum = {
   marks: 'marks',
   certificateUrl: 'certificateUrl',
   notes: 'notes',
+  isDoublePromotion: 'isDoublePromotion',
+  pipelineStage: 'pipelineStage',
+  verifiedAt: 'verifiedAt',
+  verifiedByUserId: 'verifiedByUserId',
+  submittedAt: 'submittedAt',
+  submittedByUserId: 'submittedByUserId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -579,6 +585,25 @@ exports.Prisma.StudentTransferRequestScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.PaymentTransactionScalarFieldEnum = {
+  id: 'id',
+  orderId: 'orderId',
+  eventRegistrationId: 'eventRegistrationId',
+  userId: 'userId',
+  provider: 'provider',
+  kind: 'kind',
+  status: 'status',
+  amount: 'amount',
+  currency: 'currency',
+  gatewayTxnId: 'gatewayTxnId',
+  reason: 'reason',
+  buyerName: 'buyerName',
+  buyerEmail: 'buyerEmail',
+  buyerPhone: 'buyerPhone',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.StudentDojoHistoryScalarFieldEnum = {
   id: 'id',
   studentId: 'studentId',
@@ -646,6 +671,12 @@ exports.GradingResult = exports.$Enums.GradingResult = {
   PASSED: 'PASSED',
   FAILED: 'FAILED',
   ABSENT: 'ABSENT'
+};
+
+exports.GradingPipelineStage = exports.$Enums.GradingPipelineStage = {
+  QUALIFIED: 'QUALIFIED',
+  VERIFIED: 'VERIFIED',
+  SUBMITTED: 'SUBMITTED'
 };
 
 exports.CertificateRequestStatus = exports.$Enums.CertificateRequestStatus = {
@@ -718,7 +749,8 @@ exports.AchievementRule = exports.$Enums.AchievementRule = {
   EVENTS_ATTENDED: 'EVENTS_ATTENDED',
   TOURNAMENTS_PARTICIPATED: 'TOURNAMENTS_PARTICIPATED',
   TOURNAMENT_WINS: 'TOURNAMENT_WINS',
-  CERTIFICATES_EARNED: 'CERTIFICATES_EARNED'
+  CERTIFICATES_EARNED: 'CERTIFICATES_EARNED',
+  HIGH_MARK_GRADINGS: 'HIGH_MARK_GRADINGS'
 };
 
 exports.StudentTransferStatus = exports.$Enums.StudentTransferStatus = {
@@ -734,6 +766,30 @@ exports.StudentTransferDojoDecision = exports.$Enums.StudentTransferDojoDecision
   PENDING: 'PENDING',
   APPROVED: 'APPROVED',
   REJECTED: 'REJECTED'
+};
+
+exports.PaymentProvider = exports.$Enums.PaymentProvider = {
+  SSLCOMMERZ: 'SSLCOMMERZ',
+  DEV_BYPASS: 'DEV_BYPASS',
+  MANUAL: 'MANUAL'
+};
+
+exports.PaymentTransactionKind = exports.$Enums.PaymentTransactionKind = {
+  MEMBERSHIP: 'MEMBERSHIP',
+  PAST_BELT_FEE: 'PAST_BELT_FEE',
+  CERTIFICATES: 'CERTIFICATES',
+  DOJO_RENEWAL: 'DOJO_RENEWAL',
+  TRANSFER: 'TRANSFER',
+  EVENT_TICKET: 'EVENT_TICKET',
+  SHOP: 'SHOP',
+  OTHER: 'OTHER'
+};
+
+exports.PaymentTransactionStatus = exports.$Enums.PaymentTransactionStatus = {
+  PENDING: 'PENDING',
+  SUCCESS: 'SUCCESS',
+  FAILED: 'FAILED',
+  CANCELLED: 'CANCELLED'
 };
 
 exports.Prisma.ModelName = {
@@ -771,6 +827,7 @@ exports.Prisma.ModelName = {
   Achievement: 'Achievement',
   StudentAchievement: 'StudentAchievement',
   StudentTransferRequest: 'StudentTransferRequest',
+  PaymentTransaction: 'PaymentTransaction',
   StudentDojoHistory: 'StudentDojoHistory'
 };
 

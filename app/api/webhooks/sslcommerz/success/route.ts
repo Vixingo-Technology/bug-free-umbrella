@@ -5,6 +5,7 @@ import type { Prisma } from "@/prisma/generated/client";
 import { notifyAdmins, notifyMembers } from "@/lib/notify";
 import { findUserIdsByRoles } from "@/lib/notify/recipients";
 import { extendExpiry } from "@/lib/renewals/extend-expiry";
+import { kindForOrder, recordPaymentOutcome } from "@/lib/payments/log";
 
 // Landing pages for the buyer after we finish server-side processing. We
 // prefer the page the buyer came from (renew form, dojo renewal card) so
@@ -14,8 +15,12 @@ function successRedirectFor(order: {
     includesDojoRenewal: boolean;
     includesTransferRequest: boolean;
     includesPastBeltFee: boolean;
+    includesCertificates: boolean;
     joinAdvanceForFeeUnpaid: boolean;
 }, orderId: string, expiryIso: string | null): string {
+    if (order.includesCertificates) {
+        return `/portal/dojo/certificates?status=success&orderId=${orderId}`;
+    }
     if (order.includesDojoRenewal) {
         const params = new URLSearchParams({
             status: "success",
@@ -47,8 +52,12 @@ function failureRedirectFor(order: {
     includesDojoRenewal: boolean;
     includesTransferRequest: boolean;
     includesPastBeltFee: boolean;
+    includesCertificates: boolean;
 } | null, orderId: string, reason: string): string {
     const reasonParam = encodeURIComponent(reason);
+    if (order?.includesCertificates) {
+        return `/portal/dojo/certificates?status=failed&orderId=${orderId}&reason=${reasonParam}`;
+    }
     if (order?.includesDojoRenewal) {
         return `/portal/dojo/renewals?status=failed&orderId=${orderId}&reason=${reasonParam}`;
     }
@@ -59,6 +68,56 @@ function failureRedirectFor(order: {
         return `/portal/renew?status=failed&orderId=${orderId}&reason=${reasonParam}`;
     }
     return `/portal/payment-failed?orderId=${orderId}&reason=${reasonParam}`;
+}
+
+/**
+ * Mark every still-unpaid certificate request on the order as PAID, advance
+ * the linked gradings to the SUBMITTED pipeline stage, and notify the JKA
+ * admins that a new certificate request is waiting for approval.
+ *
+ * PDF generation is intentionally NOT triggered here — an admin must first
+ * approve the request from /portal/admin/certificates, which is what actually
+ * renders and uploads the PDF.
+ */
+async function submitCertificatesForOrder(orderId: string, requestIds: string[]) {
+    await prisma.certificateRequest.updateMany({
+        where: { orderId, status: "PENDING_PAYMENT" },
+        data: { status: "PAID" },
+    });
+
+    // Pull the requests + their dojo/member context for the admin notification
+    // and the pipeline-stage bump. Only paid rows count.
+    const paid = await prisma.certificateRequest.findMany({
+        where: { id: { in: requestIds }, status: "PAID" },
+        select: { id: true, gradingId: true, dojoId: true, memberName: true, dojo: { select: { name: true } } },
+    });
+
+    if (paid.length === 0) return;
+
+    await prisma.grading.updateMany({
+        where: { id: { in: paid.map((r) => r.gradingId) } },
+        data: {
+            pipelineStage: "SUBMITTED",
+            submittedAt: new Date(),
+        },
+    });
+
+    // Group by dojo for a tidy admin notification.
+    const byDojo = new Map<string, { dojoName: string; count: number }>();
+    for (const r of paid) {
+        const key = r.dojoId;
+        const bucket = byDojo.get(key) ?? { dojoName: r.dojo?.name ?? "A dojo", count: 0 };
+        bucket.count += 1;
+        byDojo.set(key, bucket);
+    }
+    for (const { dojoName, count } of byDojo.values()) {
+        await notifyAdmins({
+            title: "New certificate request",
+            message: `${dojoName} submitted ${count} certificate request${count === 1 ? "" : "s"} for JKA HQ approval.`,
+            type: "PAYMENT",
+            link: "/portal/admin/certificates",
+        });
+    }
 }
 
 // Called by SSLCommerz after successful payment (success_url).
@@ -94,6 +153,7 @@ export async function POST(request: Request) {
                 includesDojoRenewal: true,
                 includesTransferRequest: true,
                 includesPastBeltFee: true,
+                includesCertificates: true,
             },
         });
 
@@ -101,6 +161,12 @@ export async function POST(request: Request) {
             const reason =
                 json.failedreason ||
                 "The payment gateway declined the transaction.";
+            await recordPaymentOutcome({
+                orderId,
+                status: "FAILED",
+                gatewayTxnId: valId,
+                reason,
+            });
             return NextResponse.redirect(
                 new URL(
                     failureRedirectFor(orderShell, orderId, reason),
@@ -113,10 +179,32 @@ export async function POST(request: Request) {
         const order = await prisma.shopOrder.findUnique({
             where: { id: orderId },
             include: {
+                user: { select: { id: true, fullName: true, email: true, phone: true } },
                 dojo: { select: { expiryDate: true } },
                 transferRequest: { select: { id: true, studentId: true, fromDojoId: true, toDojo: { select: { name: true } }, fromDojo: { select: { name: true } } } },
+                certificateRequests: { select: { id: true } },
+                orderItems: { select: { id: true } },
             },
         });
+
+        if (order) {
+            await recordPaymentOutcome({
+                orderId,
+                status: "SUCCESS",
+                gatewayTxnId: valId,
+                kind: kindForOrder(order),
+                amount: Number(order.total),
+                currency: order.currency,
+                buyer: order.user
+                    ? {
+                          userId: order.user.id,
+                          name: order.user.fullName,
+                          email: order.user.email,
+                          phone: order.user.phone,
+                      }
+                    : undefined,
+            });
+        }
         let renewedExpiryIso: string | null = null;
         let joinAdvanceForFeeUnpaid = false;
         if (order && order.paymentStatus !== "PAID" && order.userId) {
@@ -220,6 +308,17 @@ export async function POST(request: Request) {
 
             await prisma.$transaction(writes);
 
+            // Certificates — flip the requests to PAID, move each grading to
+            // the SUBMITTED pipeline stage, and notify JKA admins that a new
+            // certificate request needs approval. PDF generation now waits
+            // for that admin approval.
+            if (order.includesCertificates && order.certificateRequests.length > 0) {
+                await submitCertificatesForOrder(
+                    order.id,
+                    order.certificateRequests.map((r) => r.id),
+                );
+            }
+
             // Joining-flow — first JKA payment: alert the assigned dojo owner
             // (if any) that a new student is waiting for approval.
             if (joinAdvanceForFeeUnpaid) {
@@ -312,17 +411,21 @@ export async function POST(request: Request) {
                 });
 
                 // In-app receipt for the buyer.
-                const receiptLink = order.includesDojoRenewal
-                    ? "/portal/dojo/renewals"
-                    : order.includesMembership
-                        ? "/portal/renew"
-                        : "/portal/orders";
-                await notifyMembers([updatedUser.id], {
-                    title: order.includesDojoRenewal
-                        ? "Dojo membership renewed"
+                const receiptLink = order.includesCertificates
+                    ? "/portal/dojo/certificates"
+                    : order.includesDojoRenewal
+                        ? "/portal/dojo/renewals"
                         : order.includesMembership
-                            ? "Membership renewed"
-                            : "Payment received",
+                            ? "/portal/renew"
+                            : "/portal/orders";
+                await notifyMembers([updatedUser.id], {
+                    title: order.includesCertificates
+                        ? "Certificate request submitted"
+                        : order.includesDojoRenewal
+                            ? "Dojo membership renewed"
+                            : order.includesMembership
+                                ? "Membership renewed"
+                                : "Payment received",
                     message: renewedExpiryIso
                         ? `Payment of ${order.currency} ${Number(order.total).toLocaleString()} received. Valid until ${new Date(renewedExpiryIso).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}.`
                         : `Your payment of ${order.currency} ${Number(order.total).toLocaleString()} was successful. Thank you!`,
@@ -346,6 +449,7 @@ export async function POST(request: Request) {
                 includesDojoRenewal: order?.includesDojoRenewal ?? false,
                 includesTransferRequest: order?.includesTransferRequest ?? false,
                 includesPastBeltFee: order?.includesPastBeltFee ?? false,
+                includesCertificates: order?.includesCertificates ?? false,
                 joinAdvanceForFeeUnpaid,
             },
             orderId,

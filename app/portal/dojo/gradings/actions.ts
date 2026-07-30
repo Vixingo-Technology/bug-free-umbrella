@@ -9,6 +9,8 @@ import {
   buildExamUpdatedNotification,
   buildResultPublishedNotification,
 } from "@/lib/grading-notifications";
+import { resolvePromotedRank } from "@/lib/grading-promotion";
+import { evaluateAchievements } from "@/lib/achievements/evaluate";
 import type { GradingResult } from "@/prisma/generated/client";
 
 export async function scheduleExamAction(input: {
@@ -261,6 +263,20 @@ export type DraftResultRow = {
   reviewNotes?: string | null;
 };
 
+/**
+ * Re-run the achievement engine for students whose grading just changed.
+ * Never throws — a badge is a nice-to-have, the grading write is not.
+ */
+async function evaluateGradingAchievements(studentIds: string[]): Promise<void> {
+  for (const id of studentIds) {
+    try {
+      await evaluateAchievements(id);
+    } catch {
+      // Badge evaluation is best-effort.
+    }
+  }
+}
+
 function resultForRow(row: DraftResultRow): GradingResult {
   if (row.absent) return "ABSENT";
   if (row.marks == null) return "ABSENT";
@@ -276,10 +292,10 @@ function normalizeMarks(row: DraftResultRow): number | null {
 
 /**
  * Upsert per-student draft Gradings on a scheduled (and not-yet-published)
- * event. PASSED rows set toRankId = the application's targetRankId; FAILED /
- * ABSENT rows set toRankId = fromRankId so history is preserved without any
- * rank change. The member's currentRank is *not* touched here — it only flips
- * on publish.
+ * event. PASSED rows set toRankId = the application's targetRankId — or the
+ * rank above it when marks >= 80 earn a double promotion; FAILED / ABSENT rows
+ * set toRankId = fromRankId so history is preserved without any rank change.
+ * The member's currentRank is *not* touched here — it only flips on publish.
  */
 export async function upsertDraftResultsAction(input: {
   eventId: string;
@@ -306,8 +322,12 @@ export async function upsertDraftResultsAction(input: {
 
         const result = resultForRow(row);
         const marks = normalizeMarks(row);
-        const toRankId =
-          result === "PASSED" ? app.targetRankId : fromRank?.id ?? null;
+        const { toRankId, isDoublePromotion } = await resolvePromotedRank(tx, {
+          result,
+          marks,
+          targetRankId: app.targetRankId,
+          fallbackRankId: fromRank?.id ?? null,
+        });
 
         // One Grading per (student, event). Find existing draft if any.
         const existing = await tx.grading.findFirst({
@@ -322,6 +342,7 @@ export async function upsertDraftResultsAction(input: {
               marks,
               fromRankId: fromRank?.id ?? null,
               toRankId,
+              isDoublePromotion,
               notes: row.reviewNotes?.trim() || null,
             },
           });
@@ -334,6 +355,7 @@ export async function upsertDraftResultsAction(input: {
               marks,
               fromRankId: fromRank?.id ?? null,
               toRankId,
+              isDoublePromotion,
               notes: row.reviewNotes?.trim() || null,
             },
           });
@@ -360,14 +382,15 @@ export async function publishResultsAction(input: {
   if (!session.dojo) return { error: "Your dojo is not set up yet." };
 
   let publishedCount = 0;
+  let promotedStudentIds: string[] = [];
 
   try {
-    publishedCount = await prisma.$transaction(async (tx) => {
+    const outcome = await prisma.$transaction(async (tx) => {
       const event = await loadEditableEvent(input.eventId, session.dojo!.id);
 
       const gradings = await tx.grading.findMany({
         where: { gradingEventId: event.id },
-        include: { toRank: true },
+        include: { toRank: true, fromRank: true },
       });
 
       if (gradings.length === 0) {
@@ -401,16 +424,21 @@ export async function publishResultsAction(input: {
         link: string;
       }> = [];
 
+      const passedStudentIds: string[] = [];
+
       for (const g of gradings) {
         if (g.result === "PASSED" && g.toRank?.name) {
           await tx.student.update({
             where: { id: g.studentId },
             data: { currentRank: g.toRank.name },
           });
+          passedStudentIds.push(g.studentId);
         }
         const payload = buildResultPublishedNotification({
           passed: g.result === "PASSED",
           toRankName: g.toRank?.name ?? null,
+          doublePromotion: g.isDoublePromotion,
+          fromRankName: g.fromRank?.name ?? null,
         });
         notifData.push({
           userId: g.studentId,
@@ -428,11 +456,18 @@ export async function publishResultsAction(input: {
         data: { resultsPublishedAt: new Date() },
       });
 
-      return gradings.length;
+      return { count: gradings.length, passedStudentIds };
     });
+
+    publishedCount = outcome.count;
+    promotedStudentIds = outcome.passedStudentIds;
   } catch (err: unknown) {
     return { error: err instanceof Error ? err.message : "Failed to publish results." };
   }
+
+  // Achievement unlocks (incl. the 80+ "Double Promotion" badge) run after the
+  // transaction commits — a badge failure must never roll back a publish.
+  await evaluateGradingAchievements(promotedStudentIds);
 
   revalidatePath("/portal/dojo/gradings");
   revalidatePath(`/portal/dojo/gradings/${input.eventId}`);
@@ -461,6 +496,7 @@ export async function updatePublishedMarksAction(input: {
   if (!session.dojo) return { error: "Your dojo is not set up yet." };
 
   let updatedCount = 0;
+  const amendedStudentIds: string[] = [];
 
   try {
     updatedCount = await prisma.$transaction(async (tx) => {
@@ -491,15 +527,20 @@ export async function updatePublishedMarksAction(input: {
         const result = resultForRow(row);
         const marks = normalizeMarks(row);
 
-        // Rebuild toRank: PASSED promotes to the app's target, otherwise stays
-        // on fromRank. If we can't resolve a fromRank, fall back to whatever
-        // the row already carried.
+        // Rebuild toRank: PASSED promotes to the app's target — or one rank
+        // beyond it at 80+ — otherwise stays on fromRank. If we can't resolve
+        // a fromRank, fall back to whatever the row already carried.
         let fromRankId = existing.fromRankId;
         if (!fromRankId) {
           const fromRank = await tx.beltRank.findUnique({ where: { name: app.student.currentRank } });
           fromRankId = fromRank?.id ?? null;
         }
-        const toRankId = result === "PASSED" ? app.targetRankId : fromRankId;
+        const { toRankId, isDoublePromotion } = await resolvePromotedRank(tx, {
+          result,
+          marks,
+          targetRankId: app.targetRankId,
+          fallbackRankId: fromRankId,
+        });
 
         await tx.grading.update({
           where: { id: existing.id },
@@ -507,27 +548,30 @@ export async function updatePublishedMarksAction(input: {
             result,
             marks,
             toRankId,
+            isDoublePromotion,
             notes: row.reviewNotes?.trim() || null,
           },
         });
 
-        // If the pass/fail flipped, correct the student's currentRank.
+        // Re-apply the rank. This covers both a pass/fail flip and a marks
+        // change that crosses the 80 double-promotion line while still passing.
         const wasPassed = existing.result === "PASSED";
         const nowPassed = result === "PASSED";
-        if (wasPassed && !nowPassed) {
-          // Revert to the from-rank if we know it.
-          if (existing.fromRank?.name) {
-            await tx.student.update({
-              where: { id: row.studentId },
-              data: { currentRank: existing.fromRank.name },
-            });
-          }
-        } else if (!wasPassed && nowPassed && toRankId) {
+        if (nowPassed && toRankId) {
           const toRank = await tx.beltRank.findUnique({ where: { id: toRankId } });
           if (toRank?.name) {
             await tx.student.update({
               where: { id: row.studentId },
               data: { currentRank: toRank.name },
+            });
+          }
+          amendedStudentIds.push(row.studentId);
+        } else if (wasPassed && !nowPassed) {
+          // Revert to the from-rank if we know it.
+          if (existing.fromRank?.name) {
+            await tx.student.update({
+              where: { id: row.studentId },
+              data: { currentRank: existing.fromRank.name },
             });
           }
         }
@@ -541,9 +585,50 @@ export async function updatePublishedMarksAction(input: {
     return { error: err instanceof Error ? err.message : "Failed to update results." };
   }
 
+  await evaluateGradingAchievements(amendedStudentIds);
+
   revalidatePath("/portal/dojo/gradings");
   revalidatePath(`/portal/dojo/gradings/${input.eventId}`);
   revalidatePath("/portal/grading");
   revalidatePath("/portal");
   return { success: true, updated: updatedCount };
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Pipeline stage transitions (post-publish)
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Advance a batch of PASSED gradings from QUALIFIED → VERIFIED. Requires
+ * DOJO_MANAGER or higher. Silently skips rows that don't belong to the
+ * caller's dojo, aren't PASSED, or aren't currently at QUALIFIED — the count
+ * returned reflects how many actually moved.
+ */
+export async function markGradingsVerifiedAction(input: {
+  gradingIds: string[];
+}): Promise<{ success: true; updated: number } | { error: string }> {
+  const session = await requireDojoRole("DOJO_MANAGER");
+  if (!session.dojo) return { error: "Your dojo is not set up yet." };
+  if (input.gradingIds.length === 0) return { error: "Select at least one student." };
+
+  const dojoId = session.dojo.id;
+  const userId = session.userId;
+
+  const result = await prisma.grading.updateMany({
+    where: {
+      id: { in: input.gradingIds },
+      result: "PASSED",
+      pipelineStage: "QUALIFIED",
+      student: { dojoId },
+      gradingEvent: { resultsPublishedAt: { not: null } },
+    },
+    data: {
+      pipelineStage: "VERIFIED",
+      verifiedAt: new Date(),
+      verifiedByUserId: userId,
+    },
+  });
+
+  revalidatePath("/portal/dojo/gradings");
+  return { success: true, updated: result.count };
 }

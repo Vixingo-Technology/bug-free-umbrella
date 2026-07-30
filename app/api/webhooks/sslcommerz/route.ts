@@ -3,6 +3,7 @@ import { createClient } from "@supabase/supabase-js";
 import { prisma } from "@/lib/prisma";
 import { generateCertificatePdf } from "@/lib/certificates/generate";
 import { markRegistrationPaid } from "@/lib/events/ticket-payment";
+import { kindForOrder, recordPaymentOutcome } from "@/lib/payments/log";
 
 // Setup Supabase client only if environment variables are present.
 // Creating the client at import-time with empty values can throw during build.
@@ -66,6 +67,11 @@ export async function POST(request: Request) {
             : null;
         if (eventReg) {
             await markRegistrationPaid(eventReg.id, String(val_id ?? "SSLCOMMERZ"));
+            await recordPaymentOutcome({
+                eventRegistrationId: eventReg.id,
+                status: "SUCCESS",
+                gatewayTxnId: String(val_id ?? ""),
+            });
             return NextResponse.json(
                 { message: "IPN handled successfully" },
                 { status: 200 },
@@ -88,6 +94,39 @@ export async function POST(request: Request) {
         if (error) {
             console.error("Supabase update error:", error);
             throw error;
+        }
+
+        // Audit-log the successful outcome. Best-effort — a log failure
+        // must not derail the IPN ack.
+        try {
+            const orderForLog = await prisma.shopOrder.findUnique({
+                where: { id: String(tran_id) },
+                include: {
+                    user: { select: { id: true, fullName: true, email: true, phone: true } },
+                    orderItems: { select: { id: true } },
+                    certificateRequests: { select: { id: true } },
+                },
+            });
+            if (orderForLog) {
+                await recordPaymentOutcome({
+                    orderId: String(tran_id),
+                    status: "SUCCESS",
+                    gatewayTxnId: String(val_id ?? ""),
+                    kind: kindForOrder(orderForLog),
+                    amount: Number(orderForLog.total),
+                    currency: orderForLog.currency,
+                    buyer: orderForLog.user
+                        ? {
+                              userId: orderForLog.user.id,
+                              name: orderForLog.user.fullName,
+                              email: orderForLog.user.email,
+                              phone: orderForLog.user.phone,
+                          }
+                        : undefined,
+                });
+            }
+        } catch (e) {
+            console.error("[sslcommerz] transaction log failed", e);
         }
 
         // 3. Side-effects per order type. We post-process via Prisma so RLS

@@ -58,6 +58,14 @@ enum GradingResult {
   ABSENT
 }
 
+// Post-publish pipeline stage for a PASSED grading. Non-passed rows stay at
+// QUALIFIED but never advance — only passes reach the manager/dojo-head steps.
+enum GradingPipelineStage {
+  QUALIFIED // Passed & published — awaits Manager background/dues verification
+  VERIFIED // Manager verified — awaits Dojo Head submission to JKA HQ
+  SUBMITTED // Sent to federation — awaits certificate issuance
+}
+
 enum ApplicationStatus {
   SUBMITTED
   APPROVED
@@ -70,6 +78,33 @@ enum PaymentStatus {
   PAID
   FAILED
   REFUNDED
+}
+
+// Payment lifecycle for the transaction log.
+enum PaymentTransactionStatus {
+  PENDING // Order created, buyer redirected to gateway
+  SUCCESS // Gateway validated the payment
+  FAILED // Gateway rejected the payment
+  CANCELLED // Buyer cancelled before paying
+}
+
+// What the payment was for — lets admins group by revenue stream.
+enum PaymentTransactionKind {
+  MEMBERSHIP // First JKA membership fee or renewal
+  PAST_BELT_FEE // Catch-up fee during joining
+  CERTIFICATES // Batch of printed grading certificates
+  DOJO_RENEWAL // Federation membership for a dojo
+  TRANSFER // Student dojo transfer fee
+  EVENT_TICKET // Event registration
+  SHOP // Shop merchandise
+  OTHER // Anything not otherwise classified
+}
+
+// Provider that handled the transaction.
+enum PaymentProvider {
+  SSLCOMMERZ
+  DEV_BYPASS
+  MANUAL
 }
 
 enum ShopFulfillmentStatus {
@@ -154,6 +189,7 @@ enum AchievementRule {
   TOURNAMENTS_PARTICIPATED
   TOURNAMENT_WINS
   CERTIFICATES_EARNED
+  HIGH_MARK_GRADINGS
 }
 
 // ─────────────────────────────────────────────
@@ -239,6 +275,7 @@ model User {
   transfersDojoActed  StudentTransferRequest[] @relation("TransferDojoActor")
   transfersAdminActed StudentTransferRequest[] @relation("TransferAdminActor")
   dojoHistoryChanges  StudentDojoHistory[]     @relation("HistoryChangedBy")
+  paymentTransactions PaymentTransaction[]     @relation("UserTransactions")
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -565,6 +602,17 @@ model Grading {
   certificateUrl String?       @map("certificate_url")
   notes          String?
 
+  /// True when marks >= 80 promoted the student two ranks instead of one.
+  /// See lib/grading-promotion.ts — toRankId already holds the final rank.
+  isDoublePromotion Boolean @default(false) @map("is_double_promotion")
+
+  /// Post-publish pipeline stage. Only PASSED rows are meant to advance.
+  pipelineStage     GradingPipelineStage @default(QUALIFIED) @map("pipeline_stage")
+  verifiedAt        DateTime?            @map("verified_at")
+  verifiedByUserId  String?              @map("verified_by_user_id") @db.Uuid
+  submittedAt       DateTime?            @map("submitted_at")
+  submittedByUserId String?              @map("submitted_by_user_id") @db.Uuid
+
   student      Student       @relation(fields: [studentId], references: [id], onDelete: Cascade)
   gradingEvent GradingEvent? @relation(fields: [gradingEventId], references: [id])
   fromRank     BeltRank?     @relation("GradingFromRank", fields: [fromRankId], references: [id])
@@ -738,9 +786,10 @@ model EventRegistration {
   checkedInAt       DateTime? @map("checked_in_at")
   checkedInByUserId String?   @map("checked_in_by_user_id") @db.Uuid
 
-  event       Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
-  user        User? @relation(fields: [userId], references: [id], onDelete: Cascade)
-  checkedInBy User? @relation("EventCheckIns", fields: [checkedInByUserId], references: [id])
+  event        Event                @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  user         User?                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  checkedInBy  User?                @relation("EventCheckIns", fields: [checkedInByUserId], references: [id])
+  transactions PaymentTransaction[] @relation("EventRegistrationTransactions")
 
   createdAt DateTime @default(now()) @map("created_at")
 
@@ -910,6 +959,7 @@ model ShopOrder {
   orderItems          ShopOrderItem[]
   certificateRequests CertificateRequest[]    @relation("OrderCertificates")
   transferRequest     StudentTransferRequest? @relation("TransferOrder")
+  transactions        PaymentTransaction[]    @relation("OrderTransactions")
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -1098,6 +1148,47 @@ model StudentTransferRequest {
 // ─────────────────────────────────────────────
 // STUDENT DOJO HISTORY  — audit log of dojo changes
 // ─────────────────────────────────────────────
+
+// ─────────────────────────────────────────────
+// PAYMENT TRANSACTIONS — audit log for every gateway attempt
+// ─────────────────────────────────────────────
+
+model PaymentTransaction {
+  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+
+  // Linked domain rows. ShopOrder covers membership / past-belt / cert /
+  // dojo-renewal / transfer / shop paths; eventRegistrationId covers event
+  // tickets which have their own domain object.
+  orderId             String? @map("order_id") @db.Uuid
+  eventRegistrationId String? @map("event_registration_id") @db.Uuid
+  userId              String? @map("user_id") @db.Uuid
+
+  provider     PaymentProvider          @default(SSLCOMMERZ)
+  kind         PaymentTransactionKind
+  status       PaymentTransactionStatus @default(PENDING)
+  amount       Decimal                  @db.Decimal(10, 2)
+  currency     String                   @default("BDT")
+  gatewayTxnId String?                  @map("gateway_txn_id")
+  reason       String?
+  buyerName    String?                  @map("buyer_name")
+  buyerEmail   String?                  @map("buyer_email")
+  buyerPhone   String?                  @map("buyer_phone")
+
+  order             ShopOrder?         @relation("OrderTransactions", fields: [orderId], references: [id], onDelete: SetNull)
+  eventRegistration EventRegistration? @relation("EventRegistrationTransactions", fields: [eventRegistrationId], references: [id], onDelete: SetNull)
+  user              User?              @relation("UserTransactions", fields: [userId], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([orderId])
+  @@index([eventRegistrationId])
+  @@index([userId])
+  @@index([status])
+  @@index([kind])
+  @@index([createdAt])
+  @@map("payment_transactions")
+}
 
 model StudentDojoHistory {
   id                String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid

@@ -6,6 +6,7 @@ import {
   ArrowLeft,
   CalendarClock,
   CheckCircle2,
+  ChevronsUp,
   Loader2,
   MapPin,
   CalendarSync,
@@ -20,7 +21,7 @@ import {
   publishResultsAction,
   updatePublishedMarksAction,
 } from "@/app/portal/dojo/gradings/actions";
-import { bandForMarks } from "@/lib/grading-marks";
+import { bandForMarks, marksEarnDoublePromotion } from "@/lib/grading-marks";
 import type { DojoRole } from "@/lib/dojo-roles";
 
 type Event = {
@@ -41,6 +42,8 @@ type Application = {
   currentRank: string;
   targetRankId: string | null;
   targetRankName: string | null;
+  /** Rank the candidate lands on at 80+ marks; null when target is the top rank. */
+  doubleRankName: string | null;
   status: "SUBMITTED" | "APPROVED" | "REJECTED" | "CANCELLED";
 };
 
@@ -411,7 +414,11 @@ function ResultsSection({
                 disabled={!rowsInteractive}
               />
 
-              <GradeBadge marks={row?.marks ?? null} absent={row?.absent ?? false} />
+              <GradeBadge
+                marks={row?.marks ?? null}
+                absent={row?.absent ?? false}
+                doubleRankName={a.doubleRankName}
+              />
 
               <textarea
                 value={row?.reviewNotes ?? ""}
@@ -493,7 +500,15 @@ function MarksInput({
   );
 }
 
-function GradeBadge({ marks, absent }: { marks: number | null; absent: boolean }) {
+function GradeBadge({
+  marks,
+  absent,
+  doubleRankName,
+}: {
+  marks: number | null;
+  absent: boolean;
+  doubleRankName: string | null;
+}) {
   if (absent) {
     return (
       <div className="flex items-start">
@@ -509,6 +524,7 @@ function GradeBadge({ marks, absent }: { marks: number | null; absent: boolean }
     );
   }
   const band = bandForMarks(marks);
+  const isDouble = marksEarnDoublePromotion(marks);
   return (
     <div className="flex flex-col gap-1">
       <span className={`inline-flex items-center gap-1.5 text-[10px] tracking-widest uppercase font-bold px-2 py-1 rounded-full border w-max ${band.color}`}>
@@ -517,6 +533,14 @@ function GradeBadge({ marks, absent }: { marks: number | null; absent: boolean }
       <span className="text-[11px] text-zinc-600">
         {band.recommendation}
       </span>
+      {isDouble && (
+        <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-violet-700">
+          <ChevronsUp size={12} />
+          {doubleRankName
+            ? `Skips a rank → ${doubleRankName}`
+            : "Already at the top rank — single promotion"}
+        </span>
+      )}
     </div>
   );
 }

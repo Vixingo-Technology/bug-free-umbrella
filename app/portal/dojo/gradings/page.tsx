@@ -1,14 +1,9 @@
 import type { Metadata } from "next";
-import {
-    AlertCircle,
-    Award,
-    CheckCircle2,
-    Clock,
-    CreditCard,
-    Send,
-} from "lucide-react";
+import Link from "next/link";
+import { Award, CheckCircle2, Clock, Download, Send, Sparkles } from "lucide-react";
 import DojoPageHeader from "@/components/dojo/page-header";
 import AppliedStage from "@/components/dojo/gradings/applied-stage";
+import QualifiedStage, { type QualifiedPassed } from "@/components/dojo/gradings/qualified-stage";
 import ScheduledList from "@/components/dojo/gradings/scheduled-list";
 import PipelineTabs, { type PipelineTab } from "@/components/dojo/gradings/pipeline-tabs";
 import { hasAtLeast, ROLE_LABEL } from "@/lib/dojo-roles";
@@ -82,7 +77,7 @@ export default async function GradingsPage() {
     const session = await requireDojoRole("INSTRUCTOR");
     const role = session.role;
 
-    const [candidates, scheduledCount] = await Promise.all([
+    const [candidates, scheduledCount, qualifiedPassed, verifiedRows, submittedRows] = await Promise.all([
         session.dojo ? loadRealCandidates(session.dojo.id) : Promise.resolve(SAMPLE),
         session.dojo
             ? prisma.gradingEvent.count({
@@ -93,12 +88,12 @@ export default async function GradingsPage() {
                   },
               })
             : Promise.resolve(0),
+        session.dojo ? loadPipelineRows(session.dojo.id, "QUALIFIED") : Promise.resolve([]),
+        session.dojo ? loadPipelineRows(session.dojo.id, "VERIFIED") : Promise.resolve([]),
+        session.dojo ? loadPipelineRows(session.dojo.id, "SUBMITTED") : Promise.resolve([]),
     ]);
 
     const applied = candidates.filter((c) => c.stage === "APPLIED");
-    const qualified = candidates.filter((c) => c.stage === "QUALIFIED");
-    const verified = candidates.filter((c) => c.stage === "VERIFIED");
-    const submitted = candidates.filter((c) => c.stage === "SUBMITTED");
 
     const tabs: PipelineTab[] = [
         {
@@ -128,86 +123,84 @@ export default async function GradingsPage() {
         {
             key: "qualified",
             label: "3 · Qualified",
-            count: qualified.length,
-            actor: "Manager verifies dues & membership.",
-            body:
-                qualified.length === 0 ? (
-                    <Empty>No qualified candidates awaiting review.</Empty>
-                ) : (
-                    <ul className="divide-y divide-zinc-200">
-                        {qualified.map((c) => (
-                            <li
-                                key={c.id}
-                                className="py-4 flex flex-col md:flex-row md:items-center md:justify-between gap-3"
-                            >
-                                <CandidateInfo c={c} />
-                                {hasAtLeast(role, "DOJO_MANAGER") ? (
-                                    <div className="flex items-center gap-2">
-                                        {c.paymentStatus !== "PAID" && (
-                                            <PaymentBadge status={c.paymentStatus} />
-                                        )}
-                                        <Btn
-                                            icon={<CheckCircle2 size={14} />}
-                                            disabled={c.paymentStatus !== "PAID"}
-                                        >
-                                            Mark verified
-                                        </Btn>
-                                    </div>
-                                ) : (
-                                    <RoleNote requires="Manager" />
-                                )}
-                            </li>
-                        ))}
-                    </ul>
-                ),
+            count: qualifiedPassed.length,
+            actor: "Manager verifies dues, membership, and background — then sends to Verified.",
+            body: (
+                <QualifiedStage
+                    rows={qualifiedPassed}
+                    canVerify={hasAtLeast(role, "DOJO_MANAGER")}
+                />
+            ),
         },
         {
             key: "verified",
             label: "4 · Verified",
-            count: verified.length,
-            actor: "Dojo Head submits to JKA.",
+            count: verifiedRows.length,
+            actor: "Dojo Head submits to JKA HQ to request certificates.",
             body:
-                verified.length === 0 ? (
+                verifiedRows.length === 0 ? (
                     <Empty>No candidates ready to submit.</Empty>
                 ) : (
-                    <ul className="divide-y divide-zinc-200">
-                        {verified.map((c) => (
-                            <li
-                                key={c.id}
-                                className="py-4 flex flex-col md:flex-row md:items-center md:justify-between gap-3"
-                            >
-                                <CandidateInfo c={c} />
-                                {hasAtLeast(role, "DOJO_OWNER") ? (
-                                    <Btn icon={<Send size={14} />}>Submit to JKA HQ</Btn>
-                                ) : (
-                                    <RoleNote requires="Dojo Head" />
-                                )}
-                            </li>
-                        ))}
-                    </ul>
+                    <div className="space-y-3">
+                        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 border-b border-zinc-200 pb-3">
+                            <p className="text-xs text-zinc-500">
+                                {verifiedRows.length} student
+                                {verifiedRows.length === 1 ? "" : "s"} ready. Pick who to submit and request their certificates.
+                            </p>
+                            {hasAtLeast(role, "DOJO_OWNER") ? (
+                                <Link
+                                    href="/portal/dojo/certificates"
+                                    className="inline-flex items-center gap-2 text-[10px] tracking-widest uppercase font-bold px-3 py-2 rounded-sm bg-accent-red text-white hover:bg-accent-red/90"
+                                >
+                                    <Send size={14} />
+                                    Submit to JKA HQ
+                                </Link>
+                            ) : (
+                                <RoleNote requires="Dojo Head" />
+                            )}
+                        </div>
+                        <ul className="divide-y divide-zinc-200">
+                            {verifiedRows.map((q) => (
+                                <PipelineRow key={q.gradingId} q={q} />
+                            ))}
+                        </ul>
+                    </div>
                 ),
         },
         {
             key: "submitted",
             label: "5 · Submitted",
-            count: submitted.length,
-            actor: "Federation issues the certificate.",
+            count: submittedRows.length,
+            actor: "Federation reviews the request and issues the certificate.",
             body:
-                submitted.length === 0 ? (
+                submittedRows.length === 0 ? (
                     <Empty>No outstanding federation submissions.</Empty>
                 ) : (
                     <ul className="divide-y divide-zinc-200">
-                        {submitted.map((c) => (
-                            <li
-                                key={c.id}
-                                className="py-4 flex flex-col md:flex-row md:items-center md:justify-between gap-3"
-                            >
-                                <CandidateInfo c={c} />
-                                <span className="inline-flex items-center gap-2 text-xs tracking-widest uppercase font-bold text-zinc-500">
-                                    <Clock size={12} />
-                                    Awaiting HQ
-                                </span>
-                            </li>
+                        {submittedRows.map((q) => (
+                            <PipelineRow key={q.gradingId} q={q}>
+                                {q.certificateStatus === "ISSUED" && q.certificateUrl ? (
+                                    <a
+                                        href={q.certificateUrl}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        className="inline-flex items-center gap-2 text-[10px] tracking-widest uppercase font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 hover:bg-emerald-100 px-2.5 py-1.5 rounded-sm"
+                                    >
+                                        <Download size={12} />
+                                        Download certificate
+                                    </a>
+                                ) : q.certificateStatus === "ISSUED" ? (
+                                    <span className="inline-flex items-center gap-2 text-[10px] tracking-widest uppercase font-bold text-emerald-700">
+                                        <CheckCircle2 size={12} />
+                                        Certificate issued
+                                    </span>
+                                ) : (
+                                    <span className="inline-flex items-center gap-2 text-[10px] tracking-widest uppercase font-bold text-amber-700 bg-amber-50 border border-amber-200 px-2 py-1 rounded-full">
+                                        <Clock size={12} />
+                                        Submitted to JKA HQ
+                                    </span>
+                                )}
+                            </PipelineRow>
                         ))}
                     </ul>
                 ),
@@ -229,6 +222,108 @@ export default async function GradingsPage() {
 
             <PipelineTabs tabs={tabs} />
         </>
+    );
+}
+
+async function loadPipelineRows(
+    dojoId: string,
+    stage: "QUALIFIED" | "VERIFIED" | "SUBMITTED"
+): Promise<QualifiedPassed[]> {
+    const rows = await prisma.grading.findMany({
+        where: {
+            result: "PASSED",
+            pipelineStage: stage,
+            student: { dojoId },
+            gradingEvent: { resultsPublishedAt: { not: null } },
+        },
+        orderBy: { gradingEvent: { resultsPublishedAt: "desc" } },
+        include: {
+            student: { select: { id: true, user: { select: { fullName: true } } } },
+            fromRank: { select: { name: true } },
+            toRank: { select: { name: true } },
+            gradingEvent: { select: { name: true, resultsPublishedAt: true } },
+            // Latest cert request drives the Submitted-tab status pill.
+            certificateRequests: {
+                orderBy: { createdAt: "desc" },
+                take: 1,
+                select: { status: true, certificateUrl: true },
+            },
+        },
+    });
+
+    return rows.map((g) => {
+        const cert = g.certificateRequests[0];
+        return {
+            gradingId: g.id,
+            studentId: g.student.id,
+            name: g.student.user.fullName,
+            fromRank: g.fromRank?.name ?? null,
+            toRank: g.toRank?.name ?? null,
+            marks: g.marks,
+            isDoublePromotion: g.isDoublePromotion,
+            eventName: g.gradingEvent?.name ?? "",
+            publishedOn:
+                g.gradingEvent?.resultsPublishedAt?.toLocaleDateString(undefined, {
+                    day: "numeric",
+                    month: "short",
+                    year: "numeric",
+                }) ?? "",
+            certificateStatus: cert?.status ?? null,
+            certificateUrl: cert?.certificateUrl ?? null,
+        };
+    });
+}
+
+function PipelineRow({
+    q,
+    children,
+}: {
+    q: QualifiedPassed;
+    children?: React.ReactNode;
+}) {
+    return (
+        <li className="py-4 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+            <div className="flex items-center gap-4">
+                <div className="w-10 h-10 rounded-full bg-zinc-100 flex items-center justify-center text-zinc-500 font-bold text-sm">
+                    {q.name
+                        .split(" ")
+                        .map((n) => n[0])
+                        .join("")
+                        .slice(0, 2)}
+                </div>
+                <div>
+                    <Link
+                        href={`/portal/dojo/members/${q.studentId}`}
+                        className="font-semibold text-zinc-900 text-sm hover:text-accent-red hover:underline"
+                    >
+                        {q.name}
+                    </Link>
+                    <p className="text-xs text-zinc-500">
+                        {q.fromRank ?? "—"} →{" "}
+                        <span className="text-accent-red font-semibold">
+                            {q.toRank ?? "—"}
+                        </span>
+                        {q.isDoublePromotion && (
+                            <span className="ml-2 inline-flex items-center gap-1 text-[10px] tracking-widest uppercase font-bold text-amber-700 bg-amber-50 border border-amber-200 px-1.5 py-0.5 rounded">
+                                <Sparkles size={10} /> Double promotion
+                            </span>
+                        )}
+                    </p>
+                    <p className="text-[10px] text-zinc-400 tracking-widest uppercase font-bold mt-1">
+                        {q.eventName} · Published {q.publishedOn}
+                    </p>
+                </div>
+            </div>
+            <div className="flex items-center gap-3">
+                <span className="inline-flex items-baseline gap-1 text-xs tracking-widest uppercase font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-full">
+                    <span className="text-base leading-none font-black">
+                        {q.marks ?? "—"}
+                    </span>
+                    <span className="text-[10px]">/ 100</span>
+                </span>
+                {children}
+            </div>
+        </li>
     );
 }
 
@@ -263,37 +358,6 @@ async function loadRealCandidates(dojoId: string): Promise<Candidate[]> {
     }));
 }
 
-function CandidateInfo({ c }: { c: Candidate }) {
-    return (
-        <div className="flex items-center gap-4">
-            <div className="w-10 h-10 rounded-full bg-zinc-100 flex items-center justify-center text-zinc-500 font-bold text-sm">
-                {c.name
-                    .split(" ")
-                    .map((n) => n[0])
-                    .join("")
-                    .slice(0, 2)}
-            </div>
-            <div>
-                <p className="font-semibold text-zinc-900 text-sm">{c.name}</p>
-                <p className="text-xs text-zinc-500">
-                    {c.currentRank} →{" "}
-                    <span className="text-accent-red font-semibold">
-                        {c.targetRank}
-                    </span>
-                </p>
-                {c.note && (
-                    <p className="text-xs text-zinc-500 mt-1 italic">
-                        {c.note}
-                    </p>
-                )}
-                <p className="text-[10px] text-zinc-400 tracking-widest uppercase font-bold mt-1">
-                    Applied {c.appliedOn}
-                </p>
-            </div>
-        </div>
-    );
-}
-
 function Btn({
     children,
     icon,
@@ -317,28 +381,6 @@ function Btn({
             {children}
         </button>
     );
-}
-
-function PaymentBadge({
-    status,
-}: {
-    status: Candidate["paymentStatus"];
-}) {
-    if (status === "DUE")
-        return (
-            <span className="inline-flex items-center gap-1.5 text-[10px] tracking-widest uppercase font-bold text-amber-700 bg-amber-50 border border-amber-200 px-2 py-1 rounded-full">
-                <CreditCard size={10} />
-                Dues unpaid
-            </span>
-        );
-    if (status === "EXPIRED_MEMBERSHIP")
-        return (
-            <span className="inline-flex items-center gap-1.5 text-[10px] tracking-widest uppercase font-bold text-red-700 bg-red-50 border border-red-200 px-2 py-1 rounded-full">
-                <AlertCircle size={10} />
-                Membership expired
-            </span>
-        );
-    return null;
 }
 
 function RoleNote({ requires }: { requires: string }) {

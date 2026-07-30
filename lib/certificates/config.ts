@@ -1,8 +1,9 @@
 /**
  * Certificate-flow feature flag.
  *
- * While real payment integration is pending, dojos can request certificates
- * and the PDFs are generated immediately without going through SSLCommerz.
- * Flip to `false` once the payment flow is live.
+ * When true, dojos can request certificates and the PDFs are generated
+ * immediately without going through SSLCommerz. Payment is now live, so
+ * requests route through /portal/checkout and the PDFs are rendered once
+ * the order is marked PAID.
  */
-export const SKIP_CERTIFICATE_PAYMENT = true;
+export const SKIP_CERTIFICATE_PAYMENT = false;
