@@ -128,7 +128,7 @@ export default function Hero() {
                             delay: 0.4,
                             ease: "easeOut",
                         }}
-                        className="font-heading text-5xl md:text-7xl lg:text-7xl text-zinc-950 mb-6 leading-[0.92] font-bold"
+                        className="font-heading text-5xl lg:text-5xl xl:text-7xl text-zinc-950 mb-6 leading-[0.92] font-bold"
                     >
                         <span className="font-karate">
                             {copy.hero.titleLines[0]}
