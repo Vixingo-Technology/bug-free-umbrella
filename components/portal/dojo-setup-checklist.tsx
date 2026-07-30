@@ -28,13 +28,6 @@ export default async function DojoSetupChecklist({
 
     const items: Item[] = [
         {
-            key: "profile",
-            title: "Complete your profile",
-            body: "Add your phone, date of birth, and address to your member profile.",
-            href: "/portal/profile",
-            status: data.profileDone ? "done" : "todo",
-        },
-        {
             key: "logo",
             title: "Add your dojo logo & photos",
             body: "Upload a transparent logo and interior shots so your branch looks complete in the public locator.",
@@ -188,15 +181,7 @@ function ChecklistRow({ item }: { item: Item }) {
 
 async function loadChecklistData(userId: string, dojoId: string | null) {
     try {
-        const [u, profile, dojo, instructorCount, managerCount, orderCount] = await Promise.all([
-            prisma.user.findUnique({
-                where: { id: userId },
-                select: { phone: true },
-            }),
-            prisma.profile.findUnique({
-                where: { id: userId },
-                select: { dateOfBirth: true, address: true },
-            }),
+        const [dojo, instructorCount, managerCount, orderCount] = await Promise.all([
             dojoId
                 ? prisma.dojo.findUnique({
                       where: { id: dojoId },
@@ -214,9 +199,6 @@ async function loadChecklistData(userId: string, dojoId: string | null) {
         const staffCount = instructorCount + managerCount;
 
         return {
-            profileDone: Boolean(
-                u?.phone && profile?.dateOfBirth && profile?.address
-            ),
             logoDone: Boolean(dojo?.logoUrl),
             staffDone: staffCount > 0,
             gearDone: orderCount > 0,

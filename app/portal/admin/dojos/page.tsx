@@ -29,7 +29,7 @@ export default async function AdminDojosPage() {
         );
     }
 
-    const [dojosRaw, instructors, invitesRaw] = await Promise.all([
+    const [dojosRaw, invitesRaw] = await Promise.all([
         prisma.dojo.findMany({
             orderBy: { createdAt: "desc" },
             include: {
@@ -39,11 +39,6 @@ export default async function AdminDojosPage() {
                 },
             },
         }),
-        prisma.user.findMany({
-            where: { roleId: { in: ["INSTRUCTOR", "DOJO_MANAGER", "DOJO_OWNER", "ADMIN"] } },
-            select: { id: true, fullName: true, email: true, roleId: true },
-            orderBy: { fullName: "asc" },
-        }).then((rows) => rows.map((r) => ({ ...r, role: r.roleId }))),
         prisma.dojoOwnerInvite.findMany({
             orderBy: { invitedAt: "desc" },
             include: {
@@ -75,7 +70,6 @@ export default async function AdminDojosPage() {
     return (
         <DojosAdminClient
             dojos={serialize(dojos) as never}
-            instructors={instructors}
             invites={invites}
         />
     );

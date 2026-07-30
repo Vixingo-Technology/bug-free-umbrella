@@ -10,12 +10,9 @@ import {
 } from "lucide-react";
 import {
     deleteDojoAction,
-    assignDojoInstructorAction,
     sendDojoRenewalReminderAction,
 } from "@/app/actions/admin-dojos";
 import { inviteMemberAction, revokeDojoOwnerInviteAction } from "@/app/actions/admin-members";
-
-type Instructor = { id: string; fullName: string; email: string; role: string };
 
 type DojoOwnerInvite = {
     email: string;
@@ -57,10 +54,9 @@ function daysUntil(iso: string | null): number | null {
 }
 
 export default function DojosAdminClient({
-    dojos, instructors, invites,
+    dojos, invites,
 }: {
     dojos: Dojo[];
-    instructors: Instructor[];
     invites: DojoOwnerInvite[];
 }) {
     const [search, setSearch] = useState("");
@@ -147,7 +143,6 @@ export default function DojosAdminClient({
                     <DojoCard
                         key={d.id}
                         dojo={d}
-                        instructors={instructors}
                         onFlash={flash}
                     />
                 ))}
@@ -285,27 +280,12 @@ function InvitesPanel({
 }
 
 function DojoCard({
-    dojo, instructors, onFlash,
+    dojo, onFlash,
 }: {
     dojo: Dojo;
-    instructors: Instructor[];
     onFlash: (k: "ok" | "err", m: string) => void;
 }) {
     const [isPending, startTransition] = useTransition();
-    const [headId, setHeadId] = useState(dojo.headInstructorId ?? "");
-
-    function assign(next: string) {
-        const fd = new FormData();
-        fd.set("id", dojo.id);
-        fd.set("headInstructorId", next);
-        startTransition(async () => {
-            const res = await assignDojoInstructorAction(fd);
-            if (res.ok) {
-                setHeadId(next);
-                onFlash("ok", next ? "Head instructor assigned." : "Instructor unassigned.");
-            } else onFlash("err", res.error);
-        });
-    }
 
     function handleDelete() {
         if (!confirm(`Delete "${dojo.name}"? This cannot be undone.`)) return;
@@ -375,27 +355,16 @@ function DojoCard({
 
                 <ExpiryRow dojo={dojo} onFlash={onFlash} />
 
-                <div className="mt-4 pt-4 border-t border-zinc-100">
-                    <p className="text-[10px] font-bold tracking-widest uppercase text-zinc-500 mb-2 flex items-center gap-1">
-                        <UserCheck size={10} /> Head Instructor
-                    </p>
-                    <div className="relative">
-                        <select
-                            value={headId}
-                            onChange={(e) => assign(e.target.value)}
-                            disabled={isPending}
-                            className="appearance-none w-full pl-3 pr-9 py-2 text-sm bg-zinc-50 border border-zinc-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-accent-red/30 focus:border-accent-red"
-                        >
-                            <option value="">— Unassigned —</option>
-                            {instructors.map((i) => (
-                                <option key={i.id} value={i.id}>
-                                    {i.fullName} {i.role === "ADMIN" ? "(Admin)" : ""}
-                                </option>
-                            ))}
-                        </select>
-                        <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 pointer-events-none" />
+                {dojo.headInstructor && (
+                    <div className="mt-4 pt-4 border-t border-zinc-100">
+                        <p className="text-[10px] font-bold tracking-widest uppercase text-zinc-500 mb-1 flex items-center gap-1">
+                            <UserCheck size={10} /> Head Instructor
+                        </p>
+                        <p className="text-sm text-zinc-900 truncate">
+                            {dojo.headInstructor.fullName}
+                        </p>
                     </div>
-                </div>
+                )}
 
                 <div className="flex items-center gap-2 mt-4">
                     <Link

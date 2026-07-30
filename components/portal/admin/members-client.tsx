@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState, useTransition } from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
 import { motion } from "motion/react";
-import { UserPlus, Search, Mail, Shield, ShieldCheck, ShieldOff, X, CheckCircle2, AlertCircle, ChevronDown, Trash2, AlertTriangle } from "lucide-react";
+import { UserPlus, Search, Mail, Shield, ShieldCheck, ShieldOff, X, CheckCircle2, AlertCircle, ChevronDown, ChevronLeft, ChevronRight, Trash2, AlertTriangle } from "lucide-react";
 import {
     inviteMemberAction,
     updateMemberRoleAction,
@@ -14,7 +14,14 @@ import {
 } from "@/app/actions/admin-members";
 
 type Role = "STUDENT" | "INSTRUCTOR" | "DOJO_MANAGER" | "DOJO_OWNER" | "ADMIN";
-type Status = "PENDING" | "ACTIVE" | "EXPIRED" | "SUSPENDED";
+type Status =
+    | "ACTIVE"
+    | "PENDING"
+    | "EXPIRED"
+    | "SUSPENDED"
+    | "UNPAID"
+    | "AWAITING_APPROVAL"
+    | "REJECTED";
 
 const ROLE_LABELS: Record<Role, string> = {
     STUDENT: "Student",
@@ -24,7 +31,15 @@ const ROLE_LABELS: Record<Role, string> = {
     ADMIN: "Admin",
 };
 
-const ROLE_VALUES: Role[] = ["STUDENT", "INSTRUCTOR", "DOJO_MANAGER", "DOJO_OWNER", "ADMIN"];
+const STATUS_LABELS: Record<Status, string> = {
+    ACTIVE: "Active",
+    PENDING: "Pending",
+    EXPIRED: "Expired",
+    SUSPENDED: "Suspended",
+    UNPAID: "Unpaid",
+    AWAITING_APPROVAL: "Awaiting Approval",
+    REJECTED: "Rejected",
+};
 
 // Admins can only switch a member between these three staff-level roles.
 // Promoting to/from STUDENT would destroy grading history (cascade delete),
@@ -41,7 +56,7 @@ type Member = {
     email: string;
     phone: string | null;
     role: Role;
-    membershipStatus: Status;
+    status: Status;
     currentRank: string;
     memberNumber: string | null;
     onboardingComplete: boolean;
@@ -62,20 +77,82 @@ const statusStyles: Record<Status, string> = {
     PENDING: "bg-amber-50 text-amber-700 border-amber-200",
     EXPIRED: "bg-zinc-100 text-zinc-600 border-zinc-200",
     SUSPENDED: "bg-red-50 text-red-700 border-red-200",
+    UNPAID: "bg-amber-50 text-amber-700 border-amber-200",
+    AWAITING_APPROVAL: "bg-blue-50 text-blue-700 border-blue-200",
+    REJECTED: "bg-red-50 text-red-700 border-red-200",
 };
+
+type Tab = "ALL" | Role;
+
+const TABS: Tab[] = ["ALL", "STUDENT", "INSTRUCTOR", "DOJO_MANAGER", "DOJO_OWNER", "ADMIN"];
+
+const TAB_LABELS: Record<Tab, string> = {
+    ALL: "All",
+    STUDENT: "Students",
+    INSTRUCTOR: "Instructors",
+    DOJO_MANAGER: "Managers",
+    DOJO_OWNER: "Dojo Owners",
+    ADMIN: "Admins",
+};
+
+// Status filter options available per tab.
+function statusOptionsForTab(tab: Tab): { v: "ALL" | Status; l: string }[] {
+    if (tab === "STUDENT") {
+        return [
+            { v: "ALL", l: "All statuses" },
+            { v: "ACTIVE", l: "Active" },
+            { v: "PENDING", l: "Pending" },
+            { v: "EXPIRED", l: "Expired" },
+            { v: "SUSPENDED", l: "Suspended" },
+        ];
+    }
+    if (tab === "DOJO_OWNER") {
+        return [
+            { v: "ALL", l: "All statuses" },
+            { v: "ACTIVE", l: "Active" },
+            { v: "UNPAID", l: "Unpaid" },
+            { v: "AWAITING_APPROVAL", l: "Awaiting Approval" },
+            { v: "REJECTED", l: "Rejected" },
+            { v: "SUSPENDED", l: "Suspended" },
+        ];
+    }
+    // Staff & admin (and mixed "ALL") — just active / suspended is meaningful.
+    return [
+        { v: "ALL", l: "All statuses" },
+        { v: "ACTIVE", l: "Active" },
+        { v: "SUSPENDED", l: "Suspended" },
+    ];
+}
+
+const PAGE_SIZE = 25;
 
 export default function MembersAdminClient({ members }: { members: Member[] }) {
     const [search, setSearch] = useState("");
-    const [roleFilter, setRoleFilter] = useState<"ALL" | Role>("ALL");
+    const [tab, setTab] = useState<Tab>("ALL");
     const [statusFilter, setStatusFilter] = useState<"ALL" | Status>("ALL");
+    const [page, setPage] = useState(1);
     const [inviteOpen, setInviteOpen] = useState(false);
     const [toast, setToast] = useState<{ kind: "ok" | "err"; msg: string } | null>(null);
+
+    // Per-tab counts (independent of search / status).
+    const tabCounts = useMemo(() => {
+        const counts: Record<Tab, number> = {
+            ALL: members.length,
+            STUDENT: 0,
+            INSTRUCTOR: 0,
+            DOJO_MANAGER: 0,
+            DOJO_OWNER: 0,
+            ADMIN: 0,
+        };
+        for (const m of members) counts[m.role]++;
+        return counts;
+    }, [members]);
 
     const filtered = useMemo(() => {
         const q = search.trim().toLowerCase();
         return members.filter((m) => {
-            if (roleFilter !== "ALL" && m.role !== roleFilter) return false;
-            if (statusFilter !== "ALL" && m.membershipStatus !== statusFilter) return false;
+            if (tab !== "ALL" && m.role !== tab) return false;
+            if (statusFilter !== "ALL" && m.status !== statusFilter) return false;
             if (!q) return true;
             return (
                 m.fullName.toLowerCase().includes(q) ||
@@ -84,7 +161,23 @@ export default function MembersAdminClient({ members }: { members: Member[] }) {
                 (m.memberNumber ?? "").toLowerCase().includes(q)
             );
         });
-    }, [members, search, roleFilter, statusFilter]);
+    }, [members, search, tab, statusFilter]);
+
+    // Reset to page 1 whenever filters change.
+    useEffect(() => {
+        setPage(1);
+    }, [search, tab, statusFilter]);
+
+    // Reset status filter when switching to a tab that doesn't offer it.
+    useEffect(() => {
+        const allowed = statusOptionsForTab(tab).map((o) => o.v);
+        if (!allowed.includes(statusFilter)) setStatusFilter("ALL");
+    }, [tab, statusFilter]);
+
+    const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+    const clampedPage = Math.min(page, totalPages);
+    const pageStart = (clampedPage - 1) * PAGE_SIZE;
+    const pageRows = filtered.slice(pageStart, pageStart + PAGE_SIZE);
 
     function flash(kind: "ok" | "err", msg: string) {
         setToast({ kind, msg });
@@ -110,6 +203,37 @@ export default function MembersAdminClient({ members }: { members: Member[] }) {
                 </button>
             </div>
 
+            {/* Role tabs */}
+            <div className="mb-4 border-b border-zinc-200 overflow-x-auto">
+                <div className="flex items-center gap-1 min-w-max">
+                    {TABS.map((t) => {
+                        const isActive = tab === t;
+                        return (
+                            <button
+                                key={t}
+                                onClick={() => setTab(t)}
+                                className={`inline-flex items-center gap-2 px-4 py-2.5 text-sm font-semibold border-b-2 -mb-px transition-colors ${
+                                    isActive
+                                        ? "border-accent-red text-accent-red"
+                                        : "border-transparent text-zinc-500 hover:text-zinc-800 hover:border-zinc-300"
+                                }`}
+                            >
+                                {TAB_LABELS[t]}
+                                <span
+                                    className={`text-[10px] font-bold tracking-wider px-1.5 py-0.5 rounded-full ${
+                                        isActive
+                                            ? "bg-accent-red/10 text-accent-red"
+                                            : "bg-zinc-100 text-zinc-500"
+                                    }`}
+                                >
+                                    {tabCounts[t]}
+                                </span>
+                            </button>
+                        );
+                    })}
+                </div>
+            </div>
+
             {/* Filters */}
             <div className="flex flex-col md:flex-row gap-3 mb-6">
                 <div className="relative flex-1">
@@ -122,23 +246,9 @@ export default function MembersAdminClient({ members }: { members: Member[] }) {
                     />
                 </div>
                 <Select
-                    value={roleFilter}
-                    onChange={(v) => setRoleFilter(v as "ALL" | Role)}
-                    options={[
-                        { v: "ALL", l: "All roles" },
-                        ...ROLE_VALUES.map((r) => ({ v: r, l: ROLE_LABELS[r] })),
-                    ]}
-                />
-                <Select
                     value={statusFilter}
                     onChange={(v) => setStatusFilter(v as "ALL" | Status)}
-                    options={[
-                        { v: "ALL", l: "All statuses" },
-                        { v: "ACTIVE", l: "Active" },
-                        { v: "PENDING", l: "Pending" },
-                        { v: "EXPIRED", l: "Expired" },
-                        { v: "SUSPENDED", l: "Suspended" },
-                    ]}
+                    options={statusOptionsForTab(tab)}
                 />
             </div>
 
@@ -156,10 +266,10 @@ export default function MembersAdminClient({ members }: { members: Member[] }) {
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-zinc-100">
-                            {filtered.map((m) => (
+                            {pageRows.map((m) => (
                                 <Row key={m.id} member={m} onFlash={flash} />
                             ))}
-                            {filtered.length === 0 && (
+                            {pageRows.length === 0 && (
                                 <tr>
                                     <td colSpan={5} className="px-5 py-12 text-center text-sm text-zinc-400">
                                         No members match the current filters.
@@ -169,6 +279,18 @@ export default function MembersAdminClient({ members }: { members: Member[] }) {
                         </tbody>
                     </table>
                 </div>
+
+                {/* Pagination */}
+                {filtered.length > 0 && (
+                    <Pagination
+                        page={clampedPage}
+                        totalPages={totalPages}
+                        pageStart={pageStart}
+                        pageEnd={Math.min(pageStart + PAGE_SIZE, filtered.length)}
+                        total={filtered.length}
+                        onChange={setPage}
+                    />
+                )}
             </div>
 
             {/* Invite modal */}
@@ -196,8 +318,78 @@ export default function MembersAdminClient({ members }: { members: Member[] }) {
             )}
         </div>
     );
+}
 
-    // helpers below are JSX components used by render; keep declarations after return scope
+function Pagination({
+    page, totalPages, pageStart, pageEnd, total, onChange,
+}: {
+    page: number;
+    totalPages: number;
+    pageStart: number;
+    pageEnd: number;
+    total: number;
+    onChange: (p: number) => void;
+}) {
+    const canPrev = page > 1;
+    const canNext = page < totalPages;
+
+    // Compact page-number list: first, current-1..current+1, last, with ellipses.
+    const pages: (number | "…")[] = [];
+    const add = (v: number | "…") => {
+        if (pages[pages.length - 1] !== v) pages.push(v);
+    };
+    for (let p = 1; p <= totalPages; p++) {
+        if (p === 1 || p === totalPages || Math.abs(p - page) <= 1) {
+            add(p);
+        } else if (pages[pages.length - 1] !== "…") {
+            add("…");
+        }
+    }
+
+    return (
+        <div className="flex items-center justify-between gap-3 px-5 py-3 border-t border-zinc-100 bg-zinc-50/60 text-xs text-zinc-600">
+            <p>
+                Showing <span className="font-semibold text-zinc-900">{pageStart + 1}</span>–
+                <span className="font-semibold text-zinc-900">{pageEnd}</span> of{" "}
+                <span className="font-semibold text-zinc-900">{total}</span>
+            </p>
+            <div className="flex items-center gap-1">
+                <button
+                    onClick={() => canPrev && onChange(page - 1)}
+                    disabled={!canPrev}
+                    className="p-1.5 rounded-lg text-zinc-500 hover:text-zinc-900 hover:bg-white disabled:opacity-40 disabled:cursor-not-allowed border border-zinc-200"
+                    aria-label="Previous page"
+                >
+                    <ChevronLeft size={14} />
+                </button>
+                {pages.map((p, i) =>
+                    p === "…" ? (
+                        <span key={`e${i}`} className="px-2 text-zinc-400">…</span>
+                    ) : (
+                        <button
+                            key={p}
+                            onClick={() => onChange(p)}
+                            className={`min-w-[28px] px-2 py-1 rounded-lg text-xs font-semibold border ${
+                                p === page
+                                    ? "bg-accent-red text-white border-accent-red"
+                                    : "bg-white text-zinc-700 border-zinc-200 hover:bg-zinc-100"
+                            }`}
+                        >
+                            {p}
+                        </button>
+                    ),
+                )}
+                <button
+                    onClick={() => canNext && onChange(page + 1)}
+                    disabled={!canNext}
+                    className="p-1.5 rounded-lg text-zinc-500 hover:text-zinc-900 hover:bg-white disabled:opacity-40 disabled:cursor-not-allowed border border-zinc-200"
+                    aria-label="Next page"
+                >
+                    <ChevronRight size={14} />
+                </button>
+            </div>
+        </div>
+    );
 }
 
 function Select({
@@ -212,7 +404,7 @@ function Select({
             <select
                 value={value}
                 onChange={(e) => onChange(e.target.value)}
-                className="appearance-none pl-3 pr-9 py-2.5 text-sm bg-white border border-zinc-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-accent-red/30 focus:border-accent-red min-w-[160px]"
+                className="appearance-none pl-3 pr-9 py-2.5 text-sm bg-white border border-zinc-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-accent-red/30 focus:border-accent-red min-w-[180px]"
             >
                 {options.map((o) => (
                     <option key={o.v} value={o.v}>{o.l}</option>
@@ -223,10 +415,13 @@ function Select({
     );
 }
 
+// Statuses the admin can toggle a student between via the inline dropdown.
+const STUDENT_STATUS_CHOICES: Status[] = ["ACTIVE", "PENDING", "EXPIRED", "SUSPENDED"];
+
 function Row({ member, onFlash }: { member: Member; onFlash: (k: "ok" | "err", m: string) => void }) {
     const [isPending, startTransition] = useTransition();
     const [role, setRole] = useState<Role>(member.role);
-    const [status, setStatus] = useState<Status>(member.membershipStatus);
+    const [status, setStatus] = useState<Status>(member.status);
     const [confirmDelete, setConfirmDelete] = useState(false);
     const [deleted, setDeleted] = useState(false);
 
@@ -270,7 +465,7 @@ function Row({ member, onFlash }: { member: Member; onFlash: (k: "ok" | "err", m
             const res = await updateMemberStatusAction(fd);
             if (res.ok) {
                 setStatus(next);
-                onFlash("ok", `Member ${next.toLowerCase()}.`);
+                onFlash("ok", `Member ${STATUS_LABELS[next].toLowerCase()}.`);
             } else {
                 onFlash("err", res.error);
             }
@@ -288,7 +483,17 @@ function Row({ member, onFlash }: { member: Member; onFlash: (k: "ok" | "err", m
     }
 
     const initial = member.fullName.charAt(0).toUpperCase();
-    const isInvitePending = !member.onboardingComplete && member.membershipStatus === "PENDING";
+    // Only students have the "invite pending onboarding" state.
+    const isInvitePending =
+        role === "STUDENT" && !member.onboardingComplete && status === "PENDING";
+
+    // Status control varies by role.
+    //   STUDENT → full inline dropdown (Active/Pending/Expired/Suspended).
+    //   DOJO_OWNER awaiting app → read-only badge (fee/approval is the source of truth).
+    //   STAFF / ADMIN / approved DOJO_OWNER → Active ↔ Suspended toggle only.
+    const isReadOnlyStatus =
+        role === "DOJO_OWNER" &&
+        (status === "UNPAID" || status === "AWAITING_APPROVAL" || status === "REJECTED");
 
     if (deleted) return null;
 
@@ -315,7 +520,9 @@ function Row({ member, onFlash }: { member: Member; onFlash: (k: "ok" | "err", m
             </td>
             <td className="px-5 py-4 text-xs text-zinc-600">
                 <p className="font-medium text-zinc-800">{member.dojo?.name ?? "—"}</p>
-                <p className="text-[11px] text-zinc-500 mt-0.5">{member.currentRank}</p>
+                <p className="text-[11px] text-zinc-500 mt-0.5">
+                    {role === "STUDENT" ? member.currentRank : "—"}
+                </p>
             </td>
             <td className="px-5 py-4">
                 <InlineSelect
@@ -332,17 +539,31 @@ function Row({ member, onFlash }: { member: Member; onFlash: (k: "ok" | "err", m
                 />
             </td>
             <td className="px-5 py-4">
-                <InlineSelect
-                    value={status}
-                    onChange={(v) => changeStatus(v as Status)}
-                    options={[
-                        { v: "ACTIVE", l: "Active" },
-                        { v: "PENDING", l: "Pending" },
-                        { v: "EXPIRED", l: "Expired" },
-                        { v: "SUSPENDED", l: "Suspended" },
-                    ]}
-                    badgeClass={statusStyles[status]}
-                />
+                {isReadOnlyStatus ? (
+                    <span
+                        title="This status comes from the dojo enlistment application — resolve it from the applications queue."
+                        className={`inline-flex items-center pl-2.5 pr-2.5 py-1 text-[11px] font-bold tracking-widest uppercase border rounded-full cursor-not-allowed ${statusStyles[status]}`}
+                    >
+                        {STATUS_LABELS[status]}
+                    </span>
+                ) : role === "STUDENT" ? (
+                    <InlineSelect
+                        value={status}
+                        onChange={(v) => changeStatus(v as Status)}
+                        options={STUDENT_STATUS_CHOICES.map((s) => ({ v: s, l: STATUS_LABELS[s] }))}
+                        badgeClass={statusStyles[status]}
+                    />
+                ) : (
+                    <InlineSelect
+                        value={status === "SUSPENDED" ? "SUSPENDED" : "ACTIVE"}
+                        onChange={(v) => changeStatus(v as Status)}
+                        options={[
+                            { v: "ACTIVE", l: "Active" },
+                            { v: "SUSPENDED", l: "Suspended" },
+                        ]}
+                        badgeClass={statusStyles[status === "SUSPENDED" ? "SUSPENDED" : "ACTIVE"]}
+                    />
+                )}
             </td>
             <td className="px-5 py-4 text-right">
                 <div className="inline-flex items-center gap-2">
