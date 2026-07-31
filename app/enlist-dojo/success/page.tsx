@@ -61,7 +61,7 @@ export default async function EnlistDojoSuccessPage({
             email: true,
             phone: true,
             status: true,
-            createdAt: true,
+            updatedAt: true,
             userId: true,
         },
     });
@@ -93,7 +93,7 @@ type Application = {
     email: string;
     phone: string;
     status: string;
-    createdAt: Date;
+    updatedAt: Date;
 };
 
 function SuccessScreen({
@@ -106,7 +106,7 @@ function SuccessScreen({
     enlistmentFeeBDT: number;
 }) {
     const reference = `DOJO-${application.id.slice(0, 8).toUpperCase()}`;
-    const submittedAt = application.createdAt.toLocaleString("en-GB", {
+    const submittedAt = application.updatedAt.toLocaleString("en-GB", {
         day: "numeric",
         month: "long",
         year: "numeric",

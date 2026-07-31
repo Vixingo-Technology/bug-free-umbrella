@@ -72,6 +72,7 @@ export default async function AdminMemberDetailPage({
     const user = await prisma.user.findUnique({
         where: { id },
         include: {
+            profile: true,
             student: {
                 include: {
                     dojo: { select: { id: true, name: true, city: true } },
@@ -150,6 +151,7 @@ export default async function AdminMemberDetailPage({
 
     const roleLabel = ROLE_LABELS[p.roleId] ?? p.roleId;
     const s = p.student;
+    const prof = p.profile;
     const statusKey = (s?.membershipStatus ?? "PENDING") as string;
     const statusCls = STATUS_STYLES[statusKey] ?? STATUS_STYLES.PENDING;
 
@@ -271,6 +273,33 @@ export default async function AdminMemberDetailPage({
                         </FieldGrid>
                     </Section>
 
+                    {prof && (
+                        <Section title="Personal details">
+                            <FieldGrid>
+                                <Field
+                                    icon={<Calendar size={14} />}
+                                    label="Date of birth"
+                                    value={prof.dateOfBirth ? dateFmt.format(new Date(prof.dateOfBirth)) : null}
+                                />
+                                <Field icon={<Droplets size={14} />} label="Blood group" value={prof.bloodGroup} />
+                                <Field icon={<Shield size={14} />} label="National ID" value={prof.nationalId} />
+                                <Field icon={<Users size={14} />} label="Father's name" value={prof.fatherName} />
+                                <Field icon={<Users size={14} />} label="Mother's name" value={prof.motherName} />
+                                <Field icon={<MapPin size={14} />} label="Address" value={prof.address} fullWidth />
+                                <Field
+                                    icon={<HeartPulse size={14} />}
+                                    label="Emergency contact"
+                                    value={
+                                        prof.emergencyContactName
+                                            ? `${prof.emergencyContactName}${prof.emergencyContactPhone ? ` · ${prof.emergencyContactPhone}` : ""}`
+                                            : null
+                                    }
+                                    fullWidth
+                                />
+                            </FieldGrid>
+                        </Section>
+                    )}
+
                     {s && (
                         <Section title="Student profile">
                             <FieldGrid>
@@ -288,24 +317,9 @@ export default async function AdminMemberDetailPage({
                                 />
                                 <Field icon={<MapPin size={14} />} label="Dojo" value={s.dojo?.name} />
                                 <Field
-                                    icon={<Calendar size={14} />}
-                                    label="Date of birth"
-                                    value={s.dateOfBirth ? dateFmt.format(new Date(s.dateOfBirth)) : null}
-                                />
-                                <Field icon={<Droplets size={14} />} label="Blood group" value={s.bloodGroup} />
-                                <Field icon={<Shield size={14} />} label="National ID" value={s.nationalId} />
-                                <Field icon={<Users size={14} />} label="Father's name" value={s.fatherName} />
-                                <Field icon={<Users size={14} />} label="Mother's name" value={s.motherName} />
-                                <Field icon={<MapPin size={14} />} label="Address" value={s.address} fullWidth />
-                                <Field
-                                    icon={<HeartPulse size={14} />}
-                                    label="Emergency contact"
-                                    value={
-                                        s.emergencyContactName
-                                            ? `${s.emergencyContactName}${s.emergencyContactPhone ? ` · ${s.emergencyContactPhone}` : ""}`
-                                            : null
-                                    }
-                                    fullWidth
+                                    icon={<Shield size={14} />}
+                                    label="Membership status"
+                                    value={s.membershipStatus}
                                 />
                                 <Field
                                     icon={<Shield size={14} />}
@@ -314,9 +328,11 @@ export default async function AdminMemberDetailPage({
                                 />
                                 <Field
                                     icon={<Shield size={14} />}
-                                    label="Membership status"
-                                    value={s.membershipStatus}
+                                    label="Join stage"
+                                    value={s.joinStage}
                                 />
+                                <Field icon={<Award size={14} />} label="Requested rank" value={s.requestedRank} />
+                                <Field icon={<Award size={14} />} label="Assigned rank" value={s.assignedRank} />
                             </FieldGrid>
                         </Section>
                     )}
