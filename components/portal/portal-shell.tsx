@@ -126,6 +126,10 @@ interface PortalShellProps {
     initialFullName?: string;
     /** Server-known email, shown under the name in the profile dropdown. */
     initialEmail?: string;
+    /** Server-known dojo name for dojo-staff sidebar header. */
+    initialDojoName?: string | null;
+    /** Server-known dojo logo URL for dojo-staff sidebar header. */
+    initialDojoLogoUrl?: string | null;
     children: React.ReactNode;
 }
 
@@ -156,6 +160,8 @@ export default function PortalShell({
     initialAvatarUrl = null,
     initialFullName = "",
     initialEmail = "",
+    initialDojoName = null,
+    initialDojoLogoUrl = null,
     children,
 }: PortalShellProps) {
     const featureLockSet = new Set<FeatureKey>(initialLockedFeatures);
@@ -206,7 +212,8 @@ export default function PortalShell({
         // without depending on the client-side Supabase query completing.
         { fullName: initialFullName, email: initialEmail, avatarUrl: initialAvatarUrl, currentRank: null, role: initialRole, joinStage: initialJoinStage }
     );
-    const [dojoLogoUrl, setDojoLogoUrl] = useState<string | null>(null);
+    const [dojoLogoUrl, setDojoLogoUrl] = useState<string | null>(initialDojoLogoUrl);
+    const [dojoName, setDojoName] = useState<string | null>(initialDojoName);
     const [unreadCount, setUnreadCount] = useState(0);
 
     useEffect(() => {
@@ -261,12 +268,14 @@ export default function PortalShell({
                 if (staffTable) {
                     const { data: staffRow } = await supabase
                         .from(staffTable)
-                        .select("dojos(logo_url)")
+                        .select("dojos(name, logo_url)")
                         .eq("id", userId)
-                        .single<{ dojos: { logo_url: string | null } | null }>();
+                        .single<{ dojos: { name: string | null; logo_url: string | null } | null }>();
                     setDojoLogoUrl(staffRow?.dojos?.logo_url ?? null);
+                    setDojoName(staffRow?.dojos?.name ?? null);
                 } else {
                     setDojoLogoUrl(null);
+                    setDojoName(null);
                 }
             }
 
@@ -395,37 +404,59 @@ export default function PortalShell({
         <div className="flex flex-col h-full">
             {/* Logo */}
             <div className="px-6 py-5 border-b border-zinc-100 flex items-center gap-3">
-                <Link href="/portal" className="flex items-center gap-2.5">
+                <Link href="/portal" className="flex items-center gap-2.5 min-w-0">
                     {isDojoStaff ? (
                         <Image
                             src={dojoLogoUrl || Logo}
-                            alt="Dojo Logo"
+                            alt={dojoName ? `${dojoName} logo` : "Dojo Logo"}
                             width={36}
                             height={36}
                             unoptimized={!!dojoLogoUrl}
-                            className="rounded-full object-cover w-9 h-9"
+                            className="rounded-full object-cover w-9 h-9 flex-shrink-0"
                         />
                     ) : (
                         <Image src={Logo} alt="JKA Logo" width={36} height={36} />
                     )}
-                    <div>
-                        <p className="font-karate text-xs tracking-[0.3em] text-zinc-900 leading-tight">
-                            JKA <span className="text-accent-red">BD</span>
-                        </p>
-                        <p className="text-[9px] tracking-widest uppercase text-zinc-400 leading-tight">
-                            {portalLabel}
-                        </p>
+                    <div className="min-w-0">
+                        {isDojoStaff ? (
+                            <>
+                                <p className="text-sm font-semibold text-zinc-900 leading-tight truncate">
+                                    {dojoName ?? "Dojo"}
+                                </p>
+                                <p className="text-[9px] tracking-widest uppercase text-zinc-400 leading-tight mt-0.5">
+                                    {portalLabel}
+                                </p>
+                            </>
+                        ) : (
+                            <>
+                                <p className="font-karate text-xs tracking-[0.3em] text-zinc-900 leading-tight">
+                                    JKA <span className="text-accent-red">BD</span>
+                                </p>
+                                <p className="text-[9px] tracking-widest uppercase text-zinc-400 leading-tight">
+                                    {portalLabel}
+                                </p>
+                            </>
+                        )}
                     </div>
                 </Link>
             </div>
 
-            {/* Member info */}
-            {member && member.fullName && (
+            {/* Member info — Member Portal (students) only */}
+            {isStudent && member && member.fullName && (
                 <div className="px-4 py-4 mx-3 mt-4 rounded-xl bg-zinc-50 border border-zinc-100">
                     <div className="flex items-center gap-3">
-                        <div className={`w-10 h-10 rounded-full bg-gradient-to-br ${roleColor} flex items-center justify-center text-white font-bold text-sm flex-shrink-0`}>
-                            {member.fullName.charAt(0)}
-                        </div>
+                        {member.avatarUrl ? (
+                            /* eslint-disable-next-line @next/next/no-img-element */
+                            <img
+                                src={member.avatarUrl}
+                                alt={member.fullName}
+                                className="w-10 h-10 rounded-full object-cover ring-1 ring-zinc-200 flex-shrink-0"
+                            />
+                        ) : (
+                            <div className={`w-10 h-10 rounded-full bg-gradient-to-br ${roleColor} flex items-center justify-center text-white font-bold text-sm flex-shrink-0`}>
+                                {member.fullName.charAt(0)}
+                            </div>
+                        )}
                         <div className="min-w-0">
                             <p className="text-sm font-semibold text-zinc-900 truncate">{member.fullName}</p>
                             <p className="text-[10px] text-zinc-500 truncate">{member.currentRank ?? "White Belt"}</p>

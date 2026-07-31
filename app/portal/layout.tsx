@@ -96,6 +96,8 @@ export default async function PortalLayout({
     let initialAvatarUrl: string | null = null;
     let initialFullName: string = "";
     let initialEmail: string = "";
+    let initialDojoName: string | null = null;
+    let initialDojoLogoUrl: string | null = null;
 
     if (!isExempt) {
         let needsOnboarding = false;
@@ -165,6 +167,38 @@ export default async function PortalLayout({
                 role === "DOJO_MANAGER" ||
                 role === "INSTRUCTOR"
             ) {
+                // Resolve the dojo name + logo so the sidebar header can
+                // render the dojo identity on first paint (rather than
+                // flashing "Dojo Console" and swapping in later).
+                let dojoId: string | null = null;
+                if (role === "INSTRUCTOR") {
+                    const row = await prisma.instructor.findUnique({
+                        where: { id: user.id },
+                        select: { dojoId: true },
+                    });
+                    dojoId = row?.dojoId ?? null;
+                } else if (role === "DOJO_MANAGER") {
+                    const row = await prisma.dojoManager.findUnique({
+                        where: { id: user.id },
+                        select: { dojoId: true },
+                    });
+                    dojoId = row?.dojoId ?? null;
+                } else if (role === "DOJO_OWNER") {
+                    const row = await prisma.dojoOwner.findUnique({
+                        where: { id: user.id },
+                        select: { dojoId: true },
+                    });
+                    dojoId = row?.dojoId ?? null;
+                }
+                if (dojoId) {
+                    const dojo = await prisma.dojo.findUnique({
+                        where: { id: dojoId },
+                        select: { name: true, logoUrl: true },
+                    });
+                    initialDojoName = dojo?.name ?? null;
+                    initialDojoLogoUrl = dojo?.logoUrl ?? null;
+                }
+
                 // Dojo activation gate.
                 //   PENDING_PAYMENT → fee unpaid; whole console locked.
                 //   PAID            → fee paid, awaiting JKA approval;
@@ -254,6 +288,8 @@ export default async function PortalLayout({
             initialAvatarUrl={initialAvatarUrl}
             initialFullName={initialFullName}
             initialEmail={initialEmail}
+            initialDojoName={initialDojoName}
+            initialDojoLogoUrl={initialDojoLogoUrl}
         >
             {children}
         </PortalShell>
