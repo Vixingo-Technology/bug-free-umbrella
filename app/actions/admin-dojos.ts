@@ -124,6 +124,11 @@ export async function updateDojoAction(formData: FormData): Promise<ActionResult
     const data = buildData(formData);
     if (!data.name) return { ok: false, error: "Name is required." };
 
+    // Only reassign the dojo head when the form actually submitted the field.
+    // Forms that don't render a head-instructor picker (e.g. the edit page)
+    // must not clobber the existing DojoOwner → Instructor demotion path.
+    const headSubmitted = formData.has("headInstructorId");
+
     await prisma.$transaction(async (tx) => {
         await tx.dojo.update({
             where: { id },
@@ -139,7 +144,9 @@ export async function updateDojoAction(formData: FormData): Promise<ActionResult
                 studentMilestone: data.studentMilestone,
             },
         });
-        await setDojoHead(tx, id, data.headInstructorId);
+        if (headSubmitted) {
+            await setDojoHead(tx, id, data.headInstructorId);
+        }
     });
 
     revalidatePath("/portal/admin/dojos");

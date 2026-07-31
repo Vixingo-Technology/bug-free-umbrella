@@ -3,7 +3,12 @@
 import { useState, useTransition } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, Building2, CheckCircle2, AlertCircle } from "lucide-react";
+import {
+    ArrowLeft,
+    Building2,
+    CheckCircle2,
+    AlertCircle,
+} from "lucide-react";
 import {
     updateDojoAction,
     updateDojoLockedFeaturesAction,
@@ -27,9 +32,26 @@ export type DojoEditInitial = {
     isActive: boolean;
     lockedFeatures: string[];
     studentMilestone: number;
+    owner: {
+        id: string;
+        fullName: string;
+        email: string;
+    } | null;
 };
 
-export default function DojoEditForm({ dojo }: { dojo: DojoEditInitial }) {
+export type DojoOwnerCandidate = {
+    id: string;
+    fullName: string;
+    email: string;
+    roleId: string;
+};
+
+export default function DojoEditForm({
+    dojo,
+}: {
+    dojo: DojoEditInitial;
+    users?: DojoOwnerCandidate[];
+}) {
     const router = useRouter();
     const [isPending, startTransition] = useTransition();
     const [toast, setToast] = useState<
@@ -89,7 +111,6 @@ export default function DojoEditForm({ dojo }: { dojo: DojoEditInitial }) {
                 fd.set(k, String(v ?? ""));
             }
         });
-
         const nextLocked = Array.from(locked);
         const prevLocked = new Set(dojo.lockedFeatures);
         const locksChanged =

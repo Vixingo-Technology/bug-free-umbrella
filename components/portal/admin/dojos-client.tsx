@@ -5,7 +5,7 @@ import Link from "next/link";
 import { motion } from "motion/react";
 import {
     Building2, Search, X, Pencil, Trash2, MapPin, Phone, Mail,
-    Users, UserCheck, AlertCircle, CheckCircle2, ChevronDown, Power,
+    Users, AlertCircle, CheckCircle2, ChevronDown, Power,
     Calendar, Send, Loader2, UserPlus,
 } from "lucide-react";
 import {
@@ -354,17 +354,6 @@ function DojoCard({
                 </div>
 
                 <ExpiryRow dojo={dojo} onFlash={onFlash} />
-
-                {dojo.headInstructor && (
-                    <div className="mt-4 pt-4 border-t border-zinc-100">
-                        <p className="text-[10px] font-bold tracking-widest uppercase text-zinc-500 mb-1 flex items-center gap-1">
-                            <UserCheck size={10} /> Head Instructor
-                        </p>
-                        <p className="text-sm text-zinc-900 truncate">
-                            {dojo.headInstructor.fullName}
-                        </p>
-                    </div>
-                )}
 
                 <div className="flex items-center gap-2 mt-4">
                     <Link

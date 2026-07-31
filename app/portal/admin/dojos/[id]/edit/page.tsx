@@ -27,6 +27,12 @@ export default async function EditDojoPage({
             isActive: true,
             lockedFeatures: true,
             studentMilestone: true,
+            owner: {
+                select: {
+                    id: true,
+                    user: { select: { fullName: true, email: true } },
+                },
+            },
         },
     });
     if (!dojo) notFound();
@@ -34,8 +40,24 @@ export default async function EditDojoPage({
     return (
         <DojoEditForm
             dojo={{
-                ...dojo,
+                id: dojo.id,
+                name: dojo.name,
+                address: dojo.address,
+                city: dojo.city,
+                phone: dojo.phone,
+                email: dojo.email,
+                latitude: dojo.latitude,
+                longitude: dojo.longitude,
+                isActive: dojo.isActive,
                 lockedFeatures: dojo.lockedFeatures ?? [],
+                studentMilestone: dojo.studentMilestone,
+                owner: dojo.owner
+                    ? {
+                          id: dojo.owner.id,
+                          fullName: dojo.owner.user.fullName,
+                          email: dojo.owner.user.email,
+                      }
+                    : null,
             }}
         />
     );

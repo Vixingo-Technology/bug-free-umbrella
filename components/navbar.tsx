@@ -98,17 +98,17 @@ export default function Navbar() {
             ) : (
               <>
                 <Link
-                  href="/login"
+                  href="/signup"
                   className="inline-flex items-center gap-1.5 text-zinc-800 hover:text-accent-red transition-all duration-300"
                 >
-                  Portal
+                  Join Us
                 </Link>
                 <Link
-                  href="/signup"
+                  href="/login"
                   className="inline-flex items-center gap-1.5 text-accent-red hover:text-accent-gold transition-all duration-300"
                 >
                   <LogIn size={14} />
-                  Join Us
+                  Login
                 </Link>
               </>
             )}
@@ -160,19 +160,19 @@ export default function Navbar() {
           ) : (
             <>
               <Link
-                href="/login"
+                href="/signup"
                 onClick={() => setMobileMenuOpen(false)}
                 className="text-2xl font-serif text-zinc-900 hover:text-accent-red transition-colors"
               >
-                Portal
+                Join Us
               </Link>
               <Link
-                href="/signup"
+                href="/login"
                 onClick={() => setMobileMenuOpen(false)}
                 className="mt-6 px-8 py-3 bg-accent-red hover:bg-accent-red/90 text-white font-semibold tracking-widest uppercase transition-colors inline-flex items-center gap-2"
               >
                 <LogIn size={16} />
-                Join Us
+                Login
               </Link>
             </>
           )}

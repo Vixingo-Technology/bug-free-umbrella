@@ -145,7 +145,7 @@ export async function updateMemberRoleAction(formData: FormData): Promise<Action
         select: { roleId: true },
     });
     if (!current) return { ok: false, error: "Member not found." };
-    const CHANGEABLE_ROLES = ["INSTRUCTOR", "DOJO_MANAGER", "DOJO_OWNER"] as const;
+    const CHANGEABLE_ROLES = ["INSTRUCTOR", "DOJO_MANAGER"] as const;
     type ChangeableRole = (typeof CHANGEABLE_ROLES)[number];
     const isChangeable = (r: string): r is ChangeableRole =>
         (CHANGEABLE_ROLES as readonly string[]).includes(r);
@@ -156,13 +156,15 @@ export async function updateMemberRoleAction(formData: FormData): Promise<Action
             error:
                 current.roleId === "STUDENT"
                     ? "Student roles can't be changed here — it would erase their gradings, achievements, and transfer history."
-                    : "Admin roles can't be changed here.",
+                    : current.roleId === "DOJO_OWNER"
+                        ? "Dojo Owner roles can't be changed here — reassign via the dojo enlistment flow."
+                        : "Admin roles can't be changed here.",
         };
     }
     if (!isChangeable(role)) {
         return {
             ok: false,
-            error: "Admins can only switch between Instructor, Dojo Manager and Dojo Owner.",
+            error: "Admins can only switch between Instructor and Dojo Manager.",
         };
     }
 

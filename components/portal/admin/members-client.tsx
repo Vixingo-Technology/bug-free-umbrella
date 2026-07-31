@@ -41,10 +41,11 @@ const STATUS_LABELS: Record<Status, string> = {
     REJECTED: "Rejected",
 };
 
-// Admins can only switch a member between these three staff-level roles.
+// Admins can only switch a member between Instructor and Dojo Manager.
 // Promoting to/from STUDENT would destroy grading history (cascade delete),
-// and ADMIN promotion is a federation-level decision handled elsewhere.
-const CHANGEABLE_ROLE_VALUES: Role[] = ["INSTRUCTOR", "DOJO_MANAGER", "DOJO_OWNER"];
+// DOJO_OWNER is set via the dojo enlistment flow (not swappable here), and
+// ADMIN promotion is a federation-level decision handled elsewhere.
+const CHANGEABLE_ROLE_VALUES: Role[] = ["INSTRUCTOR", "DOJO_MANAGER"];
 
 // Admins can only issue federation-level invites. Instructor / Manager /
 // Student invites are the Dojo Owner's job, from inside their dojo panel.
@@ -530,11 +531,17 @@ function Row({ member, onFlash }: { member: Member; onFlash: (k: "ok" | "err", m
                     onChange={(v) => changeRole(v as Role)}
                     options={CHANGEABLE_ROLE_VALUES.map((r) => ({ v: r, l: ROLE_LABELS[r] }))}
                     badgeClass={roleStyles[role]}
-                    disabled={role === "STUDENT" || role === "ADMIN"}
+                    disabled={
+                        role === "STUDENT" ||
+                        role === "ADMIN" ||
+                        role === "DOJO_OWNER"
+                    }
                     disabledTitle={
                         role === "STUDENT"
                             ? "Student roles can't be changed here — it would erase their gradings, achievements and transfer history."
-                            : "Admin roles can't be changed here."
+                            : role === "DOJO_OWNER"
+                                ? "Dojo Owner roles can't be changed here — reassign via the dojo enlistment flow."
+                                : "Admin roles can't be changed here."
                     }
                 />
             </td>
