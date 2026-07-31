@@ -93,6 +93,9 @@ export default async function PortalLayout({
     let initialJoinStage: "FEE_UNPAID" | "AWAITING_APPROVAL" | "PAST_BELT_UNPAID" | "JOINED" | null = null;
     let initialDojoLock: DojoLockState = null;
     let initialLockedFeatures: FeatureKey[] = [];
+    let initialAvatarUrl: string | null = null;
+    let initialFullName: string = "";
+    let initialEmail: string = "";
 
     if (!isExempt) {
         let needsOnboarding = false;
@@ -103,18 +106,21 @@ export default async function PortalLayout({
         try {
             let appUser = await prisma.user.findUnique({
                 where: { id: user.id },
-                select: { roleId: true, phone: true },
+                select: { roleId: true, phone: true, avatarUrl: true, fullName: true, email: true },
             });
 
             if (!appUser) {
                 await provisionMemberFromSupabaseUser(user);
                 appUser = await prisma.user.findUnique({
                     where: { id: user.id },
-                    select: { roleId: true, phone: true },
+                    select: { roleId: true, phone: true, avatarUrl: true, fullName: true, email: true },
                 });
             }
 
             role = (appUser?.roleId as RoleId) ?? "STUDENT";
+            initialAvatarUrl = appUser?.avatarUrl ?? null;
+            initialFullName = appUser?.fullName ?? "";
+            initialEmail = appUser?.email ?? "";
 
             if (role === "STUDENT") {
                 const student = await prisma.student.findUnique({
@@ -225,9 +231,12 @@ export default async function PortalLayout({
         try {
             const u = await prisma.user.findUnique({
                 where: { id: user.id },
-                select: { roleId: true },
+                select: { roleId: true, avatarUrl: true, fullName: true, email: true },
             });
             if (u?.roleId) role = u.roleId as RoleId;
+            initialAvatarUrl = u?.avatarUrl ?? null;
+            initialFullName = u?.fullName ?? "";
+            initialEmail = u?.email ?? "";
         } catch {
             // ignore
         }
@@ -242,6 +251,9 @@ export default async function PortalLayout({
             initialJoinStage={initialJoinStage}
             initialDojoLock={initialDojoLock}
             initialLockedFeatures={initialLockedFeatures}
+            initialAvatarUrl={initialAvatarUrl}
+            initialFullName={initialFullName}
+            initialEmail={initialEmail}
         >
             {children}
         </PortalShell>

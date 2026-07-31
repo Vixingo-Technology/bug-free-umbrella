@@ -13,9 +13,7 @@ import {
     FileText,
     Bell,
     ShoppingBag,
-    User,
     RefreshCw,
-    LogOut,
     Menu,
     X,
     ChevronRight,
@@ -33,13 +31,13 @@ import {
     UserPlus,
 } from "lucide-react";
 import Logo from "@/assets/jka_logo.svg";
-import { signoutAction } from "@/app/actions/auth";
 import { createClient } from "@/lib/supabase/client";
 import { playNotificationChime } from "@/lib/notification-sound";
 import { DOJO_NAV, GROUP_LABEL, type DojoNavItem } from "@/lib/dojo-nav";
 import { type DojoRole } from "@/lib/dojo-roles";
 import type { FeatureKey } from "@/lib/dojo/feature-locks";
 import NotificationBell from "@/components/portal/notification-bell";
+import ProfileMenu from "@/components/portal/profile-menu";
 
 const DOJO_ROLE_RANK: Record<DojoRole, number> = {
     INSTRUCTOR: 1,
@@ -119,6 +117,15 @@ interface PortalShellProps {
      *  locked feature keys. Ignored while initialDojoLock is set (that
      *  gate already covers everything). */
     initialLockedFeatures?: FeatureKey[];
+    /** Server-known avatar URL, so the top-right header shows the user's
+     *  photo on first paint without depending on the client-side Supabase
+     *  query. */
+    initialAvatarUrl?: string | null;
+    /** Server-known display name, used by the profile dropdown so it shows
+     *  the user's real name on first paint. */
+    initialFullName?: string;
+    /** Server-known email, shown under the name in the profile dropdown. */
+    initialEmail?: string;
     children: React.ReactNode;
 }
 
@@ -146,6 +153,9 @@ export default function PortalShell({
     initialJoinStage = null,
     initialDojoLock = null,
     initialLockedFeatures = [],
+    initialAvatarUrl = null,
+    initialFullName = "",
+    initialEmail = "",
     children,
 }: PortalShellProps) {
     const featureLockSet = new Set<FeatureKey>(initialLockedFeatures);
@@ -186,6 +196,7 @@ export default function PortalShell({
     const [member, setMember] = useState<{
         fullName: string;
         email: string;
+        avatarUrl: string | null;
         currentRank: string | null;
         role: string;
         joinStage: "FEE_UNPAID" | "AWAITING_APPROVAL" | "PAST_BELT_UNPAID" | "JOINED" | null;
@@ -193,7 +204,7 @@ export default function PortalShell({
         // Seed with the server-known role + joinStage so admin nav renders
         // AND the student sidebar lock resolves correctly on first paint,
         // without depending on the client-side Supabase query completing.
-        { fullName: "", email: "", currentRank: null, role: initialRole, joinStage: initialJoinStage }
+        { fullName: initialFullName, email: initialEmail, avatarUrl: initialAvatarUrl, currentRank: null, role: initialRole, joinStage: initialJoinStage }
     );
     const [dojoLogoUrl, setDojoLogoUrl] = useState<string | null>(null);
     const [unreadCount, setUnreadCount] = useState(0);
@@ -204,11 +215,12 @@ export default function PortalShell({
         async function fetchMember() {
             const { data } = await supabase
                 .from("users")
-                .select("full_name, email, role_id, students(current_rank, join_stage)")
+                .select("full_name, email, avatar_url, role_id, students(current_rank, join_stage)")
                 .eq("id", userId)
                 .single<{
                     full_name: string;
                     email: string;
+                    avatar_url: string | null;
                     role_id: string;
                     students: {
                         current_rank: string | null;
@@ -225,6 +237,7 @@ export default function PortalShell({
                 setMember((prev) => ({
                     fullName: data.full_name,
                     email: data.email,
+                    avatarUrl: data.avatar_url ?? prev?.avatarUrl ?? null,
                     currentRank: data.students?.current_rank ?? null,
                     role: data.role_id,
                     // Prefer the fresh browser value, but if postgrest didn't
@@ -556,18 +569,6 @@ export default function PortalShell({
                     ))}
             </nav>
 
-            {/* Sign out */}
-            <div className="px-3 py-4 border-t border-zinc-100">
-                <form action={signoutAction}>
-                    <button
-                        type="submit"
-                        className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-zinc-500 hover:bg-red-50 hover:text-red-600 transition-all"
-                    >
-                        <LogOut size={17} />
-                        Sign Out
-                    </button>
-                </form>
-            </div>
         </div>
     );
 
@@ -635,13 +636,15 @@ export default function PortalShell({
                             align="right"
                             iconSize={20}
                         />
-                        <Link
-                            href={profileHref}
-                            aria-label={isAdmin || isDojoStaff ? "My account" : "My profile"}
-                            className="relative p-2 rounded-lg transition-colors text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900"
-                        >
-                            <User size={20} />
-                        </Link>
+                        <ProfileMenu
+                            profileHref={profileHref}
+                            profileLabel={isAdmin || isDojoStaff ? "My account" : "My profile"}
+                            avatarUrl={member?.avatarUrl ?? null}
+                            fullName={member?.fullName ?? ""}
+                            email={member?.email ?? ""}
+                            avatarSize={28}
+                            iconSize={20}
+                        />
                     </div>
                 </header>
 
@@ -675,13 +678,15 @@ export default function PortalShell({
                             align="right"
                             iconSize={18}
                         />
-                        <Link
-                            href={profileHref}
-                            aria-label={isAdmin || isDojoStaff ? "My account" : "My profile"}
-                            className="relative p-2 rounded-lg transition-colors text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900"
-                        >
-                            <User size={18} />
-                        </Link>
+                        <ProfileMenu
+                            profileHref={profileHref}
+                            profileLabel={isAdmin || isDojoStaff ? "My account" : "My profile"}
+                            avatarUrl={member?.avatarUrl ?? null}
+                            fullName={member?.fullName ?? ""}
+                            email={member?.email ?? ""}
+                            avatarSize={28}
+                            iconSize={18}
+                        />
                     </div>
                 </header>
 
