@@ -26,6 +26,7 @@ export default async function EditDojoPage({
             longitude: true,
             isActive: true,
             lockedFeatures: true,
+            studentMilestone: true,
         },
     });
     if (!dojo) notFound();

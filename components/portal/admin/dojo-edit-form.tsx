@@ -26,6 +26,7 @@ export type DojoEditInitial = {
     longitude: number | null;
     isActive: boolean;
     lockedFeatures: string[];
+    studentMilestone: number;
 };
 
 export default function DojoEditForm({ dojo }: { dojo: DojoEditInitial }) {
@@ -44,6 +45,7 @@ export default function DojoEditForm({ dojo }: { dojo: DojoEditInitial }) {
         latitude: dojo.latitude != null ? String(dojo.latitude) : "",
         longitude: dojo.longitude != null ? String(dojo.longitude) : "",
         isActive: dojo.isActive,
+        studentMilestone: String(dojo.studentMilestone),
     });
 
     const [locked, setLocked] = useState<Set<FeatureKey>>(
@@ -257,14 +259,42 @@ export default function DojoEditForm({ dojo }: { dojo: DojoEditInitial }) {
                     </label>
 
                     <div className="pt-2 border-t border-zinc-100">
+                        <Field label="Minimum students to unlock certificate features">
+                            <input
+                                type="number"
+                                inputMode="numeric"
+                                min={0}
+                                step={1}
+                                value={form.studentMilestone}
+                                onChange={(e) =>
+                                    setForm({
+                                        ...form,
+                                        studentMilestone: e.target.value
+                                            .replace(/\D/g, "")
+                                            .slice(0, 5),
+                                    })
+                                }
+                                placeholder="0"
+                                className={inputCls}
+                            />
+                            <p className="mt-1.5 text-xs text-zinc-500">
+                                Active-student count this dojo must reach before
+                                certificates, announcements, transfers, and
+                                staff invites auto-unlock. Defaults to 0
+                                (features open immediately).
+                            </p>
+                        </Field>
+                    </div>
+
+                    <div className="pt-2 border-t border-zinc-100">
                         <p className="text-sm font-semibold text-zinc-900 mb-1">
                             Locked features
                         </p>
                         <p className="text-xs text-zinc-500 mb-3">
                             Checking a feature locks its page for this dojo.
-                            Dojos below the 30-active-student milestone already
-                            auto-lock certificates, announcements, transfers,
-                            and staff invites.
+                            Dojos below the active-student milestone above
+                            already auto-lock certificates, announcements,
+                            transfers, and staff invites.
                         </p>
                         <div className="grid grid-cols-2 gap-2">
                             {FEATURE_KEYS.map((key) => {

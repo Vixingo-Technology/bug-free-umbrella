@@ -22,6 +22,12 @@ function parseFloatOrNull(v: FormDataEntryValue | null): number | null {
     return Number.isFinite(n) ? n : null;
 }
 
+function parseNonNegativeInt(v: FormDataEntryValue | null): number {
+    if (v === null || v === "") return 0;
+    const n = Number.parseInt(String(v).trim(), 10);
+    return Number.isFinite(n) && n >= 0 ? n : 0;
+}
+
 
 function buildData(formData: FormData) {
     const name = ((formData.get("name") as string) ?? "").trim();
@@ -33,8 +39,9 @@ function buildData(formData: FormData) {
     const longitude = parseFloatOrNull(formData.get("longitude"));
     const headInstructorId = ((formData.get("headInstructorId") as string) ?? "").trim() || null;
     const isActive = formData.get("isActive") === "on" || formData.get("isActive") === "true";
+    const studentMilestone = parseNonNegativeInt(formData.get("studentMilestone"));
 
-    return { name, address, city, phone, email, latitude, longitude, headInstructorId, isActive };
+    return { name, address, city, phone, email, latitude, longitude, headInstructorId, isActive, studentMilestone };
 }
 
 /**
@@ -129,12 +136,14 @@ export async function updateDojoAction(formData: FormData): Promise<ActionResult
                 latitude: data.latitude,
                 longitude: data.longitude,
                 isActive: data.isActive,
+                studentMilestone: data.studentMilestone,
             },
         });
         await setDojoHead(tx, id, data.headInstructorId);
     });
 
     revalidatePath("/portal/admin/dojos");
+    revalidatePath("/portal");
     return { ok: true };
 }
 

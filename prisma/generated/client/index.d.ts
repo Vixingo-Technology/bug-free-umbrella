@@ -18460,12 +18460,14 @@ export namespace Prisma {
     latitude: number | null
     longitude: number | null
     annualFee: Decimal | null
+    studentMilestone: number | null
   }
 
   export type DojoSumAggregateOutputType = {
     latitude: number | null
     longitude: number | null
     annualFee: Decimal | null
+    studentMilestone: number | null
   }
 
   export type DojoMinAggregateOutputType = {
@@ -18482,6 +18484,7 @@ export namespace Prisma {
     expiryDate: Date | null
     ownerSignatureUrl: string | null
     logoUrl: string | null
+    studentMilestone: number | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -18500,6 +18503,7 @@ export namespace Prisma {
     expiryDate: Date | null
     ownerSignatureUrl: string | null
     logoUrl: string | null
+    studentMilestone: number | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -18519,6 +18523,7 @@ export namespace Prisma {
     ownerSignatureUrl: number
     logoUrl: number
     lockedFeatures: number
+    studentMilestone: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -18529,12 +18534,14 @@ export namespace Prisma {
     latitude?: true
     longitude?: true
     annualFee?: true
+    studentMilestone?: true
   }
 
   export type DojoSumAggregateInputType = {
     latitude?: true
     longitude?: true
     annualFee?: true
+    studentMilestone?: true
   }
 
   export type DojoMinAggregateInputType = {
@@ -18551,6 +18558,7 @@ export namespace Prisma {
     expiryDate?: true
     ownerSignatureUrl?: true
     logoUrl?: true
+    studentMilestone?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -18569,6 +18577,7 @@ export namespace Prisma {
     expiryDate?: true
     ownerSignatureUrl?: true
     logoUrl?: true
+    studentMilestone?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -18588,6 +18597,7 @@ export namespace Prisma {
     ownerSignatureUrl?: true
     logoUrl?: true
     lockedFeatures?: true
+    studentMilestone?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -18694,6 +18704,7 @@ export namespace Prisma {
     ownerSignatureUrl: string | null
     logoUrl: string | null
     lockedFeatures: string[]
+    studentMilestone: number
     createdAt: Date
     updatedAt: Date
     _count: DojoCountAggregateOutputType | null
@@ -18732,6 +18743,7 @@ export namespace Prisma {
     ownerSignatureUrl?: boolean
     logoUrl?: boolean
     lockedFeatures?: boolean
+    studentMilestone?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     renewalOrders?: boolean | Dojo$renewalOrdersArgs<ExtArgs>
@@ -18768,6 +18780,7 @@ export namespace Prisma {
     ownerSignatureUrl?: boolean
     logoUrl?: boolean
     lockedFeatures?: boolean
+    studentMilestone?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["dojo"]>
@@ -18787,6 +18800,7 @@ export namespace Prisma {
     ownerSignatureUrl?: boolean
     logoUrl?: boolean
     lockedFeatures?: boolean
+    studentMilestone?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["dojo"]>
@@ -18806,11 +18820,12 @@ export namespace Prisma {
     ownerSignatureUrl?: boolean
     logoUrl?: boolean
     lockedFeatures?: boolean
+    studentMilestone?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type DojoOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "address" | "city" | "latitude" | "longitude" | "phone" | "email" | "isActive" | "annualFee" | "expiryDate" | "ownerSignatureUrl" | "logoUrl" | "lockedFeatures" | "createdAt" | "updatedAt", ExtArgs["result"]["dojo"]>
+  export type DojoOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "address" | "city" | "latitude" | "longitude" | "phone" | "email" | "isActive" | "annualFee" | "expiryDate" | "ownerSignatureUrl" | "logoUrl" | "lockedFeatures" | "studentMilestone" | "createdAt" | "updatedAt", ExtArgs["result"]["dojo"]>
   export type DojoInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     renewalOrders?: boolean | Dojo$renewalOrdersArgs<ExtArgs>
     certificateOrders?: boolean | Dojo$certificateOrdersArgs<ExtArgs>
@@ -18868,6 +18883,7 @@ export namespace Prisma {
       ownerSignatureUrl: string | null
       logoUrl: string | null
       lockedFeatures: string[]
+      studentMilestone: number
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["dojo"]>
@@ -19323,6 +19339,7 @@ export namespace Prisma {
     readonly ownerSignatureUrl: FieldRef<"Dojo", 'String'>
     readonly logoUrl: FieldRef<"Dojo", 'String'>
     readonly lockedFeatures: FieldRef<"Dojo", 'String[]'>
+    readonly studentMilestone: FieldRef<"Dojo", 'Int'>
     readonly createdAt: FieldRef<"Dojo", 'DateTime'>
     readonly updatedAt: FieldRef<"Dojo", 'DateTime'>
   }
@@ -51235,6 +51252,7 @@ export namespace Prisma {
     ownerSignatureUrl: 'ownerSignatureUrl',
     logoUrl: 'logoUrl',
     lockedFeatures: 'lockedFeatures',
+    studentMilestone: 'studentMilestone',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -52964,6 +52982,7 @@ export namespace Prisma {
     ownerSignatureUrl?: StringNullableFilter<"Dojo"> | string | null
     logoUrl?: StringNullableFilter<"Dojo"> | string | null
     lockedFeatures?: StringNullableListFilter<"Dojo">
+    studentMilestone?: IntFilter<"Dojo"> | number
     createdAt?: DateTimeFilter<"Dojo"> | Date | string
     updatedAt?: DateTimeFilter<"Dojo"> | Date | string
     renewalOrders?: ShopOrderListRelationFilter
@@ -52999,6 +53018,7 @@ export namespace Prisma {
     ownerSignatureUrl?: SortOrderInput | SortOrder
     logoUrl?: SortOrderInput | SortOrder
     lockedFeatures?: SortOrder
+    studentMilestone?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     renewalOrders?: ShopOrderOrderByRelationAggregateInput
@@ -53037,6 +53057,7 @@ export namespace Prisma {
     ownerSignatureUrl?: StringNullableFilter<"Dojo"> | string | null
     logoUrl?: StringNullableFilter<"Dojo"> | string | null
     lockedFeatures?: StringNullableListFilter<"Dojo">
+    studentMilestone?: IntFilter<"Dojo"> | number
     createdAt?: DateTimeFilter<"Dojo"> | Date | string
     updatedAt?: DateTimeFilter<"Dojo"> | Date | string
     renewalOrders?: ShopOrderListRelationFilter
@@ -53072,6 +53093,7 @@ export namespace Prisma {
     ownerSignatureUrl?: SortOrderInput | SortOrder
     logoUrl?: SortOrderInput | SortOrder
     lockedFeatures?: SortOrder
+    studentMilestone?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: DojoCountOrderByAggregateInput
@@ -53099,6 +53121,7 @@ export namespace Prisma {
     ownerSignatureUrl?: StringNullableWithAggregatesFilter<"Dojo"> | string | null
     logoUrl?: StringNullableWithAggregatesFilter<"Dojo"> | string | null
     lockedFeatures?: StringNullableListFilter<"Dojo">
+    studentMilestone?: IntWithAggregatesFilter<"Dojo"> | number
     createdAt?: DateTimeWithAggregatesFilter<"Dojo"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Dojo"> | Date | string
   }
@@ -56482,6 +56505,7 @@ export namespace Prisma {
     ownerSignatureUrl?: string | null
     logoUrl?: string | null
     lockedFeatures?: DojoCreatelockedFeaturesInput | string[]
+    studentMilestone?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     renewalOrders?: ShopOrderCreateNestedManyWithoutDojoInput
@@ -56517,6 +56541,7 @@ export namespace Prisma {
     ownerSignatureUrl?: string | null
     logoUrl?: string | null
     lockedFeatures?: DojoCreatelockedFeaturesInput | string[]
+    studentMilestone?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     renewalOrders?: ShopOrderUncheckedCreateNestedManyWithoutDojoInput
@@ -56552,6 +56577,7 @@ export namespace Prisma {
     ownerSignatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
     logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     lockedFeatures?: DojoUpdatelockedFeaturesInput | string[]
+    studentMilestone?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     renewalOrders?: ShopOrderUpdateManyWithoutDojoNestedInput
@@ -56587,6 +56613,7 @@ export namespace Prisma {
     ownerSignatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
     logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     lockedFeatures?: DojoUpdatelockedFeaturesInput | string[]
+    studentMilestone?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     renewalOrders?: ShopOrderUncheckedUpdateManyWithoutDojoNestedInput
@@ -56622,6 +56649,7 @@ export namespace Prisma {
     ownerSignatureUrl?: string | null
     logoUrl?: string | null
     lockedFeatures?: DojoCreatelockedFeaturesInput | string[]
+    studentMilestone?: number
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -56641,6 +56669,7 @@ export namespace Prisma {
     ownerSignatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
     logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     lockedFeatures?: DojoUpdatelockedFeaturesInput | string[]
+    studentMilestone?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -56660,6 +56689,7 @@ export namespace Prisma {
     ownerSignatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
     logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     lockedFeatures?: DojoUpdatelockedFeaturesInput | string[]
+    studentMilestone?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -60304,6 +60334,7 @@ export namespace Prisma {
     ownerSignatureUrl?: SortOrder
     logoUrl?: SortOrder
     lockedFeatures?: SortOrder
+    studentMilestone?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -60312,6 +60343,7 @@ export namespace Prisma {
     latitude?: SortOrder
     longitude?: SortOrder
     annualFee?: SortOrder
+    studentMilestone?: SortOrder
   }
 
   export type DojoMaxOrderByAggregateInput = {
@@ -60328,6 +60360,7 @@ export namespace Prisma {
     expiryDate?: SortOrder
     ownerSignatureUrl?: SortOrder
     logoUrl?: SortOrder
+    studentMilestone?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -60346,6 +60379,7 @@ export namespace Prisma {
     expiryDate?: SortOrder
     ownerSignatureUrl?: SortOrder
     logoUrl?: SortOrder
+    studentMilestone?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -60354,6 +60388,7 @@ export namespace Prisma {
     latitude?: SortOrder
     longitude?: SortOrder
     annualFee?: SortOrder
+    studentMilestone?: SortOrder
   }
 
   export type FloatNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -69084,6 +69119,7 @@ export namespace Prisma {
     ownerSignatureUrl?: string | null
     logoUrl?: string | null
     lockedFeatures?: DojoCreatelockedFeaturesInput | string[]
+    studentMilestone?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     renewalOrders?: ShopOrderCreateNestedManyWithoutDojoInput
@@ -69118,6 +69154,7 @@ export namespace Prisma {
     ownerSignatureUrl?: string | null
     logoUrl?: string | null
     lockedFeatures?: DojoCreatelockedFeaturesInput | string[]
+    studentMilestone?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     renewalOrders?: ShopOrderUncheckedCreateNestedManyWithoutDojoInput
@@ -69481,6 +69518,7 @@ export namespace Prisma {
     ownerSignatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
     logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     lockedFeatures?: DojoUpdatelockedFeaturesInput | string[]
+    studentMilestone?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     renewalOrders?: ShopOrderUpdateManyWithoutDojoNestedInput
@@ -69515,6 +69553,7 @@ export namespace Prisma {
     ownerSignatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
     logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     lockedFeatures?: DojoUpdatelockedFeaturesInput | string[]
+    studentMilestone?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     renewalOrders?: ShopOrderUncheckedUpdateManyWithoutDojoNestedInput
@@ -69776,6 +69815,7 @@ export namespace Prisma {
     ownerSignatureUrl?: string | null
     logoUrl?: string | null
     lockedFeatures?: DojoCreatelockedFeaturesInput | string[]
+    studentMilestone?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     renewalOrders?: ShopOrderCreateNestedManyWithoutDojoInput
@@ -69810,6 +69850,7 @@ export namespace Prisma {
     ownerSignatureUrl?: string | null
     logoUrl?: string | null
     lockedFeatures?: DojoCreatelockedFeaturesInput | string[]
+    studentMilestone?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     renewalOrders?: ShopOrderUncheckedCreateNestedManyWithoutDojoInput
@@ -69939,6 +69980,7 @@ export namespace Prisma {
     ownerSignatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
     logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     lockedFeatures?: DojoUpdatelockedFeaturesInput | string[]
+    studentMilestone?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     renewalOrders?: ShopOrderUpdateManyWithoutDojoNestedInput
@@ -69973,6 +70015,7 @@ export namespace Prisma {
     ownerSignatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
     logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     lockedFeatures?: DojoUpdatelockedFeaturesInput | string[]
+    studentMilestone?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     renewalOrders?: ShopOrderUncheckedUpdateManyWithoutDojoNestedInput
@@ -70080,6 +70123,7 @@ export namespace Prisma {
     ownerSignatureUrl?: string | null
     logoUrl?: string | null
     lockedFeatures?: DojoCreatelockedFeaturesInput | string[]
+    studentMilestone?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     renewalOrders?: ShopOrderCreateNestedManyWithoutDojoInput
@@ -70114,6 +70158,7 @@ export namespace Prisma {
     ownerSignatureUrl?: string | null
     logoUrl?: string | null
     lockedFeatures?: DojoCreatelockedFeaturesInput | string[]
+    studentMilestone?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     renewalOrders?: ShopOrderUncheckedCreateNestedManyWithoutDojoInput
@@ -70243,6 +70288,7 @@ export namespace Prisma {
     ownerSignatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
     logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     lockedFeatures?: DojoUpdatelockedFeaturesInput | string[]
+    studentMilestone?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     renewalOrders?: ShopOrderUpdateManyWithoutDojoNestedInput
@@ -70277,6 +70323,7 @@ export namespace Prisma {
     ownerSignatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
     logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     lockedFeatures?: DojoUpdatelockedFeaturesInput | string[]
+    studentMilestone?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     renewalOrders?: ShopOrderUncheckedUpdateManyWithoutDojoNestedInput
@@ -70384,6 +70431,7 @@ export namespace Prisma {
     ownerSignatureUrl?: string | null
     logoUrl?: string | null
     lockedFeatures?: DojoCreatelockedFeaturesInput | string[]
+    studentMilestone?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     renewalOrders?: ShopOrderCreateNestedManyWithoutDojoInput
@@ -70418,6 +70466,7 @@ export namespace Prisma {
     ownerSignatureUrl?: string | null
     logoUrl?: string | null
     lockedFeatures?: DojoCreatelockedFeaturesInput | string[]
+    studentMilestone?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     renewalOrders?: ShopOrderUncheckedCreateNestedManyWithoutDojoInput
@@ -70547,6 +70596,7 @@ export namespace Prisma {
     ownerSignatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
     logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     lockedFeatures?: DojoUpdatelockedFeaturesInput | string[]
+    studentMilestone?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     renewalOrders?: ShopOrderUpdateManyWithoutDojoNestedInput
@@ -70581,6 +70631,7 @@ export namespace Prisma {
     ownerSignatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
     logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     lockedFeatures?: DojoUpdatelockedFeaturesInput | string[]
+    studentMilestone?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     renewalOrders?: ShopOrderUncheckedUpdateManyWithoutDojoNestedInput
@@ -72141,6 +72192,7 @@ export namespace Prisma {
     ownerSignatureUrl?: string | null
     logoUrl?: string | null
     lockedFeatures?: DojoCreatelockedFeaturesInput | string[]
+    studentMilestone?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     renewalOrders?: ShopOrderCreateNestedManyWithoutDojoInput
@@ -72175,6 +72227,7 @@ export namespace Prisma {
     ownerSignatureUrl?: string | null
     logoUrl?: string | null
     lockedFeatures?: DojoCreatelockedFeaturesInput | string[]
+    studentMilestone?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     renewalOrders?: ShopOrderUncheckedCreateNestedManyWithoutDojoInput
@@ -72225,6 +72278,7 @@ export namespace Prisma {
     ownerSignatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
     logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     lockedFeatures?: DojoUpdatelockedFeaturesInput | string[]
+    studentMilestone?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     renewalOrders?: ShopOrderUpdateManyWithoutDojoNestedInput
@@ -72259,6 +72313,7 @@ export namespace Prisma {
     ownerSignatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
     logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     lockedFeatures?: DojoUpdatelockedFeaturesInput | string[]
+    studentMilestone?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     renewalOrders?: ShopOrderUncheckedUpdateManyWithoutDojoNestedInput
@@ -73393,6 +73448,7 @@ export namespace Prisma {
     ownerSignatureUrl?: string | null
     logoUrl?: string | null
     lockedFeatures?: DojoCreatelockedFeaturesInput | string[]
+    studentMilestone?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     renewalOrders?: ShopOrderCreateNestedManyWithoutDojoInput
@@ -73427,6 +73483,7 @@ export namespace Prisma {
     ownerSignatureUrl?: string | null
     logoUrl?: string | null
     lockedFeatures?: DojoCreatelockedFeaturesInput | string[]
+    studentMilestone?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     renewalOrders?: ShopOrderUncheckedCreateNestedManyWithoutDojoInput
@@ -73650,6 +73707,7 @@ export namespace Prisma {
     ownerSignatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
     logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     lockedFeatures?: DojoUpdatelockedFeaturesInput | string[]
+    studentMilestone?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     renewalOrders?: ShopOrderUpdateManyWithoutDojoNestedInput
@@ -73684,6 +73742,7 @@ export namespace Prisma {
     ownerSignatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
     logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     lockedFeatures?: DojoUpdatelockedFeaturesInput | string[]
+    studentMilestone?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     renewalOrders?: ShopOrderUncheckedUpdateManyWithoutDojoNestedInput
@@ -73910,6 +73969,7 @@ export namespace Prisma {
     ownerSignatureUrl?: string | null
     logoUrl?: string | null
     lockedFeatures?: DojoCreatelockedFeaturesInput | string[]
+    studentMilestone?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     renewalOrders?: ShopOrderCreateNestedManyWithoutDojoInput
@@ -73944,6 +74004,7 @@ export namespace Prisma {
     ownerSignatureUrl?: string | null
     logoUrl?: string | null
     lockedFeatures?: DojoCreatelockedFeaturesInput | string[]
+    studentMilestone?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     renewalOrders?: ShopOrderUncheckedCreateNestedManyWithoutDojoInput
@@ -74124,6 +74185,7 @@ export namespace Prisma {
     ownerSignatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
     logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     lockedFeatures?: DojoUpdatelockedFeaturesInput | string[]
+    studentMilestone?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     renewalOrders?: ShopOrderUpdateManyWithoutDojoNestedInput
@@ -74158,6 +74220,7 @@ export namespace Prisma {
     ownerSignatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
     logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     lockedFeatures?: DojoUpdatelockedFeaturesInput | string[]
+    studentMilestone?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     renewalOrders?: ShopOrderUncheckedUpdateManyWithoutDojoNestedInput
@@ -74306,6 +74369,7 @@ export namespace Prisma {
     ownerSignatureUrl?: string | null
     logoUrl?: string | null
     lockedFeatures?: DojoCreatelockedFeaturesInput | string[]
+    studentMilestone?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     renewalOrders?: ShopOrderCreateNestedManyWithoutDojoInput
@@ -74340,6 +74404,7 @@ export namespace Prisma {
     ownerSignatureUrl?: string | null
     logoUrl?: string | null
     lockedFeatures?: DojoCreatelockedFeaturesInput | string[]
+    studentMilestone?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     renewalOrders?: ShopOrderUncheckedCreateNestedManyWithoutDojoInput
@@ -74469,6 +74534,7 @@ export namespace Prisma {
     ownerSignatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
     logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     lockedFeatures?: DojoUpdatelockedFeaturesInput | string[]
+    studentMilestone?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     renewalOrders?: ShopOrderUpdateManyWithoutDojoNestedInput
@@ -74503,6 +74569,7 @@ export namespace Prisma {
     ownerSignatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
     logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     lockedFeatures?: DojoUpdatelockedFeaturesInput | string[]
+    studentMilestone?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     renewalOrders?: ShopOrderUncheckedUpdateManyWithoutDojoNestedInput
@@ -75322,6 +75389,7 @@ export namespace Prisma {
     ownerSignatureUrl?: string | null
     logoUrl?: string | null
     lockedFeatures?: DojoCreatelockedFeaturesInput | string[]
+    studentMilestone?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     renewalOrders?: ShopOrderCreateNestedManyWithoutDojoInput
@@ -75356,6 +75424,7 @@ export namespace Prisma {
     ownerSignatureUrl?: string | null
     logoUrl?: string | null
     lockedFeatures?: DojoCreatelockedFeaturesInput | string[]
+    studentMilestone?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     renewalOrders?: ShopOrderUncheckedCreateNestedManyWithoutDojoInput
@@ -75447,6 +75516,7 @@ export namespace Prisma {
     ownerSignatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
     logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     lockedFeatures?: DojoUpdatelockedFeaturesInput | string[]
+    studentMilestone?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     renewalOrders?: ShopOrderUpdateManyWithoutDojoNestedInput
@@ -75481,6 +75551,7 @@ export namespace Prisma {
     ownerSignatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
     logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     lockedFeatures?: DojoUpdatelockedFeaturesInput | string[]
+    studentMilestone?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     renewalOrders?: ShopOrderUncheckedUpdateManyWithoutDojoNestedInput
@@ -75562,6 +75633,7 @@ export namespace Prisma {
     ownerSignatureUrl?: string | null
     logoUrl?: string | null
     lockedFeatures?: DojoCreatelockedFeaturesInput | string[]
+    studentMilestone?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     renewalOrders?: ShopOrderCreateNestedManyWithoutDojoInput
@@ -75596,6 +75668,7 @@ export namespace Prisma {
     ownerSignatureUrl?: string | null
     logoUrl?: string | null
     lockedFeatures?: DojoCreatelockedFeaturesInput | string[]
+    studentMilestone?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     renewalOrders?: ShopOrderUncheckedCreateNestedManyWithoutDojoInput
@@ -75820,6 +75893,7 @@ export namespace Prisma {
     ownerSignatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
     logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     lockedFeatures?: DojoUpdatelockedFeaturesInput | string[]
+    studentMilestone?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     renewalOrders?: ShopOrderUpdateManyWithoutDojoNestedInput
@@ -75854,6 +75928,7 @@ export namespace Prisma {
     ownerSignatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
     logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     lockedFeatures?: DojoUpdatelockedFeaturesInput | string[]
+    studentMilestone?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     renewalOrders?: ShopOrderUncheckedUpdateManyWithoutDojoNestedInput
@@ -76303,6 +76378,7 @@ export namespace Prisma {
     ownerSignatureUrl?: string | null
     logoUrl?: string | null
     lockedFeatures?: DojoCreatelockedFeaturesInput | string[]
+    studentMilestone?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     certificateOrders?: ShopOrderCreateNestedManyWithoutCertDojoInput
@@ -76337,6 +76413,7 @@ export namespace Prisma {
     ownerSignatureUrl?: string | null
     logoUrl?: string | null
     lockedFeatures?: DojoCreatelockedFeaturesInput | string[]
+    studentMilestone?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     certificateOrders?: ShopOrderUncheckedCreateNestedManyWithoutCertDojoInput
@@ -76376,6 +76453,7 @@ export namespace Prisma {
     ownerSignatureUrl?: string | null
     logoUrl?: string | null
     lockedFeatures?: DojoCreatelockedFeaturesInput | string[]
+    studentMilestone?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     renewalOrders?: ShopOrderCreateNestedManyWithoutDojoInput
@@ -76410,6 +76488,7 @@ export namespace Prisma {
     ownerSignatureUrl?: string | null
     logoUrl?: string | null
     lockedFeatures?: DojoCreatelockedFeaturesInput | string[]
+    studentMilestone?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     renewalOrders?: ShopOrderUncheckedCreateNestedManyWithoutDojoInput
@@ -76702,6 +76781,7 @@ export namespace Prisma {
     ownerSignatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
     logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     lockedFeatures?: DojoUpdatelockedFeaturesInput | string[]
+    studentMilestone?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     certificateOrders?: ShopOrderUpdateManyWithoutCertDojoNestedInput
@@ -76736,6 +76816,7 @@ export namespace Prisma {
     ownerSignatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
     logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     lockedFeatures?: DojoUpdatelockedFeaturesInput | string[]
+    studentMilestone?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     certificateOrders?: ShopOrderUncheckedUpdateManyWithoutCertDojoNestedInput
@@ -76781,6 +76862,7 @@ export namespace Prisma {
     ownerSignatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
     logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     lockedFeatures?: DojoUpdatelockedFeaturesInput | string[]
+    studentMilestone?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     renewalOrders?: ShopOrderUpdateManyWithoutDojoNestedInput
@@ -76815,6 +76897,7 @@ export namespace Prisma {
     ownerSignatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
     logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     lockedFeatures?: DojoUpdatelockedFeaturesInput | string[]
+    studentMilestone?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     renewalOrders?: ShopOrderUncheckedUpdateManyWithoutDojoNestedInput
@@ -78328,6 +78411,7 @@ export namespace Prisma {
     ownerSignatureUrl?: string | null
     logoUrl?: string | null
     lockedFeatures?: DojoCreatelockedFeaturesInput | string[]
+    studentMilestone?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     renewalOrders?: ShopOrderCreateNestedManyWithoutDojoInput
@@ -78362,6 +78446,7 @@ export namespace Prisma {
     ownerSignatureUrl?: string | null
     logoUrl?: string | null
     lockedFeatures?: DojoCreatelockedFeaturesInput | string[]
+    studentMilestone?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     renewalOrders?: ShopOrderUncheckedCreateNestedManyWithoutDojoInput
@@ -78401,6 +78486,7 @@ export namespace Prisma {
     ownerSignatureUrl?: string | null
     logoUrl?: string | null
     lockedFeatures?: DojoCreatelockedFeaturesInput | string[]
+    studentMilestone?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     renewalOrders?: ShopOrderCreateNestedManyWithoutDojoInput
@@ -78435,6 +78521,7 @@ export namespace Prisma {
     ownerSignatureUrl?: string | null
     logoUrl?: string | null
     lockedFeatures?: DojoCreatelockedFeaturesInput | string[]
+    studentMilestone?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     renewalOrders?: ShopOrderUncheckedCreateNestedManyWithoutDojoInput
@@ -78783,6 +78870,7 @@ export namespace Prisma {
     ownerSignatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
     logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     lockedFeatures?: DojoUpdatelockedFeaturesInput | string[]
+    studentMilestone?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     renewalOrders?: ShopOrderUpdateManyWithoutDojoNestedInput
@@ -78817,6 +78905,7 @@ export namespace Prisma {
     ownerSignatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
     logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     lockedFeatures?: DojoUpdatelockedFeaturesInput | string[]
+    studentMilestone?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     renewalOrders?: ShopOrderUncheckedUpdateManyWithoutDojoNestedInput
@@ -78862,6 +78951,7 @@ export namespace Prisma {
     ownerSignatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
     logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     lockedFeatures?: DojoUpdatelockedFeaturesInput | string[]
+    studentMilestone?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     renewalOrders?: ShopOrderUpdateManyWithoutDojoNestedInput
@@ -78896,6 +78986,7 @@ export namespace Prisma {
     ownerSignatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
     logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     lockedFeatures?: DojoUpdatelockedFeaturesInput | string[]
+    studentMilestone?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     renewalOrders?: ShopOrderUncheckedUpdateManyWithoutDojoNestedInput
@@ -79606,6 +79697,7 @@ export namespace Prisma {
     ownerSignatureUrl?: string | null
     logoUrl?: string | null
     lockedFeatures?: DojoCreatelockedFeaturesInput | string[]
+    studentMilestone?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     renewalOrders?: ShopOrderCreateNestedManyWithoutDojoInput
@@ -79640,6 +79732,7 @@ export namespace Prisma {
     ownerSignatureUrl?: string | null
     logoUrl?: string | null
     lockedFeatures?: DojoCreatelockedFeaturesInput | string[]
+    studentMilestone?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     renewalOrders?: ShopOrderUncheckedCreateNestedManyWithoutDojoInput
@@ -79679,6 +79772,7 @@ export namespace Prisma {
     ownerSignatureUrl?: string | null
     logoUrl?: string | null
     lockedFeatures?: DojoCreatelockedFeaturesInput | string[]
+    studentMilestone?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     renewalOrders?: ShopOrderCreateNestedManyWithoutDojoInput
@@ -79713,6 +79807,7 @@ export namespace Prisma {
     ownerSignatureUrl?: string | null
     logoUrl?: string | null
     lockedFeatures?: DojoCreatelockedFeaturesInput | string[]
+    studentMilestone?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     renewalOrders?: ShopOrderUncheckedCreateNestedManyWithoutDojoInput
@@ -79940,6 +80035,7 @@ export namespace Prisma {
     ownerSignatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
     logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     lockedFeatures?: DojoUpdatelockedFeaturesInput | string[]
+    studentMilestone?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     renewalOrders?: ShopOrderUpdateManyWithoutDojoNestedInput
@@ -79974,6 +80070,7 @@ export namespace Prisma {
     ownerSignatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
     logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     lockedFeatures?: DojoUpdatelockedFeaturesInput | string[]
+    studentMilestone?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     renewalOrders?: ShopOrderUncheckedUpdateManyWithoutDojoNestedInput
@@ -80019,6 +80116,7 @@ export namespace Prisma {
     ownerSignatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
     logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     lockedFeatures?: DojoUpdatelockedFeaturesInput | string[]
+    studentMilestone?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     renewalOrders?: ShopOrderUpdateManyWithoutDojoNestedInput
@@ -80053,6 +80151,7 @@ export namespace Prisma {
     ownerSignatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
     logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     lockedFeatures?: DojoUpdatelockedFeaturesInput | string[]
+    studentMilestone?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     renewalOrders?: ShopOrderUncheckedUpdateManyWithoutDojoNestedInput

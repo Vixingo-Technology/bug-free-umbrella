@@ -245,6 +245,7 @@ exports.Prisma.DojoScalarFieldEnum = {
   ownerSignatureUrl: 'ownerSignatureUrl',
   logoUrl: 'logoUrl',
   lockedFeatures: 'lockedFeatures',
+  studentMilestone: 'studentMilestone',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };

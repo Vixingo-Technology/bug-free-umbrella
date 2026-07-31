@@ -479,6 +479,11 @@ model Dojo {
   // Values are from lib/dojo/feature-locks.ts FEATURE_KEYS.
   lockedFeatures String[] @default([]) @map("locked_features")
 
+  // Active-student count this dojo must reach before the milestone-gated
+  // features (certificates, announcements, transfers, invite-staff)
+  // auto-unlock. Defaults to 0 (features open immediately).
+  studentMilestone Int @default(0) @map("student_milestone")
+
   students       Student[]                @relation("DojoStudents")
   instructors    Instructor[]             @relation("DojoInstructors")
   managers       DojoManager[]            @relation("DojoManagers")

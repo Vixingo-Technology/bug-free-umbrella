@@ -5,7 +5,6 @@ import "server-only";
 
 import { prisma } from "@/lib/prisma";
 import {
-    STUDENT_MILESTONE,
     MILESTONE_LOCKED,
     isFeatureKey,
     type DojoFeatureLocks,
@@ -25,7 +24,7 @@ export async function resolveDojoFeatureLocks(
     const [dojo, studentCount] = await Promise.all([
         prisma.dojo.findUnique({
             where: { id: dojoId },
-            select: { lockedFeatures: true },
+            select: { lockedFeatures: true, studentMilestone: true },
         }),
         prisma.student.count({
             where: { dojoId, user: { isActive: true } },
@@ -36,8 +35,10 @@ export async function resolveDojoFeatureLocks(
         (dojo?.lockedFeatures ?? []).filter(isFeatureKey),
     );
 
+    const milestone = dojo?.studentMilestone ?? 0;
+
     const milestoneLocked = new Set<FeatureKey>(
-        studentCount < STUDENT_MILESTONE ? MILESTONE_LOCKED : [],
+        studentCount < milestone ? MILESTONE_LOCKED : [],
     );
 
     const locked = new Set<FeatureKey>([...adminLocked, ...milestoneLocked]);
@@ -47,6 +48,6 @@ export async function resolveDojoFeatureLocks(
         milestoneLocked,
         adminLocked,
         studentCount,
-        milestone: STUDENT_MILESTONE,
+        milestone,
     };
 }
