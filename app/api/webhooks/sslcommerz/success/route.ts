@@ -16,8 +16,13 @@ function successRedirectFor(order: {
     includesTransferRequest: boolean;
     includesPastBeltFee: boolean;
     includesCertificates: boolean;
+    includesServiceRequest: boolean;
+    serviceSlug: string | null;
     joinAdvanceForFeeUnpaid: boolean;
 }, orderId: string, expiryIso: string | null): string {
+    if (order.includesServiceRequest && order.serviceSlug) {
+        return `/portal/services/${order.serviceSlug}?status=success&orderId=${orderId}`;
+    }
     if (order.includesCertificates) {
         return `/portal/dojo/certificates?status=success&orderId=${orderId}`;
     }
@@ -53,8 +58,13 @@ function failureRedirectFor(order: {
     includesTransferRequest: boolean;
     includesPastBeltFee: boolean;
     includesCertificates: boolean;
+    includesServiceRequest: boolean;
+    serviceSlug: string | null;
 } | null, orderId: string, reason: string): string {
     const reasonParam = encodeURIComponent(reason);
+    if (order?.includesServiceRequest && order.serviceSlug) {
+        return `/portal/services/${order.serviceSlug}?status=failed&orderId=${orderId}&reason=${reasonParam}`;
+    }
     if (order?.includesCertificates) {
         return `/portal/dojo/certificates?status=failed&orderId=${orderId}&reason=${reasonParam}`;
     }
@@ -154,8 +164,13 @@ export async function POST(request: Request) {
                 includesTransferRequest: true,
                 includesPastBeltFee: true,
                 includesCertificates: true,
+                includesServiceRequest: true,
+                serviceRequest: { select: { service: { select: { slug: true } } } },
             },
         });
+        const orderShellRedirect = orderShell
+            ? { ...orderShell, serviceSlug: orderShell.serviceRequest?.service.slug ?? null }
+            : null;
 
         if (json.status !== "VALID" && json.status !== "VALIDATED") {
             const reason =
@@ -169,7 +184,7 @@ export async function POST(request: Request) {
             });
             return NextResponse.redirect(
                 new URL(
-                    failureRedirectFor(orderShell, orderId, reason),
+                    failureRedirectFor(orderShellRedirect, orderId, reason),
                     request.url,
                 ),
             );
@@ -182,6 +197,7 @@ export async function POST(request: Request) {
                 user: { select: { id: true, fullName: true, email: true, phone: true } },
                 dojo: { select: { expiryDate: true } },
                 transferRequest: { select: { id: true, studentId: true, fromDojoId: true, toDojo: { select: { name: true } }, fromDojo: { select: { name: true } } } },
+                serviceRequest: { select: { id: true, studentId: true, dojoId: true, service: { select: { name: true, slug: true } } } },
                 certificateRequests: { select: { id: true } },
                 orderItems: { select: { id: true } },
             },
@@ -306,6 +322,19 @@ export async function POST(request: Request) {
                 );
             }
 
+            // Generic service request fee — move the linked request to AWAITING_DOJO.
+            if (order.includesServiceRequest && order.serviceRequest) {
+                writes.push(
+                    prisma.serviceRequest.update({
+                        where: { id: order.serviceRequest.id },
+                        data: {
+                            status: "AWAITING_DOJO",
+                            paidAt: new Date(),
+                        },
+                    }),
+                );
+            }
+
             await prisma.$transaction(writes);
 
             // Certificates — flip the requests to PAID, move each grading to
@@ -373,6 +402,28 @@ export async function POST(request: Request) {
                         link: "/portal/dojo/join-requests",
                     });
                 }
+            }
+
+            // Service request — notify dojo staff + confirm to student.
+            if (order.includesServiceRequest && order.serviceRequest) {
+                const staffIds = await findUserIdsByRoles(
+                    ["DOJO_OWNER", "DOJO_MANAGER"],
+                    { dojoId: order.serviceRequest.dojoId },
+                );
+                if (staffIds.length) {
+                    await notifyMembers(staffIds, {
+                        title: `${order.serviceRequest.service.name} — new request`,
+                        message: "A student in your dojo submitted a paid service request. Please review.",
+                        type: "SERVICE",
+                        link: "/portal/dojo/service-requests",
+                    });
+                }
+                await notifyMembers([order.serviceRequest.studentId], {
+                    title: `${order.serviceRequest.service.name} — payment received`,
+                    message: `Payment of ৳${Number(order.total).toLocaleString()} received. Awaiting your dojo's review.`,
+                    type: "PAYMENT",
+                    link: `/portal/services/${order.serviceRequest.service.slug}`,
+                });
             }
 
             // Notify current dojo owner + student now that the request is live.
@@ -450,6 +501,8 @@ export async function POST(request: Request) {
                 includesTransferRequest: order?.includesTransferRequest ?? false,
                 includesPastBeltFee: order?.includesPastBeltFee ?? false,
                 includesCertificates: order?.includesCertificates ?? false,
+                includesServiceRequest: order?.includesServiceRequest ?? false,
+                serviceSlug: order?.serviceRequest?.service.slug ?? null,
                 joinAdvanceForFeeUnpaid,
             },
             orderId,

@@ -5,18 +5,12 @@ import { createClient } from "@/lib/supabase/server";
 import { prisma } from "@/lib/prisma";
 import { loadCurrentUser } from "@/lib/auth/load-current-user";
 import { notifyMembers } from "@/lib/notify";
-import { getFees } from "@/lib/settings/fees";
-import { calculatePastBeltFee } from "@/lib/joining";
 import { BELT_RANKS_ORDERED } from "@/lib/constants";
 
 /**
- * Accept a student's join request and confirm their rank.
- * - If assignedRank == White Belt → student is JOINED immediately.
- * - Otherwise → student moves to PAST_BELT_UNPAID with the fee calculated
- *   from the flat per-rank amount in SystemSettings.
- * Notifies the student in both cases; owner notification for the JOINED
- * completion is sent from the past-belt payment webhook (or here, if
- * White Belt short-circuits the past-belt step).
+ * Accept a student's join request and confirm their rank. The student
+ * moves straight to JOINED; any past-rank conversion is now handled
+ * separately from /portal/services/kyu-dan-conversion.
  */
 export async function acceptJoinRequestAction(
     studentId: string,
@@ -51,58 +45,38 @@ export async function acceptJoinRequestAction(
         return { error: "This request is no longer awaiting approval." };
     }
 
-    const isWhite = assignedRank === "White Belt";
-    const { pastBeltFeePerRankBDT } = await getFees();
-    const fee = isWhite ? 0 : calculatePastBeltFee(assignedRank, pastBeltFeePerRankBDT);
-
     await prisma.$transaction(async (tx) => {
         await tx.student.update({
             where: { id: studentId },
             data: {
                 assignedRank,
-                pastBeltFeeBDT: fee > 0 ? fee : null,
-                joinStage: isWhite ? "JOINED" : "PAST_BELT_UNPAID",
-                joinedAt: isWhite ? new Date() : null,
-                currentRank: isWhite ? "White Belt" : undefined,
+                pastBeltFeeBDT: null,
+                joinStage: "JOINED",
+                joinedAt: new Date(),
+                currentRank: assignedRank,
             },
         });
 
-        // Student notifications
-        if (isWhite) {
-            await notifyMembers(
-                [studentId],
-                {
-                    title: "You've joined JKA Bangladesh",
-                    message:
-                        "Your dojo has accepted your join request. Welcome — full portal access is unlocked.",
-                    type: "INFO",
-                    link: "/portal",
-                },
-                tx,
-            );
-            // Owner echo — "Student joined successfully"
-            await notifyMembers(
-                [user.id],
-                {
-                    title: "Student joined successfully",
-                    message: `${student.user.fullName} has completed joining at White Belt.`,
-                    type: "INFO",
-                    link: "/portal/dojo/join-requests",
-                },
-                tx,
-            );
-        } else {
-            await notifyMembers(
-                [studentId],
-                {
-                    title: "Dojo accepted your join request",
-                    message: `Your rank is confirmed as ${assignedRank}. Please pay the past-belt fee (৳${fee.toLocaleString()}) to finish joining.`,
-                    type: "INFO",
-                    link: "/portal/joining",
-                },
-                tx,
-            );
-        }
+        await notifyMembers(
+            [studentId],
+            {
+                title: "You've joined JKA Bangladesh",
+                message: `Your dojo has accepted your join request at ${assignedRank}. Welcome — full portal access is unlocked.`,
+                type: "INFO",
+                link: "/portal",
+            },
+            tx,
+        );
+        await notifyMembers(
+            [user.id],
+            {
+                title: "Student joined successfully",
+                message: `${student.user.fullName} has completed joining at ${assignedRank}.`,
+                type: "INFO",
+                link: "/portal/dojo/join-requests",
+            },
+            tx,
+        );
     });
 
     revalidatePath("/portal/dojo/join-requests");

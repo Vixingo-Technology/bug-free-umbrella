@@ -5,18 +5,19 @@ import { motion } from "motion/react";
 import {
     ArrowRightLeft,
     AlertTriangle,
-    CheckCircle2,
     Clock,
-    XCircle,
     Loader2,
     Building2,
     CreditCard,
     Shield,
+    Sparkles,
+    Tag,
 } from "lucide-react";
 import TiltCard from "@/components/portal/tilt-card";
 import {
     createTransferRequestAction,
     cancelPendingTransferAction,
+    previewTransferCouponAction,
 } from "@/app/portal/transfer/actions";
 
 type Dojo = { id: string; name: string };
@@ -137,6 +138,39 @@ export default function TransferClient({
     const [error, setError] = useState<string | null>(null);
     const [toDojoId, setToDojoId] = useState("");
     const [reason, setReason] = useState("");
+    const [couponInput, setCouponInput] = useState("");
+    const [couponPreview, setCouponPreview] = useState<{
+        id: string;
+        code: string;
+        discountPercent: number;
+        dojoName: string;
+        discountAmount: number;
+        finalAmount: number;
+    } | null>(null);
+    const [couponError, setCouponError] = useState<string | null>(null);
+    const [checkingCoupon, startCouponCheck] = useTransition();
+
+    const finalFee = couponPreview ? couponPreview.finalAmount : fee;
+    const isFree = finalFee <= 0;
+
+    function applyCoupon() {
+        setCouponError(null);
+        startCouponCheck(async () => {
+            const res = await previewTransferCouponAction(couponInput);
+            if ("error" in res) {
+                setCouponError(res.error ?? "Failed to check coupon.");
+                setCouponPreview(null);
+            } else {
+                setCouponPreview(res.preview);
+            }
+        });
+    }
+
+    function clearCoupon() {
+        setCouponPreview(null);
+        setCouponInput("");
+        setCouponError(null);
+    }
 
     function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
@@ -146,7 +180,11 @@ export default function TransferClient({
             return;
         }
         startTransition(async () => {
-            const res = await createTransferRequestAction({ toDojoId, reason });
+            const res = await createTransferRequestAction({
+                toDojoId,
+                reason,
+                couponCode: couponPreview?.code,
+            });
             if (res?.error) setError(res.error);
         });
     }
@@ -155,7 +193,7 @@ export default function TransferClient({
         setError(null);
         startTransition(async () => {
             const res = await cancelPendingTransferAction(requestId);
-            if (res?.error) setError(res.error);
+            if (res?.error) setError(res.error ?? null);
         });
     }
 
@@ -290,11 +328,66 @@ export default function TransferClient({
                             />
                         </div>
 
-                        <div className="pt-2 border-t border-zinc-100 flex justify-between items-center">
-                            <span className="text-sm font-bold text-zinc-900">Transfer fee</span>
-                            <span className="text-lg font-bold text-accent-red">
-                                ৳{fee.toLocaleString()}
-                            </span>
+                        <div>
+                            <label className="text-xs font-semibold text-zinc-700 mb-1.5 flex items-center gap-1.5">
+                                <Tag size={12} /> Coupon from your dojo (optional)
+                            </label>
+                            {couponPreview ? (
+                                <div className="flex items-center justify-between p-3 rounded-xl border border-emerald-200 bg-emerald-50">
+                                    <div>
+                                        <p className="text-xs font-bold text-emerald-800">
+                                            {couponPreview.code} — {couponPreview.discountPercent}% off
+                                        </p>
+                                        <p className="text-[11px] text-emerald-700">
+                                            Issued by {couponPreview.dojoName}
+                                        </p>
+                                    </div>
+                                    <button
+                                        type="button"
+                                        onClick={clearCoupon}
+                                        className="text-emerald-700 hover:text-emerald-900 text-xs font-semibold underline"
+                                    >
+                                        Remove
+                                    </button>
+                                </div>
+                            ) : (
+                                <div className="flex gap-2">
+                                    <input
+                                        value={couponInput}
+                                        onChange={(e) => setCouponInput(e.target.value.toUpperCase())}
+                                        placeholder="Enter coupon code"
+                                        className="flex-1 rounded-xl border border-zinc-200 focus:border-accent-red focus:ring-1 focus:ring-accent-red/30 text-sm px-3 py-2.5 font-mono uppercase tracking-wider"
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={applyCoupon}
+                                        disabled={checkingCoupon || !couponInput.trim()}
+                                        className="px-4 py-2.5 rounded-xl border border-zinc-200 hover:border-accent-red/40 text-sm font-semibold text-zinc-800 disabled:opacity-50"
+                                    >
+                                        {checkingCoupon ? <Loader2 size={14} className="animate-spin" /> : "Apply"}
+                                    </button>
+                                </div>
+                            )}
+                            {couponError && (
+                                <p className="text-xs text-red-600 mt-1.5">{couponError}</p>
+                            )}
+                        </div>
+
+                        <div className="rounded-xl border border-zinc-100 bg-zinc-50 p-4 space-y-1.5 text-sm">
+                            <div className="flex justify-between text-zinc-700">
+                                <span>Transfer fee</span>
+                                <span>৳{fee.toLocaleString()}</span>
+                            </div>
+                            {couponPreview && (
+                                <div className="flex justify-between text-emerald-700">
+                                    <span>Coupon ({couponPreview.discountPercent}%)</span>
+                                    <span>−৳{couponPreview.discountAmount.toLocaleString()}</span>
+                                </div>
+                            )}
+                            <div className="flex justify-between pt-2 border-t border-zinc-200 font-bold text-zinc-900">
+                                <span>Total</span>
+                                <span>{isFree ? "Free" : `৳${finalFee.toLocaleString()}`}</span>
+                            </div>
                         </div>
 
                         <button
@@ -305,12 +398,17 @@ export default function TransferClient({
                             {isPending ? (
                                 <>
                                     <Loader2 size={16} className="animate-spin" />
-                                    Preparing checkout…
+                                    Submitting…
+                                </>
+                            ) : isFree ? (
+                                <>
+                                    <Sparkles size={16} />
+                                    Submit request (free)
                                 </>
                             ) : (
                                 <>
                                     <CreditCard size={16} />
-                                    Continue to payment (৳{fee.toLocaleString()})
+                                    Continue to payment (৳{finalFee.toLocaleString()})
                                 </>
                             )}
                         </button>

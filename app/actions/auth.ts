@@ -33,7 +33,6 @@ export async function signupAction(formData: FormData) {
     const lastName = formData.get("lastName") as string;
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
-    const currentRank = formData.get("currentRank") as string;
 
     if (!firstName || !lastName || !email || !password) {
         return { error: "All required fields must be filled." };
@@ -49,7 +48,6 @@ export async function signupAction(formData: FormData) {
                 first_name: firstName,
                 last_name: lastName,
                 full_name: `${firstName} ${lastName}`,
-                current_rank: currentRank || "White Belt",
                 role: "STUDENT",
             },
         },

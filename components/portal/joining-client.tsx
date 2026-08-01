@@ -4,7 +4,6 @@ import { useTransition, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import Link from "next/link";
 import {
-    Award,
     Calendar,
     CheckCircle2,
     Circle,
@@ -20,10 +19,7 @@ import {
     X,
 } from "lucide-react";
 import TiltCard from "./tilt-card";
-import {
-    startMembershipPaymentAction,
-    startPastBeltPaymentAction,
-} from "@/app/portal/joining/actions";
+import { startMembershipPaymentAction } from "@/app/portal/joining/actions";
 
 type JoinStage = "FEE_UNPAID" | "AWAITING_APPROVAL" | "PAST_BELT_UNPAID" | "JOINED";
 
@@ -54,13 +50,15 @@ type Member = {
 const STEPS: { key: JoinStage; label: string; desc: string }[] = [
     { key: "FEE_UNPAID",        label: "Membership fee", desc: "Pay the JKA annual membership fee to begin." },
     { key: "AWAITING_APPROVAL", label: "Visit your dojo", desc: "Take the joining slip and required documents to your dojo." },
-    { key: "PAST_BELT_UNPAID",  label: "Past-belt fee",   desc: "Pay for any belts already achieved before joining." },
     { key: "JOINED",            label: "Joined",          desc: "Full portal access unlocked." },
 ];
 
 function stepStatus(current: JoinStage, step: JoinStage): "done" | "current" | "upcoming" {
-    const order: JoinStage[] = ["FEE_UNPAID", "AWAITING_APPROVAL", "PAST_BELT_UNPAID", "JOINED"];
-    const c = order.indexOf(current);
+    // PAST_BELT_UNPAID no longer surfaces in the joining UI; legacy rows in
+    // that stage are treated as still awaiting-approval so the stepper works.
+    const order: JoinStage[] = ["FEE_UNPAID", "AWAITING_APPROVAL", "JOINED"];
+    const normalized: JoinStage = current === "PAST_BELT_UNPAID" ? "AWAITING_APPROVAL" : current;
+    const c = order.indexOf(normalized);
     const s = order.indexOf(step);
     if (s < c) return "done";
     if (s === c) return "current";
@@ -81,7 +79,6 @@ export default function JoiningClient({
     authenticated?: boolean;
 }) {
     const [payingMembership, startMembership] = useTransition();
-    const [payingPastBelt, startPastBelt] = useTransition();
 
     const feedback: Feedback =
         postPaymentStatus === "success"
@@ -171,25 +168,6 @@ export default function JoiningClient({
                 </motion.div>
             )}
 
-            {member.joinStage === "PAST_BELT_UNPAID" && (
-                <motion.div
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="flex items-start gap-3 p-4 rounded-xl border border-blue-300 bg-blue-50"
-                >
-                    <Shield size={18} className="flex-shrink-0 mt-0.5 text-blue-700" />
-                    <div className="flex-1 min-w-0">
-                        <p className="text-sm font-bold text-blue-800">
-                            Your dojo accepted your join request — rank confirmed as{" "}
-                            <span className="underline">{member.assignedRank ?? "White Belt"}</span>.
-                        </p>
-                        <p className="text-xs text-blue-700 mt-0.5 opacity-80">
-                            Finish by paying the catch-up fee for the belts you already hold.
-                        </p>
-                    </div>
-                </motion.div>
-            )}
-
             {/* Stepper */}
             <TiltCard className="p-6">
                 <ol className="space-y-4">
@@ -272,19 +250,6 @@ export default function JoiningClient({
                 </TiltCard>
             )}
 
-            {member.joinStage === "PAST_BELT_UNPAID" && (
-                <PastBeltFeeCard
-                    pastBeltFeeBDT={Number(member.pastBeltFeeBDT ?? 0)}
-                    requestedRank={member.requestedRank}
-                    assignedRank={member.assignedRank}
-                    paying={payingPastBelt}
-                    onPay={() =>
-                        startPastBelt(async () => {
-                            await startPastBeltPaymentAction();
-                        })
-                    }
-                />
-            )}
         </div>
     );
 }
@@ -517,83 +482,3 @@ function MembershipFeeCard({
     );
 }
 
-function PastBeltFeeCard({
-    pastBeltFeeBDT,
-    requestedRank,
-    assignedRank,
-    paying,
-    onPay,
-}: {
-    pastBeltFeeBDT: number;
-    requestedRank: string | null;
-    assignedRank: string | null;
-    paying: boolean;
-    onPay: () => void;
-}) {
-    return (
-        <div className="space-y-6 max-w-lg">
-            <TiltCard delay={0.1} className="overflow-hidden">
-                <div className="px-6 py-5 border-b border-zinc-100">
-                    <h2 className="text-sm font-bold text-zinc-900 flex items-center gap-2">
-                        <Award size={15} className="text-accent-red" />
-                        Past-belt Fee Summary
-                    </h2>
-                </div>
-
-                <div className="px-6 py-5 space-y-4">
-                    <div className="flex justify-between items-center text-sm">
-                        <span className="text-zinc-500">Requested Rank</span>
-                        <span className="font-semibold text-zinc-900">
-                            {requestedRank ?? "White Belt"}
-                        </span>
-                    </div>
-
-                    <div className="flex justify-between items-center text-sm">
-                        <span className="text-zinc-500">Confirmed by Dojo</span>
-                        <span className="font-semibold text-zinc-900">
-                            {assignedRank ?? "White Belt"}
-                        </span>
-                    </div>
-
-                    <div className="flex justify-between items-center text-sm">
-                        <span className="text-zinc-500">Past-belt Fee</span>
-                        <span className="font-bold text-zinc-900">
-                            ৳{pastBeltFeeBDT.toLocaleString()}
-                        </span>
-                    </div>
-
-                    <div className="pt-2 border-t border-zinc-100 flex justify-between items-center">
-                        <span className="text-sm font-bold text-zinc-900">Total</span>
-                        <span className="text-lg font-bold text-accent-red">
-                            ৳{pastBeltFeeBDT.toLocaleString()}
-                        </span>
-                    </div>
-                </div>
-
-                <div className="px-6 pb-6">
-                    <form action={onPay}>
-                        <button
-                            type="submit"
-                            disabled={paying}
-                            className="w-full flex items-center justify-center gap-2.5 bg-zinc-900 hover:bg-accent-red text-white font-bold text-sm py-3.5 rounded-xl transition-colors disabled:opacity-60 shadow-sm"
-                        >
-                            {paying ? (
-                                <>
-                                    <Loader2 size={16} className="animate-spin" />
-                                    Preparing checkout…
-                                </>
-                            ) : (
-                                <>
-                                    <CreditCard size={16} />
-                                    Proceed to Payment
-                                </>
-                            )}
-                        </button>
-                    </form>
-                </div>
-            </TiltCard>
-
-            <SecurityFooter />
-        </div>
-    );
-}

@@ -106,16 +106,12 @@ export async function saveProfileAction(formData: FormData) {
         });
 
         if (role === "STUDENT") {
-            const requestedRank: string =
-                typeof meta.current_rank === "string" && meta.current_rank
-                    ? meta.current_rank
-                    : "White Belt";
             await prisma.student.upsert({
                 where: { id: user.id },
                 create: {
                     id: user.id,
                     currentRank: "White Belt",
-                    requestedRank,
+                    requestedRank: "White Belt",
                     onboardingComplete: false,
                     membershipStatus: "PENDING",
                     joinStage: "FEE_UNPAID",

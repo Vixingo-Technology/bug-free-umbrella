@@ -23,11 +23,16 @@ const STATUSES = ["PENDING", "ACTIVE", "EXPIRED", "SUSPENDED"] as const;
 type Status = (typeof STATUSES)[number];
 
 function appUrl(): string {
-    return (
-        process.env.NEXT_PUBLIC_APP_URL ??
-        process.env.APP_URL ??
-        "http://localhost:3000"
-    );
+    const url = process.env.NEXT_PUBLIC_APP_URL ?? process.env.APP_URL;
+    if (!url) {
+        if (process.env.NODE_ENV === "production") {
+            throw new Error(
+                "NEXT_PUBLIC_APP_URL (or APP_URL) is required in production — invite links depend on it. Without it, Supabase rejects the redirect and drops users on the Site URL instead of /auth/callback."
+            );
+        }
+        return "http://localhost:3000";
+    }
+    return url;
 }
 
 export async function inviteMemberAction(formData: FormData): Promise<ActionResult> {

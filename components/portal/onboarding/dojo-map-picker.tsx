@@ -1,8 +1,8 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import L from "leaflet";
-import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
+import { MapContainer, Marker, Popup, TileLayer, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 
 export type MapDojo = {
@@ -46,6 +46,19 @@ type Props = {
     onSelect: (id: string) => void;
 };
 
+function FlyToSelected({
+    target,
+}: {
+    target: { lat: number; lng: number } | null;
+}) {
+    const map = useMap();
+    useEffect(() => {
+        if (!target) return;
+        map.flyTo([target.lat, target.lng], 15, { duration: 0.8 });
+    }, [target, map]);
+    return null;
+}
+
 export default function DojoMapPicker({ dojos, selectedId, onSelect }: Props) {
     const pinnable = useMemo(
         () =>
@@ -71,6 +84,12 @@ export default function DojoMapPicker({ dojos, selectedId, onSelect }: Props) {
         return [lat, lng];
     }, [pinnable]);
 
+    const flyTarget = useMemo(() => {
+        const hit = pinnable.find((d) => d.id === selectedId);
+        if (!hit) return null;
+        return { lat: hit.latitude as number, lng: hit.longitude as number };
+    }, [pinnable, selectedId]);
+
     if (pinnable.length === 0) {
         return (
             <div className="text-xs text-zinc-500 bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3">
@@ -92,6 +111,7 @@ export default function DojoMapPicker({ dojos, selectedId, onSelect }: Props) {
                         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     />
+                    <FlyToSelected target={flyTarget} />
                     {pinnable.map((d) => (
                         <Marker
                             key={d.id}

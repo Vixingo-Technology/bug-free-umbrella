@@ -17,6 +17,7 @@ const KIND_LABEL: Record<PaymentTransactionKind, string> = {
     CERTIFICATES: "Certificates",
     DOJO_RENEWAL: "Dojo renewal",
     TRANSFER: "Dojo transfer",
+    SERVICE_REQUEST: "Service request",
     EVENT_TICKET: "Event ticket",
     SHOP: "Shop",
     OTHER: "Other",

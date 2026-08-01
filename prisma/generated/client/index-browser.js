@@ -506,6 +506,7 @@ exports.Prisma.ShopOrderScalarFieldEnum = {
   certDojoId: 'certDojoId',
   includesTransferRequest: 'includesTransferRequest',
   includesPastBeltFee: 'includesPastBeltFee',
+  includesServiceRequest: 'includesServiceRequest',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -589,6 +590,9 @@ exports.Prisma.StudentTransferRequestScalarFieldEnum = {
   dojoNote: 'dojoNote',
   adminNote: 'adminNote',
   fee: 'fee',
+  discountAmount: 'discountAmount',
+  finalAmount: 'finalAmount',
+  couponCode: 'couponCode',
   orderId: 'orderId',
   paidAt: 'paidAt',
   dojoActedAt: 'dojoActedAt',
@@ -627,6 +631,60 @@ exports.Prisma.StudentDojoHistoryScalarFieldEnum = {
   changedById: 'changedById',
   reason: 'reason',
   createdAt: 'createdAt'
+};
+
+exports.Prisma.ServiceScalarFieldEnum = {
+  id: 'id',
+  slug: 'slug',
+  name: 'name',
+  description: 'description',
+  feeBDT: 'feeBDT',
+  isActive: 'isActive',
+  handler: 'handler',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ServiceRequestScalarFieldEnum = {
+  id: 'id',
+  studentId: 'studentId',
+  serviceId: 'serviceId',
+  dojoId: 'dojoId',
+  status: 'status',
+  dojoDecision: 'dojoDecision',
+  payload: 'payload',
+  reason: 'reason',
+  dojoNote: 'dojoNote',
+  adminNote: 'adminNote',
+  fee: 'fee',
+  discountAmount: 'discountAmount',
+  finalAmount: 'finalAmount',
+  couponId: 'couponId',
+  couponCode: 'couponCode',
+  orderId: 'orderId',
+  paidAt: 'paidAt',
+  dojoActedAt: 'dojoActedAt',
+  dojoActedById: 'dojoActedById',
+  adminActedAt: 'adminActedAt',
+  adminActedById: 'adminActedById',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ServiceCouponScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  dojoId: 'dojoId',
+  createdById: 'createdById',
+  discountPercent: 'discountPercent',
+  serviceId: 'serviceId',
+  usageLimit: 'usageLimit',
+  usedCount: 'usedCount',
+  expiresAt: 'expiresAt',
+  isActive: 'isActive',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.SortOrder = {
@@ -738,7 +796,8 @@ exports.NotificationType = exports.$Enums.NotificationType = {
   EVENT: 'EVENT',
   RENEWAL: 'RENEWAL',
   CERTIFICATE: 'CERTIFICATE',
-  TRANSFER: 'TRANSFER'
+  TRANSFER: 'TRANSFER',
+  SERVICE: 'SERVICE'
 };
 
 exports.ShopFulfillmentStatus = exports.$Enums.ShopFulfillmentStatus = {
@@ -794,6 +853,7 @@ exports.PaymentTransactionKind = exports.$Enums.PaymentTransactionKind = {
   CERTIFICATES: 'CERTIFICATES',
   DOJO_RENEWAL: 'DOJO_RENEWAL',
   TRANSFER: 'TRANSFER',
+  SERVICE_REQUEST: 'SERVICE_REQUEST',
   EVENT_TICKET: 'EVENT_TICKET',
   SHOP: 'SHOP',
   OTHER: 'OTHER'
@@ -804,6 +864,21 @@ exports.PaymentTransactionStatus = exports.$Enums.PaymentTransactionStatus = {
   SUCCESS: 'SUCCESS',
   FAILED: 'FAILED',
   CANCELLED: 'CANCELLED'
+};
+
+exports.ServiceRequestStatus = exports.$Enums.ServiceRequestStatus = {
+  PENDING_PAYMENT: 'PENDING_PAYMENT',
+  AWAITING_DOJO: 'AWAITING_DOJO',
+  AWAITING_ADMIN: 'AWAITING_ADMIN',
+  APPROVED: 'APPROVED',
+  DENIED: 'DENIED',
+  CANCELLED: 'CANCELLED'
+};
+
+exports.ServiceRequestDojoDecision = exports.$Enums.ServiceRequestDojoDecision = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
 };
 
 exports.Prisma.ModelName = {
@@ -843,7 +918,10 @@ exports.Prisma.ModelName = {
   StudentAchievement: 'StudentAchievement',
   StudentTransferRequest: 'StudentTransferRequest',
   PaymentTransaction: 'PaymentTransaction',
-  StudentDojoHistory: 'StudentDojoHistory'
+  StudentDojoHistory: 'StudentDojoHistory',
+  Service: 'Service',
+  ServiceRequest: 'ServiceRequest',
+  ServiceCoupon: 'ServiceCoupon'
 };
 
 /**

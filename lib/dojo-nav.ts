@@ -7,8 +7,10 @@ import {
     Megaphone,
     RefreshCw,
     Settings,
+    Ticket,
     UserPlus,
     Users,
+    Wrench,
 } from "lucide-react";
 import type { DojoRole } from "@/lib/dojo-roles";
 
@@ -82,6 +84,20 @@ export const DOJO_NAV: DojoNavItem[] = [
         label: "Transfer requests",
         icon: ArrowRightLeft,
         min: "DOJO_OWNER",
+        group: "leadership",
+    },
+    {
+        href: "/portal/dojo/service-requests",
+        label: "Service requests",
+        icon: Wrench,
+        min: "DOJO_MANAGER",
+        group: "leadership",
+    },
+    {
+        href: "/portal/dojo/coupons",
+        label: "Coupons",
+        icon: Ticket,
+        min: "DOJO_MANAGER",
         group: "leadership",
     },
 ];

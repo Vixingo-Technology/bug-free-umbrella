@@ -142,11 +142,13 @@ export function kindForOrder(order: {
     includesCertificates?: boolean;
     includesDojoRenewal?: boolean;
     includesTransferRequest?: boolean;
+    includesServiceRequest?: boolean;
     orderItems?: unknown[];
 }): PaymentTransactionKind {
     if (order.includesCertificates) return "CERTIFICATES";
     if (order.includesDojoRenewal) return "DOJO_RENEWAL";
     if (order.includesTransferRequest) return "TRANSFER";
+    if (order.includesServiceRequest) return "SERVICE_REQUEST";
     if (order.includesPastBeltFee) return "PAST_BELT_FEE";
     if (order.includesMembership) return "MEMBERSHIP";
     if ((order.orderItems?.length ?? 0) > 0) return "SHOP";

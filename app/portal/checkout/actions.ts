@@ -23,6 +23,7 @@ export async function initiatePaymentAction(orderId: string) {
                 user: { include: { student: true, profile: true } },
                 orderItems: { include: { product: true } },
                 transferRequest: { select: { id: true } },
+                serviceRequest: { select: { id: true, service: { select: { slug: true, name: true } } } },
                 dojo: { select: { id: true } },
                 certificateRequests: { select: { id: true } },
             },
@@ -70,6 +71,20 @@ export async function initiatePaymentAction(orderId: string) {
             if (order.includesPastBeltFee) {
                 redirect(`/portal/joining?status=success&orderId=${orderId}&dev=1`);
             }
+            if (order.includesServiceRequest && order.serviceRequest) {
+                // Dev bypass — mimic the webhook: mark paid + advance to AWAITING_DOJO.
+                await prisma.$transaction([
+                    prisma.shopOrder.update({
+                        where: { id: orderId },
+                        data: { paymentStatus: "PAID" },
+                    }),
+                    prisma.serviceRequest.update({
+                        where: { id: order.serviceRequest.id },
+                        data: { status: "AWAITING_DOJO", paidAt: new Date() },
+                    }),
+                ]);
+                redirect(`/portal/services/${order.serviceRequest.service.slug}?status=success&orderId=${orderId}&dev=1`);
+            }
             if (order.includesMembership && !order.orderItems.length) {
                 // The very first JKA fee continues the joining flow; later
                 // renewals land back on the renew page.
@@ -88,6 +103,7 @@ export async function initiatePaymentAction(orderId: string) {
             : "https://securepay.sslcommerz.com/gwprocess/v4/api.php";
 
         const transferReqId = order.transferRequest?.id;
+        const serviceSlug = order.serviceRequest?.service.slug;
         // Return buyers to the same page they started renewal from so we can
         // show a contextual popup (success or failed) with fresh data.
         const renewFailBase = order.includesDojoRenewal
@@ -96,11 +112,13 @@ export async function initiatePaymentAction(orderId: string) {
             ? `${appUrl}/portal/dojo/certificates?status=failed&orderId=${orderId}`
             : order.includesPastBeltFee
                 ? `${appUrl}/portal/joining?status=failed&orderId=${orderId}`
-                : order.includesMembership
-                    ? order.user.student?.joinStage === "FEE_UNPAID"
-                        ? `${appUrl}/portal/joining?status=failed&orderId=${orderId}`
-                        : `${appUrl}/portal/renew?status=failed&orderId=${orderId}`
-                    : null;
+                : order.includesServiceRequest && serviceSlug
+                    ? `${appUrl}/portal/services/${serviceSlug}?status=failed&orderId=${orderId}`
+                    : order.includesMembership
+                        ? order.user.student?.joinStage === "FEE_UNPAID"
+                            ? `${appUrl}/portal/joining?status=failed&orderId=${orderId}`
+                            : `${appUrl}/portal/renew?status=failed&orderId=${orderId}`
+                        : null;
         const failNext = order.includesTransferRequest && transferReqId
             ? `${appUrl}/portal/transfer/failed?requestId=${transferReqId}`
             : renewFailBase ?? `${appUrl}/portal/payment-failed?orderId=${orderId}`;
@@ -116,11 +134,13 @@ export async function initiatePaymentAction(orderId: string) {
         const cancelUrl = `${appUrl}/api/webhooks/sslcommerz/fail?orderId=${orderId}&kind=cancelled&next=${encodeURIComponent(cancelNext)}`;
         const productName = order.includesTransferRequest
             ? "JKA Dojo Transfer Fee"
-            : order.includesCertificates
-                ? "JKA Grading Certificates"
-                : order.includesMembership
-                    ? "JKA Membership + Gear"
-                    : "JKA Shop Order";
+            : order.includesServiceRequest && order.serviceRequest
+                ? `JKA ${order.serviceRequest.service.name}`
+                : order.includesCertificates
+                    ? "JKA Grading Certificates"
+                    : order.includesMembership
+                        ? "JKA Membership + Gear"
+                        : "JKA Shop Order";
 
         const params = new URLSearchParams({
             store_id: storeId,

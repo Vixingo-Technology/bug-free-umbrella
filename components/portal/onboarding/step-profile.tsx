@@ -199,15 +199,9 @@ export default function StepProfile({
                     />
                 </Field>
 
-                {/* Dojo — map picker first, dropdown as a fallback for
-                    dojos without coordinates and for accessibility. */}
+                {/* Dojo — pick from the list, the map zooms into your choice. */}
                 <Field label="Preferred Dojo *" icon={<MapPin size={15} />}>
                     <div className="space-y-3">
-                        <DojoMapPicker
-                            dojos={dojos}
-                            selectedId={value.dojoId}
-                            onSelect={(id) => update("dojoId", id)}
-                        />
                         <select
                             name="dojoId"
                             value={value.dojoId}
@@ -219,7 +213,7 @@ export default function StepProfile({
                             <option value="">
                                 {dojos.length === 0
                                     ? "No dojos available yet"
-                                    : "…or pick from the list"}
+                                    : "Select your dojo"}
                             </option>
                             {dojos.map((d) => (
                                 <option key={d.id} value={d.id}>
@@ -228,6 +222,11 @@ export default function StepProfile({
                                 </option>
                             ))}
                         </select>
+                        <DojoMapPicker
+                            dojos={dojos}
+                            selectedId={value.dojoId}
+                            onSelect={(id) => update("dojoId", id)}
+                        />
                     </div>
                 </Field>
 

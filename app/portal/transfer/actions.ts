@@ -6,6 +6,9 @@ import { createClient } from "@/lib/supabase/server";
 import { prisma } from "@/lib/prisma";
 import { loadCurrentUser } from "@/lib/auth/load-current-user";
 import { getFees } from "@/lib/settings/fees";
+import { previewCoupon } from "@/lib/services/coupon";
+import { notifyMembers } from "@/lib/notify";
+import { findUserIdsByRoles } from "@/lib/notify/recipients";
 
 const OPEN_STATUSES = ["PENDING_PAYMENT", "AWAITING_DOJO", "AWAITING_ADMIN"] as const;
 
@@ -25,6 +28,7 @@ async function sweepStaleRequests(studentId: string) {
 export async function createTransferRequestAction(input: {
     toDojoId: string;
     reason?: string;
+    couponCode?: string;
 }): Promise<{ error: string } | void> {
     const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
@@ -72,7 +76,37 @@ export async function createTransferRequestAction(input: {
 
     const { transferFeeBDT } = await getFees();
 
+    // Coupons live on the shared Service catalog; the "transfer-dojo" row
+    // exists for exactly this scoping. Universal coupons (serviceId=null)
+    // are also honored.
+    const transferService = await prisma.service.findUnique({
+        where: { slug: "transfer-dojo" },
+        select: { id: true },
+    });
+
+    let discountAmount = 0;
+    let finalAmount = transferFeeBDT;
+    let couponId: string | null = null;
+    let couponCode: string | null = null;
+
+    if (input.couponCode?.trim() && transferService) {
+        const check = await previewCoupon({
+            code: input.couponCode,
+            studentDojoId: student.dojoId!,
+            serviceId: transferService.id,
+            fee: transferFeeBDT,
+        });
+        if ("error" in check) return { error: check.error };
+        discountAmount = check.preview.discountAmount;
+        finalAmount = check.preview.finalAmount;
+        couponId = check.preview.id;
+        couponCode = check.preview.code;
+    }
+
+    const isFree = finalAmount <= 0;
+
     let orderId: string;
+    let requestId: string;
     try {
         const result = await prisma.$transaction(async (tx) => {
             const request = await tx.studentTransferRequest.create({
@@ -82,15 +116,19 @@ export async function createTransferRequestAction(input: {
                     toDojoId,
                     reason: input.reason?.trim() || null,
                     fee: transferFeeBDT,
-                    status: "PENDING_PAYMENT",
+                    discountAmount,
+                    finalAmount,
+                    couponCode,
+                    status: isFree ? "AWAITING_DOJO" : "PENDING_PAYMENT",
+                    paidAt: isFree ? new Date() : null,
                 },
             });
 
             const order = await tx.shopOrder.create({
                 data: {
                     userId: user.id,
-                    total: transferFeeBDT,
-                    paymentStatus: "PENDING",
+                    total: finalAmount,
+                    paymentStatus: isFree ? "PAID" : "PENDING",
                     includesTransferRequest: true,
                     notes: `Transfer request fee`,
                 },
@@ -101,15 +139,72 @@ export async function createTransferRequestAction(input: {
                 data: { orderId: order.id },
             });
 
-            return { orderId: order.id };
+            if (couponId) {
+                await tx.serviceCoupon.update({
+                    where: { id: couponId },
+                    data: { usedCount: { increment: 1 } },
+                });
+            }
+
+            return { orderId: order.id, requestId: request.id };
         });
         orderId = result.orderId;
+        requestId = result.requestId;
     } catch (err: any) {
         return { error: err?.message ?? "Failed to create transfer request." };
     }
 
     revalidatePath("/portal/transfer");
+
+    if (isFree) {
+        // Skip the gateway — mirror the webhook's side-effects for a paid
+        // transfer so the dojo owner is alerted immediately.
+        const ownerIds = await findUserIdsByRoles(["DOJO_OWNER"], { dojoId: student.dojoId! });
+        if (ownerIds.length) {
+            await notifyMembers(ownerIds, {
+                title: "Transfer request pending your clearance",
+                message: "A student has requested a transfer from your dojo.",
+                type: "TRANSFER",
+                link: "/portal/dojo/transfers",
+            });
+        }
+        await notifyMembers([user.id], {
+            title: "Transfer request submitted (coupon applied)",
+            message: "Your coupon covered the transfer fee. Awaiting clearance from your dojo.",
+            type: "TRANSFER",
+            link: "/portal/transfer",
+        });
+        redirect(`/portal/transfer?status=success&requestId=${requestId}&free=1`);
+    }
+
     redirect(`/portal/checkout?orderId=${orderId}`);
+}
+
+export async function previewTransferCouponAction(couponCode: string) {
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return { error: "Not authenticated." };
+
+    const current = await loadCurrentUser(user.id);
+    if (!current?.dojoId) return { error: "No dojo assignment." };
+
+    const [service, { transferFeeBDT }] = await Promise.all([
+        prisma.service.findUnique({
+            where: { slug: "transfer-dojo" },
+            select: { id: true },
+        }),
+        getFees(),
+    ]);
+    if (!service) return { error: "Coupons are not available for transfers yet." };
+
+    const check = await previewCoupon({
+        code: couponCode,
+        studentDojoId: current.dojoId,
+        serviceId: service.id,
+        fee: transferFeeBDT,
+    });
+    if ("error" in check) return { error: check.error };
+    return { preview: check.preview };
 }
 
 export async function cancelPendingTransferAction(requestId: string): Promise<{ error?: string } | void> {

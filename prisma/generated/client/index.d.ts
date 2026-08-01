@@ -198,6 +198,21 @@ export type PaymentTransaction = $Result.DefaultSelection<Prisma.$PaymentTransac
  * 
  */
 export type StudentDojoHistory = $Result.DefaultSelection<Prisma.$StudentDojoHistoryPayload>
+/**
+ * Model Service
+ * 
+ */
+export type Service = $Result.DefaultSelection<Prisma.$ServicePayload>
+/**
+ * Model ServiceRequest
+ * 
+ */
+export type ServiceRequest = $Result.DefaultSelection<Prisma.$ServiceRequestPayload>
+/**
+ * Model ServiceCoupon
+ * 
+ */
+export type ServiceCoupon = $Result.DefaultSelection<Prisma.$ServiceCouponPayload>
 
 /**
  * Enums
@@ -277,6 +292,7 @@ export const PaymentTransactionKind: {
   CERTIFICATES: 'CERTIFICATES',
   DOJO_RENEWAL: 'DOJO_RENEWAL',
   TRANSFER: 'TRANSFER',
+  SERVICE_REQUEST: 'SERVICE_REQUEST',
   EVENT_TICKET: 'EVENT_TICKET',
   SHOP: 'SHOP',
   OTHER: 'OTHER'
@@ -313,7 +329,8 @@ export const NotificationType: {
   EVENT: 'EVENT',
   RENEWAL: 'RENEWAL',
   CERTIFICATE: 'CERTIFICATE',
-  TRANSFER: 'TRANSFER'
+  TRANSFER: 'TRANSFER',
+  SERVICE: 'SERVICE'
 };
 
 export type NotificationType = (typeof NotificationType)[keyof typeof NotificationType]
@@ -338,6 +355,27 @@ export const StudentTransferDojoDecision: {
 };
 
 export type StudentTransferDojoDecision = (typeof StudentTransferDojoDecision)[keyof typeof StudentTransferDojoDecision]
+
+
+export const ServiceRequestStatus: {
+  PENDING_PAYMENT: 'PENDING_PAYMENT',
+  AWAITING_DOJO: 'AWAITING_DOJO',
+  AWAITING_ADMIN: 'AWAITING_ADMIN',
+  APPROVED: 'APPROVED',
+  DENIED: 'DENIED',
+  CANCELLED: 'CANCELLED'
+};
+
+export type ServiceRequestStatus = (typeof ServiceRequestStatus)[keyof typeof ServiceRequestStatus]
+
+
+export const ServiceRequestDojoDecision: {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
+};
+
+export type ServiceRequestDojoDecision = (typeof ServiceRequestDojoDecision)[keyof typeof ServiceRequestDojoDecision]
 
 
 export const CertificateRequestStatus: {
@@ -468,6 +506,14 @@ export const StudentTransferStatus: typeof $Enums.StudentTransferStatus
 export type StudentTransferDojoDecision = $Enums.StudentTransferDojoDecision
 
 export const StudentTransferDojoDecision: typeof $Enums.StudentTransferDojoDecision
+
+export type ServiceRequestStatus = $Enums.ServiceRequestStatus
+
+export const ServiceRequestStatus: typeof $Enums.ServiceRequestStatus
+
+export type ServiceRequestDojoDecision = $Enums.ServiceRequestDojoDecision
+
+export const ServiceRequestDojoDecision: typeof $Enums.ServiceRequestDojoDecision
 
 export type CertificateRequestStatus = $Enums.CertificateRequestStatus
 
@@ -987,6 +1033,36 @@ export class PrismaClient<
     * ```
     */
   get studentDojoHistory(): Prisma.StudentDojoHistoryDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.service`: Exposes CRUD operations for the **Service** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Services
+    * const services = await prisma.service.findMany()
+    * ```
+    */
+  get service(): Prisma.ServiceDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.serviceRequest`: Exposes CRUD operations for the **ServiceRequest** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ServiceRequests
+    * const serviceRequests = await prisma.serviceRequest.findMany()
+    * ```
+    */
+  get serviceRequest(): Prisma.ServiceRequestDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.serviceCoupon`: Exposes CRUD operations for the **ServiceCoupon** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ServiceCoupons
+    * const serviceCoupons = await prisma.serviceCoupon.findMany()
+    * ```
+    */
+  get serviceCoupon(): Prisma.ServiceCouponDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -1457,7 +1533,10 @@ export namespace Prisma {
     StudentAchievement: 'StudentAchievement',
     StudentTransferRequest: 'StudentTransferRequest',
     PaymentTransaction: 'PaymentTransaction',
-    StudentDojoHistory: 'StudentDojoHistory'
+    StudentDojoHistory: 'StudentDojoHistory',
+    Service: 'Service',
+    ServiceRequest: 'ServiceRequest',
+    ServiceCoupon: 'ServiceCoupon'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1473,7 +1552,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "role" | "permission" | "rolePermission" | "user" | "profile" | "student" | "instructor" | "dojoManager" | "dojoOwner" | "admin" | "beltRank" | "dojo" | "dojoApplication" | "dojoOwnerInvite" | "gradingEvent" | "gradingApplication" | "grading" | "certificateRequest" | "systemSettings" | "event" | "announcement" | "eventRegistration" | "notification" | "shopProduct" | "dojoInventoryItem" | "dojoSale" | "dojoSaleItem" | "shopOrder" | "shopOrderItem" | "tournament" | "tournamentParticipant" | "tournamentMatch" | "achievement" | "studentAchievement" | "studentTransferRequest" | "paymentTransaction" | "studentDojoHistory"
+      modelProps: "role" | "permission" | "rolePermission" | "user" | "profile" | "student" | "instructor" | "dojoManager" | "dojoOwner" | "admin" | "beltRank" | "dojo" | "dojoApplication" | "dojoOwnerInvite" | "gradingEvent" | "gradingApplication" | "grading" | "certificateRequest" | "systemSettings" | "event" | "announcement" | "eventRegistration" | "notification" | "shopProduct" | "dojoInventoryItem" | "dojoSale" | "dojoSaleItem" | "shopOrder" | "shopOrderItem" | "tournament" | "tournamentParticipant" | "tournamentMatch" | "achievement" | "studentAchievement" | "studentTransferRequest" | "paymentTransaction" | "studentDojoHistory" | "service" | "serviceRequest" | "serviceCoupon"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -4215,6 +4294,228 @@ export namespace Prisma {
           }
         }
       }
+      Service: {
+        payload: Prisma.$ServicePayload<ExtArgs>
+        fields: Prisma.ServiceFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ServiceFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ServicePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ServiceFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ServicePayload>
+          }
+          findFirst: {
+            args: Prisma.ServiceFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ServicePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ServiceFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ServicePayload>
+          }
+          findMany: {
+            args: Prisma.ServiceFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ServicePayload>[]
+          }
+          create: {
+            args: Prisma.ServiceCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ServicePayload>
+          }
+          createMany: {
+            args: Prisma.ServiceCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ServiceCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ServicePayload>[]
+          }
+          delete: {
+            args: Prisma.ServiceDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ServicePayload>
+          }
+          update: {
+            args: Prisma.ServiceUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ServicePayload>
+          }
+          deleteMany: {
+            args: Prisma.ServiceDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ServiceUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ServiceUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ServicePayload>[]
+          }
+          upsert: {
+            args: Prisma.ServiceUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ServicePayload>
+          }
+          aggregate: {
+            args: Prisma.ServiceAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateService>
+          }
+          groupBy: {
+            args: Prisma.ServiceGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ServiceGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ServiceCountArgs<ExtArgs>
+            result: $Utils.Optional<ServiceCountAggregateOutputType> | number
+          }
+        }
+      }
+      ServiceRequest: {
+        payload: Prisma.$ServiceRequestPayload<ExtArgs>
+        fields: Prisma.ServiceRequestFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ServiceRequestFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ServiceRequestPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ServiceRequestFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ServiceRequestPayload>
+          }
+          findFirst: {
+            args: Prisma.ServiceRequestFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ServiceRequestPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ServiceRequestFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ServiceRequestPayload>
+          }
+          findMany: {
+            args: Prisma.ServiceRequestFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ServiceRequestPayload>[]
+          }
+          create: {
+            args: Prisma.ServiceRequestCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ServiceRequestPayload>
+          }
+          createMany: {
+            args: Prisma.ServiceRequestCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ServiceRequestCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ServiceRequestPayload>[]
+          }
+          delete: {
+            args: Prisma.ServiceRequestDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ServiceRequestPayload>
+          }
+          update: {
+            args: Prisma.ServiceRequestUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ServiceRequestPayload>
+          }
+          deleteMany: {
+            args: Prisma.ServiceRequestDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ServiceRequestUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ServiceRequestUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ServiceRequestPayload>[]
+          }
+          upsert: {
+            args: Prisma.ServiceRequestUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ServiceRequestPayload>
+          }
+          aggregate: {
+            args: Prisma.ServiceRequestAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateServiceRequest>
+          }
+          groupBy: {
+            args: Prisma.ServiceRequestGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ServiceRequestGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ServiceRequestCountArgs<ExtArgs>
+            result: $Utils.Optional<ServiceRequestCountAggregateOutputType> | number
+          }
+        }
+      }
+      ServiceCoupon: {
+        payload: Prisma.$ServiceCouponPayload<ExtArgs>
+        fields: Prisma.ServiceCouponFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ServiceCouponFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ServiceCouponPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ServiceCouponFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ServiceCouponPayload>
+          }
+          findFirst: {
+            args: Prisma.ServiceCouponFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ServiceCouponPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ServiceCouponFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ServiceCouponPayload>
+          }
+          findMany: {
+            args: Prisma.ServiceCouponFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ServiceCouponPayload>[]
+          }
+          create: {
+            args: Prisma.ServiceCouponCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ServiceCouponPayload>
+          }
+          createMany: {
+            args: Prisma.ServiceCouponCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ServiceCouponCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ServiceCouponPayload>[]
+          }
+          delete: {
+            args: Prisma.ServiceCouponDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ServiceCouponPayload>
+          }
+          update: {
+            args: Prisma.ServiceCouponUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ServiceCouponPayload>
+          }
+          deleteMany: {
+            args: Prisma.ServiceCouponDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ServiceCouponUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ServiceCouponUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ServiceCouponPayload>[]
+          }
+          upsert: {
+            args: Prisma.ServiceCouponUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ServiceCouponPayload>
+          }
+          aggregate: {
+            args: Prisma.ServiceCouponAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateServiceCoupon>
+          }
+          groupBy: {
+            args: Prisma.ServiceCouponGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ServiceCouponGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ServiceCouponCountArgs<ExtArgs>
+            result: $Utils.Optional<ServiceCouponCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -4360,6 +4661,9 @@ export namespace Prisma {
     studentTransferRequest?: StudentTransferRequestOmit
     paymentTransaction?: PaymentTransactionOmit
     studentDojoHistory?: StudentDojoHistoryOmit
+    service?: ServiceOmit
+    serviceRequest?: ServiceRequestOmit
+    serviceCoupon?: ServiceCouponOmit
   }
 
   /* Types for Logging */
@@ -4526,6 +4830,9 @@ export namespace Prisma {
     dojoHistoryChanges: number
     paymentTransactions: number
     dojoOwnerInvitesSent: number
+    serviceRequestsDojoActed: number
+    serviceRequestsAdminActed: number
+    serviceCouponsCreated: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4544,6 +4851,9 @@ export namespace Prisma {
     dojoHistoryChanges?: boolean | UserCountOutputTypeCountDojoHistoryChangesArgs
     paymentTransactions?: boolean | UserCountOutputTypeCountPaymentTransactionsArgs
     dojoOwnerInvitesSent?: boolean | UserCountOutputTypeCountDojoOwnerInvitesSentArgs
+    serviceRequestsDojoActed?: boolean | UserCountOutputTypeCountServiceRequestsDojoActedArgs
+    serviceRequestsAdminActed?: boolean | UserCountOutputTypeCountServiceRequestsAdminActedArgs
+    serviceCouponsCreated?: boolean | UserCountOutputTypeCountServiceCouponsCreatedArgs
   }
 
   // Custom InputTypes
@@ -4662,6 +4972,27 @@ export namespace Prisma {
     where?: DojoOwnerInviteWhereInput
   }
 
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountServiceRequestsDojoActedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ServiceRequestWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountServiceRequestsAdminActedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ServiceRequestWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountServiceCouponsCreatedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ServiceCouponWhereInput
+  }
+
 
   /**
    * Count Type StudentCountOutputType
@@ -4673,6 +5004,7 @@ export namespace Prisma {
     certificateRequests: number
     achievements: number
     transferRequests: number
+    serviceRequests: number
     dojoHistory: number
   }
 
@@ -4682,6 +5014,7 @@ export namespace Prisma {
     certificateRequests?: boolean | StudentCountOutputTypeCountCertificateRequestsArgs
     achievements?: boolean | StudentCountOutputTypeCountAchievementsArgs
     transferRequests?: boolean | StudentCountOutputTypeCountTransferRequestsArgs
+    serviceRequests?: boolean | StudentCountOutputTypeCountServiceRequestsArgs
     dojoHistory?: boolean | StudentCountOutputTypeCountDojoHistoryArgs
   }
 
@@ -4729,6 +5062,13 @@ export namespace Prisma {
    */
   export type StudentCountOutputTypeCountTransferRequestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: StudentTransferRequestWhereInput
+  }
+
+  /**
+   * StudentCountOutputType without action
+   */
+  export type StudentCountOutputTypeCountServiceRequestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ServiceRequestWhereInput
   }
 
   /**
@@ -4825,6 +5165,8 @@ export namespace Prisma {
     transfersIn: number
     historyFrom: number
     historyTo: number
+    serviceRequests: number
+    serviceCoupons: number
   }
 
   export type DojoCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4842,6 +5184,8 @@ export namespace Prisma {
     transfersIn?: boolean | DojoCountOutputTypeCountTransfersInArgs
     historyFrom?: boolean | DojoCountOutputTypeCountHistoryFromArgs
     historyTo?: boolean | DojoCountOutputTypeCountHistoryToArgs
+    serviceRequests?: boolean | DojoCountOutputTypeCountServiceRequestsArgs
+    serviceCoupons?: boolean | DojoCountOutputTypeCountServiceCouponsArgs
   }
 
   // Custom InputTypes
@@ -4951,6 +5295,20 @@ export namespace Prisma {
    */
   export type DojoCountOutputTypeCountHistoryToArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: StudentDojoHistoryWhereInput
+  }
+
+  /**
+   * DojoCountOutputType without action
+   */
+  export type DojoCountOutputTypeCountServiceRequestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ServiceRequestWhereInput
+  }
+
+  /**
+   * DojoCountOutputType without action
+   */
+  export type DojoCountOutputTypeCountServiceCouponsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ServiceCouponWhereInput
   }
 
 
@@ -5364,6 +5722,77 @@ export namespace Prisma {
    */
   export type StudentTransferRequestCountOutputTypeCountHistoryArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: StudentDojoHistoryWhereInput
+  }
+
+
+  /**
+   * Count Type ServiceCountOutputType
+   */
+
+  export type ServiceCountOutputType = {
+    requests: number
+    coupons: number
+  }
+
+  export type ServiceCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    requests?: boolean | ServiceCountOutputTypeCountRequestsArgs
+    coupons?: boolean | ServiceCountOutputTypeCountCouponsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * ServiceCountOutputType without action
+   */
+  export type ServiceCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ServiceCountOutputType
+     */
+    select?: ServiceCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * ServiceCountOutputType without action
+   */
+  export type ServiceCountOutputTypeCountRequestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ServiceRequestWhereInput
+  }
+
+  /**
+   * ServiceCountOutputType without action
+   */
+  export type ServiceCountOutputTypeCountCouponsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ServiceCouponWhereInput
+  }
+
+
+  /**
+   * Count Type ServiceCouponCountOutputType
+   */
+
+  export type ServiceCouponCountOutputType = {
+    requests: number
+  }
+
+  export type ServiceCouponCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    requests?: boolean | ServiceCouponCountOutputTypeCountRequestsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * ServiceCouponCountOutputType without action
+   */
+  export type ServiceCouponCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ServiceCouponCountOutputType
+     */
+    select?: ServiceCouponCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * ServiceCouponCountOutputType without action
+   */
+  export type ServiceCouponCountOutputTypeCountRequestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ServiceRequestWhereInput
   }
 
 
@@ -8828,6 +9257,9 @@ export namespace Prisma {
     dojoHistoryChanges?: boolean | User$dojoHistoryChangesArgs<ExtArgs>
     paymentTransactions?: boolean | User$paymentTransactionsArgs<ExtArgs>
     dojoOwnerInvitesSent?: boolean | User$dojoOwnerInvitesSentArgs<ExtArgs>
+    serviceRequestsDojoActed?: boolean | User$serviceRequestsDojoActedArgs<ExtArgs>
+    serviceRequestsAdminActed?: boolean | User$serviceRequestsAdminActedArgs<ExtArgs>
+    serviceCouponsCreated?: boolean | User$serviceCouponsCreatedArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -8899,6 +9331,9 @@ export namespace Prisma {
     dojoHistoryChanges?: boolean | User$dojoHistoryChangesArgs<ExtArgs>
     paymentTransactions?: boolean | User$paymentTransactionsArgs<ExtArgs>
     dojoOwnerInvitesSent?: boolean | User$dojoOwnerInvitesSentArgs<ExtArgs>
+    serviceRequestsDojoActed?: boolean | User$serviceRequestsDojoActedArgs<ExtArgs>
+    serviceRequestsAdminActed?: boolean | User$serviceRequestsAdminActedArgs<ExtArgs>
+    serviceCouponsCreated?: boolean | User$serviceCouponsCreatedArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -8933,6 +9368,9 @@ export namespace Prisma {
       dojoHistoryChanges: Prisma.$StudentDojoHistoryPayload<ExtArgs>[]
       paymentTransactions: Prisma.$PaymentTransactionPayload<ExtArgs>[]
       dojoOwnerInvitesSent: Prisma.$DojoOwnerInvitePayload<ExtArgs>[]
+      serviceRequestsDojoActed: Prisma.$ServiceRequestPayload<ExtArgs>[]
+      serviceRequestsAdminActed: Prisma.$ServiceRequestPayload<ExtArgs>[]
+      serviceCouponsCreated: Prisma.$ServiceCouponPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -9362,6 +9800,9 @@ export namespace Prisma {
     dojoHistoryChanges<T extends User$dojoHistoryChangesArgs<ExtArgs> = {}>(args?: Subset<T, User$dojoHistoryChangesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentDojoHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     paymentTransactions<T extends User$paymentTransactionsArgs<ExtArgs> = {}>(args?: Subset<T, User$paymentTransactionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PaymentTransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     dojoOwnerInvitesSent<T extends User$dojoOwnerInvitesSentArgs<ExtArgs> = {}>(args?: Subset<T, User$dojoOwnerInvitesSentArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DojoOwnerInvitePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    serviceRequestsDojoActed<T extends User$serviceRequestsDojoActedArgs<ExtArgs> = {}>(args?: Subset<T, User$serviceRequestsDojoActedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ServiceRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    serviceRequestsAdminActed<T extends User$serviceRequestsAdminActedArgs<ExtArgs> = {}>(args?: Subset<T, User$serviceRequestsAdminActedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ServiceRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    serviceCouponsCreated<T extends User$serviceCouponsCreatedArgs<ExtArgs> = {}>(args?: Subset<T, User$serviceCouponsCreatedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ServiceCouponPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -10274,6 +10715,78 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: DojoOwnerInviteScalarFieldEnum | DojoOwnerInviteScalarFieldEnum[]
+  }
+
+  /**
+   * User.serviceRequestsDojoActed
+   */
+  export type User$serviceRequestsDojoActedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ServiceRequest
+     */
+    select?: ServiceRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ServiceRequest
+     */
+    omit?: ServiceRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ServiceRequestInclude<ExtArgs> | null
+    where?: ServiceRequestWhereInput
+    orderBy?: ServiceRequestOrderByWithRelationInput | ServiceRequestOrderByWithRelationInput[]
+    cursor?: ServiceRequestWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ServiceRequestScalarFieldEnum | ServiceRequestScalarFieldEnum[]
+  }
+
+  /**
+   * User.serviceRequestsAdminActed
+   */
+  export type User$serviceRequestsAdminActedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ServiceRequest
+     */
+    select?: ServiceRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ServiceRequest
+     */
+    omit?: ServiceRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ServiceRequestInclude<ExtArgs> | null
+    where?: ServiceRequestWhereInput
+    orderBy?: ServiceRequestOrderByWithRelationInput | ServiceRequestOrderByWithRelationInput[]
+    cursor?: ServiceRequestWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ServiceRequestScalarFieldEnum | ServiceRequestScalarFieldEnum[]
+  }
+
+  /**
+   * User.serviceCouponsCreated
+   */
+  export type User$serviceCouponsCreatedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ServiceCoupon
+     */
+    select?: ServiceCouponSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ServiceCoupon
+     */
+    omit?: ServiceCouponOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ServiceCouponInclude<ExtArgs> | null
+    where?: ServiceCouponWhereInput
+    orderBy?: ServiceCouponOrderByWithRelationInput | ServiceCouponOrderByWithRelationInput[]
+    cursor?: ServiceCouponWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ServiceCouponScalarFieldEnum | ServiceCouponScalarFieldEnum[]
   }
 
   /**
@@ -11721,6 +12234,7 @@ export namespace Prisma {
     certificateRequests?: boolean | Student$certificateRequestsArgs<ExtArgs>
     achievements?: boolean | Student$achievementsArgs<ExtArgs>
     transferRequests?: boolean | Student$transferRequestsArgs<ExtArgs>
+    serviceRequests?: boolean | Student$serviceRequestsArgs<ExtArgs>
     dojoHistory?: boolean | Student$dojoHistoryArgs<ExtArgs>
     _count?: boolean | StudentCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["student"]>
@@ -11792,6 +12306,7 @@ export namespace Prisma {
     certificateRequests?: boolean | Student$certificateRequestsArgs<ExtArgs>
     achievements?: boolean | Student$achievementsArgs<ExtArgs>
     transferRequests?: boolean | Student$transferRequestsArgs<ExtArgs>
+    serviceRequests?: boolean | Student$serviceRequestsArgs<ExtArgs>
     dojoHistory?: boolean | Student$dojoHistoryArgs<ExtArgs>
     _count?: boolean | StudentCountOutputTypeDefaultArgs<ExtArgs>
   }
@@ -11814,6 +12329,7 @@ export namespace Prisma {
       certificateRequests: Prisma.$CertificateRequestPayload<ExtArgs>[]
       achievements: Prisma.$StudentAchievementPayload<ExtArgs>[]
       transferRequests: Prisma.$StudentTransferRequestPayload<ExtArgs>[]
+      serviceRequests: Prisma.$ServiceRequestPayload<ExtArgs>[]
       dojoHistory: Prisma.$StudentDojoHistoryPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -12233,6 +12749,7 @@ export namespace Prisma {
     certificateRequests<T extends Student$certificateRequestsArgs<ExtArgs> = {}>(args?: Subset<T, Student$certificateRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificateRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     achievements<T extends Student$achievementsArgs<ExtArgs> = {}>(args?: Subset<T, Student$achievementsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentAchievementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     transferRequests<T extends Student$transferRequestsArgs<ExtArgs> = {}>(args?: Subset<T, Student$transferRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentTransferRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    serviceRequests<T extends Student$serviceRequestsArgs<ExtArgs> = {}>(args?: Subset<T, Student$serviceRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ServiceRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     dojoHistory<T extends Student$dojoHistoryArgs<ExtArgs> = {}>(args?: Subset<T, Student$dojoHistoryArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentDojoHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -12815,6 +13332,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: StudentTransferRequestScalarFieldEnum | StudentTransferRequestScalarFieldEnum[]
+  }
+
+  /**
+   * Student.serviceRequests
+   */
+  export type Student$serviceRequestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ServiceRequest
+     */
+    select?: ServiceRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ServiceRequest
+     */
+    omit?: ServiceRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ServiceRequestInclude<ExtArgs> | null
+    where?: ServiceRequestWhereInput
+    orderBy?: ServiceRequestOrderByWithRelationInput | ServiceRequestOrderByWithRelationInput[]
+    cursor?: ServiceRequestWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ServiceRequestScalarFieldEnum | ServiceRequestScalarFieldEnum[]
   }
 
   /**
@@ -18762,6 +19303,8 @@ export namespace Prisma {
     transfersIn?: boolean | Dojo$transfersInArgs<ExtArgs>
     historyFrom?: boolean | Dojo$historyFromArgs<ExtArgs>
     historyTo?: boolean | Dojo$historyToArgs<ExtArgs>
+    serviceRequests?: boolean | Dojo$serviceRequestsArgs<ExtArgs>
+    serviceCoupons?: boolean | Dojo$serviceCouponsArgs<ExtArgs>
     _count?: boolean | DojoCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["dojo"]>
 
@@ -18843,6 +19386,8 @@ export namespace Prisma {
     transfersIn?: boolean | Dojo$transfersInArgs<ExtArgs>
     historyFrom?: boolean | Dojo$historyFromArgs<ExtArgs>
     historyTo?: boolean | Dojo$historyToArgs<ExtArgs>
+    serviceRequests?: boolean | Dojo$serviceRequestsArgs<ExtArgs>
+    serviceCoupons?: boolean | Dojo$serviceCouponsArgs<ExtArgs>
     _count?: boolean | DojoCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type DojoIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -18867,6 +19412,8 @@ export namespace Prisma {
       transfersIn: Prisma.$StudentTransferRequestPayload<ExtArgs>[]
       historyFrom: Prisma.$StudentDojoHistoryPayload<ExtArgs>[]
       historyTo: Prisma.$StudentDojoHistoryPayload<ExtArgs>[]
+      serviceRequests: Prisma.$ServiceRequestPayload<ExtArgs>[]
+      serviceCoupons: Prisma.$ServiceCouponPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -19296,6 +19843,8 @@ export namespace Prisma {
     transfersIn<T extends Dojo$transfersInArgs<ExtArgs> = {}>(args?: Subset<T, Dojo$transfersInArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentTransferRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     historyFrom<T extends Dojo$historyFromArgs<ExtArgs> = {}>(args?: Subset<T, Dojo$historyFromArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentDojoHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     historyTo<T extends Dojo$historyToArgs<ExtArgs> = {}>(args?: Subset<T, Dojo$historyToArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentDojoHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    serviceRequests<T extends Dojo$serviceRequestsArgs<ExtArgs> = {}>(args?: Subset<T, Dojo$serviceRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ServiceRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    serviceCoupons<T extends Dojo$serviceCouponsArgs<ExtArgs> = {}>(args?: Subset<T, Dojo$serviceCouponsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ServiceCouponPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -20106,6 +20655,54 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: StudentDojoHistoryScalarFieldEnum | StudentDojoHistoryScalarFieldEnum[]
+  }
+
+  /**
+   * Dojo.serviceRequests
+   */
+  export type Dojo$serviceRequestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ServiceRequest
+     */
+    select?: ServiceRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ServiceRequest
+     */
+    omit?: ServiceRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ServiceRequestInclude<ExtArgs> | null
+    where?: ServiceRequestWhereInput
+    orderBy?: ServiceRequestOrderByWithRelationInput | ServiceRequestOrderByWithRelationInput[]
+    cursor?: ServiceRequestWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ServiceRequestScalarFieldEnum | ServiceRequestScalarFieldEnum[]
+  }
+
+  /**
+   * Dojo.serviceCoupons
+   */
+  export type Dojo$serviceCouponsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ServiceCoupon
+     */
+    select?: ServiceCouponSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ServiceCoupon
+     */
+    omit?: ServiceCouponOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ServiceCouponInclude<ExtArgs> | null
+    where?: ServiceCouponWhereInput
+    orderBy?: ServiceCouponOrderByWithRelationInput | ServiceCouponOrderByWithRelationInput[]
+    cursor?: ServiceCouponWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ServiceCouponScalarFieldEnum | ServiceCouponScalarFieldEnum[]
   }
 
   /**
@@ -38623,6 +39220,7 @@ export namespace Prisma {
     certDojoId: string | null
     includesTransferRequest: boolean | null
     includesPastBeltFee: boolean | null
+    includesServiceRequest: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -38650,6 +39248,7 @@ export namespace Prisma {
     certDojoId: string | null
     includesTransferRequest: boolean | null
     includesPastBeltFee: boolean | null
+    includesServiceRequest: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -38677,6 +39276,7 @@ export namespace Prisma {
     certDojoId: number
     includesTransferRequest: number
     includesPastBeltFee: number
+    includesServiceRequest: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -38716,6 +39316,7 @@ export namespace Prisma {
     certDojoId?: true
     includesTransferRequest?: true
     includesPastBeltFee?: true
+    includesServiceRequest?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -38743,6 +39344,7 @@ export namespace Prisma {
     certDojoId?: true
     includesTransferRequest?: true
     includesPastBeltFee?: true
+    includesServiceRequest?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -38770,6 +39372,7 @@ export namespace Prisma {
     certDojoId?: true
     includesTransferRequest?: true
     includesPastBeltFee?: true
+    includesServiceRequest?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -38884,6 +39487,7 @@ export namespace Prisma {
     certDojoId: string | null
     includesTransferRequest: boolean
     includesPastBeltFee: boolean
+    includesServiceRequest: boolean
     createdAt: Date
     updatedAt: Date
     _count: ShopOrderCountAggregateOutputType | null
@@ -38930,6 +39534,7 @@ export namespace Prisma {
     certDojoId?: boolean
     includesTransferRequest?: boolean
     includesPastBeltFee?: boolean
+    includesServiceRequest?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | ShopOrder$userArgs<ExtArgs>
@@ -38938,6 +39543,7 @@ export namespace Prisma {
     orderItems?: boolean | ShopOrder$orderItemsArgs<ExtArgs>
     certificateRequests?: boolean | ShopOrder$certificateRequestsArgs<ExtArgs>
     transferRequest?: boolean | ShopOrder$transferRequestArgs<ExtArgs>
+    serviceRequest?: boolean | ShopOrder$serviceRequestArgs<ExtArgs>
     transactions?: boolean | ShopOrder$transactionsArgs<ExtArgs>
     _count?: boolean | ShopOrderCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["shopOrder"]>
@@ -38965,6 +39571,7 @@ export namespace Prisma {
     certDojoId?: boolean
     includesTransferRequest?: boolean
     includesPastBeltFee?: boolean
+    includesServiceRequest?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | ShopOrder$userArgs<ExtArgs>
@@ -38995,6 +39602,7 @@ export namespace Prisma {
     certDojoId?: boolean
     includesTransferRequest?: boolean
     includesPastBeltFee?: boolean
+    includesServiceRequest?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | ShopOrder$userArgs<ExtArgs>
@@ -39025,11 +39633,12 @@ export namespace Prisma {
     certDojoId?: boolean
     includesTransferRequest?: boolean
     includesPastBeltFee?: boolean
+    includesServiceRequest?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type ShopOrderOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "paymentStatus" | "paymentMethod" | "total" | "currency" | "transactionId" | "includesMembership" | "membershipFee" | "fulfillmentStatus" | "notes" | "guestName" | "guestEmail" | "guestPhone" | "guestAddress" | "isGuestOrder" | "dojoId" | "includesDojoRenewal" | "includesCertificates" | "certDojoId" | "includesTransferRequest" | "includesPastBeltFee" | "createdAt" | "updatedAt", ExtArgs["result"]["shopOrder"]>
+  export type ShopOrderOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "paymentStatus" | "paymentMethod" | "total" | "currency" | "transactionId" | "includesMembership" | "membershipFee" | "fulfillmentStatus" | "notes" | "guestName" | "guestEmail" | "guestPhone" | "guestAddress" | "isGuestOrder" | "dojoId" | "includesDojoRenewal" | "includesCertificates" | "certDojoId" | "includesTransferRequest" | "includesPastBeltFee" | "includesServiceRequest" | "createdAt" | "updatedAt", ExtArgs["result"]["shopOrder"]>
   export type ShopOrderInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | ShopOrder$userArgs<ExtArgs>
     dojo?: boolean | ShopOrder$dojoArgs<ExtArgs>
@@ -39037,6 +39646,7 @@ export namespace Prisma {
     orderItems?: boolean | ShopOrder$orderItemsArgs<ExtArgs>
     certificateRequests?: boolean | ShopOrder$certificateRequestsArgs<ExtArgs>
     transferRequest?: boolean | ShopOrder$transferRequestArgs<ExtArgs>
+    serviceRequest?: boolean | ShopOrder$serviceRequestArgs<ExtArgs>
     transactions?: boolean | ShopOrder$transactionsArgs<ExtArgs>
     _count?: boolean | ShopOrderCountOutputTypeDefaultArgs<ExtArgs>
   }
@@ -39060,6 +39670,7 @@ export namespace Prisma {
       orderItems: Prisma.$ShopOrderItemPayload<ExtArgs>[]
       certificateRequests: Prisma.$CertificateRequestPayload<ExtArgs>[]
       transferRequest: Prisma.$StudentTransferRequestPayload<ExtArgs> | null
+      serviceRequest: Prisma.$ServiceRequestPayload<ExtArgs> | null
       transactions: Prisma.$PaymentTransactionPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -39085,6 +39696,7 @@ export namespace Prisma {
       certDojoId: string | null
       includesTransferRequest: boolean
       includesPastBeltFee: boolean
+      includesServiceRequest: boolean
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["shopOrder"]>
@@ -39487,6 +40099,7 @@ export namespace Prisma {
     orderItems<T extends ShopOrder$orderItemsArgs<ExtArgs> = {}>(args?: Subset<T, ShopOrder$orderItemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ShopOrderItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     certificateRequests<T extends ShopOrder$certificateRequestsArgs<ExtArgs> = {}>(args?: Subset<T, ShopOrder$certificateRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificateRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     transferRequest<T extends ShopOrder$transferRequestArgs<ExtArgs> = {}>(args?: Subset<T, ShopOrder$transferRequestArgs<ExtArgs>>): Prisma__StudentTransferRequestClient<$Result.GetResult<Prisma.$StudentTransferRequestPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    serviceRequest<T extends ShopOrder$serviceRequestArgs<ExtArgs> = {}>(args?: Subset<T, ShopOrder$serviceRequestArgs<ExtArgs>>): Prisma__ServiceRequestClient<$Result.GetResult<Prisma.$ServiceRequestPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     transactions<T extends ShopOrder$transactionsArgs<ExtArgs> = {}>(args?: Subset<T, ShopOrder$transactionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PaymentTransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -39539,6 +40152,7 @@ export namespace Prisma {
     readonly certDojoId: FieldRef<"ShopOrder", 'String'>
     readonly includesTransferRequest: FieldRef<"ShopOrder", 'Boolean'>
     readonly includesPastBeltFee: FieldRef<"ShopOrder", 'Boolean'>
+    readonly includesServiceRequest: FieldRef<"ShopOrder", 'Boolean'>
     readonly createdAt: FieldRef<"ShopOrder", 'DateTime'>
     readonly updatedAt: FieldRef<"ShopOrder", 'DateTime'>
   }
@@ -40063,6 +40677,25 @@ export namespace Prisma {
      */
     include?: StudentTransferRequestInclude<ExtArgs> | null
     where?: StudentTransferRequestWhereInput
+  }
+
+  /**
+   * ShopOrder.serviceRequest
+   */
+  export type ShopOrder$serviceRequestArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ServiceRequest
+     */
+    select?: ServiceRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ServiceRequest
+     */
+    omit?: ServiceRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ServiceRequestInclude<ExtArgs> | null
+    where?: ServiceRequestWhereInput
   }
 
   /**
@@ -47178,10 +47811,14 @@ export namespace Prisma {
 
   export type StudentTransferRequestAvgAggregateOutputType = {
     fee: Decimal | null
+    discountAmount: Decimal | null
+    finalAmount: Decimal | null
   }
 
   export type StudentTransferRequestSumAggregateOutputType = {
     fee: Decimal | null
+    discountAmount: Decimal | null
+    finalAmount: Decimal | null
   }
 
   export type StudentTransferRequestMinAggregateOutputType = {
@@ -47195,6 +47832,9 @@ export namespace Prisma {
     dojoNote: string | null
     adminNote: string | null
     fee: Decimal | null
+    discountAmount: Decimal | null
+    finalAmount: Decimal | null
+    couponCode: string | null
     orderId: string | null
     paidAt: Date | null
     dojoActedAt: Date | null
@@ -47216,6 +47856,9 @@ export namespace Prisma {
     dojoNote: string | null
     adminNote: string | null
     fee: Decimal | null
+    discountAmount: Decimal | null
+    finalAmount: Decimal | null
+    couponCode: string | null
     orderId: string | null
     paidAt: Date | null
     dojoActedAt: Date | null
@@ -47237,6 +47880,9 @@ export namespace Prisma {
     dojoNote: number
     adminNote: number
     fee: number
+    discountAmount: number
+    finalAmount: number
+    couponCode: number
     orderId: number
     paidAt: number
     dojoActedAt: number
@@ -47251,10 +47897,14 @@ export namespace Prisma {
 
   export type StudentTransferRequestAvgAggregateInputType = {
     fee?: true
+    discountAmount?: true
+    finalAmount?: true
   }
 
   export type StudentTransferRequestSumAggregateInputType = {
     fee?: true
+    discountAmount?: true
+    finalAmount?: true
   }
 
   export type StudentTransferRequestMinAggregateInputType = {
@@ -47268,6 +47918,9 @@ export namespace Prisma {
     dojoNote?: true
     adminNote?: true
     fee?: true
+    discountAmount?: true
+    finalAmount?: true
+    couponCode?: true
     orderId?: true
     paidAt?: true
     dojoActedAt?: true
@@ -47289,6 +47942,9 @@ export namespace Prisma {
     dojoNote?: true
     adminNote?: true
     fee?: true
+    discountAmount?: true
+    finalAmount?: true
+    couponCode?: true
     orderId?: true
     paidAt?: true
     dojoActedAt?: true
@@ -47310,6 +47966,9 @@ export namespace Prisma {
     dojoNote?: true
     adminNote?: true
     fee?: true
+    discountAmount?: true
+    finalAmount?: true
+    couponCode?: true
     orderId?: true
     paidAt?: true
     dojoActedAt?: true
@@ -47418,6 +48077,9 @@ export namespace Prisma {
     dojoNote: string | null
     adminNote: string | null
     fee: Decimal
+    discountAmount: Decimal
+    finalAmount: Decimal | null
+    couponCode: string | null
     orderId: string | null
     paidAt: Date | null
     dojoActedAt: Date | null
@@ -47458,6 +48120,9 @@ export namespace Prisma {
     dojoNote?: boolean
     adminNote?: boolean
     fee?: boolean
+    discountAmount?: boolean
+    finalAmount?: boolean
+    couponCode?: boolean
     orderId?: boolean
     paidAt?: boolean
     dojoActedAt?: boolean
@@ -47487,6 +48152,9 @@ export namespace Prisma {
     dojoNote?: boolean
     adminNote?: boolean
     fee?: boolean
+    discountAmount?: boolean
+    finalAmount?: boolean
+    couponCode?: boolean
     orderId?: boolean
     paidAt?: boolean
     dojoActedAt?: boolean
@@ -47514,6 +48182,9 @@ export namespace Prisma {
     dojoNote?: boolean
     adminNote?: boolean
     fee?: boolean
+    discountAmount?: boolean
+    finalAmount?: boolean
+    couponCode?: boolean
     orderId?: boolean
     paidAt?: boolean
     dojoActedAt?: boolean
@@ -47541,6 +48212,9 @@ export namespace Prisma {
     dojoNote?: boolean
     adminNote?: boolean
     fee?: boolean
+    discountAmount?: boolean
+    finalAmount?: boolean
+    couponCode?: boolean
     orderId?: boolean
     paidAt?: boolean
     dojoActedAt?: boolean
@@ -47551,7 +48225,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type StudentTransferRequestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "studentId" | "fromDojoId" | "toDojoId" | "status" | "dojoDecision" | "reason" | "dojoNote" | "adminNote" | "fee" | "orderId" | "paidAt" | "dojoActedAt" | "dojoActedById" | "adminActedAt" | "adminActedById" | "createdAt" | "updatedAt", ExtArgs["result"]["studentTransferRequest"]>
+  export type StudentTransferRequestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "studentId" | "fromDojoId" | "toDojoId" | "status" | "dojoDecision" | "reason" | "dojoNote" | "adminNote" | "fee" | "discountAmount" | "finalAmount" | "couponCode" | "orderId" | "paidAt" | "dojoActedAt" | "dojoActedById" | "adminActedAt" | "adminActedById" | "createdAt" | "updatedAt", ExtArgs["result"]["studentTransferRequest"]>
   export type StudentTransferRequestInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     student?: boolean | StudentDefaultArgs<ExtArgs>
     fromDojo?: boolean | DojoDefaultArgs<ExtArgs>
@@ -47601,6 +48275,9 @@ export namespace Prisma {
       dojoNote: string | null
       adminNote: string | null
       fee: Prisma.Decimal
+      discountAmount: Prisma.Decimal
+      finalAmount: Prisma.Decimal | null
+      couponCode: string | null
       orderId: string | null
       paidAt: Date | null
       dojoActedAt: Date | null
@@ -48049,6 +48726,9 @@ export namespace Prisma {
     readonly dojoNote: FieldRef<"StudentTransferRequest", 'String'>
     readonly adminNote: FieldRef<"StudentTransferRequest", 'String'>
     readonly fee: FieldRef<"StudentTransferRequest", 'Decimal'>
+    readonly discountAmount: FieldRef<"StudentTransferRequest", 'Decimal'>
+    readonly finalAmount: FieldRef<"StudentTransferRequest", 'Decimal'>
+    readonly couponCode: FieldRef<"StudentTransferRequest", 'String'>
     readonly orderId: FieldRef<"StudentTransferRequest", 'String'>
     readonly paidAt: FieldRef<"StudentTransferRequest", 'DateTime'>
     readonly dojoActedAt: FieldRef<"StudentTransferRequest", 'DateTime'>
@@ -51081,6 +51761,3928 @@ export namespace Prisma {
 
 
   /**
+   * Model Service
+   */
+
+  export type AggregateService = {
+    _count: ServiceCountAggregateOutputType | null
+    _avg: ServiceAvgAggregateOutputType | null
+    _sum: ServiceSumAggregateOutputType | null
+    _min: ServiceMinAggregateOutputType | null
+    _max: ServiceMaxAggregateOutputType | null
+  }
+
+  export type ServiceAvgAggregateOutputType = {
+    feeBDT: Decimal | null
+  }
+
+  export type ServiceSumAggregateOutputType = {
+    feeBDT: Decimal | null
+  }
+
+  export type ServiceMinAggregateOutputType = {
+    id: string | null
+    slug: string | null
+    name: string | null
+    description: string | null
+    feeBDT: Decimal | null
+    isActive: boolean | null
+    handler: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ServiceMaxAggregateOutputType = {
+    id: string | null
+    slug: string | null
+    name: string | null
+    description: string | null
+    feeBDT: Decimal | null
+    isActive: boolean | null
+    handler: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ServiceCountAggregateOutputType = {
+    id: number
+    slug: number
+    name: number
+    description: number
+    feeBDT: number
+    isActive: number
+    handler: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type ServiceAvgAggregateInputType = {
+    feeBDT?: true
+  }
+
+  export type ServiceSumAggregateInputType = {
+    feeBDT?: true
+  }
+
+  export type ServiceMinAggregateInputType = {
+    id?: true
+    slug?: true
+    name?: true
+    description?: true
+    feeBDT?: true
+    isActive?: true
+    handler?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ServiceMaxAggregateInputType = {
+    id?: true
+    slug?: true
+    name?: true
+    description?: true
+    feeBDT?: true
+    isActive?: true
+    handler?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ServiceCountAggregateInputType = {
+    id?: true
+    slug?: true
+    name?: true
+    description?: true
+    feeBDT?: true
+    isActive?: true
+    handler?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type ServiceAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Service to aggregate.
+     */
+    where?: ServiceWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Services to fetch.
+     */
+    orderBy?: ServiceOrderByWithRelationInput | ServiceOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ServiceWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Services from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Services.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Services
+    **/
+    _count?: true | ServiceCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ServiceAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ServiceSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ServiceMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ServiceMaxAggregateInputType
+  }
+
+  export type GetServiceAggregateType<T extends ServiceAggregateArgs> = {
+        [P in keyof T & keyof AggregateService]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateService[P]>
+      : GetScalarType<T[P], AggregateService[P]>
+  }
+
+
+
+
+  export type ServiceGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ServiceWhereInput
+    orderBy?: ServiceOrderByWithAggregationInput | ServiceOrderByWithAggregationInput[]
+    by: ServiceScalarFieldEnum[] | ServiceScalarFieldEnum
+    having?: ServiceScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ServiceCountAggregateInputType | true
+    _avg?: ServiceAvgAggregateInputType
+    _sum?: ServiceSumAggregateInputType
+    _min?: ServiceMinAggregateInputType
+    _max?: ServiceMaxAggregateInputType
+  }
+
+  export type ServiceGroupByOutputType = {
+    id: string
+    slug: string
+    name: string
+    description: string | null
+    feeBDT: Decimal
+    isActive: boolean
+    handler: string
+    createdAt: Date
+    updatedAt: Date
+    _count: ServiceCountAggregateOutputType | null
+    _avg: ServiceAvgAggregateOutputType | null
+    _sum: ServiceSumAggregateOutputType | null
+    _min: ServiceMinAggregateOutputType | null
+    _max: ServiceMaxAggregateOutputType | null
+  }
+
+  type GetServiceGroupByPayload<T extends ServiceGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ServiceGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ServiceGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ServiceGroupByOutputType[P]>
+            : GetScalarType<T[P], ServiceGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ServiceSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    slug?: boolean
+    name?: boolean
+    description?: boolean
+    feeBDT?: boolean
+    isActive?: boolean
+    handler?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    requests?: boolean | Service$requestsArgs<ExtArgs>
+    coupons?: boolean | Service$couponsArgs<ExtArgs>
+    _count?: boolean | ServiceCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["service"]>
+
+  export type ServiceSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    slug?: boolean
+    name?: boolean
+    description?: boolean
+    feeBDT?: boolean
+    isActive?: boolean
+    handler?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["service"]>
+
+  export type ServiceSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    slug?: boolean
+    name?: boolean
+    description?: boolean
+    feeBDT?: boolean
+    isActive?: boolean
+    handler?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["service"]>
+
+  export type ServiceSelectScalar = {
+    id?: boolean
+    slug?: boolean
+    name?: boolean
+    description?: boolean
+    feeBDT?: boolean
+    isActive?: boolean
+    handler?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type ServiceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "slug" | "name" | "description" | "feeBDT" | "isActive" | "handler" | "createdAt" | "updatedAt", ExtArgs["result"]["service"]>
+  export type ServiceInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    requests?: boolean | Service$requestsArgs<ExtArgs>
+    coupons?: boolean | Service$couponsArgs<ExtArgs>
+    _count?: boolean | ServiceCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type ServiceIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type ServiceIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $ServicePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Service"
+    objects: {
+      requests: Prisma.$ServiceRequestPayload<ExtArgs>[]
+      coupons: Prisma.$ServiceCouponPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      slug: string
+      name: string
+      description: string | null
+      feeBDT: Prisma.Decimal
+      isActive: boolean
+      handler: string
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["service"]>
+    composites: {}
+  }
+
+  type ServiceGetPayload<S extends boolean | null | undefined | ServiceDefaultArgs> = $Result.GetResult<Prisma.$ServicePayload, S>
+
+  type ServiceCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ServiceFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ServiceCountAggregateInputType | true
+    }
+
+  export interface ServiceDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Service'], meta: { name: 'Service' } }
+    /**
+     * Find zero or one Service that matches the filter.
+     * @param {ServiceFindUniqueArgs} args - Arguments to find a Service
+     * @example
+     * // Get one Service
+     * const service = await prisma.service.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ServiceFindUniqueArgs>(args: SelectSubset<T, ServiceFindUniqueArgs<ExtArgs>>): Prisma__ServiceClient<$Result.GetResult<Prisma.$ServicePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Service that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ServiceFindUniqueOrThrowArgs} args - Arguments to find a Service
+     * @example
+     * // Get one Service
+     * const service = await prisma.service.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ServiceFindUniqueOrThrowArgs>(args: SelectSubset<T, ServiceFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ServiceClient<$Result.GetResult<Prisma.$ServicePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Service that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ServiceFindFirstArgs} args - Arguments to find a Service
+     * @example
+     * // Get one Service
+     * const service = await prisma.service.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ServiceFindFirstArgs>(args?: SelectSubset<T, ServiceFindFirstArgs<ExtArgs>>): Prisma__ServiceClient<$Result.GetResult<Prisma.$ServicePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Service that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ServiceFindFirstOrThrowArgs} args - Arguments to find a Service
+     * @example
+     * // Get one Service
+     * const service = await prisma.service.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ServiceFindFirstOrThrowArgs>(args?: SelectSubset<T, ServiceFindFirstOrThrowArgs<ExtArgs>>): Prisma__ServiceClient<$Result.GetResult<Prisma.$ServicePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Services that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ServiceFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Services
+     * const services = await prisma.service.findMany()
+     * 
+     * // Get first 10 Services
+     * const services = await prisma.service.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const serviceWithIdOnly = await prisma.service.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ServiceFindManyArgs>(args?: SelectSubset<T, ServiceFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ServicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Service.
+     * @param {ServiceCreateArgs} args - Arguments to create a Service.
+     * @example
+     * // Create one Service
+     * const Service = await prisma.service.create({
+     *   data: {
+     *     // ... data to create a Service
+     *   }
+     * })
+     * 
+     */
+    create<T extends ServiceCreateArgs>(args: SelectSubset<T, ServiceCreateArgs<ExtArgs>>): Prisma__ServiceClient<$Result.GetResult<Prisma.$ServicePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Services.
+     * @param {ServiceCreateManyArgs} args - Arguments to create many Services.
+     * @example
+     * // Create many Services
+     * const service = await prisma.service.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ServiceCreateManyArgs>(args?: SelectSubset<T, ServiceCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Services and returns the data saved in the database.
+     * @param {ServiceCreateManyAndReturnArgs} args - Arguments to create many Services.
+     * @example
+     * // Create many Services
+     * const service = await prisma.service.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Services and only return the `id`
+     * const serviceWithIdOnly = await prisma.service.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ServiceCreateManyAndReturnArgs>(args?: SelectSubset<T, ServiceCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ServicePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Service.
+     * @param {ServiceDeleteArgs} args - Arguments to delete one Service.
+     * @example
+     * // Delete one Service
+     * const Service = await prisma.service.delete({
+     *   where: {
+     *     // ... filter to delete one Service
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ServiceDeleteArgs>(args: SelectSubset<T, ServiceDeleteArgs<ExtArgs>>): Prisma__ServiceClient<$Result.GetResult<Prisma.$ServicePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Service.
+     * @param {ServiceUpdateArgs} args - Arguments to update one Service.
+     * @example
+     * // Update one Service
+     * const service = await prisma.service.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ServiceUpdateArgs>(args: SelectSubset<T, ServiceUpdateArgs<ExtArgs>>): Prisma__ServiceClient<$Result.GetResult<Prisma.$ServicePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Services.
+     * @param {ServiceDeleteManyArgs} args - Arguments to filter Services to delete.
+     * @example
+     * // Delete a few Services
+     * const { count } = await prisma.service.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ServiceDeleteManyArgs>(args?: SelectSubset<T, ServiceDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Services.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ServiceUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Services
+     * const service = await prisma.service.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ServiceUpdateManyArgs>(args: SelectSubset<T, ServiceUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Services and returns the data updated in the database.
+     * @param {ServiceUpdateManyAndReturnArgs} args - Arguments to update many Services.
+     * @example
+     * // Update many Services
+     * const service = await prisma.service.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Services and only return the `id`
+     * const serviceWithIdOnly = await prisma.service.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ServiceUpdateManyAndReturnArgs>(args: SelectSubset<T, ServiceUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ServicePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Service.
+     * @param {ServiceUpsertArgs} args - Arguments to update or create a Service.
+     * @example
+     * // Update or create a Service
+     * const service = await prisma.service.upsert({
+     *   create: {
+     *     // ... data to create a Service
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Service we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ServiceUpsertArgs>(args: SelectSubset<T, ServiceUpsertArgs<ExtArgs>>): Prisma__ServiceClient<$Result.GetResult<Prisma.$ServicePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Services.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ServiceCountArgs} args - Arguments to filter Services to count.
+     * @example
+     * // Count the number of Services
+     * const count = await prisma.service.count({
+     *   where: {
+     *     // ... the filter for the Services we want to count
+     *   }
+     * })
+    **/
+    count<T extends ServiceCountArgs>(
+      args?: Subset<T, ServiceCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ServiceCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Service.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ServiceAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ServiceAggregateArgs>(args: Subset<T, ServiceAggregateArgs>): Prisma.PrismaPromise<GetServiceAggregateType<T>>
+
+    /**
+     * Group by Service.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ServiceGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ServiceGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ServiceGroupByArgs['orderBy'] }
+        : { orderBy?: ServiceGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ServiceGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetServiceGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Service model
+   */
+  readonly fields: ServiceFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Service.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ServiceClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    requests<T extends Service$requestsArgs<ExtArgs> = {}>(args?: Subset<T, Service$requestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ServiceRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    coupons<T extends Service$couponsArgs<ExtArgs> = {}>(args?: Subset<T, Service$couponsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ServiceCouponPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Service model
+   */
+  interface ServiceFieldRefs {
+    readonly id: FieldRef<"Service", 'String'>
+    readonly slug: FieldRef<"Service", 'String'>
+    readonly name: FieldRef<"Service", 'String'>
+    readonly description: FieldRef<"Service", 'String'>
+    readonly feeBDT: FieldRef<"Service", 'Decimal'>
+    readonly isActive: FieldRef<"Service", 'Boolean'>
+    readonly handler: FieldRef<"Service", 'String'>
+    readonly createdAt: FieldRef<"Service", 'DateTime'>
+    readonly updatedAt: FieldRef<"Service", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Service findUnique
+   */
+  export type ServiceFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Service
+     */
+    select?: ServiceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Service
+     */
+    omit?: ServiceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ServiceInclude<ExtArgs> | null
+    /**
+     * Filter, which Service to fetch.
+     */
+    where: ServiceWhereUniqueInput
+  }
+
+  /**
+   * Service findUniqueOrThrow
+   */
+  export type ServiceFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Service
+     */
+    select?: ServiceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Service
+     */
+    omit?: ServiceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ServiceInclude<ExtArgs> | null
+    /**
+     * Filter, which Service to fetch.
+     */
+    where: ServiceWhereUniqueInput
+  }
+
+  /**
+   * Service findFirst
+   */
+  export type ServiceFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Service
+     */
+    select?: ServiceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Service
+     */
+    omit?: ServiceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ServiceInclude<ExtArgs> | null
+    /**
+     * Filter, which Service to fetch.
+     */
+    where?: ServiceWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Services to fetch.
+     */
+    orderBy?: ServiceOrderByWithRelationInput | ServiceOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Services.
+     */
+    cursor?: ServiceWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Services from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Services.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Services.
+     */
+    distinct?: ServiceScalarFieldEnum | ServiceScalarFieldEnum[]
+  }
+
+  /**
+   * Service findFirstOrThrow
+   */
+  export type ServiceFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Service
+     */
+    select?: ServiceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Service
+     */
+    omit?: ServiceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ServiceInclude<ExtArgs> | null
+    /**
+     * Filter, which Service to fetch.
+     */
+    where?: ServiceWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Services to fetch.
+     */
+    orderBy?: ServiceOrderByWithRelationInput | ServiceOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Services.
+     */
+    cursor?: ServiceWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Services from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Services.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Services.
+     */
+    distinct?: ServiceScalarFieldEnum | ServiceScalarFieldEnum[]
+  }
+
+  /**
+   * Service findMany
+   */
+  export type ServiceFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Service
+     */
+    select?: ServiceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Service
+     */
+    omit?: ServiceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ServiceInclude<ExtArgs> | null
+    /**
+     * Filter, which Services to fetch.
+     */
+    where?: ServiceWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Services to fetch.
+     */
+    orderBy?: ServiceOrderByWithRelationInput | ServiceOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Services.
+     */
+    cursor?: ServiceWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Services from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Services.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Services.
+     */
+    distinct?: ServiceScalarFieldEnum | ServiceScalarFieldEnum[]
+  }
+
+  /**
+   * Service create
+   */
+  export type ServiceCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Service
+     */
+    select?: ServiceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Service
+     */
+    omit?: ServiceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ServiceInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Service.
+     */
+    data: XOR<ServiceCreateInput, ServiceUncheckedCreateInput>
+  }
+
+  /**
+   * Service createMany
+   */
+  export type ServiceCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Services.
+     */
+    data: ServiceCreateManyInput | ServiceCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Service createManyAndReturn
+   */
+  export type ServiceCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Service
+     */
+    select?: ServiceSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Service
+     */
+    omit?: ServiceOmit<ExtArgs> | null
+    /**
+     * The data used to create many Services.
+     */
+    data: ServiceCreateManyInput | ServiceCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Service update
+   */
+  export type ServiceUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Service
+     */
+    select?: ServiceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Service
+     */
+    omit?: ServiceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ServiceInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Service.
+     */
+    data: XOR<ServiceUpdateInput, ServiceUncheckedUpdateInput>
+    /**
+     * Choose, which Service to update.
+     */
+    where: ServiceWhereUniqueInput
+  }
+
+  /**
+   * Service updateMany
+   */
+  export type ServiceUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Services.
+     */
+    data: XOR<ServiceUpdateManyMutationInput, ServiceUncheckedUpdateManyInput>
+    /**
+     * Filter which Services to update
+     */
+    where?: ServiceWhereInput
+    /**
+     * Limit how many Services to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Service updateManyAndReturn
+   */
+  export type ServiceUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Service
+     */
+    select?: ServiceSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Service
+     */
+    omit?: ServiceOmit<ExtArgs> | null
+    /**
+     * The data used to update Services.
+     */
+    data: XOR<ServiceUpdateManyMutationInput, ServiceUncheckedUpdateManyInput>
+    /**
+     * Filter which Services to update
+     */
+    where?: ServiceWhereInput
+    /**
+     * Limit how many Services to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Service upsert
+   */
+  export type ServiceUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Service
+     */
+    select?: ServiceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Service
+     */
+    omit?: ServiceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ServiceInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Service to update in case it exists.
+     */
+    where: ServiceWhereUniqueInput
+    /**
+     * In case the Service found by the `where` argument doesn't exist, create a new Service with this data.
+     */
+    create: XOR<ServiceCreateInput, ServiceUncheckedCreateInput>
+    /**
+     * In case the Service was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ServiceUpdateInput, ServiceUncheckedUpdateInput>
+  }
+
+  /**
+   * Service delete
+   */
+  export type ServiceDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Service
+     */
+    select?: ServiceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Service
+     */
+    omit?: ServiceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ServiceInclude<ExtArgs> | null
+    /**
+     * Filter which Service to delete.
+     */
+    where: ServiceWhereUniqueInput
+  }
+
+  /**
+   * Service deleteMany
+   */
+  export type ServiceDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Services to delete
+     */
+    where?: ServiceWhereInput
+    /**
+     * Limit how many Services to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Service.requests
+   */
+  export type Service$requestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ServiceRequest
+     */
+    select?: ServiceRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ServiceRequest
+     */
+    omit?: ServiceRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ServiceRequestInclude<ExtArgs> | null
+    where?: ServiceRequestWhereInput
+    orderBy?: ServiceRequestOrderByWithRelationInput | ServiceRequestOrderByWithRelationInput[]
+    cursor?: ServiceRequestWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ServiceRequestScalarFieldEnum | ServiceRequestScalarFieldEnum[]
+  }
+
+  /**
+   * Service.coupons
+   */
+  export type Service$couponsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ServiceCoupon
+     */
+    select?: ServiceCouponSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ServiceCoupon
+     */
+    omit?: ServiceCouponOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ServiceCouponInclude<ExtArgs> | null
+    where?: ServiceCouponWhereInput
+    orderBy?: ServiceCouponOrderByWithRelationInput | ServiceCouponOrderByWithRelationInput[]
+    cursor?: ServiceCouponWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ServiceCouponScalarFieldEnum | ServiceCouponScalarFieldEnum[]
+  }
+
+  /**
+   * Service without action
+   */
+  export type ServiceDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Service
+     */
+    select?: ServiceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Service
+     */
+    omit?: ServiceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ServiceInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ServiceRequest
+   */
+
+  export type AggregateServiceRequest = {
+    _count: ServiceRequestCountAggregateOutputType | null
+    _avg: ServiceRequestAvgAggregateOutputType | null
+    _sum: ServiceRequestSumAggregateOutputType | null
+    _min: ServiceRequestMinAggregateOutputType | null
+    _max: ServiceRequestMaxAggregateOutputType | null
+  }
+
+  export type ServiceRequestAvgAggregateOutputType = {
+    fee: Decimal | null
+    discountAmount: Decimal | null
+    finalAmount: Decimal | null
+  }
+
+  export type ServiceRequestSumAggregateOutputType = {
+    fee: Decimal | null
+    discountAmount: Decimal | null
+    finalAmount: Decimal | null
+  }
+
+  export type ServiceRequestMinAggregateOutputType = {
+    id: string | null
+    studentId: string | null
+    serviceId: string | null
+    dojoId: string | null
+    status: $Enums.ServiceRequestStatus | null
+    dojoDecision: $Enums.ServiceRequestDojoDecision | null
+    reason: string | null
+    dojoNote: string | null
+    adminNote: string | null
+    fee: Decimal | null
+    discountAmount: Decimal | null
+    finalAmount: Decimal | null
+    couponId: string | null
+    couponCode: string | null
+    orderId: string | null
+    paidAt: Date | null
+    dojoActedAt: Date | null
+    dojoActedById: string | null
+    adminActedAt: Date | null
+    adminActedById: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ServiceRequestMaxAggregateOutputType = {
+    id: string | null
+    studentId: string | null
+    serviceId: string | null
+    dojoId: string | null
+    status: $Enums.ServiceRequestStatus | null
+    dojoDecision: $Enums.ServiceRequestDojoDecision | null
+    reason: string | null
+    dojoNote: string | null
+    adminNote: string | null
+    fee: Decimal | null
+    discountAmount: Decimal | null
+    finalAmount: Decimal | null
+    couponId: string | null
+    couponCode: string | null
+    orderId: string | null
+    paidAt: Date | null
+    dojoActedAt: Date | null
+    dojoActedById: string | null
+    adminActedAt: Date | null
+    adminActedById: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ServiceRequestCountAggregateOutputType = {
+    id: number
+    studentId: number
+    serviceId: number
+    dojoId: number
+    status: number
+    dojoDecision: number
+    payload: number
+    reason: number
+    dojoNote: number
+    adminNote: number
+    fee: number
+    discountAmount: number
+    finalAmount: number
+    couponId: number
+    couponCode: number
+    orderId: number
+    paidAt: number
+    dojoActedAt: number
+    dojoActedById: number
+    adminActedAt: number
+    adminActedById: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type ServiceRequestAvgAggregateInputType = {
+    fee?: true
+    discountAmount?: true
+    finalAmount?: true
+  }
+
+  export type ServiceRequestSumAggregateInputType = {
+    fee?: true
+    discountAmount?: true
+    finalAmount?: true
+  }
+
+  export type ServiceRequestMinAggregateInputType = {
+    id?: true
+    studentId?: true
+    serviceId?: true
+    dojoId?: true
+    status?: true
+    dojoDecision?: true
+    reason?: true
+    dojoNote?: true
+    adminNote?: true
+    fee?: true
+    discountAmount?: true
+    finalAmount?: true
+    couponId?: true
+    couponCode?: true
+    orderId?: true
+    paidAt?: true
+    dojoActedAt?: true
+    dojoActedById?: true
+    adminActedAt?: true
+    adminActedById?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ServiceRequestMaxAggregateInputType = {
+    id?: true
+    studentId?: true
+    serviceId?: true
+    dojoId?: true
+    status?: true
+    dojoDecision?: true
+    reason?: true
+    dojoNote?: true
+    adminNote?: true
+    fee?: true
+    discountAmount?: true
+    finalAmount?: true
+    couponId?: true
+    couponCode?: true
+    orderId?: true
+    paidAt?: true
+    dojoActedAt?: true
+    dojoActedById?: true
+    adminActedAt?: true
+    adminActedById?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ServiceRequestCountAggregateInputType = {
+    id?: true
+    studentId?: true
+    serviceId?: true
+    dojoId?: true
+    status?: true
+    dojoDecision?: true
+    payload?: true
+    reason?: true
+    dojoNote?: true
+    adminNote?: true
+    fee?: true
+    discountAmount?: true
+    finalAmount?: true
+    couponId?: true
+    couponCode?: true
+    orderId?: true
+    paidAt?: true
+    dojoActedAt?: true
+    dojoActedById?: true
+    adminActedAt?: true
+    adminActedById?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type ServiceRequestAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ServiceRequest to aggregate.
+     */
+    where?: ServiceRequestWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ServiceRequests to fetch.
+     */
+    orderBy?: ServiceRequestOrderByWithRelationInput | ServiceRequestOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ServiceRequestWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ServiceRequests from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ServiceRequests.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ServiceRequests
+    **/
+    _count?: true | ServiceRequestCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ServiceRequestAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ServiceRequestSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ServiceRequestMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ServiceRequestMaxAggregateInputType
+  }
+
+  export type GetServiceRequestAggregateType<T extends ServiceRequestAggregateArgs> = {
+        [P in keyof T & keyof AggregateServiceRequest]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateServiceRequest[P]>
+      : GetScalarType<T[P], AggregateServiceRequest[P]>
+  }
+
+
+
+
+  export type ServiceRequestGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ServiceRequestWhereInput
+    orderBy?: ServiceRequestOrderByWithAggregationInput | ServiceRequestOrderByWithAggregationInput[]
+    by: ServiceRequestScalarFieldEnum[] | ServiceRequestScalarFieldEnum
+    having?: ServiceRequestScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ServiceRequestCountAggregateInputType | true
+    _avg?: ServiceRequestAvgAggregateInputType
+    _sum?: ServiceRequestSumAggregateInputType
+    _min?: ServiceRequestMinAggregateInputType
+    _max?: ServiceRequestMaxAggregateInputType
+  }
+
+  export type ServiceRequestGroupByOutputType = {
+    id: string
+    studentId: string
+    serviceId: string
+    dojoId: string
+    status: $Enums.ServiceRequestStatus
+    dojoDecision: $Enums.ServiceRequestDojoDecision
+    payload: JsonValue
+    reason: string | null
+    dojoNote: string | null
+    adminNote: string | null
+    fee: Decimal
+    discountAmount: Decimal
+    finalAmount: Decimal
+    couponId: string | null
+    couponCode: string | null
+    orderId: string | null
+    paidAt: Date | null
+    dojoActedAt: Date | null
+    dojoActedById: string | null
+    adminActedAt: Date | null
+    adminActedById: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: ServiceRequestCountAggregateOutputType | null
+    _avg: ServiceRequestAvgAggregateOutputType | null
+    _sum: ServiceRequestSumAggregateOutputType | null
+    _min: ServiceRequestMinAggregateOutputType | null
+    _max: ServiceRequestMaxAggregateOutputType | null
+  }
+
+  type GetServiceRequestGroupByPayload<T extends ServiceRequestGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ServiceRequestGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ServiceRequestGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ServiceRequestGroupByOutputType[P]>
+            : GetScalarType<T[P], ServiceRequestGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ServiceRequestSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    studentId?: boolean
+    serviceId?: boolean
+    dojoId?: boolean
+    status?: boolean
+    dojoDecision?: boolean
+    payload?: boolean
+    reason?: boolean
+    dojoNote?: boolean
+    adminNote?: boolean
+    fee?: boolean
+    discountAmount?: boolean
+    finalAmount?: boolean
+    couponId?: boolean
+    couponCode?: boolean
+    orderId?: boolean
+    paidAt?: boolean
+    dojoActedAt?: boolean
+    dojoActedById?: boolean
+    adminActedAt?: boolean
+    adminActedById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    student?: boolean | StudentDefaultArgs<ExtArgs>
+    service?: boolean | ServiceDefaultArgs<ExtArgs>
+    dojo?: boolean | DojoDefaultArgs<ExtArgs>
+    order?: boolean | ServiceRequest$orderArgs<ExtArgs>
+    coupon?: boolean | ServiceRequest$couponArgs<ExtArgs>
+    dojoActedBy?: boolean | ServiceRequest$dojoActedByArgs<ExtArgs>
+    adminActedBy?: boolean | ServiceRequest$adminActedByArgs<ExtArgs>
+  }, ExtArgs["result"]["serviceRequest"]>
+
+  export type ServiceRequestSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    studentId?: boolean
+    serviceId?: boolean
+    dojoId?: boolean
+    status?: boolean
+    dojoDecision?: boolean
+    payload?: boolean
+    reason?: boolean
+    dojoNote?: boolean
+    adminNote?: boolean
+    fee?: boolean
+    discountAmount?: boolean
+    finalAmount?: boolean
+    couponId?: boolean
+    couponCode?: boolean
+    orderId?: boolean
+    paidAt?: boolean
+    dojoActedAt?: boolean
+    dojoActedById?: boolean
+    adminActedAt?: boolean
+    adminActedById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    student?: boolean | StudentDefaultArgs<ExtArgs>
+    service?: boolean | ServiceDefaultArgs<ExtArgs>
+    dojo?: boolean | DojoDefaultArgs<ExtArgs>
+    order?: boolean | ServiceRequest$orderArgs<ExtArgs>
+    coupon?: boolean | ServiceRequest$couponArgs<ExtArgs>
+    dojoActedBy?: boolean | ServiceRequest$dojoActedByArgs<ExtArgs>
+    adminActedBy?: boolean | ServiceRequest$adminActedByArgs<ExtArgs>
+  }, ExtArgs["result"]["serviceRequest"]>
+
+  export type ServiceRequestSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    studentId?: boolean
+    serviceId?: boolean
+    dojoId?: boolean
+    status?: boolean
+    dojoDecision?: boolean
+    payload?: boolean
+    reason?: boolean
+    dojoNote?: boolean
+    adminNote?: boolean
+    fee?: boolean
+    discountAmount?: boolean
+    finalAmount?: boolean
+    couponId?: boolean
+    couponCode?: boolean
+    orderId?: boolean
+    paidAt?: boolean
+    dojoActedAt?: boolean
+    dojoActedById?: boolean
+    adminActedAt?: boolean
+    adminActedById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    student?: boolean | StudentDefaultArgs<ExtArgs>
+    service?: boolean | ServiceDefaultArgs<ExtArgs>
+    dojo?: boolean | DojoDefaultArgs<ExtArgs>
+    order?: boolean | ServiceRequest$orderArgs<ExtArgs>
+    coupon?: boolean | ServiceRequest$couponArgs<ExtArgs>
+    dojoActedBy?: boolean | ServiceRequest$dojoActedByArgs<ExtArgs>
+    adminActedBy?: boolean | ServiceRequest$adminActedByArgs<ExtArgs>
+  }, ExtArgs["result"]["serviceRequest"]>
+
+  export type ServiceRequestSelectScalar = {
+    id?: boolean
+    studentId?: boolean
+    serviceId?: boolean
+    dojoId?: boolean
+    status?: boolean
+    dojoDecision?: boolean
+    payload?: boolean
+    reason?: boolean
+    dojoNote?: boolean
+    adminNote?: boolean
+    fee?: boolean
+    discountAmount?: boolean
+    finalAmount?: boolean
+    couponId?: boolean
+    couponCode?: boolean
+    orderId?: boolean
+    paidAt?: boolean
+    dojoActedAt?: boolean
+    dojoActedById?: boolean
+    adminActedAt?: boolean
+    adminActedById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type ServiceRequestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "studentId" | "serviceId" | "dojoId" | "status" | "dojoDecision" | "payload" | "reason" | "dojoNote" | "adminNote" | "fee" | "discountAmount" | "finalAmount" | "couponId" | "couponCode" | "orderId" | "paidAt" | "dojoActedAt" | "dojoActedById" | "adminActedAt" | "adminActedById" | "createdAt" | "updatedAt", ExtArgs["result"]["serviceRequest"]>
+  export type ServiceRequestInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    student?: boolean | StudentDefaultArgs<ExtArgs>
+    service?: boolean | ServiceDefaultArgs<ExtArgs>
+    dojo?: boolean | DojoDefaultArgs<ExtArgs>
+    order?: boolean | ServiceRequest$orderArgs<ExtArgs>
+    coupon?: boolean | ServiceRequest$couponArgs<ExtArgs>
+    dojoActedBy?: boolean | ServiceRequest$dojoActedByArgs<ExtArgs>
+    adminActedBy?: boolean | ServiceRequest$adminActedByArgs<ExtArgs>
+  }
+  export type ServiceRequestIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    student?: boolean | StudentDefaultArgs<ExtArgs>
+    service?: boolean | ServiceDefaultArgs<ExtArgs>
+    dojo?: boolean | DojoDefaultArgs<ExtArgs>
+    order?: boolean | ServiceRequest$orderArgs<ExtArgs>
+    coupon?: boolean | ServiceRequest$couponArgs<ExtArgs>
+    dojoActedBy?: boolean | ServiceRequest$dojoActedByArgs<ExtArgs>
+    adminActedBy?: boolean | ServiceRequest$adminActedByArgs<ExtArgs>
+  }
+  export type ServiceRequestIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    student?: boolean | StudentDefaultArgs<ExtArgs>
+    service?: boolean | ServiceDefaultArgs<ExtArgs>
+    dojo?: boolean | DojoDefaultArgs<ExtArgs>
+    order?: boolean | ServiceRequest$orderArgs<ExtArgs>
+    coupon?: boolean | ServiceRequest$couponArgs<ExtArgs>
+    dojoActedBy?: boolean | ServiceRequest$dojoActedByArgs<ExtArgs>
+    adminActedBy?: boolean | ServiceRequest$adminActedByArgs<ExtArgs>
+  }
+
+  export type $ServiceRequestPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ServiceRequest"
+    objects: {
+      student: Prisma.$StudentPayload<ExtArgs>
+      service: Prisma.$ServicePayload<ExtArgs>
+      dojo: Prisma.$DojoPayload<ExtArgs>
+      order: Prisma.$ShopOrderPayload<ExtArgs> | null
+      coupon: Prisma.$ServiceCouponPayload<ExtArgs> | null
+      dojoActedBy: Prisma.$UserPayload<ExtArgs> | null
+      adminActedBy: Prisma.$UserPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      studentId: string
+      serviceId: string
+      dojoId: string
+      status: $Enums.ServiceRequestStatus
+      dojoDecision: $Enums.ServiceRequestDojoDecision
+      payload: Prisma.JsonValue
+      reason: string | null
+      dojoNote: string | null
+      adminNote: string | null
+      fee: Prisma.Decimal
+      discountAmount: Prisma.Decimal
+      finalAmount: Prisma.Decimal
+      couponId: string | null
+      couponCode: string | null
+      orderId: string | null
+      paidAt: Date | null
+      dojoActedAt: Date | null
+      dojoActedById: string | null
+      adminActedAt: Date | null
+      adminActedById: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["serviceRequest"]>
+    composites: {}
+  }
+
+  type ServiceRequestGetPayload<S extends boolean | null | undefined | ServiceRequestDefaultArgs> = $Result.GetResult<Prisma.$ServiceRequestPayload, S>
+
+  type ServiceRequestCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ServiceRequestFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ServiceRequestCountAggregateInputType | true
+    }
+
+  export interface ServiceRequestDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ServiceRequest'], meta: { name: 'ServiceRequest' } }
+    /**
+     * Find zero or one ServiceRequest that matches the filter.
+     * @param {ServiceRequestFindUniqueArgs} args - Arguments to find a ServiceRequest
+     * @example
+     * // Get one ServiceRequest
+     * const serviceRequest = await prisma.serviceRequest.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ServiceRequestFindUniqueArgs>(args: SelectSubset<T, ServiceRequestFindUniqueArgs<ExtArgs>>): Prisma__ServiceRequestClient<$Result.GetResult<Prisma.$ServiceRequestPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ServiceRequest that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ServiceRequestFindUniqueOrThrowArgs} args - Arguments to find a ServiceRequest
+     * @example
+     * // Get one ServiceRequest
+     * const serviceRequest = await prisma.serviceRequest.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ServiceRequestFindUniqueOrThrowArgs>(args: SelectSubset<T, ServiceRequestFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ServiceRequestClient<$Result.GetResult<Prisma.$ServiceRequestPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ServiceRequest that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ServiceRequestFindFirstArgs} args - Arguments to find a ServiceRequest
+     * @example
+     * // Get one ServiceRequest
+     * const serviceRequest = await prisma.serviceRequest.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ServiceRequestFindFirstArgs>(args?: SelectSubset<T, ServiceRequestFindFirstArgs<ExtArgs>>): Prisma__ServiceRequestClient<$Result.GetResult<Prisma.$ServiceRequestPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ServiceRequest that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ServiceRequestFindFirstOrThrowArgs} args - Arguments to find a ServiceRequest
+     * @example
+     * // Get one ServiceRequest
+     * const serviceRequest = await prisma.serviceRequest.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ServiceRequestFindFirstOrThrowArgs>(args?: SelectSubset<T, ServiceRequestFindFirstOrThrowArgs<ExtArgs>>): Prisma__ServiceRequestClient<$Result.GetResult<Prisma.$ServiceRequestPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ServiceRequests that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ServiceRequestFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ServiceRequests
+     * const serviceRequests = await prisma.serviceRequest.findMany()
+     * 
+     * // Get first 10 ServiceRequests
+     * const serviceRequests = await prisma.serviceRequest.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const serviceRequestWithIdOnly = await prisma.serviceRequest.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ServiceRequestFindManyArgs>(args?: SelectSubset<T, ServiceRequestFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ServiceRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ServiceRequest.
+     * @param {ServiceRequestCreateArgs} args - Arguments to create a ServiceRequest.
+     * @example
+     * // Create one ServiceRequest
+     * const ServiceRequest = await prisma.serviceRequest.create({
+     *   data: {
+     *     // ... data to create a ServiceRequest
+     *   }
+     * })
+     * 
+     */
+    create<T extends ServiceRequestCreateArgs>(args: SelectSubset<T, ServiceRequestCreateArgs<ExtArgs>>): Prisma__ServiceRequestClient<$Result.GetResult<Prisma.$ServiceRequestPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ServiceRequests.
+     * @param {ServiceRequestCreateManyArgs} args - Arguments to create many ServiceRequests.
+     * @example
+     * // Create many ServiceRequests
+     * const serviceRequest = await prisma.serviceRequest.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ServiceRequestCreateManyArgs>(args?: SelectSubset<T, ServiceRequestCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ServiceRequests and returns the data saved in the database.
+     * @param {ServiceRequestCreateManyAndReturnArgs} args - Arguments to create many ServiceRequests.
+     * @example
+     * // Create many ServiceRequests
+     * const serviceRequest = await prisma.serviceRequest.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ServiceRequests and only return the `id`
+     * const serviceRequestWithIdOnly = await prisma.serviceRequest.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ServiceRequestCreateManyAndReturnArgs>(args?: SelectSubset<T, ServiceRequestCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ServiceRequestPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ServiceRequest.
+     * @param {ServiceRequestDeleteArgs} args - Arguments to delete one ServiceRequest.
+     * @example
+     * // Delete one ServiceRequest
+     * const ServiceRequest = await prisma.serviceRequest.delete({
+     *   where: {
+     *     // ... filter to delete one ServiceRequest
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ServiceRequestDeleteArgs>(args: SelectSubset<T, ServiceRequestDeleteArgs<ExtArgs>>): Prisma__ServiceRequestClient<$Result.GetResult<Prisma.$ServiceRequestPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ServiceRequest.
+     * @param {ServiceRequestUpdateArgs} args - Arguments to update one ServiceRequest.
+     * @example
+     * // Update one ServiceRequest
+     * const serviceRequest = await prisma.serviceRequest.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ServiceRequestUpdateArgs>(args: SelectSubset<T, ServiceRequestUpdateArgs<ExtArgs>>): Prisma__ServiceRequestClient<$Result.GetResult<Prisma.$ServiceRequestPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ServiceRequests.
+     * @param {ServiceRequestDeleteManyArgs} args - Arguments to filter ServiceRequests to delete.
+     * @example
+     * // Delete a few ServiceRequests
+     * const { count } = await prisma.serviceRequest.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ServiceRequestDeleteManyArgs>(args?: SelectSubset<T, ServiceRequestDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ServiceRequests.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ServiceRequestUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ServiceRequests
+     * const serviceRequest = await prisma.serviceRequest.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ServiceRequestUpdateManyArgs>(args: SelectSubset<T, ServiceRequestUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ServiceRequests and returns the data updated in the database.
+     * @param {ServiceRequestUpdateManyAndReturnArgs} args - Arguments to update many ServiceRequests.
+     * @example
+     * // Update many ServiceRequests
+     * const serviceRequest = await prisma.serviceRequest.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ServiceRequests and only return the `id`
+     * const serviceRequestWithIdOnly = await prisma.serviceRequest.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ServiceRequestUpdateManyAndReturnArgs>(args: SelectSubset<T, ServiceRequestUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ServiceRequestPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ServiceRequest.
+     * @param {ServiceRequestUpsertArgs} args - Arguments to update or create a ServiceRequest.
+     * @example
+     * // Update or create a ServiceRequest
+     * const serviceRequest = await prisma.serviceRequest.upsert({
+     *   create: {
+     *     // ... data to create a ServiceRequest
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ServiceRequest we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ServiceRequestUpsertArgs>(args: SelectSubset<T, ServiceRequestUpsertArgs<ExtArgs>>): Prisma__ServiceRequestClient<$Result.GetResult<Prisma.$ServiceRequestPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ServiceRequests.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ServiceRequestCountArgs} args - Arguments to filter ServiceRequests to count.
+     * @example
+     * // Count the number of ServiceRequests
+     * const count = await prisma.serviceRequest.count({
+     *   where: {
+     *     // ... the filter for the ServiceRequests we want to count
+     *   }
+     * })
+    **/
+    count<T extends ServiceRequestCountArgs>(
+      args?: Subset<T, ServiceRequestCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ServiceRequestCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ServiceRequest.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ServiceRequestAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ServiceRequestAggregateArgs>(args: Subset<T, ServiceRequestAggregateArgs>): Prisma.PrismaPromise<GetServiceRequestAggregateType<T>>
+
+    /**
+     * Group by ServiceRequest.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ServiceRequestGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ServiceRequestGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ServiceRequestGroupByArgs['orderBy'] }
+        : { orderBy?: ServiceRequestGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ServiceRequestGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetServiceRequestGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ServiceRequest model
+   */
+  readonly fields: ServiceRequestFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ServiceRequest.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ServiceRequestClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    student<T extends StudentDefaultArgs<ExtArgs> = {}>(args?: Subset<T, StudentDefaultArgs<ExtArgs>>): Prisma__StudentClient<$Result.GetResult<Prisma.$StudentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    service<T extends ServiceDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ServiceDefaultArgs<ExtArgs>>): Prisma__ServiceClient<$Result.GetResult<Prisma.$ServicePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    dojo<T extends DojoDefaultArgs<ExtArgs> = {}>(args?: Subset<T, DojoDefaultArgs<ExtArgs>>): Prisma__DojoClient<$Result.GetResult<Prisma.$DojoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    order<T extends ServiceRequest$orderArgs<ExtArgs> = {}>(args?: Subset<T, ServiceRequest$orderArgs<ExtArgs>>): Prisma__ShopOrderClient<$Result.GetResult<Prisma.$ShopOrderPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    coupon<T extends ServiceRequest$couponArgs<ExtArgs> = {}>(args?: Subset<T, ServiceRequest$couponArgs<ExtArgs>>): Prisma__ServiceCouponClient<$Result.GetResult<Prisma.$ServiceCouponPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    dojoActedBy<T extends ServiceRequest$dojoActedByArgs<ExtArgs> = {}>(args?: Subset<T, ServiceRequest$dojoActedByArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    adminActedBy<T extends ServiceRequest$adminActedByArgs<ExtArgs> = {}>(args?: Subset<T, ServiceRequest$adminActedByArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ServiceRequest model
+   */
+  interface ServiceRequestFieldRefs {
+    readonly id: FieldRef<"ServiceRequest", 'String'>
+    readonly studentId: FieldRef<"ServiceRequest", 'String'>
+    readonly serviceId: FieldRef<"ServiceRequest", 'String'>
+    readonly dojoId: FieldRef<"ServiceRequest", 'String'>
+    readonly status: FieldRef<"ServiceRequest", 'ServiceRequestStatus'>
+    readonly dojoDecision: FieldRef<"ServiceRequest", 'ServiceRequestDojoDecision'>
+    readonly payload: FieldRef<"ServiceRequest", 'Json'>
+    readonly reason: FieldRef<"ServiceRequest", 'String'>
+    readonly dojoNote: FieldRef<"ServiceRequest", 'String'>
+    readonly adminNote: FieldRef<"ServiceRequest", 'String'>
+    readonly fee: FieldRef<"ServiceRequest", 'Decimal'>
+    readonly discountAmount: FieldRef<"ServiceRequest", 'Decimal'>
+    readonly finalAmount: FieldRef<"ServiceRequest", 'Decimal'>
+    readonly couponId: FieldRef<"ServiceRequest", 'String'>
+    readonly couponCode: FieldRef<"ServiceRequest", 'String'>
+    readonly orderId: FieldRef<"ServiceRequest", 'String'>
+    readonly paidAt: FieldRef<"ServiceRequest", 'DateTime'>
+    readonly dojoActedAt: FieldRef<"ServiceRequest", 'DateTime'>
+    readonly dojoActedById: FieldRef<"ServiceRequest", 'String'>
+    readonly adminActedAt: FieldRef<"ServiceRequest", 'DateTime'>
+    readonly adminActedById: FieldRef<"ServiceRequest", 'String'>
+    readonly createdAt: FieldRef<"ServiceRequest", 'DateTime'>
+    readonly updatedAt: FieldRef<"ServiceRequest", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ServiceRequest findUnique
+   */
+  export type ServiceRequestFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ServiceRequest
+     */
+    select?: ServiceRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ServiceRequest
+     */
+    omit?: ServiceRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ServiceRequestInclude<ExtArgs> | null
+    /**
+     * Filter, which ServiceRequest to fetch.
+     */
+    where: ServiceRequestWhereUniqueInput
+  }
+
+  /**
+   * ServiceRequest findUniqueOrThrow
+   */
+  export type ServiceRequestFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ServiceRequest
+     */
+    select?: ServiceRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ServiceRequest
+     */
+    omit?: ServiceRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ServiceRequestInclude<ExtArgs> | null
+    /**
+     * Filter, which ServiceRequest to fetch.
+     */
+    where: ServiceRequestWhereUniqueInput
+  }
+
+  /**
+   * ServiceRequest findFirst
+   */
+  export type ServiceRequestFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ServiceRequest
+     */
+    select?: ServiceRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ServiceRequest
+     */
+    omit?: ServiceRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ServiceRequestInclude<ExtArgs> | null
+    /**
+     * Filter, which ServiceRequest to fetch.
+     */
+    where?: ServiceRequestWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ServiceRequests to fetch.
+     */
+    orderBy?: ServiceRequestOrderByWithRelationInput | ServiceRequestOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ServiceRequests.
+     */
+    cursor?: ServiceRequestWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ServiceRequests from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ServiceRequests.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ServiceRequests.
+     */
+    distinct?: ServiceRequestScalarFieldEnum | ServiceRequestScalarFieldEnum[]
+  }
+
+  /**
+   * ServiceRequest findFirstOrThrow
+   */
+  export type ServiceRequestFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ServiceRequest
+     */
+    select?: ServiceRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ServiceRequest
+     */
+    omit?: ServiceRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ServiceRequestInclude<ExtArgs> | null
+    /**
+     * Filter, which ServiceRequest to fetch.
+     */
+    where?: ServiceRequestWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ServiceRequests to fetch.
+     */
+    orderBy?: ServiceRequestOrderByWithRelationInput | ServiceRequestOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ServiceRequests.
+     */
+    cursor?: ServiceRequestWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ServiceRequests from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ServiceRequests.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ServiceRequests.
+     */
+    distinct?: ServiceRequestScalarFieldEnum | ServiceRequestScalarFieldEnum[]
+  }
+
+  /**
+   * ServiceRequest findMany
+   */
+  export type ServiceRequestFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ServiceRequest
+     */
+    select?: ServiceRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ServiceRequest
+     */
+    omit?: ServiceRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ServiceRequestInclude<ExtArgs> | null
+    /**
+     * Filter, which ServiceRequests to fetch.
+     */
+    where?: ServiceRequestWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ServiceRequests to fetch.
+     */
+    orderBy?: ServiceRequestOrderByWithRelationInput | ServiceRequestOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ServiceRequests.
+     */
+    cursor?: ServiceRequestWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ServiceRequests from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ServiceRequests.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ServiceRequests.
+     */
+    distinct?: ServiceRequestScalarFieldEnum | ServiceRequestScalarFieldEnum[]
+  }
+
+  /**
+   * ServiceRequest create
+   */
+  export type ServiceRequestCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ServiceRequest
+     */
+    select?: ServiceRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ServiceRequest
+     */
+    omit?: ServiceRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ServiceRequestInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ServiceRequest.
+     */
+    data: XOR<ServiceRequestCreateInput, ServiceRequestUncheckedCreateInput>
+  }
+
+  /**
+   * ServiceRequest createMany
+   */
+  export type ServiceRequestCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ServiceRequests.
+     */
+    data: ServiceRequestCreateManyInput | ServiceRequestCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ServiceRequest createManyAndReturn
+   */
+  export type ServiceRequestCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ServiceRequest
+     */
+    select?: ServiceRequestSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ServiceRequest
+     */
+    omit?: ServiceRequestOmit<ExtArgs> | null
+    /**
+     * The data used to create many ServiceRequests.
+     */
+    data: ServiceRequestCreateManyInput | ServiceRequestCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ServiceRequestIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ServiceRequest update
+   */
+  export type ServiceRequestUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ServiceRequest
+     */
+    select?: ServiceRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ServiceRequest
+     */
+    omit?: ServiceRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ServiceRequestInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ServiceRequest.
+     */
+    data: XOR<ServiceRequestUpdateInput, ServiceRequestUncheckedUpdateInput>
+    /**
+     * Choose, which ServiceRequest to update.
+     */
+    where: ServiceRequestWhereUniqueInput
+  }
+
+  /**
+   * ServiceRequest updateMany
+   */
+  export type ServiceRequestUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ServiceRequests.
+     */
+    data: XOR<ServiceRequestUpdateManyMutationInput, ServiceRequestUncheckedUpdateManyInput>
+    /**
+     * Filter which ServiceRequests to update
+     */
+    where?: ServiceRequestWhereInput
+    /**
+     * Limit how many ServiceRequests to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ServiceRequest updateManyAndReturn
+   */
+  export type ServiceRequestUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ServiceRequest
+     */
+    select?: ServiceRequestSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ServiceRequest
+     */
+    omit?: ServiceRequestOmit<ExtArgs> | null
+    /**
+     * The data used to update ServiceRequests.
+     */
+    data: XOR<ServiceRequestUpdateManyMutationInput, ServiceRequestUncheckedUpdateManyInput>
+    /**
+     * Filter which ServiceRequests to update
+     */
+    where?: ServiceRequestWhereInput
+    /**
+     * Limit how many ServiceRequests to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ServiceRequestIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ServiceRequest upsert
+   */
+  export type ServiceRequestUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ServiceRequest
+     */
+    select?: ServiceRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ServiceRequest
+     */
+    omit?: ServiceRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ServiceRequestInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ServiceRequest to update in case it exists.
+     */
+    where: ServiceRequestWhereUniqueInput
+    /**
+     * In case the ServiceRequest found by the `where` argument doesn't exist, create a new ServiceRequest with this data.
+     */
+    create: XOR<ServiceRequestCreateInput, ServiceRequestUncheckedCreateInput>
+    /**
+     * In case the ServiceRequest was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ServiceRequestUpdateInput, ServiceRequestUncheckedUpdateInput>
+  }
+
+  /**
+   * ServiceRequest delete
+   */
+  export type ServiceRequestDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ServiceRequest
+     */
+    select?: ServiceRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ServiceRequest
+     */
+    omit?: ServiceRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ServiceRequestInclude<ExtArgs> | null
+    /**
+     * Filter which ServiceRequest to delete.
+     */
+    where: ServiceRequestWhereUniqueInput
+  }
+
+  /**
+   * ServiceRequest deleteMany
+   */
+  export type ServiceRequestDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ServiceRequests to delete
+     */
+    where?: ServiceRequestWhereInput
+    /**
+     * Limit how many ServiceRequests to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ServiceRequest.order
+   */
+  export type ServiceRequest$orderArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShopOrder
+     */
+    select?: ShopOrderSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ShopOrder
+     */
+    omit?: ShopOrderOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShopOrderInclude<ExtArgs> | null
+    where?: ShopOrderWhereInput
+  }
+
+  /**
+   * ServiceRequest.coupon
+   */
+  export type ServiceRequest$couponArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ServiceCoupon
+     */
+    select?: ServiceCouponSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ServiceCoupon
+     */
+    omit?: ServiceCouponOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ServiceCouponInclude<ExtArgs> | null
+    where?: ServiceCouponWhereInput
+  }
+
+  /**
+   * ServiceRequest.dojoActedBy
+   */
+  export type ServiceRequest$dojoActedByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * ServiceRequest.adminActedBy
+   */
+  export type ServiceRequest$adminActedByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * ServiceRequest without action
+   */
+  export type ServiceRequestDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ServiceRequest
+     */
+    select?: ServiceRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ServiceRequest
+     */
+    omit?: ServiceRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ServiceRequestInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ServiceCoupon
+   */
+
+  export type AggregateServiceCoupon = {
+    _count: ServiceCouponCountAggregateOutputType | null
+    _avg: ServiceCouponAvgAggregateOutputType | null
+    _sum: ServiceCouponSumAggregateOutputType | null
+    _min: ServiceCouponMinAggregateOutputType | null
+    _max: ServiceCouponMaxAggregateOutputType | null
+  }
+
+  export type ServiceCouponAvgAggregateOutputType = {
+    discountPercent: number | null
+    usageLimit: number | null
+    usedCount: number | null
+  }
+
+  export type ServiceCouponSumAggregateOutputType = {
+    discountPercent: number | null
+    usageLimit: number | null
+    usedCount: number | null
+  }
+
+  export type ServiceCouponMinAggregateOutputType = {
+    id: string | null
+    code: string | null
+    dojoId: string | null
+    createdById: string | null
+    discountPercent: number | null
+    serviceId: string | null
+    usageLimit: number | null
+    usedCount: number | null
+    expiresAt: Date | null
+    isActive: boolean | null
+    notes: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ServiceCouponMaxAggregateOutputType = {
+    id: string | null
+    code: string | null
+    dojoId: string | null
+    createdById: string | null
+    discountPercent: number | null
+    serviceId: string | null
+    usageLimit: number | null
+    usedCount: number | null
+    expiresAt: Date | null
+    isActive: boolean | null
+    notes: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ServiceCouponCountAggregateOutputType = {
+    id: number
+    code: number
+    dojoId: number
+    createdById: number
+    discountPercent: number
+    serviceId: number
+    usageLimit: number
+    usedCount: number
+    expiresAt: number
+    isActive: number
+    notes: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type ServiceCouponAvgAggregateInputType = {
+    discountPercent?: true
+    usageLimit?: true
+    usedCount?: true
+  }
+
+  export type ServiceCouponSumAggregateInputType = {
+    discountPercent?: true
+    usageLimit?: true
+    usedCount?: true
+  }
+
+  export type ServiceCouponMinAggregateInputType = {
+    id?: true
+    code?: true
+    dojoId?: true
+    createdById?: true
+    discountPercent?: true
+    serviceId?: true
+    usageLimit?: true
+    usedCount?: true
+    expiresAt?: true
+    isActive?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ServiceCouponMaxAggregateInputType = {
+    id?: true
+    code?: true
+    dojoId?: true
+    createdById?: true
+    discountPercent?: true
+    serviceId?: true
+    usageLimit?: true
+    usedCount?: true
+    expiresAt?: true
+    isActive?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ServiceCouponCountAggregateInputType = {
+    id?: true
+    code?: true
+    dojoId?: true
+    createdById?: true
+    discountPercent?: true
+    serviceId?: true
+    usageLimit?: true
+    usedCount?: true
+    expiresAt?: true
+    isActive?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type ServiceCouponAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ServiceCoupon to aggregate.
+     */
+    where?: ServiceCouponWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ServiceCoupons to fetch.
+     */
+    orderBy?: ServiceCouponOrderByWithRelationInput | ServiceCouponOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ServiceCouponWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ServiceCoupons from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ServiceCoupons.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ServiceCoupons
+    **/
+    _count?: true | ServiceCouponCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ServiceCouponAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ServiceCouponSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ServiceCouponMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ServiceCouponMaxAggregateInputType
+  }
+
+  export type GetServiceCouponAggregateType<T extends ServiceCouponAggregateArgs> = {
+        [P in keyof T & keyof AggregateServiceCoupon]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateServiceCoupon[P]>
+      : GetScalarType<T[P], AggregateServiceCoupon[P]>
+  }
+
+
+
+
+  export type ServiceCouponGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ServiceCouponWhereInput
+    orderBy?: ServiceCouponOrderByWithAggregationInput | ServiceCouponOrderByWithAggregationInput[]
+    by: ServiceCouponScalarFieldEnum[] | ServiceCouponScalarFieldEnum
+    having?: ServiceCouponScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ServiceCouponCountAggregateInputType | true
+    _avg?: ServiceCouponAvgAggregateInputType
+    _sum?: ServiceCouponSumAggregateInputType
+    _min?: ServiceCouponMinAggregateInputType
+    _max?: ServiceCouponMaxAggregateInputType
+  }
+
+  export type ServiceCouponGroupByOutputType = {
+    id: string
+    code: string
+    dojoId: string
+    createdById: string
+    discountPercent: number
+    serviceId: string | null
+    usageLimit: number
+    usedCount: number
+    expiresAt: Date | null
+    isActive: boolean
+    notes: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: ServiceCouponCountAggregateOutputType | null
+    _avg: ServiceCouponAvgAggregateOutputType | null
+    _sum: ServiceCouponSumAggregateOutputType | null
+    _min: ServiceCouponMinAggregateOutputType | null
+    _max: ServiceCouponMaxAggregateOutputType | null
+  }
+
+  type GetServiceCouponGroupByPayload<T extends ServiceCouponGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ServiceCouponGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ServiceCouponGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ServiceCouponGroupByOutputType[P]>
+            : GetScalarType<T[P], ServiceCouponGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ServiceCouponSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    code?: boolean
+    dojoId?: boolean
+    createdById?: boolean
+    discountPercent?: boolean
+    serviceId?: boolean
+    usageLimit?: boolean
+    usedCount?: boolean
+    expiresAt?: boolean
+    isActive?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    dojo?: boolean | DojoDefaultArgs<ExtArgs>
+    service?: boolean | ServiceCoupon$serviceArgs<ExtArgs>
+    createdBy?: boolean | UserDefaultArgs<ExtArgs>
+    requests?: boolean | ServiceCoupon$requestsArgs<ExtArgs>
+    _count?: boolean | ServiceCouponCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["serviceCoupon"]>
+
+  export type ServiceCouponSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    code?: boolean
+    dojoId?: boolean
+    createdById?: boolean
+    discountPercent?: boolean
+    serviceId?: boolean
+    usageLimit?: boolean
+    usedCount?: boolean
+    expiresAt?: boolean
+    isActive?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    dojo?: boolean | DojoDefaultArgs<ExtArgs>
+    service?: boolean | ServiceCoupon$serviceArgs<ExtArgs>
+    createdBy?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["serviceCoupon"]>
+
+  export type ServiceCouponSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    code?: boolean
+    dojoId?: boolean
+    createdById?: boolean
+    discountPercent?: boolean
+    serviceId?: boolean
+    usageLimit?: boolean
+    usedCount?: boolean
+    expiresAt?: boolean
+    isActive?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    dojo?: boolean | DojoDefaultArgs<ExtArgs>
+    service?: boolean | ServiceCoupon$serviceArgs<ExtArgs>
+    createdBy?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["serviceCoupon"]>
+
+  export type ServiceCouponSelectScalar = {
+    id?: boolean
+    code?: boolean
+    dojoId?: boolean
+    createdById?: boolean
+    discountPercent?: boolean
+    serviceId?: boolean
+    usageLimit?: boolean
+    usedCount?: boolean
+    expiresAt?: boolean
+    isActive?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type ServiceCouponOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "dojoId" | "createdById" | "discountPercent" | "serviceId" | "usageLimit" | "usedCount" | "expiresAt" | "isActive" | "notes" | "createdAt" | "updatedAt", ExtArgs["result"]["serviceCoupon"]>
+  export type ServiceCouponInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    dojo?: boolean | DojoDefaultArgs<ExtArgs>
+    service?: boolean | ServiceCoupon$serviceArgs<ExtArgs>
+    createdBy?: boolean | UserDefaultArgs<ExtArgs>
+    requests?: boolean | ServiceCoupon$requestsArgs<ExtArgs>
+    _count?: boolean | ServiceCouponCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type ServiceCouponIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    dojo?: boolean | DojoDefaultArgs<ExtArgs>
+    service?: boolean | ServiceCoupon$serviceArgs<ExtArgs>
+    createdBy?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type ServiceCouponIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    dojo?: boolean | DojoDefaultArgs<ExtArgs>
+    service?: boolean | ServiceCoupon$serviceArgs<ExtArgs>
+    createdBy?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $ServiceCouponPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ServiceCoupon"
+    objects: {
+      dojo: Prisma.$DojoPayload<ExtArgs>
+      service: Prisma.$ServicePayload<ExtArgs> | null
+      createdBy: Prisma.$UserPayload<ExtArgs>
+      requests: Prisma.$ServiceRequestPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      code: string
+      dojoId: string
+      createdById: string
+      discountPercent: number
+      serviceId: string | null
+      usageLimit: number
+      usedCount: number
+      expiresAt: Date | null
+      isActive: boolean
+      notes: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["serviceCoupon"]>
+    composites: {}
+  }
+
+  type ServiceCouponGetPayload<S extends boolean | null | undefined | ServiceCouponDefaultArgs> = $Result.GetResult<Prisma.$ServiceCouponPayload, S>
+
+  type ServiceCouponCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ServiceCouponFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ServiceCouponCountAggregateInputType | true
+    }
+
+  export interface ServiceCouponDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ServiceCoupon'], meta: { name: 'ServiceCoupon' } }
+    /**
+     * Find zero or one ServiceCoupon that matches the filter.
+     * @param {ServiceCouponFindUniqueArgs} args - Arguments to find a ServiceCoupon
+     * @example
+     * // Get one ServiceCoupon
+     * const serviceCoupon = await prisma.serviceCoupon.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ServiceCouponFindUniqueArgs>(args: SelectSubset<T, ServiceCouponFindUniqueArgs<ExtArgs>>): Prisma__ServiceCouponClient<$Result.GetResult<Prisma.$ServiceCouponPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ServiceCoupon that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ServiceCouponFindUniqueOrThrowArgs} args - Arguments to find a ServiceCoupon
+     * @example
+     * // Get one ServiceCoupon
+     * const serviceCoupon = await prisma.serviceCoupon.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ServiceCouponFindUniqueOrThrowArgs>(args: SelectSubset<T, ServiceCouponFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ServiceCouponClient<$Result.GetResult<Prisma.$ServiceCouponPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ServiceCoupon that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ServiceCouponFindFirstArgs} args - Arguments to find a ServiceCoupon
+     * @example
+     * // Get one ServiceCoupon
+     * const serviceCoupon = await prisma.serviceCoupon.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ServiceCouponFindFirstArgs>(args?: SelectSubset<T, ServiceCouponFindFirstArgs<ExtArgs>>): Prisma__ServiceCouponClient<$Result.GetResult<Prisma.$ServiceCouponPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ServiceCoupon that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ServiceCouponFindFirstOrThrowArgs} args - Arguments to find a ServiceCoupon
+     * @example
+     * // Get one ServiceCoupon
+     * const serviceCoupon = await prisma.serviceCoupon.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ServiceCouponFindFirstOrThrowArgs>(args?: SelectSubset<T, ServiceCouponFindFirstOrThrowArgs<ExtArgs>>): Prisma__ServiceCouponClient<$Result.GetResult<Prisma.$ServiceCouponPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ServiceCoupons that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ServiceCouponFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ServiceCoupons
+     * const serviceCoupons = await prisma.serviceCoupon.findMany()
+     * 
+     * // Get first 10 ServiceCoupons
+     * const serviceCoupons = await prisma.serviceCoupon.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const serviceCouponWithIdOnly = await prisma.serviceCoupon.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ServiceCouponFindManyArgs>(args?: SelectSubset<T, ServiceCouponFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ServiceCouponPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ServiceCoupon.
+     * @param {ServiceCouponCreateArgs} args - Arguments to create a ServiceCoupon.
+     * @example
+     * // Create one ServiceCoupon
+     * const ServiceCoupon = await prisma.serviceCoupon.create({
+     *   data: {
+     *     // ... data to create a ServiceCoupon
+     *   }
+     * })
+     * 
+     */
+    create<T extends ServiceCouponCreateArgs>(args: SelectSubset<T, ServiceCouponCreateArgs<ExtArgs>>): Prisma__ServiceCouponClient<$Result.GetResult<Prisma.$ServiceCouponPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ServiceCoupons.
+     * @param {ServiceCouponCreateManyArgs} args - Arguments to create many ServiceCoupons.
+     * @example
+     * // Create many ServiceCoupons
+     * const serviceCoupon = await prisma.serviceCoupon.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ServiceCouponCreateManyArgs>(args?: SelectSubset<T, ServiceCouponCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ServiceCoupons and returns the data saved in the database.
+     * @param {ServiceCouponCreateManyAndReturnArgs} args - Arguments to create many ServiceCoupons.
+     * @example
+     * // Create many ServiceCoupons
+     * const serviceCoupon = await prisma.serviceCoupon.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ServiceCoupons and only return the `id`
+     * const serviceCouponWithIdOnly = await prisma.serviceCoupon.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ServiceCouponCreateManyAndReturnArgs>(args?: SelectSubset<T, ServiceCouponCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ServiceCouponPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ServiceCoupon.
+     * @param {ServiceCouponDeleteArgs} args - Arguments to delete one ServiceCoupon.
+     * @example
+     * // Delete one ServiceCoupon
+     * const ServiceCoupon = await prisma.serviceCoupon.delete({
+     *   where: {
+     *     // ... filter to delete one ServiceCoupon
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ServiceCouponDeleteArgs>(args: SelectSubset<T, ServiceCouponDeleteArgs<ExtArgs>>): Prisma__ServiceCouponClient<$Result.GetResult<Prisma.$ServiceCouponPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ServiceCoupon.
+     * @param {ServiceCouponUpdateArgs} args - Arguments to update one ServiceCoupon.
+     * @example
+     * // Update one ServiceCoupon
+     * const serviceCoupon = await prisma.serviceCoupon.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ServiceCouponUpdateArgs>(args: SelectSubset<T, ServiceCouponUpdateArgs<ExtArgs>>): Prisma__ServiceCouponClient<$Result.GetResult<Prisma.$ServiceCouponPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ServiceCoupons.
+     * @param {ServiceCouponDeleteManyArgs} args - Arguments to filter ServiceCoupons to delete.
+     * @example
+     * // Delete a few ServiceCoupons
+     * const { count } = await prisma.serviceCoupon.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ServiceCouponDeleteManyArgs>(args?: SelectSubset<T, ServiceCouponDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ServiceCoupons.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ServiceCouponUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ServiceCoupons
+     * const serviceCoupon = await prisma.serviceCoupon.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ServiceCouponUpdateManyArgs>(args: SelectSubset<T, ServiceCouponUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ServiceCoupons and returns the data updated in the database.
+     * @param {ServiceCouponUpdateManyAndReturnArgs} args - Arguments to update many ServiceCoupons.
+     * @example
+     * // Update many ServiceCoupons
+     * const serviceCoupon = await prisma.serviceCoupon.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ServiceCoupons and only return the `id`
+     * const serviceCouponWithIdOnly = await prisma.serviceCoupon.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ServiceCouponUpdateManyAndReturnArgs>(args: SelectSubset<T, ServiceCouponUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ServiceCouponPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ServiceCoupon.
+     * @param {ServiceCouponUpsertArgs} args - Arguments to update or create a ServiceCoupon.
+     * @example
+     * // Update or create a ServiceCoupon
+     * const serviceCoupon = await prisma.serviceCoupon.upsert({
+     *   create: {
+     *     // ... data to create a ServiceCoupon
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ServiceCoupon we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ServiceCouponUpsertArgs>(args: SelectSubset<T, ServiceCouponUpsertArgs<ExtArgs>>): Prisma__ServiceCouponClient<$Result.GetResult<Prisma.$ServiceCouponPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ServiceCoupons.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ServiceCouponCountArgs} args - Arguments to filter ServiceCoupons to count.
+     * @example
+     * // Count the number of ServiceCoupons
+     * const count = await prisma.serviceCoupon.count({
+     *   where: {
+     *     // ... the filter for the ServiceCoupons we want to count
+     *   }
+     * })
+    **/
+    count<T extends ServiceCouponCountArgs>(
+      args?: Subset<T, ServiceCouponCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ServiceCouponCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ServiceCoupon.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ServiceCouponAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ServiceCouponAggregateArgs>(args: Subset<T, ServiceCouponAggregateArgs>): Prisma.PrismaPromise<GetServiceCouponAggregateType<T>>
+
+    /**
+     * Group by ServiceCoupon.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ServiceCouponGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ServiceCouponGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ServiceCouponGroupByArgs['orderBy'] }
+        : { orderBy?: ServiceCouponGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ServiceCouponGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetServiceCouponGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ServiceCoupon model
+   */
+  readonly fields: ServiceCouponFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ServiceCoupon.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ServiceCouponClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    dojo<T extends DojoDefaultArgs<ExtArgs> = {}>(args?: Subset<T, DojoDefaultArgs<ExtArgs>>): Prisma__DojoClient<$Result.GetResult<Prisma.$DojoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    service<T extends ServiceCoupon$serviceArgs<ExtArgs> = {}>(args?: Subset<T, ServiceCoupon$serviceArgs<ExtArgs>>): Prisma__ServiceClient<$Result.GetResult<Prisma.$ServicePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    createdBy<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    requests<T extends ServiceCoupon$requestsArgs<ExtArgs> = {}>(args?: Subset<T, ServiceCoupon$requestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ServiceRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ServiceCoupon model
+   */
+  interface ServiceCouponFieldRefs {
+    readonly id: FieldRef<"ServiceCoupon", 'String'>
+    readonly code: FieldRef<"ServiceCoupon", 'String'>
+    readonly dojoId: FieldRef<"ServiceCoupon", 'String'>
+    readonly createdById: FieldRef<"ServiceCoupon", 'String'>
+    readonly discountPercent: FieldRef<"ServiceCoupon", 'Int'>
+    readonly serviceId: FieldRef<"ServiceCoupon", 'String'>
+    readonly usageLimit: FieldRef<"ServiceCoupon", 'Int'>
+    readonly usedCount: FieldRef<"ServiceCoupon", 'Int'>
+    readonly expiresAt: FieldRef<"ServiceCoupon", 'DateTime'>
+    readonly isActive: FieldRef<"ServiceCoupon", 'Boolean'>
+    readonly notes: FieldRef<"ServiceCoupon", 'String'>
+    readonly createdAt: FieldRef<"ServiceCoupon", 'DateTime'>
+    readonly updatedAt: FieldRef<"ServiceCoupon", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ServiceCoupon findUnique
+   */
+  export type ServiceCouponFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ServiceCoupon
+     */
+    select?: ServiceCouponSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ServiceCoupon
+     */
+    omit?: ServiceCouponOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ServiceCouponInclude<ExtArgs> | null
+    /**
+     * Filter, which ServiceCoupon to fetch.
+     */
+    where: ServiceCouponWhereUniqueInput
+  }
+
+  /**
+   * ServiceCoupon findUniqueOrThrow
+   */
+  export type ServiceCouponFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ServiceCoupon
+     */
+    select?: ServiceCouponSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ServiceCoupon
+     */
+    omit?: ServiceCouponOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ServiceCouponInclude<ExtArgs> | null
+    /**
+     * Filter, which ServiceCoupon to fetch.
+     */
+    where: ServiceCouponWhereUniqueInput
+  }
+
+  /**
+   * ServiceCoupon findFirst
+   */
+  export type ServiceCouponFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ServiceCoupon
+     */
+    select?: ServiceCouponSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ServiceCoupon
+     */
+    omit?: ServiceCouponOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ServiceCouponInclude<ExtArgs> | null
+    /**
+     * Filter, which ServiceCoupon to fetch.
+     */
+    where?: ServiceCouponWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ServiceCoupons to fetch.
+     */
+    orderBy?: ServiceCouponOrderByWithRelationInput | ServiceCouponOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ServiceCoupons.
+     */
+    cursor?: ServiceCouponWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ServiceCoupons from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ServiceCoupons.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ServiceCoupons.
+     */
+    distinct?: ServiceCouponScalarFieldEnum | ServiceCouponScalarFieldEnum[]
+  }
+
+  /**
+   * ServiceCoupon findFirstOrThrow
+   */
+  export type ServiceCouponFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ServiceCoupon
+     */
+    select?: ServiceCouponSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ServiceCoupon
+     */
+    omit?: ServiceCouponOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ServiceCouponInclude<ExtArgs> | null
+    /**
+     * Filter, which ServiceCoupon to fetch.
+     */
+    where?: ServiceCouponWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ServiceCoupons to fetch.
+     */
+    orderBy?: ServiceCouponOrderByWithRelationInput | ServiceCouponOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ServiceCoupons.
+     */
+    cursor?: ServiceCouponWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ServiceCoupons from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ServiceCoupons.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ServiceCoupons.
+     */
+    distinct?: ServiceCouponScalarFieldEnum | ServiceCouponScalarFieldEnum[]
+  }
+
+  /**
+   * ServiceCoupon findMany
+   */
+  export type ServiceCouponFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ServiceCoupon
+     */
+    select?: ServiceCouponSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ServiceCoupon
+     */
+    omit?: ServiceCouponOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ServiceCouponInclude<ExtArgs> | null
+    /**
+     * Filter, which ServiceCoupons to fetch.
+     */
+    where?: ServiceCouponWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ServiceCoupons to fetch.
+     */
+    orderBy?: ServiceCouponOrderByWithRelationInput | ServiceCouponOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ServiceCoupons.
+     */
+    cursor?: ServiceCouponWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ServiceCoupons from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ServiceCoupons.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ServiceCoupons.
+     */
+    distinct?: ServiceCouponScalarFieldEnum | ServiceCouponScalarFieldEnum[]
+  }
+
+  /**
+   * ServiceCoupon create
+   */
+  export type ServiceCouponCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ServiceCoupon
+     */
+    select?: ServiceCouponSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ServiceCoupon
+     */
+    omit?: ServiceCouponOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ServiceCouponInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ServiceCoupon.
+     */
+    data: XOR<ServiceCouponCreateInput, ServiceCouponUncheckedCreateInput>
+  }
+
+  /**
+   * ServiceCoupon createMany
+   */
+  export type ServiceCouponCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ServiceCoupons.
+     */
+    data: ServiceCouponCreateManyInput | ServiceCouponCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ServiceCoupon createManyAndReturn
+   */
+  export type ServiceCouponCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ServiceCoupon
+     */
+    select?: ServiceCouponSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ServiceCoupon
+     */
+    omit?: ServiceCouponOmit<ExtArgs> | null
+    /**
+     * The data used to create many ServiceCoupons.
+     */
+    data: ServiceCouponCreateManyInput | ServiceCouponCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ServiceCouponIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ServiceCoupon update
+   */
+  export type ServiceCouponUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ServiceCoupon
+     */
+    select?: ServiceCouponSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ServiceCoupon
+     */
+    omit?: ServiceCouponOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ServiceCouponInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ServiceCoupon.
+     */
+    data: XOR<ServiceCouponUpdateInput, ServiceCouponUncheckedUpdateInput>
+    /**
+     * Choose, which ServiceCoupon to update.
+     */
+    where: ServiceCouponWhereUniqueInput
+  }
+
+  /**
+   * ServiceCoupon updateMany
+   */
+  export type ServiceCouponUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ServiceCoupons.
+     */
+    data: XOR<ServiceCouponUpdateManyMutationInput, ServiceCouponUncheckedUpdateManyInput>
+    /**
+     * Filter which ServiceCoupons to update
+     */
+    where?: ServiceCouponWhereInput
+    /**
+     * Limit how many ServiceCoupons to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ServiceCoupon updateManyAndReturn
+   */
+  export type ServiceCouponUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ServiceCoupon
+     */
+    select?: ServiceCouponSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ServiceCoupon
+     */
+    omit?: ServiceCouponOmit<ExtArgs> | null
+    /**
+     * The data used to update ServiceCoupons.
+     */
+    data: XOR<ServiceCouponUpdateManyMutationInput, ServiceCouponUncheckedUpdateManyInput>
+    /**
+     * Filter which ServiceCoupons to update
+     */
+    where?: ServiceCouponWhereInput
+    /**
+     * Limit how many ServiceCoupons to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ServiceCouponIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ServiceCoupon upsert
+   */
+  export type ServiceCouponUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ServiceCoupon
+     */
+    select?: ServiceCouponSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ServiceCoupon
+     */
+    omit?: ServiceCouponOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ServiceCouponInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ServiceCoupon to update in case it exists.
+     */
+    where: ServiceCouponWhereUniqueInput
+    /**
+     * In case the ServiceCoupon found by the `where` argument doesn't exist, create a new ServiceCoupon with this data.
+     */
+    create: XOR<ServiceCouponCreateInput, ServiceCouponUncheckedCreateInput>
+    /**
+     * In case the ServiceCoupon was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ServiceCouponUpdateInput, ServiceCouponUncheckedUpdateInput>
+  }
+
+  /**
+   * ServiceCoupon delete
+   */
+  export type ServiceCouponDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ServiceCoupon
+     */
+    select?: ServiceCouponSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ServiceCoupon
+     */
+    omit?: ServiceCouponOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ServiceCouponInclude<ExtArgs> | null
+    /**
+     * Filter which ServiceCoupon to delete.
+     */
+    where: ServiceCouponWhereUniqueInput
+  }
+
+  /**
+   * ServiceCoupon deleteMany
+   */
+  export type ServiceCouponDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ServiceCoupons to delete
+     */
+    where?: ServiceCouponWhereInput
+    /**
+     * Limit how many ServiceCoupons to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ServiceCoupon.service
+   */
+  export type ServiceCoupon$serviceArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Service
+     */
+    select?: ServiceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Service
+     */
+    omit?: ServiceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ServiceInclude<ExtArgs> | null
+    where?: ServiceWhereInput
+  }
+
+  /**
+   * ServiceCoupon.requests
+   */
+  export type ServiceCoupon$requestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ServiceRequest
+     */
+    select?: ServiceRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ServiceRequest
+     */
+    omit?: ServiceRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ServiceRequestInclude<ExtArgs> | null
+    where?: ServiceRequestWhereInput
+    orderBy?: ServiceRequestOrderByWithRelationInput | ServiceRequestOrderByWithRelationInput[]
+    cursor?: ServiceRequestWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ServiceRequestScalarFieldEnum | ServiceRequestScalarFieldEnum[]
+  }
+
+  /**
+   * ServiceCoupon without action
+   */
+  export type ServiceCouponDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ServiceCoupon
+     */
+    select?: ServiceCouponSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ServiceCoupon
+     */
+    omit?: ServiceCouponOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ServiceCouponInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -51561,6 +56163,7 @@ export namespace Prisma {
     certDojoId: 'certDojoId',
     includesTransferRequest: 'includesTransferRequest',
     includesPastBeltFee: 'includesPastBeltFee',
+    includesServiceRequest: 'includesServiceRequest',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -51665,6 +56268,9 @@ export namespace Prisma {
     dojoNote: 'dojoNote',
     adminNote: 'adminNote',
     fee: 'fee',
+    discountAmount: 'discountAmount',
+    finalAmount: 'finalAmount',
+    couponCode: 'couponCode',
     orderId: 'orderId',
     paidAt: 'paidAt',
     dojoActedAt: 'dojoActedAt',
@@ -51712,6 +56318,69 @@ export namespace Prisma {
   };
 
   export type StudentDojoHistoryScalarFieldEnum = (typeof StudentDojoHistoryScalarFieldEnum)[keyof typeof StudentDojoHistoryScalarFieldEnum]
+
+
+  export const ServiceScalarFieldEnum: {
+    id: 'id',
+    slug: 'slug',
+    name: 'name',
+    description: 'description',
+    feeBDT: 'feeBDT',
+    isActive: 'isActive',
+    handler: 'handler',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type ServiceScalarFieldEnum = (typeof ServiceScalarFieldEnum)[keyof typeof ServiceScalarFieldEnum]
+
+
+  export const ServiceRequestScalarFieldEnum: {
+    id: 'id',
+    studentId: 'studentId',
+    serviceId: 'serviceId',
+    dojoId: 'dojoId',
+    status: 'status',
+    dojoDecision: 'dojoDecision',
+    payload: 'payload',
+    reason: 'reason',
+    dojoNote: 'dojoNote',
+    adminNote: 'adminNote',
+    fee: 'fee',
+    discountAmount: 'discountAmount',
+    finalAmount: 'finalAmount',
+    couponId: 'couponId',
+    couponCode: 'couponCode',
+    orderId: 'orderId',
+    paidAt: 'paidAt',
+    dojoActedAt: 'dojoActedAt',
+    dojoActedById: 'dojoActedById',
+    adminActedAt: 'adminActedAt',
+    adminActedById: 'adminActedById',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type ServiceRequestScalarFieldEnum = (typeof ServiceRequestScalarFieldEnum)[keyof typeof ServiceRequestScalarFieldEnum]
+
+
+  export const ServiceCouponScalarFieldEnum: {
+    id: 'id',
+    code: 'code',
+    dojoId: 'dojoId',
+    createdById: 'createdById',
+    discountPercent: 'discountPercent',
+    serviceId: 'serviceId',
+    usageLimit: 'usageLimit',
+    usedCount: 'usedCount',
+    expiresAt: 'expiresAt',
+    isActive: 'isActive',
+    notes: 'notes',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type ServiceCouponScalarFieldEnum = (typeof ServiceCouponScalarFieldEnum)[keyof typeof ServiceCouponScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -52128,6 +56797,34 @@ export namespace Prisma {
    */
   export type ListEnumPaymentTransactionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PaymentTransactionStatus[]'>
     
+
+
+  /**
+   * Reference to a field of type 'ServiceRequestStatus'
+   */
+  export type EnumServiceRequestStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ServiceRequestStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'ServiceRequestStatus[]'
+   */
+  export type ListEnumServiceRequestStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ServiceRequestStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'ServiceRequestDojoDecision'
+   */
+  export type EnumServiceRequestDojoDecisionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ServiceRequestDojoDecision'>
+    
+
+
+  /**
+   * Reference to a field of type 'ServiceRequestDojoDecision[]'
+   */
+  export type ListEnumServiceRequestDojoDecisionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ServiceRequestDojoDecision[]'>
+    
   /**
    * Deep Input Types
    */
@@ -52332,6 +57029,9 @@ export namespace Prisma {
     dojoHistoryChanges?: StudentDojoHistoryListRelationFilter
     paymentTransactions?: PaymentTransactionListRelationFilter
     dojoOwnerInvitesSent?: DojoOwnerInviteListRelationFilter
+    serviceRequestsDojoActed?: ServiceRequestListRelationFilter
+    serviceRequestsAdminActed?: ServiceRequestListRelationFilter
+    serviceCouponsCreated?: ServiceCouponListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -52368,6 +57068,9 @@ export namespace Prisma {
     dojoHistoryChanges?: StudentDojoHistoryOrderByRelationAggregateInput
     paymentTransactions?: PaymentTransactionOrderByRelationAggregateInput
     dojoOwnerInvitesSent?: DojoOwnerInviteOrderByRelationAggregateInput
+    serviceRequestsDojoActed?: ServiceRequestOrderByRelationAggregateInput
+    serviceRequestsAdminActed?: ServiceRequestOrderByRelationAggregateInput
+    serviceCouponsCreated?: ServiceCouponOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -52407,6 +57110,9 @@ export namespace Prisma {
     dojoHistoryChanges?: StudentDojoHistoryListRelationFilter
     paymentTransactions?: PaymentTransactionListRelationFilter
     dojoOwnerInvitesSent?: DojoOwnerInviteListRelationFilter
+    serviceRequestsDojoActed?: ServiceRequestListRelationFilter
+    serviceRequestsAdminActed?: ServiceRequestListRelationFilter
+    serviceCouponsCreated?: ServiceCouponListRelationFilter
   }, "id" | "email" | "memberNumber">
 
   export type UserOrderByWithAggregationInput = {
@@ -52554,6 +57260,7 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestListRelationFilter
     achievements?: StudentAchievementListRelationFilter
     transferRequests?: StudentTransferRequestListRelationFilter
+    serviceRequests?: ServiceRequestListRelationFilter
     dojoHistory?: StudentDojoHistoryListRelationFilter
   }
 
@@ -52580,6 +57287,7 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestOrderByRelationAggregateInput
     achievements?: StudentAchievementOrderByRelationAggregateInput
     transferRequests?: StudentTransferRequestOrderByRelationAggregateInput
+    serviceRequests?: ServiceRequestOrderByRelationAggregateInput
     dojoHistory?: StudentDojoHistoryOrderByRelationAggregateInput
   }
 
@@ -52609,6 +57317,7 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestListRelationFilter
     achievements?: StudentAchievementListRelationFilter
     transferRequests?: StudentTransferRequestListRelationFilter
+    serviceRequests?: ServiceRequestListRelationFilter
     dojoHistory?: StudentDojoHistoryListRelationFilter
   }, "id">
 
@@ -53001,6 +57710,8 @@ export namespace Prisma {
     transfersIn?: StudentTransferRequestListRelationFilter
     historyFrom?: StudentDojoHistoryListRelationFilter
     historyTo?: StudentDojoHistoryListRelationFilter
+    serviceRequests?: ServiceRequestListRelationFilter
+    serviceCoupons?: ServiceCouponListRelationFilter
   }
 
   export type DojoOrderByWithRelationInput = {
@@ -53037,6 +57748,8 @@ export namespace Prisma {
     transfersIn?: StudentTransferRequestOrderByRelationAggregateInput
     historyFrom?: StudentDojoHistoryOrderByRelationAggregateInput
     historyTo?: StudentDojoHistoryOrderByRelationAggregateInput
+    serviceRequests?: ServiceRequestOrderByRelationAggregateInput
+    serviceCoupons?: ServiceCouponOrderByRelationAggregateInput
   }
 
   export type DojoWhereUniqueInput = Prisma.AtLeast<{
@@ -53076,6 +57789,8 @@ export namespace Prisma {
     transfersIn?: StudentTransferRequestListRelationFilter
     historyFrom?: StudentDojoHistoryListRelationFilter
     historyTo?: StudentDojoHistoryListRelationFilter
+    serviceRequests?: ServiceRequestListRelationFilter
+    serviceCoupons?: ServiceCouponListRelationFilter
   }, "id">
 
   export type DojoOrderByWithAggregationInput = {
@@ -54636,6 +59351,7 @@ export namespace Prisma {
     certDojoId?: UuidNullableFilter<"ShopOrder"> | string | null
     includesTransferRequest?: BoolFilter<"ShopOrder"> | boolean
     includesPastBeltFee?: BoolFilter<"ShopOrder"> | boolean
+    includesServiceRequest?: BoolFilter<"ShopOrder"> | boolean
     createdAt?: DateTimeFilter<"ShopOrder"> | Date | string
     updatedAt?: DateTimeFilter<"ShopOrder"> | Date | string
     user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
@@ -54644,6 +59360,7 @@ export namespace Prisma {
     orderItems?: ShopOrderItemListRelationFilter
     certificateRequests?: CertificateRequestListRelationFilter
     transferRequest?: XOR<StudentTransferRequestNullableScalarRelationFilter, StudentTransferRequestWhereInput> | null
+    serviceRequest?: XOR<ServiceRequestNullableScalarRelationFilter, ServiceRequestWhereInput> | null
     transactions?: PaymentTransactionListRelationFilter
   }
 
@@ -54670,6 +59387,7 @@ export namespace Prisma {
     certDojoId?: SortOrderInput | SortOrder
     includesTransferRequest?: SortOrder
     includesPastBeltFee?: SortOrder
+    includesServiceRequest?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     user?: UserOrderByWithRelationInput
@@ -54678,6 +59396,7 @@ export namespace Prisma {
     orderItems?: ShopOrderItemOrderByRelationAggregateInput
     certificateRequests?: CertificateRequestOrderByRelationAggregateInput
     transferRequest?: StudentTransferRequestOrderByWithRelationInput
+    serviceRequest?: ServiceRequestOrderByWithRelationInput
     transactions?: PaymentTransactionOrderByRelationAggregateInput
   }
 
@@ -54707,6 +59426,7 @@ export namespace Prisma {
     certDojoId?: UuidNullableFilter<"ShopOrder"> | string | null
     includesTransferRequest?: BoolFilter<"ShopOrder"> | boolean
     includesPastBeltFee?: BoolFilter<"ShopOrder"> | boolean
+    includesServiceRequest?: BoolFilter<"ShopOrder"> | boolean
     createdAt?: DateTimeFilter<"ShopOrder"> | Date | string
     updatedAt?: DateTimeFilter<"ShopOrder"> | Date | string
     user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
@@ -54715,6 +59435,7 @@ export namespace Prisma {
     orderItems?: ShopOrderItemListRelationFilter
     certificateRequests?: CertificateRequestListRelationFilter
     transferRequest?: XOR<StudentTransferRequestNullableScalarRelationFilter, StudentTransferRequestWhereInput> | null
+    serviceRequest?: XOR<ServiceRequestNullableScalarRelationFilter, ServiceRequestWhereInput> | null
     transactions?: PaymentTransactionListRelationFilter
   }, "id" | "transactionId">
 
@@ -54741,6 +59462,7 @@ export namespace Prisma {
     certDojoId?: SortOrderInput | SortOrder
     includesTransferRequest?: SortOrder
     includesPastBeltFee?: SortOrder
+    includesServiceRequest?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: ShopOrderCountOrderByAggregateInput
@@ -54776,6 +59498,7 @@ export namespace Prisma {
     certDojoId?: UuidNullableWithAggregatesFilter<"ShopOrder"> | string | null
     includesTransferRequest?: BoolWithAggregatesFilter<"ShopOrder"> | boolean
     includesPastBeltFee?: BoolWithAggregatesFilter<"ShopOrder"> | boolean
+    includesServiceRequest?: BoolWithAggregatesFilter<"ShopOrder"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"ShopOrder"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"ShopOrder"> | Date | string
   }
@@ -55267,6 +59990,9 @@ export namespace Prisma {
     dojoNote?: StringNullableFilter<"StudentTransferRequest"> | string | null
     adminNote?: StringNullableFilter<"StudentTransferRequest"> | string | null
     fee?: DecimalFilter<"StudentTransferRequest"> | Decimal | DecimalJsLike | number | string
+    discountAmount?: DecimalFilter<"StudentTransferRequest"> | Decimal | DecimalJsLike | number | string
+    finalAmount?: DecimalNullableFilter<"StudentTransferRequest"> | Decimal | DecimalJsLike | number | string | null
+    couponCode?: StringNullableFilter<"StudentTransferRequest"> | string | null
     orderId?: UuidNullableFilter<"StudentTransferRequest"> | string | null
     paidAt?: DateTimeNullableFilter<"StudentTransferRequest"> | Date | string | null
     dojoActedAt?: DateTimeNullableFilter<"StudentTransferRequest"> | Date | string | null
@@ -55295,6 +60021,9 @@ export namespace Prisma {
     dojoNote?: SortOrderInput | SortOrder
     adminNote?: SortOrderInput | SortOrder
     fee?: SortOrder
+    discountAmount?: SortOrder
+    finalAmount?: SortOrderInput | SortOrder
+    couponCode?: SortOrderInput | SortOrder
     orderId?: SortOrderInput | SortOrder
     paidAt?: SortOrderInput | SortOrder
     dojoActedAt?: SortOrderInput | SortOrder
@@ -55327,6 +60056,9 @@ export namespace Prisma {
     dojoNote?: StringNullableFilter<"StudentTransferRequest"> | string | null
     adminNote?: StringNullableFilter<"StudentTransferRequest"> | string | null
     fee?: DecimalFilter<"StudentTransferRequest"> | Decimal | DecimalJsLike | number | string
+    discountAmount?: DecimalFilter<"StudentTransferRequest"> | Decimal | DecimalJsLike | number | string
+    finalAmount?: DecimalNullableFilter<"StudentTransferRequest"> | Decimal | DecimalJsLike | number | string | null
+    couponCode?: StringNullableFilter<"StudentTransferRequest"> | string | null
     paidAt?: DateTimeNullableFilter<"StudentTransferRequest"> | Date | string | null
     dojoActedAt?: DateTimeNullableFilter<"StudentTransferRequest"> | Date | string | null
     dojoActedById?: UuidNullableFilter<"StudentTransferRequest"> | string | null
@@ -55354,6 +60086,9 @@ export namespace Prisma {
     dojoNote?: SortOrderInput | SortOrder
     adminNote?: SortOrderInput | SortOrder
     fee?: SortOrder
+    discountAmount?: SortOrder
+    finalAmount?: SortOrderInput | SortOrder
+    couponCode?: SortOrderInput | SortOrder
     orderId?: SortOrderInput | SortOrder
     paidAt?: SortOrderInput | SortOrder
     dojoActedAt?: SortOrderInput | SortOrder
@@ -55383,6 +60118,9 @@ export namespace Prisma {
     dojoNote?: StringNullableWithAggregatesFilter<"StudentTransferRequest"> | string | null
     adminNote?: StringNullableWithAggregatesFilter<"StudentTransferRequest"> | string | null
     fee?: DecimalWithAggregatesFilter<"StudentTransferRequest"> | Decimal | DecimalJsLike | number | string
+    discountAmount?: DecimalWithAggregatesFilter<"StudentTransferRequest"> | Decimal | DecimalJsLike | number | string
+    finalAmount?: DecimalNullableWithAggregatesFilter<"StudentTransferRequest"> | Decimal | DecimalJsLike | number | string | null
+    couponCode?: StringNullableWithAggregatesFilter<"StudentTransferRequest"> | string | null
     orderId?: UuidNullableWithAggregatesFilter<"StudentTransferRequest"> | string | null
     paidAt?: DateTimeNullableWithAggregatesFilter<"StudentTransferRequest"> | Date | string | null
     dojoActedAt?: DateTimeNullableWithAggregatesFilter<"StudentTransferRequest"> | Date | string | null
@@ -55593,6 +60331,357 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"StudentDojoHistory"> | Date | string
   }
 
+  export type ServiceWhereInput = {
+    AND?: ServiceWhereInput | ServiceWhereInput[]
+    OR?: ServiceWhereInput[]
+    NOT?: ServiceWhereInput | ServiceWhereInput[]
+    id?: UuidFilter<"Service"> | string
+    slug?: StringFilter<"Service"> | string
+    name?: StringFilter<"Service"> | string
+    description?: StringNullableFilter<"Service"> | string | null
+    feeBDT?: DecimalFilter<"Service"> | Decimal | DecimalJsLike | number | string
+    isActive?: BoolFilter<"Service"> | boolean
+    handler?: StringFilter<"Service"> | string
+    createdAt?: DateTimeFilter<"Service"> | Date | string
+    updatedAt?: DateTimeFilter<"Service"> | Date | string
+    requests?: ServiceRequestListRelationFilter
+    coupons?: ServiceCouponListRelationFilter
+  }
+
+  export type ServiceOrderByWithRelationInput = {
+    id?: SortOrder
+    slug?: SortOrder
+    name?: SortOrder
+    description?: SortOrderInput | SortOrder
+    feeBDT?: SortOrder
+    isActive?: SortOrder
+    handler?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    requests?: ServiceRequestOrderByRelationAggregateInput
+    coupons?: ServiceCouponOrderByRelationAggregateInput
+  }
+
+  export type ServiceWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    slug?: string
+    AND?: ServiceWhereInput | ServiceWhereInput[]
+    OR?: ServiceWhereInput[]
+    NOT?: ServiceWhereInput | ServiceWhereInput[]
+    name?: StringFilter<"Service"> | string
+    description?: StringNullableFilter<"Service"> | string | null
+    feeBDT?: DecimalFilter<"Service"> | Decimal | DecimalJsLike | number | string
+    isActive?: BoolFilter<"Service"> | boolean
+    handler?: StringFilter<"Service"> | string
+    createdAt?: DateTimeFilter<"Service"> | Date | string
+    updatedAt?: DateTimeFilter<"Service"> | Date | string
+    requests?: ServiceRequestListRelationFilter
+    coupons?: ServiceCouponListRelationFilter
+  }, "id" | "slug">
+
+  export type ServiceOrderByWithAggregationInput = {
+    id?: SortOrder
+    slug?: SortOrder
+    name?: SortOrder
+    description?: SortOrderInput | SortOrder
+    feeBDT?: SortOrder
+    isActive?: SortOrder
+    handler?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: ServiceCountOrderByAggregateInput
+    _avg?: ServiceAvgOrderByAggregateInput
+    _max?: ServiceMaxOrderByAggregateInput
+    _min?: ServiceMinOrderByAggregateInput
+    _sum?: ServiceSumOrderByAggregateInput
+  }
+
+  export type ServiceScalarWhereWithAggregatesInput = {
+    AND?: ServiceScalarWhereWithAggregatesInput | ServiceScalarWhereWithAggregatesInput[]
+    OR?: ServiceScalarWhereWithAggregatesInput[]
+    NOT?: ServiceScalarWhereWithAggregatesInput | ServiceScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"Service"> | string
+    slug?: StringWithAggregatesFilter<"Service"> | string
+    name?: StringWithAggregatesFilter<"Service"> | string
+    description?: StringNullableWithAggregatesFilter<"Service"> | string | null
+    feeBDT?: DecimalWithAggregatesFilter<"Service"> | Decimal | DecimalJsLike | number | string
+    isActive?: BoolWithAggregatesFilter<"Service"> | boolean
+    handler?: StringWithAggregatesFilter<"Service"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"Service"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Service"> | Date | string
+  }
+
+  export type ServiceRequestWhereInput = {
+    AND?: ServiceRequestWhereInput | ServiceRequestWhereInput[]
+    OR?: ServiceRequestWhereInput[]
+    NOT?: ServiceRequestWhereInput | ServiceRequestWhereInput[]
+    id?: UuidFilter<"ServiceRequest"> | string
+    studentId?: UuidFilter<"ServiceRequest"> | string
+    serviceId?: UuidFilter<"ServiceRequest"> | string
+    dojoId?: UuidFilter<"ServiceRequest"> | string
+    status?: EnumServiceRequestStatusFilter<"ServiceRequest"> | $Enums.ServiceRequestStatus
+    dojoDecision?: EnumServiceRequestDojoDecisionFilter<"ServiceRequest"> | $Enums.ServiceRequestDojoDecision
+    payload?: JsonFilter<"ServiceRequest">
+    reason?: StringNullableFilter<"ServiceRequest"> | string | null
+    dojoNote?: StringNullableFilter<"ServiceRequest"> | string | null
+    adminNote?: StringNullableFilter<"ServiceRequest"> | string | null
+    fee?: DecimalFilter<"ServiceRequest"> | Decimal | DecimalJsLike | number | string
+    discountAmount?: DecimalFilter<"ServiceRequest"> | Decimal | DecimalJsLike | number | string
+    finalAmount?: DecimalFilter<"ServiceRequest"> | Decimal | DecimalJsLike | number | string
+    couponId?: UuidNullableFilter<"ServiceRequest"> | string | null
+    couponCode?: StringNullableFilter<"ServiceRequest"> | string | null
+    orderId?: UuidNullableFilter<"ServiceRequest"> | string | null
+    paidAt?: DateTimeNullableFilter<"ServiceRequest"> | Date | string | null
+    dojoActedAt?: DateTimeNullableFilter<"ServiceRequest"> | Date | string | null
+    dojoActedById?: UuidNullableFilter<"ServiceRequest"> | string | null
+    adminActedAt?: DateTimeNullableFilter<"ServiceRequest"> | Date | string | null
+    adminActedById?: UuidNullableFilter<"ServiceRequest"> | string | null
+    createdAt?: DateTimeFilter<"ServiceRequest"> | Date | string
+    updatedAt?: DateTimeFilter<"ServiceRequest"> | Date | string
+    student?: XOR<StudentScalarRelationFilter, StudentWhereInput>
+    service?: XOR<ServiceScalarRelationFilter, ServiceWhereInput>
+    dojo?: XOR<DojoScalarRelationFilter, DojoWhereInput>
+    order?: XOR<ShopOrderNullableScalarRelationFilter, ShopOrderWhereInput> | null
+    coupon?: XOR<ServiceCouponNullableScalarRelationFilter, ServiceCouponWhereInput> | null
+    dojoActedBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    adminActedBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+  }
+
+  export type ServiceRequestOrderByWithRelationInput = {
+    id?: SortOrder
+    studentId?: SortOrder
+    serviceId?: SortOrder
+    dojoId?: SortOrder
+    status?: SortOrder
+    dojoDecision?: SortOrder
+    payload?: SortOrder
+    reason?: SortOrderInput | SortOrder
+    dojoNote?: SortOrderInput | SortOrder
+    adminNote?: SortOrderInput | SortOrder
+    fee?: SortOrder
+    discountAmount?: SortOrder
+    finalAmount?: SortOrder
+    couponId?: SortOrderInput | SortOrder
+    couponCode?: SortOrderInput | SortOrder
+    orderId?: SortOrderInput | SortOrder
+    paidAt?: SortOrderInput | SortOrder
+    dojoActedAt?: SortOrderInput | SortOrder
+    dojoActedById?: SortOrderInput | SortOrder
+    adminActedAt?: SortOrderInput | SortOrder
+    adminActedById?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    student?: StudentOrderByWithRelationInput
+    service?: ServiceOrderByWithRelationInput
+    dojo?: DojoOrderByWithRelationInput
+    order?: ShopOrderOrderByWithRelationInput
+    coupon?: ServiceCouponOrderByWithRelationInput
+    dojoActedBy?: UserOrderByWithRelationInput
+    adminActedBy?: UserOrderByWithRelationInput
+  }
+
+  export type ServiceRequestWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    orderId?: string
+    AND?: ServiceRequestWhereInput | ServiceRequestWhereInput[]
+    OR?: ServiceRequestWhereInput[]
+    NOT?: ServiceRequestWhereInput | ServiceRequestWhereInput[]
+    studentId?: UuidFilter<"ServiceRequest"> | string
+    serviceId?: UuidFilter<"ServiceRequest"> | string
+    dojoId?: UuidFilter<"ServiceRequest"> | string
+    status?: EnumServiceRequestStatusFilter<"ServiceRequest"> | $Enums.ServiceRequestStatus
+    dojoDecision?: EnumServiceRequestDojoDecisionFilter<"ServiceRequest"> | $Enums.ServiceRequestDojoDecision
+    payload?: JsonFilter<"ServiceRequest">
+    reason?: StringNullableFilter<"ServiceRequest"> | string | null
+    dojoNote?: StringNullableFilter<"ServiceRequest"> | string | null
+    adminNote?: StringNullableFilter<"ServiceRequest"> | string | null
+    fee?: DecimalFilter<"ServiceRequest"> | Decimal | DecimalJsLike | number | string
+    discountAmount?: DecimalFilter<"ServiceRequest"> | Decimal | DecimalJsLike | number | string
+    finalAmount?: DecimalFilter<"ServiceRequest"> | Decimal | DecimalJsLike | number | string
+    couponId?: UuidNullableFilter<"ServiceRequest"> | string | null
+    couponCode?: StringNullableFilter<"ServiceRequest"> | string | null
+    paidAt?: DateTimeNullableFilter<"ServiceRequest"> | Date | string | null
+    dojoActedAt?: DateTimeNullableFilter<"ServiceRequest"> | Date | string | null
+    dojoActedById?: UuidNullableFilter<"ServiceRequest"> | string | null
+    adminActedAt?: DateTimeNullableFilter<"ServiceRequest"> | Date | string | null
+    adminActedById?: UuidNullableFilter<"ServiceRequest"> | string | null
+    createdAt?: DateTimeFilter<"ServiceRequest"> | Date | string
+    updatedAt?: DateTimeFilter<"ServiceRequest"> | Date | string
+    student?: XOR<StudentScalarRelationFilter, StudentWhereInput>
+    service?: XOR<ServiceScalarRelationFilter, ServiceWhereInput>
+    dojo?: XOR<DojoScalarRelationFilter, DojoWhereInput>
+    order?: XOR<ShopOrderNullableScalarRelationFilter, ShopOrderWhereInput> | null
+    coupon?: XOR<ServiceCouponNullableScalarRelationFilter, ServiceCouponWhereInput> | null
+    dojoActedBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    adminActedBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+  }, "id" | "orderId">
+
+  export type ServiceRequestOrderByWithAggregationInput = {
+    id?: SortOrder
+    studentId?: SortOrder
+    serviceId?: SortOrder
+    dojoId?: SortOrder
+    status?: SortOrder
+    dojoDecision?: SortOrder
+    payload?: SortOrder
+    reason?: SortOrderInput | SortOrder
+    dojoNote?: SortOrderInput | SortOrder
+    adminNote?: SortOrderInput | SortOrder
+    fee?: SortOrder
+    discountAmount?: SortOrder
+    finalAmount?: SortOrder
+    couponId?: SortOrderInput | SortOrder
+    couponCode?: SortOrderInput | SortOrder
+    orderId?: SortOrderInput | SortOrder
+    paidAt?: SortOrderInput | SortOrder
+    dojoActedAt?: SortOrderInput | SortOrder
+    dojoActedById?: SortOrderInput | SortOrder
+    adminActedAt?: SortOrderInput | SortOrder
+    adminActedById?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: ServiceRequestCountOrderByAggregateInput
+    _avg?: ServiceRequestAvgOrderByAggregateInput
+    _max?: ServiceRequestMaxOrderByAggregateInput
+    _min?: ServiceRequestMinOrderByAggregateInput
+    _sum?: ServiceRequestSumOrderByAggregateInput
+  }
+
+  export type ServiceRequestScalarWhereWithAggregatesInput = {
+    AND?: ServiceRequestScalarWhereWithAggregatesInput | ServiceRequestScalarWhereWithAggregatesInput[]
+    OR?: ServiceRequestScalarWhereWithAggregatesInput[]
+    NOT?: ServiceRequestScalarWhereWithAggregatesInput | ServiceRequestScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"ServiceRequest"> | string
+    studentId?: UuidWithAggregatesFilter<"ServiceRequest"> | string
+    serviceId?: UuidWithAggregatesFilter<"ServiceRequest"> | string
+    dojoId?: UuidWithAggregatesFilter<"ServiceRequest"> | string
+    status?: EnumServiceRequestStatusWithAggregatesFilter<"ServiceRequest"> | $Enums.ServiceRequestStatus
+    dojoDecision?: EnumServiceRequestDojoDecisionWithAggregatesFilter<"ServiceRequest"> | $Enums.ServiceRequestDojoDecision
+    payload?: JsonWithAggregatesFilter<"ServiceRequest">
+    reason?: StringNullableWithAggregatesFilter<"ServiceRequest"> | string | null
+    dojoNote?: StringNullableWithAggregatesFilter<"ServiceRequest"> | string | null
+    adminNote?: StringNullableWithAggregatesFilter<"ServiceRequest"> | string | null
+    fee?: DecimalWithAggregatesFilter<"ServiceRequest"> | Decimal | DecimalJsLike | number | string
+    discountAmount?: DecimalWithAggregatesFilter<"ServiceRequest"> | Decimal | DecimalJsLike | number | string
+    finalAmount?: DecimalWithAggregatesFilter<"ServiceRequest"> | Decimal | DecimalJsLike | number | string
+    couponId?: UuidNullableWithAggregatesFilter<"ServiceRequest"> | string | null
+    couponCode?: StringNullableWithAggregatesFilter<"ServiceRequest"> | string | null
+    orderId?: UuidNullableWithAggregatesFilter<"ServiceRequest"> | string | null
+    paidAt?: DateTimeNullableWithAggregatesFilter<"ServiceRequest"> | Date | string | null
+    dojoActedAt?: DateTimeNullableWithAggregatesFilter<"ServiceRequest"> | Date | string | null
+    dojoActedById?: UuidNullableWithAggregatesFilter<"ServiceRequest"> | string | null
+    adminActedAt?: DateTimeNullableWithAggregatesFilter<"ServiceRequest"> | Date | string | null
+    adminActedById?: UuidNullableWithAggregatesFilter<"ServiceRequest"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"ServiceRequest"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"ServiceRequest"> | Date | string
+  }
+
+  export type ServiceCouponWhereInput = {
+    AND?: ServiceCouponWhereInput | ServiceCouponWhereInput[]
+    OR?: ServiceCouponWhereInput[]
+    NOT?: ServiceCouponWhereInput | ServiceCouponWhereInput[]
+    id?: UuidFilter<"ServiceCoupon"> | string
+    code?: StringFilter<"ServiceCoupon"> | string
+    dojoId?: UuidFilter<"ServiceCoupon"> | string
+    createdById?: UuidFilter<"ServiceCoupon"> | string
+    discountPercent?: IntFilter<"ServiceCoupon"> | number
+    serviceId?: UuidNullableFilter<"ServiceCoupon"> | string | null
+    usageLimit?: IntFilter<"ServiceCoupon"> | number
+    usedCount?: IntFilter<"ServiceCoupon"> | number
+    expiresAt?: DateTimeNullableFilter<"ServiceCoupon"> | Date | string | null
+    isActive?: BoolFilter<"ServiceCoupon"> | boolean
+    notes?: StringNullableFilter<"ServiceCoupon"> | string | null
+    createdAt?: DateTimeFilter<"ServiceCoupon"> | Date | string
+    updatedAt?: DateTimeFilter<"ServiceCoupon"> | Date | string
+    dojo?: XOR<DojoScalarRelationFilter, DojoWhereInput>
+    service?: XOR<ServiceNullableScalarRelationFilter, ServiceWhereInput> | null
+    createdBy?: XOR<UserScalarRelationFilter, UserWhereInput>
+    requests?: ServiceRequestListRelationFilter
+  }
+
+  export type ServiceCouponOrderByWithRelationInput = {
+    id?: SortOrder
+    code?: SortOrder
+    dojoId?: SortOrder
+    createdById?: SortOrder
+    discountPercent?: SortOrder
+    serviceId?: SortOrderInput | SortOrder
+    usageLimit?: SortOrder
+    usedCount?: SortOrder
+    expiresAt?: SortOrderInput | SortOrder
+    isActive?: SortOrder
+    notes?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    dojo?: DojoOrderByWithRelationInput
+    service?: ServiceOrderByWithRelationInput
+    createdBy?: UserOrderByWithRelationInput
+    requests?: ServiceRequestOrderByRelationAggregateInput
+  }
+
+  export type ServiceCouponWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    code?: string
+    AND?: ServiceCouponWhereInput | ServiceCouponWhereInput[]
+    OR?: ServiceCouponWhereInput[]
+    NOT?: ServiceCouponWhereInput | ServiceCouponWhereInput[]
+    dojoId?: UuidFilter<"ServiceCoupon"> | string
+    createdById?: UuidFilter<"ServiceCoupon"> | string
+    discountPercent?: IntFilter<"ServiceCoupon"> | number
+    serviceId?: UuidNullableFilter<"ServiceCoupon"> | string | null
+    usageLimit?: IntFilter<"ServiceCoupon"> | number
+    usedCount?: IntFilter<"ServiceCoupon"> | number
+    expiresAt?: DateTimeNullableFilter<"ServiceCoupon"> | Date | string | null
+    isActive?: BoolFilter<"ServiceCoupon"> | boolean
+    notes?: StringNullableFilter<"ServiceCoupon"> | string | null
+    createdAt?: DateTimeFilter<"ServiceCoupon"> | Date | string
+    updatedAt?: DateTimeFilter<"ServiceCoupon"> | Date | string
+    dojo?: XOR<DojoScalarRelationFilter, DojoWhereInput>
+    service?: XOR<ServiceNullableScalarRelationFilter, ServiceWhereInput> | null
+    createdBy?: XOR<UserScalarRelationFilter, UserWhereInput>
+    requests?: ServiceRequestListRelationFilter
+  }, "id" | "code">
+
+  export type ServiceCouponOrderByWithAggregationInput = {
+    id?: SortOrder
+    code?: SortOrder
+    dojoId?: SortOrder
+    createdById?: SortOrder
+    discountPercent?: SortOrder
+    serviceId?: SortOrderInput | SortOrder
+    usageLimit?: SortOrder
+    usedCount?: SortOrder
+    expiresAt?: SortOrderInput | SortOrder
+    isActive?: SortOrder
+    notes?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: ServiceCouponCountOrderByAggregateInput
+    _avg?: ServiceCouponAvgOrderByAggregateInput
+    _max?: ServiceCouponMaxOrderByAggregateInput
+    _min?: ServiceCouponMinOrderByAggregateInput
+    _sum?: ServiceCouponSumOrderByAggregateInput
+  }
+
+  export type ServiceCouponScalarWhereWithAggregatesInput = {
+    AND?: ServiceCouponScalarWhereWithAggregatesInput | ServiceCouponScalarWhereWithAggregatesInput[]
+    OR?: ServiceCouponScalarWhereWithAggregatesInput[]
+    NOT?: ServiceCouponScalarWhereWithAggregatesInput | ServiceCouponScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"ServiceCoupon"> | string
+    code?: StringWithAggregatesFilter<"ServiceCoupon"> | string
+    dojoId?: UuidWithAggregatesFilter<"ServiceCoupon"> | string
+    createdById?: UuidWithAggregatesFilter<"ServiceCoupon"> | string
+    discountPercent?: IntWithAggregatesFilter<"ServiceCoupon"> | number
+    serviceId?: UuidNullableWithAggregatesFilter<"ServiceCoupon"> | string | null
+    usageLimit?: IntWithAggregatesFilter<"ServiceCoupon"> | number
+    usedCount?: IntWithAggregatesFilter<"ServiceCoupon"> | number
+    expiresAt?: DateTimeNullableWithAggregatesFilter<"ServiceCoupon"> | Date | string | null
+    isActive?: BoolWithAggregatesFilter<"ServiceCoupon"> | boolean
+    notes?: StringNullableWithAggregatesFilter<"ServiceCoupon"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"ServiceCoupon"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"ServiceCoupon"> | Date | string
+  }
+
   export type RoleCreateInput = {
     id: string
     displayName: string
@@ -55790,6 +60879,9 @@ export namespace Prisma {
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteCreateNestedManyWithoutInvitedByInput
+    serviceRequestsDojoActed?: ServiceRequestCreateNestedManyWithoutDojoActedByInput
+    serviceRequestsAdminActed?: ServiceRequestCreateNestedManyWithoutAdminActedByInput
+    serviceCouponsCreated?: ServiceCouponCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -55825,6 +60917,9 @@ export namespace Prisma {
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedCreateNestedManyWithoutInvitedByInput
+    serviceRequestsDojoActed?: ServiceRequestUncheckedCreateNestedManyWithoutDojoActedByInput
+    serviceRequestsAdminActed?: ServiceRequestUncheckedCreateNestedManyWithoutAdminActedByInput
+    serviceCouponsCreated?: ServiceCouponUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUpdateInput = {
@@ -55860,6 +60955,9 @@ export namespace Prisma {
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUpdateManyWithoutInvitedByNestedInput
+    serviceRequestsDojoActed?: ServiceRequestUpdateManyWithoutDojoActedByNestedInput
+    serviceRequestsAdminActed?: ServiceRequestUpdateManyWithoutAdminActedByNestedInput
+    serviceCouponsCreated?: ServiceCouponUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -55895,6 +60993,9 @@ export namespace Prisma {
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedUpdateManyWithoutInvitedByNestedInput
+    serviceRequestsDojoActed?: ServiceRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
+    serviceRequestsAdminActed?: ServiceRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
+    serviceCouponsCreated?: ServiceCouponUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -56056,6 +61157,7 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestCreateNestedManyWithoutStudentInput
     achievements?: StudentAchievementCreateNestedManyWithoutStudentInput
     transferRequests?: StudentTransferRequestCreateNestedManyWithoutStudentInput
+    serviceRequests?: ServiceRequestCreateNestedManyWithoutStudentInput
     dojoHistory?: StudentDojoHistoryCreateNestedManyWithoutStudentInput
   }
 
@@ -56080,6 +61182,7 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutStudentInput
     achievements?: StudentAchievementUncheckedCreateNestedManyWithoutStudentInput
     transferRequests?: StudentTransferRequestUncheckedCreateNestedManyWithoutStudentInput
+    serviceRequests?: ServiceRequestUncheckedCreateNestedManyWithoutStudentInput
     dojoHistory?: StudentDojoHistoryUncheckedCreateNestedManyWithoutStudentInput
   }
 
@@ -56104,6 +61207,7 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestUpdateManyWithoutStudentNestedInput
     achievements?: StudentAchievementUpdateManyWithoutStudentNestedInput
     transferRequests?: StudentTransferRequestUpdateManyWithoutStudentNestedInput
+    serviceRequests?: ServiceRequestUpdateManyWithoutStudentNestedInput
     dojoHistory?: StudentDojoHistoryUpdateManyWithoutStudentNestedInput
   }
 
@@ -56128,6 +61232,7 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutStudentNestedInput
     achievements?: StudentAchievementUncheckedUpdateManyWithoutStudentNestedInput
     transferRequests?: StudentTransferRequestUncheckedUpdateManyWithoutStudentNestedInput
+    serviceRequests?: ServiceRequestUncheckedUpdateManyWithoutStudentNestedInput
     dojoHistory?: StudentDojoHistoryUncheckedUpdateManyWithoutStudentNestedInput
   }
 
@@ -56524,6 +61629,8 @@ export namespace Prisma {
     transfersIn?: StudentTransferRequestCreateNestedManyWithoutToDojoInput
     historyFrom?: StudentDojoHistoryCreateNestedManyWithoutFromDojoInput
     historyTo?: StudentDojoHistoryCreateNestedManyWithoutToDojoInput
+    serviceRequests?: ServiceRequestCreateNestedManyWithoutDojoInput
+    serviceCoupons?: ServiceCouponCreateNestedManyWithoutDojoInput
   }
 
   export type DojoUncheckedCreateInput = {
@@ -56560,6 +61667,8 @@ export namespace Prisma {
     transfersIn?: StudentTransferRequestUncheckedCreateNestedManyWithoutToDojoInput
     historyFrom?: StudentDojoHistoryUncheckedCreateNestedManyWithoutFromDojoInput
     historyTo?: StudentDojoHistoryUncheckedCreateNestedManyWithoutToDojoInput
+    serviceRequests?: ServiceRequestUncheckedCreateNestedManyWithoutDojoInput
+    serviceCoupons?: ServiceCouponUncheckedCreateNestedManyWithoutDojoInput
   }
 
   export type DojoUpdateInput = {
@@ -56596,6 +61705,8 @@ export namespace Prisma {
     transfersIn?: StudentTransferRequestUpdateManyWithoutToDojoNestedInput
     historyFrom?: StudentDojoHistoryUpdateManyWithoutFromDojoNestedInput
     historyTo?: StudentDojoHistoryUpdateManyWithoutToDojoNestedInput
+    serviceRequests?: ServiceRequestUpdateManyWithoutDojoNestedInput
+    serviceCoupons?: ServiceCouponUpdateManyWithoutDojoNestedInput
   }
 
   export type DojoUncheckedUpdateInput = {
@@ -56632,6 +61743,8 @@ export namespace Prisma {
     transfersIn?: StudentTransferRequestUncheckedUpdateManyWithoutToDojoNestedInput
     historyFrom?: StudentDojoHistoryUncheckedUpdateManyWithoutFromDojoNestedInput
     historyTo?: StudentDojoHistoryUncheckedUpdateManyWithoutToDojoNestedInput
+    serviceRequests?: ServiceRequestUncheckedUpdateManyWithoutDojoNestedInput
+    serviceCoupons?: ServiceCouponUncheckedUpdateManyWithoutDojoNestedInput
   }
 
   export type DojoCreateManyInput = {
@@ -58351,6 +63464,7 @@ export namespace Prisma {
     includesCertificates?: boolean
     includesTransferRequest?: boolean
     includesPastBeltFee?: boolean
+    includesServiceRequest?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     user?: UserCreateNestedOneWithoutOrdersInput
@@ -58359,6 +63473,7 @@ export namespace Prisma {
     orderItems?: ShopOrderItemCreateNestedManyWithoutOrderInput
     certificateRequests?: CertificateRequestCreateNestedManyWithoutOrderInput
     transferRequest?: StudentTransferRequestCreateNestedOneWithoutOrderInput
+    serviceRequest?: ServiceRequestCreateNestedOneWithoutOrderInput
     transactions?: PaymentTransactionCreateNestedManyWithoutOrderInput
   }
 
@@ -58385,11 +63500,13 @@ export namespace Prisma {
     certDojoId?: string | null
     includesTransferRequest?: boolean
     includesPastBeltFee?: boolean
+    includesServiceRequest?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     orderItems?: ShopOrderItemUncheckedCreateNestedManyWithoutOrderInput
     certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutOrderInput
     transferRequest?: StudentTransferRequestUncheckedCreateNestedOneWithoutOrderInput
+    serviceRequest?: ServiceRequestUncheckedCreateNestedOneWithoutOrderInput
     transactions?: PaymentTransactionUncheckedCreateNestedManyWithoutOrderInput
   }
 
@@ -58413,6 +63530,7 @@ export namespace Prisma {
     includesCertificates?: BoolFieldUpdateOperationsInput | boolean
     includesTransferRequest?: BoolFieldUpdateOperationsInput | boolean
     includesPastBeltFee?: BoolFieldUpdateOperationsInput | boolean
+    includesServiceRequest?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneWithoutOrdersNestedInput
@@ -58421,6 +63539,7 @@ export namespace Prisma {
     orderItems?: ShopOrderItemUpdateManyWithoutOrderNestedInput
     certificateRequests?: CertificateRequestUpdateManyWithoutOrderNestedInput
     transferRequest?: StudentTransferRequestUpdateOneWithoutOrderNestedInput
+    serviceRequest?: ServiceRequestUpdateOneWithoutOrderNestedInput
     transactions?: PaymentTransactionUpdateManyWithoutOrderNestedInput
   }
 
@@ -58447,11 +63566,13 @@ export namespace Prisma {
     certDojoId?: NullableStringFieldUpdateOperationsInput | string | null
     includesTransferRequest?: BoolFieldUpdateOperationsInput | boolean
     includesPastBeltFee?: BoolFieldUpdateOperationsInput | boolean
+    includesServiceRequest?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     orderItems?: ShopOrderItemUncheckedUpdateManyWithoutOrderNestedInput
     certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutOrderNestedInput
     transferRequest?: StudentTransferRequestUncheckedUpdateOneWithoutOrderNestedInput
+    serviceRequest?: ServiceRequestUncheckedUpdateOneWithoutOrderNestedInput
     transactions?: PaymentTransactionUncheckedUpdateManyWithoutOrderNestedInput
   }
 
@@ -58478,6 +63599,7 @@ export namespace Prisma {
     certDojoId?: string | null
     includesTransferRequest?: boolean
     includesPastBeltFee?: boolean
+    includesServiceRequest?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -58502,6 +63624,7 @@ export namespace Prisma {
     includesCertificates?: BoolFieldUpdateOperationsInput | boolean
     includesTransferRequest?: BoolFieldUpdateOperationsInput | boolean
     includesPastBeltFee?: BoolFieldUpdateOperationsInput | boolean
+    includesServiceRequest?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -58529,6 +63652,7 @@ export namespace Prisma {
     certDojoId?: NullableStringFieldUpdateOperationsInput | string | null
     includesTransferRequest?: BoolFieldUpdateOperationsInput | boolean
     includesPastBeltFee?: BoolFieldUpdateOperationsInput | boolean
+    includesServiceRequest?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -59030,6 +64154,9 @@ export namespace Prisma {
     dojoNote?: string | null
     adminNote?: string | null
     fee: Decimal | DecimalJsLike | number | string
+    discountAmount?: Decimal | DecimalJsLike | number | string
+    finalAmount?: Decimal | DecimalJsLike | number | string | null
+    couponCode?: string | null
     paidAt?: Date | string | null
     dojoActedAt?: Date | string | null
     adminActedAt?: Date | string | null
@@ -59055,6 +64182,9 @@ export namespace Prisma {
     dojoNote?: string | null
     adminNote?: string | null
     fee: Decimal | DecimalJsLike | number | string
+    discountAmount?: Decimal | DecimalJsLike | number | string
+    finalAmount?: Decimal | DecimalJsLike | number | string | null
+    couponCode?: string | null
     orderId?: string | null
     paidAt?: Date | string | null
     dojoActedAt?: Date | string | null
@@ -59074,6 +64204,9 @@ export namespace Prisma {
     dojoNote?: NullableStringFieldUpdateOperationsInput | string | null
     adminNote?: NullableStringFieldUpdateOperationsInput | string | null
     fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discountAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    finalAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    couponCode?: NullableStringFieldUpdateOperationsInput | string | null
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     adminActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -59099,6 +64232,9 @@ export namespace Prisma {
     dojoNote?: NullableStringFieldUpdateOperationsInput | string | null
     adminNote?: NullableStringFieldUpdateOperationsInput | string | null
     fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discountAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    finalAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    couponCode?: NullableStringFieldUpdateOperationsInput | string | null
     orderId?: NullableStringFieldUpdateOperationsInput | string | null
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -59121,6 +64257,9 @@ export namespace Prisma {
     dojoNote?: string | null
     adminNote?: string | null
     fee: Decimal | DecimalJsLike | number | string
+    discountAmount?: Decimal | DecimalJsLike | number | string
+    finalAmount?: Decimal | DecimalJsLike | number | string | null
+    couponCode?: string | null
     orderId?: string | null
     paidAt?: Date | string | null
     dojoActedAt?: Date | string | null
@@ -59139,6 +64278,9 @@ export namespace Prisma {
     dojoNote?: NullableStringFieldUpdateOperationsInput | string | null
     adminNote?: NullableStringFieldUpdateOperationsInput | string | null
     fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discountAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    finalAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    couponCode?: NullableStringFieldUpdateOperationsInput | string | null
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     adminActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -59157,6 +64299,9 @@ export namespace Prisma {
     dojoNote?: NullableStringFieldUpdateOperationsInput | string | null
     adminNote?: NullableStringFieldUpdateOperationsInput | string | null
     fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discountAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    finalAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    couponCode?: NullableStringFieldUpdateOperationsInput | string | null
     orderId?: NullableStringFieldUpdateOperationsInput | string | null
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -59367,6 +64512,386 @@ export namespace Prisma {
     changedById?: NullableStringFieldUpdateOperationsInput | string | null
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ServiceCreateInput = {
+    id?: string
+    slug: string
+    name: string
+    description?: string | null
+    feeBDT: Decimal | DecimalJsLike | number | string
+    isActive?: boolean
+    handler?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    requests?: ServiceRequestCreateNestedManyWithoutServiceInput
+    coupons?: ServiceCouponCreateNestedManyWithoutServiceInput
+  }
+
+  export type ServiceUncheckedCreateInput = {
+    id?: string
+    slug: string
+    name: string
+    description?: string | null
+    feeBDT: Decimal | DecimalJsLike | number | string
+    isActive?: boolean
+    handler?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    requests?: ServiceRequestUncheckedCreateNestedManyWithoutServiceInput
+    coupons?: ServiceCouponUncheckedCreateNestedManyWithoutServiceInput
+  }
+
+  export type ServiceUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    feeBDT?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    handler?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    requests?: ServiceRequestUpdateManyWithoutServiceNestedInput
+    coupons?: ServiceCouponUpdateManyWithoutServiceNestedInput
+  }
+
+  export type ServiceUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    feeBDT?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    handler?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    requests?: ServiceRequestUncheckedUpdateManyWithoutServiceNestedInput
+    coupons?: ServiceCouponUncheckedUpdateManyWithoutServiceNestedInput
+  }
+
+  export type ServiceCreateManyInput = {
+    id?: string
+    slug: string
+    name: string
+    description?: string | null
+    feeBDT: Decimal | DecimalJsLike | number | string
+    isActive?: boolean
+    handler?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ServiceUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    feeBDT?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    handler?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ServiceUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    feeBDT?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    handler?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ServiceRequestCreateInput = {
+    id?: string
+    status?: $Enums.ServiceRequestStatus
+    dojoDecision?: $Enums.ServiceRequestDojoDecision
+    payload?: JsonNullValueInput | InputJsonValue
+    reason?: string | null
+    dojoNote?: string | null
+    adminNote?: string | null
+    fee: Decimal | DecimalJsLike | number | string
+    discountAmount?: Decimal | DecimalJsLike | number | string
+    finalAmount: Decimal | DecimalJsLike | number | string
+    couponCode?: string | null
+    paidAt?: Date | string | null
+    dojoActedAt?: Date | string | null
+    adminActedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    student: StudentCreateNestedOneWithoutServiceRequestsInput
+    service: ServiceCreateNestedOneWithoutRequestsInput
+    dojo: DojoCreateNestedOneWithoutServiceRequestsInput
+    order?: ShopOrderCreateNestedOneWithoutServiceRequestInput
+    coupon?: ServiceCouponCreateNestedOneWithoutRequestsInput
+    dojoActedBy?: UserCreateNestedOneWithoutServiceRequestsDojoActedInput
+    adminActedBy?: UserCreateNestedOneWithoutServiceRequestsAdminActedInput
+  }
+
+  export type ServiceRequestUncheckedCreateInput = {
+    id?: string
+    studentId: string
+    serviceId: string
+    dojoId: string
+    status?: $Enums.ServiceRequestStatus
+    dojoDecision?: $Enums.ServiceRequestDojoDecision
+    payload?: JsonNullValueInput | InputJsonValue
+    reason?: string | null
+    dojoNote?: string | null
+    adminNote?: string | null
+    fee: Decimal | DecimalJsLike | number | string
+    discountAmount?: Decimal | DecimalJsLike | number | string
+    finalAmount: Decimal | DecimalJsLike | number | string
+    couponId?: string | null
+    couponCode?: string | null
+    orderId?: string | null
+    paidAt?: Date | string | null
+    dojoActedAt?: Date | string | null
+    dojoActedById?: string | null
+    adminActedAt?: Date | string | null
+    adminActedById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ServiceRequestUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumServiceRequestStatusFieldUpdateOperationsInput | $Enums.ServiceRequestStatus
+    dojoDecision?: EnumServiceRequestDojoDecisionFieldUpdateOperationsInput | $Enums.ServiceRequestDojoDecision
+    payload?: JsonNullValueInput | InputJsonValue
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    dojoNote?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNote?: NullableStringFieldUpdateOperationsInput | string | null
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discountAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    finalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    couponCode?: NullableStringFieldUpdateOperationsInput | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    adminActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    student?: StudentUpdateOneRequiredWithoutServiceRequestsNestedInput
+    service?: ServiceUpdateOneRequiredWithoutRequestsNestedInput
+    dojo?: DojoUpdateOneRequiredWithoutServiceRequestsNestedInput
+    order?: ShopOrderUpdateOneWithoutServiceRequestNestedInput
+    coupon?: ServiceCouponUpdateOneWithoutRequestsNestedInput
+    dojoActedBy?: UserUpdateOneWithoutServiceRequestsDojoActedNestedInput
+    adminActedBy?: UserUpdateOneWithoutServiceRequestsAdminActedNestedInput
+  }
+
+  export type ServiceRequestUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    serviceId?: StringFieldUpdateOperationsInput | string
+    dojoId?: StringFieldUpdateOperationsInput | string
+    status?: EnumServiceRequestStatusFieldUpdateOperationsInput | $Enums.ServiceRequestStatus
+    dojoDecision?: EnumServiceRequestDojoDecisionFieldUpdateOperationsInput | $Enums.ServiceRequestDojoDecision
+    payload?: JsonNullValueInput | InputJsonValue
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    dojoNote?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNote?: NullableStringFieldUpdateOperationsInput | string | null
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discountAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    finalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    couponId?: NullableStringFieldUpdateOperationsInput | string | null
+    couponCode?: NullableStringFieldUpdateOperationsInput | string | null
+    orderId?: NullableStringFieldUpdateOperationsInput | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dojoActedById?: NullableStringFieldUpdateOperationsInput | string | null
+    adminActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    adminActedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ServiceRequestCreateManyInput = {
+    id?: string
+    studentId: string
+    serviceId: string
+    dojoId: string
+    status?: $Enums.ServiceRequestStatus
+    dojoDecision?: $Enums.ServiceRequestDojoDecision
+    payload?: JsonNullValueInput | InputJsonValue
+    reason?: string | null
+    dojoNote?: string | null
+    adminNote?: string | null
+    fee: Decimal | DecimalJsLike | number | string
+    discountAmount?: Decimal | DecimalJsLike | number | string
+    finalAmount: Decimal | DecimalJsLike | number | string
+    couponId?: string | null
+    couponCode?: string | null
+    orderId?: string | null
+    paidAt?: Date | string | null
+    dojoActedAt?: Date | string | null
+    dojoActedById?: string | null
+    adminActedAt?: Date | string | null
+    adminActedById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ServiceRequestUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumServiceRequestStatusFieldUpdateOperationsInput | $Enums.ServiceRequestStatus
+    dojoDecision?: EnumServiceRequestDojoDecisionFieldUpdateOperationsInput | $Enums.ServiceRequestDojoDecision
+    payload?: JsonNullValueInput | InputJsonValue
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    dojoNote?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNote?: NullableStringFieldUpdateOperationsInput | string | null
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discountAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    finalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    couponCode?: NullableStringFieldUpdateOperationsInput | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    adminActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ServiceRequestUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    serviceId?: StringFieldUpdateOperationsInput | string
+    dojoId?: StringFieldUpdateOperationsInput | string
+    status?: EnumServiceRequestStatusFieldUpdateOperationsInput | $Enums.ServiceRequestStatus
+    dojoDecision?: EnumServiceRequestDojoDecisionFieldUpdateOperationsInput | $Enums.ServiceRequestDojoDecision
+    payload?: JsonNullValueInput | InputJsonValue
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    dojoNote?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNote?: NullableStringFieldUpdateOperationsInput | string | null
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discountAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    finalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    couponId?: NullableStringFieldUpdateOperationsInput | string | null
+    couponCode?: NullableStringFieldUpdateOperationsInput | string | null
+    orderId?: NullableStringFieldUpdateOperationsInput | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dojoActedById?: NullableStringFieldUpdateOperationsInput | string | null
+    adminActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    adminActedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ServiceCouponCreateInput = {
+    id?: string
+    code: string
+    discountPercent: number
+    usageLimit?: number
+    usedCount?: number
+    expiresAt?: Date | string | null
+    isActive?: boolean
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    dojo: DojoCreateNestedOneWithoutServiceCouponsInput
+    service?: ServiceCreateNestedOneWithoutCouponsInput
+    createdBy: UserCreateNestedOneWithoutServiceCouponsCreatedInput
+    requests?: ServiceRequestCreateNestedManyWithoutCouponInput
+  }
+
+  export type ServiceCouponUncheckedCreateInput = {
+    id?: string
+    code: string
+    dojoId: string
+    createdById: string
+    discountPercent: number
+    serviceId?: string | null
+    usageLimit?: number
+    usedCount?: number
+    expiresAt?: Date | string | null
+    isActive?: boolean
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    requests?: ServiceRequestUncheckedCreateNestedManyWithoutCouponInput
+  }
+
+  export type ServiceCouponUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    discountPercent?: IntFieldUpdateOperationsInput | number
+    usageLimit?: IntFieldUpdateOperationsInput | number
+    usedCount?: IntFieldUpdateOperationsInput | number
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    dojo?: DojoUpdateOneRequiredWithoutServiceCouponsNestedInput
+    service?: ServiceUpdateOneWithoutCouponsNestedInput
+    createdBy?: UserUpdateOneRequiredWithoutServiceCouponsCreatedNestedInput
+    requests?: ServiceRequestUpdateManyWithoutCouponNestedInput
+  }
+
+  export type ServiceCouponUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    dojoId?: StringFieldUpdateOperationsInput | string
+    createdById?: StringFieldUpdateOperationsInput | string
+    discountPercent?: IntFieldUpdateOperationsInput | number
+    serviceId?: NullableStringFieldUpdateOperationsInput | string | null
+    usageLimit?: IntFieldUpdateOperationsInput | number
+    usedCount?: IntFieldUpdateOperationsInput | number
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    requests?: ServiceRequestUncheckedUpdateManyWithoutCouponNestedInput
+  }
+
+  export type ServiceCouponCreateManyInput = {
+    id?: string
+    code: string
+    dojoId: string
+    createdById: string
+    discountPercent: number
+    serviceId?: string | null
+    usageLimit?: number
+    usedCount?: number
+    expiresAt?: Date | string | null
+    isActive?: boolean
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ServiceCouponUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    discountPercent?: IntFieldUpdateOperationsInput | number
+    usageLimit?: IntFieldUpdateOperationsInput | number
+    usedCount?: IntFieldUpdateOperationsInput | number
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ServiceCouponUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    dojoId?: StringFieldUpdateOperationsInput | string
+    createdById?: StringFieldUpdateOperationsInput | string
+    discountPercent?: IntFieldUpdateOperationsInput | number
+    serviceId?: NullableStringFieldUpdateOperationsInput | string | null
+    usageLimit?: IntFieldUpdateOperationsInput | number
+    usedCount?: IntFieldUpdateOperationsInput | number
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -59685,6 +65210,18 @@ export namespace Prisma {
     none?: DojoOwnerInviteWhereInput
   }
 
+  export type ServiceRequestListRelationFilter = {
+    every?: ServiceRequestWhereInput
+    some?: ServiceRequestWhereInput
+    none?: ServiceRequestWhereInput
+  }
+
+  export type ServiceCouponListRelationFilter = {
+    every?: ServiceCouponWhereInput
+    some?: ServiceCouponWhereInput
+    none?: ServiceCouponWhereInput
+  }
+
   export type NotificationOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -59730,6 +65267,14 @@ export namespace Prisma {
   }
 
   export type DojoOwnerInviteOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ServiceRequestOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ServiceCouponOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -61555,6 +67100,11 @@ export namespace Prisma {
     isNot?: StudentTransferRequestWhereInput | null
   }
 
+  export type ServiceRequestNullableScalarRelationFilter = {
+    is?: ServiceRequestWhereInput | null
+    isNot?: ServiceRequestWhereInput | null
+  }
+
   export type ShopOrderCountOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
@@ -61578,6 +67128,7 @@ export namespace Prisma {
     certDojoId?: SortOrder
     includesTransferRequest?: SortOrder
     includesPastBeltFee?: SortOrder
+    includesServiceRequest?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -61610,6 +67161,7 @@ export namespace Prisma {
     certDojoId?: SortOrder
     includesTransferRequest?: SortOrder
     includesPastBeltFee?: SortOrder
+    includesServiceRequest?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -61637,6 +67189,7 @@ export namespace Prisma {
     certDojoId?: SortOrder
     includesTransferRequest?: SortOrder
     includesPastBeltFee?: SortOrder
+    includesServiceRequest?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -62007,6 +67560,9 @@ export namespace Prisma {
     dojoNote?: SortOrder
     adminNote?: SortOrder
     fee?: SortOrder
+    discountAmount?: SortOrder
+    finalAmount?: SortOrder
+    couponCode?: SortOrder
     orderId?: SortOrder
     paidAt?: SortOrder
     dojoActedAt?: SortOrder
@@ -62019,6 +67575,8 @@ export namespace Prisma {
 
   export type StudentTransferRequestAvgOrderByAggregateInput = {
     fee?: SortOrder
+    discountAmount?: SortOrder
+    finalAmount?: SortOrder
   }
 
   export type StudentTransferRequestMaxOrderByAggregateInput = {
@@ -62032,6 +67590,9 @@ export namespace Prisma {
     dojoNote?: SortOrder
     adminNote?: SortOrder
     fee?: SortOrder
+    discountAmount?: SortOrder
+    finalAmount?: SortOrder
+    couponCode?: SortOrder
     orderId?: SortOrder
     paidAt?: SortOrder
     dojoActedAt?: SortOrder
@@ -62053,6 +67614,9 @@ export namespace Prisma {
     dojoNote?: SortOrder
     adminNote?: SortOrder
     fee?: SortOrder
+    discountAmount?: SortOrder
+    finalAmount?: SortOrder
+    couponCode?: SortOrder
     orderId?: SortOrder
     paidAt?: SortOrder
     dojoActedAt?: SortOrder
@@ -62065,6 +67629,8 @@ export namespace Prisma {
 
   export type StudentTransferRequestSumOrderByAggregateInput = {
     fee?: SortOrder
+    discountAmount?: SortOrder
+    finalAmount?: SortOrder
   }
 
   export type EnumStudentTransferStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -62239,6 +67805,247 @@ export namespace Prisma {
     changedById?: SortOrder
     reason?: SortOrder
     createdAt?: SortOrder
+  }
+
+  export type ServiceCountOrderByAggregateInput = {
+    id?: SortOrder
+    slug?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    feeBDT?: SortOrder
+    isActive?: SortOrder
+    handler?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ServiceAvgOrderByAggregateInput = {
+    feeBDT?: SortOrder
+  }
+
+  export type ServiceMaxOrderByAggregateInput = {
+    id?: SortOrder
+    slug?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    feeBDT?: SortOrder
+    isActive?: SortOrder
+    handler?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ServiceMinOrderByAggregateInput = {
+    id?: SortOrder
+    slug?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    feeBDT?: SortOrder
+    isActive?: SortOrder
+    handler?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ServiceSumOrderByAggregateInput = {
+    feeBDT?: SortOrder
+  }
+
+  export type EnumServiceRequestStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.ServiceRequestStatus | EnumServiceRequestStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ServiceRequestStatus[] | ListEnumServiceRequestStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ServiceRequestStatus[] | ListEnumServiceRequestStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumServiceRequestStatusFilter<$PrismaModel> | $Enums.ServiceRequestStatus
+  }
+
+  export type EnumServiceRequestDojoDecisionFilter<$PrismaModel = never> = {
+    equals?: $Enums.ServiceRequestDojoDecision | EnumServiceRequestDojoDecisionFieldRefInput<$PrismaModel>
+    in?: $Enums.ServiceRequestDojoDecision[] | ListEnumServiceRequestDojoDecisionFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ServiceRequestDojoDecision[] | ListEnumServiceRequestDojoDecisionFieldRefInput<$PrismaModel>
+    not?: NestedEnumServiceRequestDojoDecisionFilter<$PrismaModel> | $Enums.ServiceRequestDojoDecision
+  }
+
+  export type ServiceScalarRelationFilter = {
+    is?: ServiceWhereInput
+    isNot?: ServiceWhereInput
+  }
+
+  export type ServiceCouponNullableScalarRelationFilter = {
+    is?: ServiceCouponWhereInput | null
+    isNot?: ServiceCouponWhereInput | null
+  }
+
+  export type ServiceRequestCountOrderByAggregateInput = {
+    id?: SortOrder
+    studentId?: SortOrder
+    serviceId?: SortOrder
+    dojoId?: SortOrder
+    status?: SortOrder
+    dojoDecision?: SortOrder
+    payload?: SortOrder
+    reason?: SortOrder
+    dojoNote?: SortOrder
+    adminNote?: SortOrder
+    fee?: SortOrder
+    discountAmount?: SortOrder
+    finalAmount?: SortOrder
+    couponId?: SortOrder
+    couponCode?: SortOrder
+    orderId?: SortOrder
+    paidAt?: SortOrder
+    dojoActedAt?: SortOrder
+    dojoActedById?: SortOrder
+    adminActedAt?: SortOrder
+    adminActedById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ServiceRequestAvgOrderByAggregateInput = {
+    fee?: SortOrder
+    discountAmount?: SortOrder
+    finalAmount?: SortOrder
+  }
+
+  export type ServiceRequestMaxOrderByAggregateInput = {
+    id?: SortOrder
+    studentId?: SortOrder
+    serviceId?: SortOrder
+    dojoId?: SortOrder
+    status?: SortOrder
+    dojoDecision?: SortOrder
+    reason?: SortOrder
+    dojoNote?: SortOrder
+    adminNote?: SortOrder
+    fee?: SortOrder
+    discountAmount?: SortOrder
+    finalAmount?: SortOrder
+    couponId?: SortOrder
+    couponCode?: SortOrder
+    orderId?: SortOrder
+    paidAt?: SortOrder
+    dojoActedAt?: SortOrder
+    dojoActedById?: SortOrder
+    adminActedAt?: SortOrder
+    adminActedById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ServiceRequestMinOrderByAggregateInput = {
+    id?: SortOrder
+    studentId?: SortOrder
+    serviceId?: SortOrder
+    dojoId?: SortOrder
+    status?: SortOrder
+    dojoDecision?: SortOrder
+    reason?: SortOrder
+    dojoNote?: SortOrder
+    adminNote?: SortOrder
+    fee?: SortOrder
+    discountAmount?: SortOrder
+    finalAmount?: SortOrder
+    couponId?: SortOrder
+    couponCode?: SortOrder
+    orderId?: SortOrder
+    paidAt?: SortOrder
+    dojoActedAt?: SortOrder
+    dojoActedById?: SortOrder
+    adminActedAt?: SortOrder
+    adminActedById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ServiceRequestSumOrderByAggregateInput = {
+    fee?: SortOrder
+    discountAmount?: SortOrder
+    finalAmount?: SortOrder
+  }
+
+  export type EnumServiceRequestStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ServiceRequestStatus | EnumServiceRequestStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ServiceRequestStatus[] | ListEnumServiceRequestStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ServiceRequestStatus[] | ListEnumServiceRequestStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumServiceRequestStatusWithAggregatesFilter<$PrismaModel> | $Enums.ServiceRequestStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumServiceRequestStatusFilter<$PrismaModel>
+    _max?: NestedEnumServiceRequestStatusFilter<$PrismaModel>
+  }
+
+  export type EnumServiceRequestDojoDecisionWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ServiceRequestDojoDecision | EnumServiceRequestDojoDecisionFieldRefInput<$PrismaModel>
+    in?: $Enums.ServiceRequestDojoDecision[] | ListEnumServiceRequestDojoDecisionFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ServiceRequestDojoDecision[] | ListEnumServiceRequestDojoDecisionFieldRefInput<$PrismaModel>
+    not?: NestedEnumServiceRequestDojoDecisionWithAggregatesFilter<$PrismaModel> | $Enums.ServiceRequestDojoDecision
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumServiceRequestDojoDecisionFilter<$PrismaModel>
+    _max?: NestedEnumServiceRequestDojoDecisionFilter<$PrismaModel>
+  }
+
+  export type ServiceNullableScalarRelationFilter = {
+    is?: ServiceWhereInput | null
+    isNot?: ServiceWhereInput | null
+  }
+
+  export type ServiceCouponCountOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    dojoId?: SortOrder
+    createdById?: SortOrder
+    discountPercent?: SortOrder
+    serviceId?: SortOrder
+    usageLimit?: SortOrder
+    usedCount?: SortOrder
+    expiresAt?: SortOrder
+    isActive?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ServiceCouponAvgOrderByAggregateInput = {
+    discountPercent?: SortOrder
+    usageLimit?: SortOrder
+    usedCount?: SortOrder
+  }
+
+  export type ServiceCouponMaxOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    dojoId?: SortOrder
+    createdById?: SortOrder
+    discountPercent?: SortOrder
+    serviceId?: SortOrder
+    usageLimit?: SortOrder
+    usedCount?: SortOrder
+    expiresAt?: SortOrder
+    isActive?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ServiceCouponMinOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    dojoId?: SortOrder
+    createdById?: SortOrder
+    discountPercent?: SortOrder
+    serviceId?: SortOrder
+    usageLimit?: SortOrder
+    usedCount?: SortOrder
+    expiresAt?: SortOrder
+    isActive?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ServiceCouponSumOrderByAggregateInput = {
+    discountPercent?: SortOrder
+    usageLimit?: SortOrder
+    usedCount?: SortOrder
   }
 
   export type UserCreateNestedManyWithoutRoleInput = {
@@ -62554,6 +68361,27 @@ export namespace Prisma {
     connect?: DojoOwnerInviteWhereUniqueInput | DojoOwnerInviteWhereUniqueInput[]
   }
 
+  export type ServiceRequestCreateNestedManyWithoutDojoActedByInput = {
+    create?: XOR<ServiceRequestCreateWithoutDojoActedByInput, ServiceRequestUncheckedCreateWithoutDojoActedByInput> | ServiceRequestCreateWithoutDojoActedByInput[] | ServiceRequestUncheckedCreateWithoutDojoActedByInput[]
+    connectOrCreate?: ServiceRequestCreateOrConnectWithoutDojoActedByInput | ServiceRequestCreateOrConnectWithoutDojoActedByInput[]
+    createMany?: ServiceRequestCreateManyDojoActedByInputEnvelope
+    connect?: ServiceRequestWhereUniqueInput | ServiceRequestWhereUniqueInput[]
+  }
+
+  export type ServiceRequestCreateNestedManyWithoutAdminActedByInput = {
+    create?: XOR<ServiceRequestCreateWithoutAdminActedByInput, ServiceRequestUncheckedCreateWithoutAdminActedByInput> | ServiceRequestCreateWithoutAdminActedByInput[] | ServiceRequestUncheckedCreateWithoutAdminActedByInput[]
+    connectOrCreate?: ServiceRequestCreateOrConnectWithoutAdminActedByInput | ServiceRequestCreateOrConnectWithoutAdminActedByInput[]
+    createMany?: ServiceRequestCreateManyAdminActedByInputEnvelope
+    connect?: ServiceRequestWhereUniqueInput | ServiceRequestWhereUniqueInput[]
+  }
+
+  export type ServiceCouponCreateNestedManyWithoutCreatedByInput = {
+    create?: XOR<ServiceCouponCreateWithoutCreatedByInput, ServiceCouponUncheckedCreateWithoutCreatedByInput> | ServiceCouponCreateWithoutCreatedByInput[] | ServiceCouponUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: ServiceCouponCreateOrConnectWithoutCreatedByInput | ServiceCouponCreateOrConnectWithoutCreatedByInput[]
+    createMany?: ServiceCouponCreateManyCreatedByInputEnvelope
+    connect?: ServiceCouponWhereUniqueInput | ServiceCouponWhereUniqueInput[]
+  }
+
   export type ProfileUncheckedCreateNestedOneWithoutUserInput = {
     create?: XOR<ProfileCreateWithoutUserInput, ProfileUncheckedCreateWithoutUserInput>
     connectOrCreate?: ProfileCreateOrConnectWithoutUserInput
@@ -62693,6 +68521,27 @@ export namespace Prisma {
     connectOrCreate?: DojoOwnerInviteCreateOrConnectWithoutInvitedByInput | DojoOwnerInviteCreateOrConnectWithoutInvitedByInput[]
     createMany?: DojoOwnerInviteCreateManyInvitedByInputEnvelope
     connect?: DojoOwnerInviteWhereUniqueInput | DojoOwnerInviteWhereUniqueInput[]
+  }
+
+  export type ServiceRequestUncheckedCreateNestedManyWithoutDojoActedByInput = {
+    create?: XOR<ServiceRequestCreateWithoutDojoActedByInput, ServiceRequestUncheckedCreateWithoutDojoActedByInput> | ServiceRequestCreateWithoutDojoActedByInput[] | ServiceRequestUncheckedCreateWithoutDojoActedByInput[]
+    connectOrCreate?: ServiceRequestCreateOrConnectWithoutDojoActedByInput | ServiceRequestCreateOrConnectWithoutDojoActedByInput[]
+    createMany?: ServiceRequestCreateManyDojoActedByInputEnvelope
+    connect?: ServiceRequestWhereUniqueInput | ServiceRequestWhereUniqueInput[]
+  }
+
+  export type ServiceRequestUncheckedCreateNestedManyWithoutAdminActedByInput = {
+    create?: XOR<ServiceRequestCreateWithoutAdminActedByInput, ServiceRequestUncheckedCreateWithoutAdminActedByInput> | ServiceRequestCreateWithoutAdminActedByInput[] | ServiceRequestUncheckedCreateWithoutAdminActedByInput[]
+    connectOrCreate?: ServiceRequestCreateOrConnectWithoutAdminActedByInput | ServiceRequestCreateOrConnectWithoutAdminActedByInput[]
+    createMany?: ServiceRequestCreateManyAdminActedByInputEnvelope
+    connect?: ServiceRequestWhereUniqueInput | ServiceRequestWhereUniqueInput[]
+  }
+
+  export type ServiceCouponUncheckedCreateNestedManyWithoutCreatedByInput = {
+    create?: XOR<ServiceCouponCreateWithoutCreatedByInput, ServiceCouponUncheckedCreateWithoutCreatedByInput> | ServiceCouponCreateWithoutCreatedByInput[] | ServiceCouponUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: ServiceCouponCreateOrConnectWithoutCreatedByInput | ServiceCouponCreateOrConnectWithoutCreatedByInput[]
+    createMany?: ServiceCouponCreateManyCreatedByInputEnvelope
+    connect?: ServiceCouponWhereUniqueInput | ServiceCouponWhereUniqueInput[]
   }
 
   export type BoolFieldUpdateOperationsInput = {
@@ -62977,6 +68826,48 @@ export namespace Prisma {
     deleteMany?: DojoOwnerInviteScalarWhereInput | DojoOwnerInviteScalarWhereInput[]
   }
 
+  export type ServiceRequestUpdateManyWithoutDojoActedByNestedInput = {
+    create?: XOR<ServiceRequestCreateWithoutDojoActedByInput, ServiceRequestUncheckedCreateWithoutDojoActedByInput> | ServiceRequestCreateWithoutDojoActedByInput[] | ServiceRequestUncheckedCreateWithoutDojoActedByInput[]
+    connectOrCreate?: ServiceRequestCreateOrConnectWithoutDojoActedByInput | ServiceRequestCreateOrConnectWithoutDojoActedByInput[]
+    upsert?: ServiceRequestUpsertWithWhereUniqueWithoutDojoActedByInput | ServiceRequestUpsertWithWhereUniqueWithoutDojoActedByInput[]
+    createMany?: ServiceRequestCreateManyDojoActedByInputEnvelope
+    set?: ServiceRequestWhereUniqueInput | ServiceRequestWhereUniqueInput[]
+    disconnect?: ServiceRequestWhereUniqueInput | ServiceRequestWhereUniqueInput[]
+    delete?: ServiceRequestWhereUniqueInput | ServiceRequestWhereUniqueInput[]
+    connect?: ServiceRequestWhereUniqueInput | ServiceRequestWhereUniqueInput[]
+    update?: ServiceRequestUpdateWithWhereUniqueWithoutDojoActedByInput | ServiceRequestUpdateWithWhereUniqueWithoutDojoActedByInput[]
+    updateMany?: ServiceRequestUpdateManyWithWhereWithoutDojoActedByInput | ServiceRequestUpdateManyWithWhereWithoutDojoActedByInput[]
+    deleteMany?: ServiceRequestScalarWhereInput | ServiceRequestScalarWhereInput[]
+  }
+
+  export type ServiceRequestUpdateManyWithoutAdminActedByNestedInput = {
+    create?: XOR<ServiceRequestCreateWithoutAdminActedByInput, ServiceRequestUncheckedCreateWithoutAdminActedByInput> | ServiceRequestCreateWithoutAdminActedByInput[] | ServiceRequestUncheckedCreateWithoutAdminActedByInput[]
+    connectOrCreate?: ServiceRequestCreateOrConnectWithoutAdminActedByInput | ServiceRequestCreateOrConnectWithoutAdminActedByInput[]
+    upsert?: ServiceRequestUpsertWithWhereUniqueWithoutAdminActedByInput | ServiceRequestUpsertWithWhereUniqueWithoutAdminActedByInput[]
+    createMany?: ServiceRequestCreateManyAdminActedByInputEnvelope
+    set?: ServiceRequestWhereUniqueInput | ServiceRequestWhereUniqueInput[]
+    disconnect?: ServiceRequestWhereUniqueInput | ServiceRequestWhereUniqueInput[]
+    delete?: ServiceRequestWhereUniqueInput | ServiceRequestWhereUniqueInput[]
+    connect?: ServiceRequestWhereUniqueInput | ServiceRequestWhereUniqueInput[]
+    update?: ServiceRequestUpdateWithWhereUniqueWithoutAdminActedByInput | ServiceRequestUpdateWithWhereUniqueWithoutAdminActedByInput[]
+    updateMany?: ServiceRequestUpdateManyWithWhereWithoutAdminActedByInput | ServiceRequestUpdateManyWithWhereWithoutAdminActedByInput[]
+    deleteMany?: ServiceRequestScalarWhereInput | ServiceRequestScalarWhereInput[]
+  }
+
+  export type ServiceCouponUpdateManyWithoutCreatedByNestedInput = {
+    create?: XOR<ServiceCouponCreateWithoutCreatedByInput, ServiceCouponUncheckedCreateWithoutCreatedByInput> | ServiceCouponCreateWithoutCreatedByInput[] | ServiceCouponUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: ServiceCouponCreateOrConnectWithoutCreatedByInput | ServiceCouponCreateOrConnectWithoutCreatedByInput[]
+    upsert?: ServiceCouponUpsertWithWhereUniqueWithoutCreatedByInput | ServiceCouponUpsertWithWhereUniqueWithoutCreatedByInput[]
+    createMany?: ServiceCouponCreateManyCreatedByInputEnvelope
+    set?: ServiceCouponWhereUniqueInput | ServiceCouponWhereUniqueInput[]
+    disconnect?: ServiceCouponWhereUniqueInput | ServiceCouponWhereUniqueInput[]
+    delete?: ServiceCouponWhereUniqueInput | ServiceCouponWhereUniqueInput[]
+    connect?: ServiceCouponWhereUniqueInput | ServiceCouponWhereUniqueInput[]
+    update?: ServiceCouponUpdateWithWhereUniqueWithoutCreatedByInput | ServiceCouponUpdateWithWhereUniqueWithoutCreatedByInput[]
+    updateMany?: ServiceCouponUpdateManyWithWhereWithoutCreatedByInput | ServiceCouponUpdateManyWithWhereWithoutCreatedByInput[]
+    deleteMany?: ServiceCouponScalarWhereInput | ServiceCouponScalarWhereInput[]
+  }
+
   export type ProfileUncheckedUpdateOneWithoutUserNestedInput = {
     create?: XOR<ProfileCreateWithoutUserInput, ProfileUncheckedCreateWithoutUserInput>
     connectOrCreate?: ProfileCreateOrConnectWithoutUserInput
@@ -63247,6 +69138,48 @@ export namespace Prisma {
     deleteMany?: DojoOwnerInviteScalarWhereInput | DojoOwnerInviteScalarWhereInput[]
   }
 
+  export type ServiceRequestUncheckedUpdateManyWithoutDojoActedByNestedInput = {
+    create?: XOR<ServiceRequestCreateWithoutDojoActedByInput, ServiceRequestUncheckedCreateWithoutDojoActedByInput> | ServiceRequestCreateWithoutDojoActedByInput[] | ServiceRequestUncheckedCreateWithoutDojoActedByInput[]
+    connectOrCreate?: ServiceRequestCreateOrConnectWithoutDojoActedByInput | ServiceRequestCreateOrConnectWithoutDojoActedByInput[]
+    upsert?: ServiceRequestUpsertWithWhereUniqueWithoutDojoActedByInput | ServiceRequestUpsertWithWhereUniqueWithoutDojoActedByInput[]
+    createMany?: ServiceRequestCreateManyDojoActedByInputEnvelope
+    set?: ServiceRequestWhereUniqueInput | ServiceRequestWhereUniqueInput[]
+    disconnect?: ServiceRequestWhereUniqueInput | ServiceRequestWhereUniqueInput[]
+    delete?: ServiceRequestWhereUniqueInput | ServiceRequestWhereUniqueInput[]
+    connect?: ServiceRequestWhereUniqueInput | ServiceRequestWhereUniqueInput[]
+    update?: ServiceRequestUpdateWithWhereUniqueWithoutDojoActedByInput | ServiceRequestUpdateWithWhereUniqueWithoutDojoActedByInput[]
+    updateMany?: ServiceRequestUpdateManyWithWhereWithoutDojoActedByInput | ServiceRequestUpdateManyWithWhereWithoutDojoActedByInput[]
+    deleteMany?: ServiceRequestScalarWhereInput | ServiceRequestScalarWhereInput[]
+  }
+
+  export type ServiceRequestUncheckedUpdateManyWithoutAdminActedByNestedInput = {
+    create?: XOR<ServiceRequestCreateWithoutAdminActedByInput, ServiceRequestUncheckedCreateWithoutAdminActedByInput> | ServiceRequestCreateWithoutAdminActedByInput[] | ServiceRequestUncheckedCreateWithoutAdminActedByInput[]
+    connectOrCreate?: ServiceRequestCreateOrConnectWithoutAdminActedByInput | ServiceRequestCreateOrConnectWithoutAdminActedByInput[]
+    upsert?: ServiceRequestUpsertWithWhereUniqueWithoutAdminActedByInput | ServiceRequestUpsertWithWhereUniqueWithoutAdminActedByInput[]
+    createMany?: ServiceRequestCreateManyAdminActedByInputEnvelope
+    set?: ServiceRequestWhereUniqueInput | ServiceRequestWhereUniqueInput[]
+    disconnect?: ServiceRequestWhereUniqueInput | ServiceRequestWhereUniqueInput[]
+    delete?: ServiceRequestWhereUniqueInput | ServiceRequestWhereUniqueInput[]
+    connect?: ServiceRequestWhereUniqueInput | ServiceRequestWhereUniqueInput[]
+    update?: ServiceRequestUpdateWithWhereUniqueWithoutAdminActedByInput | ServiceRequestUpdateWithWhereUniqueWithoutAdminActedByInput[]
+    updateMany?: ServiceRequestUpdateManyWithWhereWithoutAdminActedByInput | ServiceRequestUpdateManyWithWhereWithoutAdminActedByInput[]
+    deleteMany?: ServiceRequestScalarWhereInput | ServiceRequestScalarWhereInput[]
+  }
+
+  export type ServiceCouponUncheckedUpdateManyWithoutCreatedByNestedInput = {
+    create?: XOR<ServiceCouponCreateWithoutCreatedByInput, ServiceCouponUncheckedCreateWithoutCreatedByInput> | ServiceCouponCreateWithoutCreatedByInput[] | ServiceCouponUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: ServiceCouponCreateOrConnectWithoutCreatedByInput | ServiceCouponCreateOrConnectWithoutCreatedByInput[]
+    upsert?: ServiceCouponUpsertWithWhereUniqueWithoutCreatedByInput | ServiceCouponUpsertWithWhereUniqueWithoutCreatedByInput[]
+    createMany?: ServiceCouponCreateManyCreatedByInputEnvelope
+    set?: ServiceCouponWhereUniqueInput | ServiceCouponWhereUniqueInput[]
+    disconnect?: ServiceCouponWhereUniqueInput | ServiceCouponWhereUniqueInput[]
+    delete?: ServiceCouponWhereUniqueInput | ServiceCouponWhereUniqueInput[]
+    connect?: ServiceCouponWhereUniqueInput | ServiceCouponWhereUniqueInput[]
+    update?: ServiceCouponUpdateWithWhereUniqueWithoutCreatedByInput | ServiceCouponUpdateWithWhereUniqueWithoutCreatedByInput[]
+    updateMany?: ServiceCouponUpdateManyWithWhereWithoutCreatedByInput | ServiceCouponUpdateManyWithWhereWithoutCreatedByInput[]
+    deleteMany?: ServiceCouponScalarWhereInput | ServiceCouponScalarWhereInput[]
+  }
+
   export type UserCreateNestedOneWithoutProfileInput = {
     create?: XOR<UserCreateWithoutProfileInput, UserUncheckedCreateWithoutProfileInput>
     connectOrCreate?: UserCreateOrConnectWithoutProfileInput
@@ -63312,6 +69245,13 @@ export namespace Prisma {
     connect?: StudentTransferRequestWhereUniqueInput | StudentTransferRequestWhereUniqueInput[]
   }
 
+  export type ServiceRequestCreateNestedManyWithoutStudentInput = {
+    create?: XOR<ServiceRequestCreateWithoutStudentInput, ServiceRequestUncheckedCreateWithoutStudentInput> | ServiceRequestCreateWithoutStudentInput[] | ServiceRequestUncheckedCreateWithoutStudentInput[]
+    connectOrCreate?: ServiceRequestCreateOrConnectWithoutStudentInput | ServiceRequestCreateOrConnectWithoutStudentInput[]
+    createMany?: ServiceRequestCreateManyStudentInputEnvelope
+    connect?: ServiceRequestWhereUniqueInput | ServiceRequestWhereUniqueInput[]
+  }
+
   export type StudentDojoHistoryCreateNestedManyWithoutStudentInput = {
     create?: XOR<StudentDojoHistoryCreateWithoutStudentInput, StudentDojoHistoryUncheckedCreateWithoutStudentInput> | StudentDojoHistoryCreateWithoutStudentInput[] | StudentDojoHistoryUncheckedCreateWithoutStudentInput[]
     connectOrCreate?: StudentDojoHistoryCreateOrConnectWithoutStudentInput | StudentDojoHistoryCreateOrConnectWithoutStudentInput[]
@@ -63352,6 +69292,13 @@ export namespace Prisma {
     connectOrCreate?: StudentTransferRequestCreateOrConnectWithoutStudentInput | StudentTransferRequestCreateOrConnectWithoutStudentInput[]
     createMany?: StudentTransferRequestCreateManyStudentInputEnvelope
     connect?: StudentTransferRequestWhereUniqueInput | StudentTransferRequestWhereUniqueInput[]
+  }
+
+  export type ServiceRequestUncheckedCreateNestedManyWithoutStudentInput = {
+    create?: XOR<ServiceRequestCreateWithoutStudentInput, ServiceRequestUncheckedCreateWithoutStudentInput> | ServiceRequestCreateWithoutStudentInput[] | ServiceRequestUncheckedCreateWithoutStudentInput[]
+    connectOrCreate?: ServiceRequestCreateOrConnectWithoutStudentInput | ServiceRequestCreateOrConnectWithoutStudentInput[]
+    createMany?: ServiceRequestCreateManyStudentInputEnvelope
+    connect?: ServiceRequestWhereUniqueInput | ServiceRequestWhereUniqueInput[]
   }
 
   export type StudentDojoHistoryUncheckedCreateNestedManyWithoutStudentInput = {
@@ -63465,6 +69412,20 @@ export namespace Prisma {
     deleteMany?: StudentTransferRequestScalarWhereInput | StudentTransferRequestScalarWhereInput[]
   }
 
+  export type ServiceRequestUpdateManyWithoutStudentNestedInput = {
+    create?: XOR<ServiceRequestCreateWithoutStudentInput, ServiceRequestUncheckedCreateWithoutStudentInput> | ServiceRequestCreateWithoutStudentInput[] | ServiceRequestUncheckedCreateWithoutStudentInput[]
+    connectOrCreate?: ServiceRequestCreateOrConnectWithoutStudentInput | ServiceRequestCreateOrConnectWithoutStudentInput[]
+    upsert?: ServiceRequestUpsertWithWhereUniqueWithoutStudentInput | ServiceRequestUpsertWithWhereUniqueWithoutStudentInput[]
+    createMany?: ServiceRequestCreateManyStudentInputEnvelope
+    set?: ServiceRequestWhereUniqueInput | ServiceRequestWhereUniqueInput[]
+    disconnect?: ServiceRequestWhereUniqueInput | ServiceRequestWhereUniqueInput[]
+    delete?: ServiceRequestWhereUniqueInput | ServiceRequestWhereUniqueInput[]
+    connect?: ServiceRequestWhereUniqueInput | ServiceRequestWhereUniqueInput[]
+    update?: ServiceRequestUpdateWithWhereUniqueWithoutStudentInput | ServiceRequestUpdateWithWhereUniqueWithoutStudentInput[]
+    updateMany?: ServiceRequestUpdateManyWithWhereWithoutStudentInput | ServiceRequestUpdateManyWithWhereWithoutStudentInput[]
+    deleteMany?: ServiceRequestScalarWhereInput | ServiceRequestScalarWhereInput[]
+  }
+
   export type StudentDojoHistoryUpdateManyWithoutStudentNestedInput = {
     create?: XOR<StudentDojoHistoryCreateWithoutStudentInput, StudentDojoHistoryUncheckedCreateWithoutStudentInput> | StudentDojoHistoryCreateWithoutStudentInput[] | StudentDojoHistoryUncheckedCreateWithoutStudentInput[]
     connectOrCreate?: StudentDojoHistoryCreateOrConnectWithoutStudentInput | StudentDojoHistoryCreateOrConnectWithoutStudentInput[]
@@ -63547,6 +69508,20 @@ export namespace Prisma {
     update?: StudentTransferRequestUpdateWithWhereUniqueWithoutStudentInput | StudentTransferRequestUpdateWithWhereUniqueWithoutStudentInput[]
     updateMany?: StudentTransferRequestUpdateManyWithWhereWithoutStudentInput | StudentTransferRequestUpdateManyWithWhereWithoutStudentInput[]
     deleteMany?: StudentTransferRequestScalarWhereInput | StudentTransferRequestScalarWhereInput[]
+  }
+
+  export type ServiceRequestUncheckedUpdateManyWithoutStudentNestedInput = {
+    create?: XOR<ServiceRequestCreateWithoutStudentInput, ServiceRequestUncheckedCreateWithoutStudentInput> | ServiceRequestCreateWithoutStudentInput[] | ServiceRequestUncheckedCreateWithoutStudentInput[]
+    connectOrCreate?: ServiceRequestCreateOrConnectWithoutStudentInput | ServiceRequestCreateOrConnectWithoutStudentInput[]
+    upsert?: ServiceRequestUpsertWithWhereUniqueWithoutStudentInput | ServiceRequestUpsertWithWhereUniqueWithoutStudentInput[]
+    createMany?: ServiceRequestCreateManyStudentInputEnvelope
+    set?: ServiceRequestWhereUniqueInput | ServiceRequestWhereUniqueInput[]
+    disconnect?: ServiceRequestWhereUniqueInput | ServiceRequestWhereUniqueInput[]
+    delete?: ServiceRequestWhereUniqueInput | ServiceRequestWhereUniqueInput[]
+    connect?: ServiceRequestWhereUniqueInput | ServiceRequestWhereUniqueInput[]
+    update?: ServiceRequestUpdateWithWhereUniqueWithoutStudentInput | ServiceRequestUpdateWithWhereUniqueWithoutStudentInput[]
+    updateMany?: ServiceRequestUpdateManyWithWhereWithoutStudentInput | ServiceRequestUpdateManyWithWhereWithoutStudentInput[]
+    deleteMany?: ServiceRequestScalarWhereInput | ServiceRequestScalarWhereInput[]
   }
 
   export type StudentDojoHistoryUncheckedUpdateManyWithoutStudentNestedInput = {
@@ -64007,6 +69982,20 @@ export namespace Prisma {
     connect?: StudentDojoHistoryWhereUniqueInput | StudentDojoHistoryWhereUniqueInput[]
   }
 
+  export type ServiceRequestCreateNestedManyWithoutDojoInput = {
+    create?: XOR<ServiceRequestCreateWithoutDojoInput, ServiceRequestUncheckedCreateWithoutDojoInput> | ServiceRequestCreateWithoutDojoInput[] | ServiceRequestUncheckedCreateWithoutDojoInput[]
+    connectOrCreate?: ServiceRequestCreateOrConnectWithoutDojoInput | ServiceRequestCreateOrConnectWithoutDojoInput[]
+    createMany?: ServiceRequestCreateManyDojoInputEnvelope
+    connect?: ServiceRequestWhereUniqueInput | ServiceRequestWhereUniqueInput[]
+  }
+
+  export type ServiceCouponCreateNestedManyWithoutDojoInput = {
+    create?: XOR<ServiceCouponCreateWithoutDojoInput, ServiceCouponUncheckedCreateWithoutDojoInput> | ServiceCouponCreateWithoutDojoInput[] | ServiceCouponUncheckedCreateWithoutDojoInput[]
+    connectOrCreate?: ServiceCouponCreateOrConnectWithoutDojoInput | ServiceCouponCreateOrConnectWithoutDojoInput[]
+    createMany?: ServiceCouponCreateManyDojoInputEnvelope
+    connect?: ServiceCouponWhereUniqueInput | ServiceCouponWhereUniqueInput[]
+  }
+
   export type ShopOrderUncheckedCreateNestedManyWithoutDojoInput = {
     create?: XOR<ShopOrderCreateWithoutDojoInput, ShopOrderUncheckedCreateWithoutDojoInput> | ShopOrderCreateWithoutDojoInput[] | ShopOrderUncheckedCreateWithoutDojoInput[]
     connectOrCreate?: ShopOrderCreateOrConnectWithoutDojoInput | ShopOrderCreateOrConnectWithoutDojoInput[]
@@ -64115,6 +70104,20 @@ export namespace Prisma {
     connectOrCreate?: StudentDojoHistoryCreateOrConnectWithoutToDojoInput | StudentDojoHistoryCreateOrConnectWithoutToDojoInput[]
     createMany?: StudentDojoHistoryCreateManyToDojoInputEnvelope
     connect?: StudentDojoHistoryWhereUniqueInput | StudentDojoHistoryWhereUniqueInput[]
+  }
+
+  export type ServiceRequestUncheckedCreateNestedManyWithoutDojoInput = {
+    create?: XOR<ServiceRequestCreateWithoutDojoInput, ServiceRequestUncheckedCreateWithoutDojoInput> | ServiceRequestCreateWithoutDojoInput[] | ServiceRequestUncheckedCreateWithoutDojoInput[]
+    connectOrCreate?: ServiceRequestCreateOrConnectWithoutDojoInput | ServiceRequestCreateOrConnectWithoutDojoInput[]
+    createMany?: ServiceRequestCreateManyDojoInputEnvelope
+    connect?: ServiceRequestWhereUniqueInput | ServiceRequestWhereUniqueInput[]
+  }
+
+  export type ServiceCouponUncheckedCreateNestedManyWithoutDojoInput = {
+    create?: XOR<ServiceCouponCreateWithoutDojoInput, ServiceCouponUncheckedCreateWithoutDojoInput> | ServiceCouponCreateWithoutDojoInput[] | ServiceCouponUncheckedCreateWithoutDojoInput[]
+    connectOrCreate?: ServiceCouponCreateOrConnectWithoutDojoInput | ServiceCouponCreateOrConnectWithoutDojoInput[]
+    createMany?: ServiceCouponCreateManyDojoInputEnvelope
+    connect?: ServiceCouponWhereUniqueInput | ServiceCouponWhereUniqueInput[]
   }
 
   export type NullableFloatFieldUpdateOperationsInput = {
@@ -64346,6 +70349,34 @@ export namespace Prisma {
     deleteMany?: StudentDojoHistoryScalarWhereInput | StudentDojoHistoryScalarWhereInput[]
   }
 
+  export type ServiceRequestUpdateManyWithoutDojoNestedInput = {
+    create?: XOR<ServiceRequestCreateWithoutDojoInput, ServiceRequestUncheckedCreateWithoutDojoInput> | ServiceRequestCreateWithoutDojoInput[] | ServiceRequestUncheckedCreateWithoutDojoInput[]
+    connectOrCreate?: ServiceRequestCreateOrConnectWithoutDojoInput | ServiceRequestCreateOrConnectWithoutDojoInput[]
+    upsert?: ServiceRequestUpsertWithWhereUniqueWithoutDojoInput | ServiceRequestUpsertWithWhereUniqueWithoutDojoInput[]
+    createMany?: ServiceRequestCreateManyDojoInputEnvelope
+    set?: ServiceRequestWhereUniqueInput | ServiceRequestWhereUniqueInput[]
+    disconnect?: ServiceRequestWhereUniqueInput | ServiceRequestWhereUniqueInput[]
+    delete?: ServiceRequestWhereUniqueInput | ServiceRequestWhereUniqueInput[]
+    connect?: ServiceRequestWhereUniqueInput | ServiceRequestWhereUniqueInput[]
+    update?: ServiceRequestUpdateWithWhereUniqueWithoutDojoInput | ServiceRequestUpdateWithWhereUniqueWithoutDojoInput[]
+    updateMany?: ServiceRequestUpdateManyWithWhereWithoutDojoInput | ServiceRequestUpdateManyWithWhereWithoutDojoInput[]
+    deleteMany?: ServiceRequestScalarWhereInput | ServiceRequestScalarWhereInput[]
+  }
+
+  export type ServiceCouponUpdateManyWithoutDojoNestedInput = {
+    create?: XOR<ServiceCouponCreateWithoutDojoInput, ServiceCouponUncheckedCreateWithoutDojoInput> | ServiceCouponCreateWithoutDojoInput[] | ServiceCouponUncheckedCreateWithoutDojoInput[]
+    connectOrCreate?: ServiceCouponCreateOrConnectWithoutDojoInput | ServiceCouponCreateOrConnectWithoutDojoInput[]
+    upsert?: ServiceCouponUpsertWithWhereUniqueWithoutDojoInput | ServiceCouponUpsertWithWhereUniqueWithoutDojoInput[]
+    createMany?: ServiceCouponCreateManyDojoInputEnvelope
+    set?: ServiceCouponWhereUniqueInput | ServiceCouponWhereUniqueInput[]
+    disconnect?: ServiceCouponWhereUniqueInput | ServiceCouponWhereUniqueInput[]
+    delete?: ServiceCouponWhereUniqueInput | ServiceCouponWhereUniqueInput[]
+    connect?: ServiceCouponWhereUniqueInput | ServiceCouponWhereUniqueInput[]
+    update?: ServiceCouponUpdateWithWhereUniqueWithoutDojoInput | ServiceCouponUpdateWithWhereUniqueWithoutDojoInput[]
+    updateMany?: ServiceCouponUpdateManyWithWhereWithoutDojoInput | ServiceCouponUpdateManyWithWhereWithoutDojoInput[]
+    deleteMany?: ServiceCouponScalarWhereInput | ServiceCouponScalarWhereInput[]
+  }
+
   export type ShopOrderUncheckedUpdateManyWithoutDojoNestedInput = {
     create?: XOR<ShopOrderCreateWithoutDojoInput, ShopOrderUncheckedCreateWithoutDojoInput> | ShopOrderCreateWithoutDojoInput[] | ShopOrderUncheckedCreateWithoutDojoInput[]
     connectOrCreate?: ShopOrderCreateOrConnectWithoutDojoInput | ShopOrderCreateOrConnectWithoutDojoInput[]
@@ -64560,6 +70591,34 @@ export namespace Prisma {
     update?: StudentDojoHistoryUpdateWithWhereUniqueWithoutToDojoInput | StudentDojoHistoryUpdateWithWhereUniqueWithoutToDojoInput[]
     updateMany?: StudentDojoHistoryUpdateManyWithWhereWithoutToDojoInput | StudentDojoHistoryUpdateManyWithWhereWithoutToDojoInput[]
     deleteMany?: StudentDojoHistoryScalarWhereInput | StudentDojoHistoryScalarWhereInput[]
+  }
+
+  export type ServiceRequestUncheckedUpdateManyWithoutDojoNestedInput = {
+    create?: XOR<ServiceRequestCreateWithoutDojoInput, ServiceRequestUncheckedCreateWithoutDojoInput> | ServiceRequestCreateWithoutDojoInput[] | ServiceRequestUncheckedCreateWithoutDojoInput[]
+    connectOrCreate?: ServiceRequestCreateOrConnectWithoutDojoInput | ServiceRequestCreateOrConnectWithoutDojoInput[]
+    upsert?: ServiceRequestUpsertWithWhereUniqueWithoutDojoInput | ServiceRequestUpsertWithWhereUniqueWithoutDojoInput[]
+    createMany?: ServiceRequestCreateManyDojoInputEnvelope
+    set?: ServiceRequestWhereUniqueInput | ServiceRequestWhereUniqueInput[]
+    disconnect?: ServiceRequestWhereUniqueInput | ServiceRequestWhereUniqueInput[]
+    delete?: ServiceRequestWhereUniqueInput | ServiceRequestWhereUniqueInput[]
+    connect?: ServiceRequestWhereUniqueInput | ServiceRequestWhereUniqueInput[]
+    update?: ServiceRequestUpdateWithWhereUniqueWithoutDojoInput | ServiceRequestUpdateWithWhereUniqueWithoutDojoInput[]
+    updateMany?: ServiceRequestUpdateManyWithWhereWithoutDojoInput | ServiceRequestUpdateManyWithWhereWithoutDojoInput[]
+    deleteMany?: ServiceRequestScalarWhereInput | ServiceRequestScalarWhereInput[]
+  }
+
+  export type ServiceCouponUncheckedUpdateManyWithoutDojoNestedInput = {
+    create?: XOR<ServiceCouponCreateWithoutDojoInput, ServiceCouponUncheckedCreateWithoutDojoInput> | ServiceCouponCreateWithoutDojoInput[] | ServiceCouponUncheckedCreateWithoutDojoInput[]
+    connectOrCreate?: ServiceCouponCreateOrConnectWithoutDojoInput | ServiceCouponCreateOrConnectWithoutDojoInput[]
+    upsert?: ServiceCouponUpsertWithWhereUniqueWithoutDojoInput | ServiceCouponUpsertWithWhereUniqueWithoutDojoInput[]
+    createMany?: ServiceCouponCreateManyDojoInputEnvelope
+    set?: ServiceCouponWhereUniqueInput | ServiceCouponWhereUniqueInput[]
+    disconnect?: ServiceCouponWhereUniqueInput | ServiceCouponWhereUniqueInput[]
+    delete?: ServiceCouponWhereUniqueInput | ServiceCouponWhereUniqueInput[]
+    connect?: ServiceCouponWhereUniqueInput | ServiceCouponWhereUniqueInput[]
+    update?: ServiceCouponUpdateWithWhereUniqueWithoutDojoInput | ServiceCouponUpdateWithWhereUniqueWithoutDojoInput[]
+    updateMany?: ServiceCouponUpdateManyWithWhereWithoutDojoInput | ServiceCouponUpdateManyWithWhereWithoutDojoInput[]
+    deleteMany?: ServiceCouponScalarWhereInput | ServiceCouponScalarWhereInput[]
   }
 
   export type DojoApplicationCreateinteriorUrlsInput = {
@@ -65498,6 +71557,12 @@ export namespace Prisma {
     connect?: StudentTransferRequestWhereUniqueInput
   }
 
+  export type ServiceRequestCreateNestedOneWithoutOrderInput = {
+    create?: XOR<ServiceRequestCreateWithoutOrderInput, ServiceRequestUncheckedCreateWithoutOrderInput>
+    connectOrCreate?: ServiceRequestCreateOrConnectWithoutOrderInput
+    connect?: ServiceRequestWhereUniqueInput
+  }
+
   export type PaymentTransactionCreateNestedManyWithoutOrderInput = {
     create?: XOR<PaymentTransactionCreateWithoutOrderInput, PaymentTransactionUncheckedCreateWithoutOrderInput> | PaymentTransactionCreateWithoutOrderInput[] | PaymentTransactionUncheckedCreateWithoutOrderInput[]
     connectOrCreate?: PaymentTransactionCreateOrConnectWithoutOrderInput | PaymentTransactionCreateOrConnectWithoutOrderInput[]
@@ -65523,6 +71588,12 @@ export namespace Prisma {
     create?: XOR<StudentTransferRequestCreateWithoutOrderInput, StudentTransferRequestUncheckedCreateWithoutOrderInput>
     connectOrCreate?: StudentTransferRequestCreateOrConnectWithoutOrderInput
     connect?: StudentTransferRequestWhereUniqueInput
+  }
+
+  export type ServiceRequestUncheckedCreateNestedOneWithoutOrderInput = {
+    create?: XOR<ServiceRequestCreateWithoutOrderInput, ServiceRequestUncheckedCreateWithoutOrderInput>
+    connectOrCreate?: ServiceRequestCreateOrConnectWithoutOrderInput
+    connect?: ServiceRequestWhereUniqueInput
   }
 
   export type PaymentTransactionUncheckedCreateNestedManyWithoutOrderInput = {
@@ -65608,6 +71679,16 @@ export namespace Prisma {
     update?: XOR<XOR<StudentTransferRequestUpdateToOneWithWhereWithoutOrderInput, StudentTransferRequestUpdateWithoutOrderInput>, StudentTransferRequestUncheckedUpdateWithoutOrderInput>
   }
 
+  export type ServiceRequestUpdateOneWithoutOrderNestedInput = {
+    create?: XOR<ServiceRequestCreateWithoutOrderInput, ServiceRequestUncheckedCreateWithoutOrderInput>
+    connectOrCreate?: ServiceRequestCreateOrConnectWithoutOrderInput
+    upsert?: ServiceRequestUpsertWithoutOrderInput
+    disconnect?: ServiceRequestWhereInput | boolean
+    delete?: ServiceRequestWhereInput | boolean
+    connect?: ServiceRequestWhereUniqueInput
+    update?: XOR<XOR<ServiceRequestUpdateToOneWithWhereWithoutOrderInput, ServiceRequestUpdateWithoutOrderInput>, ServiceRequestUncheckedUpdateWithoutOrderInput>
+  }
+
   export type PaymentTransactionUpdateManyWithoutOrderNestedInput = {
     create?: XOR<PaymentTransactionCreateWithoutOrderInput, PaymentTransactionUncheckedCreateWithoutOrderInput> | PaymentTransactionCreateWithoutOrderInput[] | PaymentTransactionUncheckedCreateWithoutOrderInput[]
     connectOrCreate?: PaymentTransactionCreateOrConnectWithoutOrderInput | PaymentTransactionCreateOrConnectWithoutOrderInput[]
@@ -65658,6 +71739,16 @@ export namespace Prisma {
     delete?: StudentTransferRequestWhereInput | boolean
     connect?: StudentTransferRequestWhereUniqueInput
     update?: XOR<XOR<StudentTransferRequestUpdateToOneWithWhereWithoutOrderInput, StudentTransferRequestUpdateWithoutOrderInput>, StudentTransferRequestUncheckedUpdateWithoutOrderInput>
+  }
+
+  export type ServiceRequestUncheckedUpdateOneWithoutOrderNestedInput = {
+    create?: XOR<ServiceRequestCreateWithoutOrderInput, ServiceRequestUncheckedCreateWithoutOrderInput>
+    connectOrCreate?: ServiceRequestCreateOrConnectWithoutOrderInput
+    upsert?: ServiceRequestUpsertWithoutOrderInput
+    disconnect?: ServiceRequestWhereInput | boolean
+    delete?: ServiceRequestWhereInput | boolean
+    connect?: ServiceRequestWhereUniqueInput
+    update?: XOR<XOR<ServiceRequestUpdateToOneWithWhereWithoutOrderInput, ServiceRequestUpdateWithoutOrderInput>, ServiceRequestUncheckedUpdateWithoutOrderInput>
   }
 
   export type PaymentTransactionUncheckedUpdateManyWithoutOrderNestedInput = {
@@ -66374,6 +72465,290 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutDojoHistoryChangesInput, UserUpdateWithoutDojoHistoryChangesInput>, UserUncheckedUpdateWithoutDojoHistoryChangesInput>
   }
 
+  export type ServiceRequestCreateNestedManyWithoutServiceInput = {
+    create?: XOR<ServiceRequestCreateWithoutServiceInput, ServiceRequestUncheckedCreateWithoutServiceInput> | ServiceRequestCreateWithoutServiceInput[] | ServiceRequestUncheckedCreateWithoutServiceInput[]
+    connectOrCreate?: ServiceRequestCreateOrConnectWithoutServiceInput | ServiceRequestCreateOrConnectWithoutServiceInput[]
+    createMany?: ServiceRequestCreateManyServiceInputEnvelope
+    connect?: ServiceRequestWhereUniqueInput | ServiceRequestWhereUniqueInput[]
+  }
+
+  export type ServiceCouponCreateNestedManyWithoutServiceInput = {
+    create?: XOR<ServiceCouponCreateWithoutServiceInput, ServiceCouponUncheckedCreateWithoutServiceInput> | ServiceCouponCreateWithoutServiceInput[] | ServiceCouponUncheckedCreateWithoutServiceInput[]
+    connectOrCreate?: ServiceCouponCreateOrConnectWithoutServiceInput | ServiceCouponCreateOrConnectWithoutServiceInput[]
+    createMany?: ServiceCouponCreateManyServiceInputEnvelope
+    connect?: ServiceCouponWhereUniqueInput | ServiceCouponWhereUniqueInput[]
+  }
+
+  export type ServiceRequestUncheckedCreateNestedManyWithoutServiceInput = {
+    create?: XOR<ServiceRequestCreateWithoutServiceInput, ServiceRequestUncheckedCreateWithoutServiceInput> | ServiceRequestCreateWithoutServiceInput[] | ServiceRequestUncheckedCreateWithoutServiceInput[]
+    connectOrCreate?: ServiceRequestCreateOrConnectWithoutServiceInput | ServiceRequestCreateOrConnectWithoutServiceInput[]
+    createMany?: ServiceRequestCreateManyServiceInputEnvelope
+    connect?: ServiceRequestWhereUniqueInput | ServiceRequestWhereUniqueInput[]
+  }
+
+  export type ServiceCouponUncheckedCreateNestedManyWithoutServiceInput = {
+    create?: XOR<ServiceCouponCreateWithoutServiceInput, ServiceCouponUncheckedCreateWithoutServiceInput> | ServiceCouponCreateWithoutServiceInput[] | ServiceCouponUncheckedCreateWithoutServiceInput[]
+    connectOrCreate?: ServiceCouponCreateOrConnectWithoutServiceInput | ServiceCouponCreateOrConnectWithoutServiceInput[]
+    createMany?: ServiceCouponCreateManyServiceInputEnvelope
+    connect?: ServiceCouponWhereUniqueInput | ServiceCouponWhereUniqueInput[]
+  }
+
+  export type ServiceRequestUpdateManyWithoutServiceNestedInput = {
+    create?: XOR<ServiceRequestCreateWithoutServiceInput, ServiceRequestUncheckedCreateWithoutServiceInput> | ServiceRequestCreateWithoutServiceInput[] | ServiceRequestUncheckedCreateWithoutServiceInput[]
+    connectOrCreate?: ServiceRequestCreateOrConnectWithoutServiceInput | ServiceRequestCreateOrConnectWithoutServiceInput[]
+    upsert?: ServiceRequestUpsertWithWhereUniqueWithoutServiceInput | ServiceRequestUpsertWithWhereUniqueWithoutServiceInput[]
+    createMany?: ServiceRequestCreateManyServiceInputEnvelope
+    set?: ServiceRequestWhereUniqueInput | ServiceRequestWhereUniqueInput[]
+    disconnect?: ServiceRequestWhereUniqueInput | ServiceRequestWhereUniqueInput[]
+    delete?: ServiceRequestWhereUniqueInput | ServiceRequestWhereUniqueInput[]
+    connect?: ServiceRequestWhereUniqueInput | ServiceRequestWhereUniqueInput[]
+    update?: ServiceRequestUpdateWithWhereUniqueWithoutServiceInput | ServiceRequestUpdateWithWhereUniqueWithoutServiceInput[]
+    updateMany?: ServiceRequestUpdateManyWithWhereWithoutServiceInput | ServiceRequestUpdateManyWithWhereWithoutServiceInput[]
+    deleteMany?: ServiceRequestScalarWhereInput | ServiceRequestScalarWhereInput[]
+  }
+
+  export type ServiceCouponUpdateManyWithoutServiceNestedInput = {
+    create?: XOR<ServiceCouponCreateWithoutServiceInput, ServiceCouponUncheckedCreateWithoutServiceInput> | ServiceCouponCreateWithoutServiceInput[] | ServiceCouponUncheckedCreateWithoutServiceInput[]
+    connectOrCreate?: ServiceCouponCreateOrConnectWithoutServiceInput | ServiceCouponCreateOrConnectWithoutServiceInput[]
+    upsert?: ServiceCouponUpsertWithWhereUniqueWithoutServiceInput | ServiceCouponUpsertWithWhereUniqueWithoutServiceInput[]
+    createMany?: ServiceCouponCreateManyServiceInputEnvelope
+    set?: ServiceCouponWhereUniqueInput | ServiceCouponWhereUniqueInput[]
+    disconnect?: ServiceCouponWhereUniqueInput | ServiceCouponWhereUniqueInput[]
+    delete?: ServiceCouponWhereUniqueInput | ServiceCouponWhereUniqueInput[]
+    connect?: ServiceCouponWhereUniqueInput | ServiceCouponWhereUniqueInput[]
+    update?: ServiceCouponUpdateWithWhereUniqueWithoutServiceInput | ServiceCouponUpdateWithWhereUniqueWithoutServiceInput[]
+    updateMany?: ServiceCouponUpdateManyWithWhereWithoutServiceInput | ServiceCouponUpdateManyWithWhereWithoutServiceInput[]
+    deleteMany?: ServiceCouponScalarWhereInput | ServiceCouponScalarWhereInput[]
+  }
+
+  export type ServiceRequestUncheckedUpdateManyWithoutServiceNestedInput = {
+    create?: XOR<ServiceRequestCreateWithoutServiceInput, ServiceRequestUncheckedCreateWithoutServiceInput> | ServiceRequestCreateWithoutServiceInput[] | ServiceRequestUncheckedCreateWithoutServiceInput[]
+    connectOrCreate?: ServiceRequestCreateOrConnectWithoutServiceInput | ServiceRequestCreateOrConnectWithoutServiceInput[]
+    upsert?: ServiceRequestUpsertWithWhereUniqueWithoutServiceInput | ServiceRequestUpsertWithWhereUniqueWithoutServiceInput[]
+    createMany?: ServiceRequestCreateManyServiceInputEnvelope
+    set?: ServiceRequestWhereUniqueInput | ServiceRequestWhereUniqueInput[]
+    disconnect?: ServiceRequestWhereUniqueInput | ServiceRequestWhereUniqueInput[]
+    delete?: ServiceRequestWhereUniqueInput | ServiceRequestWhereUniqueInput[]
+    connect?: ServiceRequestWhereUniqueInput | ServiceRequestWhereUniqueInput[]
+    update?: ServiceRequestUpdateWithWhereUniqueWithoutServiceInput | ServiceRequestUpdateWithWhereUniqueWithoutServiceInput[]
+    updateMany?: ServiceRequestUpdateManyWithWhereWithoutServiceInput | ServiceRequestUpdateManyWithWhereWithoutServiceInput[]
+    deleteMany?: ServiceRequestScalarWhereInput | ServiceRequestScalarWhereInput[]
+  }
+
+  export type ServiceCouponUncheckedUpdateManyWithoutServiceNestedInput = {
+    create?: XOR<ServiceCouponCreateWithoutServiceInput, ServiceCouponUncheckedCreateWithoutServiceInput> | ServiceCouponCreateWithoutServiceInput[] | ServiceCouponUncheckedCreateWithoutServiceInput[]
+    connectOrCreate?: ServiceCouponCreateOrConnectWithoutServiceInput | ServiceCouponCreateOrConnectWithoutServiceInput[]
+    upsert?: ServiceCouponUpsertWithWhereUniqueWithoutServiceInput | ServiceCouponUpsertWithWhereUniqueWithoutServiceInput[]
+    createMany?: ServiceCouponCreateManyServiceInputEnvelope
+    set?: ServiceCouponWhereUniqueInput | ServiceCouponWhereUniqueInput[]
+    disconnect?: ServiceCouponWhereUniqueInput | ServiceCouponWhereUniqueInput[]
+    delete?: ServiceCouponWhereUniqueInput | ServiceCouponWhereUniqueInput[]
+    connect?: ServiceCouponWhereUniqueInput | ServiceCouponWhereUniqueInput[]
+    update?: ServiceCouponUpdateWithWhereUniqueWithoutServiceInput | ServiceCouponUpdateWithWhereUniqueWithoutServiceInput[]
+    updateMany?: ServiceCouponUpdateManyWithWhereWithoutServiceInput | ServiceCouponUpdateManyWithWhereWithoutServiceInput[]
+    deleteMany?: ServiceCouponScalarWhereInput | ServiceCouponScalarWhereInput[]
+  }
+
+  export type StudentCreateNestedOneWithoutServiceRequestsInput = {
+    create?: XOR<StudentCreateWithoutServiceRequestsInput, StudentUncheckedCreateWithoutServiceRequestsInput>
+    connectOrCreate?: StudentCreateOrConnectWithoutServiceRequestsInput
+    connect?: StudentWhereUniqueInput
+  }
+
+  export type ServiceCreateNestedOneWithoutRequestsInput = {
+    create?: XOR<ServiceCreateWithoutRequestsInput, ServiceUncheckedCreateWithoutRequestsInput>
+    connectOrCreate?: ServiceCreateOrConnectWithoutRequestsInput
+    connect?: ServiceWhereUniqueInput
+  }
+
+  export type DojoCreateNestedOneWithoutServiceRequestsInput = {
+    create?: XOR<DojoCreateWithoutServiceRequestsInput, DojoUncheckedCreateWithoutServiceRequestsInput>
+    connectOrCreate?: DojoCreateOrConnectWithoutServiceRequestsInput
+    connect?: DojoWhereUniqueInput
+  }
+
+  export type ShopOrderCreateNestedOneWithoutServiceRequestInput = {
+    create?: XOR<ShopOrderCreateWithoutServiceRequestInput, ShopOrderUncheckedCreateWithoutServiceRequestInput>
+    connectOrCreate?: ShopOrderCreateOrConnectWithoutServiceRequestInput
+    connect?: ShopOrderWhereUniqueInput
+  }
+
+  export type ServiceCouponCreateNestedOneWithoutRequestsInput = {
+    create?: XOR<ServiceCouponCreateWithoutRequestsInput, ServiceCouponUncheckedCreateWithoutRequestsInput>
+    connectOrCreate?: ServiceCouponCreateOrConnectWithoutRequestsInput
+    connect?: ServiceCouponWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutServiceRequestsDojoActedInput = {
+    create?: XOR<UserCreateWithoutServiceRequestsDojoActedInput, UserUncheckedCreateWithoutServiceRequestsDojoActedInput>
+    connectOrCreate?: UserCreateOrConnectWithoutServiceRequestsDojoActedInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutServiceRequestsAdminActedInput = {
+    create?: XOR<UserCreateWithoutServiceRequestsAdminActedInput, UserUncheckedCreateWithoutServiceRequestsAdminActedInput>
+    connectOrCreate?: UserCreateOrConnectWithoutServiceRequestsAdminActedInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type EnumServiceRequestStatusFieldUpdateOperationsInput = {
+    set?: $Enums.ServiceRequestStatus
+  }
+
+  export type EnumServiceRequestDojoDecisionFieldUpdateOperationsInput = {
+    set?: $Enums.ServiceRequestDojoDecision
+  }
+
+  export type StudentUpdateOneRequiredWithoutServiceRequestsNestedInput = {
+    create?: XOR<StudentCreateWithoutServiceRequestsInput, StudentUncheckedCreateWithoutServiceRequestsInput>
+    connectOrCreate?: StudentCreateOrConnectWithoutServiceRequestsInput
+    upsert?: StudentUpsertWithoutServiceRequestsInput
+    connect?: StudentWhereUniqueInput
+    update?: XOR<XOR<StudentUpdateToOneWithWhereWithoutServiceRequestsInput, StudentUpdateWithoutServiceRequestsInput>, StudentUncheckedUpdateWithoutServiceRequestsInput>
+  }
+
+  export type ServiceUpdateOneRequiredWithoutRequestsNestedInput = {
+    create?: XOR<ServiceCreateWithoutRequestsInput, ServiceUncheckedCreateWithoutRequestsInput>
+    connectOrCreate?: ServiceCreateOrConnectWithoutRequestsInput
+    upsert?: ServiceUpsertWithoutRequestsInput
+    connect?: ServiceWhereUniqueInput
+    update?: XOR<XOR<ServiceUpdateToOneWithWhereWithoutRequestsInput, ServiceUpdateWithoutRequestsInput>, ServiceUncheckedUpdateWithoutRequestsInput>
+  }
+
+  export type DojoUpdateOneRequiredWithoutServiceRequestsNestedInput = {
+    create?: XOR<DojoCreateWithoutServiceRequestsInput, DojoUncheckedCreateWithoutServiceRequestsInput>
+    connectOrCreate?: DojoCreateOrConnectWithoutServiceRequestsInput
+    upsert?: DojoUpsertWithoutServiceRequestsInput
+    connect?: DojoWhereUniqueInput
+    update?: XOR<XOR<DojoUpdateToOneWithWhereWithoutServiceRequestsInput, DojoUpdateWithoutServiceRequestsInput>, DojoUncheckedUpdateWithoutServiceRequestsInput>
+  }
+
+  export type ShopOrderUpdateOneWithoutServiceRequestNestedInput = {
+    create?: XOR<ShopOrderCreateWithoutServiceRequestInput, ShopOrderUncheckedCreateWithoutServiceRequestInput>
+    connectOrCreate?: ShopOrderCreateOrConnectWithoutServiceRequestInput
+    upsert?: ShopOrderUpsertWithoutServiceRequestInput
+    disconnect?: ShopOrderWhereInput | boolean
+    delete?: ShopOrderWhereInput | boolean
+    connect?: ShopOrderWhereUniqueInput
+    update?: XOR<XOR<ShopOrderUpdateToOneWithWhereWithoutServiceRequestInput, ShopOrderUpdateWithoutServiceRequestInput>, ShopOrderUncheckedUpdateWithoutServiceRequestInput>
+  }
+
+  export type ServiceCouponUpdateOneWithoutRequestsNestedInput = {
+    create?: XOR<ServiceCouponCreateWithoutRequestsInput, ServiceCouponUncheckedCreateWithoutRequestsInput>
+    connectOrCreate?: ServiceCouponCreateOrConnectWithoutRequestsInput
+    upsert?: ServiceCouponUpsertWithoutRequestsInput
+    disconnect?: ServiceCouponWhereInput | boolean
+    delete?: ServiceCouponWhereInput | boolean
+    connect?: ServiceCouponWhereUniqueInput
+    update?: XOR<XOR<ServiceCouponUpdateToOneWithWhereWithoutRequestsInput, ServiceCouponUpdateWithoutRequestsInput>, ServiceCouponUncheckedUpdateWithoutRequestsInput>
+  }
+
+  export type UserUpdateOneWithoutServiceRequestsDojoActedNestedInput = {
+    create?: XOR<UserCreateWithoutServiceRequestsDojoActedInput, UserUncheckedCreateWithoutServiceRequestsDojoActedInput>
+    connectOrCreate?: UserCreateOrConnectWithoutServiceRequestsDojoActedInput
+    upsert?: UserUpsertWithoutServiceRequestsDojoActedInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutServiceRequestsDojoActedInput, UserUpdateWithoutServiceRequestsDojoActedInput>, UserUncheckedUpdateWithoutServiceRequestsDojoActedInput>
+  }
+
+  export type UserUpdateOneWithoutServiceRequestsAdminActedNestedInput = {
+    create?: XOR<UserCreateWithoutServiceRequestsAdminActedInput, UserUncheckedCreateWithoutServiceRequestsAdminActedInput>
+    connectOrCreate?: UserCreateOrConnectWithoutServiceRequestsAdminActedInput
+    upsert?: UserUpsertWithoutServiceRequestsAdminActedInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutServiceRequestsAdminActedInput, UserUpdateWithoutServiceRequestsAdminActedInput>, UserUncheckedUpdateWithoutServiceRequestsAdminActedInput>
+  }
+
+  export type DojoCreateNestedOneWithoutServiceCouponsInput = {
+    create?: XOR<DojoCreateWithoutServiceCouponsInput, DojoUncheckedCreateWithoutServiceCouponsInput>
+    connectOrCreate?: DojoCreateOrConnectWithoutServiceCouponsInput
+    connect?: DojoWhereUniqueInput
+  }
+
+  export type ServiceCreateNestedOneWithoutCouponsInput = {
+    create?: XOR<ServiceCreateWithoutCouponsInput, ServiceUncheckedCreateWithoutCouponsInput>
+    connectOrCreate?: ServiceCreateOrConnectWithoutCouponsInput
+    connect?: ServiceWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutServiceCouponsCreatedInput = {
+    create?: XOR<UserCreateWithoutServiceCouponsCreatedInput, UserUncheckedCreateWithoutServiceCouponsCreatedInput>
+    connectOrCreate?: UserCreateOrConnectWithoutServiceCouponsCreatedInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type ServiceRequestCreateNestedManyWithoutCouponInput = {
+    create?: XOR<ServiceRequestCreateWithoutCouponInput, ServiceRequestUncheckedCreateWithoutCouponInput> | ServiceRequestCreateWithoutCouponInput[] | ServiceRequestUncheckedCreateWithoutCouponInput[]
+    connectOrCreate?: ServiceRequestCreateOrConnectWithoutCouponInput | ServiceRequestCreateOrConnectWithoutCouponInput[]
+    createMany?: ServiceRequestCreateManyCouponInputEnvelope
+    connect?: ServiceRequestWhereUniqueInput | ServiceRequestWhereUniqueInput[]
+  }
+
+  export type ServiceRequestUncheckedCreateNestedManyWithoutCouponInput = {
+    create?: XOR<ServiceRequestCreateWithoutCouponInput, ServiceRequestUncheckedCreateWithoutCouponInput> | ServiceRequestCreateWithoutCouponInput[] | ServiceRequestUncheckedCreateWithoutCouponInput[]
+    connectOrCreate?: ServiceRequestCreateOrConnectWithoutCouponInput | ServiceRequestCreateOrConnectWithoutCouponInput[]
+    createMany?: ServiceRequestCreateManyCouponInputEnvelope
+    connect?: ServiceRequestWhereUniqueInput | ServiceRequestWhereUniqueInput[]
+  }
+
+  export type DojoUpdateOneRequiredWithoutServiceCouponsNestedInput = {
+    create?: XOR<DojoCreateWithoutServiceCouponsInput, DojoUncheckedCreateWithoutServiceCouponsInput>
+    connectOrCreate?: DojoCreateOrConnectWithoutServiceCouponsInput
+    upsert?: DojoUpsertWithoutServiceCouponsInput
+    connect?: DojoWhereUniqueInput
+    update?: XOR<XOR<DojoUpdateToOneWithWhereWithoutServiceCouponsInput, DojoUpdateWithoutServiceCouponsInput>, DojoUncheckedUpdateWithoutServiceCouponsInput>
+  }
+
+  export type ServiceUpdateOneWithoutCouponsNestedInput = {
+    create?: XOR<ServiceCreateWithoutCouponsInput, ServiceUncheckedCreateWithoutCouponsInput>
+    connectOrCreate?: ServiceCreateOrConnectWithoutCouponsInput
+    upsert?: ServiceUpsertWithoutCouponsInput
+    disconnect?: ServiceWhereInput | boolean
+    delete?: ServiceWhereInput | boolean
+    connect?: ServiceWhereUniqueInput
+    update?: XOR<XOR<ServiceUpdateToOneWithWhereWithoutCouponsInput, ServiceUpdateWithoutCouponsInput>, ServiceUncheckedUpdateWithoutCouponsInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutServiceCouponsCreatedNestedInput = {
+    create?: XOR<UserCreateWithoutServiceCouponsCreatedInput, UserUncheckedCreateWithoutServiceCouponsCreatedInput>
+    connectOrCreate?: UserCreateOrConnectWithoutServiceCouponsCreatedInput
+    upsert?: UserUpsertWithoutServiceCouponsCreatedInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutServiceCouponsCreatedInput, UserUpdateWithoutServiceCouponsCreatedInput>, UserUncheckedUpdateWithoutServiceCouponsCreatedInput>
+  }
+
+  export type ServiceRequestUpdateManyWithoutCouponNestedInput = {
+    create?: XOR<ServiceRequestCreateWithoutCouponInput, ServiceRequestUncheckedCreateWithoutCouponInput> | ServiceRequestCreateWithoutCouponInput[] | ServiceRequestUncheckedCreateWithoutCouponInput[]
+    connectOrCreate?: ServiceRequestCreateOrConnectWithoutCouponInput | ServiceRequestCreateOrConnectWithoutCouponInput[]
+    upsert?: ServiceRequestUpsertWithWhereUniqueWithoutCouponInput | ServiceRequestUpsertWithWhereUniqueWithoutCouponInput[]
+    createMany?: ServiceRequestCreateManyCouponInputEnvelope
+    set?: ServiceRequestWhereUniqueInput | ServiceRequestWhereUniqueInput[]
+    disconnect?: ServiceRequestWhereUniqueInput | ServiceRequestWhereUniqueInput[]
+    delete?: ServiceRequestWhereUniqueInput | ServiceRequestWhereUniqueInput[]
+    connect?: ServiceRequestWhereUniqueInput | ServiceRequestWhereUniqueInput[]
+    update?: ServiceRequestUpdateWithWhereUniqueWithoutCouponInput | ServiceRequestUpdateWithWhereUniqueWithoutCouponInput[]
+    updateMany?: ServiceRequestUpdateManyWithWhereWithoutCouponInput | ServiceRequestUpdateManyWithWhereWithoutCouponInput[]
+    deleteMany?: ServiceRequestScalarWhereInput | ServiceRequestScalarWhereInput[]
+  }
+
+  export type ServiceRequestUncheckedUpdateManyWithoutCouponNestedInput = {
+    create?: XOR<ServiceRequestCreateWithoutCouponInput, ServiceRequestUncheckedCreateWithoutCouponInput> | ServiceRequestCreateWithoutCouponInput[] | ServiceRequestUncheckedCreateWithoutCouponInput[]
+    connectOrCreate?: ServiceRequestCreateOrConnectWithoutCouponInput | ServiceRequestCreateOrConnectWithoutCouponInput[]
+    upsert?: ServiceRequestUpsertWithWhereUniqueWithoutCouponInput | ServiceRequestUpsertWithWhereUniqueWithoutCouponInput[]
+    createMany?: ServiceRequestCreateManyCouponInputEnvelope
+    set?: ServiceRequestWhereUniqueInput | ServiceRequestWhereUniqueInput[]
+    disconnect?: ServiceRequestWhereUniqueInput | ServiceRequestWhereUniqueInput[]
+    delete?: ServiceRequestWhereUniqueInput | ServiceRequestWhereUniqueInput[]
+    connect?: ServiceRequestWhereUniqueInput | ServiceRequestWhereUniqueInput[]
+    update?: ServiceRequestUpdateWithWhereUniqueWithoutCouponInput | ServiceRequestUpdateWithWhereUniqueWithoutCouponInput[]
+    updateMany?: ServiceRequestUpdateManyWithWhereWithoutCouponInput | ServiceRequestUpdateManyWithWhereWithoutCouponInput[]
+    deleteMany?: ServiceRequestScalarWhereInput | ServiceRequestScalarWhereInput[]
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -67075,6 +73450,40 @@ export namespace Prisma {
     _max?: NestedEnumPaymentTransactionStatusFilter<$PrismaModel>
   }
 
+  export type NestedEnumServiceRequestStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.ServiceRequestStatus | EnumServiceRequestStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ServiceRequestStatus[] | ListEnumServiceRequestStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ServiceRequestStatus[] | ListEnumServiceRequestStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumServiceRequestStatusFilter<$PrismaModel> | $Enums.ServiceRequestStatus
+  }
+
+  export type NestedEnumServiceRequestDojoDecisionFilter<$PrismaModel = never> = {
+    equals?: $Enums.ServiceRequestDojoDecision | EnumServiceRequestDojoDecisionFieldRefInput<$PrismaModel>
+    in?: $Enums.ServiceRequestDojoDecision[] | ListEnumServiceRequestDojoDecisionFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ServiceRequestDojoDecision[] | ListEnumServiceRequestDojoDecisionFieldRefInput<$PrismaModel>
+    not?: NestedEnumServiceRequestDojoDecisionFilter<$PrismaModel> | $Enums.ServiceRequestDojoDecision
+  }
+
+  export type NestedEnumServiceRequestStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ServiceRequestStatus | EnumServiceRequestStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ServiceRequestStatus[] | ListEnumServiceRequestStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ServiceRequestStatus[] | ListEnumServiceRequestStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumServiceRequestStatusWithAggregatesFilter<$PrismaModel> | $Enums.ServiceRequestStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumServiceRequestStatusFilter<$PrismaModel>
+    _max?: NestedEnumServiceRequestStatusFilter<$PrismaModel>
+  }
+
+  export type NestedEnumServiceRequestDojoDecisionWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ServiceRequestDojoDecision | EnumServiceRequestDojoDecisionFieldRefInput<$PrismaModel>
+    in?: $Enums.ServiceRequestDojoDecision[] | ListEnumServiceRequestDojoDecisionFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ServiceRequestDojoDecision[] | ListEnumServiceRequestDojoDecisionFieldRefInput<$PrismaModel>
+    not?: NestedEnumServiceRequestDojoDecisionWithAggregatesFilter<$PrismaModel> | $Enums.ServiceRequestDojoDecision
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumServiceRequestDojoDecisionFilter<$PrismaModel>
+    _max?: NestedEnumServiceRequestDojoDecisionFilter<$PrismaModel>
+  }
+
   export type UserCreateWithoutRoleInput = {
     id: string
     email: string
@@ -67107,6 +73516,9 @@ export namespace Prisma {
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteCreateNestedManyWithoutInvitedByInput
+    serviceRequestsDojoActed?: ServiceRequestCreateNestedManyWithoutDojoActedByInput
+    serviceRequestsAdminActed?: ServiceRequestCreateNestedManyWithoutAdminActedByInput
+    serviceCouponsCreated?: ServiceCouponCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutRoleInput = {
@@ -67141,6 +73553,9 @@ export namespace Prisma {
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedCreateNestedManyWithoutInvitedByInput
+    serviceRequestsDojoActed?: ServiceRequestUncheckedCreateNestedManyWithoutDojoActedByInput
+    serviceRequestsAdminActed?: ServiceRequestUncheckedCreateNestedManyWithoutAdminActedByInput
+    serviceCouponsCreated?: ServiceCouponUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutRoleInput = {
@@ -67441,6 +73856,7 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestCreateNestedManyWithoutStudentInput
     achievements?: StudentAchievementCreateNestedManyWithoutStudentInput
     transferRequests?: StudentTransferRequestCreateNestedManyWithoutStudentInput
+    serviceRequests?: ServiceRequestCreateNestedManyWithoutStudentInput
     dojoHistory?: StudentDojoHistoryCreateNestedManyWithoutStudentInput
   }
 
@@ -67464,6 +73880,7 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutStudentInput
     achievements?: StudentAchievementUncheckedCreateNestedManyWithoutStudentInput
     transferRequests?: StudentTransferRequestUncheckedCreateNestedManyWithoutStudentInput
+    serviceRequests?: ServiceRequestUncheckedCreateNestedManyWithoutStudentInput
     dojoHistory?: StudentDojoHistoryUncheckedCreateNestedManyWithoutStudentInput
   }
 
@@ -67598,6 +74015,7 @@ export namespace Prisma {
     includesCertificates?: boolean
     includesTransferRequest?: boolean
     includesPastBeltFee?: boolean
+    includesServiceRequest?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     dojo?: DojoCreateNestedOneWithoutRenewalOrdersInput
@@ -67605,6 +74023,7 @@ export namespace Prisma {
     orderItems?: ShopOrderItemCreateNestedManyWithoutOrderInput
     certificateRequests?: CertificateRequestCreateNestedManyWithoutOrderInput
     transferRequest?: StudentTransferRequestCreateNestedOneWithoutOrderInput
+    serviceRequest?: ServiceRequestCreateNestedOneWithoutOrderInput
     transactions?: PaymentTransactionCreateNestedManyWithoutOrderInput
   }
 
@@ -67630,11 +74049,13 @@ export namespace Prisma {
     certDojoId?: string | null
     includesTransferRequest?: boolean
     includesPastBeltFee?: boolean
+    includesServiceRequest?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     orderItems?: ShopOrderItemUncheckedCreateNestedManyWithoutOrderInput
     certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutOrderInput
     transferRequest?: StudentTransferRequestUncheckedCreateNestedOneWithoutOrderInput
+    serviceRequest?: ServiceRequestUncheckedCreateNestedOneWithoutOrderInput
     transactions?: PaymentTransactionUncheckedCreateNestedManyWithoutOrderInput
   }
 
@@ -67992,6 +74413,9 @@ export namespace Prisma {
     dojoNote?: string | null
     adminNote?: string | null
     fee: Decimal | DecimalJsLike | number | string
+    discountAmount?: Decimal | DecimalJsLike | number | string
+    finalAmount?: Decimal | DecimalJsLike | number | string | null
+    couponCode?: string | null
     paidAt?: Date | string | null
     dojoActedAt?: Date | string | null
     adminActedAt?: Date | string | null
@@ -68016,6 +74440,9 @@ export namespace Prisma {
     dojoNote?: string | null
     adminNote?: string | null
     fee: Decimal | DecimalJsLike | number | string
+    discountAmount?: Decimal | DecimalJsLike | number | string
+    finalAmount?: Decimal | DecimalJsLike | number | string | null
+    couponCode?: string | null
     orderId?: string | null
     paidAt?: Date | string | null
     dojoActedAt?: Date | string | null
@@ -68044,6 +74471,9 @@ export namespace Prisma {
     dojoNote?: string | null
     adminNote?: string | null
     fee: Decimal | DecimalJsLike | number | string
+    discountAmount?: Decimal | DecimalJsLike | number | string
+    finalAmount?: Decimal | DecimalJsLike | number | string | null
+    couponCode?: string | null
     paidAt?: Date | string | null
     dojoActedAt?: Date | string | null
     adminActedAt?: Date | string | null
@@ -68068,6 +74498,9 @@ export namespace Prisma {
     dojoNote?: string | null
     adminNote?: string | null
     fee: Decimal | DecimalJsLike | number | string
+    discountAmount?: Decimal | DecimalJsLike | number | string
+    finalAmount?: Decimal | DecimalJsLike | number | string | null
+    couponCode?: string | null
     orderId?: string | null
     paidAt?: Date | string | null
     dojoActedAt?: Date | string | null
@@ -68190,6 +74623,168 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type ServiceRequestCreateWithoutDojoActedByInput = {
+    id?: string
+    status?: $Enums.ServiceRequestStatus
+    dojoDecision?: $Enums.ServiceRequestDojoDecision
+    payload?: JsonNullValueInput | InputJsonValue
+    reason?: string | null
+    dojoNote?: string | null
+    adminNote?: string | null
+    fee: Decimal | DecimalJsLike | number | string
+    discountAmount?: Decimal | DecimalJsLike | number | string
+    finalAmount: Decimal | DecimalJsLike | number | string
+    couponCode?: string | null
+    paidAt?: Date | string | null
+    dojoActedAt?: Date | string | null
+    adminActedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    student: StudentCreateNestedOneWithoutServiceRequestsInput
+    service: ServiceCreateNestedOneWithoutRequestsInput
+    dojo: DojoCreateNestedOneWithoutServiceRequestsInput
+    order?: ShopOrderCreateNestedOneWithoutServiceRequestInput
+    coupon?: ServiceCouponCreateNestedOneWithoutRequestsInput
+    adminActedBy?: UserCreateNestedOneWithoutServiceRequestsAdminActedInput
+  }
+
+  export type ServiceRequestUncheckedCreateWithoutDojoActedByInput = {
+    id?: string
+    studentId: string
+    serviceId: string
+    dojoId: string
+    status?: $Enums.ServiceRequestStatus
+    dojoDecision?: $Enums.ServiceRequestDojoDecision
+    payload?: JsonNullValueInput | InputJsonValue
+    reason?: string | null
+    dojoNote?: string | null
+    adminNote?: string | null
+    fee: Decimal | DecimalJsLike | number | string
+    discountAmount?: Decimal | DecimalJsLike | number | string
+    finalAmount: Decimal | DecimalJsLike | number | string
+    couponId?: string | null
+    couponCode?: string | null
+    orderId?: string | null
+    paidAt?: Date | string | null
+    dojoActedAt?: Date | string | null
+    adminActedAt?: Date | string | null
+    adminActedById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ServiceRequestCreateOrConnectWithoutDojoActedByInput = {
+    where: ServiceRequestWhereUniqueInput
+    create: XOR<ServiceRequestCreateWithoutDojoActedByInput, ServiceRequestUncheckedCreateWithoutDojoActedByInput>
+  }
+
+  export type ServiceRequestCreateManyDojoActedByInputEnvelope = {
+    data: ServiceRequestCreateManyDojoActedByInput | ServiceRequestCreateManyDojoActedByInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ServiceRequestCreateWithoutAdminActedByInput = {
+    id?: string
+    status?: $Enums.ServiceRequestStatus
+    dojoDecision?: $Enums.ServiceRequestDojoDecision
+    payload?: JsonNullValueInput | InputJsonValue
+    reason?: string | null
+    dojoNote?: string | null
+    adminNote?: string | null
+    fee: Decimal | DecimalJsLike | number | string
+    discountAmount?: Decimal | DecimalJsLike | number | string
+    finalAmount: Decimal | DecimalJsLike | number | string
+    couponCode?: string | null
+    paidAt?: Date | string | null
+    dojoActedAt?: Date | string | null
+    adminActedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    student: StudentCreateNestedOneWithoutServiceRequestsInput
+    service: ServiceCreateNestedOneWithoutRequestsInput
+    dojo: DojoCreateNestedOneWithoutServiceRequestsInput
+    order?: ShopOrderCreateNestedOneWithoutServiceRequestInput
+    coupon?: ServiceCouponCreateNestedOneWithoutRequestsInput
+    dojoActedBy?: UserCreateNestedOneWithoutServiceRequestsDojoActedInput
+  }
+
+  export type ServiceRequestUncheckedCreateWithoutAdminActedByInput = {
+    id?: string
+    studentId: string
+    serviceId: string
+    dojoId: string
+    status?: $Enums.ServiceRequestStatus
+    dojoDecision?: $Enums.ServiceRequestDojoDecision
+    payload?: JsonNullValueInput | InputJsonValue
+    reason?: string | null
+    dojoNote?: string | null
+    adminNote?: string | null
+    fee: Decimal | DecimalJsLike | number | string
+    discountAmount?: Decimal | DecimalJsLike | number | string
+    finalAmount: Decimal | DecimalJsLike | number | string
+    couponId?: string | null
+    couponCode?: string | null
+    orderId?: string | null
+    paidAt?: Date | string | null
+    dojoActedAt?: Date | string | null
+    dojoActedById?: string | null
+    adminActedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ServiceRequestCreateOrConnectWithoutAdminActedByInput = {
+    where: ServiceRequestWhereUniqueInput
+    create: XOR<ServiceRequestCreateWithoutAdminActedByInput, ServiceRequestUncheckedCreateWithoutAdminActedByInput>
+  }
+
+  export type ServiceRequestCreateManyAdminActedByInputEnvelope = {
+    data: ServiceRequestCreateManyAdminActedByInput | ServiceRequestCreateManyAdminActedByInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ServiceCouponCreateWithoutCreatedByInput = {
+    id?: string
+    code: string
+    discountPercent: number
+    usageLimit?: number
+    usedCount?: number
+    expiresAt?: Date | string | null
+    isActive?: boolean
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    dojo: DojoCreateNestedOneWithoutServiceCouponsInput
+    service?: ServiceCreateNestedOneWithoutCouponsInput
+    requests?: ServiceRequestCreateNestedManyWithoutCouponInput
+  }
+
+  export type ServiceCouponUncheckedCreateWithoutCreatedByInput = {
+    id?: string
+    code: string
+    dojoId: string
+    discountPercent: number
+    serviceId?: string | null
+    usageLimit?: number
+    usedCount?: number
+    expiresAt?: Date | string | null
+    isActive?: boolean
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    requests?: ServiceRequestUncheckedCreateNestedManyWithoutCouponInput
+  }
+
+  export type ServiceCouponCreateOrConnectWithoutCreatedByInput = {
+    where: ServiceCouponWhereUniqueInput
+    create: XOR<ServiceCouponCreateWithoutCreatedByInput, ServiceCouponUncheckedCreateWithoutCreatedByInput>
+  }
+
+  export type ServiceCouponCreateManyCreatedByInputEnvelope = {
+    data: ServiceCouponCreateManyCreatedByInput | ServiceCouponCreateManyCreatedByInput[]
+    skipDuplicates?: boolean
+  }
+
   export type RoleUpsertWithoutUsersInput = {
     update: XOR<RoleUpdateWithoutUsersInput, RoleUncheckedUpdateWithoutUsersInput>
     create: XOR<RoleCreateWithoutUsersInput, RoleUncheckedCreateWithoutUsersInput>
@@ -68287,6 +74882,7 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestUpdateManyWithoutStudentNestedInput
     achievements?: StudentAchievementUpdateManyWithoutStudentNestedInput
     transferRequests?: StudentTransferRequestUpdateManyWithoutStudentNestedInput
+    serviceRequests?: ServiceRequestUpdateManyWithoutStudentNestedInput
     dojoHistory?: StudentDojoHistoryUpdateManyWithoutStudentNestedInput
   }
 
@@ -68310,6 +74906,7 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutStudentNestedInput
     achievements?: StudentAchievementUncheckedUpdateManyWithoutStudentNestedInput
     transferRequests?: StudentTransferRequestUncheckedUpdateManyWithoutStudentNestedInput
+    serviceRequests?: ServiceRequestUncheckedUpdateManyWithoutStudentNestedInput
     dojoHistory?: StudentDojoHistoryUncheckedUpdateManyWithoutStudentNestedInput
   }
 
@@ -68484,6 +75081,7 @@ export namespace Prisma {
     certDojoId?: UuidNullableFilter<"ShopOrder"> | string | null
     includesTransferRequest?: BoolFilter<"ShopOrder"> | boolean
     includesPastBeltFee?: BoolFilter<"ShopOrder"> | boolean
+    includesServiceRequest?: BoolFilter<"ShopOrder"> | boolean
     createdAt?: DateTimeFilter<"ShopOrder"> | Date | string
     updatedAt?: DateTimeFilter<"ShopOrder"> | Date | string
   }
@@ -68757,6 +75355,9 @@ export namespace Prisma {
     dojoNote?: StringNullableFilter<"StudentTransferRequest"> | string | null
     adminNote?: StringNullableFilter<"StudentTransferRequest"> | string | null
     fee?: DecimalFilter<"StudentTransferRequest"> | Decimal | DecimalJsLike | number | string
+    discountAmount?: DecimalFilter<"StudentTransferRequest"> | Decimal | DecimalJsLike | number | string
+    finalAmount?: DecimalNullableFilter<"StudentTransferRequest"> | Decimal | DecimalJsLike | number | string | null
+    couponCode?: StringNullableFilter<"StudentTransferRequest"> | string | null
     orderId?: UuidNullableFilter<"StudentTransferRequest"> | string | null
     paidAt?: DateTimeNullableFilter<"StudentTransferRequest"> | Date | string | null
     dojoActedAt?: DateTimeNullableFilter<"StudentTransferRequest"> | Date | string | null
@@ -68879,6 +75480,102 @@ export namespace Prisma {
     acceptedAt?: DateTimeNullableFilter<"DojoOwnerInvite"> | Date | string | null
   }
 
+  export type ServiceRequestUpsertWithWhereUniqueWithoutDojoActedByInput = {
+    where: ServiceRequestWhereUniqueInput
+    update: XOR<ServiceRequestUpdateWithoutDojoActedByInput, ServiceRequestUncheckedUpdateWithoutDojoActedByInput>
+    create: XOR<ServiceRequestCreateWithoutDojoActedByInput, ServiceRequestUncheckedCreateWithoutDojoActedByInput>
+  }
+
+  export type ServiceRequestUpdateWithWhereUniqueWithoutDojoActedByInput = {
+    where: ServiceRequestWhereUniqueInput
+    data: XOR<ServiceRequestUpdateWithoutDojoActedByInput, ServiceRequestUncheckedUpdateWithoutDojoActedByInput>
+  }
+
+  export type ServiceRequestUpdateManyWithWhereWithoutDojoActedByInput = {
+    where: ServiceRequestScalarWhereInput
+    data: XOR<ServiceRequestUpdateManyMutationInput, ServiceRequestUncheckedUpdateManyWithoutDojoActedByInput>
+  }
+
+  export type ServiceRequestScalarWhereInput = {
+    AND?: ServiceRequestScalarWhereInput | ServiceRequestScalarWhereInput[]
+    OR?: ServiceRequestScalarWhereInput[]
+    NOT?: ServiceRequestScalarWhereInput | ServiceRequestScalarWhereInput[]
+    id?: UuidFilter<"ServiceRequest"> | string
+    studentId?: UuidFilter<"ServiceRequest"> | string
+    serviceId?: UuidFilter<"ServiceRequest"> | string
+    dojoId?: UuidFilter<"ServiceRequest"> | string
+    status?: EnumServiceRequestStatusFilter<"ServiceRequest"> | $Enums.ServiceRequestStatus
+    dojoDecision?: EnumServiceRequestDojoDecisionFilter<"ServiceRequest"> | $Enums.ServiceRequestDojoDecision
+    payload?: JsonFilter<"ServiceRequest">
+    reason?: StringNullableFilter<"ServiceRequest"> | string | null
+    dojoNote?: StringNullableFilter<"ServiceRequest"> | string | null
+    adminNote?: StringNullableFilter<"ServiceRequest"> | string | null
+    fee?: DecimalFilter<"ServiceRequest"> | Decimal | DecimalJsLike | number | string
+    discountAmount?: DecimalFilter<"ServiceRequest"> | Decimal | DecimalJsLike | number | string
+    finalAmount?: DecimalFilter<"ServiceRequest"> | Decimal | DecimalJsLike | number | string
+    couponId?: UuidNullableFilter<"ServiceRequest"> | string | null
+    couponCode?: StringNullableFilter<"ServiceRequest"> | string | null
+    orderId?: UuidNullableFilter<"ServiceRequest"> | string | null
+    paidAt?: DateTimeNullableFilter<"ServiceRequest"> | Date | string | null
+    dojoActedAt?: DateTimeNullableFilter<"ServiceRequest"> | Date | string | null
+    dojoActedById?: UuidNullableFilter<"ServiceRequest"> | string | null
+    adminActedAt?: DateTimeNullableFilter<"ServiceRequest"> | Date | string | null
+    adminActedById?: UuidNullableFilter<"ServiceRequest"> | string | null
+    createdAt?: DateTimeFilter<"ServiceRequest"> | Date | string
+    updatedAt?: DateTimeFilter<"ServiceRequest"> | Date | string
+  }
+
+  export type ServiceRequestUpsertWithWhereUniqueWithoutAdminActedByInput = {
+    where: ServiceRequestWhereUniqueInput
+    update: XOR<ServiceRequestUpdateWithoutAdminActedByInput, ServiceRequestUncheckedUpdateWithoutAdminActedByInput>
+    create: XOR<ServiceRequestCreateWithoutAdminActedByInput, ServiceRequestUncheckedCreateWithoutAdminActedByInput>
+  }
+
+  export type ServiceRequestUpdateWithWhereUniqueWithoutAdminActedByInput = {
+    where: ServiceRequestWhereUniqueInput
+    data: XOR<ServiceRequestUpdateWithoutAdminActedByInput, ServiceRequestUncheckedUpdateWithoutAdminActedByInput>
+  }
+
+  export type ServiceRequestUpdateManyWithWhereWithoutAdminActedByInput = {
+    where: ServiceRequestScalarWhereInput
+    data: XOR<ServiceRequestUpdateManyMutationInput, ServiceRequestUncheckedUpdateManyWithoutAdminActedByInput>
+  }
+
+  export type ServiceCouponUpsertWithWhereUniqueWithoutCreatedByInput = {
+    where: ServiceCouponWhereUniqueInput
+    update: XOR<ServiceCouponUpdateWithoutCreatedByInput, ServiceCouponUncheckedUpdateWithoutCreatedByInput>
+    create: XOR<ServiceCouponCreateWithoutCreatedByInput, ServiceCouponUncheckedCreateWithoutCreatedByInput>
+  }
+
+  export type ServiceCouponUpdateWithWhereUniqueWithoutCreatedByInput = {
+    where: ServiceCouponWhereUniqueInput
+    data: XOR<ServiceCouponUpdateWithoutCreatedByInput, ServiceCouponUncheckedUpdateWithoutCreatedByInput>
+  }
+
+  export type ServiceCouponUpdateManyWithWhereWithoutCreatedByInput = {
+    where: ServiceCouponScalarWhereInput
+    data: XOR<ServiceCouponUpdateManyMutationInput, ServiceCouponUncheckedUpdateManyWithoutCreatedByInput>
+  }
+
+  export type ServiceCouponScalarWhereInput = {
+    AND?: ServiceCouponScalarWhereInput | ServiceCouponScalarWhereInput[]
+    OR?: ServiceCouponScalarWhereInput[]
+    NOT?: ServiceCouponScalarWhereInput | ServiceCouponScalarWhereInput[]
+    id?: UuidFilter<"ServiceCoupon"> | string
+    code?: StringFilter<"ServiceCoupon"> | string
+    dojoId?: UuidFilter<"ServiceCoupon"> | string
+    createdById?: UuidFilter<"ServiceCoupon"> | string
+    discountPercent?: IntFilter<"ServiceCoupon"> | number
+    serviceId?: UuidNullableFilter<"ServiceCoupon"> | string | null
+    usageLimit?: IntFilter<"ServiceCoupon"> | number
+    usedCount?: IntFilter<"ServiceCoupon"> | number
+    expiresAt?: DateTimeNullableFilter<"ServiceCoupon"> | Date | string | null
+    isActive?: BoolFilter<"ServiceCoupon"> | boolean
+    notes?: StringNullableFilter<"ServiceCoupon"> | string | null
+    createdAt?: DateTimeFilter<"ServiceCoupon"> | Date | string
+    updatedAt?: DateTimeFilter<"ServiceCoupon"> | Date | string
+  }
+
   export type UserCreateWithoutProfileInput = {
     id: string
     email: string
@@ -68911,6 +75608,9 @@ export namespace Prisma {
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteCreateNestedManyWithoutInvitedByInput
+    serviceRequestsDojoActed?: ServiceRequestCreateNestedManyWithoutDojoActedByInput
+    serviceRequestsAdminActed?: ServiceRequestCreateNestedManyWithoutAdminActedByInput
+    serviceCouponsCreated?: ServiceCouponCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutProfileInput = {
@@ -68945,6 +75645,9 @@ export namespace Prisma {
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedCreateNestedManyWithoutInvitedByInput
+    serviceRequestsDojoActed?: ServiceRequestUncheckedCreateNestedManyWithoutDojoActedByInput
+    serviceRequestsAdminActed?: ServiceRequestUncheckedCreateNestedManyWithoutAdminActedByInput
+    serviceCouponsCreated?: ServiceCouponUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutProfileInput = {
@@ -68995,6 +75698,9 @@ export namespace Prisma {
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUpdateManyWithoutInvitedByNestedInput
+    serviceRequestsDojoActed?: ServiceRequestUpdateManyWithoutDojoActedByNestedInput
+    serviceRequestsAdminActed?: ServiceRequestUpdateManyWithoutAdminActedByNestedInput
+    serviceCouponsCreated?: ServiceCouponUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutProfileInput = {
@@ -69029,6 +75735,9 @@ export namespace Prisma {
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedUpdateManyWithoutInvitedByNestedInput
+    serviceRequestsDojoActed?: ServiceRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
+    serviceRequestsAdminActed?: ServiceRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
+    serviceCouponsCreated?: ServiceCouponUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserCreateWithoutStudentInput = {
@@ -69063,6 +75772,9 @@ export namespace Prisma {
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteCreateNestedManyWithoutInvitedByInput
+    serviceRequestsDojoActed?: ServiceRequestCreateNestedManyWithoutDojoActedByInput
+    serviceRequestsAdminActed?: ServiceRequestCreateNestedManyWithoutAdminActedByInput
+    serviceCouponsCreated?: ServiceCouponCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutStudentInput = {
@@ -69097,6 +75809,9 @@ export namespace Prisma {
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedCreateNestedManyWithoutInvitedByInput
+    serviceRequestsDojoActed?: ServiceRequestUncheckedCreateNestedManyWithoutDojoActedByInput
+    serviceRequestsAdminActed?: ServiceRequestUncheckedCreateNestedManyWithoutAdminActedByInput
+    serviceCouponsCreated?: ServiceCouponUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutStudentInput = {
@@ -69137,6 +75852,8 @@ export namespace Prisma {
     transfersIn?: StudentTransferRequestCreateNestedManyWithoutToDojoInput
     historyFrom?: StudentDojoHistoryCreateNestedManyWithoutFromDojoInput
     historyTo?: StudentDojoHistoryCreateNestedManyWithoutToDojoInput
+    serviceRequests?: ServiceRequestCreateNestedManyWithoutDojoInput
+    serviceCoupons?: ServiceCouponCreateNestedManyWithoutDojoInput
   }
 
   export type DojoUncheckedCreateWithoutStudentsInput = {
@@ -69172,6 +75889,8 @@ export namespace Prisma {
     transfersIn?: StudentTransferRequestUncheckedCreateNestedManyWithoutToDojoInput
     historyFrom?: StudentDojoHistoryUncheckedCreateNestedManyWithoutFromDojoInput
     historyTo?: StudentDojoHistoryUncheckedCreateNestedManyWithoutToDojoInput
+    serviceRequests?: ServiceRequestUncheckedCreateNestedManyWithoutDojoInput
+    serviceCoupons?: ServiceCouponUncheckedCreateNestedManyWithoutDojoInput
   }
 
   export type DojoCreateOrConnectWithoutStudentsInput = {
@@ -69339,6 +76058,9 @@ export namespace Prisma {
     dojoNote?: string | null
     adminNote?: string | null
     fee: Decimal | DecimalJsLike | number | string
+    discountAmount?: Decimal | DecimalJsLike | number | string
+    finalAmount?: Decimal | DecimalJsLike | number | string | null
+    couponCode?: string | null
     paidAt?: Date | string | null
     dojoActedAt?: Date | string | null
     adminActedAt?: Date | string | null
@@ -69362,6 +76084,9 @@ export namespace Prisma {
     dojoNote?: string | null
     adminNote?: string | null
     fee: Decimal | DecimalJsLike | number | string
+    discountAmount?: Decimal | DecimalJsLike | number | string
+    finalAmount?: Decimal | DecimalJsLike | number | string | null
+    couponCode?: string | null
     orderId?: string | null
     paidAt?: Date | string | null
     dojoActedAt?: Date | string | null
@@ -69380,6 +76105,66 @@ export namespace Prisma {
 
   export type StudentTransferRequestCreateManyStudentInputEnvelope = {
     data: StudentTransferRequestCreateManyStudentInput | StudentTransferRequestCreateManyStudentInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ServiceRequestCreateWithoutStudentInput = {
+    id?: string
+    status?: $Enums.ServiceRequestStatus
+    dojoDecision?: $Enums.ServiceRequestDojoDecision
+    payload?: JsonNullValueInput | InputJsonValue
+    reason?: string | null
+    dojoNote?: string | null
+    adminNote?: string | null
+    fee: Decimal | DecimalJsLike | number | string
+    discountAmount?: Decimal | DecimalJsLike | number | string
+    finalAmount: Decimal | DecimalJsLike | number | string
+    couponCode?: string | null
+    paidAt?: Date | string | null
+    dojoActedAt?: Date | string | null
+    adminActedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    service: ServiceCreateNestedOneWithoutRequestsInput
+    dojo: DojoCreateNestedOneWithoutServiceRequestsInput
+    order?: ShopOrderCreateNestedOneWithoutServiceRequestInput
+    coupon?: ServiceCouponCreateNestedOneWithoutRequestsInput
+    dojoActedBy?: UserCreateNestedOneWithoutServiceRequestsDojoActedInput
+    adminActedBy?: UserCreateNestedOneWithoutServiceRequestsAdminActedInput
+  }
+
+  export type ServiceRequestUncheckedCreateWithoutStudentInput = {
+    id?: string
+    serviceId: string
+    dojoId: string
+    status?: $Enums.ServiceRequestStatus
+    dojoDecision?: $Enums.ServiceRequestDojoDecision
+    payload?: JsonNullValueInput | InputJsonValue
+    reason?: string | null
+    dojoNote?: string | null
+    adminNote?: string | null
+    fee: Decimal | DecimalJsLike | number | string
+    discountAmount?: Decimal | DecimalJsLike | number | string
+    finalAmount: Decimal | DecimalJsLike | number | string
+    couponId?: string | null
+    couponCode?: string | null
+    orderId?: string | null
+    paidAt?: Date | string | null
+    dojoActedAt?: Date | string | null
+    dojoActedById?: string | null
+    adminActedAt?: Date | string | null
+    adminActedById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ServiceRequestCreateOrConnectWithoutStudentInput = {
+    where: ServiceRequestWhereUniqueInput
+    create: XOR<ServiceRequestCreateWithoutStudentInput, ServiceRequestUncheckedCreateWithoutStudentInput>
+  }
+
+  export type ServiceRequestCreateManyStudentInputEnvelope = {
+    data: ServiceRequestCreateManyStudentInput | ServiceRequestCreateManyStudentInput[]
     skipDuplicates?: boolean
   }
 
@@ -69456,6 +76241,9 @@ export namespace Prisma {
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUpdateManyWithoutInvitedByNestedInput
+    serviceRequestsDojoActed?: ServiceRequestUpdateManyWithoutDojoActedByNestedInput
+    serviceRequestsAdminActed?: ServiceRequestUpdateManyWithoutAdminActedByNestedInput
+    serviceCouponsCreated?: ServiceCouponUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutStudentInput = {
@@ -69490,6 +76278,9 @@ export namespace Prisma {
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedUpdateManyWithoutInvitedByNestedInput
+    serviceRequestsDojoActed?: ServiceRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
+    serviceRequestsAdminActed?: ServiceRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
+    serviceCouponsCreated?: ServiceCouponUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type DojoUpsertWithoutStudentsInput = {
@@ -69536,6 +76327,8 @@ export namespace Prisma {
     transfersIn?: StudentTransferRequestUpdateManyWithoutToDojoNestedInput
     historyFrom?: StudentDojoHistoryUpdateManyWithoutFromDojoNestedInput
     historyTo?: StudentDojoHistoryUpdateManyWithoutToDojoNestedInput
+    serviceRequests?: ServiceRequestUpdateManyWithoutDojoNestedInput
+    serviceCoupons?: ServiceCouponUpdateManyWithoutDojoNestedInput
   }
 
   export type DojoUncheckedUpdateWithoutStudentsInput = {
@@ -69571,6 +76364,8 @@ export namespace Prisma {
     transfersIn?: StudentTransferRequestUncheckedUpdateManyWithoutToDojoNestedInput
     historyFrom?: StudentDojoHistoryUncheckedUpdateManyWithoutFromDojoNestedInput
     historyTo?: StudentDojoHistoryUncheckedUpdateManyWithoutToDojoNestedInput
+    serviceRequests?: ServiceRequestUncheckedUpdateManyWithoutDojoNestedInput
+    serviceCoupons?: ServiceCouponUncheckedUpdateManyWithoutDojoNestedInput
   }
 
   export type GradingUpsertWithWhereUniqueWithoutStudentInput = {
@@ -69711,6 +76506,22 @@ export namespace Prisma {
     data: XOR<StudentTransferRequestUpdateManyMutationInput, StudentTransferRequestUncheckedUpdateManyWithoutStudentInput>
   }
 
+  export type ServiceRequestUpsertWithWhereUniqueWithoutStudentInput = {
+    where: ServiceRequestWhereUniqueInput
+    update: XOR<ServiceRequestUpdateWithoutStudentInput, ServiceRequestUncheckedUpdateWithoutStudentInput>
+    create: XOR<ServiceRequestCreateWithoutStudentInput, ServiceRequestUncheckedCreateWithoutStudentInput>
+  }
+
+  export type ServiceRequestUpdateWithWhereUniqueWithoutStudentInput = {
+    where: ServiceRequestWhereUniqueInput
+    data: XOR<ServiceRequestUpdateWithoutStudentInput, ServiceRequestUncheckedUpdateWithoutStudentInput>
+  }
+
+  export type ServiceRequestUpdateManyWithWhereWithoutStudentInput = {
+    where: ServiceRequestScalarWhereInput
+    data: XOR<ServiceRequestUpdateManyMutationInput, ServiceRequestUncheckedUpdateManyWithoutStudentInput>
+  }
+
   export type StudentDojoHistoryUpsertWithWhereUniqueWithoutStudentInput = {
     where: StudentDojoHistoryWhereUniqueInput
     update: XOR<StudentDojoHistoryUpdateWithoutStudentInput, StudentDojoHistoryUncheckedUpdateWithoutStudentInput>
@@ -69759,6 +76570,9 @@ export namespace Prisma {
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteCreateNestedManyWithoutInvitedByInput
+    serviceRequestsDojoActed?: ServiceRequestCreateNestedManyWithoutDojoActedByInput
+    serviceRequestsAdminActed?: ServiceRequestCreateNestedManyWithoutAdminActedByInput
+    serviceCouponsCreated?: ServiceCouponCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutInstructorInput = {
@@ -69793,6 +76607,9 @@ export namespace Prisma {
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedCreateNestedManyWithoutInvitedByInput
+    serviceRequestsDojoActed?: ServiceRequestUncheckedCreateNestedManyWithoutDojoActedByInput
+    serviceRequestsAdminActed?: ServiceRequestUncheckedCreateNestedManyWithoutAdminActedByInput
+    serviceCouponsCreated?: ServiceCouponUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutInstructorInput = {
@@ -69833,6 +76650,8 @@ export namespace Prisma {
     transfersIn?: StudentTransferRequestCreateNestedManyWithoutToDojoInput
     historyFrom?: StudentDojoHistoryCreateNestedManyWithoutFromDojoInput
     historyTo?: StudentDojoHistoryCreateNestedManyWithoutToDojoInput
+    serviceRequests?: ServiceRequestCreateNestedManyWithoutDojoInput
+    serviceCoupons?: ServiceCouponCreateNestedManyWithoutDojoInput
   }
 
   export type DojoUncheckedCreateWithoutInstructorsInput = {
@@ -69868,6 +76687,8 @@ export namespace Prisma {
     transfersIn?: StudentTransferRequestUncheckedCreateNestedManyWithoutToDojoInput
     historyFrom?: StudentDojoHistoryUncheckedCreateNestedManyWithoutFromDojoInput
     historyTo?: StudentDojoHistoryUncheckedCreateNestedManyWithoutToDojoInput
+    serviceRequests?: ServiceRequestUncheckedCreateNestedManyWithoutDojoInput
+    serviceCoupons?: ServiceCouponUncheckedCreateNestedManyWithoutDojoInput
   }
 
   export type DojoCreateOrConnectWithoutInstructorsInput = {
@@ -69918,6 +76739,9 @@ export namespace Prisma {
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUpdateManyWithoutInvitedByNestedInput
+    serviceRequestsDojoActed?: ServiceRequestUpdateManyWithoutDojoActedByNestedInput
+    serviceRequestsAdminActed?: ServiceRequestUpdateManyWithoutAdminActedByNestedInput
+    serviceCouponsCreated?: ServiceCouponUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInstructorInput = {
@@ -69952,6 +76776,9 @@ export namespace Prisma {
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedUpdateManyWithoutInvitedByNestedInput
+    serviceRequestsDojoActed?: ServiceRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
+    serviceRequestsAdminActed?: ServiceRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
+    serviceCouponsCreated?: ServiceCouponUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type DojoUpsertWithoutInstructorsInput = {
@@ -69998,6 +76825,8 @@ export namespace Prisma {
     transfersIn?: StudentTransferRequestUpdateManyWithoutToDojoNestedInput
     historyFrom?: StudentDojoHistoryUpdateManyWithoutFromDojoNestedInput
     historyTo?: StudentDojoHistoryUpdateManyWithoutToDojoNestedInput
+    serviceRequests?: ServiceRequestUpdateManyWithoutDojoNestedInput
+    serviceCoupons?: ServiceCouponUpdateManyWithoutDojoNestedInput
   }
 
   export type DojoUncheckedUpdateWithoutInstructorsInput = {
@@ -70033,6 +76862,8 @@ export namespace Prisma {
     transfersIn?: StudentTransferRequestUncheckedUpdateManyWithoutToDojoNestedInput
     historyFrom?: StudentDojoHistoryUncheckedUpdateManyWithoutFromDojoNestedInput
     historyTo?: StudentDojoHistoryUncheckedUpdateManyWithoutToDojoNestedInput
+    serviceRequests?: ServiceRequestUncheckedUpdateManyWithoutDojoNestedInput
+    serviceCoupons?: ServiceCouponUncheckedUpdateManyWithoutDojoNestedInput
   }
 
   export type UserCreateWithoutDojoManagerInput = {
@@ -70067,6 +76898,9 @@ export namespace Prisma {
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteCreateNestedManyWithoutInvitedByInput
+    serviceRequestsDojoActed?: ServiceRequestCreateNestedManyWithoutDojoActedByInput
+    serviceRequestsAdminActed?: ServiceRequestCreateNestedManyWithoutAdminActedByInput
+    serviceCouponsCreated?: ServiceCouponCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutDojoManagerInput = {
@@ -70101,6 +76935,9 @@ export namespace Prisma {
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedCreateNestedManyWithoutInvitedByInput
+    serviceRequestsDojoActed?: ServiceRequestUncheckedCreateNestedManyWithoutDojoActedByInput
+    serviceRequestsAdminActed?: ServiceRequestUncheckedCreateNestedManyWithoutAdminActedByInput
+    serviceCouponsCreated?: ServiceCouponUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutDojoManagerInput = {
@@ -70141,6 +76978,8 @@ export namespace Prisma {
     transfersIn?: StudentTransferRequestCreateNestedManyWithoutToDojoInput
     historyFrom?: StudentDojoHistoryCreateNestedManyWithoutFromDojoInput
     historyTo?: StudentDojoHistoryCreateNestedManyWithoutToDojoInput
+    serviceRequests?: ServiceRequestCreateNestedManyWithoutDojoInput
+    serviceCoupons?: ServiceCouponCreateNestedManyWithoutDojoInput
   }
 
   export type DojoUncheckedCreateWithoutManagersInput = {
@@ -70176,6 +77015,8 @@ export namespace Prisma {
     transfersIn?: StudentTransferRequestUncheckedCreateNestedManyWithoutToDojoInput
     historyFrom?: StudentDojoHistoryUncheckedCreateNestedManyWithoutFromDojoInput
     historyTo?: StudentDojoHistoryUncheckedCreateNestedManyWithoutToDojoInput
+    serviceRequests?: ServiceRequestUncheckedCreateNestedManyWithoutDojoInput
+    serviceCoupons?: ServiceCouponUncheckedCreateNestedManyWithoutDojoInput
   }
 
   export type DojoCreateOrConnectWithoutManagersInput = {
@@ -70226,6 +77067,9 @@ export namespace Prisma {
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUpdateManyWithoutInvitedByNestedInput
+    serviceRequestsDojoActed?: ServiceRequestUpdateManyWithoutDojoActedByNestedInput
+    serviceRequestsAdminActed?: ServiceRequestUpdateManyWithoutAdminActedByNestedInput
+    serviceCouponsCreated?: ServiceCouponUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDojoManagerInput = {
@@ -70260,6 +77104,9 @@ export namespace Prisma {
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedUpdateManyWithoutInvitedByNestedInput
+    serviceRequestsDojoActed?: ServiceRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
+    serviceRequestsAdminActed?: ServiceRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
+    serviceCouponsCreated?: ServiceCouponUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type DojoUpsertWithoutManagersInput = {
@@ -70306,6 +77153,8 @@ export namespace Prisma {
     transfersIn?: StudentTransferRequestUpdateManyWithoutToDojoNestedInput
     historyFrom?: StudentDojoHistoryUpdateManyWithoutFromDojoNestedInput
     historyTo?: StudentDojoHistoryUpdateManyWithoutToDojoNestedInput
+    serviceRequests?: ServiceRequestUpdateManyWithoutDojoNestedInput
+    serviceCoupons?: ServiceCouponUpdateManyWithoutDojoNestedInput
   }
 
   export type DojoUncheckedUpdateWithoutManagersInput = {
@@ -70341,6 +77190,8 @@ export namespace Prisma {
     transfersIn?: StudentTransferRequestUncheckedUpdateManyWithoutToDojoNestedInput
     historyFrom?: StudentDojoHistoryUncheckedUpdateManyWithoutFromDojoNestedInput
     historyTo?: StudentDojoHistoryUncheckedUpdateManyWithoutToDojoNestedInput
+    serviceRequests?: ServiceRequestUncheckedUpdateManyWithoutDojoNestedInput
+    serviceCoupons?: ServiceCouponUncheckedUpdateManyWithoutDojoNestedInput
   }
 
   export type UserCreateWithoutDojoOwnerInput = {
@@ -70375,6 +77226,9 @@ export namespace Prisma {
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteCreateNestedManyWithoutInvitedByInput
+    serviceRequestsDojoActed?: ServiceRequestCreateNestedManyWithoutDojoActedByInput
+    serviceRequestsAdminActed?: ServiceRequestCreateNestedManyWithoutAdminActedByInput
+    serviceCouponsCreated?: ServiceCouponCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutDojoOwnerInput = {
@@ -70409,6 +77263,9 @@ export namespace Prisma {
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedCreateNestedManyWithoutInvitedByInput
+    serviceRequestsDojoActed?: ServiceRequestUncheckedCreateNestedManyWithoutDojoActedByInput
+    serviceRequestsAdminActed?: ServiceRequestUncheckedCreateNestedManyWithoutAdminActedByInput
+    serviceCouponsCreated?: ServiceCouponUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutDojoOwnerInput = {
@@ -70449,6 +77306,8 @@ export namespace Prisma {
     transfersIn?: StudentTransferRequestCreateNestedManyWithoutToDojoInput
     historyFrom?: StudentDojoHistoryCreateNestedManyWithoutFromDojoInput
     historyTo?: StudentDojoHistoryCreateNestedManyWithoutToDojoInput
+    serviceRequests?: ServiceRequestCreateNestedManyWithoutDojoInput
+    serviceCoupons?: ServiceCouponCreateNestedManyWithoutDojoInput
   }
 
   export type DojoUncheckedCreateWithoutOwnerInput = {
@@ -70484,6 +77343,8 @@ export namespace Prisma {
     transfersIn?: StudentTransferRequestUncheckedCreateNestedManyWithoutToDojoInput
     historyFrom?: StudentDojoHistoryUncheckedCreateNestedManyWithoutFromDojoInput
     historyTo?: StudentDojoHistoryUncheckedCreateNestedManyWithoutToDojoInput
+    serviceRequests?: ServiceRequestUncheckedCreateNestedManyWithoutDojoInput
+    serviceCoupons?: ServiceCouponUncheckedCreateNestedManyWithoutDojoInput
   }
 
   export type DojoCreateOrConnectWithoutOwnerInput = {
@@ -70534,6 +77395,9 @@ export namespace Prisma {
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUpdateManyWithoutInvitedByNestedInput
+    serviceRequestsDojoActed?: ServiceRequestUpdateManyWithoutDojoActedByNestedInput
+    serviceRequestsAdminActed?: ServiceRequestUpdateManyWithoutAdminActedByNestedInput
+    serviceCouponsCreated?: ServiceCouponUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDojoOwnerInput = {
@@ -70568,6 +77432,9 @@ export namespace Prisma {
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedUpdateManyWithoutInvitedByNestedInput
+    serviceRequestsDojoActed?: ServiceRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
+    serviceRequestsAdminActed?: ServiceRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
+    serviceCouponsCreated?: ServiceCouponUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type DojoUpsertWithoutOwnerInput = {
@@ -70614,6 +77481,8 @@ export namespace Prisma {
     transfersIn?: StudentTransferRequestUpdateManyWithoutToDojoNestedInput
     historyFrom?: StudentDojoHistoryUpdateManyWithoutFromDojoNestedInput
     historyTo?: StudentDojoHistoryUpdateManyWithoutToDojoNestedInput
+    serviceRequests?: ServiceRequestUpdateManyWithoutDojoNestedInput
+    serviceCoupons?: ServiceCouponUpdateManyWithoutDojoNestedInput
   }
 
   export type DojoUncheckedUpdateWithoutOwnerInput = {
@@ -70649,6 +77518,8 @@ export namespace Prisma {
     transfersIn?: StudentTransferRequestUncheckedUpdateManyWithoutToDojoNestedInput
     historyFrom?: StudentDojoHistoryUncheckedUpdateManyWithoutFromDojoNestedInput
     historyTo?: StudentDojoHistoryUncheckedUpdateManyWithoutToDojoNestedInput
+    serviceRequests?: ServiceRequestUncheckedUpdateManyWithoutDojoNestedInput
+    serviceCoupons?: ServiceCouponUncheckedUpdateManyWithoutDojoNestedInput
   }
 
   export type UserCreateWithoutAdminInput = {
@@ -70683,6 +77554,9 @@ export namespace Prisma {
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteCreateNestedManyWithoutInvitedByInput
+    serviceRequestsDojoActed?: ServiceRequestCreateNestedManyWithoutDojoActedByInput
+    serviceRequestsAdminActed?: ServiceRequestCreateNestedManyWithoutAdminActedByInput
+    serviceCouponsCreated?: ServiceCouponCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutAdminInput = {
@@ -70717,6 +77591,9 @@ export namespace Prisma {
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedCreateNestedManyWithoutInvitedByInput
+    serviceRequestsDojoActed?: ServiceRequestUncheckedCreateNestedManyWithoutDojoActedByInput
+    serviceRequestsAdminActed?: ServiceRequestUncheckedCreateNestedManyWithoutAdminActedByInput
+    serviceCouponsCreated?: ServiceCouponUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutAdminInput = {
@@ -70767,6 +77644,9 @@ export namespace Prisma {
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUpdateManyWithoutInvitedByNestedInput
+    serviceRequestsDojoActed?: ServiceRequestUpdateManyWithoutDojoActedByNestedInput
+    serviceRequestsAdminActed?: ServiceRequestUpdateManyWithoutAdminActedByNestedInput
+    serviceCouponsCreated?: ServiceCouponUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAdminInput = {
@@ -70801,6 +77681,9 @@ export namespace Prisma {
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedUpdateManyWithoutInvitedByNestedInput
+    serviceRequestsDojoActed?: ServiceRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
+    serviceRequestsAdminActed?: ServiceRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
+    serviceCouponsCreated?: ServiceCouponUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type GradingCreateWithoutFromRankInput = {
@@ -71151,6 +78034,7 @@ export namespace Prisma {
     includesCertificates?: boolean
     includesTransferRequest?: boolean
     includesPastBeltFee?: boolean
+    includesServiceRequest?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     user?: UserCreateNestedOneWithoutOrdersInput
@@ -71158,6 +78042,7 @@ export namespace Prisma {
     orderItems?: ShopOrderItemCreateNestedManyWithoutOrderInput
     certificateRequests?: CertificateRequestCreateNestedManyWithoutOrderInput
     transferRequest?: StudentTransferRequestCreateNestedOneWithoutOrderInput
+    serviceRequest?: ServiceRequestCreateNestedOneWithoutOrderInput
     transactions?: PaymentTransactionCreateNestedManyWithoutOrderInput
   }
 
@@ -71183,11 +78068,13 @@ export namespace Prisma {
     certDojoId?: string | null
     includesTransferRequest?: boolean
     includesPastBeltFee?: boolean
+    includesServiceRequest?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     orderItems?: ShopOrderItemUncheckedCreateNestedManyWithoutOrderInput
     certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutOrderInput
     transferRequest?: StudentTransferRequestUncheckedCreateNestedOneWithoutOrderInput
+    serviceRequest?: ServiceRequestUncheckedCreateNestedOneWithoutOrderInput
     transactions?: PaymentTransactionUncheckedCreateNestedManyWithoutOrderInput
   }
 
@@ -71221,6 +78108,7 @@ export namespace Prisma {
     includesCertificates?: boolean
     includesTransferRequest?: boolean
     includesPastBeltFee?: boolean
+    includesServiceRequest?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     user?: UserCreateNestedOneWithoutOrdersInput
@@ -71228,6 +78116,7 @@ export namespace Prisma {
     orderItems?: ShopOrderItemCreateNestedManyWithoutOrderInput
     certificateRequests?: CertificateRequestCreateNestedManyWithoutOrderInput
     transferRequest?: StudentTransferRequestCreateNestedOneWithoutOrderInput
+    serviceRequest?: ServiceRequestCreateNestedOneWithoutOrderInput
     transactions?: PaymentTransactionCreateNestedManyWithoutOrderInput
   }
 
@@ -71253,11 +78142,13 @@ export namespace Prisma {
     includesCertificates?: boolean
     includesTransferRequest?: boolean
     includesPastBeltFee?: boolean
+    includesServiceRequest?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     orderItems?: ShopOrderItemUncheckedCreateNestedManyWithoutOrderInput
     certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutOrderInput
     transferRequest?: StudentTransferRequestUncheckedCreateNestedOneWithoutOrderInput
+    serviceRequest?: ServiceRequestUncheckedCreateNestedOneWithoutOrderInput
     transactions?: PaymentTransactionUncheckedCreateNestedManyWithoutOrderInput
   }
 
@@ -71335,6 +78226,7 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestCreateNestedManyWithoutStudentInput
     achievements?: StudentAchievementCreateNestedManyWithoutStudentInput
     transferRequests?: StudentTransferRequestCreateNestedManyWithoutStudentInput
+    serviceRequests?: ServiceRequestCreateNestedManyWithoutStudentInput
     dojoHistory?: StudentDojoHistoryCreateNestedManyWithoutStudentInput
   }
 
@@ -71358,6 +78250,7 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutStudentInput
     achievements?: StudentAchievementUncheckedCreateNestedManyWithoutStudentInput
     transferRequests?: StudentTransferRequestUncheckedCreateNestedManyWithoutStudentInput
+    serviceRequests?: ServiceRequestUncheckedCreateNestedManyWithoutStudentInput
     dojoHistory?: StudentDojoHistoryUncheckedCreateNestedManyWithoutStudentInput
   }
 
@@ -71661,6 +78554,9 @@ export namespace Prisma {
     dojoNote?: string | null
     adminNote?: string | null
     fee: Decimal | DecimalJsLike | number | string
+    discountAmount?: Decimal | DecimalJsLike | number | string
+    finalAmount?: Decimal | DecimalJsLike | number | string | null
+    couponCode?: string | null
     paidAt?: Date | string | null
     dojoActedAt?: Date | string | null
     adminActedAt?: Date | string | null
@@ -71684,6 +78580,9 @@ export namespace Prisma {
     dojoNote?: string | null
     adminNote?: string | null
     fee: Decimal | DecimalJsLike | number | string
+    discountAmount?: Decimal | DecimalJsLike | number | string
+    finalAmount?: Decimal | DecimalJsLike | number | string | null
+    couponCode?: string | null
     orderId?: string | null
     paidAt?: Date | string | null
     dojoActedAt?: Date | string | null
@@ -71713,6 +78612,9 @@ export namespace Prisma {
     dojoNote?: string | null
     adminNote?: string | null
     fee: Decimal | DecimalJsLike | number | string
+    discountAmount?: Decimal | DecimalJsLike | number | string
+    finalAmount?: Decimal | DecimalJsLike | number | string | null
+    couponCode?: string | null
     paidAt?: Date | string | null
     dojoActedAt?: Date | string | null
     adminActedAt?: Date | string | null
@@ -71736,6 +78638,9 @@ export namespace Prisma {
     dojoNote?: string | null
     adminNote?: string | null
     fee: Decimal | DecimalJsLike | number | string
+    discountAmount?: Decimal | DecimalJsLike | number | string
+    finalAmount?: Decimal | DecimalJsLike | number | string | null
+    couponCode?: string | null
     orderId?: string | null
     paidAt?: Date | string | null
     dojoActedAt?: Date | string | null
@@ -71814,6 +78719,108 @@ export namespace Prisma {
 
   export type StudentDojoHistoryCreateManyToDojoInputEnvelope = {
     data: StudentDojoHistoryCreateManyToDojoInput | StudentDojoHistoryCreateManyToDojoInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ServiceRequestCreateWithoutDojoInput = {
+    id?: string
+    status?: $Enums.ServiceRequestStatus
+    dojoDecision?: $Enums.ServiceRequestDojoDecision
+    payload?: JsonNullValueInput | InputJsonValue
+    reason?: string | null
+    dojoNote?: string | null
+    adminNote?: string | null
+    fee: Decimal | DecimalJsLike | number | string
+    discountAmount?: Decimal | DecimalJsLike | number | string
+    finalAmount: Decimal | DecimalJsLike | number | string
+    couponCode?: string | null
+    paidAt?: Date | string | null
+    dojoActedAt?: Date | string | null
+    adminActedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    student: StudentCreateNestedOneWithoutServiceRequestsInput
+    service: ServiceCreateNestedOneWithoutRequestsInput
+    order?: ShopOrderCreateNestedOneWithoutServiceRequestInput
+    coupon?: ServiceCouponCreateNestedOneWithoutRequestsInput
+    dojoActedBy?: UserCreateNestedOneWithoutServiceRequestsDojoActedInput
+    adminActedBy?: UserCreateNestedOneWithoutServiceRequestsAdminActedInput
+  }
+
+  export type ServiceRequestUncheckedCreateWithoutDojoInput = {
+    id?: string
+    studentId: string
+    serviceId: string
+    status?: $Enums.ServiceRequestStatus
+    dojoDecision?: $Enums.ServiceRequestDojoDecision
+    payload?: JsonNullValueInput | InputJsonValue
+    reason?: string | null
+    dojoNote?: string | null
+    adminNote?: string | null
+    fee: Decimal | DecimalJsLike | number | string
+    discountAmount?: Decimal | DecimalJsLike | number | string
+    finalAmount: Decimal | DecimalJsLike | number | string
+    couponId?: string | null
+    couponCode?: string | null
+    orderId?: string | null
+    paidAt?: Date | string | null
+    dojoActedAt?: Date | string | null
+    dojoActedById?: string | null
+    adminActedAt?: Date | string | null
+    adminActedById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ServiceRequestCreateOrConnectWithoutDojoInput = {
+    where: ServiceRequestWhereUniqueInput
+    create: XOR<ServiceRequestCreateWithoutDojoInput, ServiceRequestUncheckedCreateWithoutDojoInput>
+  }
+
+  export type ServiceRequestCreateManyDojoInputEnvelope = {
+    data: ServiceRequestCreateManyDojoInput | ServiceRequestCreateManyDojoInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ServiceCouponCreateWithoutDojoInput = {
+    id?: string
+    code: string
+    discountPercent: number
+    usageLimit?: number
+    usedCount?: number
+    expiresAt?: Date | string | null
+    isActive?: boolean
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    service?: ServiceCreateNestedOneWithoutCouponsInput
+    createdBy: UserCreateNestedOneWithoutServiceCouponsCreatedInput
+    requests?: ServiceRequestCreateNestedManyWithoutCouponInput
+  }
+
+  export type ServiceCouponUncheckedCreateWithoutDojoInput = {
+    id?: string
+    code: string
+    createdById: string
+    discountPercent: number
+    serviceId?: string | null
+    usageLimit?: number
+    usedCount?: number
+    expiresAt?: Date | string | null
+    isActive?: boolean
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    requests?: ServiceRequestUncheckedCreateNestedManyWithoutCouponInput
+  }
+
+  export type ServiceCouponCreateOrConnectWithoutDojoInput = {
+    where: ServiceCouponWhereUniqueInput
+    create: XOR<ServiceCouponCreateWithoutDojoInput, ServiceCouponUncheckedCreateWithoutDojoInput>
+  }
+
+  export type ServiceCouponCreateManyDojoInputEnvelope = {
+    data: ServiceCouponCreateManyDojoInput | ServiceCouponCreateManyDojoInput[]
     skipDuplicates?: boolean
   }
 
@@ -72177,6 +79184,38 @@ export namespace Prisma {
     data: XOR<StudentDojoHistoryUpdateManyMutationInput, StudentDojoHistoryUncheckedUpdateManyWithoutToDojoInput>
   }
 
+  export type ServiceRequestUpsertWithWhereUniqueWithoutDojoInput = {
+    where: ServiceRequestWhereUniqueInput
+    update: XOR<ServiceRequestUpdateWithoutDojoInput, ServiceRequestUncheckedUpdateWithoutDojoInput>
+    create: XOR<ServiceRequestCreateWithoutDojoInput, ServiceRequestUncheckedCreateWithoutDojoInput>
+  }
+
+  export type ServiceRequestUpdateWithWhereUniqueWithoutDojoInput = {
+    where: ServiceRequestWhereUniqueInput
+    data: XOR<ServiceRequestUpdateWithoutDojoInput, ServiceRequestUncheckedUpdateWithoutDojoInput>
+  }
+
+  export type ServiceRequestUpdateManyWithWhereWithoutDojoInput = {
+    where: ServiceRequestScalarWhereInput
+    data: XOR<ServiceRequestUpdateManyMutationInput, ServiceRequestUncheckedUpdateManyWithoutDojoInput>
+  }
+
+  export type ServiceCouponUpsertWithWhereUniqueWithoutDojoInput = {
+    where: ServiceCouponWhereUniqueInput
+    update: XOR<ServiceCouponUpdateWithoutDojoInput, ServiceCouponUncheckedUpdateWithoutDojoInput>
+    create: XOR<ServiceCouponCreateWithoutDojoInput, ServiceCouponUncheckedCreateWithoutDojoInput>
+  }
+
+  export type ServiceCouponUpdateWithWhereUniqueWithoutDojoInput = {
+    where: ServiceCouponWhereUniqueInput
+    data: XOR<ServiceCouponUpdateWithoutDojoInput, ServiceCouponUncheckedUpdateWithoutDojoInput>
+  }
+
+  export type ServiceCouponUpdateManyWithWhereWithoutDojoInput = {
+    where: ServiceCouponScalarWhereInput
+    data: XOR<ServiceCouponUpdateManyMutationInput, ServiceCouponUncheckedUpdateManyWithoutDojoInput>
+  }
+
   export type DojoCreateWithoutApplicationInput = {
     id?: string
     name: string
@@ -72210,6 +79249,8 @@ export namespace Prisma {
     transfersIn?: StudentTransferRequestCreateNestedManyWithoutToDojoInput
     historyFrom?: StudentDojoHistoryCreateNestedManyWithoutFromDojoInput
     historyTo?: StudentDojoHistoryCreateNestedManyWithoutToDojoInput
+    serviceRequests?: ServiceRequestCreateNestedManyWithoutDojoInput
+    serviceCoupons?: ServiceCouponCreateNestedManyWithoutDojoInput
   }
 
   export type DojoUncheckedCreateWithoutApplicationInput = {
@@ -72245,6 +79286,8 @@ export namespace Prisma {
     transfersIn?: StudentTransferRequestUncheckedCreateNestedManyWithoutToDojoInput
     historyFrom?: StudentDojoHistoryUncheckedCreateNestedManyWithoutFromDojoInput
     historyTo?: StudentDojoHistoryUncheckedCreateNestedManyWithoutToDojoInput
+    serviceRequests?: ServiceRequestUncheckedCreateNestedManyWithoutDojoInput
+    serviceCoupons?: ServiceCouponUncheckedCreateNestedManyWithoutDojoInput
   }
 
   export type DojoCreateOrConnectWithoutApplicationInput = {
@@ -72296,6 +79339,8 @@ export namespace Prisma {
     transfersIn?: StudentTransferRequestUpdateManyWithoutToDojoNestedInput
     historyFrom?: StudentDojoHistoryUpdateManyWithoutFromDojoNestedInput
     historyTo?: StudentDojoHistoryUpdateManyWithoutToDojoNestedInput
+    serviceRequests?: ServiceRequestUpdateManyWithoutDojoNestedInput
+    serviceCoupons?: ServiceCouponUpdateManyWithoutDojoNestedInput
   }
 
   export type DojoUncheckedUpdateWithoutApplicationInput = {
@@ -72331,6 +79376,8 @@ export namespace Prisma {
     transfersIn?: StudentTransferRequestUncheckedUpdateManyWithoutToDojoNestedInput
     historyFrom?: StudentDojoHistoryUncheckedUpdateManyWithoutFromDojoNestedInput
     historyTo?: StudentDojoHistoryUncheckedUpdateManyWithoutToDojoNestedInput
+    serviceRequests?: ServiceRequestUncheckedUpdateManyWithoutDojoNestedInput
+    serviceCoupons?: ServiceCouponUncheckedUpdateManyWithoutDojoNestedInput
   }
 
   export type UserCreateWithoutDojoOwnerInvitesSentInput = {
@@ -72365,6 +79412,9 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutUserInput
+    serviceRequestsDojoActed?: ServiceRequestCreateNestedManyWithoutDojoActedByInput
+    serviceRequestsAdminActed?: ServiceRequestCreateNestedManyWithoutAdminActedByInput
+    serviceCouponsCreated?: ServiceCouponCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutDojoOwnerInvitesSentInput = {
@@ -72399,6 +79449,9 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutUserInput
+    serviceRequestsDojoActed?: ServiceRequestUncheckedCreateNestedManyWithoutDojoActedByInput
+    serviceRequestsAdminActed?: ServiceRequestUncheckedCreateNestedManyWithoutAdminActedByInput
+    serviceCouponsCreated?: ServiceCouponUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutDojoOwnerInvitesSentInput = {
@@ -72449,6 +79502,9 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUpdateManyWithoutUserNestedInput
+    serviceRequestsDojoActed?: ServiceRequestUpdateManyWithoutDojoActedByNestedInput
+    serviceRequestsAdminActed?: ServiceRequestUpdateManyWithoutAdminActedByNestedInput
+    serviceCouponsCreated?: ServiceCouponUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDojoOwnerInvitesSentInput = {
@@ -72483,6 +79539,9 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutUserNestedInput
+    serviceRequestsDojoActed?: ServiceRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
+    serviceRequestsAdminActed?: ServiceRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
+    serviceCouponsCreated?: ServiceCouponUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type BeltRankCreateWithoutGradingEventsInput = {
@@ -72693,6 +79752,7 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestCreateNestedManyWithoutStudentInput
     achievements?: StudentAchievementCreateNestedManyWithoutStudentInput
     transferRequests?: StudentTransferRequestCreateNestedManyWithoutStudentInput
+    serviceRequests?: ServiceRequestCreateNestedManyWithoutStudentInput
     dojoHistory?: StudentDojoHistoryCreateNestedManyWithoutStudentInput
   }
 
@@ -72716,6 +79776,7 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutStudentInput
     achievements?: StudentAchievementUncheckedCreateNestedManyWithoutStudentInput
     transferRequests?: StudentTransferRequestUncheckedCreateNestedManyWithoutStudentInput
+    serviceRequests?: ServiceRequestUncheckedCreateNestedManyWithoutStudentInput
     dojoHistory?: StudentDojoHistoryUncheckedCreateNestedManyWithoutStudentInput
   }
 
@@ -72827,6 +79888,7 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestUpdateManyWithoutStudentNestedInput
     achievements?: StudentAchievementUpdateManyWithoutStudentNestedInput
     transferRequests?: StudentTransferRequestUpdateManyWithoutStudentNestedInput
+    serviceRequests?: ServiceRequestUpdateManyWithoutStudentNestedInput
     dojoHistory?: StudentDojoHistoryUpdateManyWithoutStudentNestedInput
   }
 
@@ -72850,6 +79912,7 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutStudentNestedInput
     achievements?: StudentAchievementUncheckedUpdateManyWithoutStudentNestedInput
     transferRequests?: StudentTransferRequestUncheckedUpdateManyWithoutStudentNestedInput
+    serviceRequests?: ServiceRequestUncheckedUpdateManyWithoutStudentNestedInput
     dojoHistory?: StudentDojoHistoryUncheckedUpdateManyWithoutStudentNestedInput
   }
 
@@ -72957,6 +80020,7 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestCreateNestedManyWithoutStudentInput
     achievements?: StudentAchievementCreateNestedManyWithoutStudentInput
     transferRequests?: StudentTransferRequestCreateNestedManyWithoutStudentInput
+    serviceRequests?: ServiceRequestCreateNestedManyWithoutStudentInput
     dojoHistory?: StudentDojoHistoryCreateNestedManyWithoutStudentInput
   }
 
@@ -72980,6 +80044,7 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutStudentInput
     achievements?: StudentAchievementUncheckedCreateNestedManyWithoutStudentInput
     transferRequests?: StudentTransferRequestUncheckedCreateNestedManyWithoutStudentInput
+    serviceRequests?: ServiceRequestUncheckedCreateNestedManyWithoutStudentInput
     dojoHistory?: StudentDojoHistoryUncheckedCreateNestedManyWithoutStudentInput
   }
 
@@ -73170,6 +80235,7 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestUpdateManyWithoutStudentNestedInput
     achievements?: StudentAchievementUpdateManyWithoutStudentNestedInput
     transferRequests?: StudentTransferRequestUpdateManyWithoutStudentNestedInput
+    serviceRequests?: ServiceRequestUpdateManyWithoutStudentNestedInput
     dojoHistory?: StudentDojoHistoryUpdateManyWithoutStudentNestedInput
   }
 
@@ -73193,6 +80259,7 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutStudentNestedInput
     achievements?: StudentAchievementUncheckedUpdateManyWithoutStudentNestedInput
     transferRequests?: StudentTransferRequestUncheckedUpdateManyWithoutStudentNestedInput
+    serviceRequests?: ServiceRequestUncheckedUpdateManyWithoutStudentNestedInput
     dojoHistory?: StudentDojoHistoryUncheckedUpdateManyWithoutStudentNestedInput
   }
 
@@ -73402,6 +80469,7 @@ export namespace Prisma {
     gradingApplications?: GradingApplicationCreateNestedManyWithoutStudentInput
     achievements?: StudentAchievementCreateNestedManyWithoutStudentInput
     transferRequests?: StudentTransferRequestCreateNestedManyWithoutStudentInput
+    serviceRequests?: ServiceRequestCreateNestedManyWithoutStudentInput
     dojoHistory?: StudentDojoHistoryCreateNestedManyWithoutStudentInput
   }
 
@@ -73425,6 +80493,7 @@ export namespace Prisma {
     gradingApplications?: GradingApplicationUncheckedCreateNestedManyWithoutStudentInput
     achievements?: StudentAchievementUncheckedCreateNestedManyWithoutStudentInput
     transferRequests?: StudentTransferRequestUncheckedCreateNestedManyWithoutStudentInput
+    serviceRequests?: ServiceRequestUncheckedCreateNestedManyWithoutStudentInput
     dojoHistory?: StudentDojoHistoryUncheckedCreateNestedManyWithoutStudentInput
   }
 
@@ -73466,6 +80535,8 @@ export namespace Prisma {
     transfersIn?: StudentTransferRequestCreateNestedManyWithoutToDojoInput
     historyFrom?: StudentDojoHistoryCreateNestedManyWithoutFromDojoInput
     historyTo?: StudentDojoHistoryCreateNestedManyWithoutToDojoInput
+    serviceRequests?: ServiceRequestCreateNestedManyWithoutDojoInput
+    serviceCoupons?: ServiceCouponCreateNestedManyWithoutDojoInput
   }
 
   export type DojoUncheckedCreateWithoutCertificateRequestsInput = {
@@ -73501,6 +80572,8 @@ export namespace Prisma {
     transfersIn?: StudentTransferRequestUncheckedCreateNestedManyWithoutToDojoInput
     historyFrom?: StudentDojoHistoryUncheckedCreateNestedManyWithoutFromDojoInput
     historyTo?: StudentDojoHistoryUncheckedCreateNestedManyWithoutToDojoInput
+    serviceRequests?: ServiceRequestUncheckedCreateNestedManyWithoutDojoInput
+    serviceCoupons?: ServiceCouponUncheckedCreateNestedManyWithoutDojoInput
   }
 
   export type DojoCreateOrConnectWithoutCertificateRequestsInput = {
@@ -73528,6 +80601,7 @@ export namespace Prisma {
     includesCertificates?: boolean
     includesTransferRequest?: boolean
     includesPastBeltFee?: boolean
+    includesServiceRequest?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     user?: UserCreateNestedOneWithoutOrdersInput
@@ -73535,6 +80609,7 @@ export namespace Prisma {
     certDojo?: DojoCreateNestedOneWithoutCertificateOrdersInput
     orderItems?: ShopOrderItemCreateNestedManyWithoutOrderInput
     transferRequest?: StudentTransferRequestCreateNestedOneWithoutOrderInput
+    serviceRequest?: ServiceRequestCreateNestedOneWithoutOrderInput
     transactions?: PaymentTransactionCreateNestedManyWithoutOrderInput
   }
 
@@ -73561,10 +80636,12 @@ export namespace Prisma {
     certDojoId?: string | null
     includesTransferRequest?: boolean
     includesPastBeltFee?: boolean
+    includesServiceRequest?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     orderItems?: ShopOrderItemUncheckedCreateNestedManyWithoutOrderInput
     transferRequest?: StudentTransferRequestUncheckedCreateNestedOneWithoutOrderInput
+    serviceRequest?: ServiceRequestUncheckedCreateNestedOneWithoutOrderInput
     transactions?: PaymentTransactionUncheckedCreateNestedManyWithoutOrderInput
   }
 
@@ -73655,6 +80732,7 @@ export namespace Prisma {
     gradingApplications?: GradingApplicationUpdateManyWithoutStudentNestedInput
     achievements?: StudentAchievementUpdateManyWithoutStudentNestedInput
     transferRequests?: StudentTransferRequestUpdateManyWithoutStudentNestedInput
+    serviceRequests?: ServiceRequestUpdateManyWithoutStudentNestedInput
     dojoHistory?: StudentDojoHistoryUpdateManyWithoutStudentNestedInput
   }
 
@@ -73678,6 +80756,7 @@ export namespace Prisma {
     gradingApplications?: GradingApplicationUncheckedUpdateManyWithoutStudentNestedInput
     achievements?: StudentAchievementUncheckedUpdateManyWithoutStudentNestedInput
     transferRequests?: StudentTransferRequestUncheckedUpdateManyWithoutStudentNestedInput
+    serviceRequests?: ServiceRequestUncheckedUpdateManyWithoutStudentNestedInput
     dojoHistory?: StudentDojoHistoryUncheckedUpdateManyWithoutStudentNestedInput
   }
 
@@ -73725,6 +80804,8 @@ export namespace Prisma {
     transfersIn?: StudentTransferRequestUpdateManyWithoutToDojoNestedInput
     historyFrom?: StudentDojoHistoryUpdateManyWithoutFromDojoNestedInput
     historyTo?: StudentDojoHistoryUpdateManyWithoutToDojoNestedInput
+    serviceRequests?: ServiceRequestUpdateManyWithoutDojoNestedInput
+    serviceCoupons?: ServiceCouponUpdateManyWithoutDojoNestedInput
   }
 
   export type DojoUncheckedUpdateWithoutCertificateRequestsInput = {
@@ -73760,6 +80841,8 @@ export namespace Prisma {
     transfersIn?: StudentTransferRequestUncheckedUpdateManyWithoutToDojoNestedInput
     historyFrom?: StudentDojoHistoryUncheckedUpdateManyWithoutFromDojoNestedInput
     historyTo?: StudentDojoHistoryUncheckedUpdateManyWithoutToDojoNestedInput
+    serviceRequests?: ServiceRequestUncheckedUpdateManyWithoutDojoNestedInput
+    serviceCoupons?: ServiceCouponUncheckedUpdateManyWithoutDojoNestedInput
   }
 
   export type ShopOrderUpsertWithoutCertificateRequestsInput = {
@@ -73793,6 +80876,7 @@ export namespace Prisma {
     includesCertificates?: BoolFieldUpdateOperationsInput | boolean
     includesTransferRequest?: BoolFieldUpdateOperationsInput | boolean
     includesPastBeltFee?: BoolFieldUpdateOperationsInput | boolean
+    includesServiceRequest?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneWithoutOrdersNestedInput
@@ -73800,6 +80884,7 @@ export namespace Prisma {
     certDojo?: DojoUpdateOneWithoutCertificateOrdersNestedInput
     orderItems?: ShopOrderItemUpdateManyWithoutOrderNestedInput
     transferRequest?: StudentTransferRequestUpdateOneWithoutOrderNestedInput
+    serviceRequest?: ServiceRequestUpdateOneWithoutOrderNestedInput
     transactions?: PaymentTransactionUpdateManyWithoutOrderNestedInput
   }
 
@@ -73826,10 +80911,12 @@ export namespace Prisma {
     certDojoId?: NullableStringFieldUpdateOperationsInput | string | null
     includesTransferRequest?: BoolFieldUpdateOperationsInput | boolean
     includesPastBeltFee?: BoolFieldUpdateOperationsInput | boolean
+    includesServiceRequest?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     orderItems?: ShopOrderItemUncheckedUpdateManyWithoutOrderNestedInput
     transferRequest?: StudentTransferRequestUncheckedUpdateOneWithoutOrderNestedInput
+    serviceRequest?: ServiceRequestUncheckedUpdateOneWithoutOrderNestedInput
     transactions?: PaymentTransactionUncheckedUpdateManyWithoutOrderNestedInput
   }
 
@@ -73913,6 +81000,9 @@ export namespace Prisma {
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteCreateNestedManyWithoutInvitedByInput
+    serviceRequestsDojoActed?: ServiceRequestCreateNestedManyWithoutDojoActedByInput
+    serviceRequestsAdminActed?: ServiceRequestCreateNestedManyWithoutAdminActedByInput
+    serviceCouponsCreated?: ServiceCouponCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutEventsPostedInput = {
@@ -73947,6 +81037,9 @@ export namespace Prisma {
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedCreateNestedManyWithoutInvitedByInput
+    serviceRequestsDojoActed?: ServiceRequestUncheckedCreateNestedManyWithoutDojoActedByInput
+    serviceRequestsAdminActed?: ServiceRequestUncheckedCreateNestedManyWithoutAdminActedByInput
+    serviceCouponsCreated?: ServiceCouponUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutEventsPostedInput = {
@@ -73987,6 +81080,8 @@ export namespace Prisma {
     transfersIn?: StudentTransferRequestCreateNestedManyWithoutToDojoInput
     historyFrom?: StudentDojoHistoryCreateNestedManyWithoutFromDojoInput
     historyTo?: StudentDojoHistoryCreateNestedManyWithoutToDojoInput
+    serviceRequests?: ServiceRequestCreateNestedManyWithoutDojoInput
+    serviceCoupons?: ServiceCouponCreateNestedManyWithoutDojoInput
   }
 
   export type DojoUncheckedCreateWithoutEventsInput = {
@@ -74022,6 +81117,8 @@ export namespace Prisma {
     transfersIn?: StudentTransferRequestUncheckedCreateNestedManyWithoutToDojoInput
     historyFrom?: StudentDojoHistoryUncheckedCreateNestedManyWithoutFromDojoInput
     historyTo?: StudentDojoHistoryUncheckedCreateNestedManyWithoutToDojoInput
+    serviceRequests?: ServiceRequestUncheckedCreateNestedManyWithoutDojoInput
+    serviceCoupons?: ServiceCouponUncheckedCreateNestedManyWithoutDojoInput
   }
 
   export type DojoCreateOrConnectWithoutEventsInput = {
@@ -74123,6 +81220,9 @@ export namespace Prisma {
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUpdateManyWithoutInvitedByNestedInput
+    serviceRequestsDojoActed?: ServiceRequestUpdateManyWithoutDojoActedByNestedInput
+    serviceRequestsAdminActed?: ServiceRequestUpdateManyWithoutAdminActedByNestedInput
+    serviceCouponsCreated?: ServiceCouponUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEventsPostedInput = {
@@ -74157,6 +81257,9 @@ export namespace Prisma {
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedUpdateManyWithoutInvitedByNestedInput
+    serviceRequestsDojoActed?: ServiceRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
+    serviceRequestsAdminActed?: ServiceRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
+    serviceCouponsCreated?: ServiceCouponUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type DojoUpsertWithoutEventsInput = {
@@ -74203,6 +81306,8 @@ export namespace Prisma {
     transfersIn?: StudentTransferRequestUpdateManyWithoutToDojoNestedInput
     historyFrom?: StudentDojoHistoryUpdateManyWithoutFromDojoNestedInput
     historyTo?: StudentDojoHistoryUpdateManyWithoutToDojoNestedInput
+    serviceRequests?: ServiceRequestUpdateManyWithoutDojoNestedInput
+    serviceCoupons?: ServiceCouponUpdateManyWithoutDojoNestedInput
   }
 
   export type DojoUncheckedUpdateWithoutEventsInput = {
@@ -74238,6 +81343,8 @@ export namespace Prisma {
     transfersIn?: StudentTransferRequestUncheckedUpdateManyWithoutToDojoNestedInput
     historyFrom?: StudentDojoHistoryUncheckedUpdateManyWithoutFromDojoNestedInput
     historyTo?: StudentDojoHistoryUncheckedUpdateManyWithoutToDojoNestedInput
+    serviceRequests?: ServiceRequestUncheckedUpdateManyWithoutDojoNestedInput
+    serviceCoupons?: ServiceCouponUncheckedUpdateManyWithoutDojoNestedInput
   }
 
   export type BeltRankUpsertWithoutMinRankEventsInput = {
@@ -74313,6 +81420,9 @@ export namespace Prisma {
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteCreateNestedManyWithoutInvitedByInput
+    serviceRequestsDojoActed?: ServiceRequestCreateNestedManyWithoutDojoActedByInput
+    serviceRequestsAdminActed?: ServiceRequestCreateNestedManyWithoutAdminActedByInput
+    serviceCouponsCreated?: ServiceCouponCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutAnnouncementsPostedInput = {
@@ -74347,6 +81457,9 @@ export namespace Prisma {
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedCreateNestedManyWithoutInvitedByInput
+    serviceRequestsDojoActed?: ServiceRequestUncheckedCreateNestedManyWithoutDojoActedByInput
+    serviceRequestsAdminActed?: ServiceRequestUncheckedCreateNestedManyWithoutAdminActedByInput
+    serviceCouponsCreated?: ServiceCouponUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutAnnouncementsPostedInput = {
@@ -74387,6 +81500,8 @@ export namespace Prisma {
     transfersIn?: StudentTransferRequestCreateNestedManyWithoutToDojoInput
     historyFrom?: StudentDojoHistoryCreateNestedManyWithoutFromDojoInput
     historyTo?: StudentDojoHistoryCreateNestedManyWithoutToDojoInput
+    serviceRequests?: ServiceRequestCreateNestedManyWithoutDojoInput
+    serviceCoupons?: ServiceCouponCreateNestedManyWithoutDojoInput
   }
 
   export type DojoUncheckedCreateWithoutAnnouncementsInput = {
@@ -74422,6 +81537,8 @@ export namespace Prisma {
     transfersIn?: StudentTransferRequestUncheckedCreateNestedManyWithoutToDojoInput
     historyFrom?: StudentDojoHistoryUncheckedCreateNestedManyWithoutFromDojoInput
     historyTo?: StudentDojoHistoryUncheckedCreateNestedManyWithoutToDojoInput
+    serviceRequests?: ServiceRequestUncheckedCreateNestedManyWithoutDojoInput
+    serviceCoupons?: ServiceCouponUncheckedCreateNestedManyWithoutDojoInput
   }
 
   export type DojoCreateOrConnectWithoutAnnouncementsInput = {
@@ -74472,6 +81589,9 @@ export namespace Prisma {
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUpdateManyWithoutInvitedByNestedInput
+    serviceRequestsDojoActed?: ServiceRequestUpdateManyWithoutDojoActedByNestedInput
+    serviceRequestsAdminActed?: ServiceRequestUpdateManyWithoutAdminActedByNestedInput
+    serviceCouponsCreated?: ServiceCouponUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAnnouncementsPostedInput = {
@@ -74506,6 +81626,9 @@ export namespace Prisma {
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedUpdateManyWithoutInvitedByNestedInput
+    serviceRequestsDojoActed?: ServiceRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
+    serviceRequestsAdminActed?: ServiceRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
+    serviceCouponsCreated?: ServiceCouponUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type DojoUpsertWithoutAnnouncementsInput = {
@@ -74552,6 +81675,8 @@ export namespace Prisma {
     transfersIn?: StudentTransferRequestUpdateManyWithoutToDojoNestedInput
     historyFrom?: StudentDojoHistoryUpdateManyWithoutFromDojoNestedInput
     historyTo?: StudentDojoHistoryUpdateManyWithoutToDojoNestedInput
+    serviceRequests?: ServiceRequestUpdateManyWithoutDojoNestedInput
+    serviceCoupons?: ServiceCouponUpdateManyWithoutDojoNestedInput
   }
 
   export type DojoUncheckedUpdateWithoutAnnouncementsInput = {
@@ -74587,6 +81712,8 @@ export namespace Prisma {
     transfersIn?: StudentTransferRequestUncheckedUpdateManyWithoutToDojoNestedInput
     historyFrom?: StudentDojoHistoryUncheckedUpdateManyWithoutFromDojoNestedInput
     historyTo?: StudentDojoHistoryUncheckedUpdateManyWithoutToDojoNestedInput
+    serviceRequests?: ServiceRequestUncheckedUpdateManyWithoutDojoNestedInput
+    serviceCoupons?: ServiceCouponUncheckedUpdateManyWithoutDojoNestedInput
   }
 
   export type EventCreateWithoutRegistrationsInput = {
@@ -74674,6 +81801,9 @@ export namespace Prisma {
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteCreateNestedManyWithoutInvitedByInput
+    serviceRequestsDojoActed?: ServiceRequestCreateNestedManyWithoutDojoActedByInput
+    serviceRequestsAdminActed?: ServiceRequestCreateNestedManyWithoutAdminActedByInput
+    serviceCouponsCreated?: ServiceCouponCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutEventRegistrationsInput = {
@@ -74708,6 +81838,9 @@ export namespace Prisma {
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedCreateNestedManyWithoutInvitedByInput
+    serviceRequestsDojoActed?: ServiceRequestUncheckedCreateNestedManyWithoutDojoActedByInput
+    serviceRequestsAdminActed?: ServiceRequestUncheckedCreateNestedManyWithoutAdminActedByInput
+    serviceCouponsCreated?: ServiceCouponUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutEventRegistrationsInput = {
@@ -74747,6 +81880,9 @@ export namespace Prisma {
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteCreateNestedManyWithoutInvitedByInput
+    serviceRequestsDojoActed?: ServiceRequestCreateNestedManyWithoutDojoActedByInput
+    serviceRequestsAdminActed?: ServiceRequestCreateNestedManyWithoutAdminActedByInput
+    serviceCouponsCreated?: ServiceCouponCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutEventCheckInsInput = {
@@ -74781,6 +81917,9 @@ export namespace Prisma {
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedCreateNestedManyWithoutInvitedByInput
+    serviceRequestsDojoActed?: ServiceRequestUncheckedCreateNestedManyWithoutDojoActedByInput
+    serviceRequestsAdminActed?: ServiceRequestUncheckedCreateNestedManyWithoutAdminActedByInput
+    serviceCouponsCreated?: ServiceCouponUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutEventCheckInsInput = {
@@ -74936,6 +82075,9 @@ export namespace Prisma {
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUpdateManyWithoutInvitedByNestedInput
+    serviceRequestsDojoActed?: ServiceRequestUpdateManyWithoutDojoActedByNestedInput
+    serviceRequestsAdminActed?: ServiceRequestUpdateManyWithoutAdminActedByNestedInput
+    serviceCouponsCreated?: ServiceCouponUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEventRegistrationsInput = {
@@ -74970,6 +82112,9 @@ export namespace Prisma {
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedUpdateManyWithoutInvitedByNestedInput
+    serviceRequestsDojoActed?: ServiceRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
+    serviceRequestsAdminActed?: ServiceRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
+    serviceCouponsCreated?: ServiceCouponUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUpsertWithoutEventCheckInsInput = {
@@ -75015,6 +82160,9 @@ export namespace Prisma {
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUpdateManyWithoutInvitedByNestedInput
+    serviceRequestsDojoActed?: ServiceRequestUpdateManyWithoutDojoActedByNestedInput
+    serviceRequestsAdminActed?: ServiceRequestUpdateManyWithoutAdminActedByNestedInput
+    serviceCouponsCreated?: ServiceCouponUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEventCheckInsInput = {
@@ -75049,6 +82197,9 @@ export namespace Prisma {
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedUpdateManyWithoutInvitedByNestedInput
+    serviceRequestsDojoActed?: ServiceRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
+    serviceRequestsAdminActed?: ServiceRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
+    serviceCouponsCreated?: ServiceCouponUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type PaymentTransactionUpsertWithWhereUniqueWithoutEventRegistrationInput = {
@@ -75099,6 +82250,9 @@ export namespace Prisma {
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteCreateNestedManyWithoutInvitedByInput
+    serviceRequestsDojoActed?: ServiceRequestCreateNestedManyWithoutDojoActedByInput
+    serviceRequestsAdminActed?: ServiceRequestCreateNestedManyWithoutAdminActedByInput
+    serviceCouponsCreated?: ServiceCouponCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -75133,6 +82287,9 @@ export namespace Prisma {
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedCreateNestedManyWithoutInvitedByInput
+    serviceRequestsDojoActed?: ServiceRequestUncheckedCreateNestedManyWithoutDojoActedByInput
+    serviceRequestsAdminActed?: ServiceRequestUncheckedCreateNestedManyWithoutAdminActedByInput
+    serviceCouponsCreated?: ServiceCouponUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -75183,6 +82340,9 @@ export namespace Prisma {
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUpdateManyWithoutInvitedByNestedInput
+    serviceRequestsDojoActed?: ServiceRequestUpdateManyWithoutDojoActedByNestedInput
+    serviceRequestsAdminActed?: ServiceRequestUpdateManyWithoutAdminActedByNestedInput
+    serviceCouponsCreated?: ServiceCouponUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -75217,6 +82377,9 @@ export namespace Prisma {
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedUpdateManyWithoutInvitedByNestedInput
+    serviceRequestsDojoActed?: ServiceRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
+    serviceRequestsAdminActed?: ServiceRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
+    serviceCouponsCreated?: ServiceCouponUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type ShopOrderItemCreateWithoutProductInput = {
@@ -75407,6 +82570,8 @@ export namespace Prisma {
     transfersIn?: StudentTransferRequestCreateNestedManyWithoutToDojoInput
     historyFrom?: StudentDojoHistoryCreateNestedManyWithoutFromDojoInput
     historyTo?: StudentDojoHistoryCreateNestedManyWithoutToDojoInput
+    serviceRequests?: ServiceRequestCreateNestedManyWithoutDojoInput
+    serviceCoupons?: ServiceCouponCreateNestedManyWithoutDojoInput
   }
 
   export type DojoUncheckedCreateWithoutInventoryItemsInput = {
@@ -75442,6 +82607,8 @@ export namespace Prisma {
     transfersIn?: StudentTransferRequestUncheckedCreateNestedManyWithoutToDojoInput
     historyFrom?: StudentDojoHistoryUncheckedCreateNestedManyWithoutFromDojoInput
     historyTo?: StudentDojoHistoryUncheckedCreateNestedManyWithoutToDojoInput
+    serviceRequests?: ServiceRequestUncheckedCreateNestedManyWithoutDojoInput
+    serviceCoupons?: ServiceCouponUncheckedCreateNestedManyWithoutDojoInput
   }
 
   export type DojoCreateOrConnectWithoutInventoryItemsInput = {
@@ -75534,6 +82701,8 @@ export namespace Prisma {
     transfersIn?: StudentTransferRequestUpdateManyWithoutToDojoNestedInput
     historyFrom?: StudentDojoHistoryUpdateManyWithoutFromDojoNestedInput
     historyTo?: StudentDojoHistoryUpdateManyWithoutToDojoNestedInput
+    serviceRequests?: ServiceRequestUpdateManyWithoutDojoNestedInput
+    serviceCoupons?: ServiceCouponUpdateManyWithoutDojoNestedInput
   }
 
   export type DojoUncheckedUpdateWithoutInventoryItemsInput = {
@@ -75569,6 +82738,8 @@ export namespace Prisma {
     transfersIn?: StudentTransferRequestUncheckedUpdateManyWithoutToDojoNestedInput
     historyFrom?: StudentDojoHistoryUncheckedUpdateManyWithoutFromDojoNestedInput
     historyTo?: StudentDojoHistoryUncheckedUpdateManyWithoutToDojoNestedInput
+    serviceRequests?: ServiceRequestUncheckedUpdateManyWithoutDojoNestedInput
+    serviceCoupons?: ServiceCouponUncheckedUpdateManyWithoutDojoNestedInput
   }
 
   export type ShopProductUpsertWithoutDojoInventoryInput = {
@@ -75651,6 +82822,8 @@ export namespace Prisma {
     transfersIn?: StudentTransferRequestCreateNestedManyWithoutToDojoInput
     historyFrom?: StudentDojoHistoryCreateNestedManyWithoutFromDojoInput
     historyTo?: StudentDojoHistoryCreateNestedManyWithoutToDojoInput
+    serviceRequests?: ServiceRequestCreateNestedManyWithoutDojoInput
+    serviceCoupons?: ServiceCouponCreateNestedManyWithoutDojoInput
   }
 
   export type DojoUncheckedCreateWithoutSalesInput = {
@@ -75686,6 +82859,8 @@ export namespace Prisma {
     transfersIn?: StudentTransferRequestUncheckedCreateNestedManyWithoutToDojoInput
     historyFrom?: StudentDojoHistoryUncheckedCreateNestedManyWithoutFromDojoInput
     historyTo?: StudentDojoHistoryUncheckedCreateNestedManyWithoutToDojoInput
+    serviceRequests?: ServiceRequestUncheckedCreateNestedManyWithoutDojoInput
+    serviceCoupons?: ServiceCouponUncheckedCreateNestedManyWithoutDojoInput
   }
 
   export type DojoCreateOrConnectWithoutSalesInput = {
@@ -75725,6 +82900,9 @@ export namespace Prisma {
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteCreateNestedManyWithoutInvitedByInput
+    serviceRequestsDojoActed?: ServiceRequestCreateNestedManyWithoutDojoActedByInput
+    serviceRequestsAdminActed?: ServiceRequestCreateNestedManyWithoutAdminActedByInput
+    serviceCouponsCreated?: ServiceCouponCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutDojoSalesAsBuyerInput = {
@@ -75759,6 +82937,9 @@ export namespace Prisma {
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedCreateNestedManyWithoutInvitedByInput
+    serviceRequestsDojoActed?: ServiceRequestUncheckedCreateNestedManyWithoutDojoActedByInput
+    serviceRequestsAdminActed?: ServiceRequestUncheckedCreateNestedManyWithoutAdminActedByInput
+    serviceCouponsCreated?: ServiceCouponUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutDojoSalesAsBuyerInput = {
@@ -75798,6 +82979,9 @@ export namespace Prisma {
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteCreateNestedManyWithoutInvitedByInput
+    serviceRequestsDojoActed?: ServiceRequestCreateNestedManyWithoutDojoActedByInput
+    serviceRequestsAdminActed?: ServiceRequestCreateNestedManyWithoutAdminActedByInput
+    serviceCouponsCreated?: ServiceCouponCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutDojoSalesSoldInput = {
@@ -75832,6 +83016,9 @@ export namespace Prisma {
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedCreateNestedManyWithoutInvitedByInput
+    serviceRequestsDojoActed?: ServiceRequestUncheckedCreateNestedManyWithoutDojoActedByInput
+    serviceRequestsAdminActed?: ServiceRequestUncheckedCreateNestedManyWithoutAdminActedByInput
+    serviceCouponsCreated?: ServiceCouponUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutDojoSalesSoldInput = {
@@ -75911,6 +83098,8 @@ export namespace Prisma {
     transfersIn?: StudentTransferRequestUpdateManyWithoutToDojoNestedInput
     historyFrom?: StudentDojoHistoryUpdateManyWithoutFromDojoNestedInput
     historyTo?: StudentDojoHistoryUpdateManyWithoutToDojoNestedInput
+    serviceRequests?: ServiceRequestUpdateManyWithoutDojoNestedInput
+    serviceCoupons?: ServiceCouponUpdateManyWithoutDojoNestedInput
   }
 
   export type DojoUncheckedUpdateWithoutSalesInput = {
@@ -75946,6 +83135,8 @@ export namespace Prisma {
     transfersIn?: StudentTransferRequestUncheckedUpdateManyWithoutToDojoNestedInput
     historyFrom?: StudentDojoHistoryUncheckedUpdateManyWithoutFromDojoNestedInput
     historyTo?: StudentDojoHistoryUncheckedUpdateManyWithoutToDojoNestedInput
+    serviceRequests?: ServiceRequestUncheckedUpdateManyWithoutDojoNestedInput
+    serviceCoupons?: ServiceCouponUncheckedUpdateManyWithoutDojoNestedInput
   }
 
   export type UserUpsertWithoutDojoSalesAsBuyerInput = {
@@ -75991,6 +83182,9 @@ export namespace Prisma {
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUpdateManyWithoutInvitedByNestedInput
+    serviceRequestsDojoActed?: ServiceRequestUpdateManyWithoutDojoActedByNestedInput
+    serviceRequestsAdminActed?: ServiceRequestUpdateManyWithoutAdminActedByNestedInput
+    serviceCouponsCreated?: ServiceCouponUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDojoSalesAsBuyerInput = {
@@ -76025,6 +83219,9 @@ export namespace Prisma {
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedUpdateManyWithoutInvitedByNestedInput
+    serviceRequestsDojoActed?: ServiceRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
+    serviceRequestsAdminActed?: ServiceRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
+    serviceCouponsCreated?: ServiceCouponUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUpsertWithoutDojoSalesSoldInput = {
@@ -76070,6 +83267,9 @@ export namespace Prisma {
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUpdateManyWithoutInvitedByNestedInput
+    serviceRequestsDojoActed?: ServiceRequestUpdateManyWithoutDojoActedByNestedInput
+    serviceRequestsAdminActed?: ServiceRequestUpdateManyWithoutAdminActedByNestedInput
+    serviceCouponsCreated?: ServiceCouponUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDojoSalesSoldInput = {
@@ -76104,6 +83304,9 @@ export namespace Prisma {
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedUpdateManyWithoutInvitedByNestedInput
+    serviceRequestsDojoActed?: ServiceRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
+    serviceRequestsAdminActed?: ServiceRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
+    serviceCouponsCreated?: ServiceCouponUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type DojoSaleItemUpsertWithWhereUniqueWithoutSaleInput = {
@@ -76322,6 +83525,9 @@ export namespace Prisma {
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteCreateNestedManyWithoutInvitedByInput
+    serviceRequestsDojoActed?: ServiceRequestCreateNestedManyWithoutDojoActedByInput
+    serviceRequestsAdminActed?: ServiceRequestCreateNestedManyWithoutAdminActedByInput
+    serviceCouponsCreated?: ServiceCouponCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutOrdersInput = {
@@ -76356,6 +83562,9 @@ export namespace Prisma {
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedCreateNestedManyWithoutInvitedByInput
+    serviceRequestsDojoActed?: ServiceRequestUncheckedCreateNestedManyWithoutDojoActedByInput
+    serviceRequestsAdminActed?: ServiceRequestUncheckedCreateNestedManyWithoutAdminActedByInput
+    serviceCouponsCreated?: ServiceCouponUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutOrdersInput = {
@@ -76396,6 +83605,8 @@ export namespace Prisma {
     transfersIn?: StudentTransferRequestCreateNestedManyWithoutToDojoInput
     historyFrom?: StudentDojoHistoryCreateNestedManyWithoutFromDojoInput
     historyTo?: StudentDojoHistoryCreateNestedManyWithoutToDojoInput
+    serviceRequests?: ServiceRequestCreateNestedManyWithoutDojoInput
+    serviceCoupons?: ServiceCouponCreateNestedManyWithoutDojoInput
   }
 
   export type DojoUncheckedCreateWithoutRenewalOrdersInput = {
@@ -76431,6 +83642,8 @@ export namespace Prisma {
     transfersIn?: StudentTransferRequestUncheckedCreateNestedManyWithoutToDojoInput
     historyFrom?: StudentDojoHistoryUncheckedCreateNestedManyWithoutFromDojoInput
     historyTo?: StudentDojoHistoryUncheckedCreateNestedManyWithoutToDojoInput
+    serviceRequests?: ServiceRequestUncheckedCreateNestedManyWithoutDojoInput
+    serviceCoupons?: ServiceCouponUncheckedCreateNestedManyWithoutDojoInput
   }
 
   export type DojoCreateOrConnectWithoutRenewalOrdersInput = {
@@ -76471,6 +83684,8 @@ export namespace Prisma {
     transfersIn?: StudentTransferRequestCreateNestedManyWithoutToDojoInput
     historyFrom?: StudentDojoHistoryCreateNestedManyWithoutFromDojoInput
     historyTo?: StudentDojoHistoryCreateNestedManyWithoutToDojoInput
+    serviceRequests?: ServiceRequestCreateNestedManyWithoutDojoInput
+    serviceCoupons?: ServiceCouponCreateNestedManyWithoutDojoInput
   }
 
   export type DojoUncheckedCreateWithoutCertificateOrdersInput = {
@@ -76506,6 +83721,8 @@ export namespace Prisma {
     transfersIn?: StudentTransferRequestUncheckedCreateNestedManyWithoutToDojoInput
     historyFrom?: StudentDojoHistoryUncheckedCreateNestedManyWithoutFromDojoInput
     historyTo?: StudentDojoHistoryUncheckedCreateNestedManyWithoutToDojoInput
+    serviceRequests?: ServiceRequestUncheckedCreateNestedManyWithoutDojoInput
+    serviceCoupons?: ServiceCouponUncheckedCreateNestedManyWithoutDojoInput
   }
 
   export type DojoCreateOrConnectWithoutCertificateOrdersInput = {
@@ -76591,6 +83808,9 @@ export namespace Prisma {
     dojoNote?: string | null
     adminNote?: string | null
     fee: Decimal | DecimalJsLike | number | string
+    discountAmount?: Decimal | DecimalJsLike | number | string
+    finalAmount?: Decimal | DecimalJsLike | number | string | null
+    couponCode?: string | null
     paidAt?: Date | string | null
     dojoActedAt?: Date | string | null
     adminActedAt?: Date | string | null
@@ -76615,6 +83835,9 @@ export namespace Prisma {
     dojoNote?: string | null
     adminNote?: string | null
     fee: Decimal | DecimalJsLike | number | string
+    discountAmount?: Decimal | DecimalJsLike | number | string
+    finalAmount?: Decimal | DecimalJsLike | number | string | null
+    couponCode?: string | null
     paidAt?: Date | string | null
     dojoActedAt?: Date | string | null
     dojoActedById?: string | null
@@ -76628,6 +83851,61 @@ export namespace Prisma {
   export type StudentTransferRequestCreateOrConnectWithoutOrderInput = {
     where: StudentTransferRequestWhereUniqueInput
     create: XOR<StudentTransferRequestCreateWithoutOrderInput, StudentTransferRequestUncheckedCreateWithoutOrderInput>
+  }
+
+  export type ServiceRequestCreateWithoutOrderInput = {
+    id?: string
+    status?: $Enums.ServiceRequestStatus
+    dojoDecision?: $Enums.ServiceRequestDojoDecision
+    payload?: JsonNullValueInput | InputJsonValue
+    reason?: string | null
+    dojoNote?: string | null
+    adminNote?: string | null
+    fee: Decimal | DecimalJsLike | number | string
+    discountAmount?: Decimal | DecimalJsLike | number | string
+    finalAmount: Decimal | DecimalJsLike | number | string
+    couponCode?: string | null
+    paidAt?: Date | string | null
+    dojoActedAt?: Date | string | null
+    adminActedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    student: StudentCreateNestedOneWithoutServiceRequestsInput
+    service: ServiceCreateNestedOneWithoutRequestsInput
+    dojo: DojoCreateNestedOneWithoutServiceRequestsInput
+    coupon?: ServiceCouponCreateNestedOneWithoutRequestsInput
+    dojoActedBy?: UserCreateNestedOneWithoutServiceRequestsDojoActedInput
+    adminActedBy?: UserCreateNestedOneWithoutServiceRequestsAdminActedInput
+  }
+
+  export type ServiceRequestUncheckedCreateWithoutOrderInput = {
+    id?: string
+    studentId: string
+    serviceId: string
+    dojoId: string
+    status?: $Enums.ServiceRequestStatus
+    dojoDecision?: $Enums.ServiceRequestDojoDecision
+    payload?: JsonNullValueInput | InputJsonValue
+    reason?: string | null
+    dojoNote?: string | null
+    adminNote?: string | null
+    fee: Decimal | DecimalJsLike | number | string
+    discountAmount?: Decimal | DecimalJsLike | number | string
+    finalAmount: Decimal | DecimalJsLike | number | string
+    couponId?: string | null
+    couponCode?: string | null
+    paidAt?: Date | string | null
+    dojoActedAt?: Date | string | null
+    dojoActedById?: string | null
+    adminActedAt?: Date | string | null
+    adminActedById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ServiceRequestCreateOrConnectWithoutOrderInput = {
+    where: ServiceRequestWhereUniqueInput
+    create: XOR<ServiceRequestCreateWithoutOrderInput, ServiceRequestUncheckedCreateWithoutOrderInput>
   }
 
   export type PaymentTransactionCreateWithoutOrderInput = {
@@ -76719,6 +83997,9 @@ export namespace Prisma {
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUpdateManyWithoutInvitedByNestedInput
+    serviceRequestsDojoActed?: ServiceRequestUpdateManyWithoutDojoActedByNestedInput
+    serviceRequestsAdminActed?: ServiceRequestUpdateManyWithoutAdminActedByNestedInput
+    serviceCouponsCreated?: ServiceCouponUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOrdersInput = {
@@ -76753,6 +84034,9 @@ export namespace Prisma {
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedUpdateManyWithoutInvitedByNestedInput
+    serviceRequestsDojoActed?: ServiceRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
+    serviceRequestsAdminActed?: ServiceRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
+    serviceCouponsCreated?: ServiceCouponUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type DojoUpsertWithoutRenewalOrdersInput = {
@@ -76799,6 +84083,8 @@ export namespace Prisma {
     transfersIn?: StudentTransferRequestUpdateManyWithoutToDojoNestedInput
     historyFrom?: StudentDojoHistoryUpdateManyWithoutFromDojoNestedInput
     historyTo?: StudentDojoHistoryUpdateManyWithoutToDojoNestedInput
+    serviceRequests?: ServiceRequestUpdateManyWithoutDojoNestedInput
+    serviceCoupons?: ServiceCouponUpdateManyWithoutDojoNestedInput
   }
 
   export type DojoUncheckedUpdateWithoutRenewalOrdersInput = {
@@ -76834,6 +84120,8 @@ export namespace Prisma {
     transfersIn?: StudentTransferRequestUncheckedUpdateManyWithoutToDojoNestedInput
     historyFrom?: StudentDojoHistoryUncheckedUpdateManyWithoutFromDojoNestedInput
     historyTo?: StudentDojoHistoryUncheckedUpdateManyWithoutToDojoNestedInput
+    serviceRequests?: ServiceRequestUncheckedUpdateManyWithoutDojoNestedInput
+    serviceCoupons?: ServiceCouponUncheckedUpdateManyWithoutDojoNestedInput
   }
 
   export type DojoUpsertWithoutCertificateOrdersInput = {
@@ -76880,6 +84168,8 @@ export namespace Prisma {
     transfersIn?: StudentTransferRequestUpdateManyWithoutToDojoNestedInput
     historyFrom?: StudentDojoHistoryUpdateManyWithoutFromDojoNestedInput
     historyTo?: StudentDojoHistoryUpdateManyWithoutToDojoNestedInput
+    serviceRequests?: ServiceRequestUpdateManyWithoutDojoNestedInput
+    serviceCoupons?: ServiceCouponUpdateManyWithoutDojoNestedInput
   }
 
   export type DojoUncheckedUpdateWithoutCertificateOrdersInput = {
@@ -76915,6 +84205,8 @@ export namespace Prisma {
     transfersIn?: StudentTransferRequestUncheckedUpdateManyWithoutToDojoNestedInput
     historyFrom?: StudentDojoHistoryUncheckedUpdateManyWithoutFromDojoNestedInput
     historyTo?: StudentDojoHistoryUncheckedUpdateManyWithoutToDojoNestedInput
+    serviceRequests?: ServiceRequestUncheckedUpdateManyWithoutDojoNestedInput
+    serviceCoupons?: ServiceCouponUncheckedUpdateManyWithoutDojoNestedInput
   }
 
   export type ShopOrderItemUpsertWithWhereUniqueWithoutOrderInput = {
@@ -76968,6 +84260,9 @@ export namespace Prisma {
     dojoNote?: NullableStringFieldUpdateOperationsInput | string | null
     adminNote?: NullableStringFieldUpdateOperationsInput | string | null
     fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discountAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    finalAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    couponCode?: NullableStringFieldUpdateOperationsInput | string | null
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     adminActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -76992,6 +84287,9 @@ export namespace Prisma {
     dojoNote?: NullableStringFieldUpdateOperationsInput | string | null
     adminNote?: NullableStringFieldUpdateOperationsInput | string | null
     fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discountAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    finalAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    couponCode?: NullableStringFieldUpdateOperationsInput | string | null
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dojoActedById?: NullableStringFieldUpdateOperationsInput | string | null
@@ -77000,6 +84298,67 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     history?: StudentDojoHistoryUncheckedUpdateManyWithoutTransferRequestNestedInput
+  }
+
+  export type ServiceRequestUpsertWithoutOrderInput = {
+    update: XOR<ServiceRequestUpdateWithoutOrderInput, ServiceRequestUncheckedUpdateWithoutOrderInput>
+    create: XOR<ServiceRequestCreateWithoutOrderInput, ServiceRequestUncheckedCreateWithoutOrderInput>
+    where?: ServiceRequestWhereInput
+  }
+
+  export type ServiceRequestUpdateToOneWithWhereWithoutOrderInput = {
+    where?: ServiceRequestWhereInput
+    data: XOR<ServiceRequestUpdateWithoutOrderInput, ServiceRequestUncheckedUpdateWithoutOrderInput>
+  }
+
+  export type ServiceRequestUpdateWithoutOrderInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumServiceRequestStatusFieldUpdateOperationsInput | $Enums.ServiceRequestStatus
+    dojoDecision?: EnumServiceRequestDojoDecisionFieldUpdateOperationsInput | $Enums.ServiceRequestDojoDecision
+    payload?: JsonNullValueInput | InputJsonValue
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    dojoNote?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNote?: NullableStringFieldUpdateOperationsInput | string | null
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discountAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    finalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    couponCode?: NullableStringFieldUpdateOperationsInput | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    adminActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    student?: StudentUpdateOneRequiredWithoutServiceRequestsNestedInput
+    service?: ServiceUpdateOneRequiredWithoutRequestsNestedInput
+    dojo?: DojoUpdateOneRequiredWithoutServiceRequestsNestedInput
+    coupon?: ServiceCouponUpdateOneWithoutRequestsNestedInput
+    dojoActedBy?: UserUpdateOneWithoutServiceRequestsDojoActedNestedInput
+    adminActedBy?: UserUpdateOneWithoutServiceRequestsAdminActedNestedInput
+  }
+
+  export type ServiceRequestUncheckedUpdateWithoutOrderInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    serviceId?: StringFieldUpdateOperationsInput | string
+    dojoId?: StringFieldUpdateOperationsInput | string
+    status?: EnumServiceRequestStatusFieldUpdateOperationsInput | $Enums.ServiceRequestStatus
+    dojoDecision?: EnumServiceRequestDojoDecisionFieldUpdateOperationsInput | $Enums.ServiceRequestDojoDecision
+    payload?: JsonNullValueInput | InputJsonValue
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    dojoNote?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNote?: NullableStringFieldUpdateOperationsInput | string | null
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discountAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    finalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    couponId?: NullableStringFieldUpdateOperationsInput | string | null
+    couponCode?: NullableStringFieldUpdateOperationsInput | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dojoActedById?: NullableStringFieldUpdateOperationsInput | string | null
+    adminActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    adminActedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type PaymentTransactionUpsertWithWhereUniqueWithoutOrderInput = {
@@ -77038,6 +84397,7 @@ export namespace Prisma {
     includesCertificates?: boolean
     includesTransferRequest?: boolean
     includesPastBeltFee?: boolean
+    includesServiceRequest?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     user?: UserCreateNestedOneWithoutOrdersInput
@@ -77045,6 +84405,7 @@ export namespace Prisma {
     certDojo?: DojoCreateNestedOneWithoutCertificateOrdersInput
     certificateRequests?: CertificateRequestCreateNestedManyWithoutOrderInput
     transferRequest?: StudentTransferRequestCreateNestedOneWithoutOrderInput
+    serviceRequest?: ServiceRequestCreateNestedOneWithoutOrderInput
     transactions?: PaymentTransactionCreateNestedManyWithoutOrderInput
   }
 
@@ -77071,10 +84432,12 @@ export namespace Prisma {
     certDojoId?: string | null
     includesTransferRequest?: boolean
     includesPastBeltFee?: boolean
+    includesServiceRequest?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutOrderInput
     transferRequest?: StudentTransferRequestUncheckedCreateNestedOneWithoutOrderInput
+    serviceRequest?: ServiceRequestUncheckedCreateNestedOneWithoutOrderInput
     transactions?: PaymentTransactionUncheckedCreateNestedManyWithoutOrderInput
   }
 
@@ -77155,6 +84518,7 @@ export namespace Prisma {
     includesCertificates?: BoolFieldUpdateOperationsInput | boolean
     includesTransferRequest?: BoolFieldUpdateOperationsInput | boolean
     includesPastBeltFee?: BoolFieldUpdateOperationsInput | boolean
+    includesServiceRequest?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneWithoutOrdersNestedInput
@@ -77162,6 +84526,7 @@ export namespace Prisma {
     certDojo?: DojoUpdateOneWithoutCertificateOrdersNestedInput
     certificateRequests?: CertificateRequestUpdateManyWithoutOrderNestedInput
     transferRequest?: StudentTransferRequestUpdateOneWithoutOrderNestedInput
+    serviceRequest?: ServiceRequestUpdateOneWithoutOrderNestedInput
     transactions?: PaymentTransactionUpdateManyWithoutOrderNestedInput
   }
 
@@ -77188,10 +84553,12 @@ export namespace Prisma {
     certDojoId?: NullableStringFieldUpdateOperationsInput | string | null
     includesTransferRequest?: BoolFieldUpdateOperationsInput | boolean
     includesPastBeltFee?: BoolFieldUpdateOperationsInput | boolean
+    includesServiceRequest?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutOrderNestedInput
     transferRequest?: StudentTransferRequestUncheckedUpdateOneWithoutOrderNestedInput
+    serviceRequest?: ServiceRequestUncheckedUpdateOneWithoutOrderNestedInput
     transactions?: PaymentTransactionUncheckedUpdateManyWithoutOrderNestedInput
   }
 
@@ -77414,6 +84781,9 @@ export namespace Prisma {
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteCreateNestedManyWithoutInvitedByInput
+    serviceRequestsDojoActed?: ServiceRequestCreateNestedManyWithoutDojoActedByInput
+    serviceRequestsAdminActed?: ServiceRequestCreateNestedManyWithoutAdminActedByInput
+    serviceCouponsCreated?: ServiceCouponCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutTournamentEntriesInput = {
@@ -77448,6 +84818,9 @@ export namespace Prisma {
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedCreateNestedManyWithoutInvitedByInput
+    serviceRequestsDojoActed?: ServiceRequestUncheckedCreateNestedManyWithoutDojoActedByInput
+    serviceRequestsAdminActed?: ServiceRequestUncheckedCreateNestedManyWithoutAdminActedByInput
+    serviceCouponsCreated?: ServiceCouponUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutTournamentEntriesInput = {
@@ -77629,6 +85002,9 @@ export namespace Prisma {
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUpdateManyWithoutInvitedByNestedInput
+    serviceRequestsDojoActed?: ServiceRequestUpdateManyWithoutDojoActedByNestedInput
+    serviceRequestsAdminActed?: ServiceRequestUpdateManyWithoutAdminActedByNestedInput
+    serviceCouponsCreated?: ServiceCouponUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTournamentEntriesInput = {
@@ -77663,6 +85039,9 @@ export namespace Prisma {
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedUpdateManyWithoutInvitedByNestedInput
+    serviceRequestsDojoActed?: ServiceRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
+    serviceRequestsAdminActed?: ServiceRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
+    serviceCouponsCreated?: ServiceCouponUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type TournamentMatchUpsertWithWhereUniqueWithoutParticipant1Input = {
@@ -78021,6 +85400,7 @@ export namespace Prisma {
     gradingApplications?: GradingApplicationCreateNestedManyWithoutStudentInput
     certificateRequests?: CertificateRequestCreateNestedManyWithoutStudentInput
     transferRequests?: StudentTransferRequestCreateNestedManyWithoutStudentInput
+    serviceRequests?: ServiceRequestCreateNestedManyWithoutStudentInput
     dojoHistory?: StudentDojoHistoryCreateNestedManyWithoutStudentInput
   }
 
@@ -78044,6 +85424,7 @@ export namespace Prisma {
     gradingApplications?: GradingApplicationUncheckedCreateNestedManyWithoutStudentInput
     certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutStudentInput
     transferRequests?: StudentTransferRequestUncheckedCreateNestedManyWithoutStudentInput
+    serviceRequests?: ServiceRequestUncheckedCreateNestedManyWithoutStudentInput
     dojoHistory?: StudentDojoHistoryUncheckedCreateNestedManyWithoutStudentInput
   }
 
@@ -78123,6 +85504,9 @@ export namespace Prisma {
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteCreateNestedManyWithoutInvitedByInput
+    serviceRequestsDojoActed?: ServiceRequestCreateNestedManyWithoutDojoActedByInput
+    serviceRequestsAdminActed?: ServiceRequestCreateNestedManyWithoutAdminActedByInput
+    serviceCouponsCreated?: ServiceCouponCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutAchievementsAwardedInput = {
@@ -78157,6 +85541,9 @@ export namespace Prisma {
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedCreateNestedManyWithoutInvitedByInput
+    serviceRequestsDojoActed?: ServiceRequestUncheckedCreateNestedManyWithoutDojoActedByInput
+    serviceRequestsAdminActed?: ServiceRequestUncheckedCreateNestedManyWithoutAdminActedByInput
+    serviceCouponsCreated?: ServiceCouponUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutAchievementsAwardedInput = {
@@ -78195,6 +85582,7 @@ export namespace Prisma {
     gradingApplications?: GradingApplicationUpdateManyWithoutStudentNestedInput
     certificateRequests?: CertificateRequestUpdateManyWithoutStudentNestedInput
     transferRequests?: StudentTransferRequestUpdateManyWithoutStudentNestedInput
+    serviceRequests?: ServiceRequestUpdateManyWithoutStudentNestedInput
     dojoHistory?: StudentDojoHistoryUpdateManyWithoutStudentNestedInput
   }
 
@@ -78218,6 +85606,7 @@ export namespace Prisma {
     gradingApplications?: GradingApplicationUncheckedUpdateManyWithoutStudentNestedInput
     certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutStudentNestedInput
     transferRequests?: StudentTransferRequestUncheckedUpdateManyWithoutStudentNestedInput
+    serviceRequests?: ServiceRequestUncheckedUpdateManyWithoutStudentNestedInput
     dojoHistory?: StudentDojoHistoryUncheckedUpdateManyWithoutStudentNestedInput
   }
 
@@ -78309,6 +85698,9 @@ export namespace Prisma {
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUpdateManyWithoutInvitedByNestedInput
+    serviceRequestsDojoActed?: ServiceRequestUpdateManyWithoutDojoActedByNestedInput
+    serviceRequestsAdminActed?: ServiceRequestUpdateManyWithoutAdminActedByNestedInput
+    serviceCouponsCreated?: ServiceCouponUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAchievementsAwardedInput = {
@@ -78343,6 +85735,9 @@ export namespace Prisma {
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedUpdateManyWithoutInvitedByNestedInput
+    serviceRequestsDojoActed?: ServiceRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
+    serviceRequestsAdminActed?: ServiceRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
+    serviceCouponsCreated?: ServiceCouponUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type StudentCreateWithoutTransferRequestsInput = {
@@ -78365,6 +85760,7 @@ export namespace Prisma {
     gradingApplications?: GradingApplicationCreateNestedManyWithoutStudentInput
     certificateRequests?: CertificateRequestCreateNestedManyWithoutStudentInput
     achievements?: StudentAchievementCreateNestedManyWithoutStudentInput
+    serviceRequests?: ServiceRequestCreateNestedManyWithoutStudentInput
     dojoHistory?: StudentDojoHistoryCreateNestedManyWithoutStudentInput
   }
 
@@ -78388,6 +85784,7 @@ export namespace Prisma {
     gradingApplications?: GradingApplicationUncheckedCreateNestedManyWithoutStudentInput
     certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutStudentInput
     achievements?: StudentAchievementUncheckedCreateNestedManyWithoutStudentInput
+    serviceRequests?: ServiceRequestUncheckedCreateNestedManyWithoutStudentInput
     dojoHistory?: StudentDojoHistoryUncheckedCreateNestedManyWithoutStudentInput
   }
 
@@ -78429,6 +85826,8 @@ export namespace Prisma {
     transfersIn?: StudentTransferRequestCreateNestedManyWithoutToDojoInput
     historyFrom?: StudentDojoHistoryCreateNestedManyWithoutFromDojoInput
     historyTo?: StudentDojoHistoryCreateNestedManyWithoutToDojoInput
+    serviceRequests?: ServiceRequestCreateNestedManyWithoutDojoInput
+    serviceCoupons?: ServiceCouponCreateNestedManyWithoutDojoInput
   }
 
   export type DojoUncheckedCreateWithoutTransfersOutInput = {
@@ -78464,6 +85863,8 @@ export namespace Prisma {
     transfersIn?: StudentTransferRequestUncheckedCreateNestedManyWithoutToDojoInput
     historyFrom?: StudentDojoHistoryUncheckedCreateNestedManyWithoutFromDojoInput
     historyTo?: StudentDojoHistoryUncheckedCreateNestedManyWithoutToDojoInput
+    serviceRequests?: ServiceRequestUncheckedCreateNestedManyWithoutDojoInput
+    serviceCoupons?: ServiceCouponUncheckedCreateNestedManyWithoutDojoInput
   }
 
   export type DojoCreateOrConnectWithoutTransfersOutInput = {
@@ -78504,6 +85905,8 @@ export namespace Prisma {
     transfersOut?: StudentTransferRequestCreateNestedManyWithoutFromDojoInput
     historyFrom?: StudentDojoHistoryCreateNestedManyWithoutFromDojoInput
     historyTo?: StudentDojoHistoryCreateNestedManyWithoutToDojoInput
+    serviceRequests?: ServiceRequestCreateNestedManyWithoutDojoInput
+    serviceCoupons?: ServiceCouponCreateNestedManyWithoutDojoInput
   }
 
   export type DojoUncheckedCreateWithoutTransfersInInput = {
@@ -78539,6 +85942,8 @@ export namespace Prisma {
     transfersOut?: StudentTransferRequestUncheckedCreateNestedManyWithoutFromDojoInput
     historyFrom?: StudentDojoHistoryUncheckedCreateNestedManyWithoutFromDojoInput
     historyTo?: StudentDojoHistoryUncheckedCreateNestedManyWithoutToDojoInput
+    serviceRequests?: ServiceRequestUncheckedCreateNestedManyWithoutDojoInput
+    serviceCoupons?: ServiceCouponUncheckedCreateNestedManyWithoutDojoInput
   }
 
   export type DojoCreateOrConnectWithoutTransfersInInput = {
@@ -78566,6 +85971,7 @@ export namespace Prisma {
     includesCertificates?: boolean
     includesTransferRequest?: boolean
     includesPastBeltFee?: boolean
+    includesServiceRequest?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     user?: UserCreateNestedOneWithoutOrdersInput
@@ -78573,6 +85979,7 @@ export namespace Prisma {
     certDojo?: DojoCreateNestedOneWithoutCertificateOrdersInput
     orderItems?: ShopOrderItemCreateNestedManyWithoutOrderInput
     certificateRequests?: CertificateRequestCreateNestedManyWithoutOrderInput
+    serviceRequest?: ServiceRequestCreateNestedOneWithoutOrderInput
     transactions?: PaymentTransactionCreateNestedManyWithoutOrderInput
   }
 
@@ -78599,10 +86006,12 @@ export namespace Prisma {
     certDojoId?: string | null
     includesTransferRequest?: boolean
     includesPastBeltFee?: boolean
+    includesServiceRequest?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     orderItems?: ShopOrderItemUncheckedCreateNestedManyWithoutOrderInput
     certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutOrderInput
+    serviceRequest?: ServiceRequestUncheckedCreateNestedOneWithoutOrderInput
     transactions?: PaymentTransactionUncheckedCreateNestedManyWithoutOrderInput
   }
 
@@ -78643,6 +86052,9 @@ export namespace Prisma {
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteCreateNestedManyWithoutInvitedByInput
+    serviceRequestsDojoActed?: ServiceRequestCreateNestedManyWithoutDojoActedByInput
+    serviceRequestsAdminActed?: ServiceRequestCreateNestedManyWithoutAdminActedByInput
+    serviceCouponsCreated?: ServiceCouponCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutTransfersDojoActedInput = {
@@ -78677,6 +86089,9 @@ export namespace Prisma {
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedCreateNestedManyWithoutInvitedByInput
+    serviceRequestsDojoActed?: ServiceRequestUncheckedCreateNestedManyWithoutDojoActedByInput
+    serviceRequestsAdminActed?: ServiceRequestUncheckedCreateNestedManyWithoutAdminActedByInput
+    serviceCouponsCreated?: ServiceCouponUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutTransfersDojoActedInput = {
@@ -78716,6 +86131,9 @@ export namespace Prisma {
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteCreateNestedManyWithoutInvitedByInput
+    serviceRequestsDojoActed?: ServiceRequestCreateNestedManyWithoutDojoActedByInput
+    serviceRequestsAdminActed?: ServiceRequestCreateNestedManyWithoutAdminActedByInput
+    serviceCouponsCreated?: ServiceCouponCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutTransfersAdminActedInput = {
@@ -78750,6 +86168,9 @@ export namespace Prisma {
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedCreateNestedManyWithoutInvitedByInput
+    serviceRequestsDojoActed?: ServiceRequestUncheckedCreateNestedManyWithoutDojoActedByInput
+    serviceRequestsAdminActed?: ServiceRequestUncheckedCreateNestedManyWithoutAdminActedByInput
+    serviceCouponsCreated?: ServiceCouponUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutTransfersAdminActedInput = {
@@ -78818,6 +86239,7 @@ export namespace Prisma {
     gradingApplications?: GradingApplicationUpdateManyWithoutStudentNestedInput
     certificateRequests?: CertificateRequestUpdateManyWithoutStudentNestedInput
     achievements?: StudentAchievementUpdateManyWithoutStudentNestedInput
+    serviceRequests?: ServiceRequestUpdateManyWithoutStudentNestedInput
     dojoHistory?: StudentDojoHistoryUpdateManyWithoutStudentNestedInput
   }
 
@@ -78841,6 +86263,7 @@ export namespace Prisma {
     gradingApplications?: GradingApplicationUncheckedUpdateManyWithoutStudentNestedInput
     certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutStudentNestedInput
     achievements?: StudentAchievementUncheckedUpdateManyWithoutStudentNestedInput
+    serviceRequests?: ServiceRequestUncheckedUpdateManyWithoutStudentNestedInput
     dojoHistory?: StudentDojoHistoryUncheckedUpdateManyWithoutStudentNestedInput
   }
 
@@ -78888,6 +86311,8 @@ export namespace Prisma {
     transfersIn?: StudentTransferRequestUpdateManyWithoutToDojoNestedInput
     historyFrom?: StudentDojoHistoryUpdateManyWithoutFromDojoNestedInput
     historyTo?: StudentDojoHistoryUpdateManyWithoutToDojoNestedInput
+    serviceRequests?: ServiceRequestUpdateManyWithoutDojoNestedInput
+    serviceCoupons?: ServiceCouponUpdateManyWithoutDojoNestedInput
   }
 
   export type DojoUncheckedUpdateWithoutTransfersOutInput = {
@@ -78923,6 +86348,8 @@ export namespace Prisma {
     transfersIn?: StudentTransferRequestUncheckedUpdateManyWithoutToDojoNestedInput
     historyFrom?: StudentDojoHistoryUncheckedUpdateManyWithoutFromDojoNestedInput
     historyTo?: StudentDojoHistoryUncheckedUpdateManyWithoutToDojoNestedInput
+    serviceRequests?: ServiceRequestUncheckedUpdateManyWithoutDojoNestedInput
+    serviceCoupons?: ServiceCouponUncheckedUpdateManyWithoutDojoNestedInput
   }
 
   export type DojoUpsertWithoutTransfersInInput = {
@@ -78969,6 +86396,8 @@ export namespace Prisma {
     transfersOut?: StudentTransferRequestUpdateManyWithoutFromDojoNestedInput
     historyFrom?: StudentDojoHistoryUpdateManyWithoutFromDojoNestedInput
     historyTo?: StudentDojoHistoryUpdateManyWithoutToDojoNestedInput
+    serviceRequests?: ServiceRequestUpdateManyWithoutDojoNestedInput
+    serviceCoupons?: ServiceCouponUpdateManyWithoutDojoNestedInput
   }
 
   export type DojoUncheckedUpdateWithoutTransfersInInput = {
@@ -79004,6 +86433,8 @@ export namespace Prisma {
     transfersOut?: StudentTransferRequestUncheckedUpdateManyWithoutFromDojoNestedInput
     historyFrom?: StudentDojoHistoryUncheckedUpdateManyWithoutFromDojoNestedInput
     historyTo?: StudentDojoHistoryUncheckedUpdateManyWithoutToDojoNestedInput
+    serviceRequests?: ServiceRequestUncheckedUpdateManyWithoutDojoNestedInput
+    serviceCoupons?: ServiceCouponUncheckedUpdateManyWithoutDojoNestedInput
   }
 
   export type ShopOrderUpsertWithoutTransferRequestInput = {
@@ -79037,6 +86468,7 @@ export namespace Prisma {
     includesCertificates?: BoolFieldUpdateOperationsInput | boolean
     includesTransferRequest?: BoolFieldUpdateOperationsInput | boolean
     includesPastBeltFee?: BoolFieldUpdateOperationsInput | boolean
+    includesServiceRequest?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneWithoutOrdersNestedInput
@@ -79044,6 +86476,7 @@ export namespace Prisma {
     certDojo?: DojoUpdateOneWithoutCertificateOrdersNestedInput
     orderItems?: ShopOrderItemUpdateManyWithoutOrderNestedInput
     certificateRequests?: CertificateRequestUpdateManyWithoutOrderNestedInput
+    serviceRequest?: ServiceRequestUpdateOneWithoutOrderNestedInput
     transactions?: PaymentTransactionUpdateManyWithoutOrderNestedInput
   }
 
@@ -79070,10 +86503,12 @@ export namespace Prisma {
     certDojoId?: NullableStringFieldUpdateOperationsInput | string | null
     includesTransferRequest?: BoolFieldUpdateOperationsInput | boolean
     includesPastBeltFee?: BoolFieldUpdateOperationsInput | boolean
+    includesServiceRequest?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     orderItems?: ShopOrderItemUncheckedUpdateManyWithoutOrderNestedInput
     certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutOrderNestedInput
+    serviceRequest?: ServiceRequestUncheckedUpdateOneWithoutOrderNestedInput
     transactions?: PaymentTransactionUncheckedUpdateManyWithoutOrderNestedInput
   }
 
@@ -79120,6 +86555,9 @@ export namespace Prisma {
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUpdateManyWithoutInvitedByNestedInput
+    serviceRequestsDojoActed?: ServiceRequestUpdateManyWithoutDojoActedByNestedInput
+    serviceRequestsAdminActed?: ServiceRequestUpdateManyWithoutAdminActedByNestedInput
+    serviceCouponsCreated?: ServiceCouponUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTransfersDojoActedInput = {
@@ -79154,6 +86592,9 @@ export namespace Prisma {
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedUpdateManyWithoutInvitedByNestedInput
+    serviceRequestsDojoActed?: ServiceRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
+    serviceRequestsAdminActed?: ServiceRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
+    serviceCouponsCreated?: ServiceCouponUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUpsertWithoutTransfersAdminActedInput = {
@@ -79199,6 +86640,9 @@ export namespace Prisma {
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUpdateManyWithoutInvitedByNestedInput
+    serviceRequestsDojoActed?: ServiceRequestUpdateManyWithoutDojoActedByNestedInput
+    serviceRequestsAdminActed?: ServiceRequestUpdateManyWithoutAdminActedByNestedInput
+    serviceCouponsCreated?: ServiceCouponUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTransfersAdminActedInput = {
@@ -79233,6 +86677,9 @@ export namespace Prisma {
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedUpdateManyWithoutInvitedByNestedInput
+    serviceRequestsDojoActed?: ServiceRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
+    serviceRequestsAdminActed?: ServiceRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
+    serviceCouponsCreated?: ServiceCouponUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type StudentDojoHistoryUpsertWithWhereUniqueWithoutTransferRequestInput = {
@@ -79271,6 +86718,7 @@ export namespace Prisma {
     includesCertificates?: boolean
     includesTransferRequest?: boolean
     includesPastBeltFee?: boolean
+    includesServiceRequest?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     user?: UserCreateNestedOneWithoutOrdersInput
@@ -79279,6 +86727,7 @@ export namespace Prisma {
     orderItems?: ShopOrderItemCreateNestedManyWithoutOrderInput
     certificateRequests?: CertificateRequestCreateNestedManyWithoutOrderInput
     transferRequest?: StudentTransferRequestCreateNestedOneWithoutOrderInput
+    serviceRequest?: ServiceRequestCreateNestedOneWithoutOrderInput
   }
 
   export type ShopOrderUncheckedCreateWithoutTransactionsInput = {
@@ -79304,11 +86753,13 @@ export namespace Prisma {
     certDojoId?: string | null
     includesTransferRequest?: boolean
     includesPastBeltFee?: boolean
+    includesServiceRequest?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     orderItems?: ShopOrderItemUncheckedCreateNestedManyWithoutOrderInput
     certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutOrderInput
     transferRequest?: StudentTransferRequestUncheckedCreateNestedOneWithoutOrderInput
+    serviceRequest?: ServiceRequestUncheckedCreateNestedOneWithoutOrderInput
   }
 
   export type ShopOrderCreateOrConnectWithoutTransactionsInput = {
@@ -79391,6 +86842,9 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
     dojoOwnerInvitesSent?: DojoOwnerInviteCreateNestedManyWithoutInvitedByInput
+    serviceRequestsDojoActed?: ServiceRequestCreateNestedManyWithoutDojoActedByInput
+    serviceRequestsAdminActed?: ServiceRequestCreateNestedManyWithoutAdminActedByInput
+    serviceCouponsCreated?: ServiceCouponCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutPaymentTransactionsInput = {
@@ -79425,6 +86879,9 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedCreateNestedManyWithoutInvitedByInput
+    serviceRequestsDojoActed?: ServiceRequestUncheckedCreateNestedManyWithoutDojoActedByInput
+    serviceRequestsAdminActed?: ServiceRequestUncheckedCreateNestedManyWithoutAdminActedByInput
+    serviceCouponsCreated?: ServiceCouponUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutPaymentTransactionsInput = {
@@ -79463,6 +86920,7 @@ export namespace Prisma {
     includesCertificates?: BoolFieldUpdateOperationsInput | boolean
     includesTransferRequest?: BoolFieldUpdateOperationsInput | boolean
     includesPastBeltFee?: BoolFieldUpdateOperationsInput | boolean
+    includesServiceRequest?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneWithoutOrdersNestedInput
@@ -79471,6 +86929,7 @@ export namespace Prisma {
     orderItems?: ShopOrderItemUpdateManyWithoutOrderNestedInput
     certificateRequests?: CertificateRequestUpdateManyWithoutOrderNestedInput
     transferRequest?: StudentTransferRequestUpdateOneWithoutOrderNestedInput
+    serviceRequest?: ServiceRequestUpdateOneWithoutOrderNestedInput
   }
 
   export type ShopOrderUncheckedUpdateWithoutTransactionsInput = {
@@ -79496,11 +86955,13 @@ export namespace Prisma {
     certDojoId?: NullableStringFieldUpdateOperationsInput | string | null
     includesTransferRequest?: BoolFieldUpdateOperationsInput | boolean
     includesPastBeltFee?: BoolFieldUpdateOperationsInput | boolean
+    includesServiceRequest?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     orderItems?: ShopOrderItemUncheckedUpdateManyWithoutOrderNestedInput
     certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutOrderNestedInput
     transferRequest?: StudentTransferRequestUncheckedUpdateOneWithoutOrderNestedInput
+    serviceRequest?: ServiceRequestUncheckedUpdateOneWithoutOrderNestedInput
   }
 
   export type EventRegistrationUpsertWithoutTransactionsInput = {
@@ -79595,6 +87056,9 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUpdateManyWithoutInvitedByNestedInput
+    serviceRequestsDojoActed?: ServiceRequestUpdateManyWithoutDojoActedByNestedInput
+    serviceRequestsAdminActed?: ServiceRequestUpdateManyWithoutAdminActedByNestedInput
+    serviceCouponsCreated?: ServiceCouponUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPaymentTransactionsInput = {
@@ -79629,6 +87093,9 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedUpdateManyWithoutInvitedByNestedInput
+    serviceRequestsDojoActed?: ServiceRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
+    serviceRequestsAdminActed?: ServiceRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
+    serviceCouponsCreated?: ServiceCouponUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type StudentCreateWithoutDojoHistoryInput = {
@@ -79652,6 +87119,7 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestCreateNestedManyWithoutStudentInput
     achievements?: StudentAchievementCreateNestedManyWithoutStudentInput
     transferRequests?: StudentTransferRequestCreateNestedManyWithoutStudentInput
+    serviceRequests?: ServiceRequestCreateNestedManyWithoutStudentInput
   }
 
   export type StudentUncheckedCreateWithoutDojoHistoryInput = {
@@ -79675,6 +87143,7 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutStudentInput
     achievements?: StudentAchievementUncheckedCreateNestedManyWithoutStudentInput
     transferRequests?: StudentTransferRequestUncheckedCreateNestedManyWithoutStudentInput
+    serviceRequests?: ServiceRequestUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type StudentCreateOrConnectWithoutDojoHistoryInput = {
@@ -79715,6 +87184,8 @@ export namespace Prisma {
     transfersOut?: StudentTransferRequestCreateNestedManyWithoutFromDojoInput
     transfersIn?: StudentTransferRequestCreateNestedManyWithoutToDojoInput
     historyTo?: StudentDojoHistoryCreateNestedManyWithoutToDojoInput
+    serviceRequests?: ServiceRequestCreateNestedManyWithoutDojoInput
+    serviceCoupons?: ServiceCouponCreateNestedManyWithoutDojoInput
   }
 
   export type DojoUncheckedCreateWithoutHistoryFromInput = {
@@ -79750,6 +87221,8 @@ export namespace Prisma {
     transfersOut?: StudentTransferRequestUncheckedCreateNestedManyWithoutFromDojoInput
     transfersIn?: StudentTransferRequestUncheckedCreateNestedManyWithoutToDojoInput
     historyTo?: StudentDojoHistoryUncheckedCreateNestedManyWithoutToDojoInput
+    serviceRequests?: ServiceRequestUncheckedCreateNestedManyWithoutDojoInput
+    serviceCoupons?: ServiceCouponUncheckedCreateNestedManyWithoutDojoInput
   }
 
   export type DojoCreateOrConnectWithoutHistoryFromInput = {
@@ -79790,6 +87263,8 @@ export namespace Prisma {
     transfersOut?: StudentTransferRequestCreateNestedManyWithoutFromDojoInput
     transfersIn?: StudentTransferRequestCreateNestedManyWithoutToDojoInput
     historyFrom?: StudentDojoHistoryCreateNestedManyWithoutFromDojoInput
+    serviceRequests?: ServiceRequestCreateNestedManyWithoutDojoInput
+    serviceCoupons?: ServiceCouponCreateNestedManyWithoutDojoInput
   }
 
   export type DojoUncheckedCreateWithoutHistoryToInput = {
@@ -79825,6 +87300,8 @@ export namespace Prisma {
     transfersOut?: StudentTransferRequestUncheckedCreateNestedManyWithoutFromDojoInput
     transfersIn?: StudentTransferRequestUncheckedCreateNestedManyWithoutToDojoInput
     historyFrom?: StudentDojoHistoryUncheckedCreateNestedManyWithoutFromDojoInput
+    serviceRequests?: ServiceRequestUncheckedCreateNestedManyWithoutDojoInput
+    serviceCoupons?: ServiceCouponUncheckedCreateNestedManyWithoutDojoInput
   }
 
   export type DojoCreateOrConnectWithoutHistoryToInput = {
@@ -79840,6 +87317,9 @@ export namespace Prisma {
     dojoNote?: string | null
     adminNote?: string | null
     fee: Decimal | DecimalJsLike | number | string
+    discountAmount?: Decimal | DecimalJsLike | number | string
+    finalAmount?: Decimal | DecimalJsLike | number | string | null
+    couponCode?: string | null
     paidAt?: Date | string | null
     dojoActedAt?: Date | string | null
     adminActedAt?: Date | string | null
@@ -79864,6 +87344,9 @@ export namespace Prisma {
     dojoNote?: string | null
     adminNote?: string | null
     fee: Decimal | DecimalJsLike | number | string
+    discountAmount?: Decimal | DecimalJsLike | number | string
+    finalAmount?: Decimal | DecimalJsLike | number | string | null
+    couponCode?: string | null
     orderId?: string | null
     paidAt?: Date | string | null
     dojoActedAt?: Date | string | null
@@ -79911,6 +87394,9 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteCreateNestedManyWithoutInvitedByInput
+    serviceRequestsDojoActed?: ServiceRequestCreateNestedManyWithoutDojoActedByInput
+    serviceRequestsAdminActed?: ServiceRequestCreateNestedManyWithoutAdminActedByInput
+    serviceCouponsCreated?: ServiceCouponCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutDojoHistoryChangesInput = {
@@ -79945,6 +87431,9 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedCreateNestedManyWithoutInvitedByInput
+    serviceRequestsDojoActed?: ServiceRequestUncheckedCreateNestedManyWithoutDojoActedByInput
+    serviceRequestsAdminActed?: ServiceRequestUncheckedCreateNestedManyWithoutAdminActedByInput
+    serviceCouponsCreated?: ServiceCouponUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutDojoHistoryChangesInput = {
@@ -79984,6 +87473,7 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestUpdateManyWithoutStudentNestedInput
     achievements?: StudentAchievementUpdateManyWithoutStudentNestedInput
     transferRequests?: StudentTransferRequestUpdateManyWithoutStudentNestedInput
+    serviceRequests?: ServiceRequestUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateWithoutDojoHistoryInput = {
@@ -80007,6 +87497,7 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutStudentNestedInput
     achievements?: StudentAchievementUncheckedUpdateManyWithoutStudentNestedInput
     transferRequests?: StudentTransferRequestUncheckedUpdateManyWithoutStudentNestedInput
+    serviceRequests?: ServiceRequestUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type DojoUpsertWithoutHistoryFromInput = {
@@ -80053,6 +87544,8 @@ export namespace Prisma {
     transfersOut?: StudentTransferRequestUpdateManyWithoutFromDojoNestedInput
     transfersIn?: StudentTransferRequestUpdateManyWithoutToDojoNestedInput
     historyTo?: StudentDojoHistoryUpdateManyWithoutToDojoNestedInput
+    serviceRequests?: ServiceRequestUpdateManyWithoutDojoNestedInput
+    serviceCoupons?: ServiceCouponUpdateManyWithoutDojoNestedInput
   }
 
   export type DojoUncheckedUpdateWithoutHistoryFromInput = {
@@ -80088,6 +87581,8 @@ export namespace Prisma {
     transfersOut?: StudentTransferRequestUncheckedUpdateManyWithoutFromDojoNestedInput
     transfersIn?: StudentTransferRequestUncheckedUpdateManyWithoutToDojoNestedInput
     historyTo?: StudentDojoHistoryUncheckedUpdateManyWithoutToDojoNestedInput
+    serviceRequests?: ServiceRequestUncheckedUpdateManyWithoutDojoNestedInput
+    serviceCoupons?: ServiceCouponUncheckedUpdateManyWithoutDojoNestedInput
   }
 
   export type DojoUpsertWithoutHistoryToInput = {
@@ -80134,6 +87629,8 @@ export namespace Prisma {
     transfersOut?: StudentTransferRequestUpdateManyWithoutFromDojoNestedInput
     transfersIn?: StudentTransferRequestUpdateManyWithoutToDojoNestedInput
     historyFrom?: StudentDojoHistoryUpdateManyWithoutFromDojoNestedInput
+    serviceRequests?: ServiceRequestUpdateManyWithoutDojoNestedInput
+    serviceCoupons?: ServiceCouponUpdateManyWithoutDojoNestedInput
   }
 
   export type DojoUncheckedUpdateWithoutHistoryToInput = {
@@ -80169,6 +87666,8 @@ export namespace Prisma {
     transfersOut?: StudentTransferRequestUncheckedUpdateManyWithoutFromDojoNestedInput
     transfersIn?: StudentTransferRequestUncheckedUpdateManyWithoutToDojoNestedInput
     historyFrom?: StudentDojoHistoryUncheckedUpdateManyWithoutFromDojoNestedInput
+    serviceRequests?: ServiceRequestUncheckedUpdateManyWithoutDojoNestedInput
+    serviceCoupons?: ServiceCouponUncheckedUpdateManyWithoutDojoNestedInput
   }
 
   export type StudentTransferRequestUpsertWithoutHistoryInput = {
@@ -80190,6 +87689,9 @@ export namespace Prisma {
     dojoNote?: NullableStringFieldUpdateOperationsInput | string | null
     adminNote?: NullableStringFieldUpdateOperationsInput | string | null
     fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discountAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    finalAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    couponCode?: NullableStringFieldUpdateOperationsInput | string | null
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     adminActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -80214,6 +87716,9 @@ export namespace Prisma {
     dojoNote?: NullableStringFieldUpdateOperationsInput | string | null
     adminNote?: NullableStringFieldUpdateOperationsInput | string | null
     fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discountAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    finalAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    couponCode?: NullableStringFieldUpdateOperationsInput | string | null
     orderId?: NullableStringFieldUpdateOperationsInput | string | null
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -80267,6 +87772,9 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
     paymentTransactions?: PaymentTransactionUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUpdateManyWithoutInvitedByNestedInput
+    serviceRequestsDojoActed?: ServiceRequestUpdateManyWithoutDojoActedByNestedInput
+    serviceRequestsAdminActed?: ServiceRequestUpdateManyWithoutAdminActedByNestedInput
+    serviceCouponsCreated?: ServiceCouponUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDojoHistoryChangesInput = {
@@ -80301,6 +87809,1511 @@ export namespace Prisma {
     transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedUpdateManyWithoutInvitedByNestedInput
+    serviceRequestsDojoActed?: ServiceRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
+    serviceRequestsAdminActed?: ServiceRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
+    serviceCouponsCreated?: ServiceCouponUncheckedUpdateManyWithoutCreatedByNestedInput
+  }
+
+  export type ServiceRequestCreateWithoutServiceInput = {
+    id?: string
+    status?: $Enums.ServiceRequestStatus
+    dojoDecision?: $Enums.ServiceRequestDojoDecision
+    payload?: JsonNullValueInput | InputJsonValue
+    reason?: string | null
+    dojoNote?: string | null
+    adminNote?: string | null
+    fee: Decimal | DecimalJsLike | number | string
+    discountAmount?: Decimal | DecimalJsLike | number | string
+    finalAmount: Decimal | DecimalJsLike | number | string
+    couponCode?: string | null
+    paidAt?: Date | string | null
+    dojoActedAt?: Date | string | null
+    adminActedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    student: StudentCreateNestedOneWithoutServiceRequestsInput
+    dojo: DojoCreateNestedOneWithoutServiceRequestsInput
+    order?: ShopOrderCreateNestedOneWithoutServiceRequestInput
+    coupon?: ServiceCouponCreateNestedOneWithoutRequestsInput
+    dojoActedBy?: UserCreateNestedOneWithoutServiceRequestsDojoActedInput
+    adminActedBy?: UserCreateNestedOneWithoutServiceRequestsAdminActedInput
+  }
+
+  export type ServiceRequestUncheckedCreateWithoutServiceInput = {
+    id?: string
+    studentId: string
+    dojoId: string
+    status?: $Enums.ServiceRequestStatus
+    dojoDecision?: $Enums.ServiceRequestDojoDecision
+    payload?: JsonNullValueInput | InputJsonValue
+    reason?: string | null
+    dojoNote?: string | null
+    adminNote?: string | null
+    fee: Decimal | DecimalJsLike | number | string
+    discountAmount?: Decimal | DecimalJsLike | number | string
+    finalAmount: Decimal | DecimalJsLike | number | string
+    couponId?: string | null
+    couponCode?: string | null
+    orderId?: string | null
+    paidAt?: Date | string | null
+    dojoActedAt?: Date | string | null
+    dojoActedById?: string | null
+    adminActedAt?: Date | string | null
+    adminActedById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ServiceRequestCreateOrConnectWithoutServiceInput = {
+    where: ServiceRequestWhereUniqueInput
+    create: XOR<ServiceRequestCreateWithoutServiceInput, ServiceRequestUncheckedCreateWithoutServiceInput>
+  }
+
+  export type ServiceRequestCreateManyServiceInputEnvelope = {
+    data: ServiceRequestCreateManyServiceInput | ServiceRequestCreateManyServiceInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ServiceCouponCreateWithoutServiceInput = {
+    id?: string
+    code: string
+    discountPercent: number
+    usageLimit?: number
+    usedCount?: number
+    expiresAt?: Date | string | null
+    isActive?: boolean
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    dojo: DojoCreateNestedOneWithoutServiceCouponsInput
+    createdBy: UserCreateNestedOneWithoutServiceCouponsCreatedInput
+    requests?: ServiceRequestCreateNestedManyWithoutCouponInput
+  }
+
+  export type ServiceCouponUncheckedCreateWithoutServiceInput = {
+    id?: string
+    code: string
+    dojoId: string
+    createdById: string
+    discountPercent: number
+    usageLimit?: number
+    usedCount?: number
+    expiresAt?: Date | string | null
+    isActive?: boolean
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    requests?: ServiceRequestUncheckedCreateNestedManyWithoutCouponInput
+  }
+
+  export type ServiceCouponCreateOrConnectWithoutServiceInput = {
+    where: ServiceCouponWhereUniqueInput
+    create: XOR<ServiceCouponCreateWithoutServiceInput, ServiceCouponUncheckedCreateWithoutServiceInput>
+  }
+
+  export type ServiceCouponCreateManyServiceInputEnvelope = {
+    data: ServiceCouponCreateManyServiceInput | ServiceCouponCreateManyServiceInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ServiceRequestUpsertWithWhereUniqueWithoutServiceInput = {
+    where: ServiceRequestWhereUniqueInput
+    update: XOR<ServiceRequestUpdateWithoutServiceInput, ServiceRequestUncheckedUpdateWithoutServiceInput>
+    create: XOR<ServiceRequestCreateWithoutServiceInput, ServiceRequestUncheckedCreateWithoutServiceInput>
+  }
+
+  export type ServiceRequestUpdateWithWhereUniqueWithoutServiceInput = {
+    where: ServiceRequestWhereUniqueInput
+    data: XOR<ServiceRequestUpdateWithoutServiceInput, ServiceRequestUncheckedUpdateWithoutServiceInput>
+  }
+
+  export type ServiceRequestUpdateManyWithWhereWithoutServiceInput = {
+    where: ServiceRequestScalarWhereInput
+    data: XOR<ServiceRequestUpdateManyMutationInput, ServiceRequestUncheckedUpdateManyWithoutServiceInput>
+  }
+
+  export type ServiceCouponUpsertWithWhereUniqueWithoutServiceInput = {
+    where: ServiceCouponWhereUniqueInput
+    update: XOR<ServiceCouponUpdateWithoutServiceInput, ServiceCouponUncheckedUpdateWithoutServiceInput>
+    create: XOR<ServiceCouponCreateWithoutServiceInput, ServiceCouponUncheckedCreateWithoutServiceInput>
+  }
+
+  export type ServiceCouponUpdateWithWhereUniqueWithoutServiceInput = {
+    where: ServiceCouponWhereUniqueInput
+    data: XOR<ServiceCouponUpdateWithoutServiceInput, ServiceCouponUncheckedUpdateWithoutServiceInput>
+  }
+
+  export type ServiceCouponUpdateManyWithWhereWithoutServiceInput = {
+    where: ServiceCouponScalarWhereInput
+    data: XOR<ServiceCouponUpdateManyMutationInput, ServiceCouponUncheckedUpdateManyWithoutServiceInput>
+  }
+
+  export type StudentCreateWithoutServiceRequestsInput = {
+    currentRank?: string
+    joinDate?: Date | string
+    expiryDate?: Date | string | null
+    onboardingComplete?: boolean
+    membershipStatus?: $Enums.MembershipStatus
+    joinStage?: $Enums.JoinStage
+    requestedRank?: string | null
+    assignedRank?: string | null
+    pastBeltFeeBDT?: number | null
+    joinPdfUrl?: string | null
+    joinedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutStudentInput
+    dojo?: DojoCreateNestedOneWithoutStudentsInput
+    gradings?: GradingCreateNestedManyWithoutStudentInput
+    gradingApplications?: GradingApplicationCreateNestedManyWithoutStudentInput
+    certificateRequests?: CertificateRequestCreateNestedManyWithoutStudentInput
+    achievements?: StudentAchievementCreateNestedManyWithoutStudentInput
+    transferRequests?: StudentTransferRequestCreateNestedManyWithoutStudentInput
+    dojoHistory?: StudentDojoHistoryCreateNestedManyWithoutStudentInput
+  }
+
+  export type StudentUncheckedCreateWithoutServiceRequestsInput = {
+    id: string
+    currentRank?: string
+    joinDate?: Date | string
+    expiryDate?: Date | string | null
+    dojoId?: string | null
+    onboardingComplete?: boolean
+    membershipStatus?: $Enums.MembershipStatus
+    joinStage?: $Enums.JoinStage
+    requestedRank?: string | null
+    assignedRank?: string | null
+    pastBeltFeeBDT?: number | null
+    joinPdfUrl?: string | null
+    joinedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    gradings?: GradingUncheckedCreateNestedManyWithoutStudentInput
+    gradingApplications?: GradingApplicationUncheckedCreateNestedManyWithoutStudentInput
+    certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutStudentInput
+    achievements?: StudentAchievementUncheckedCreateNestedManyWithoutStudentInput
+    transferRequests?: StudentTransferRequestUncheckedCreateNestedManyWithoutStudentInput
+    dojoHistory?: StudentDojoHistoryUncheckedCreateNestedManyWithoutStudentInput
+  }
+
+  export type StudentCreateOrConnectWithoutServiceRequestsInput = {
+    where: StudentWhereUniqueInput
+    create: XOR<StudentCreateWithoutServiceRequestsInput, StudentUncheckedCreateWithoutServiceRequestsInput>
+  }
+
+  export type ServiceCreateWithoutRequestsInput = {
+    id?: string
+    slug: string
+    name: string
+    description?: string | null
+    feeBDT: Decimal | DecimalJsLike | number | string
+    isActive?: boolean
+    handler?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    coupons?: ServiceCouponCreateNestedManyWithoutServiceInput
+  }
+
+  export type ServiceUncheckedCreateWithoutRequestsInput = {
+    id?: string
+    slug: string
+    name: string
+    description?: string | null
+    feeBDT: Decimal | DecimalJsLike | number | string
+    isActive?: boolean
+    handler?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    coupons?: ServiceCouponUncheckedCreateNestedManyWithoutServiceInput
+  }
+
+  export type ServiceCreateOrConnectWithoutRequestsInput = {
+    where: ServiceWhereUniqueInput
+    create: XOR<ServiceCreateWithoutRequestsInput, ServiceUncheckedCreateWithoutRequestsInput>
+  }
+
+  export type DojoCreateWithoutServiceRequestsInput = {
+    id?: string
+    name: string
+    address?: string | null
+    city?: string | null
+    latitude?: number | null
+    longitude?: number | null
+    phone?: string | null
+    email?: string | null
+    isActive?: boolean
+    annualFee?: Decimal | DecimalJsLike | number | string | null
+    expiryDate?: Date | string | null
+    ownerSignatureUrl?: string | null
+    logoUrl?: string | null
+    lockedFeatures?: DojoCreatelockedFeaturesInput | string[]
+    studentMilestone?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    renewalOrders?: ShopOrderCreateNestedManyWithoutDojoInput
+    certificateOrders?: ShopOrderCreateNestedManyWithoutCertDojoInput
+    certificateRequests?: CertificateRequestCreateNestedManyWithoutDojoInput
+    students?: StudentCreateNestedManyWithoutDojoInput
+    instructors?: InstructorCreateNestedManyWithoutDojoInput
+    managers?: DojoManagerCreateNestedManyWithoutDojoInput
+    owner?: DojoOwnerCreateNestedOneWithoutDojoInput
+    application?: DojoApplicationCreateNestedOneWithoutDojoInput
+    events?: EventCreateNestedManyWithoutDojoInput
+    announcements?: AnnouncementCreateNestedManyWithoutDojoInput
+    inventoryItems?: DojoInventoryItemCreateNestedManyWithoutDojoInput
+    sales?: DojoSaleCreateNestedManyWithoutDojoInput
+    transfersOut?: StudentTransferRequestCreateNestedManyWithoutFromDojoInput
+    transfersIn?: StudentTransferRequestCreateNestedManyWithoutToDojoInput
+    historyFrom?: StudentDojoHistoryCreateNestedManyWithoutFromDojoInput
+    historyTo?: StudentDojoHistoryCreateNestedManyWithoutToDojoInput
+    serviceCoupons?: ServiceCouponCreateNestedManyWithoutDojoInput
+  }
+
+  export type DojoUncheckedCreateWithoutServiceRequestsInput = {
+    id?: string
+    name: string
+    address?: string | null
+    city?: string | null
+    latitude?: number | null
+    longitude?: number | null
+    phone?: string | null
+    email?: string | null
+    isActive?: boolean
+    annualFee?: Decimal | DecimalJsLike | number | string | null
+    expiryDate?: Date | string | null
+    ownerSignatureUrl?: string | null
+    logoUrl?: string | null
+    lockedFeatures?: DojoCreatelockedFeaturesInput | string[]
+    studentMilestone?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    renewalOrders?: ShopOrderUncheckedCreateNestedManyWithoutDojoInput
+    certificateOrders?: ShopOrderUncheckedCreateNestedManyWithoutCertDojoInput
+    certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutDojoInput
+    students?: StudentUncheckedCreateNestedManyWithoutDojoInput
+    instructors?: InstructorUncheckedCreateNestedManyWithoutDojoInput
+    managers?: DojoManagerUncheckedCreateNestedManyWithoutDojoInput
+    owner?: DojoOwnerUncheckedCreateNestedOneWithoutDojoInput
+    application?: DojoApplicationUncheckedCreateNestedOneWithoutDojoInput
+    events?: EventUncheckedCreateNestedManyWithoutDojoInput
+    announcements?: AnnouncementUncheckedCreateNestedManyWithoutDojoInput
+    inventoryItems?: DojoInventoryItemUncheckedCreateNestedManyWithoutDojoInput
+    sales?: DojoSaleUncheckedCreateNestedManyWithoutDojoInput
+    transfersOut?: StudentTransferRequestUncheckedCreateNestedManyWithoutFromDojoInput
+    transfersIn?: StudentTransferRequestUncheckedCreateNestedManyWithoutToDojoInput
+    historyFrom?: StudentDojoHistoryUncheckedCreateNestedManyWithoutFromDojoInput
+    historyTo?: StudentDojoHistoryUncheckedCreateNestedManyWithoutToDojoInput
+    serviceCoupons?: ServiceCouponUncheckedCreateNestedManyWithoutDojoInput
+  }
+
+  export type DojoCreateOrConnectWithoutServiceRequestsInput = {
+    where: DojoWhereUniqueInput
+    create: XOR<DojoCreateWithoutServiceRequestsInput, DojoUncheckedCreateWithoutServiceRequestsInput>
+  }
+
+  export type ShopOrderCreateWithoutServiceRequestInput = {
+    id?: string
+    paymentStatus?: $Enums.PaymentStatus
+    paymentMethod?: string | null
+    total: Decimal | DecimalJsLike | number | string
+    currency?: string
+    transactionId?: string | null
+    includesMembership?: boolean
+    membershipFee?: Decimal | DecimalJsLike | number | string | null
+    fulfillmentStatus?: $Enums.ShopFulfillmentStatus
+    notes?: string | null
+    guestName?: string | null
+    guestEmail?: string | null
+    guestPhone?: string | null
+    guestAddress?: string | null
+    isGuestOrder?: boolean
+    includesDojoRenewal?: boolean
+    includesCertificates?: boolean
+    includesTransferRequest?: boolean
+    includesPastBeltFee?: boolean
+    includesServiceRequest?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user?: UserCreateNestedOneWithoutOrdersInput
+    dojo?: DojoCreateNestedOneWithoutRenewalOrdersInput
+    certDojo?: DojoCreateNestedOneWithoutCertificateOrdersInput
+    orderItems?: ShopOrderItemCreateNestedManyWithoutOrderInput
+    certificateRequests?: CertificateRequestCreateNestedManyWithoutOrderInput
+    transferRequest?: StudentTransferRequestCreateNestedOneWithoutOrderInput
+    transactions?: PaymentTransactionCreateNestedManyWithoutOrderInput
+  }
+
+  export type ShopOrderUncheckedCreateWithoutServiceRequestInput = {
+    id?: string
+    userId?: string | null
+    paymentStatus?: $Enums.PaymentStatus
+    paymentMethod?: string | null
+    total: Decimal | DecimalJsLike | number | string
+    currency?: string
+    transactionId?: string | null
+    includesMembership?: boolean
+    membershipFee?: Decimal | DecimalJsLike | number | string | null
+    fulfillmentStatus?: $Enums.ShopFulfillmentStatus
+    notes?: string | null
+    guestName?: string | null
+    guestEmail?: string | null
+    guestPhone?: string | null
+    guestAddress?: string | null
+    isGuestOrder?: boolean
+    dojoId?: string | null
+    includesDojoRenewal?: boolean
+    includesCertificates?: boolean
+    certDojoId?: string | null
+    includesTransferRequest?: boolean
+    includesPastBeltFee?: boolean
+    includesServiceRequest?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    orderItems?: ShopOrderItemUncheckedCreateNestedManyWithoutOrderInput
+    certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutOrderInput
+    transferRequest?: StudentTransferRequestUncheckedCreateNestedOneWithoutOrderInput
+    transactions?: PaymentTransactionUncheckedCreateNestedManyWithoutOrderInput
+  }
+
+  export type ShopOrderCreateOrConnectWithoutServiceRequestInput = {
+    where: ShopOrderWhereUniqueInput
+    create: XOR<ShopOrderCreateWithoutServiceRequestInput, ShopOrderUncheckedCreateWithoutServiceRequestInput>
+  }
+
+  export type ServiceCouponCreateWithoutRequestsInput = {
+    id?: string
+    code: string
+    discountPercent: number
+    usageLimit?: number
+    usedCount?: number
+    expiresAt?: Date | string | null
+    isActive?: boolean
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    dojo: DojoCreateNestedOneWithoutServiceCouponsInput
+    service?: ServiceCreateNestedOneWithoutCouponsInput
+    createdBy: UserCreateNestedOneWithoutServiceCouponsCreatedInput
+  }
+
+  export type ServiceCouponUncheckedCreateWithoutRequestsInput = {
+    id?: string
+    code: string
+    dojoId: string
+    createdById: string
+    discountPercent: number
+    serviceId?: string | null
+    usageLimit?: number
+    usedCount?: number
+    expiresAt?: Date | string | null
+    isActive?: boolean
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ServiceCouponCreateOrConnectWithoutRequestsInput = {
+    where: ServiceCouponWhereUniqueInput
+    create: XOR<ServiceCouponCreateWithoutRequestsInput, ServiceCouponUncheckedCreateWithoutRequestsInput>
+  }
+
+  export type UserCreateWithoutServiceRequestsDojoActedInput = {
+    id: string
+    email: string
+    phone?: string | null
+    fullName: string
+    avatarUrl?: string | null
+    bio?: string | null
+    isActive?: boolean
+    memberNumber?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    role?: RoleCreateNestedOneWithoutUsersInput
+    profile?: ProfileCreateNestedOneWithoutUserInput
+    student?: StudentCreateNestedOneWithoutUserInput
+    instructor?: InstructorCreateNestedOneWithoutUserInput
+    dojoManager?: DojoManagerCreateNestedOneWithoutUserInput
+    dojoOwner?: DojoOwnerCreateNestedOneWithoutUserInput
+    admin?: AdminCreateNestedOneWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    orders?: ShopOrderCreateNestedManyWithoutUserInput
+    eventRegistrations?: EventRegistrationCreateNestedManyWithoutUserInput
+    eventCheckIns?: EventRegistrationCreateNestedManyWithoutCheckedInByInput
+    eventsPosted?: EventCreateNestedManyWithoutPostedByInput
+    announcementsPosted?: AnnouncementCreateNestedManyWithoutPostedByInput
+    dojoSalesAsBuyer?: DojoSaleCreateNestedManyWithoutBuyerInput
+    dojoSalesSold?: DojoSaleCreateNestedManyWithoutSoldByInput
+    achievementsAwarded?: StudentAchievementCreateNestedManyWithoutAwardedByInput
+    tournamentEntries?: TournamentParticipantCreateNestedManyWithoutUserInput
+    transfersDojoActed?: StudentTransferRequestCreateNestedManyWithoutDojoActedByInput
+    transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
+    dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
+    paymentTransactions?: PaymentTransactionCreateNestedManyWithoutUserInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteCreateNestedManyWithoutInvitedByInput
+    serviceRequestsAdminActed?: ServiceRequestCreateNestedManyWithoutAdminActedByInput
+    serviceCouponsCreated?: ServiceCouponCreateNestedManyWithoutCreatedByInput
+  }
+
+  export type UserUncheckedCreateWithoutServiceRequestsDojoActedInput = {
+    id: string
+    email: string
+    phone?: string | null
+    fullName: string
+    avatarUrl?: string | null
+    bio?: string | null
+    roleId?: string
+    isActive?: boolean
+    memberNumber?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    profile?: ProfileUncheckedCreateNestedOneWithoutUserInput
+    student?: StudentUncheckedCreateNestedOneWithoutUserInput
+    instructor?: InstructorUncheckedCreateNestedOneWithoutUserInput
+    dojoManager?: DojoManagerUncheckedCreateNestedOneWithoutUserInput
+    dojoOwner?: DojoOwnerUncheckedCreateNestedOneWithoutUserInput
+    admin?: AdminUncheckedCreateNestedOneWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    orders?: ShopOrderUncheckedCreateNestedManyWithoutUserInput
+    eventRegistrations?: EventRegistrationUncheckedCreateNestedManyWithoutUserInput
+    eventCheckIns?: EventRegistrationUncheckedCreateNestedManyWithoutCheckedInByInput
+    eventsPosted?: EventUncheckedCreateNestedManyWithoutPostedByInput
+    announcementsPosted?: AnnouncementUncheckedCreateNestedManyWithoutPostedByInput
+    dojoSalesAsBuyer?: DojoSaleUncheckedCreateNestedManyWithoutBuyerInput
+    dojoSalesSold?: DojoSaleUncheckedCreateNestedManyWithoutSoldByInput
+    achievementsAwarded?: StudentAchievementUncheckedCreateNestedManyWithoutAwardedByInput
+    tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutUserInput
+    transfersDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutDojoActedByInput
+    transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
+    dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
+    paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutUserInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedCreateNestedManyWithoutInvitedByInput
+    serviceRequestsAdminActed?: ServiceRequestUncheckedCreateNestedManyWithoutAdminActedByInput
+    serviceCouponsCreated?: ServiceCouponUncheckedCreateNestedManyWithoutCreatedByInput
+  }
+
+  export type UserCreateOrConnectWithoutServiceRequestsDojoActedInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutServiceRequestsDojoActedInput, UserUncheckedCreateWithoutServiceRequestsDojoActedInput>
+  }
+
+  export type UserCreateWithoutServiceRequestsAdminActedInput = {
+    id: string
+    email: string
+    phone?: string | null
+    fullName: string
+    avatarUrl?: string | null
+    bio?: string | null
+    isActive?: boolean
+    memberNumber?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    role?: RoleCreateNestedOneWithoutUsersInput
+    profile?: ProfileCreateNestedOneWithoutUserInput
+    student?: StudentCreateNestedOneWithoutUserInput
+    instructor?: InstructorCreateNestedOneWithoutUserInput
+    dojoManager?: DojoManagerCreateNestedOneWithoutUserInput
+    dojoOwner?: DojoOwnerCreateNestedOneWithoutUserInput
+    admin?: AdminCreateNestedOneWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    orders?: ShopOrderCreateNestedManyWithoutUserInput
+    eventRegistrations?: EventRegistrationCreateNestedManyWithoutUserInput
+    eventCheckIns?: EventRegistrationCreateNestedManyWithoutCheckedInByInput
+    eventsPosted?: EventCreateNestedManyWithoutPostedByInput
+    announcementsPosted?: AnnouncementCreateNestedManyWithoutPostedByInput
+    dojoSalesAsBuyer?: DojoSaleCreateNestedManyWithoutBuyerInput
+    dojoSalesSold?: DojoSaleCreateNestedManyWithoutSoldByInput
+    achievementsAwarded?: StudentAchievementCreateNestedManyWithoutAwardedByInput
+    tournamentEntries?: TournamentParticipantCreateNestedManyWithoutUserInput
+    transfersDojoActed?: StudentTransferRequestCreateNestedManyWithoutDojoActedByInput
+    transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
+    dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
+    paymentTransactions?: PaymentTransactionCreateNestedManyWithoutUserInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteCreateNestedManyWithoutInvitedByInput
+    serviceRequestsDojoActed?: ServiceRequestCreateNestedManyWithoutDojoActedByInput
+    serviceCouponsCreated?: ServiceCouponCreateNestedManyWithoutCreatedByInput
+  }
+
+  export type UserUncheckedCreateWithoutServiceRequestsAdminActedInput = {
+    id: string
+    email: string
+    phone?: string | null
+    fullName: string
+    avatarUrl?: string | null
+    bio?: string | null
+    roleId?: string
+    isActive?: boolean
+    memberNumber?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    profile?: ProfileUncheckedCreateNestedOneWithoutUserInput
+    student?: StudentUncheckedCreateNestedOneWithoutUserInput
+    instructor?: InstructorUncheckedCreateNestedOneWithoutUserInput
+    dojoManager?: DojoManagerUncheckedCreateNestedOneWithoutUserInput
+    dojoOwner?: DojoOwnerUncheckedCreateNestedOneWithoutUserInput
+    admin?: AdminUncheckedCreateNestedOneWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    orders?: ShopOrderUncheckedCreateNestedManyWithoutUserInput
+    eventRegistrations?: EventRegistrationUncheckedCreateNestedManyWithoutUserInput
+    eventCheckIns?: EventRegistrationUncheckedCreateNestedManyWithoutCheckedInByInput
+    eventsPosted?: EventUncheckedCreateNestedManyWithoutPostedByInput
+    announcementsPosted?: AnnouncementUncheckedCreateNestedManyWithoutPostedByInput
+    dojoSalesAsBuyer?: DojoSaleUncheckedCreateNestedManyWithoutBuyerInput
+    dojoSalesSold?: DojoSaleUncheckedCreateNestedManyWithoutSoldByInput
+    achievementsAwarded?: StudentAchievementUncheckedCreateNestedManyWithoutAwardedByInput
+    tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutUserInput
+    transfersDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutDojoActedByInput
+    transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
+    dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
+    paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutUserInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedCreateNestedManyWithoutInvitedByInput
+    serviceRequestsDojoActed?: ServiceRequestUncheckedCreateNestedManyWithoutDojoActedByInput
+    serviceCouponsCreated?: ServiceCouponUncheckedCreateNestedManyWithoutCreatedByInput
+  }
+
+  export type UserCreateOrConnectWithoutServiceRequestsAdminActedInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutServiceRequestsAdminActedInput, UserUncheckedCreateWithoutServiceRequestsAdminActedInput>
+  }
+
+  export type StudentUpsertWithoutServiceRequestsInput = {
+    update: XOR<StudentUpdateWithoutServiceRequestsInput, StudentUncheckedUpdateWithoutServiceRequestsInput>
+    create: XOR<StudentCreateWithoutServiceRequestsInput, StudentUncheckedCreateWithoutServiceRequestsInput>
+    where?: StudentWhereInput
+  }
+
+  export type StudentUpdateToOneWithWhereWithoutServiceRequestsInput = {
+    where?: StudentWhereInput
+    data: XOR<StudentUpdateWithoutServiceRequestsInput, StudentUncheckedUpdateWithoutServiceRequestsInput>
+  }
+
+  export type StudentUpdateWithoutServiceRequestsInput = {
+    currentRank?: StringFieldUpdateOperationsInput | string
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    onboardingComplete?: BoolFieldUpdateOperationsInput | boolean
+    membershipStatus?: EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
+    joinStage?: EnumJoinStageFieldUpdateOperationsInput | $Enums.JoinStage
+    requestedRank?: NullableStringFieldUpdateOperationsInput | string | null
+    assignedRank?: NullableStringFieldUpdateOperationsInput | string | null
+    pastBeltFeeBDT?: NullableIntFieldUpdateOperationsInput | number | null
+    joinPdfUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    joinedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutStudentNestedInput
+    dojo?: DojoUpdateOneWithoutStudentsNestedInput
+    gradings?: GradingUpdateManyWithoutStudentNestedInput
+    gradingApplications?: GradingApplicationUpdateManyWithoutStudentNestedInput
+    certificateRequests?: CertificateRequestUpdateManyWithoutStudentNestedInput
+    achievements?: StudentAchievementUpdateManyWithoutStudentNestedInput
+    transferRequests?: StudentTransferRequestUpdateManyWithoutStudentNestedInput
+    dojoHistory?: StudentDojoHistoryUpdateManyWithoutStudentNestedInput
+  }
+
+  export type StudentUncheckedUpdateWithoutServiceRequestsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    currentRank?: StringFieldUpdateOperationsInput | string
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dojoId?: NullableStringFieldUpdateOperationsInput | string | null
+    onboardingComplete?: BoolFieldUpdateOperationsInput | boolean
+    membershipStatus?: EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
+    joinStage?: EnumJoinStageFieldUpdateOperationsInput | $Enums.JoinStage
+    requestedRank?: NullableStringFieldUpdateOperationsInput | string | null
+    assignedRank?: NullableStringFieldUpdateOperationsInput | string | null
+    pastBeltFeeBDT?: NullableIntFieldUpdateOperationsInput | number | null
+    joinPdfUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    joinedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    gradings?: GradingUncheckedUpdateManyWithoutStudentNestedInput
+    gradingApplications?: GradingApplicationUncheckedUpdateManyWithoutStudentNestedInput
+    certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutStudentNestedInput
+    achievements?: StudentAchievementUncheckedUpdateManyWithoutStudentNestedInput
+    transferRequests?: StudentTransferRequestUncheckedUpdateManyWithoutStudentNestedInput
+    dojoHistory?: StudentDojoHistoryUncheckedUpdateManyWithoutStudentNestedInput
+  }
+
+  export type ServiceUpsertWithoutRequestsInput = {
+    update: XOR<ServiceUpdateWithoutRequestsInput, ServiceUncheckedUpdateWithoutRequestsInput>
+    create: XOR<ServiceCreateWithoutRequestsInput, ServiceUncheckedCreateWithoutRequestsInput>
+    where?: ServiceWhereInput
+  }
+
+  export type ServiceUpdateToOneWithWhereWithoutRequestsInput = {
+    where?: ServiceWhereInput
+    data: XOR<ServiceUpdateWithoutRequestsInput, ServiceUncheckedUpdateWithoutRequestsInput>
+  }
+
+  export type ServiceUpdateWithoutRequestsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    feeBDT?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    handler?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    coupons?: ServiceCouponUpdateManyWithoutServiceNestedInput
+  }
+
+  export type ServiceUncheckedUpdateWithoutRequestsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    feeBDT?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    handler?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    coupons?: ServiceCouponUncheckedUpdateManyWithoutServiceNestedInput
+  }
+
+  export type DojoUpsertWithoutServiceRequestsInput = {
+    update: XOR<DojoUpdateWithoutServiceRequestsInput, DojoUncheckedUpdateWithoutServiceRequestsInput>
+    create: XOR<DojoCreateWithoutServiceRequestsInput, DojoUncheckedCreateWithoutServiceRequestsInput>
+    where?: DojoWhereInput
+  }
+
+  export type DojoUpdateToOneWithWhereWithoutServiceRequestsInput = {
+    where?: DojoWhereInput
+    data: XOR<DojoUpdateWithoutServiceRequestsInput, DojoUncheckedUpdateWithoutServiceRequestsInput>
+  }
+
+  export type DojoUpdateWithoutServiceRequestsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    annualFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    ownerSignatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    lockedFeatures?: DojoUpdatelockedFeaturesInput | string[]
+    studentMilestone?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    renewalOrders?: ShopOrderUpdateManyWithoutDojoNestedInput
+    certificateOrders?: ShopOrderUpdateManyWithoutCertDojoNestedInput
+    certificateRequests?: CertificateRequestUpdateManyWithoutDojoNestedInput
+    students?: StudentUpdateManyWithoutDojoNestedInput
+    instructors?: InstructorUpdateManyWithoutDojoNestedInput
+    managers?: DojoManagerUpdateManyWithoutDojoNestedInput
+    owner?: DojoOwnerUpdateOneWithoutDojoNestedInput
+    application?: DojoApplicationUpdateOneWithoutDojoNestedInput
+    events?: EventUpdateManyWithoutDojoNestedInput
+    announcements?: AnnouncementUpdateManyWithoutDojoNestedInput
+    inventoryItems?: DojoInventoryItemUpdateManyWithoutDojoNestedInput
+    sales?: DojoSaleUpdateManyWithoutDojoNestedInput
+    transfersOut?: StudentTransferRequestUpdateManyWithoutFromDojoNestedInput
+    transfersIn?: StudentTransferRequestUpdateManyWithoutToDojoNestedInput
+    historyFrom?: StudentDojoHistoryUpdateManyWithoutFromDojoNestedInput
+    historyTo?: StudentDojoHistoryUpdateManyWithoutToDojoNestedInput
+    serviceCoupons?: ServiceCouponUpdateManyWithoutDojoNestedInput
+  }
+
+  export type DojoUncheckedUpdateWithoutServiceRequestsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    annualFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    ownerSignatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    lockedFeatures?: DojoUpdatelockedFeaturesInput | string[]
+    studentMilestone?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    renewalOrders?: ShopOrderUncheckedUpdateManyWithoutDojoNestedInput
+    certificateOrders?: ShopOrderUncheckedUpdateManyWithoutCertDojoNestedInput
+    certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutDojoNestedInput
+    students?: StudentUncheckedUpdateManyWithoutDojoNestedInput
+    instructors?: InstructorUncheckedUpdateManyWithoutDojoNestedInput
+    managers?: DojoManagerUncheckedUpdateManyWithoutDojoNestedInput
+    owner?: DojoOwnerUncheckedUpdateOneWithoutDojoNestedInput
+    application?: DojoApplicationUncheckedUpdateOneWithoutDojoNestedInput
+    events?: EventUncheckedUpdateManyWithoutDojoNestedInput
+    announcements?: AnnouncementUncheckedUpdateManyWithoutDojoNestedInput
+    inventoryItems?: DojoInventoryItemUncheckedUpdateManyWithoutDojoNestedInput
+    sales?: DojoSaleUncheckedUpdateManyWithoutDojoNestedInput
+    transfersOut?: StudentTransferRequestUncheckedUpdateManyWithoutFromDojoNestedInput
+    transfersIn?: StudentTransferRequestUncheckedUpdateManyWithoutToDojoNestedInput
+    historyFrom?: StudentDojoHistoryUncheckedUpdateManyWithoutFromDojoNestedInput
+    historyTo?: StudentDojoHistoryUncheckedUpdateManyWithoutToDojoNestedInput
+    serviceCoupons?: ServiceCouponUncheckedUpdateManyWithoutDojoNestedInput
+  }
+
+  export type ShopOrderUpsertWithoutServiceRequestInput = {
+    update: XOR<ShopOrderUpdateWithoutServiceRequestInput, ShopOrderUncheckedUpdateWithoutServiceRequestInput>
+    create: XOR<ShopOrderCreateWithoutServiceRequestInput, ShopOrderUncheckedCreateWithoutServiceRequestInput>
+    where?: ShopOrderWhereInput
+  }
+
+  export type ShopOrderUpdateToOneWithWhereWithoutServiceRequestInput = {
+    where?: ShopOrderWhereInput
+    data: XOR<ShopOrderUpdateWithoutServiceRequestInput, ShopOrderUncheckedUpdateWithoutServiceRequestInput>
+  }
+
+  export type ShopOrderUpdateWithoutServiceRequestInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: StringFieldUpdateOperationsInput | string
+    transactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    includesMembership?: BoolFieldUpdateOperationsInput | boolean
+    membershipFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    fulfillmentStatus?: EnumShopFulfillmentStatusFieldUpdateOperationsInput | $Enums.ShopFulfillmentStatus
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    guestName?: NullableStringFieldUpdateOperationsInput | string | null
+    guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    guestPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guestAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    isGuestOrder?: BoolFieldUpdateOperationsInput | boolean
+    includesDojoRenewal?: BoolFieldUpdateOperationsInput | boolean
+    includesCertificates?: BoolFieldUpdateOperationsInput | boolean
+    includesTransferRequest?: BoolFieldUpdateOperationsInput | boolean
+    includesPastBeltFee?: BoolFieldUpdateOperationsInput | boolean
+    includesServiceRequest?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneWithoutOrdersNestedInput
+    dojo?: DojoUpdateOneWithoutRenewalOrdersNestedInput
+    certDojo?: DojoUpdateOneWithoutCertificateOrdersNestedInput
+    orderItems?: ShopOrderItemUpdateManyWithoutOrderNestedInput
+    certificateRequests?: CertificateRequestUpdateManyWithoutOrderNestedInput
+    transferRequest?: StudentTransferRequestUpdateOneWithoutOrderNestedInput
+    transactions?: PaymentTransactionUpdateManyWithoutOrderNestedInput
+  }
+
+  export type ShopOrderUncheckedUpdateWithoutServiceRequestInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currency?: StringFieldUpdateOperationsInput | string
+    transactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    includesMembership?: BoolFieldUpdateOperationsInput | boolean
+    membershipFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    fulfillmentStatus?: EnumShopFulfillmentStatusFieldUpdateOperationsInput | $Enums.ShopFulfillmentStatus
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    guestName?: NullableStringFieldUpdateOperationsInput | string | null
+    guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    guestPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guestAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    isGuestOrder?: BoolFieldUpdateOperationsInput | boolean
+    dojoId?: NullableStringFieldUpdateOperationsInput | string | null
+    includesDojoRenewal?: BoolFieldUpdateOperationsInput | boolean
+    includesCertificates?: BoolFieldUpdateOperationsInput | boolean
+    certDojoId?: NullableStringFieldUpdateOperationsInput | string | null
+    includesTransferRequest?: BoolFieldUpdateOperationsInput | boolean
+    includesPastBeltFee?: BoolFieldUpdateOperationsInput | boolean
+    includesServiceRequest?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    orderItems?: ShopOrderItemUncheckedUpdateManyWithoutOrderNestedInput
+    certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutOrderNestedInput
+    transferRequest?: StudentTransferRequestUncheckedUpdateOneWithoutOrderNestedInput
+    transactions?: PaymentTransactionUncheckedUpdateManyWithoutOrderNestedInput
+  }
+
+  export type ServiceCouponUpsertWithoutRequestsInput = {
+    update: XOR<ServiceCouponUpdateWithoutRequestsInput, ServiceCouponUncheckedUpdateWithoutRequestsInput>
+    create: XOR<ServiceCouponCreateWithoutRequestsInput, ServiceCouponUncheckedCreateWithoutRequestsInput>
+    where?: ServiceCouponWhereInput
+  }
+
+  export type ServiceCouponUpdateToOneWithWhereWithoutRequestsInput = {
+    where?: ServiceCouponWhereInput
+    data: XOR<ServiceCouponUpdateWithoutRequestsInput, ServiceCouponUncheckedUpdateWithoutRequestsInput>
+  }
+
+  export type ServiceCouponUpdateWithoutRequestsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    discountPercent?: IntFieldUpdateOperationsInput | number
+    usageLimit?: IntFieldUpdateOperationsInput | number
+    usedCount?: IntFieldUpdateOperationsInput | number
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    dojo?: DojoUpdateOneRequiredWithoutServiceCouponsNestedInput
+    service?: ServiceUpdateOneWithoutCouponsNestedInput
+    createdBy?: UserUpdateOneRequiredWithoutServiceCouponsCreatedNestedInput
+  }
+
+  export type ServiceCouponUncheckedUpdateWithoutRequestsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    dojoId?: StringFieldUpdateOperationsInput | string
+    createdById?: StringFieldUpdateOperationsInput | string
+    discountPercent?: IntFieldUpdateOperationsInput | number
+    serviceId?: NullableStringFieldUpdateOperationsInput | string | null
+    usageLimit?: IntFieldUpdateOperationsInput | number
+    usedCount?: IntFieldUpdateOperationsInput | number
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserUpsertWithoutServiceRequestsDojoActedInput = {
+    update: XOR<UserUpdateWithoutServiceRequestsDojoActedInput, UserUncheckedUpdateWithoutServiceRequestsDojoActedInput>
+    create: XOR<UserCreateWithoutServiceRequestsDojoActedInput, UserUncheckedCreateWithoutServiceRequestsDojoActedInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutServiceRequestsDojoActedInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutServiceRequestsDojoActedInput, UserUncheckedUpdateWithoutServiceRequestsDojoActedInput>
+  }
+
+  export type UserUpdateWithoutServiceRequestsDojoActedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    fullName?: StringFieldUpdateOperationsInput | string
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: RoleUpdateOneRequiredWithoutUsersNestedInput
+    profile?: ProfileUpdateOneWithoutUserNestedInput
+    student?: StudentUpdateOneWithoutUserNestedInput
+    instructor?: InstructorUpdateOneWithoutUserNestedInput
+    dojoManager?: DojoManagerUpdateOneWithoutUserNestedInput
+    dojoOwner?: DojoOwnerUpdateOneWithoutUserNestedInput
+    admin?: AdminUpdateOneWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    orders?: ShopOrderUpdateManyWithoutUserNestedInput
+    eventRegistrations?: EventRegistrationUpdateManyWithoutUserNestedInput
+    eventCheckIns?: EventRegistrationUpdateManyWithoutCheckedInByNestedInput
+    eventsPosted?: EventUpdateManyWithoutPostedByNestedInput
+    announcementsPosted?: AnnouncementUpdateManyWithoutPostedByNestedInput
+    dojoSalesAsBuyer?: DojoSaleUpdateManyWithoutBuyerNestedInput
+    dojoSalesSold?: DojoSaleUpdateManyWithoutSoldByNestedInput
+    achievementsAwarded?: StudentAchievementUpdateManyWithoutAwardedByNestedInput
+    tournamentEntries?: TournamentParticipantUpdateManyWithoutUserNestedInput
+    transfersDojoActed?: StudentTransferRequestUpdateManyWithoutDojoActedByNestedInput
+    transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
+    dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
+    paymentTransactions?: PaymentTransactionUpdateManyWithoutUserNestedInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteUpdateManyWithoutInvitedByNestedInput
+    serviceRequestsAdminActed?: ServiceRequestUpdateManyWithoutAdminActedByNestedInput
+    serviceCouponsCreated?: ServiceCouponUpdateManyWithoutCreatedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutServiceRequestsDojoActedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    fullName?: StringFieldUpdateOperationsInput | string
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    roleId?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    profile?: ProfileUncheckedUpdateOneWithoutUserNestedInput
+    student?: StudentUncheckedUpdateOneWithoutUserNestedInput
+    instructor?: InstructorUncheckedUpdateOneWithoutUserNestedInput
+    dojoManager?: DojoManagerUncheckedUpdateOneWithoutUserNestedInput
+    dojoOwner?: DojoOwnerUncheckedUpdateOneWithoutUserNestedInput
+    admin?: AdminUncheckedUpdateOneWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    orders?: ShopOrderUncheckedUpdateManyWithoutUserNestedInput
+    eventRegistrations?: EventRegistrationUncheckedUpdateManyWithoutUserNestedInput
+    eventCheckIns?: EventRegistrationUncheckedUpdateManyWithoutCheckedInByNestedInput
+    eventsPosted?: EventUncheckedUpdateManyWithoutPostedByNestedInput
+    announcementsPosted?: AnnouncementUncheckedUpdateManyWithoutPostedByNestedInput
+    dojoSalesAsBuyer?: DojoSaleUncheckedUpdateManyWithoutBuyerNestedInput
+    dojoSalesSold?: DojoSaleUncheckedUpdateManyWithoutSoldByNestedInput
+    achievementsAwarded?: StudentAchievementUncheckedUpdateManyWithoutAwardedByNestedInput
+    tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutUserNestedInput
+    transfersDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
+    transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
+    dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+    paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutUserNestedInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedUpdateManyWithoutInvitedByNestedInput
+    serviceRequestsAdminActed?: ServiceRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
+    serviceCouponsCreated?: ServiceCouponUncheckedUpdateManyWithoutCreatedByNestedInput
+  }
+
+  export type UserUpsertWithoutServiceRequestsAdminActedInput = {
+    update: XOR<UserUpdateWithoutServiceRequestsAdminActedInput, UserUncheckedUpdateWithoutServiceRequestsAdminActedInput>
+    create: XOR<UserCreateWithoutServiceRequestsAdminActedInput, UserUncheckedCreateWithoutServiceRequestsAdminActedInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutServiceRequestsAdminActedInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutServiceRequestsAdminActedInput, UserUncheckedUpdateWithoutServiceRequestsAdminActedInput>
+  }
+
+  export type UserUpdateWithoutServiceRequestsAdminActedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    fullName?: StringFieldUpdateOperationsInput | string
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: RoleUpdateOneRequiredWithoutUsersNestedInput
+    profile?: ProfileUpdateOneWithoutUserNestedInput
+    student?: StudentUpdateOneWithoutUserNestedInput
+    instructor?: InstructorUpdateOneWithoutUserNestedInput
+    dojoManager?: DojoManagerUpdateOneWithoutUserNestedInput
+    dojoOwner?: DojoOwnerUpdateOneWithoutUserNestedInput
+    admin?: AdminUpdateOneWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    orders?: ShopOrderUpdateManyWithoutUserNestedInput
+    eventRegistrations?: EventRegistrationUpdateManyWithoutUserNestedInput
+    eventCheckIns?: EventRegistrationUpdateManyWithoutCheckedInByNestedInput
+    eventsPosted?: EventUpdateManyWithoutPostedByNestedInput
+    announcementsPosted?: AnnouncementUpdateManyWithoutPostedByNestedInput
+    dojoSalesAsBuyer?: DojoSaleUpdateManyWithoutBuyerNestedInput
+    dojoSalesSold?: DojoSaleUpdateManyWithoutSoldByNestedInput
+    achievementsAwarded?: StudentAchievementUpdateManyWithoutAwardedByNestedInput
+    tournamentEntries?: TournamentParticipantUpdateManyWithoutUserNestedInput
+    transfersDojoActed?: StudentTransferRequestUpdateManyWithoutDojoActedByNestedInput
+    transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
+    dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
+    paymentTransactions?: PaymentTransactionUpdateManyWithoutUserNestedInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteUpdateManyWithoutInvitedByNestedInput
+    serviceRequestsDojoActed?: ServiceRequestUpdateManyWithoutDojoActedByNestedInput
+    serviceCouponsCreated?: ServiceCouponUpdateManyWithoutCreatedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutServiceRequestsAdminActedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    fullName?: StringFieldUpdateOperationsInput | string
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    roleId?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    profile?: ProfileUncheckedUpdateOneWithoutUserNestedInput
+    student?: StudentUncheckedUpdateOneWithoutUserNestedInput
+    instructor?: InstructorUncheckedUpdateOneWithoutUserNestedInput
+    dojoManager?: DojoManagerUncheckedUpdateOneWithoutUserNestedInput
+    dojoOwner?: DojoOwnerUncheckedUpdateOneWithoutUserNestedInput
+    admin?: AdminUncheckedUpdateOneWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    orders?: ShopOrderUncheckedUpdateManyWithoutUserNestedInput
+    eventRegistrations?: EventRegistrationUncheckedUpdateManyWithoutUserNestedInput
+    eventCheckIns?: EventRegistrationUncheckedUpdateManyWithoutCheckedInByNestedInput
+    eventsPosted?: EventUncheckedUpdateManyWithoutPostedByNestedInput
+    announcementsPosted?: AnnouncementUncheckedUpdateManyWithoutPostedByNestedInput
+    dojoSalesAsBuyer?: DojoSaleUncheckedUpdateManyWithoutBuyerNestedInput
+    dojoSalesSold?: DojoSaleUncheckedUpdateManyWithoutSoldByNestedInput
+    achievementsAwarded?: StudentAchievementUncheckedUpdateManyWithoutAwardedByNestedInput
+    tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutUserNestedInput
+    transfersDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
+    transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
+    dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+    paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutUserNestedInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedUpdateManyWithoutInvitedByNestedInput
+    serviceRequestsDojoActed?: ServiceRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
+    serviceCouponsCreated?: ServiceCouponUncheckedUpdateManyWithoutCreatedByNestedInput
+  }
+
+  export type DojoCreateWithoutServiceCouponsInput = {
+    id?: string
+    name: string
+    address?: string | null
+    city?: string | null
+    latitude?: number | null
+    longitude?: number | null
+    phone?: string | null
+    email?: string | null
+    isActive?: boolean
+    annualFee?: Decimal | DecimalJsLike | number | string | null
+    expiryDate?: Date | string | null
+    ownerSignatureUrl?: string | null
+    logoUrl?: string | null
+    lockedFeatures?: DojoCreatelockedFeaturesInput | string[]
+    studentMilestone?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    renewalOrders?: ShopOrderCreateNestedManyWithoutDojoInput
+    certificateOrders?: ShopOrderCreateNestedManyWithoutCertDojoInput
+    certificateRequests?: CertificateRequestCreateNestedManyWithoutDojoInput
+    students?: StudentCreateNestedManyWithoutDojoInput
+    instructors?: InstructorCreateNestedManyWithoutDojoInput
+    managers?: DojoManagerCreateNestedManyWithoutDojoInput
+    owner?: DojoOwnerCreateNestedOneWithoutDojoInput
+    application?: DojoApplicationCreateNestedOneWithoutDojoInput
+    events?: EventCreateNestedManyWithoutDojoInput
+    announcements?: AnnouncementCreateNestedManyWithoutDojoInput
+    inventoryItems?: DojoInventoryItemCreateNestedManyWithoutDojoInput
+    sales?: DojoSaleCreateNestedManyWithoutDojoInput
+    transfersOut?: StudentTransferRequestCreateNestedManyWithoutFromDojoInput
+    transfersIn?: StudentTransferRequestCreateNestedManyWithoutToDojoInput
+    historyFrom?: StudentDojoHistoryCreateNestedManyWithoutFromDojoInput
+    historyTo?: StudentDojoHistoryCreateNestedManyWithoutToDojoInput
+    serviceRequests?: ServiceRequestCreateNestedManyWithoutDojoInput
+  }
+
+  export type DojoUncheckedCreateWithoutServiceCouponsInput = {
+    id?: string
+    name: string
+    address?: string | null
+    city?: string | null
+    latitude?: number | null
+    longitude?: number | null
+    phone?: string | null
+    email?: string | null
+    isActive?: boolean
+    annualFee?: Decimal | DecimalJsLike | number | string | null
+    expiryDate?: Date | string | null
+    ownerSignatureUrl?: string | null
+    logoUrl?: string | null
+    lockedFeatures?: DojoCreatelockedFeaturesInput | string[]
+    studentMilestone?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    renewalOrders?: ShopOrderUncheckedCreateNestedManyWithoutDojoInput
+    certificateOrders?: ShopOrderUncheckedCreateNestedManyWithoutCertDojoInput
+    certificateRequests?: CertificateRequestUncheckedCreateNestedManyWithoutDojoInput
+    students?: StudentUncheckedCreateNestedManyWithoutDojoInput
+    instructors?: InstructorUncheckedCreateNestedManyWithoutDojoInput
+    managers?: DojoManagerUncheckedCreateNestedManyWithoutDojoInput
+    owner?: DojoOwnerUncheckedCreateNestedOneWithoutDojoInput
+    application?: DojoApplicationUncheckedCreateNestedOneWithoutDojoInput
+    events?: EventUncheckedCreateNestedManyWithoutDojoInput
+    announcements?: AnnouncementUncheckedCreateNestedManyWithoutDojoInput
+    inventoryItems?: DojoInventoryItemUncheckedCreateNestedManyWithoutDojoInput
+    sales?: DojoSaleUncheckedCreateNestedManyWithoutDojoInput
+    transfersOut?: StudentTransferRequestUncheckedCreateNestedManyWithoutFromDojoInput
+    transfersIn?: StudentTransferRequestUncheckedCreateNestedManyWithoutToDojoInput
+    historyFrom?: StudentDojoHistoryUncheckedCreateNestedManyWithoutFromDojoInput
+    historyTo?: StudentDojoHistoryUncheckedCreateNestedManyWithoutToDojoInput
+    serviceRequests?: ServiceRequestUncheckedCreateNestedManyWithoutDojoInput
+  }
+
+  export type DojoCreateOrConnectWithoutServiceCouponsInput = {
+    where: DojoWhereUniqueInput
+    create: XOR<DojoCreateWithoutServiceCouponsInput, DojoUncheckedCreateWithoutServiceCouponsInput>
+  }
+
+  export type ServiceCreateWithoutCouponsInput = {
+    id?: string
+    slug: string
+    name: string
+    description?: string | null
+    feeBDT: Decimal | DecimalJsLike | number | string
+    isActive?: boolean
+    handler?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    requests?: ServiceRequestCreateNestedManyWithoutServiceInput
+  }
+
+  export type ServiceUncheckedCreateWithoutCouponsInput = {
+    id?: string
+    slug: string
+    name: string
+    description?: string | null
+    feeBDT: Decimal | DecimalJsLike | number | string
+    isActive?: boolean
+    handler?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    requests?: ServiceRequestUncheckedCreateNestedManyWithoutServiceInput
+  }
+
+  export type ServiceCreateOrConnectWithoutCouponsInput = {
+    where: ServiceWhereUniqueInput
+    create: XOR<ServiceCreateWithoutCouponsInput, ServiceUncheckedCreateWithoutCouponsInput>
+  }
+
+  export type UserCreateWithoutServiceCouponsCreatedInput = {
+    id: string
+    email: string
+    phone?: string | null
+    fullName: string
+    avatarUrl?: string | null
+    bio?: string | null
+    isActive?: boolean
+    memberNumber?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    role?: RoleCreateNestedOneWithoutUsersInput
+    profile?: ProfileCreateNestedOneWithoutUserInput
+    student?: StudentCreateNestedOneWithoutUserInput
+    instructor?: InstructorCreateNestedOneWithoutUserInput
+    dojoManager?: DojoManagerCreateNestedOneWithoutUserInput
+    dojoOwner?: DojoOwnerCreateNestedOneWithoutUserInput
+    admin?: AdminCreateNestedOneWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    orders?: ShopOrderCreateNestedManyWithoutUserInput
+    eventRegistrations?: EventRegistrationCreateNestedManyWithoutUserInput
+    eventCheckIns?: EventRegistrationCreateNestedManyWithoutCheckedInByInput
+    eventsPosted?: EventCreateNestedManyWithoutPostedByInput
+    announcementsPosted?: AnnouncementCreateNestedManyWithoutPostedByInput
+    dojoSalesAsBuyer?: DojoSaleCreateNestedManyWithoutBuyerInput
+    dojoSalesSold?: DojoSaleCreateNestedManyWithoutSoldByInput
+    achievementsAwarded?: StudentAchievementCreateNestedManyWithoutAwardedByInput
+    tournamentEntries?: TournamentParticipantCreateNestedManyWithoutUserInput
+    transfersDojoActed?: StudentTransferRequestCreateNestedManyWithoutDojoActedByInput
+    transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
+    dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
+    paymentTransactions?: PaymentTransactionCreateNestedManyWithoutUserInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteCreateNestedManyWithoutInvitedByInput
+    serviceRequestsDojoActed?: ServiceRequestCreateNestedManyWithoutDojoActedByInput
+    serviceRequestsAdminActed?: ServiceRequestCreateNestedManyWithoutAdminActedByInput
+  }
+
+  export type UserUncheckedCreateWithoutServiceCouponsCreatedInput = {
+    id: string
+    email: string
+    phone?: string | null
+    fullName: string
+    avatarUrl?: string | null
+    bio?: string | null
+    roleId?: string
+    isActive?: boolean
+    memberNumber?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    profile?: ProfileUncheckedCreateNestedOneWithoutUserInput
+    student?: StudentUncheckedCreateNestedOneWithoutUserInput
+    instructor?: InstructorUncheckedCreateNestedOneWithoutUserInput
+    dojoManager?: DojoManagerUncheckedCreateNestedOneWithoutUserInput
+    dojoOwner?: DojoOwnerUncheckedCreateNestedOneWithoutUserInput
+    admin?: AdminUncheckedCreateNestedOneWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    orders?: ShopOrderUncheckedCreateNestedManyWithoutUserInput
+    eventRegistrations?: EventRegistrationUncheckedCreateNestedManyWithoutUserInput
+    eventCheckIns?: EventRegistrationUncheckedCreateNestedManyWithoutCheckedInByInput
+    eventsPosted?: EventUncheckedCreateNestedManyWithoutPostedByInput
+    announcementsPosted?: AnnouncementUncheckedCreateNestedManyWithoutPostedByInput
+    dojoSalesAsBuyer?: DojoSaleUncheckedCreateNestedManyWithoutBuyerInput
+    dojoSalesSold?: DojoSaleUncheckedCreateNestedManyWithoutSoldByInput
+    achievementsAwarded?: StudentAchievementUncheckedCreateNestedManyWithoutAwardedByInput
+    tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutUserInput
+    transfersDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutDojoActedByInput
+    transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
+    dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
+    paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutUserInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedCreateNestedManyWithoutInvitedByInput
+    serviceRequestsDojoActed?: ServiceRequestUncheckedCreateNestedManyWithoutDojoActedByInput
+    serviceRequestsAdminActed?: ServiceRequestUncheckedCreateNestedManyWithoutAdminActedByInput
+  }
+
+  export type UserCreateOrConnectWithoutServiceCouponsCreatedInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutServiceCouponsCreatedInput, UserUncheckedCreateWithoutServiceCouponsCreatedInput>
+  }
+
+  export type ServiceRequestCreateWithoutCouponInput = {
+    id?: string
+    status?: $Enums.ServiceRequestStatus
+    dojoDecision?: $Enums.ServiceRequestDojoDecision
+    payload?: JsonNullValueInput | InputJsonValue
+    reason?: string | null
+    dojoNote?: string | null
+    adminNote?: string | null
+    fee: Decimal | DecimalJsLike | number | string
+    discountAmount?: Decimal | DecimalJsLike | number | string
+    finalAmount: Decimal | DecimalJsLike | number | string
+    couponCode?: string | null
+    paidAt?: Date | string | null
+    dojoActedAt?: Date | string | null
+    adminActedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    student: StudentCreateNestedOneWithoutServiceRequestsInput
+    service: ServiceCreateNestedOneWithoutRequestsInput
+    dojo: DojoCreateNestedOneWithoutServiceRequestsInput
+    order?: ShopOrderCreateNestedOneWithoutServiceRequestInput
+    dojoActedBy?: UserCreateNestedOneWithoutServiceRequestsDojoActedInput
+    adminActedBy?: UserCreateNestedOneWithoutServiceRequestsAdminActedInput
+  }
+
+  export type ServiceRequestUncheckedCreateWithoutCouponInput = {
+    id?: string
+    studentId: string
+    serviceId: string
+    dojoId: string
+    status?: $Enums.ServiceRequestStatus
+    dojoDecision?: $Enums.ServiceRequestDojoDecision
+    payload?: JsonNullValueInput | InputJsonValue
+    reason?: string | null
+    dojoNote?: string | null
+    adminNote?: string | null
+    fee: Decimal | DecimalJsLike | number | string
+    discountAmount?: Decimal | DecimalJsLike | number | string
+    finalAmount: Decimal | DecimalJsLike | number | string
+    couponCode?: string | null
+    orderId?: string | null
+    paidAt?: Date | string | null
+    dojoActedAt?: Date | string | null
+    dojoActedById?: string | null
+    adminActedAt?: Date | string | null
+    adminActedById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ServiceRequestCreateOrConnectWithoutCouponInput = {
+    where: ServiceRequestWhereUniqueInput
+    create: XOR<ServiceRequestCreateWithoutCouponInput, ServiceRequestUncheckedCreateWithoutCouponInput>
+  }
+
+  export type ServiceRequestCreateManyCouponInputEnvelope = {
+    data: ServiceRequestCreateManyCouponInput | ServiceRequestCreateManyCouponInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type DojoUpsertWithoutServiceCouponsInput = {
+    update: XOR<DojoUpdateWithoutServiceCouponsInput, DojoUncheckedUpdateWithoutServiceCouponsInput>
+    create: XOR<DojoCreateWithoutServiceCouponsInput, DojoUncheckedCreateWithoutServiceCouponsInput>
+    where?: DojoWhereInput
+  }
+
+  export type DojoUpdateToOneWithWhereWithoutServiceCouponsInput = {
+    where?: DojoWhereInput
+    data: XOR<DojoUpdateWithoutServiceCouponsInput, DojoUncheckedUpdateWithoutServiceCouponsInput>
+  }
+
+  export type DojoUpdateWithoutServiceCouponsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    annualFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    ownerSignatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    lockedFeatures?: DojoUpdatelockedFeaturesInput | string[]
+    studentMilestone?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    renewalOrders?: ShopOrderUpdateManyWithoutDojoNestedInput
+    certificateOrders?: ShopOrderUpdateManyWithoutCertDojoNestedInput
+    certificateRequests?: CertificateRequestUpdateManyWithoutDojoNestedInput
+    students?: StudentUpdateManyWithoutDojoNestedInput
+    instructors?: InstructorUpdateManyWithoutDojoNestedInput
+    managers?: DojoManagerUpdateManyWithoutDojoNestedInput
+    owner?: DojoOwnerUpdateOneWithoutDojoNestedInput
+    application?: DojoApplicationUpdateOneWithoutDojoNestedInput
+    events?: EventUpdateManyWithoutDojoNestedInput
+    announcements?: AnnouncementUpdateManyWithoutDojoNestedInput
+    inventoryItems?: DojoInventoryItemUpdateManyWithoutDojoNestedInput
+    sales?: DojoSaleUpdateManyWithoutDojoNestedInput
+    transfersOut?: StudentTransferRequestUpdateManyWithoutFromDojoNestedInput
+    transfersIn?: StudentTransferRequestUpdateManyWithoutToDojoNestedInput
+    historyFrom?: StudentDojoHistoryUpdateManyWithoutFromDojoNestedInput
+    historyTo?: StudentDojoHistoryUpdateManyWithoutToDojoNestedInput
+    serviceRequests?: ServiceRequestUpdateManyWithoutDojoNestedInput
+  }
+
+  export type DojoUncheckedUpdateWithoutServiceCouponsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    annualFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    ownerSignatureUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    lockedFeatures?: DojoUpdatelockedFeaturesInput | string[]
+    studentMilestone?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    renewalOrders?: ShopOrderUncheckedUpdateManyWithoutDojoNestedInput
+    certificateOrders?: ShopOrderUncheckedUpdateManyWithoutCertDojoNestedInput
+    certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutDojoNestedInput
+    students?: StudentUncheckedUpdateManyWithoutDojoNestedInput
+    instructors?: InstructorUncheckedUpdateManyWithoutDojoNestedInput
+    managers?: DojoManagerUncheckedUpdateManyWithoutDojoNestedInput
+    owner?: DojoOwnerUncheckedUpdateOneWithoutDojoNestedInput
+    application?: DojoApplicationUncheckedUpdateOneWithoutDojoNestedInput
+    events?: EventUncheckedUpdateManyWithoutDojoNestedInput
+    announcements?: AnnouncementUncheckedUpdateManyWithoutDojoNestedInput
+    inventoryItems?: DojoInventoryItemUncheckedUpdateManyWithoutDojoNestedInput
+    sales?: DojoSaleUncheckedUpdateManyWithoutDojoNestedInput
+    transfersOut?: StudentTransferRequestUncheckedUpdateManyWithoutFromDojoNestedInput
+    transfersIn?: StudentTransferRequestUncheckedUpdateManyWithoutToDojoNestedInput
+    historyFrom?: StudentDojoHistoryUncheckedUpdateManyWithoutFromDojoNestedInput
+    historyTo?: StudentDojoHistoryUncheckedUpdateManyWithoutToDojoNestedInput
+    serviceRequests?: ServiceRequestUncheckedUpdateManyWithoutDojoNestedInput
+  }
+
+  export type ServiceUpsertWithoutCouponsInput = {
+    update: XOR<ServiceUpdateWithoutCouponsInput, ServiceUncheckedUpdateWithoutCouponsInput>
+    create: XOR<ServiceCreateWithoutCouponsInput, ServiceUncheckedCreateWithoutCouponsInput>
+    where?: ServiceWhereInput
+  }
+
+  export type ServiceUpdateToOneWithWhereWithoutCouponsInput = {
+    where?: ServiceWhereInput
+    data: XOR<ServiceUpdateWithoutCouponsInput, ServiceUncheckedUpdateWithoutCouponsInput>
+  }
+
+  export type ServiceUpdateWithoutCouponsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    feeBDT?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    handler?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    requests?: ServiceRequestUpdateManyWithoutServiceNestedInput
+  }
+
+  export type ServiceUncheckedUpdateWithoutCouponsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    feeBDT?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    handler?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    requests?: ServiceRequestUncheckedUpdateManyWithoutServiceNestedInput
+  }
+
+  export type UserUpsertWithoutServiceCouponsCreatedInput = {
+    update: XOR<UserUpdateWithoutServiceCouponsCreatedInput, UserUncheckedUpdateWithoutServiceCouponsCreatedInput>
+    create: XOR<UserCreateWithoutServiceCouponsCreatedInput, UserUncheckedCreateWithoutServiceCouponsCreatedInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutServiceCouponsCreatedInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutServiceCouponsCreatedInput, UserUncheckedUpdateWithoutServiceCouponsCreatedInput>
+  }
+
+  export type UserUpdateWithoutServiceCouponsCreatedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    fullName?: StringFieldUpdateOperationsInput | string
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: RoleUpdateOneRequiredWithoutUsersNestedInput
+    profile?: ProfileUpdateOneWithoutUserNestedInput
+    student?: StudentUpdateOneWithoutUserNestedInput
+    instructor?: InstructorUpdateOneWithoutUserNestedInput
+    dojoManager?: DojoManagerUpdateOneWithoutUserNestedInput
+    dojoOwner?: DojoOwnerUpdateOneWithoutUserNestedInput
+    admin?: AdminUpdateOneWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    orders?: ShopOrderUpdateManyWithoutUserNestedInput
+    eventRegistrations?: EventRegistrationUpdateManyWithoutUserNestedInput
+    eventCheckIns?: EventRegistrationUpdateManyWithoutCheckedInByNestedInput
+    eventsPosted?: EventUpdateManyWithoutPostedByNestedInput
+    announcementsPosted?: AnnouncementUpdateManyWithoutPostedByNestedInput
+    dojoSalesAsBuyer?: DojoSaleUpdateManyWithoutBuyerNestedInput
+    dojoSalesSold?: DojoSaleUpdateManyWithoutSoldByNestedInput
+    achievementsAwarded?: StudentAchievementUpdateManyWithoutAwardedByNestedInput
+    tournamentEntries?: TournamentParticipantUpdateManyWithoutUserNestedInput
+    transfersDojoActed?: StudentTransferRequestUpdateManyWithoutDojoActedByNestedInput
+    transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
+    dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
+    paymentTransactions?: PaymentTransactionUpdateManyWithoutUserNestedInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteUpdateManyWithoutInvitedByNestedInput
+    serviceRequestsDojoActed?: ServiceRequestUpdateManyWithoutDojoActedByNestedInput
+    serviceRequestsAdminActed?: ServiceRequestUpdateManyWithoutAdminActedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutServiceCouponsCreatedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    fullName?: StringFieldUpdateOperationsInput | string
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    roleId?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    profile?: ProfileUncheckedUpdateOneWithoutUserNestedInput
+    student?: StudentUncheckedUpdateOneWithoutUserNestedInput
+    instructor?: InstructorUncheckedUpdateOneWithoutUserNestedInput
+    dojoManager?: DojoManagerUncheckedUpdateOneWithoutUserNestedInput
+    dojoOwner?: DojoOwnerUncheckedUpdateOneWithoutUserNestedInput
+    admin?: AdminUncheckedUpdateOneWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    orders?: ShopOrderUncheckedUpdateManyWithoutUserNestedInput
+    eventRegistrations?: EventRegistrationUncheckedUpdateManyWithoutUserNestedInput
+    eventCheckIns?: EventRegistrationUncheckedUpdateManyWithoutCheckedInByNestedInput
+    eventsPosted?: EventUncheckedUpdateManyWithoutPostedByNestedInput
+    announcementsPosted?: AnnouncementUncheckedUpdateManyWithoutPostedByNestedInput
+    dojoSalesAsBuyer?: DojoSaleUncheckedUpdateManyWithoutBuyerNestedInput
+    dojoSalesSold?: DojoSaleUncheckedUpdateManyWithoutSoldByNestedInput
+    achievementsAwarded?: StudentAchievementUncheckedUpdateManyWithoutAwardedByNestedInput
+    tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutUserNestedInput
+    transfersDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
+    transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
+    dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+    paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutUserNestedInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedUpdateManyWithoutInvitedByNestedInput
+    serviceRequestsDojoActed?: ServiceRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
+    serviceRequestsAdminActed?: ServiceRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
+  }
+
+  export type ServiceRequestUpsertWithWhereUniqueWithoutCouponInput = {
+    where: ServiceRequestWhereUniqueInput
+    update: XOR<ServiceRequestUpdateWithoutCouponInput, ServiceRequestUncheckedUpdateWithoutCouponInput>
+    create: XOR<ServiceRequestCreateWithoutCouponInput, ServiceRequestUncheckedCreateWithoutCouponInput>
+  }
+
+  export type ServiceRequestUpdateWithWhereUniqueWithoutCouponInput = {
+    where: ServiceRequestWhereUniqueInput
+    data: XOR<ServiceRequestUpdateWithoutCouponInput, ServiceRequestUncheckedUpdateWithoutCouponInput>
+  }
+
+  export type ServiceRequestUpdateManyWithWhereWithoutCouponInput = {
+    where: ServiceRequestScalarWhereInput
+    data: XOR<ServiceRequestUpdateManyMutationInput, ServiceRequestUncheckedUpdateManyWithoutCouponInput>
   }
 
   export type UserCreateManyRoleInput = {
@@ -80353,6 +89366,9 @@ export namespace Prisma {
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUpdateManyWithoutInvitedByNestedInput
+    serviceRequestsDojoActed?: ServiceRequestUpdateManyWithoutDojoActedByNestedInput
+    serviceRequestsAdminActed?: ServiceRequestUpdateManyWithoutAdminActedByNestedInput
+    serviceCouponsCreated?: ServiceCouponUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRoleInput = {
@@ -80387,6 +89403,9 @@ export namespace Prisma {
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedUpdateManyWithoutInvitedByNestedInput
+    serviceRequestsDojoActed?: ServiceRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
+    serviceRequestsAdminActed?: ServiceRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
+    serviceCouponsCreated?: ServiceCouponUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutRoleInput = {
@@ -80470,6 +89489,7 @@ export namespace Prisma {
     certDojoId?: string | null
     includesTransferRequest?: boolean
     includesPastBeltFee?: boolean
+    includesServiceRequest?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -80605,6 +89625,9 @@ export namespace Prisma {
     dojoNote?: string | null
     adminNote?: string | null
     fee: Decimal | DecimalJsLike | number | string
+    discountAmount?: Decimal | DecimalJsLike | number | string
+    finalAmount?: Decimal | DecimalJsLike | number | string | null
+    couponCode?: string | null
     orderId?: string | null
     paidAt?: Date | string | null
     dojoActedAt?: Date | string | null
@@ -80625,6 +89648,9 @@ export namespace Prisma {
     dojoNote?: string | null
     adminNote?: string | null
     fee: Decimal | DecimalJsLike | number | string
+    discountAmount?: Decimal | DecimalJsLike | number | string
+    finalAmount?: Decimal | DecimalJsLike | number | string | null
+    couponCode?: string | null
     orderId?: string | null
     paidAt?: Date | string | null
     dojoActedAt?: Date | string | null
@@ -80668,6 +89694,71 @@ export namespace Prisma {
     fullName?: string | null
     invitedAt?: Date | string
     acceptedAt?: Date | string | null
+  }
+
+  export type ServiceRequestCreateManyDojoActedByInput = {
+    id?: string
+    studentId: string
+    serviceId: string
+    dojoId: string
+    status?: $Enums.ServiceRequestStatus
+    dojoDecision?: $Enums.ServiceRequestDojoDecision
+    payload?: JsonNullValueInput | InputJsonValue
+    reason?: string | null
+    dojoNote?: string | null
+    adminNote?: string | null
+    fee: Decimal | DecimalJsLike | number | string
+    discountAmount?: Decimal | DecimalJsLike | number | string
+    finalAmount: Decimal | DecimalJsLike | number | string
+    couponId?: string | null
+    couponCode?: string | null
+    orderId?: string | null
+    paidAt?: Date | string | null
+    dojoActedAt?: Date | string | null
+    adminActedAt?: Date | string | null
+    adminActedById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ServiceRequestCreateManyAdminActedByInput = {
+    id?: string
+    studentId: string
+    serviceId: string
+    dojoId: string
+    status?: $Enums.ServiceRequestStatus
+    dojoDecision?: $Enums.ServiceRequestDojoDecision
+    payload?: JsonNullValueInput | InputJsonValue
+    reason?: string | null
+    dojoNote?: string | null
+    adminNote?: string | null
+    fee: Decimal | DecimalJsLike | number | string
+    discountAmount?: Decimal | DecimalJsLike | number | string
+    finalAmount: Decimal | DecimalJsLike | number | string
+    couponId?: string | null
+    couponCode?: string | null
+    orderId?: string | null
+    paidAt?: Date | string | null
+    dojoActedAt?: Date | string | null
+    dojoActedById?: string | null
+    adminActedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ServiceCouponCreateManyCreatedByInput = {
+    id?: string
+    code: string
+    dojoId: string
+    discountPercent: number
+    serviceId?: string | null
+    usageLimit?: number
+    usedCount?: number
+    expiresAt?: Date | string | null
+    isActive?: boolean
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type NotificationUpdateWithoutUserInput = {
@@ -80723,6 +89814,7 @@ export namespace Prisma {
     includesCertificates?: BoolFieldUpdateOperationsInput | boolean
     includesTransferRequest?: BoolFieldUpdateOperationsInput | boolean
     includesPastBeltFee?: BoolFieldUpdateOperationsInput | boolean
+    includesServiceRequest?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dojo?: DojoUpdateOneWithoutRenewalOrdersNestedInput
@@ -80730,6 +89822,7 @@ export namespace Prisma {
     orderItems?: ShopOrderItemUpdateManyWithoutOrderNestedInput
     certificateRequests?: CertificateRequestUpdateManyWithoutOrderNestedInput
     transferRequest?: StudentTransferRequestUpdateOneWithoutOrderNestedInput
+    serviceRequest?: ServiceRequestUpdateOneWithoutOrderNestedInput
     transactions?: PaymentTransactionUpdateManyWithoutOrderNestedInput
   }
 
@@ -80755,11 +89848,13 @@ export namespace Prisma {
     certDojoId?: NullableStringFieldUpdateOperationsInput | string | null
     includesTransferRequest?: BoolFieldUpdateOperationsInput | boolean
     includesPastBeltFee?: BoolFieldUpdateOperationsInput | boolean
+    includesServiceRequest?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     orderItems?: ShopOrderItemUncheckedUpdateManyWithoutOrderNestedInput
     certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutOrderNestedInput
     transferRequest?: StudentTransferRequestUncheckedUpdateOneWithoutOrderNestedInput
+    serviceRequest?: ServiceRequestUncheckedUpdateOneWithoutOrderNestedInput
     transactions?: PaymentTransactionUncheckedUpdateManyWithoutOrderNestedInput
   }
 
@@ -80785,6 +89880,7 @@ export namespace Prisma {
     certDojoId?: NullableStringFieldUpdateOperationsInput | string | null
     includesTransferRequest?: BoolFieldUpdateOperationsInput | boolean
     includesPastBeltFee?: BoolFieldUpdateOperationsInput | boolean
+    includesServiceRequest?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -81173,6 +90269,9 @@ export namespace Prisma {
     dojoNote?: NullableStringFieldUpdateOperationsInput | string | null
     adminNote?: NullableStringFieldUpdateOperationsInput | string | null
     fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discountAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    finalAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    couponCode?: NullableStringFieldUpdateOperationsInput | string | null
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     adminActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -81197,6 +90296,9 @@ export namespace Prisma {
     dojoNote?: NullableStringFieldUpdateOperationsInput | string | null
     adminNote?: NullableStringFieldUpdateOperationsInput | string | null
     fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discountAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    finalAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    couponCode?: NullableStringFieldUpdateOperationsInput | string | null
     orderId?: NullableStringFieldUpdateOperationsInput | string | null
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -81218,6 +90320,9 @@ export namespace Prisma {
     dojoNote?: NullableStringFieldUpdateOperationsInput | string | null
     adminNote?: NullableStringFieldUpdateOperationsInput | string | null
     fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discountAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    finalAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    couponCode?: NullableStringFieldUpdateOperationsInput | string | null
     orderId?: NullableStringFieldUpdateOperationsInput | string | null
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -81235,6 +90340,9 @@ export namespace Prisma {
     dojoNote?: NullableStringFieldUpdateOperationsInput | string | null
     adminNote?: NullableStringFieldUpdateOperationsInput | string | null
     fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discountAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    finalAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    couponCode?: NullableStringFieldUpdateOperationsInput | string | null
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     adminActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -81259,6 +90367,9 @@ export namespace Prisma {
     dojoNote?: NullableStringFieldUpdateOperationsInput | string | null
     adminNote?: NullableStringFieldUpdateOperationsInput | string | null
     fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discountAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    finalAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    couponCode?: NullableStringFieldUpdateOperationsInput | string | null
     orderId?: NullableStringFieldUpdateOperationsInput | string | null
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -81280,6 +90391,9 @@ export namespace Prisma {
     dojoNote?: NullableStringFieldUpdateOperationsInput | string | null
     adminNote?: NullableStringFieldUpdateOperationsInput | string | null
     fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discountAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    finalAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    couponCode?: NullableStringFieldUpdateOperationsInput | string | null
     orderId?: NullableStringFieldUpdateOperationsInput | string | null
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -81397,6 +90511,203 @@ export namespace Prisma {
     acceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
+  export type ServiceRequestUpdateWithoutDojoActedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumServiceRequestStatusFieldUpdateOperationsInput | $Enums.ServiceRequestStatus
+    dojoDecision?: EnumServiceRequestDojoDecisionFieldUpdateOperationsInput | $Enums.ServiceRequestDojoDecision
+    payload?: JsonNullValueInput | InputJsonValue
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    dojoNote?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNote?: NullableStringFieldUpdateOperationsInput | string | null
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discountAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    finalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    couponCode?: NullableStringFieldUpdateOperationsInput | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    adminActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    student?: StudentUpdateOneRequiredWithoutServiceRequestsNestedInput
+    service?: ServiceUpdateOneRequiredWithoutRequestsNestedInput
+    dojo?: DojoUpdateOneRequiredWithoutServiceRequestsNestedInput
+    order?: ShopOrderUpdateOneWithoutServiceRequestNestedInput
+    coupon?: ServiceCouponUpdateOneWithoutRequestsNestedInput
+    adminActedBy?: UserUpdateOneWithoutServiceRequestsAdminActedNestedInput
+  }
+
+  export type ServiceRequestUncheckedUpdateWithoutDojoActedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    serviceId?: StringFieldUpdateOperationsInput | string
+    dojoId?: StringFieldUpdateOperationsInput | string
+    status?: EnumServiceRequestStatusFieldUpdateOperationsInput | $Enums.ServiceRequestStatus
+    dojoDecision?: EnumServiceRequestDojoDecisionFieldUpdateOperationsInput | $Enums.ServiceRequestDojoDecision
+    payload?: JsonNullValueInput | InputJsonValue
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    dojoNote?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNote?: NullableStringFieldUpdateOperationsInput | string | null
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discountAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    finalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    couponId?: NullableStringFieldUpdateOperationsInput | string | null
+    couponCode?: NullableStringFieldUpdateOperationsInput | string | null
+    orderId?: NullableStringFieldUpdateOperationsInput | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    adminActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    adminActedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ServiceRequestUncheckedUpdateManyWithoutDojoActedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    serviceId?: StringFieldUpdateOperationsInput | string
+    dojoId?: StringFieldUpdateOperationsInput | string
+    status?: EnumServiceRequestStatusFieldUpdateOperationsInput | $Enums.ServiceRequestStatus
+    dojoDecision?: EnumServiceRequestDojoDecisionFieldUpdateOperationsInput | $Enums.ServiceRequestDojoDecision
+    payload?: JsonNullValueInput | InputJsonValue
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    dojoNote?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNote?: NullableStringFieldUpdateOperationsInput | string | null
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discountAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    finalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    couponId?: NullableStringFieldUpdateOperationsInput | string | null
+    couponCode?: NullableStringFieldUpdateOperationsInput | string | null
+    orderId?: NullableStringFieldUpdateOperationsInput | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    adminActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    adminActedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ServiceRequestUpdateWithoutAdminActedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumServiceRequestStatusFieldUpdateOperationsInput | $Enums.ServiceRequestStatus
+    dojoDecision?: EnumServiceRequestDojoDecisionFieldUpdateOperationsInput | $Enums.ServiceRequestDojoDecision
+    payload?: JsonNullValueInput | InputJsonValue
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    dojoNote?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNote?: NullableStringFieldUpdateOperationsInput | string | null
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discountAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    finalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    couponCode?: NullableStringFieldUpdateOperationsInput | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    adminActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    student?: StudentUpdateOneRequiredWithoutServiceRequestsNestedInput
+    service?: ServiceUpdateOneRequiredWithoutRequestsNestedInput
+    dojo?: DojoUpdateOneRequiredWithoutServiceRequestsNestedInput
+    order?: ShopOrderUpdateOneWithoutServiceRequestNestedInput
+    coupon?: ServiceCouponUpdateOneWithoutRequestsNestedInput
+    dojoActedBy?: UserUpdateOneWithoutServiceRequestsDojoActedNestedInput
+  }
+
+  export type ServiceRequestUncheckedUpdateWithoutAdminActedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    serviceId?: StringFieldUpdateOperationsInput | string
+    dojoId?: StringFieldUpdateOperationsInput | string
+    status?: EnumServiceRequestStatusFieldUpdateOperationsInput | $Enums.ServiceRequestStatus
+    dojoDecision?: EnumServiceRequestDojoDecisionFieldUpdateOperationsInput | $Enums.ServiceRequestDojoDecision
+    payload?: JsonNullValueInput | InputJsonValue
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    dojoNote?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNote?: NullableStringFieldUpdateOperationsInput | string | null
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discountAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    finalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    couponId?: NullableStringFieldUpdateOperationsInput | string | null
+    couponCode?: NullableStringFieldUpdateOperationsInput | string | null
+    orderId?: NullableStringFieldUpdateOperationsInput | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dojoActedById?: NullableStringFieldUpdateOperationsInput | string | null
+    adminActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ServiceRequestUncheckedUpdateManyWithoutAdminActedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    serviceId?: StringFieldUpdateOperationsInput | string
+    dojoId?: StringFieldUpdateOperationsInput | string
+    status?: EnumServiceRequestStatusFieldUpdateOperationsInput | $Enums.ServiceRequestStatus
+    dojoDecision?: EnumServiceRequestDojoDecisionFieldUpdateOperationsInput | $Enums.ServiceRequestDojoDecision
+    payload?: JsonNullValueInput | InputJsonValue
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    dojoNote?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNote?: NullableStringFieldUpdateOperationsInput | string | null
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discountAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    finalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    couponId?: NullableStringFieldUpdateOperationsInput | string | null
+    couponCode?: NullableStringFieldUpdateOperationsInput | string | null
+    orderId?: NullableStringFieldUpdateOperationsInput | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dojoActedById?: NullableStringFieldUpdateOperationsInput | string | null
+    adminActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ServiceCouponUpdateWithoutCreatedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    discountPercent?: IntFieldUpdateOperationsInput | number
+    usageLimit?: IntFieldUpdateOperationsInput | number
+    usedCount?: IntFieldUpdateOperationsInput | number
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    dojo?: DojoUpdateOneRequiredWithoutServiceCouponsNestedInput
+    service?: ServiceUpdateOneWithoutCouponsNestedInput
+    requests?: ServiceRequestUpdateManyWithoutCouponNestedInput
+  }
+
+  export type ServiceCouponUncheckedUpdateWithoutCreatedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    dojoId?: StringFieldUpdateOperationsInput | string
+    discountPercent?: IntFieldUpdateOperationsInput | number
+    serviceId?: NullableStringFieldUpdateOperationsInput | string | null
+    usageLimit?: IntFieldUpdateOperationsInput | number
+    usedCount?: IntFieldUpdateOperationsInput | number
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    requests?: ServiceRequestUncheckedUpdateManyWithoutCouponNestedInput
+  }
+
+  export type ServiceCouponUncheckedUpdateManyWithoutCreatedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    dojoId?: StringFieldUpdateOperationsInput | string
+    discountPercent?: IntFieldUpdateOperationsInput | number
+    serviceId?: NullableStringFieldUpdateOperationsInput | string | null
+    usageLimit?: IntFieldUpdateOperationsInput | number
+    usedCount?: IntFieldUpdateOperationsInput | number
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type GradingCreateManyStudentInput = {
     id?: string
     gradingEventId?: string | null
@@ -81462,6 +90773,34 @@ export namespace Prisma {
     dojoNote?: string | null
     adminNote?: string | null
     fee: Decimal | DecimalJsLike | number | string
+    discountAmount?: Decimal | DecimalJsLike | number | string
+    finalAmount?: Decimal | DecimalJsLike | number | string | null
+    couponCode?: string | null
+    orderId?: string | null
+    paidAt?: Date | string | null
+    dojoActedAt?: Date | string | null
+    dojoActedById?: string | null
+    adminActedAt?: Date | string | null
+    adminActedById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ServiceRequestCreateManyStudentInput = {
+    id?: string
+    serviceId: string
+    dojoId: string
+    status?: $Enums.ServiceRequestStatus
+    dojoDecision?: $Enums.ServiceRequestDojoDecision
+    payload?: JsonNullValueInput | InputJsonValue
+    reason?: string | null
+    dojoNote?: string | null
+    adminNote?: string | null
+    fee: Decimal | DecimalJsLike | number | string
+    discountAmount?: Decimal | DecimalJsLike | number | string
+    finalAmount: Decimal | DecimalJsLike | number | string
+    couponId?: string | null
+    couponCode?: string | null
     orderId?: string | null
     paidAt?: Date | string | null
     dojoActedAt?: Date | string | null
@@ -81657,6 +90996,9 @@ export namespace Prisma {
     dojoNote?: NullableStringFieldUpdateOperationsInput | string | null
     adminNote?: NullableStringFieldUpdateOperationsInput | string | null
     fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discountAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    finalAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    couponCode?: NullableStringFieldUpdateOperationsInput | string | null
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     adminActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -81680,6 +91022,9 @@ export namespace Prisma {
     dojoNote?: NullableStringFieldUpdateOperationsInput | string | null
     adminNote?: NullableStringFieldUpdateOperationsInput | string | null
     fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discountAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    finalAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    couponCode?: NullableStringFieldUpdateOperationsInput | string | null
     orderId?: NullableStringFieldUpdateOperationsInput | string | null
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -81701,6 +91046,84 @@ export namespace Prisma {
     dojoNote?: NullableStringFieldUpdateOperationsInput | string | null
     adminNote?: NullableStringFieldUpdateOperationsInput | string | null
     fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discountAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    finalAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    couponCode?: NullableStringFieldUpdateOperationsInput | string | null
+    orderId?: NullableStringFieldUpdateOperationsInput | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dojoActedById?: NullableStringFieldUpdateOperationsInput | string | null
+    adminActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    adminActedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ServiceRequestUpdateWithoutStudentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumServiceRequestStatusFieldUpdateOperationsInput | $Enums.ServiceRequestStatus
+    dojoDecision?: EnumServiceRequestDojoDecisionFieldUpdateOperationsInput | $Enums.ServiceRequestDojoDecision
+    payload?: JsonNullValueInput | InputJsonValue
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    dojoNote?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNote?: NullableStringFieldUpdateOperationsInput | string | null
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discountAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    finalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    couponCode?: NullableStringFieldUpdateOperationsInput | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    adminActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    service?: ServiceUpdateOneRequiredWithoutRequestsNestedInput
+    dojo?: DojoUpdateOneRequiredWithoutServiceRequestsNestedInput
+    order?: ShopOrderUpdateOneWithoutServiceRequestNestedInput
+    coupon?: ServiceCouponUpdateOneWithoutRequestsNestedInput
+    dojoActedBy?: UserUpdateOneWithoutServiceRequestsDojoActedNestedInput
+    adminActedBy?: UserUpdateOneWithoutServiceRequestsAdminActedNestedInput
+  }
+
+  export type ServiceRequestUncheckedUpdateWithoutStudentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    serviceId?: StringFieldUpdateOperationsInput | string
+    dojoId?: StringFieldUpdateOperationsInput | string
+    status?: EnumServiceRequestStatusFieldUpdateOperationsInput | $Enums.ServiceRequestStatus
+    dojoDecision?: EnumServiceRequestDojoDecisionFieldUpdateOperationsInput | $Enums.ServiceRequestDojoDecision
+    payload?: JsonNullValueInput | InputJsonValue
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    dojoNote?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNote?: NullableStringFieldUpdateOperationsInput | string | null
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discountAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    finalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    couponId?: NullableStringFieldUpdateOperationsInput | string | null
+    couponCode?: NullableStringFieldUpdateOperationsInput | string | null
+    orderId?: NullableStringFieldUpdateOperationsInput | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dojoActedById?: NullableStringFieldUpdateOperationsInput | string | null
+    adminActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    adminActedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ServiceRequestUncheckedUpdateManyWithoutStudentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    serviceId?: StringFieldUpdateOperationsInput | string
+    dojoId?: StringFieldUpdateOperationsInput | string
+    status?: EnumServiceRequestStatusFieldUpdateOperationsInput | $Enums.ServiceRequestStatus
+    dojoDecision?: EnumServiceRequestDojoDecisionFieldUpdateOperationsInput | $Enums.ServiceRequestDojoDecision
+    payload?: JsonNullValueInput | InputJsonValue
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    dojoNote?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNote?: NullableStringFieldUpdateOperationsInput | string | null
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discountAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    finalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    couponId?: NullableStringFieldUpdateOperationsInput | string | null
+    couponCode?: NullableStringFieldUpdateOperationsInput | string | null
     orderId?: NullableStringFieldUpdateOperationsInput | string | null
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -82113,6 +91536,7 @@ export namespace Prisma {
     certDojoId?: string | null
     includesTransferRequest?: boolean
     includesPastBeltFee?: boolean
+    includesServiceRequest?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -82139,6 +91563,7 @@ export namespace Prisma {
     includesCertificates?: boolean
     includesTransferRequest?: boolean
     includesPastBeltFee?: boolean
+    includesServiceRequest?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -82262,6 +91687,9 @@ export namespace Prisma {
     dojoNote?: string | null
     adminNote?: string | null
     fee: Decimal | DecimalJsLike | number | string
+    discountAmount?: Decimal | DecimalJsLike | number | string
+    finalAmount?: Decimal | DecimalJsLike | number | string | null
+    couponCode?: string | null
     orderId?: string | null
     paidAt?: Date | string | null
     dojoActedAt?: Date | string | null
@@ -82282,6 +91710,9 @@ export namespace Prisma {
     dojoNote?: string | null
     adminNote?: string | null
     fee: Decimal | DecimalJsLike | number | string
+    discountAmount?: Decimal | DecimalJsLike | number | string
+    finalAmount?: Decimal | DecimalJsLike | number | string | null
+    couponCode?: string | null
     orderId?: string | null
     paidAt?: Date | string | null
     dojoActedAt?: Date | string | null
@@ -82312,6 +91743,46 @@ export namespace Prisma {
     createdAt?: Date | string
   }
 
+  export type ServiceRequestCreateManyDojoInput = {
+    id?: string
+    studentId: string
+    serviceId: string
+    status?: $Enums.ServiceRequestStatus
+    dojoDecision?: $Enums.ServiceRequestDojoDecision
+    payload?: JsonNullValueInput | InputJsonValue
+    reason?: string | null
+    dojoNote?: string | null
+    adminNote?: string | null
+    fee: Decimal | DecimalJsLike | number | string
+    discountAmount?: Decimal | DecimalJsLike | number | string
+    finalAmount: Decimal | DecimalJsLike | number | string
+    couponId?: string | null
+    couponCode?: string | null
+    orderId?: string | null
+    paidAt?: Date | string | null
+    dojoActedAt?: Date | string | null
+    dojoActedById?: string | null
+    adminActedAt?: Date | string | null
+    adminActedById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ServiceCouponCreateManyDojoInput = {
+    id?: string
+    code: string
+    createdById: string
+    discountPercent: number
+    serviceId?: string | null
+    usageLimit?: number
+    usedCount?: number
+    expiresAt?: Date | string | null
+    isActive?: boolean
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type ShopOrderUpdateWithoutDojoInput = {
     id?: StringFieldUpdateOperationsInput | string
     paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
@@ -82332,6 +91803,7 @@ export namespace Prisma {
     includesCertificates?: BoolFieldUpdateOperationsInput | boolean
     includesTransferRequest?: BoolFieldUpdateOperationsInput | boolean
     includesPastBeltFee?: BoolFieldUpdateOperationsInput | boolean
+    includesServiceRequest?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneWithoutOrdersNestedInput
@@ -82339,6 +91811,7 @@ export namespace Prisma {
     orderItems?: ShopOrderItemUpdateManyWithoutOrderNestedInput
     certificateRequests?: CertificateRequestUpdateManyWithoutOrderNestedInput
     transferRequest?: StudentTransferRequestUpdateOneWithoutOrderNestedInput
+    serviceRequest?: ServiceRequestUpdateOneWithoutOrderNestedInput
     transactions?: PaymentTransactionUpdateManyWithoutOrderNestedInput
   }
 
@@ -82364,11 +91837,13 @@ export namespace Prisma {
     certDojoId?: NullableStringFieldUpdateOperationsInput | string | null
     includesTransferRequest?: BoolFieldUpdateOperationsInput | boolean
     includesPastBeltFee?: BoolFieldUpdateOperationsInput | boolean
+    includesServiceRequest?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     orderItems?: ShopOrderItemUncheckedUpdateManyWithoutOrderNestedInput
     certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutOrderNestedInput
     transferRequest?: StudentTransferRequestUncheckedUpdateOneWithoutOrderNestedInput
+    serviceRequest?: ServiceRequestUncheckedUpdateOneWithoutOrderNestedInput
     transactions?: PaymentTransactionUncheckedUpdateManyWithoutOrderNestedInput
   }
 
@@ -82394,6 +91869,7 @@ export namespace Prisma {
     certDojoId?: NullableStringFieldUpdateOperationsInput | string | null
     includesTransferRequest?: BoolFieldUpdateOperationsInput | boolean
     includesPastBeltFee?: BoolFieldUpdateOperationsInput | boolean
+    includesServiceRequest?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -82418,6 +91894,7 @@ export namespace Prisma {
     includesCertificates?: BoolFieldUpdateOperationsInput | boolean
     includesTransferRequest?: BoolFieldUpdateOperationsInput | boolean
     includesPastBeltFee?: BoolFieldUpdateOperationsInput | boolean
+    includesServiceRequest?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneWithoutOrdersNestedInput
@@ -82425,6 +91902,7 @@ export namespace Prisma {
     orderItems?: ShopOrderItemUpdateManyWithoutOrderNestedInput
     certificateRequests?: CertificateRequestUpdateManyWithoutOrderNestedInput
     transferRequest?: StudentTransferRequestUpdateOneWithoutOrderNestedInput
+    serviceRequest?: ServiceRequestUpdateOneWithoutOrderNestedInput
     transactions?: PaymentTransactionUpdateManyWithoutOrderNestedInput
   }
 
@@ -82450,11 +91928,13 @@ export namespace Prisma {
     includesCertificates?: BoolFieldUpdateOperationsInput | boolean
     includesTransferRequest?: BoolFieldUpdateOperationsInput | boolean
     includesPastBeltFee?: BoolFieldUpdateOperationsInput | boolean
+    includesServiceRequest?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     orderItems?: ShopOrderItemUncheckedUpdateManyWithoutOrderNestedInput
     certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutOrderNestedInput
     transferRequest?: StudentTransferRequestUncheckedUpdateOneWithoutOrderNestedInput
+    serviceRequest?: ServiceRequestUncheckedUpdateOneWithoutOrderNestedInput
     transactions?: PaymentTransactionUncheckedUpdateManyWithoutOrderNestedInput
   }
 
@@ -82480,6 +91960,7 @@ export namespace Prisma {
     includesCertificates?: BoolFieldUpdateOperationsInput | boolean
     includesTransferRequest?: BoolFieldUpdateOperationsInput | boolean
     includesPastBeltFee?: BoolFieldUpdateOperationsInput | boolean
+    includesServiceRequest?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -82555,6 +92036,7 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestUpdateManyWithoutStudentNestedInput
     achievements?: StudentAchievementUpdateManyWithoutStudentNestedInput
     transferRequests?: StudentTransferRequestUpdateManyWithoutStudentNestedInput
+    serviceRequests?: ServiceRequestUpdateManyWithoutStudentNestedInput
     dojoHistory?: StudentDojoHistoryUpdateManyWithoutStudentNestedInput
   }
 
@@ -82578,6 +92060,7 @@ export namespace Prisma {
     certificateRequests?: CertificateRequestUncheckedUpdateManyWithoutStudentNestedInput
     achievements?: StudentAchievementUncheckedUpdateManyWithoutStudentNestedInput
     transferRequests?: StudentTransferRequestUncheckedUpdateManyWithoutStudentNestedInput
+    serviceRequests?: ServiceRequestUncheckedUpdateManyWithoutStudentNestedInput
     dojoHistory?: StudentDojoHistoryUncheckedUpdateManyWithoutStudentNestedInput
   }
 
@@ -82835,6 +92318,9 @@ export namespace Prisma {
     dojoNote?: NullableStringFieldUpdateOperationsInput | string | null
     adminNote?: NullableStringFieldUpdateOperationsInput | string | null
     fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discountAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    finalAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    couponCode?: NullableStringFieldUpdateOperationsInput | string | null
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     adminActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -82858,6 +92344,9 @@ export namespace Prisma {
     dojoNote?: NullableStringFieldUpdateOperationsInput | string | null
     adminNote?: NullableStringFieldUpdateOperationsInput | string | null
     fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discountAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    finalAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    couponCode?: NullableStringFieldUpdateOperationsInput | string | null
     orderId?: NullableStringFieldUpdateOperationsInput | string | null
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -82879,6 +92368,9 @@ export namespace Prisma {
     dojoNote?: NullableStringFieldUpdateOperationsInput | string | null
     adminNote?: NullableStringFieldUpdateOperationsInput | string | null
     fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discountAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    finalAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    couponCode?: NullableStringFieldUpdateOperationsInput | string | null
     orderId?: NullableStringFieldUpdateOperationsInput | string | null
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -82897,6 +92389,9 @@ export namespace Prisma {
     dojoNote?: NullableStringFieldUpdateOperationsInput | string | null
     adminNote?: NullableStringFieldUpdateOperationsInput | string | null
     fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discountAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    finalAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    couponCode?: NullableStringFieldUpdateOperationsInput | string | null
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     adminActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -82920,6 +92415,9 @@ export namespace Prisma {
     dojoNote?: NullableStringFieldUpdateOperationsInput | string | null
     adminNote?: NullableStringFieldUpdateOperationsInput | string | null
     fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discountAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    finalAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    couponCode?: NullableStringFieldUpdateOperationsInput | string | null
     orderId?: NullableStringFieldUpdateOperationsInput | string | null
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -82941,6 +92439,9 @@ export namespace Prisma {
     dojoNote?: NullableStringFieldUpdateOperationsInput | string | null
     adminNote?: NullableStringFieldUpdateOperationsInput | string | null
     fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discountAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    finalAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    couponCode?: NullableStringFieldUpdateOperationsInput | string | null
     orderId?: NullableStringFieldUpdateOperationsInput | string | null
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -83009,6 +92510,128 @@ export namespace Prisma {
     changedById?: NullableStringFieldUpdateOperationsInput | string | null
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ServiceRequestUpdateWithoutDojoInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumServiceRequestStatusFieldUpdateOperationsInput | $Enums.ServiceRequestStatus
+    dojoDecision?: EnumServiceRequestDojoDecisionFieldUpdateOperationsInput | $Enums.ServiceRequestDojoDecision
+    payload?: JsonNullValueInput | InputJsonValue
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    dojoNote?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNote?: NullableStringFieldUpdateOperationsInput | string | null
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discountAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    finalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    couponCode?: NullableStringFieldUpdateOperationsInput | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    adminActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    student?: StudentUpdateOneRequiredWithoutServiceRequestsNestedInput
+    service?: ServiceUpdateOneRequiredWithoutRequestsNestedInput
+    order?: ShopOrderUpdateOneWithoutServiceRequestNestedInput
+    coupon?: ServiceCouponUpdateOneWithoutRequestsNestedInput
+    dojoActedBy?: UserUpdateOneWithoutServiceRequestsDojoActedNestedInput
+    adminActedBy?: UserUpdateOneWithoutServiceRequestsAdminActedNestedInput
+  }
+
+  export type ServiceRequestUncheckedUpdateWithoutDojoInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    serviceId?: StringFieldUpdateOperationsInput | string
+    status?: EnumServiceRequestStatusFieldUpdateOperationsInput | $Enums.ServiceRequestStatus
+    dojoDecision?: EnumServiceRequestDojoDecisionFieldUpdateOperationsInput | $Enums.ServiceRequestDojoDecision
+    payload?: JsonNullValueInput | InputJsonValue
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    dojoNote?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNote?: NullableStringFieldUpdateOperationsInput | string | null
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discountAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    finalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    couponId?: NullableStringFieldUpdateOperationsInput | string | null
+    couponCode?: NullableStringFieldUpdateOperationsInput | string | null
+    orderId?: NullableStringFieldUpdateOperationsInput | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dojoActedById?: NullableStringFieldUpdateOperationsInput | string | null
+    adminActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    adminActedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ServiceRequestUncheckedUpdateManyWithoutDojoInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    serviceId?: StringFieldUpdateOperationsInput | string
+    status?: EnumServiceRequestStatusFieldUpdateOperationsInput | $Enums.ServiceRequestStatus
+    dojoDecision?: EnumServiceRequestDojoDecisionFieldUpdateOperationsInput | $Enums.ServiceRequestDojoDecision
+    payload?: JsonNullValueInput | InputJsonValue
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    dojoNote?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNote?: NullableStringFieldUpdateOperationsInput | string | null
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discountAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    finalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    couponId?: NullableStringFieldUpdateOperationsInput | string | null
+    couponCode?: NullableStringFieldUpdateOperationsInput | string | null
+    orderId?: NullableStringFieldUpdateOperationsInput | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dojoActedById?: NullableStringFieldUpdateOperationsInput | string | null
+    adminActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    adminActedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ServiceCouponUpdateWithoutDojoInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    discountPercent?: IntFieldUpdateOperationsInput | number
+    usageLimit?: IntFieldUpdateOperationsInput | number
+    usedCount?: IntFieldUpdateOperationsInput | number
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    service?: ServiceUpdateOneWithoutCouponsNestedInput
+    createdBy?: UserUpdateOneRequiredWithoutServiceCouponsCreatedNestedInput
+    requests?: ServiceRequestUpdateManyWithoutCouponNestedInput
+  }
+
+  export type ServiceCouponUncheckedUpdateWithoutDojoInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    createdById?: StringFieldUpdateOperationsInput | string
+    discountPercent?: IntFieldUpdateOperationsInput | number
+    serviceId?: NullableStringFieldUpdateOperationsInput | string | null
+    usageLimit?: IntFieldUpdateOperationsInput | number
+    usedCount?: IntFieldUpdateOperationsInput | number
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    requests?: ServiceRequestUncheckedUpdateManyWithoutCouponNestedInput
+  }
+
+  export type ServiceCouponUncheckedUpdateManyWithoutDojoInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    createdById?: StringFieldUpdateOperationsInput | string
+    discountPercent?: IntFieldUpdateOperationsInput | number
+    serviceId?: NullableStringFieldUpdateOperationsInput | string | null
+    usageLimit?: IntFieldUpdateOperationsInput | number
+    usedCount?: IntFieldUpdateOperationsInput | number
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type GradingCreateManyGradingEventInput = {
@@ -83943,6 +93566,268 @@ export namespace Prisma {
     changedById?: NullableStringFieldUpdateOperationsInput | string | null
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ServiceRequestCreateManyServiceInput = {
+    id?: string
+    studentId: string
+    dojoId: string
+    status?: $Enums.ServiceRequestStatus
+    dojoDecision?: $Enums.ServiceRequestDojoDecision
+    payload?: JsonNullValueInput | InputJsonValue
+    reason?: string | null
+    dojoNote?: string | null
+    adminNote?: string | null
+    fee: Decimal | DecimalJsLike | number | string
+    discountAmount?: Decimal | DecimalJsLike | number | string
+    finalAmount: Decimal | DecimalJsLike | number | string
+    couponId?: string | null
+    couponCode?: string | null
+    orderId?: string | null
+    paidAt?: Date | string | null
+    dojoActedAt?: Date | string | null
+    dojoActedById?: string | null
+    adminActedAt?: Date | string | null
+    adminActedById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ServiceCouponCreateManyServiceInput = {
+    id?: string
+    code: string
+    dojoId: string
+    createdById: string
+    discountPercent: number
+    usageLimit?: number
+    usedCount?: number
+    expiresAt?: Date | string | null
+    isActive?: boolean
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ServiceRequestUpdateWithoutServiceInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumServiceRequestStatusFieldUpdateOperationsInput | $Enums.ServiceRequestStatus
+    dojoDecision?: EnumServiceRequestDojoDecisionFieldUpdateOperationsInput | $Enums.ServiceRequestDojoDecision
+    payload?: JsonNullValueInput | InputJsonValue
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    dojoNote?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNote?: NullableStringFieldUpdateOperationsInput | string | null
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discountAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    finalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    couponCode?: NullableStringFieldUpdateOperationsInput | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    adminActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    student?: StudentUpdateOneRequiredWithoutServiceRequestsNestedInput
+    dojo?: DojoUpdateOneRequiredWithoutServiceRequestsNestedInput
+    order?: ShopOrderUpdateOneWithoutServiceRequestNestedInput
+    coupon?: ServiceCouponUpdateOneWithoutRequestsNestedInput
+    dojoActedBy?: UserUpdateOneWithoutServiceRequestsDojoActedNestedInput
+    adminActedBy?: UserUpdateOneWithoutServiceRequestsAdminActedNestedInput
+  }
+
+  export type ServiceRequestUncheckedUpdateWithoutServiceInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    dojoId?: StringFieldUpdateOperationsInput | string
+    status?: EnumServiceRequestStatusFieldUpdateOperationsInput | $Enums.ServiceRequestStatus
+    dojoDecision?: EnumServiceRequestDojoDecisionFieldUpdateOperationsInput | $Enums.ServiceRequestDojoDecision
+    payload?: JsonNullValueInput | InputJsonValue
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    dojoNote?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNote?: NullableStringFieldUpdateOperationsInput | string | null
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discountAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    finalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    couponId?: NullableStringFieldUpdateOperationsInput | string | null
+    couponCode?: NullableStringFieldUpdateOperationsInput | string | null
+    orderId?: NullableStringFieldUpdateOperationsInput | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dojoActedById?: NullableStringFieldUpdateOperationsInput | string | null
+    adminActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    adminActedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ServiceRequestUncheckedUpdateManyWithoutServiceInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    dojoId?: StringFieldUpdateOperationsInput | string
+    status?: EnumServiceRequestStatusFieldUpdateOperationsInput | $Enums.ServiceRequestStatus
+    dojoDecision?: EnumServiceRequestDojoDecisionFieldUpdateOperationsInput | $Enums.ServiceRequestDojoDecision
+    payload?: JsonNullValueInput | InputJsonValue
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    dojoNote?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNote?: NullableStringFieldUpdateOperationsInput | string | null
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discountAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    finalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    couponId?: NullableStringFieldUpdateOperationsInput | string | null
+    couponCode?: NullableStringFieldUpdateOperationsInput | string | null
+    orderId?: NullableStringFieldUpdateOperationsInput | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dojoActedById?: NullableStringFieldUpdateOperationsInput | string | null
+    adminActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    adminActedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ServiceCouponUpdateWithoutServiceInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    discountPercent?: IntFieldUpdateOperationsInput | number
+    usageLimit?: IntFieldUpdateOperationsInput | number
+    usedCount?: IntFieldUpdateOperationsInput | number
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    dojo?: DojoUpdateOneRequiredWithoutServiceCouponsNestedInput
+    createdBy?: UserUpdateOneRequiredWithoutServiceCouponsCreatedNestedInput
+    requests?: ServiceRequestUpdateManyWithoutCouponNestedInput
+  }
+
+  export type ServiceCouponUncheckedUpdateWithoutServiceInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    dojoId?: StringFieldUpdateOperationsInput | string
+    createdById?: StringFieldUpdateOperationsInput | string
+    discountPercent?: IntFieldUpdateOperationsInput | number
+    usageLimit?: IntFieldUpdateOperationsInput | number
+    usedCount?: IntFieldUpdateOperationsInput | number
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    requests?: ServiceRequestUncheckedUpdateManyWithoutCouponNestedInput
+  }
+
+  export type ServiceCouponUncheckedUpdateManyWithoutServiceInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    dojoId?: StringFieldUpdateOperationsInput | string
+    createdById?: StringFieldUpdateOperationsInput | string
+    discountPercent?: IntFieldUpdateOperationsInput | number
+    usageLimit?: IntFieldUpdateOperationsInput | number
+    usedCount?: IntFieldUpdateOperationsInput | number
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ServiceRequestCreateManyCouponInput = {
+    id?: string
+    studentId: string
+    serviceId: string
+    dojoId: string
+    status?: $Enums.ServiceRequestStatus
+    dojoDecision?: $Enums.ServiceRequestDojoDecision
+    payload?: JsonNullValueInput | InputJsonValue
+    reason?: string | null
+    dojoNote?: string | null
+    adminNote?: string | null
+    fee: Decimal | DecimalJsLike | number | string
+    discountAmount?: Decimal | DecimalJsLike | number | string
+    finalAmount: Decimal | DecimalJsLike | number | string
+    couponCode?: string | null
+    orderId?: string | null
+    paidAt?: Date | string | null
+    dojoActedAt?: Date | string | null
+    dojoActedById?: string | null
+    adminActedAt?: Date | string | null
+    adminActedById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ServiceRequestUpdateWithoutCouponInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumServiceRequestStatusFieldUpdateOperationsInput | $Enums.ServiceRequestStatus
+    dojoDecision?: EnumServiceRequestDojoDecisionFieldUpdateOperationsInput | $Enums.ServiceRequestDojoDecision
+    payload?: JsonNullValueInput | InputJsonValue
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    dojoNote?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNote?: NullableStringFieldUpdateOperationsInput | string | null
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discountAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    finalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    couponCode?: NullableStringFieldUpdateOperationsInput | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    adminActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    student?: StudentUpdateOneRequiredWithoutServiceRequestsNestedInput
+    service?: ServiceUpdateOneRequiredWithoutRequestsNestedInput
+    dojo?: DojoUpdateOneRequiredWithoutServiceRequestsNestedInput
+    order?: ShopOrderUpdateOneWithoutServiceRequestNestedInput
+    dojoActedBy?: UserUpdateOneWithoutServiceRequestsDojoActedNestedInput
+    adminActedBy?: UserUpdateOneWithoutServiceRequestsAdminActedNestedInput
+  }
+
+  export type ServiceRequestUncheckedUpdateWithoutCouponInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    serviceId?: StringFieldUpdateOperationsInput | string
+    dojoId?: StringFieldUpdateOperationsInput | string
+    status?: EnumServiceRequestStatusFieldUpdateOperationsInput | $Enums.ServiceRequestStatus
+    dojoDecision?: EnumServiceRequestDojoDecisionFieldUpdateOperationsInput | $Enums.ServiceRequestDojoDecision
+    payload?: JsonNullValueInput | InputJsonValue
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    dojoNote?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNote?: NullableStringFieldUpdateOperationsInput | string | null
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discountAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    finalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    couponCode?: NullableStringFieldUpdateOperationsInput | string | null
+    orderId?: NullableStringFieldUpdateOperationsInput | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dojoActedById?: NullableStringFieldUpdateOperationsInput | string | null
+    adminActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    adminActedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ServiceRequestUncheckedUpdateManyWithoutCouponInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    serviceId?: StringFieldUpdateOperationsInput | string
+    dojoId?: StringFieldUpdateOperationsInput | string
+    status?: EnumServiceRequestStatusFieldUpdateOperationsInput | $Enums.ServiceRequestStatus
+    dojoDecision?: EnumServiceRequestDojoDecisionFieldUpdateOperationsInput | $Enums.ServiceRequestDojoDecision
+    payload?: JsonNullValueInput | InputJsonValue
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    dojoNote?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNote?: NullableStringFieldUpdateOperationsInput | string | null
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discountAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    finalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    couponCode?: NullableStringFieldUpdateOperationsInput | string | null
+    orderId?: NullableStringFieldUpdateOperationsInput | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dojoActedById?: NullableStringFieldUpdateOperationsInput | string | null
+    adminActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    adminActedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
 

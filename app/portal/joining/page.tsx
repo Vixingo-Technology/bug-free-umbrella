@@ -26,14 +26,13 @@ async function applyDevBypass(userId: string, orderId: string) {
         select: {
             paymentStatus: true,
             includesMembership: true,
-            includesPastBeltFee: true,
         },
     });
     if (!order || order.paymentStatus === "PAID") return;
 
     const student = await prisma.student.findUnique({
         where: { id: userId },
-        select: { expiryDate: true, joinStage: true, assignedRank: true },
+        select: { expiryDate: true, joinStage: true },
     });
     if (!student) return;
 
@@ -55,19 +54,6 @@ async function applyDevBypass(userId: string, orderId: string) {
                     ...(student.joinStage === "FEE_UNPAID"
                         ? { joinStage: "AWAITING_APPROVAL" as const }
                         : {}),
-                },
-            }),
-        );
-    }
-
-    if (order.includesPastBeltFee && student.joinStage === "PAST_BELT_UNPAID") {
-        writes.push(
-            prisma.student.update({
-                where: { id: userId },
-                data: {
-                    joinStage: "JOINED",
-                    joinedAt: new Date(),
-                    currentRank: student.assignedRank ?? undefined,
                 },
             }),
         );
@@ -152,9 +138,7 @@ export default async function JoiningPage({
     }
 
     // Already fully joined — bounce to the dashboard.
-    // Exception: keep them here to show the "you've joined" popup if they
-    // just returned from the past-belt payment success.
-    if (user && u.student.joinStage === "JOINED" && params.status !== "success") {
+    if (user && u.student.joinStage === "JOINED") {
         redirect("/portal");
     }
 

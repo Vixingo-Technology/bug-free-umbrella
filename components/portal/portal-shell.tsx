@@ -29,6 +29,7 @@ import {
     Lock,
     Receipt,
     UserPlus,
+    Wrench,
 } from "lucide-react";
 import Logo from "@/assets/jka_logo.svg";
 import { createClient } from "@/lib/supabase/client";
@@ -58,7 +59,7 @@ const studentNavItems = [
     { label: "Notifications",href: "/portal/notifications",icon: Bell },
     { label: "Shop Orders",  href: "/portal/orders",       icon: ShoppingBag },
     { label: "Renew",        href: "/portal/renew",        icon: RefreshCw },
-    { label: "Transfer Dojo",href: "/portal/transfer",     icon: ArrowRightLeft },
+    { label: "Request Service", href: "/portal/services",  icon: Wrench },
 ];
 
 // While the student is still in the joining flow (joinStage !== JOINED),
@@ -88,6 +89,8 @@ const adminNavItems = [
     { label: "Dojos",    href: "/portal/admin/dojos",    icon: Building2 },
     { label: "Certificates", href: "/portal/admin/certificates", icon: Award },
     { label: "Transfers", href: "/portal/admin/transfers", icon: ArrowRightLeft },
+    { label: "Services", href: "/portal/admin/services", icon: Wrench },
+    { label: "Service Requests", href: "/portal/admin/service-requests", icon: Wrench },
     { label: "Subscriptions", href: "/portal/admin/subscriptions", icon: CreditCard },
 ];
 
