@@ -101,12 +101,13 @@ export default function EventForm({
         [tournamentType],
     );
     const divisionsByBand = useMemo(() => {
-        const groups = new Map<string, typeof ALL_DIVISIONS>();
+        type Division = (typeof ALL_DIVISIONS)[number];
+        const groups = new Map<string, Division[]>();
         for (const d of divisions) {
             const key = d.ageBand;
             const arr = groups.get(key) ?? [];
             arr.push(d);
-            groups.set(key, [...arr]);
+            groups.set(key, arr);
         }
         return groups;
     }, [divisions]);
