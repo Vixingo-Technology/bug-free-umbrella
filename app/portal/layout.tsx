@@ -97,6 +97,7 @@ export default async function PortalLayout({
     let initialFullName: string = "";
     let initialEmail: string = "";
     let initialDojoName: string | null = null;
+    let initialDojoShortName: string | null = null;
     let initialDojoLogoUrl: string | null = null;
     let initialCurrentRank: string | null = null;
 
@@ -196,9 +197,10 @@ export default async function PortalLayout({
                 if (dojoId) {
                     const dojo = await prisma.dojo.findUnique({
                         where: { id: dojoId },
-                        select: { name: true, logoUrl: true },
+                        select: { name: true, shortName: true, logoUrl: true },
                     });
                     initialDojoName = dojo?.name ?? null;
+                    initialDojoShortName = dojo?.shortName ?? null;
                     initialDojoLogoUrl = dojo?.logoUrl ?? null;
                 }
 
@@ -292,6 +294,7 @@ export default async function PortalLayout({
             initialFullName={initialFullName}
             initialEmail={initialEmail}
             initialDojoName={initialDojoName}
+            initialDojoShortName={initialDojoShortName}
             initialDojoLogoUrl={initialDojoLogoUrl}
             initialCurrentRank={initialCurrentRank}
         >

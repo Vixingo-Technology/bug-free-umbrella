@@ -32,6 +32,7 @@ const LocationMiniMap = dynamic(
 
 type Values = {
     name: string;
+    shortName: string;
     phone: string;
     email: string;
     address: string;
@@ -45,6 +46,7 @@ type Props = {
 
 const FIELD_LABELS: Record<keyof Values, string> = {
     name: "Dojo name",
+    shortName: "Short name",
     phone: "Phone",
     email: "Public email",
     address: "Address",
@@ -121,6 +123,10 @@ export default function DojoSettingsForm({ initial }: Props) {
             setError("Dojo name is required.");
             return;
         }
+        if (values.shortName.trim().length > 24) {
+            setError("Short name must be 24 characters or fewer.");
+            return;
+        }
         const phoneDigits = values.phone.replace(/\D/g, "");
         if (values.phone.trim() && phoneDigits.length !== 11) {
             setError("Phone number must be 11 digits.");
@@ -136,6 +142,7 @@ export default function DojoSettingsForm({ initial }: Props) {
         startTransition(async () => {
             const res = await saveDojoSettingsAction({
                 name: values.name.trim(),
+                shortName: values.shortName.trim() || null,
                 phone: values.phone.trim() || null,
                 email: values.email.trim() || null,
                 address: values.address.trim() || null,
@@ -199,6 +206,12 @@ export default function DojoSettingsForm({ initial }: Props) {
                         label="Dojo name"
                         value={values.name}
                         onChange={(v) => update("name", v)}
+                    />
+                    <Field
+                        label="Short name"
+                        value={values.shortName}
+                        onChange={(v) => update("shortName", v.slice(0, 24))}
+                        hint='Shown above "Dojo Console" in the portal sidebar. Max 24 characters.'
                     />
                     <Field
                         label="Phone"

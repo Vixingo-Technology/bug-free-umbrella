@@ -233,6 +233,7 @@ exports.Prisma.BeltRankScalarFieldEnum = {
 exports.Prisma.DojoScalarFieldEnum = {
   id: 'id',
   name: 'name',
+  shortName: 'shortName',
   address: 'address',
   city: 'city',
   latitude: 'latitude',

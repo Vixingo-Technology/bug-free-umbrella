@@ -72,6 +72,7 @@ export async function saveCertificateSettingsAction(
     }
 
     revalidatePath("/portal/admin/certificates");
+    revalidatePath("/portal/admin/certificates/settings");
     return { success: true };
 }
 
@@ -129,6 +130,7 @@ export async function saveRankCertificatePriceAction(
     }
 
     revalidatePath("/portal/admin/certificates");
+    revalidatePath("/portal/admin/certificates/settings");
     return { success: true };
 }
 

@@ -478,6 +478,7 @@ model BeltRank {
 model Dojo {
   id        String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name      String
+  shortName String? @map("short_name")
   address   String?
   city      String?
   latitude  Float?

@@ -19014,6 +19014,7 @@ export namespace Prisma {
   export type DojoMinAggregateOutputType = {
     id: string | null
     name: string | null
+    shortName: string | null
     address: string | null
     city: string | null
     latitude: number | null
@@ -19033,6 +19034,7 @@ export namespace Prisma {
   export type DojoMaxAggregateOutputType = {
     id: string | null
     name: string | null
+    shortName: string | null
     address: string | null
     city: string | null
     latitude: number | null
@@ -19052,6 +19054,7 @@ export namespace Prisma {
   export type DojoCountAggregateOutputType = {
     id: number
     name: number
+    shortName: number
     address: number
     city: number
     latitude: number
@@ -19088,6 +19091,7 @@ export namespace Prisma {
   export type DojoMinAggregateInputType = {
     id?: true
     name?: true
+    shortName?: true
     address?: true
     city?: true
     latitude?: true
@@ -19107,6 +19111,7 @@ export namespace Prisma {
   export type DojoMaxAggregateInputType = {
     id?: true
     name?: true
+    shortName?: true
     address?: true
     city?: true
     latitude?: true
@@ -19126,6 +19131,7 @@ export namespace Prisma {
   export type DojoCountAggregateInputType = {
     id?: true
     name?: true
+    shortName?: true
     address?: true
     city?: true
     latitude?: true
@@ -19233,6 +19239,7 @@ export namespace Prisma {
   export type DojoGroupByOutputType = {
     id: string
     name: string
+    shortName: string | null
     address: string | null
     city: string | null
     latitude: number | null
@@ -19272,6 +19279,7 @@ export namespace Prisma {
   export type DojoSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
+    shortName?: boolean
     address?: boolean
     city?: boolean
     latitude?: boolean
@@ -19311,6 +19319,7 @@ export namespace Prisma {
   export type DojoSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
+    shortName?: boolean
     address?: boolean
     city?: boolean
     latitude?: boolean
@@ -19331,6 +19340,7 @@ export namespace Prisma {
   export type DojoSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
+    shortName?: boolean
     address?: boolean
     city?: boolean
     latitude?: boolean
@@ -19351,6 +19361,7 @@ export namespace Prisma {
   export type DojoSelectScalar = {
     id?: boolean
     name?: boolean
+    shortName?: boolean
     address?: boolean
     city?: boolean
     latitude?: boolean
@@ -19368,7 +19379,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type DojoOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "address" | "city" | "latitude" | "longitude" | "phone" | "email" | "isActive" | "annualFee" | "expiryDate" | "ownerSignatureUrl" | "logoUrl" | "lockedFeatures" | "studentMilestone" | "createdAt" | "updatedAt", ExtArgs["result"]["dojo"]>
+  export type DojoOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "shortName" | "address" | "city" | "latitude" | "longitude" | "phone" | "email" | "isActive" | "annualFee" | "expiryDate" | "ownerSignatureUrl" | "logoUrl" | "lockedFeatures" | "studentMilestone" | "createdAt" | "updatedAt", ExtArgs["result"]["dojo"]>
   export type DojoInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     renewalOrders?: boolean | Dojo$renewalOrdersArgs<ExtArgs>
     certificateOrders?: boolean | Dojo$certificateOrdersArgs<ExtArgs>
@@ -19418,6 +19429,7 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: string
       name: string
+      shortName: string | null
       address: string | null
       city: string | null
       latitude: number | null
@@ -19876,6 +19888,7 @@ export namespace Prisma {
   interface DojoFieldRefs {
     readonly id: FieldRef<"Dojo", 'String'>
     readonly name: FieldRef<"Dojo", 'String'>
+    readonly shortName: FieldRef<"Dojo", 'String'>
     readonly address: FieldRef<"Dojo", 'String'>
     readonly city: FieldRef<"Dojo", 'String'>
     readonly latitude: FieldRef<"Dojo", 'Float'>
@@ -55842,6 +55855,7 @@ export namespace Prisma {
   export const DojoScalarFieldEnum: {
     id: 'id',
     name: 'name',
+    shortName: 'shortName',
     address: 'address',
     city: 'city',
     latitude: 'latitude',
@@ -57679,6 +57693,7 @@ export namespace Prisma {
     NOT?: DojoWhereInput | DojoWhereInput[]
     id?: UuidFilter<"Dojo"> | string
     name?: StringFilter<"Dojo"> | string
+    shortName?: StringNullableFilter<"Dojo"> | string | null
     address?: StringNullableFilter<"Dojo"> | string | null
     city?: StringNullableFilter<"Dojo"> | string | null
     latitude?: FloatNullableFilter<"Dojo"> | number | null
@@ -57717,6 +57732,7 @@ export namespace Prisma {
   export type DojoOrderByWithRelationInput = {
     id?: SortOrder
     name?: SortOrder
+    shortName?: SortOrderInput | SortOrder
     address?: SortOrderInput | SortOrder
     city?: SortOrderInput | SortOrder
     latitude?: SortOrderInput | SortOrder
@@ -57758,6 +57774,7 @@ export namespace Prisma {
     OR?: DojoWhereInput[]
     NOT?: DojoWhereInput | DojoWhereInput[]
     name?: StringFilter<"Dojo"> | string
+    shortName?: StringNullableFilter<"Dojo"> | string | null
     address?: StringNullableFilter<"Dojo"> | string | null
     city?: StringNullableFilter<"Dojo"> | string | null
     latitude?: FloatNullableFilter<"Dojo"> | number | null
@@ -57796,6 +57813,7 @@ export namespace Prisma {
   export type DojoOrderByWithAggregationInput = {
     id?: SortOrder
     name?: SortOrder
+    shortName?: SortOrderInput | SortOrder
     address?: SortOrderInput | SortOrder
     city?: SortOrderInput | SortOrder
     latitude?: SortOrderInput | SortOrder
@@ -57824,6 +57842,7 @@ export namespace Prisma {
     NOT?: DojoScalarWhereWithAggregatesInput | DojoScalarWhereWithAggregatesInput[]
     id?: UuidWithAggregatesFilter<"Dojo"> | string
     name?: StringWithAggregatesFilter<"Dojo"> | string
+    shortName?: StringNullableWithAggregatesFilter<"Dojo"> | string | null
     address?: StringNullableWithAggregatesFilter<"Dojo"> | string | null
     city?: StringNullableWithAggregatesFilter<"Dojo"> | string | null
     latitude?: FloatNullableWithAggregatesFilter<"Dojo"> | number | null
@@ -61598,6 +61617,7 @@ export namespace Prisma {
   export type DojoCreateInput = {
     id?: string
     name: string
+    shortName?: string | null
     address?: string | null
     city?: string | null
     latitude?: number | null
@@ -61636,6 +61656,7 @@ export namespace Prisma {
   export type DojoUncheckedCreateInput = {
     id?: string
     name: string
+    shortName?: string | null
     address?: string | null
     city?: string | null
     latitude?: number | null
@@ -61674,6 +61695,7 @@ export namespace Prisma {
   export type DojoUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    shortName?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     latitude?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -61712,6 +61734,7 @@ export namespace Prisma {
   export type DojoUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    shortName?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     latitude?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -61750,6 +61773,7 @@ export namespace Prisma {
   export type DojoCreateManyInput = {
     id?: string
     name: string
+    shortName?: string | null
     address?: string | null
     city?: string | null
     latitude?: number | null
@@ -61770,6 +61794,7 @@ export namespace Prisma {
   export type DojoUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    shortName?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     latitude?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -61790,6 +61815,7 @@ export namespace Prisma {
   export type DojoUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    shortName?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     latitude?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -65867,6 +65893,7 @@ export namespace Prisma {
   export type DojoCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
+    shortName?: SortOrder
     address?: SortOrder
     city?: SortOrder
     latitude?: SortOrder
@@ -65894,6 +65921,7 @@ export namespace Prisma {
   export type DojoMaxOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
+    shortName?: SortOrder
     address?: SortOrder
     city?: SortOrder
     latitude?: SortOrder
@@ -65913,6 +65941,7 @@ export namespace Prisma {
   export type DojoMinOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
+    shortName?: SortOrder
     address?: SortOrder
     city?: SortOrder
     latitude?: SortOrder
@@ -75822,6 +75851,7 @@ export namespace Prisma {
   export type DojoCreateWithoutStudentsInput = {
     id?: string
     name: string
+    shortName?: string | null
     address?: string | null
     city?: string | null
     latitude?: number | null
@@ -75859,6 +75889,7 @@ export namespace Prisma {
   export type DojoUncheckedCreateWithoutStudentsInput = {
     id?: string
     name: string
+    shortName?: string | null
     address?: string | null
     city?: string | null
     latitude?: number | null
@@ -76297,6 +76328,7 @@ export namespace Prisma {
   export type DojoUpdateWithoutStudentsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    shortName?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     latitude?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -76334,6 +76366,7 @@ export namespace Prisma {
   export type DojoUncheckedUpdateWithoutStudentsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    shortName?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     latitude?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -76620,6 +76653,7 @@ export namespace Prisma {
   export type DojoCreateWithoutInstructorsInput = {
     id?: string
     name: string
+    shortName?: string | null
     address?: string | null
     city?: string | null
     latitude?: number | null
@@ -76657,6 +76691,7 @@ export namespace Prisma {
   export type DojoUncheckedCreateWithoutInstructorsInput = {
     id?: string
     name: string
+    shortName?: string | null
     address?: string | null
     city?: string | null
     latitude?: number | null
@@ -76795,6 +76830,7 @@ export namespace Prisma {
   export type DojoUpdateWithoutInstructorsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    shortName?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     latitude?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -76832,6 +76868,7 @@ export namespace Prisma {
   export type DojoUncheckedUpdateWithoutInstructorsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    shortName?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     latitude?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -76948,6 +76985,7 @@ export namespace Prisma {
   export type DojoCreateWithoutManagersInput = {
     id?: string
     name: string
+    shortName?: string | null
     address?: string | null
     city?: string | null
     latitude?: number | null
@@ -76985,6 +77023,7 @@ export namespace Prisma {
   export type DojoUncheckedCreateWithoutManagersInput = {
     id?: string
     name: string
+    shortName?: string | null
     address?: string | null
     city?: string | null
     latitude?: number | null
@@ -77123,6 +77162,7 @@ export namespace Prisma {
   export type DojoUpdateWithoutManagersInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    shortName?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     latitude?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -77160,6 +77200,7 @@ export namespace Prisma {
   export type DojoUncheckedUpdateWithoutManagersInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    shortName?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     latitude?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -77276,6 +77317,7 @@ export namespace Prisma {
   export type DojoCreateWithoutOwnerInput = {
     id?: string
     name: string
+    shortName?: string | null
     address?: string | null
     city?: string | null
     latitude?: number | null
@@ -77313,6 +77355,7 @@ export namespace Prisma {
   export type DojoUncheckedCreateWithoutOwnerInput = {
     id?: string
     name: string
+    shortName?: string | null
     address?: string | null
     city?: string | null
     latitude?: number | null
@@ -77451,6 +77494,7 @@ export namespace Prisma {
   export type DojoUpdateWithoutOwnerInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    shortName?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     latitude?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -77488,6 +77532,7 @@ export namespace Prisma {
   export type DojoUncheckedUpdateWithoutOwnerInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    shortName?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     latitude?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -79219,6 +79264,7 @@ export namespace Prisma {
   export type DojoCreateWithoutApplicationInput = {
     id?: string
     name: string
+    shortName?: string | null
     address?: string | null
     city?: string | null
     latitude?: number | null
@@ -79256,6 +79302,7 @@ export namespace Prisma {
   export type DojoUncheckedCreateWithoutApplicationInput = {
     id?: string
     name: string
+    shortName?: string | null
     address?: string | null
     city?: string | null
     latitude?: number | null
@@ -79309,6 +79356,7 @@ export namespace Prisma {
   export type DojoUpdateWithoutApplicationInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    shortName?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     latitude?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -79346,6 +79394,7 @@ export namespace Prisma {
   export type DojoUncheckedUpdateWithoutApplicationInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    shortName?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     latitude?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -80505,6 +80554,7 @@ export namespace Prisma {
   export type DojoCreateWithoutCertificateRequestsInput = {
     id?: string
     name: string
+    shortName?: string | null
     address?: string | null
     city?: string | null
     latitude?: number | null
@@ -80542,6 +80592,7 @@ export namespace Prisma {
   export type DojoUncheckedCreateWithoutCertificateRequestsInput = {
     id?: string
     name: string
+    shortName?: string | null
     address?: string | null
     city?: string | null
     latitude?: number | null
@@ -80774,6 +80825,7 @@ export namespace Prisma {
   export type DojoUpdateWithoutCertificateRequestsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    shortName?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     latitude?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -80811,6 +80863,7 @@ export namespace Prisma {
   export type DojoUncheckedUpdateWithoutCertificateRequestsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    shortName?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     latitude?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -81050,6 +81103,7 @@ export namespace Prisma {
   export type DojoCreateWithoutEventsInput = {
     id?: string
     name: string
+    shortName?: string | null
     address?: string | null
     city?: string | null
     latitude?: number | null
@@ -81087,6 +81141,7 @@ export namespace Prisma {
   export type DojoUncheckedCreateWithoutEventsInput = {
     id?: string
     name: string
+    shortName?: string | null
     address?: string | null
     city?: string | null
     latitude?: number | null
@@ -81276,6 +81331,7 @@ export namespace Prisma {
   export type DojoUpdateWithoutEventsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    shortName?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     latitude?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -81313,6 +81369,7 @@ export namespace Prisma {
   export type DojoUncheckedUpdateWithoutEventsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    shortName?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     latitude?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -81470,6 +81527,7 @@ export namespace Prisma {
   export type DojoCreateWithoutAnnouncementsInput = {
     id?: string
     name: string
+    shortName?: string | null
     address?: string | null
     city?: string | null
     latitude?: number | null
@@ -81507,6 +81565,7 @@ export namespace Prisma {
   export type DojoUncheckedCreateWithoutAnnouncementsInput = {
     id?: string
     name: string
+    shortName?: string | null
     address?: string | null
     city?: string | null
     latitude?: number | null
@@ -81645,6 +81704,7 @@ export namespace Prisma {
   export type DojoUpdateWithoutAnnouncementsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    shortName?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     latitude?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -81682,6 +81742,7 @@ export namespace Prisma {
   export type DojoUncheckedUpdateWithoutAnnouncementsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    shortName?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     latitude?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -82540,6 +82601,7 @@ export namespace Prisma {
   export type DojoCreateWithoutInventoryItemsInput = {
     id?: string
     name: string
+    shortName?: string | null
     address?: string | null
     city?: string | null
     latitude?: number | null
@@ -82577,6 +82639,7 @@ export namespace Prisma {
   export type DojoUncheckedCreateWithoutInventoryItemsInput = {
     id?: string
     name: string
+    shortName?: string | null
     address?: string | null
     city?: string | null
     latitude?: number | null
@@ -82671,6 +82734,7 @@ export namespace Prisma {
   export type DojoUpdateWithoutInventoryItemsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    shortName?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     latitude?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -82708,6 +82772,7 @@ export namespace Prisma {
   export type DojoUncheckedUpdateWithoutInventoryItemsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    shortName?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     latitude?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -82792,6 +82857,7 @@ export namespace Prisma {
   export type DojoCreateWithoutSalesInput = {
     id?: string
     name: string
+    shortName?: string | null
     address?: string | null
     city?: string | null
     latitude?: number | null
@@ -82829,6 +82895,7 @@ export namespace Prisma {
   export type DojoUncheckedCreateWithoutSalesInput = {
     id?: string
     name: string
+    shortName?: string | null
     address?: string | null
     city?: string | null
     latitude?: number | null
@@ -83068,6 +83135,7 @@ export namespace Prisma {
   export type DojoUpdateWithoutSalesInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    shortName?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     latitude?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -83105,6 +83173,7 @@ export namespace Prisma {
   export type DojoUncheckedUpdateWithoutSalesInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    shortName?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     latitude?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -83575,6 +83644,7 @@ export namespace Prisma {
   export type DojoCreateWithoutRenewalOrdersInput = {
     id?: string
     name: string
+    shortName?: string | null
     address?: string | null
     city?: string | null
     latitude?: number | null
@@ -83612,6 +83682,7 @@ export namespace Prisma {
   export type DojoUncheckedCreateWithoutRenewalOrdersInput = {
     id?: string
     name: string
+    shortName?: string | null
     address?: string | null
     city?: string | null
     latitude?: number | null
@@ -83654,6 +83725,7 @@ export namespace Prisma {
   export type DojoCreateWithoutCertificateOrdersInput = {
     id?: string
     name: string
+    shortName?: string | null
     address?: string | null
     city?: string | null
     latitude?: number | null
@@ -83691,6 +83763,7 @@ export namespace Prisma {
   export type DojoUncheckedCreateWithoutCertificateOrdersInput = {
     id?: string
     name: string
+    shortName?: string | null
     address?: string | null
     city?: string | null
     latitude?: number | null
@@ -84053,6 +84126,7 @@ export namespace Prisma {
   export type DojoUpdateWithoutRenewalOrdersInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    shortName?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     latitude?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -84090,6 +84164,7 @@ export namespace Prisma {
   export type DojoUncheckedUpdateWithoutRenewalOrdersInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    shortName?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     latitude?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -84138,6 +84213,7 @@ export namespace Prisma {
   export type DojoUpdateWithoutCertificateOrdersInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    shortName?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     latitude?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -84175,6 +84251,7 @@ export namespace Prisma {
   export type DojoUncheckedUpdateWithoutCertificateOrdersInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    shortName?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     latitude?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -85796,6 +85873,7 @@ export namespace Prisma {
   export type DojoCreateWithoutTransfersOutInput = {
     id?: string
     name: string
+    shortName?: string | null
     address?: string | null
     city?: string | null
     latitude?: number | null
@@ -85833,6 +85911,7 @@ export namespace Prisma {
   export type DojoUncheckedCreateWithoutTransfersOutInput = {
     id?: string
     name: string
+    shortName?: string | null
     address?: string | null
     city?: string | null
     latitude?: number | null
@@ -85875,6 +85954,7 @@ export namespace Prisma {
   export type DojoCreateWithoutTransfersInInput = {
     id?: string
     name: string
+    shortName?: string | null
     address?: string | null
     city?: string | null
     latitude?: number | null
@@ -85912,6 +85992,7 @@ export namespace Prisma {
   export type DojoUncheckedCreateWithoutTransfersInInput = {
     id?: string
     name: string
+    shortName?: string | null
     address?: string | null
     city?: string | null
     latitude?: number | null
@@ -86281,6 +86362,7 @@ export namespace Prisma {
   export type DojoUpdateWithoutTransfersOutInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    shortName?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     latitude?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -86318,6 +86400,7 @@ export namespace Prisma {
   export type DojoUncheckedUpdateWithoutTransfersOutInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    shortName?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     latitude?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -86366,6 +86449,7 @@ export namespace Prisma {
   export type DojoUpdateWithoutTransfersInInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    shortName?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     latitude?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -86403,6 +86487,7 @@ export namespace Prisma {
   export type DojoUncheckedUpdateWithoutTransfersInInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    shortName?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     latitude?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -87154,6 +87239,7 @@ export namespace Prisma {
   export type DojoCreateWithoutHistoryFromInput = {
     id?: string
     name: string
+    shortName?: string | null
     address?: string | null
     city?: string | null
     latitude?: number | null
@@ -87191,6 +87277,7 @@ export namespace Prisma {
   export type DojoUncheckedCreateWithoutHistoryFromInput = {
     id?: string
     name: string
+    shortName?: string | null
     address?: string | null
     city?: string | null
     latitude?: number | null
@@ -87233,6 +87320,7 @@ export namespace Prisma {
   export type DojoCreateWithoutHistoryToInput = {
     id?: string
     name: string
+    shortName?: string | null
     address?: string | null
     city?: string | null
     latitude?: number | null
@@ -87270,6 +87358,7 @@ export namespace Prisma {
   export type DojoUncheckedCreateWithoutHistoryToInput = {
     id?: string
     name: string
+    shortName?: string | null
     address?: string | null
     city?: string | null
     latitude?: number | null
@@ -87514,6 +87603,7 @@ export namespace Prisma {
   export type DojoUpdateWithoutHistoryFromInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    shortName?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     latitude?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -87551,6 +87641,7 @@ export namespace Prisma {
   export type DojoUncheckedUpdateWithoutHistoryFromInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    shortName?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     latitude?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -87599,6 +87690,7 @@ export namespace Prisma {
   export type DojoUpdateWithoutHistoryToInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    shortName?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     latitude?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -87636,6 +87728,7 @@ export namespace Prisma {
   export type DojoUncheckedUpdateWithoutHistoryToInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    shortName?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     latitude?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -88035,6 +88128,7 @@ export namespace Prisma {
   export type DojoCreateWithoutServiceRequestsInput = {
     id?: string
     name: string
+    shortName?: string | null
     address?: string | null
     city?: string | null
     latitude?: number | null
@@ -88072,6 +88166,7 @@ export namespace Prisma {
   export type DojoUncheckedCreateWithoutServiceRequestsInput = {
     id?: string
     name: string
+    shortName?: string | null
     address?: string | null
     city?: string | null
     latitude?: number | null
@@ -88485,6 +88580,7 @@ export namespace Prisma {
   export type DojoUpdateWithoutServiceRequestsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    shortName?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     latitude?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -88522,6 +88618,7 @@ export namespace Prisma {
   export type DojoUncheckedUpdateWithoutServiceRequestsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    shortName?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     latitude?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -88847,6 +88944,7 @@ export namespace Prisma {
   export type DojoCreateWithoutServiceCouponsInput = {
     id?: string
     name: string
+    shortName?: string | null
     address?: string | null
     city?: string | null
     latitude?: number | null
@@ -88884,6 +88982,7 @@ export namespace Prisma {
   export type DojoUncheckedCreateWithoutServiceCouponsInput = {
     id?: string
     name: string
+    shortName?: string | null
     address?: string | null
     city?: string | null
     latitude?: number | null
@@ -89107,6 +89206,7 @@ export namespace Prisma {
   export type DojoUpdateWithoutServiceCouponsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    shortName?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     latitude?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -89144,6 +89244,7 @@ export namespace Prisma {
   export type DojoUncheckedUpdateWithoutServiceCouponsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    shortName?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     latitude?: NullableFloatFieldUpdateOperationsInput | number | null

@@ -131,6 +131,9 @@ interface PortalShellProps {
     initialEmail?: string;
     /** Server-known dojo name for dojo-staff sidebar header. */
     initialDojoName?: string | null;
+    /** Server-known dojo short name for dojo-staff sidebar header —
+     *  the concise label shown above "Dojo Console". */
+    initialDojoShortName?: string | null;
     /** Server-known dojo logo URL for dojo-staff sidebar header. */
     initialDojoLogoUrl?: string | null;
     /** Server-known current belt rank for students — so the sidebar
@@ -168,6 +171,7 @@ export default function PortalShell({
     initialFullName = "",
     initialEmail = "",
     initialDojoName = null,
+    initialDojoShortName = null,
     initialDojoLogoUrl = null,
     initialCurrentRank = null,
     children,
@@ -222,6 +226,7 @@ export default function PortalShell({
     );
     const [dojoLogoUrl, setDojoLogoUrl] = useState<string | null>(initialDojoLogoUrl);
     const [dojoName, setDojoName] = useState<string | null>(initialDojoName);
+    const [dojoShortName] = useState<string | null>(initialDojoShortName);
     const [unreadCount, setUnreadCount] = useState(0);
 
     useEffect(() => {
@@ -429,7 +434,7 @@ export default function PortalShell({
                         {isDojoStaff ? (
                             <>
                                 <p className="text-sm font-semibold text-zinc-900 leading-tight truncate">
-                                    {dojoName ?? "Dojo"}
+                                    {dojoShortName ?? dojoName ?? "Dojo"}
                                 </p>
                                 <p className="text-[9px] tracking-widest uppercase text-zinc-400 leading-tight mt-0.5">
                                     {portalLabel}

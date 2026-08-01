@@ -10,6 +10,8 @@ import { getFees } from "@/lib/settings/fees";
 
 export type DojoEnlistmentInput = {
     dojoName: string;
+    /** Concise label displayed above "Dojo Console" in the portal sidebar. */
+    shortName?: string;
     email: string;
     phone: string;
     contactName: string;
@@ -385,6 +387,7 @@ export async function commitDojoEnlistment(
     const lng = input.longitude ? parseFloat(input.longitude) : null;
     const contactRank = input.contactRank?.trim() || "";
     const division = input.division?.trim() || null;
+    const shortName = input.shortName?.trim() || null;
 
     // Images have already been uploaded via uploadDojoAssetFromDataUrl —
     // we only receive URLs here.
@@ -427,6 +430,7 @@ export async function commitDojoEnlistment(
                 const dojo = await tx.dojo.create({
                     data: {
                         name: input.dojoName.trim(),
+                        shortName,
                         address: input.address.trim(),
                         city: division,
                         phone: input.phone.trim(),
@@ -443,6 +447,7 @@ export async function commitDojoEnlistment(
                     where: { id: dojoId },
                     data: {
                         name: input.dojoName.trim(),
+                        shortName,
                         address: input.address.trim(),
                         city: division ?? undefined,
                         phone: input.phone.trim(),

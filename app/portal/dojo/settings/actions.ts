@@ -21,6 +21,10 @@ const annualFeeSchema = z.object({
 
 const settingsSchema = z.object({
   name: z.string().min(1, "Dojo name is required.").max(200, "Name is too long."),
+  shortName: z
+    .string()
+    .max(24, "Short name must be 24 characters or fewer.")
+    .nullable(),
   phone: z
     .string()
     .max(50, "Phone is too long.")
@@ -48,6 +52,7 @@ const settingsSchema = z.object({
 
 export async function saveDojoSettingsAction(input: {
   name: string;
+  shortName: string | null;
   phone: string | null;
   email: string | null;
   address: string | null;
@@ -67,6 +72,7 @@ export async function saveDojoSettingsAction(input: {
       where: { id: session.dojo.id },
       data: {
         name: parsed.data.name,
+        shortName: parsed.data.shortName,
         phone: parsed.data.phone,
         email: parsed.data.email,
         address: parsed.data.address,

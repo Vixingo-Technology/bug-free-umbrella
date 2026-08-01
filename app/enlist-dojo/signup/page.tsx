@@ -37,6 +37,7 @@ const DOJO_OWNER_MIN_AGE = 18;
 
 type FormState = {
     dojoName: string;
+    shortName: string;
     email: string;
     phone: string;
     contactName: string;
@@ -86,6 +87,7 @@ const STEPS = [
 
 const initialState: FormState = {
     dojoName: "",
+    shortName: "",
     email: "",
     phone: "",
     contactName: "",
@@ -160,6 +162,10 @@ export default function EnlistDojoSignupPage() {
     function validateStep(s: number): string | null {
         if (s === 0) {
             if (!form.dojoName.trim()) return "Please enter your dojo name.";
+            if (!form.shortName.trim())
+                return "Please enter a short name for your dojo.";
+            if (form.shortName.trim().length > 24)
+                return "Short name must be 24 characters or fewer.";
         }
         if (s === 1) {
             if (!form.email.trim() || !form.email.includes("@"))
@@ -464,6 +470,24 @@ function BasicsStep({
                     className={inputClass()}
                 />
             </div>
+
+            <div>
+                <Label>Dojo short name *</Label>
+                <input
+                    type="text"
+                    value={form.shortName}
+                    onChange={(e) =>
+                        update("shortName", e.target.value.slice(0, 24))
+                    }
+                    maxLength={24}
+                    placeholder="e.g. Dhanmondi"
+                    className={inputClass()}
+                />
+                <p className="text-[11px] text-zinc-500 mt-2">
+                    A concise label shown above &ldquo;Dojo Console&rdquo; in
+                    the portal sidebar. Max 24 characters.
+                </p>
+            </div>
         </div>
     );
 }
@@ -675,6 +699,7 @@ function ReviewStep({
 
             <div className="bg-white border border-zinc-200 rounded-sm divide-y divide-zinc-200">
                 <ReviewRow label="Dojo name" value={form.dojoName} />
+                <ReviewRow label="Short name" value={form.shortName} />
                 <ReviewRow label="Email" value={form.email} />
                 <ReviewRow label="Phone" value={form.phone} />
                 <ReviewRow

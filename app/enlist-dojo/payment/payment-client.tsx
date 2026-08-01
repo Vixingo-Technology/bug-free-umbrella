@@ -27,6 +27,7 @@ const DRAFT_KEY = "jka.enlistDojo.draft";
 
 type DraftShape = {
     dojoName: string;
+    shortName?: string;
     email: string;
     phone: string;
     contactName: string;
@@ -91,6 +92,7 @@ function PaymentContent({ enlistmentFeeBDT }: { enlistmentFeeBDT: number }) {
     function draftToInput(draft: DraftShape): DojoEnlistmentInput {
         return {
             dojoName: draft.dojoName,
+            shortName: draft.shortName ?? "",
             email: draft.email,
             phone: draft.phone,
             contactName: draft.contactName,

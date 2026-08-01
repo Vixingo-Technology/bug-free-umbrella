@@ -50,6 +50,7 @@ export default async function SettingsPage() {
             <DojoSettingsForm
                 initial={{
                     name: dojo.name ?? "",
+                    shortName: dojo.shortName ?? "",
                     phone: dojo.phone ?? "",
                     email: dojo.email ?? "",
                     address: dojo.address ?? "",
