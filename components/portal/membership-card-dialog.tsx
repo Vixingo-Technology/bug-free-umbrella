@@ -214,12 +214,19 @@ export default function MembershipCardDialog({
                             <motion.div
                                 animate={{ rotateY: flipped ? 180 : 0 }}
                                 transition={{ duration: 0.7, ease: [0.4, 0, 0.2, 1] }}
-                                style={{ transformStyle: "preserve-3d" }}
+                                style={{
+                                    transformStyle: "preserve-3d",
+                                    WebkitTransformStyle: "preserve-3d",
+                                }}
                                 className="relative w-full h-full"
                             >
                                 <div
                                     className="absolute inset-0"
-                                    style={{ backfaceVisibility: "hidden" }}
+                                    style={{
+                                        backfaceVisibility: "hidden",
+                                        WebkitBackfaceVisibility: "hidden",
+                                        transform: "rotateY(0deg) translateZ(0.01px)",
+                                    }}
                                 >
                                     <DigitalCard fullName={fullName} {...cardProps} />
                                 </div>
@@ -227,7 +234,8 @@ export default function MembershipCardDialog({
                                     className="absolute inset-0"
                                     style={{
                                         backfaceVisibility: "hidden",
-                                        transform: "rotateY(180deg)",
+                                        WebkitBackfaceVisibility: "hidden",
+                                        transform: "rotateY(180deg) translateZ(0.01px)",
                                     }}
                                 >
                                     <DigitalCardBack

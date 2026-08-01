@@ -705,7 +705,7 @@ export default function PortalShell({
                     </div>
 
                     <div className="flex items-center gap-3">
-                        {member && member.fullName && (
+                        {member && member.fullName && isAdmin && (
                             <span className={`bg-gradient-to-r ${roleColor} text-white text-[10px] font-bold tracking-widest uppercase px-3 py-1.5 rounded-full`}>
                                 {member.role}
                             </span>

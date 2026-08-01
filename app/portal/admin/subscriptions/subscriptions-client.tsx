@@ -6,8 +6,6 @@ import {
     DOJO_ENLISTMENT_FEE_BDT,
     DOJO_RENEWAL_FEE_BDT,
     MEMBERSHIP_FEE_BDT,
-    PAST_BELT_FEE_PER_RANK_BDT,
-    TRANSFER_REQUEST_FEE_BDT,
 } from "@/lib/constants";
 import { updateSubscriptionFeesAction } from "./actions";
 
@@ -15,8 +13,6 @@ type FeeState = {
     dojoEnlistmentFeeBDT: string;
     dojoRenewalFeeBDT: string;
     membershipFeeBDT: string;
-    transferFeeBDT: string;
-    pastBeltFeePerRankBDT: string;
 };
 
 type Props = {
@@ -60,20 +56,6 @@ const FIELDS: Array<{
         unit: "৳ / year",
         fallback: MEMBERSHIP_FEE_BDT,
     },
-    {
-        key: "transferFeeBDT",
-        label: "Dojo Transfer Fee",
-        hint: "Non-refundable fee a student pays when requesting a transfer to a different dojo.",
-        unit: "৳ / request",
-        fallback: TRANSFER_REQUEST_FEE_BDT,
-    },
-    {
-        key: "pastBeltFeePerRankBDT",
-        label: "Past-belt Catch-up Fee",
-        hint: "Flat amount charged per belt when a new student is accepted above White Belt. Multiplied by the number of belts between White and the assigned rank.",
-        unit: "৳ / belt",
-        fallback: PAST_BELT_FEE_PER_RANK_BDT,
-    },
 ];
 
 function toInput(n: number | null): string {
@@ -85,8 +67,6 @@ export default function SubscriptionsClient({ stored }: Props) {
         dojoEnlistmentFeeBDT: toInput(stored.dojoEnlistmentFeeBDT),
         dojoRenewalFeeBDT: toInput(stored.dojoRenewalFeeBDT),
         membershipFeeBDT: toInput(stored.membershipFeeBDT),
-        transferFeeBDT: toInput(stored.transferFeeBDT),
-        pastBeltFeePerRankBDT: toInput(stored.pastBeltFeePerRankBDT),
     };
 
     const [values, setValues] = useState<FeeState>(initial);
@@ -98,9 +78,7 @@ export default function SubscriptionsClient({ stored }: Props) {
     const dirty =
         values.dojoEnlistmentFeeBDT !== savedValues.dojoEnlistmentFeeBDT ||
         values.dojoRenewalFeeBDT !== savedValues.dojoRenewalFeeBDT ||
-        values.membershipFeeBDT !== savedValues.membershipFeeBDT ||
-        values.transferFeeBDT !== savedValues.transferFeeBDT ||
-        values.pastBeltFeePerRankBDT !== savedValues.pastBeltFeePerRankBDT;
+        values.membershipFeeBDT !== savedValues.membershipFeeBDT;
 
     function setField(key: FieldKey, v: string) {
         setValues((prev) => ({ ...prev, [key]: v }));
@@ -121,8 +99,6 @@ export default function SubscriptionsClient({ stored }: Props) {
         form.set("dojoEnlistmentFeeBDT", values.dojoEnlistmentFeeBDT);
         form.set("dojoRenewalFeeBDT", values.dojoRenewalFeeBDT);
         form.set("membershipFeeBDT", values.membershipFeeBDT);
-        form.set("transferFeeBDT", values.transferFeeBDT);
-        form.set("pastBeltFeePerRankBDT", values.pastBeltFeePerRankBDT);
 
         startTransition(async () => {
             const result = await updateSubscriptionFeesAction(form);
