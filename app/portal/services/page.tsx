@@ -3,22 +3,26 @@ import { redirect } from "next/navigation";
 import { ArrowRightLeft, Award, ChevronRight } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { prisma } from "@/lib/prisma";
+import { TRANSFER_REQUEST_FEE_BDT } from "@/lib/constants";
 
 export const metadata = { title: "Request a service — JKA Bangladesh" };
 
-const TRANSFER_CARD = {
-    slug: "transfer-dojo",
+const TRANSFER_SLUG = "transfer-dojo";
+const TRANSFER_DEFAULTS = {
     name: "Transfer Dojo",
     description:
         "Move your JKA membership from your current dojo to another. Requires clearance from your current dojo and JKA HQ approval.",
-    href: "/portal/transfer",
-    icon: ArrowRightLeft,
 };
 
 function iconFor(slug: string) {
     if (slug === "kyu-dan-conversion") return Award;
-    if (slug === "transfer-dojo") return ArrowRightLeft;
+    if (slug === TRANSFER_SLUG) return ArrowRightLeft;
     return Award;
+}
+
+function hrefFor(slug: string) {
+    if (slug === TRANSFER_SLUG) return "/portal/transfer";
+    return `/portal/services/${slug}`;
 }
 
 export default async function ServicesHubPage() {
@@ -26,16 +30,25 @@ export default async function ServicesHubPage() {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) redirect("/login");
 
-    const [services, transferFee] = await Promise.all([
-        prisma.service.findMany({
-            where: { isActive: true },
-            orderBy: { name: "asc" },
-        }),
-        prisma.systemSettings.findUnique({
-            where: { id: "default" },
-            select: { transferFeeBDT: true },
-        }),
-    ]);
+    // Ensure the default Transfer Dojo service row exists so it's always
+    // editable from the admin services page and selectable as the target
+    // service when a dojo owner issues a coupon.
+    await prisma.service.upsert({
+        where: { slug: TRANSFER_SLUG },
+        update: {},
+        create: {
+            slug: TRANSFER_SLUG,
+            name: TRANSFER_DEFAULTS.name,
+            description: TRANSFER_DEFAULTS.description,
+            feeBDT: TRANSFER_REQUEST_FEE_BDT,
+            handler: TRANSFER_SLUG,
+        },
+    });
+
+    const services = await prisma.service.findMany({
+        where: { isActive: true },
+        orderBy: { name: "asc" },
+    });
 
     return (
         <div className="max-w-4xl space-y-6">
@@ -49,19 +62,12 @@ export default async function ServicesHubPage() {
             </div>
 
             <div className="grid gap-4 sm:grid-cols-2">
-                <ServiceCard
-                    href={TRANSFER_CARD.href}
-                    name={TRANSFER_CARD.name}
-                    description={TRANSFER_CARD.description}
-                    fee={Number(transferFee?.transferFeeBDT ?? 0)}
-                    Icon={ArrowRightLeft}
-                />
                 {services.map((s) => {
                     const Icon = iconFor(s.slug);
                     return (
                         <ServiceCard
                             key={s.id}
-                            href={`/portal/services/${s.slug}`}
+                            href={hrefFor(s.slug)}
                             name={s.name}
                             description={s.description ?? ""}
                             fee={Number(s.feeBDT)}

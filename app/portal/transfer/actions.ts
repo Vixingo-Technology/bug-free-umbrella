@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { prisma } from "@/lib/prisma";
 import { loadCurrentUser } from "@/lib/auth/load-current-user";
-import { getFees } from "@/lib/settings/fees";
+import { loadTransferService } from "@/lib/settings/transfer-fee";
 import { previewCoupon } from "@/lib/services/coupon";
 import { notifyMembers } from "@/lib/notify";
 import { findUserIdsByRoles } from "@/lib/notify/recipients";
@@ -74,26 +74,21 @@ export async function createTransferRequestAction(input: {
         return { error: "You already have an open transfer request." };
     }
 
-    const { transferFeeBDT } = await getFees();
-
-    // Coupons live on the shared Service catalog; the "transfer-dojo" row
-    // exists for exactly this scoping. Universal coupons (serviceId=null)
-    // are also honored.
-    const transferService = await prisma.service.findUnique({
-        where: { slug: "transfer-dojo" },
-        select: { id: true },
-    });
+    // Fee & coupon scope both come from the `transfer-dojo` Service row
+    // so admin edits on the services page take effect immediately.
+    const { fee: transferFeeBDT, serviceId: transferServiceId } =
+        await loadTransferService();
 
     let discountAmount = 0;
     let finalAmount = transferFeeBDT;
     let couponId: string | null = null;
     let couponCode: string | null = null;
 
-    if (input.couponCode?.trim() && transferService) {
+    if (input.couponCode?.trim() && transferServiceId) {
         const check = await previewCoupon({
             code: input.couponCode,
             studentDojoId: student.dojoId!,
-            serviceId: transferService.id,
+            serviceId: transferServiceId,
             fee: transferFeeBDT,
         });
         if ("error" in check) return { error: check.error };
@@ -188,19 +183,16 @@ export async function previewTransferCouponAction(couponCode: string) {
     const current = await loadCurrentUser(user.id);
     if (!current?.dojoId) return { error: "No dojo assignment." };
 
-    const [service, { transferFeeBDT }] = await Promise.all([
-        prisma.service.findUnique({
-            where: { slug: "transfer-dojo" },
-            select: { id: true },
-        }),
-        getFees(),
-    ]);
-    if (!service) return { error: "Coupons are not available for transfers yet." };
+    const { fee: transferFeeBDT, serviceId: transferServiceId } =
+        await loadTransferService();
+    if (!transferServiceId) {
+        return { error: "Coupons are not available for transfers yet." };
+    }
 
     const check = await previewCoupon({
         code: couponCode,
         studentDojoId: current.dojoId,
-        serviceId: service.id,
+        serviceId: transferServiceId,
         fee: transferFeeBDT,
     });
     if ("error" in check) return { error: check.error };

@@ -18,6 +18,9 @@ type Service = {
     handler: string;
 };
 
+// Kept in sync with PROTECTED_SERVICE_SLUGS in the server action.
+const PROTECTED_SLUGS = new Set(["transfer-dojo", "kyu-dan-conversion"]);
+
 export default function AdminServicesClient({ services }: { services: Service[] }) {
     const [creating, setCreating] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -124,6 +127,7 @@ function ServiceRow({ service }: { service: Service }) {
     const [isActive, setIsActive] = useState(service.isActive);
     const [error, setError] = useState<string | null>(null);
     const [isPending, startTransition] = useTransition();
+    const isProtected = PROTECTED_SLUGS.has(service.slug);
 
     const dirty =
         name !== service.name ||
@@ -186,6 +190,11 @@ function ServiceRow({ service }: { service: Service }) {
             <p className="text-[11px] text-zinc-400 mt-1">
                 Slug: <span className="font-mono">{service.slug}</span> · Handler:{" "}
                 <span className="font-mono">{service.handler}</span>
+                {isProtected && (
+                    <span className="ml-2 inline-flex items-center px-1.5 py-0.5 rounded bg-zinc-100 text-zinc-600 font-semibold uppercase tracking-widest text-[10px]">
+                        Built-in
+                    </span>
+                )}
             </p>
             {error && (
                 <div className="flex items-center gap-2 p-2 mt-2 rounded-lg border border-red-200 bg-red-50 text-xs text-red-700">
@@ -202,14 +211,16 @@ function ServiceRow({ service }: { service: Service }) {
                     {isPending ? <Loader2 size={12} className="animate-spin" /> : null}
                     Save
                 </button>
-                <button
-                    onClick={remove}
-                    disabled={isPending}
-                    className="inline-flex items-center gap-2 border border-red-300 text-red-700 hover:bg-red-50 text-xs font-bold uppercase tracking-widest px-3 py-2 rounded-xl disabled:opacity-40"
-                >
-                    <Trash2 size={12} />
-                    Remove
-                </button>
+                {!isProtected && (
+                    <button
+                        onClick={remove}
+                        disabled={isPending}
+                        className="inline-flex items-center gap-2 border border-red-300 text-red-700 hover:bg-red-50 text-xs font-bold uppercase tracking-widest px-3 py-2 rounded-xl disabled:opacity-40"
+                    >
+                        <Trash2 size={12} />
+                        Remove
+                    </button>
+                )}
             </div>
         </div>
     );

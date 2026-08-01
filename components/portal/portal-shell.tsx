@@ -51,12 +51,12 @@ const DOJO_ROLE_RANK: Record<DojoRole, number> = {
 // student is still in the joining flow).
 const studentNavItems = [
     { label: "Dashboard",    href: "/portal",              icon: LayoutDashboard },
+    { label: "Events",       href: "/portal/events",       icon: CalendarDays },
+    { label: "Notifications",href: "/portal/notifications",icon: Bell },
     { label: "My Progress",  href: "/portal/progress",     icon: TrendingUp },
     { label: "Achievements", href: "/portal/achievements", icon: Trophy },
     { label: "Gradings",     href: "/portal/grading",      icon: Award },
     { label: "Certificates", href: "/portal/certificates", icon: FileText },
-    { label: "Events",       href: "/portal/events",       icon: CalendarDays },
-    { label: "Notifications",href: "/portal/notifications",icon: Bell },
     { label: "Shop Orders",  href: "/portal/orders",       icon: ShoppingBag },
     { label: "Renew",        href: "/portal/renew",        icon: RefreshCw },
     { label: "Request Service", href: "/portal/services",  icon: Wrench },
@@ -133,6 +133,10 @@ interface PortalShellProps {
     initialDojoName?: string | null;
     /** Server-known dojo logo URL for dojo-staff sidebar header. */
     initialDojoLogoUrl?: string | null;
+    /** Server-known current belt rank for students — so the sidebar
+     *  card shows the real rank on first paint, without waiting on the
+     *  client-side Supabase query. */
+    initialCurrentRank?: string | null;
     children: React.ReactNode;
 }
 
@@ -165,6 +169,7 @@ export default function PortalShell({
     initialEmail = "",
     initialDojoName = null,
     initialDojoLogoUrl = null,
+    initialCurrentRank = null,
     children,
 }: PortalShellProps) {
     const featureLockSet = new Set<FeatureKey>(initialLockedFeatures);
@@ -213,7 +218,7 @@ export default function PortalShell({
         // Seed with the server-known role + joinStage so admin nav renders
         // AND the student sidebar lock resolves correctly on first paint,
         // without depending on the client-side Supabase query completing.
-        { fullName: initialFullName, email: initialEmail, avatarUrl: initialAvatarUrl, currentRank: null, role: initialRole, joinStage: initialJoinStage }
+        { fullName: initialFullName, email: initialEmail, avatarUrl: initialAvatarUrl, currentRank: initialCurrentRank, role: initialRole, joinStage: initialJoinStage }
     );
     const [dojoLogoUrl, setDojoLogoUrl] = useState<string | null>(initialDojoLogoUrl);
     const [dojoName, setDojoName] = useState<string | null>(initialDojoName);
@@ -248,7 +253,7 @@ export default function PortalShell({
                     fullName: data.full_name,
                     email: data.email,
                     avatarUrl: data.avatar_url ?? prev?.avatarUrl ?? null,
-                    currentRank: data.students?.current_rank ?? null,
+                    currentRank: data.students?.current_rank ?? prev?.currentRank ?? null,
                     role: data.role_id,
                     // Prefer the fresh browser value, but if postgrest didn't
                     // return a students row (RLS or missing join), keep the

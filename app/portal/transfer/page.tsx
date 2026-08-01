@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { prisma } from "@/lib/prisma";
 import { serialize } from "@/lib/serialize";
-import { getFees } from "@/lib/settings/fees";
+import { getTransferFee } from "@/lib/settings/transfer-fee";
 import TransferClient from "@/components/portal/transfer-client";
 
 export const metadata = { title: "Transfer Dojo — JKA Bangladesh" };
@@ -65,7 +65,7 @@ export default async function TransferPage() {
           })
         : [];
 
-    const { transferFeeBDT } = await getFees();
+    const transferFeeBDT = await getTransferFee();
 
     return (
         <TransferClient

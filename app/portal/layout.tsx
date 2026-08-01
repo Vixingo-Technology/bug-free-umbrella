@@ -98,6 +98,7 @@ export default async function PortalLayout({
     let initialEmail: string = "";
     let initialDojoName: string | null = null;
     let initialDojoLogoUrl: string | null = null;
+    let initialCurrentRank: string | null = null;
 
     if (!isExempt) {
         let needsOnboarding = false;
@@ -131,8 +132,10 @@ export default async function PortalLayout({
                         onboardingComplete: true,
                         dojoId: true,
                         joinStage: true,
+                        currentRank: true,
                     },
                 });
+                initialCurrentRank = student?.currentRank ?? null;
                 needsOnboarding =
                     !student ||
                     !student.onboardingComplete ||
@@ -290,6 +293,7 @@ export default async function PortalLayout({
             initialEmail={initialEmail}
             initialDojoName={initialDojoName}
             initialDojoLogoUrl={initialDojoLogoUrl}
+            initialCurrentRank={initialCurrentRank}
         >
             {children}
         </PortalShell>

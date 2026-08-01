@@ -46,6 +46,8 @@ export async function createServiceAction(input: {
 
     revalidatePath("/portal/admin/services");
     revalidatePath("/portal/services");
+    revalidatePath("/portal/transfer");
+    revalidatePath("/portal/dojo/coupons");
 }
 
 export async function updateServiceAction(input: {
@@ -73,10 +75,27 @@ export async function updateServiceAction(input: {
 
     revalidatePath("/portal/admin/services");
     revalidatePath("/portal/services");
+    revalidatePath("/portal/transfer");
+    revalidatePath("/portal/dojo/coupons");
 }
+
+// Built-in services that ship with the platform. Admins can edit them
+// (name, description, fee) and toggle isActive, but they can never be
+// hard-deleted — other flows (transfer, kyu/dan) depend on the slug.
+const PROTECTED_SERVICE_SLUGS = new Set(["transfer-dojo", "kyu-dan-conversion"]);
 
 export async function deleteServiceAction(id: string): Promise<{ error?: string } | void> {
     await requireAdmin();
+
+    const svc = await prisma.service.findUnique({
+        where: { id },
+        select: { slug: true },
+    });
+    if (!svc) return { error: "Service not found." };
+    if (PROTECTED_SERVICE_SLUGS.has(svc.slug)) {
+        return { error: "This is a built-in service and can't be deleted. Use the Active toggle to hide it." };
+    }
+
     // Deactivate rather than hard-delete when requests exist, to preserve history.
     const count = await prisma.serviceRequest.count({ where: { serviceId: id } });
     if (count > 0) {
@@ -86,4 +105,6 @@ export async function deleteServiceAction(id: string): Promise<{ error?: string 
     }
     revalidatePath("/portal/admin/services");
     revalidatePath("/portal/services");
+    revalidatePath("/portal/transfer");
+    revalidatePath("/portal/dojo/coupons");
 }
