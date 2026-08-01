@@ -159,6 +159,7 @@ exports.Prisma.UserScalarFieldEnum = {
 exports.Prisma.ProfileScalarFieldEnum = {
   id: 'id',
   dateOfBirth: 'dateOfBirth',
+  gender: 'gender',
   bloodGroup: 'bloodGroup',
   address: 'address',
   nationalId: 'nationalId',
@@ -386,6 +387,17 @@ exports.Prisma.EventScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.TournamentDetailScalarFieldEnum = {
+  eventId: 'eventId',
+  eventType: 'eventType',
+  enabledDivisions: 'enabledDivisions',
+  registrationDeadline: 'registrationDeadline',
+  weighInDate: 'weighInDate',
+  rulesUrl: 'rulesUrl',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.AnnouncementScalarFieldEnum = {
   id: 'id',
   title: 'title',
@@ -415,6 +427,19 @@ exports.Prisma.EventRegistrationScalarFieldEnum = {
   transactionId: 'transactionId',
   guestDateOfBirth: 'guestDateOfBirth',
   parentOfMemberNumber: 'parentOfMemberNumber',
+  divisionCode: 'divisionCode',
+  entrantGender: 'entrantGender',
+  entrantWeightKg: 'entrantWeightKg',
+  entrantBeltRank: 'entrantBeltRank',
+  entrantDojoName: 'entrantDojoName',
+  coachName: 'coachName',
+  teamName: 'teamName',
+  teammates: 'teammates',
+  guardianName: 'guardianName',
+  guardianPhone: 'guardianPhone',
+  guardianConsent: 'guardianConsent',
+  emergencyContactName: 'emergencyContactName',
+  emergencyContactPhone: 'emergencyContactPhone',
   checkedInAt: 'checkedInAt',
   checkedInByUserId: 'checkedInByUserId',
   createdAt: 'createdAt'
@@ -697,6 +722,11 @@ exports.Prisma.JsonNullValueInput = {
   JsonNull: Prisma.JsonNull
 };
 
+exports.Prisma.NullableJsonNullValueInput = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull
+};
+
 exports.Prisma.QueryMode = {
   default: 'default',
   insensitive: 'insensitive'
@@ -712,6 +742,11 @@ exports.Prisma.JsonNullValueFilter = {
   JsonNull: Prisma.JsonNull,
   AnyNull: Prisma.AnyNull
 };
+exports.Gender = exports.$Enums.Gender = {
+  MALE: 'MALE',
+  FEMALE: 'FEMALE'
+};
+
 exports.MembershipStatus = exports.$Enums.MembershipStatus = {
   PENDING: 'PENDING',
   ACTIVE: 'ACTIVE',
@@ -779,6 +814,11 @@ exports.EventParticipantType = exports.$Enums.EventParticipantType = {
   INSTRUCTORS: 'INSTRUCTORS',
   PARENTS: 'PARENTS',
   DOJO_MEMBERS: 'DOJO_MEMBERS'
+};
+
+exports.TournamentEventType = exports.$Enums.TournamentEventType = {
+  KATA: 'KATA',
+  KUMITE: 'KUMITE'
 };
 
 exports.PaymentStatus = exports.$Enums.PaymentStatus = {
@@ -903,6 +943,7 @@ exports.Prisma.ModelName = {
   CertificateRequest: 'CertificateRequest',
   SystemSettings: 'SystemSettings',
   Event: 'Event',
+  TournamentDetail: 'TournamentDetail',
   Announcement: 'Announcement',
   EventRegistration: 'EventRegistration',
   Notification: 'Notification',

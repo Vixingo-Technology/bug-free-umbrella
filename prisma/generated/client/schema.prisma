@@ -212,6 +212,23 @@ enum AchievementRule {
   HIGH_MARK_GRADINGS
 }
 
+// Tournament competition type — matches the two appendices in the JKA
+// tournament rulebook. Set on TournamentDetail when an Event's category is
+// TOURNAMENT.
+enum TournamentEventType {
+  KATA
+  KUMITE
+
+  @@map("tournament_event_type")
+}
+
+// Binary sport-category gender for competition division matching. Independent
+// of any wider identity signal we may capture elsewhere.
+enum Gender {
+  MALE
+  FEMALE
+}
+
 // ─────────────────────────────────────────────
 // RBAC — Role / Permission / RolePermission
 // Role IDs are slugs (STUDENT, INSTRUCTOR, DOJO_MANAGER, DOJO_OWNER, ADMIN)
@@ -316,6 +333,7 @@ model User {
 model Profile {
   id                    String    @id @db.Uuid // = users.id
   dateOfBirth           DateTime? @map("date_of_birth") @db.Date
+  gender                Gender?
   bloodGroup            String?   @map("blood_group")
   address               String?
   nationalId            String?   @map("national_id")
@@ -784,10 +802,11 @@ model Event {
   postedById String? @map("posted_by_id") @db.Uuid
   dojoId     String? @map("dojo_id") @db.Uuid
 
-  registrations EventRegistration[]
-  postedBy      User?               @relation("EventsPosted", fields: [postedById], references: [id])
-  dojo          Dojo?               @relation("DojoEvents", fields: [dojoId], references: [id])
-  minRank       BeltRank?           @relation("EventMinRank", fields: [minRankId], references: [id], onDelete: SetNull)
+  registrations    EventRegistration[]
+  postedBy         User?               @relation("EventsPosted", fields: [postedById], references: [id])
+  dojo             Dojo?               @relation("DojoEvents", fields: [dojoId], references: [id])
+  minRank          BeltRank?           @relation("EventMinRank", fields: [minRankId], references: [id], onDelete: SetNull)
+  tournamentDetail TournamentDetail?
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -795,6 +814,29 @@ model Event {
   @@index([isPublished, eventDate])
   @@index([category])
   @@map("events")
+}
+
+// ─────────────────────────────────────────────
+// TOURNAMENT DETAIL — 1:1 with Event when category = TOURNAMENT
+// ─────────────────────────────────────────────
+// Kata vs Kumite is set here, along with the subset of WKF divisions the
+// admin has enabled for this specific tournament. Division codes live in
+// lib/tournaments/divisions.ts — they are stable identifiers, not FKs.
+
+model TournamentDetail {
+  eventId              String              @id @map("event_id") @db.Uuid
+  eventType            TournamentEventType @map("event_type")
+  enabledDivisions     String[]            @map("enabled_divisions")
+  registrationDeadline DateTime?           @map("registration_deadline")
+  weighInDate          DateTime?           @map("weigh_in_date") // KUMITE only
+  rulesUrl             String?             @map("rules_url")
+
+  event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("tournament_details")
 }
 
 // ─────────────────────────────────────────────
@@ -851,6 +893,29 @@ model EventRegistration {
   guestDateOfBirth     DateTime? @map("guest_date_of_birth") @db.Date
   parentOfMemberNumber String?   @map("parent_of_member_number")
 
+  // ── Tournament-only fields (null on non-tournament events) ─────────────
+  // divisionCode references lib/tournaments/divisions.ts. gender + weight
+  // are captured on the registration row (rather than the profile) because
+  // weight in particular varies over time and is measured at weigh-in.
+  divisionCode    String?  @map("division_code")
+  entrantGender   Gender?  @map("entrant_gender")
+  entrantWeightKg Decimal? @map("entrant_weight_kg") @db.Decimal(5, 2)
+  entrantBeltRank String?  @map("entrant_belt_rank")
+  entrantDojoName String?  @map("entrant_dojo_name") // free-text for guests
+  coachName       String?  @map("coach_name")
+
+  // Team kata — teammates stored as JSON array of { name, memberNumber? }.
+  teamName  String? @map("team_name")
+  teammates Json?   @map("teammates")
+
+  // Minor guardian block — required when entrant is under 18 on event date.
+  guardianName    String?  @map("guardian_name")
+  guardianPhone   String?  @map("guardian_phone")
+  guardianConsent Boolean? @map("guardian_consent")
+
+  emergencyContactName  String? @map("emergency_contact_name")
+  emergencyContactPhone String? @map("emergency_contact_phone")
+
   checkedInAt       DateTime? @map("checked_in_at")
   checkedInByUserId String?   @map("checked_in_by_user_id") @db.Uuid
 
@@ -862,6 +927,7 @@ model EventRegistration {
   createdAt DateTime @default(now()) @map("created_at")
 
   @@index([eventId, checkedInAt])
+  @@index([eventId, divisionCode])
   @@map("event_registrations")
 }
 

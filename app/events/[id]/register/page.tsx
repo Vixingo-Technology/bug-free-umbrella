@@ -21,6 +21,10 @@ import {
     PARTICIPANT_TYPE_LABEL,
     type EventGates,
 } from "@/lib/events/eligibility";
+import TournamentRegistrationForm, {
+    type MemberAutofill,
+    type TournamentRegistrationEvent,
+} from "@/components/events/tournament-registration-form";
 
 type Props = {
     params: Promise<{ id: string }>;
@@ -62,6 +66,7 @@ export default async function RegisterPage({ params, searchParams }: Props) {
             minAge: true,
             participantType: true,
             minRank: { select: { id: true, name: true, orderIndex: true } },
+            tournamentDetail: true,
             _count: { select: { registrations: true } },
         },
     });
@@ -99,7 +104,10 @@ export default async function RegisterPage({ params, searchParams }: Props) {
     };
 
     const viewer = await loadViewerContext(user?.id ?? null);
-    if (viewer.userId) {
+    // Tournaments allow entering multiple divisions, so we only short-circuit
+    // to an existing card for non-tournament events. Tournament dup-check
+    // happens per division inside the action.
+    if (viewer.userId && !event.tournamentDetail) {
         const existing = await prisma.eventRegistration.findFirst({
             where: { eventId: event.id, userId: viewer.userId },
             select: { qrToken: true },
@@ -108,6 +116,110 @@ export default async function RegisterPage({ params, searchParams }: Props) {
     }
 
     const eligibility = checkEligibility(gates, viewer);
+
+    // ── Tournament branch — dedicated client form for division selection ──
+    if (event.tournamentDetail) {
+        // Auto-fill from the member's profile / student record when signed in.
+        let memberAutofill: MemberAutofill = null;
+        if (viewer.userId) {
+            const me = await prisma.user.findUnique({
+                where: { id: viewer.userId },
+                select: {
+                    fullName: true,
+                    email: true,
+                    phone: true,
+                    profile: {
+                        select: {
+                            dateOfBirth: true,
+                            gender: true,
+                            emergencyContactName: true,
+                            emergencyContactPhone: true,
+                        },
+                    },
+                    student: {
+                        select: {
+                            currentRank: true,
+                            dojo: { select: { name: true } },
+                        },
+                    },
+                },
+            });
+            if (me) {
+                memberAutofill = {
+                    userId: viewer.userId,
+                    fullName: me.fullName ?? "",
+                    email: me.email ?? "",
+                    phone: me.phone,
+                    dateOfBirth: me.profile?.dateOfBirth
+                        ? me.profile.dateOfBirth.toISOString().slice(0, 10)
+                        : null,
+                    gender: me.profile?.gender ?? null,
+                    currentRank: me.student?.currentRank ?? null,
+                    dojoName: me.student?.dojo?.name ?? null,
+                    emergencyContactName: me.profile?.emergencyContactName ?? null,
+                    emergencyContactPhone: me.profile?.emergencyContactPhone ?? null,
+                };
+            }
+        }
+
+        const tournamentEvent: TournamentRegistrationEvent = {
+            id: event.id,
+            title: event.title,
+            eventDate: event.eventDate.toISOString(),
+            ticketPrice: ticketPrice,
+            memberDiscountActive: memberDiscountActive,
+            baseTicketPrice: baseTicketPrice,
+            memberDiscountPercent: event.memberDiscountPercent,
+            isPremium,
+            eventType: event.tournamentDetail.eventType,
+            enabledDivisions: event.tournamentDetail.enabledDivisions,
+            registrationDeadline: event.tournamentDetail.registrationDeadline
+                ? event.tournamentDetail.registrationDeadline.toISOString()
+                : null,
+        };
+
+        return (
+            <main className="min-h-screen bg-bg-deep w-full overflow-hidden">
+                <Navbar />
+                <section className="pt-32 pb-24">
+                    <div className="max-w-2xl mx-auto px-6 lg:px-12">
+                        <Link
+                            href={`/events/${event.id}`}
+                            className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-zinc-500 hover:text-accent-red transition-colors mb-8"
+                        >
+                            <ArrowLeft size={14} />
+                            Back to event
+                        </Link>
+                        <p className="text-[10px] tracking-[0.4em] uppercase text-accent-red font-bold mb-3">
+                            Register — {event.tournamentDetail.eventType === "KATA" ? "Kata" : "Kumite"}
+                        </p>
+                        <h1 className="font-karate text-2xl md:text-4xl text-zinc-900 mb-4 uppercase tracking-widest font-bold leading-tight">
+                            {event.title}
+                        </h1>
+                        <div className="flex flex-col sm:flex-row gap-4 sm:gap-8 text-sm text-zinc-600 mb-8">
+                            <span className="inline-flex items-center gap-2">
+                                <Calendar size={14} className="text-accent-red" />
+                                {formatDate(event.eventDate)}
+                            </span>
+                            {event.location && (
+                                <span className="inline-flex items-center gap-2">
+                                    <MapPin size={14} className="text-accent-red" />
+                                    {event.location}
+                                </span>
+                            )}
+                        </div>
+                        <TournamentRegistrationForm
+                            event={tournamentEvent}
+                            member={memberAutofill}
+                            signInHref={`/login?next=/events/${event.id}/register`}
+                            initialError={error ?? null}
+                        />
+                    </div>
+                </section>
+                <Footer />
+            </main>
+        );
+    }
 
     const isFull =
         event.maxCapacity !== null &&

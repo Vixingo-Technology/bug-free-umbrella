@@ -14,6 +14,12 @@ import {
 } from "@/lib/events/eligibility";
 import { initiateTicketPayment } from "@/lib/events/ticket-payment";
 import { applyDiscount, isJkaMember } from "@/lib/auth/is-jka-member";
+import {
+    ageOnDate,
+    checkDivisionEligibility,
+    getDivision,
+} from "@/lib/tournaments/divisions";
+import type { Gender } from "@/prisma/generated/client";
 
 type ActionResult =
     | { ok: true; token: string; payUrl?: string }
@@ -461,6 +467,324 @@ export async function checkInParticipantAction(
         eventTitle: registration.event.title,
         eventId: registration.event.id,
     };
+}
+
+// ─────────────────────────────────────────────────────────────────────────
+// TOURNAMENT REGISTRATION
+// ─────────────────────────────────────────────────────────────────────────
+
+type TournamentRegistrationResult =
+    | { ok: true; token: string; payUrl?: string }
+    | { ok: false; error: string };
+
+function trim(value: FormDataEntryValue | null): string {
+    return typeof value === "string" ? value.trim() : "";
+}
+
+function isGender(v: string): v is Gender {
+    return v === "MALE" || v === "FEMALE";
+}
+
+export async function registerForTournamentAction(
+    formData: FormData,
+): Promise<TournamentRegistrationResult> {
+    const eventId = trim(formData.get("eventId"));
+    if (!eventId) return { ok: false, error: "Missing event id." };
+
+    const event = await prisma.event.findUnique({
+        where: { id: eventId },
+        select: {
+            id: true,
+            title: true,
+            isPublished: true,
+            maxCapacity: true,
+            eventDate: true,
+            location: true,
+            dojoId: true,
+            isPremium: true,
+            ticketPrice: true,
+            memberDiscountPercent: true,
+            minAge: true,
+            participantType: true,
+            minRank: { select: { id: true, name: true, orderIndex: true } },
+            dojo: { select: { name: true } },
+            tournamentDetail: true,
+            _count: { select: { registrations: true } },
+        },
+    });
+    if (!event || !event.isPublished || !event.tournamentDetail) {
+        return { ok: false, error: "Tournament not found." };
+    }
+    if (
+        event.tournamentDetail.registrationDeadline &&
+        event.tournamentDetail.registrationDeadline.getTime() < Date.now()
+    ) {
+        return { ok: false, error: "Registration for this tournament has closed." };
+    }
+    if (
+        event.maxCapacity !== null &&
+        event._count.registrations >= event.maxCapacity
+    ) {
+        return { ok: false, error: "This event is fully booked." };
+    }
+
+    // ── Tournament-specific fields ──────────────────────────────────────
+    const divisionCode = trim(formData.get("divisionCode"));
+    if (!divisionCode) return { ok: false, error: "Pick a division to register for." };
+    if (!event.tournamentDetail.enabledDivisions.includes(divisionCode)) {
+        return { ok: false, error: "That division is not open for this tournament." };
+    }
+    const division = getDivision(divisionCode);
+    if (!division) return { ok: false, error: "Unknown division." };
+
+    const genderRaw = trim(formData.get("entrantGender"));
+    if (!isGender(genderRaw)) return { ok: false, error: "Select your gender." };
+
+    const dobStr = trim(formData.get("dateOfBirth"));
+    const dob = dobStr ? new Date(dobStr) : null;
+    if (!dob || Number.isNaN(dob.getTime())) {
+        return { ok: false, error: "Enter a valid date of birth." };
+    }
+
+    let weightKg: number | null = null;
+    if (event.tournamentDetail.eventType === "KUMITE") {
+        const w = Number.parseFloat(trim(formData.get("entrantWeightKg")));
+        if (!Number.isFinite(w) || w <= 0) {
+            return { ok: false, error: "Enter your weight in kg." };
+        }
+        weightKg = Math.round(w * 100) / 100;
+    }
+
+    const issue = checkDivisionEligibility(division, {
+        gender: genderRaw,
+        dob,
+        eventDate: event.eventDate,
+        weightKg,
+    });
+    if (issue) {
+        const messages: Record<typeof issue, string> = {
+            "wrong-event-type": "Division doesn't match the tournament type.",
+            "wrong-gender": "That division is for a different gender.",
+            "age-below-min": `You must be at least ${division.ageMin} on the event date for this division.`,
+            "age-above-max": `You must be under ${(division.ageMax ?? 0) + 1} on the event date for this division.`,
+            "weight-below-min": "Your weight is below this division's range.",
+            "weight-above-max": "Your weight is above this division's range.",
+            "weight-required": "Weight is required for kumite divisions.",
+        };
+        return { ok: false, error: messages[issue] };
+    }
+
+    // ── Common (member vs guest) ────────────────────────────────────────
+    const supabase = await createClient();
+    const {
+        data: { user },
+    } = await supabase.auth.getUser();
+
+    const registrantIsMember = user ? await isJkaMember(user.id) : false;
+    const baseTicketPrice = event.ticketPrice ? Number(event.ticketPrice) : null;
+    const isPremium = event.isPremium && baseTicketPrice !== null && baseTicketPrice > 0;
+    const ticketPrice =
+        isPremium && baseTicketPrice !== null
+            ? registrantIsMember
+                ? applyDiscount(baseTicketPrice, event.memberDiscountPercent)
+                : baseTicketPrice
+            : baseTicketPrice;
+
+    const userId = user?.id ?? null;
+    let guestName: string | null = null;
+    let guestEmail: string | null = null;
+    let guestPhone: string | null = null;
+
+    if (!userId) {
+        guestName = trim(formData.get("name")) || null;
+        guestEmail = normaliseEmail(formData.get("email") as string);
+        guestPhone = trim(formData.get("phone")) || null;
+        if (!guestName) return { ok: false, error: "Your name is required." };
+        if (!guestEmail) return { ok: false, error: "Your email is required." };
+        if (!guestPhone) return { ok: false, error: "Your phone is required." };
+    }
+
+    const entrantBeltRank = trim(formData.get("entrantBeltRank")) || null;
+    if (!entrantBeltRank) return { ok: false, error: "Belt rank is required." };
+    const entrantDojoName = trim(formData.get("entrantDojoName")) || null;
+    const coachName = trim(formData.get("coachName")) || null;
+    const emergencyContactName = trim(formData.get("emergencyContactName")) || null;
+    const emergencyContactPhone = trim(formData.get("emergencyContactPhone")) || null;
+    if (!emergencyContactName || !emergencyContactPhone) {
+        return { ok: false, error: "Emergency contact details are required." };
+    }
+
+    // Team kata: expect team name + two teammates. Third team member is the
+    // registrant themself.
+    let teamName: string | null = null;
+    let teammates: unknown = null;
+    if (division.isTeam) {
+        teamName = trim(formData.get("teamName")) || null;
+        const t1n = trim(formData.get("teammate1Name"));
+        const t2n = trim(formData.get("teammate2Name"));
+        if (!teamName || !t1n || !t2n) {
+            return {
+                ok: false,
+                error: "Team name and both teammates are required for team kata.",
+            };
+        }
+        teammates = [
+            { name: t1n, memberNumber: trim(formData.get("teammate1Member")) || null },
+            { name: t2n, memberNumber: trim(formData.get("teammate2Member")) || null },
+        ];
+    }
+
+    // Minor guardian block — driven by age on the event date, computed with
+    // the same helper the picker uses.
+    const isMinor = ageOnDate(dob, event.eventDate) < 18;
+    let guardianName: string | null = null;
+    let guardianPhone: string | null = null;
+    let guardianConsent: boolean | null = null;
+    if (isMinor) {
+        guardianName = trim(formData.get("guardianName")) || null;
+        guardianPhone = trim(formData.get("guardianPhone")) || null;
+        guardianConsent = trim(formData.get("guardianConsent")) === "true";
+        if (!guardianName || !guardianPhone || !guardianConsent) {
+            return {
+                ok: false,
+                error: "Guardian name, phone, and consent are required for participants under 18.",
+            };
+        }
+    }
+
+    // Prevent double-entering the same division. Members are uniquely
+    // identified by userId+eventId+divisionCode; guests by email.
+    const existing = userId
+        ? await prisma.eventRegistration.findFirst({
+              where: { eventId, userId, divisionCode },
+              select: { id: true, qrToken: true, paymentStatus: true, amountDue: true },
+          })
+        : guestEmail
+          ? await prisma.eventRegistration.findFirst({
+                where: {
+                    eventId,
+                    userId: null,
+                    divisionCode,
+                    guestEmail: { equals: guestEmail, mode: "insensitive" },
+                },
+                select: { id: true, qrToken: true, paymentStatus: true, amountDue: true },
+            })
+          : null;
+
+    if (existing) {
+        if (existing.paymentStatus !== "PENDING") {
+            return { ok: true, token: existing.qrToken };
+        }
+        const init = await initiateTicketPayment({
+            registrationId: existing.id,
+            qrToken: existing.qrToken,
+            amount: existing.amountDue ? Number(existing.amountDue) : (ticketPrice ?? 0),
+            eventId: event.id,
+            eventTitle: event.title,
+            customerName: user ? (guestName ?? "Participant") : (guestName ?? "Participant"),
+            customerEmail: user?.email ?? guestEmail ?? "",
+            customerPhone: guestPhone,
+        });
+        if (init.kind === "gateway") {
+            return { ok: true, token: existing.qrToken, payUrl: init.url };
+        }
+        if (init.kind === "devPaid") {
+            return { ok: true, token: existing.qrToken };
+        }
+        return { ok: false, error: init.message };
+    }
+
+    const qrToken = urlSafeToken();
+    const reg = await prisma.eventRegistration.create({
+        data: {
+            eventId,
+            userId,
+            guestName,
+            guestEmail,
+            guestPhone,
+            qrToken,
+            paymentStatus: isPremium ? "PENDING" : null,
+            amountDue: isPremium ? ticketPrice : null,
+            divisionCode,
+            entrantGender: genderRaw,
+            entrantWeightKg: weightKg,
+            entrantBeltRank,
+            entrantDojoName,
+            coachName,
+            teamName,
+            teammates: teammates as never,
+            guardianName,
+            guardianPhone,
+            guardianConsent,
+            emergencyContactName,
+            emergencyContactPhone,
+            // Store DOB in the same guest_date_of_birth column used by the
+            // existing gate-answers flow — one column, one meaning.
+            guestDateOfBirth: dob,
+        },
+        select: { id: true, qrToken: true },
+    });
+
+    revalidatePath(`/events/${eventId}`);
+    revalidatePath(`/portal/admin/events/${eventId}/participants`);
+
+    if (isPremium) {
+        const init = await initiateTicketPayment({
+            registrationId: reg.id,
+            qrToken: reg.qrToken,
+            amount: ticketPrice ?? 0,
+            eventId: event.id,
+            eventTitle: event.title,
+            customerName: user ? "Participant" : (guestName ?? "Participant"),
+            customerEmail: user?.email ?? guestEmail ?? "",
+            customerPhone: guestPhone,
+        });
+        if (init.kind === "gateway") {
+            return { ok: true, token: reg.qrToken, payUrl: init.url };
+        }
+        if (init.kind === "devPaid") {
+            return { ok: true, token: reg.qrToken };
+        }
+        return { ok: false, error: init.message };
+    }
+
+    const appUrl =
+        process.env.NEXT_PUBLIC_APP_URL ??
+        process.env.APP_URL ??
+        "http://localhost:3000";
+    await emitEventRegistered({
+        registrationId: reg.id,
+        qrToken: reg.qrToken,
+        participationCardUrl: `${appUrl}/participants/${reg.qrToken}`,
+        participantName: guestName ?? "Participant",
+        participantEmail: user?.email ?? guestEmail ?? "",
+        participantPhone: guestPhone,
+        memberId: userId ?? null,
+        isGuest: !userId,
+        event: {
+            id: event.id,
+            title: event.title,
+            eventDate: event.eventDate.toISOString(),
+            location: event.location,
+            dojoName: event.dojo?.name ?? null,
+        },
+    });
+
+    return { ok: true, token: reg.qrToken };
+}
+
+export async function registerForTournamentAndRedirect(
+    formData: FormData,
+): Promise<void> {
+    const res = await registerForTournamentAction(formData);
+    if (!res.ok) {
+        const eventId = (formData.get("eventId") as string) ?? "";
+        redirect(
+            `/events/${eventId}/register?error=${encodeURIComponent(res.error)}`,
+        );
+    }
+    if (res.payUrl) redirect(res.payUrl);
+    redirect(`/participants/${res.token}`);
 }
 
 /**

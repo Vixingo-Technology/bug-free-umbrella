@@ -114,6 +114,11 @@ export type SystemSettings = $Result.DefaultSelection<Prisma.$SystemSettingsPayl
  */
 export type Event = $Result.DefaultSelection<Prisma.$EventPayload>
 /**
+ * Model TournamentDetail
+ * 
+ */
+export type TournamentDetail = $Result.DefaultSelection<Prisma.$TournamentDetailPayload>
+/**
  * Model Announcement
  * 
  */
@@ -444,6 +449,22 @@ export const AchievementRule: {
 export type AchievementRule = (typeof AchievementRule)[keyof typeof AchievementRule]
 
 
+export const TournamentEventType: {
+  KATA: 'KATA',
+  KUMITE: 'KUMITE'
+};
+
+export type TournamentEventType = (typeof TournamentEventType)[keyof typeof TournamentEventType]
+
+
+export const Gender: {
+  MALE: 'MALE',
+  FEMALE: 'FEMALE'
+};
+
+export type Gender = (typeof Gender)[keyof typeof Gender]
+
+
 export const DojoApplicationStatus: {
   PENDING_PAYMENT: 'PENDING_PAYMENT',
   PAID: 'PAID',
@@ -538,6 +559,14 @@ export const AchievementTier: typeof $Enums.AchievementTier
 export type AchievementRule = $Enums.AchievementRule
 
 export const AchievementRule: typeof $Enums.AchievementRule
+
+export type TournamentEventType = $Enums.TournamentEventType
+
+export const TournamentEventType: typeof $Enums.TournamentEventType
+
+export type Gender = $Enums.Gender
+
+export const Gender: typeof $Enums.Gender
 
 export type DojoApplicationStatus = $Enums.DojoApplicationStatus
 
@@ -863,6 +892,16 @@ export class PrismaClient<
     * ```
     */
   get event(): Prisma.EventDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.tournamentDetail`: Exposes CRUD operations for the **TournamentDetail** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more TournamentDetails
+    * const tournamentDetails = await prisma.tournamentDetail.findMany()
+    * ```
+    */
+  get tournamentDetail(): Prisma.TournamentDetailDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.announcement`: Exposes CRUD operations for the **Announcement** model.
@@ -1517,6 +1556,7 @@ export namespace Prisma {
     CertificateRequest: 'CertificateRequest',
     SystemSettings: 'SystemSettings',
     Event: 'Event',
+    TournamentDetail: 'TournamentDetail',
     Announcement: 'Announcement',
     EventRegistration: 'EventRegistration',
     Notification: 'Notification',
@@ -1552,7 +1592,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "role" | "permission" | "rolePermission" | "user" | "profile" | "student" | "instructor" | "dojoManager" | "dojoOwner" | "admin" | "beltRank" | "dojo" | "dojoApplication" | "dojoOwnerInvite" | "gradingEvent" | "gradingApplication" | "grading" | "certificateRequest" | "systemSettings" | "event" | "announcement" | "eventRegistration" | "notification" | "shopProduct" | "dojoInventoryItem" | "dojoSale" | "dojoSaleItem" | "shopOrder" | "shopOrderItem" | "tournament" | "tournamentParticipant" | "tournamentMatch" | "achievement" | "studentAchievement" | "studentTransferRequest" | "paymentTransaction" | "studentDojoHistory" | "service" | "serviceRequest" | "serviceCoupon"
+      modelProps: "role" | "permission" | "rolePermission" | "user" | "profile" | "student" | "instructor" | "dojoManager" | "dojoOwner" | "admin" | "beltRank" | "dojo" | "dojoApplication" | "dojoOwnerInvite" | "gradingEvent" | "gradingApplication" | "grading" | "certificateRequest" | "systemSettings" | "event" | "tournamentDetail" | "announcement" | "eventRegistration" | "notification" | "shopProduct" | "dojoInventoryItem" | "dojoSale" | "dojoSaleItem" | "shopOrder" | "shopOrderItem" | "tournament" | "tournamentParticipant" | "tournamentMatch" | "achievement" | "studentAchievement" | "studentTransferRequest" | "paymentTransaction" | "studentDojoHistory" | "service" | "serviceRequest" | "serviceCoupon"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -3033,6 +3073,80 @@ export namespace Prisma {
           count: {
             args: Prisma.EventCountArgs<ExtArgs>
             result: $Utils.Optional<EventCountAggregateOutputType> | number
+          }
+        }
+      }
+      TournamentDetail: {
+        payload: Prisma.$TournamentDetailPayload<ExtArgs>
+        fields: Prisma.TournamentDetailFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.TournamentDetailFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TournamentDetailPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.TournamentDetailFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TournamentDetailPayload>
+          }
+          findFirst: {
+            args: Prisma.TournamentDetailFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TournamentDetailPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.TournamentDetailFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TournamentDetailPayload>
+          }
+          findMany: {
+            args: Prisma.TournamentDetailFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TournamentDetailPayload>[]
+          }
+          create: {
+            args: Prisma.TournamentDetailCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TournamentDetailPayload>
+          }
+          createMany: {
+            args: Prisma.TournamentDetailCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.TournamentDetailCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TournamentDetailPayload>[]
+          }
+          delete: {
+            args: Prisma.TournamentDetailDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TournamentDetailPayload>
+          }
+          update: {
+            args: Prisma.TournamentDetailUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TournamentDetailPayload>
+          }
+          deleteMany: {
+            args: Prisma.TournamentDetailDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.TournamentDetailUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.TournamentDetailUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TournamentDetailPayload>[]
+          }
+          upsert: {
+            args: Prisma.TournamentDetailUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TournamentDetailPayload>
+          }
+          aggregate: {
+            args: Prisma.TournamentDetailAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateTournamentDetail>
+          }
+          groupBy: {
+            args: Prisma.TournamentDetailGroupByArgs<ExtArgs>
+            result: $Utils.Optional<TournamentDetailGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.TournamentDetailCountArgs<ExtArgs>
+            result: $Utils.Optional<TournamentDetailCountAggregateOutputType> | number
           }
         }
       }
@@ -4644,6 +4758,7 @@ export namespace Prisma {
     certificateRequest?: CertificateRequestOmit
     systemSettings?: SystemSettingsOmit
     event?: EventOmit
+    tournamentDetail?: TournamentDetailOmit
     announcement?: AnnouncementOmit
     eventRegistration?: EventRegistrationOmit
     notification?: NotificationOmit
@@ -10821,6 +10936,7 @@ export namespace Prisma {
   export type ProfileMinAggregateOutputType = {
     id: string | null
     dateOfBirth: Date | null
+    gender: $Enums.Gender | null
     bloodGroup: string | null
     address: string | null
     nationalId: string | null
@@ -10835,6 +10951,7 @@ export namespace Prisma {
   export type ProfileMaxAggregateOutputType = {
     id: string | null
     dateOfBirth: Date | null
+    gender: $Enums.Gender | null
     bloodGroup: string | null
     address: string | null
     nationalId: string | null
@@ -10849,6 +10966,7 @@ export namespace Prisma {
   export type ProfileCountAggregateOutputType = {
     id: number
     dateOfBirth: number
+    gender: number
     bloodGroup: number
     address: number
     nationalId: number
@@ -10865,6 +10983,7 @@ export namespace Prisma {
   export type ProfileMinAggregateInputType = {
     id?: true
     dateOfBirth?: true
+    gender?: true
     bloodGroup?: true
     address?: true
     nationalId?: true
@@ -10879,6 +10998,7 @@ export namespace Prisma {
   export type ProfileMaxAggregateInputType = {
     id?: true
     dateOfBirth?: true
+    gender?: true
     bloodGroup?: true
     address?: true
     nationalId?: true
@@ -10893,6 +11013,7 @@ export namespace Prisma {
   export type ProfileCountAggregateInputType = {
     id?: true
     dateOfBirth?: true
+    gender?: true
     bloodGroup?: true
     address?: true
     nationalId?: true
@@ -10980,6 +11101,7 @@ export namespace Prisma {
   export type ProfileGroupByOutputType = {
     id: string
     dateOfBirth: Date | null
+    gender: $Enums.Gender | null
     bloodGroup: string | null
     address: string | null
     nationalId: string | null
@@ -11011,6 +11133,7 @@ export namespace Prisma {
   export type ProfileSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     dateOfBirth?: boolean
+    gender?: boolean
     bloodGroup?: boolean
     address?: boolean
     nationalId?: boolean
@@ -11026,6 +11149,7 @@ export namespace Prisma {
   export type ProfileSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     dateOfBirth?: boolean
+    gender?: boolean
     bloodGroup?: boolean
     address?: boolean
     nationalId?: boolean
@@ -11041,6 +11165,7 @@ export namespace Prisma {
   export type ProfileSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     dateOfBirth?: boolean
+    gender?: boolean
     bloodGroup?: boolean
     address?: boolean
     nationalId?: boolean
@@ -11056,6 +11181,7 @@ export namespace Prisma {
   export type ProfileSelectScalar = {
     id?: boolean
     dateOfBirth?: boolean
+    gender?: boolean
     bloodGroup?: boolean
     address?: boolean
     nationalId?: boolean
@@ -11067,7 +11193,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type ProfileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "dateOfBirth" | "bloodGroup" | "address" | "nationalId" | "fatherName" | "motherName" | "emergencyContactName" | "emergencyContactPhone" | "createdAt" | "updatedAt", ExtArgs["result"]["profile"]>
+  export type ProfileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "dateOfBirth" | "gender" | "bloodGroup" | "address" | "nationalId" | "fatherName" | "motherName" | "emergencyContactName" | "emergencyContactPhone" | "createdAt" | "updatedAt", ExtArgs["result"]["profile"]>
   export type ProfileInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
   }
@@ -11086,6 +11212,7 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: string
       dateOfBirth: Date | null
+      gender: $Enums.Gender | null
       bloodGroup: string | null
       address: string | null
       nationalId: string | null
@@ -11521,6 +11648,7 @@ export namespace Prisma {
   interface ProfileFieldRefs {
     readonly id: FieldRef<"Profile", 'String'>
     readonly dateOfBirth: FieldRef<"Profile", 'DateTime'>
+    readonly gender: FieldRef<"Profile", 'Gender'>
     readonly bloodGroup: FieldRef<"Profile", 'String'>
     readonly address: FieldRef<"Profile", 'String'>
     readonly nationalId: FieldRef<"Profile", 'String'>
@@ -29631,6 +29759,7 @@ export namespace Prisma {
     postedBy?: boolean | Event$postedByArgs<ExtArgs>
     dojo?: boolean | Event$dojoArgs<ExtArgs>
     minRank?: boolean | Event$minRankArgs<ExtArgs>
+    tournamentDetail?: boolean | Event$tournamentDetailArgs<ExtArgs>
     _count?: boolean | EventCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["event"]>
 
@@ -29718,6 +29847,7 @@ export namespace Prisma {
     postedBy?: boolean | Event$postedByArgs<ExtArgs>
     dojo?: boolean | Event$dojoArgs<ExtArgs>
     minRank?: boolean | Event$minRankArgs<ExtArgs>
+    tournamentDetail?: boolean | Event$tournamentDetailArgs<ExtArgs>
     _count?: boolean | EventCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type EventIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -29738,6 +29868,7 @@ export namespace Prisma {
       postedBy: Prisma.$UserPayload<ExtArgs> | null
       dojo: Prisma.$DojoPayload<ExtArgs> | null
       minRank: Prisma.$BeltRankPayload<ExtArgs> | null
+      tournamentDetail: Prisma.$TournamentDetailPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -30159,6 +30290,7 @@ export namespace Prisma {
     postedBy<T extends Event$postedByArgs<ExtArgs> = {}>(args?: Subset<T, Event$postedByArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     dojo<T extends Event$dojoArgs<ExtArgs> = {}>(args?: Subset<T, Event$dojoArgs<ExtArgs>>): Prisma__DojoClient<$Result.GetResult<Prisma.$DojoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     minRank<T extends Event$minRankArgs<ExtArgs> = {}>(args?: Subset<T, Event$minRankArgs<ExtArgs>>): Prisma__BeltRankClient<$Result.GetResult<Prisma.$BeltRankPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    tournamentDetail<T extends Event$tournamentDetailArgs<ExtArgs> = {}>(args?: Subset<T, Event$tournamentDetailArgs<ExtArgs>>): Prisma__TournamentDetailClient<$Result.GetResult<Prisma.$TournamentDetailPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -30691,6 +30823,25 @@ export namespace Prisma {
   }
 
   /**
+   * Event.tournamentDetail
+   */
+  export type Event$tournamentDetailArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TournamentDetail
+     */
+    select?: TournamentDetailSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TournamentDetail
+     */
+    omit?: TournamentDetailOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TournamentDetailInclude<ExtArgs> | null
+    where?: TournamentDetailWhereInput
+  }
+
+  /**
    * Event without action
    */
   export type EventDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -30706,6 +30857,1104 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: EventInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model TournamentDetail
+   */
+
+  export type AggregateTournamentDetail = {
+    _count: TournamentDetailCountAggregateOutputType | null
+    _min: TournamentDetailMinAggregateOutputType | null
+    _max: TournamentDetailMaxAggregateOutputType | null
+  }
+
+  export type TournamentDetailMinAggregateOutputType = {
+    eventId: string | null
+    eventType: $Enums.TournamentEventType | null
+    registrationDeadline: Date | null
+    weighInDate: Date | null
+    rulesUrl: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type TournamentDetailMaxAggregateOutputType = {
+    eventId: string | null
+    eventType: $Enums.TournamentEventType | null
+    registrationDeadline: Date | null
+    weighInDate: Date | null
+    rulesUrl: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type TournamentDetailCountAggregateOutputType = {
+    eventId: number
+    eventType: number
+    enabledDivisions: number
+    registrationDeadline: number
+    weighInDate: number
+    rulesUrl: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type TournamentDetailMinAggregateInputType = {
+    eventId?: true
+    eventType?: true
+    registrationDeadline?: true
+    weighInDate?: true
+    rulesUrl?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type TournamentDetailMaxAggregateInputType = {
+    eventId?: true
+    eventType?: true
+    registrationDeadline?: true
+    weighInDate?: true
+    rulesUrl?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type TournamentDetailCountAggregateInputType = {
+    eventId?: true
+    eventType?: true
+    enabledDivisions?: true
+    registrationDeadline?: true
+    weighInDate?: true
+    rulesUrl?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type TournamentDetailAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which TournamentDetail to aggregate.
+     */
+    where?: TournamentDetailWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TournamentDetails to fetch.
+     */
+    orderBy?: TournamentDetailOrderByWithRelationInput | TournamentDetailOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: TournamentDetailWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TournamentDetails from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TournamentDetails.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned TournamentDetails
+    **/
+    _count?: true | TournamentDetailCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: TournamentDetailMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: TournamentDetailMaxAggregateInputType
+  }
+
+  export type GetTournamentDetailAggregateType<T extends TournamentDetailAggregateArgs> = {
+        [P in keyof T & keyof AggregateTournamentDetail]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateTournamentDetail[P]>
+      : GetScalarType<T[P], AggregateTournamentDetail[P]>
+  }
+
+
+
+
+  export type TournamentDetailGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TournamentDetailWhereInput
+    orderBy?: TournamentDetailOrderByWithAggregationInput | TournamentDetailOrderByWithAggregationInput[]
+    by: TournamentDetailScalarFieldEnum[] | TournamentDetailScalarFieldEnum
+    having?: TournamentDetailScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: TournamentDetailCountAggregateInputType | true
+    _min?: TournamentDetailMinAggregateInputType
+    _max?: TournamentDetailMaxAggregateInputType
+  }
+
+  export type TournamentDetailGroupByOutputType = {
+    eventId: string
+    eventType: $Enums.TournamentEventType
+    enabledDivisions: string[]
+    registrationDeadline: Date | null
+    weighInDate: Date | null
+    rulesUrl: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: TournamentDetailCountAggregateOutputType | null
+    _min: TournamentDetailMinAggregateOutputType | null
+    _max: TournamentDetailMaxAggregateOutputType | null
+  }
+
+  type GetTournamentDetailGroupByPayload<T extends TournamentDetailGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<TournamentDetailGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof TournamentDetailGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], TournamentDetailGroupByOutputType[P]>
+            : GetScalarType<T[P], TournamentDetailGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type TournamentDetailSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    eventId?: boolean
+    eventType?: boolean
+    enabledDivisions?: boolean
+    registrationDeadline?: boolean
+    weighInDate?: boolean
+    rulesUrl?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    event?: boolean | EventDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["tournamentDetail"]>
+
+  export type TournamentDetailSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    eventId?: boolean
+    eventType?: boolean
+    enabledDivisions?: boolean
+    registrationDeadline?: boolean
+    weighInDate?: boolean
+    rulesUrl?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    event?: boolean | EventDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["tournamentDetail"]>
+
+  export type TournamentDetailSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    eventId?: boolean
+    eventType?: boolean
+    enabledDivisions?: boolean
+    registrationDeadline?: boolean
+    weighInDate?: boolean
+    rulesUrl?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    event?: boolean | EventDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["tournamentDetail"]>
+
+  export type TournamentDetailSelectScalar = {
+    eventId?: boolean
+    eventType?: boolean
+    enabledDivisions?: boolean
+    registrationDeadline?: boolean
+    weighInDate?: boolean
+    rulesUrl?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type TournamentDetailOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"eventId" | "eventType" | "enabledDivisions" | "registrationDeadline" | "weighInDate" | "rulesUrl" | "createdAt" | "updatedAt", ExtArgs["result"]["tournamentDetail"]>
+  export type TournamentDetailInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    event?: boolean | EventDefaultArgs<ExtArgs>
+  }
+  export type TournamentDetailIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    event?: boolean | EventDefaultArgs<ExtArgs>
+  }
+  export type TournamentDetailIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    event?: boolean | EventDefaultArgs<ExtArgs>
+  }
+
+  export type $TournamentDetailPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "TournamentDetail"
+    objects: {
+      event: Prisma.$EventPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      eventId: string
+      eventType: $Enums.TournamentEventType
+      enabledDivisions: string[]
+      registrationDeadline: Date | null
+      weighInDate: Date | null
+      rulesUrl: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["tournamentDetail"]>
+    composites: {}
+  }
+
+  type TournamentDetailGetPayload<S extends boolean | null | undefined | TournamentDetailDefaultArgs> = $Result.GetResult<Prisma.$TournamentDetailPayload, S>
+
+  type TournamentDetailCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<TournamentDetailFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: TournamentDetailCountAggregateInputType | true
+    }
+
+  export interface TournamentDetailDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['TournamentDetail'], meta: { name: 'TournamentDetail' } }
+    /**
+     * Find zero or one TournamentDetail that matches the filter.
+     * @param {TournamentDetailFindUniqueArgs} args - Arguments to find a TournamentDetail
+     * @example
+     * // Get one TournamentDetail
+     * const tournamentDetail = await prisma.tournamentDetail.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends TournamentDetailFindUniqueArgs>(args: SelectSubset<T, TournamentDetailFindUniqueArgs<ExtArgs>>): Prisma__TournamentDetailClient<$Result.GetResult<Prisma.$TournamentDetailPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one TournamentDetail that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {TournamentDetailFindUniqueOrThrowArgs} args - Arguments to find a TournamentDetail
+     * @example
+     * // Get one TournamentDetail
+     * const tournamentDetail = await prisma.tournamentDetail.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends TournamentDetailFindUniqueOrThrowArgs>(args: SelectSubset<T, TournamentDetailFindUniqueOrThrowArgs<ExtArgs>>): Prisma__TournamentDetailClient<$Result.GetResult<Prisma.$TournamentDetailPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first TournamentDetail that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TournamentDetailFindFirstArgs} args - Arguments to find a TournamentDetail
+     * @example
+     * // Get one TournamentDetail
+     * const tournamentDetail = await prisma.tournamentDetail.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends TournamentDetailFindFirstArgs>(args?: SelectSubset<T, TournamentDetailFindFirstArgs<ExtArgs>>): Prisma__TournamentDetailClient<$Result.GetResult<Prisma.$TournamentDetailPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first TournamentDetail that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TournamentDetailFindFirstOrThrowArgs} args - Arguments to find a TournamentDetail
+     * @example
+     * // Get one TournamentDetail
+     * const tournamentDetail = await prisma.tournamentDetail.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends TournamentDetailFindFirstOrThrowArgs>(args?: SelectSubset<T, TournamentDetailFindFirstOrThrowArgs<ExtArgs>>): Prisma__TournamentDetailClient<$Result.GetResult<Prisma.$TournamentDetailPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more TournamentDetails that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TournamentDetailFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all TournamentDetails
+     * const tournamentDetails = await prisma.tournamentDetail.findMany()
+     * 
+     * // Get first 10 TournamentDetails
+     * const tournamentDetails = await prisma.tournamentDetail.findMany({ take: 10 })
+     * 
+     * // Only select the `eventId`
+     * const tournamentDetailWithEventIdOnly = await prisma.tournamentDetail.findMany({ select: { eventId: true } })
+     * 
+     */
+    findMany<T extends TournamentDetailFindManyArgs>(args?: SelectSubset<T, TournamentDetailFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TournamentDetailPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a TournamentDetail.
+     * @param {TournamentDetailCreateArgs} args - Arguments to create a TournamentDetail.
+     * @example
+     * // Create one TournamentDetail
+     * const TournamentDetail = await prisma.tournamentDetail.create({
+     *   data: {
+     *     // ... data to create a TournamentDetail
+     *   }
+     * })
+     * 
+     */
+    create<T extends TournamentDetailCreateArgs>(args: SelectSubset<T, TournamentDetailCreateArgs<ExtArgs>>): Prisma__TournamentDetailClient<$Result.GetResult<Prisma.$TournamentDetailPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many TournamentDetails.
+     * @param {TournamentDetailCreateManyArgs} args - Arguments to create many TournamentDetails.
+     * @example
+     * // Create many TournamentDetails
+     * const tournamentDetail = await prisma.tournamentDetail.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends TournamentDetailCreateManyArgs>(args?: SelectSubset<T, TournamentDetailCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many TournamentDetails and returns the data saved in the database.
+     * @param {TournamentDetailCreateManyAndReturnArgs} args - Arguments to create many TournamentDetails.
+     * @example
+     * // Create many TournamentDetails
+     * const tournamentDetail = await prisma.tournamentDetail.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many TournamentDetails and only return the `eventId`
+     * const tournamentDetailWithEventIdOnly = await prisma.tournamentDetail.createManyAndReturn({
+     *   select: { eventId: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends TournamentDetailCreateManyAndReturnArgs>(args?: SelectSubset<T, TournamentDetailCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TournamentDetailPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a TournamentDetail.
+     * @param {TournamentDetailDeleteArgs} args - Arguments to delete one TournamentDetail.
+     * @example
+     * // Delete one TournamentDetail
+     * const TournamentDetail = await prisma.tournamentDetail.delete({
+     *   where: {
+     *     // ... filter to delete one TournamentDetail
+     *   }
+     * })
+     * 
+     */
+    delete<T extends TournamentDetailDeleteArgs>(args: SelectSubset<T, TournamentDetailDeleteArgs<ExtArgs>>): Prisma__TournamentDetailClient<$Result.GetResult<Prisma.$TournamentDetailPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one TournamentDetail.
+     * @param {TournamentDetailUpdateArgs} args - Arguments to update one TournamentDetail.
+     * @example
+     * // Update one TournamentDetail
+     * const tournamentDetail = await prisma.tournamentDetail.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends TournamentDetailUpdateArgs>(args: SelectSubset<T, TournamentDetailUpdateArgs<ExtArgs>>): Prisma__TournamentDetailClient<$Result.GetResult<Prisma.$TournamentDetailPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more TournamentDetails.
+     * @param {TournamentDetailDeleteManyArgs} args - Arguments to filter TournamentDetails to delete.
+     * @example
+     * // Delete a few TournamentDetails
+     * const { count } = await prisma.tournamentDetail.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends TournamentDetailDeleteManyArgs>(args?: SelectSubset<T, TournamentDetailDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more TournamentDetails.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TournamentDetailUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many TournamentDetails
+     * const tournamentDetail = await prisma.tournamentDetail.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends TournamentDetailUpdateManyArgs>(args: SelectSubset<T, TournamentDetailUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more TournamentDetails and returns the data updated in the database.
+     * @param {TournamentDetailUpdateManyAndReturnArgs} args - Arguments to update many TournamentDetails.
+     * @example
+     * // Update many TournamentDetails
+     * const tournamentDetail = await prisma.tournamentDetail.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more TournamentDetails and only return the `eventId`
+     * const tournamentDetailWithEventIdOnly = await prisma.tournamentDetail.updateManyAndReturn({
+     *   select: { eventId: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends TournamentDetailUpdateManyAndReturnArgs>(args: SelectSubset<T, TournamentDetailUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TournamentDetailPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one TournamentDetail.
+     * @param {TournamentDetailUpsertArgs} args - Arguments to update or create a TournamentDetail.
+     * @example
+     * // Update or create a TournamentDetail
+     * const tournamentDetail = await prisma.tournamentDetail.upsert({
+     *   create: {
+     *     // ... data to create a TournamentDetail
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the TournamentDetail we want to update
+     *   }
+     * })
+     */
+    upsert<T extends TournamentDetailUpsertArgs>(args: SelectSubset<T, TournamentDetailUpsertArgs<ExtArgs>>): Prisma__TournamentDetailClient<$Result.GetResult<Prisma.$TournamentDetailPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of TournamentDetails.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TournamentDetailCountArgs} args - Arguments to filter TournamentDetails to count.
+     * @example
+     * // Count the number of TournamentDetails
+     * const count = await prisma.tournamentDetail.count({
+     *   where: {
+     *     // ... the filter for the TournamentDetails we want to count
+     *   }
+     * })
+    **/
+    count<T extends TournamentDetailCountArgs>(
+      args?: Subset<T, TournamentDetailCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], TournamentDetailCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a TournamentDetail.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TournamentDetailAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends TournamentDetailAggregateArgs>(args: Subset<T, TournamentDetailAggregateArgs>): Prisma.PrismaPromise<GetTournamentDetailAggregateType<T>>
+
+    /**
+     * Group by TournamentDetail.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TournamentDetailGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends TournamentDetailGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: TournamentDetailGroupByArgs['orderBy'] }
+        : { orderBy?: TournamentDetailGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, TournamentDetailGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetTournamentDetailGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the TournamentDetail model
+   */
+  readonly fields: TournamentDetailFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for TournamentDetail.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__TournamentDetailClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    event<T extends EventDefaultArgs<ExtArgs> = {}>(args?: Subset<T, EventDefaultArgs<ExtArgs>>): Prisma__EventClient<$Result.GetResult<Prisma.$EventPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the TournamentDetail model
+   */
+  interface TournamentDetailFieldRefs {
+    readonly eventId: FieldRef<"TournamentDetail", 'String'>
+    readonly eventType: FieldRef<"TournamentDetail", 'TournamentEventType'>
+    readonly enabledDivisions: FieldRef<"TournamentDetail", 'String[]'>
+    readonly registrationDeadline: FieldRef<"TournamentDetail", 'DateTime'>
+    readonly weighInDate: FieldRef<"TournamentDetail", 'DateTime'>
+    readonly rulesUrl: FieldRef<"TournamentDetail", 'String'>
+    readonly createdAt: FieldRef<"TournamentDetail", 'DateTime'>
+    readonly updatedAt: FieldRef<"TournamentDetail", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * TournamentDetail findUnique
+   */
+  export type TournamentDetailFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TournamentDetail
+     */
+    select?: TournamentDetailSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TournamentDetail
+     */
+    omit?: TournamentDetailOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TournamentDetailInclude<ExtArgs> | null
+    /**
+     * Filter, which TournamentDetail to fetch.
+     */
+    where: TournamentDetailWhereUniqueInput
+  }
+
+  /**
+   * TournamentDetail findUniqueOrThrow
+   */
+  export type TournamentDetailFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TournamentDetail
+     */
+    select?: TournamentDetailSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TournamentDetail
+     */
+    omit?: TournamentDetailOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TournamentDetailInclude<ExtArgs> | null
+    /**
+     * Filter, which TournamentDetail to fetch.
+     */
+    where: TournamentDetailWhereUniqueInput
+  }
+
+  /**
+   * TournamentDetail findFirst
+   */
+  export type TournamentDetailFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TournamentDetail
+     */
+    select?: TournamentDetailSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TournamentDetail
+     */
+    omit?: TournamentDetailOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TournamentDetailInclude<ExtArgs> | null
+    /**
+     * Filter, which TournamentDetail to fetch.
+     */
+    where?: TournamentDetailWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TournamentDetails to fetch.
+     */
+    orderBy?: TournamentDetailOrderByWithRelationInput | TournamentDetailOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for TournamentDetails.
+     */
+    cursor?: TournamentDetailWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TournamentDetails from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TournamentDetails.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of TournamentDetails.
+     */
+    distinct?: TournamentDetailScalarFieldEnum | TournamentDetailScalarFieldEnum[]
+  }
+
+  /**
+   * TournamentDetail findFirstOrThrow
+   */
+  export type TournamentDetailFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TournamentDetail
+     */
+    select?: TournamentDetailSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TournamentDetail
+     */
+    omit?: TournamentDetailOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TournamentDetailInclude<ExtArgs> | null
+    /**
+     * Filter, which TournamentDetail to fetch.
+     */
+    where?: TournamentDetailWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TournamentDetails to fetch.
+     */
+    orderBy?: TournamentDetailOrderByWithRelationInput | TournamentDetailOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for TournamentDetails.
+     */
+    cursor?: TournamentDetailWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TournamentDetails from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TournamentDetails.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of TournamentDetails.
+     */
+    distinct?: TournamentDetailScalarFieldEnum | TournamentDetailScalarFieldEnum[]
+  }
+
+  /**
+   * TournamentDetail findMany
+   */
+  export type TournamentDetailFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TournamentDetail
+     */
+    select?: TournamentDetailSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TournamentDetail
+     */
+    omit?: TournamentDetailOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TournamentDetailInclude<ExtArgs> | null
+    /**
+     * Filter, which TournamentDetails to fetch.
+     */
+    where?: TournamentDetailWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TournamentDetails to fetch.
+     */
+    orderBy?: TournamentDetailOrderByWithRelationInput | TournamentDetailOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing TournamentDetails.
+     */
+    cursor?: TournamentDetailWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TournamentDetails from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TournamentDetails.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of TournamentDetails.
+     */
+    distinct?: TournamentDetailScalarFieldEnum | TournamentDetailScalarFieldEnum[]
+  }
+
+  /**
+   * TournamentDetail create
+   */
+  export type TournamentDetailCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TournamentDetail
+     */
+    select?: TournamentDetailSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TournamentDetail
+     */
+    omit?: TournamentDetailOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TournamentDetailInclude<ExtArgs> | null
+    /**
+     * The data needed to create a TournamentDetail.
+     */
+    data: XOR<TournamentDetailCreateInput, TournamentDetailUncheckedCreateInput>
+  }
+
+  /**
+   * TournamentDetail createMany
+   */
+  export type TournamentDetailCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many TournamentDetails.
+     */
+    data: TournamentDetailCreateManyInput | TournamentDetailCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * TournamentDetail createManyAndReturn
+   */
+  export type TournamentDetailCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TournamentDetail
+     */
+    select?: TournamentDetailSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the TournamentDetail
+     */
+    omit?: TournamentDetailOmit<ExtArgs> | null
+    /**
+     * The data used to create many TournamentDetails.
+     */
+    data: TournamentDetailCreateManyInput | TournamentDetailCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TournamentDetailIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * TournamentDetail update
+   */
+  export type TournamentDetailUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TournamentDetail
+     */
+    select?: TournamentDetailSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TournamentDetail
+     */
+    omit?: TournamentDetailOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TournamentDetailInclude<ExtArgs> | null
+    /**
+     * The data needed to update a TournamentDetail.
+     */
+    data: XOR<TournamentDetailUpdateInput, TournamentDetailUncheckedUpdateInput>
+    /**
+     * Choose, which TournamentDetail to update.
+     */
+    where: TournamentDetailWhereUniqueInput
+  }
+
+  /**
+   * TournamentDetail updateMany
+   */
+  export type TournamentDetailUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update TournamentDetails.
+     */
+    data: XOR<TournamentDetailUpdateManyMutationInput, TournamentDetailUncheckedUpdateManyInput>
+    /**
+     * Filter which TournamentDetails to update
+     */
+    where?: TournamentDetailWhereInput
+    /**
+     * Limit how many TournamentDetails to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * TournamentDetail updateManyAndReturn
+   */
+  export type TournamentDetailUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TournamentDetail
+     */
+    select?: TournamentDetailSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the TournamentDetail
+     */
+    omit?: TournamentDetailOmit<ExtArgs> | null
+    /**
+     * The data used to update TournamentDetails.
+     */
+    data: XOR<TournamentDetailUpdateManyMutationInput, TournamentDetailUncheckedUpdateManyInput>
+    /**
+     * Filter which TournamentDetails to update
+     */
+    where?: TournamentDetailWhereInput
+    /**
+     * Limit how many TournamentDetails to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TournamentDetailIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * TournamentDetail upsert
+   */
+  export type TournamentDetailUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TournamentDetail
+     */
+    select?: TournamentDetailSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TournamentDetail
+     */
+    omit?: TournamentDetailOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TournamentDetailInclude<ExtArgs> | null
+    /**
+     * The filter to search for the TournamentDetail to update in case it exists.
+     */
+    where: TournamentDetailWhereUniqueInput
+    /**
+     * In case the TournamentDetail found by the `where` argument doesn't exist, create a new TournamentDetail with this data.
+     */
+    create: XOR<TournamentDetailCreateInput, TournamentDetailUncheckedCreateInput>
+    /**
+     * In case the TournamentDetail was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<TournamentDetailUpdateInput, TournamentDetailUncheckedUpdateInput>
+  }
+
+  /**
+   * TournamentDetail delete
+   */
+  export type TournamentDetailDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TournamentDetail
+     */
+    select?: TournamentDetailSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TournamentDetail
+     */
+    omit?: TournamentDetailOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TournamentDetailInclude<ExtArgs> | null
+    /**
+     * Filter which TournamentDetail to delete.
+     */
+    where: TournamentDetailWhereUniqueInput
+  }
+
+  /**
+   * TournamentDetail deleteMany
+   */
+  export type TournamentDetailDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which TournamentDetails to delete
+     */
+    where?: TournamentDetailWhereInput
+    /**
+     * Limit how many TournamentDetails to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * TournamentDetail without action
+   */
+  export type TournamentDetailDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TournamentDetail
+     */
+    select?: TournamentDetailSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TournamentDetail
+     */
+    omit?: TournamentDetailOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TournamentDetailInclude<ExtArgs> | null
   }
 
 
@@ -31923,10 +33172,12 @@ export namespace Prisma {
 
   export type EventRegistrationAvgAggregateOutputType = {
     amountDue: Decimal | null
+    entrantWeightKg: Decimal | null
   }
 
   export type EventRegistrationSumAggregateOutputType = {
     amountDue: Decimal | null
+    entrantWeightKg: Decimal | null
   }
 
   export type EventRegistrationMinAggregateOutputType = {
@@ -31943,6 +33194,18 @@ export namespace Prisma {
     transactionId: string | null
     guestDateOfBirth: Date | null
     parentOfMemberNumber: string | null
+    divisionCode: string | null
+    entrantGender: $Enums.Gender | null
+    entrantWeightKg: Decimal | null
+    entrantBeltRank: string | null
+    entrantDojoName: string | null
+    coachName: string | null
+    teamName: string | null
+    guardianName: string | null
+    guardianPhone: string | null
+    guardianConsent: boolean | null
+    emergencyContactName: string | null
+    emergencyContactPhone: string | null
     checkedInAt: Date | null
     checkedInByUserId: string | null
     createdAt: Date | null
@@ -31962,6 +33225,18 @@ export namespace Prisma {
     transactionId: string | null
     guestDateOfBirth: Date | null
     parentOfMemberNumber: string | null
+    divisionCode: string | null
+    entrantGender: $Enums.Gender | null
+    entrantWeightKg: Decimal | null
+    entrantBeltRank: string | null
+    entrantDojoName: string | null
+    coachName: string | null
+    teamName: string | null
+    guardianName: string | null
+    guardianPhone: string | null
+    guardianConsent: boolean | null
+    emergencyContactName: string | null
+    emergencyContactPhone: string | null
     checkedInAt: Date | null
     checkedInByUserId: string | null
     createdAt: Date | null
@@ -31981,6 +33256,19 @@ export namespace Prisma {
     transactionId: number
     guestDateOfBirth: number
     parentOfMemberNumber: number
+    divisionCode: number
+    entrantGender: number
+    entrantWeightKg: number
+    entrantBeltRank: number
+    entrantDojoName: number
+    coachName: number
+    teamName: number
+    teammates: number
+    guardianName: number
+    guardianPhone: number
+    guardianConsent: number
+    emergencyContactName: number
+    emergencyContactPhone: number
     checkedInAt: number
     checkedInByUserId: number
     createdAt: number
@@ -31990,10 +33278,12 @@ export namespace Prisma {
 
   export type EventRegistrationAvgAggregateInputType = {
     amountDue?: true
+    entrantWeightKg?: true
   }
 
   export type EventRegistrationSumAggregateInputType = {
     amountDue?: true
+    entrantWeightKg?: true
   }
 
   export type EventRegistrationMinAggregateInputType = {
@@ -32010,6 +33300,18 @@ export namespace Prisma {
     transactionId?: true
     guestDateOfBirth?: true
     parentOfMemberNumber?: true
+    divisionCode?: true
+    entrantGender?: true
+    entrantWeightKg?: true
+    entrantBeltRank?: true
+    entrantDojoName?: true
+    coachName?: true
+    teamName?: true
+    guardianName?: true
+    guardianPhone?: true
+    guardianConsent?: true
+    emergencyContactName?: true
+    emergencyContactPhone?: true
     checkedInAt?: true
     checkedInByUserId?: true
     createdAt?: true
@@ -32029,6 +33331,18 @@ export namespace Prisma {
     transactionId?: true
     guestDateOfBirth?: true
     parentOfMemberNumber?: true
+    divisionCode?: true
+    entrantGender?: true
+    entrantWeightKg?: true
+    entrantBeltRank?: true
+    entrantDojoName?: true
+    coachName?: true
+    teamName?: true
+    guardianName?: true
+    guardianPhone?: true
+    guardianConsent?: true
+    emergencyContactName?: true
+    emergencyContactPhone?: true
     checkedInAt?: true
     checkedInByUserId?: true
     createdAt?: true
@@ -32048,6 +33362,19 @@ export namespace Prisma {
     transactionId?: true
     guestDateOfBirth?: true
     parentOfMemberNumber?: true
+    divisionCode?: true
+    entrantGender?: true
+    entrantWeightKg?: true
+    entrantBeltRank?: true
+    entrantDojoName?: true
+    coachName?: true
+    teamName?: true
+    teammates?: true
+    guardianName?: true
+    guardianPhone?: true
+    guardianConsent?: true
+    emergencyContactName?: true
+    emergencyContactPhone?: true
     checkedInAt?: true
     checkedInByUserId?: true
     createdAt?: true
@@ -32154,6 +33481,19 @@ export namespace Prisma {
     transactionId: string | null
     guestDateOfBirth: Date | null
     parentOfMemberNumber: string | null
+    divisionCode: string | null
+    entrantGender: $Enums.Gender | null
+    entrantWeightKg: Decimal | null
+    entrantBeltRank: string | null
+    entrantDojoName: string | null
+    coachName: string | null
+    teamName: string | null
+    teammates: JsonValue | null
+    guardianName: string | null
+    guardianPhone: string | null
+    guardianConsent: boolean | null
+    emergencyContactName: string | null
+    emergencyContactPhone: string | null
     checkedInAt: Date | null
     checkedInByUserId: string | null
     createdAt: Date
@@ -32192,6 +33532,19 @@ export namespace Prisma {
     transactionId?: boolean
     guestDateOfBirth?: boolean
     parentOfMemberNumber?: boolean
+    divisionCode?: boolean
+    entrantGender?: boolean
+    entrantWeightKg?: boolean
+    entrantBeltRank?: boolean
+    entrantDojoName?: boolean
+    coachName?: boolean
+    teamName?: boolean
+    teammates?: boolean
+    guardianName?: boolean
+    guardianPhone?: boolean
+    guardianConsent?: boolean
+    emergencyContactName?: boolean
+    emergencyContactPhone?: boolean
     checkedInAt?: boolean
     checkedInByUserId?: boolean
     createdAt?: boolean
@@ -32216,6 +33569,19 @@ export namespace Prisma {
     transactionId?: boolean
     guestDateOfBirth?: boolean
     parentOfMemberNumber?: boolean
+    divisionCode?: boolean
+    entrantGender?: boolean
+    entrantWeightKg?: boolean
+    entrantBeltRank?: boolean
+    entrantDojoName?: boolean
+    coachName?: boolean
+    teamName?: boolean
+    teammates?: boolean
+    guardianName?: boolean
+    guardianPhone?: boolean
+    guardianConsent?: boolean
+    emergencyContactName?: boolean
+    emergencyContactPhone?: boolean
     checkedInAt?: boolean
     checkedInByUserId?: boolean
     createdAt?: boolean
@@ -32238,6 +33604,19 @@ export namespace Prisma {
     transactionId?: boolean
     guestDateOfBirth?: boolean
     parentOfMemberNumber?: boolean
+    divisionCode?: boolean
+    entrantGender?: boolean
+    entrantWeightKg?: boolean
+    entrantBeltRank?: boolean
+    entrantDojoName?: boolean
+    coachName?: boolean
+    teamName?: boolean
+    teammates?: boolean
+    guardianName?: boolean
+    guardianPhone?: boolean
+    guardianConsent?: boolean
+    emergencyContactName?: boolean
+    emergencyContactPhone?: boolean
     checkedInAt?: boolean
     checkedInByUserId?: boolean
     createdAt?: boolean
@@ -32260,12 +33639,25 @@ export namespace Prisma {
     transactionId?: boolean
     guestDateOfBirth?: boolean
     parentOfMemberNumber?: boolean
+    divisionCode?: boolean
+    entrantGender?: boolean
+    entrantWeightKg?: boolean
+    entrantBeltRank?: boolean
+    entrantDojoName?: boolean
+    coachName?: boolean
+    teamName?: boolean
+    teammates?: boolean
+    guardianName?: boolean
+    guardianPhone?: boolean
+    guardianConsent?: boolean
+    emergencyContactName?: boolean
+    emergencyContactPhone?: boolean
     checkedInAt?: boolean
     checkedInByUserId?: boolean
     createdAt?: boolean
   }
 
-  export type EventRegistrationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "eventId" | "userId" | "guestName" | "guestEmail" | "guestPhone" | "qrToken" | "paymentStatus" | "amountDue" | "paidAt" | "transactionId" | "guestDateOfBirth" | "parentOfMemberNumber" | "checkedInAt" | "checkedInByUserId" | "createdAt", ExtArgs["result"]["eventRegistration"]>
+  export type EventRegistrationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "eventId" | "userId" | "guestName" | "guestEmail" | "guestPhone" | "qrToken" | "paymentStatus" | "amountDue" | "paidAt" | "transactionId" | "guestDateOfBirth" | "parentOfMemberNumber" | "divisionCode" | "entrantGender" | "entrantWeightKg" | "entrantBeltRank" | "entrantDojoName" | "coachName" | "teamName" | "teammates" | "guardianName" | "guardianPhone" | "guardianConsent" | "emergencyContactName" | "emergencyContactPhone" | "checkedInAt" | "checkedInByUserId" | "createdAt", ExtArgs["result"]["eventRegistration"]>
   export type EventRegistrationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     event?: boolean | EventDefaultArgs<ExtArgs>
     user?: boolean | EventRegistration$userArgs<ExtArgs>
@@ -32306,6 +33698,19 @@ export namespace Prisma {
       transactionId: string | null
       guestDateOfBirth: Date | null
       parentOfMemberNumber: string | null
+      divisionCode: string | null
+      entrantGender: $Enums.Gender | null
+      entrantWeightKg: Prisma.Decimal | null
+      entrantBeltRank: string | null
+      entrantDojoName: string | null
+      coachName: string | null
+      teamName: string | null
+      teammates: Prisma.JsonValue | null
+      guardianName: string | null
+      guardianPhone: string | null
+      guardianConsent: boolean | null
+      emergencyContactName: string | null
+      emergencyContactPhone: string | null
       checkedInAt: Date | null
       checkedInByUserId: string | null
       createdAt: Date
@@ -32749,6 +34154,19 @@ export namespace Prisma {
     readonly transactionId: FieldRef<"EventRegistration", 'String'>
     readonly guestDateOfBirth: FieldRef<"EventRegistration", 'DateTime'>
     readonly parentOfMemberNumber: FieldRef<"EventRegistration", 'String'>
+    readonly divisionCode: FieldRef<"EventRegistration", 'String'>
+    readonly entrantGender: FieldRef<"EventRegistration", 'Gender'>
+    readonly entrantWeightKg: FieldRef<"EventRegistration", 'Decimal'>
+    readonly entrantBeltRank: FieldRef<"EventRegistration", 'String'>
+    readonly entrantDojoName: FieldRef<"EventRegistration", 'String'>
+    readonly coachName: FieldRef<"EventRegistration", 'String'>
+    readonly teamName: FieldRef<"EventRegistration", 'String'>
+    readonly teammates: FieldRef<"EventRegistration", 'Json'>
+    readonly guardianName: FieldRef<"EventRegistration", 'String'>
+    readonly guardianPhone: FieldRef<"EventRegistration", 'String'>
+    readonly guardianConsent: FieldRef<"EventRegistration", 'Boolean'>
+    readonly emergencyContactName: FieldRef<"EventRegistration", 'String'>
+    readonly emergencyContactPhone: FieldRef<"EventRegistration", 'String'>
     readonly checkedInAt: FieldRef<"EventRegistration", 'DateTime'>
     readonly checkedInByUserId: FieldRef<"EventRegistration", 'String'>
     readonly createdAt: FieldRef<"EventRegistration", 'DateTime'>
@@ -55760,6 +57178,7 @@ export namespace Prisma {
   export const ProfileScalarFieldEnum: {
     id: 'id',
     dateOfBirth: 'dateOfBirth',
+    gender: 'gender',
     bloodGroup: 'bloodGroup',
     address: 'address',
     nationalId: 'nationalId',
@@ -56035,6 +57454,20 @@ export namespace Prisma {
   export type EventScalarFieldEnum = (typeof EventScalarFieldEnum)[keyof typeof EventScalarFieldEnum]
 
 
+  export const TournamentDetailScalarFieldEnum: {
+    eventId: 'eventId',
+    eventType: 'eventType',
+    enabledDivisions: 'enabledDivisions',
+    registrationDeadline: 'registrationDeadline',
+    weighInDate: 'weighInDate',
+    rulesUrl: 'rulesUrl',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type TournamentDetailScalarFieldEnum = (typeof TournamentDetailScalarFieldEnum)[keyof typeof TournamentDetailScalarFieldEnum]
+
+
   export const AnnouncementScalarFieldEnum: {
     id: 'id',
     title: 'title',
@@ -56067,6 +57500,19 @@ export namespace Prisma {
     transactionId: 'transactionId',
     guestDateOfBirth: 'guestDateOfBirth',
     parentOfMemberNumber: 'parentOfMemberNumber',
+    divisionCode: 'divisionCode',
+    entrantGender: 'entrantGender',
+    entrantWeightKg: 'entrantWeightKg',
+    entrantBeltRank: 'entrantBeltRank',
+    entrantDojoName: 'entrantDojoName',
+    coachName: 'coachName',
+    teamName: 'teamName',
+    teammates: 'teammates',
+    guardianName: 'guardianName',
+    guardianPhone: 'guardianPhone',
+    guardianConsent: 'guardianConsent',
+    emergencyContactName: 'emergencyContactName',
+    emergencyContactPhone: 'emergencyContactPhone',
     checkedInAt: 'checkedInAt',
     checkedInByUserId: 'checkedInByUserId',
     createdAt: 'createdAt'
@@ -56412,6 +57858,14 @@ export namespace Prisma {
   export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 
+  export const NullableJsonNullValueInput: {
+    DbNull: typeof DbNull,
+    JsonNull: typeof JsonNull
+  };
+
+  export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
+
+
   export const QueryMode: {
     default: 'default',
     insensitive: 'insensitive'
@@ -56474,6 +57928,20 @@ export namespace Prisma {
    * Reference to a field of type 'Boolean'
    */
   export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+  /**
+   * Reference to a field of type 'Gender'
+   */
+  export type EnumGenderFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Gender'>
+    
+
+
+  /**
+   * Reference to a field of type 'Gender[]'
+   */
+  export type ListEnumGenderFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Gender[]'>
     
 
 
@@ -56670,6 +58138,20 @@ export namespace Prisma {
    * Reference to a field of type 'EventParticipantType[]'
    */
   export type ListEnumEventParticipantTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EventParticipantType[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'TournamentEventType'
+   */
+  export type EnumTournamentEventTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TournamentEventType'>
+    
+
+
+  /**
+   * Reference to a field of type 'TournamentEventType[]'
+   */
+  export type ListEnumTournamentEventTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TournamentEventType[]'>
     
 
 
@@ -57169,6 +58651,7 @@ export namespace Prisma {
     NOT?: ProfileWhereInput | ProfileWhereInput[]
     id?: UuidFilter<"Profile"> | string
     dateOfBirth?: DateTimeNullableFilter<"Profile"> | Date | string | null
+    gender?: EnumGenderNullableFilter<"Profile"> | $Enums.Gender | null
     bloodGroup?: StringNullableFilter<"Profile"> | string | null
     address?: StringNullableFilter<"Profile"> | string | null
     nationalId?: StringNullableFilter<"Profile"> | string | null
@@ -57184,6 +58667,7 @@ export namespace Prisma {
   export type ProfileOrderByWithRelationInput = {
     id?: SortOrder
     dateOfBirth?: SortOrderInput | SortOrder
+    gender?: SortOrderInput | SortOrder
     bloodGroup?: SortOrderInput | SortOrder
     address?: SortOrderInput | SortOrder
     nationalId?: SortOrderInput | SortOrder
@@ -57202,6 +58686,7 @@ export namespace Prisma {
     OR?: ProfileWhereInput[]
     NOT?: ProfileWhereInput | ProfileWhereInput[]
     dateOfBirth?: DateTimeNullableFilter<"Profile"> | Date | string | null
+    gender?: EnumGenderNullableFilter<"Profile"> | $Enums.Gender | null
     bloodGroup?: StringNullableFilter<"Profile"> | string | null
     address?: StringNullableFilter<"Profile"> | string | null
     nationalId?: StringNullableFilter<"Profile"> | string | null
@@ -57217,6 +58702,7 @@ export namespace Prisma {
   export type ProfileOrderByWithAggregationInput = {
     id?: SortOrder
     dateOfBirth?: SortOrderInput | SortOrder
+    gender?: SortOrderInput | SortOrder
     bloodGroup?: SortOrderInput | SortOrder
     address?: SortOrderInput | SortOrder
     nationalId?: SortOrderInput | SortOrder
@@ -57237,6 +58723,7 @@ export namespace Prisma {
     NOT?: ProfileScalarWhereWithAggregatesInput | ProfileScalarWhereWithAggregatesInput[]
     id?: UuidWithAggregatesFilter<"Profile"> | string
     dateOfBirth?: DateTimeNullableWithAggregatesFilter<"Profile"> | Date | string | null
+    gender?: EnumGenderNullableWithAggregatesFilter<"Profile"> | $Enums.Gender | null
     bloodGroup?: StringNullableWithAggregatesFilter<"Profile"> | string | null
     address?: StringNullableWithAggregatesFilter<"Profile"> | string | null
     nationalId?: StringNullableWithAggregatesFilter<"Profile"> | string | null
@@ -58587,6 +60074,7 @@ export namespace Prisma {
     postedBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     dojo?: XOR<DojoNullableScalarRelationFilter, DojoWhereInput> | null
     minRank?: XOR<BeltRankNullableScalarRelationFilter, BeltRankWhereInput> | null
+    tournamentDetail?: XOR<TournamentDetailNullableScalarRelationFilter, TournamentDetailWhereInput> | null
   }
 
   export type EventOrderByWithRelationInput = {
@@ -58615,6 +60103,7 @@ export namespace Prisma {
     postedBy?: UserOrderByWithRelationInput
     dojo?: DojoOrderByWithRelationInput
     minRank?: BeltRankOrderByWithRelationInput
+    tournamentDetail?: TournamentDetailOrderByWithRelationInput
   }
 
   export type EventWhereUniqueInput = Prisma.AtLeast<{
@@ -58646,6 +60135,7 @@ export namespace Prisma {
     postedBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     dojo?: XOR<DojoNullableScalarRelationFilter, DojoWhereInput> | null
     minRank?: XOR<BeltRankNullableScalarRelationFilter, BeltRankWhereInput> | null
+    tournamentDetail?: XOR<TournamentDetailNullableScalarRelationFilter, TournamentDetailWhereInput> | null
   }, "id">
 
   export type EventOrderByWithAggregationInput = {
@@ -58702,6 +60192,76 @@ export namespace Prisma {
     dojoId?: UuidNullableWithAggregatesFilter<"Event"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Event"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Event"> | Date | string
+  }
+
+  export type TournamentDetailWhereInput = {
+    AND?: TournamentDetailWhereInput | TournamentDetailWhereInput[]
+    OR?: TournamentDetailWhereInput[]
+    NOT?: TournamentDetailWhereInput | TournamentDetailWhereInput[]
+    eventId?: UuidFilter<"TournamentDetail"> | string
+    eventType?: EnumTournamentEventTypeFilter<"TournamentDetail"> | $Enums.TournamentEventType
+    enabledDivisions?: StringNullableListFilter<"TournamentDetail">
+    registrationDeadline?: DateTimeNullableFilter<"TournamentDetail"> | Date | string | null
+    weighInDate?: DateTimeNullableFilter<"TournamentDetail"> | Date | string | null
+    rulesUrl?: StringNullableFilter<"TournamentDetail"> | string | null
+    createdAt?: DateTimeFilter<"TournamentDetail"> | Date | string
+    updatedAt?: DateTimeFilter<"TournamentDetail"> | Date | string
+    event?: XOR<EventScalarRelationFilter, EventWhereInput>
+  }
+
+  export type TournamentDetailOrderByWithRelationInput = {
+    eventId?: SortOrder
+    eventType?: SortOrder
+    enabledDivisions?: SortOrder
+    registrationDeadline?: SortOrderInput | SortOrder
+    weighInDate?: SortOrderInput | SortOrder
+    rulesUrl?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    event?: EventOrderByWithRelationInput
+  }
+
+  export type TournamentDetailWhereUniqueInput = Prisma.AtLeast<{
+    eventId?: string
+    AND?: TournamentDetailWhereInput | TournamentDetailWhereInput[]
+    OR?: TournamentDetailWhereInput[]
+    NOT?: TournamentDetailWhereInput | TournamentDetailWhereInput[]
+    eventType?: EnumTournamentEventTypeFilter<"TournamentDetail"> | $Enums.TournamentEventType
+    enabledDivisions?: StringNullableListFilter<"TournamentDetail">
+    registrationDeadline?: DateTimeNullableFilter<"TournamentDetail"> | Date | string | null
+    weighInDate?: DateTimeNullableFilter<"TournamentDetail"> | Date | string | null
+    rulesUrl?: StringNullableFilter<"TournamentDetail"> | string | null
+    createdAt?: DateTimeFilter<"TournamentDetail"> | Date | string
+    updatedAt?: DateTimeFilter<"TournamentDetail"> | Date | string
+    event?: XOR<EventScalarRelationFilter, EventWhereInput>
+  }, "eventId">
+
+  export type TournamentDetailOrderByWithAggregationInput = {
+    eventId?: SortOrder
+    eventType?: SortOrder
+    enabledDivisions?: SortOrder
+    registrationDeadline?: SortOrderInput | SortOrder
+    weighInDate?: SortOrderInput | SortOrder
+    rulesUrl?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: TournamentDetailCountOrderByAggregateInput
+    _max?: TournamentDetailMaxOrderByAggregateInput
+    _min?: TournamentDetailMinOrderByAggregateInput
+  }
+
+  export type TournamentDetailScalarWhereWithAggregatesInput = {
+    AND?: TournamentDetailScalarWhereWithAggregatesInput | TournamentDetailScalarWhereWithAggregatesInput[]
+    OR?: TournamentDetailScalarWhereWithAggregatesInput[]
+    NOT?: TournamentDetailScalarWhereWithAggregatesInput | TournamentDetailScalarWhereWithAggregatesInput[]
+    eventId?: UuidWithAggregatesFilter<"TournamentDetail"> | string
+    eventType?: EnumTournamentEventTypeWithAggregatesFilter<"TournamentDetail"> | $Enums.TournamentEventType
+    enabledDivisions?: StringNullableListFilter<"TournamentDetail">
+    registrationDeadline?: DateTimeNullableWithAggregatesFilter<"TournamentDetail"> | Date | string | null
+    weighInDate?: DateTimeNullableWithAggregatesFilter<"TournamentDetail"> | Date | string | null
+    rulesUrl?: StringNullableWithAggregatesFilter<"TournamentDetail"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"TournamentDetail"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"TournamentDetail"> | Date | string
   }
 
   export type AnnouncementWhereInput = {
@@ -58814,6 +60374,19 @@ export namespace Prisma {
     transactionId?: StringNullableFilter<"EventRegistration"> | string | null
     guestDateOfBirth?: DateTimeNullableFilter<"EventRegistration"> | Date | string | null
     parentOfMemberNumber?: StringNullableFilter<"EventRegistration"> | string | null
+    divisionCode?: StringNullableFilter<"EventRegistration"> | string | null
+    entrantGender?: EnumGenderNullableFilter<"EventRegistration"> | $Enums.Gender | null
+    entrantWeightKg?: DecimalNullableFilter<"EventRegistration"> | Decimal | DecimalJsLike | number | string | null
+    entrantBeltRank?: StringNullableFilter<"EventRegistration"> | string | null
+    entrantDojoName?: StringNullableFilter<"EventRegistration"> | string | null
+    coachName?: StringNullableFilter<"EventRegistration"> | string | null
+    teamName?: StringNullableFilter<"EventRegistration"> | string | null
+    teammates?: JsonNullableFilter<"EventRegistration">
+    guardianName?: StringNullableFilter<"EventRegistration"> | string | null
+    guardianPhone?: StringNullableFilter<"EventRegistration"> | string | null
+    guardianConsent?: BoolNullableFilter<"EventRegistration"> | boolean | null
+    emergencyContactName?: StringNullableFilter<"EventRegistration"> | string | null
+    emergencyContactPhone?: StringNullableFilter<"EventRegistration"> | string | null
     checkedInAt?: DateTimeNullableFilter<"EventRegistration"> | Date | string | null
     checkedInByUserId?: UuidNullableFilter<"EventRegistration"> | string | null
     createdAt?: DateTimeFilter<"EventRegistration"> | Date | string
@@ -58837,6 +60410,19 @@ export namespace Prisma {
     transactionId?: SortOrderInput | SortOrder
     guestDateOfBirth?: SortOrderInput | SortOrder
     parentOfMemberNumber?: SortOrderInput | SortOrder
+    divisionCode?: SortOrderInput | SortOrder
+    entrantGender?: SortOrderInput | SortOrder
+    entrantWeightKg?: SortOrderInput | SortOrder
+    entrantBeltRank?: SortOrderInput | SortOrder
+    entrantDojoName?: SortOrderInput | SortOrder
+    coachName?: SortOrderInput | SortOrder
+    teamName?: SortOrderInput | SortOrder
+    teammates?: SortOrderInput | SortOrder
+    guardianName?: SortOrderInput | SortOrder
+    guardianPhone?: SortOrderInput | SortOrder
+    guardianConsent?: SortOrderInput | SortOrder
+    emergencyContactName?: SortOrderInput | SortOrder
+    emergencyContactPhone?: SortOrderInput | SortOrder
     checkedInAt?: SortOrderInput | SortOrder
     checkedInByUserId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
@@ -58863,6 +60449,19 @@ export namespace Prisma {
     transactionId?: StringNullableFilter<"EventRegistration"> | string | null
     guestDateOfBirth?: DateTimeNullableFilter<"EventRegistration"> | Date | string | null
     parentOfMemberNumber?: StringNullableFilter<"EventRegistration"> | string | null
+    divisionCode?: StringNullableFilter<"EventRegistration"> | string | null
+    entrantGender?: EnumGenderNullableFilter<"EventRegistration"> | $Enums.Gender | null
+    entrantWeightKg?: DecimalNullableFilter<"EventRegistration"> | Decimal | DecimalJsLike | number | string | null
+    entrantBeltRank?: StringNullableFilter<"EventRegistration"> | string | null
+    entrantDojoName?: StringNullableFilter<"EventRegistration"> | string | null
+    coachName?: StringNullableFilter<"EventRegistration"> | string | null
+    teamName?: StringNullableFilter<"EventRegistration"> | string | null
+    teammates?: JsonNullableFilter<"EventRegistration">
+    guardianName?: StringNullableFilter<"EventRegistration"> | string | null
+    guardianPhone?: StringNullableFilter<"EventRegistration"> | string | null
+    guardianConsent?: BoolNullableFilter<"EventRegistration"> | boolean | null
+    emergencyContactName?: StringNullableFilter<"EventRegistration"> | string | null
+    emergencyContactPhone?: StringNullableFilter<"EventRegistration"> | string | null
     checkedInAt?: DateTimeNullableFilter<"EventRegistration"> | Date | string | null
     checkedInByUserId?: UuidNullableFilter<"EventRegistration"> | string | null
     createdAt?: DateTimeFilter<"EventRegistration"> | Date | string
@@ -58886,6 +60485,19 @@ export namespace Prisma {
     transactionId?: SortOrderInput | SortOrder
     guestDateOfBirth?: SortOrderInput | SortOrder
     parentOfMemberNumber?: SortOrderInput | SortOrder
+    divisionCode?: SortOrderInput | SortOrder
+    entrantGender?: SortOrderInput | SortOrder
+    entrantWeightKg?: SortOrderInput | SortOrder
+    entrantBeltRank?: SortOrderInput | SortOrder
+    entrantDojoName?: SortOrderInput | SortOrder
+    coachName?: SortOrderInput | SortOrder
+    teamName?: SortOrderInput | SortOrder
+    teammates?: SortOrderInput | SortOrder
+    guardianName?: SortOrderInput | SortOrder
+    guardianPhone?: SortOrderInput | SortOrder
+    guardianConsent?: SortOrderInput | SortOrder
+    emergencyContactName?: SortOrderInput | SortOrder
+    emergencyContactPhone?: SortOrderInput | SortOrder
     checkedInAt?: SortOrderInput | SortOrder
     checkedInByUserId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
@@ -58913,6 +60525,19 @@ export namespace Prisma {
     transactionId?: StringNullableWithAggregatesFilter<"EventRegistration"> | string | null
     guestDateOfBirth?: DateTimeNullableWithAggregatesFilter<"EventRegistration"> | Date | string | null
     parentOfMemberNumber?: StringNullableWithAggregatesFilter<"EventRegistration"> | string | null
+    divisionCode?: StringNullableWithAggregatesFilter<"EventRegistration"> | string | null
+    entrantGender?: EnumGenderNullableWithAggregatesFilter<"EventRegistration"> | $Enums.Gender | null
+    entrantWeightKg?: DecimalNullableWithAggregatesFilter<"EventRegistration"> | Decimal | DecimalJsLike | number | string | null
+    entrantBeltRank?: StringNullableWithAggregatesFilter<"EventRegistration"> | string | null
+    entrantDojoName?: StringNullableWithAggregatesFilter<"EventRegistration"> | string | null
+    coachName?: StringNullableWithAggregatesFilter<"EventRegistration"> | string | null
+    teamName?: StringNullableWithAggregatesFilter<"EventRegistration"> | string | null
+    teammates?: JsonNullableWithAggregatesFilter<"EventRegistration">
+    guardianName?: StringNullableWithAggregatesFilter<"EventRegistration"> | string | null
+    guardianPhone?: StringNullableWithAggregatesFilter<"EventRegistration"> | string | null
+    guardianConsent?: BoolNullableWithAggregatesFilter<"EventRegistration"> | boolean | null
+    emergencyContactName?: StringNullableWithAggregatesFilter<"EventRegistration"> | string | null
+    emergencyContactPhone?: StringNullableWithAggregatesFilter<"EventRegistration"> | string | null
     checkedInAt?: DateTimeNullableWithAggregatesFilter<"EventRegistration"> | Date | string | null
     checkedInByUserId?: UuidNullableWithAggregatesFilter<"EventRegistration"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"EventRegistration"> | Date | string
@@ -61060,6 +62685,7 @@ export namespace Prisma {
 
   export type ProfileCreateInput = {
     dateOfBirth?: Date | string | null
+    gender?: $Enums.Gender | null
     bloodGroup?: string | null
     address?: string | null
     nationalId?: string | null
@@ -61075,6 +62701,7 @@ export namespace Prisma {
   export type ProfileUncheckedCreateInput = {
     id: string
     dateOfBirth?: Date | string | null
+    gender?: $Enums.Gender | null
     bloodGroup?: string | null
     address?: string | null
     nationalId?: string | null
@@ -61088,6 +62715,7 @@ export namespace Prisma {
 
   export type ProfileUpdateInput = {
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
     bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     nationalId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -61103,6 +62731,7 @@ export namespace Prisma {
   export type ProfileUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
     bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     nationalId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -61117,6 +62746,7 @@ export namespace Prisma {
   export type ProfileCreateManyInput = {
     id: string
     dateOfBirth?: Date | string | null
+    gender?: $Enums.Gender | null
     bloodGroup?: string | null
     address?: string | null
     nationalId?: string | null
@@ -61130,6 +62760,7 @@ export namespace Prisma {
 
   export type ProfileUpdateManyMutationInput = {
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
     bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     nationalId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -61144,6 +62775,7 @@ export namespace Prisma {
   export type ProfileUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
     bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     nationalId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -62631,6 +64263,7 @@ export namespace Prisma {
     postedBy?: UserCreateNestedOneWithoutEventsPostedInput
     dojo?: DojoCreateNestedOneWithoutEventsInput
     minRank?: BeltRankCreateNestedOneWithoutMinRankEventsInput
+    tournamentDetail?: TournamentDetailCreateNestedOneWithoutEventInput
   }
 
   export type EventUncheckedCreateInput = {
@@ -62656,6 +64289,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     registrations?: EventRegistrationUncheckedCreateNestedManyWithoutEventInput
+    tournamentDetail?: TournamentDetailUncheckedCreateNestedOneWithoutEventInput
   }
 
   export type EventUpdateInput = {
@@ -62681,6 +64315,7 @@ export namespace Prisma {
     postedBy?: UserUpdateOneWithoutEventsPostedNestedInput
     dojo?: DojoUpdateOneWithoutEventsNestedInput
     minRank?: BeltRankUpdateOneWithoutMinRankEventsNestedInput
+    tournamentDetail?: TournamentDetailUpdateOneWithoutEventNestedInput
   }
 
   export type EventUncheckedUpdateInput = {
@@ -62706,6 +64341,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     registrations?: EventRegistrationUncheckedUpdateManyWithoutEventNestedInput
+    tournamentDetail?: TournamentDetailUncheckedUpdateOneWithoutEventNestedInput
   }
 
   export type EventCreateManyInput = {
@@ -62773,6 +64409,82 @@ export namespace Prisma {
     participantType?: EnumEventParticipantTypeFieldUpdateOperationsInput | $Enums.EventParticipantType
     postedById?: NullableStringFieldUpdateOperationsInput | string | null
     dojoId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TournamentDetailCreateInput = {
+    eventType: $Enums.TournamentEventType
+    enabledDivisions?: TournamentDetailCreateenabledDivisionsInput | string[]
+    registrationDeadline?: Date | string | null
+    weighInDate?: Date | string | null
+    rulesUrl?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    event: EventCreateNestedOneWithoutTournamentDetailInput
+  }
+
+  export type TournamentDetailUncheckedCreateInput = {
+    eventId: string
+    eventType: $Enums.TournamentEventType
+    enabledDivisions?: TournamentDetailCreateenabledDivisionsInput | string[]
+    registrationDeadline?: Date | string | null
+    weighInDate?: Date | string | null
+    rulesUrl?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TournamentDetailUpdateInput = {
+    eventType?: EnumTournamentEventTypeFieldUpdateOperationsInput | $Enums.TournamentEventType
+    enabledDivisions?: TournamentDetailUpdateenabledDivisionsInput | string[]
+    registrationDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    weighInDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rulesUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    event?: EventUpdateOneRequiredWithoutTournamentDetailNestedInput
+  }
+
+  export type TournamentDetailUncheckedUpdateInput = {
+    eventId?: StringFieldUpdateOperationsInput | string
+    eventType?: EnumTournamentEventTypeFieldUpdateOperationsInput | $Enums.TournamentEventType
+    enabledDivisions?: TournamentDetailUpdateenabledDivisionsInput | string[]
+    registrationDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    weighInDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rulesUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TournamentDetailCreateManyInput = {
+    eventId: string
+    eventType: $Enums.TournamentEventType
+    enabledDivisions?: TournamentDetailCreateenabledDivisionsInput | string[]
+    registrationDeadline?: Date | string | null
+    weighInDate?: Date | string | null
+    rulesUrl?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TournamentDetailUpdateManyMutationInput = {
+    eventType?: EnumTournamentEventTypeFieldUpdateOperationsInput | $Enums.TournamentEventType
+    enabledDivisions?: TournamentDetailUpdateenabledDivisionsInput | string[]
+    registrationDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    weighInDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rulesUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TournamentDetailUncheckedUpdateManyInput = {
+    eventId?: StringFieldUpdateOperationsInput | string
+    eventType?: EnumTournamentEventTypeFieldUpdateOperationsInput | $Enums.TournamentEventType
+    enabledDivisions?: TournamentDetailUpdateenabledDivisionsInput | string[]
+    registrationDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    weighInDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rulesUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -62892,6 +64604,19 @@ export namespace Prisma {
     transactionId?: string | null
     guestDateOfBirth?: Date | string | null
     parentOfMemberNumber?: string | null
+    divisionCode?: string | null
+    entrantGender?: $Enums.Gender | null
+    entrantWeightKg?: Decimal | DecimalJsLike | number | string | null
+    entrantBeltRank?: string | null
+    entrantDojoName?: string | null
+    coachName?: string | null
+    teamName?: string | null
+    teammates?: NullableJsonNullValueInput | InputJsonValue
+    guardianName?: string | null
+    guardianPhone?: string | null
+    guardianConsent?: boolean | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
     checkedInAt?: Date | string | null
     createdAt?: Date | string
     event: EventCreateNestedOneWithoutRegistrationsInput
@@ -62914,6 +64639,19 @@ export namespace Prisma {
     transactionId?: string | null
     guestDateOfBirth?: Date | string | null
     parentOfMemberNumber?: string | null
+    divisionCode?: string | null
+    entrantGender?: $Enums.Gender | null
+    entrantWeightKg?: Decimal | DecimalJsLike | number | string | null
+    entrantBeltRank?: string | null
+    entrantDojoName?: string | null
+    coachName?: string | null
+    teamName?: string | null
+    teammates?: NullableJsonNullValueInput | InputJsonValue
+    guardianName?: string | null
+    guardianPhone?: string | null
+    guardianConsent?: boolean | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
     checkedInAt?: Date | string | null
     checkedInByUserId?: string | null
     createdAt?: Date | string
@@ -62932,6 +64670,19 @@ export namespace Prisma {
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null
     guestDateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     parentOfMemberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    divisionCode?: NullableStringFieldUpdateOperationsInput | string | null
+    entrantGender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    entrantWeightKg?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    entrantBeltRank?: NullableStringFieldUpdateOperationsInput | string | null
+    entrantDojoName?: NullableStringFieldUpdateOperationsInput | string | null
+    coachName?: NullableStringFieldUpdateOperationsInput | string | null
+    teamName?: NullableStringFieldUpdateOperationsInput | string | null
+    teammates?: NullableJsonNullValueInput | InputJsonValue
+    guardianName?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianConsent?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     checkedInAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     event?: EventUpdateOneRequiredWithoutRegistrationsNestedInput
@@ -62954,6 +64705,19 @@ export namespace Prisma {
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null
     guestDateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     parentOfMemberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    divisionCode?: NullableStringFieldUpdateOperationsInput | string | null
+    entrantGender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    entrantWeightKg?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    entrantBeltRank?: NullableStringFieldUpdateOperationsInput | string | null
+    entrantDojoName?: NullableStringFieldUpdateOperationsInput | string | null
+    coachName?: NullableStringFieldUpdateOperationsInput | string | null
+    teamName?: NullableStringFieldUpdateOperationsInput | string | null
+    teammates?: NullableJsonNullValueInput | InputJsonValue
+    guardianName?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianConsent?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     checkedInAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     checkedInByUserId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -62974,6 +64738,19 @@ export namespace Prisma {
     transactionId?: string | null
     guestDateOfBirth?: Date | string | null
     parentOfMemberNumber?: string | null
+    divisionCode?: string | null
+    entrantGender?: $Enums.Gender | null
+    entrantWeightKg?: Decimal | DecimalJsLike | number | string | null
+    entrantBeltRank?: string | null
+    entrantDojoName?: string | null
+    coachName?: string | null
+    teamName?: string | null
+    teammates?: NullableJsonNullValueInput | InputJsonValue
+    guardianName?: string | null
+    guardianPhone?: string | null
+    guardianConsent?: boolean | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
     checkedInAt?: Date | string | null
     checkedInByUserId?: string | null
     createdAt?: Date | string
@@ -62991,6 +64768,19 @@ export namespace Prisma {
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null
     guestDateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     parentOfMemberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    divisionCode?: NullableStringFieldUpdateOperationsInput | string | null
+    entrantGender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    entrantWeightKg?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    entrantBeltRank?: NullableStringFieldUpdateOperationsInput | string | null
+    entrantDojoName?: NullableStringFieldUpdateOperationsInput | string | null
+    coachName?: NullableStringFieldUpdateOperationsInput | string | null
+    teamName?: NullableStringFieldUpdateOperationsInput | string | null
+    teammates?: NullableJsonNullValueInput | InputJsonValue
+    guardianName?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianConsent?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     checkedInAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -63009,6 +64799,19 @@ export namespace Prisma {
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null
     guestDateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     parentOfMemberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    divisionCode?: NullableStringFieldUpdateOperationsInput | string | null
+    entrantGender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    entrantWeightKg?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    entrantBeltRank?: NullableStringFieldUpdateOperationsInput | string | null
+    entrantDojoName?: NullableStringFieldUpdateOperationsInput | string | null
+    coachName?: NullableStringFieldUpdateOperationsInput | string | null
+    teamName?: NullableStringFieldUpdateOperationsInput | string | null
+    teammates?: NullableJsonNullValueInput | InputJsonValue
+    guardianName?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianConsent?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     checkedInAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     checkedInByUserId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -65380,6 +67183,13 @@ export namespace Prisma {
     not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
+  export type EnumGenderNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.Gender | EnumGenderFieldRefInput<$PrismaModel> | null
+    in?: $Enums.Gender[] | ListEnumGenderFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.Gender[] | ListEnumGenderFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumGenderNullableFilter<$PrismaModel> | $Enums.Gender | null
+  }
+
   export type UserScalarRelationFilter = {
     is?: UserWhereInput
     isNot?: UserWhereInput
@@ -65388,6 +67198,7 @@ export namespace Prisma {
   export type ProfileCountOrderByAggregateInput = {
     id?: SortOrder
     dateOfBirth?: SortOrder
+    gender?: SortOrder
     bloodGroup?: SortOrder
     address?: SortOrder
     nationalId?: SortOrder
@@ -65402,6 +67213,7 @@ export namespace Prisma {
   export type ProfileMaxOrderByAggregateInput = {
     id?: SortOrder
     dateOfBirth?: SortOrder
+    gender?: SortOrder
     bloodGroup?: SortOrder
     address?: SortOrder
     nationalId?: SortOrder
@@ -65416,6 +67228,7 @@ export namespace Prisma {
   export type ProfileMinOrderByAggregateInput = {
     id?: SortOrder
     dateOfBirth?: SortOrder
+    gender?: SortOrder
     bloodGroup?: SortOrder
     address?: SortOrder
     nationalId?: SortOrder
@@ -65439,6 +67252,16 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedDateTimeNullableFilter<$PrismaModel>
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
+  export type EnumGenderNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.Gender | EnumGenderFieldRefInput<$PrismaModel> | null
+    in?: $Enums.Gender[] | ListEnumGenderFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.Gender[] | ListEnumGenderFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumGenderNullableWithAggregatesFilter<$PrismaModel> | $Enums.Gender | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumGenderNullableFilter<$PrismaModel>
+    _max?: NestedEnumGenderNullableFilter<$PrismaModel>
   }
 
   export type UuidNullableFilter<$PrismaModel = never> = {
@@ -66569,6 +68392,11 @@ export namespace Prisma {
     isNot?: UserWhereInput | null
   }
 
+  export type TournamentDetailNullableScalarRelationFilter = {
+    is?: TournamentDetailWhereInput | null
+    isNot?: TournamentDetailWhereInput | null
+  }
+
   export type EventCountOrderByAggregateInput = {
     id?: SortOrder
     title?: SortOrder
@@ -66685,6 +68513,59 @@ export namespace Prisma {
     _max?: NestedEnumEventParticipantTypeFilter<$PrismaModel>
   }
 
+  export type EnumTournamentEventTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.TournamentEventType | EnumTournamentEventTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.TournamentEventType[] | ListEnumTournamentEventTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TournamentEventType[] | ListEnumTournamentEventTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumTournamentEventTypeFilter<$PrismaModel> | $Enums.TournamentEventType
+  }
+
+  export type EventScalarRelationFilter = {
+    is?: EventWhereInput
+    isNot?: EventWhereInput
+  }
+
+  export type TournamentDetailCountOrderByAggregateInput = {
+    eventId?: SortOrder
+    eventType?: SortOrder
+    enabledDivisions?: SortOrder
+    registrationDeadline?: SortOrder
+    weighInDate?: SortOrder
+    rulesUrl?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type TournamentDetailMaxOrderByAggregateInput = {
+    eventId?: SortOrder
+    eventType?: SortOrder
+    registrationDeadline?: SortOrder
+    weighInDate?: SortOrder
+    rulesUrl?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type TournamentDetailMinOrderByAggregateInput = {
+    eventId?: SortOrder
+    eventType?: SortOrder
+    registrationDeadline?: SortOrder
+    weighInDate?: SortOrder
+    rulesUrl?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type EnumTournamentEventTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.TournamentEventType | EnumTournamentEventTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.TournamentEventType[] | ListEnumTournamentEventTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TournamentEventType[] | ListEnumTournamentEventTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumTournamentEventTypeWithAggregatesFilter<$PrismaModel> | $Enums.TournamentEventType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumTournamentEventTypeFilter<$PrismaModel>
+    _max?: NestedEnumTournamentEventTypeFilter<$PrismaModel>
+  }
+
   export type AnnouncementCountOrderByAggregateInput = {
     id?: SortOrder
     title?: SortOrder
@@ -66736,10 +68617,33 @@ export namespace Prisma {
     notIn?: $Enums.PaymentStatus[] | ListEnumPaymentStatusFieldRefInput<$PrismaModel> | null
     not?: NestedEnumPaymentStatusNullableFilter<$PrismaModel> | $Enums.PaymentStatus | null
   }
+  export type JsonNullableFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>
 
-  export type EventScalarRelationFilter = {
-    is?: EventWhereInput
-    isNot?: EventWhereInput
+  export type JsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
+  export type BoolNullableFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
+    not?: NestedBoolNullableFilter<$PrismaModel> | boolean | null
   }
 
   export type EventRegistrationCountOrderByAggregateInput = {
@@ -66756,6 +68660,19 @@ export namespace Prisma {
     transactionId?: SortOrder
     guestDateOfBirth?: SortOrder
     parentOfMemberNumber?: SortOrder
+    divisionCode?: SortOrder
+    entrantGender?: SortOrder
+    entrantWeightKg?: SortOrder
+    entrantBeltRank?: SortOrder
+    entrantDojoName?: SortOrder
+    coachName?: SortOrder
+    teamName?: SortOrder
+    teammates?: SortOrder
+    guardianName?: SortOrder
+    guardianPhone?: SortOrder
+    guardianConsent?: SortOrder
+    emergencyContactName?: SortOrder
+    emergencyContactPhone?: SortOrder
     checkedInAt?: SortOrder
     checkedInByUserId?: SortOrder
     createdAt?: SortOrder
@@ -66763,6 +68680,7 @@ export namespace Prisma {
 
   export type EventRegistrationAvgOrderByAggregateInput = {
     amountDue?: SortOrder
+    entrantWeightKg?: SortOrder
   }
 
   export type EventRegistrationMaxOrderByAggregateInput = {
@@ -66779,6 +68697,18 @@ export namespace Prisma {
     transactionId?: SortOrder
     guestDateOfBirth?: SortOrder
     parentOfMemberNumber?: SortOrder
+    divisionCode?: SortOrder
+    entrantGender?: SortOrder
+    entrantWeightKg?: SortOrder
+    entrantBeltRank?: SortOrder
+    entrantDojoName?: SortOrder
+    coachName?: SortOrder
+    teamName?: SortOrder
+    guardianName?: SortOrder
+    guardianPhone?: SortOrder
+    guardianConsent?: SortOrder
+    emergencyContactName?: SortOrder
+    emergencyContactPhone?: SortOrder
     checkedInAt?: SortOrder
     checkedInByUserId?: SortOrder
     createdAt?: SortOrder
@@ -66798,6 +68728,18 @@ export namespace Prisma {
     transactionId?: SortOrder
     guestDateOfBirth?: SortOrder
     parentOfMemberNumber?: SortOrder
+    divisionCode?: SortOrder
+    entrantGender?: SortOrder
+    entrantWeightKg?: SortOrder
+    entrantBeltRank?: SortOrder
+    entrantDojoName?: SortOrder
+    coachName?: SortOrder
+    teamName?: SortOrder
+    guardianName?: SortOrder
+    guardianPhone?: SortOrder
+    guardianConsent?: SortOrder
+    emergencyContactName?: SortOrder
+    emergencyContactPhone?: SortOrder
     checkedInAt?: SortOrder
     checkedInByUserId?: SortOrder
     createdAt?: SortOrder
@@ -66805,6 +68747,7 @@ export namespace Prisma {
 
   export type EventRegistrationSumOrderByAggregateInput = {
     amountDue?: SortOrder
+    entrantWeightKg?: SortOrder
   }
 
   export type EnumPaymentStatusNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -66815,6 +68758,40 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedEnumPaymentStatusNullableFilter<$PrismaModel>
     _max?: NestedEnumPaymentStatusNullableFilter<$PrismaModel>
+  }
+  export type JsonNullableWithAggregatesFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableWithAggregatesFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedJsonNullableFilter<$PrismaModel>
+    _max?: NestedJsonNullableFilter<$PrismaModel>
+  }
+
+  export type BoolNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
+    not?: NestedBoolNullableWithAggregatesFilter<$PrismaModel> | boolean | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedBoolNullableFilter<$PrismaModel>
+    _max?: NestedBoolNullableFilter<$PrismaModel>
   }
 
   export type EnumNotificationTypeFilter<$PrismaModel = never> = {
@@ -69219,6 +71196,10 @@ export namespace Prisma {
     set?: Date | string | null
   }
 
+  export type NullableEnumGenderFieldUpdateOperationsInput = {
+    set?: $Enums.Gender | null
+  }
+
   export type UserUpdateOneRequiredWithoutProfileNestedInput = {
     create?: XOR<UserCreateWithoutProfileInput, UserUncheckedCreateWithoutProfileInput>
     connectOrCreate?: UserCreateOrConnectWithoutProfileInput
@@ -71050,11 +73031,23 @@ export namespace Prisma {
     connect?: BeltRankWhereUniqueInput
   }
 
+  export type TournamentDetailCreateNestedOneWithoutEventInput = {
+    create?: XOR<TournamentDetailCreateWithoutEventInput, TournamentDetailUncheckedCreateWithoutEventInput>
+    connectOrCreate?: TournamentDetailCreateOrConnectWithoutEventInput
+    connect?: TournamentDetailWhereUniqueInput
+  }
+
   export type EventRegistrationUncheckedCreateNestedManyWithoutEventInput = {
     create?: XOR<EventRegistrationCreateWithoutEventInput, EventRegistrationUncheckedCreateWithoutEventInput> | EventRegistrationCreateWithoutEventInput[] | EventRegistrationUncheckedCreateWithoutEventInput[]
     connectOrCreate?: EventRegistrationCreateOrConnectWithoutEventInput | EventRegistrationCreateOrConnectWithoutEventInput[]
     createMany?: EventRegistrationCreateManyEventInputEnvelope
     connect?: EventRegistrationWhereUniqueInput | EventRegistrationWhereUniqueInput[]
+  }
+
+  export type TournamentDetailUncheckedCreateNestedOneWithoutEventInput = {
+    create?: XOR<TournamentDetailCreateWithoutEventInput, TournamentDetailUncheckedCreateWithoutEventInput>
+    connectOrCreate?: TournamentDetailCreateOrConnectWithoutEventInput
+    connect?: TournamentDetailWhereUniqueInput
   }
 
   export type EnumEventCategoryFieldUpdateOperationsInput = {
@@ -71113,6 +73106,16 @@ export namespace Prisma {
     update?: XOR<XOR<BeltRankUpdateToOneWithWhereWithoutMinRankEventsInput, BeltRankUpdateWithoutMinRankEventsInput>, BeltRankUncheckedUpdateWithoutMinRankEventsInput>
   }
 
+  export type TournamentDetailUpdateOneWithoutEventNestedInput = {
+    create?: XOR<TournamentDetailCreateWithoutEventInput, TournamentDetailUncheckedCreateWithoutEventInput>
+    connectOrCreate?: TournamentDetailCreateOrConnectWithoutEventInput
+    upsert?: TournamentDetailUpsertWithoutEventInput
+    disconnect?: TournamentDetailWhereInput | boolean
+    delete?: TournamentDetailWhereInput | boolean
+    connect?: TournamentDetailWhereUniqueInput
+    update?: XOR<XOR<TournamentDetailUpdateToOneWithWhereWithoutEventInput, TournamentDetailUpdateWithoutEventInput>, TournamentDetailUncheckedUpdateWithoutEventInput>
+  }
+
   export type EventRegistrationUncheckedUpdateManyWithoutEventNestedInput = {
     create?: XOR<EventRegistrationCreateWithoutEventInput, EventRegistrationUncheckedCreateWithoutEventInput> | EventRegistrationCreateWithoutEventInput[] | EventRegistrationUncheckedCreateWithoutEventInput[]
     connectOrCreate?: EventRegistrationCreateOrConnectWithoutEventInput | EventRegistrationCreateOrConnectWithoutEventInput[]
@@ -71125,6 +73128,43 @@ export namespace Prisma {
     update?: EventRegistrationUpdateWithWhereUniqueWithoutEventInput | EventRegistrationUpdateWithWhereUniqueWithoutEventInput[]
     updateMany?: EventRegistrationUpdateManyWithWhereWithoutEventInput | EventRegistrationUpdateManyWithWhereWithoutEventInput[]
     deleteMany?: EventRegistrationScalarWhereInput | EventRegistrationScalarWhereInput[]
+  }
+
+  export type TournamentDetailUncheckedUpdateOneWithoutEventNestedInput = {
+    create?: XOR<TournamentDetailCreateWithoutEventInput, TournamentDetailUncheckedCreateWithoutEventInput>
+    connectOrCreate?: TournamentDetailCreateOrConnectWithoutEventInput
+    upsert?: TournamentDetailUpsertWithoutEventInput
+    disconnect?: TournamentDetailWhereInput | boolean
+    delete?: TournamentDetailWhereInput | boolean
+    connect?: TournamentDetailWhereUniqueInput
+    update?: XOR<XOR<TournamentDetailUpdateToOneWithWhereWithoutEventInput, TournamentDetailUpdateWithoutEventInput>, TournamentDetailUncheckedUpdateWithoutEventInput>
+  }
+
+  export type TournamentDetailCreateenabledDivisionsInput = {
+    set: string[]
+  }
+
+  export type EventCreateNestedOneWithoutTournamentDetailInput = {
+    create?: XOR<EventCreateWithoutTournamentDetailInput, EventUncheckedCreateWithoutTournamentDetailInput>
+    connectOrCreate?: EventCreateOrConnectWithoutTournamentDetailInput
+    connect?: EventWhereUniqueInput
+  }
+
+  export type EnumTournamentEventTypeFieldUpdateOperationsInput = {
+    set?: $Enums.TournamentEventType
+  }
+
+  export type TournamentDetailUpdateenabledDivisionsInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type EventUpdateOneRequiredWithoutTournamentDetailNestedInput = {
+    create?: XOR<EventCreateWithoutTournamentDetailInput, EventUncheckedCreateWithoutTournamentDetailInput>
+    connectOrCreate?: EventCreateOrConnectWithoutTournamentDetailInput
+    upsert?: EventUpsertWithoutTournamentDetailInput
+    connect?: EventWhereUniqueInput
+    update?: XOR<XOR<EventUpdateToOneWithWhereWithoutTournamentDetailInput, EventUpdateWithoutTournamentDetailInput>, EventUncheckedUpdateWithoutTournamentDetailInput>
   }
 
   export type UserCreateNestedOneWithoutAnnouncementsPostedInput = {
@@ -71193,6 +73233,10 @@ export namespace Prisma {
 
   export type NullableEnumPaymentStatusFieldUpdateOperationsInput = {
     set?: $Enums.PaymentStatus | null
+  }
+
+  export type NullableBoolFieldUpdateOperationsInput = {
+    set?: boolean | null
   }
 
   export type EventUpdateOneRequiredWithoutRegistrationsNestedInput = {
@@ -72936,6 +74980,13 @@ export namespace Prisma {
     not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
+  export type NestedEnumGenderNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.Gender | EnumGenderFieldRefInput<$PrismaModel> | null
+    in?: $Enums.Gender[] | ListEnumGenderFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.Gender[] | ListEnumGenderFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumGenderNullableFilter<$PrismaModel> | $Enums.Gender | null
+  }
+
   export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
@@ -72948,6 +74999,16 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedDateTimeNullableFilter<$PrismaModel>
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
+  export type NestedEnumGenderNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.Gender | EnumGenderFieldRefInput<$PrismaModel> | null
+    in?: $Enums.Gender[] | ListEnumGenderFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.Gender[] | ListEnumGenderFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumGenderNullableWithAggregatesFilter<$PrismaModel> | $Enums.Gender | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumGenderNullableFilter<$PrismaModel>
+    _max?: NestedEnumGenderNullableFilter<$PrismaModel>
   }
 
   export type NestedUuidNullableFilter<$PrismaModel = never> = {
@@ -73292,11 +75353,33 @@ export namespace Prisma {
     _max?: NestedEnumEventParticipantTypeFilter<$PrismaModel>
   }
 
+  export type NestedEnumTournamentEventTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.TournamentEventType | EnumTournamentEventTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.TournamentEventType[] | ListEnumTournamentEventTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TournamentEventType[] | ListEnumTournamentEventTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumTournamentEventTypeFilter<$PrismaModel> | $Enums.TournamentEventType
+  }
+
+  export type NestedEnumTournamentEventTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.TournamentEventType | EnumTournamentEventTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.TournamentEventType[] | ListEnumTournamentEventTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TournamentEventType[] | ListEnumTournamentEventTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumTournamentEventTypeWithAggregatesFilter<$PrismaModel> | $Enums.TournamentEventType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumTournamentEventTypeFilter<$PrismaModel>
+    _max?: NestedEnumTournamentEventTypeFilter<$PrismaModel>
+  }
+
   export type NestedEnumPaymentStatusNullableFilter<$PrismaModel = never> = {
     equals?: $Enums.PaymentStatus | EnumPaymentStatusFieldRefInput<$PrismaModel> | null
     in?: $Enums.PaymentStatus[] | ListEnumPaymentStatusFieldRefInput<$PrismaModel> | null
     notIn?: $Enums.PaymentStatus[] | ListEnumPaymentStatusFieldRefInput<$PrismaModel> | null
     not?: NestedEnumPaymentStatusNullableFilter<$PrismaModel> | $Enums.PaymentStatus | null
+  }
+
+  export type NestedBoolNullableFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
+    not?: NestedBoolNullableFilter<$PrismaModel> | boolean | null
   }
 
   export type NestedEnumPaymentStatusNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -73307,6 +75390,37 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedEnumPaymentStatusNullableFilter<$PrismaModel>
     _max?: NestedEnumPaymentStatusNullableFilter<$PrismaModel>
+  }
+  export type NestedJsonNullableFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<NestedJsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<NestedJsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type NestedJsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
+  export type NestedBoolNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
+    not?: NestedBoolNullableWithAggregatesFilter<$PrismaModel> | boolean | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedBoolNullableFilter<$PrismaModel>
+    _max?: NestedBoolNullableFilter<$PrismaModel>
   }
 
   export type NestedEnumNotificationTypeFilter<$PrismaModel = never> = {
@@ -73836,6 +75950,7 @@ export namespace Prisma {
 
   export type ProfileCreateWithoutUserInput = {
     dateOfBirth?: Date | string | null
+    gender?: $Enums.Gender | null
     bloodGroup?: string | null
     address?: string | null
     nationalId?: string | null
@@ -73849,6 +75964,7 @@ export namespace Prisma {
 
   export type ProfileUncheckedCreateWithoutUserInput = {
     dateOfBirth?: Date | string | null
+    gender?: $Enums.Gender | null
     bloodGroup?: string | null
     address?: string | null
     nationalId?: string | null
@@ -74110,6 +76226,19 @@ export namespace Prisma {
     transactionId?: string | null
     guestDateOfBirth?: Date | string | null
     parentOfMemberNumber?: string | null
+    divisionCode?: string | null
+    entrantGender?: $Enums.Gender | null
+    entrantWeightKg?: Decimal | DecimalJsLike | number | string | null
+    entrantBeltRank?: string | null
+    entrantDojoName?: string | null
+    coachName?: string | null
+    teamName?: string | null
+    teammates?: NullableJsonNullValueInput | InputJsonValue
+    guardianName?: string | null
+    guardianPhone?: string | null
+    guardianConsent?: boolean | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
     checkedInAt?: Date | string | null
     createdAt?: Date | string
     event: EventCreateNestedOneWithoutRegistrationsInput
@@ -74130,6 +76259,19 @@ export namespace Prisma {
     transactionId?: string | null
     guestDateOfBirth?: Date | string | null
     parentOfMemberNumber?: string | null
+    divisionCode?: string | null
+    entrantGender?: $Enums.Gender | null
+    entrantWeightKg?: Decimal | DecimalJsLike | number | string | null
+    entrantBeltRank?: string | null
+    entrantDojoName?: string | null
+    coachName?: string | null
+    teamName?: string | null
+    teammates?: NullableJsonNullValueInput | InputJsonValue
+    guardianName?: string | null
+    guardianPhone?: string | null
+    guardianConsent?: boolean | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
     checkedInAt?: Date | string | null
     checkedInByUserId?: string | null
     createdAt?: Date | string
@@ -74158,6 +76300,19 @@ export namespace Prisma {
     transactionId?: string | null
     guestDateOfBirth?: Date | string | null
     parentOfMemberNumber?: string | null
+    divisionCode?: string | null
+    entrantGender?: $Enums.Gender | null
+    entrantWeightKg?: Decimal | DecimalJsLike | number | string | null
+    entrantBeltRank?: string | null
+    entrantDojoName?: string | null
+    coachName?: string | null
+    teamName?: string | null
+    teammates?: NullableJsonNullValueInput | InputJsonValue
+    guardianName?: string | null
+    guardianPhone?: string | null
+    guardianConsent?: boolean | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
     checkedInAt?: Date | string | null
     createdAt?: Date | string
     event: EventCreateNestedOneWithoutRegistrationsInput
@@ -74179,6 +76334,19 @@ export namespace Prisma {
     transactionId?: string | null
     guestDateOfBirth?: Date | string | null
     parentOfMemberNumber?: string | null
+    divisionCode?: string | null
+    entrantGender?: $Enums.Gender | null
+    entrantWeightKg?: Decimal | DecimalJsLike | number | string | null
+    entrantBeltRank?: string | null
+    entrantDojoName?: string | null
+    coachName?: string | null
+    teamName?: string | null
+    teammates?: NullableJsonNullValueInput | InputJsonValue
+    guardianName?: string | null
+    guardianPhone?: string | null
+    guardianConsent?: boolean | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
     checkedInAt?: Date | string | null
     createdAt?: Date | string
     transactions?: PaymentTransactionUncheckedCreateNestedManyWithoutEventRegistrationInput
@@ -74216,6 +76384,7 @@ export namespace Prisma {
     registrations?: EventRegistrationCreateNestedManyWithoutEventInput
     dojo?: DojoCreateNestedOneWithoutEventsInput
     minRank?: BeltRankCreateNestedOneWithoutMinRankEventsInput
+    tournamentDetail?: TournamentDetailCreateNestedOneWithoutEventInput
   }
 
   export type EventUncheckedCreateWithoutPostedByInput = {
@@ -74240,6 +76409,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     registrations?: EventRegistrationUncheckedCreateNestedManyWithoutEventInput
+    tournamentDetail?: TournamentDetailUncheckedCreateNestedOneWithoutEventInput
   }
 
   export type EventCreateOrConnectWithoutPostedByInput = {
@@ -74856,6 +77026,7 @@ export namespace Prisma {
 
   export type ProfileUpdateWithoutUserInput = {
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
     bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     nationalId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -74869,6 +77040,7 @@ export namespace Prisma {
 
   export type ProfileUncheckedUpdateWithoutUserInput = {
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
     bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     nationalId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -75148,6 +77320,19 @@ export namespace Prisma {
     transactionId?: StringNullableFilter<"EventRegistration"> | string | null
     guestDateOfBirth?: DateTimeNullableFilter<"EventRegistration"> | Date | string | null
     parentOfMemberNumber?: StringNullableFilter<"EventRegistration"> | string | null
+    divisionCode?: StringNullableFilter<"EventRegistration"> | string | null
+    entrantGender?: EnumGenderNullableFilter<"EventRegistration"> | $Enums.Gender | null
+    entrantWeightKg?: DecimalNullableFilter<"EventRegistration"> | Decimal | DecimalJsLike | number | string | null
+    entrantBeltRank?: StringNullableFilter<"EventRegistration"> | string | null
+    entrantDojoName?: StringNullableFilter<"EventRegistration"> | string | null
+    coachName?: StringNullableFilter<"EventRegistration"> | string | null
+    teamName?: StringNullableFilter<"EventRegistration"> | string | null
+    teammates?: JsonNullableFilter<"EventRegistration">
+    guardianName?: StringNullableFilter<"EventRegistration"> | string | null
+    guardianPhone?: StringNullableFilter<"EventRegistration"> | string | null
+    guardianConsent?: BoolNullableFilter<"EventRegistration"> | boolean | null
+    emergencyContactName?: StringNullableFilter<"EventRegistration"> | string | null
+    emergencyContactPhone?: StringNullableFilter<"EventRegistration"> | string | null
     checkedInAt?: DateTimeNullableFilter<"EventRegistration"> | Date | string | null
     checkedInByUserId?: UuidNullableFilter<"EventRegistration"> | string | null
     createdAt?: DateTimeFilter<"EventRegistration"> | Date | string
@@ -77925,6 +80110,7 @@ export namespace Prisma {
     registrations?: EventRegistrationCreateNestedManyWithoutEventInput
     postedBy?: UserCreateNestedOneWithoutEventsPostedInput
     dojo?: DojoCreateNestedOneWithoutEventsInput
+    tournamentDetail?: TournamentDetailCreateNestedOneWithoutEventInput
   }
 
   export type EventUncheckedCreateWithoutMinRankInput = {
@@ -77949,6 +80135,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     registrations?: EventRegistrationUncheckedCreateNestedManyWithoutEventInput
+    tournamentDetail?: TournamentDetailUncheckedCreateNestedOneWithoutEventInput
   }
 
   export type EventCreateOrConnectWithoutMinRankInput = {
@@ -78447,6 +80634,7 @@ export namespace Prisma {
     registrations?: EventRegistrationCreateNestedManyWithoutEventInput
     postedBy?: UserCreateNestedOneWithoutEventsPostedInput
     minRank?: BeltRankCreateNestedOneWithoutMinRankEventsInput
+    tournamentDetail?: TournamentDetailCreateNestedOneWithoutEventInput
   }
 
   export type EventUncheckedCreateWithoutDojoInput = {
@@ -78471,6 +80659,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     registrations?: EventRegistrationUncheckedCreateNestedManyWithoutEventInput
+    tournamentDetail?: TournamentDetailUncheckedCreateNestedOneWithoutEventInput
   }
 
   export type EventCreateOrConnectWithoutDojoInput = {
@@ -80985,6 +83174,19 @@ export namespace Prisma {
     transactionId?: string | null
     guestDateOfBirth?: Date | string | null
     parentOfMemberNumber?: string | null
+    divisionCode?: string | null
+    entrantGender?: $Enums.Gender | null
+    entrantWeightKg?: Decimal | DecimalJsLike | number | string | null
+    entrantBeltRank?: string | null
+    entrantDojoName?: string | null
+    coachName?: string | null
+    teamName?: string | null
+    teammates?: NullableJsonNullValueInput | InputJsonValue
+    guardianName?: string | null
+    guardianPhone?: string | null
+    guardianConsent?: boolean | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
     checkedInAt?: Date | string | null
     createdAt?: Date | string
     user?: UserCreateNestedOneWithoutEventRegistrationsInput
@@ -81005,6 +83207,19 @@ export namespace Prisma {
     transactionId?: string | null
     guestDateOfBirth?: Date | string | null
     parentOfMemberNumber?: string | null
+    divisionCode?: string | null
+    entrantGender?: $Enums.Gender | null
+    entrantWeightKg?: Decimal | DecimalJsLike | number | string | null
+    entrantBeltRank?: string | null
+    entrantDojoName?: string | null
+    coachName?: string | null
+    teamName?: string | null
+    teammates?: NullableJsonNullValueInput | InputJsonValue
+    guardianName?: string | null
+    guardianPhone?: string | null
+    guardianConsent?: boolean | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
     checkedInAt?: Date | string | null
     checkedInByUserId?: string | null
     createdAt?: Date | string
@@ -81214,6 +83429,31 @@ export namespace Prisma {
   export type BeltRankCreateOrConnectWithoutMinRankEventsInput = {
     where: BeltRankWhereUniqueInput
     create: XOR<BeltRankCreateWithoutMinRankEventsInput, BeltRankUncheckedCreateWithoutMinRankEventsInput>
+  }
+
+  export type TournamentDetailCreateWithoutEventInput = {
+    eventType: $Enums.TournamentEventType
+    enabledDivisions?: TournamentDetailCreateenabledDivisionsInput | string[]
+    registrationDeadline?: Date | string | null
+    weighInDate?: Date | string | null
+    rulesUrl?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TournamentDetailUncheckedCreateWithoutEventInput = {
+    eventType: $Enums.TournamentEventType
+    enabledDivisions?: TournamentDetailCreateenabledDivisionsInput | string[]
+    registrationDeadline?: Date | string | null
+    weighInDate?: Date | string | null
+    rulesUrl?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TournamentDetailCreateOrConnectWithoutEventInput = {
+    where: TournamentDetailWhereUniqueInput
+    create: XOR<TournamentDetailCreateWithoutEventInput, TournamentDetailUncheckedCreateWithoutEventInput>
   }
 
   export type EventRegistrationUpsertWithWhereUniqueWithoutEventInput = {
@@ -81443,6 +83683,153 @@ export namespace Prisma {
     gradingsTo?: GradingUncheckedUpdateManyWithoutToRankNestedInput
     gradingEvents?: GradingEventUncheckedUpdateManyWithoutTargetRankNestedInput
     gradingApplications?: GradingApplicationUncheckedUpdateManyWithoutTargetRankNestedInput
+  }
+
+  export type TournamentDetailUpsertWithoutEventInput = {
+    update: XOR<TournamentDetailUpdateWithoutEventInput, TournamentDetailUncheckedUpdateWithoutEventInput>
+    create: XOR<TournamentDetailCreateWithoutEventInput, TournamentDetailUncheckedCreateWithoutEventInput>
+    where?: TournamentDetailWhereInput
+  }
+
+  export type TournamentDetailUpdateToOneWithWhereWithoutEventInput = {
+    where?: TournamentDetailWhereInput
+    data: XOR<TournamentDetailUpdateWithoutEventInput, TournamentDetailUncheckedUpdateWithoutEventInput>
+  }
+
+  export type TournamentDetailUpdateWithoutEventInput = {
+    eventType?: EnumTournamentEventTypeFieldUpdateOperationsInput | $Enums.TournamentEventType
+    enabledDivisions?: TournamentDetailUpdateenabledDivisionsInput | string[]
+    registrationDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    weighInDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rulesUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TournamentDetailUncheckedUpdateWithoutEventInput = {
+    eventType?: EnumTournamentEventTypeFieldUpdateOperationsInput | $Enums.TournamentEventType
+    enabledDivisions?: TournamentDetailUpdateenabledDivisionsInput | string[]
+    registrationDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    weighInDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rulesUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type EventCreateWithoutTournamentDetailInput = {
+    id?: string
+    title: string
+    description?: string | null
+    eventDate: Date | string
+    location?: string | null
+    imageUrl?: string | null
+    isPublished?: boolean
+    maxCapacity?: number | null
+    category?: $Enums.EventCategory
+    attachmentUrl?: string | null
+    attachmentType?: $Enums.AttachmentType | null
+    isPremium?: boolean
+    ticketPrice?: Decimal | DecimalJsLike | number | string | null
+    memberDiscountPercent?: number
+    minAge?: number | null
+    participantType?: $Enums.EventParticipantType
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    registrations?: EventRegistrationCreateNestedManyWithoutEventInput
+    postedBy?: UserCreateNestedOneWithoutEventsPostedInput
+    dojo?: DojoCreateNestedOneWithoutEventsInput
+    minRank?: BeltRankCreateNestedOneWithoutMinRankEventsInput
+  }
+
+  export type EventUncheckedCreateWithoutTournamentDetailInput = {
+    id?: string
+    title: string
+    description?: string | null
+    eventDate: Date | string
+    location?: string | null
+    imageUrl?: string | null
+    isPublished?: boolean
+    maxCapacity?: number | null
+    category?: $Enums.EventCategory
+    attachmentUrl?: string | null
+    attachmentType?: $Enums.AttachmentType | null
+    isPremium?: boolean
+    ticketPrice?: Decimal | DecimalJsLike | number | string | null
+    memberDiscountPercent?: number
+    minAge?: number | null
+    minRankId?: string | null
+    participantType?: $Enums.EventParticipantType
+    postedById?: string | null
+    dojoId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    registrations?: EventRegistrationUncheckedCreateNestedManyWithoutEventInput
+  }
+
+  export type EventCreateOrConnectWithoutTournamentDetailInput = {
+    where: EventWhereUniqueInput
+    create: XOR<EventCreateWithoutTournamentDetailInput, EventUncheckedCreateWithoutTournamentDetailInput>
+  }
+
+  export type EventUpsertWithoutTournamentDetailInput = {
+    update: XOR<EventUpdateWithoutTournamentDetailInput, EventUncheckedUpdateWithoutTournamentDetailInput>
+    create: XOR<EventCreateWithoutTournamentDetailInput, EventUncheckedCreateWithoutTournamentDetailInput>
+    where?: EventWhereInput
+  }
+
+  export type EventUpdateToOneWithWhereWithoutTournamentDetailInput = {
+    where?: EventWhereInput
+    data: XOR<EventUpdateWithoutTournamentDetailInput, EventUncheckedUpdateWithoutTournamentDetailInput>
+  }
+
+  export type EventUpdateWithoutTournamentDetailInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    eventDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
+    maxCapacity?: NullableIntFieldUpdateOperationsInput | number | null
+    category?: EnumEventCategoryFieldUpdateOperationsInput | $Enums.EventCategory
+    attachmentUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    attachmentType?: NullableEnumAttachmentTypeFieldUpdateOperationsInput | $Enums.AttachmentType | null
+    isPremium?: BoolFieldUpdateOperationsInput | boolean
+    ticketPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    memberDiscountPercent?: IntFieldUpdateOperationsInput | number
+    minAge?: NullableIntFieldUpdateOperationsInput | number | null
+    participantType?: EnumEventParticipantTypeFieldUpdateOperationsInput | $Enums.EventParticipantType
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    registrations?: EventRegistrationUpdateManyWithoutEventNestedInput
+    postedBy?: UserUpdateOneWithoutEventsPostedNestedInput
+    dojo?: DojoUpdateOneWithoutEventsNestedInput
+    minRank?: BeltRankUpdateOneWithoutMinRankEventsNestedInput
+  }
+
+  export type EventUncheckedUpdateWithoutTournamentDetailInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    eventDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
+    maxCapacity?: NullableIntFieldUpdateOperationsInput | number | null
+    category?: EnumEventCategoryFieldUpdateOperationsInput | $Enums.EventCategory
+    attachmentUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    attachmentType?: NullableEnumAttachmentTypeFieldUpdateOperationsInput | $Enums.AttachmentType | null
+    isPremium?: BoolFieldUpdateOperationsInput | boolean
+    ticketPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    memberDiscountPercent?: IntFieldUpdateOperationsInput | number
+    minAge?: NullableIntFieldUpdateOperationsInput | number | null
+    minRankId?: NullableStringFieldUpdateOperationsInput | string | null
+    participantType?: EnumEventParticipantTypeFieldUpdateOperationsInput | $Enums.EventParticipantType
+    postedById?: NullableStringFieldUpdateOperationsInput | string | null
+    dojoId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    registrations?: EventRegistrationUncheckedUpdateManyWithoutEventNestedInput
   }
 
   export type UserCreateWithoutAnnouncementsPostedInput = {
@@ -81799,6 +84186,7 @@ export namespace Prisma {
     postedBy?: UserCreateNestedOneWithoutEventsPostedInput
     dojo?: DojoCreateNestedOneWithoutEventsInput
     minRank?: BeltRankCreateNestedOneWithoutMinRankEventsInput
+    tournamentDetail?: TournamentDetailCreateNestedOneWithoutEventInput
   }
 
   export type EventUncheckedCreateWithoutRegistrationsInput = {
@@ -81823,6 +84211,7 @@ export namespace Prisma {
     dojoId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    tournamentDetail?: TournamentDetailUncheckedCreateNestedOneWithoutEventInput
   }
 
   export type EventCreateOrConnectWithoutRegistrationsInput = {
@@ -82067,6 +84456,7 @@ export namespace Prisma {
     postedBy?: UserUpdateOneWithoutEventsPostedNestedInput
     dojo?: DojoUpdateOneWithoutEventsNestedInput
     minRank?: BeltRankUpdateOneWithoutMinRankEventsNestedInput
+    tournamentDetail?: TournamentDetailUpdateOneWithoutEventNestedInput
   }
 
   export type EventUncheckedUpdateWithoutRegistrationsInput = {
@@ -82091,6 +84481,7 @@ export namespace Prisma {
     dojoId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tournamentDetail?: TournamentDetailUncheckedUpdateOneWithoutEventNestedInput
   }
 
   export type UserUpsertWithoutEventRegistrationsInput = {
@@ -86864,6 +89255,19 @@ export namespace Prisma {
     transactionId?: string | null
     guestDateOfBirth?: Date | string | null
     parentOfMemberNumber?: string | null
+    divisionCode?: string | null
+    entrantGender?: $Enums.Gender | null
+    entrantWeightKg?: Decimal | DecimalJsLike | number | string | null
+    entrantBeltRank?: string | null
+    entrantDojoName?: string | null
+    coachName?: string | null
+    teamName?: string | null
+    teammates?: NullableJsonNullValueInput | InputJsonValue
+    guardianName?: string | null
+    guardianPhone?: string | null
+    guardianConsent?: boolean | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
     checkedInAt?: Date | string | null
     createdAt?: Date | string
     event: EventCreateNestedOneWithoutRegistrationsInput
@@ -86885,6 +89289,19 @@ export namespace Prisma {
     transactionId?: string | null
     guestDateOfBirth?: Date | string | null
     parentOfMemberNumber?: string | null
+    divisionCode?: string | null
+    entrantGender?: $Enums.Gender | null
+    entrantWeightKg?: Decimal | DecimalJsLike | number | string | null
+    entrantBeltRank?: string | null
+    entrantDojoName?: string | null
+    coachName?: string | null
+    teamName?: string | null
+    teammates?: NullableJsonNullValueInput | InputJsonValue
+    guardianName?: string | null
+    guardianPhone?: string | null
+    guardianConsent?: boolean | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
     checkedInAt?: Date | string | null
     checkedInByUserId?: string | null
     createdAt?: Date | string
@@ -87072,6 +89489,19 @@ export namespace Prisma {
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null
     guestDateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     parentOfMemberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    divisionCode?: NullableStringFieldUpdateOperationsInput | string | null
+    entrantGender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    entrantWeightKg?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    entrantBeltRank?: NullableStringFieldUpdateOperationsInput | string | null
+    entrantDojoName?: NullableStringFieldUpdateOperationsInput | string | null
+    coachName?: NullableStringFieldUpdateOperationsInput | string | null
+    teamName?: NullableStringFieldUpdateOperationsInput | string | null
+    teammates?: NullableJsonNullValueInput | InputJsonValue
+    guardianName?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianConsent?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     checkedInAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     event?: EventUpdateOneRequiredWithoutRegistrationsNestedInput
@@ -87093,6 +89523,19 @@ export namespace Prisma {
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null
     guestDateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     parentOfMemberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    divisionCode?: NullableStringFieldUpdateOperationsInput | string | null
+    entrantGender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    entrantWeightKg?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    entrantBeltRank?: NullableStringFieldUpdateOperationsInput | string | null
+    entrantDojoName?: NullableStringFieldUpdateOperationsInput | string | null
+    coachName?: NullableStringFieldUpdateOperationsInput | string | null
+    teamName?: NullableStringFieldUpdateOperationsInput | string | null
+    teammates?: NullableJsonNullValueInput | InputJsonValue
+    guardianName?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianConsent?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     checkedInAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     checkedInByUserId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -89608,6 +92051,19 @@ export namespace Prisma {
     transactionId?: string | null
     guestDateOfBirth?: Date | string | null
     parentOfMemberNumber?: string | null
+    divisionCode?: string | null
+    entrantGender?: $Enums.Gender | null
+    entrantWeightKg?: Decimal | DecimalJsLike | number | string | null
+    entrantBeltRank?: string | null
+    entrantDojoName?: string | null
+    coachName?: string | null
+    teamName?: string | null
+    teammates?: NullableJsonNullValueInput | InputJsonValue
+    guardianName?: string | null
+    guardianPhone?: string | null
+    guardianConsent?: boolean | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
     checkedInAt?: Date | string | null
     checkedInByUserId?: string | null
     createdAt?: Date | string
@@ -89627,6 +92083,19 @@ export namespace Prisma {
     transactionId?: string | null
     guestDateOfBirth?: Date | string | null
     parentOfMemberNumber?: string | null
+    divisionCode?: string | null
+    entrantGender?: $Enums.Gender | null
+    entrantWeightKg?: Decimal | DecimalJsLike | number | string | null
+    entrantBeltRank?: string | null
+    entrantDojoName?: string | null
+    coachName?: string | null
+    teamName?: string | null
+    teammates?: NullableJsonNullValueInput | InputJsonValue
+    guardianName?: string | null
+    guardianPhone?: string | null
+    guardianConsent?: boolean | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
     checkedInAt?: Date | string | null
     createdAt?: Date | string
   }
@@ -89998,6 +92467,19 @@ export namespace Prisma {
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null
     guestDateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     parentOfMemberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    divisionCode?: NullableStringFieldUpdateOperationsInput | string | null
+    entrantGender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    entrantWeightKg?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    entrantBeltRank?: NullableStringFieldUpdateOperationsInput | string | null
+    entrantDojoName?: NullableStringFieldUpdateOperationsInput | string | null
+    coachName?: NullableStringFieldUpdateOperationsInput | string | null
+    teamName?: NullableStringFieldUpdateOperationsInput | string | null
+    teammates?: NullableJsonNullValueInput | InputJsonValue
+    guardianName?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianConsent?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     checkedInAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     event?: EventUpdateOneRequiredWithoutRegistrationsNestedInput
@@ -90018,6 +92500,19 @@ export namespace Prisma {
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null
     guestDateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     parentOfMemberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    divisionCode?: NullableStringFieldUpdateOperationsInput | string | null
+    entrantGender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    entrantWeightKg?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    entrantBeltRank?: NullableStringFieldUpdateOperationsInput | string | null
+    entrantDojoName?: NullableStringFieldUpdateOperationsInput | string | null
+    coachName?: NullableStringFieldUpdateOperationsInput | string | null
+    teamName?: NullableStringFieldUpdateOperationsInput | string | null
+    teammates?: NullableJsonNullValueInput | InputJsonValue
+    guardianName?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianConsent?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     checkedInAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     checkedInByUserId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -90037,6 +92532,19 @@ export namespace Prisma {
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null
     guestDateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     parentOfMemberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    divisionCode?: NullableStringFieldUpdateOperationsInput | string | null
+    entrantGender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    entrantWeightKg?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    entrantBeltRank?: NullableStringFieldUpdateOperationsInput | string | null
+    entrantDojoName?: NullableStringFieldUpdateOperationsInput | string | null
+    coachName?: NullableStringFieldUpdateOperationsInput | string | null
+    teamName?: NullableStringFieldUpdateOperationsInput | string | null
+    teammates?: NullableJsonNullValueInput | InputJsonValue
+    guardianName?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianConsent?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     checkedInAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     checkedInByUserId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -90054,6 +92562,19 @@ export namespace Prisma {
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null
     guestDateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     parentOfMemberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    divisionCode?: NullableStringFieldUpdateOperationsInput | string | null
+    entrantGender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    entrantWeightKg?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    entrantBeltRank?: NullableStringFieldUpdateOperationsInput | string | null
+    entrantDojoName?: NullableStringFieldUpdateOperationsInput | string | null
+    coachName?: NullableStringFieldUpdateOperationsInput | string | null
+    teamName?: NullableStringFieldUpdateOperationsInput | string | null
+    teammates?: NullableJsonNullValueInput | InputJsonValue
+    guardianName?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianConsent?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     checkedInAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     event?: EventUpdateOneRequiredWithoutRegistrationsNestedInput
@@ -90075,6 +92596,19 @@ export namespace Prisma {
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null
     guestDateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     parentOfMemberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    divisionCode?: NullableStringFieldUpdateOperationsInput | string | null
+    entrantGender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    entrantWeightKg?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    entrantBeltRank?: NullableStringFieldUpdateOperationsInput | string | null
+    entrantDojoName?: NullableStringFieldUpdateOperationsInput | string | null
+    coachName?: NullableStringFieldUpdateOperationsInput | string | null
+    teamName?: NullableStringFieldUpdateOperationsInput | string | null
+    teammates?: NullableJsonNullValueInput | InputJsonValue
+    guardianName?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianConsent?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     checkedInAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     transactions?: PaymentTransactionUncheckedUpdateManyWithoutEventRegistrationNestedInput
@@ -90094,6 +92628,19 @@ export namespace Prisma {
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null
     guestDateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     parentOfMemberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    divisionCode?: NullableStringFieldUpdateOperationsInput | string | null
+    entrantGender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    entrantWeightKg?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    entrantBeltRank?: NullableStringFieldUpdateOperationsInput | string | null
+    entrantDojoName?: NullableStringFieldUpdateOperationsInput | string | null
+    coachName?: NullableStringFieldUpdateOperationsInput | string | null
+    teamName?: NullableStringFieldUpdateOperationsInput | string | null
+    teammates?: NullableJsonNullValueInput | InputJsonValue
+    guardianName?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianConsent?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     checkedInAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -90120,6 +92667,7 @@ export namespace Prisma {
     registrations?: EventRegistrationUpdateManyWithoutEventNestedInput
     dojo?: DojoUpdateOneWithoutEventsNestedInput
     minRank?: BeltRankUpdateOneWithoutMinRankEventsNestedInput
+    tournamentDetail?: TournamentDetailUpdateOneWithoutEventNestedInput
   }
 
   export type EventUncheckedUpdateWithoutPostedByInput = {
@@ -90144,6 +92692,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     registrations?: EventRegistrationUncheckedUpdateManyWithoutEventNestedInput
+    tournamentDetail?: TournamentDetailUncheckedUpdateOneWithoutEventNestedInput
   }
 
   export type EventUncheckedUpdateManyWithoutPostedByInput = {
@@ -91566,6 +94115,7 @@ export namespace Prisma {
     registrations?: EventRegistrationUpdateManyWithoutEventNestedInput
     postedBy?: UserUpdateOneWithoutEventsPostedNestedInput
     dojo?: DojoUpdateOneWithoutEventsNestedInput
+    tournamentDetail?: TournamentDetailUpdateOneWithoutEventNestedInput
   }
 
   export type EventUncheckedUpdateWithoutMinRankInput = {
@@ -91590,6 +94140,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     registrations?: EventRegistrationUncheckedUpdateManyWithoutEventNestedInput
+    tournamentDetail?: TournamentDetailUncheckedUpdateOneWithoutEventNestedInput
   }
 
   export type EventUncheckedUpdateManyWithoutMinRankInput = {
@@ -92246,6 +94797,7 @@ export namespace Prisma {
     registrations?: EventRegistrationUpdateManyWithoutEventNestedInput
     postedBy?: UserUpdateOneWithoutEventsPostedNestedInput
     minRank?: BeltRankUpdateOneWithoutMinRankEventsNestedInput
+    tournamentDetail?: TournamentDetailUpdateOneWithoutEventNestedInput
   }
 
   export type EventUncheckedUpdateWithoutDojoInput = {
@@ -92270,6 +94822,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     registrations?: EventRegistrationUncheckedUpdateManyWithoutEventNestedInput
+    tournamentDetail?: TournamentDetailUncheckedUpdateOneWithoutEventNestedInput
   }
 
   export type EventUncheckedUpdateManyWithoutDojoInput = {
@@ -92934,6 +95487,19 @@ export namespace Prisma {
     transactionId?: string | null
     guestDateOfBirth?: Date | string | null
     parentOfMemberNumber?: string | null
+    divisionCode?: string | null
+    entrantGender?: $Enums.Gender | null
+    entrantWeightKg?: Decimal | DecimalJsLike | number | string | null
+    entrantBeltRank?: string | null
+    entrantDojoName?: string | null
+    coachName?: string | null
+    teamName?: string | null
+    teammates?: NullableJsonNullValueInput | InputJsonValue
+    guardianName?: string | null
+    guardianPhone?: string | null
+    guardianConsent?: boolean | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
     checkedInAt?: Date | string | null
     checkedInByUserId?: string | null
     createdAt?: Date | string
@@ -92951,6 +95517,19 @@ export namespace Prisma {
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null
     guestDateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     parentOfMemberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    divisionCode?: NullableStringFieldUpdateOperationsInput | string | null
+    entrantGender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    entrantWeightKg?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    entrantBeltRank?: NullableStringFieldUpdateOperationsInput | string | null
+    entrantDojoName?: NullableStringFieldUpdateOperationsInput | string | null
+    coachName?: NullableStringFieldUpdateOperationsInput | string | null
+    teamName?: NullableStringFieldUpdateOperationsInput | string | null
+    teammates?: NullableJsonNullValueInput | InputJsonValue
+    guardianName?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianConsent?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     checkedInAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneWithoutEventRegistrationsNestedInput
@@ -92971,6 +95550,19 @@ export namespace Prisma {
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null
     guestDateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     parentOfMemberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    divisionCode?: NullableStringFieldUpdateOperationsInput | string | null
+    entrantGender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    entrantWeightKg?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    entrantBeltRank?: NullableStringFieldUpdateOperationsInput | string | null
+    entrantDojoName?: NullableStringFieldUpdateOperationsInput | string | null
+    coachName?: NullableStringFieldUpdateOperationsInput | string | null
+    teamName?: NullableStringFieldUpdateOperationsInput | string | null
+    teammates?: NullableJsonNullValueInput | InputJsonValue
+    guardianName?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianConsent?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     checkedInAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     checkedInByUserId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -92990,6 +95582,19 @@ export namespace Prisma {
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null
     guestDateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     parentOfMemberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    divisionCode?: NullableStringFieldUpdateOperationsInput | string | null
+    entrantGender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    entrantWeightKg?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    entrantBeltRank?: NullableStringFieldUpdateOperationsInput | string | null
+    entrantDojoName?: NullableStringFieldUpdateOperationsInput | string | null
+    coachName?: NullableStringFieldUpdateOperationsInput | string | null
+    teamName?: NullableStringFieldUpdateOperationsInput | string | null
+    teammates?: NullableJsonNullValueInput | InputJsonValue
+    guardianName?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianConsent?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     checkedInAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     checkedInByUserId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string

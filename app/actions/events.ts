@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { createClient } from "@/lib/supabase/server";
 import { uploadAttachmentIfPresent } from "@/lib/attachment-upload";
 import { loadCurrentUser } from "@/lib/auth/load-current-user";
+import { getDivision, type TournamentEventType } from "@/lib/tournaments/divisions";
 import type {
     EventCategory,
     EventParticipantType,
@@ -37,6 +38,70 @@ function isParticipantType(v: unknown): v is EventParticipantType {
         typeof v === "string" &&
         (PARTICIPANT_TYPES as readonly string[]).includes(v)
     );
+}
+
+type TournamentInput =
+    | {
+          eventType: TournamentEventType;
+          enabledDivisions: string[];
+          registrationDeadline: Date | null;
+          weighInDate: Date | null;
+          rulesUrl: string | null;
+      }
+    | { error: string };
+
+// Parse the tournament fields from the event form. Only called when category
+// is TOURNAMENT. Enforces that every submitted division code is a real WKF
+// division of the chosen event type — the divisions list is a fixed preset
+// (lib/tournaments/divisions.ts), so unknown codes are a bug or tampering.
+function parseTournamentFields(formData: FormData): TournamentInput {
+    const typeRaw = ((formData.get("tournamentType") as string) ?? "").trim();
+    if (typeRaw !== "KATA" && typeRaw !== "KUMITE") {
+        return { error: "Pick either Kata or Kumite for the tournament." };
+    }
+    const eventType = typeRaw as TournamentEventType;
+
+    const codesRaw = ((formData.get("enabledDivisions") as string) ?? "").trim();
+    const codes = codesRaw
+        .split(",")
+        .map((c) => c.trim())
+        .filter(Boolean);
+    if (codes.length === 0) {
+        return { error: "Enable at least one division for this tournament." };
+    }
+    for (const c of codes) {
+        const d = getDivision(c);
+        if (!d) return { error: `Unknown division code: ${c}.` };
+        if (d.eventType !== eventType) {
+            return {
+                error: `Division ${c} does not belong to the ${eventType} event type.`,
+            };
+        }
+    }
+
+    const deadlineRaw = ((formData.get("registrationDeadline") as string) ?? "").trim();
+    let registrationDeadline: Date | null = null;
+    if (deadlineRaw) {
+        const d = new Date(deadlineRaw);
+        if (Number.isNaN(d.getTime())) {
+            return { error: "Invalid registration deadline." };
+        }
+        registrationDeadline = d;
+    }
+
+    const weighInRaw = ((formData.get("weighInDate") as string) ?? "").trim();
+    let weighInDate: Date | null = null;
+    if (weighInRaw && eventType === "KUMITE") {
+        const d = new Date(weighInRaw);
+        if (Number.isNaN(d.getTime())) {
+            return { error: "Invalid weigh-in date." };
+        }
+        weighInDate = d;
+    }
+
+    const rulesUrl = ((formData.get("rulesUrl") as string) ?? "").trim() || null;
+
+    return { eventType, enabledDivisions: codes, registrationDeadline, weighInDate, rulesUrl };
 }
 
 async function requirePoster(): Promise<
@@ -159,26 +224,48 @@ export async function createEventAction(formData: FormData): Promise<ActionResul
         };
     }
 
-    const created = await prisma.event.create({
-        data: {
-            title,
-            description,
-            location,
-            eventDate,
-            category: categoryRaw,
-            maxCapacity,
-            isPublished,
-            isPremium,
-            ticketPrice,
-            memberDiscountPercent,
-            minAge,
-            minRankId,
-            participantType: participantTypeRaw,
-            attachmentUrl: attachment?.url ?? null,
-            attachmentType: attachment?.type ?? null,
-            postedById: auth.userId,
-            dojoId: null,
-        },
+    let tournament: TournamentInput | null = null;
+    if (categoryRaw === "TOURNAMENT") {
+        const parsed = parseTournamentFields(formData);
+        if ("error" in parsed) return { ok: false, error: parsed.error };
+        tournament = parsed;
+    }
+
+    const created = await prisma.$transaction(async (tx) => {
+        const event = await tx.event.create({
+            data: {
+                title,
+                description,
+                location,
+                eventDate,
+                category: categoryRaw,
+                maxCapacity,
+                isPublished,
+                isPremium,
+                ticketPrice,
+                memberDiscountPercent,
+                minAge,
+                minRankId,
+                participantType: participantTypeRaw,
+                attachmentUrl: attachment?.url ?? null,
+                attachmentType: attachment?.type ?? null,
+                postedById: auth.userId,
+                dojoId: null,
+            },
+        });
+        if (tournament && !("error" in tournament)) {
+            await tx.tournamentDetail.create({
+                data: {
+                    eventId: event.id,
+                    eventType: tournament.eventType,
+                    enabledDivisions: tournament.enabledDivisions,
+                    registrationDeadline: tournament.registrationDeadline,
+                    weighInDate: tournament.weighInDate,
+                    rulesUrl: tournament.rulesUrl,
+                },
+            });
+        }
+        return event;
     });
 
     revalidateAll();
@@ -287,26 +374,59 @@ export async function updateEventAction(formData: FormData): Promise<ActionResul
         };
     }
 
-    await prisma.event.update({
-        where: { id },
-        data: {
-            title,
-            description,
-            location,
-            eventDate,
-            category: categoryRaw,
-            maxCapacity,
-            isPublished,
-            isPremium,
-            ticketPrice,
-            memberDiscountPercent,
-            minAge,
-            minRankId,
-            participantType: participantTypeRaw,
-            ...(attachment
-                ? { attachmentUrl: attachment.url, attachmentType: attachment.type }
-                : {}),
-        },
+    let tournament: TournamentInput | null = null;
+    if (categoryRaw === "TOURNAMENT") {
+        const parsed = parseTournamentFields(formData);
+        if ("error" in parsed) return { ok: false, error: parsed.error };
+        tournament = parsed;
+    }
+
+    await prisma.$transaction(async (tx) => {
+        await tx.event.update({
+            where: { id },
+            data: {
+                title,
+                description,
+                location,
+                eventDate,
+                category: categoryRaw,
+                maxCapacity,
+                isPublished,
+                isPremium,
+                ticketPrice,
+                memberDiscountPercent,
+                minAge,
+                minRankId,
+                participantType: participantTypeRaw,
+                ...(attachment
+                    ? { attachmentUrl: attachment.url, attachmentType: attachment.type }
+                    : {}),
+            },
+        });
+        // Upsert on category change: TOURNAMENT-only detail row appears or
+        // disappears with the category selection.
+        if (tournament && !("error" in tournament)) {
+            await tx.tournamentDetail.upsert({
+                where: { eventId: id },
+                update: {
+                    eventType: tournament.eventType,
+                    enabledDivisions: tournament.enabledDivisions,
+                    registrationDeadline: tournament.registrationDeadline,
+                    weighInDate: tournament.weighInDate,
+                    rulesUrl: tournament.rulesUrl,
+                },
+                create: {
+                    eventId: id,
+                    eventType: tournament.eventType,
+                    enabledDivisions: tournament.enabledDivisions,
+                    registrationDeadline: tournament.registrationDeadline,
+                    weighInDate: tournament.weighInDate,
+                    rulesUrl: tournament.rulesUrl,
+                },
+            });
+        } else {
+            await tx.tournamentDetail.deleteMany({ where: { eventId: id } });
+        }
     });
 
     revalidateAll();

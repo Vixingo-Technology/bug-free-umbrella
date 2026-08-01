@@ -30,7 +30,10 @@ export default async function EditAdminEventPage({
     const { id } = await params;
 
     const [event, beltRanks] = await Promise.all([
-        prisma.event.findUnique({ where: { id } }),
+        prisma.event.findUnique({
+            where: { id },
+            include: { tournamentDetail: true },
+        }),
         prisma.beltRank.findMany({
             orderBy: { orderIndex: "asc" },
             select: { id: true, name: true },
@@ -56,6 +59,19 @@ export default async function EditAdminEventPage({
         isPublished: event.isPublished,
         attachmentUrl: event.attachmentUrl,
         attachmentType: event.attachmentType,
+        tournament: event.tournamentDetail
+            ? {
+                  eventType: event.tournamentDetail.eventType,
+                  enabledDivisions: event.tournamentDetail.enabledDivisions,
+                  registrationDeadline: event.tournamentDetail.registrationDeadline
+                      ? toDateTimeLocal(event.tournamentDetail.registrationDeadline)
+                      : null,
+                  weighInDate: event.tournamentDetail.weighInDate
+                      ? toDateTimeLocal(event.tournamentDetail.weighInDate)
+                      : null,
+                  rulesUrl: event.tournamentDetail.rulesUrl,
+              }
+            : null,
     };
 
     return (
