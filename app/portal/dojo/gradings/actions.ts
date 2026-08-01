@@ -13,6 +13,12 @@ import { resolvePromotedRank } from "@/lib/grading-promotion";
 import { evaluateAchievements } from "@/lib/achievements/evaluate";
 import type { GradingResult } from "@/prisma/generated/client";
 
+function startOfDay(d: Date): Date {
+  const x = new Date(d);
+  x.setHours(0, 0, 0, 0);
+  return x;
+}
+
 export async function scheduleExamAction(input: {
   applicationIds: string[];
   name: string;
@@ -30,8 +36,8 @@ export async function scheduleExamAction(input: {
 
   const date = new Date(input.eventDate);
   if (Number.isNaN(date.getTime())) return { error: "Invalid date/time." };
-  if (date.getTime() <= Date.now()) {
-    return { error: "Exam date must be in the future." };
+  if (startOfDay(date).getTime() < startOfDay(new Date()).getTime()) {
+    return { error: "Exam date cannot be in the past." };
   }
 
   const dojoId = session.dojo.id;
@@ -197,7 +203,9 @@ export async function updateScheduledExamAction(input: {
       if (input.eventDate) {
         const d = new Date(input.eventDate);
         if (Number.isNaN(d.getTime())) throw new Error("Invalid date/time.");
-        if (d.getTime() <= Date.now()) throw new Error("Exam date must be in the future.");
+        if (startOfDay(d).getTime() < startOfDay(new Date()).getTime()) {
+          throw new Error("Exam date cannot be in the past.");
+        }
         newDate = d;
       }
       const newLocation =

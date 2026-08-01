@@ -3,7 +3,6 @@
 import { useState, useTransition } from "react";
 import { CheckCircle2, Loader2, Plus, X } from "lucide-react";
 import { inviteDojoMemberAction } from "@/app/actions/dojo-invite";
-import { BELT_RANKS_ORDERED } from "@/lib/constants";
 import { DOJO_STAFF_LIMIT } from "@/lib/dojo-roles";
 
 type Role = "STUDENT" | "INSTRUCTOR" | "DOJO_MANAGER";
@@ -51,7 +50,6 @@ export default function InviteMemberModal({
     const [open, setOpen] = useState(false);
     const [email, setEmail] = useState("");
     const [fullName, setFullName] = useState("");
-    const [rank, setRank] = useState("");
     const [role, setRole] = useState<Role>(defaultRole);
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState<string | null>(null);
@@ -60,7 +58,6 @@ export default function InviteMemberModal({
     function reset() {
         setEmail("");
         setFullName("");
-        setRank("");
         setRole(defaultRole);
         setError(null);
         setSuccess(null);
@@ -80,7 +77,6 @@ export default function InviteMemberModal({
         const form = new FormData();
         form.set("email", email);
         form.set("fullName", fullName);
-        form.set("rank", rank);
         form.set("role", role);
 
         startTransition(async () => {
@@ -92,7 +88,6 @@ export default function InviteMemberModal({
             setSuccess(`Invitation sent to ${email}.`);
             setEmail("");
             setFullName("");
-            setRank("");
             setRole(defaultRole);
         });
     }
@@ -187,36 +182,8 @@ export default function InviteMemberModal({
                                 />
                             </div>
 
-                            {(role === "INSTRUCTOR" || role === "STUDENT") && (
-                                <div>
-                                    <label
-                                        htmlFor="invite-rank"
-                                        className="block text-[10px] tracking-widest uppercase font-bold text-zinc-500 mb-1.5"
-                                    >
-                                        Belt rank{" "}
-                                        <span className="text-zinc-400 font-normal normal-case tracking-normal">
-                                            (optional)
-                                        </span>
-                                    </label>
-                                    <select
-                                        id="invite-rank"
-                                        value={rank}
-                                        onChange={(e) => setRank(e.target.value)}
-                                        disabled={isPending}
-                                        className="w-full bg-white border border-zinc-300 rounded-sm px-3 py-2.5 text-sm text-zinc-900 focus:outline-none focus:border-accent-red focus:ring-1 focus:ring-accent-red disabled:opacity-60"
-                                    >
-                                        <option value="">Not set</option>
-                                        {BELT_RANKS_ORDERED.map((r) => (
-                                            <option key={r} value={r}>
-                                                {r}
-                                            </option>
-                                        ))}
-                                    </select>
-                                </div>
-                            )}
-
                             <div>
-                                <div className="flex items-center justify-between mb-2">
+                                <div className="flex items-center justify-between mb-1.5">
                                     <p className="text-[10px] tracking-widest uppercase font-bold text-zinc-500">
                                         Role
                                     </p>
@@ -235,11 +202,42 @@ export default function InviteMemberModal({
                                         </p>
                                     )}
                                 </div>
+                                <div
+                                    role="radiogroup"
+                                    aria-label="Role"
+                                    className="grid grid-cols-3 gap-1.5 p-1 bg-zinc-100 rounded-sm"
+                                >
+                                    {effectiveRoles.map((value) => {
+                                        const opt = ROLE_OPTIONS[value];
+                                        const active = role === value;
+                                        return (
+                                            <button
+                                                key={value}
+                                                type="button"
+                                                role="radio"
+                                                aria-checked={active}
+                                                onClick={() => setRole(value)}
+                                                disabled={isPending}
+                                                title={opt.hint}
+                                                className={`px-2 py-1.5 text-xs font-semibold rounded-sm transition-colors disabled:opacity-60 ${
+                                                    active
+                                                        ? "bg-white text-accent-red shadow-sm"
+                                                        : "text-zinc-600 hover:text-zinc-900"
+                                                }`}
+                                            >
+                                                {opt.label}
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+                                <p className="text-xs text-zinc-500 mt-1.5 leading-relaxed">
+                                    {ROLE_OPTIONS[role].hint}
+                                </p>
                                 {staffFull &&
                                     allowedRoles.some(
                                         (r) => r !== "STUDENT"
                                     ) && (
-                                        <p className="text-xs text-zinc-500 mb-3 leading-relaxed">
+                                        <p className="text-xs text-zinc-500 mt-2 leading-relaxed">
                                             Your dojo has reached the{" "}
                                             {DOJO_STAFF_LIMIT}-staff limit.
                                             Revoke a pending invite or remove a
@@ -248,42 +246,6 @@ export default function InviteMemberModal({
                                             remain unlimited.
                                         </p>
                                     )}
-                                <div className="space-y-2">
-                                    {effectiveRoles.map((value) => {
-                                        const opt = ROLE_OPTIONS[value];
-                                        const active = role === value;
-                                        return (
-                                            <label
-                                                key={value}
-                                                className={`flex items-start gap-3 p-3 border rounded-sm cursor-pointer transition-colors ${
-                                                    active
-                                                        ? "border-accent-red ring-1 ring-accent-red bg-accent-red/5"
-                                                        : "border-zinc-200 hover:border-zinc-300"
-                                                }`}
-                                            >
-                                                <input
-                                                    type="radio"
-                                                    name="invite-role"
-                                                    value={value}
-                                                    checked={active}
-                                                    onChange={() =>
-                                                        setRole(value)
-                                                    }
-                                                    disabled={isPending}
-                                                    className="mt-1 accent-accent-red"
-                                                />
-                                                <div className="flex-1 min-w-0">
-                                                    <p className="text-sm font-semibold text-zinc-900">
-                                                        {opt.label}
-                                                    </p>
-                                                    <p className="text-xs text-zinc-500 mt-0.5 leading-relaxed">
-                                                        {opt.hint}
-                                                    </p>
-                                                </div>
-                                            </label>
-                                        );
-                                    })}
-                                </div>
                             </div>
 
                             {error && (
