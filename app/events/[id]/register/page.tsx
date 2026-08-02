@@ -25,6 +25,7 @@ import TournamentRegistrationForm, {
     type MemberAutofill,
     type TournamentRegistrationEvent,
 } from "@/components/events/tournament-registration-form";
+import { parseCustomDivisions } from "@/lib/tournaments/divisions";
 
 type Props = {
     params: Promise<{ id: string }>;
@@ -162,6 +163,9 @@ export default async function RegisterPage({ params, searchParams }: Props) {
             }
         }
 
+        const enabledTypes = event.tournamentDetail.enabledTypes?.length
+            ? event.tournamentDetail.enabledTypes
+            : [event.tournamentDetail.eventType];
         const tournamentEvent: TournamentRegistrationEvent = {
             id: event.id,
             title: event.title,
@@ -171,8 +175,11 @@ export default async function RegisterPage({ params, searchParams }: Props) {
             baseTicketPrice: baseTicketPrice,
             memberDiscountPercent: event.memberDiscountPercent,
             isPremium,
-            eventType: event.tournamentDetail.eventType,
+            enabledTypes,
             enabledDivisions: event.tournamentDetail.enabledDivisions,
+            customDivisions: parseCustomDivisions(
+                event.tournamentDetail.customDivisions,
+            ),
             registrationDeadline: event.tournamentDetail.registrationDeadline
                 ? event.tournamentDetail.registrationDeadline.toISOString()
                 : null,
@@ -191,7 +198,12 @@ export default async function RegisterPage({ params, searchParams }: Props) {
                             Back to event
                         </Link>
                         <p className="text-[10px] tracking-[0.4em] uppercase text-accent-red font-bold mb-3">
-                            Register — {event.tournamentDetail.eventType === "KATA" ? "Kata" : "Kumite"}
+                            Register —{" "}
+                            {enabledTypes.length === 2
+                                ? "Kata & Kumite"
+                                : enabledTypes[0] === "KATA"
+                                  ? "Kata"
+                                  : "Kumite"}
                         </p>
                         <h1 className="font-karate text-2xl md:text-4xl text-zinc-900 mb-4 uppercase tracking-widest font-bold leading-tight">
                             {event.title}

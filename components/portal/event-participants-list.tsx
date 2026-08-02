@@ -2,7 +2,7 @@ import Link from "next/link";
 import { ArrowLeft, Calendar, MapPin, CheckCircle2, Circle, QrCode, Trophy } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import Pager from "@/components/portal/pager";
-import { getDivision } from "@/lib/tournaments/divisions";
+import { parseCustomDivisions, resolveDivision } from "@/lib/tournaments/divisions";
 
 const PAGE_SIZE = 25;
 
@@ -153,6 +153,7 @@ export default async function EventParticipantsList({
                 <TournamentDivisionBreakdown
                     eventId={eventId}
                     enabledDivisions={event.tournamentDetail.enabledDivisions}
+                    customDivisionsRaw={event.tournamentDetail.customDivisions}
                     detailBase={`${basePath.replace(/\/$/, "")}`}
                 />
             )}
@@ -292,12 +293,15 @@ function Stat({ label, value }: { label: string; value: string }) {
 async function TournamentDivisionBreakdown({
     eventId,
     enabledDivisions,
+    customDivisionsRaw,
     detailBase,
 }: {
     eventId: string;
     enabledDivisions: string[];
+    customDivisionsRaw: unknown;
     detailBase: string;
 }) {
+    const customDivisions = parseCustomDivisions(customDivisionsRaw);
     const entries = await prisma.eventRegistration.findMany({
         where: { eventId, divisionCode: { not: null } },
         orderBy: [{ divisionCode: "asc" }, { createdAt: "asc" }],
@@ -332,7 +336,7 @@ async function TournamentDivisionBreakdown({
     const rows = Array.from(grouped.entries())
         .map(([code, list]) => ({
             code,
-            division: getDivision(code),
+            division: resolveDivision(code, customDivisions),
             list,
         }))
         .sort((a, b) => b.list.length - a.list.length);

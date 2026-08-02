@@ -390,7 +390,9 @@ exports.Prisma.EventScalarFieldEnum = {
 exports.Prisma.TournamentDetailScalarFieldEnum = {
   eventId: 'eventId',
   eventType: 'eventType',
+  enabledTypes: 'enabledTypes',
   enabledDivisions: 'enabledDivisions',
+  customDivisions: 'customDivisions',
   registrationDeadline: 'registrationDeadline',
   weighInDate: 'weighInDate',
   rulesUrl: 'rulesUrl',
@@ -422,6 +424,7 @@ exports.Prisma.EventRegistrationScalarFieldEnum = {
   guestPhone: 'guestPhone',
   qrToken: 'qrToken',
   paymentStatus: 'paymentStatus',
+  paymentGroupId: 'paymentGroupId',
   amountDue: 'amountDue',
   paidAt: 'paidAt',
   transactionId: 'transactionId',

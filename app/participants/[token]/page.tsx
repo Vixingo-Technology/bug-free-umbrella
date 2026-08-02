@@ -19,6 +19,10 @@ import {
     checkInFromCardAction,
     payForRegistrationAction,
 } from "@/app/actions/event-registration";
+import {
+    parseCustomDivisions,
+    resolveDivision,
+} from "@/lib/tournaments/divisions";
 
 type Props = {
     params: Promise<{ token: string }>;
@@ -70,6 +74,9 @@ export default async function ParticipationCardPage({
             event: {
                 include: {
                     dojo: { select: { name: true } },
+                    tournamentDetail: {
+                        select: { customDivisions: true },
+                    },
                 },
             },
             user: {
@@ -84,6 +91,44 @@ export default async function ParticipationCardPage({
     });
 
     if (!registration) notFound();
+
+    // Sibling rows created in the same multi-division submit share
+    // paymentGroupId. We render them together so the participant sees "you have
+    // both divisions" and the payment total reflects the whole group.
+    const groupSiblings = registration.paymentGroupId
+        ? await prisma.eventRegistration.findMany({
+              where: { paymentGroupId: registration.paymentGroupId },
+              orderBy: { createdAt: "asc" },
+              select: {
+                  id: true,
+                  qrToken: true,
+                  divisionCode: true,
+                  paymentStatus: true,
+                  amountDue: true,
+              },
+          })
+        : [];
+    const customDivisions = parseCustomDivisions(
+        registration.event.tournamentDetail?.customDivisions,
+    );
+    const groupEntries = groupSiblings.map((s) => {
+        const div = s.divisionCode
+            ? resolveDivision(s.divisionCode, customDivisions)
+            : null;
+        return {
+            qrToken: s.qrToken,
+            isCurrent: s.qrToken === token,
+            label: div?.label ?? s.divisionCode ?? "Division",
+            eventType: div?.eventType ?? null,
+            paid: s.paymentStatus !== "PENDING" && s.paymentStatus !== "FAILED",
+        };
+    });
+    const groupTotalDue = groupSiblings.length
+        ? groupSiblings.reduce(
+              (t, s) => t + (s.amountDue ? Number(s.amountDue) : 0),
+              0,
+          )
+        : 0;
 
     const participantName =
         registration.user?.fullName ?? registration.guestName ?? "Participant";
@@ -114,9 +159,15 @@ export default async function ParticipationCardPage({
     const paymentPending =
         registration.paymentStatus === "PENDING" ||
         registration.paymentStatus === "FAILED";
-    const amountDue = registration.amountDue
+    const singleAmount = registration.amountDue
         ? Number(registration.amountDue)
         : null;
+    // When this row is part of a group, the amount shown/paid covers every
+    // sibling — otherwise we fall back to the row's own amountDue.
+    const amountDue =
+        groupSiblings.length > 1
+            ? groupTotalDue
+            : singleAmount;
 
     // Does the current viewer have authority to check this participant in?
     const supabase = await createClient();
@@ -261,6 +312,43 @@ export default async function ParticipationCardPage({
                                         </p>
                                     )}
                                 </div>
+
+                                {groupEntries.length > 1 && (
+                                    <div className="border-t border-zinc-200 pt-4 mt-4 print:pt-2 print:mt-2">
+                                        <p className="text-[10px] tracking-widest uppercase font-bold text-zinc-400 mb-2">
+                                            Divisions ({groupEntries.length})
+                                        </p>
+                                        <ul className="space-y-1.5 text-xs">
+                                            {groupEntries.map((g) => (
+                                                <li
+                                                    key={g.qrToken}
+                                                    className="flex items-center gap-2"
+                                                >
+                                                    <span
+                                                        className={`inline-block h-1.5 w-1.5 rounded-full ${g.paid ? "bg-emerald-500" : "bg-amber-500"}`}
+                                                    />
+                                                    {g.isCurrent ? (
+                                                        <span className="font-semibold text-zinc-900">
+                                                            {g.label}
+                                                        </span>
+                                                    ) : (
+                                                        <Link
+                                                            href={`/participants/${g.qrToken}`}
+                                                            className="text-accent-red hover:underline"
+                                                        >
+                                                            {g.label}
+                                                        </Link>
+                                                    )}
+                                                    {g.eventType && (
+                                                        <span className="text-[10px] tracking-widest uppercase text-zinc-400">
+                                                            · {g.eventType === "KATA" ? "Kata" : "Kumite"}
+                                                        </span>
+                                                    )}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                )}
                             </div>
 
                             {paymentPending ? (
@@ -315,7 +403,10 @@ export default async function ParticipationCardPage({
                                     ? ` ৳${amountDue.toLocaleString()}`
                                     : ""}{" "}
                                 ticket payment to activate your participation
-                                card.
+                                card
+                                {groupEntries.length > 1
+                                    ? ` — this covers all ${groupEntries.length} of your divisions.`
+                                    : "."}
                             </p>
                             <form action={payForRegistrationAction}>
                                 <input type="hidden" name="token" value={token} />

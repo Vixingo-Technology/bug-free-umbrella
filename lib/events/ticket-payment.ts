@@ -149,14 +149,33 @@ export async function markRegistrationPaid(
     if (!reg) return { ok: false, qrToken: null };
     if (reg.paymentStatus === "PAID") return { ok: true, qrToken: reg.qrToken };
 
+    const paidAt = new Date();
     await prisma.eventRegistration.update({
         where: { id: reg.id },
         data: {
             paymentStatus: "PAID",
-            paidAt: new Date(),
+            paidAt,
             transactionId,
         },
     });
+
+    // Fan the paid mark out to sibling rows in the same payment group. This
+    // covers multi-division tournament submissions where one gateway session
+    // pays for both entries.
+    if (reg.paymentGroupId) {
+        await prisma.eventRegistration.updateMany({
+            where: {
+                paymentGroupId: reg.paymentGroupId,
+                id: { not: reg.id },
+                paymentStatus: "PENDING",
+            },
+            data: {
+                paymentStatus: "PAID",
+                paidAt,
+                transactionId,
+            },
+        });
+    }
 
     const cardUrl = `${appUrl()}/participants/${reg.qrToken}`;
     await emitEventRegistered({

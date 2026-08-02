@@ -2,11 +2,13 @@
 
 import { useMemo, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { Loader2, CalendarPlus, Save, Trophy } from "lucide-react";
+import { Loader2, CalendarPlus, Save, Trophy, Plus, X } from "lucide-react";
 import { createEventAction, updateEventAction } from "@/app/actions/events";
 import {
     ALL_DIVISIONS,
     divisionsFor,
+    makeCustomDivisionCode,
+    type CustomDivision,
     type TournamentEventType,
 } from "@/lib/tournaments/divisions";
 
@@ -59,7 +61,9 @@ export type EventFormInitialValues = {
 
 export type TournamentInitialValues = {
     eventType: TournamentEventType;
+    enabledTypes: TournamentEventType[];
     enabledDivisions: string[];
+    customDivisions: CustomDivision[];
     registrationDeadline: string | null; // datetime-local string
     weighInDate: string | null;
     rulesUrl: string | null;
@@ -84,33 +88,54 @@ export default function EventForm({
     const [category, setCategory] = useState<string>(
         initial?.category ?? "OTHER",
     );
-    const [tournamentType, setTournamentType] = useState<TournamentEventType>(
-        initial?.tournament?.eventType ?? "KATA",
+    const [enabledTypes, setEnabledTypes] = useState<Set<TournamentEventType>>(
+        () =>
+            new Set(
+                initial?.tournament?.enabledTypes?.length
+                    ? initial.tournament.enabledTypes
+                    : initial?.tournament
+                      ? [initial.tournament.eventType]
+                      : ["KATA"],
+            ),
     );
     const [enabledDivisions, setEnabledDivisions] = useState<Set<string>>(
         () => new Set(initial?.tournament?.enabledDivisions ?? []),
+    );
+    const [customDivisions, setCustomDivisions] = useState<CustomDivision[]>(
+        () => initial?.tournament?.customDivisions ?? [],
     );
     const [error, setError] = useState<string | null>(null);
     const [isPending, startTransition] = useTransition();
     const router = useRouter();
 
     const isTournament = category === "TOURNAMENT";
+    const kataEnabled = enabledTypes.has("KATA");
+    const kumiteEnabled = enabledTypes.has("KUMITE");
 
-    const divisions = useMemo(
-        () => divisionsFor(tournamentType),
-        [tournamentType],
-    );
-    const divisionsByBand = useMemo(() => {
-        type Division = (typeof ALL_DIVISIONS)[number];
-        const groups = new Map<string, Division[]>();
-        for (const d of divisions) {
-            const key = d.ageBand;
-            const arr = groups.get(key) ?? [];
-            arr.push(d);
-            groups.set(key, arr);
+    function toggleType(t: TournamentEventType, on: boolean) {
+        setEnabledTypes((prev) => {
+            const next = new Set(prev);
+            if (on) next.add(t);
+            else next.delete(t);
+            return next;
+        });
+        if (!on) {
+            // Turning a type off should also clear its selected divisions and
+            // its custom categories, otherwise a hidden selection could carry
+            // through to submit.
+            setEnabledDivisions((prev) => {
+                const next = new Set(prev);
+                for (const code of next) {
+                    const preset = ALL_DIVISIONS.find((d) => d.code === code);
+                    if (preset && preset.eventType === t) next.delete(code);
+                    const custom = customDivisions.find((c) => c.code === code);
+                    if (custom && custom.eventType === t) next.delete(code);
+                }
+                return next;
+            });
+            setCustomDivisions((prev) => prev.filter((c) => c.eventType !== t));
         }
-        return groups;
-    }, [divisions]);
+    }
 
     function toggleDivision(code: string) {
         setEnabledDivisions((prev) => {
@@ -128,6 +153,32 @@ export default function EventForm({
                 if (on) next.add(c);
                 else next.delete(c);
             }
+            return next;
+        });
+    }
+
+    function addCustomDivision(
+        eventType: TournamentEventType,
+        label: string,
+        isTeam: boolean,
+    ) {
+        const trimmed = label.trim();
+        if (!trimmed) return;
+        const code = makeCustomDivisionCode(trimmed, eventType);
+        setCustomDivisions((prev) => {
+            if (prev.some((c) => c.code === code)) return prev;
+            return [...prev, { code, label: trimmed, eventType, isTeam }];
+        });
+        // Auto-enable freshly added custom entries — the admin just declared
+        // the category so they almost certainly want it selected.
+        setEnabledDivisions((prev) => new Set(prev).add(code));
+    }
+
+    function removeCustomDivision(code: string) {
+        setCustomDivisions((prev) => prev.filter((c) => c.code !== code));
+        setEnabledDivisions((prev) => {
+            const next = new Set(prev);
+            next.delete(code);
             return next;
         });
     }
@@ -368,29 +419,39 @@ export default function EventForm({
                         Tournament setup
                     </p>
 
-                    <Field label="Competition type">
+                    <Field label="Competition types (enable one or both)">
                         <div className="grid grid-cols-2 gap-2">
-                            {(["KATA", "KUMITE"] as const).map((t) => (
-                                <label
-                                    key={t}
-                                    className={`flex items-center gap-2 px-3 py-2 border cursor-pointer select-none rounded-sm text-sm ${
-                                        tournamentType === t
-                                            ? "border-accent-red bg-accent-red/5 text-accent-red font-semibold"
-                                            : "border-zinc-200 bg-zinc-50 text-zinc-700"
-                                    }`}
-                                >
-                                    <input
-                                        type="radio"
-                                        name="tournamentType"
-                                        value={t}
-                                        checked={tournamentType === t}
-                                        onChange={() => setTournamentType(t)}
-                                        className="h-4 w-4 accent-red-600"
-                                    />
-                                    {t === "KATA" ? "Kata (form)" : "Kumite (sparring)"}
-                                </label>
-                            ))}
+                            {(["KATA", "KUMITE"] as const).map((t) => {
+                                const on = enabledTypes.has(t);
+                                return (
+                                    <label
+                                        key={t}
+                                        className={`flex items-center gap-2 px-3 py-2 border cursor-pointer select-none rounded-sm text-sm ${
+                                            on
+                                                ? "border-accent-red bg-accent-red/5 text-accent-red font-semibold"
+                                                : "border-zinc-200 bg-zinc-50 text-zinc-700"
+                                        }`}
+                                    >
+                                        <input
+                                            type="checkbox"
+                                            checked={on}
+                                            onChange={(e) =>
+                                                toggleType(t, e.target.checked)
+                                            }
+                                            className="h-4 w-4 accent-red-600"
+                                        />
+                                        {t === "KATA"
+                                            ? "Kata (form)"
+                                            : "Kumite (sparring)"}
+                                    </label>
+                                );
+                            })}
                         </div>
+                        <input
+                            type="hidden"
+                            name="enabledTypes"
+                            value={Array.from(enabledTypes).join(",")}
+                        />
                     </Field>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-3">
@@ -402,7 +463,7 @@ export default function EventForm({
                                 className="w-full bg-zinc-50 border border-zinc-200 text-zinc-900 px-3 py-2 focus:outline-none focus:border-accent-red text-sm transition-colors rounded-sm"
                             />
                         </Field>
-                        {tournamentType === "KUMITE" && (
+                        {kumiteEnabled && (
                             <Field label="Weigh-in date (optional)">
                                 <input
                                     name="weighInDate"
@@ -426,96 +487,56 @@ export default function EventForm({
                         </Field>
                     </div>
 
-                    <div className="mt-4">
-                        <div className="flex items-center justify-between mb-2">
-                            <span className="text-[10px] tracking-widest uppercase font-bold text-zinc-500">
-                                Divisions ({enabledDivisions.size} selected)
-                            </span>
-                            <div className="flex items-center gap-2">
-                                <button
-                                    type="button"
-                                    onClick={() =>
-                                        setEnabledDivisions(
-                                            new Set(divisions.map((d) => d.code)),
-                                        )
+                    <div className="mt-4 space-y-4">
+                        {(["KATA", "KUMITE"] as const)
+                            .filter((t) => enabledTypes.has(t))
+                            .map((t) => (
+                                <DivisionsBlock
+                                    key={t}
+                                    eventType={t}
+                                    enabledDivisions={enabledDivisions}
+                                    customDivisions={customDivisions.filter(
+                                        (c) => c.eventType === t,
+                                    )}
+                                    toggleDivision={toggleDivision}
+                                    selectAllInBand={selectAllInBand}
+                                    onSetAll={(codes) =>
+                                        setEnabledDivisions((prev) => {
+                                            const next = new Set(prev);
+                                            for (const c of codes) next.add(c);
+                                            return next;
+                                        })
                                     }
-                                    className="text-[10px] tracking-widest uppercase font-bold text-accent-red hover:underline"
-                                >
-                                    Enable all
-                                </button>
-                                <span className="text-zinc-300">·</span>
-                                <button
-                                    type="button"
-                                    onClick={() => setEnabledDivisions(new Set())}
-                                    className="text-[10px] tracking-widest uppercase font-bold text-zinc-500 hover:underline"
-                                >
-                                    Clear
-                                </button>
-                            </div>
-                        </div>
-                        <div className="space-y-3">
-                            {Array.from(divisionsByBand.entries()).map(
-                                ([band, list]) => {
-                                    const codes = list.map((d) => d.code);
-                                    const allOn = codes.every((c) =>
-                                        enabledDivisions.has(c),
-                                    );
-                                    return (
-                                        <div
-                                            key={band}
-                                            className="border border-zinc-200 rounded-sm bg-zinc-50/50"
-                                        >
-                                            <div className="flex items-center justify-between px-3 py-2 border-b border-zinc-200 bg-white">
-                                                <p className="text-[10px] tracking-widest uppercase font-bold text-zinc-600">
-                                                    {AGE_BAND_LABEL[band] ?? band}
-                                                </p>
-                                                <button
-                                                    type="button"
-                                                    onClick={() =>
-                                                        selectAllInBand(codes, !allOn)
-                                                    }
-                                                    className="text-[10px] tracking-widest uppercase font-bold text-accent-red hover:underline"
-                                                >
-                                                    {allOn ? "Deselect" : "Select all"}
-                                                </button>
-                                            </div>
-                                            <ul className="p-2 grid grid-cols-1 sm:grid-cols-2 gap-1">
-                                                {list.map((d) => {
-                                                    const checked =
-                                                        enabledDivisions.has(d.code);
-                                                    return (
-                                                        <li key={d.code}>
-                                                            <label className="flex items-start gap-2 px-2 py-1.5 hover:bg-white rounded-sm cursor-pointer">
-                                                                <input
-                                                                    type="checkbox"
-                                                                    checked={checked}
-                                                                    onChange={() =>
-                                                                        toggleDivision(
-                                                                            d.code,
-                                                                        )
-                                                                    }
-                                                                    className="h-4 w-4 accent-red-600 mt-0.5 shrink-0"
-                                                                />
-                                                                <span className="text-xs text-zinc-700 leading-tight">
-                                                                    {d.label}
-                                                                </span>
-                                                            </label>
-                                                        </li>
-                                                    );
-                                                })}
-                                            </ul>
-                                        </div>
-                                    );
-                                },
-                            )}
-                        </div>
+                                    onClearAll={(codes) =>
+                                        setEnabledDivisions((prev) => {
+                                            const next = new Set(prev);
+                                            for (const c of codes) next.delete(c);
+                                            return next;
+                                        })
+                                    }
+                                    onAddCustom={(label, isTeam) =>
+                                        addCustomDivision(t, label, isTeam)
+                                    }
+                                    onRemoveCustom={removeCustomDivision}
+                                />
+                            ))}
                         <input
                             type="hidden"
                             name="enabledDivisions"
                             value={Array.from(enabledDivisions).join(",")}
                         />
-                        {enabledDivisions.size === 0 && (
-                            <p className="text-[11px] text-amber-700 bg-amber-50 border border-amber-200 rounded-sm px-3 py-2 mt-3">
+                        <input
+                            type="hidden"
+                            name="customDivisions"
+                            value={JSON.stringify(customDivisions)}
+                        />
+                        {enabledTypes.size === 0 && (
+                            <p className="text-[11px] text-amber-700 bg-amber-50 border border-amber-200 rounded-sm px-3 py-2">
+                                Enable Kata, Kumite, or both to pick divisions.
+                            </p>
+                        )}
+                        {enabledTypes.size > 0 && enabledDivisions.size === 0 && (
+                            <p className="text-[11px] text-amber-700 bg-amber-50 border border-amber-200 rounded-sm px-3 py-2">
                                 Pick at least one division so entrants have
                                 something to register for.
                             </p>
@@ -583,5 +604,203 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
             </span>
             {children}
         </label>
+    );
+}
+
+function DivisionsBlock({
+    eventType,
+    enabledDivisions,
+    customDivisions,
+    toggleDivision,
+    selectAllInBand,
+    onSetAll,
+    onClearAll,
+    onAddCustom,
+    onRemoveCustom,
+}: {
+    eventType: TournamentEventType;
+    enabledDivisions: Set<string>;
+    customDivisions: CustomDivision[];
+    toggleDivision: (code: string) => void;
+    selectAllInBand: (codes: readonly string[], on: boolean) => void;
+    onSetAll: (codes: string[]) => void;
+    onClearAll: (codes: string[]) => void;
+    onAddCustom: (label: string, isTeam: boolean) => void;
+    onRemoveCustom: (code: string) => void;
+}) {
+    const divisions = useMemo(() => divisionsFor(eventType), [eventType]);
+    const divisionsByBand = useMemo(() => {
+        type Division = (typeof ALL_DIVISIONS)[number];
+        const groups = new Map<string, Division[]>();
+        for (const d of divisions) {
+            const key = d.ageBand;
+            const arr = groups.get(key) ?? [];
+            arr.push(d);
+            groups.set(key, arr);
+        }
+        return groups;
+    }, [divisions]);
+
+    const presetCodes = divisions.map((d) => d.code);
+    const customCodes = customDivisions.map((c) => c.code);
+    const allCodes = [...presetCodes, ...customCodes];
+    const selectedInBlock = allCodes.filter((c) =>
+        enabledDivisions.has(c),
+    ).length;
+
+    const [customLabel, setCustomLabel] = useState("");
+    const [customIsTeam, setCustomIsTeam] = useState(false);
+    const label = eventType === "KATA" ? "Kata" : "Kumite";
+
+    return (
+        <div className="border border-zinc-200 rounded-sm bg-white">
+            <div className="flex items-center justify-between px-3 py-2 border-b border-zinc-200 bg-zinc-50">
+                <p className="text-xs tracking-widest uppercase font-bold text-zinc-700">
+                    {label} divisions ({selectedInBlock} selected)
+                </p>
+                <div className="flex items-center gap-2">
+                    <button
+                        type="button"
+                        onClick={() => onSetAll(allCodes)}
+                        className="text-[10px] tracking-widest uppercase font-bold text-accent-red hover:underline"
+                    >
+                        Enable all
+                    </button>
+                    <span className="text-zinc-300">·</span>
+                    <button
+                        type="button"
+                        onClick={() => onClearAll(allCodes)}
+                        className="text-[10px] tracking-widest uppercase font-bold text-zinc-500 hover:underline"
+                    >
+                        Clear
+                    </button>
+                </div>
+            </div>
+            <div className="p-3 space-y-3">
+                {Array.from(divisionsByBand.entries()).map(([band, list]) => {
+                    const codes = list.map((d) => d.code);
+                    const allOn = codes.every((c) => enabledDivisions.has(c));
+                    return (
+                        <div
+                            key={band}
+                            className="border border-zinc-200 rounded-sm bg-zinc-50/50"
+                        >
+                            <div className="flex items-center justify-between px-3 py-2 border-b border-zinc-200 bg-white">
+                                <p className="text-[10px] tracking-widest uppercase font-bold text-zinc-600">
+                                    {AGE_BAND_LABEL[band] ?? band}
+                                </p>
+                                <button
+                                    type="button"
+                                    onClick={() => selectAllInBand(codes, !allOn)}
+                                    className="text-[10px] tracking-widest uppercase font-bold text-accent-red hover:underline"
+                                >
+                                    {allOn ? "Deselect" : "Select all"}
+                                </button>
+                            </div>
+                            <ul className="p-2 grid grid-cols-1 sm:grid-cols-2 gap-1">
+                                {list.map((d) => {
+                                    const checked = enabledDivisions.has(d.code);
+                                    return (
+                                        <li key={d.code}>
+                                            <label className="flex items-start gap-2 px-2 py-1.5 hover:bg-white rounded-sm cursor-pointer">
+                                                <input
+                                                    type="checkbox"
+                                                    checked={checked}
+                                                    onChange={() =>
+                                                        toggleDivision(d.code)
+                                                    }
+                                                    className="h-4 w-4 accent-red-600 mt-0.5 shrink-0"
+                                                />
+                                                <span className="text-xs text-zinc-700 leading-tight">
+                                                    {d.label}
+                                                </span>
+                                            </label>
+                                        </li>
+                                    );
+                                })}
+                            </ul>
+                        </div>
+                    );
+                })}
+
+                {/* Custom categories — admin-defined, per event. */}
+                <div className="border border-dashed border-zinc-300 rounded-sm bg-white">
+                    <div className="px-3 py-2 border-b border-dashed border-zinc-300">
+                        <p className="text-[10px] tracking-widest uppercase font-bold text-zinc-600">
+                            Custom {label.toLowerCase()} categories
+                        </p>
+                    </div>
+                    {customDivisions.length > 0 && (
+                        <ul className="p-2 grid grid-cols-1 sm:grid-cols-2 gap-1">
+                            {customDivisions.map((c) => {
+                                const checked = enabledDivisions.has(c.code);
+                                return (
+                                    <li key={c.code}>
+                                        <div className="flex items-start gap-2 px-2 py-1.5 hover:bg-zinc-50 rounded-sm">
+                                            <input
+                                                type="checkbox"
+                                                checked={checked}
+                                                onChange={() =>
+                                                    toggleDivision(c.code)
+                                                }
+                                                className="h-4 w-4 accent-red-600 mt-0.5 shrink-0"
+                                            />
+                                            <span className="text-xs text-zinc-700 leading-tight flex-1">
+                                                {c.label}
+                                                {c.isTeam && (
+                                                    <span className="text-[10px] uppercase tracking-widest text-zinc-400 ml-1.5">
+                                                        · team
+                                                    </span>
+                                                )}
+                                            </span>
+                                            <button
+                                                type="button"
+                                                aria-label={`Remove ${c.label}`}
+                                                onClick={() =>
+                                                    onRemoveCustom(c.code)
+                                                }
+                                                className="text-zinc-400 hover:text-accent-red"
+                                            >
+                                                <X size={12} />
+                                            </button>
+                                        </div>
+                                    </li>
+                                );
+                            })}
+                        </ul>
+                    )}
+                    <div className="p-2 flex flex-wrap items-center gap-2">
+                        <input
+                            type="text"
+                            value={customLabel}
+                            onChange={(e) => setCustomLabel(e.target.value)}
+                            placeholder={`e.g. Masters ${label} 40+`}
+                            className="flex-1 min-w-[180px] bg-zinc-50 border border-zinc-200 text-zinc-900 px-2 py-1.5 focus:outline-none focus:border-accent-red text-xs rounded-sm"
+                        />
+                        <label className="inline-flex items-center gap-1.5 text-[10px] uppercase tracking-widest font-bold text-zinc-500 select-none cursor-pointer">
+                            <input
+                                type="checkbox"
+                                checked={customIsTeam}
+                                onChange={(e) => setCustomIsTeam(e.target.checked)}
+                                className="h-3.5 w-3.5 accent-red-600"
+                            />
+                            Team
+                        </label>
+                        <button
+                            type="button"
+                            onClick={() => {
+                                onAddCustom(customLabel, customIsTeam);
+                                setCustomLabel("");
+                                setCustomIsTeam(false);
+                            }}
+                            disabled={!customLabel.trim()}
+                            className="inline-flex items-center gap-1 bg-accent-red text-white px-2.5 py-1.5 text-[10px] font-bold tracking-widest uppercase hover:bg-accent-red/90 disabled:opacity-40 rounded-sm"
+                        >
+                            <Plus size={11} /> Add
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
     );
 }

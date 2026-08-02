@@ -5,7 +5,14 @@ import { prisma } from "@/lib/prisma";
 import { createClient } from "@/lib/supabase/server";
 import { uploadAttachmentIfPresent } from "@/lib/attachment-upload";
 import { loadCurrentUser } from "@/lib/auth/load-current-user";
-import { getDivision, type TournamentEventType } from "@/lib/tournaments/divisions";
+import {
+    getDivision,
+    isCustomDivisionCode,
+    makeCustomDivisionCode,
+    parseCustomDivisions,
+    type CustomDivision,
+    type TournamentEventType,
+} from "@/lib/tournaments/divisions";
 import type {
     EventCategory,
     EventParticipantType,
@@ -43,7 +50,9 @@ function isParticipantType(v: unknown): v is EventParticipantType {
 type TournamentInput =
     | {
           eventType: TournamentEventType;
+          enabledTypes: TournamentEventType[];
           enabledDivisions: string[];
+          customDivisions: CustomDivision[];
           registrationDeadline: Date | null;
           weighInDate: Date | null;
           rulesUrl: string | null;
@@ -51,15 +60,56 @@ type TournamentInput =
     | { error: string };
 
 // Parse the tournament fields from the event form. Only called when category
-// is TOURNAMENT. Enforces that every submitted division code is a real WKF
-// division of the chosen event type — the divisions list is a fixed preset
-// (lib/tournaments/divisions.ts), so unknown codes are a bug or tampering.
+// is TOURNAMENT. An event may enable KATA, KUMITE, or both. Every enabled
+// division code must be either a preset WKF code of a matching enabled type,
+// or a custom division the admin defined on this same form submission.
 function parseTournamentFields(formData: FormData): TournamentInput {
-    const typeRaw = ((formData.get("tournamentType") as string) ?? "").trim();
-    if (typeRaw !== "KATA" && typeRaw !== "KUMITE") {
-        return { error: "Pick either Kata or Kumite for the tournament." };
+    const typesRaw = ((formData.get("enabledTypes") as string) ?? "").trim();
+    const enabledTypes = typesRaw
+        .split(",")
+        .map((s) => s.trim())
+        .filter((s): s is TournamentEventType => s === "KATA" || s === "KUMITE");
+    const dedupTypes = Array.from(new Set(enabledTypes));
+    if (dedupTypes.length === 0) {
+        return { error: "Enable Kata, Kumite, or both for the tournament." };
     }
-    const eventType = typeRaw as TournamentEventType;
+
+    // Custom divisions submitted as JSON so labels + isTeam survive intact.
+    const customRaw = ((formData.get("customDivisions") as string) ?? "").trim();
+    let customDivisions: CustomDivision[] = [];
+    if (customRaw) {
+        try {
+            customDivisions = parseCustomDivisions(JSON.parse(customRaw));
+        } catch {
+            return { error: "Custom categories payload is malformed." };
+        }
+    }
+    // Assign / normalise codes and reject entries whose type isn't enabled.
+    const seenCodes = new Set<string>();
+    const normalisedCustom: CustomDivision[] = [];
+    for (const c of customDivisions) {
+        if (!dedupTypes.includes(c.eventType)) {
+            return {
+                error: `Custom category "${c.label}" targets ${c.eventType} but that type is not enabled.`,
+            };
+        }
+        const label = c.label.trim();
+        if (!label) continue;
+        const code = c.code && isCustomDivisionCode(c.code)
+            ? c.code
+            : makeCustomDivisionCode(label, c.eventType);
+        if (seenCodes.has(code)) {
+            return { error: `Duplicate custom category code: ${code}.` };
+        }
+        seenCodes.add(code);
+        normalisedCustom.push({
+            code,
+            label,
+            eventType: c.eventType,
+            isTeam: !!c.isTeam,
+        });
+    }
+    const customByCode = new Map(normalisedCustom.map((c) => [c.code, c]));
 
     const codesRaw = ((formData.get("enabledDivisions") as string) ?? "").trim();
     const codes = codesRaw
@@ -70,14 +120,24 @@ function parseTournamentFields(formData: FormData): TournamentInput {
         return { error: "Enable at least one division for this tournament." };
     }
     for (const c of codes) {
+        if (isCustomDivisionCode(c)) {
+            const cd = customByCode.get(c);
+            if (!cd) return { error: `Unknown custom division code: ${c}.` };
+            continue;
+        }
         const d = getDivision(c);
         if (!d) return { error: `Unknown division code: ${c}.` };
-        if (d.eventType !== eventType) {
+        if (!dedupTypes.includes(d.eventType)) {
             return {
-                error: `Division ${c} does not belong to the ${eventType} event type.`,
+                error: `Division ${c} belongs to ${d.eventType} but that type is not enabled.`,
             };
         }
     }
+
+    // Legacy single-type column: pick whichever is enabled first. The
+    // application no longer branches on it, but keeping it populated avoids
+    // NOT NULL trouble and preserves old reads.
+    const eventType = dedupTypes[0];
 
     const deadlineRaw = ((formData.get("registrationDeadline") as string) ?? "").trim();
     let registrationDeadline: Date | null = null;
@@ -91,7 +151,7 @@ function parseTournamentFields(formData: FormData): TournamentInput {
 
     const weighInRaw = ((formData.get("weighInDate") as string) ?? "").trim();
     let weighInDate: Date | null = null;
-    if (weighInRaw && eventType === "KUMITE") {
+    if (weighInRaw && dedupTypes.includes("KUMITE")) {
         const d = new Date(weighInRaw);
         if (Number.isNaN(d.getTime())) {
             return { error: "Invalid weigh-in date." };
@@ -101,7 +161,15 @@ function parseTournamentFields(formData: FormData): TournamentInput {
 
     const rulesUrl = ((formData.get("rulesUrl") as string) ?? "").trim() || null;
 
-    return { eventType, enabledDivisions: codes, registrationDeadline, weighInDate, rulesUrl };
+    return {
+        eventType,
+        enabledTypes: dedupTypes,
+        enabledDivisions: codes,
+        customDivisions: normalisedCustom,
+        registrationDeadline,
+        weighInDate,
+        rulesUrl,
+    };
 }
 
 async function requirePoster(): Promise<
@@ -258,7 +326,9 @@ export async function createEventAction(formData: FormData): Promise<ActionResul
                 data: {
                     eventId: event.id,
                     eventType: tournament.eventType,
+                    enabledTypes: tournament.enabledTypes,
                     enabledDivisions: tournament.enabledDivisions,
+                    customDivisions: tournament.customDivisions,
                     registrationDeadline: tournament.registrationDeadline,
                     weighInDate: tournament.weighInDate,
                     rulesUrl: tournament.rulesUrl,
@@ -410,7 +480,9 @@ export async function updateEventAction(formData: FormData): Promise<ActionResul
                 where: { eventId: id },
                 update: {
                     eventType: tournament.eventType,
+                    enabledTypes: tournament.enabledTypes,
                     enabledDivisions: tournament.enabledDivisions,
+                    customDivisions: tournament.customDivisions,
                     registrationDeadline: tournament.registrationDeadline,
                     weighInDate: tournament.weighInDate,
                     rulesUrl: tournament.rulesUrl,
@@ -418,7 +490,9 @@ export async function updateEventAction(formData: FormData): Promise<ActionResul
                 create: {
                     eventId: id,
                     eventType: tournament.eventType,
+                    enabledTypes: tournament.enabledTypes,
                     enabledDivisions: tournament.enabledDivisions,
+                    customDivisions: tournament.customDivisions,
                     registrationDeadline: tournament.registrationDeadline,
                     weighInDate: tournament.weighInDate,
                     rulesUrl: tournament.rulesUrl,

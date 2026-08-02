@@ -7,6 +7,7 @@ import EventForm, {
 } from "@/components/dojo/events/event-form";
 import { requireAdmin } from "@/lib/admin-guard";
 import { prisma } from "@/lib/prisma";
+import { parseCustomDivisions } from "@/lib/tournaments/divisions";
 
 export const metadata: Metadata = {
     title: "Edit event — Admin",
@@ -62,7 +63,14 @@ export default async function EditAdminEventPage({
         tournament: event.tournamentDetail
             ? {
                   eventType: event.tournamentDetail.eventType,
+                  enabledTypes:
+                      event.tournamentDetail.enabledTypes?.length
+                          ? event.tournamentDetail.enabledTypes
+                          : [event.tournamentDetail.eventType],
                   enabledDivisions: event.tournamentDetail.enabledDivisions,
+                  customDivisions: parseCustomDivisions(
+                      event.tournamentDetail.customDivisions,
+                  ),
                   registrationDeadline: event.tournamentDetail.registrationDeadline
                       ? toDateTimeLocal(event.tournamentDetail.registrationDeadline)
                       : null,

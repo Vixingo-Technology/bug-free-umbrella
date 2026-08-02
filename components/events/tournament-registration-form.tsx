@@ -6,7 +6,10 @@ import { Ticket, LogIn } from "lucide-react";
 import {
     ageOnDate,
     checkDivisionEligibility,
+    customToDivision,
     getDivision,
+    isCustomDivisionCode,
+    type CustomDivision,
     type Division,
     type Gender,
     type TournamentEventType,
@@ -22,8 +25,10 @@ export type TournamentRegistrationEvent = {
     baseTicketPrice: number | null;
     memberDiscountPercent: number;
     isPremium: boolean;
-    eventType: TournamentEventType;
+    // Types the tournament is running. May contain KATA, KUMITE, or both.
+    enabledTypes: TournamentEventType[];
     enabledDivisions: string[];
+    customDivisions: CustomDivision[];
     registrationDeadline: string | null; // ISO
 };
 
@@ -58,13 +63,24 @@ export default function TournamentRegistrationForm({
 
     // Enabled divisions, resolved to full Division objects. Unknown codes are
     // filtered out — a code that vanished from the preset is treated as
-    // disabled rather than crashing the page.
+    // disabled rather than crashing the page. Custom codes are resolved from
+    // the event's admin-defined list.
+    const customByCode = useMemo(
+        () => new Map(event.customDivisions.map((c) => [c.code, c])),
+        [event.customDivisions],
+    );
     const allEnabled = useMemo(
         () =>
             event.enabledDivisions
-                .map((c) => getDivision(c))
+                .map((c): Division | null => {
+                    if (isCustomDivisionCode(c)) {
+                        const custom = customByCode.get(c);
+                        return custom ? customToDivision(custom) : null;
+                    }
+                    return getDivision(c) ?? null;
+                })
                 .filter((d): d is Division => !!d),
-        [event.enabledDivisions],
+        [event.enabledDivisions, customByCode],
     );
 
     const [gender, setGender] = useState<Gender | "">(
@@ -72,7 +88,10 @@ export default function TournamentRegistrationForm({
     );
     const [dobStr, setDobStr] = useState<string>(member?.dateOfBirth ?? "");
     const [weightKgStr, setWeightKgStr] = useState<string>("");
-    const [divisionCode, setDivisionCode] = useState<string>("");
+    // Two independent picks so a participant can enter one Kata + one Kumite
+    // in a single submission. Either can be empty; at least one must be set.
+    const [kataCode, setKataCode] = useState<string>("");
+    const [kumiteCode, setKumiteCode] = useState<string>("");
 
     // Compute the participant's age at the event so we can filter divisions
     // and decide whether the guardian block is required. If DOB isn't filled
@@ -87,9 +106,14 @@ export default function TournamentRegistrationForm({
     const availableDivisions = useMemo(() => {
         if (!gender) return [] as Division[];
         return allEnabled
-            .filter((d) => d.gender === gender)
+            .filter((d) => {
+                // Custom divisions aren't gender-locked (see divisions.ts).
+                if (isCustomDivisionCode(d.code)) return true;
+                return d.gender === gender;
+            })
             .filter((d) => {
                 if (!dob) return true; // relax when DOB missing; server enforces
+                if (isCustomDivisionCode(d.code)) return true;
                 const issue = checkDivisionEligibility(d, {
                     gender,
                     dob,
@@ -110,10 +134,31 @@ export default function TournamentRegistrationForm({
             });
     }, [allEnabled, gender, dob, weightKg, eventDate]);
 
-    const selectedDivision = divisionCode
-        ? availableDivisions.find((d) => d.code === divisionCode) ?? null
+    // Group the picker by event type so an event running both Kata and Kumite
+    // shows two labelled sections instead of a flat list.
+    const divisionsByType = useMemo(() => {
+        const kata = availableDivisions.filter((d) => d.eventType === "KATA");
+        const kumite = availableDivisions.filter((d) => d.eventType === "KUMITE");
+        return { KATA: kata, KUMITE: kumite };
+    }, [availableDivisions]);
+
+    const kataAllowed = event.enabledTypes.includes("KATA");
+    const kumiteAllowed = event.enabledTypes.includes("KUMITE");
+    const bothTypesEnabled = kataAllowed && kumiteAllowed;
+
+    const selectedKata = kataCode
+        ? divisionsByType.KATA.find((d) => d.code === kataCode) ?? null
         : null;
-    const isTeam = !!selectedDivision?.isTeam;
+    const selectedKumite = kumiteCode
+        ? divisionsByType.KUMITE.find((d) => d.code === kumiteCode) ?? null
+        : null;
+    // Team info is only asked once — the current data model captures one
+    // teamName/teammates block on the registration row it belongs to. If both
+    // picks are team divisions we still surface the block; the server writes
+    // the same team payload to whichever row is the team division.
+    const isTeam = !!selectedKata?.isTeam || !!selectedKumite?.isTeam;
+    const kumiteRequired = !!selectedKumite;
+    const selectedCount = (selectedKata ? 1 : 0) + (selectedKumite ? 1 : 0);
 
     if (registrationClosed) {
         return (
@@ -191,7 +236,8 @@ export default function TournamentRegistrationForm({
                         value={gender}
                         onChange={(e) => {
                             setGender(e.target.value as Gender);
-                            setDivisionCode("");
+                            setKataCode("");
+                            setKumiteCode("");
                         }}
                         required
                         className={inputCx}
@@ -208,7 +254,8 @@ export default function TournamentRegistrationForm({
                         value={dobStr}
                         onChange={(e) => {
                             setDobStr(e.target.value);
-                            setDivisionCode("");
+                            setKataCode("");
+                            setKumiteCode("");
                         }}
                         required
                         className={inputCx}
@@ -216,8 +263,15 @@ export default function TournamentRegistrationForm({
                 </Field>
             </div>
 
-            {event.eventType === "KUMITE" && (
-                <Field label="Weight (kg)" required>
+            {event.enabledTypes.includes("KUMITE") && (
+                <Field
+                    label={
+                        kumiteRequired
+                            ? "Weight (kg)"
+                            : "Weight (kg) — required for kumite divisions"
+                    }
+                    required={kumiteRequired}
+                >
                     <input
                         name="entrantWeightKg"
                         type="number"
@@ -225,11 +279,8 @@ export default function TournamentRegistrationForm({
                         max={200}
                         step="0.1"
                         value={weightKgStr}
-                        onChange={(e) => {
-                            setWeightKgStr(e.target.value);
-                            setDivisionCode("");
-                        }}
-                        required
+                        onChange={(e) => setWeightKgStr(e.target.value)}
+                        required={kumiteRequired}
                         placeholder="e.g. 67.5"
                         className={inputCx}
                     />
@@ -265,36 +316,102 @@ export default function TournamentRegistrationForm({
                 <input name="coachName" type="text" className={inputCx} />
             </Field>
 
-            <Field label="Division" required>
-                <select
-                    name="divisionCode"
-                    value={divisionCode}
-                    onChange={(e) => setDivisionCode(e.target.value)}
-                    required
-                    disabled={!gender || !dob}
-                    className={inputCx}
-                >
-                    <option value="">
-                        {!gender || !dob
-                            ? "Fill in gender and date of birth first…"
-                            : availableDivisions.length === 0
-                              ? "No divisions match your details"
-                              : "Select a division…"}
-                    </option>
-                    {availableDivisions.map((d) => (
-                        <option key={d.code} value={d.code}>
-                            {d.label}
-                        </option>
-                    ))}
-                </select>
-                {gender && dob && availableDivisions.length === 0 && (
-                    <p className="text-[11px] text-amber-700 bg-amber-50 border border-amber-200 rounded-sm px-3 py-2 mt-2">
-                        None of the enabled divisions match your age and
-                        gender. Contact the organiser if you believe this is
-                        wrong.
-                    </p>
+            <div
+                className={
+                    bothTypesEnabled
+                        ? "grid grid-cols-1 md:grid-cols-2 gap-3"
+                        : ""
+                }
+            >
+                {kataAllowed && (
+                    <Field
+                        label={
+                            bothTypesEnabled
+                                ? "Kata division (optional)"
+                                : "Division"
+                        }
+                        required={!bothTypesEnabled}
+                    >
+                        <select
+                            name="kataDivisionCode"
+                            value={kataCode}
+                            onChange={(e) => setKataCode(e.target.value)}
+                            required={!bothTypesEnabled}
+                            disabled={!gender || !dob}
+                            className={inputCx}
+                        >
+                            <option value="">
+                                {!gender || !dob
+                                    ? "Fill in gender and date of birth first…"
+                                    : divisionsByType.KATA.length === 0
+                                      ? "No kata divisions match"
+                                      : bothTypesEnabled
+                                        ? "— No kata entry —"
+                                        : "Select a division…"}
+                            </option>
+                            {divisionsByType.KATA.map((d) => (
+                                <option key={d.code} value={d.code}>
+                                    {d.label}
+                                </option>
+                            ))}
+                        </select>
+                    </Field>
                 )}
-            </Field>
+                {kumiteAllowed && (
+                    <Field
+                        label={
+                            bothTypesEnabled
+                                ? "Kumite division (optional)"
+                                : "Division"
+                        }
+                        required={!bothTypesEnabled}
+                    >
+                        <select
+                            name="kumiteDivisionCode"
+                            value={kumiteCode}
+                            onChange={(e) => setKumiteCode(e.target.value)}
+                            required={!bothTypesEnabled}
+                            disabled={!gender || !dob}
+                            className={inputCx}
+                        >
+                            <option value="">
+                                {!gender || !dob
+                                    ? "Fill in gender and date of birth first…"
+                                    : divisionsByType.KUMITE.length === 0
+                                      ? "No kumite divisions match"
+                                      : bothTypesEnabled
+                                        ? "— No kumite entry —"
+                                        : "Select a division…"}
+                            </option>
+                            {divisionsByType.KUMITE.map((d) => (
+                                <option key={d.code} value={d.code}>
+                                    {d.label}
+                                </option>
+                            ))}
+                        </select>
+                    </Field>
+                )}
+            </div>
+            {gender && dob && availableDivisions.length === 0 && (
+                <p className="text-[11px] text-amber-700 bg-amber-50 border border-amber-200 rounded-sm px-3 py-2">
+                    None of the enabled divisions match your age and gender.
+                    Contact the organiser if you believe this is wrong.
+                </p>
+            )}
+            {bothTypesEnabled && (
+                <p className="text-[11px] text-zinc-500 -mt-2">
+                    Pick a kata division, a kumite division, or one of each —
+                    both entries are created together
+                    {event.isPremium
+                        ? "; the ticket price applies to each."
+                        : "."}
+                </p>
+            )}
+            {bothTypesEnabled && selectedCount === 0 && (
+                <p className="text-[11px] text-amber-700 bg-amber-50 border border-amber-200 rounded-sm px-3 py-2 -mt-2">
+                    Pick at least one division to continue.
+                </p>
+            )}
 
             {isTeam && (
                 <div className="border border-zinc-200 rounded-sm bg-zinc-50 p-4 space-y-3">
@@ -416,31 +533,56 @@ export default function TournamentRegistrationForm({
 
             {event.isPremium && event.ticketPrice !== null ? (
                 <>
-                    <div className="flex items-center justify-between text-sm text-zinc-700 border-t border-zinc-200 pt-4">
-                        <span className="font-semibold">
-                            {event.memberDiscountActive
-                                ? "Member ticket price"
-                                : "Ticket price"}
-                        </span>
-                        <span className="font-bold text-zinc-900">
-                            ৳{event.ticketPrice.toLocaleString()}
-                            {event.memberDiscountActive &&
-                                event.baseTicketPrice !== null && (
-                                    <span className="ml-2 text-zinc-400 text-xs line-through font-normal">
-                                        ৳{event.baseTicketPrice.toLocaleString()}
+                    <div className="border-t border-zinc-200 pt-4 space-y-2">
+                        <div className="flex items-center justify-between text-sm text-zinc-700">
+                            <span className="font-semibold">
+                                {event.memberDiscountActive
+                                    ? "Member ticket"
+                                    : "Ticket price"}
+                                {selectedCount > 1 && (
+                                    <span className="text-zinc-400 font-normal">
+                                        {" "}
+                                        × {selectedCount} divisions
                                     </span>
                                 )}
-                        </span>
+                            </span>
+                            <span className="text-zinc-700">
+                                ৳{event.ticketPrice.toLocaleString()}
+                                {event.memberDiscountActive &&
+                                    event.baseTicketPrice !== null && (
+                                        <span className="ml-2 text-zinc-400 text-xs line-through font-normal">
+                                            ৳{event.baseTicketPrice.toLocaleString()}
+                                        </span>
+                                    )}
+                            </span>
+                        </div>
+                        {selectedCount > 1 && (
+                            <div className="flex items-center justify-between text-sm border-t border-zinc-100 pt-2">
+                                <span className="font-bold text-zinc-900">
+                                    Total
+                                </span>
+                                <span className="font-bold text-zinc-900">
+                                    ৳
+                                    {(
+                                        event.ticketPrice * selectedCount
+                                    ).toLocaleString()}
+                                </span>
+                            </div>
+                        )}
                     </div>
                     <button
                         type="submit"
                         className="w-full inline-flex items-center justify-center gap-2 bg-accent-red text-white px-4 py-3 text-xs font-bold tracking-widest uppercase hover:bg-accent-red/90 transition-colors rounded-sm"
                     >
                         <Ticket size={14} />
-                        Continue to payment
+                        {selectedCount > 1
+                            ? `Pay ৳${(event.ticketPrice * selectedCount).toLocaleString()} for ${selectedCount} divisions`
+                            : "Continue to payment"}
                     </button>
                     <p className="text-[11px] text-zinc-500 text-center">
-                        Your division entry is confirmed once payment settles.
+                        {selectedCount > 1
+                            ? "Both entries are confirmed once payment settles."
+                            : "Your division entry is confirmed once payment settles."}
                     </p>
                 </>
             ) : (

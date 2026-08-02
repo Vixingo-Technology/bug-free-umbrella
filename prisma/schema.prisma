@@ -824,12 +824,19 @@ model Event {
 // lib/tournaments/divisions.ts — they are stable identifiers, not FKs.
 
 model TournamentDetail {
-  eventId              String              @id @map("event_id") @db.Uuid
-  eventType            TournamentEventType @map("event_type")
-  enabledDivisions     String[]            @map("enabled_divisions")
-  registrationDeadline DateTime?           @map("registration_deadline")
-  weighInDate          DateTime?           @map("weigh_in_date") // KUMITE only
-  rulesUrl             String?             @map("rules_url")
+  eventId              String                @id @map("event_id") @db.Uuid
+  // Legacy single-type flag — kept for older rows and reporting. New writes
+  // also populate `enabledTypes`, and the participant flow reads from that.
+  eventType            TournamentEventType   @map("event_type")
+  // 1 or 2 of KATA/KUMITE. An event may run both types.
+  enabledTypes         TournamentEventType[] @map("enabled_types")
+  enabledDivisions     String[]              @map("enabled_divisions")
+  // Admin-added categories not in the WKF preset. Shape:
+  //   { code: string, label: string, eventType: 'KATA'|'KUMITE', isTeam: boolean }[]
+  customDivisions      Json?                 @map("custom_divisions")
+  registrationDeadline DateTime?             @map("registration_deadline")
+  weighInDate          DateTime?             @map("weigh_in_date") // KUMITE only
+  rulesUrl             String?               @map("rules_url")
 
   event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
 
@@ -885,6 +892,11 @@ model EventRegistration {
   // Premium-event ticket payment. Null on free events; PENDING until the
   // SSLCommerz payment settles, then PAID.
   paymentStatus PaymentStatus? @map("payment_status")
+  // When a tournament participant pays for multiple divisions in one submit,
+  // every row in the group shares this id. The gateway session runs on the
+  // primary row's id + summed amount; markRegistrationPaid fans PAID out to
+  // the siblings.
+  paymentGroupId String? @map("payment_group_id") @db.Uuid
   amountDue     Decimal?       @map("amount_due") @db.Decimal(10, 2)
   paidAt        DateTime?      @map("paid_at")
   transactionId String?        @map("transaction_id")

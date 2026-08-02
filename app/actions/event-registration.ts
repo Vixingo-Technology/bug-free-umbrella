@@ -1,6 +1,6 @@
 "use server";
 
-import { randomBytes } from "node:crypto";
+import { randomBytes, randomUUID } from "node:crypto";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
@@ -17,7 +17,8 @@ import { applyDiscount, isJkaMember } from "@/lib/auth/is-jka-member";
 import {
     ageOnDate,
     checkDivisionEligibility,
-    getDivision,
+    parseCustomDivisions,
+    resolveDivision,
 } from "@/lib/tournaments/divisions";
 import type { Gender } from "@/prisma/generated/client";
 
@@ -340,12 +341,19 @@ export async function payForRegistrationAction(formData: FormData): Promise<void
         redirect(`/participants/${encodeURIComponent(token)}`);
     }
 
+    // If this row is part of a multi-division payment group, resume the group
+    // total rather than a single row's amount. The gateway session still runs
+    // on this row's id; markRegistrationPaid fans PAID out to every sibling.
+    const groupTotal = await groupTotalFor(reg);
     const init = await initiateTicketPayment({
         registrationId: reg.id,
         qrToken: reg.qrToken,
-        amount: reg.amountDue ? Number(reg.amountDue) : 0,
+        amount: groupTotal.amount,
         eventId: reg.event.id,
-        eventTitle: reg.event.title,
+        eventTitle:
+            groupTotal.count > 1
+                ? `${reg.event.title} — ${groupTotal.count} divisions`
+                : reg.event.title,
         customerName: reg.user?.fullName ?? reg.guestName ?? "Participant",
         customerEmail: reg.user?.email ?? reg.guestEmail ?? "",
         customerPhone: reg.user?.phone ?? reg.guestPhone ?? null,
@@ -469,6 +477,38 @@ export async function checkInParticipantAction(
     };
 }
 
+// Sum amountDue across every row in a payment group so a resumed premium
+// registration pays for the whole group rather than one row's slice. Falls
+// back to the single row's amount when the row isn't grouped (legacy /
+// single-division premium submissions).
+async function groupTotalFor(reg: {
+    id: string;
+    paymentGroupId: string | null;
+    amountDue: import("@/prisma/generated/client").Prisma.Decimal | null;
+}): Promise<{ amount: number; count: number }> {
+    if (!reg.paymentGroupId) {
+        return {
+            amount: reg.amountDue ? Number(reg.amountDue) : 0,
+            count: 1,
+        };
+    }
+    const siblings = await prisma.eventRegistration.findMany({
+        where: { paymentGroupId: reg.paymentGroupId },
+        select: { amountDue: true },
+    });
+    if (siblings.length === 0) {
+        return {
+            amount: reg.amountDue ? Number(reg.amountDue) : 0,
+            count: 1,
+        };
+    }
+    const amount = siblings.reduce(
+        (t, s) => t + (s.amountDue ? Number(s.amountDue) : 0),
+        0,
+    );
+    return { amount, count: siblings.length };
+}
+
 // ─────────────────────────────────────────────────────────────────────────
 // TOURNAMENT REGISTRATION
 // ─────────────────────────────────────────────────────────────────────────
@@ -529,13 +569,37 @@ export async function registerForTournamentAction(
     }
 
     // ── Tournament-specific fields ──────────────────────────────────────
-    const divisionCode = trim(formData.get("divisionCode"));
-    if (!divisionCode) return { ok: false, error: "Pick a division to register for." };
-    if (!event.tournamentDetail.enabledDivisions.includes(divisionCode)) {
-        return { ok: false, error: "That division is not open for this tournament." };
+    // Collect the participant's division picks. `divisionCode` is the legacy
+    // single-select input; the new form submits per-type codes so entrants
+    // can enter a Kata and a Kumite division in one shot.
+    const customDivisions = parseCustomDivisions(
+        event.tournamentDetail.customDivisions,
+    );
+    const rawCodes = [
+        trim(formData.get("divisionCode")),
+        trim(formData.get("kataDivisionCode")),
+        trim(formData.get("kumiteDivisionCode")),
+    ].filter(Boolean);
+    const codesToRegister = Array.from(new Set(rawCodes));
+    if (codesToRegister.length === 0) {
+        return { ok: false, error: "Pick a division to register for." };
     }
-    const division = getDivision(divisionCode);
-    if (!division) return { ok: false, error: "Unknown division." };
+
+    const divisions = [] as Array<{
+        code: string;
+        division: NonNullable<ReturnType<typeof resolveDivision>>;
+    }>;
+    for (const code of codesToRegister) {
+        if (!event.tournamentDetail.enabledDivisions.includes(code)) {
+            return {
+                ok: false,
+                error: "That division is not open for this tournament.",
+            };
+        }
+        const d = resolveDivision(code, customDivisions);
+        if (!d) return { ok: false, error: "Unknown division." };
+        divisions.push({ code, division: d });
+    }
 
     const genderRaw = trim(formData.get("entrantGender"));
     if (!isGender(genderRaw)) return { ok: false, error: "Select your gender." };
@@ -546,8 +610,11 @@ export async function registerForTournamentAction(
         return { ok: false, error: "Enter a valid date of birth." };
     }
 
+    const anyKumite = divisions.some(
+        ({ division }) => division.eventType === "KUMITE",
+    );
     let weightKg: number | null = null;
-    if (event.tournamentDetail.eventType === "KUMITE") {
+    if (anyKumite) {
         const w = Number.parseFloat(trim(formData.get("entrantWeightKg")));
         if (!Number.isFinite(w) || w <= 0) {
             return { ok: false, error: "Enter your weight in kg." };
@@ -555,20 +622,21 @@ export async function registerForTournamentAction(
         weightKg = Math.round(w * 100) / 100;
     }
 
-    const issue = checkDivisionEligibility(division, {
-        gender: genderRaw,
-        dob,
-        eventDate: event.eventDate,
-        weightKg,
-    });
-    if (issue) {
+    for (const { division } of divisions) {
+        const issue = checkDivisionEligibility(division, {
+            gender: genderRaw,
+            dob,
+            eventDate: event.eventDate,
+            weightKg,
+        });
+        if (!issue) continue;
         const messages: Record<typeof issue, string> = {
             "wrong-event-type": "Division doesn't match the tournament type.",
-            "wrong-gender": "That division is for a different gender.",
-            "age-below-min": `You must be at least ${division.ageMin} on the event date for this division.`,
-            "age-above-max": `You must be under ${(division.ageMax ?? 0) + 1} on the event date for this division.`,
-            "weight-below-min": "Your weight is below this division's range.",
-            "weight-above-max": "Your weight is above this division's range.",
+            "wrong-gender": `${division.label} is for a different gender.`,
+            "age-below-min": `You must be at least ${division.ageMin} on the event date for ${division.label}.`,
+            "age-above-max": `You must be under ${(division.ageMax ?? 0) + 1} on the event date for ${division.label}.`,
+            "weight-below-min": `Your weight is below ${division.label}'s range.`,
+            "weight-above-max": `Your weight is above ${division.label}'s range.`,
             "weight-required": "Weight is required for kumite divisions.",
         };
         return { ok: false, error: messages[issue] };
@@ -589,6 +657,13 @@ export async function registerForTournamentAction(
                 ? applyDiscount(baseTicketPrice, event.memberDiscountPercent)
                 : baseTicketPrice
             : baseTicketPrice;
+
+    // Premium tickets go through a single gateway session even when the
+    // participant enters multiple divisions — the session's total is
+    // ticketPrice × N, and every row shares a payment_group_id so the paid
+    // mark fans out from the primary row when the webhook fires.
+    const paymentGroupId =
+        isPremium && divisions.length > 1 ? randomUUID() : null;
 
     const userId = user?.id ?? null;
     let guestName: string | null = null;
@@ -615,10 +690,12 @@ export async function registerForTournamentAction(
     }
 
     // Team kata: expect team name + two teammates. Third team member is the
-    // registrant themself.
+    // registrant themself. The block is required if any selected division is
+    // a team division; the payload is only written onto the team row(s).
+    const anyTeam = divisions.some(({ division }) => division.isTeam);
     let teamName: string | null = null;
     let teammates: unknown = null;
-    if (division.isTeam) {
+    if (anyTeam) {
         teamName = trim(formData.get("teamName")) || null;
         const t1n = trim(formData.get("teammate1Name"));
         const t2n = trim(formData.get("teammate2Name"));
@@ -653,97 +730,181 @@ export async function registerForTournamentAction(
     }
 
     // Prevent double-entering the same division. Members are uniquely
-    // identified by userId+eventId+divisionCode; guests by email.
-    const existing = userId
-        ? await prisma.eventRegistration.findFirst({
-              where: { eventId, userId, divisionCode },
-              select: { id: true, qrToken: true, paymentStatus: true, amountDue: true },
-          })
-        : guestEmail
-          ? await prisma.eventRegistration.findFirst({
-                where: {
-                    eventId,
-                    userId: null,
-                    divisionCode,
-                    guestEmail: { equals: guestEmail, mode: "insensitive" },
-                },
-                select: { id: true, qrToken: true, paymentStatus: true, amountDue: true },
-            })
-          : null;
+    // identified by userId+eventId+divisionCode; guests by email. When the
+    // participant selects multiple divisions we walk each one — divisions that
+    // already have a paid entry are silently skipped, PENDING rows are resumed
+    // (premium single-division only), new picks become fresh rows.
+    type CreatedRow = { id: string; qrToken: string; divisionCode: string };
+    const created: CreatedRow[] = [];
+    let existingFallback: CreatedRow | null = null;
+    let pendingExisting: {
+        id: string;
+        qrToken: string;
+        amountDue: number | null;
+    } | null = null;
 
-    if (existing) {
-        if (existing.paymentStatus !== "PENDING") {
-            return { ok: true, token: existing.qrToken };
+    for (const { code, division } of divisions) {
+        const existing = userId
+            ? await prisma.eventRegistration.findFirst({
+                  where: { eventId, userId, divisionCode: code },
+                  select: {
+                      id: true,
+                      qrToken: true,
+                      paymentStatus: true,
+                      amountDue: true,
+                  },
+              })
+            : guestEmail
+              ? await prisma.eventRegistration.findFirst({
+                    where: {
+                        eventId,
+                        userId: null,
+                        divisionCode: code,
+                        guestEmail: { equals: guestEmail, mode: "insensitive" },
+                    },
+                    select: {
+                        id: true,
+                        qrToken: true,
+                        paymentStatus: true,
+                        amountDue: true,
+                    },
+                })
+              : null;
+
+        if (existing) {
+            if (existing.paymentStatus === "PENDING") {
+                // Resume the unpaid registration. Premium is capped at a single
+                // division per submit, so there's only ever one of these.
+                pendingExisting = {
+                    id: existing.id,
+                    qrToken: existing.qrToken,
+                    amountDue: existing.amountDue
+                        ? Number(existing.amountDue)
+                        : null,
+                };
+                continue;
+            }
+            existingFallback = existingFallback ?? {
+                id: existing.id,
+                qrToken: existing.qrToken,
+                divisionCode: code,
+            };
+            continue;
         }
+
+        const qrToken = urlSafeToken();
+        const reg = await prisma.eventRegistration.create({
+            data: {
+                eventId,
+                userId,
+                guestName,
+                guestEmail,
+                guestPhone,
+                qrToken,
+                paymentStatus: isPremium ? "PENDING" : null,
+                amountDue: isPremium ? ticketPrice : null,
+                // Per-row amountDue stays at the single-division price so
+                // per-division accounting is preserved. The group id links
+                // rows so one payment covers them all.
+                paymentGroupId,
+                divisionCode: code,
+                entrantGender: genderRaw,
+                // Weight only makes sense on kumite rows.
+                entrantWeightKg:
+                    division.eventType === "KUMITE" ? weightKg : null,
+                entrantBeltRank,
+                entrantDojoName,
+                coachName,
+                // Team block only lands on rows that represent a team division.
+                teamName: division.isTeam ? teamName : null,
+                teammates: (division.isTeam ? teammates : null) as never,
+                guardianName,
+                guardianPhone,
+                guardianConsent,
+                emergencyContactName,
+                emergencyContactPhone,
+                // Store DOB in the same guest_date_of_birth column used by the
+                // existing gate-answers flow — one column, one meaning.
+                guestDateOfBirth: dob,
+            },
+            select: { id: true, qrToken: true },
+        });
+        created.push({
+            id: reg.id,
+            qrToken: reg.qrToken,
+            divisionCode: code,
+        });
+    }
+
+    if (pendingExisting) {
+        // Resume with the group total when the row belongs to a multi-division
+        // payment group. Single-division rows just pay their own amountDue.
+        const full = await prisma.eventRegistration.findUnique({
+            where: { id: pendingExisting.id },
+            select: { id: true, paymentGroupId: true, amountDue: true },
+        });
+        const groupTotal = full
+            ? await groupTotalFor(full)
+            : {
+                  amount: pendingExisting.amountDue ?? ticketPrice ?? 0,
+                  count: 1,
+              };
         const init = await initiateTicketPayment({
-            registrationId: existing.id,
-            qrToken: existing.qrToken,
-            amount: existing.amountDue ? Number(existing.amountDue) : (ticketPrice ?? 0),
+            registrationId: pendingExisting.id,
+            qrToken: pendingExisting.qrToken,
+            amount: groupTotal.amount,
             eventId: event.id,
-            eventTitle: event.title,
+            eventTitle:
+                groupTotal.count > 1
+                    ? `${event.title} — ${groupTotal.count} divisions`
+                    : event.title,
             customerName: user ? (guestName ?? "Participant") : (guestName ?? "Participant"),
             customerEmail: user?.email ?? guestEmail ?? "",
             customerPhone: guestPhone,
         });
         if (init.kind === "gateway") {
-            return { ok: true, token: existing.qrToken, payUrl: init.url };
+            return { ok: true, token: pendingExisting.qrToken, payUrl: init.url };
         }
         if (init.kind === "devPaid") {
-            return { ok: true, token: existing.qrToken };
+            return { ok: true, token: pendingExisting.qrToken };
         }
         return { ok: false, error: init.message };
     }
 
-    const qrToken = urlSafeToken();
-    const reg = await prisma.eventRegistration.create({
-        data: {
-            eventId,
-            userId,
-            guestName,
-            guestEmail,
-            guestPhone,
-            qrToken,
-            paymentStatus: isPremium ? "PENDING" : null,
-            amountDue: isPremium ? ticketPrice : null,
-            divisionCode,
-            entrantGender: genderRaw,
-            entrantWeightKg: weightKg,
-            entrantBeltRank,
-            entrantDojoName,
-            coachName,
-            teamName,
-            teammates: teammates as never,
-            guardianName,
-            guardianPhone,
-            guardianConsent,
-            emergencyContactName,
-            emergencyContactPhone,
-            // Store DOB in the same guest_date_of_birth column used by the
-            // existing gate-answers flow — one column, one meaning.
-            guestDateOfBirth: dob,
-        },
-        select: { id: true, qrToken: true },
-    });
+    if (created.length === 0) {
+        // Everything the participant selected was already registered and paid.
+        // Send them to the existing card so they can see their entry.
+        if (existingFallback) return { ok: true, token: existingFallback.qrToken };
+        return { ok: false, error: "You're already registered for that division." };
+    }
 
     revalidatePath(`/events/${eventId}`);
     revalidatePath(`/portal/admin/events/${eventId}/participants`);
 
     if (isPremium) {
+        // The primary row (first created) drives the gateway session, with
+        // the summed total covering every sibling in the same payment group.
+        const first = created[0];
+        const perDivision = ticketPrice ?? 0;
+        const totalAmount = perDivision * created.length;
         const init = await initiateTicketPayment({
-            registrationId: reg.id,
-            qrToken: reg.qrToken,
-            amount: ticketPrice ?? 0,
+            registrationId: first.id,
+            qrToken: first.qrToken,
+            amount: totalAmount,
             eventId: event.id,
-            eventTitle: event.title,
+            eventTitle:
+                created.length > 1
+                    ? `${event.title} — ${created.length} divisions`
+                    : event.title,
             customerName: user ? "Participant" : (guestName ?? "Participant"),
             customerEmail: user?.email ?? guestEmail ?? "",
             customerPhone: guestPhone,
         });
         if (init.kind === "gateway") {
-            return { ok: true, token: reg.qrToken, payUrl: init.url };
+            return { ok: true, token: first.qrToken, payUrl: init.url };
         }
         if (init.kind === "devPaid") {
-            return { ok: true, token: reg.qrToken };
+            return { ok: true, token: first.qrToken };
         }
         return { ok: false, error: init.message };
     }
@@ -752,25 +913,26 @@ export async function registerForTournamentAction(
         process.env.NEXT_PUBLIC_APP_URL ??
         process.env.APP_URL ??
         "http://localhost:3000";
-    await emitEventRegistered({
-        registrationId: reg.id,
-        qrToken: reg.qrToken,
-        participationCardUrl: `${appUrl}/participants/${reg.qrToken}`,
-        participantName: guestName ?? "Participant",
-        participantEmail: user?.email ?? guestEmail ?? "",
-        participantPhone: guestPhone,
-        memberId: userId ?? null,
-        isGuest: !userId,
-        event: {
-            id: event.id,
-            title: event.title,
-            eventDate: event.eventDate.toISOString(),
-            location: event.location,
-            dojoName: event.dojo?.name ?? null,
-        },
-    });
-
-    return { ok: true, token: reg.qrToken };
+    for (const row of created) {
+        await emitEventRegistered({
+            registrationId: row.id,
+            qrToken: row.qrToken,
+            participationCardUrl: `${appUrl}/participants/${row.qrToken}`,
+            participantName: guestName ?? "Participant",
+            participantEmail: user?.email ?? guestEmail ?? "",
+            participantPhone: guestPhone,
+            memberId: userId ?? null,
+            isGuest: !userId,
+            event: {
+                id: event.id,
+                title: event.title,
+                eventDate: event.eventDate.toISOString(),
+                location: event.location,
+                dojoName: event.dojo?.name ?? null,
+            },
+        });
+    }
+    return { ok: true, token: created[0].qrToken };
 }
 
 export async function registerForTournamentAndRedirect(

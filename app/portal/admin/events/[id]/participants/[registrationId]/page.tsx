@@ -18,7 +18,7 @@ import {
 } from "lucide-react";
 import { requireAdmin } from "@/lib/admin-guard";
 import { prisma } from "@/lib/prisma";
-import { getDivision } from "@/lib/tournaments/divisions";
+import { parseCustomDivisions, resolveDivision } from "@/lib/tournaments/divisions";
 
 export const metadata: Metadata = {
     title: "Participant — Admin",
@@ -76,7 +76,7 @@ export default async function ParticipantDetailPage({
                     eventDate: true,
                     location: true,
                     tournamentDetail: {
-                        select: { eventType: true },
+                        select: { eventType: true, customDivisions: true },
                     },
                 },
             },
@@ -132,8 +132,11 @@ export default async function ParticipantDetailPage({
         registration.user?.profile?.emergencyContactPhone ??
         null;
 
+    const eventCustomDivisions = parseCustomDivisions(
+        registration.event.tournamentDetail?.customDivisions,
+    );
     const division = registration.divisionCode
-        ? getDivision(registration.divisionCode)
+        ? resolveDivision(registration.divisionCode, eventCustomDivisions)
         : null;
     const teammates = parseTeammates(registration.teammates);
     const isTournament = !!registration.event.tournamentDetail;
@@ -205,10 +208,11 @@ export default async function ParticipantDetailPage({
                             <Datum
                                 label="Type"
                                 value={
-                                    registration.event.tournamentDetail?.eventType ===
-                                    "KATA"
+                                    division?.eventType === "KATA"
                                         ? "Kata"
-                                        : "Kumite"
+                                        : division?.eventType === "KUMITE"
+                                          ? "Kumite"
+                                          : "—"
                                 }
                             />
                             <Datum

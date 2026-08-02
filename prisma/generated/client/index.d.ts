@@ -30893,7 +30893,9 @@ export namespace Prisma {
   export type TournamentDetailCountAggregateOutputType = {
     eventId: number
     eventType: number
+    enabledTypes: number
     enabledDivisions: number
+    customDivisions: number
     registrationDeadline: number
     weighInDate: number
     rulesUrl: number
@@ -30926,7 +30928,9 @@ export namespace Prisma {
   export type TournamentDetailCountAggregateInputType = {
     eventId?: true
     eventType?: true
+    enabledTypes?: true
     enabledDivisions?: true
+    customDivisions?: true
     registrationDeadline?: true
     weighInDate?: true
     rulesUrl?: true
@@ -31010,7 +31014,9 @@ export namespace Prisma {
   export type TournamentDetailGroupByOutputType = {
     eventId: string
     eventType: $Enums.TournamentEventType
+    enabledTypes: $Enums.TournamentEventType[]
     enabledDivisions: string[]
+    customDivisions: JsonValue | null
     registrationDeadline: Date | null
     weighInDate: Date | null
     rulesUrl: string | null
@@ -31038,7 +31044,9 @@ export namespace Prisma {
   export type TournamentDetailSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     eventId?: boolean
     eventType?: boolean
+    enabledTypes?: boolean
     enabledDivisions?: boolean
+    customDivisions?: boolean
     registrationDeadline?: boolean
     weighInDate?: boolean
     rulesUrl?: boolean
@@ -31050,7 +31058,9 @@ export namespace Prisma {
   export type TournamentDetailSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     eventId?: boolean
     eventType?: boolean
+    enabledTypes?: boolean
     enabledDivisions?: boolean
+    customDivisions?: boolean
     registrationDeadline?: boolean
     weighInDate?: boolean
     rulesUrl?: boolean
@@ -31062,7 +31072,9 @@ export namespace Prisma {
   export type TournamentDetailSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     eventId?: boolean
     eventType?: boolean
+    enabledTypes?: boolean
     enabledDivisions?: boolean
+    customDivisions?: boolean
     registrationDeadline?: boolean
     weighInDate?: boolean
     rulesUrl?: boolean
@@ -31074,7 +31086,9 @@ export namespace Prisma {
   export type TournamentDetailSelectScalar = {
     eventId?: boolean
     eventType?: boolean
+    enabledTypes?: boolean
     enabledDivisions?: boolean
+    customDivisions?: boolean
     registrationDeadline?: boolean
     weighInDate?: boolean
     rulesUrl?: boolean
@@ -31082,7 +31096,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type TournamentDetailOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"eventId" | "eventType" | "enabledDivisions" | "registrationDeadline" | "weighInDate" | "rulesUrl" | "createdAt" | "updatedAt", ExtArgs["result"]["tournamentDetail"]>
+  export type TournamentDetailOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"eventId" | "eventType" | "enabledTypes" | "enabledDivisions" | "customDivisions" | "registrationDeadline" | "weighInDate" | "rulesUrl" | "createdAt" | "updatedAt", ExtArgs["result"]["tournamentDetail"]>
   export type TournamentDetailInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     event?: boolean | EventDefaultArgs<ExtArgs>
   }
@@ -31101,7 +31115,9 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       eventId: string
       eventType: $Enums.TournamentEventType
+      enabledTypes: $Enums.TournamentEventType[]
       enabledDivisions: string[]
+      customDivisions: Prisma.JsonValue | null
       registrationDeadline: Date | null
       weighInDate: Date | null
       rulesUrl: string | null
@@ -31533,7 +31549,9 @@ export namespace Prisma {
   interface TournamentDetailFieldRefs {
     readonly eventId: FieldRef<"TournamentDetail", 'String'>
     readonly eventType: FieldRef<"TournamentDetail", 'TournamentEventType'>
+    readonly enabledTypes: FieldRef<"TournamentDetail", 'TournamentEventType[]'>
     readonly enabledDivisions: FieldRef<"TournamentDetail", 'String[]'>
+    readonly customDivisions: FieldRef<"TournamentDetail", 'Json'>
     readonly registrationDeadline: FieldRef<"TournamentDetail", 'DateTime'>
     readonly weighInDate: FieldRef<"TournamentDetail", 'DateTime'>
     readonly rulesUrl: FieldRef<"TournamentDetail", 'String'>
@@ -33189,6 +33207,7 @@ export namespace Prisma {
     guestPhone: string | null
     qrToken: string | null
     paymentStatus: $Enums.PaymentStatus | null
+    paymentGroupId: string | null
     amountDue: Decimal | null
     paidAt: Date | null
     transactionId: string | null
@@ -33220,6 +33239,7 @@ export namespace Prisma {
     guestPhone: string | null
     qrToken: string | null
     paymentStatus: $Enums.PaymentStatus | null
+    paymentGroupId: string | null
     amountDue: Decimal | null
     paidAt: Date | null
     transactionId: string | null
@@ -33251,6 +33271,7 @@ export namespace Prisma {
     guestPhone: number
     qrToken: number
     paymentStatus: number
+    paymentGroupId: number
     amountDue: number
     paidAt: number
     transactionId: number
@@ -33295,6 +33316,7 @@ export namespace Prisma {
     guestPhone?: true
     qrToken?: true
     paymentStatus?: true
+    paymentGroupId?: true
     amountDue?: true
     paidAt?: true
     transactionId?: true
@@ -33326,6 +33348,7 @@ export namespace Prisma {
     guestPhone?: true
     qrToken?: true
     paymentStatus?: true
+    paymentGroupId?: true
     amountDue?: true
     paidAt?: true
     transactionId?: true
@@ -33357,6 +33380,7 @@ export namespace Prisma {
     guestPhone?: true
     qrToken?: true
     paymentStatus?: true
+    paymentGroupId?: true
     amountDue?: true
     paidAt?: true
     transactionId?: true
@@ -33476,6 +33500,7 @@ export namespace Prisma {
     guestPhone: string | null
     qrToken: string
     paymentStatus: $Enums.PaymentStatus | null
+    paymentGroupId: string | null
     amountDue: Decimal | null
     paidAt: Date | null
     transactionId: string | null
@@ -33527,6 +33552,7 @@ export namespace Prisma {
     guestPhone?: boolean
     qrToken?: boolean
     paymentStatus?: boolean
+    paymentGroupId?: boolean
     amountDue?: boolean
     paidAt?: boolean
     transactionId?: boolean
@@ -33564,6 +33590,7 @@ export namespace Prisma {
     guestPhone?: boolean
     qrToken?: boolean
     paymentStatus?: boolean
+    paymentGroupId?: boolean
     amountDue?: boolean
     paidAt?: boolean
     transactionId?: boolean
@@ -33599,6 +33626,7 @@ export namespace Prisma {
     guestPhone?: boolean
     qrToken?: boolean
     paymentStatus?: boolean
+    paymentGroupId?: boolean
     amountDue?: boolean
     paidAt?: boolean
     transactionId?: boolean
@@ -33634,6 +33662,7 @@ export namespace Prisma {
     guestPhone?: boolean
     qrToken?: boolean
     paymentStatus?: boolean
+    paymentGroupId?: boolean
     amountDue?: boolean
     paidAt?: boolean
     transactionId?: boolean
@@ -33657,7 +33686,7 @@ export namespace Prisma {
     createdAt?: boolean
   }
 
-  export type EventRegistrationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "eventId" | "userId" | "guestName" | "guestEmail" | "guestPhone" | "qrToken" | "paymentStatus" | "amountDue" | "paidAt" | "transactionId" | "guestDateOfBirth" | "parentOfMemberNumber" | "divisionCode" | "entrantGender" | "entrantWeightKg" | "entrantBeltRank" | "entrantDojoName" | "coachName" | "teamName" | "teammates" | "guardianName" | "guardianPhone" | "guardianConsent" | "emergencyContactName" | "emergencyContactPhone" | "checkedInAt" | "checkedInByUserId" | "createdAt", ExtArgs["result"]["eventRegistration"]>
+  export type EventRegistrationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "eventId" | "userId" | "guestName" | "guestEmail" | "guestPhone" | "qrToken" | "paymentStatus" | "paymentGroupId" | "amountDue" | "paidAt" | "transactionId" | "guestDateOfBirth" | "parentOfMemberNumber" | "divisionCode" | "entrantGender" | "entrantWeightKg" | "entrantBeltRank" | "entrantDojoName" | "coachName" | "teamName" | "teammates" | "guardianName" | "guardianPhone" | "guardianConsent" | "emergencyContactName" | "emergencyContactPhone" | "checkedInAt" | "checkedInByUserId" | "createdAt", ExtArgs["result"]["eventRegistration"]>
   export type EventRegistrationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     event?: boolean | EventDefaultArgs<ExtArgs>
     user?: boolean | EventRegistration$userArgs<ExtArgs>
@@ -33693,6 +33722,7 @@ export namespace Prisma {
       guestPhone: string | null
       qrToken: string
       paymentStatus: $Enums.PaymentStatus | null
+      paymentGroupId: string | null
       amountDue: Prisma.Decimal | null
       paidAt: Date | null
       transactionId: string | null
@@ -34149,6 +34179,7 @@ export namespace Prisma {
     readonly guestPhone: FieldRef<"EventRegistration", 'String'>
     readonly qrToken: FieldRef<"EventRegistration", 'String'>
     readonly paymentStatus: FieldRef<"EventRegistration", 'PaymentStatus'>
+    readonly paymentGroupId: FieldRef<"EventRegistration", 'String'>
     readonly amountDue: FieldRef<"EventRegistration", 'Decimal'>
     readonly paidAt: FieldRef<"EventRegistration", 'DateTime'>
     readonly transactionId: FieldRef<"EventRegistration", 'String'>
@@ -57457,7 +57488,9 @@ export namespace Prisma {
   export const TournamentDetailScalarFieldEnum: {
     eventId: 'eventId',
     eventType: 'eventType',
+    enabledTypes: 'enabledTypes',
     enabledDivisions: 'enabledDivisions',
+    customDivisions: 'customDivisions',
     registrationDeadline: 'registrationDeadline',
     weighInDate: 'weighInDate',
     rulesUrl: 'rulesUrl',
@@ -57495,6 +57528,7 @@ export namespace Prisma {
     guestPhone: 'guestPhone',
     qrToken: 'qrToken',
     paymentStatus: 'paymentStatus',
+    paymentGroupId: 'paymentGroupId',
     amountDue: 'amountDue',
     paidAt: 'paidAt',
     transactionId: 'transactionId',
@@ -60200,7 +60234,9 @@ export namespace Prisma {
     NOT?: TournamentDetailWhereInput | TournamentDetailWhereInput[]
     eventId?: UuidFilter<"TournamentDetail"> | string
     eventType?: EnumTournamentEventTypeFilter<"TournamentDetail"> | $Enums.TournamentEventType
+    enabledTypes?: EnumTournamentEventTypeNullableListFilter<"TournamentDetail">
     enabledDivisions?: StringNullableListFilter<"TournamentDetail">
+    customDivisions?: JsonNullableFilter<"TournamentDetail">
     registrationDeadline?: DateTimeNullableFilter<"TournamentDetail"> | Date | string | null
     weighInDate?: DateTimeNullableFilter<"TournamentDetail"> | Date | string | null
     rulesUrl?: StringNullableFilter<"TournamentDetail"> | string | null
@@ -60212,7 +60248,9 @@ export namespace Prisma {
   export type TournamentDetailOrderByWithRelationInput = {
     eventId?: SortOrder
     eventType?: SortOrder
+    enabledTypes?: SortOrder
     enabledDivisions?: SortOrder
+    customDivisions?: SortOrderInput | SortOrder
     registrationDeadline?: SortOrderInput | SortOrder
     weighInDate?: SortOrderInput | SortOrder
     rulesUrl?: SortOrderInput | SortOrder
@@ -60227,7 +60265,9 @@ export namespace Prisma {
     OR?: TournamentDetailWhereInput[]
     NOT?: TournamentDetailWhereInput | TournamentDetailWhereInput[]
     eventType?: EnumTournamentEventTypeFilter<"TournamentDetail"> | $Enums.TournamentEventType
+    enabledTypes?: EnumTournamentEventTypeNullableListFilter<"TournamentDetail">
     enabledDivisions?: StringNullableListFilter<"TournamentDetail">
+    customDivisions?: JsonNullableFilter<"TournamentDetail">
     registrationDeadline?: DateTimeNullableFilter<"TournamentDetail"> | Date | string | null
     weighInDate?: DateTimeNullableFilter<"TournamentDetail"> | Date | string | null
     rulesUrl?: StringNullableFilter<"TournamentDetail"> | string | null
@@ -60239,7 +60279,9 @@ export namespace Prisma {
   export type TournamentDetailOrderByWithAggregationInput = {
     eventId?: SortOrder
     eventType?: SortOrder
+    enabledTypes?: SortOrder
     enabledDivisions?: SortOrder
+    customDivisions?: SortOrderInput | SortOrder
     registrationDeadline?: SortOrderInput | SortOrder
     weighInDate?: SortOrderInput | SortOrder
     rulesUrl?: SortOrderInput | SortOrder
@@ -60256,7 +60298,9 @@ export namespace Prisma {
     NOT?: TournamentDetailScalarWhereWithAggregatesInput | TournamentDetailScalarWhereWithAggregatesInput[]
     eventId?: UuidWithAggregatesFilter<"TournamentDetail"> | string
     eventType?: EnumTournamentEventTypeWithAggregatesFilter<"TournamentDetail"> | $Enums.TournamentEventType
+    enabledTypes?: EnumTournamentEventTypeNullableListFilter<"TournamentDetail">
     enabledDivisions?: StringNullableListFilter<"TournamentDetail">
+    customDivisions?: JsonNullableWithAggregatesFilter<"TournamentDetail">
     registrationDeadline?: DateTimeNullableWithAggregatesFilter<"TournamentDetail"> | Date | string | null
     weighInDate?: DateTimeNullableWithAggregatesFilter<"TournamentDetail"> | Date | string | null
     rulesUrl?: StringNullableWithAggregatesFilter<"TournamentDetail"> | string | null
@@ -60369,6 +60413,7 @@ export namespace Prisma {
     guestPhone?: StringNullableFilter<"EventRegistration"> | string | null
     qrToken?: StringFilter<"EventRegistration"> | string
     paymentStatus?: EnumPaymentStatusNullableFilter<"EventRegistration"> | $Enums.PaymentStatus | null
+    paymentGroupId?: UuidNullableFilter<"EventRegistration"> | string | null
     amountDue?: DecimalNullableFilter<"EventRegistration"> | Decimal | DecimalJsLike | number | string | null
     paidAt?: DateTimeNullableFilter<"EventRegistration"> | Date | string | null
     transactionId?: StringNullableFilter<"EventRegistration"> | string | null
@@ -60405,6 +60450,7 @@ export namespace Prisma {
     guestPhone?: SortOrderInput | SortOrder
     qrToken?: SortOrder
     paymentStatus?: SortOrderInput | SortOrder
+    paymentGroupId?: SortOrderInput | SortOrder
     amountDue?: SortOrderInput | SortOrder
     paidAt?: SortOrderInput | SortOrder
     transactionId?: SortOrderInput | SortOrder
@@ -60444,6 +60490,7 @@ export namespace Prisma {
     guestEmail?: StringNullableFilter<"EventRegistration"> | string | null
     guestPhone?: StringNullableFilter<"EventRegistration"> | string | null
     paymentStatus?: EnumPaymentStatusNullableFilter<"EventRegistration"> | $Enums.PaymentStatus | null
+    paymentGroupId?: UuidNullableFilter<"EventRegistration"> | string | null
     amountDue?: DecimalNullableFilter<"EventRegistration"> | Decimal | DecimalJsLike | number | string | null
     paidAt?: DateTimeNullableFilter<"EventRegistration"> | Date | string | null
     transactionId?: StringNullableFilter<"EventRegistration"> | string | null
@@ -60480,6 +60527,7 @@ export namespace Prisma {
     guestPhone?: SortOrderInput | SortOrder
     qrToken?: SortOrder
     paymentStatus?: SortOrderInput | SortOrder
+    paymentGroupId?: SortOrderInput | SortOrder
     amountDue?: SortOrderInput | SortOrder
     paidAt?: SortOrderInput | SortOrder
     transactionId?: SortOrderInput | SortOrder
@@ -60520,6 +60568,7 @@ export namespace Prisma {
     guestPhone?: StringNullableWithAggregatesFilter<"EventRegistration"> | string | null
     qrToken?: StringWithAggregatesFilter<"EventRegistration"> | string
     paymentStatus?: EnumPaymentStatusNullableWithAggregatesFilter<"EventRegistration"> | $Enums.PaymentStatus | null
+    paymentGroupId?: UuidNullableWithAggregatesFilter<"EventRegistration"> | string | null
     amountDue?: DecimalNullableWithAggregatesFilter<"EventRegistration"> | Decimal | DecimalJsLike | number | string | null
     paidAt?: DateTimeNullableWithAggregatesFilter<"EventRegistration"> | Date | string | null
     transactionId?: StringNullableWithAggregatesFilter<"EventRegistration"> | string | null
@@ -64415,7 +64464,9 @@ export namespace Prisma {
 
   export type TournamentDetailCreateInput = {
     eventType: $Enums.TournamentEventType
+    enabledTypes?: TournamentDetailCreateenabledTypesInput | $Enums.TournamentEventType[]
     enabledDivisions?: TournamentDetailCreateenabledDivisionsInput | string[]
+    customDivisions?: NullableJsonNullValueInput | InputJsonValue
     registrationDeadline?: Date | string | null
     weighInDate?: Date | string | null
     rulesUrl?: string | null
@@ -64427,7 +64478,9 @@ export namespace Prisma {
   export type TournamentDetailUncheckedCreateInput = {
     eventId: string
     eventType: $Enums.TournamentEventType
+    enabledTypes?: TournamentDetailCreateenabledTypesInput | $Enums.TournamentEventType[]
     enabledDivisions?: TournamentDetailCreateenabledDivisionsInput | string[]
+    customDivisions?: NullableJsonNullValueInput | InputJsonValue
     registrationDeadline?: Date | string | null
     weighInDate?: Date | string | null
     rulesUrl?: string | null
@@ -64437,7 +64490,9 @@ export namespace Prisma {
 
   export type TournamentDetailUpdateInput = {
     eventType?: EnumTournamentEventTypeFieldUpdateOperationsInput | $Enums.TournamentEventType
+    enabledTypes?: TournamentDetailUpdateenabledTypesInput | $Enums.TournamentEventType[]
     enabledDivisions?: TournamentDetailUpdateenabledDivisionsInput | string[]
+    customDivisions?: NullableJsonNullValueInput | InputJsonValue
     registrationDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     weighInDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     rulesUrl?: NullableStringFieldUpdateOperationsInput | string | null
@@ -64449,7 +64504,9 @@ export namespace Prisma {
   export type TournamentDetailUncheckedUpdateInput = {
     eventId?: StringFieldUpdateOperationsInput | string
     eventType?: EnumTournamentEventTypeFieldUpdateOperationsInput | $Enums.TournamentEventType
+    enabledTypes?: TournamentDetailUpdateenabledTypesInput | $Enums.TournamentEventType[]
     enabledDivisions?: TournamentDetailUpdateenabledDivisionsInput | string[]
+    customDivisions?: NullableJsonNullValueInput | InputJsonValue
     registrationDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     weighInDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     rulesUrl?: NullableStringFieldUpdateOperationsInput | string | null
@@ -64460,7 +64517,9 @@ export namespace Prisma {
   export type TournamentDetailCreateManyInput = {
     eventId: string
     eventType: $Enums.TournamentEventType
+    enabledTypes?: TournamentDetailCreateenabledTypesInput | $Enums.TournamentEventType[]
     enabledDivisions?: TournamentDetailCreateenabledDivisionsInput | string[]
+    customDivisions?: NullableJsonNullValueInput | InputJsonValue
     registrationDeadline?: Date | string | null
     weighInDate?: Date | string | null
     rulesUrl?: string | null
@@ -64470,7 +64529,9 @@ export namespace Prisma {
 
   export type TournamentDetailUpdateManyMutationInput = {
     eventType?: EnumTournamentEventTypeFieldUpdateOperationsInput | $Enums.TournamentEventType
+    enabledTypes?: TournamentDetailUpdateenabledTypesInput | $Enums.TournamentEventType[]
     enabledDivisions?: TournamentDetailUpdateenabledDivisionsInput | string[]
+    customDivisions?: NullableJsonNullValueInput | InputJsonValue
     registrationDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     weighInDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     rulesUrl?: NullableStringFieldUpdateOperationsInput | string | null
@@ -64481,7 +64542,9 @@ export namespace Prisma {
   export type TournamentDetailUncheckedUpdateManyInput = {
     eventId?: StringFieldUpdateOperationsInput | string
     eventType?: EnumTournamentEventTypeFieldUpdateOperationsInput | $Enums.TournamentEventType
+    enabledTypes?: TournamentDetailUpdateenabledTypesInput | $Enums.TournamentEventType[]
     enabledDivisions?: TournamentDetailUpdateenabledDivisionsInput | string[]
+    customDivisions?: NullableJsonNullValueInput | InputJsonValue
     registrationDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     weighInDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     rulesUrl?: NullableStringFieldUpdateOperationsInput | string | null
@@ -64599,6 +64662,7 @@ export namespace Prisma {
     guestPhone?: string | null
     qrToken: string
     paymentStatus?: $Enums.PaymentStatus | null
+    paymentGroupId?: string | null
     amountDue?: Decimal | DecimalJsLike | number | string | null
     paidAt?: Date | string | null
     transactionId?: string | null
@@ -64634,6 +64698,7 @@ export namespace Prisma {
     guestPhone?: string | null
     qrToken: string
     paymentStatus?: $Enums.PaymentStatus | null
+    paymentGroupId?: string | null
     amountDue?: Decimal | DecimalJsLike | number | string | null
     paidAt?: Date | string | null
     transactionId?: string | null
@@ -64665,6 +64730,7 @@ export namespace Prisma {
     guestPhone?: NullableStringFieldUpdateOperationsInput | string | null
     qrToken?: StringFieldUpdateOperationsInput | string
     paymentStatus?: NullableEnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus | null
+    paymentGroupId?: NullableStringFieldUpdateOperationsInput | string | null
     amountDue?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -64700,6 +64766,7 @@ export namespace Prisma {
     guestPhone?: NullableStringFieldUpdateOperationsInput | string | null
     qrToken?: StringFieldUpdateOperationsInput | string
     paymentStatus?: NullableEnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus | null
+    paymentGroupId?: NullableStringFieldUpdateOperationsInput | string | null
     amountDue?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -64733,6 +64800,7 @@ export namespace Prisma {
     guestPhone?: string | null
     qrToken: string
     paymentStatus?: $Enums.PaymentStatus | null
+    paymentGroupId?: string | null
     amountDue?: Decimal | DecimalJsLike | number | string | null
     paidAt?: Date | string | null
     transactionId?: string | null
@@ -64763,6 +64831,7 @@ export namespace Prisma {
     guestPhone?: NullableStringFieldUpdateOperationsInput | string | null
     qrToken?: StringFieldUpdateOperationsInput | string
     paymentStatus?: NullableEnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus | null
+    paymentGroupId?: NullableStringFieldUpdateOperationsInput | string | null
     amountDue?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -64794,6 +64863,7 @@ export namespace Prisma {
     guestPhone?: NullableStringFieldUpdateOperationsInput | string | null
     qrToken?: StringFieldUpdateOperationsInput | string
     paymentStatus?: NullableEnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus | null
+    paymentGroupId?: NullableStringFieldUpdateOperationsInput | string | null
     amountDue?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -68520,6 +68590,37 @@ export namespace Prisma {
     not?: NestedEnumTournamentEventTypeFilter<$PrismaModel> | $Enums.TournamentEventType
   }
 
+  export type EnumTournamentEventTypeNullableListFilter<$PrismaModel = never> = {
+    equals?: $Enums.TournamentEventType[] | ListEnumTournamentEventTypeFieldRefInput<$PrismaModel> | null
+    has?: $Enums.TournamentEventType | EnumTournamentEventTypeFieldRefInput<$PrismaModel> | null
+    hasEvery?: $Enums.TournamentEventType[] | ListEnumTournamentEventTypeFieldRefInput<$PrismaModel>
+    hasSome?: $Enums.TournamentEventType[] | ListEnumTournamentEventTypeFieldRefInput<$PrismaModel>
+    isEmpty?: boolean
+  }
+  export type JsonNullableFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
   export type EventScalarRelationFilter = {
     is?: EventWhereInput
     isNot?: EventWhereInput
@@ -68528,7 +68629,9 @@ export namespace Prisma {
   export type TournamentDetailCountOrderByAggregateInput = {
     eventId?: SortOrder
     eventType?: SortOrder
+    enabledTypes?: SortOrder
     enabledDivisions?: SortOrder
+    customDivisions?: SortOrder
     registrationDeadline?: SortOrder
     weighInDate?: SortOrder
     rulesUrl?: SortOrder
@@ -68564,6 +68667,32 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumTournamentEventTypeFilter<$PrismaModel>
     _max?: NestedEnumTournamentEventTypeFilter<$PrismaModel>
+  }
+  export type JsonNullableWithAggregatesFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableWithAggregatesFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedJsonNullableFilter<$PrismaModel>
+    _max?: NestedJsonNullableFilter<$PrismaModel>
   }
 
   export type AnnouncementCountOrderByAggregateInput = {
@@ -68617,29 +68746,6 @@ export namespace Prisma {
     notIn?: $Enums.PaymentStatus[] | ListEnumPaymentStatusFieldRefInput<$PrismaModel> | null
     not?: NestedEnumPaymentStatusNullableFilter<$PrismaModel> | $Enums.PaymentStatus | null
   }
-  export type JsonNullableFilter<$PrismaModel = never> =
-    | PatchUndefined<
-        Either<Required<JsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>,
-        Required<JsonNullableFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>
-
-  export type JsonNullableFilterBase<$PrismaModel = never> = {
-    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string[]
-    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-  }
 
   export type BoolNullableFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
@@ -68655,6 +68761,7 @@ export namespace Prisma {
     guestPhone?: SortOrder
     qrToken?: SortOrder
     paymentStatus?: SortOrder
+    paymentGroupId?: SortOrder
     amountDue?: SortOrder
     paidAt?: SortOrder
     transactionId?: SortOrder
@@ -68692,6 +68799,7 @@ export namespace Prisma {
     guestPhone?: SortOrder
     qrToken?: SortOrder
     paymentStatus?: SortOrder
+    paymentGroupId?: SortOrder
     amountDue?: SortOrder
     paidAt?: SortOrder
     transactionId?: SortOrder
@@ -68723,6 +68831,7 @@ export namespace Prisma {
     guestPhone?: SortOrder
     qrToken?: SortOrder
     paymentStatus?: SortOrder
+    paymentGroupId?: SortOrder
     amountDue?: SortOrder
     paidAt?: SortOrder
     transactionId?: SortOrder
@@ -68758,32 +68867,6 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedEnumPaymentStatusNullableFilter<$PrismaModel>
     _max?: NestedEnumPaymentStatusNullableFilter<$PrismaModel>
-  }
-  export type JsonNullableWithAggregatesFilter<$PrismaModel = never> =
-    | PatchUndefined<
-        Either<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
-        Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
-
-  export type JsonNullableWithAggregatesFilterBase<$PrismaModel = never> = {
-    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string[]
-    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedJsonNullableFilter<$PrismaModel>
-    _max?: NestedJsonNullableFilter<$PrismaModel>
   }
 
   export type BoolNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -73140,6 +73223,10 @@ export namespace Prisma {
     update?: XOR<XOR<TournamentDetailUpdateToOneWithWhereWithoutEventInput, TournamentDetailUpdateWithoutEventInput>, TournamentDetailUncheckedUpdateWithoutEventInput>
   }
 
+  export type TournamentDetailCreateenabledTypesInput = {
+    set: $Enums.TournamentEventType[]
+  }
+
   export type TournamentDetailCreateenabledDivisionsInput = {
     set: string[]
   }
@@ -73152,6 +73239,11 @@ export namespace Prisma {
 
   export type EnumTournamentEventTypeFieldUpdateOperationsInput = {
     set?: $Enums.TournamentEventType
+  }
+
+  export type TournamentDetailUpdateenabledTypesInput = {
+    set?: $Enums.TournamentEventType[]
+    push?: $Enums.TournamentEventType | $Enums.TournamentEventType[]
   }
 
   export type TournamentDetailUpdateenabledDivisionsInput = {
@@ -75369,28 +75461,6 @@ export namespace Prisma {
     _min?: NestedEnumTournamentEventTypeFilter<$PrismaModel>
     _max?: NestedEnumTournamentEventTypeFilter<$PrismaModel>
   }
-
-  export type NestedEnumPaymentStatusNullableFilter<$PrismaModel = never> = {
-    equals?: $Enums.PaymentStatus | EnumPaymentStatusFieldRefInput<$PrismaModel> | null
-    in?: $Enums.PaymentStatus[] | ListEnumPaymentStatusFieldRefInput<$PrismaModel> | null
-    notIn?: $Enums.PaymentStatus[] | ListEnumPaymentStatusFieldRefInput<$PrismaModel> | null
-    not?: NestedEnumPaymentStatusNullableFilter<$PrismaModel> | $Enums.PaymentStatus | null
-  }
-
-  export type NestedBoolNullableFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
-    not?: NestedBoolNullableFilter<$PrismaModel> | boolean | null
-  }
-
-  export type NestedEnumPaymentStatusNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.PaymentStatus | EnumPaymentStatusFieldRefInput<$PrismaModel> | null
-    in?: $Enums.PaymentStatus[] | ListEnumPaymentStatusFieldRefInput<$PrismaModel> | null
-    notIn?: $Enums.PaymentStatus[] | ListEnumPaymentStatusFieldRefInput<$PrismaModel> | null
-    not?: NestedEnumPaymentStatusNullableWithAggregatesFilter<$PrismaModel> | $Enums.PaymentStatus | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedEnumPaymentStatusNullableFilter<$PrismaModel>
-    _max?: NestedEnumPaymentStatusNullableFilter<$PrismaModel>
-  }
   export type NestedJsonNullableFilter<$PrismaModel = never> =
     | PatchUndefined<
         Either<Required<NestedJsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>,
@@ -75413,6 +75483,28 @@ export namespace Prisma {
     gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
     gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
+  export type NestedEnumPaymentStatusNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.PaymentStatus | EnumPaymentStatusFieldRefInput<$PrismaModel> | null
+    in?: $Enums.PaymentStatus[] | ListEnumPaymentStatusFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.PaymentStatus[] | ListEnumPaymentStatusFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumPaymentStatusNullableFilter<$PrismaModel> | $Enums.PaymentStatus | null
+  }
+
+  export type NestedBoolNullableFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
+    not?: NestedBoolNullableFilter<$PrismaModel> | boolean | null
+  }
+
+  export type NestedEnumPaymentStatusNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.PaymentStatus | EnumPaymentStatusFieldRefInput<$PrismaModel> | null
+    in?: $Enums.PaymentStatus[] | ListEnumPaymentStatusFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.PaymentStatus[] | ListEnumPaymentStatusFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumPaymentStatusNullableWithAggregatesFilter<$PrismaModel> | $Enums.PaymentStatus | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumPaymentStatusNullableFilter<$PrismaModel>
+    _max?: NestedEnumPaymentStatusNullableFilter<$PrismaModel>
   }
 
   export type NestedBoolNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -76221,6 +76313,7 @@ export namespace Prisma {
     guestPhone?: string | null
     qrToken: string
     paymentStatus?: $Enums.PaymentStatus | null
+    paymentGroupId?: string | null
     amountDue?: Decimal | DecimalJsLike | number | string | null
     paidAt?: Date | string | null
     transactionId?: string | null
@@ -76254,6 +76347,7 @@ export namespace Prisma {
     guestPhone?: string | null
     qrToken: string
     paymentStatus?: $Enums.PaymentStatus | null
+    paymentGroupId?: string | null
     amountDue?: Decimal | DecimalJsLike | number | string | null
     paidAt?: Date | string | null
     transactionId?: string | null
@@ -76295,6 +76389,7 @@ export namespace Prisma {
     guestPhone?: string | null
     qrToken: string
     paymentStatus?: $Enums.PaymentStatus | null
+    paymentGroupId?: string | null
     amountDue?: Decimal | DecimalJsLike | number | string | null
     paidAt?: Date | string | null
     transactionId?: string | null
@@ -76329,6 +76424,7 @@ export namespace Prisma {
     guestPhone?: string | null
     qrToken: string
     paymentStatus?: $Enums.PaymentStatus | null
+    paymentGroupId?: string | null
     amountDue?: Decimal | DecimalJsLike | number | string | null
     paidAt?: Date | string | null
     transactionId?: string | null
@@ -77315,6 +77411,7 @@ export namespace Prisma {
     guestPhone?: StringNullableFilter<"EventRegistration"> | string | null
     qrToken?: StringFilter<"EventRegistration"> | string
     paymentStatus?: EnumPaymentStatusNullableFilter<"EventRegistration"> | $Enums.PaymentStatus | null
+    paymentGroupId?: UuidNullableFilter<"EventRegistration"> | string | null
     amountDue?: DecimalNullableFilter<"EventRegistration"> | Decimal | DecimalJsLike | number | string | null
     paidAt?: DateTimeNullableFilter<"EventRegistration"> | Date | string | null
     transactionId?: StringNullableFilter<"EventRegistration"> | string | null
@@ -83169,6 +83266,7 @@ export namespace Prisma {
     guestPhone?: string | null
     qrToken: string
     paymentStatus?: $Enums.PaymentStatus | null
+    paymentGroupId?: string | null
     amountDue?: Decimal | DecimalJsLike | number | string | null
     paidAt?: Date | string | null
     transactionId?: string | null
@@ -83202,6 +83300,7 @@ export namespace Prisma {
     guestPhone?: string | null
     qrToken: string
     paymentStatus?: $Enums.PaymentStatus | null
+    paymentGroupId?: string | null
     amountDue?: Decimal | DecimalJsLike | number | string | null
     paidAt?: Date | string | null
     transactionId?: string | null
@@ -83433,7 +83532,9 @@ export namespace Prisma {
 
   export type TournamentDetailCreateWithoutEventInput = {
     eventType: $Enums.TournamentEventType
+    enabledTypes?: TournamentDetailCreateenabledTypesInput | $Enums.TournamentEventType[]
     enabledDivisions?: TournamentDetailCreateenabledDivisionsInput | string[]
+    customDivisions?: NullableJsonNullValueInput | InputJsonValue
     registrationDeadline?: Date | string | null
     weighInDate?: Date | string | null
     rulesUrl?: string | null
@@ -83443,7 +83544,9 @@ export namespace Prisma {
 
   export type TournamentDetailUncheckedCreateWithoutEventInput = {
     eventType: $Enums.TournamentEventType
+    enabledTypes?: TournamentDetailCreateenabledTypesInput | $Enums.TournamentEventType[]
     enabledDivisions?: TournamentDetailCreateenabledDivisionsInput | string[]
+    customDivisions?: NullableJsonNullValueInput | InputJsonValue
     registrationDeadline?: Date | string | null
     weighInDate?: Date | string | null
     rulesUrl?: string | null
@@ -83698,7 +83801,9 @@ export namespace Prisma {
 
   export type TournamentDetailUpdateWithoutEventInput = {
     eventType?: EnumTournamentEventTypeFieldUpdateOperationsInput | $Enums.TournamentEventType
+    enabledTypes?: TournamentDetailUpdateenabledTypesInput | $Enums.TournamentEventType[]
     enabledDivisions?: TournamentDetailUpdateenabledDivisionsInput | string[]
+    customDivisions?: NullableJsonNullValueInput | InputJsonValue
     registrationDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     weighInDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     rulesUrl?: NullableStringFieldUpdateOperationsInput | string | null
@@ -83708,7 +83813,9 @@ export namespace Prisma {
 
   export type TournamentDetailUncheckedUpdateWithoutEventInput = {
     eventType?: EnumTournamentEventTypeFieldUpdateOperationsInput | $Enums.TournamentEventType
+    enabledTypes?: TournamentDetailUpdateenabledTypesInput | $Enums.TournamentEventType[]
     enabledDivisions?: TournamentDetailUpdateenabledDivisionsInput | string[]
+    customDivisions?: NullableJsonNullValueInput | InputJsonValue
     registrationDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     weighInDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     rulesUrl?: NullableStringFieldUpdateOperationsInput | string | null
@@ -89250,6 +89357,7 @@ export namespace Prisma {
     guestPhone?: string | null
     qrToken: string
     paymentStatus?: $Enums.PaymentStatus | null
+    paymentGroupId?: string | null
     amountDue?: Decimal | DecimalJsLike | number | string | null
     paidAt?: Date | string | null
     transactionId?: string | null
@@ -89284,6 +89392,7 @@ export namespace Prisma {
     guestPhone?: string | null
     qrToken: string
     paymentStatus?: $Enums.PaymentStatus | null
+    paymentGroupId?: string | null
     amountDue?: Decimal | DecimalJsLike | number | string | null
     paidAt?: Date | string | null
     transactionId?: string | null
@@ -89484,6 +89593,7 @@ export namespace Prisma {
     guestPhone?: NullableStringFieldUpdateOperationsInput | string | null
     qrToken?: StringFieldUpdateOperationsInput | string
     paymentStatus?: NullableEnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus | null
+    paymentGroupId?: NullableStringFieldUpdateOperationsInput | string | null
     amountDue?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -89518,6 +89628,7 @@ export namespace Prisma {
     guestPhone?: NullableStringFieldUpdateOperationsInput | string | null
     qrToken?: StringFieldUpdateOperationsInput | string
     paymentStatus?: NullableEnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus | null
+    paymentGroupId?: NullableStringFieldUpdateOperationsInput | string | null
     amountDue?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -92046,6 +92157,7 @@ export namespace Prisma {
     guestPhone?: string | null
     qrToken: string
     paymentStatus?: $Enums.PaymentStatus | null
+    paymentGroupId?: string | null
     amountDue?: Decimal | DecimalJsLike | number | string | null
     paidAt?: Date | string | null
     transactionId?: string | null
@@ -92078,6 +92190,7 @@ export namespace Prisma {
     guestPhone?: string | null
     qrToken: string
     paymentStatus?: $Enums.PaymentStatus | null
+    paymentGroupId?: string | null
     amountDue?: Decimal | DecimalJsLike | number | string | null
     paidAt?: Date | string | null
     transactionId?: string | null
@@ -92462,6 +92575,7 @@ export namespace Prisma {
     guestPhone?: NullableStringFieldUpdateOperationsInput | string | null
     qrToken?: StringFieldUpdateOperationsInput | string
     paymentStatus?: NullableEnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus | null
+    paymentGroupId?: NullableStringFieldUpdateOperationsInput | string | null
     amountDue?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -92495,6 +92609,7 @@ export namespace Prisma {
     guestPhone?: NullableStringFieldUpdateOperationsInput | string | null
     qrToken?: StringFieldUpdateOperationsInput | string
     paymentStatus?: NullableEnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus | null
+    paymentGroupId?: NullableStringFieldUpdateOperationsInput | string | null
     amountDue?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -92527,6 +92642,7 @@ export namespace Prisma {
     guestPhone?: NullableStringFieldUpdateOperationsInput | string | null
     qrToken?: StringFieldUpdateOperationsInput | string
     paymentStatus?: NullableEnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus | null
+    paymentGroupId?: NullableStringFieldUpdateOperationsInput | string | null
     amountDue?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -92557,6 +92673,7 @@ export namespace Prisma {
     guestPhone?: NullableStringFieldUpdateOperationsInput | string | null
     qrToken?: StringFieldUpdateOperationsInput | string
     paymentStatus?: NullableEnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus | null
+    paymentGroupId?: NullableStringFieldUpdateOperationsInput | string | null
     amountDue?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -92591,6 +92708,7 @@ export namespace Prisma {
     guestPhone?: NullableStringFieldUpdateOperationsInput | string | null
     qrToken?: StringFieldUpdateOperationsInput | string
     paymentStatus?: NullableEnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus | null
+    paymentGroupId?: NullableStringFieldUpdateOperationsInput | string | null
     amountDue?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -92623,6 +92741,7 @@ export namespace Prisma {
     guestPhone?: NullableStringFieldUpdateOperationsInput | string | null
     qrToken?: StringFieldUpdateOperationsInput | string
     paymentStatus?: NullableEnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus | null
+    paymentGroupId?: NullableStringFieldUpdateOperationsInput | string | null
     amountDue?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -95482,6 +95601,7 @@ export namespace Prisma {
     guestPhone?: string | null
     qrToken: string
     paymentStatus?: $Enums.PaymentStatus | null
+    paymentGroupId?: string | null
     amountDue?: Decimal | DecimalJsLike | number | string | null
     paidAt?: Date | string | null
     transactionId?: string | null
@@ -95512,6 +95632,7 @@ export namespace Prisma {
     guestPhone?: NullableStringFieldUpdateOperationsInput | string | null
     qrToken?: StringFieldUpdateOperationsInput | string
     paymentStatus?: NullableEnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus | null
+    paymentGroupId?: NullableStringFieldUpdateOperationsInput | string | null
     amountDue?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -95545,6 +95666,7 @@ export namespace Prisma {
     guestPhone?: NullableStringFieldUpdateOperationsInput | string | null
     qrToken?: StringFieldUpdateOperationsInput | string
     paymentStatus?: NullableEnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus | null
+    paymentGroupId?: NullableStringFieldUpdateOperationsInput | string | null
     amountDue?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -95577,6 +95699,7 @@ export namespace Prisma {
     guestPhone?: NullableStringFieldUpdateOperationsInput | string | null
     qrToken?: StringFieldUpdateOperationsInput | string
     paymentStatus?: NullableEnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus | null
+    paymentGroupId?: NullableStringFieldUpdateOperationsInput | string | null
     amountDue?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null
