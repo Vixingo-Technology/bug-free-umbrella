@@ -7,7 +7,7 @@ import TransferClient from "@/components/portal/transfer-client";
 
 export const metadata = { title: "Transfer Dojo — JKA Bangladesh" };
 
-const OPEN_STATUSES = ["PENDING_PAYMENT", "AWAITING_DOJO", "AWAITING_ADMIN"] as const;
+const OPEN_STATUSES = ["PENDING_PAYMENT", "AWAITING_DOJO", "AWAITING_ADMIN", "AWAITING_NEW_DOJO"] as const;
 
 export default async function TransferPage() {
     const supabase = await createClient();

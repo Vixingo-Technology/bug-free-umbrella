@@ -22,7 +22,7 @@ import {
 
 type Dojo = { id: string; name: string };
 
-type TransferStatus = "PENDING_PAYMENT" | "AWAITING_DOJO" | "AWAITING_ADMIN" | "APPROVED" | "DENIED" | "CANCELLED";
+type TransferStatus = "PENDING_PAYMENT" | "AWAITING_DOJO" | "AWAITING_ADMIN" | "AWAITING_NEW_DOJO" | "APPROVED" | "DENIED" | "CANCELLED";
 
 type ActiveRequest = {
     id: string;
@@ -65,6 +65,7 @@ const STATUS_LABEL: Record<string, string> = {
     PENDING_PAYMENT: "Awaiting payment",
     AWAITING_DOJO: "Awaiting dojo clearance",
     AWAITING_ADMIN: "Awaiting JKA admin",
+    AWAITING_NEW_DOJO: "Visit your new dojo",
     APPROVED: "Approved",
     DENIED: "Denied",
     CANCELLED: "Cancelled",
@@ -74,6 +75,7 @@ const STATUS_TONE: Record<string, string> = {
     PENDING_PAYMENT: "bg-zinc-100 text-zinc-700 border-zinc-200",
     AWAITING_DOJO: "bg-amber-50 text-amber-800 border-amber-200",
     AWAITING_ADMIN: "bg-blue-50 text-blue-800 border-blue-200",
+    AWAITING_NEW_DOJO: "bg-violet-50 text-violet-800 border-violet-200",
     APPROVED: "bg-emerald-50 text-emerald-800 border-emerald-200",
     DENIED: "bg-red-50 text-red-800 border-red-200",
     CANCELLED: "bg-zinc-100 text-zinc-500 border-zinc-200",
@@ -90,20 +92,23 @@ function StatusPill({ status }: { status: string }) {
 }
 
 function Timeline({ req }: { req: NonNullable<ActiveRequest> }) {
+    const s = req.status as string;
+    const passedAdmin = s === "AWAITING_NEW_DOJO" || s === "APPROVED";
     const steps = [
-        { label: "Payment", done: req.status !== "PENDING_PAYMENT" },
+        { label: "Payment", done: s !== "PENDING_PAYMENT" },
         {
             label: "Dojo clearance",
-            done:
-                req.status === "AWAITING_ADMIN" ||
-                (req.status as string) === "APPROVED" ||
-                (req.status as string) === "DENIED",
+            done: s === "AWAITING_ADMIN" || passedAdmin || s === "DENIED",
             failed: req.dojoDecision === "REJECTED",
         },
         {
             label: "JKA admin",
-            done: (req.status as string) === "APPROVED",
-            failed: (req.status as string) === "DENIED",
+            done: passedAdmin,
+            failed: s === "DENIED",
+        },
+        {
+            label: "New dojo accepts",
+            done: s === "APPROVED",
         },
     ];
     return (
@@ -241,6 +246,19 @@ export default function TransferClient({
                         </div>
 
                         <Timeline req={activeRequest} />
+
+                        {activeRequest.status === "AWAITING_NEW_DOJO" && (
+                            <div className="rounded-xl border border-violet-200 bg-violet-50 p-3 text-xs text-violet-800 flex items-start gap-2">
+                                <Sparkles size={14} className="mt-0.5 flex-shrink-0" />
+                                <div>
+                                    <p className="font-semibold">JKA HQ approved your request.</p>
+                                    <p className="mt-0.5">
+                                        Now visit your new dojo ({activeRequest.toDojo.name}) and
+                                        get your Joining request approved.
+                                    </p>
+                                </div>
+                            </div>
+                        )}
 
                         {activeRequest.reason && (
                             <div className="text-xs text-zinc-500 pt-2 border-t border-zinc-100">

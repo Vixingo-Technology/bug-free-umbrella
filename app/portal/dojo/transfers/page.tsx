@@ -26,27 +26,59 @@ export default async function DojoTransfersPage() {
         );
     }
 
-    const requests = await prisma.studentTransferRequest.findMany({
-        where: { fromDojoId: session.dojo.id },
-        include: {
-            student: {
-                include: {
-                    user: { select: { id: true, fullName: true, avatarUrl: true } },
+    const [outgoing, incoming, beltRanks] = await Promise.all([
+        prisma.studentTransferRequest.findMany({
+            where: { fromDojoId: session.dojo.id },
+            include: {
+                student: {
+                    include: {
+                        user: { select: { id: true, fullName: true, avatarUrl: true } },
+                    },
                 },
+                toDojo: { select: { id: true, name: true, city: true } },
+                fromDojo: { select: { id: true, name: true, city: true } },
             },
-            toDojo: { select: { id: true, name: true, city: true } },
-        },
-        orderBy: { createdAt: "desc" },
-    });
+            orderBy: { createdAt: "desc" },
+        }),
+        prisma.studentTransferRequest.findMany({
+            where: { toDojoId: session.dojo.id, status: { in: ["AWAITING_NEW_DOJO", "APPROVED"] } },
+            include: {
+                student: {
+                    include: {
+                        user: {
+                            select: {
+                                id: true,
+                                fullName: true,
+                                email: true,
+                                phone: true,
+                                avatarUrl: true,
+                            },
+                        },
+                    },
+                },
+                toDojo: { select: { id: true, name: true, city: true } },
+                fromDojo: { select: { id: true, name: true, city: true } },
+            },
+            orderBy: { createdAt: "desc" },
+        }),
+        prisma.beltRank.findMany({
+            select: { id: true, name: true, orderIndex: true },
+            orderBy: { orderIndex: "asc" },
+        }),
+    ]);
 
     return (
         <>
             <DojoPageHeader
                 eyebrow="Dojo Head"
                 title="Transfer requests"
-                description="Give clearance for students who want to move to another dojo. Once you decide, the request goes to JKA admin for final approval."
+                description="Give clearance for students moving out. When JKA admin approves an incoming transfer, review the student and accept them into your dojo."
             />
-            <DojoTransfersClient requests={serialize(requests) as never} />
+            <DojoTransfersClient
+                requests={serialize(outgoing) as never}
+                incoming={serialize(incoming) as never}
+                beltRanks={beltRanks}
+            />
         </>
     );
 }

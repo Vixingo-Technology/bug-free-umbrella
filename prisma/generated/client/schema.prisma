@@ -132,6 +132,7 @@ enum StudentTransferStatus {
   PENDING_PAYMENT
   AWAITING_DOJO
   AWAITING_ADMIN
+  AWAITING_NEW_DOJO
   APPROVED
   DENIED
   CANCELLED
@@ -312,6 +313,7 @@ model User {
   tournamentEntries         TournamentParticipant[]  @relation("TournamentEntries")
   transfersDojoActed        StudentTransferRequest[] @relation("TransferDojoActor")
   transfersAdminActed       StudentTransferRequest[] @relation("TransferAdminActor")
+  transfersNewDojoActed     StudentTransferRequest[] @relation("TransferNewDojoActor")
   dojoHistoryChanges        StudentDojoHistory[]     @relation("HistoryChangedBy")
   paymentTransactions       PaymentTransaction[]     @relation("UserTransactions")
   dojoOwnerInvitesSent      DojoOwnerInvite[]        @relation("DojoOwnerInvites")
@@ -1278,18 +1280,22 @@ model StudentTransferRequest {
 
   orderId String? @unique @map("order_id") @db.Uuid
 
-  paidAt         DateTime? @map("paid_at")
-  dojoActedAt    DateTime? @map("dojo_acted_at")
-  dojoActedById  String?   @map("dojo_acted_by_id") @db.Uuid
-  adminActedAt   DateTime? @map("admin_acted_at")
-  adminActedById String?   @map("admin_acted_by_id") @db.Uuid
+  paidAt           DateTime? @map("paid_at")
+  dojoActedAt      DateTime? @map("dojo_acted_at")
+  dojoActedById    String?   @map("dojo_acted_by_id") @db.Uuid
+  adminActedAt     DateTime? @map("admin_acted_at")
+  adminActedById   String?   @map("admin_acted_by_id") @db.Uuid
+  newDojoActedAt   DateTime? @map("new_dojo_acted_at")
+  newDojoActedById String?   @map("new_dojo_acted_by_id") @db.Uuid
+  assignedRank     String?   @map("assigned_rank")
 
-  student      Student    @relation(fields: [studentId], references: [id], onDelete: Cascade)
-  fromDojo     Dojo       @relation("TransferFromDojo", fields: [fromDojoId], references: [id])
-  toDojo       Dojo       @relation("TransferToDojo", fields: [toDojoId], references: [id])
-  order        ShopOrder? @relation("TransferOrder", fields: [orderId], references: [id], onDelete: SetNull)
-  dojoActedBy  User?      @relation("TransferDojoActor", fields: [dojoActedById], references: [id], onDelete: SetNull)
-  adminActedBy User?      @relation("TransferAdminActor", fields: [adminActedById], references: [id], onDelete: SetNull)
+  student        Student    @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  fromDojo       Dojo       @relation("TransferFromDojo", fields: [fromDojoId], references: [id])
+  toDojo         Dojo       @relation("TransferToDojo", fields: [toDojoId], references: [id])
+  order          ShopOrder? @relation("TransferOrder", fields: [orderId], references: [id], onDelete: SetNull)
+  dojoActedBy    User?      @relation("TransferDojoActor", fields: [dojoActedById], references: [id], onDelete: SetNull)
+  adminActedBy   User?      @relation("TransferAdminActor", fields: [adminActedById], references: [id], onDelete: SetNull)
+  newDojoActedBy User?      @relation("TransferNewDojoActor", fields: [newDojoActedById], references: [id], onDelete: SetNull)
 
   history StudentDojoHistory[] @relation("HistoryTransferRequest")
 

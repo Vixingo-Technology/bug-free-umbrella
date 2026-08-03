@@ -10,7 +10,7 @@ import { previewCoupon } from "@/lib/services/coupon";
 import { notifyMembers } from "@/lib/notify";
 import { findUserIdsByRoles } from "@/lib/notify/recipients";
 
-const OPEN_STATUSES = ["PENDING_PAYMENT", "AWAITING_DOJO", "AWAITING_ADMIN"] as const;
+const OPEN_STATUSES = ["PENDING_PAYMENT", "AWAITING_DOJO", "AWAITING_ADMIN", "AWAITING_NEW_DOJO"] as const;
 
 /** Sweep away any orphaned PENDING_PAYMENT rows older than 30 minutes. */
 async function sweepStaleRequests(studentId: string) {

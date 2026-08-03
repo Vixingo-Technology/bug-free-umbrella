@@ -628,6 +628,9 @@ exports.Prisma.StudentTransferRequestScalarFieldEnum = {
   dojoActedById: 'dojoActedById',
   adminActedAt: 'adminActedAt',
   adminActedById: 'adminActedById',
+  newDojoActedAt: 'newDojoActedAt',
+  newDojoActedById: 'newDojoActedById',
+  assignedRank: 'assignedRank',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -874,6 +877,7 @@ exports.StudentTransferStatus = exports.$Enums.StudentTransferStatus = {
   PENDING_PAYMENT: 'PENDING_PAYMENT',
   AWAITING_DOJO: 'AWAITING_DOJO',
   AWAITING_ADMIN: 'AWAITING_ADMIN',
+  AWAITING_NEW_DOJO: 'AWAITING_NEW_DOJO',
   APPROVED: 'APPROVED',
   DENIED: 'DENIED',
   CANCELLED: 'CANCELLED'

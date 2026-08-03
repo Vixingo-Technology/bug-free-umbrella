@@ -4,7 +4,6 @@ import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { prisma } from "@/lib/prisma";
 import { loadCurrentUser } from "@/lib/auth/load-current-user";
-import { assignDojo } from "@/lib/auth/assign-dojo";
 import { findUserIdsByRoles } from "@/lib/notify/recipients";
 import { notifyMembers } from "@/lib/notify";
 
@@ -50,17 +49,10 @@ export async function approveTransferAction(
     const newDojoOwnerIds = await findUserIdsByRoles(["DOJO_OWNER"], { dojoId: req.toDojoId });
 
     await prisma.$transaction(async (tx) => {
-        await assignDojo(req.studentId, req.toDojoId, {
-            changedById: user.id,
-            reason: "Transfer approved",
-            transferRequestId: req.id,
-            tx,
-        });
-
         await tx.studentTransferRequest.update({
             where: { id: req.id },
             data: {
-                status: "APPROVED",
+                status: "AWAITING_NEW_DOJO",
                 adminNote: note?.trim() || null,
                 adminActedAt: new Date(),
                 adminActedById: user.id,
@@ -70,8 +62,8 @@ export async function approveTransferAction(
         await notifyMembers(
             [req.studentId],
             {
-                title: "Transfer approved",
-                message: `Your transfer request has been approved. You are now a member of ${req.toDojo.name}.`,
+                title: "JKA HQ approved your request",
+                message: `Now visit your new dojo (${req.toDojo.name}) and get your Joining request approved.`,
                 type: "TRANSFER",
                 link: `/portal/transfer`,
             },
@@ -81,8 +73,8 @@ export async function approveTransferAction(
         await notifyMembers(
             newDojoOwnerIds,
             {
-                title: "New student transferred in",
-                message: `JKA admin transferred ${req.student.user.fullName} from ${req.fromDojo.name} to your dojo.`,
+                title: "Admin approved a transfer to your dojo",
+                message: `JKA admin approved a transfer request from ${req.fromDojo.name} to your dojo. Review ${req.student.user.fullName}'s join request and set their rank.`,
                 type: "TRANSFER",
                 link: `/portal/dojo/transfers`,
             },

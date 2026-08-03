@@ -17,7 +17,7 @@ import {
 
 type Row = {
     id: string;
-    status: "PENDING_PAYMENT" | "AWAITING_DOJO" | "AWAITING_ADMIN" | "APPROVED" | "DENIED" | "CANCELLED";
+    status: "PENDING_PAYMENT" | "AWAITING_DOJO" | "AWAITING_ADMIN" | "AWAITING_NEW_DOJO" | "APPROVED" | "DENIED" | "CANCELLED";
     dojoDecision: "PENDING" | "APPROVED" | "REJECTED";
     reason: string | null;
     dojoNote: string | null;
@@ -37,6 +37,7 @@ const STATUS_LABEL: Record<string, string> = {
     PENDING_PAYMENT: "Awaiting payment",
     AWAITING_DOJO: "Awaiting dojo clearance",
     AWAITING_ADMIN: "Awaiting your decision",
+    AWAITING_NEW_DOJO: "Awaiting new dojo acceptance",
     APPROVED: "Approved",
     DENIED: "Denied",
     CANCELLED: "Cancelled",
@@ -46,6 +47,7 @@ const STATUS_TONE: Record<string, string> = {
     PENDING_PAYMENT: "bg-zinc-100 text-zinc-700 border-zinc-200",
     AWAITING_DOJO: "bg-amber-50 text-amber-800 border-amber-200",
     AWAITING_ADMIN: "bg-blue-50 text-blue-800 border-blue-200",
+    AWAITING_NEW_DOJO: "bg-violet-50 text-violet-800 border-violet-200",
     APPROVED: "bg-emerald-50 text-emerald-800 border-emerald-200",
     DENIED: "bg-red-50 text-red-800 border-red-200",
     CANCELLED: "bg-zinc-100 text-zinc-500 border-zinc-200",

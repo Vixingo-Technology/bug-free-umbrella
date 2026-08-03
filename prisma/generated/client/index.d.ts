@@ -345,6 +345,7 @@ export const StudentTransferStatus: {
   PENDING_PAYMENT: 'PENDING_PAYMENT',
   AWAITING_DOJO: 'AWAITING_DOJO',
   AWAITING_ADMIN: 'AWAITING_ADMIN',
+  AWAITING_NEW_DOJO: 'AWAITING_NEW_DOJO',
   APPROVED: 'APPROVED',
   DENIED: 'DENIED',
   CANCELLED: 'CANCELLED'
@@ -4942,6 +4943,7 @@ export namespace Prisma {
     tournamentEntries: number
     transfersDojoActed: number
     transfersAdminActed: number
+    transfersNewDojoActed: number
     dojoHistoryChanges: number
     paymentTransactions: number
     dojoOwnerInvitesSent: number
@@ -4963,6 +4965,7 @@ export namespace Prisma {
     tournamentEntries?: boolean | UserCountOutputTypeCountTournamentEntriesArgs
     transfersDojoActed?: boolean | UserCountOutputTypeCountTransfersDojoActedArgs
     transfersAdminActed?: boolean | UserCountOutputTypeCountTransfersAdminActedArgs
+    transfersNewDojoActed?: boolean | UserCountOutputTypeCountTransfersNewDojoActedArgs
     dojoHistoryChanges?: boolean | UserCountOutputTypeCountDojoHistoryChangesArgs
     paymentTransactions?: boolean | UserCountOutputTypeCountPaymentTransactionsArgs
     dojoOwnerInvitesSent?: boolean | UserCountOutputTypeCountDojoOwnerInvitesSentArgs
@@ -5063,6 +5066,13 @@ export namespace Prisma {
    * UserCountOutputType without action
    */
   export type UserCountOutputTypeCountTransfersAdminActedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: StudentTransferRequestWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountTransfersNewDojoActedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: StudentTransferRequestWhereInput
   }
 
@@ -9369,6 +9379,7 @@ export namespace Prisma {
     tournamentEntries?: boolean | User$tournamentEntriesArgs<ExtArgs>
     transfersDojoActed?: boolean | User$transfersDojoActedArgs<ExtArgs>
     transfersAdminActed?: boolean | User$transfersAdminActedArgs<ExtArgs>
+    transfersNewDojoActed?: boolean | User$transfersNewDojoActedArgs<ExtArgs>
     dojoHistoryChanges?: boolean | User$dojoHistoryChangesArgs<ExtArgs>
     paymentTransactions?: boolean | User$paymentTransactionsArgs<ExtArgs>
     dojoOwnerInvitesSent?: boolean | User$dojoOwnerInvitesSentArgs<ExtArgs>
@@ -9443,6 +9454,7 @@ export namespace Prisma {
     tournamentEntries?: boolean | User$tournamentEntriesArgs<ExtArgs>
     transfersDojoActed?: boolean | User$transfersDojoActedArgs<ExtArgs>
     transfersAdminActed?: boolean | User$transfersAdminActedArgs<ExtArgs>
+    transfersNewDojoActed?: boolean | User$transfersNewDojoActedArgs<ExtArgs>
     dojoHistoryChanges?: boolean | User$dojoHistoryChangesArgs<ExtArgs>
     paymentTransactions?: boolean | User$paymentTransactionsArgs<ExtArgs>
     dojoOwnerInvitesSent?: boolean | User$dojoOwnerInvitesSentArgs<ExtArgs>
@@ -9480,6 +9492,7 @@ export namespace Prisma {
       tournamentEntries: Prisma.$TournamentParticipantPayload<ExtArgs>[]
       transfersDojoActed: Prisma.$StudentTransferRequestPayload<ExtArgs>[]
       transfersAdminActed: Prisma.$StudentTransferRequestPayload<ExtArgs>[]
+      transfersNewDojoActed: Prisma.$StudentTransferRequestPayload<ExtArgs>[]
       dojoHistoryChanges: Prisma.$StudentDojoHistoryPayload<ExtArgs>[]
       paymentTransactions: Prisma.$PaymentTransactionPayload<ExtArgs>[]
       dojoOwnerInvitesSent: Prisma.$DojoOwnerInvitePayload<ExtArgs>[]
@@ -9912,6 +9925,7 @@ export namespace Prisma {
     tournamentEntries<T extends User$tournamentEntriesArgs<ExtArgs> = {}>(args?: Subset<T, User$tournamentEntriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TournamentParticipantPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     transfersDojoActed<T extends User$transfersDojoActedArgs<ExtArgs> = {}>(args?: Subset<T, User$transfersDojoActedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentTransferRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     transfersAdminActed<T extends User$transfersAdminActedArgs<ExtArgs> = {}>(args?: Subset<T, User$transfersAdminActedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentTransferRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    transfersNewDojoActed<T extends User$transfersNewDojoActedArgs<ExtArgs> = {}>(args?: Subset<T, User$transfersNewDojoActedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentTransferRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     dojoHistoryChanges<T extends User$dojoHistoryChangesArgs<ExtArgs> = {}>(args?: Subset<T, User$dojoHistoryChangesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentDojoHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     paymentTransactions<T extends User$paymentTransactionsArgs<ExtArgs> = {}>(args?: Subset<T, User$paymentTransactionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PaymentTransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     dojoOwnerInvitesSent<T extends User$dojoOwnerInvitesSentArgs<ExtArgs> = {}>(args?: Subset<T, User$dojoOwnerInvitesSentArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DojoOwnerInvitePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -10740,6 +10754,30 @@ export namespace Prisma {
    * User.transfersAdminActed
    */
   export type User$transfersAdminActedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentTransferRequest
+     */
+    select?: StudentTransferRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentTransferRequest
+     */
+    omit?: StudentTransferRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentTransferRequestInclude<ExtArgs> | null
+    where?: StudentTransferRequestWhereInput
+    orderBy?: StudentTransferRequestOrderByWithRelationInput | StudentTransferRequestOrderByWithRelationInput[]
+    cursor?: StudentTransferRequestWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: StudentTransferRequestScalarFieldEnum | StudentTransferRequestScalarFieldEnum[]
+  }
+
+  /**
+   * User.transfersNewDojoActed
+   */
+  export type User$transfersNewDojoActedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the StudentTransferRequest
      */
@@ -49303,6 +49341,9 @@ export namespace Prisma {
     dojoActedById: string | null
     adminActedAt: Date | null
     adminActedById: string | null
+    newDojoActedAt: Date | null
+    newDojoActedById: string | null
+    assignedRank: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -49327,6 +49368,9 @@ export namespace Prisma {
     dojoActedById: string | null
     adminActedAt: Date | null
     adminActedById: string | null
+    newDojoActedAt: Date | null
+    newDojoActedById: string | null
+    assignedRank: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -49351,6 +49395,9 @@ export namespace Prisma {
     dojoActedById: number
     adminActedAt: number
     adminActedById: number
+    newDojoActedAt: number
+    newDojoActedById: number
+    assignedRank: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -49389,6 +49436,9 @@ export namespace Prisma {
     dojoActedById?: true
     adminActedAt?: true
     adminActedById?: true
+    newDojoActedAt?: true
+    newDojoActedById?: true
+    assignedRank?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -49413,6 +49463,9 @@ export namespace Prisma {
     dojoActedById?: true
     adminActedAt?: true
     adminActedById?: true
+    newDojoActedAt?: true
+    newDojoActedById?: true
+    assignedRank?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -49437,6 +49490,9 @@ export namespace Prisma {
     dojoActedById?: true
     adminActedAt?: true
     adminActedById?: true
+    newDojoActedAt?: true
+    newDojoActedById?: true
+    assignedRank?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -49548,6 +49604,9 @@ export namespace Prisma {
     dojoActedById: string | null
     adminActedAt: Date | null
     adminActedById: string | null
+    newDojoActedAt: Date | null
+    newDojoActedById: string | null
+    assignedRank: string | null
     createdAt: Date
     updatedAt: Date
     _count: StudentTransferRequestCountAggregateOutputType | null
@@ -49591,6 +49650,9 @@ export namespace Prisma {
     dojoActedById?: boolean
     adminActedAt?: boolean
     adminActedById?: boolean
+    newDojoActedAt?: boolean
+    newDojoActedById?: boolean
+    assignedRank?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     student?: boolean | StudentDefaultArgs<ExtArgs>
@@ -49599,6 +49661,7 @@ export namespace Prisma {
     order?: boolean | StudentTransferRequest$orderArgs<ExtArgs>
     dojoActedBy?: boolean | StudentTransferRequest$dojoActedByArgs<ExtArgs>
     adminActedBy?: boolean | StudentTransferRequest$adminActedByArgs<ExtArgs>
+    newDojoActedBy?: boolean | StudentTransferRequest$newDojoActedByArgs<ExtArgs>
     history?: boolean | StudentTransferRequest$historyArgs<ExtArgs>
     _count?: boolean | StudentTransferRequestCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["studentTransferRequest"]>
@@ -49623,6 +49686,9 @@ export namespace Prisma {
     dojoActedById?: boolean
     adminActedAt?: boolean
     adminActedById?: boolean
+    newDojoActedAt?: boolean
+    newDojoActedById?: boolean
+    assignedRank?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     student?: boolean | StudentDefaultArgs<ExtArgs>
@@ -49631,6 +49697,7 @@ export namespace Prisma {
     order?: boolean | StudentTransferRequest$orderArgs<ExtArgs>
     dojoActedBy?: boolean | StudentTransferRequest$dojoActedByArgs<ExtArgs>
     adminActedBy?: boolean | StudentTransferRequest$adminActedByArgs<ExtArgs>
+    newDojoActedBy?: boolean | StudentTransferRequest$newDojoActedByArgs<ExtArgs>
   }, ExtArgs["result"]["studentTransferRequest"]>
 
   export type StudentTransferRequestSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -49653,6 +49720,9 @@ export namespace Prisma {
     dojoActedById?: boolean
     adminActedAt?: boolean
     adminActedById?: boolean
+    newDojoActedAt?: boolean
+    newDojoActedById?: boolean
+    assignedRank?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     student?: boolean | StudentDefaultArgs<ExtArgs>
@@ -49661,6 +49731,7 @@ export namespace Prisma {
     order?: boolean | StudentTransferRequest$orderArgs<ExtArgs>
     dojoActedBy?: boolean | StudentTransferRequest$dojoActedByArgs<ExtArgs>
     adminActedBy?: boolean | StudentTransferRequest$adminActedByArgs<ExtArgs>
+    newDojoActedBy?: boolean | StudentTransferRequest$newDojoActedByArgs<ExtArgs>
   }, ExtArgs["result"]["studentTransferRequest"]>
 
   export type StudentTransferRequestSelectScalar = {
@@ -49683,11 +49754,14 @@ export namespace Prisma {
     dojoActedById?: boolean
     adminActedAt?: boolean
     adminActedById?: boolean
+    newDojoActedAt?: boolean
+    newDojoActedById?: boolean
+    assignedRank?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type StudentTransferRequestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "studentId" | "fromDojoId" | "toDojoId" | "status" | "dojoDecision" | "reason" | "dojoNote" | "adminNote" | "fee" | "discountAmount" | "finalAmount" | "couponCode" | "orderId" | "paidAt" | "dojoActedAt" | "dojoActedById" | "adminActedAt" | "adminActedById" | "createdAt" | "updatedAt", ExtArgs["result"]["studentTransferRequest"]>
+  export type StudentTransferRequestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "studentId" | "fromDojoId" | "toDojoId" | "status" | "dojoDecision" | "reason" | "dojoNote" | "adminNote" | "fee" | "discountAmount" | "finalAmount" | "couponCode" | "orderId" | "paidAt" | "dojoActedAt" | "dojoActedById" | "adminActedAt" | "adminActedById" | "newDojoActedAt" | "newDojoActedById" | "assignedRank" | "createdAt" | "updatedAt", ExtArgs["result"]["studentTransferRequest"]>
   export type StudentTransferRequestInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     student?: boolean | StudentDefaultArgs<ExtArgs>
     fromDojo?: boolean | DojoDefaultArgs<ExtArgs>
@@ -49695,6 +49769,7 @@ export namespace Prisma {
     order?: boolean | StudentTransferRequest$orderArgs<ExtArgs>
     dojoActedBy?: boolean | StudentTransferRequest$dojoActedByArgs<ExtArgs>
     adminActedBy?: boolean | StudentTransferRequest$adminActedByArgs<ExtArgs>
+    newDojoActedBy?: boolean | StudentTransferRequest$newDojoActedByArgs<ExtArgs>
     history?: boolean | StudentTransferRequest$historyArgs<ExtArgs>
     _count?: boolean | StudentTransferRequestCountOutputTypeDefaultArgs<ExtArgs>
   }
@@ -49705,6 +49780,7 @@ export namespace Prisma {
     order?: boolean | StudentTransferRequest$orderArgs<ExtArgs>
     dojoActedBy?: boolean | StudentTransferRequest$dojoActedByArgs<ExtArgs>
     adminActedBy?: boolean | StudentTransferRequest$adminActedByArgs<ExtArgs>
+    newDojoActedBy?: boolean | StudentTransferRequest$newDojoActedByArgs<ExtArgs>
   }
   export type StudentTransferRequestIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     student?: boolean | StudentDefaultArgs<ExtArgs>
@@ -49713,6 +49789,7 @@ export namespace Prisma {
     order?: boolean | StudentTransferRequest$orderArgs<ExtArgs>
     dojoActedBy?: boolean | StudentTransferRequest$dojoActedByArgs<ExtArgs>
     adminActedBy?: boolean | StudentTransferRequest$adminActedByArgs<ExtArgs>
+    newDojoActedBy?: boolean | StudentTransferRequest$newDojoActedByArgs<ExtArgs>
   }
 
   export type $StudentTransferRequestPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -49724,6 +49801,7 @@ export namespace Prisma {
       order: Prisma.$ShopOrderPayload<ExtArgs> | null
       dojoActedBy: Prisma.$UserPayload<ExtArgs> | null
       adminActedBy: Prisma.$UserPayload<ExtArgs> | null
+      newDojoActedBy: Prisma.$UserPayload<ExtArgs> | null
       history: Prisma.$StudentDojoHistoryPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -49746,6 +49824,9 @@ export namespace Prisma {
       dojoActedById: string | null
       adminActedAt: Date | null
       adminActedById: string | null
+      newDojoActedAt: Date | null
+      newDojoActedById: string | null
+      assignedRank: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["studentTransferRequest"]>
@@ -50148,6 +50229,7 @@ export namespace Prisma {
     order<T extends StudentTransferRequest$orderArgs<ExtArgs> = {}>(args?: Subset<T, StudentTransferRequest$orderArgs<ExtArgs>>): Prisma__ShopOrderClient<$Result.GetResult<Prisma.$ShopOrderPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     dojoActedBy<T extends StudentTransferRequest$dojoActedByArgs<ExtArgs> = {}>(args?: Subset<T, StudentTransferRequest$dojoActedByArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     adminActedBy<T extends StudentTransferRequest$adminActedByArgs<ExtArgs> = {}>(args?: Subset<T, StudentTransferRequest$adminActedByArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    newDojoActedBy<T extends StudentTransferRequest$newDojoActedByArgs<ExtArgs> = {}>(args?: Subset<T, StudentTransferRequest$newDojoActedByArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     history<T extends StudentTransferRequest$historyArgs<ExtArgs> = {}>(args?: Subset<T, StudentTransferRequest$historyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentDojoHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -50197,6 +50279,9 @@ export namespace Prisma {
     readonly dojoActedById: FieldRef<"StudentTransferRequest", 'String'>
     readonly adminActedAt: FieldRef<"StudentTransferRequest", 'DateTime'>
     readonly adminActedById: FieldRef<"StudentTransferRequest", 'String'>
+    readonly newDojoActedAt: FieldRef<"StudentTransferRequest", 'DateTime'>
+    readonly newDojoActedById: FieldRef<"StudentTransferRequest", 'String'>
+    readonly assignedRank: FieldRef<"StudentTransferRequest", 'String'>
     readonly createdAt: FieldRef<"StudentTransferRequest", 'DateTime'>
     readonly updatedAt: FieldRef<"StudentTransferRequest", 'DateTime'>
   }
@@ -50641,6 +50726,25 @@ export namespace Prisma {
    * StudentTransferRequest.adminActedBy
    */
   export type StudentTransferRequest$adminActedByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * StudentTransferRequest.newDojoActedBy
+   */
+  export type StudentTransferRequest$newDojoActedByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the User
      */
@@ -57771,6 +57875,9 @@ export namespace Prisma {
     dojoActedById: 'dojoActedById',
     adminActedAt: 'adminActedAt',
     adminActedById: 'adminActedById',
+    newDojoActedAt: 'newDojoActedAt',
+    newDojoActedById: 'newDojoActedById',
+    assignedRank: 'assignedRank',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -58556,6 +58663,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantListRelationFilter
     transfersDojoActed?: StudentTransferRequestListRelationFilter
     transfersAdminActed?: StudentTransferRequestListRelationFilter
+    transfersNewDojoActed?: StudentTransferRequestListRelationFilter
     dojoHistoryChanges?: StudentDojoHistoryListRelationFilter
     paymentTransactions?: PaymentTransactionListRelationFilter
     dojoOwnerInvitesSent?: DojoOwnerInviteListRelationFilter
@@ -58595,6 +58703,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantOrderByRelationAggregateInput
     transfersDojoActed?: StudentTransferRequestOrderByRelationAggregateInput
     transfersAdminActed?: StudentTransferRequestOrderByRelationAggregateInput
+    transfersNewDojoActed?: StudentTransferRequestOrderByRelationAggregateInput
     dojoHistoryChanges?: StudentDojoHistoryOrderByRelationAggregateInput
     paymentTransactions?: PaymentTransactionOrderByRelationAggregateInput
     dojoOwnerInvitesSent?: DojoOwnerInviteOrderByRelationAggregateInput
@@ -58637,6 +58746,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantListRelationFilter
     transfersDojoActed?: StudentTransferRequestListRelationFilter
     transfersAdminActed?: StudentTransferRequestListRelationFilter
+    transfersNewDojoActed?: StudentTransferRequestListRelationFilter
     dojoHistoryChanges?: StudentDojoHistoryListRelationFilter
     paymentTransactions?: PaymentTransactionListRelationFilter
     dojoOwnerInvitesSent?: DojoOwnerInviteListRelationFilter
@@ -61692,6 +61802,9 @@ export namespace Prisma {
     dojoActedById?: UuidNullableFilter<"StudentTransferRequest"> | string | null
     adminActedAt?: DateTimeNullableFilter<"StudentTransferRequest"> | Date | string | null
     adminActedById?: UuidNullableFilter<"StudentTransferRequest"> | string | null
+    newDojoActedAt?: DateTimeNullableFilter<"StudentTransferRequest"> | Date | string | null
+    newDojoActedById?: UuidNullableFilter<"StudentTransferRequest"> | string | null
+    assignedRank?: StringNullableFilter<"StudentTransferRequest"> | string | null
     createdAt?: DateTimeFilter<"StudentTransferRequest"> | Date | string
     updatedAt?: DateTimeFilter<"StudentTransferRequest"> | Date | string
     student?: XOR<StudentScalarRelationFilter, StudentWhereInput>
@@ -61700,6 +61813,7 @@ export namespace Prisma {
     order?: XOR<ShopOrderNullableScalarRelationFilter, ShopOrderWhereInput> | null
     dojoActedBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     adminActedBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    newDojoActedBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     history?: StudentDojoHistoryListRelationFilter
   }
 
@@ -61723,6 +61837,9 @@ export namespace Prisma {
     dojoActedById?: SortOrderInput | SortOrder
     adminActedAt?: SortOrderInput | SortOrder
     adminActedById?: SortOrderInput | SortOrder
+    newDojoActedAt?: SortOrderInput | SortOrder
+    newDojoActedById?: SortOrderInput | SortOrder
+    assignedRank?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     student?: StudentOrderByWithRelationInput
@@ -61731,6 +61848,7 @@ export namespace Prisma {
     order?: ShopOrderOrderByWithRelationInput
     dojoActedBy?: UserOrderByWithRelationInput
     adminActedBy?: UserOrderByWithRelationInput
+    newDojoActedBy?: UserOrderByWithRelationInput
     history?: StudentDojoHistoryOrderByRelationAggregateInput
   }
 
@@ -61757,6 +61875,9 @@ export namespace Prisma {
     dojoActedById?: UuidNullableFilter<"StudentTransferRequest"> | string | null
     adminActedAt?: DateTimeNullableFilter<"StudentTransferRequest"> | Date | string | null
     adminActedById?: UuidNullableFilter<"StudentTransferRequest"> | string | null
+    newDojoActedAt?: DateTimeNullableFilter<"StudentTransferRequest"> | Date | string | null
+    newDojoActedById?: UuidNullableFilter<"StudentTransferRequest"> | string | null
+    assignedRank?: StringNullableFilter<"StudentTransferRequest"> | string | null
     createdAt?: DateTimeFilter<"StudentTransferRequest"> | Date | string
     updatedAt?: DateTimeFilter<"StudentTransferRequest"> | Date | string
     student?: XOR<StudentScalarRelationFilter, StudentWhereInput>
@@ -61765,6 +61886,7 @@ export namespace Prisma {
     order?: XOR<ShopOrderNullableScalarRelationFilter, ShopOrderWhereInput> | null
     dojoActedBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     adminActedBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    newDojoActedBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     history?: StudentDojoHistoryListRelationFilter
   }, "id" | "orderId">
 
@@ -61788,6 +61910,9 @@ export namespace Prisma {
     dojoActedById?: SortOrderInput | SortOrder
     adminActedAt?: SortOrderInput | SortOrder
     adminActedById?: SortOrderInput | SortOrder
+    newDojoActedAt?: SortOrderInput | SortOrder
+    newDojoActedById?: SortOrderInput | SortOrder
+    assignedRank?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: StudentTransferRequestCountOrderByAggregateInput
@@ -61820,6 +61945,9 @@ export namespace Prisma {
     dojoActedById?: UuidNullableWithAggregatesFilter<"StudentTransferRequest"> | string | null
     adminActedAt?: DateTimeNullableWithAggregatesFilter<"StudentTransferRequest"> | Date | string | null
     adminActedById?: UuidNullableWithAggregatesFilter<"StudentTransferRequest"> | string | null
+    newDojoActedAt?: DateTimeNullableWithAggregatesFilter<"StudentTransferRequest"> | Date | string | null
+    newDojoActedById?: UuidNullableWithAggregatesFilter<"StudentTransferRequest"> | string | null
+    assignedRank?: StringNullableWithAggregatesFilter<"StudentTransferRequest"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"StudentTransferRequest"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"StudentTransferRequest"> | Date | string
   }
@@ -62569,6 +62697,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantCreateNestedManyWithoutUserInput
     transfersDojoActed?: StudentTransferRequestCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
+    transfersNewDojoActed?: StudentTransferRequestCreateNestedManyWithoutNewDojoActedByInput
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteCreateNestedManyWithoutInvitedByInput
@@ -62607,6 +62736,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutUserInput
     transfersDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
+    transfersNewDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutNewDojoActedByInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedCreateNestedManyWithoutInvitedByInput
@@ -62645,6 +62775,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUpdateManyWithoutUserNestedInput
     transfersDojoActed?: StudentTransferRequestUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
+    transfersNewDojoActed?: StudentTransferRequestUpdateManyWithoutNewDojoActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUpdateManyWithoutInvitedByNestedInput
@@ -62683,6 +62814,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutUserNestedInput
     transfersDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
+    transfersNewDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutNewDojoActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedUpdateManyWithoutInvitedByNestedInput
@@ -66059,6 +66191,8 @@ export namespace Prisma {
     paidAt?: Date | string | null
     dojoActedAt?: Date | string | null
     adminActedAt?: Date | string | null
+    newDojoActedAt?: Date | string | null
+    assignedRank?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     student: StudentCreateNestedOneWithoutTransferRequestsInput
@@ -66067,6 +66201,7 @@ export namespace Prisma {
     order?: ShopOrderCreateNestedOneWithoutTransferRequestInput
     dojoActedBy?: UserCreateNestedOneWithoutTransfersDojoActedInput
     adminActedBy?: UserCreateNestedOneWithoutTransfersAdminActedInput
+    newDojoActedBy?: UserCreateNestedOneWithoutTransfersNewDojoActedInput
     history?: StudentDojoHistoryCreateNestedManyWithoutTransferRequestInput
   }
 
@@ -66090,6 +66225,9 @@ export namespace Prisma {
     dojoActedById?: string | null
     adminActedAt?: Date | string | null
     adminActedById?: string | null
+    newDojoActedAt?: Date | string | null
+    newDojoActedById?: string | null
+    assignedRank?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     history?: StudentDojoHistoryUncheckedCreateNestedManyWithoutTransferRequestInput
@@ -66109,6 +66247,8 @@ export namespace Prisma {
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     adminActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    newDojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    assignedRank?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     student?: StudentUpdateOneRequiredWithoutTransferRequestsNestedInput
@@ -66117,6 +66257,7 @@ export namespace Prisma {
     order?: ShopOrderUpdateOneWithoutTransferRequestNestedInput
     dojoActedBy?: UserUpdateOneWithoutTransfersDojoActedNestedInput
     adminActedBy?: UserUpdateOneWithoutTransfersAdminActedNestedInput
+    newDojoActedBy?: UserUpdateOneWithoutTransfersNewDojoActedNestedInput
     history?: StudentDojoHistoryUpdateManyWithoutTransferRequestNestedInput
   }
 
@@ -66140,6 +66281,9 @@ export namespace Prisma {
     dojoActedById?: NullableStringFieldUpdateOperationsInput | string | null
     adminActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     adminActedById?: NullableStringFieldUpdateOperationsInput | string | null
+    newDojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    newDojoActedById?: NullableStringFieldUpdateOperationsInput | string | null
+    assignedRank?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     history?: StudentDojoHistoryUncheckedUpdateManyWithoutTransferRequestNestedInput
@@ -66165,6 +66309,9 @@ export namespace Prisma {
     dojoActedById?: string | null
     adminActedAt?: Date | string | null
     adminActedById?: string | null
+    newDojoActedAt?: Date | string | null
+    newDojoActedById?: string | null
+    assignedRank?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -66183,6 +66330,8 @@ export namespace Prisma {
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     adminActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    newDojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    assignedRank?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -66207,6 +66356,9 @@ export namespace Prisma {
     dojoActedById?: NullableStringFieldUpdateOperationsInput | string | null
     adminActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     adminActedById?: NullableStringFieldUpdateOperationsInput | string | null
+    newDojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    newDojoActedById?: NullableStringFieldUpdateOperationsInput | string | null
+    assignedRank?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -69658,6 +69810,9 @@ export namespace Prisma {
     dojoActedById?: SortOrder
     adminActedAt?: SortOrder
     adminActedById?: SortOrder
+    newDojoActedAt?: SortOrder
+    newDojoActedById?: SortOrder
+    assignedRank?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -69688,6 +69843,9 @@ export namespace Prisma {
     dojoActedById?: SortOrder
     adminActedAt?: SortOrder
     adminActedById?: SortOrder
+    newDojoActedAt?: SortOrder
+    newDojoActedById?: SortOrder
+    assignedRank?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -69712,6 +69870,9 @@ export namespace Prisma {
     dojoActedById?: SortOrder
     adminActedAt?: SortOrder
     adminActedById?: SortOrder
+    newDojoActedAt?: SortOrder
+    newDojoActedById?: SortOrder
+    assignedRank?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -70429,6 +70590,13 @@ export namespace Prisma {
     connect?: StudentTransferRequestWhereUniqueInput | StudentTransferRequestWhereUniqueInput[]
   }
 
+  export type StudentTransferRequestCreateNestedManyWithoutNewDojoActedByInput = {
+    create?: XOR<StudentTransferRequestCreateWithoutNewDojoActedByInput, StudentTransferRequestUncheckedCreateWithoutNewDojoActedByInput> | StudentTransferRequestCreateWithoutNewDojoActedByInput[] | StudentTransferRequestUncheckedCreateWithoutNewDojoActedByInput[]
+    connectOrCreate?: StudentTransferRequestCreateOrConnectWithoutNewDojoActedByInput | StudentTransferRequestCreateOrConnectWithoutNewDojoActedByInput[]
+    createMany?: StudentTransferRequestCreateManyNewDojoActedByInputEnvelope
+    connect?: StudentTransferRequestWhereUniqueInput | StudentTransferRequestWhereUniqueInput[]
+  }
+
   export type StudentDojoHistoryCreateNestedManyWithoutChangedByInput = {
     create?: XOR<StudentDojoHistoryCreateWithoutChangedByInput, StudentDojoHistoryUncheckedCreateWithoutChangedByInput> | StudentDojoHistoryCreateWithoutChangedByInput[] | StudentDojoHistoryUncheckedCreateWithoutChangedByInput[]
     connectOrCreate?: StudentDojoHistoryCreateOrConnectWithoutChangedByInput | StudentDojoHistoryCreateOrConnectWithoutChangedByInput[]
@@ -70588,6 +70756,13 @@ export namespace Prisma {
     create?: XOR<StudentTransferRequestCreateWithoutAdminActedByInput, StudentTransferRequestUncheckedCreateWithoutAdminActedByInput> | StudentTransferRequestCreateWithoutAdminActedByInput[] | StudentTransferRequestUncheckedCreateWithoutAdminActedByInput[]
     connectOrCreate?: StudentTransferRequestCreateOrConnectWithoutAdminActedByInput | StudentTransferRequestCreateOrConnectWithoutAdminActedByInput[]
     createMany?: StudentTransferRequestCreateManyAdminActedByInputEnvelope
+    connect?: StudentTransferRequestWhereUniqueInput | StudentTransferRequestWhereUniqueInput[]
+  }
+
+  export type StudentTransferRequestUncheckedCreateNestedManyWithoutNewDojoActedByInput = {
+    create?: XOR<StudentTransferRequestCreateWithoutNewDojoActedByInput, StudentTransferRequestUncheckedCreateWithoutNewDojoActedByInput> | StudentTransferRequestCreateWithoutNewDojoActedByInput[] | StudentTransferRequestUncheckedCreateWithoutNewDojoActedByInput[]
+    connectOrCreate?: StudentTransferRequestCreateOrConnectWithoutNewDojoActedByInput | StudentTransferRequestCreateOrConnectWithoutNewDojoActedByInput[]
+    createMany?: StudentTransferRequestCreateManyNewDojoActedByInputEnvelope
     connect?: StudentTransferRequestWhereUniqueInput | StudentTransferRequestWhereUniqueInput[]
   }
 
@@ -70870,6 +71045,20 @@ export namespace Prisma {
     connect?: StudentTransferRequestWhereUniqueInput | StudentTransferRequestWhereUniqueInput[]
     update?: StudentTransferRequestUpdateWithWhereUniqueWithoutAdminActedByInput | StudentTransferRequestUpdateWithWhereUniqueWithoutAdminActedByInput[]
     updateMany?: StudentTransferRequestUpdateManyWithWhereWithoutAdminActedByInput | StudentTransferRequestUpdateManyWithWhereWithoutAdminActedByInput[]
+    deleteMany?: StudentTransferRequestScalarWhereInput | StudentTransferRequestScalarWhereInput[]
+  }
+
+  export type StudentTransferRequestUpdateManyWithoutNewDojoActedByNestedInput = {
+    create?: XOR<StudentTransferRequestCreateWithoutNewDojoActedByInput, StudentTransferRequestUncheckedCreateWithoutNewDojoActedByInput> | StudentTransferRequestCreateWithoutNewDojoActedByInput[] | StudentTransferRequestUncheckedCreateWithoutNewDojoActedByInput[]
+    connectOrCreate?: StudentTransferRequestCreateOrConnectWithoutNewDojoActedByInput | StudentTransferRequestCreateOrConnectWithoutNewDojoActedByInput[]
+    upsert?: StudentTransferRequestUpsertWithWhereUniqueWithoutNewDojoActedByInput | StudentTransferRequestUpsertWithWhereUniqueWithoutNewDojoActedByInput[]
+    createMany?: StudentTransferRequestCreateManyNewDojoActedByInputEnvelope
+    set?: StudentTransferRequestWhereUniqueInput | StudentTransferRequestWhereUniqueInput[]
+    disconnect?: StudentTransferRequestWhereUniqueInput | StudentTransferRequestWhereUniqueInput[]
+    delete?: StudentTransferRequestWhereUniqueInput | StudentTransferRequestWhereUniqueInput[]
+    connect?: StudentTransferRequestWhereUniqueInput | StudentTransferRequestWhereUniqueInput[]
+    update?: StudentTransferRequestUpdateWithWhereUniqueWithoutNewDojoActedByInput | StudentTransferRequestUpdateWithWhereUniqueWithoutNewDojoActedByInput[]
+    updateMany?: StudentTransferRequestUpdateManyWithWhereWithoutNewDojoActedByInput | StudentTransferRequestUpdateManyWithWhereWithoutNewDojoActedByInput[]
     deleteMany?: StudentTransferRequestScalarWhereInput | StudentTransferRequestScalarWhereInput[]
   }
 
@@ -71182,6 +71371,20 @@ export namespace Prisma {
     connect?: StudentTransferRequestWhereUniqueInput | StudentTransferRequestWhereUniqueInput[]
     update?: StudentTransferRequestUpdateWithWhereUniqueWithoutAdminActedByInput | StudentTransferRequestUpdateWithWhereUniqueWithoutAdminActedByInput[]
     updateMany?: StudentTransferRequestUpdateManyWithWhereWithoutAdminActedByInput | StudentTransferRequestUpdateManyWithWhereWithoutAdminActedByInput[]
+    deleteMany?: StudentTransferRequestScalarWhereInput | StudentTransferRequestScalarWhereInput[]
+  }
+
+  export type StudentTransferRequestUncheckedUpdateManyWithoutNewDojoActedByNestedInput = {
+    create?: XOR<StudentTransferRequestCreateWithoutNewDojoActedByInput, StudentTransferRequestUncheckedCreateWithoutNewDojoActedByInput> | StudentTransferRequestCreateWithoutNewDojoActedByInput[] | StudentTransferRequestUncheckedCreateWithoutNewDojoActedByInput[]
+    connectOrCreate?: StudentTransferRequestCreateOrConnectWithoutNewDojoActedByInput | StudentTransferRequestCreateOrConnectWithoutNewDojoActedByInput[]
+    upsert?: StudentTransferRequestUpsertWithWhereUniqueWithoutNewDojoActedByInput | StudentTransferRequestUpsertWithWhereUniqueWithoutNewDojoActedByInput[]
+    createMany?: StudentTransferRequestCreateManyNewDojoActedByInputEnvelope
+    set?: StudentTransferRequestWhereUniqueInput | StudentTransferRequestWhereUniqueInput[]
+    disconnect?: StudentTransferRequestWhereUniqueInput | StudentTransferRequestWhereUniqueInput[]
+    delete?: StudentTransferRequestWhereUniqueInput | StudentTransferRequestWhereUniqueInput[]
+    connect?: StudentTransferRequestWhereUniqueInput | StudentTransferRequestWhereUniqueInput[]
+    update?: StudentTransferRequestUpdateWithWhereUniqueWithoutNewDojoActedByInput | StudentTransferRequestUpdateWithWhereUniqueWithoutNewDojoActedByInput[]
+    updateMany?: StudentTransferRequestUpdateManyWithWhereWithoutNewDojoActedByInput | StudentTransferRequestUpdateManyWithWhereWithoutNewDojoActedByInput[]
     deleteMany?: StudentTransferRequestScalarWhereInput | StudentTransferRequestScalarWhereInput[]
   }
 
@@ -74388,6 +74591,12 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput
   }
 
+  export type UserCreateNestedOneWithoutTransfersNewDojoActedInput = {
+    create?: XOR<UserCreateWithoutTransfersNewDojoActedInput, UserUncheckedCreateWithoutTransfersNewDojoActedInput>
+    connectOrCreate?: UserCreateOrConnectWithoutTransfersNewDojoActedInput
+    connect?: UserWhereUniqueInput
+  }
+
   export type StudentDojoHistoryCreateNestedManyWithoutTransferRequestInput = {
     create?: XOR<StudentDojoHistoryCreateWithoutTransferRequestInput, StudentDojoHistoryUncheckedCreateWithoutTransferRequestInput> | StudentDojoHistoryCreateWithoutTransferRequestInput[] | StudentDojoHistoryUncheckedCreateWithoutTransferRequestInput[]
     connectOrCreate?: StudentDojoHistoryCreateOrConnectWithoutTransferRequestInput | StudentDojoHistoryCreateOrConnectWithoutTransferRequestInput[]
@@ -74462,6 +74671,16 @@ export namespace Prisma {
     delete?: UserWhereInput | boolean
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutTransfersAdminActedInput, UserUpdateWithoutTransfersAdminActedInput>, UserUncheckedUpdateWithoutTransfersAdminActedInput>
+  }
+
+  export type UserUpdateOneWithoutTransfersNewDojoActedNestedInput = {
+    create?: XOR<UserCreateWithoutTransfersNewDojoActedInput, UserUncheckedCreateWithoutTransfersNewDojoActedInput>
+    connectOrCreate?: UserCreateOrConnectWithoutTransfersNewDojoActedInput
+    upsert?: UserUpsertWithoutTransfersNewDojoActedInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutTransfersNewDojoActedInput, UserUpdateWithoutTransfersNewDojoActedInput>, UserUncheckedUpdateWithoutTransfersNewDojoActedInput>
   }
 
   export type StudentDojoHistoryUpdateManyWithoutTransferRequestNestedInput = {
@@ -75748,6 +75967,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantCreateNestedManyWithoutUserInput
     transfersDojoActed?: StudentTransferRequestCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
+    transfersNewDojoActed?: StudentTransferRequestCreateNestedManyWithoutNewDojoActedByInput
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteCreateNestedManyWithoutInvitedByInput
@@ -75785,6 +76005,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutUserInput
     transfersDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
+    transfersNewDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutNewDojoActedByInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedCreateNestedManyWithoutInvitedByInput
@@ -76714,6 +76935,8 @@ export namespace Prisma {
     paidAt?: Date | string | null
     dojoActedAt?: Date | string | null
     adminActedAt?: Date | string | null
+    newDojoActedAt?: Date | string | null
+    assignedRank?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     student: StudentCreateNestedOneWithoutTransferRequestsInput
@@ -76721,6 +76944,7 @@ export namespace Prisma {
     toDojo: DojoCreateNestedOneWithoutTransfersInInput
     order?: ShopOrderCreateNestedOneWithoutTransferRequestInput
     adminActedBy?: UserCreateNestedOneWithoutTransfersAdminActedInput
+    newDojoActedBy?: UserCreateNestedOneWithoutTransfersNewDojoActedInput
     history?: StudentDojoHistoryCreateNestedManyWithoutTransferRequestInput
   }
 
@@ -76743,6 +76967,9 @@ export namespace Prisma {
     dojoActedAt?: Date | string | null
     adminActedAt?: Date | string | null
     adminActedById?: string | null
+    newDojoActedAt?: Date | string | null
+    newDojoActedById?: string | null
+    assignedRank?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     history?: StudentDojoHistoryUncheckedCreateNestedManyWithoutTransferRequestInput
@@ -76772,6 +76999,8 @@ export namespace Prisma {
     paidAt?: Date | string | null
     dojoActedAt?: Date | string | null
     adminActedAt?: Date | string | null
+    newDojoActedAt?: Date | string | null
+    assignedRank?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     student: StudentCreateNestedOneWithoutTransferRequestsInput
@@ -76779,6 +77008,7 @@ export namespace Prisma {
     toDojo: DojoCreateNestedOneWithoutTransfersInInput
     order?: ShopOrderCreateNestedOneWithoutTransferRequestInput
     dojoActedBy?: UserCreateNestedOneWithoutTransfersDojoActedInput
+    newDojoActedBy?: UserCreateNestedOneWithoutTransfersNewDojoActedInput
     history?: StudentDojoHistoryCreateNestedManyWithoutTransferRequestInput
   }
 
@@ -76801,6 +77031,9 @@ export namespace Prisma {
     dojoActedAt?: Date | string | null
     dojoActedById?: string | null
     adminActedAt?: Date | string | null
+    newDojoActedAt?: Date | string | null
+    newDojoActedById?: string | null
+    assignedRank?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     history?: StudentDojoHistoryUncheckedCreateNestedManyWithoutTransferRequestInput
@@ -76813,6 +77046,70 @@ export namespace Prisma {
 
   export type StudentTransferRequestCreateManyAdminActedByInputEnvelope = {
     data: StudentTransferRequestCreateManyAdminActedByInput | StudentTransferRequestCreateManyAdminActedByInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type StudentTransferRequestCreateWithoutNewDojoActedByInput = {
+    id?: string
+    status?: $Enums.StudentTransferStatus
+    dojoDecision?: $Enums.StudentTransferDojoDecision
+    reason?: string | null
+    dojoNote?: string | null
+    adminNote?: string | null
+    fee: Decimal | DecimalJsLike | number | string
+    discountAmount?: Decimal | DecimalJsLike | number | string
+    finalAmount?: Decimal | DecimalJsLike | number | string | null
+    couponCode?: string | null
+    paidAt?: Date | string | null
+    dojoActedAt?: Date | string | null
+    adminActedAt?: Date | string | null
+    newDojoActedAt?: Date | string | null
+    assignedRank?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    student: StudentCreateNestedOneWithoutTransferRequestsInput
+    fromDojo: DojoCreateNestedOneWithoutTransfersOutInput
+    toDojo: DojoCreateNestedOneWithoutTransfersInInput
+    order?: ShopOrderCreateNestedOneWithoutTransferRequestInput
+    dojoActedBy?: UserCreateNestedOneWithoutTransfersDojoActedInput
+    adminActedBy?: UserCreateNestedOneWithoutTransfersAdminActedInput
+    history?: StudentDojoHistoryCreateNestedManyWithoutTransferRequestInput
+  }
+
+  export type StudentTransferRequestUncheckedCreateWithoutNewDojoActedByInput = {
+    id?: string
+    studentId: string
+    fromDojoId: string
+    toDojoId: string
+    status?: $Enums.StudentTransferStatus
+    dojoDecision?: $Enums.StudentTransferDojoDecision
+    reason?: string | null
+    dojoNote?: string | null
+    adminNote?: string | null
+    fee: Decimal | DecimalJsLike | number | string
+    discountAmount?: Decimal | DecimalJsLike | number | string
+    finalAmount?: Decimal | DecimalJsLike | number | string | null
+    couponCode?: string | null
+    orderId?: string | null
+    paidAt?: Date | string | null
+    dojoActedAt?: Date | string | null
+    dojoActedById?: string | null
+    adminActedAt?: Date | string | null
+    adminActedById?: string | null
+    newDojoActedAt?: Date | string | null
+    assignedRank?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    history?: StudentDojoHistoryUncheckedCreateNestedManyWithoutTransferRequestInput
+  }
+
+  export type StudentTransferRequestCreateOrConnectWithoutNewDojoActedByInput = {
+    where: StudentTransferRequestWhereUniqueInput
+    create: XOR<StudentTransferRequestCreateWithoutNewDojoActedByInput, StudentTransferRequestUncheckedCreateWithoutNewDojoActedByInput>
+  }
+
+  export type StudentTransferRequestCreateManyNewDojoActedByInputEnvelope = {
+    data: StudentTransferRequestCreateManyNewDojoActedByInput | StudentTransferRequestCreateManyNewDojoActedByInput[]
     skipDuplicates?: boolean
   }
 
@@ -77675,6 +77972,9 @@ export namespace Prisma {
     dojoActedById?: UuidNullableFilter<"StudentTransferRequest"> | string | null
     adminActedAt?: DateTimeNullableFilter<"StudentTransferRequest"> | Date | string | null
     adminActedById?: UuidNullableFilter<"StudentTransferRequest"> | string | null
+    newDojoActedAt?: DateTimeNullableFilter<"StudentTransferRequest"> | Date | string | null
+    newDojoActedById?: UuidNullableFilter<"StudentTransferRequest"> | string | null
+    assignedRank?: StringNullableFilter<"StudentTransferRequest"> | string | null
     createdAt?: DateTimeFilter<"StudentTransferRequest"> | Date | string
     updatedAt?: DateTimeFilter<"StudentTransferRequest"> | Date | string
   }
@@ -77693,6 +77993,22 @@ export namespace Prisma {
   export type StudentTransferRequestUpdateManyWithWhereWithoutAdminActedByInput = {
     where: StudentTransferRequestScalarWhereInput
     data: XOR<StudentTransferRequestUpdateManyMutationInput, StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByInput>
+  }
+
+  export type StudentTransferRequestUpsertWithWhereUniqueWithoutNewDojoActedByInput = {
+    where: StudentTransferRequestWhereUniqueInput
+    update: XOR<StudentTransferRequestUpdateWithoutNewDojoActedByInput, StudentTransferRequestUncheckedUpdateWithoutNewDojoActedByInput>
+    create: XOR<StudentTransferRequestCreateWithoutNewDojoActedByInput, StudentTransferRequestUncheckedCreateWithoutNewDojoActedByInput>
+  }
+
+  export type StudentTransferRequestUpdateWithWhereUniqueWithoutNewDojoActedByInput = {
+    where: StudentTransferRequestWhereUniqueInput
+    data: XOR<StudentTransferRequestUpdateWithoutNewDojoActedByInput, StudentTransferRequestUncheckedUpdateWithoutNewDojoActedByInput>
+  }
+
+  export type StudentTransferRequestUpdateManyWithWhereWithoutNewDojoActedByInput = {
+    where: StudentTransferRequestScalarWhereInput
+    data: XOR<StudentTransferRequestUpdateManyMutationInput, StudentTransferRequestUncheckedUpdateManyWithoutNewDojoActedByInput>
   }
 
   export type StudentDojoHistoryUpsertWithWhereUniqueWithoutChangedByInput = {
@@ -77916,6 +78232,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantCreateNestedManyWithoutUserInput
     transfersDojoActed?: StudentTransferRequestCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
+    transfersNewDojoActed?: StudentTransferRequestCreateNestedManyWithoutNewDojoActedByInput
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteCreateNestedManyWithoutInvitedByInput
@@ -77953,6 +78270,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutUserInput
     transfersDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
+    transfersNewDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutNewDojoActedByInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedCreateNestedManyWithoutInvitedByInput
@@ -78006,6 +78324,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUpdateManyWithoutUserNestedInput
     transfersDojoActed?: StudentTransferRequestUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
+    transfersNewDojoActed?: StudentTransferRequestUpdateManyWithoutNewDojoActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUpdateManyWithoutInvitedByNestedInput
@@ -78043,6 +78362,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutUserNestedInput
     transfersDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
+    transfersNewDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutNewDojoActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedUpdateManyWithoutInvitedByNestedInput
@@ -78080,6 +78400,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantCreateNestedManyWithoutUserInput
     transfersDojoActed?: StudentTransferRequestCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
+    transfersNewDojoActed?: StudentTransferRequestCreateNestedManyWithoutNewDojoActedByInput
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteCreateNestedManyWithoutInvitedByInput
@@ -78117,6 +78438,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutUserInput
     transfersDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
+    transfersNewDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutNewDojoActedByInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedCreateNestedManyWithoutInvitedByInput
@@ -78377,6 +78699,8 @@ export namespace Prisma {
     paidAt?: Date | string | null
     dojoActedAt?: Date | string | null
     adminActedAt?: Date | string | null
+    newDojoActedAt?: Date | string | null
+    assignedRank?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     fromDojo: DojoCreateNestedOneWithoutTransfersOutInput
@@ -78384,6 +78708,7 @@ export namespace Prisma {
     order?: ShopOrderCreateNestedOneWithoutTransferRequestInput
     dojoActedBy?: UserCreateNestedOneWithoutTransfersDojoActedInput
     adminActedBy?: UserCreateNestedOneWithoutTransfersAdminActedInput
+    newDojoActedBy?: UserCreateNestedOneWithoutTransfersNewDojoActedInput
     history?: StudentDojoHistoryCreateNestedManyWithoutTransferRequestInput
   }
 
@@ -78406,6 +78731,9 @@ export namespace Prisma {
     dojoActedById?: string | null
     adminActedAt?: Date | string | null
     adminActedById?: string | null
+    newDojoActedAt?: Date | string | null
+    newDojoActedById?: string | null
+    assignedRank?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     history?: StudentDojoHistoryUncheckedCreateNestedManyWithoutTransferRequestInput
@@ -78551,6 +78879,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUpdateManyWithoutUserNestedInput
     transfersDojoActed?: StudentTransferRequestUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
+    transfersNewDojoActed?: StudentTransferRequestUpdateManyWithoutNewDojoActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUpdateManyWithoutInvitedByNestedInput
@@ -78588,6 +78917,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutUserNestedInput
     transfersDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
+    transfersNewDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutNewDojoActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedUpdateManyWithoutInvitedByNestedInput
@@ -78882,6 +79212,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantCreateNestedManyWithoutUserInput
     transfersDojoActed?: StudentTransferRequestCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
+    transfersNewDojoActed?: StudentTransferRequestCreateNestedManyWithoutNewDojoActedByInput
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteCreateNestedManyWithoutInvitedByInput
@@ -78919,6 +79250,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutUserInput
     transfersDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
+    transfersNewDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutNewDojoActedByInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedCreateNestedManyWithoutInvitedByInput
@@ -79053,6 +79385,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUpdateManyWithoutUserNestedInput
     transfersDojoActed?: StudentTransferRequestUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
+    transfersNewDojoActed?: StudentTransferRequestUpdateManyWithoutNewDojoActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUpdateManyWithoutInvitedByNestedInput
@@ -79090,6 +79423,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutUserNestedInput
     transfersDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
+    transfersNewDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutNewDojoActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedUpdateManyWithoutInvitedByNestedInput
@@ -79214,6 +79548,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantCreateNestedManyWithoutUserInput
     transfersDojoActed?: StudentTransferRequestCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
+    transfersNewDojoActed?: StudentTransferRequestCreateNestedManyWithoutNewDojoActedByInput
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteCreateNestedManyWithoutInvitedByInput
@@ -79251,6 +79586,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutUserInput
     transfersDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
+    transfersNewDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutNewDojoActedByInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedCreateNestedManyWithoutInvitedByInput
@@ -79385,6 +79721,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUpdateManyWithoutUserNestedInput
     transfersDojoActed?: StudentTransferRequestUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
+    transfersNewDojoActed?: StudentTransferRequestUpdateManyWithoutNewDojoActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUpdateManyWithoutInvitedByNestedInput
@@ -79422,6 +79759,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutUserNestedInput
     transfersDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
+    transfersNewDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutNewDojoActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedUpdateManyWithoutInvitedByNestedInput
@@ -79546,6 +79884,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantCreateNestedManyWithoutUserInput
     transfersDojoActed?: StudentTransferRequestCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
+    transfersNewDojoActed?: StudentTransferRequestCreateNestedManyWithoutNewDojoActedByInput
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteCreateNestedManyWithoutInvitedByInput
@@ -79583,6 +79922,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutUserInput
     transfersDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
+    transfersNewDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutNewDojoActedByInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedCreateNestedManyWithoutInvitedByInput
@@ -79717,6 +80057,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUpdateManyWithoutUserNestedInput
     transfersDojoActed?: StudentTransferRequestUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
+    transfersNewDojoActed?: StudentTransferRequestUpdateManyWithoutNewDojoActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUpdateManyWithoutInvitedByNestedInput
@@ -79754,6 +80095,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutUserNestedInput
     transfersDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
+    transfersNewDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutNewDojoActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedUpdateManyWithoutInvitedByNestedInput
@@ -79878,6 +80220,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantCreateNestedManyWithoutUserInput
     transfersDojoActed?: StudentTransferRequestCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
+    transfersNewDojoActed?: StudentTransferRequestCreateNestedManyWithoutNewDojoActedByInput
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteCreateNestedManyWithoutInvitedByInput
@@ -79915,6 +80258,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutUserInput
     transfersDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
+    transfersNewDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutNewDojoActedByInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedCreateNestedManyWithoutInvitedByInput
@@ -79968,6 +80312,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUpdateManyWithoutUserNestedInput
     transfersDojoActed?: StudentTransferRequestUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
+    transfersNewDojoActed?: StudentTransferRequestUpdateManyWithoutNewDojoActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUpdateManyWithoutInvitedByNestedInput
@@ -80005,6 +80350,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutUserNestedInput
     transfersDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
+    transfersNewDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutNewDojoActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedUpdateManyWithoutInvitedByNestedInput
@@ -80891,6 +81237,8 @@ export namespace Prisma {
     paidAt?: Date | string | null
     dojoActedAt?: Date | string | null
     adminActedAt?: Date | string | null
+    newDojoActedAt?: Date | string | null
+    assignedRank?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     student: StudentCreateNestedOneWithoutTransferRequestsInput
@@ -80898,6 +81246,7 @@ export namespace Prisma {
     order?: ShopOrderCreateNestedOneWithoutTransferRequestInput
     dojoActedBy?: UserCreateNestedOneWithoutTransfersDojoActedInput
     adminActedBy?: UserCreateNestedOneWithoutTransfersAdminActedInput
+    newDojoActedBy?: UserCreateNestedOneWithoutTransfersNewDojoActedInput
     history?: StudentDojoHistoryCreateNestedManyWithoutTransferRequestInput
   }
 
@@ -80920,6 +81269,9 @@ export namespace Prisma {
     dojoActedById?: string | null
     adminActedAt?: Date | string | null
     adminActedById?: string | null
+    newDojoActedAt?: Date | string | null
+    newDojoActedById?: string | null
+    assignedRank?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     history?: StudentDojoHistoryUncheckedCreateNestedManyWithoutTransferRequestInput
@@ -80949,6 +81301,8 @@ export namespace Prisma {
     paidAt?: Date | string | null
     dojoActedAt?: Date | string | null
     adminActedAt?: Date | string | null
+    newDojoActedAt?: Date | string | null
+    assignedRank?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     student: StudentCreateNestedOneWithoutTransferRequestsInput
@@ -80956,6 +81310,7 @@ export namespace Prisma {
     order?: ShopOrderCreateNestedOneWithoutTransferRequestInput
     dojoActedBy?: UserCreateNestedOneWithoutTransfersDojoActedInput
     adminActedBy?: UserCreateNestedOneWithoutTransfersAdminActedInput
+    newDojoActedBy?: UserCreateNestedOneWithoutTransfersNewDojoActedInput
     history?: StudentDojoHistoryCreateNestedManyWithoutTransferRequestInput
   }
 
@@ -80978,6 +81333,9 @@ export namespace Prisma {
     dojoActedById?: string | null
     adminActedAt?: Date | string | null
     adminActedById?: string | null
+    newDojoActedAt?: Date | string | null
+    newDojoActedById?: string | null
+    assignedRank?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     history?: StudentDojoHistoryUncheckedCreateNestedManyWithoutTransferRequestInput
@@ -81745,6 +82103,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantCreateNestedManyWithoutUserInput
     transfersDojoActed?: StudentTransferRequestCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
+    transfersNewDojoActed?: StudentTransferRequestCreateNestedManyWithoutNewDojoActedByInput
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutUserInput
     serviceRequestsDojoActed?: ServiceRequestCreateNestedManyWithoutDojoActedByInput
@@ -81782,6 +82141,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutUserInput
     transfersDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
+    transfersNewDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutNewDojoActedByInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutUserInput
     serviceRequestsDojoActed?: ServiceRequestUncheckedCreateNestedManyWithoutDojoActedByInput
@@ -81835,6 +82195,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUpdateManyWithoutUserNestedInput
     transfersDojoActed?: StudentTransferRequestUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
+    transfersNewDojoActed?: StudentTransferRequestUpdateManyWithoutNewDojoActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUpdateManyWithoutUserNestedInput
     serviceRequestsDojoActed?: ServiceRequestUpdateManyWithoutDojoActedByNestedInput
@@ -81872,6 +82233,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutUserNestedInput
     transfersDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
+    transfersNewDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutNewDojoActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutUserNestedInput
     serviceRequestsDojoActed?: ServiceRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
@@ -83364,6 +83726,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantCreateNestedManyWithoutUserInput
     transfersDojoActed?: StudentTransferRequestCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
+    transfersNewDojoActed?: StudentTransferRequestCreateNestedManyWithoutNewDojoActedByInput
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteCreateNestedManyWithoutInvitedByInput
@@ -83401,6 +83764,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutUserInput
     transfersDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
+    transfersNewDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutNewDojoActedByInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedCreateNestedManyWithoutInvitedByInput
@@ -83615,6 +83979,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUpdateManyWithoutUserNestedInput
     transfersDojoActed?: StudentTransferRequestUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
+    transfersNewDojoActed?: StudentTransferRequestUpdateManyWithoutNewDojoActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUpdateManyWithoutInvitedByNestedInput
@@ -83652,6 +84017,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutUserNestedInput
     transfersDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
+    transfersNewDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutNewDojoActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedUpdateManyWithoutInvitedByNestedInput
@@ -83968,6 +84334,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantCreateNestedManyWithoutUserInput
     transfersDojoActed?: StudentTransferRequestCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
+    transfersNewDojoActed?: StudentTransferRequestCreateNestedManyWithoutNewDojoActedByInput
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteCreateNestedManyWithoutInvitedByInput
@@ -84005,6 +84372,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutUserInput
     transfersDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
+    transfersNewDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutNewDojoActedByInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedCreateNestedManyWithoutInvitedByInput
@@ -84139,6 +84507,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUpdateManyWithoutUserNestedInput
     transfersDojoActed?: StudentTransferRequestUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
+    transfersNewDojoActed?: StudentTransferRequestUpdateManyWithoutNewDojoActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUpdateManyWithoutInvitedByNestedInput
@@ -84176,6 +84545,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutUserNestedInput
     transfersDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
+    transfersNewDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutNewDojoActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedUpdateManyWithoutInvitedByNestedInput
@@ -84355,6 +84725,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantCreateNestedManyWithoutUserInput
     transfersDojoActed?: StudentTransferRequestCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
+    transfersNewDojoActed?: StudentTransferRequestCreateNestedManyWithoutNewDojoActedByInput
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteCreateNestedManyWithoutInvitedByInput
@@ -84392,6 +84763,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutUserInput
     transfersDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
+    transfersNewDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutNewDojoActedByInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedCreateNestedManyWithoutInvitedByInput
@@ -84434,6 +84806,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantCreateNestedManyWithoutUserInput
     transfersDojoActed?: StudentTransferRequestCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
+    transfersNewDojoActed?: StudentTransferRequestCreateNestedManyWithoutNewDojoActedByInput
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteCreateNestedManyWithoutInvitedByInput
@@ -84471,6 +84844,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutUserInput
     transfersDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
+    transfersNewDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutNewDojoActedByInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedCreateNestedManyWithoutInvitedByInput
@@ -84631,6 +85005,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUpdateManyWithoutUserNestedInput
     transfersDojoActed?: StudentTransferRequestUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
+    transfersNewDojoActed?: StudentTransferRequestUpdateManyWithoutNewDojoActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUpdateManyWithoutInvitedByNestedInput
@@ -84668,6 +85043,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutUserNestedInput
     transfersDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
+    transfersNewDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutNewDojoActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedUpdateManyWithoutInvitedByNestedInput
@@ -84716,6 +85092,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUpdateManyWithoutUserNestedInput
     transfersDojoActed?: StudentTransferRequestUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
+    transfersNewDojoActed?: StudentTransferRequestUpdateManyWithoutNewDojoActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUpdateManyWithoutInvitedByNestedInput
@@ -84753,6 +85130,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutUserNestedInput
     transfersDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
+    transfersNewDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutNewDojoActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedUpdateManyWithoutInvitedByNestedInput
@@ -84806,6 +85184,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantCreateNestedManyWithoutUserInput
     transfersDojoActed?: StudentTransferRequestCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
+    transfersNewDojoActed?: StudentTransferRequestCreateNestedManyWithoutNewDojoActedByInput
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteCreateNestedManyWithoutInvitedByInput
@@ -84843,6 +85222,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutUserInput
     transfersDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
+    transfersNewDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutNewDojoActedByInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedCreateNestedManyWithoutInvitedByInput
@@ -84896,6 +85276,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUpdateManyWithoutUserNestedInput
     transfersDojoActed?: StudentTransferRequestUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
+    transfersNewDojoActed?: StudentTransferRequestUpdateManyWithoutNewDojoActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUpdateManyWithoutInvitedByNestedInput
@@ -84933,6 +85314,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutUserNestedInput
     transfersDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
+    transfersNewDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutNewDojoActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedUpdateManyWithoutInvitedByNestedInput
@@ -85462,6 +85844,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantCreateNestedManyWithoutUserInput
     transfersDojoActed?: StudentTransferRequestCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
+    transfersNewDojoActed?: StudentTransferRequestCreateNestedManyWithoutNewDojoActedByInput
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteCreateNestedManyWithoutInvitedByInput
@@ -85499,6 +85882,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutUserInput
     transfersDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
+    transfersNewDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutNewDojoActedByInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedCreateNestedManyWithoutInvitedByInput
@@ -85541,6 +85925,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantCreateNestedManyWithoutUserInput
     transfersDojoActed?: StudentTransferRequestCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
+    transfersNewDojoActed?: StudentTransferRequestCreateNestedManyWithoutNewDojoActedByInput
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteCreateNestedManyWithoutInvitedByInput
@@ -85578,6 +85963,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutUserInput
     transfersDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
+    transfersNewDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutNewDojoActedByInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedCreateNestedManyWithoutInvitedByInput
@@ -85746,6 +86132,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUpdateManyWithoutUserNestedInput
     transfersDojoActed?: StudentTransferRequestUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
+    transfersNewDojoActed?: StudentTransferRequestUpdateManyWithoutNewDojoActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUpdateManyWithoutInvitedByNestedInput
@@ -85783,6 +86170,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutUserNestedInput
     transfersDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
+    transfersNewDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutNewDojoActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedUpdateManyWithoutInvitedByNestedInput
@@ -85831,6 +86219,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUpdateManyWithoutUserNestedInput
     transfersDojoActed?: StudentTransferRequestUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
+    transfersNewDojoActed?: StudentTransferRequestUpdateManyWithoutNewDojoActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUpdateManyWithoutInvitedByNestedInput
@@ -85868,6 +86257,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutUserNestedInput
     transfersDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
+    transfersNewDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutNewDojoActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedUpdateManyWithoutInvitedByNestedInput
@@ -86089,6 +86479,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantCreateNestedManyWithoutUserInput
     transfersDojoActed?: StudentTransferRequestCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
+    transfersNewDojoActed?: StudentTransferRequestCreateNestedManyWithoutNewDojoActedByInput
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteCreateNestedManyWithoutInvitedByInput
@@ -86126,6 +86517,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutUserInput
     transfersDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
+    transfersNewDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutNewDojoActedByInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedCreateNestedManyWithoutInvitedByInput
@@ -86385,6 +86777,8 @@ export namespace Prisma {
     paidAt?: Date | string | null
     dojoActedAt?: Date | string | null
     adminActedAt?: Date | string | null
+    newDojoActedAt?: Date | string | null
+    assignedRank?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     student: StudentCreateNestedOneWithoutTransferRequestsInput
@@ -86392,6 +86786,7 @@ export namespace Prisma {
     toDojo: DojoCreateNestedOneWithoutTransfersInInput
     dojoActedBy?: UserCreateNestedOneWithoutTransfersDojoActedInput
     adminActedBy?: UserCreateNestedOneWithoutTransfersAdminActedInput
+    newDojoActedBy?: UserCreateNestedOneWithoutTransfersNewDojoActedInput
     history?: StudentDojoHistoryCreateNestedManyWithoutTransferRequestInput
   }
 
@@ -86414,6 +86809,9 @@ export namespace Prisma {
     dojoActedById?: string | null
     adminActedAt?: Date | string | null
     adminActedById?: string | null
+    newDojoActedAt?: Date | string | null
+    newDojoActedById?: string | null
+    assignedRank?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     history?: StudentDojoHistoryUncheckedCreateNestedManyWithoutTransferRequestInput
@@ -86565,6 +86963,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUpdateManyWithoutUserNestedInput
     transfersDojoActed?: StudentTransferRequestUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
+    transfersNewDojoActed?: StudentTransferRequestUpdateManyWithoutNewDojoActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUpdateManyWithoutInvitedByNestedInput
@@ -86602,6 +87001,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutUserNestedInput
     transfersDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
+    transfersNewDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutNewDojoActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedUpdateManyWithoutInvitedByNestedInput
@@ -86841,6 +87241,8 @@ export namespace Prisma {
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     adminActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    newDojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    assignedRank?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     student?: StudentUpdateOneRequiredWithoutTransferRequestsNestedInput
@@ -86848,6 +87250,7 @@ export namespace Prisma {
     toDojo?: DojoUpdateOneRequiredWithoutTransfersInNestedInput
     dojoActedBy?: UserUpdateOneWithoutTransfersDojoActedNestedInput
     adminActedBy?: UserUpdateOneWithoutTransfersAdminActedNestedInput
+    newDojoActedBy?: UserUpdateOneWithoutTransfersNewDojoActedNestedInput
     history?: StudentDojoHistoryUpdateManyWithoutTransferRequestNestedInput
   }
 
@@ -86870,6 +87273,9 @@ export namespace Prisma {
     dojoActedById?: NullableStringFieldUpdateOperationsInput | string | null
     adminActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     adminActedById?: NullableStringFieldUpdateOperationsInput | string | null
+    newDojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    newDojoActedById?: NullableStringFieldUpdateOperationsInput | string | null
+    assignedRank?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     history?: StudentDojoHistoryUncheckedUpdateManyWithoutTransferRequestNestedInput
@@ -87353,6 +87759,7 @@ export namespace Prisma {
     achievementsAwarded?: StudentAchievementCreateNestedManyWithoutAwardedByInput
     transfersDojoActed?: StudentTransferRequestCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
+    transfersNewDojoActed?: StudentTransferRequestCreateNestedManyWithoutNewDojoActedByInput
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteCreateNestedManyWithoutInvitedByInput
@@ -87390,6 +87797,7 @@ export namespace Prisma {
     achievementsAwarded?: StudentAchievementUncheckedCreateNestedManyWithoutAwardedByInput
     transfersDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
+    transfersNewDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutNewDojoActedByInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedCreateNestedManyWithoutInvitedByInput
@@ -87574,6 +87982,7 @@ export namespace Prisma {
     achievementsAwarded?: StudentAchievementUpdateManyWithoutAwardedByNestedInput
     transfersDojoActed?: StudentTransferRequestUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
+    transfersNewDojoActed?: StudentTransferRequestUpdateManyWithoutNewDojoActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUpdateManyWithoutInvitedByNestedInput
@@ -87611,6 +88020,7 @@ export namespace Prisma {
     achievementsAwarded?: StudentAchievementUncheckedUpdateManyWithoutAwardedByNestedInput
     transfersDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
+    transfersNewDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutNewDojoActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedUpdateManyWithoutInvitedByNestedInput
@@ -88076,6 +88486,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantCreateNestedManyWithoutUserInput
     transfersDojoActed?: StudentTransferRequestCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
+    transfersNewDojoActed?: StudentTransferRequestCreateNestedManyWithoutNewDojoActedByInput
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteCreateNestedManyWithoutInvitedByInput
@@ -88113,6 +88524,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutUserInput
     transfersDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
+    transfersNewDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutNewDojoActedByInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedCreateNestedManyWithoutInvitedByInput
@@ -88270,6 +88682,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUpdateManyWithoutUserNestedInput
     transfersDojoActed?: StudentTransferRequestUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
+    transfersNewDojoActed?: StudentTransferRequestUpdateManyWithoutNewDojoActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUpdateManyWithoutInvitedByNestedInput
@@ -88307,6 +88720,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutUserNestedInput
     transfersDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
+    transfersNewDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutNewDojoActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedUpdateManyWithoutInvitedByNestedInput
@@ -88628,6 +89042,7 @@ export namespace Prisma {
     achievementsAwarded?: StudentAchievementCreateNestedManyWithoutAwardedByInput
     tournamentEntries?: TournamentParticipantCreateNestedManyWithoutUserInput
     transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
+    transfersNewDojoActed?: StudentTransferRequestCreateNestedManyWithoutNewDojoActedByInput
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteCreateNestedManyWithoutInvitedByInput
@@ -88665,6 +89080,7 @@ export namespace Prisma {
     achievementsAwarded?: StudentAchievementUncheckedCreateNestedManyWithoutAwardedByInput
     tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutUserInput
     transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
+    transfersNewDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutNewDojoActedByInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedCreateNestedManyWithoutInvitedByInput
@@ -88707,6 +89123,7 @@ export namespace Prisma {
     achievementsAwarded?: StudentAchievementCreateNestedManyWithoutAwardedByInput
     tournamentEntries?: TournamentParticipantCreateNestedManyWithoutUserInput
     transfersDojoActed?: StudentTransferRequestCreateNestedManyWithoutDojoActedByInput
+    transfersNewDojoActed?: StudentTransferRequestCreateNestedManyWithoutNewDojoActedByInput
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteCreateNestedManyWithoutInvitedByInput
@@ -88744,6 +89161,7 @@ export namespace Prisma {
     achievementsAwarded?: StudentAchievementUncheckedCreateNestedManyWithoutAwardedByInput
     tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutUserInput
     transfersDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutDojoActedByInput
+    transfersNewDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutNewDojoActedByInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedCreateNestedManyWithoutInvitedByInput
@@ -88755,6 +89173,87 @@ export namespace Prisma {
   export type UserCreateOrConnectWithoutTransfersAdminActedInput = {
     where: UserWhereUniqueInput
     create: XOR<UserCreateWithoutTransfersAdminActedInput, UserUncheckedCreateWithoutTransfersAdminActedInput>
+  }
+
+  export type UserCreateWithoutTransfersNewDojoActedInput = {
+    id: string
+    email: string
+    phone?: string | null
+    fullName: string
+    avatarUrl?: string | null
+    bio?: string | null
+    isActive?: boolean
+    memberNumber?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    role?: RoleCreateNestedOneWithoutUsersInput
+    profile?: ProfileCreateNestedOneWithoutUserInput
+    student?: StudentCreateNestedOneWithoutUserInput
+    instructor?: InstructorCreateNestedOneWithoutUserInput
+    dojoManager?: DojoManagerCreateNestedOneWithoutUserInput
+    dojoOwner?: DojoOwnerCreateNestedOneWithoutUserInput
+    admin?: AdminCreateNestedOneWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    orders?: ShopOrderCreateNestedManyWithoutUserInput
+    eventRegistrations?: EventRegistrationCreateNestedManyWithoutUserInput
+    eventCheckIns?: EventRegistrationCreateNestedManyWithoutCheckedInByInput
+    eventsPosted?: EventCreateNestedManyWithoutPostedByInput
+    announcementsPosted?: AnnouncementCreateNestedManyWithoutPostedByInput
+    dojoSalesAsBuyer?: DojoSaleCreateNestedManyWithoutBuyerInput
+    dojoSalesSold?: DojoSaleCreateNestedManyWithoutSoldByInput
+    achievementsAwarded?: StudentAchievementCreateNestedManyWithoutAwardedByInput
+    tournamentEntries?: TournamentParticipantCreateNestedManyWithoutUserInput
+    transfersDojoActed?: StudentTransferRequestCreateNestedManyWithoutDojoActedByInput
+    transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
+    dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
+    paymentTransactions?: PaymentTransactionCreateNestedManyWithoutUserInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteCreateNestedManyWithoutInvitedByInput
+    serviceRequestsDojoActed?: ServiceRequestCreateNestedManyWithoutDojoActedByInput
+    serviceRequestsAdminActed?: ServiceRequestCreateNestedManyWithoutAdminActedByInput
+    serviceCouponsCreated?: ServiceCouponCreateNestedManyWithoutCreatedByInput
+  }
+
+  export type UserUncheckedCreateWithoutTransfersNewDojoActedInput = {
+    id: string
+    email: string
+    phone?: string | null
+    fullName: string
+    avatarUrl?: string | null
+    bio?: string | null
+    roleId?: string
+    isActive?: boolean
+    memberNumber?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    profile?: ProfileUncheckedCreateNestedOneWithoutUserInput
+    student?: StudentUncheckedCreateNestedOneWithoutUserInput
+    instructor?: InstructorUncheckedCreateNestedOneWithoutUserInput
+    dojoManager?: DojoManagerUncheckedCreateNestedOneWithoutUserInput
+    dojoOwner?: DojoOwnerUncheckedCreateNestedOneWithoutUserInput
+    admin?: AdminUncheckedCreateNestedOneWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    orders?: ShopOrderUncheckedCreateNestedManyWithoutUserInput
+    eventRegistrations?: EventRegistrationUncheckedCreateNestedManyWithoutUserInput
+    eventCheckIns?: EventRegistrationUncheckedCreateNestedManyWithoutCheckedInByInput
+    eventsPosted?: EventUncheckedCreateNestedManyWithoutPostedByInput
+    announcementsPosted?: AnnouncementUncheckedCreateNestedManyWithoutPostedByInput
+    dojoSalesAsBuyer?: DojoSaleUncheckedCreateNestedManyWithoutBuyerInput
+    dojoSalesSold?: DojoSaleUncheckedCreateNestedManyWithoutSoldByInput
+    achievementsAwarded?: StudentAchievementUncheckedCreateNestedManyWithoutAwardedByInput
+    tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutUserInput
+    transfersDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutDojoActedByInput
+    transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
+    dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
+    paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutUserInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedCreateNestedManyWithoutInvitedByInput
+    serviceRequestsDojoActed?: ServiceRequestUncheckedCreateNestedManyWithoutDojoActedByInput
+    serviceRequestsAdminActed?: ServiceRequestUncheckedCreateNestedManyWithoutAdminActedByInput
+    serviceCouponsCreated?: ServiceCouponUncheckedCreateNestedManyWithoutCreatedByInput
+  }
+
+  export type UserCreateOrConnectWithoutTransfersNewDojoActedInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutTransfersNewDojoActedInput, UserUncheckedCreateWithoutTransfersNewDojoActedInput>
   }
 
   export type StudentDojoHistoryCreateWithoutTransferRequestInput = {
@@ -89135,6 +89634,7 @@ export namespace Prisma {
     achievementsAwarded?: StudentAchievementUpdateManyWithoutAwardedByNestedInput
     tournamentEntries?: TournamentParticipantUpdateManyWithoutUserNestedInput
     transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
+    transfersNewDojoActed?: StudentTransferRequestUpdateManyWithoutNewDojoActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUpdateManyWithoutInvitedByNestedInput
@@ -89172,6 +89672,7 @@ export namespace Prisma {
     achievementsAwarded?: StudentAchievementUncheckedUpdateManyWithoutAwardedByNestedInput
     tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutUserNestedInput
     transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
+    transfersNewDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutNewDojoActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedUpdateManyWithoutInvitedByNestedInput
@@ -89220,6 +89721,7 @@ export namespace Prisma {
     achievementsAwarded?: StudentAchievementUpdateManyWithoutAwardedByNestedInput
     tournamentEntries?: TournamentParticipantUpdateManyWithoutUserNestedInput
     transfersDojoActed?: StudentTransferRequestUpdateManyWithoutDojoActedByNestedInput
+    transfersNewDojoActed?: StudentTransferRequestUpdateManyWithoutNewDojoActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUpdateManyWithoutInvitedByNestedInput
@@ -89257,6 +89759,94 @@ export namespace Prisma {
     achievementsAwarded?: StudentAchievementUncheckedUpdateManyWithoutAwardedByNestedInput
     tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutUserNestedInput
     transfersDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
+    transfersNewDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutNewDojoActedByNestedInput
+    dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+    paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutUserNestedInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedUpdateManyWithoutInvitedByNestedInput
+    serviceRequestsDojoActed?: ServiceRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
+    serviceRequestsAdminActed?: ServiceRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
+    serviceCouponsCreated?: ServiceCouponUncheckedUpdateManyWithoutCreatedByNestedInput
+  }
+
+  export type UserUpsertWithoutTransfersNewDojoActedInput = {
+    update: XOR<UserUpdateWithoutTransfersNewDojoActedInput, UserUncheckedUpdateWithoutTransfersNewDojoActedInput>
+    create: XOR<UserCreateWithoutTransfersNewDojoActedInput, UserUncheckedCreateWithoutTransfersNewDojoActedInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutTransfersNewDojoActedInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutTransfersNewDojoActedInput, UserUncheckedUpdateWithoutTransfersNewDojoActedInput>
+  }
+
+  export type UserUpdateWithoutTransfersNewDojoActedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    fullName?: StringFieldUpdateOperationsInput | string
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: RoleUpdateOneRequiredWithoutUsersNestedInput
+    profile?: ProfileUpdateOneWithoutUserNestedInput
+    student?: StudentUpdateOneWithoutUserNestedInput
+    instructor?: InstructorUpdateOneWithoutUserNestedInput
+    dojoManager?: DojoManagerUpdateOneWithoutUserNestedInput
+    dojoOwner?: DojoOwnerUpdateOneWithoutUserNestedInput
+    admin?: AdminUpdateOneWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    orders?: ShopOrderUpdateManyWithoutUserNestedInput
+    eventRegistrations?: EventRegistrationUpdateManyWithoutUserNestedInput
+    eventCheckIns?: EventRegistrationUpdateManyWithoutCheckedInByNestedInput
+    eventsPosted?: EventUpdateManyWithoutPostedByNestedInput
+    announcementsPosted?: AnnouncementUpdateManyWithoutPostedByNestedInput
+    dojoSalesAsBuyer?: DojoSaleUpdateManyWithoutBuyerNestedInput
+    dojoSalesSold?: DojoSaleUpdateManyWithoutSoldByNestedInput
+    achievementsAwarded?: StudentAchievementUpdateManyWithoutAwardedByNestedInput
+    tournamentEntries?: TournamentParticipantUpdateManyWithoutUserNestedInput
+    transfersDojoActed?: StudentTransferRequestUpdateManyWithoutDojoActedByNestedInput
+    transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
+    dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
+    paymentTransactions?: PaymentTransactionUpdateManyWithoutUserNestedInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteUpdateManyWithoutInvitedByNestedInput
+    serviceRequestsDojoActed?: ServiceRequestUpdateManyWithoutDojoActedByNestedInput
+    serviceRequestsAdminActed?: ServiceRequestUpdateManyWithoutAdminActedByNestedInput
+    serviceCouponsCreated?: ServiceCouponUpdateManyWithoutCreatedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutTransfersNewDojoActedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    fullName?: StringFieldUpdateOperationsInput | string
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    roleId?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    profile?: ProfileUncheckedUpdateOneWithoutUserNestedInput
+    student?: StudentUncheckedUpdateOneWithoutUserNestedInput
+    instructor?: InstructorUncheckedUpdateOneWithoutUserNestedInput
+    dojoManager?: DojoManagerUncheckedUpdateOneWithoutUserNestedInput
+    dojoOwner?: DojoOwnerUncheckedUpdateOneWithoutUserNestedInput
+    admin?: AdminUncheckedUpdateOneWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    orders?: ShopOrderUncheckedUpdateManyWithoutUserNestedInput
+    eventRegistrations?: EventRegistrationUncheckedUpdateManyWithoutUserNestedInput
+    eventCheckIns?: EventRegistrationUncheckedUpdateManyWithoutCheckedInByNestedInput
+    eventsPosted?: EventUncheckedUpdateManyWithoutPostedByNestedInput
+    announcementsPosted?: AnnouncementUncheckedUpdateManyWithoutPostedByNestedInput
+    dojoSalesAsBuyer?: DojoSaleUncheckedUpdateManyWithoutBuyerNestedInput
+    dojoSalesSold?: DojoSaleUncheckedUpdateManyWithoutSoldByNestedInput
+    achievementsAwarded?: StudentAchievementUncheckedUpdateManyWithoutAwardedByNestedInput
+    tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutUserNestedInput
+    transfersDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
+    transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedUpdateManyWithoutInvitedByNestedInput
@@ -89451,6 +90041,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantCreateNestedManyWithoutUserInput
     transfersDojoActed?: StudentTransferRequestCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
+    transfersNewDojoActed?: StudentTransferRequestCreateNestedManyWithoutNewDojoActedByInput
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
     dojoOwnerInvitesSent?: DojoOwnerInviteCreateNestedManyWithoutInvitedByInput
     serviceRequestsDojoActed?: ServiceRequestCreateNestedManyWithoutDojoActedByInput
@@ -89488,6 +90079,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutUserInput
     transfersDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
+    transfersNewDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutNewDojoActedByInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedCreateNestedManyWithoutInvitedByInput
     serviceRequestsDojoActed?: ServiceRequestUncheckedCreateNestedManyWithoutDojoActedByInput
@@ -89693,6 +90285,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUpdateManyWithoutUserNestedInput
     transfersDojoActed?: StudentTransferRequestUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
+    transfersNewDojoActed?: StudentTransferRequestUpdateManyWithoutNewDojoActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUpdateManyWithoutInvitedByNestedInput
     serviceRequestsDojoActed?: ServiceRequestUpdateManyWithoutDojoActedByNestedInput
@@ -89730,6 +90323,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutUserNestedInput
     transfersDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
+    transfersNewDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutNewDojoActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedUpdateManyWithoutInvitedByNestedInput
     serviceRequestsDojoActed?: ServiceRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
@@ -89966,6 +90560,8 @@ export namespace Prisma {
     paidAt?: Date | string | null
     dojoActedAt?: Date | string | null
     adminActedAt?: Date | string | null
+    newDojoActedAt?: Date | string | null
+    assignedRank?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     student: StudentCreateNestedOneWithoutTransferRequestsInput
@@ -89974,6 +90570,7 @@ export namespace Prisma {
     order?: ShopOrderCreateNestedOneWithoutTransferRequestInput
     dojoActedBy?: UserCreateNestedOneWithoutTransfersDojoActedInput
     adminActedBy?: UserCreateNestedOneWithoutTransfersAdminActedInput
+    newDojoActedBy?: UserCreateNestedOneWithoutTransfersNewDojoActedInput
   }
 
   export type StudentTransferRequestUncheckedCreateWithoutHistoryInput = {
@@ -89996,6 +90593,9 @@ export namespace Prisma {
     dojoActedById?: string | null
     adminActedAt?: Date | string | null
     adminActedById?: string | null
+    newDojoActedAt?: Date | string | null
+    newDojoActedById?: string | null
+    assignedRank?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -90035,6 +90635,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantCreateNestedManyWithoutUserInput
     transfersDojoActed?: StudentTransferRequestCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
+    transfersNewDojoActed?: StudentTransferRequestCreateNestedManyWithoutNewDojoActedByInput
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteCreateNestedManyWithoutInvitedByInput
     serviceRequestsDojoActed?: ServiceRequestCreateNestedManyWithoutDojoActedByInput
@@ -90072,6 +90673,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutUserInput
     transfersDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
+    transfersNewDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutNewDojoActedByInput
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedCreateNestedManyWithoutInvitedByInput
     serviceRequestsDojoActed?: ServiceRequestUncheckedCreateNestedManyWithoutDojoActedByInput
@@ -90342,6 +90944,8 @@ export namespace Prisma {
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     adminActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    newDojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    assignedRank?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     student?: StudentUpdateOneRequiredWithoutTransferRequestsNestedInput
@@ -90350,6 +90954,7 @@ export namespace Prisma {
     order?: ShopOrderUpdateOneWithoutTransferRequestNestedInput
     dojoActedBy?: UserUpdateOneWithoutTransfersDojoActedNestedInput
     adminActedBy?: UserUpdateOneWithoutTransfersAdminActedNestedInput
+    newDojoActedBy?: UserUpdateOneWithoutTransfersNewDojoActedNestedInput
   }
 
   export type StudentTransferRequestUncheckedUpdateWithoutHistoryInput = {
@@ -90372,6 +90977,9 @@ export namespace Prisma {
     dojoActedById?: NullableStringFieldUpdateOperationsInput | string | null
     adminActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     adminActedById?: NullableStringFieldUpdateOperationsInput | string | null
+    newDojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    newDojoActedById?: NullableStringFieldUpdateOperationsInput | string | null
+    assignedRank?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -90417,6 +91025,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUpdateManyWithoutUserNestedInput
     transfersDojoActed?: StudentTransferRequestUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
+    transfersNewDojoActed?: StudentTransferRequestUpdateManyWithoutNewDojoActedByNestedInput
     paymentTransactions?: PaymentTransactionUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUpdateManyWithoutInvitedByNestedInput
     serviceRequestsDojoActed?: ServiceRequestUpdateManyWithoutDojoActedByNestedInput
@@ -90454,6 +91063,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutUserNestedInput
     transfersDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
+    transfersNewDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutNewDojoActedByNestedInput
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedUpdateManyWithoutInvitedByNestedInput
     serviceRequestsDojoActed?: ServiceRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
@@ -90896,6 +91506,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantCreateNestedManyWithoutUserInput
     transfersDojoActed?: StudentTransferRequestCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
+    transfersNewDojoActed?: StudentTransferRequestCreateNestedManyWithoutNewDojoActedByInput
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteCreateNestedManyWithoutInvitedByInput
@@ -90933,6 +91544,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutUserInput
     transfersDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
+    transfersNewDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutNewDojoActedByInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedCreateNestedManyWithoutInvitedByInput
@@ -90975,6 +91587,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantCreateNestedManyWithoutUserInput
     transfersDojoActed?: StudentTransferRequestCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
+    transfersNewDojoActed?: StudentTransferRequestCreateNestedManyWithoutNewDojoActedByInput
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteCreateNestedManyWithoutInvitedByInput
@@ -91012,6 +91625,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutUserInput
     transfersDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
+    transfersNewDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutNewDojoActedByInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedCreateNestedManyWithoutInvitedByInput
@@ -91366,6 +91980,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUpdateManyWithoutUserNestedInput
     transfersDojoActed?: StudentTransferRequestUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
+    transfersNewDojoActed?: StudentTransferRequestUpdateManyWithoutNewDojoActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUpdateManyWithoutInvitedByNestedInput
@@ -91403,6 +92018,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutUserNestedInput
     transfersDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
+    transfersNewDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutNewDojoActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedUpdateManyWithoutInvitedByNestedInput
@@ -91451,6 +92067,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUpdateManyWithoutUserNestedInput
     transfersDojoActed?: StudentTransferRequestUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
+    transfersNewDojoActed?: StudentTransferRequestUpdateManyWithoutNewDojoActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUpdateManyWithoutInvitedByNestedInput
@@ -91488,6 +92105,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutUserNestedInput
     transfersDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
+    transfersNewDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutNewDojoActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedUpdateManyWithoutInvitedByNestedInput
@@ -91637,6 +92255,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantCreateNestedManyWithoutUserInput
     transfersDojoActed?: StudentTransferRequestCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
+    transfersNewDojoActed?: StudentTransferRequestCreateNestedManyWithoutNewDojoActedByInput
     dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteCreateNestedManyWithoutInvitedByInput
@@ -91674,6 +92293,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutUserInput
     transfersDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutDojoActedByInput
     transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
+    transfersNewDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutNewDojoActedByInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
     paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutUserInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedCreateNestedManyWithoutInvitedByInput
@@ -91911,6 +92531,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUpdateManyWithoutUserNestedInput
     transfersDojoActed?: StudentTransferRequestUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
+    transfersNewDojoActed?: StudentTransferRequestUpdateManyWithoutNewDojoActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUpdateManyWithoutInvitedByNestedInput
@@ -91948,6 +92569,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutUserNestedInput
     transfersDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
+    transfersNewDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutNewDojoActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedUpdateManyWithoutInvitedByNestedInput
@@ -92018,6 +92640,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUpdateManyWithoutUserNestedInput
     transfersDojoActed?: StudentTransferRequestUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
+    transfersNewDojoActed?: StudentTransferRequestUpdateManyWithoutNewDojoActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUpdateManyWithoutInvitedByNestedInput
@@ -92055,6 +92678,7 @@ export namespace Prisma {
     tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutUserNestedInput
     transfersDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
     transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
+    transfersNewDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutNewDojoActedByNestedInput
     dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutUserNestedInput
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedUpdateManyWithoutInvitedByNestedInput
@@ -92316,6 +92940,9 @@ export namespace Prisma {
     dojoActedAt?: Date | string | null
     adminActedAt?: Date | string | null
     adminActedById?: string | null
+    newDojoActedAt?: Date | string | null
+    newDojoActedById?: string | null
+    assignedRank?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -92339,6 +92966,35 @@ export namespace Prisma {
     dojoActedAt?: Date | string | null
     dojoActedById?: string | null
     adminActedAt?: Date | string | null
+    newDojoActedAt?: Date | string | null
+    newDojoActedById?: string | null
+    assignedRank?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type StudentTransferRequestCreateManyNewDojoActedByInput = {
+    id?: string
+    studentId: string
+    fromDojoId: string
+    toDojoId: string
+    status?: $Enums.StudentTransferStatus
+    dojoDecision?: $Enums.StudentTransferDojoDecision
+    reason?: string | null
+    dojoNote?: string | null
+    adminNote?: string | null
+    fee: Decimal | DecimalJsLike | number | string
+    discountAmount?: Decimal | DecimalJsLike | number | string
+    finalAmount?: Decimal | DecimalJsLike | number | string | null
+    couponCode?: string | null
+    orderId?: string | null
+    paidAt?: Date | string | null
+    dojoActedAt?: Date | string | null
+    dojoActedById?: string | null
+    adminActedAt?: Date | string | null
+    adminActedById?: string | null
+    newDojoActedAt?: Date | string | null
+    assignedRank?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -93044,6 +93700,8 @@ export namespace Prisma {
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     adminActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    newDojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    assignedRank?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     student?: StudentUpdateOneRequiredWithoutTransferRequestsNestedInput
@@ -93051,6 +93709,7 @@ export namespace Prisma {
     toDojo?: DojoUpdateOneRequiredWithoutTransfersInNestedInput
     order?: ShopOrderUpdateOneWithoutTransferRequestNestedInput
     adminActedBy?: UserUpdateOneWithoutTransfersAdminActedNestedInput
+    newDojoActedBy?: UserUpdateOneWithoutTransfersNewDojoActedNestedInput
     history?: StudentDojoHistoryUpdateManyWithoutTransferRequestNestedInput
   }
 
@@ -93073,6 +93732,9 @@ export namespace Prisma {
     dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     adminActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     adminActedById?: NullableStringFieldUpdateOperationsInput | string | null
+    newDojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    newDojoActedById?: NullableStringFieldUpdateOperationsInput | string | null
+    assignedRank?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     history?: StudentDojoHistoryUncheckedUpdateManyWithoutTransferRequestNestedInput
@@ -93097,6 +93759,9 @@ export namespace Prisma {
     dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     adminActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     adminActedById?: NullableStringFieldUpdateOperationsInput | string | null
+    newDojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    newDojoActedById?: NullableStringFieldUpdateOperationsInput | string | null
+    assignedRank?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -93115,6 +93780,8 @@ export namespace Prisma {
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     adminActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    newDojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    assignedRank?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     student?: StudentUpdateOneRequiredWithoutTransferRequestsNestedInput
@@ -93122,6 +93789,7 @@ export namespace Prisma {
     toDojo?: DojoUpdateOneRequiredWithoutTransfersInNestedInput
     order?: ShopOrderUpdateOneWithoutTransferRequestNestedInput
     dojoActedBy?: UserUpdateOneWithoutTransfersDojoActedNestedInput
+    newDojoActedBy?: UserUpdateOneWithoutTransfersNewDojoActedNestedInput
     history?: StudentDojoHistoryUpdateManyWithoutTransferRequestNestedInput
   }
 
@@ -93144,6 +93812,9 @@ export namespace Prisma {
     dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dojoActedById?: NullableStringFieldUpdateOperationsInput | string | null
     adminActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    newDojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    newDojoActedById?: NullableStringFieldUpdateOperationsInput | string | null
+    assignedRank?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     history?: StudentDojoHistoryUncheckedUpdateManyWithoutTransferRequestNestedInput
@@ -93168,6 +93839,89 @@ export namespace Prisma {
     dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dojoActedById?: NullableStringFieldUpdateOperationsInput | string | null
     adminActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    newDojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    newDojoActedById?: NullableStringFieldUpdateOperationsInput | string | null
+    assignedRank?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type StudentTransferRequestUpdateWithoutNewDojoActedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumStudentTransferStatusFieldUpdateOperationsInput | $Enums.StudentTransferStatus
+    dojoDecision?: EnumStudentTransferDojoDecisionFieldUpdateOperationsInput | $Enums.StudentTransferDojoDecision
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    dojoNote?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNote?: NullableStringFieldUpdateOperationsInput | string | null
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discountAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    finalAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    couponCode?: NullableStringFieldUpdateOperationsInput | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    adminActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    newDojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    assignedRank?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    student?: StudentUpdateOneRequiredWithoutTransferRequestsNestedInput
+    fromDojo?: DojoUpdateOneRequiredWithoutTransfersOutNestedInput
+    toDojo?: DojoUpdateOneRequiredWithoutTransfersInNestedInput
+    order?: ShopOrderUpdateOneWithoutTransferRequestNestedInput
+    dojoActedBy?: UserUpdateOneWithoutTransfersDojoActedNestedInput
+    adminActedBy?: UserUpdateOneWithoutTransfersAdminActedNestedInput
+    history?: StudentDojoHistoryUpdateManyWithoutTransferRequestNestedInput
+  }
+
+  export type StudentTransferRequestUncheckedUpdateWithoutNewDojoActedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    fromDojoId?: StringFieldUpdateOperationsInput | string
+    toDojoId?: StringFieldUpdateOperationsInput | string
+    status?: EnumStudentTransferStatusFieldUpdateOperationsInput | $Enums.StudentTransferStatus
+    dojoDecision?: EnumStudentTransferDojoDecisionFieldUpdateOperationsInput | $Enums.StudentTransferDojoDecision
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    dojoNote?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNote?: NullableStringFieldUpdateOperationsInput | string | null
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discountAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    finalAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    couponCode?: NullableStringFieldUpdateOperationsInput | string | null
+    orderId?: NullableStringFieldUpdateOperationsInput | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dojoActedById?: NullableStringFieldUpdateOperationsInput | string | null
+    adminActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    adminActedById?: NullableStringFieldUpdateOperationsInput | string | null
+    newDojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    assignedRank?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    history?: StudentDojoHistoryUncheckedUpdateManyWithoutTransferRequestNestedInput
+  }
+
+  export type StudentTransferRequestUncheckedUpdateManyWithoutNewDojoActedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    fromDojoId?: StringFieldUpdateOperationsInput | string
+    toDojoId?: StringFieldUpdateOperationsInput | string
+    status?: EnumStudentTransferStatusFieldUpdateOperationsInput | $Enums.StudentTransferStatus
+    dojoDecision?: EnumStudentTransferDojoDecisionFieldUpdateOperationsInput | $Enums.StudentTransferDojoDecision
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    dojoNote?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNote?: NullableStringFieldUpdateOperationsInput | string | null
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discountAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    finalAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    couponCode?: NullableStringFieldUpdateOperationsInput | string | null
+    orderId?: NullableStringFieldUpdateOperationsInput | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dojoActedById?: NullableStringFieldUpdateOperationsInput | string | null
+    adminActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    adminActedById?: NullableStringFieldUpdateOperationsInput | string | null
+    newDojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    assignedRank?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -93551,6 +94305,9 @@ export namespace Prisma {
     dojoActedById?: string | null
     adminActedAt?: Date | string | null
     adminActedById?: string | null
+    newDojoActedAt?: Date | string | null
+    newDojoActedById?: string | null
+    assignedRank?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -93771,6 +94528,8 @@ export namespace Prisma {
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     adminActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    newDojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    assignedRank?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     fromDojo?: DojoUpdateOneRequiredWithoutTransfersOutNestedInput
@@ -93778,6 +94537,7 @@ export namespace Prisma {
     order?: ShopOrderUpdateOneWithoutTransferRequestNestedInput
     dojoActedBy?: UserUpdateOneWithoutTransfersDojoActedNestedInput
     adminActedBy?: UserUpdateOneWithoutTransfersAdminActedNestedInput
+    newDojoActedBy?: UserUpdateOneWithoutTransfersNewDojoActedNestedInput
     history?: StudentDojoHistoryUpdateManyWithoutTransferRequestNestedInput
   }
 
@@ -93800,6 +94560,9 @@ export namespace Prisma {
     dojoActedById?: NullableStringFieldUpdateOperationsInput | string | null
     adminActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     adminActedById?: NullableStringFieldUpdateOperationsInput | string | null
+    newDojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    newDojoActedById?: NullableStringFieldUpdateOperationsInput | string | null
+    assignedRank?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     history?: StudentDojoHistoryUncheckedUpdateManyWithoutTransferRequestNestedInput
@@ -93824,6 +94587,9 @@ export namespace Prisma {
     dojoActedById?: NullableStringFieldUpdateOperationsInput | string | null
     adminActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     adminActedById?: NullableStringFieldUpdateOperationsInput | string | null
+    newDojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    newDojoActedById?: NullableStringFieldUpdateOperationsInput | string | null
+    assignedRank?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -94467,6 +95233,9 @@ export namespace Prisma {
     dojoActedById?: string | null
     adminActedAt?: Date | string | null
     adminActedById?: string | null
+    newDojoActedAt?: Date | string | null
+    newDojoActedById?: string | null
+    assignedRank?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -94490,6 +95259,9 @@ export namespace Prisma {
     dojoActedById?: string | null
     adminActedAt?: Date | string | null
     adminActedById?: string | null
+    newDojoActedAt?: Date | string | null
+    newDojoActedById?: string | null
+    assignedRank?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -95097,6 +95869,8 @@ export namespace Prisma {
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     adminActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    newDojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    assignedRank?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     student?: StudentUpdateOneRequiredWithoutTransferRequestsNestedInput
@@ -95104,6 +95878,7 @@ export namespace Prisma {
     order?: ShopOrderUpdateOneWithoutTransferRequestNestedInput
     dojoActedBy?: UserUpdateOneWithoutTransfersDojoActedNestedInput
     adminActedBy?: UserUpdateOneWithoutTransfersAdminActedNestedInput
+    newDojoActedBy?: UserUpdateOneWithoutTransfersNewDojoActedNestedInput
     history?: StudentDojoHistoryUpdateManyWithoutTransferRequestNestedInput
   }
 
@@ -95126,6 +95901,9 @@ export namespace Prisma {
     dojoActedById?: NullableStringFieldUpdateOperationsInput | string | null
     adminActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     adminActedById?: NullableStringFieldUpdateOperationsInput | string | null
+    newDojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    newDojoActedById?: NullableStringFieldUpdateOperationsInput | string | null
+    assignedRank?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     history?: StudentDojoHistoryUncheckedUpdateManyWithoutTransferRequestNestedInput
@@ -95150,6 +95928,9 @@ export namespace Prisma {
     dojoActedById?: NullableStringFieldUpdateOperationsInput | string | null
     adminActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     adminActedById?: NullableStringFieldUpdateOperationsInput | string | null
+    newDojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    newDojoActedById?: NullableStringFieldUpdateOperationsInput | string | null
+    assignedRank?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -95168,6 +95949,8 @@ export namespace Prisma {
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     adminActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    newDojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    assignedRank?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     student?: StudentUpdateOneRequiredWithoutTransferRequestsNestedInput
@@ -95175,6 +95958,7 @@ export namespace Prisma {
     order?: ShopOrderUpdateOneWithoutTransferRequestNestedInput
     dojoActedBy?: UserUpdateOneWithoutTransfersDojoActedNestedInput
     adminActedBy?: UserUpdateOneWithoutTransfersAdminActedNestedInput
+    newDojoActedBy?: UserUpdateOneWithoutTransfersNewDojoActedNestedInput
     history?: StudentDojoHistoryUpdateManyWithoutTransferRequestNestedInput
   }
 
@@ -95197,6 +95981,9 @@ export namespace Prisma {
     dojoActedById?: NullableStringFieldUpdateOperationsInput | string | null
     adminActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     adminActedById?: NullableStringFieldUpdateOperationsInput | string | null
+    newDojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    newDojoActedById?: NullableStringFieldUpdateOperationsInput | string | null
+    assignedRank?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     history?: StudentDojoHistoryUncheckedUpdateManyWithoutTransferRequestNestedInput
@@ -95221,6 +96008,9 @@ export namespace Prisma {
     dojoActedById?: NullableStringFieldUpdateOperationsInput | string | null
     adminActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     adminActedById?: NullableStringFieldUpdateOperationsInput | string | null
+    newDojoActedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    newDojoActedById?: NullableStringFieldUpdateOperationsInput | string | null
+    assignedRank?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
