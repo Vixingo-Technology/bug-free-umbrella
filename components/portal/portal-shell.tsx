@@ -30,6 +30,7 @@ import {
     Receipt,
     UserPlus,
     Wrench,
+    BarChart3,
 } from "lucide-react";
 import Logo from "@/assets/jka_logo.svg";
 import { createClient } from "@/lib/supabase/client";
@@ -92,6 +93,7 @@ const adminNavItems = [
     { label: "Services", href: "/portal/admin/services", icon: Wrench },
     { label: "Service Requests", href: "/portal/admin/service-requests", icon: Wrench },
     { label: "Subscriptions", href: "/portal/admin/subscriptions", icon: CreditCard },
+    { label: "Reports",   href: "/portal/admin/reports",   icon: BarChart3 },
 ];
 
 // Dojo staff (Instructor / Manager / Dojo Head) share the personal sidebar;
