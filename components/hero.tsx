@@ -53,7 +53,7 @@ export default function Hero() {
                         onError={() => setVideoReady(true)}
                         onStalled={() => setVideoReady(true)}
                         onAbort={() => setVideoReady(true)}
-                        className={`absolute inset-0 h-full w-full object-cover pointer-events-none transition-opacity duration-700 saturate-0 contrast-125 brightness-65 ${videoReady ? "opacity-28" : "opacity-0"}`}
+                        className={`absolute inset-0 h-full w-full object-cover pointer-events-none transition-opacity duration-700 saturate-0 contrast-115 brightness-90 ${videoReady ? "opacity-70" : "opacity-0"}`}
                     >
                         <source src="/assets/bg.mp4" type="video/mp4" />
                     </video>
@@ -91,7 +91,7 @@ export default function Hero() {
                         </div>
                     </motion.div>
                 ) : null}
-                <div className="absolute inset-0 bg-gradient-to-b from-bg-deep/28 via-bg-deep/70 to-bg-deep z-10" />
+                <div className="absolute inset-0 bg-gradient-to-b from-bg-deep/10 via-bg-deep/40 to-bg-deep z-10" />
                 <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-accent-red/25 via-transparent to-transparent z-10 mix-blend-overlay" />
                 <div
                     className="absolute inset-0 z-10 opacity-5 mix-blend-overlay"
@@ -102,7 +102,6 @@ export default function Hero() {
                     }}
                 />
             </motion.div>
-
 
             <motion.div
                 style={{ opacity }}

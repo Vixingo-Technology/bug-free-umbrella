@@ -28,11 +28,11 @@ export default function About() {
                             className="absolute inset-0 z-10 shadow-lg rounded-sm overflow-hidden"
                         >
                             <Image
-                                src="https://picsum.photos/seed/sensei/800/1000"
-                                alt="Leadership"
+                                src="/assets/Training-1.jpeg"
+                                alt="JKA Bangladesh training session"
                                 fill
                                 className="object-cover rounded-sm grayscale contrast-110 opacity-95"
-                                referrerPolicy="no-referrer"
+                                priority
                             />
                             <div className="absolute inset-0 bg-gradient-to-t from-bg-charcoal/50 via-transparent to-transparent"></div>
                         </motion.div>
@@ -47,11 +47,10 @@ export default function About() {
                         >
                             <div className="relative w-full h-full">
                                 <Image
-                                    src="https://picsum.photos/seed/tradition/400/500"
-                                    alt="Tradition"
+                                    src="/assets/training-2.jpeg"
+                                    alt="JKA Bangladesh grading ceremony"
                                     fill
                                     className="object-cover grayscale opacity-90"
-                                    referrerPolicy="no-referrer"
                                 />
                             </div>
                         </motion.div>

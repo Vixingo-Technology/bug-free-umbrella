@@ -11,18 +11,17 @@ export default function CTA() {
     return (
         <section
             id="membership"
-            className="relative py-40 bg-bg-deep flex items-center justify-center overflow-hidden"
+            className="relative pt-[38rem] pb-40 bg-bg-deep flex items-end justify-center overflow-hidden"
         >
             {/* Background Image */}
             <div className="absolute inset-0 z-0">
                 <Image
-                    src="https://picsum.photos/seed/ceremony/1920/1080"
+                    src="/assets/cta.jpeg"
                     alt="Ceremony"
                     fill
-                    className="object-cover opacity-20 grayscale"
-                    referrerPolicy="no-referrer"
+                    className="object-cover object-top opacity-80 grayscale"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-bg-deep via-bg-deep/30 to-bg-deep z-10"></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-bg-deep via-bg-deep/70 via-40% to-transparent z-10"></div>
                 <div className="absolute inset-0 bg-accent-red/5 mix-blend-overlay z-10"></div>
             </div>
 
@@ -33,14 +32,14 @@ export default function CTA() {
                     viewport={{ once: true }}
                     transition={{ duration: 1 }}
                 >
-                    <h2 className="font-karate text-5xl md:text-7xl text-zinc-900 mb-6 leading-tight tracking-tighter font-bold">
+                    <h2 className="font-karate text-5xl md:text-7xl text-zinc-900 mb-6 leading-tight tracking-tighter font-bold drop-shadow-[0_2px_8px_rgba(255,255,255,0.6)]">
                         {copy.cta.headingLines[0]} <br />
                         <span className="italic text-accent-red font-serif font-normal text-4xl md:text-5xl uppercase tracking-widest block mt-2">
                             {copy.cta.headingLines[1]}
                         </span>
                     </h2>
 
-                    <p className="text-zinc-650 mb-12 max-w-2xl mx-auto font-normal leading-relaxed text-lg">
+                    <p className="text-zinc-800 mb-12 max-w-2xl mx-auto font-medium leading-relaxed text-lg drop-shadow-[0_1px_4px_rgba(255,255,255,0.7)]">
                         {copy.cta.description}
                     </p>
 
