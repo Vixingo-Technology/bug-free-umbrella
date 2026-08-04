@@ -289,13 +289,25 @@ export default async function ParticipationCardPage({
                                     )}
                                 </ul>
 
-                                <div className="border-t border-zinc-200 pt-4 print:pt-2">
-                                    <p className="text-[10px] tracking-widest uppercase font-bold text-zinc-400 mb-1">
-                                        Participant
-                                    </p>
-                                    <p className="text-base font-bold text-zinc-900 mb-1 print:text-sm print:mb-0.5">
-                                        {participantName}
-                                    </p>
+                                <div className="border-t border-zinc-200 pt-4 print:pt-2 flex items-start gap-4">
+                                    {registration.profileImageUrl && (
+                                        // Cloudinary URL — plain <img> avoids
+                                        // Next/Image domain config for a
+                                        // print-focused card.
+                                        // eslint-disable-next-line @next/next/no-img-element
+                                        <img
+                                            src={registration.profileImageUrl}
+                                            alt=""
+                                            className="h-16 w-16 rounded-sm object-cover border border-zinc-200 shrink-0 print:h-14 print:w-14"
+                                        />
+                                    )}
+                                    <div className="flex-1 min-w-0">
+                                        <p className="text-[10px] tracking-widest uppercase font-bold text-zinc-400 mb-1">
+                                            Participant
+                                        </p>
+                                        <p className="text-base font-bold text-zinc-900 mb-1 print:text-sm print:mb-0.5">
+                                            {participantName}
+                                        </p>
                                     {participantEmail && (
                                         <p className="text-xs text-zinc-500 print:text-[10px]">
                                             {participantEmail}
@@ -311,6 +323,7 @@ export default async function ParticipationCardPage({
                                             Member #{memberNumber}
                                         </p>
                                     )}
+                                    </div>
                                 </div>
 
                                 {groupEntries.length > 1 && (

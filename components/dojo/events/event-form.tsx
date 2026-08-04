@@ -1,41 +1,21 @@
 "use client";
 
-import { useMemo, useState, useTransition } from "react";
+import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { Loader2, CalendarPlus, Save, Trophy, Plus, X } from "lucide-react";
+import { Loader2, CalendarPlus, Save, Plus, X, Layers } from "lucide-react";
 import { createEventAction, updateEventAction } from "@/app/actions/events";
 import {
-    ALL_DIVISIONS,
-    divisionsFor,
     makeCustomDivisionCode,
     type CustomDivision,
+    type DivisionGender,
     type TournamentEventType,
 } from "@/lib/tournaments/divisions";
 
 const CATEGORIES = [
-    { value: "BELT_TEST", label: "Belt Test" },
-    { value: "TOURNAMENT", label: "Tournament" },
     { value: "SEMINAR", label: "Seminar" },
     { value: "TRAINING_CAMP", label: "Training Camp" },
-    { value: "OTHER", label: "Other" },
+    { value: "TOURNAMENT", label: "Tournament" },
 ] as const;
-
-const PARTICIPANT_TYPES = [
-    { value: "PUBLIC", label: "Public — anyone can register" },
-    { value: "STUDENTS", label: "Students only" },
-    { value: "INSTRUCTORS", label: "Teachers only" },
-    { value: "PARENTS", label: "Parents only" },
-    { value: "DOJO_MEMBERS", label: "Dojo members only" },
-] as const;
-
-const AGE_BAND_LABEL: Record<string, string> = {
-    U14: "U14 (12 – <14)",
-    CADET: "Cadet (14 – <16)",
-    JUNIOR: "Junior (16 – <18)",
-    CADET_JUNIOR: "Cadet & Junior (14 – <18)",
-    U21: "U21 (18 – <21)",
-    SENIOR: "Senior (16+ / 18+)",
-};
 
 export type BeltRankOption = { id: string; name: string };
 
@@ -47,27 +27,57 @@ export type EventFormInitialValues = {
     eventDate: string;
     category: string;
     maxCapacity: number | null;
-    isPremium: boolean;
-    ticketPrice: string | null;
     memberDiscountPercent: number;
-    participantType: string;
-    minAge: number | null;
-    minRankId: string | null;
     isPublished: boolean;
     attachmentUrl: string | null;
     attachmentType: "IMAGE" | "PDF" | null;
-    tournament?: TournamentInitialValues | null;
-};
-
-export type TournamentInitialValues = {
-    eventType: TournamentEventType;
-    enabledTypes: TournamentEventType[];
-    enabledDivisions: string[];
-    customDivisions: CustomDivision[];
-    registrationDeadline: string | null; // datetime-local string
+    divisions: CustomDivision[];
+    multiDivisionBundlePriceBdt: string | null;
+    registrationDeadline: string | null;
     weighInDate: string | null;
     rulesUrl: string | null;
 };
+
+// Local draft type — mirrors CustomDivision but keeps price/age as strings
+// while the admin is editing so the input can be left blank.
+type DivisionDraft = {
+    code: string;
+    label: string;
+    eventType: TournamentEventType;
+    gender: DivisionGender;
+    isTeam: boolean;
+    minAge: string;
+    minRankId: string;
+    priceBdt: string;
+};
+
+function toDraft(d: CustomDivision): DivisionDraft {
+    return {
+        code: d.code,
+        label: d.label,
+        eventType: d.eventType,
+        gender: d.gender,
+        isTeam: d.isTeam,
+        minAge: d.minAge !== null ? String(d.minAge) : "",
+        minRankId: d.minRankId ?? "",
+        priceBdt: d.priceBdt !== null ? String(d.priceBdt) : "",
+    };
+}
+
+function draftToDivision(d: DivisionDraft): CustomDivision {
+    const minAge = d.minAge.trim() ? Number.parseInt(d.minAge, 10) : NaN;
+    const priceBdt = d.priceBdt.trim() ? Number.parseFloat(d.priceBdt) : NaN;
+    return {
+        code: d.code,
+        label: d.label.trim(),
+        eventType: d.eventType,
+        gender: d.gender,
+        isTeam: d.isTeam,
+        minAge: Number.isFinite(minAge) ? minAge : null,
+        minRankId: d.minRankId || null,
+        priceBdt: Number.isFinite(priceBdt) ? priceBdt : null,
+    };
+}
 
 export default function EventForm({
     eyebrow = "New event",
@@ -83,109 +93,70 @@ export default function EventForm({
     initial?: EventFormInitialValues;
 }) {
     const isEdit = !!initial;
-    const [isPremium, setIsPremium] = useState(initial?.isPremium ?? false);
     const [isPublished, setIsPublished] = useState(initial?.isPublished ?? true);
     const [category, setCategory] = useState<string>(
-        initial?.category ?? "OTHER",
+        initial?.category ?? "SEMINAR",
     );
-    const [enabledTypes, setEnabledTypes] = useState<Set<TournamentEventType>>(
-        () =>
-            new Set(
-                initial?.tournament?.enabledTypes?.length
-                    ? initial.tournament.enabledTypes
-                    : initial?.tournament
-                      ? [initial.tournament.eventType]
-                      : ["KATA"],
-            ),
-    );
-    const [enabledDivisions, setEnabledDivisions] = useState<Set<string>>(
-        () => new Set(initial?.tournament?.enabledDivisions ?? []),
-    );
-    const [customDivisions, setCustomDivisions] = useState<CustomDivision[]>(
-        () => initial?.tournament?.customDivisions ?? [],
+    const [divisions, setDivisions] = useState<DivisionDraft[]>(() =>
+        (initial?.divisions ?? []).map(toDraft),
     );
     const [error, setError] = useState<string | null>(null);
     const [isPending, startTransition] = useTransition();
     const router = useRouter();
 
-    const isTournament = category === "TOURNAMENT";
-    const kataEnabled = enabledTypes.has("KATA");
-    const kumiteEnabled = enabledTypes.has("KUMITE");
+    const anyKumite = divisions.some((d) => d.eventType === "KUMITE");
 
-    function toggleType(t: TournamentEventType, on: boolean) {
-        setEnabledTypes((prev) => {
-            const next = new Set(prev);
-            if (on) next.add(t);
-            else next.delete(t);
-            return next;
-        });
-        if (!on) {
-            // Turning a type off should also clear its selected divisions and
-            // its custom categories, otherwise a hidden selection could carry
-            // through to submit.
-            setEnabledDivisions((prev) => {
-                const next = new Set(prev);
-                for (const code of next) {
-                    const preset = ALL_DIVISIONS.find((d) => d.code === code);
-                    if (preset && preset.eventType === t) next.delete(code);
-                    const custom = customDivisions.find((c) => c.code === code);
-                    if (custom && custom.eventType === t) next.delete(code);
+    function addDivision(eventType: TournamentEventType) {
+        setDivisions((prev) => [
+            ...prev,
+            {
+                code: makeCustomDivisionCode(
+                    `Division ${prev.length + 1}`,
+                    eventType,
+                ),
+                label: "",
+                eventType,
+                gender: "ANY",
+                isTeam: false,
+                minAge: "",
+                minRankId: "",
+                priceBdt: "",
+            },
+        ]);
+    }
+
+    function updateDivision(index: number, patch: Partial<DivisionDraft>) {
+        setDivisions((prev) =>
+            prev.map((d, i) => {
+                if (i !== index) return d;
+                const next = { ...d, ...patch };
+                // Re-derive code from label + type when either changes so
+                // reads stay stable across renames until save.
+                if (
+                    (patch.label !== undefined || patch.eventType !== undefined) &&
+                    next.label.trim()
+                ) {
+                    next.code = makeCustomDivisionCode(
+                        next.label,
+                        next.eventType,
+                    );
                 }
                 return next;
-            });
-            setCustomDivisions((prev) => prev.filter((c) => c.eventType !== t));
-        }
+            }),
+        );
     }
 
-    function toggleDivision(code: string) {
-        setEnabledDivisions((prev) => {
-            const next = new Set(prev);
-            if (next.has(code)) next.delete(code);
-            else next.add(code);
-            return next;
-        });
-    }
-
-    function selectAllInBand(codes: readonly string[], on: boolean) {
-        setEnabledDivisions((prev) => {
-            const next = new Set(prev);
-            for (const c of codes) {
-                if (on) next.add(c);
-                else next.delete(c);
-            }
-            return next;
-        });
-    }
-
-    function addCustomDivision(
-        eventType: TournamentEventType,
-        label: string,
-        isTeam: boolean,
-    ) {
-        const trimmed = label.trim();
-        if (!trimmed) return;
-        const code = makeCustomDivisionCode(trimmed, eventType);
-        setCustomDivisions((prev) => {
-            if (prev.some((c) => c.code === code)) return prev;
-            return [...prev, { code, label: trimmed, eventType, isTeam }];
-        });
-        // Auto-enable freshly added custom entries — the admin just declared
-        // the category so they almost certainly want it selected.
-        setEnabledDivisions((prev) => new Set(prev).add(code));
-    }
-
-    function removeCustomDivision(code: string) {
-        setCustomDivisions((prev) => prev.filter((c) => c.code !== code));
-        setEnabledDivisions((prev) => {
-            const next = new Set(prev);
-            next.delete(code);
-            return next;
-        });
+    function removeDivision(index: number) {
+        setDivisions((prev) => prev.filter((_, i) => i !== index));
     }
 
     function submit(formData: FormData) {
         setError(null);
         if (initial?.id) formData.set("id", initial.id);
+        const payload = divisions
+            .filter((d) => d.label.trim())
+            .map(draftToDivision);
+        formData.set("customDivisions", JSON.stringify(payload));
         startTransition(async () => {
             const res = isEdit
                 ? await updateEventAction(formData)
@@ -199,7 +170,7 @@ export default function EventForm({
                     "event-form",
                 ) as HTMLFormElement | null;
                 form?.reset();
-                setIsPremium(false);
+                setDivisions([]);
             }
             if (redirectAfter) {
                 router.push(redirectAfter);
@@ -225,7 +196,7 @@ export default function EventForm({
                     type="text"
                     defaultValue={initial?.title ?? ""}
                     placeholder="e.g. Summer kata seminar"
-                    className="w-full bg-zinc-50 border border-zinc-200 text-zinc-900 px-3 py-2 focus:outline-none focus:border-accent-red text-sm transition-colors rounded-sm"
+                    className={inputCx}
                 />
             </Field>
 
@@ -235,7 +206,7 @@ export default function EventForm({
                         name="category"
                         value={category}
                         onChange={(e) => setCategory(e.target.value)}
-                        className="w-full bg-zinc-50 border border-zinc-200 text-zinc-900 px-3 py-2 focus:outline-none focus:border-accent-red text-sm transition-colors rounded-sm"
+                        className={inputCx}
                     >
                         {CATEGORIES.map((c) => (
                             <option key={c.value} value={c.value}>
@@ -250,7 +221,7 @@ export default function EventForm({
                         required
                         type="datetime-local"
                         defaultValue={initial?.eventDate ?? ""}
-                        className="w-full bg-zinc-50 border border-zinc-200 text-zinc-900 px-3 py-2 focus:outline-none focus:border-accent-red text-sm transition-colors rounded-sm"
+                        className={inputCx}
                     />
                 </Field>
             </div>
@@ -262,7 +233,7 @@ export default function EventForm({
                         type="text"
                         defaultValue={initial?.location ?? ""}
                         placeholder="e.g. Main floor"
-                        className="w-full bg-zinc-50 border border-zinc-200 text-zinc-900 px-3 py-2 focus:outline-none focus:border-accent-red text-sm transition-colors rounded-sm"
+                        className={inputCx}
                     />
                 </Field>
             </div>
@@ -273,7 +244,7 @@ export default function EventForm({
                         name="description"
                         rows={3}
                         defaultValue={initial?.description ?? ""}
-                        className="w-full bg-zinc-50 border border-zinc-200 text-zinc-900 px-3 py-2 focus:outline-none focus:border-accent-red text-sm transition-colors rounded-sm"
+                        className={inputCx}
                     />
                 </Field>
             </div>
@@ -285,7 +256,7 @@ export default function EventForm({
                         type="number"
                         min={0}
                         defaultValue={initial?.maxCapacity ?? ""}
-                        className="w-full bg-zinc-50 border border-zinc-200 text-zinc-900 px-3 py-2 focus:outline-none focus:border-accent-red text-sm transition-colors rounded-sm"
+                        className={inputCx}
                     />
                 </Field>
             </div>
@@ -311,239 +282,129 @@ export default function EventForm({
                 </div>
             )}
 
-            {/* ── Ticketing ─────────────────────────────────────────── */}
+            {/* ── Divisions ─────────────────────────────────────────── */}
             <div className="mt-5 border-t border-zinc-200 pt-4">
-                <p className="text-[10px] tracking-widest uppercase font-bold text-zinc-400 mb-3">
-                    Ticketing
+                <p className="text-[10px] tracking-widest uppercase font-bold text-zinc-400 mb-3 inline-flex items-center gap-1.5">
+                    <Layers size={11} />
+                    Divisions
                 </p>
-                <label className="flex items-center gap-2.5 cursor-pointer select-none">
-                    <input
-                        type="checkbox"
-                        checked={isPremium}
-                        onChange={(e) => setIsPremium(e.target.checked)}
-                        className="h-4 w-4 accent-red-600"
-                    />
-                    <span className="text-sm text-zinc-700 font-semibold">
-                        Premium event (paid entry)
-                    </span>
-                </label>
-                <input
-                    type="hidden"
-                    name="isPremium"
-                    value={isPremium ? "true" : "false"}
-                />
-                {isPremium && (
-                    <div className="mt-3 space-y-3">
-                        <Field label="Ticket price (BDT)">
-                            <input
-                                name="ticketPrice"
-                                type="number"
-                                min={1}
-                                step="0.01"
-                                required
-                                defaultValue={initial?.ticketPrice ?? ""}
-                                placeholder="e.g. 500"
-                                className="w-full bg-zinc-50 border border-zinc-200 text-zinc-900 px-3 py-2 focus:outline-none focus:border-accent-red text-sm transition-colors rounded-sm"
-                            />
-                        </Field>
-                        <Field label="JKA member discount (%)">
-                            <input
-                                name="memberDiscountPercent"
-                                type="number"
-                                min={0}
-                                max={100}
-                                step="1"
-                                defaultValue={initial?.memberDiscountPercent ?? 0}
-                                placeholder="0"
-                                className="w-full bg-zinc-50 border border-zinc-200 text-zinc-900 px-3 py-2 focus:outline-none focus:border-accent-red text-sm transition-colors rounded-sm"
-                            />
-                            <p className="text-[11px] text-zinc-500 mt-1.5">
-                                Signed-in members with an active membership pay this % less on the ticket. Leave 0 for no discount.
-                            </p>
-                        </Field>
-                    </div>
-                )}
-            </div>
-
-            {/* ── Participation requirements ────────────────────────── */}
-            <div className="mt-5 border-t border-zinc-200 pt-4">
-                <p className="text-[10px] tracking-widest uppercase font-bold text-zinc-400 mb-3">
-                    Participation requirements (optional)
+                <p className="text-[11px] text-zinc-500 mb-3">
+                    Add every division participants can enter. Each division
+                    has its own price; the entrant pays the sum of the
+                    divisions they select. Leave price empty (or 0) for a
+                    free entry.
                 </p>
-                <Field label="Who can register">
-                    <select
-                        name="participantType"
-                        defaultValue={initial?.participantType ?? "PUBLIC"}
-                        className="w-full bg-zinc-50 border border-zinc-200 text-zinc-900 px-3 py-2 focus:outline-none focus:border-accent-red text-sm transition-colors rounded-sm"
-                    >
-                        {PARTICIPANT_TYPES.map((t) => (
-                            <option key={t.value} value={t.value}>
-                                {t.label}
-                            </option>
-                        ))}
-                    </select>
-                </Field>
-                <div className="grid grid-cols-2 gap-3 mt-3">
-                    <Field label="Minimum age">
-                        <input
-                            name="minAge"
-                            type="number"
-                            min={1}
-                            max={100}
-                            defaultValue={initial?.minAge ?? ""}
-                            placeholder="Any age"
-                            className="w-full bg-zinc-50 border border-zinc-200 text-zinc-900 px-3 py-2 focus:outline-none focus:border-accent-red text-sm transition-colors rounded-sm"
-                        />
-                    </Field>
-                    <Field label="Minimum belt rank">
-                        <select
-                            name="minRankId"
-                            defaultValue={initial?.minRankId ?? ""}
-                            className="w-full bg-zinc-50 border border-zinc-200 text-zinc-900 px-3 py-2 focus:outline-none focus:border-accent-red text-sm transition-colors rounded-sm"
-                        >
-                            <option value="">Any rank</option>
-                            {beltRanks.map((r) => (
-                                <option key={r.id} value={r.id}>
-                                    {r.name}
-                                </option>
-                            ))}
-                        </select>
-                    </Field>
-                </div>
-            </div>
 
-            {isTournament && (
-                <div className="mt-5 border-t border-zinc-200 pt-4">
-                    <p className="text-[10px] tracking-widest uppercase font-bold text-zinc-400 mb-3 inline-flex items-center gap-1.5">
-                        <Trophy size={11} />
-                        Tournament setup
+                {divisions.length === 0 && (
+                    <p className="text-[11px] text-amber-700 bg-amber-50 border border-amber-200 rounded-sm px-3 py-2 mb-3">
+                        Add at least one division so participants have
+                        something to register for.
                     </p>
+                )}
 
-                    <Field label="Competition types (enable one or both)">
-                        <div className="grid grid-cols-2 gap-2">
-                            {(["KATA", "KUMITE"] as const).map((t) => {
-                                const on = enabledTypes.has(t);
-                                return (
-                                    <label
-                                        key={t}
-                                        className={`flex items-center gap-2 px-3 py-2 border cursor-pointer select-none rounded-sm text-sm ${
-                                            on
-                                                ? "border-accent-red bg-accent-red/5 text-accent-red font-semibold"
-                                                : "border-zinc-200 bg-zinc-50 text-zinc-700"
-                                        }`}
-                                    >
-                                        <input
-                                            type="checkbox"
-                                            checked={on}
-                                            onChange={(e) =>
-                                                toggleType(t, e.target.checked)
-                                            }
-                                            className="h-4 w-4 accent-red-600"
-                                        />
-                                        {t === "KATA"
-                                            ? "Kata (form)"
-                                            : "Kumite (sparring)"}
-                                    </label>
-                                );
-                            })}
-                        </div>
+                <div className="space-y-3">
+                    {divisions.map((d, i) => (
+                        <DivisionRow
+                            key={i}
+                            draft={d}
+                            beltRanks={beltRanks}
+                            onChange={(patch) => updateDivision(i, patch)}
+                            onRemove={() => removeDivision(i)}
+                        />
+                    ))}
+                </div>
+
+                <div className="flex flex-wrap gap-2 mt-3">
+                    <button
+                        type="button"
+                        onClick={() => addDivision("KATA")}
+                        className="inline-flex items-center gap-1.5 bg-zinc-900 text-white px-3 py-2 text-[10px] font-bold tracking-widest uppercase hover:bg-zinc-800 rounded-sm"
+                    >
+                        <Plus size={11} /> Add Kata division
+                    </button>
+                    <button
+                        type="button"
+                        onClick={() => addDivision("KUMITE")}
+                        className="inline-flex items-center gap-1.5 bg-zinc-900 text-white px-3 py-2 text-[10px] font-bold tracking-widest uppercase hover:bg-zinc-800 rounded-sm"
+                    >
+                        <Plus size={11} /> Add Kumite division
+                    </button>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-4">
+                    <Field label="Registration deadline (optional)">
                         <input
-                            type="hidden"
-                            name="enabledTypes"
-                            value={Array.from(enabledTypes).join(",")}
+                            name="registrationDeadline"
+                            type="datetime-local"
+                            defaultValue={initial?.registrationDeadline ?? ""}
+                            className={inputCx}
                         />
                     </Field>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-3">
-                        <Field label="Registration deadline (optional)">
+                    {anyKumite && (
+                        <Field label="Weigh-in date (optional)">
                             <input
-                                name="registrationDeadline"
+                                name="weighInDate"
                                 type="datetime-local"
-                                defaultValue={initial?.tournament?.registrationDeadline ?? ""}
-                                className="w-full bg-zinc-50 border border-zinc-200 text-zinc-900 px-3 py-2 focus:outline-none focus:border-accent-red text-sm transition-colors rounded-sm"
+                                defaultValue={initial?.weighInDate ?? ""}
+                                className={inputCx}
                             />
                         </Field>
-                        {kumiteEnabled && (
-                            <Field label="Weigh-in date (optional)">
-                                <input
-                                    name="weighInDate"
-                                    type="datetime-local"
-                                    defaultValue={initial?.tournament?.weighInDate ?? ""}
-                                    className="w-full bg-zinc-50 border border-zinc-200 text-zinc-900 px-3 py-2 focus:outline-none focus:border-accent-red text-sm transition-colors rounded-sm"
-                                />
-                            </Field>
-                        )}
-                    </div>
-
-                    <div className="mt-3">
-                        <Field label="Rules / info URL (optional)">
-                            <input
-                                name="rulesUrl"
-                                type="url"
-                                defaultValue={initial?.tournament?.rulesUrl ?? ""}
-                                placeholder="https://…"
-                                className="w-full bg-zinc-50 border border-zinc-200 text-zinc-900 px-3 py-2 focus:outline-none focus:border-accent-red text-sm transition-colors rounded-sm"
-                            />
-                        </Field>
-                    </div>
-
-                    <div className="mt-4 space-y-4">
-                        {(["KATA", "KUMITE"] as const)
-                            .filter((t) => enabledTypes.has(t))
-                            .map((t) => (
-                                <DivisionsBlock
-                                    key={t}
-                                    eventType={t}
-                                    enabledDivisions={enabledDivisions}
-                                    customDivisions={customDivisions.filter(
-                                        (c) => c.eventType === t,
-                                    )}
-                                    toggleDivision={toggleDivision}
-                                    selectAllInBand={selectAllInBand}
-                                    onSetAll={(codes) =>
-                                        setEnabledDivisions((prev) => {
-                                            const next = new Set(prev);
-                                            for (const c of codes) next.add(c);
-                                            return next;
-                                        })
-                                    }
-                                    onClearAll={(codes) =>
-                                        setEnabledDivisions((prev) => {
-                                            const next = new Set(prev);
-                                            for (const c of codes) next.delete(c);
-                                            return next;
-                                        })
-                                    }
-                                    onAddCustom={(label, isTeam) =>
-                                        addCustomDivision(t, label, isTeam)
-                                    }
-                                    onRemoveCustom={removeCustomDivision}
-                                />
-                            ))}
-                        <input
-                            type="hidden"
-                            name="enabledDivisions"
-                            value={Array.from(enabledDivisions).join(",")}
-                        />
-                        <input
-                            type="hidden"
-                            name="customDivisions"
-                            value={JSON.stringify(customDivisions)}
-                        />
-                        {enabledTypes.size === 0 && (
-                            <p className="text-[11px] text-amber-700 bg-amber-50 border border-amber-200 rounded-sm px-3 py-2">
-                                Enable Kata, Kumite, or both to pick divisions.
-                            </p>
-                        )}
-                        {enabledTypes.size > 0 && enabledDivisions.size === 0 && (
-                            <p className="text-[11px] text-amber-700 bg-amber-50 border border-amber-200 rounded-sm px-3 py-2">
-                                Pick at least one division so entrants have
-                                something to register for.
-                            </p>
-                        )}
-                    </div>
+                    )}
                 </div>
-            )}
+
+                <div className="mt-3">
+                    <Field label="Rules / info URL (optional)">
+                        <input
+                            name="rulesUrl"
+                            type="url"
+                            defaultValue={initial?.rulesUrl ?? ""}
+                            placeholder="https://…"
+                            className={inputCx}
+                        />
+                    </Field>
+                </div>
+            </div>
+
+            {/* ── Multi-division bundle price ───────────────────────── */}
+            <div className="mt-5 border-t border-zinc-200 pt-4">
+                <Field label="Multi-division bundle total (BDT · optional)">
+                    <input
+                        name="multiDivisionBundlePriceBdt"
+                        type="number"
+                        min={0}
+                        step="0.01"
+                        defaultValue={initial?.multiDivisionBundlePriceBdt ?? ""}
+                        placeholder="e.g. 800"
+                        className={inputCx}
+                    />
+                    <p className="text-[11px] text-zinc-500 mt-1.5">
+                        If a participant picks 2 or more divisions, they pay
+                        this bundle total instead of the sum of division
+                        prices. Leave blank to always charge the sum.
+                    </p>
+                </Field>
+            </div>
+
+            {/* ── Member discount ─────────────────────────────────── */}
+            <div className="mt-5 border-t border-zinc-200 pt-4">
+                <Field label="JKA member discount (%)">
+                    <input
+                        name="memberDiscountPercent"
+                        type="number"
+                        min={0}
+                        max={100}
+                        step="1"
+                        defaultValue={initial?.memberDiscountPercent ?? 0}
+                        placeholder="0"
+                        className={inputCx}
+                    />
+                    <p className="text-[11px] text-zinc-500 mt-1.5">
+                        Applied to each division's price when a signed-in JKA
+                        member with an active membership registers. Leave 0
+                        for no discount.
+                    </p>
+                </Field>
+            </div>
 
             <div className="mt-3">
                 <Field
@@ -596,7 +457,16 @@ export default function EventForm({
     );
 }
 
-function Field({ label, children }: { label: string; children: React.ReactNode }) {
+const inputCx =
+    "w-full bg-zinc-50 border border-zinc-200 text-zinc-900 px-3 py-2 focus:outline-none focus:border-accent-red text-sm transition-colors rounded-sm";
+
+function Field({
+    label,
+    children,
+}: {
+    label: string;
+    children: React.ReactNode;
+}) {
     return (
         <label className="block">
             <span className="text-[10px] tracking-widest uppercase font-bold text-zinc-500 block mb-1">
@@ -607,200 +477,131 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
     );
 }
 
-function DivisionsBlock({
-    eventType,
-    enabledDivisions,
-    customDivisions,
-    toggleDivision,
-    selectAllInBand,
-    onSetAll,
-    onClearAll,
-    onAddCustom,
-    onRemoveCustom,
+function DivisionRow({
+    draft,
+    beltRanks,
+    onChange,
+    onRemove,
 }: {
-    eventType: TournamentEventType;
-    enabledDivisions: Set<string>;
-    customDivisions: CustomDivision[];
-    toggleDivision: (code: string) => void;
-    selectAllInBand: (codes: readonly string[], on: boolean) => void;
-    onSetAll: (codes: string[]) => void;
-    onClearAll: (codes: string[]) => void;
-    onAddCustom: (label: string, isTeam: boolean) => void;
-    onRemoveCustom: (code: string) => void;
+    draft: DivisionDraft;
+    beltRanks: BeltRankOption[];
+    onChange: (patch: Partial<DivisionDraft>) => void;
+    onRemove: () => void;
 }) {
-    const divisions = useMemo(() => divisionsFor(eventType), [eventType]);
-    const divisionsByBand = useMemo(() => {
-        type Division = (typeof ALL_DIVISIONS)[number];
-        const groups = new Map<string, Division[]>();
-        for (const d of divisions) {
-            const key = d.ageBand;
-            const arr = groups.get(key) ?? [];
-            arr.push(d);
-            groups.set(key, arr);
-        }
-        return groups;
-    }, [divisions]);
-
-    const presetCodes = divisions.map((d) => d.code);
-    const customCodes = customDivisions.map((c) => c.code);
-    const allCodes = [...presetCodes, ...customCodes];
-    const selectedInBlock = allCodes.filter((c) =>
-        enabledDivisions.has(c),
-    ).length;
-
-    const [customLabel, setCustomLabel] = useState("");
-    const [customIsTeam, setCustomIsTeam] = useState(false);
-    const label = eventType === "KATA" ? "Kata" : "Kumite";
-
     return (
-        <div className="border border-zinc-200 rounded-sm bg-white">
-            <div className="flex items-center justify-between px-3 py-2 border-b border-zinc-200 bg-zinc-50">
-                <p className="text-xs tracking-widest uppercase font-bold text-zinc-700">
-                    {label} divisions ({selectedInBlock} selected)
-                </p>
-                <div className="flex items-center gap-2">
-                    <button
-                        type="button"
-                        onClick={() => onSetAll(allCodes)}
-                        className="text-[10px] tracking-widest uppercase font-bold text-accent-red hover:underline"
-                    >
-                        Enable all
-                    </button>
-                    <span className="text-zinc-300">·</span>
-                    <button
-                        type="button"
-                        onClick={() => onClearAll(allCodes)}
-                        className="text-[10px] tracking-widest uppercase font-bold text-zinc-500 hover:underline"
-                    >
-                        Clear
-                    </button>
-                </div>
+        <div className="border border-zinc-200 rounded-sm p-3 bg-zinc-50/50">
+            <div className="flex items-center justify-between mb-2">
+                <span className="text-[10px] tracking-widest uppercase font-bold text-accent-red">
+                    {draft.eventType === "KATA" ? "Kata" : "Kumite"} ·{" "}
+                    {draft.gender === "MALE"
+                        ? "Male"
+                        : draft.gender === "FEMALE"
+                          ? "Female"
+                          : "Any gender"}{" "}
+                    division
+                </span>
+                <button
+                    type="button"
+                    onClick={onRemove}
+                    aria-label="Remove division"
+                    className="text-zinc-400 hover:text-accent-red"
+                >
+                    <X size={14} />
+                </button>
             </div>
-            <div className="p-3 space-y-3">
-                {Array.from(divisionsByBand.entries()).map(([band, list]) => {
-                    const codes = list.map((d) => d.code);
-                    const allOn = codes.every((c) => enabledDivisions.has(c));
-                    return (
-                        <div
-                            key={band}
-                            className="border border-zinc-200 rounded-sm bg-zinc-50/50"
-                        >
-                            <div className="flex items-center justify-between px-3 py-2 border-b border-zinc-200 bg-white">
-                                <p className="text-[10px] tracking-widest uppercase font-bold text-zinc-600">
-                                    {AGE_BAND_LABEL[band] ?? band}
-                                </p>
-                                <button
-                                    type="button"
-                                    onClick={() => selectAllInBand(codes, !allOn)}
-                                    className="text-[10px] tracking-widest uppercase font-bold text-accent-red hover:underline"
-                                >
-                                    {allOn ? "Deselect" : "Select all"}
-                                </button>
-                            </div>
-                            <ul className="p-2 grid grid-cols-1 sm:grid-cols-2 gap-1">
-                                {list.map((d) => {
-                                    const checked = enabledDivisions.has(d.code);
-                                    return (
-                                        <li key={d.code}>
-                                            <label className="flex items-start gap-2 px-2 py-1.5 hover:bg-white rounded-sm cursor-pointer">
-                                                <input
-                                                    type="checkbox"
-                                                    checked={checked}
-                                                    onChange={() =>
-                                                        toggleDivision(d.code)
-                                                    }
-                                                    className="h-4 w-4 accent-red-600 mt-0.5 shrink-0"
-                                                />
-                                                <span className="text-xs text-zinc-700 leading-tight">
-                                                    {d.label}
-                                                </span>
-                                            </label>
-                                        </li>
-                                    );
-                                })}
-                            </ul>
-                        </div>
-                    );
-                })}
 
-                {/* Custom categories — admin-defined, per event. */}
-                <div className="border border-dashed border-zinc-300 rounded-sm bg-white">
-                    <div className="px-3 py-2 border-b border-dashed border-zinc-300">
-                        <p className="text-[10px] tracking-widest uppercase font-bold text-zinc-600">
-                            Custom {label.toLowerCase()} categories
-                        </p>
-                    </div>
-                    {customDivisions.length > 0 && (
-                        <ul className="p-2 grid grid-cols-1 sm:grid-cols-2 gap-1">
-                            {customDivisions.map((c) => {
-                                const checked = enabledDivisions.has(c.code);
-                                return (
-                                    <li key={c.code}>
-                                        <div className="flex items-start gap-2 px-2 py-1.5 hover:bg-zinc-50 rounded-sm">
-                                            <input
-                                                type="checkbox"
-                                                checked={checked}
-                                                onChange={() =>
-                                                    toggleDivision(c.code)
-                                                }
-                                                className="h-4 w-4 accent-red-600 mt-0.5 shrink-0"
-                                            />
-                                            <span className="text-xs text-zinc-700 leading-tight flex-1">
-                                                {c.label}
-                                                {c.isTeam && (
-                                                    <span className="text-[10px] uppercase tracking-widest text-zinc-400 ml-1.5">
-                                                        · team
-                                                    </span>
-                                                )}
-                                            </span>
-                                            <button
-                                                type="button"
-                                                aria-label={`Remove ${c.label}`}
-                                                onClick={() =>
-                                                    onRemoveCustom(c.code)
-                                                }
-                                                className="text-zinc-400 hover:text-accent-red"
-                                            >
-                                                <X size={12} />
-                                            </button>
-                                        </div>
-                                    </li>
-                                );
-                            })}
-                        </ul>
-                    )}
-                    <div className="p-2 flex flex-wrap items-center gap-2">
-                        <input
-                            type="text"
-                            value={customLabel}
-                            onChange={(e) => setCustomLabel(e.target.value)}
-                            placeholder={`e.g. Masters ${label} 40+`}
-                            className="flex-1 min-w-[180px] bg-zinc-50 border border-zinc-200 text-zinc-900 px-2 py-1.5 focus:outline-none focus:border-accent-red text-xs rounded-sm"
-                        />
-                        <label className="inline-flex items-center gap-1.5 text-[10px] uppercase tracking-widest font-bold text-zinc-500 select-none cursor-pointer">
-                            <input
-                                type="checkbox"
-                                checked={customIsTeam}
-                                onChange={(e) => setCustomIsTeam(e.target.checked)}
-                                className="h-3.5 w-3.5 accent-red-600"
-                            />
-                            Team
-                        </label>
-                        <button
-                            type="button"
-                            onClick={() => {
-                                onAddCustom(customLabel, customIsTeam);
-                                setCustomLabel("");
-                                setCustomIsTeam(false);
-                            }}
-                            disabled={!customLabel.trim()}
-                            className="inline-flex items-center gap-1 bg-accent-red text-white px-2.5 py-1.5 text-[10px] font-bold tracking-widest uppercase hover:bg-accent-red/90 disabled:opacity-40 rounded-sm"
-                        >
-                            <Plus size={11} /> Add
-                        </button>
-                    </div>
-                </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                <Field label="Division name">
+                    <input
+                        type="text"
+                        value={draft.label}
+                        onChange={(e) => onChange({ label: e.target.value })}
+                        required
+                        placeholder="e.g. Individual kata — Junior"
+                        className={inputCx}
+                    />
+                </Field>
+                <Field label="Type">
+                    <select
+                        value={draft.eventType}
+                        onChange={(e) =>
+                            onChange({
+                                eventType: e.target.value as TournamentEventType,
+                            })
+                        }
+                        className={inputCx}
+                    >
+                        <option value="KATA">Kata (form)</option>
+                        <option value="KUMITE">Kumite (sparring)</option>
+                    </select>
+                </Field>
+                <Field label="Gender">
+                    <select
+                        value={draft.gender}
+                        onChange={(e) =>
+                            onChange({
+                                gender: e.target.value as DivisionGender,
+                            })
+                        }
+                        className={inputCx}
+                    >
+                        <option value="ANY">Any (open)</option>
+                        <option value="MALE">Male only</option>
+                        <option value="FEMALE">Female only</option>
+                    </select>
+                </Field>
             </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-3">
+                <Field label="Minimum age (optional)">
+                    <input
+                        type="number"
+                        min={1}
+                        max={100}
+                        value={draft.minAge}
+                        onChange={(e) => onChange({ minAge: e.target.value })}
+                        placeholder="Any age"
+                        className={inputCx}
+                    />
+                </Field>
+                <Field label="Minimum belt rank (optional)">
+                    <select
+                        value={draft.minRankId}
+                        onChange={(e) => onChange({ minRankId: e.target.value })}
+                        className={inputCx}
+                    >
+                        <option value="">Any rank</option>
+                        {beltRanks.map((r) => (
+                            <option key={r.id} value={r.id}>
+                                {r.name}
+                            </option>
+                        ))}
+                    </select>
+                </Field>
+                <Field label="Price (BDT)">
+                    <input
+                        type="number"
+                        min={0}
+                        step="0.01"
+                        value={draft.priceBdt}
+                        onChange={(e) => onChange({ priceBdt: e.target.value })}
+                        placeholder="0 (free)"
+                        className={inputCx}
+                    />
+                </Field>
+            </div>
+
+            <label className="inline-flex items-center gap-2 mt-3 cursor-pointer select-none">
+                <input
+                    type="checkbox"
+                    checked={draft.isTeam}
+                    onChange={(e) => onChange({ isTeam: e.target.checked })}
+                    className="h-4 w-4 accent-red-600"
+                />
+                <span className="text-xs text-zinc-700">
+                    Team division (participants must name teammates)
+                </span>
+            </label>
         </div>
     );
 }

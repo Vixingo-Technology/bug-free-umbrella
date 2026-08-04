@@ -6,138 +6,117 @@ import { createClient } from "@/lib/supabase/server";
 import { uploadAttachmentIfPresent } from "@/lib/attachment-upload";
 import { loadCurrentUser } from "@/lib/auth/load-current-user";
 import {
-    getDivision,
     isCustomDivisionCode,
     makeCustomDivisionCode,
     parseCustomDivisions,
     type CustomDivision,
     type TournamentEventType,
 } from "@/lib/tournaments/divisions";
-import type {
-    EventCategory,
-    EventParticipantType,
-} from "@/prisma/generated/client";
+import type { EventCategory } from "@/prisma/generated/client";
 
 type ActionResult = { ok: true; id?: string } | { ok: false; error: string };
 
 const CATEGORIES = [
-    "BELT_TEST",
-    "TOURNAMENT",
     "SEMINAR",
     "TRAINING_CAMP",
-    "OTHER",
+    "TOURNAMENT",
 ] as const satisfies readonly EventCategory[];
-
-const PARTICIPANT_TYPES = [
-    "PUBLIC",
-    "STUDENTS",
-    "INSTRUCTORS",
-    "PARENTS",
-    "DOJO_MEMBERS",
-] as const satisfies readonly EventParticipantType[];
 
 function isCategory(v: unknown): v is EventCategory {
     return typeof v === "string" && (CATEGORIES as readonly string[]).includes(v);
 }
 
-function isParticipantType(v: unknown): v is EventParticipantType {
-    return (
-        typeof v === "string" &&
-        (PARTICIPANT_TYPES as readonly string[]).includes(v)
-    );
-}
-
-type TournamentInput =
+type DivisionInput =
     | {
-          eventType: TournamentEventType;
+          divisions: CustomDivision[];
           enabledTypes: TournamentEventType[];
-          enabledDivisions: string[];
-          customDivisions: CustomDivision[];
           registrationDeadline: Date | null;
           weighInDate: Date | null;
           rulesUrl: string | null;
+          isPremium: boolean;
       }
     | { error: string };
 
-// Parse the tournament fields from the event form. Only called when category
-// is TOURNAMENT. An event may enable KATA, KUMITE, or both. Every enabled
-// division code must be either a preset WKF code of a matching enabled type,
-// or a custom division the admin defined on this same form submission.
-function parseTournamentFields(formData: FormData): TournamentInput {
-    const typesRaw = ((formData.get("enabledTypes") as string) ?? "").trim();
-    const enabledTypes = typesRaw
-        .split(",")
-        .map((s) => s.trim())
-        .filter((s): s is TournamentEventType => s === "KATA" || s === "KUMITE");
-    const dedupTypes = Array.from(new Set(enabledTypes));
-    if (dedupTypes.length === 0) {
-        return { error: "Enable Kata, Kumite, or both for the tournament." };
+// Parse the divisions block from the form. Divisions are always admin-defined
+// (no WKF presets). At least one division is required; each row supplies its
+// own optional min age / min belt / price.
+async function parseDivisionFields(formData: FormData): Promise<DivisionInput> {
+    const raw = ((formData.get("customDivisions") as string) ?? "").trim();
+    if (!raw) return { error: "Add at least one division for this event." };
+
+    let parsed: CustomDivision[];
+    try {
+        parsed = parseCustomDivisions(JSON.parse(raw));
+    } catch {
+        return { error: "Divisions payload is malformed." };
+    }
+    if (parsed.length === 0) {
+        return { error: "Add at least one division for this event." };
     }
 
-    // Custom divisions submitted as JSON so labels + isTeam survive intact.
-    const customRaw = ((formData.get("customDivisions") as string) ?? "").trim();
-    let customDivisions: CustomDivision[] = [];
-    if (customRaw) {
-        try {
-            customDivisions = parseCustomDivisions(JSON.parse(customRaw));
-        } catch {
-            return { error: "Custom categories payload is malformed." };
+    // Belt rank ids must exist. Collect once and validate against the set.
+    const rankIds = Array.from(
+        new Set(parsed.map((d) => d.minRankId).filter((x): x is string => !!x)),
+    );
+    if (rankIds.length > 0) {
+        const found = await prisma.beltRank.findMany({
+            where: { id: { in: rankIds } },
+            select: { id: true },
+        });
+        const foundIds = new Set(found.map((r) => r.id));
+        for (const id of rankIds) {
+            if (!foundIds.has(id)) {
+                return { error: "One or more selected belt ranks were not found." };
+            }
         }
     }
-    // Assign / normalise codes and reject entries whose type isn't enabled.
-    const seenCodes = new Set<string>();
-    const normalisedCustom: CustomDivision[] = [];
-    for (const c of customDivisions) {
-        if (!dedupTypes.includes(c.eventType)) {
+
+    const seen = new Set<string>();
+    const normalised: CustomDivision[] = [];
+    for (const d of parsed) {
+        const label = d.label.trim();
+        if (!label) continue;
+        const code =
+            d.code && isCustomDivisionCode(d.code)
+                ? d.code
+                : makeCustomDivisionCode(label, d.eventType);
+        if (seen.has(code)) {
             return {
-                error: `Custom category "${c.label}" targets ${c.eventType} but that type is not enabled.`,
+                error: `Two divisions share the same name/type ("${label}"). Rename one.`,
             };
         }
-        const label = c.label.trim();
-        if (!label) continue;
-        const code = c.code && isCustomDivisionCode(c.code)
-            ? c.code
-            : makeCustomDivisionCode(label, c.eventType);
-        if (seenCodes.has(code)) {
-            return { error: `Duplicate custom category code: ${code}.` };
+        seen.add(code);
+        if (d.minAge !== null && (d.minAge < 1 || d.minAge > 100)) {
+            return {
+                error: `Minimum age for "${label}" must be between 1 and 100.`,
+            };
         }
-        seenCodes.add(code);
-        normalisedCustom.push({
+        if (d.priceBdt !== null && d.priceBdt < 0) {
+            return {
+                error: `Price for "${label}" cannot be negative.`,
+            };
+        }
+        normalised.push({
             code,
             label,
-            eventType: c.eventType,
-            isTeam: !!c.isTeam,
+            eventType: d.eventType,
+            gender: d.gender,
+            isTeam: d.isTeam,
+            minAge: d.minAge,
+            minRankId: d.minRankId,
+            priceBdt: d.priceBdt !== null ? Math.round(d.priceBdt * 100) / 100 : null,
         });
     }
-    const customByCode = new Map(normalisedCustom.map((c) => [c.code, c]));
-
-    const codesRaw = ((formData.get("enabledDivisions") as string) ?? "").trim();
-    const codes = codesRaw
-        .split(",")
-        .map((c) => c.trim())
-        .filter(Boolean);
-    if (codes.length === 0) {
-        return { error: "Enable at least one division for this tournament." };
-    }
-    for (const c of codes) {
-        if (isCustomDivisionCode(c)) {
-            const cd = customByCode.get(c);
-            if (!cd) return { error: `Unknown custom division code: ${c}.` };
-            continue;
-        }
-        const d = getDivision(c);
-        if (!d) return { error: `Unknown division code: ${c}.` };
-        if (!dedupTypes.includes(d.eventType)) {
-            return {
-                error: `Division ${c} belongs to ${d.eventType} but that type is not enabled.`,
-            };
-        }
+    if (normalised.length === 0) {
+        return { error: "Add at least one division for this event." };
     }
 
-    // Legacy single-type column: pick whichever is enabled first. The
-    // application no longer branches on it, but keeping it populated avoids
-    // NOT NULL trouble and preserves old reads.
-    const eventType = dedupTypes[0];
+    const enabledTypes = Array.from(
+        new Set(normalised.map((d) => d.eventType)),
+    );
+    const isPremium = normalised.some(
+        (d) => d.priceBdt !== null && d.priceBdt > 0,
+    );
 
     const deadlineRaw = ((formData.get("registrationDeadline") as string) ?? "").trim();
     let registrationDeadline: Date | null = null;
@@ -151,7 +130,7 @@ function parseTournamentFields(formData: FormData): TournamentInput {
 
     const weighInRaw = ((formData.get("weighInDate") as string) ?? "").trim();
     let weighInDate: Date | null = null;
-    if (weighInRaw && dedupTypes.includes("KUMITE")) {
+    if (weighInRaw && enabledTypes.includes("KUMITE")) {
         const d = new Date(weighInRaw);
         if (Number.isNaN(d.getTime())) {
             return { error: "Invalid weigh-in date." };
@@ -162,13 +141,12 @@ function parseTournamentFields(formData: FormData): TournamentInput {
     const rulesUrl = ((formData.get("rulesUrl") as string) ?? "").trim() || null;
 
     return {
-        eventType,
-        enabledTypes: dedupTypes,
-        enabledDivisions: codes,
-        customDivisions: normalisedCustom,
+        divisions: normalised,
+        enabledTypes,
         registrationDeadline,
         weighInDate,
         rulesUrl,
+        isPremium,
     };
 }
 
@@ -197,17 +175,26 @@ function revalidateAll() {
     revalidatePath("/portal/admin/events");
 }
 
-export async function createEventAction(formData: FormData): Promise<ActionResult> {
-    const auth = await requirePoster();
-    if (!auth.ok) return auth;
+type ParsedCommon = {
+    title: string;
+    description: string | null;
+    location: string | null;
+    eventDate: Date;
+    category: EventCategory;
+    maxCapacity: number | null;
+    memberDiscountPercent: number;
+    multiDivisionBundlePriceBdt: number | null;
+};
 
+function parseCommonFields(
+    formData: FormData,
+): { ok: true; value: ParsedCommon } | { ok: false; error: string } {
     const title = ((formData.get("title") as string) ?? "").trim();
     const description = ((formData.get("description") as string) ?? "").trim() || null;
     const location = ((formData.get("location") as string) ?? "").trim() || null;
     const eventDateStr = ((formData.get("eventDate") as string) ?? "").trim();
     const categoryRaw = formData.get("category");
     const maxCapacityRaw = ((formData.get("maxCapacity") as string) ?? "").trim();
-    const isPublished = formData.get("isPublished") !== "false";
 
     if (!title) return { ok: false, error: "Title is required." };
     if (!eventDateStr) return { ok: false, error: "Event date is required." };
@@ -226,61 +213,54 @@ export async function createEventAction(formData: FormData): Promise<ActionResul
         }
         maxCapacity = n;
     }
-
-    // ── Premium ticketing ───────────────────────────────────────────────
-    const isPremium = formData.get("isPremium") === "true";
-    let ticketPrice: number | null = null;
     let memberDiscountPercent = 0;
-    if (isPremium) {
-        const raw = ((formData.get("ticketPrice") as string) ?? "").trim();
-        const n = Number.parseFloat(raw);
-        if (!raw || !Number.isFinite(n) || n <= 0) {
+    const discountRaw = ((formData.get("memberDiscountPercent") as string) ?? "").trim();
+    if (discountRaw) {
+        const d = Number.parseInt(discountRaw, 10);
+        if (!Number.isFinite(d) || d < 0 || d > 100) {
             return {
                 ok: false,
-                error: "Premium events need a ticket price greater than zero.",
+                error: "Member discount must be a whole number between 0 and 100.",
             };
         }
-        ticketPrice = Math.round(n * 100) / 100;
+        memberDiscountPercent = d;
+    }
 
-        const discountRaw = ((formData.get("memberDiscountPercent") as string) ?? "").trim();
-        if (discountRaw) {
-            const d = Number.parseInt(discountRaw, 10);
-            if (!Number.isFinite(d) || d < 0 || d > 100) {
-                return {
-                    ok: false,
-                    error: "Member discount must be a whole number between 0 and 100.",
-                };
-            }
-            memberDiscountPercent = d;
+    let multiDivisionBundlePriceBdt: number | null = null;
+    const bundleRaw = ((formData.get("multiDivisionBundlePriceBdt") as string) ?? "").trim();
+    if (bundleRaw) {
+        const b = Number.parseFloat(bundleRaw);
+        if (!Number.isFinite(b) || b < 0) {
+            return {
+                ok: false,
+                error: "Multi-division bundle price must be a positive number.",
+            };
         }
+        multiDivisionBundlePriceBdt = Math.round(b * 100) / 100;
     }
 
-    // ── Optional participation gates ────────────────────────────────────
-    const participantTypeRaw = formData.get("participantType") ?? "PUBLIC";
-    if (!isParticipantType(participantTypeRaw)) {
-        return { ok: false, error: "Invalid participant type." };
-    }
+    return {
+        ok: true,
+        value: {
+            title,
+            description,
+            location,
+            eventDate,
+            category: categoryRaw,
+            maxCapacity,
+            memberDiscountPercent,
+            multiDivisionBundlePriceBdt,
+        },
+    };
+}
 
-    let minAge: number | null = null;
-    const minAgeRaw = ((formData.get("minAge") as string) ?? "").trim();
-    if (minAgeRaw) {
-        const n = Number.parseInt(minAgeRaw, 10);
-        if (!Number.isFinite(n) || n < 1 || n > 100) {
-            return { ok: false, error: "Minimum age must be between 1 and 100." };
-        }
-        minAge = n;
-    }
+export async function createEventAction(formData: FormData): Promise<ActionResult> {
+    const auth = await requirePoster();
+    if (!auth.ok) return auth;
 
-    let minRankId: string | null = null;
-    const minRankRaw = ((formData.get("minRankId") as string) ?? "").trim();
-    if (minRankRaw) {
-        const rank = await prisma.beltRank.findUnique({
-            where: { id: minRankRaw },
-            select: { id: true },
-        });
-        if (!rank) return { ok: false, error: "Unknown belt rank." };
-        minRankId = rank.id;
-    }
+    const parsed = parseCommonFields(formData);
+    if (!parsed.ok) return parsed;
+    const isPublished = formData.get("isPublished") !== "false";
 
     let attachment: { url: string; type: "IMAGE" | "PDF" } | null;
     try {
@@ -292,12 +272,19 @@ export async function createEventAction(formData: FormData): Promise<ActionResul
         };
     }
 
-    let tournament: TournamentInput | null = null;
-    if (categoryRaw === "TOURNAMENT") {
-        const parsed = parseTournamentFields(formData);
-        if ("error" in parsed) return { ok: false, error: parsed.error };
-        tournament = parsed;
-    }
+    const divisions = await parseDivisionFields(formData);
+    if ("error" in divisions) return { ok: false, error: divisions.error };
+
+    const {
+        title,
+        description,
+        location,
+        eventDate,
+        category,
+        maxCapacity,
+        memberDiscountPercent,
+        multiDivisionBundlePriceBdt,
+    } = parsed.value;
 
     const created = await prisma.$transaction(async (tx) => {
         const event = await tx.event.create({
@@ -306,35 +293,35 @@ export async function createEventAction(formData: FormData): Promise<ActionResul
                 description,
                 location,
                 eventDate,
-                category: categoryRaw,
+                category,
                 maxCapacity,
                 isPublished,
-                isPremium,
-                ticketPrice,
+                // Event-level fields are unused now that pricing lives on
+                // each division; kept nullable in the schema.
+                isPremium: divisions.isPremium,
+                ticketPrice: multiDivisionBundlePriceBdt,
                 memberDiscountPercent,
-                minAge,
-                minRankId,
-                participantType: participantTypeRaw,
+                minAge: null,
+                minRankId: null,
+                participantType: "PUBLIC",
                 attachmentUrl: attachment?.url ?? null,
                 attachmentType: attachment?.type ?? null,
                 postedById: auth.userId,
                 dojoId: null,
             },
         });
-        if (tournament && !("error" in tournament)) {
-            await tx.tournamentDetail.create({
-                data: {
-                    eventId: event.id,
-                    eventType: tournament.eventType,
-                    enabledTypes: tournament.enabledTypes,
-                    enabledDivisions: tournament.enabledDivisions,
-                    customDivisions: tournament.customDivisions,
-                    registrationDeadline: tournament.registrationDeadline,
-                    weighInDate: tournament.weighInDate,
-                    rulesUrl: tournament.rulesUrl,
-                },
-            });
-        }
+        await tx.tournamentDetail.create({
+            data: {
+                eventId: event.id,
+                eventType: divisions.enabledTypes[0],
+                enabledTypes: divisions.enabledTypes,
+                enabledDivisions: divisions.divisions.map((d) => d.code),
+                customDivisions: divisions.divisions,
+                registrationDeadline: divisions.registrationDeadline,
+                weighInDate: divisions.weighInDate,
+                rulesUrl: divisions.rulesUrl,
+            },
+        });
         return event;
     });
 
@@ -355,84 +342,9 @@ export async function updateEventAction(formData: FormData): Promise<ActionResul
     });
     if (!existing) return { ok: false, error: "Event not found." };
 
-    const title = ((formData.get("title") as string) ?? "").trim();
-    const description = ((formData.get("description") as string) ?? "").trim() || null;
-    const location = ((formData.get("location") as string) ?? "").trim() || null;
-    const eventDateStr = ((formData.get("eventDate") as string) ?? "").trim();
-    const categoryRaw = formData.get("category");
-    const maxCapacityRaw = ((formData.get("maxCapacity") as string) ?? "").trim();
+    const parsed = parseCommonFields(formData);
+    if (!parsed.ok) return parsed;
     const isPublished = formData.get("isPublished") !== "false";
-
-    if (!title) return { ok: false, error: "Title is required." };
-    if (!eventDateStr) return { ok: false, error: "Event date is required." };
-    const eventDate = new Date(eventDateStr);
-    if (Number.isNaN(eventDate.getTime())) {
-        return { ok: false, error: "Invalid date." };
-    }
-    if (!isCategory(categoryRaw)) {
-        return { ok: false, error: "Invalid category." };
-    }
-    let maxCapacity: number | null = null;
-    if (maxCapacityRaw) {
-        const n = Number.parseInt(maxCapacityRaw, 10);
-        if (!Number.isFinite(n) || n < 0) {
-            return { ok: false, error: "Capacity must be a positive number." };
-        }
-        maxCapacity = n;
-    }
-
-    const isPremium = formData.get("isPremium") === "true";
-    let ticketPrice: number | null = null;
-    let memberDiscountPercent = 0;
-    if (isPremium) {
-        const raw = ((formData.get("ticketPrice") as string) ?? "").trim();
-        const n = Number.parseFloat(raw);
-        if (!raw || !Number.isFinite(n) || n <= 0) {
-            return {
-                ok: false,
-                error: "Premium events need a ticket price greater than zero.",
-            };
-        }
-        ticketPrice = Math.round(n * 100) / 100;
-
-        const discountRaw = ((formData.get("memberDiscountPercent") as string) ?? "").trim();
-        if (discountRaw) {
-            const d = Number.parseInt(discountRaw, 10);
-            if (!Number.isFinite(d) || d < 0 || d > 100) {
-                return {
-                    ok: false,
-                    error: "Member discount must be a whole number between 0 and 100.",
-                };
-            }
-            memberDiscountPercent = d;
-        }
-    }
-
-    const participantTypeRaw = formData.get("participantType") ?? "PUBLIC";
-    if (!isParticipantType(participantTypeRaw)) {
-        return { ok: false, error: "Invalid participant type." };
-    }
-
-    let minAge: number | null = null;
-    const minAgeRaw = ((formData.get("minAge") as string) ?? "").trim();
-    if (minAgeRaw) {
-        const n = Number.parseInt(minAgeRaw, 10);
-        if (!Number.isFinite(n) || n < 1 || n > 100) {
-            return { ok: false, error: "Minimum age must be between 1 and 100." };
-        }
-        minAge = n;
-    }
-
-    let minRankId: string | null = null;
-    const minRankRaw = ((formData.get("minRankId") as string) ?? "").trim();
-    if (minRankRaw) {
-        const rank = await prisma.beltRank.findUnique({
-            where: { id: minRankRaw },
-            select: { id: true },
-        });
-        if (!rank) return { ok: false, error: "Unknown belt rank." };
-        minRankId = rank.id;
-    }
 
     let attachment: { url: string; type: "IMAGE" | "PDF" } | null;
     try {
@@ -444,12 +356,19 @@ export async function updateEventAction(formData: FormData): Promise<ActionResul
         };
     }
 
-    let tournament: TournamentInput | null = null;
-    if (categoryRaw === "TOURNAMENT") {
-        const parsed = parseTournamentFields(formData);
-        if ("error" in parsed) return { ok: false, error: parsed.error };
-        tournament = parsed;
-    }
+    const divisions = await parseDivisionFields(formData);
+    if ("error" in divisions) return { ok: false, error: divisions.error };
+
+    const {
+        title,
+        description,
+        location,
+        eventDate,
+        category,
+        maxCapacity,
+        memberDiscountPercent,
+        multiDivisionBundlePriceBdt,
+    } = parsed.value;
 
     await prisma.$transaction(async (tx) => {
         await tx.event.update({
@@ -459,48 +378,42 @@ export async function updateEventAction(formData: FormData): Promise<ActionResul
                 description,
                 location,
                 eventDate,
-                category: categoryRaw,
+                category,
                 maxCapacity,
                 isPublished,
-                isPremium,
-                ticketPrice,
+                isPremium: divisions.isPremium,
+                ticketPrice: multiDivisionBundlePriceBdt,
                 memberDiscountPercent,
-                minAge,
-                minRankId,
-                participantType: participantTypeRaw,
+                minAge: null,
+                minRankId: null,
+                participantType: "PUBLIC",
                 ...(attachment
                     ? { attachmentUrl: attachment.url, attachmentType: attachment.type }
                     : {}),
             },
         });
-        // Upsert on category change: TOURNAMENT-only detail row appears or
-        // disappears with the category selection.
-        if (tournament && !("error" in tournament)) {
-            await tx.tournamentDetail.upsert({
-                where: { eventId: id },
-                update: {
-                    eventType: tournament.eventType,
-                    enabledTypes: tournament.enabledTypes,
-                    enabledDivisions: tournament.enabledDivisions,
-                    customDivisions: tournament.customDivisions,
-                    registrationDeadline: tournament.registrationDeadline,
-                    weighInDate: tournament.weighInDate,
-                    rulesUrl: tournament.rulesUrl,
-                },
-                create: {
-                    eventId: id,
-                    eventType: tournament.eventType,
-                    enabledTypes: tournament.enabledTypes,
-                    enabledDivisions: tournament.enabledDivisions,
-                    customDivisions: tournament.customDivisions,
-                    registrationDeadline: tournament.registrationDeadline,
-                    weighInDate: tournament.weighInDate,
-                    rulesUrl: tournament.rulesUrl,
-                },
-            });
-        } else {
-            await tx.tournamentDetail.deleteMany({ where: { eventId: id } });
-        }
+        await tx.tournamentDetail.upsert({
+            where: { eventId: id },
+            update: {
+                eventType: divisions.enabledTypes[0],
+                enabledTypes: divisions.enabledTypes,
+                enabledDivisions: divisions.divisions.map((d) => d.code),
+                customDivisions: divisions.divisions,
+                registrationDeadline: divisions.registrationDeadline,
+                weighInDate: divisions.weighInDate,
+                rulesUrl: divisions.rulesUrl,
+            },
+            create: {
+                eventId: id,
+                eventType: divisions.enabledTypes[0],
+                enabledTypes: divisions.enabledTypes,
+                enabledDivisions: divisions.divisions.map((d) => d.code),
+                customDivisions: divisions.divisions,
+                registrationDeadline: divisions.registrationDeadline,
+                weighInDate: divisions.weighInDate,
+                rulesUrl: divisions.rulesUrl,
+            },
+        });
     });
 
     revalidateAll();

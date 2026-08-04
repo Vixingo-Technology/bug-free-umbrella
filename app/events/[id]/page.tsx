@@ -11,19 +11,12 @@ import { applyDiscount, currentUserIsJkaMember } from "@/lib/auth/is-jka-member"
 type Props = { params: Promise<{ id: string }> };
 
 const CATEGORY_LABEL: Record<string, string> = {
-    BELT_TEST: "Belt Test",
-    TOURNAMENT: "Tournament",
     SEMINAR: "Seminar",
     TRAINING_CAMP: "Training Camp",
+    TOURNAMENT: "Tournament",
+    // Legacy values still present on old rows.
+    BELT_TEST: "Belt Test",
     OTHER: "Event",
-};
-
-const PARTICIPANT_LABEL: Record<string, string> = {
-    PUBLIC: "Open to everyone",
-    STUDENTS: "Students only",
-    INSTRUCTORS: "Teachers only",
-    PARENTS: "Parents only",
-    DOJO_MEMBERS: "Dojo members only",
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -57,27 +50,43 @@ export default async function EventDetailPage({ params }: Props) {
         include: {
             dojo: { select: { id: true, name: true } },
             postedBy: { select: { fullName: true } },
-            minRank: { select: { name: true } },
+            tournamentDetail: {
+                select: { customDivisions: true },
+            },
             _count: { select: { registrations: true } },
         },
     });
 
     if (!e || !e.isPublished) notFound();
 
-    const baseTicketPrice = e.ticketPrice ? Number(e.ticketPrice) : null;
-    const isPremium = e.isPremium && baseTicketPrice !== null && baseTicketPrice > 0;
+    const divisions = e.tournamentDetail
+        ? (await import("@/lib/tournaments/divisions")).parseCustomDivisions(
+              e.tournamentDetail.customDivisions,
+          )
+        : [];
+    const divisionPrices = divisions
+        .map((d) => d.priceBdt)
+        .filter((p): p is number => p !== null && p > 0);
+    const isPremium = divisionPrices.length > 0;
+    const minPrice = isPremium ? Math.min(...divisionPrices) : null;
+    const maxPrice = isPremium ? Math.max(...divisionPrices) : null;
     const isMember = await currentUserIsJkaMember().catch(() => false);
     const memberDiscountActive =
         isPremium && isMember && e.memberDiscountPercent > 0;
-    const ticketPrice = memberDiscountActive
-        ? applyDiscount(baseTicketPrice!, e.memberDiscountPercent)
-        : baseTicketPrice;
-    const requirements: string[] = [];
-    if (e.participantType !== "PUBLIC") {
-        requirements.push(PARTICIPANT_LABEL[e.participantType] ?? e.participantType);
-    }
-    if (e.minAge !== null) requirements.push(`Age ${e.minAge}+`);
-    if (e.minRank) requirements.push(`${e.minRank.name} or above`);
+    const displayMin =
+        minPrice !== null && memberDiscountActive
+            ? applyDiscount(minPrice, e.memberDiscountPercent)
+            : minPrice;
+    const displayMax =
+        maxPrice !== null && memberDiscountActive
+            ? applyDiscount(maxPrice, e.memberDiscountPercent)
+            : maxPrice;
+    const priceLabel =
+        displayMin !== null && displayMax !== null
+            ? displayMin === displayMax
+                ? `৳${displayMin.toLocaleString()}`
+                : `৳${displayMin.toLocaleString()} – ৳${displayMax.toLocaleString()}`
+            : null;
 
     // eslint-disable-next-line react-hooks/purity -- server component re-renders per request (force-dynamic)
     const isPast = e.eventDate.getTime() < Date.now();
@@ -106,16 +115,11 @@ export default async function EventDetailPage({ params }: Props) {
                                 {e.dojo.name}
                             </span>
                         )}
-                        {isPremium ? (
+                        {isPremium && priceLabel ? (
                             <>
                                 <span className="inline-flex items-center gap-1.5 text-[10px] tracking-widest uppercase font-bold px-3 py-1 rounded-full border border-amber-200 bg-amber-50 text-amber-700">
                                     <Ticket size={12} />
-                                    ৳{ticketPrice?.toLocaleString()}
-                                    {memberDiscountActive && baseTicketPrice !== null && (
-                                        <span className="ml-1 text-zinc-400 line-through font-normal">
-                                            ৳{baseTicketPrice.toLocaleString()}
-                                        </span>
-                                    )}
+                                    {priceLabel} / division
                                 </span>
                                 {memberDiscountActive && (
                                     <span className="text-[10px] tracking-widest uppercase font-bold px-3 py-1 rounded-full border border-emerald-200 bg-emerald-50 text-emerald-700">
@@ -133,14 +137,11 @@ export default async function EventDetailPage({ params }: Props) {
                                 Free entry
                             </span>
                         )}
-                        {requirements.map((r) => (
-                            <span
-                                key={r}
-                                className="text-[10px] tracking-widest uppercase font-bold px-3 py-1 rounded-full border border-zinc-200 bg-zinc-50 text-zinc-600"
-                            >
-                                {r}
+                        {divisions.length > 0 && (
+                            <span className="text-[10px] tracking-widest uppercase font-bold px-3 py-1 rounded-full border border-zinc-200 bg-zinc-50 text-zinc-600">
+                                {divisions.length} divisions
                             </span>
-                        ))}
+                        )}
                     </div>
 
                     <h1 className="font-karate text-3xl md:text-5xl text-zinc-900 mb-6 uppercase tracking-wider font-bold leading-tight">
@@ -237,12 +238,8 @@ export default async function EventDetailPage({ params }: Props) {
                                 </h3>
                                 <p className="text-sm text-zinc-600">
                                     {isPremium
-                                        ? `Register and pay the ৳${ticketPrice?.toLocaleString()} ticket${
-                                              memberDiscountActive
-                                                  ? " (member price)"
-                                                  : ""
-                                          } to get your participation card with a QR code to show at the door.`
-                                        : "Register in under a minute. You'll get a participation card with a QR code to show at the door."}
+                                        ? `Pick your divisions, pay online, and get your participation card by email as soon as payment is confirmed.`
+                                        : "Pick your divisions to get your participation card with a QR code to show at the door."}
                                 </p>
                             </div>
                             {isFull ? (

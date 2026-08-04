@@ -5,31 +5,28 @@ import Link from "next/link";
 import { Ticket, LogIn } from "lucide-react";
 import {
     ageOnDate,
-    checkDivisionEligibility,
-    customToDivision,
-    getDivision,
-    isCustomDivisionCode,
     type CustomDivision,
-    type Division,
     type Gender,
-    type TournamentEventType,
 } from "@/lib/tournaments/divisions";
 import { registerForTournamentAndRedirect } from "@/app/actions/event-registration";
+
+export type EventRegistrationBeltRank = {
+    id: string;
+    name: string;
+    orderIndex: number;
+};
 
 export type TournamentRegistrationEvent = {
     id: string;
     title: string;
     eventDate: string; // ISO
-    ticketPrice: number | null;
     memberDiscountActive: boolean;
-    baseTicketPrice: number | null;
     memberDiscountPercent: number;
-    isPremium: boolean;
-    // Types the tournament is running. May contain KATA, KUMITE, or both.
-    enabledTypes: TournamentEventType[];
-    enabledDivisions: string[];
-    customDivisions: CustomDivision[];
+    divisions: CustomDivision[];
+    /** Optional bundle total (BDT) applied when 2+ divisions selected. */
+    multiDivisionBundlePriceBdt: number | null;
     registrationDeadline: string | null; // ISO
+    beltRanks: EventRegistrationBeltRank[];
 };
 
 export type MemberAutofill = {
@@ -37,13 +34,20 @@ export type MemberAutofill = {
     fullName: string;
     email: string;
     phone: string | null;
-    dateOfBirth: string | null; // ISO date
+    dateOfBirth: string | null;
     gender: Gender | null;
     currentRank: string | null;
     dojoName: string | null;
     emergencyContactName: string | null;
     emergencyContactPhone: string | null;
+    rankOrderIndex: number | null;
 } | null;
+
+function applyDiscount(base: number, pct: number): number {
+    if (pct <= 0) return base;
+    const capped = Math.min(100, Math.max(0, pct));
+    return Math.round(base * (1 - capped / 100) * 100) / 100;
+}
 
 export default function TournamentRegistrationForm({
     event,
@@ -61,104 +65,148 @@ export default function TournamentRegistrationForm({
         ? new Date(event.registrationDeadline).getTime() < Date.now()
         : false;
 
-    // Enabled divisions, resolved to full Division objects. Unknown codes are
-    // filtered out — a code that vanished from the preset is treated as
-    // disabled rather than crashing the page. Custom codes are resolved from
-    // the event's admin-defined list.
-    const customByCode = useMemo(
-        () => new Map(event.customDivisions.map((c) => [c.code, c])),
-        [event.customDivisions],
-    );
-    const allEnabled = useMemo(
-        () =>
-            event.enabledDivisions
-                .map((c): Division | null => {
-                    if (isCustomDivisionCode(c)) {
-                        const custom = customByCode.get(c);
-                        return custom ? customToDivision(custom) : null;
-                    }
-                    return getDivision(c) ?? null;
-                })
-                .filter((d): d is Division => !!d),
-        [event.enabledDivisions, customByCode],
-    );
-
-    const [gender, setGender] = useState<Gender | "">(
-        member?.gender ?? "",
-    );
+    const [gender, setGender] = useState<Gender | "">(member?.gender ?? "");
     const [dobStr, setDobStr] = useState<string>(member?.dateOfBirth ?? "");
     const [weightKgStr, setWeightKgStr] = useState<string>("");
-    // Two independent picks so a participant can enter one Kata + one Kumite
-    // in a single submission. Either can be empty; at least one must be set.
-    const [kataCode, setKataCode] = useState<string>("");
-    const [kumiteCode, setKumiteCode] = useState<string>("");
+    const [selectedRankName, setSelectedRankName] = useState<string>(
+        member?.currentRank ?? "",
+    );
+    const [selectedCodes, setSelectedCodes] = useState<Set<string>>(new Set());
 
-    // Compute the participant's age at the event so we can filter divisions
-    // and decide whether the guardian block is required. If DOB isn't filled
-    // yet we can't filter — show all enabled divisions of the right gender.
     const dob = dobStr ? new Date(dobStr) : null;
     const age = dob ? ageOnDate(dob, eventDate) : null;
     const isMinor = age !== null && age < 18;
 
-    const weightKg =
-        weightKgStr.trim() !== "" ? Number.parseFloat(weightKgStr) : null;
+    // Belt rank order lookup — used to disable divisions whose min belt is
+    // above the entrant's picked rank.
+    const rankByOrder = useMemo(() => {
+        const map = new Map<string, number>();
+        for (const r of event.beltRanks) map.set(r.id, r.orderIndex);
+        return map;
+    }, [event.beltRanks]);
+    const selectedRank = useMemo(
+        () => event.beltRanks.find((r) => r.name === selectedRankName) ?? null,
+        [event.beltRanks, selectedRankName],
+    );
+    const entrantRankOrder =
+        selectedRank?.orderIndex ?? member?.rankOrderIndex ?? null;
 
-    const availableDivisions = useMemo(() => {
-        if (!gender) return [] as Division[];
-        return allEnabled
-            .filter((d) => {
-                // Custom divisions aren't gender-locked (see divisions.ts).
-                if (isCustomDivisionCode(d.code)) return true;
-                return d.gender === gender;
-            })
-            .filter((d) => {
-                if (!dob) return true; // relax when DOB missing; server enforces
-                if (isCustomDivisionCode(d.code)) return true;
-                const issue = checkDivisionEligibility(d, {
-                    gender,
-                    dob,
-                    eventDate,
-                    weightKg: weightKg ?? undefined,
-                });
-                // Weight-required is fine at picker time — user hasn't entered
-                // their weight yet. Only hide when age is off.
-                if (issue === "age-below-min" || issue === "age-above-max")
-                    return false;
+    type EligibleDivision = {
+        d: CustomDivision;
+        reason: string | null;
+    };
+
+    // Per-division eligibility — a filter kicks in only once its input
+    // field is filled. Any unfilled input means we can't say the division
+    // is definitely out, so we leave it selectable.
+    const eligibility = useMemo<EligibleDivision[]>(() => {
+        return event.divisions.map((d) => {
+            const reasons: string[] = [];
+            if (gender && d.gender !== "ANY" && d.gender !== gender) {
+                reasons.push(
+                    d.gender === "MALE" ? "male only" : "female only",
+                );
+            }
+            if (d.minAge !== null && age !== null && age < d.minAge) {
+                reasons.push(`age ${d.minAge}+ on event day (you are ${age})`);
+            }
+            if (d.minRankId) {
+                const required = rankByOrder.get(d.minRankId);
                 if (
-                    weightKg !== null &&
-                    (issue === "weight-below-min" ||
-                        issue === "weight-above-max")
-                )
-                    return false;
-                return true;
-            });
-    }, [allEnabled, gender, dob, weightKg, eventDate]);
+                    required !== undefined &&
+                    entrantRankOrder !== null &&
+                    entrantRankOrder < required
+                ) {
+                    const rank = event.beltRanks.find(
+                        (r) => r.id === d.minRankId,
+                    );
+                    reasons.push(`min ${rank?.name ?? "belt"}`);
+                }
+            }
+            return {
+                d,
+                reason: reasons.length ? reasons.join(", ") : null,
+            };
+        });
+    }, [
+        event.divisions,
+        gender,
+        age,
+        entrantRankOrder,
+        rankByOrder,
+        event.beltRanks,
+    ]);
 
-    // Group the picker by event type so an event running both Kata and Kumite
-    // shows two labelled sections instead of a flat list.
-    const divisionsByType = useMemo(() => {
-        const kata = availableDivisions.filter((d) => d.eventType === "KATA");
-        const kumite = availableDivisions.filter((d) => d.eventType === "KUMITE");
-        return { KATA: kata, KUMITE: kumite };
-    }, [availableDivisions]);
+    // Prune selected divisions that became ineligible as filters tightened.
+    const eligibleCodes = useMemo(() => {
+        const s = new Set<string>();
+        for (const { d, reason } of eligibility) if (!reason) s.add(d.code);
+        return s;
+    }, [eligibility]);
+    const effectiveSelected = useMemo(() => {
+        const next = new Set<string>();
+        for (const c of selectedCodes) if (eligibleCodes.has(c)) next.add(c);
+        return next;
+    }, [selectedCodes, eligibleCodes]);
 
-    const kataAllowed = event.enabledTypes.includes("KATA");
-    const kumiteAllowed = event.enabledTypes.includes("KUMITE");
-    const bothTypesEnabled = kataAllowed && kumiteAllowed;
+    const allFiltersProvided = !!gender && !!dobStr && !!selectedRankName;
+    const anyEligible = eligibility.some((e) => !e.reason);
+    const cannotRegister = allFiltersProvided && !anyEligible;
 
-    const selectedKata = kataCode
-        ? divisionsByType.KATA.find((d) => d.code === kataCode) ?? null
-        : null;
-    const selectedKumite = kumiteCode
-        ? divisionsByType.KUMITE.find((d) => d.code === kumiteCode) ?? null
-        : null;
-    // Team info is only asked once — the current data model captures one
-    // teamName/teammates block on the registration row it belongs to. If both
-    // picks are team divisions we still surface the block; the server writes
-    // the same team payload to whichever row is the team division.
-    const isTeam = !!selectedKata?.isTeam || !!selectedKumite?.isTeam;
-    const kumiteRequired = !!selectedKumite;
-    const selectedCount = (selectedKata ? 1 : 0) + (selectedKumite ? 1 : 0);
+    const selected = useMemo(
+        () => event.divisions.filter((d) => effectiveSelected.has(d.code)),
+        [event.divisions, effectiveSelected],
+    );
+    const anyTeam = selected.some((d) => d.isTeam);
+    const anyKumite = selected.some((d) => d.eventType === "KUMITE");
+
+    const totals = useMemo(() => {
+        let sum = 0;
+        let baseSum = 0;
+        for (const d of selected) {
+            const base = d.priceBdt ?? 0;
+            baseSum += base;
+            const effective = event.memberDiscountActive
+                ? applyDiscount(base, event.memberDiscountPercent)
+                : base;
+            sum += effective;
+        }
+        const usesBundle =
+            selected.length >= 2 &&
+            event.multiDivisionBundlePriceBdt !== null &&
+            event.multiDivisionBundlePriceBdt > 0;
+        const bundleBase = usesBundle ? event.multiDivisionBundlePriceBdt! : 0;
+        const bundleEffective =
+            usesBundle && event.memberDiscountActive
+                ? applyDiscount(bundleBase, event.memberDiscountPercent)
+                : bundleBase;
+        return {
+            total: usesBundle
+                ? Math.round(bundleEffective * 100) / 100
+                : Math.round(sum * 100) / 100,
+            baseTotal: usesBundle
+                ? Math.round(bundleBase * 100) / 100
+                : Math.round(baseSum * 100) / 100,
+            usesBundle,
+            sumTotal: Math.round(sum * 100) / 100,
+        };
+    }, [
+        selected,
+        event.memberDiscountActive,
+        event.memberDiscountPercent,
+        event.multiDivisionBundlePriceBdt,
+    ]);
+
+    const paid = totals.total > 0;
+
+    function toggle(code: string) {
+        setSelectedCodes((prev) => {
+            const next = new Set(prev);
+            if (next.has(code)) next.delete(code);
+            else next.add(code);
+            return next;
+        });
+    }
 
     if (registrationClosed) {
         return (
@@ -167,7 +215,20 @@ export default function TournamentRegistrationForm({
                     Registration is closed.
                 </p>
                 <p className="text-sm text-zinc-500">
-                    The deadline for this tournament has passed.
+                    The deadline for this event has passed.
+                </p>
+            </div>
+        );
+    }
+
+    if (event.divisions.length === 0) {
+        return (
+            <div className="bg-white border border-zinc-200 rounded-sm shadow-sm p-6 text-center">
+                <p className="text-base font-semibold text-zinc-900 mb-2">
+                    Registration not open yet.
+                </p>
+                <p className="text-sm text-zinc-500">
+                    The organiser has not published any divisions.
                 </p>
             </div>
         );
@@ -179,6 +240,14 @@ export default function TournamentRegistrationForm({
             className="bg-white border border-zinc-200 rounded-sm shadow-sm p-6 space-y-5"
         >
             <input type="hidden" name="eventId" value={event.id} />
+            {selected.map((d) => (
+                <input
+                    key={d.code}
+                    type="hidden"
+                    name="divisionCode"
+                    value={d.code}
+                />
+            ))}
 
             {member ? (
                 <div className="text-sm text-zinc-700 bg-emerald-50 border border-emerald-200 rounded-sm px-4 py-3">
@@ -187,12 +256,7 @@ export default function TournamentRegistrationForm({
             ) : (
                 <>
                     <Field label="Full name" required>
-                        <input
-                            name="name"
-                            type="text"
-                            required
-                            className={inputCx}
-                        />
+                        <input name="name" type="text" required className={inputCx} />
                     </Field>
                     <Field label="Email" required>
                         <input
@@ -217,14 +281,15 @@ export default function TournamentRegistrationForm({
                         />
                     </Field>
                     <p className="text-xs text-zinc-500 -mt-1">
-                        Already a JKA member?{" "}
+                        Anyone can register — no JKA account needed. Already
+                        a member?{" "}
                         <Link
                             href={signInHref}
                             className="text-accent-red font-semibold hover:underline inline-flex items-center gap-1"
                         >
                             <LogIn size={12} /> Sign in
                         </Link>{" "}
-                        for a faster registration.
+                        to autofill your details.
                     </p>
                 </>
             )}
@@ -236,8 +301,7 @@ export default function TournamentRegistrationForm({
                         value={gender}
                         onChange={(e) => {
                             setGender(e.target.value as Gender);
-                            setKataCode("");
-                            setKumiteCode("");
+                            setSelectedCodes(new Set());
                         }}
                         required
                         className={inputCx}
@@ -252,26 +316,15 @@ export default function TournamentRegistrationForm({
                         name="dateOfBirth"
                         type="date"
                         value={dobStr}
-                        onChange={(e) => {
-                            setDobStr(e.target.value);
-                            setKataCode("");
-                            setKumiteCode("");
-                        }}
+                        onChange={(e) => setDobStr(e.target.value)}
                         required
                         className={inputCx}
                     />
                 </Field>
             </div>
 
-            {event.enabledTypes.includes("KUMITE") && (
-                <Field
-                    label={
-                        kumiteRequired
-                            ? "Weight (kg)"
-                            : "Weight (kg) — required for kumite divisions"
-                    }
-                    required={kumiteRequired}
-                >
+            {anyKumite && (
+                <Field label="Weight (kg)" required>
                     <input
                         name="entrantWeightKg"
                         type="number"
@@ -280,7 +333,7 @@ export default function TournamentRegistrationForm({
                         step="0.1"
                         value={weightKgStr}
                         onChange={(e) => setWeightKgStr(e.target.value)}
-                        required={kumiteRequired}
+                        required
                         placeholder="e.g. 67.5"
                         className={inputCx}
                     />
@@ -292,14 +345,20 @@ export default function TournamentRegistrationForm({
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 <Field label="Belt rank" required>
-                    <input
+                    <select
                         name="entrantBeltRank"
-                        type="text"
-                        defaultValue={member?.currentRank ?? ""}
+                        value={selectedRankName}
+                        onChange={(e) => setSelectedRankName(e.target.value)}
                         required
-                        placeholder="e.g. 3rd Kyu"
                         className={inputCx}
-                    />
+                    >
+                        <option value="">Select your rank…</option>
+                        {event.beltRanks.map((r) => (
+                            <option key={r.id} value={r.name}>
+                                {r.name}
+                            </option>
+                        ))}
+                    </select>
                 </Field>
                 <Field label="Dojo">
                     <input
@@ -311,120 +370,157 @@ export default function TournamentRegistrationForm({
                     />
                 </Field>
             </div>
+            <p className="text-[11px] text-amber-800 bg-amber-50 border border-amber-200 rounded-sm px-3 py-2 -mt-2">
+                You must bring your belt test results or certificate to
+                justify your rank.
+            </p>
 
             <Field label="Coach name (optional)">
                 <input name="coachName" type="text" className={inputCx} />
             </Field>
 
-            <div
-                className={
-                    bothTypesEnabled
-                        ? "grid grid-cols-1 md:grid-cols-2 gap-3"
-                        : ""
-                }
-            >
-                {kataAllowed && (
-                    <Field
-                        label={
-                            bothTypesEnabled
-                                ? "Kata division (optional)"
-                                : "Division"
-                        }
-                        required={!bothTypesEnabled}
-                    >
-                        <select
-                            name="kataDivisionCode"
-                            value={kataCode}
-                            onChange={(e) => setKataCode(e.target.value)}
-                            required={!bothTypesEnabled}
-                            disabled={!gender || !dob}
-                            className={inputCx}
-                        >
-                            <option value="">
-                                {!gender || !dob
-                                    ? "Fill in gender and date of birth first…"
-                                    : divisionsByType.KATA.length === 0
-                                      ? "No kata divisions match"
-                                      : bothTypesEnabled
-                                        ? "— No kata entry —"
-                                        : "Select a division…"}
-                            </option>
-                            {divisionsByType.KATA.map((d) => (
-                                <option key={d.code} value={d.code}>
-                                    {d.label}
-                                </option>
+            <Field label="Profile photo (optional · JPG/PNG · appears on your card)">
+                <input
+                    name="profileImage"
+                    type="file"
+                    accept="image/jpeg,image/png,image/webp"
+                    className="w-full text-xs text-zinc-600 file:mr-3 file:py-2 file:px-3 file:rounded-sm file:border file:border-zinc-200 file:bg-zinc-50 file:text-zinc-700 file:text-[10px] file:font-bold file:uppercase file:tracking-widest hover:file:bg-zinc-100 cursor-pointer"
+                />
+            </Field>
+
+            <div>
+                <p className="text-[10px] tracking-widest uppercase font-bold text-zinc-500 mb-2">
+                    Divisions <span className="text-accent-red">*</span>
+                </p>
+                <p className="text-[11px] text-zinc-500 mb-3">
+                    Pick every division you want to enter. Prices add up.
+                </p>
+                {cannotRegister && (
+                    <div className="text-xs text-red-800 bg-red-50 border border-red-200 rounded-sm px-3 py-3 mb-3 space-y-2">
+                        <p className="font-semibold">
+                            You cannot register for this event.
+                        </p>
+                        <p className="text-red-700">
+                            None of the published divisions match your details.
+                            Here is why each one is unavailable:
+                        </p>
+                        <ul className="list-disc pl-4 space-y-1 text-red-700">
+                            {eligibility.map(({ d, reason }) => (
+                                <li key={d.code}>
+                                    <span className="font-semibold">
+                                        {d.label}
+                                    </span>{" "}
+                                    — {reason}
+                                </li>
                             ))}
-                        </select>
-                    </Field>
+                        </ul>
+                    </div>
                 )}
-                {kumiteAllowed && (
-                    <Field
-                        label={
-                            bothTypesEnabled
-                                ? "Kumite division (optional)"
-                                : "Division"
-                        }
-                        required={!bothTypesEnabled}
-                    >
-                        <select
-                            name="kumiteDivisionCode"
-                            value={kumiteCode}
-                            onChange={(e) => setKumiteCode(e.target.value)}
-                            required={!bothTypesEnabled}
-                            disabled={!gender || !dob}
-                            className={inputCx}
-                        >
-                            <option value="">
-                                {!gender || !dob
-                                    ? "Fill in gender and date of birth first…"
-                                    : divisionsByType.KUMITE.length === 0
-                                      ? "No kumite divisions match"
-                                      : bothTypesEnabled
-                                        ? "— No kumite entry —"
-                                        : "Select a division…"}
-                            </option>
-                            {divisionsByType.KUMITE.map((d) => (
-                                <option key={d.code} value={d.code}>
-                                    {d.label}
-                                </option>
-                            ))}
-                        </select>
-                    </Field>
+                <ul className="space-y-2">
+                    {eligibility
+                        .filter(({ reason }) => !cannotRegister && !reason)
+                        .map(({ d, reason }) => {
+                        const checked = effectiveSelected.has(d.code);
+                        const disabled = !!reason;
+                        const base = d.priceBdt ?? 0;
+                        const effective = event.memberDiscountActive
+                            ? applyDiscount(base, event.memberDiscountPercent)
+                            : base;
+                        return (
+                            <li key={d.code}>
+                                <label
+                                    className={`flex items-start gap-3 border rounded-sm px-3 py-2.5 cursor-pointer select-none ${
+                                        disabled
+                                            ? "border-zinc-100 bg-zinc-50 text-zinc-400 cursor-not-allowed"
+                                            : checked
+                                              ? "border-accent-red bg-accent-red/5"
+                                              : "border-zinc-200 bg-white hover:border-zinc-300"
+                                    }`}
+                                >
+                                    <input
+                                        type="checkbox"
+                                        className="h-4 w-4 accent-red-600 mt-0.5 shrink-0"
+                                        checked={checked}
+                                        disabled={disabled}
+                                        onChange={() => toggle(d.code)}
+                                    />
+                                    <div className="flex-1 min-w-0">
+                                        <div className="flex items-center justify-between gap-3">
+                                            <span className="text-sm font-semibold text-zinc-900 truncate">
+                                                {d.label}
+                                            </span>
+                                            <span className="text-sm text-zinc-700 whitespace-nowrap">
+                                                {base > 0 ? (
+                                                    <>
+                                                        ৳
+                                                        {effective.toLocaleString()}
+                                                        {event.memberDiscountActive &&
+                                                            effective !== base && (
+                                                                <span className="ml-2 text-zinc-400 text-xs line-through font-normal">
+                                                                    ৳
+                                                                    {base.toLocaleString()}
+                                                                </span>
+                                                            )}
+                                                    </>
+                                                ) : (
+                                                    <span className="text-emerald-700 text-xs uppercase tracking-widest font-bold">
+                                                        Free
+                                                    </span>
+                                                )}
+                                            </span>
+                                        </div>
+                                        <div className="flex flex-wrap items-center gap-2 mt-1">
+                                            <span className="text-[10px] uppercase tracking-widest font-bold text-zinc-500">
+                                                {d.eventType === "KATA"
+                                                    ? "Kata"
+                                                    : "Kumite"}
+                                            </span>
+                                            {d.isTeam && (
+                                                <span className="text-[10px] uppercase tracking-widest font-bold text-zinc-500">
+                                                    · Team
+                                                </span>
+                                            )}
+                                            {d.minAge !== null && (
+                                                <span className="text-[10px] uppercase tracking-widest text-zinc-500">
+                                                    · Age {d.minAge}+
+                                                </span>
+                                            )}
+                                            {d.minRankId && (
+                                                <span className="text-[10px] uppercase tracking-widest text-zinc-500">
+                                                    ·{" "}
+                                                    {event.beltRanks.find(
+                                                        (r) =>
+                                                            r.id === d.minRankId,
+                                                    )?.name ?? "belt"}
+                                                    +
+                                                </span>
+                                            )}
+                                            {reason && (
+                                                <span className="text-[10px] text-amber-700 bg-amber-50 border border-amber-200 rounded-sm px-1.5 py-0.5">
+                                                    Not eligible: {reason}
+                                                </span>
+                                            )}
+                                        </div>
+                                    </div>
+                                </label>
+                            </li>
+                        );
+                    })}
+                </ul>
+                {!cannotRegister && selected.length === 0 && (
+                    <p className="text-[11px] text-amber-700 bg-amber-50 border border-amber-200 rounded-sm px-3 py-2 mt-3">
+                        Select at least one division to continue.
+                    </p>
                 )}
             </div>
-            {gender && dob && availableDivisions.length === 0 && (
-                <p className="text-[11px] text-amber-700 bg-amber-50 border border-amber-200 rounded-sm px-3 py-2">
-                    None of the enabled divisions match your age and gender.
-                    Contact the organiser if you believe this is wrong.
-                </p>
-            )}
-            {bothTypesEnabled && (
-                <p className="text-[11px] text-zinc-500 -mt-2">
-                    Pick a kata division, a kumite division, or one of each —
-                    both entries are created together
-                    {event.isPremium
-                        ? "; the ticket price applies to each."
-                        : "."}
-                </p>
-            )}
-            {bothTypesEnabled && selectedCount === 0 && (
-                <p className="text-[11px] text-amber-700 bg-amber-50 border border-amber-200 rounded-sm px-3 py-2 -mt-2">
-                    Pick at least one division to continue.
-                </p>
-            )}
 
-            {isTeam && (
+            {anyTeam && (
                 <div className="border border-zinc-200 rounded-sm bg-zinc-50 p-4 space-y-3">
                     <p className="text-[10px] tracking-widest uppercase font-bold text-zinc-500">
-                        Team kata — teammates
+                        Team — teammates
                     </p>
                     <Field label="Team name" required>
-                        <input
-                            name="teamName"
-                            type="text"
-                            required
-                            className={inputCx}
-                        />
+                        <input name="teamName" type="text" required className={inputCx} />
                     </Field>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                         <Field label="Teammate 1 (name)" required>
@@ -527,68 +623,57 @@ export default function TournamentRegistrationForm({
                 </div>
             )}
 
-            {initialError && (
-                <p className="text-sm text-red-600">{initialError}</p>
-            )}
+            {initialError && <p className="text-sm text-red-600">{initialError}</p>}
 
-            {event.isPremium && event.ticketPrice !== null ? (
+            {paid ? (
                 <>
                     <div className="border-t border-zinc-200 pt-4 space-y-2">
-                        <div className="flex items-center justify-between text-sm text-zinc-700">
-                            <span className="font-semibold">
-                                {event.memberDiscountActive
-                                    ? "Member ticket"
-                                    : "Ticket price"}
-                                {selectedCount > 1 && (
+                        {totals.usesBundle && (
+                            <div className="text-[11px] text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-sm px-3 py-2">
+                                Multi-division bundle applied: ৳
+                                {totals.total.toLocaleString()} instead of ৳
+                                {totals.sumTotal.toLocaleString()}.
+                            </div>
+                        )}
+                        <div className="flex items-center justify-between text-sm">
+                            <span className="font-bold text-zinc-900">
+                                Total
+                                {selected.length > 1 && (
                                     <span className="text-zinc-400 font-normal">
                                         {" "}
-                                        × {selectedCount} divisions
+                                        · {selected.length} divisions
                                     </span>
                                 )}
                             </span>
-                            <span className="text-zinc-700">
-                                ৳{event.ticketPrice.toLocaleString()}
+                            <span className="font-bold text-zinc-900">
+                                ৳{totals.total.toLocaleString()}
                                 {event.memberDiscountActive &&
-                                    event.baseTicketPrice !== null && (
+                                    totals.total !== totals.baseTotal && (
                                         <span className="ml-2 text-zinc-400 text-xs line-through font-normal">
-                                            ৳{event.baseTicketPrice.toLocaleString()}
+                                            ৳{totals.baseTotal.toLocaleString()}
                                         </span>
                                     )}
                             </span>
                         </div>
-                        {selectedCount > 1 && (
-                            <div className="flex items-center justify-between text-sm border-t border-zinc-100 pt-2">
-                                <span className="font-bold text-zinc-900">
-                                    Total
-                                </span>
-                                <span className="font-bold text-zinc-900">
-                                    ৳
-                                    {(
-                                        event.ticketPrice * selectedCount
-                                    ).toLocaleString()}
-                                </span>
-                            </div>
-                        )}
                     </div>
                     <button
                         type="submit"
-                        className="w-full inline-flex items-center justify-center gap-2 bg-accent-red text-white px-4 py-3 text-xs font-bold tracking-widest uppercase hover:bg-accent-red/90 transition-colors rounded-sm"
+                        disabled={selected.length === 0}
+                        className="w-full inline-flex items-center justify-center gap-2 bg-accent-red text-white px-4 py-3 text-xs font-bold tracking-widest uppercase hover:bg-accent-red/90 disabled:opacity-40 transition-colors rounded-sm"
                     >
                         <Ticket size={14} />
-                        {selectedCount > 1
-                            ? `Pay ৳${(event.ticketPrice * selectedCount).toLocaleString()} for ${selectedCount} divisions`
-                            : "Continue to payment"}
+                        Pay ৳{totals.total.toLocaleString()} & register
                     </button>
                     <p className="text-[11px] text-zinc-500 text-center">
-                        {selectedCount > 1
-                            ? "Both entries are confirmed once payment settles."
-                            : "Your division entry is confirmed once payment settles."}
+                        Your participation card is emailed as soon as payment
+                        is confirmed.
                     </p>
                 </>
             ) : (
                 <button
                     type="submit"
-                    className="w-full inline-flex items-center justify-center gap-2 bg-accent-red text-white px-4 py-3 text-xs font-bold tracking-widest uppercase hover:bg-accent-red/90 transition-colors rounded-sm"
+                    disabled={selected.length === 0}
+                    className="w-full inline-flex items-center justify-center gap-2 bg-accent-red text-white px-4 py-3 text-xs font-bold tracking-widest uppercase hover:bg-accent-red/90 disabled:opacity-40 transition-colors rounded-sm"
                 >
                     Complete registration
                 </button>

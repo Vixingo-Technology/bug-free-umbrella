@@ -18,19 +18,18 @@ export const dynamic = "force-dynamic";
 const PAGE_SIZE = 12;
 
 const CATEGORY_LABEL: Record<string, string> = {
-    BELT_TEST: "Belt Test",
-    TOURNAMENT: "Tournament",
     SEMINAR: "Seminar",
     TRAINING_CAMP: "Training Camp",
+    TOURNAMENT: "Tournament",
+    // Legacy values still present on old rows.
+    BELT_TEST: "Belt Test",
     OTHER: "Event",
 };
 
 const VALID_CATEGORIES = new Set<EventCategory>([
-    "BELT_TEST",
-    "TOURNAMENT",
     "SEMINAR",
     "TRAINING_CAMP",
-    "OTHER",
+    "TOURNAMENT",
 ]);
 
 type Row =

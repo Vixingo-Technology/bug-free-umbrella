@@ -443,6 +443,7 @@ exports.Prisma.EventRegistrationScalarFieldEnum = {
   guardianConsent: 'guardianConsent',
   emergencyContactName: 'emergencyContactName',
   emergencyContactPhone: 'emergencyContactPhone',
+  profileImageUrl: 'profileImageUrl',
   checkedInAt: 'checkedInAt',
   checkedInByUserId: 'checkedInByUserId',
   createdAt: 'createdAt'

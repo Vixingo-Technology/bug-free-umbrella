@@ -18,19 +18,12 @@ const BASE = "/portal/admin/events";
 const PAGE_SIZE = 10;
 
 const CATEGORY_LABEL: Record<string, string> = {
-    BELT_TEST: "Belt Test",
-    TOURNAMENT: "Tournament",
     SEMINAR: "Seminar",
     TRAINING_CAMP: "Training Camp",
+    TOURNAMENT: "Tournament",
+    // Legacy values still present on old rows.
+    BELT_TEST: "Belt Test",
     OTHER: "Event",
-};
-
-const PARTICIPANT_LABEL: Record<string, string> = {
-    PUBLIC: "Open to everyone",
-    STUDENTS: "Students only",
-    INSTRUCTORS: "Teachers only",
-    PARENTS: "Parents only",
-    DOJO_MEMBERS: "Dojo members only",
 };
 
 function formatDate(d: Date): string {
@@ -65,7 +58,6 @@ export default async function AdminEventsPage({
                   include: {
                       dojo: { select: { id: true, name: true } },
                       postedBy: { select: { fullName: true } },
-                      minRank: { select: { name: true } },
                       _count: { select: { registrations: true } },
                   },
               })
@@ -98,7 +90,7 @@ export default async function AdminEventsPage({
             <PostedNewTabs current={tab} basePath={BASE} postedCount={total} />
 
             {tab === "new" ? (
-                <div className="max-w-2xl">
+                <div className="max-w-4xl">
                     <EventForm
                         eyebrow="New federation event"
                         submitLabel="Publish to landing page"
@@ -156,7 +148,7 @@ export default async function AdminEventsPage({
                                 </span>
                                 {e.isPremium && (
                                     <span className="text-[10px] tracking-widest uppercase font-bold px-2 py-1 rounded-full border bg-amber-50 text-amber-700 border-amber-200">
-                                        Premium · ৳{Number(e.ticketPrice ?? 0).toLocaleString()}
+                                        Paid
                                     </span>
                                 )}
                                 {e.isPremium && e.memberDiscountPercent > 0 && (
@@ -188,25 +180,6 @@ export default async function AdminEventsPage({
                                         ? ` · cap ${e.maxCapacity}`
                                         : ""}
                                 </li>
-                                {(e.participantType !== "PUBLIC" ||
-                                    e.minAge !== null ||
-                                    e.minRank) && (
-                                    <li className="text-zinc-500">
-                                        {[
-                                            e.participantType !== "PUBLIC"
-                                                ? PARTICIPANT_LABEL[e.participantType]
-                                                : null,
-                                            e.minAge !== null
-                                                ? `age ${e.minAge}+`
-                                                : null,
-                                            e.minRank
-                                                ? `${e.minRank.name}+`
-                                                : null,
-                                        ]
-                                            .filter(Boolean)
-                                            .join(" · ")}
-                                    </li>
-                                )}
                             </ul>
                             <Link
                                 href={`/portal/admin/events/${e.id}/participants`}

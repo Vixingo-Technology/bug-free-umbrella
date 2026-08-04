@@ -10,7 +10,7 @@ export type EventItem = {
     title: string;
     eventDate: string; // ISO
     location: string | null;
-    category: "BELT_TEST" | "TOURNAMENT" | "SEMINAR" | "TRAINING_CAMP" | "OTHER";
+    category: "SEMINAR" | "TRAINING_CAMP" | "TOURNAMENT" | "BELT_TEST" | "OTHER";
     dojoName: string | null;
 };
 
@@ -24,10 +24,11 @@ export type AnnouncementItem = {
 };
 
 const CATEGORY_LABEL: Record<EventItem["category"], string> = {
-    BELT_TEST: "Belt Test",
-    TOURNAMENT: "Tournament",
     SEMINAR: "Seminar",
     TRAINING_CAMP: "Training Camp",
+    TOURNAMENT: "Tournament",
+    // Legacy values still present on old rows.
+    BELT_TEST: "Belt Test",
     OTHER: "Event",
 };
 

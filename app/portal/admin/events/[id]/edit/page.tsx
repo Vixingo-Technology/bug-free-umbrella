@@ -49,41 +49,37 @@ export default async function EditAdminEventPage({
         description: event.description,
         location: event.location,
         eventDate: toDateTimeLocal(event.eventDate),
-        category: event.category,
+        // Legacy rows may still carry BELT_TEST/OTHER; default those into a
+        // valid pick-from-three so the admin can save without touching the
+        // category.
+        category: ["SEMINAR", "TRAINING_CAMP", "TOURNAMENT"].includes(
+            event.category,
+        )
+            ? event.category
+            : "SEMINAR",
         maxCapacity: event.maxCapacity,
-        isPremium: event.isPremium,
-        ticketPrice: event.ticketPrice ? event.ticketPrice.toString() : null,
         memberDiscountPercent: event.memberDiscountPercent,
-        participantType: event.participantType,
-        minAge: event.minAge,
-        minRankId: event.minRankId,
         isPublished: event.isPublished,
         attachmentUrl: event.attachmentUrl,
         attachmentType: event.attachmentType,
-        tournament: event.tournamentDetail
-            ? {
-                  eventType: event.tournamentDetail.eventType,
-                  enabledTypes:
-                      event.tournamentDetail.enabledTypes?.length
-                          ? event.tournamentDetail.enabledTypes
-                          : [event.tournamentDetail.eventType],
-                  enabledDivisions: event.tournamentDetail.enabledDivisions,
-                  customDivisions: parseCustomDivisions(
-                      event.tournamentDetail.customDivisions,
-                  ),
-                  registrationDeadline: event.tournamentDetail.registrationDeadline
-                      ? toDateTimeLocal(event.tournamentDetail.registrationDeadline)
-                      : null,
-                  weighInDate: event.tournamentDetail.weighInDate
-                      ? toDateTimeLocal(event.tournamentDetail.weighInDate)
-                      : null,
-                  rulesUrl: event.tournamentDetail.rulesUrl,
-              }
+        divisions: event.tournamentDetail
+            ? parseCustomDivisions(event.tournamentDetail.customDivisions)
+            : [],
+        multiDivisionBundlePriceBdt: event.ticketPrice
+            ? event.ticketPrice.toString()
             : null,
+        registrationDeadline:
+            event.tournamentDetail?.registrationDeadline
+                ? toDateTimeLocal(event.tournamentDetail.registrationDeadline)
+                : null,
+        weighInDate: event.tournamentDetail?.weighInDate
+            ? toDateTimeLocal(event.tournamentDetail.weighInDate)
+            : null,
+        rulesUrl: event.tournamentDetail?.rulesUrl ?? null,
     };
 
     return (
-        <div className="max-w-2xl">
+        <div className="max-w-4xl">
             <Link
                 href={BASE}
                 className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-widest text-zinc-500 hover:text-zinc-900 mb-6"

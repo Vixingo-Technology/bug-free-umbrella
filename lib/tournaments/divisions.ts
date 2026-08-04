@@ -1,335 +1,30 @@
-// WKF-standard tournament divisions. Source: Appendix 2 (Kata) and Appendix 3
-// (Kumite) of the JKA Bangladesh tournament rulebook. Codes are stable —
-// registrations reference them, so do not renumber existing entries.
+// Event divisions. All divisions are admin-defined ("custom") per event —
+// there is no WKF preset picker in the app. Codes are stable identifiers
+// stored on registrations; do not rename them once an event is published.
 
 export type TournamentEventType = "KATA" | "KUMITE";
 
 export type Gender = "MALE" | "FEMALE";
 
-export type Division = {
-    code: string;
-    label: string;
-    eventType: TournamentEventType;
-    gender: Gender;
-    ageMin: number;
-    ageMax: number | null; // null = no upper bound
-    weightMinKg: number | null; // inclusive lower bound; null = no lower bound
-    weightMaxKg: number | null; // exclusive upper bound; null = open
-    isTeam: boolean;
-    ageBand:
-        | "U14"
-        | "CADET"
-        | "JUNIOR"
-        | "CADET_JUNIOR"
-        | "U21"
-        | "SENIOR";
-};
-
-// ── KATA (Appendix 2) ────────────────────────────────────────────────────
-
-const KATA: readonly Division[] = [
-    // Team kata
-    {
-        code: "KATA-TEAM-SR-M",
-        label: "Team Kata Senior Male (16+)",
-        eventType: "KATA",
-        gender: "MALE",
-        ageMin: 16,
-        ageMax: null,
-        weightMinKg: null,
-        weightMaxKg: null,
-        isTeam: true,
-        ageBand: "SENIOR",
-    },
-    {
-        code: "KATA-TEAM-SR-F",
-        label: "Team Kata Senior Female (16+)",
-        eventType: "KATA",
-        gender: "FEMALE",
-        ageMin: 16,
-        ageMax: null,
-        weightMinKg: null,
-        weightMaxKg: null,
-        isTeam: true,
-        ageBand: "SENIOR",
-    },
-    {
-        code: "KATA-TEAM-CJ-M",
-        label: "Team Kata Cadet & Junior Male (14 – <18)",
-        eventType: "KATA",
-        gender: "MALE",
-        ageMin: 14,
-        ageMax: 17,
-        weightMinKg: null,
-        weightMaxKg: null,
-        isTeam: true,
-        ageBand: "CADET_JUNIOR",
-    },
-    {
-        code: "KATA-TEAM-CJ-F",
-        label: "Team Kata Cadet & Junior Female (14 – <18)",
-        eventType: "KATA",
-        gender: "FEMALE",
-        ageMin: 14,
-        ageMax: 17,
-        weightMinKg: null,
-        weightMaxKg: null,
-        isTeam: true,
-        ageBand: "CADET_JUNIOR",
-    },
-    // Individual kata — Senior
-    {
-        code: "KATA-IND-SR-M",
-        label: "Individual Kata Senior Male (16+)",
-        eventType: "KATA",
-        gender: "MALE",
-        ageMin: 16,
-        ageMax: null,
-        weightMinKg: null,
-        weightMaxKg: null,
-        isTeam: false,
-        ageBand: "SENIOR",
-    },
-    {
-        code: "KATA-IND-SR-F",
-        label: "Individual Kata Senior Female (16+)",
-        eventType: "KATA",
-        gender: "FEMALE",
-        ageMin: 16,
-        ageMax: null,
-        weightMinKg: null,
-        weightMaxKg: null,
-        isTeam: false,
-        ageBand: "SENIOR",
-    },
-    // Individual kata — U21
-    {
-        code: "KATA-IND-U21-M",
-        label: "Individual Kata U21 Male (18 – <21)",
-        eventType: "KATA",
-        gender: "MALE",
-        ageMin: 18,
-        ageMax: 20,
-        weightMinKg: null,
-        weightMaxKg: null,
-        isTeam: false,
-        ageBand: "U21",
-    },
-    {
-        code: "KATA-IND-U21-F",
-        label: "Individual Kata U21 Female (18 – <21)",
-        eventType: "KATA",
-        gender: "FEMALE",
-        ageMin: 18,
-        ageMax: 20,
-        weightMinKg: null,
-        weightMaxKg: null,
-        isTeam: false,
-        ageBand: "U21",
-    },
-    // Individual kata — Junior
-    {
-        code: "KATA-IND-JR-M",
-        label: "Individual Kata Junior Male (16 – <18)",
-        eventType: "KATA",
-        gender: "MALE",
-        ageMin: 16,
-        ageMax: 17,
-        weightMinKg: null,
-        weightMaxKg: null,
-        isTeam: false,
-        ageBand: "JUNIOR",
-    },
-    {
-        code: "KATA-IND-JR-F",
-        label: "Individual Kata Junior Female (16 – <18)",
-        eventType: "KATA",
-        gender: "FEMALE",
-        ageMin: 16,
-        ageMax: 17,
-        weightMinKg: null,
-        weightMaxKg: null,
-        isTeam: false,
-        ageBand: "JUNIOR",
-    },
-    // Individual kata — Cadet
-    {
-        code: "KATA-IND-CDT-M",
-        label: "Individual Cadet Kata Male (14 – <16)",
-        eventType: "KATA",
-        gender: "MALE",
-        ageMin: 14,
-        ageMax: 15,
-        weightMinKg: null,
-        weightMaxKg: null,
-        isTeam: false,
-        ageBand: "CADET",
-    },
-    {
-        code: "KATA-IND-CDT-F",
-        label: "Individual Cadet Kata Female (14 – <16)",
-        eventType: "KATA",
-        gender: "FEMALE",
-        ageMin: 14,
-        ageMax: 15,
-        weightMinKg: null,
-        weightMaxKg: null,
-        isTeam: false,
-        ageBand: "CADET",
-    },
-    // Youth kata — U14
-    {
-        code: "KATA-IND-U14-M",
-        label: "Youth Kata U14 Male (12 – <14)",
-        eventType: "KATA",
-        gender: "MALE",
-        ageMin: 12,
-        ageMax: 13,
-        weightMinKg: null,
-        weightMaxKg: null,
-        isTeam: false,
-        ageBand: "U14",
-    },
-    {
-        code: "KATA-IND-U14-F",
-        label: "Youth Kata U14 Female (12 – <14)",
-        eventType: "KATA",
-        gender: "FEMALE",
-        ageMin: 12,
-        ageMax: 13,
-        weightMinKg: null,
-        weightMaxKg: null,
-        isTeam: false,
-        ageBand: "U14",
-    },
-] as const;
-
-// ── KUMITE (Appendix 3) ──────────────────────────────────────────────────
-// Weight ranges use `weightMaxKg` as exclusive upper bound (e.g. −60 kg means
-// weightKg < 60). The final "+X kg" entry uses weightMinKg = X and no max.
-
-type KumiteRow = {
-    ageBand: Division["ageBand"];
-    ageMin: number;
-    ageMax: number | null;
-    male: number[]; // ordered thresholds; last item = min for open class
-    female: number[];
-    labelPrefix: string;
-};
-
-const KUMITE_ROWS: readonly KumiteRow[] = [
-    {
-        ageBand: "SENIOR",
-        ageMin: 18,
-        ageMax: null,
-        male: [60, 67, 75, 84],
-        female: [50, 55, 61, 68],
-        labelPrefix: "Senior",
-    },
-    {
-        ageBand: "U21",
-        ageMin: 18,
-        ageMax: 20,
-        male: [60, 67, 75, 84],
-        female: [50, 55, 61, 68],
-        labelPrefix: "U21",
-    },
-    {
-        ageBand: "JUNIOR",
-        ageMin: 16,
-        ageMax: 17,
-        male: [55, 61, 68, 76],
-        female: [48, 53, 59, 66],
-        labelPrefix: "Junior",
-    },
-    {
-        ageBand: "CADET",
-        ageMin: 14,
-        ageMax: 15,
-        male: [52, 57, 63, 70],
-        female: [47, 54, 61],
-        labelPrefix: "Cadet",
-    },
-    {
-        ageBand: "U14",
-        ageMin: 12,
-        ageMax: 13,
-        male: [40, 45, 50, 55],
-        female: [42, 47, 52],
-        labelPrefix: "U14",
-    },
-];
-
-function buildKumite(): Division[] {
-    const out: Division[] = [];
-    for (const row of KUMITE_ROWS) {
-        for (const gender of ["MALE", "FEMALE"] as const) {
-            const cuts = gender === "MALE" ? row.male : row.female;
-            const genderLabel = gender === "MALE" ? "Male" : "Female";
-            const codeGender = gender === "MALE" ? "M" : "F";
-            for (let i = 0; i < cuts.length; i++) {
-                const max = cuts[i];
-                out.push({
-                    code: `KUMITE-${row.ageBand}-${codeGender}-U${max}`,
-                    label: `${row.labelPrefix} ${genderLabel} −${max} kg`,
-                    eventType: "KUMITE",
-                    gender,
-                    ageMin: row.ageMin,
-                    ageMax: row.ageMax,
-                    weightMinKg: i === 0 ? null : cuts[i - 1],
-                    weightMaxKg: max,
-                    isTeam: false,
-                    ageBand: row.ageBand,
-                });
-            }
-            // Open weight ( +last )
-            const openMin = cuts[cuts.length - 1];
-            out.push({
-                code: `KUMITE-${row.ageBand}-${codeGender}-O${openMin}`,
-                label: `${row.labelPrefix} ${genderLabel} +${openMin} kg`,
-                eventType: "KUMITE",
-                gender,
-                ageMin: row.ageMin,
-                ageMax: row.ageMax,
-                weightMinKg: openMin,
-                weightMaxKg: null,
-                isTeam: false,
-                ageBand: row.ageBand,
-            });
-        }
-    }
-    return out;
-}
-
-const KUMITE: readonly Division[] = buildKumite();
-
-// ── Public API ───────────────────────────────────────────────────────────
-
-export const ALL_DIVISIONS: readonly Division[] = [...KATA, ...KUMITE];
-
-const BY_CODE = new Map(ALL_DIVISIONS.map((d) => [d.code, d]));
-
-export function getDivision(code: string): Division | undefined {
-    return BY_CODE.get(code);
-}
-
-export function divisionsFor(eventType: TournamentEventType): readonly Division[] {
-    return eventType === "KATA" ? KATA : KUMITE;
-}
-
-// ── Custom (admin-defined) divisions ────────────────────────────────────
-// Custom divisions live on `TournamentDetail.customDivisions` as JSON. They
-// carry no age/weight bounds — the admin's label is the whole spec — so
-// eligibility for them is not enforced beyond gender.
+// A division on an event. `code` is a stable slug; `label` is the display
+// name. Optional gates apply on top of the label: gender restricts entry
+// (ANY = no restriction), minAge (years on the event date) and minRankId
+// (belt_ranks.id) further limit who may enter. `priceBdt` is the entry fee
+// for this division (0/null = free entry).
+export type DivisionGender = "MALE" | "FEMALE" | "ANY";
 
 export type CustomDivision = {
     code: string;
     label: string;
     eventType: TournamentEventType;
+    gender: DivisionGender;
     isTeam: boolean;
+    minAge: number | null;
+    minRankId: string | null;
+    priceBdt: number | null;
 };
 
-const CUSTOM_CODE_PREFIX = "CUSTOM-";
+const CUSTOM_CODE_PREFIX = "DIV-";
 
 function slugify(label: string): string {
     return label
@@ -341,9 +36,9 @@ function slugify(label: string): string {
         .slice(0, 40);
 }
 
-// Deterministic-ish code — good enough for the admin form to pre-populate a
-// code so the picker key is stable across renders. Duplicates within one event
-// are de-duped by the admin form before save.
+// Deterministic code from label + type so the admin form's per-row key is
+// stable across re-renders. Collisions inside a single event are rejected
+// by the server action.
 export function makeCustomDivisionCode(
     label: string,
     eventType: TournamentEventType,
@@ -353,11 +48,12 @@ export function makeCustomDivisionCode(
 }
 
 export function isCustomDivisionCode(code: string): boolean {
-    return code.startsWith(CUSTOM_CODE_PREFIX);
+    // Also accept the legacy "CUSTOM-" prefix from earlier writes.
+    return code.startsWith(CUSTOM_CODE_PREFIX) || code.startsWith("CUSTOM-");
 }
 
-// Parse a raw JSON value (as stored on TournamentDetail.customDivisions) into
-// a typed array. Anything malformed is dropped rather than throwing.
+// Parse the raw JSON stored on TournamentDetail.customDivisions. Anything
+// malformed is dropped rather than throwing.
 export function parseCustomDivisions(raw: unknown): CustomDivision[] {
     if (!Array.isArray(raw)) return [];
     const out: CustomDivision[] = [];
@@ -370,48 +66,49 @@ export function parseCustomDivisions(raw: unknown): CustomDivision[] {
             rec.eventType === "KATA" || rec.eventType === "KUMITE"
                 ? (rec.eventType as TournamentEventType)
                 : null;
-        const isTeam = typeof rec.isTeam === "boolean" ? rec.isTeam : false;
         if (!code || !label || !eventType) continue;
-        out.push({ code, label, eventType, isTeam });
+        const gender: DivisionGender =
+            rec.gender === "MALE" || rec.gender === "FEMALE"
+                ? rec.gender
+                : "ANY";
+        const isTeam = typeof rec.isTeam === "boolean" ? rec.isTeam : false;
+        const minAge =
+            typeof rec.minAge === "number" && Number.isFinite(rec.minAge)
+                ? Math.trunc(rec.minAge)
+                : null;
+        const minRankId =
+            typeof rec.minRankId === "string" && rec.minRankId
+                ? rec.minRankId
+                : null;
+        const priceBdt =
+            typeof rec.priceBdt === "number" && Number.isFinite(rec.priceBdt)
+                ? Math.round(rec.priceBdt * 100) / 100
+                : null;
+        out.push({
+            code,
+            label,
+            eventType,
+            gender,
+            isTeam,
+            minAge,
+            minRankId,
+            priceBdt,
+        });
     }
     return out;
 }
 
-// Custom divisions are shaped like a Division so the participant form and
-// the reporting UI can treat them uniformly. Age/weight bounds are open, so
-// the WKF eligibility checks pass trivially — only gender is enforced.
-export function customToDivision(c: CustomDivision): Division {
-    return {
-        code: c.code,
-        label: c.label,
-        eventType: c.eventType,
-        gender: "MALE", // placeholder; see resolveDivision — custom rows aren't
-        // gender-locked. The registration form treats a custom code as valid
-        // for both genders and skips the gender check.
-        ageMin: 0,
-        ageMax: null,
-        weightMinKg: null,
-        weightMaxKg: null,
-        isTeam: c.isTeam,
-        ageBand: "SENIOR",
-    };
-}
-
-// Look a division up by code, checking the WKF preset first then the event's
-// admin-defined extras. Returns null if the code isn't recognised.
+// Find a division by code within a set of custom divisions.
 export function resolveDivision(
     code: string,
     customDivisions?: readonly CustomDivision[] | null,
-): Division | null {
-    const preset = getDivision(code);
-    if (preset) return preset;
+): CustomDivision | null {
     if (!customDivisions) return null;
-    const custom = customDivisions.find((c) => c.code === code);
-    return custom ? customToDivision(custom) : null;
+    return customDivisions.find((c) => c.code === code) ?? null;
 }
 
-// Compute the participant's age at the tournament date to match the WKF rule
-// (bands use age on the day of competition).
+// Age at a given date — used to enforce a division's minAge on the event
+// date (the same rule used by WKF-style age bands).
 export function ageOnDate(dob: Date, on: Date): number {
     let age = on.getFullYear() - dob.getFullYear();
     const m = on.getMonth() - dob.getMonth();
@@ -420,47 +117,43 @@ export function ageOnDate(dob: Date, on: Date): number {
 }
 
 export type EligibilityIssue =
-    | "wrong-event-type"
-    | "wrong-gender"
     | "age-below-min"
-    | "age-above-max"
-    | "weight-below-min"
-    | "weight-above-max"
+    | "rank-below-min"
     | "weight-required";
 
+// Check that a would-be entrant satisfies the division's gates. Gender is
+// not enforced — admins pick who competes, and the current schema doesn't
+// require gender-split divisions. Kumite divisions still require a weight
+// value (used at weigh-in), even though weight isn't validated against a
+// bracket.
 export function checkDivisionEligibility(
-    division: Division,
+    division: CustomDivision,
     entrant: {
-        gender: Gender;
         dob: Date;
         eventDate: Date;
         weightKg?: number | null;
+        rankOrderIndex?: number | null;
     },
+    ranks?: readonly { id: string; orderIndex: number }[],
 ): EligibilityIssue | null {
-    // Custom (admin-defined) divisions carry no age/weight/gender spec, so
-    // eligibility is always ok for them — the admin owns the rules.
-    if (isCustomDivisionCode(division.code)) return null;
-
-    if (division.gender !== entrant.gender) return "wrong-gender";
-
-    const age = ageOnDate(entrant.dob, entrant.eventDate);
-    if (age < division.ageMin) return "age-below-min";
-    if (division.ageMax !== null && age > division.ageMax) return "age-above-max";
-
-    if (division.eventType === "KUMITE") {
-        if (entrant.weightKg == null) return "weight-required";
-        if (
-            division.weightMinKg !== null &&
-            entrant.weightKg < division.weightMinKg
-        ) {
-            return "weight-below-min";
+    if (division.minAge !== null) {
+        const age = ageOnDate(entrant.dob, entrant.eventDate);
+        if (age < division.minAge) return "age-below-min";
+    }
+    if (division.minRankId && ranks) {
+        const required = ranks.find((r) => r.id === division.minRankId);
+        if (required) {
+            const have = entrant.rankOrderIndex;
+            if (have === null || have === undefined || have < required.orderIndex) {
+                return "rank-below-min";
+            }
         }
-        if (
-            division.weightMaxKg !== null &&
-            entrant.weightKg >= division.weightMaxKg
-        ) {
-            return "weight-above-max";
-        }
+    }
+    if (
+        division.eventType === "KUMITE" &&
+        (entrant.weightKg === null || entrant.weightKg === undefined)
+    ) {
+        return "weight-required";
     }
     return null;
 }

@@ -3,22 +3,23 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "motion/react";
-import { Calendar, MapPin, X, ArrowRight } from "lucide-react";
+import { Calendar, MapPin, X } from "lucide-react";
 
 export type FabEvent = {
     id: string;
     title: string;
     eventDate: string; // ISO
     location: string | null;
-    category: "BELT_TEST" | "TOURNAMENT" | "SEMINAR" | "TRAINING_CAMP" | "OTHER";
+    category: "SEMINAR" | "TRAINING_CAMP" | "TOURNAMENT" | "BELT_TEST" | "OTHER";
     dojoName: string | null;
 };
 
 const CATEGORY_LABEL: Record<FabEvent["category"], string> = {
-    BELT_TEST: "Belt Test",
-    TOURNAMENT: "Tournament",
     SEMINAR: "Seminar",
     TRAINING_CAMP: "Training Camp",
+    TOURNAMENT: "Tournament",
+    // Legacy values still present on old rows.
+    BELT_TEST: "Belt Test",
     OTHER: "Event",
 };
 
@@ -44,7 +45,11 @@ function daysUntil(iso: string) {
 
 type Mode = "pill" | "icon" | "card";
 
-export default function UpcomingEventFabClient({ event }: { event: FabEvent }) {
+export default function UpcomingEventFabClient({
+    events,
+}: {
+    events: FabEvent[];
+}) {
     const [mounted, setMounted] = useState(false);
     const [mode, setMode] = useState<Mode>("pill");
     const [dismissed, setDismissed] = useState(false);
@@ -54,14 +59,16 @@ export default function UpcomingEventFabClient({ event }: { event: FabEvent }) {
         return () => clearTimeout(t);
     }, []);
 
-    // Pill auto-collapses into icon after a few seconds.
     useEffect(() => {
         if (!mounted || mode !== "pill") return;
         const t = setTimeout(() => setMode("icon"), 3500);
         return () => clearTimeout(t);
     }, [mounted, mode]);
 
-    if (dismissed) return null;
+    if (dismissed || events.length === 0) return null;
+
+    const count = events.length;
+    const pluralLabel = count === 1 ? "See upcoming event" : "See upcoming events";
 
     return (
         <AnimatePresence>
@@ -81,7 +88,7 @@ export default function UpcomingEventFabClient({ event }: { event: FabEvent }) {
                                 animate={{ opacity: 1, y: 0, scale: 1 }}
                                 exit={{ opacity: 0, y: 12, scale: 0.95 }}
                                 transition={{ duration: 0.22, ease: "easeOut" }}
-                                className="w-[320px] sm:w-[360px] bg-white border border-zinc-200 rounded-sm shadow-[0_20px_60px_rgba(0,0,0,0.18)] overflow-hidden"
+                                className="w-[340px] sm:w-[380px] bg-white border border-zinc-200 rounded-sm shadow-[0_20px_60px_rgba(0,0,0,0.18)] overflow-hidden"
                             >
                                 <div className="flex items-center justify-between px-4 py-3 bg-accent-red text-white">
                                     <div className="flex items-center gap-2">
@@ -90,7 +97,10 @@ export default function UpcomingEventFabClient({ event }: { event: FabEvent }) {
                                             <span className="relative inline-flex h-2 w-2 rounded-full bg-white" />
                                         </span>
                                         <span className="text-[10px] tracking-[0.3em] uppercase font-bold">
-                                            Next Event
+                                            Upcoming Events
+                                        </span>
+                                        <span className="ml-1 text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-white/20">
+                                            {count}
                                         </span>
                                     </div>
                                     <button
@@ -103,51 +113,78 @@ export default function UpcomingEventFabClient({ event }: { event: FabEvent }) {
                                     </button>
                                 </div>
 
+                                <ul className="max-h-[420px] overflow-y-auto divide-y divide-zinc-100">
+                                    {events.map((event) => (
+                                        <li key={event.id}>
+                                            <Link
+                                                href={`/events/${event.id}`}
+                                                className="block px-4 py-3 hover:bg-zinc-50 transition-colors group"
+                                            >
+                                                <div className="flex items-start gap-3">
+                                                    <div className="shrink-0 text-center min-w-[42px] pt-0.5">
+                                                        <div className="text-lg font-bold text-zinc-900 leading-none">
+                                                            {new Date(
+                                                                event.eventDate,
+                                                            ).toLocaleDateString(
+                                                                "en-GB",
+                                                                { day: "2-digit" },
+                                                            )}
+                                                        </div>
+                                                        <div className="text-[9px] tracking-widest font-bold text-zinc-400 mt-1">
+                                                            {new Date(event.eventDate)
+                                                                .toLocaleDateString(
+                                                                    "en-GB",
+                                                                    { month: "short" },
+                                                                )
+                                                                .toUpperCase()}
+                                                        </div>
+                                                    </div>
+                                                    <div className="flex-1 min-w-0">
+                                                        <div className="flex flex-wrap items-center gap-2 mb-1">
+                                                            <span className="text-[9px] tracking-widest uppercase font-bold px-1.5 py-0.5 rounded-full border border-accent-red/20 bg-accent-red/5 text-accent-red">
+                                                                {CATEGORY_LABEL[event.category]}
+                                                            </span>
+                                                            <span className="text-[9px] tracking-widest uppercase font-bold text-accent-red">
+                                                                {daysUntil(event.eventDate)}
+                                                            </span>
+                                                        </div>
+                                                        <h4 className="text-sm font-bold text-zinc-900 group-hover:text-accent-red transition-colors line-clamp-2 leading-snug">
+                                                            {event.title}
+                                                        </h4>
+                                                        <div className="flex flex-wrap gap-x-3 gap-y-0.5 text-[11px] text-zinc-500 mt-1">
+                                                            <span className="inline-flex items-center gap-1">
+                                                                <Calendar
+                                                                    size={10}
+                                                                    className="text-accent-red shrink-0"
+                                                                />
+                                                                {formatShort(
+                                                                    event.eventDate,
+                                                                )}
+                                                            </span>
+                                                            {event.location && (
+                                                                <span className="inline-flex items-center gap-1 min-w-0">
+                                                                    <MapPin
+                                                                        size={10}
+                                                                        className="text-accent-red shrink-0"
+                                                                    />
+                                                                    <span className="truncate">
+                                                                        {event.location}
+                                                                    </span>
+                                                                </span>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </Link>
+                                        </li>
+                                    ))}
+                                </ul>
+
                                 <Link
-                                    href={`/events/${event.id}`}
-                                    className="block p-5 group"
+                                    href="/events"
+                                    className="block text-center px-4 py-3 border-t border-zinc-100 text-[10px] tracking-widest uppercase font-bold text-zinc-500 hover:text-accent-red hover:bg-zinc-50 transition-colors"
                                 >
-                                    <div className="flex flex-wrap items-center gap-2 mb-2">
-                                        <span className="text-[10px] tracking-widest uppercase font-bold px-2 py-0.5 rounded-full border border-accent-red/20 bg-accent-red/5 text-accent-red">
-                                            {CATEGORY_LABEL[event.category]}
-                                        </span>
-                                        <span className="text-[10px] tracking-widest uppercase font-bold text-accent-red">
-                                            {daysUntil(event.eventDate)}
-                                        </span>
-                                    </div>
-
-                                    <h3 className="text-base font-bold text-zinc-900 group-hover:text-accent-red transition-colors mb-3 line-clamp-2">
-                                        {event.title}
-                                    </h3>
-
-                                    <div className="flex flex-col gap-1.5 text-xs text-zinc-500">
-                                        <span className="inline-flex items-center gap-1.5">
-                                            <Calendar
-                                                size={12}
-                                                className="text-accent-red shrink-0"
-                                            />
-                                            {formatShort(event.eventDate)}
-                                        </span>
-                                        {event.location && (
-                                            <span className="inline-flex items-center gap-1.5">
-                                                <MapPin
-                                                    size={12}
-                                                    className="text-accent-red shrink-0"
-                                                />
-                                                <span className="truncate">
-                                                    {event.location}
-                                                </span>
-                                            </span>
-                                        )}
-                                    </div>
-
-                                    <div className="mt-4 pt-3 border-t border-zinc-100 flex items-center justify-between text-[10px] tracking-widest uppercase font-bold text-zinc-500 group-hover:text-accent-red transition-colors">
-                                        <span>View details</span>
-                                        <ArrowRight
-                                            size={14}
-                                            className="group-hover:translate-x-1 transition-transform"
-                                        />
-                                    </div>
+                                    View all events
                                 </Link>
                             </motion.div>
                         ) : (
@@ -162,8 +199,8 @@ export default function UpcomingEventFabClient({ event }: { event: FabEvent }) {
                                 <motion.button
                                     type="button"
                                     onClick={() => setMode("card")}
-                                    aria-label={`See upcoming event: ${event.title}`}
-                                    animate={{ width: mode === "pill" ? 220 : 56 }}
+                                    aria-label={`${pluralLabel} (${count})`}
+                                    animate={{ width: mode === "pill" ? 240 : 56 }}
                                     transition={{
                                         duration: 0.55,
                                         ease: [0.4, 0, 0.2, 1],
@@ -172,7 +209,6 @@ export default function UpcomingEventFabClient({ event }: { event: FabEvent }) {
                                     whileTap={{ scale: 0.97 }}
                                     className="relative flex items-center h-14 rounded-full bg-accent-red text-white shadow-[0_10px_30px_rgba(196,30,58,0.45)] cursor-pointer overflow-hidden"
                                 >
-                                    {/* Pulsing rings — only when collapsed */}
                                     {mode === "icon" && (
                                         <>
                                             <span
@@ -203,12 +239,11 @@ export default function UpcomingEventFabClient({ event }: { event: FabEvent }) {
                                                 }}
                                                 className="relative pr-5 whitespace-nowrap text-sm font-semibold tracking-wide"
                                             >
-                                                See upcoming event
+                                                {pluralLabel}
                                             </motion.span>
                                         )}
                                     </AnimatePresence>
 
-                                    {/* Badge on the icon */}
                                     {mode === "icon" && (
                                         <motion.span
                                             initial={{ scale: 0 }}
@@ -221,12 +256,11 @@ export default function UpcomingEventFabClient({ event }: { event: FabEvent }) {
                                             }}
                                             className="absolute -top-1 -right-1 min-w-[20px] h-5 px-1 rounded-full bg-white text-accent-red text-[10px] font-bold flex items-center justify-center border border-accent-red shadow-sm"
                                         >
-                                            !
+                                            {count}
                                         </motion.span>
                                     )}
                                 </motion.button>
 
-                                {/* Dismiss button — persists in both pill and icon modes */}
                                 <motion.button
                                     type="button"
                                     onClick={() => setDismissed(true)}

@@ -17,17 +17,11 @@ interface Props {
     userId: string;
 }
 
-const participantLabels: Record<string, string> = {
-    STUDENTS:     "Students only",
-    INSTRUCTORS:  "Teachers only",
-    PARENTS:      "Parents only",
-    DOJO_MEMBERS: "Dojo members only",
-};
-
 const typeColors: Record<string, string> = {
     TOURNAMENT:    "bg-red-50 text-red-600",
     SEMINAR:       "bg-purple-50 text-purple-600",
     TRAINING_CAMP: "bg-blue-50 text-blue-600",
+    // Legacy values still present on old rows.
     BELT_TEST:     "bg-amber-50 text-amber-600",
     OTHER:         "bg-zinc-100 text-zinc-600",
 };
@@ -134,9 +128,9 @@ export default function EventsClient({ upcomingEvents, pastEvents, myRegistratio
                                                 <span className={`text-[9px] font-bold tracking-widest uppercase px-2 py-0.5 rounded-full ${typeColors[category] ?? typeColors.OTHER}`}>
                                                     {category.replace("_", " ")}
                                                 </span>
-                                                {ev.isPremium && ev.ticketPrice ? (
+                                                {ev.isPremium ? (
                                                     <span className="text-[9px] font-bold tracking-widest uppercase px-2 py-0.5 rounded-full bg-amber-50 text-amber-600 flex items-center gap-1">
-                                                        <Ticket size={10} /> ৳{Number(ev.ticketPrice).toLocaleString()}
+                                                        <Ticket size={10} /> Paid
                                                     </span>
                                                 ) : null}
                                                 {isRegistered && (
@@ -159,15 +153,6 @@ export default function EventsClient({ upcomingEvents, pastEvents, myRegistratio
                                                     <span className="flex items-center gap-1">
                                                         <Users size={11} />
                                                         {ev._count?.registrations ?? 0} / {ev.maxCapacity}
-                                                    </span>
-                                                )}
-                                                {(participantLabels[ev.participantType] || ev.minAge || ev.minRank) && (
-                                                    <span className="text-amber-600 font-semibold">
-                                                        {[
-                                                            participantLabels[ev.participantType],
-                                                            ev.minAge ? `Age ${ev.minAge}+` : null,
-                                                            ev.minRank?.name ? `${ev.minRank.name}+` : null,
-                                                        ].filter(Boolean).join(" · ")}
                                                     </span>
                                                 )}
                                             </div>

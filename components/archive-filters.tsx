@@ -28,11 +28,9 @@ const TYPES = [
 
 const CATEGORIES = [
     { value: "", label: "Any category" },
-    { value: "BELT_TEST", label: "Belt Test" },
-    { value: "TOURNAMENT", label: "Tournament" },
     { value: "SEMINAR", label: "Seminar" },
     { value: "TRAINING_CAMP", label: "Training Camp" },
-    { value: "OTHER", label: "Other" },
+    { value: "TOURNAMENT", label: "Tournament" },
 ];
 
 export default function ArchiveFilters({ years }: { years: number[] }) {

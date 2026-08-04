@@ -930,6 +930,10 @@ model EventRegistration {
   emergencyContactName  String? @map("emergency_contact_name")
   emergencyContactPhone String? @map("emergency_contact_phone")
 
+  // Optional profile image the participant uploaded — shown on their
+  // participation card. Cloudinary URL.
+  profileImageUrl String? @map("profile_image_url")
+
   checkedInAt       DateTime? @map("checked_in_at")
   checkedInByUserId String?   @map("checked_in_by_user_id") @db.Uuid
 

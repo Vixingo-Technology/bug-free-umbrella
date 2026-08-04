@@ -2,6 +2,8 @@ import "server-only";
 import { uploadToCloudinary, CLOUDINARY_FOLDERS } from "@/lib/cloudinary";
 import type { AttachmentType } from "@/prisma/generated/client";
 
+const MAX_PROFILE_BYTES = 5 * 1024 * 1024; // 5 MB — plenty for a headshot
+
 const MAX_BYTES = 15 * 1024 * 1024; // 15 MB — covers brochures + flyers comfortably
 const IMAGE_MIME = new Set([
     "image/jpeg",
@@ -53,4 +55,29 @@ export async function uploadAttachmentIfPresent(
     });
 
     return { url, type: attachmentType };
+}
+
+/**
+ * Upload an optional image-only File — used for participant profile photos
+ * on event registrations. Returns just the URL (no attachment type needed).
+ */
+export async function uploadImageIfPresent(
+    value: FormDataEntryValue | null,
+): Promise<string | null> {
+    if (!(value instanceof File) || value.size === 0) return null;
+
+    if (value.size > MAX_PROFILE_BYTES) {
+        throw new Error("Profile image must be 5 MB or smaller.");
+    }
+    if (!IMAGE_MIME.has(value.type)) {
+        throw new Error("Profile image must be a JPG, PNG, or WebP.");
+    }
+
+    const buffer = Buffer.from(await value.arrayBuffer());
+    const dataUri = `data:${value.type};base64,${buffer.toString("base64")}`;
+    const { url } = await uploadToCloudinary(dataUri, {
+        folder: CLOUDINARY_FOLDERS.avatars,
+        resourceType: "image",
+    });
+    return url;
 }
