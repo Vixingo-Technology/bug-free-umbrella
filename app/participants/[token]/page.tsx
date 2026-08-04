@@ -258,38 +258,7 @@ export default async function ParticipationCardPage({
                         {/* Body */}
                         <div className="p-6 md:p-8 grid md:grid-cols-[1fr_auto] gap-8 items-start print:p-3 print:gap-4 print:grid-cols-[1fr_auto]">
                             <div className="min-w-0">
-                                <p className="text-[10px] tracking-widest uppercase font-bold text-accent-red mb-2 print:mb-1">
-                                    Event
-                                </p>
-                                <h2 className="font-karate text-xl md:text-2xl text-zinc-900 uppercase tracking-wider font-bold leading-tight mb-4 print:text-base print:mb-2">
-                                    {registration.event.title}
-                                </h2>
-
-                                <ul className="space-y-2 text-xs text-zinc-600 mb-6 print:space-y-1 print:mb-3 print:text-[10px]">
-                                    <li className="flex items-center gap-2">
-                                        <Calendar
-                                            size={12}
-                                            className="text-accent-red shrink-0"
-                                        />
-                                        {formatDate(registration.event.eventDate)}
-                                    </li>
-                                    {registration.event.location && (
-                                        <li className="flex items-center gap-2">
-                                            <MapPin
-                                                size={12}
-                                                className="text-accent-red shrink-0"
-                                            />
-                                            {registration.event.location}
-                                        </li>
-                                    )}
-                                    {registration.event.dojo?.name && (
-                                        <li className="text-[10px] tracking-widest uppercase font-bold text-zinc-400">
-                                            {registration.event.dojo.name}
-                                        </li>
-                                    )}
-                                </ul>
-
-                                <div className="border-t border-zinc-200 pt-4 print:pt-2 flex items-start gap-4">
+                                <div className="flex items-start gap-4 mb-6 print:mb-3">
                                     {registration.profileImageUrl && (
                                         // Cloudinary URL — plain <img> avoids
                                         // Next/Image domain config for a
@@ -302,28 +271,61 @@ export default async function ParticipationCardPage({
                                         />
                                     )}
                                     <div className="flex-1 min-w-0">
-                                        <p className="text-[10px] tracking-widest uppercase font-bold text-zinc-400 mb-1">
+                                        <p className="text-[10px] tracking-widest uppercase font-bold text-accent-red mb-2 print:mb-1">
                                             Participant
                                         </p>
                                         <p className="text-base font-bold text-zinc-900 mb-1 print:text-sm print:mb-0.5">
                                             {participantName}
                                         </p>
-                                    {participantEmail && (
-                                        <p className="text-xs text-zinc-500 print:text-[10px]">
-                                            {participantEmail}
-                                        </p>
-                                    )}
-                                    {participantPhone && (
-                                        <p className="text-xs text-zinc-500 print:text-[10px]">
-                                            {participantPhone}
-                                        </p>
-                                    )}
-                                    {memberNumber && (
-                                        <p className="text-[10px] tracking-widest uppercase font-bold text-zinc-400 mt-1">
-                                            Member #{memberNumber}
-                                        </p>
-                                    )}
+                                        {participantEmail && (
+                                            <p className="text-xs text-zinc-500 print:text-[10px]">
+                                                {participantEmail}
+                                            </p>
+                                        )}
+                                        {participantPhone && (
+                                            <p className="text-xs text-zinc-500 print:text-[10px]">
+                                                {participantPhone}
+                                            </p>
+                                        )}
+                                        {memberNumber && (
+                                            <p className="text-[10px] tracking-widest uppercase font-bold text-zinc-400 mt-1">
+                                                Member #{memberNumber}
+                                            </p>
+                                        )}
                                     </div>
+                                </div>
+
+                                <div className="border-t border-zinc-200 pt-4 print:pt-2">
+                                    <p className="text-[10px] tracking-widest uppercase font-bold text-accent-red mb-2 print:mb-1">
+                                        Event
+                                    </p>
+                                    <h2 className="font-karate text-xl md:text-2xl text-zinc-900 uppercase tracking-wider font-bold leading-tight mb-4 print:text-base print:mb-2">
+                                        {registration.event.title}
+                                    </h2>
+
+                                    <ul className="space-y-2 text-xs text-zinc-600 print:space-y-1 print:text-[10px]">
+                                        <li className="flex items-center gap-2">
+                                            <Calendar
+                                                size={12}
+                                                className="text-accent-red shrink-0"
+                                            />
+                                            {formatDate(registration.event.eventDate)}
+                                        </li>
+                                        {registration.event.location && (
+                                            <li className="flex items-center gap-2">
+                                                <MapPin
+                                                    size={12}
+                                                    className="text-accent-red shrink-0"
+                                                />
+                                                {registration.event.location}
+                                            </li>
+                                        )}
+                                        {registration.event.dojo?.name && (
+                                            <li className="text-[10px] tracking-widest uppercase font-bold text-zinc-400">
+                                                {registration.event.dojo.name}
+                                            </li>
+                                        )}
+                                    </ul>
                                 </div>
 
                                 {groupEntries.length > 1 && (
