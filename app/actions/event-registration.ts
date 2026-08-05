@@ -289,9 +289,6 @@ export async function registerForTournamentAction(
         .map((v) => (typeof v === "string" ? v.trim() : ""))
         .filter(Boolean);
     const codesToRegister = Array.from(new Set(picked));
-    if (customDivisions.length > 0 && codesToRegister.length === 0) {
-        return { ok: false, error: "Pick at least one division to register for." };
-    }
 
     const divisions: Array<{ code: string; division: CustomDivision }> = [];
     for (const code of codesToRegister) {
@@ -324,10 +321,9 @@ export async function registerForTournamentAction(
     const entrantAge = ageOnDate(dob, event.eventDate);
 
     const entrantBeltRank = trim(formData.get("entrantBeltRank")) || null;
-    // Belt rank is only mandatory when the event actually offers divisions
-    // (divisions may gate on rank). Ticket-only events don't need it.
-    if (divisions.length > 0 && !entrantBeltRank) {
-        return { ok: false, error: "Belt rank is required." };
+    const anyRankGated = divisions.some(({ division }) => !!division.minRankId);
+    if (anyRankGated && !entrantBeltRank) {
+        return { ok: false, error: "Belt rank is required for the selected division." };
     }
 
     // Look up ranks the selected divisions gate on, plus the rank the

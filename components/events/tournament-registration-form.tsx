@@ -75,6 +75,10 @@ export default function TournamentRegistrationForm({
         member?.currentRank ?? "",
     );
     const [selectedCodes, setSelectedCodes] = useState<Set<string>>(new Set());
+    // Keys are `${divisionCode}:${feeId}` for opt-in extras on each division.
+    const [selectedOptionalFees, setSelectedOptionalFees] = useState<
+        Set<string>
+    >(new Set());
 
     const dob = dobStr ? new Date(dobStr) : null;
     const age = dob ? ageOnDate(dob, eventDate) : null;
@@ -163,11 +167,25 @@ export default function TournamentRegistrationForm({
     const anyTeam = selected.some((d) => d.isTeam);
     const anyKumite = selected.some((d) => d.eventType === "KUMITE");
 
+    // Base price for a division including any opt-in fees the participant
+    // has ticked. Falls back to `divisionBasePrice` (sum of required fees or
+    // legacy priceBdt) when the division has no fee list.
+    function priceFor(d: CustomDivision): number {
+        if (!d.fees || d.fees.length === 0) return divisionBasePrice(d);
+        let total = 0;
+        for (const f of d.fees) {
+            if (f.required || selectedOptionalFees.has(`${d.code}:${f.id}`)) {
+                total += f.amountBdt;
+            }
+        }
+        return Math.round(total * 100) / 100;
+    }
+
     const totals = useMemo(() => {
         let divisionsBase = 0;
         let divisionsAfter = 0;
         for (const d of selected) {
-            const base = divisionBasePrice(d);
+            const base = priceFor(d);
             divisionsBase += base;
             let eff = event.memberDiscountActive
                 ? applyDiscount(base, event.memberDiscountPercent)
@@ -197,6 +215,7 @@ export default function TournamentRegistrationForm({
         };
     }, [
         selected,
+        selectedOptionalFees,
         event.memberDiscountActive,
         event.memberDiscountPercent,
         event.eventTicketPriceBdt,
@@ -210,6 +229,25 @@ export default function TournamentRegistrationForm({
             const next = new Set(prev);
             if (next.has(code)) next.delete(code);
             else next.add(code);
+            return next;
+        });
+        // Drop any opt-in fees on a division that just got unchecked so the
+        // hidden inputs and totals don't drift out of sync with the UI.
+        setSelectedOptionalFees((prev) => {
+            const next = new Set<string>();
+            for (const key of prev) {
+                if (!key.startsWith(`${code}:`)) next.add(key);
+            }
+            return next;
+        });
+    }
+
+    function toggleOptionalFee(code: string, feeId: string) {
+        const key = `${code}:${feeId}`;
+        setSelectedOptionalFees((prev) => {
+            const next = new Set(prev);
+            if (next.has(key)) next.delete(key);
+            else next.add(key);
             return next;
         });
     }
@@ -239,6 +277,14 @@ export default function TournamentRegistrationForm({
                     type="hidden"
                     name="divisionCode"
                     value={d.code}
+                />
+            ))}
+            {Array.from(selectedOptionalFees).map((key) => (
+                <input
+                    key={key}
+                    type="hidden"
+                    name="optionalFee"
+                    value={key}
                 />
             ))}
 
@@ -337,21 +383,15 @@ export default function TournamentRegistrationForm({
             )}
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                <Field
-                    label="Belt rank"
-                    required={event.divisions.length > 0}
-                >
+                <Field label="Belt rank">
                     <select
                         name="entrantBeltRank"
                         value={selectedRankName}
                         onChange={(e) => setSelectedRankName(e.target.value)}
-                        required={event.divisions.length > 0}
                         className={inputCx}
                     >
                         <option value="">
-                            {event.divisions.length > 0
-                                ? "Select your rank…"
-                                : "Select your rank (optional)"}
+                            Select your rank (optional)
                         </option>
                         {event.beltRanks.map((r) => (
                             <option key={r.id} value={r.name}>
@@ -425,10 +465,12 @@ export default function TournamentRegistrationForm({
                         .map(({ d, reason }) => {
                         const checked = effectiveSelected.has(d.code);
                         const disabled = !!reason;
-                        const base = divisionBasePrice(d);
+                        const base = priceFor(d);
                         const effective = event.memberDiscountActive
                             ? applyDiscount(base, event.memberDiscountPercent)
                             : base;
+                        const optionalFees =
+                            d.fees?.filter((f) => !f.required) ?? [];
                         return (
                             <li key={d.code}>
                                 <label
@@ -499,6 +541,47 @@ export default function TournamentRegistrationForm({
                                                 </span>
                                             )}
                                         </div>
+                                        {checked && optionalFees.length > 0 && (
+                                            <div className="mt-3 pt-3 border-t border-dashed border-zinc-200 space-y-1.5">
+                                                <p className="text-[10px] tracking-widest uppercase font-bold text-zinc-500">
+                                                    Optional add-ons
+                                                </p>
+                                                {optionalFees.map((f) => {
+                                                    const key = `${d.code}:${f.id}`;
+                                                    const feeChecked =
+                                                        selectedOptionalFees.has(key);
+                                                    return (
+                                                        <div
+                                                            key={f.id}
+                                                            className="flex items-center justify-between gap-3 text-xs text-zinc-700 select-none"
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                e.preventDefault();
+                                                                toggleOptionalFee(
+                                                                    d.code,
+                                                                    f.id,
+                                                                );
+                                                            }}
+                                                        >
+                                                            <span className="inline-flex items-center gap-2 cursor-pointer">
+                                                                <input
+                                                                    type="checkbox"
+                                                                    className="h-3.5 w-3.5 accent-red-600 cursor-pointer"
+                                                                    checked={feeChecked}
+                                                                    readOnly
+                                                                    tabIndex={-1}
+                                                                />
+                                                                {f.name}
+                                                            </span>
+                                                            <span className="text-zinc-600 whitespace-nowrap">
+                                                                +৳
+                                                                {f.amountBdt.toLocaleString()}
+                                                            </span>
+                                                        </div>
+                                                    );
+                                                })}
+                                            </div>
+                                        )}
                                     </div>
                                 </label>
                             </li>
@@ -506,8 +589,9 @@ export default function TournamentRegistrationForm({
                     })}
                 </ul>
                 {!cannotRegister && selected.length === 0 && (
-                    <p className="text-[11px] text-amber-700 bg-amber-50 border border-amber-200 rounded-sm px-3 py-2 mt-3">
-                        Select at least one division to continue.
+                    <p className="text-[11px] text-zinc-500 bg-zinc-50 border border-zinc-200 rounded-sm px-3 py-2 mt-3">
+                        Divisions are optional — leave all unchecked to
+                        register as a general attendee.
                     </p>
                 )}
             </div>
@@ -663,9 +747,6 @@ export default function TournamentRegistrationForm({
                     </div>
                     <button
                         type="submit"
-                        disabled={
-                            event.divisions.length > 0 && selected.length === 0
-                        }
                         className="w-full inline-flex items-center justify-center gap-2 bg-accent-red text-white px-4 py-3 text-xs font-bold tracking-widest uppercase hover:bg-accent-red/90 disabled:opacity-40 transition-colors rounded-sm"
                     >
                         <Ticket size={14} />
@@ -679,7 +760,6 @@ export default function TournamentRegistrationForm({
             ) : (
                 <button
                     type="submit"
-                    disabled={selected.length === 0}
                     className="w-full inline-flex items-center justify-center gap-2 bg-accent-red text-white px-4 py-3 text-xs font-bold tracking-widest uppercase hover:bg-accent-red/90 disabled:opacity-40 transition-colors rounded-sm"
                 >
                     Complete registration

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, Calendar, MapPin, Users, UserPlus, Ticket } from "lucide-react";
+import { ArrowLeft, Calendar, Clock, MapPin, Users, UserPlus, Ticket } from "lucide-react";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import AttachmentViewer from "@/components/attachment-viewer";
@@ -51,7 +51,10 @@ export default async function EventDetailPage({ params }: Props) {
             dojo: { select: { id: true, name: true } },
             postedBy: { select: { fullName: true } },
             tournamentDetail: {
-                select: { customDivisions: true },
+                select: {
+                    customDivisions: true,
+                    registrationDeadline: true,
+                },
             },
             _count: { select: { registrations: true } },
         },
@@ -92,6 +95,10 @@ export default async function EventDetailPage({ params }: Props) {
     const isPast = e.eventDate.getTime() < Date.now();
     const isFull =
         e.maxCapacity !== null && e._count.registrations >= e.maxCapacity;
+    const registrationDeadline = e.tournamentDetail?.registrationDeadline ?? null;
+    const registrationClosed = registrationDeadline
+        ? registrationDeadline.getTime() < Date.now()
+        : false;
 
     return (
         <main className="min-h-screen bg-bg-deep w-full overflow-hidden">
@@ -179,6 +186,37 @@ export default async function EventDetailPage({ params }: Props) {
                                 </div>
                             </div>
                         )}
+                        {registrationDeadline && (
+                            <div className="flex items-start gap-3">
+                                <Clock
+                                    size={18}
+                                    className={`mt-0.5 shrink-0 ${
+                                        registrationClosed
+                                            ? "text-zinc-400"
+                                            : "text-accent-red"
+                                    }`}
+                                />
+                                <div>
+                                    <p className="text-[10px] tracking-widest uppercase font-bold text-zinc-400 mb-1">
+                                        Registration deadline
+                                    </p>
+                                    <p
+                                        className={`text-sm font-semibold ${
+                                            registrationClosed
+                                                ? "text-zinc-400 line-through"
+                                                : "text-zinc-700"
+                                        }`}
+                                    >
+                                        {formatDate(registrationDeadline)}
+                                    </p>
+                                    {registrationClosed && (
+                                        <p className="text-[11px] uppercase tracking-widest font-bold text-zinc-500 mt-1">
+                                            Closed
+                                        </p>
+                                    )}
+                                </div>
+                            </div>
+                        )}
                         <div className="flex items-start gap-3">
                             <Users
                                 size={18}
@@ -245,6 +283,10 @@ export default async function EventDetailPage({ params }: Props) {
                             {isFull ? (
                                 <span className="inline-flex items-center justify-center px-6 py-3 text-xs font-bold tracking-widest uppercase border border-zinc-200 bg-zinc-50 text-zinc-400 rounded-sm">
                                     Fully booked
+                                </span>
+                            ) : registrationClosed ? (
+                                <span className="inline-flex items-center justify-center px-6 py-3 text-xs font-bold tracking-widest uppercase border border-zinc-200 bg-zinc-50 text-zinc-400 rounded-sm">
+                                    Registration closed
                                 </span>
                             ) : (
                                 <Link
