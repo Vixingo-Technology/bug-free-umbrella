@@ -320,6 +320,7 @@ model User {
   serviceRequestsDojoActed  ServiceRequest[]         @relation("ServiceRequestDojoActor")
   serviceRequestsAdminActed ServiceRequest[]         @relation("ServiceRequestAdminActor")
   serviceCouponsCreated     ServiceCoupon[]          @relation("ServiceCouponCreator")
+  divisionPresetsCreated    DivisionPreset[]         @relation("DivisionPresetsCreated")
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -796,6 +797,10 @@ model Event {
   // JKA members with an ACTIVE membership. Zero = no discount.
   memberDiscountPercent Int @default(0) @map("member_discount_percent")
 
+  // Optional discount % applied when a participant selects 2 or more
+  // divisions in this event. Zero = no multi-division discount.
+  multiDivisionDiscountPercent Int @default(0) @map("multi_division_discount_percent")
+
   // Optional participation gates.
   minAge          Int?                 @map("min_age")
   minRankId       String?              @map("min_rank_id") @db.Uuid
@@ -874,6 +879,30 @@ model Announcement {
 
   @@index([isPublished, publishedAt])
   @@map("announcements")
+}
+
+// ─────────────────────────────────────────────
+// DIVISION PRESETS — reusable event division templates
+// ─────────────────────────────────────────────
+// Admins save the current form's divisions block (name + gates + fees) as
+// a preset they can import back into future event forms. `divisions` is
+// the same shape as TournamentDetail.customDivisions (see
+// lib/tournaments/divisions.ts).
+
+model DivisionPreset {
+  id          String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name        String
+  description String?
+  divisions   Json
+
+  createdById String? @map("created_by_id") @db.Uuid
+  createdBy   User?   @relation("DivisionPresetsCreated", fields: [createdById], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([createdById, createdAt])
+  @@map("division_presets")
 }
 
 // ─────────────────────────────────────────────

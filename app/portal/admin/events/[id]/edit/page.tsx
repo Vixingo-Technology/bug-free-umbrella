@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import EventForm, {
+    type DivisionPresetOption,
     type EventFormInitialValues,
 } from "@/components/dojo/events/event-form";
 import { requireAdmin } from "@/lib/admin-guard";
@@ -30,7 +31,7 @@ export default async function EditAdminEventPage({
     await requireAdmin();
     const { id } = await params;
 
-    const [event, beltRanks] = await Promise.all([
+    const [event, beltRanks, presetRows] = await Promise.all([
         prisma.event.findUnique({
             where: { id },
             include: { tournamentDetail: true },
@@ -39,9 +40,26 @@ export default async function EditAdminEventPage({
             orderBy: { orderIndex: "asc" },
             select: { id: true, name: true },
         }),
+        prisma.divisionPreset.findMany({
+            orderBy: { createdAt: "desc" },
+            take: 50,
+            select: {
+                id: true,
+                name: true,
+                description: true,
+                divisions: true,
+            },
+        }),
     ]);
 
     if (!event) notFound();
+
+    const presets: DivisionPresetOption[] = presetRows.map((p) => ({
+        id: p.id,
+        name: p.name,
+        description: p.description,
+        divisions: parseCustomDivisions(p.divisions),
+    }));
 
     const initial: EventFormInitialValues = {
         id: event.id,
@@ -59,15 +77,18 @@ export default async function EditAdminEventPage({
             : "SEMINAR",
         maxCapacity: event.maxCapacity,
         memberDiscountPercent: event.memberDiscountPercent,
+        multiDivisionDiscountPercent: event.multiDivisionDiscountPercent,
+        eventMinAge: event.minAge,
+        eventMinRankId: event.minRankId,
+        eventTicketPriceBdt: event.ticketPrice
+            ? event.ticketPrice.toString()
+            : null,
         isPublished: event.isPublished,
         attachmentUrl: event.attachmentUrl,
         attachmentType: event.attachmentType,
         divisions: event.tournamentDetail
             ? parseCustomDivisions(event.tournamentDetail.customDivisions)
             : [],
-        multiDivisionBundlePriceBdt: event.ticketPrice
-            ? event.ticketPrice.toString()
-            : null,
         registrationDeadline:
             event.tournamentDetail?.registrationDeadline
                 ? toDateTimeLocal(event.tournamentDetail.registrationDeadline)
@@ -95,6 +116,7 @@ export default async function EditAdminEventPage({
                 submitLabel="Save changes"
                 redirectAfter={BASE}
                 beltRanks={beltRanks}
+                presets={presets}
                 initial={initial}
             />
         </div>

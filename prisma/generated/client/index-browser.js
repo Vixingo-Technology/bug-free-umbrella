@@ -378,6 +378,7 @@ exports.Prisma.EventScalarFieldEnum = {
   isPremium: 'isPremium',
   ticketPrice: 'ticketPrice',
   memberDiscountPercent: 'memberDiscountPercent',
+  multiDivisionDiscountPercent: 'multiDivisionDiscountPercent',
   minAge: 'minAge',
   minRankId: 'minRankId',
   participantType: 'participantType',
@@ -411,6 +412,16 @@ exports.Prisma.AnnouncementScalarFieldEnum = {
   attachmentType: 'attachmentType',
   postedById: 'postedById',
   dojoId: 'dojoId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.DivisionPresetScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  divisions: 'divisions',
+  createdById: 'createdById',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -953,6 +964,7 @@ exports.Prisma.ModelName = {
   Event: 'Event',
   TournamentDetail: 'TournamentDetail',
   Announcement: 'Announcement',
+  DivisionPreset: 'DivisionPreset',
   EventRegistration: 'EventRegistration',
   Notification: 'Notification',
   ShopProduct: 'ShopProduct',

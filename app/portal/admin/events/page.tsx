@@ -1,12 +1,15 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { MapPin, Users, ArrowRight, Pencil } from "lucide-react";
-import EventForm from "@/components/dojo/events/event-form";
+import EventForm, {
+    type DivisionPresetOption,
+} from "@/components/dojo/events/event-form";
 import DeleteEventButton from "@/components/dojo/events/delete-button";
 import PostedNewTabs, { type TabValue } from "@/components/portal/posted-new-tabs";
 import Pager from "@/components/portal/pager";
 import { requireAdmin } from "@/lib/admin-guard";
 import { prisma } from "@/lib/prisma";
+import { parseCustomDivisions } from "@/lib/tournaments/divisions";
 
 export const metadata: Metadata = {
     title: "Events — Admin",
@@ -71,6 +74,27 @@ export default async function AdminEventsPage({
               })
             : [];
 
+    const presets: DivisionPresetOption[] =
+        tab === "new"
+            ? (
+                  await prisma.divisionPreset.findMany({
+                      orderBy: { createdAt: "desc" },
+                      take: 50,
+                      select: {
+                          id: true,
+                          name: true,
+                          description: true,
+                          divisions: true,
+                      },
+                  })
+              ).map((p) => ({
+                  id: p.id,
+                  name: p.name,
+                  description: p.description,
+                  divisions: parseCustomDivisions(p.divisions),
+              }))
+            : [];
+
     return (
         <>
             <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-10">
@@ -96,6 +120,7 @@ export default async function AdminEventsPage({
                         submitLabel="Publish to landing page"
                         redirectAfter={BASE}
                         beltRanks={beltRanks}
+                        presets={presets}
                     />
                 </div>
             ) : events.length === 0 ? (

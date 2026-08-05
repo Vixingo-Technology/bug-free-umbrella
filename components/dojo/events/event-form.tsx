@@ -1,12 +1,27 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useMemo, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { Loader2, CalendarPlus, Save, Plus, X, Layers } from "lucide-react";
+import {
+    Loader2,
+    CalendarPlus,
+    Save,
+    Plus,
+    X,
+    Layers,
+    Bookmark,
+    Download,
+    Trash2,
+} from "lucide-react";
 import { createEventAction, updateEventAction } from "@/app/actions/events";
+import {
+    saveDivisionPresetAction,
+    deleteDivisionPresetAction,
+} from "@/app/actions/division-presets";
 import {
     makeCustomDivisionCode,
     type CustomDivision,
+    type DivisionFee,
     type DivisionGender,
     type TournamentEventType,
 } from "@/lib/tournaments/divisions";
@@ -19,6 +34,13 @@ const CATEGORIES = [
 
 export type BeltRankOption = { id: string; name: string };
 
+export type DivisionPresetOption = {
+    id: string;
+    name: string;
+    description: string | null;
+    divisions: CustomDivision[];
+};
+
 export type EventFormInitialValues = {
     id: string;
     title: string;
@@ -28,30 +50,64 @@ export type EventFormInitialValues = {
     category: string;
     maxCapacity: number | null;
     memberDiscountPercent: number;
+    multiDivisionDiscountPercent: number;
+    eventMinAge: number | null;
+    eventMinRankId: string | null;
+    eventTicketPriceBdt: string | null;
     isPublished: boolean;
     attachmentUrl: string | null;
     attachmentType: "IMAGE" | "PDF" | null;
     divisions: CustomDivision[];
-    multiDivisionBundlePriceBdt: string | null;
     registrationDeadline: string | null;
     weighInDate: string | null;
     rulesUrl: string | null;
 };
 
-// Local draft type — mirrors CustomDivision but keeps price/age as strings
-// while the admin is editing so the input can be left blank.
+// Local draft — mirrors CustomDivision but keeps numeric fields as strings
+// while the admin is editing so inputs can be left blank.
+type FeeDraft = {
+    id: string;
+    name: string;
+    amountBdt: string;
+    required: boolean;
+};
+
 type DivisionDraft = {
     code: string;
     label: string;
+    // Kept hidden in the current UI; new divisions default to KATA so older
+    // consumers that look at eventType keep working.
     eventType: TournamentEventType;
     gender: DivisionGender;
     isTeam: boolean;
     minAge: string;
     minRankId: string;
-    priceBdt: string;
+    fees: FeeDraft[];
 };
 
+function makeFeeId(): string {
+    return Math.random().toString(36).slice(2, 10);
+}
+
 function toDraft(d: CustomDivision): DivisionDraft {
+    const fees: FeeDraft[] =
+        d.fees && d.fees.length > 0
+            ? d.fees.map((f) => ({
+                  id: f.id || makeFeeId(),
+                  name: f.name,
+                  amountBdt: String(f.amountBdt),
+                  required: f.required,
+              }))
+            : d.priceBdt !== null && d.priceBdt > 0
+              ? [
+                    {
+                        id: makeFeeId(),
+                        name: "Entry fee",
+                        amountBdt: String(d.priceBdt),
+                        required: true,
+                    },
+                ]
+              : [];
     return {
         code: d.code,
         label: d.label,
@@ -60,13 +116,23 @@ function toDraft(d: CustomDivision): DivisionDraft {
         isTeam: d.isTeam,
         minAge: d.minAge !== null ? String(d.minAge) : "",
         minRankId: d.minRankId ?? "",
-        priceBdt: d.priceBdt !== null ? String(d.priceBdt) : "",
+        fees,
     };
 }
 
 function draftToDivision(d: DivisionDraft): CustomDivision {
     const minAge = d.minAge.trim() ? Number.parseInt(d.minAge, 10) : NaN;
-    const priceBdt = d.priceBdt.trim() ? Number.parseFloat(d.priceBdt) : NaN;
+    const fees: DivisionFee[] = d.fees
+        .filter((f) => f.name.trim())
+        .map((f) => ({
+            id: f.id,
+            name: f.name.trim(),
+            amountBdt: Number.parseFloat(f.amountBdt) || 0,
+            required: f.required,
+        }));
+    const priceBdt = fees
+        .filter((f) => f.required)
+        .reduce((s, f) => s + (Number.isFinite(f.amountBdt) ? f.amountBdt : 0), 0);
     return {
         code: d.code,
         label: d.label.trim(),
@@ -75,7 +141,8 @@ function draftToDivision(d: DivisionDraft): CustomDivision {
         isTeam: d.isTeam,
         minAge: Number.isFinite(minAge) ? minAge : null,
         minRankId: d.minRankId || null,
-        priceBdt: Number.isFinite(priceBdt) ? priceBdt : null,
+        priceBdt: fees.length > 0 ? Math.round(priceBdt * 100) / 100 : null,
+        fees,
     };
 }
 
@@ -84,12 +151,14 @@ export default function EventForm({
     submitLabel = "Publish event",
     redirectAfter,
     beltRanks = [],
+    presets = [],
     initial,
 }: {
     eyebrow?: string;
     submitLabel?: string;
     redirectAfter?: string;
     beltRanks?: BeltRankOption[];
+    presets?: DivisionPresetOption[];
     initial?: EventFormInitialValues;
 }) {
     const isEdit = !!initial;
@@ -102,25 +171,40 @@ export default function EventForm({
     );
     const [error, setError] = useState<string | null>(null);
     const [isPending, startTransition] = useTransition();
+    const [presetOpen, setPresetOpen] = useState(false);
+    const [presetName, setPresetName] = useState("");
+    const [presetMsg, setPresetMsg] = useState<string | null>(null);
+    const [presetBusy, startPresetTransition] = useTransition();
     const router = useRouter();
 
-    const anyKumite = divisions.some((d) => d.eventType === "KUMITE");
+    const presetLookup = useMemo(() => {
+        const map = new Map<string, DivisionPresetOption>();
+        for (const p of presets) map.set(p.id, p);
+        return map;
+    }, [presets]);
 
-    function addDivision(eventType: TournamentEventType) {
+    function addDivision() {
         setDivisions((prev) => [
             ...prev,
             {
                 code: makeCustomDivisionCode(
                     `Division ${prev.length + 1}`,
-                    eventType,
+                    "KATA",
                 ),
                 label: "",
-                eventType,
+                eventType: "KATA",
                 gender: "ANY",
                 isTeam: false,
                 minAge: "",
                 minRankId: "",
-                priceBdt: "",
+                fees: [
+                    {
+                        id: makeFeeId(),
+                        name: "Entry fee",
+                        amountBdt: "",
+                        required: true,
+                    },
+                ],
             },
         ]);
     }
@@ -130,16 +214,8 @@ export default function EventForm({
             prev.map((d, i) => {
                 if (i !== index) return d;
                 const next = { ...d, ...patch };
-                // Re-derive code from label + type when either changes so
-                // reads stay stable across renames until save.
-                if (
-                    (patch.label !== undefined || patch.eventType !== undefined) &&
-                    next.label.trim()
-                ) {
-                    next.code = makeCustomDivisionCode(
-                        next.label,
-                        next.eventType,
-                    );
+                if (patch.label !== undefined && next.label.trim()) {
+                    next.code = makeCustomDivisionCode(next.label, next.eventType);
                 }
                 return next;
             }),
@@ -148,6 +224,120 @@ export default function EventForm({
 
     function removeDivision(index: number) {
         setDivisions((prev) => prev.filter((_, i) => i !== index));
+    }
+
+    function addFee(index: number) {
+        setDivisions((prev) =>
+            prev.map((d, i) =>
+                i === index
+                    ? {
+                          ...d,
+                          fees: [
+                              ...d.fees,
+                              {
+                                  id: makeFeeId(),
+                                  name: "",
+                                  amountBdt: "",
+                                  required: false,
+                              },
+                          ],
+                      }
+                    : d,
+            ),
+        );
+    }
+
+    function updateFee(
+        divisionIndex: number,
+        feeIndex: number,
+        patch: Partial<FeeDraft>,
+    ) {
+        setDivisions((prev) =>
+            prev.map((d, i) => {
+                if (i !== divisionIndex) return d;
+                return {
+                    ...d,
+                    fees: d.fees.map((f, fi) =>
+                        fi === feeIndex ? { ...f, ...patch } : f,
+                    ),
+                };
+            }),
+        );
+    }
+
+    function removeFee(divisionIndex: number, feeIndex: number) {
+        setDivisions((prev) =>
+            prev.map((d, i) => {
+                if (i !== divisionIndex) return d;
+                return {
+                    ...d,
+                    fees: d.fees.filter((_, fi) => fi !== feeIndex),
+                };
+            }),
+        );
+    }
+
+    function importPreset(presetId: string, mode: "replace" | "append") {
+        const p = presetLookup.get(presetId);
+        if (!p) return;
+        const drafts = p.divisions.map((d) => {
+            const draft = toDraft(d);
+            // Re-key fee ids on import so re-saving as a preset doesn't
+            // collide with the source rows.
+            draft.fees = draft.fees.map((f) => ({ ...f, id: makeFeeId() }));
+            return draft;
+        });
+        setDivisions((prev) => (mode === "replace" ? drafts : [...prev, ...drafts]));
+        setPresetMsg(`Imported "${p.name}".`);
+    }
+
+    async function savePreset() {
+        setPresetMsg(null);
+        if (!presetName.trim()) {
+            setPresetMsg("Give the preset a name first.");
+            return;
+        }
+        const payload = divisions
+            .filter((d) => d.label.trim())
+            .map(draftToDivision);
+        if (payload.length === 0) {
+            setPresetMsg("Add at least one division before saving.");
+            return;
+        }
+        const fd = new FormData();
+        fd.set("name", presetName.trim());
+        fd.set("divisions", JSON.stringify(payload));
+        startPresetTransition(async () => {
+            const res = await saveDivisionPresetAction(fd);
+            if (!res.ok) {
+                setPresetMsg(res.error);
+                return;
+            }
+            setPresetMsg(`Preset "${presetName.trim()}" saved.`);
+            setPresetName("");
+            router.refresh();
+        });
+    }
+
+    function deletePreset(presetId: string, name: string) {
+        if (
+            !window.confirm(
+                `Delete preset "${name}"? This can't be undone.`,
+            )
+        ) {
+            return;
+        }
+        const fd = new FormData();
+        fd.set("id", presetId);
+        startPresetTransition(async () => {
+            const res = await deleteDivisionPresetAction(fd);
+            if (!res.ok) {
+                setPresetMsg(res.error);
+                return;
+            }
+            setPresetMsg(`Preset "${name}" deleted.`);
+            router.refresh();
+        });
     }
 
     function submit(formData: FormData) {
@@ -282,23 +472,190 @@ export default function EventForm({
                 </div>
             )}
 
-            {/* ── Divisions ─────────────────────────────────────────── */}
+            {/* ── Event-level entry gates + ticket ─────────────────── */}
             <div className="mt-5 border-t border-zinc-200 pt-4">
-                <p className="text-[10px] tracking-widest uppercase font-bold text-zinc-400 mb-3 inline-flex items-center gap-1.5">
-                    <Layers size={11} />
-                    Divisions
+                <p className="text-[10px] tracking-widest uppercase font-bold text-zinc-400 mb-3">
+                    Event entry
                 </p>
                 <p className="text-[11px] text-zinc-500 mb-3">
+                    These gates apply to the event overall, before the
+                    participant picks any division. Leave any field blank to
+                    skip that gate.
+                </p>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    <Field label="Minimum age">
+                        <input
+                            name="eventMinAge"
+                            type="number"
+                            min={1}
+                            max={100}
+                            defaultValue={initial?.eventMinAge ?? ""}
+                            placeholder="Any age"
+                            className={inputCx}
+                        />
+                    </Field>
+                    <Field label="Minimum belt rank">
+                        <select
+                            name="eventMinRankId"
+                            defaultValue={initial?.eventMinRankId ?? ""}
+                            className={inputCx}
+                        >
+                            <option value="">Any rank</option>
+                            {beltRanks.map((r) => (
+                                <option key={r.id} value={r.id}>
+                                    {r.name}
+                                </option>
+                            ))}
+                        </select>
+                    </Field>
+                    <Field label="Ticket price (BDT)">
+                        <input
+                            name="eventTicketPrice"
+                            type="number"
+                            min={0}
+                            step="0.01"
+                            defaultValue={initial?.eventTicketPriceBdt ?? ""}
+                            placeholder="0 (free)"
+                            className={inputCx}
+                        />
+                    </Field>
+                </div>
+            </div>
+
+            {/* ── Divisions ─────────────────────────────────────────── */}
+            <div className="mt-5 border-t border-zinc-200 pt-4">
+                <div className="flex items-center justify-between gap-3 mb-3">
+                    <p className="text-[10px] tracking-widest uppercase font-bold text-zinc-400 inline-flex items-center gap-1.5">
+                        <Layers size={11} />
+                        Divisions
+                    </p>
+                    <button
+                        type="button"
+                        onClick={() => setPresetOpen((v) => !v)}
+                        className="text-[10px] tracking-widest uppercase font-bold text-accent-red hover:underline inline-flex items-center gap-1"
+                    >
+                        <Bookmark size={11} />
+                        Presets
+                    </button>
+                </div>
+                <p className="text-[11px] text-zinc-500 mb-3">
                     Add every division participants can enter. Each division
-                    has its own price; the entrant pays the sum of the
-                    divisions they select. Leave price empty (or 0) for a
-                    free entry.
+                    has its own gates and one or more fees; fees can be
+                    required (always paid) or optional (participant opts in).
                 </p>
 
+                {presetOpen && (
+                    <div className="mb-4 border border-zinc-200 rounded-sm p-3 bg-zinc-50/60">
+                        <div className="flex items-center justify-between mb-2">
+                            <span className="text-[10px] tracking-widest uppercase font-bold text-zinc-500">
+                                Division presets
+                            </span>
+                            <button
+                                type="button"
+                                onClick={() => setPresetOpen(false)}
+                                className="text-zinc-400 hover:text-accent-red"
+                                aria-label="Close presets panel"
+                            >
+                                <X size={14} />
+                            </button>
+                        </div>
+                        {presets.length === 0 ? (
+                            <p className="text-[11px] text-zinc-500 mb-3">
+                                No presets yet. Save the current division
+                                block to reuse it on future events.
+                            </p>
+                        ) : (
+                            <ul className="space-y-2 mb-3">
+                                {presets.map((p) => (
+                                    <li
+                                        key={p.id}
+                                        className="flex flex-wrap items-center justify-between gap-2 border border-zinc-200 rounded-sm px-3 py-2 bg-white"
+                                    >
+                                        <div className="min-w-0">
+                                            <p className="text-sm font-semibold text-zinc-900 truncate">
+                                                {p.name}
+                                            </p>
+                                            <p className="text-[11px] text-zinc-500">
+                                                {p.divisions.length} division
+                                                {p.divisions.length === 1
+                                                    ? ""
+                                                    : "s"}
+                                            </p>
+                                        </div>
+                                        <div className="flex items-center gap-1">
+                                            <button
+                                                type="button"
+                                                onClick={() =>
+                                                    importPreset(p.id, "replace")
+                                                }
+                                                disabled={presetBusy}
+                                                className="inline-flex items-center gap-1 text-[10px] tracking-widest uppercase font-bold text-zinc-700 hover:text-accent-red px-2 py-1 border border-zinc-200 rounded-sm"
+                                            >
+                                                <Download size={10} />
+                                                Replace
+                                            </button>
+                                            <button
+                                                type="button"
+                                                onClick={() =>
+                                                    importPreset(p.id, "append")
+                                                }
+                                                disabled={presetBusy}
+                                                className="inline-flex items-center gap-1 text-[10px] tracking-widest uppercase font-bold text-zinc-700 hover:text-accent-red px-2 py-1 border border-zinc-200 rounded-sm"
+                                            >
+                                                <Plus size={10} />
+                                                Append
+                                            </button>
+                                            <button
+                                                type="button"
+                                                onClick={() =>
+                                                    deletePreset(p.id, p.name)
+                                                }
+                                                disabled={presetBusy}
+                                                className="inline-flex items-center gap-1 text-[10px] tracking-widest uppercase font-bold text-zinc-400 hover:text-red-600 px-2 py-1"
+                                                aria-label={`Delete preset ${p.name}`}
+                                            >
+                                                <Trash2 size={11} />
+                                            </button>
+                                        </div>
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
+                        <div className="flex gap-2">
+                            <input
+                                type="text"
+                                value={presetName}
+                                onChange={(e) => setPresetName(e.target.value)}
+                                placeholder="New preset name"
+                                className={inputCx}
+                            />
+                            <button
+                                type="button"
+                                onClick={savePreset}
+                                disabled={presetBusy}
+                                className="inline-flex items-center gap-1.5 bg-zinc-900 text-white px-3 py-2 text-[10px] font-bold tracking-widest uppercase hover:bg-zinc-800 rounded-sm disabled:opacity-40 whitespace-nowrap"
+                            >
+                                {presetBusy ? (
+                                    <Loader2 size={11} className="animate-spin" />
+                                ) : (
+                                    <Bookmark size={11} />
+                                )}
+                                Save preset
+                            </button>
+                        </div>
+                        {presetMsg && (
+                            <p className="text-[11px] text-zinc-600 mt-2">
+                                {presetMsg}
+                            </p>
+                        )}
+                    </div>
+                )}
+
                 {divisions.length === 0 && (
-                    <p className="text-[11px] text-amber-700 bg-amber-50 border border-amber-200 rounded-sm px-3 py-2 mb-3">
-                        Add at least one division so participants have
-                        something to register for.
+                    <p className="text-[11px] text-zinc-500 bg-zinc-50 border border-zinc-200 rounded-sm px-3 py-2 mb-3">
+                        No divisions yet — participants will register for the
+                        event ticket only. Add divisions if you want per-
+                        entry categories, extra fees, or age/rank gates.
                     </p>
                 )}
 
@@ -310,6 +667,9 @@ export default function EventForm({
                             beltRanks={beltRanks}
                             onChange={(patch) => updateDivision(i, patch)}
                             onRemove={() => removeDivision(i)}
+                            onAddFee={() => addFee(i)}
+                            onUpdateFee={(fi, patch) => updateFee(i, fi, patch)}
+                            onRemoveFee={(fi) => removeFee(i, fi)}
                         />
                     ))}
                 </div>
@@ -317,17 +677,10 @@ export default function EventForm({
                 <div className="flex flex-wrap gap-2 mt-3">
                     <button
                         type="button"
-                        onClick={() => addDivision("KATA")}
+                        onClick={addDivision}
                         className="inline-flex items-center gap-1.5 bg-zinc-900 text-white px-3 py-2 text-[10px] font-bold tracking-widest uppercase hover:bg-zinc-800 rounded-sm"
                     >
-                        <Plus size={11} /> Add Kata division
-                    </button>
-                    <button
-                        type="button"
-                        onClick={() => addDivision("KUMITE")}
-                        className="inline-flex items-center gap-1.5 bg-zinc-900 text-white px-3 py-2 text-[10px] font-bold tracking-widest uppercase hover:bg-zinc-800 rounded-sm"
-                    >
-                        <Plus size={11} /> Add Kumite division
+                        <Plus size={11} /> Add division
                     </button>
                 </div>
 
@@ -340,19 +693,6 @@ export default function EventForm({
                             className={inputCx}
                         />
                     </Field>
-                    {anyKumite && (
-                        <Field label="Weigh-in date (optional)">
-                            <input
-                                name="weighInDate"
-                                type="datetime-local"
-                                defaultValue={initial?.weighInDate ?? ""}
-                                className={inputCx}
-                            />
-                        </Field>
-                    )}
-                </div>
-
-                <div className="mt-3">
                     <Field label="Rules / info URL (optional)">
                         <input
                             name="rulesUrl"
@@ -363,47 +703,55 @@ export default function EventForm({
                         />
                     </Field>
                 </div>
+                <input
+                    type="hidden"
+                    name="weighInDate"
+                    defaultValue={initial?.weighInDate ?? ""}
+                />
             </div>
 
-            {/* ── Multi-division bundle price ───────────────────────── */}
+            {/* ── Discounts ─────────────────────────────────────────── */}
             <div className="mt-5 border-t border-zinc-200 pt-4">
-                <Field label="Multi-division bundle total (BDT · optional)">
-                    <input
-                        name="multiDivisionBundlePriceBdt"
-                        type="number"
-                        min={0}
-                        step="0.01"
-                        defaultValue={initial?.multiDivisionBundlePriceBdt ?? ""}
-                        placeholder="e.g. 800"
-                        className={inputCx}
-                    />
-                    <p className="text-[11px] text-zinc-500 mt-1.5">
-                        If a participant picks 2 or more divisions, they pay
-                        this bundle total instead of the sum of division
-                        prices. Leave blank to always charge the sum.
-                    </p>
-                </Field>
-            </div>
-
-            {/* ── Member discount ─────────────────────────────────── */}
-            <div className="mt-5 border-t border-zinc-200 pt-4">
-                <Field label="JKA member discount (%)">
-                    <input
-                        name="memberDiscountPercent"
-                        type="number"
-                        min={0}
-                        max={100}
-                        step="1"
-                        defaultValue={initial?.memberDiscountPercent ?? 0}
-                        placeholder="0"
-                        className={inputCx}
-                    />
-                    <p className="text-[11px] text-zinc-500 mt-1.5">
-                        Applied to each division's price when a signed-in JKA
-                        member with an active membership registers. Leave 0
-                        for no discount.
-                    </p>
-                </Field>
+                <p className="text-[10px] tracking-widest uppercase font-bold text-zinc-400 mb-3">
+                    Discounts
+                </p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <Field label="Multi-division discount (%)">
+                        <input
+                            name="multiDivisionDiscountPercent"
+                            type="number"
+                            min={0}
+                            max={100}
+                            step="1"
+                            defaultValue={
+                                initial?.multiDivisionDiscountPercent ?? 0
+                            }
+                            placeholder="0"
+                            className={inputCx}
+                        />
+                        <p className="text-[11px] text-zinc-500 mt-1.5">
+                            Applied to the sum of a participant&apos;s
+                            division fees when they pick 2 or more
+                            divisions. Leave 0 to skip.
+                        </p>
+                    </Field>
+                    <Field label="JKA member discount (%)">
+                        <input
+                            name="memberDiscountPercent"
+                            type="number"
+                            min={0}
+                            max={100}
+                            step="1"
+                            defaultValue={initial?.memberDiscountPercent ?? 0}
+                            placeholder="0"
+                            className={inputCx}
+                        />
+                        <p className="text-[11px] text-zinc-500 mt-1.5">
+                            Applied to each fee when a signed-in JKA member
+                            with an active membership registers.
+                        </p>
+                    </Field>
+                </div>
             </div>
 
             <div className="mt-3">
@@ -482,23 +830,23 @@ function DivisionRow({
     beltRanks,
     onChange,
     onRemove,
+    onAddFee,
+    onUpdateFee,
+    onRemoveFee,
 }: {
     draft: DivisionDraft;
     beltRanks: BeltRankOption[];
     onChange: (patch: Partial<DivisionDraft>) => void;
     onRemove: () => void;
+    onAddFee: () => void;
+    onUpdateFee: (feeIndex: number, patch: Partial<FeeDraft>) => void;
+    onRemoveFee: (feeIndex: number) => void;
 }) {
     return (
         <div className="border border-zinc-200 rounded-sm p-3 bg-zinc-50/50">
             <div className="flex items-center justify-between mb-2">
                 <span className="text-[10px] tracking-widest uppercase font-bold text-accent-red">
-                    {draft.eventType === "KATA" ? "Kata" : "Kumite"} ·{" "}
-                    {draft.gender === "MALE"
-                        ? "Male"
-                        : draft.gender === "FEMALE"
-                          ? "Female"
-                          : "Any gender"}{" "}
-                    division
+                    Division
                 </span>
                 <button
                     type="button"
@@ -517,42 +865,10 @@ function DivisionRow({
                         value={draft.label}
                         onChange={(e) => onChange({ label: e.target.value })}
                         required
-                        placeholder="e.g. Individual kata — Junior"
+                        placeholder="e.g. Junior individual"
                         className={inputCx}
                     />
                 </Field>
-                <Field label="Type">
-                    <select
-                        value={draft.eventType}
-                        onChange={(e) =>
-                            onChange({
-                                eventType: e.target.value as TournamentEventType,
-                            })
-                        }
-                        className={inputCx}
-                    >
-                        <option value="KATA">Kata (form)</option>
-                        <option value="KUMITE">Kumite (sparring)</option>
-                    </select>
-                </Field>
-                <Field label="Gender">
-                    <select
-                        value={draft.gender}
-                        onChange={(e) =>
-                            onChange({
-                                gender: e.target.value as DivisionGender,
-                            })
-                        }
-                        className={inputCx}
-                    >
-                        <option value="ANY">Any (open)</option>
-                        <option value="MALE">Male only</option>
-                        <option value="FEMALE">Female only</option>
-                    </select>
-                </Field>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-3">
                 <Field label="Minimum age (optional)">
                     <input
                         type="number"
@@ -578,30 +894,91 @@ function DivisionRow({
                         ))}
                     </select>
                 </Field>
-                <Field label="Price (BDT)">
-                    <input
-                        type="number"
-                        min={0}
-                        step="0.01"
-                        value={draft.priceBdt}
-                        onChange={(e) => onChange({ priceBdt: e.target.value })}
-                        placeholder="0 (free)"
-                        className={inputCx}
-                    />
-                </Field>
             </div>
 
-            <label className="inline-flex items-center gap-2 mt-3 cursor-pointer select-none">
-                <input
-                    type="checkbox"
-                    checked={draft.isTeam}
-                    onChange={(e) => onChange({ isTeam: e.target.checked })}
-                    className="h-4 w-4 accent-red-600"
-                />
-                <span className="text-xs text-zinc-700">
-                    Team division (participants must name teammates)
-                </span>
-            </label>
+            <div className="mt-4 border-t border-zinc-200/70 pt-3">
+                <div className="flex items-center justify-between mb-2">
+                    <span className="text-[10px] tracking-widest uppercase font-bold text-zinc-500">
+                        Fees
+                    </span>
+                    <button
+                        type="button"
+                        onClick={onAddFee}
+                        className="inline-flex items-center gap-1 text-[10px] tracking-widest uppercase font-bold text-accent-red hover:underline"
+                    >
+                        <Plus size={10} /> Add fee
+                    </button>
+                </div>
+                {draft.fees.length === 0 ? (
+                    <p className="text-[11px] text-zinc-500 bg-white border border-dashed border-zinc-200 rounded-sm px-3 py-2">
+                        No fees — this division is free to enter.
+                    </p>
+                ) : (
+                    <ul className="space-y-2">
+                        {draft.fees.map((f, fi) => (
+                            <li
+                                key={f.id}
+                                className="grid grid-cols-1 md:grid-cols-[1fr_120px_130px_28px] gap-2 items-end bg-white border border-zinc-200 rounded-sm p-2"
+                            >
+                                <Field label="Fee name">
+                                    <input
+                                        type="text"
+                                        value={f.name}
+                                        onChange={(e) =>
+                                            onUpdateFee(fi, {
+                                                name: e.target.value,
+                                            })
+                                        }
+                                        placeholder="e.g. Entry fee"
+                                        className={inputCx}
+                                    />
+                                </Field>
+                                <Field label="Amount (BDT)">
+                                    <input
+                                        type="number"
+                                        min={0}
+                                        step="0.01"
+                                        value={f.amountBdt}
+                                        onChange={(e) =>
+                                            onUpdateFee(fi, {
+                                                amountBdt: e.target.value,
+                                            })
+                                        }
+                                        placeholder="0"
+                                        className={inputCx}
+                                    />
+                                </Field>
+                                <div>
+                                    <span className="text-[10px] tracking-widest uppercase font-bold text-zinc-500 block mb-1">
+                                        Type
+                                    </span>
+                                    <select
+                                        value={f.required ? "required" : "optional"}
+                                        onChange={(e) =>
+                                            onUpdateFee(fi, {
+                                                required:
+                                                    e.target.value === "required",
+                                            })
+                                        }
+                                        className={inputCx}
+                                    >
+                                        <option value="required">Required</option>
+                                        <option value="optional">Optional</option>
+                                    </select>
+                                </div>
+                                <button
+                                    type="button"
+                                    onClick={() => onRemoveFee(fi)}
+                                    aria-label="Remove fee"
+                                    className="text-zinc-400 hover:text-accent-red mb-2 justify-self-end"
+                                >
+                                    <X size={14} />
+                                </button>
+                            </li>
+                        ))}
+                    </ul>
+                )}
+            </div>
         </div>
     );
 }

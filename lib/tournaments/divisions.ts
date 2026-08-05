@@ -1,18 +1,32 @@
 // Event divisions. All divisions are admin-defined ("custom") per event —
 // there is no WKF preset picker in the app. Codes are stable identifiers
 // stored on registrations; do not rename them once an event is published.
+//
+// Divisions are no longer kata/kumite specific — the admin just gives each
+// division a name and gates (age / belt / fees). `eventType` is retained
+// on the type for backward compatibility with older rows but is not
+// surfaced in the current UI; new divisions default to "KATA".
 
 export type TournamentEventType = "KATA" | "KUMITE";
 
 export type Gender = "MALE" | "FEMALE";
 
-// A division on an event. `code` is a stable slug; `label` is the display
-// name. Optional gates apply on top of the label: gender restricts entry
-// (ANY = no restriction), minAge (years on the event date) and minRankId
-// (belt_ranks.id) further limit who may enter. `priceBdt` is the entry fee
-// for this division (0/null = free entry).
 export type DivisionGender = "MALE" | "FEMALE" | "ANY";
 
+// A single fee inside a division. `required` fees are always billed to
+// the participant; `!required` fees are opt-in add-ons at registration.
+export type DivisionFee = {
+    id: string;
+    name: string;
+    amountBdt: number;
+    required: boolean;
+};
+
+// A division on an event. `code` is a stable slug; `label` is the display
+// name. Optional gates: `minAge` (years on the event date) and `minRankId`
+// (belt_ranks.id). `fees` is the current source of truth for pricing;
+// `priceBdt` is a legacy fallback (equal to sum of required fees) kept so
+// older code paths keep working.
 export type CustomDivision = {
     code: string;
     label: string;
@@ -22,6 +36,7 @@ export type CustomDivision = {
     minAge: number | null;
     minRankId: string | null;
     priceBdt: number | null;
+    fees: DivisionFee[];
 };
 
 const CUSTOM_CODE_PREFIX = "DIV-";
@@ -52,6 +67,46 @@ export function isCustomDivisionCode(code: string): boolean {
     return code.startsWith(CUSTOM_CODE_PREFIX) || code.startsWith("CUSTOM-");
 }
 
+function parseFees(raw: unknown): DivisionFee[] {
+    if (!Array.isArray(raw)) return [];
+    const out: DivisionFee[] = [];
+    for (const r of raw) {
+        if (!r || typeof r !== "object") continue;
+        const rec = r as Record<string, unknown>;
+        const name = typeof rec.name === "string" ? rec.name.trim() : "";
+        if (!name) continue;
+        const amountRaw = rec.amountBdt ?? rec.amount;
+        const amount =
+            typeof amountRaw === "number" && Number.isFinite(amountRaw)
+                ? Math.round(amountRaw * 100) / 100
+                : 0;
+        const id =
+            typeof rec.id === "string" && rec.id
+                ? rec.id
+                : Math.random().toString(36).slice(2, 10);
+        out.push({
+            id,
+            name,
+            amountBdt: amount < 0 ? 0 : amount,
+            required: rec.required !== false,
+        });
+    }
+    return out;
+}
+
+export function sumRequiredFees(fees: readonly DivisionFee[]): number {
+    let total = 0;
+    for (const f of fees) if (f.required) total += f.amountBdt;
+    return Math.round(total * 100) / 100;
+}
+
+// Base price for a division — sum of required fees when the division has
+// them; otherwise the legacy priceBdt field (may be null = free).
+export function divisionBasePrice(d: CustomDivision): number {
+    if (d.fees && d.fees.length > 0) return sumRequiredFees(d.fees);
+    return d.priceBdt ?? 0;
+}
+
 // Parse the raw JSON stored on TournamentDetail.customDivisions. Anything
 // malformed is dropped rather than throwing.
 export function parseCustomDivisions(raw: unknown): CustomDivision[] {
@@ -62,11 +117,11 @@ export function parseCustomDivisions(raw: unknown): CustomDivision[] {
         const rec = r as Record<string, unknown>;
         const code = typeof rec.code === "string" ? rec.code : null;
         const label = typeof rec.label === "string" ? rec.label : null;
-        const eventType =
-            rec.eventType === "KATA" || rec.eventType === "KUMITE"
-                ? (rec.eventType as TournamentEventType)
-                : null;
-        if (!code || !label || !eventType) continue;
+        // Older rows may omit eventType; treat missing as KATA so pricing
+        // and lookups continue to work.
+        const eventType: TournamentEventType =
+            rec.eventType === "KUMITE" ? "KUMITE" : "KATA";
+        if (!code || !label) continue;
         const gender: DivisionGender =
             rec.gender === "MALE" || rec.gender === "FEMALE"
                 ? rec.gender
@@ -80,10 +135,15 @@ export function parseCustomDivisions(raw: unknown): CustomDivision[] {
             typeof rec.minRankId === "string" && rec.minRankId
                 ? rec.minRankId
                 : null;
-        const priceBdt =
+        const fees = parseFees(rec.fees);
+        // If the row supplies fees, derive priceBdt from the required ones so
+        // legacy consumers (which read priceBdt directly) keep working.
+        const legacyPrice =
             typeof rec.priceBdt === "number" && Number.isFinite(rec.priceBdt)
                 ? Math.round(rec.priceBdt * 100) / 100
                 : null;
+        const priceBdt =
+            fees.length > 0 ? sumRequiredFees(fees) : legacyPrice;
         out.push({
             code,
             label,
@@ -93,6 +153,7 @@ export function parseCustomDivisions(raw: unknown): CustomDivision[] {
             minAge,
             minRankId,
             priceBdt,
+            fees,
         });
     }
     return out;

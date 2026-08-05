@@ -250,19 +250,23 @@ export async function registerForTournamentAction(
             location: true,
             dojoId: true,
             memberDiscountPercent: true,
-            // Repurposed: optional multi-division bundle price. When set and
-            // the participant selected 2+ divisions, this replaces the sum.
+            // Event-wide base ticket, added on top of the selected division
+            // fees. Null / 0 = no base ticket.
             ticketPrice: true,
+            // Optional % discount applied when the participant picks 2+
+            // divisions. Applied to the summed division fees only, not to
+            // the base ticket.
+            multiDivisionDiscountPercent: true,
             dojo: { select: { name: true } },
             tournamentDetail: true,
             _count: { select: { registrations: true } },
         },
     });
-    if (!event || !event.isPublished || !event.tournamentDetail) {
+    if (!event || !event.isPublished) {
         return { ok: false, error: "Event not found." };
     }
     if (
-        event.tournamentDetail.registrationDeadline &&
+        event.tournamentDetail?.registrationDeadline &&
         event.tournamentDetail.registrationDeadline.getTime() < Date.now()
     ) {
         return { ok: false, error: "Registration for this event has closed." };
@@ -274,9 +278,9 @@ export async function registerForTournamentAction(
         return { ok: false, error: "This event is fully booked." };
     }
 
-    const customDivisions = parseCustomDivisions(
-        event.tournamentDetail.customDivisions,
-    );
+    const customDivisions = event.tournamentDetail
+        ? parseCustomDivisions(event.tournamentDetail.customDivisions)
+        : [];
 
     // Divisions the participant selected — form posts one hidden input per
     // pick under the name `divisionCode`.
@@ -285,7 +289,7 @@ export async function registerForTournamentAction(
         .map((v) => (typeof v === "string" ? v.trim() : ""))
         .filter(Boolean);
     const codesToRegister = Array.from(new Set(picked));
-    if (codesToRegister.length === 0) {
+    if (customDivisions.length > 0 && codesToRegister.length === 0) {
         return { ok: false, error: "Pick at least one division to register for." };
     }
 
@@ -320,7 +324,11 @@ export async function registerForTournamentAction(
     const entrantAge = ageOnDate(dob, event.eventDate);
 
     const entrantBeltRank = trim(formData.get("entrantBeltRank")) || null;
-    if (!entrantBeltRank) return { ok: false, error: "Belt rank is required." };
+    // Belt rank is only mandatory when the event actually offers divisions
+    // (divisions may gate on rank). Ticket-only events don't need it.
+    if (divisions.length > 0 && !entrantBeltRank) {
+        return { ok: false, error: "Belt rank is required." };
+    }
 
     // Look up ranks the selected divisions gate on, plus the rank the
     // entrant declared on the form, so we can enforce minRankId server-side.
@@ -349,10 +357,12 @@ export async function registerForTournamentAction(
     // member) — the form message reminds them to bring proof on the day.
     // If the entrant is a signed-in student and their declared rank matches
     // a known belt, we cross-check with their student record.
-    const declaredRank = await prisma.beltRank.findUnique({
-        where: { name: entrantBeltRank },
-        select: { orderIndex: true },
-    });
+    const declaredRank = entrantBeltRank
+        ? await prisma.beltRank.findUnique({
+              where: { name: entrantBeltRank },
+              select: { orderIndex: true },
+          })
+        : null;
     let viewerRankOrder: number | null = declaredRank?.orderIndex ?? null;
     if (user && viewerRankOrder === null) {
         const s = await prisma.student.findUnique({
@@ -398,48 +408,66 @@ export async function registerForTournamentAction(
 
     const registrantIsMember = user ? await isJkaMember(user.id) : false;
 
-    // Compute per-division prices (with member discount) and the group total.
+    // Parse opt-in fees the participant picked. The form posts one hidden
+    // input per pick under `optionalFee` with value `${divisionCode}:${feeId}`.
+    const chosenOptional = new Set<string>();
+    for (const v of formData.getAll("optionalFee")) {
+        if (typeof v === "string" && v.includes(":")) chosenOptional.add(v);
+    }
+
+    // Compute per-division prices (required fees + chosen optional fees),
+    // applying the member discount to each. When 2+ divisions are selected,
+    // the event's multi-division discount is applied on top.
+    const round2 = (n: number) => Math.round(n * 100) / 100;
     const pricePerCode = new Map<string, number>();
-    let sumAmount = 0;
+    let divisionsSubtotal = 0;
     for (const { code, division } of divisions) {
-        const base = division.priceBdt ?? 0;
-        const effective =
-            base > 0 && registrantIsMember
-                ? applyDiscount(base, event.memberDiscountPercent)
-                : base;
-        pricePerCode.set(code, Math.round(effective * 100) / 100);
-        sumAmount += effective;
+        let base = 0;
+        if (division.fees && division.fees.length > 0) {
+            for (const f of division.fees) {
+                if (f.required || chosenOptional.has(`${code}:${f.id}`)) {
+                    base += f.amountBdt;
+                }
+            }
+        } else {
+            base = division.priceBdt ?? 0;
+        }
+        let effective = base;
+        if (effective > 0 && registrantIsMember) {
+            effective = applyDiscount(effective, event.memberDiscountPercent);
+        }
+        if (effective > 0 && divisions.length >= 2) {
+            effective = applyDiscount(
+                effective,
+                event.multiDivisionDiscountPercent,
+            );
+        }
+        effective = round2(effective);
+        pricePerCode.set(code, effective);
+        divisionsSubtotal += effective;
     }
-    sumAmount = Math.round(sumAmount * 100) / 100;
+    divisionsSubtotal = round2(divisionsSubtotal);
 
-    // Optional multi-division bundle price kicks in when the participant
-    // selects 2+ divisions AND the admin set a bundle total on the event.
-    const bundlePrice = event.ticketPrice ? Number(event.ticketPrice) : null;
-    const useBundle =
-        divisions.length >= 2 && bundlePrice !== null && bundlePrice > 0;
-    let totalAmount = useBundle
-        ? Math.round(
-              (registrantIsMember
-                  ? applyDiscount(bundlePrice!, event.memberDiscountPercent)
-                  : bundlePrice!) * 100,
-          ) / 100
-        : sumAmount;
-
-    // When the bundle applies, spread the total across the selected division
-    // rows so per-row accounting stays coherent. Any rounding drift lands on
-    // the first row.
-    if (useBundle) {
-        const share = Math.floor((totalAmount / divisions.length) * 100) / 100;
-        let allocated = 0;
-        divisions.forEach(({ code }, i) => {
-            const price =
-                i === divisions.length - 1
-                    ? Math.round((totalAmount - allocated) * 100) / 100
-                    : share;
-            pricePerCode.set(code, price);
-            allocated += share;
-        });
+    // Optional event-wide base ticket (paid once per registration group).
+    // Applies the member discount but not the multi-division discount.
+    let ticketAmount = 0;
+    if (event.ticketPrice !== null && Number(event.ticketPrice) > 0) {
+        const t = Number(event.ticketPrice);
+        ticketAmount = round2(
+            registrantIsMember
+                ? applyDiscount(t, event.memberDiscountPercent)
+                : t,
+        );
+        // Attach the ticket to the first division row so per-row accounting
+        // stays coherent (payment webhook fans PAID across sibling rows).
+        const firstCode = divisions[0]?.code;
+        if (firstCode) {
+            const prev = pricePerCode.get(firstCode) ?? 0;
+            pricePerCode.set(firstCode, round2(prev + ticketAmount));
+        }
     }
+
+    let totalAmount = round2(divisionsSubtotal + ticketAmount);
     const isPremium = totalAmount > 0;
     const paymentGroupId =
         isPremium && divisions.length > 1 ? randomUUID() : null;
@@ -601,6 +629,94 @@ export async function registerForTournamentAction(
         });
     }
 
+    // Ticket-only path: event has no divisions. Insert a single row without
+    // a divisionCode. All the same fields (guardian, emergency contact,
+    // profile image) apply.
+    if (divisions.length === 0) {
+        const existing = userId
+            ? await prisma.eventRegistration.findFirst({
+                  where: { eventId, userId, divisionCode: null },
+                  select: {
+                      id: true,
+                      qrToken: true,
+                      paymentStatus: true,
+                  },
+              })
+            : guestEmail
+              ? await prisma.eventRegistration.findFirst({
+                    where: {
+                        eventId,
+                        userId: null,
+                        divisionCode: null,
+                        guestEmail: { equals: guestEmail, mode: "insensitive" },
+                    },
+                    select: {
+                        id: true,
+                        qrToken: true,
+                        paymentStatus: true,
+                    },
+                })
+              : null;
+
+        if (existing) {
+            if (existing.paymentStatus === "PENDING") {
+                pendingExisting = {
+                    id: existing.id,
+                    qrToken: existing.qrToken,
+                };
+            } else {
+                existingFallback = {
+                    id: existing.id,
+                    qrToken: existing.qrToken,
+                    divisionCode: "",
+                };
+            }
+        } else {
+            const qrToken = urlSafeToken();
+            const reg = await prisma.eventRegistration.create({
+                data: {
+                    eventId,
+                    userId,
+                    guestName,
+                    guestEmail,
+                    guestPhone,
+                    qrToken,
+                    paymentStatus:
+                        isPremium && ticketAmount > 0
+                            ? "PENDING"
+                            : isPremium
+                              ? "PAID"
+                              : null,
+                    amountDue: isPremium ? ticketAmount : null,
+                    paidAt:
+                        isPremium && ticketAmount === 0 ? new Date() : null,
+                    paymentGroupId: null,
+                    divisionCode: null,
+                    entrantGender: genderRaw,
+                    entrantWeightKg: null,
+                    entrantBeltRank,
+                    entrantDojoName,
+                    coachName,
+                    teamName: null,
+                    teammates: null as never,
+                    guardianName,
+                    guardianPhone,
+                    guardianConsent,
+                    emergencyContactName,
+                    emergencyContactPhone,
+                    profileImageUrl,
+                    guestDateOfBirth: dob,
+                },
+                select: { id: true, qrToken: true },
+            });
+            created.push({
+                id: reg.id,
+                qrToken: reg.qrToken,
+                divisionCode: "",
+            });
+        }
+    }
+
     if (pendingExisting) {
         const full = await prisma.eventRegistration.findUnique({
             where: { id: pendingExisting.id },
@@ -633,7 +749,13 @@ export async function registerForTournamentAction(
 
     if (created.length === 0) {
         if (existingFallback) return { ok: true, token: existingFallback.qrToken };
-        return { ok: false, error: "You're already registered for that division." };
+        return {
+            ok: false,
+            error:
+                divisions.length === 0
+                    ? "You're already registered for this event."
+                    : "You're already registered for that division.",
+        };
     }
 
     revalidatePath(`/events/${eventId}`);

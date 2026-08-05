@@ -48,6 +48,7 @@ export default async function RegisterPage({ params, searchParams }: Props) {
                 location: true,
                 maxCapacity: true,
                 memberDiscountPercent: true,
+                multiDivisionDiscountPercent: true,
                 ticketPrice: true,
                 tournamentDetail: true,
                 _count: { select: { registrations: true } },
@@ -58,14 +59,16 @@ export default async function RegisterPage({ params, searchParams }: Props) {
             select: { id: true, name: true, orderIndex: true },
         }),
     ]);
-    if (!event || !event.isPublished || !event.tournamentDetail) notFound();
+    if (!event || !event.isPublished) notFound();
 
     const supabase = await createClient();
     const {
         data: { user },
     } = await supabase.auth.getUser();
 
-    const divisions = parseCustomDivisions(event.tournamentDetail.customDivisions);
+    const divisions = event.tournamentDetail
+        ? parseCustomDivisions(event.tournamentDetail.customDivisions)
+        : [];
     const registrantIsMember = user ? await isJkaMember(user.id) : false;
     const memberDiscountActive =
         registrantIsMember && event.memberDiscountPercent > 0;
@@ -128,10 +131,9 @@ export default async function RegisterPage({ params, searchParams }: Props) {
         memberDiscountActive,
         memberDiscountPercent: event.memberDiscountPercent,
         divisions,
-        multiDivisionBundlePriceBdt: event.ticketPrice
-            ? Number(event.ticketPrice)
-            : null,
-        registrationDeadline: event.tournamentDetail.registrationDeadline
+        eventTicketPriceBdt: event.ticketPrice ? Number(event.ticketPrice) : null,
+        multiDivisionDiscountPercent: event.multiDivisionDiscountPercent,
+        registrationDeadline: event.tournamentDetail?.registrationDeadline
             ? event.tournamentDetail.registrationDeadline.toISOString()
             : null,
         beltRanks,

@@ -9,6 +9,7 @@ import {
     isCustomDivisionCode,
     makeCustomDivisionCode,
     parseCustomDivisions,
+    sumRequiredFees,
     type CustomDivision,
     type TournamentEventType,
 } from "@/lib/tournaments/divisions";
@@ -37,21 +38,19 @@ type DivisionInput =
       }
     | { error: string };
 
-// Parse the divisions block from the form. Divisions are always admin-defined
-// (no WKF presets). At least one division is required; each row supplies its
-// own optional min age / min belt / price.
+// Parse the divisions block from the form. Divisions are admin-defined and
+// entirely optional — an event may publish with zero divisions, in which
+// case participants register for the event ticket alone.
 async function parseDivisionFields(formData: FormData): Promise<DivisionInput> {
     const raw = ((formData.get("customDivisions") as string) ?? "").trim();
-    if (!raw) return { error: "Add at least one division for this event." };
 
-    let parsed: CustomDivision[];
-    try {
-        parsed = parseCustomDivisions(JSON.parse(raw));
-    } catch {
-        return { error: "Divisions payload is malformed." };
-    }
-    if (parsed.length === 0) {
-        return { error: "Add at least one division for this event." };
+    let parsed: CustomDivision[] = [];
+    if (raw) {
+        try {
+            parsed = parseCustomDivisions(JSON.parse(raw));
+        } catch {
+            return { error: "Divisions payload is malformed." };
+        }
     }
 
     // Belt rank ids must exist. Collect once and validate against the set.
@@ -96,6 +95,39 @@ async function parseDivisionFields(formData: FormData): Promise<DivisionInput> {
                 error: `Price for "${label}" cannot be negative.`,
             };
         }
+        // Validate fees. Names must be non-empty; amounts must be >= 0.
+        const feeNames = new Set<string>();
+        for (const f of d.fees ?? []) {
+            const fname = f.name.trim();
+            if (!fname) {
+                return {
+                    error: `Every fee on "${label}" needs a name.`,
+                };
+            }
+            if (feeNames.has(fname.toLowerCase())) {
+                return {
+                    error: `"${label}" has two fees named "${fname}". Rename one.`,
+                };
+            }
+            feeNames.add(fname.toLowerCase());
+            if (!Number.isFinite(f.amountBdt) || f.amountBdt < 0) {
+                return {
+                    error: `Fee "${fname}" on "${label}" must be a positive amount.`,
+                };
+            }
+        }
+        const cleanedFees = (d.fees ?? []).map((f) => ({
+            id: f.id,
+            name: f.name.trim(),
+            amountBdt: Math.round(f.amountBdt * 100) / 100,
+            required: f.required,
+        }));
+        const derivedPrice =
+            cleanedFees.length > 0
+                ? sumRequiredFees(cleanedFees)
+                : d.priceBdt !== null
+                  ? Math.round(d.priceBdt * 100) / 100
+                  : null;
         normalised.push({
             code,
             label,
@@ -104,13 +136,10 @@ async function parseDivisionFields(formData: FormData): Promise<DivisionInput> {
             isTeam: d.isTeam,
             minAge: d.minAge,
             minRankId: d.minRankId,
-            priceBdt: d.priceBdt !== null ? Math.round(d.priceBdt * 100) / 100 : null,
+            priceBdt: derivedPrice,
+            fees: cleanedFees,
         });
     }
-    if (normalised.length === 0) {
-        return { error: "Add at least one division for this event." };
-    }
-
     const enabledTypes = Array.from(
         new Set(normalised.map((d) => d.eventType)),
     );
@@ -183,7 +212,10 @@ type ParsedCommon = {
     category: EventCategory;
     maxCapacity: number | null;
     memberDiscountPercent: number;
-    multiDivisionBundlePriceBdt: number | null;
+    multiDivisionDiscountPercent: number;
+    eventMinAge: number | null;
+    eventMinRankId: string | null;
+    eventTicketPrice: number | null;
 };
 
 function parseCommonFields(
@@ -226,17 +258,49 @@ function parseCommonFields(
         memberDiscountPercent = d;
     }
 
-    let multiDivisionBundlePriceBdt: number | null = null;
-    const bundleRaw = ((formData.get("multiDivisionBundlePriceBdt") as string) ?? "").trim();
-    if (bundleRaw) {
-        const b = Number.parseFloat(bundleRaw);
-        if (!Number.isFinite(b) || b < 0) {
+    let multiDivisionDiscountPercent = 0;
+    const multiRaw = (
+        (formData.get("multiDivisionDiscountPercent") as string) ?? ""
+    ).trim();
+    if (multiRaw) {
+        const m = Number.parseInt(multiRaw, 10);
+        if (!Number.isFinite(m) || m < 0 || m > 100) {
             return {
                 ok: false,
-                error: "Multi-division bundle price must be a positive number.",
+                error:
+                    "Multi-division discount must be a whole number between 0 and 100.",
             };
         }
-        multiDivisionBundlePriceBdt = Math.round(b * 100) / 100;
+        multiDivisionDiscountPercent = m;
+    }
+
+    let eventMinAge: number | null = null;
+    const minAgeRaw = ((formData.get("eventMinAge") as string) ?? "").trim();
+    if (minAgeRaw) {
+        const a = Number.parseInt(minAgeRaw, 10);
+        if (!Number.isFinite(a) || a < 1 || a > 100) {
+            return {
+                ok: false,
+                error: "Event minimum age must be between 1 and 100.",
+            };
+        }
+        eventMinAge = a;
+    }
+
+    const rankRaw = ((formData.get("eventMinRankId") as string) ?? "").trim();
+    const eventMinRankId = rankRaw || null;
+
+    let eventTicketPrice: number | null = null;
+    const ticketRaw = ((formData.get("eventTicketPrice") as string) ?? "").trim();
+    if (ticketRaw) {
+        const t = Number.parseFloat(ticketRaw);
+        if (!Number.isFinite(t) || t < 0) {
+            return {
+                ok: false,
+                error: "Event ticket price must be a positive number.",
+            };
+        }
+        eventTicketPrice = Math.round(t * 100) / 100;
     }
 
     return {
@@ -249,7 +313,10 @@ function parseCommonFields(
             category: categoryRaw,
             maxCapacity,
             memberDiscountPercent,
-            multiDivisionBundlePriceBdt,
+            multiDivisionDiscountPercent,
+            eventMinAge,
+            eventMinRankId,
+            eventTicketPrice,
         },
     };
 }
@@ -283,8 +350,24 @@ export async function createEventAction(formData: FormData): Promise<ActionResul
         category,
         maxCapacity,
         memberDiscountPercent,
-        multiDivisionBundlePriceBdt,
+        multiDivisionDiscountPercent,
+        eventMinAge,
+        eventMinRankId,
+        eventTicketPrice,
     } = parsed.value;
+
+    if (eventMinRankId) {
+        const rank = await prisma.beltRank.findUnique({
+            where: { id: eventMinRankId },
+            select: { id: true },
+        });
+        if (!rank) {
+            return { ok: false, error: "Selected event belt rank was not found." };
+        }
+    }
+
+    const isPremium =
+        divisions.isPremium || (eventTicketPrice !== null && eventTicketPrice > 0);
 
     const created = await prisma.$transaction(async (tx) => {
         const event = await tx.event.create({
@@ -296,13 +379,12 @@ export async function createEventAction(formData: FormData): Promise<ActionResul
                 category,
                 maxCapacity,
                 isPublished,
-                // Event-level fields are unused now that pricing lives on
-                // each division; kept nullable in the schema.
-                isPremium: divisions.isPremium,
-                ticketPrice: multiDivisionBundlePriceBdt,
+                isPremium,
+                ticketPrice: eventTicketPrice,
                 memberDiscountPercent,
-                minAge: null,
-                minRankId: null,
+                multiDivisionDiscountPercent,
+                minAge: eventMinAge,
+                minRankId: eventMinRankId,
                 participantType: "PUBLIC",
                 attachmentUrl: attachment?.url ?? null,
                 attachmentType: attachment?.type ?? null,
@@ -310,18 +392,20 @@ export async function createEventAction(formData: FormData): Promise<ActionResul
                 dojoId: null,
             },
         });
-        await tx.tournamentDetail.create({
-            data: {
-                eventId: event.id,
-                eventType: divisions.enabledTypes[0],
-                enabledTypes: divisions.enabledTypes,
-                enabledDivisions: divisions.divisions.map((d) => d.code),
-                customDivisions: divisions.divisions,
-                registrationDeadline: divisions.registrationDeadline,
-                weighInDate: divisions.weighInDate,
-                rulesUrl: divisions.rulesUrl,
-            },
-        });
+        if (divisions.divisions.length > 0) {
+            await tx.tournamentDetail.create({
+                data: {
+                    eventId: event.id,
+                    eventType: divisions.enabledTypes[0],
+                    enabledTypes: divisions.enabledTypes,
+                    enabledDivisions: divisions.divisions.map((d) => d.code),
+                    customDivisions: divisions.divisions,
+                    registrationDeadline: divisions.registrationDeadline,
+                    weighInDate: divisions.weighInDate,
+                    rulesUrl: divisions.rulesUrl,
+                },
+            });
+        }
         return event;
     });
 
@@ -367,8 +451,24 @@ export async function updateEventAction(formData: FormData): Promise<ActionResul
         category,
         maxCapacity,
         memberDiscountPercent,
-        multiDivisionBundlePriceBdt,
+        multiDivisionDiscountPercent,
+        eventMinAge,
+        eventMinRankId,
+        eventTicketPrice,
     } = parsed.value;
+
+    if (eventMinRankId) {
+        const rank = await prisma.beltRank.findUnique({
+            where: { id: eventMinRankId },
+            select: { id: true },
+        });
+        if (!rank) {
+            return { ok: false, error: "Selected event belt rank was not found." };
+        }
+    }
+
+    const isPremium =
+        divisions.isPremium || (eventTicketPrice !== null && eventTicketPrice > 0);
 
     await prisma.$transaction(async (tx) => {
         await tx.event.update({
@@ -381,39 +481,46 @@ export async function updateEventAction(formData: FormData): Promise<ActionResul
                 category,
                 maxCapacity,
                 isPublished,
-                isPremium: divisions.isPremium,
-                ticketPrice: multiDivisionBundlePriceBdt,
+                isPremium,
+                ticketPrice: eventTicketPrice,
                 memberDiscountPercent,
-                minAge: null,
-                minRankId: null,
+                multiDivisionDiscountPercent,
+                minAge: eventMinAge,
+                minRankId: eventMinRankId,
                 participantType: "PUBLIC",
                 ...(attachment
                     ? { attachmentUrl: attachment.url, attachmentType: attachment.type }
                     : {}),
             },
         });
-        await tx.tournamentDetail.upsert({
-            where: { eventId: id },
-            update: {
-                eventType: divisions.enabledTypes[0],
-                enabledTypes: divisions.enabledTypes,
-                enabledDivisions: divisions.divisions.map((d) => d.code),
-                customDivisions: divisions.divisions,
-                registrationDeadline: divisions.registrationDeadline,
-                weighInDate: divisions.weighInDate,
-                rulesUrl: divisions.rulesUrl,
-            },
-            create: {
-                eventId: id,
-                eventType: divisions.enabledTypes[0],
-                enabledTypes: divisions.enabledTypes,
-                enabledDivisions: divisions.divisions.map((d) => d.code),
-                customDivisions: divisions.divisions,
-                registrationDeadline: divisions.registrationDeadline,
-                weighInDate: divisions.weighInDate,
-                rulesUrl: divisions.rulesUrl,
-            },
-        });
+        if (divisions.divisions.length > 0) {
+            await tx.tournamentDetail.upsert({
+                where: { eventId: id },
+                update: {
+                    eventType: divisions.enabledTypes[0],
+                    enabledTypes: divisions.enabledTypes,
+                    enabledDivisions: divisions.divisions.map((d) => d.code),
+                    customDivisions: divisions.divisions,
+                    registrationDeadline: divisions.registrationDeadline,
+                    weighInDate: divisions.weighInDate,
+                    rulesUrl: divisions.rulesUrl,
+                },
+                create: {
+                    eventId: id,
+                    eventType: divisions.enabledTypes[0],
+                    enabledTypes: divisions.enabledTypes,
+                    enabledDivisions: divisions.divisions.map((d) => d.code),
+                    customDivisions: divisions.divisions,
+                    registrationDeadline: divisions.registrationDeadline,
+                    weighInDate: divisions.weighInDate,
+                    rulesUrl: divisions.rulesUrl,
+                },
+            });
+        } else {
+            // Divisions removed — drop the tournament-specific row so the
+            // event registers as a plain (ticket-only) event.
+            await tx.tournamentDetail.deleteMany({ where: { eventId: id } });
+        }
     });
 
     revalidateAll();

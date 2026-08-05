@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Ticket, LogIn } from "lucide-react";
 import {
     ageOnDate,
+    divisionBasePrice,
     type CustomDivision,
     type Gender,
 } from "@/lib/tournaments/divisions";
@@ -23,8 +24,10 @@ export type TournamentRegistrationEvent = {
     memberDiscountActive: boolean;
     memberDiscountPercent: number;
     divisions: CustomDivision[];
-    /** Optional bundle total (BDT) applied when 2+ divisions selected. */
-    multiDivisionBundlePriceBdt: number | null;
+    /** Event-wide base ticket price (BDT), added on top of division fees. */
+    eventTicketPriceBdt: number | null;
+    /** % discount applied to division subtotal when 2+ divisions selected. */
+    multiDivisionDiscountPercent: number;
     registrationDeadline: string | null; // ISO
     beltRanks: EventRegistrationBeltRank[];
 };
@@ -161,40 +164,43 @@ export default function TournamentRegistrationForm({
     const anyKumite = selected.some((d) => d.eventType === "KUMITE");
 
     const totals = useMemo(() => {
-        let sum = 0;
-        let baseSum = 0;
+        let divisionsBase = 0;
+        let divisionsAfter = 0;
         for (const d of selected) {
-            const base = d.priceBdt ?? 0;
-            baseSum += base;
-            const effective = event.memberDiscountActive
+            const base = divisionBasePrice(d);
+            divisionsBase += base;
+            let eff = event.memberDiscountActive
                 ? applyDiscount(base, event.memberDiscountPercent)
                 : base;
-            sum += effective;
+            if (
+                selected.length >= 2 &&
+                event.multiDivisionDiscountPercent > 0
+            ) {
+                eff = applyDiscount(eff, event.multiDivisionDiscountPercent);
+            }
+            divisionsAfter += eff;
         }
-        const usesBundle =
-            selected.length >= 2 &&
-            event.multiDivisionBundlePriceBdt !== null &&
-            event.multiDivisionBundlePriceBdt > 0;
-        const bundleBase = usesBundle ? event.multiDivisionBundlePriceBdt! : 0;
-        const bundleEffective =
-            usesBundle && event.memberDiscountActive
-                ? applyDiscount(bundleBase, event.memberDiscountPercent)
-                : bundleBase;
+        const ticketBase = event.eventTicketPriceBdt ?? 0;
+        const ticketAfter =
+            ticketBase > 0 && event.memberDiscountActive
+                ? applyDiscount(ticketBase, event.memberDiscountPercent)
+                : ticketBase;
+        const round2 = (n: number) => Math.round(n * 100) / 100;
+        const multiActive =
+            selected.length >= 2 && event.multiDivisionDiscountPercent > 0;
         return {
-            total: usesBundle
-                ? Math.round(bundleEffective * 100) / 100
-                : Math.round(sum * 100) / 100,
-            baseTotal: usesBundle
-                ? Math.round(bundleBase * 100) / 100
-                : Math.round(baseSum * 100) / 100,
-            usesBundle,
-            sumTotal: Math.round(sum * 100) / 100,
+            total: round2(divisionsAfter + ticketAfter),
+            baseTotal: round2(divisionsBase + ticketBase),
+            divisionsAfter: round2(divisionsAfter),
+            ticketAfter: round2(ticketAfter),
+            multiDiscountActive: multiActive,
         };
     }, [
         selected,
         event.memberDiscountActive,
         event.memberDiscountPercent,
-        event.multiDivisionBundlePriceBdt,
+        event.eventTicketPriceBdt,
+        event.multiDivisionDiscountPercent,
     ]);
 
     const paid = totals.total > 0;
@@ -216,19 +222,6 @@ export default function TournamentRegistrationForm({
                 </p>
                 <p className="text-sm text-zinc-500">
                     The deadline for this event has passed.
-                </p>
-            </div>
-        );
-    }
-
-    if (event.divisions.length === 0) {
-        return (
-            <div className="bg-white border border-zinc-200 rounded-sm shadow-sm p-6 text-center">
-                <p className="text-base font-semibold text-zinc-900 mb-2">
-                    Registration not open yet.
-                </p>
-                <p className="text-sm text-zinc-500">
-                    The organiser has not published any divisions.
                 </p>
             </div>
         );
@@ -344,15 +337,22 @@ export default function TournamentRegistrationForm({
             )}
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                <Field label="Belt rank" required>
+                <Field
+                    label="Belt rank"
+                    required={event.divisions.length > 0}
+                >
                     <select
                         name="entrantBeltRank"
                         value={selectedRankName}
                         onChange={(e) => setSelectedRankName(e.target.value)}
-                        required
+                        required={event.divisions.length > 0}
                         className={inputCx}
                     >
-                        <option value="">Select your rank…</option>
+                        <option value="">
+                            {event.divisions.length > 0
+                                ? "Select your rank…"
+                                : "Select your rank (optional)"}
+                        </option>
                         {event.beltRanks.map((r) => (
                             <option key={r.id} value={r.name}>
                                 {r.name}
@@ -370,10 +370,12 @@ export default function TournamentRegistrationForm({
                     />
                 </Field>
             </div>
-            <p className="text-[11px] text-amber-800 bg-amber-50 border border-amber-200 rounded-sm px-3 py-2 -mt-2">
-                You must bring your belt test results or certificate to
-                justify your rank.
-            </p>
+            {event.divisions.length > 0 && (
+                <p className="text-[11px] text-amber-800 bg-amber-50 border border-amber-200 rounded-sm px-3 py-2 -mt-2">
+                    You must bring your belt test results or certificate to
+                    justify your rank.
+                </p>
+            )}
 
             <Field label="Coach name (optional)">
                 <input name="coachName" type="text" className={inputCx} />
@@ -388,6 +390,7 @@ export default function TournamentRegistrationForm({
                 />
             </Field>
 
+            {event.divisions.length > 0 && (
             <div>
                 <p className="text-[10px] tracking-widest uppercase font-bold text-zinc-500 mb-2">
                     Divisions <span className="text-accent-red">*</span>
@@ -422,7 +425,7 @@ export default function TournamentRegistrationForm({
                         .map(({ d, reason }) => {
                         const checked = effectiveSelected.has(d.code);
                         const disabled = !!reason;
-                        const base = d.priceBdt ?? 0;
+                        const base = divisionBasePrice(d);
                         const effective = event.memberDiscountActive
                             ? applyDiscount(base, event.memberDiscountPercent)
                             : base;
@@ -470,14 +473,9 @@ export default function TournamentRegistrationForm({
                                             </span>
                                         </div>
                                         <div className="flex flex-wrap items-center gap-2 mt-1">
-                                            <span className="text-[10px] uppercase tracking-widest font-bold text-zinc-500">
-                                                {d.eventType === "KATA"
-                                                    ? "Kata"
-                                                    : "Kumite"}
-                                            </span>
                                             {d.isTeam && (
                                                 <span className="text-[10px] uppercase tracking-widest font-bold text-zinc-500">
-                                                    · Team
+                                                    Team
                                                 </span>
                                             )}
                                             {d.minAge !== null && (
@@ -513,6 +511,7 @@ export default function TournamentRegistrationForm({
                     </p>
                 )}
             </div>
+            )}
 
             {anyTeam && (
                 <div className="border border-zinc-200 rounded-sm bg-zinc-50 p-4 space-y-3">
@@ -628,11 +627,17 @@ export default function TournamentRegistrationForm({
             {paid ? (
                 <>
                     <div className="border-t border-zinc-200 pt-4 space-y-2">
-                        {totals.usesBundle && (
+                        {totals.multiDiscountActive && (
                             <div className="text-[11px] text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-sm px-3 py-2">
-                                Multi-division bundle applied: ৳
-                                {totals.total.toLocaleString()} instead of ৳
-                                {totals.sumTotal.toLocaleString()}.
+                                Multi-division discount applied: −
+                                {event.multiDivisionDiscountPercent}% on the
+                                sum of your division fees.
+                            </div>
+                        )}
+                        {totals.ticketAfter > 0 && (
+                            <div className="flex items-center justify-between text-xs text-zinc-600">
+                                <span>Event ticket</span>
+                                <span>৳{totals.ticketAfter.toLocaleString()}</span>
                             </div>
                         )}
                         <div className="flex items-center justify-between text-sm">
@@ -658,7 +663,9 @@ export default function TournamentRegistrationForm({
                     </div>
                     <button
                         type="submit"
-                        disabled={selected.length === 0}
+                        disabled={
+                            event.divisions.length > 0 && selected.length === 0
+                        }
                         className="w-full inline-flex items-center justify-center gap-2 bg-accent-red text-white px-4 py-3 text-xs font-bold tracking-widest uppercase hover:bg-accent-red/90 disabled:opacity-40 transition-colors rounded-sm"
                     >
                         <Ticket size={14} />

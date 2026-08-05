@@ -124,6 +124,11 @@ export type TournamentDetail = $Result.DefaultSelection<Prisma.$TournamentDetail
  */
 export type Announcement = $Result.DefaultSelection<Prisma.$AnnouncementPayload>
 /**
+ * Model DivisionPreset
+ * 
+ */
+export type DivisionPreset = $Result.DefaultSelection<Prisma.$DivisionPresetPayload>
+/**
  * Model EventRegistration
  * 
  */
@@ -915,6 +920,16 @@ export class PrismaClient<
   get announcement(): Prisma.AnnouncementDelegate<ExtArgs, ClientOptions>;
 
   /**
+   * `prisma.divisionPreset`: Exposes CRUD operations for the **DivisionPreset** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more DivisionPresets
+    * const divisionPresets = await prisma.divisionPreset.findMany()
+    * ```
+    */
+  get divisionPreset(): Prisma.DivisionPresetDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.eventRegistration`: Exposes CRUD operations for the **EventRegistration** model.
     * Example usage:
     * ```ts
@@ -1559,6 +1574,7 @@ export namespace Prisma {
     Event: 'Event',
     TournamentDetail: 'TournamentDetail',
     Announcement: 'Announcement',
+    DivisionPreset: 'DivisionPreset',
     EventRegistration: 'EventRegistration',
     Notification: 'Notification',
     ShopProduct: 'ShopProduct',
@@ -1593,7 +1609,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "role" | "permission" | "rolePermission" | "user" | "profile" | "student" | "instructor" | "dojoManager" | "dojoOwner" | "admin" | "beltRank" | "dojo" | "dojoApplication" | "dojoOwnerInvite" | "gradingEvent" | "gradingApplication" | "grading" | "certificateRequest" | "systemSettings" | "event" | "tournamentDetail" | "announcement" | "eventRegistration" | "notification" | "shopProduct" | "dojoInventoryItem" | "dojoSale" | "dojoSaleItem" | "shopOrder" | "shopOrderItem" | "tournament" | "tournamentParticipant" | "tournamentMatch" | "achievement" | "studentAchievement" | "studentTransferRequest" | "paymentTransaction" | "studentDojoHistory" | "service" | "serviceRequest" | "serviceCoupon"
+      modelProps: "role" | "permission" | "rolePermission" | "user" | "profile" | "student" | "instructor" | "dojoManager" | "dojoOwner" | "admin" | "beltRank" | "dojo" | "dojoApplication" | "dojoOwnerInvite" | "gradingEvent" | "gradingApplication" | "grading" | "certificateRequest" | "systemSettings" | "event" | "tournamentDetail" | "announcement" | "divisionPreset" | "eventRegistration" | "notification" | "shopProduct" | "dojoInventoryItem" | "dojoSale" | "dojoSaleItem" | "shopOrder" | "shopOrderItem" | "tournament" | "tournamentParticipant" | "tournamentMatch" | "achievement" | "studentAchievement" | "studentTransferRequest" | "paymentTransaction" | "studentDojoHistory" | "service" | "serviceRequest" | "serviceCoupon"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -3225,6 +3241,80 @@ export namespace Prisma {
           }
         }
       }
+      DivisionPreset: {
+        payload: Prisma.$DivisionPresetPayload<ExtArgs>
+        fields: Prisma.DivisionPresetFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.DivisionPresetFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DivisionPresetPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.DivisionPresetFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DivisionPresetPayload>
+          }
+          findFirst: {
+            args: Prisma.DivisionPresetFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DivisionPresetPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.DivisionPresetFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DivisionPresetPayload>
+          }
+          findMany: {
+            args: Prisma.DivisionPresetFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DivisionPresetPayload>[]
+          }
+          create: {
+            args: Prisma.DivisionPresetCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DivisionPresetPayload>
+          }
+          createMany: {
+            args: Prisma.DivisionPresetCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.DivisionPresetCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DivisionPresetPayload>[]
+          }
+          delete: {
+            args: Prisma.DivisionPresetDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DivisionPresetPayload>
+          }
+          update: {
+            args: Prisma.DivisionPresetUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DivisionPresetPayload>
+          }
+          deleteMany: {
+            args: Prisma.DivisionPresetDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.DivisionPresetUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.DivisionPresetUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DivisionPresetPayload>[]
+          }
+          upsert: {
+            args: Prisma.DivisionPresetUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DivisionPresetPayload>
+          }
+          aggregate: {
+            args: Prisma.DivisionPresetAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateDivisionPreset>
+          }
+          groupBy: {
+            args: Prisma.DivisionPresetGroupByArgs<ExtArgs>
+            result: $Utils.Optional<DivisionPresetGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.DivisionPresetCountArgs<ExtArgs>
+            result: $Utils.Optional<DivisionPresetCountAggregateOutputType> | number
+          }
+        }
+      }
       EventRegistration: {
         payload: Prisma.$EventRegistrationPayload<ExtArgs>
         fields: Prisma.EventRegistrationFieldRefs
@@ -4761,6 +4851,7 @@ export namespace Prisma {
     event?: EventOmit
     tournamentDetail?: TournamentDetailOmit
     announcement?: AnnouncementOmit
+    divisionPreset?: DivisionPresetOmit
     eventRegistration?: EventRegistrationOmit
     notification?: NotificationOmit
     shopProduct?: ShopProductOmit
@@ -4950,6 +5041,7 @@ export namespace Prisma {
     serviceRequestsDojoActed: number
     serviceRequestsAdminActed: number
     serviceCouponsCreated: number
+    divisionPresetsCreated: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4972,6 +5064,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: boolean | UserCountOutputTypeCountServiceRequestsDojoActedArgs
     serviceRequestsAdminActed?: boolean | UserCountOutputTypeCountServiceRequestsAdminActedArgs
     serviceCouponsCreated?: boolean | UserCountOutputTypeCountServiceCouponsCreatedArgs
+    divisionPresetsCreated?: boolean | UserCountOutputTypeCountDivisionPresetsCreatedArgs
   }
 
   // Custom InputTypes
@@ -5116,6 +5209,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountServiceCouponsCreatedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ServiceCouponWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountDivisionPresetsCreatedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DivisionPresetWhereInput
   }
 
 
@@ -9386,6 +9486,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: boolean | User$serviceRequestsDojoActedArgs<ExtArgs>
     serviceRequestsAdminActed?: boolean | User$serviceRequestsAdminActedArgs<ExtArgs>
     serviceCouponsCreated?: boolean | User$serviceCouponsCreatedArgs<ExtArgs>
+    divisionPresetsCreated?: boolean | User$divisionPresetsCreatedArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -9461,6 +9562,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: boolean | User$serviceRequestsDojoActedArgs<ExtArgs>
     serviceRequestsAdminActed?: boolean | User$serviceRequestsAdminActedArgs<ExtArgs>
     serviceCouponsCreated?: boolean | User$serviceCouponsCreatedArgs<ExtArgs>
+    divisionPresetsCreated?: boolean | User$divisionPresetsCreatedArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -9499,6 +9601,7 @@ export namespace Prisma {
       serviceRequestsDojoActed: Prisma.$ServiceRequestPayload<ExtArgs>[]
       serviceRequestsAdminActed: Prisma.$ServiceRequestPayload<ExtArgs>[]
       serviceCouponsCreated: Prisma.$ServiceCouponPayload<ExtArgs>[]
+      divisionPresetsCreated: Prisma.$DivisionPresetPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -9932,6 +10035,7 @@ export namespace Prisma {
     serviceRequestsDojoActed<T extends User$serviceRequestsDojoActedArgs<ExtArgs> = {}>(args?: Subset<T, User$serviceRequestsDojoActedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ServiceRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     serviceRequestsAdminActed<T extends User$serviceRequestsAdminActedArgs<ExtArgs> = {}>(args?: Subset<T, User$serviceRequestsAdminActedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ServiceRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     serviceCouponsCreated<T extends User$serviceCouponsCreatedArgs<ExtArgs> = {}>(args?: Subset<T, User$serviceCouponsCreatedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ServiceCouponPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    divisionPresetsCreated<T extends User$divisionPresetsCreatedArgs<ExtArgs> = {}>(args?: Subset<T, User$divisionPresetsCreatedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DivisionPresetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -10940,6 +11044,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: ServiceCouponScalarFieldEnum | ServiceCouponScalarFieldEnum[]
+  }
+
+  /**
+   * User.divisionPresetsCreated
+   */
+  export type User$divisionPresetsCreatedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DivisionPreset
+     */
+    select?: DivisionPresetSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DivisionPreset
+     */
+    omit?: DivisionPresetOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DivisionPresetInclude<ExtArgs> | null
+    where?: DivisionPresetWhereInput
+    orderBy?: DivisionPresetOrderByWithRelationInput | DivisionPresetOrderByWithRelationInput[]
+    cursor?: DivisionPresetWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: DivisionPresetScalarFieldEnum | DivisionPresetScalarFieldEnum[]
   }
 
   /**
@@ -29471,6 +29599,7 @@ export namespace Prisma {
     maxCapacity: number | null
     ticketPrice: Decimal | null
     memberDiscountPercent: number | null
+    multiDivisionDiscountPercent: number | null
     minAge: number | null
   }
 
@@ -29478,6 +29607,7 @@ export namespace Prisma {
     maxCapacity: number | null
     ticketPrice: Decimal | null
     memberDiscountPercent: number | null
+    multiDivisionDiscountPercent: number | null
     minAge: number | null
   }
 
@@ -29496,6 +29626,7 @@ export namespace Prisma {
     isPremium: boolean | null
     ticketPrice: Decimal | null
     memberDiscountPercent: number | null
+    multiDivisionDiscountPercent: number | null
     minAge: number | null
     minRankId: string | null
     participantType: $Enums.EventParticipantType | null
@@ -29520,6 +29651,7 @@ export namespace Prisma {
     isPremium: boolean | null
     ticketPrice: Decimal | null
     memberDiscountPercent: number | null
+    multiDivisionDiscountPercent: number | null
     minAge: number | null
     minRankId: string | null
     participantType: $Enums.EventParticipantType | null
@@ -29544,6 +29676,7 @@ export namespace Prisma {
     isPremium: number
     ticketPrice: number
     memberDiscountPercent: number
+    multiDivisionDiscountPercent: number
     minAge: number
     minRankId: number
     participantType: number
@@ -29559,6 +29692,7 @@ export namespace Prisma {
     maxCapacity?: true
     ticketPrice?: true
     memberDiscountPercent?: true
+    multiDivisionDiscountPercent?: true
     minAge?: true
   }
 
@@ -29566,6 +29700,7 @@ export namespace Prisma {
     maxCapacity?: true
     ticketPrice?: true
     memberDiscountPercent?: true
+    multiDivisionDiscountPercent?: true
     minAge?: true
   }
 
@@ -29584,6 +29719,7 @@ export namespace Prisma {
     isPremium?: true
     ticketPrice?: true
     memberDiscountPercent?: true
+    multiDivisionDiscountPercent?: true
     minAge?: true
     minRankId?: true
     participantType?: true
@@ -29608,6 +29744,7 @@ export namespace Prisma {
     isPremium?: true
     ticketPrice?: true
     memberDiscountPercent?: true
+    multiDivisionDiscountPercent?: true
     minAge?: true
     minRankId?: true
     participantType?: true
@@ -29632,6 +29769,7 @@ export namespace Prisma {
     isPremium?: true
     ticketPrice?: true
     memberDiscountPercent?: true
+    multiDivisionDiscountPercent?: true
     minAge?: true
     minRankId?: true
     participantType?: true
@@ -29743,6 +29881,7 @@ export namespace Prisma {
     isPremium: boolean
     ticketPrice: Decimal | null
     memberDiscountPercent: number
+    multiDivisionDiscountPercent: number
     minAge: number | null
     minRankId: string | null
     participantType: $Enums.EventParticipantType
@@ -29786,6 +29925,7 @@ export namespace Prisma {
     isPremium?: boolean
     ticketPrice?: boolean
     memberDiscountPercent?: boolean
+    multiDivisionDiscountPercent?: boolean
     minAge?: boolean
     minRankId?: boolean
     participantType?: boolean
@@ -29816,6 +29956,7 @@ export namespace Prisma {
     isPremium?: boolean
     ticketPrice?: boolean
     memberDiscountPercent?: boolean
+    multiDivisionDiscountPercent?: boolean
     minAge?: boolean
     minRankId?: boolean
     participantType?: boolean
@@ -29843,6 +29984,7 @@ export namespace Prisma {
     isPremium?: boolean
     ticketPrice?: boolean
     memberDiscountPercent?: boolean
+    multiDivisionDiscountPercent?: boolean
     minAge?: boolean
     minRankId?: boolean
     participantType?: boolean
@@ -29870,6 +30012,7 @@ export namespace Prisma {
     isPremium?: boolean
     ticketPrice?: boolean
     memberDiscountPercent?: boolean
+    multiDivisionDiscountPercent?: boolean
     minAge?: boolean
     minRankId?: boolean
     participantType?: boolean
@@ -29879,7 +30022,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type EventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "eventDate" | "location" | "imageUrl" | "isPublished" | "maxCapacity" | "category" | "attachmentUrl" | "attachmentType" | "isPremium" | "ticketPrice" | "memberDiscountPercent" | "minAge" | "minRankId" | "participantType" | "postedById" | "dojoId" | "createdAt" | "updatedAt", ExtArgs["result"]["event"]>
+  export type EventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "eventDate" | "location" | "imageUrl" | "isPublished" | "maxCapacity" | "category" | "attachmentUrl" | "attachmentType" | "isPremium" | "ticketPrice" | "memberDiscountPercent" | "multiDivisionDiscountPercent" | "minAge" | "minRankId" | "participantType" | "postedById" | "dojoId" | "createdAt" | "updatedAt", ExtArgs["result"]["event"]>
   export type EventInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     registrations?: boolean | Event$registrationsArgs<ExtArgs>
     postedBy?: boolean | Event$postedByArgs<ExtArgs>
@@ -29923,6 +30066,7 @@ export namespace Prisma {
       isPremium: boolean
       ticketPrice: Prisma.Decimal | null
       memberDiscountPercent: number
+      multiDivisionDiscountPercent: number
       minAge: number | null
       minRankId: string | null
       participantType: $Enums.EventParticipantType
@@ -30372,6 +30516,7 @@ export namespace Prisma {
     readonly isPremium: FieldRef<"Event", 'Boolean'>
     readonly ticketPrice: FieldRef<"Event", 'Decimal'>
     readonly memberDiscountPercent: FieldRef<"Event", 'Int'>
+    readonly multiDivisionDiscountPercent: FieldRef<"Event", 'Int'>
     readonly minAge: FieldRef<"Event", 'Int'>
     readonly minRankId: FieldRef<"Event", 'String'>
     readonly participantType: FieldRef<"Event", 'EventParticipantType'>
@@ -33211,6 +33356,1110 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: AnnouncementInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model DivisionPreset
+   */
+
+  export type AggregateDivisionPreset = {
+    _count: DivisionPresetCountAggregateOutputType | null
+    _min: DivisionPresetMinAggregateOutputType | null
+    _max: DivisionPresetMaxAggregateOutputType | null
+  }
+
+  export type DivisionPresetMinAggregateOutputType = {
+    id: string | null
+    name: string | null
+    description: string | null
+    createdById: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type DivisionPresetMaxAggregateOutputType = {
+    id: string | null
+    name: string | null
+    description: string | null
+    createdById: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type DivisionPresetCountAggregateOutputType = {
+    id: number
+    name: number
+    description: number
+    divisions: number
+    createdById: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type DivisionPresetMinAggregateInputType = {
+    id?: true
+    name?: true
+    description?: true
+    createdById?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type DivisionPresetMaxAggregateInputType = {
+    id?: true
+    name?: true
+    description?: true
+    createdById?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type DivisionPresetCountAggregateInputType = {
+    id?: true
+    name?: true
+    description?: true
+    divisions?: true
+    createdById?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type DivisionPresetAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which DivisionPreset to aggregate.
+     */
+    where?: DivisionPresetWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DivisionPresets to fetch.
+     */
+    orderBy?: DivisionPresetOrderByWithRelationInput | DivisionPresetOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: DivisionPresetWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DivisionPresets from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DivisionPresets.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned DivisionPresets
+    **/
+    _count?: true | DivisionPresetCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: DivisionPresetMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: DivisionPresetMaxAggregateInputType
+  }
+
+  export type GetDivisionPresetAggregateType<T extends DivisionPresetAggregateArgs> = {
+        [P in keyof T & keyof AggregateDivisionPreset]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateDivisionPreset[P]>
+      : GetScalarType<T[P], AggregateDivisionPreset[P]>
+  }
+
+
+
+
+  export type DivisionPresetGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DivisionPresetWhereInput
+    orderBy?: DivisionPresetOrderByWithAggregationInput | DivisionPresetOrderByWithAggregationInput[]
+    by: DivisionPresetScalarFieldEnum[] | DivisionPresetScalarFieldEnum
+    having?: DivisionPresetScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: DivisionPresetCountAggregateInputType | true
+    _min?: DivisionPresetMinAggregateInputType
+    _max?: DivisionPresetMaxAggregateInputType
+  }
+
+  export type DivisionPresetGroupByOutputType = {
+    id: string
+    name: string
+    description: string | null
+    divisions: JsonValue
+    createdById: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: DivisionPresetCountAggregateOutputType | null
+    _min: DivisionPresetMinAggregateOutputType | null
+    _max: DivisionPresetMaxAggregateOutputType | null
+  }
+
+  type GetDivisionPresetGroupByPayload<T extends DivisionPresetGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<DivisionPresetGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof DivisionPresetGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], DivisionPresetGroupByOutputType[P]>
+            : GetScalarType<T[P], DivisionPresetGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type DivisionPresetSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    description?: boolean
+    divisions?: boolean
+    createdById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean | DivisionPreset$createdByArgs<ExtArgs>
+  }, ExtArgs["result"]["divisionPreset"]>
+
+  export type DivisionPresetSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    description?: boolean
+    divisions?: boolean
+    createdById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean | DivisionPreset$createdByArgs<ExtArgs>
+  }, ExtArgs["result"]["divisionPreset"]>
+
+  export type DivisionPresetSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    description?: boolean
+    divisions?: boolean
+    createdById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean | DivisionPreset$createdByArgs<ExtArgs>
+  }, ExtArgs["result"]["divisionPreset"]>
+
+  export type DivisionPresetSelectScalar = {
+    id?: boolean
+    name?: boolean
+    description?: boolean
+    divisions?: boolean
+    createdById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type DivisionPresetOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "divisions" | "createdById" | "createdAt" | "updatedAt", ExtArgs["result"]["divisionPreset"]>
+  export type DivisionPresetInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    createdBy?: boolean | DivisionPreset$createdByArgs<ExtArgs>
+  }
+  export type DivisionPresetIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    createdBy?: boolean | DivisionPreset$createdByArgs<ExtArgs>
+  }
+  export type DivisionPresetIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    createdBy?: boolean | DivisionPreset$createdByArgs<ExtArgs>
+  }
+
+  export type $DivisionPresetPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "DivisionPreset"
+    objects: {
+      createdBy: Prisma.$UserPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      name: string
+      description: string | null
+      divisions: Prisma.JsonValue
+      createdById: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["divisionPreset"]>
+    composites: {}
+  }
+
+  type DivisionPresetGetPayload<S extends boolean | null | undefined | DivisionPresetDefaultArgs> = $Result.GetResult<Prisma.$DivisionPresetPayload, S>
+
+  type DivisionPresetCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<DivisionPresetFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: DivisionPresetCountAggregateInputType | true
+    }
+
+  export interface DivisionPresetDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['DivisionPreset'], meta: { name: 'DivisionPreset' } }
+    /**
+     * Find zero or one DivisionPreset that matches the filter.
+     * @param {DivisionPresetFindUniqueArgs} args - Arguments to find a DivisionPreset
+     * @example
+     * // Get one DivisionPreset
+     * const divisionPreset = await prisma.divisionPreset.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends DivisionPresetFindUniqueArgs>(args: SelectSubset<T, DivisionPresetFindUniqueArgs<ExtArgs>>): Prisma__DivisionPresetClient<$Result.GetResult<Prisma.$DivisionPresetPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one DivisionPreset that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {DivisionPresetFindUniqueOrThrowArgs} args - Arguments to find a DivisionPreset
+     * @example
+     * // Get one DivisionPreset
+     * const divisionPreset = await prisma.divisionPreset.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends DivisionPresetFindUniqueOrThrowArgs>(args: SelectSubset<T, DivisionPresetFindUniqueOrThrowArgs<ExtArgs>>): Prisma__DivisionPresetClient<$Result.GetResult<Prisma.$DivisionPresetPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first DivisionPreset that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DivisionPresetFindFirstArgs} args - Arguments to find a DivisionPreset
+     * @example
+     * // Get one DivisionPreset
+     * const divisionPreset = await prisma.divisionPreset.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends DivisionPresetFindFirstArgs>(args?: SelectSubset<T, DivisionPresetFindFirstArgs<ExtArgs>>): Prisma__DivisionPresetClient<$Result.GetResult<Prisma.$DivisionPresetPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first DivisionPreset that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DivisionPresetFindFirstOrThrowArgs} args - Arguments to find a DivisionPreset
+     * @example
+     * // Get one DivisionPreset
+     * const divisionPreset = await prisma.divisionPreset.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends DivisionPresetFindFirstOrThrowArgs>(args?: SelectSubset<T, DivisionPresetFindFirstOrThrowArgs<ExtArgs>>): Prisma__DivisionPresetClient<$Result.GetResult<Prisma.$DivisionPresetPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more DivisionPresets that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DivisionPresetFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all DivisionPresets
+     * const divisionPresets = await prisma.divisionPreset.findMany()
+     * 
+     * // Get first 10 DivisionPresets
+     * const divisionPresets = await prisma.divisionPreset.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const divisionPresetWithIdOnly = await prisma.divisionPreset.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends DivisionPresetFindManyArgs>(args?: SelectSubset<T, DivisionPresetFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DivisionPresetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a DivisionPreset.
+     * @param {DivisionPresetCreateArgs} args - Arguments to create a DivisionPreset.
+     * @example
+     * // Create one DivisionPreset
+     * const DivisionPreset = await prisma.divisionPreset.create({
+     *   data: {
+     *     // ... data to create a DivisionPreset
+     *   }
+     * })
+     * 
+     */
+    create<T extends DivisionPresetCreateArgs>(args: SelectSubset<T, DivisionPresetCreateArgs<ExtArgs>>): Prisma__DivisionPresetClient<$Result.GetResult<Prisma.$DivisionPresetPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many DivisionPresets.
+     * @param {DivisionPresetCreateManyArgs} args - Arguments to create many DivisionPresets.
+     * @example
+     * // Create many DivisionPresets
+     * const divisionPreset = await prisma.divisionPreset.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends DivisionPresetCreateManyArgs>(args?: SelectSubset<T, DivisionPresetCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many DivisionPresets and returns the data saved in the database.
+     * @param {DivisionPresetCreateManyAndReturnArgs} args - Arguments to create many DivisionPresets.
+     * @example
+     * // Create many DivisionPresets
+     * const divisionPreset = await prisma.divisionPreset.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many DivisionPresets and only return the `id`
+     * const divisionPresetWithIdOnly = await prisma.divisionPreset.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends DivisionPresetCreateManyAndReturnArgs>(args?: SelectSubset<T, DivisionPresetCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DivisionPresetPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a DivisionPreset.
+     * @param {DivisionPresetDeleteArgs} args - Arguments to delete one DivisionPreset.
+     * @example
+     * // Delete one DivisionPreset
+     * const DivisionPreset = await prisma.divisionPreset.delete({
+     *   where: {
+     *     // ... filter to delete one DivisionPreset
+     *   }
+     * })
+     * 
+     */
+    delete<T extends DivisionPresetDeleteArgs>(args: SelectSubset<T, DivisionPresetDeleteArgs<ExtArgs>>): Prisma__DivisionPresetClient<$Result.GetResult<Prisma.$DivisionPresetPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one DivisionPreset.
+     * @param {DivisionPresetUpdateArgs} args - Arguments to update one DivisionPreset.
+     * @example
+     * // Update one DivisionPreset
+     * const divisionPreset = await prisma.divisionPreset.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends DivisionPresetUpdateArgs>(args: SelectSubset<T, DivisionPresetUpdateArgs<ExtArgs>>): Prisma__DivisionPresetClient<$Result.GetResult<Prisma.$DivisionPresetPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more DivisionPresets.
+     * @param {DivisionPresetDeleteManyArgs} args - Arguments to filter DivisionPresets to delete.
+     * @example
+     * // Delete a few DivisionPresets
+     * const { count } = await prisma.divisionPreset.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends DivisionPresetDeleteManyArgs>(args?: SelectSubset<T, DivisionPresetDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more DivisionPresets.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DivisionPresetUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many DivisionPresets
+     * const divisionPreset = await prisma.divisionPreset.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends DivisionPresetUpdateManyArgs>(args: SelectSubset<T, DivisionPresetUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more DivisionPresets and returns the data updated in the database.
+     * @param {DivisionPresetUpdateManyAndReturnArgs} args - Arguments to update many DivisionPresets.
+     * @example
+     * // Update many DivisionPresets
+     * const divisionPreset = await prisma.divisionPreset.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more DivisionPresets and only return the `id`
+     * const divisionPresetWithIdOnly = await prisma.divisionPreset.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends DivisionPresetUpdateManyAndReturnArgs>(args: SelectSubset<T, DivisionPresetUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DivisionPresetPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one DivisionPreset.
+     * @param {DivisionPresetUpsertArgs} args - Arguments to update or create a DivisionPreset.
+     * @example
+     * // Update or create a DivisionPreset
+     * const divisionPreset = await prisma.divisionPreset.upsert({
+     *   create: {
+     *     // ... data to create a DivisionPreset
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the DivisionPreset we want to update
+     *   }
+     * })
+     */
+    upsert<T extends DivisionPresetUpsertArgs>(args: SelectSubset<T, DivisionPresetUpsertArgs<ExtArgs>>): Prisma__DivisionPresetClient<$Result.GetResult<Prisma.$DivisionPresetPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of DivisionPresets.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DivisionPresetCountArgs} args - Arguments to filter DivisionPresets to count.
+     * @example
+     * // Count the number of DivisionPresets
+     * const count = await prisma.divisionPreset.count({
+     *   where: {
+     *     // ... the filter for the DivisionPresets we want to count
+     *   }
+     * })
+    **/
+    count<T extends DivisionPresetCountArgs>(
+      args?: Subset<T, DivisionPresetCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], DivisionPresetCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a DivisionPreset.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DivisionPresetAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends DivisionPresetAggregateArgs>(args: Subset<T, DivisionPresetAggregateArgs>): Prisma.PrismaPromise<GetDivisionPresetAggregateType<T>>
+
+    /**
+     * Group by DivisionPreset.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DivisionPresetGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends DivisionPresetGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: DivisionPresetGroupByArgs['orderBy'] }
+        : { orderBy?: DivisionPresetGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, DivisionPresetGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetDivisionPresetGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the DivisionPreset model
+   */
+  readonly fields: DivisionPresetFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for DivisionPreset.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__DivisionPresetClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    createdBy<T extends DivisionPreset$createdByArgs<ExtArgs> = {}>(args?: Subset<T, DivisionPreset$createdByArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the DivisionPreset model
+   */
+  interface DivisionPresetFieldRefs {
+    readonly id: FieldRef<"DivisionPreset", 'String'>
+    readonly name: FieldRef<"DivisionPreset", 'String'>
+    readonly description: FieldRef<"DivisionPreset", 'String'>
+    readonly divisions: FieldRef<"DivisionPreset", 'Json'>
+    readonly createdById: FieldRef<"DivisionPreset", 'String'>
+    readonly createdAt: FieldRef<"DivisionPreset", 'DateTime'>
+    readonly updatedAt: FieldRef<"DivisionPreset", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * DivisionPreset findUnique
+   */
+  export type DivisionPresetFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DivisionPreset
+     */
+    select?: DivisionPresetSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DivisionPreset
+     */
+    omit?: DivisionPresetOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DivisionPresetInclude<ExtArgs> | null
+    /**
+     * Filter, which DivisionPreset to fetch.
+     */
+    where: DivisionPresetWhereUniqueInput
+  }
+
+  /**
+   * DivisionPreset findUniqueOrThrow
+   */
+  export type DivisionPresetFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DivisionPreset
+     */
+    select?: DivisionPresetSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DivisionPreset
+     */
+    omit?: DivisionPresetOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DivisionPresetInclude<ExtArgs> | null
+    /**
+     * Filter, which DivisionPreset to fetch.
+     */
+    where: DivisionPresetWhereUniqueInput
+  }
+
+  /**
+   * DivisionPreset findFirst
+   */
+  export type DivisionPresetFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DivisionPreset
+     */
+    select?: DivisionPresetSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DivisionPreset
+     */
+    omit?: DivisionPresetOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DivisionPresetInclude<ExtArgs> | null
+    /**
+     * Filter, which DivisionPreset to fetch.
+     */
+    where?: DivisionPresetWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DivisionPresets to fetch.
+     */
+    orderBy?: DivisionPresetOrderByWithRelationInput | DivisionPresetOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for DivisionPresets.
+     */
+    cursor?: DivisionPresetWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DivisionPresets from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DivisionPresets.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DivisionPresets.
+     */
+    distinct?: DivisionPresetScalarFieldEnum | DivisionPresetScalarFieldEnum[]
+  }
+
+  /**
+   * DivisionPreset findFirstOrThrow
+   */
+  export type DivisionPresetFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DivisionPreset
+     */
+    select?: DivisionPresetSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DivisionPreset
+     */
+    omit?: DivisionPresetOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DivisionPresetInclude<ExtArgs> | null
+    /**
+     * Filter, which DivisionPreset to fetch.
+     */
+    where?: DivisionPresetWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DivisionPresets to fetch.
+     */
+    orderBy?: DivisionPresetOrderByWithRelationInput | DivisionPresetOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for DivisionPresets.
+     */
+    cursor?: DivisionPresetWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DivisionPresets from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DivisionPresets.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DivisionPresets.
+     */
+    distinct?: DivisionPresetScalarFieldEnum | DivisionPresetScalarFieldEnum[]
+  }
+
+  /**
+   * DivisionPreset findMany
+   */
+  export type DivisionPresetFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DivisionPreset
+     */
+    select?: DivisionPresetSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DivisionPreset
+     */
+    omit?: DivisionPresetOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DivisionPresetInclude<ExtArgs> | null
+    /**
+     * Filter, which DivisionPresets to fetch.
+     */
+    where?: DivisionPresetWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DivisionPresets to fetch.
+     */
+    orderBy?: DivisionPresetOrderByWithRelationInput | DivisionPresetOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing DivisionPresets.
+     */
+    cursor?: DivisionPresetWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DivisionPresets from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DivisionPresets.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DivisionPresets.
+     */
+    distinct?: DivisionPresetScalarFieldEnum | DivisionPresetScalarFieldEnum[]
+  }
+
+  /**
+   * DivisionPreset create
+   */
+  export type DivisionPresetCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DivisionPreset
+     */
+    select?: DivisionPresetSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DivisionPreset
+     */
+    omit?: DivisionPresetOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DivisionPresetInclude<ExtArgs> | null
+    /**
+     * The data needed to create a DivisionPreset.
+     */
+    data: XOR<DivisionPresetCreateInput, DivisionPresetUncheckedCreateInput>
+  }
+
+  /**
+   * DivisionPreset createMany
+   */
+  export type DivisionPresetCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many DivisionPresets.
+     */
+    data: DivisionPresetCreateManyInput | DivisionPresetCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * DivisionPreset createManyAndReturn
+   */
+  export type DivisionPresetCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DivisionPreset
+     */
+    select?: DivisionPresetSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the DivisionPreset
+     */
+    omit?: DivisionPresetOmit<ExtArgs> | null
+    /**
+     * The data used to create many DivisionPresets.
+     */
+    data: DivisionPresetCreateManyInput | DivisionPresetCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DivisionPresetIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * DivisionPreset update
+   */
+  export type DivisionPresetUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DivisionPreset
+     */
+    select?: DivisionPresetSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DivisionPreset
+     */
+    omit?: DivisionPresetOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DivisionPresetInclude<ExtArgs> | null
+    /**
+     * The data needed to update a DivisionPreset.
+     */
+    data: XOR<DivisionPresetUpdateInput, DivisionPresetUncheckedUpdateInput>
+    /**
+     * Choose, which DivisionPreset to update.
+     */
+    where: DivisionPresetWhereUniqueInput
+  }
+
+  /**
+   * DivisionPreset updateMany
+   */
+  export type DivisionPresetUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update DivisionPresets.
+     */
+    data: XOR<DivisionPresetUpdateManyMutationInput, DivisionPresetUncheckedUpdateManyInput>
+    /**
+     * Filter which DivisionPresets to update
+     */
+    where?: DivisionPresetWhereInput
+    /**
+     * Limit how many DivisionPresets to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * DivisionPreset updateManyAndReturn
+   */
+  export type DivisionPresetUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DivisionPreset
+     */
+    select?: DivisionPresetSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the DivisionPreset
+     */
+    omit?: DivisionPresetOmit<ExtArgs> | null
+    /**
+     * The data used to update DivisionPresets.
+     */
+    data: XOR<DivisionPresetUpdateManyMutationInput, DivisionPresetUncheckedUpdateManyInput>
+    /**
+     * Filter which DivisionPresets to update
+     */
+    where?: DivisionPresetWhereInput
+    /**
+     * Limit how many DivisionPresets to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DivisionPresetIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * DivisionPreset upsert
+   */
+  export type DivisionPresetUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DivisionPreset
+     */
+    select?: DivisionPresetSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DivisionPreset
+     */
+    omit?: DivisionPresetOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DivisionPresetInclude<ExtArgs> | null
+    /**
+     * The filter to search for the DivisionPreset to update in case it exists.
+     */
+    where: DivisionPresetWhereUniqueInput
+    /**
+     * In case the DivisionPreset found by the `where` argument doesn't exist, create a new DivisionPreset with this data.
+     */
+    create: XOR<DivisionPresetCreateInput, DivisionPresetUncheckedCreateInput>
+    /**
+     * In case the DivisionPreset was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<DivisionPresetUpdateInput, DivisionPresetUncheckedUpdateInput>
+  }
+
+  /**
+   * DivisionPreset delete
+   */
+  export type DivisionPresetDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DivisionPreset
+     */
+    select?: DivisionPresetSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DivisionPreset
+     */
+    omit?: DivisionPresetOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DivisionPresetInclude<ExtArgs> | null
+    /**
+     * Filter which DivisionPreset to delete.
+     */
+    where: DivisionPresetWhereUniqueInput
+  }
+
+  /**
+   * DivisionPreset deleteMany
+   */
+  export type DivisionPresetDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which DivisionPresets to delete
+     */
+    where?: DivisionPresetWhereInput
+    /**
+     * Limit how many DivisionPresets to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * DivisionPreset.createdBy
+   */
+  export type DivisionPreset$createdByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * DivisionPreset without action
+   */
+  export type DivisionPresetDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DivisionPreset
+     */
+    select?: DivisionPresetSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DivisionPreset
+     */
+    omit?: DivisionPresetOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DivisionPresetInclude<ExtArgs> | null
   }
 
 
@@ -57590,6 +58839,7 @@ export namespace Prisma {
     isPremium: 'isPremium',
     ticketPrice: 'ticketPrice',
     memberDiscountPercent: 'memberDiscountPercent',
+    multiDivisionDiscountPercent: 'multiDivisionDiscountPercent',
     minAge: 'minAge',
     minRankId: 'minRankId',
     participantType: 'participantType',
@@ -57634,6 +58884,19 @@ export namespace Prisma {
   };
 
   export type AnnouncementScalarFieldEnum = (typeof AnnouncementScalarFieldEnum)[keyof typeof AnnouncementScalarFieldEnum]
+
+
+  export const DivisionPresetScalarFieldEnum: {
+    id: 'id',
+    name: 'name',
+    description: 'description',
+    divisions: 'divisions',
+    createdById: 'createdById',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type DivisionPresetScalarFieldEnum = (typeof DivisionPresetScalarFieldEnum)[keyof typeof DivisionPresetScalarFieldEnum]
 
 
   export const EventRegistrationScalarFieldEnum: {
@@ -58684,6 +59947,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestListRelationFilter
     serviceRequestsAdminActed?: ServiceRequestListRelationFilter
     serviceCouponsCreated?: ServiceCouponListRelationFilter
+    divisionPresetsCreated?: DivisionPresetListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -58724,6 +59988,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestOrderByRelationAggregateInput
     serviceRequestsAdminActed?: ServiceRequestOrderByRelationAggregateInput
     serviceCouponsCreated?: ServiceCouponOrderByRelationAggregateInput
+    divisionPresetsCreated?: DivisionPresetOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -58767,6 +60032,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestListRelationFilter
     serviceRequestsAdminActed?: ServiceRequestListRelationFilter
     serviceCouponsCreated?: ServiceCouponListRelationFilter
+    divisionPresetsCreated?: DivisionPresetListRelationFilter
   }, "id" | "email" | "memberNumber">
 
   export type UserOrderByWithAggregationInput = {
@@ -60221,6 +61487,7 @@ export namespace Prisma {
     isPremium?: BoolFilter<"Event"> | boolean
     ticketPrice?: DecimalNullableFilter<"Event"> | Decimal | DecimalJsLike | number | string | null
     memberDiscountPercent?: IntFilter<"Event"> | number
+    multiDivisionDiscountPercent?: IntFilter<"Event"> | number
     minAge?: IntNullableFilter<"Event"> | number | null
     minRankId?: UuidNullableFilter<"Event"> | string | null
     participantType?: EnumEventParticipantTypeFilter<"Event"> | $Enums.EventParticipantType
@@ -60250,6 +61517,7 @@ export namespace Prisma {
     isPremium?: SortOrder
     ticketPrice?: SortOrderInput | SortOrder
     memberDiscountPercent?: SortOrder
+    multiDivisionDiscountPercent?: SortOrder
     minAge?: SortOrderInput | SortOrder
     minRankId?: SortOrderInput | SortOrder
     participantType?: SortOrder
@@ -60282,6 +61550,7 @@ export namespace Prisma {
     isPremium?: BoolFilter<"Event"> | boolean
     ticketPrice?: DecimalNullableFilter<"Event"> | Decimal | DecimalJsLike | number | string | null
     memberDiscountPercent?: IntFilter<"Event"> | number
+    multiDivisionDiscountPercent?: IntFilter<"Event"> | number
     minAge?: IntNullableFilter<"Event"> | number | null
     minRankId?: UuidNullableFilter<"Event"> | string | null
     participantType?: EnumEventParticipantTypeFilter<"Event"> | $Enums.EventParticipantType
@@ -60311,6 +61580,7 @@ export namespace Prisma {
     isPremium?: SortOrder
     ticketPrice?: SortOrderInput | SortOrder
     memberDiscountPercent?: SortOrder
+    multiDivisionDiscountPercent?: SortOrder
     minAge?: SortOrderInput | SortOrder
     minRankId?: SortOrderInput | SortOrder
     participantType?: SortOrder
@@ -60343,6 +61613,7 @@ export namespace Prisma {
     isPremium?: BoolWithAggregatesFilter<"Event"> | boolean
     ticketPrice?: DecimalNullableWithAggregatesFilter<"Event"> | Decimal | DecimalJsLike | number | string | null
     memberDiscountPercent?: IntWithAggregatesFilter<"Event"> | number
+    multiDivisionDiscountPercent?: IntWithAggregatesFilter<"Event"> | number
     minAge?: IntNullableWithAggregatesFilter<"Event"> | number | null
     minRankId?: UuidNullableWithAggregatesFilter<"Event"> | string | null
     participantType?: EnumEventParticipantTypeWithAggregatesFilter<"Event"> | $Enums.EventParticipantType
@@ -60523,6 +61794,71 @@ export namespace Prisma {
     dojoId?: UuidNullableWithAggregatesFilter<"Announcement"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Announcement"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Announcement"> | Date | string
+  }
+
+  export type DivisionPresetWhereInput = {
+    AND?: DivisionPresetWhereInput | DivisionPresetWhereInput[]
+    OR?: DivisionPresetWhereInput[]
+    NOT?: DivisionPresetWhereInput | DivisionPresetWhereInput[]
+    id?: UuidFilter<"DivisionPreset"> | string
+    name?: StringFilter<"DivisionPreset"> | string
+    description?: StringNullableFilter<"DivisionPreset"> | string | null
+    divisions?: JsonFilter<"DivisionPreset">
+    createdById?: UuidNullableFilter<"DivisionPreset"> | string | null
+    createdAt?: DateTimeFilter<"DivisionPreset"> | Date | string
+    updatedAt?: DateTimeFilter<"DivisionPreset"> | Date | string
+    createdBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+  }
+
+  export type DivisionPresetOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrderInput | SortOrder
+    divisions?: SortOrder
+    createdById?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: UserOrderByWithRelationInput
+  }
+
+  export type DivisionPresetWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: DivisionPresetWhereInput | DivisionPresetWhereInput[]
+    OR?: DivisionPresetWhereInput[]
+    NOT?: DivisionPresetWhereInput | DivisionPresetWhereInput[]
+    name?: StringFilter<"DivisionPreset"> | string
+    description?: StringNullableFilter<"DivisionPreset"> | string | null
+    divisions?: JsonFilter<"DivisionPreset">
+    createdById?: UuidNullableFilter<"DivisionPreset"> | string | null
+    createdAt?: DateTimeFilter<"DivisionPreset"> | Date | string
+    updatedAt?: DateTimeFilter<"DivisionPreset"> | Date | string
+    createdBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+  }, "id">
+
+  export type DivisionPresetOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrderInput | SortOrder
+    divisions?: SortOrder
+    createdById?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: DivisionPresetCountOrderByAggregateInput
+    _max?: DivisionPresetMaxOrderByAggregateInput
+    _min?: DivisionPresetMinOrderByAggregateInput
+  }
+
+  export type DivisionPresetScalarWhereWithAggregatesInput = {
+    AND?: DivisionPresetScalarWhereWithAggregatesInput | DivisionPresetScalarWhereWithAggregatesInput[]
+    OR?: DivisionPresetScalarWhereWithAggregatesInput[]
+    NOT?: DivisionPresetScalarWhereWithAggregatesInput | DivisionPresetScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"DivisionPreset"> | string
+    name?: StringWithAggregatesFilter<"DivisionPreset"> | string
+    description?: StringNullableWithAggregatesFilter<"DivisionPreset"> | string | null
+    divisions?: JsonWithAggregatesFilter<"DivisionPreset">
+    createdById?: UuidNullableWithAggregatesFilter<"DivisionPreset"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"DivisionPreset"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"DivisionPreset"> | Date | string
   }
 
   export type EventRegistrationWhereInput = {
@@ -62723,6 +64059,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestCreateNestedManyWithoutDojoActedByInput
     serviceRequestsAdminActed?: ServiceRequestCreateNestedManyWithoutAdminActedByInput
     serviceCouponsCreated?: ServiceCouponCreateNestedManyWithoutCreatedByInput
+    divisionPresetsCreated?: DivisionPresetCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -62762,6 +64099,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestUncheckedCreateNestedManyWithoutDojoActedByInput
     serviceRequestsAdminActed?: ServiceRequestUncheckedCreateNestedManyWithoutAdminActedByInput
     serviceCouponsCreated?: ServiceCouponUncheckedCreateNestedManyWithoutCreatedByInput
+    divisionPresetsCreated?: DivisionPresetUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUpdateInput = {
@@ -62801,6 +64139,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestUpdateManyWithoutDojoActedByNestedInput
     serviceRequestsAdminActed?: ServiceRequestUpdateManyWithoutAdminActedByNestedInput
     serviceCouponsCreated?: ServiceCouponUpdateManyWithoutCreatedByNestedInput
+    divisionPresetsCreated?: DivisionPresetUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -62840,6 +64179,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
     serviceRequestsAdminActed?: ServiceRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
     serviceCouponsCreated?: ServiceCouponUncheckedUpdateManyWithoutCreatedByNestedInput
+    divisionPresetsCreated?: DivisionPresetUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -64455,6 +65795,7 @@ export namespace Prisma {
     isPremium?: boolean
     ticketPrice?: Decimal | DecimalJsLike | number | string | null
     memberDiscountPercent?: number
+    multiDivisionDiscountPercent?: number
     minAge?: number | null
     participantType?: $Enums.EventParticipantType
     createdAt?: Date | string
@@ -64481,6 +65822,7 @@ export namespace Prisma {
     isPremium?: boolean
     ticketPrice?: Decimal | DecimalJsLike | number | string | null
     memberDiscountPercent?: number
+    multiDivisionDiscountPercent?: number
     minAge?: number | null
     minRankId?: string | null
     participantType?: $Enums.EventParticipantType
@@ -64507,6 +65849,7 @@ export namespace Prisma {
     isPremium?: BoolFieldUpdateOperationsInput | boolean
     ticketPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     memberDiscountPercent?: IntFieldUpdateOperationsInput | number
+    multiDivisionDiscountPercent?: IntFieldUpdateOperationsInput | number
     minAge?: NullableIntFieldUpdateOperationsInput | number | null
     participantType?: EnumEventParticipantTypeFieldUpdateOperationsInput | $Enums.EventParticipantType
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -64533,6 +65876,7 @@ export namespace Prisma {
     isPremium?: BoolFieldUpdateOperationsInput | boolean
     ticketPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     memberDiscountPercent?: IntFieldUpdateOperationsInput | number
+    multiDivisionDiscountPercent?: IntFieldUpdateOperationsInput | number
     minAge?: NullableIntFieldUpdateOperationsInput | number | null
     minRankId?: NullableStringFieldUpdateOperationsInput | string | null
     participantType?: EnumEventParticipantTypeFieldUpdateOperationsInput | $Enums.EventParticipantType
@@ -64559,6 +65903,7 @@ export namespace Prisma {
     isPremium?: boolean
     ticketPrice?: Decimal | DecimalJsLike | number | string | null
     memberDiscountPercent?: number
+    multiDivisionDiscountPercent?: number
     minAge?: number | null
     minRankId?: string | null
     participantType?: $Enums.EventParticipantType
@@ -64583,6 +65928,7 @@ export namespace Prisma {
     isPremium?: BoolFieldUpdateOperationsInput | boolean
     ticketPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     memberDiscountPercent?: IntFieldUpdateOperationsInput | number
+    multiDivisionDiscountPercent?: IntFieldUpdateOperationsInput | number
     minAge?: NullableIntFieldUpdateOperationsInput | number | null
     participantType?: EnumEventParticipantTypeFieldUpdateOperationsInput | $Enums.EventParticipantType
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -64604,6 +65950,7 @@ export namespace Prisma {
     isPremium?: BoolFieldUpdateOperationsInput | boolean
     ticketPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     memberDiscountPercent?: IntFieldUpdateOperationsInput | number
+    multiDivisionDiscountPercent?: IntFieldUpdateOperationsInput | number
     minAge?: NullableIntFieldUpdateOperationsInput | number | null
     minRankId?: NullableStringFieldUpdateOperationsInput | string | null
     participantType?: EnumEventParticipantTypeFieldUpdateOperationsInput | $Enums.EventParticipantType
@@ -64802,6 +66149,75 @@ export namespace Prisma {
     attachmentType?: NullableEnumAttachmentTypeFieldUpdateOperationsInput | $Enums.AttachmentType | null
     postedById?: NullableStringFieldUpdateOperationsInput | string | null
     dojoId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DivisionPresetCreateInput = {
+    id?: string
+    name: string
+    description?: string | null
+    divisions: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: UserCreateNestedOneWithoutDivisionPresetsCreatedInput
+  }
+
+  export type DivisionPresetUncheckedCreateInput = {
+    id?: string
+    name: string
+    description?: string | null
+    divisions: JsonNullValueInput | InputJsonValue
+    createdById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DivisionPresetUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    divisions?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: UserUpdateOneWithoutDivisionPresetsCreatedNestedInput
+  }
+
+  export type DivisionPresetUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    divisions?: JsonNullValueInput | InputJsonValue
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DivisionPresetCreateManyInput = {
+    id?: string
+    name: string
+    description?: string | null
+    divisions: JsonNullValueInput | InputJsonValue
+    createdById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DivisionPresetUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    divisions?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DivisionPresetUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    divisions?: JsonNullValueInput | InputJsonValue
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -67299,6 +68715,12 @@ export namespace Prisma {
     none?: ServiceCouponWhereInput
   }
 
+  export type DivisionPresetListRelationFilter = {
+    every?: DivisionPresetWhereInput
+    some?: DivisionPresetWhereInput
+    none?: DivisionPresetWhereInput
+  }
+
   export type NotificationOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -67352,6 +68774,10 @@ export namespace Prisma {
   }
 
   export type ServiceCouponOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type DivisionPresetOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -68660,6 +70086,7 @@ export namespace Prisma {
     isPremium?: SortOrder
     ticketPrice?: SortOrder
     memberDiscountPercent?: SortOrder
+    multiDivisionDiscountPercent?: SortOrder
     minAge?: SortOrder
     minRankId?: SortOrder
     participantType?: SortOrder
@@ -68673,6 +70100,7 @@ export namespace Prisma {
     maxCapacity?: SortOrder
     ticketPrice?: SortOrder
     memberDiscountPercent?: SortOrder
+    multiDivisionDiscountPercent?: SortOrder
     minAge?: SortOrder
   }
 
@@ -68691,6 +70119,7 @@ export namespace Prisma {
     isPremium?: SortOrder
     ticketPrice?: SortOrder
     memberDiscountPercent?: SortOrder
+    multiDivisionDiscountPercent?: SortOrder
     minAge?: SortOrder
     minRankId?: SortOrder
     participantType?: SortOrder
@@ -68715,6 +70144,7 @@ export namespace Prisma {
     isPremium?: SortOrder
     ticketPrice?: SortOrder
     memberDiscountPercent?: SortOrder
+    multiDivisionDiscountPercent?: SortOrder
     minAge?: SortOrder
     minRankId?: SortOrder
     participantType?: SortOrder
@@ -68728,6 +70158,7 @@ export namespace Prisma {
     maxCapacity?: SortOrder
     ticketPrice?: SortOrder
     memberDiscountPercent?: SortOrder
+    multiDivisionDiscountPercent?: SortOrder
     minAge?: SortOrder
   }
 
@@ -68914,6 +70345,34 @@ export namespace Prisma {
     attachmentType?: SortOrder
     postedById?: SortOrder
     dojoId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type DivisionPresetCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    divisions?: SortOrder
+    createdById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type DivisionPresetMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    createdById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type DivisionPresetMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    createdById?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -70668,6 +72127,13 @@ export namespace Prisma {
     connect?: ServiceCouponWhereUniqueInput | ServiceCouponWhereUniqueInput[]
   }
 
+  export type DivisionPresetCreateNestedManyWithoutCreatedByInput = {
+    create?: XOR<DivisionPresetCreateWithoutCreatedByInput, DivisionPresetUncheckedCreateWithoutCreatedByInput> | DivisionPresetCreateWithoutCreatedByInput[] | DivisionPresetUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: DivisionPresetCreateOrConnectWithoutCreatedByInput | DivisionPresetCreateOrConnectWithoutCreatedByInput[]
+    createMany?: DivisionPresetCreateManyCreatedByInputEnvelope
+    connect?: DivisionPresetWhereUniqueInput | DivisionPresetWhereUniqueInput[]
+  }
+
   export type ProfileUncheckedCreateNestedOneWithoutUserInput = {
     create?: XOR<ProfileCreateWithoutUserInput, ProfileUncheckedCreateWithoutUserInput>
     connectOrCreate?: ProfileCreateOrConnectWithoutUserInput
@@ -70835,6 +72301,13 @@ export namespace Prisma {
     connectOrCreate?: ServiceCouponCreateOrConnectWithoutCreatedByInput | ServiceCouponCreateOrConnectWithoutCreatedByInput[]
     createMany?: ServiceCouponCreateManyCreatedByInputEnvelope
     connect?: ServiceCouponWhereUniqueInput | ServiceCouponWhereUniqueInput[]
+  }
+
+  export type DivisionPresetUncheckedCreateNestedManyWithoutCreatedByInput = {
+    create?: XOR<DivisionPresetCreateWithoutCreatedByInput, DivisionPresetUncheckedCreateWithoutCreatedByInput> | DivisionPresetCreateWithoutCreatedByInput[] | DivisionPresetUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: DivisionPresetCreateOrConnectWithoutCreatedByInput | DivisionPresetCreateOrConnectWithoutCreatedByInput[]
+    createMany?: DivisionPresetCreateManyCreatedByInputEnvelope
+    connect?: DivisionPresetWhereUniqueInput | DivisionPresetWhereUniqueInput[]
   }
 
   export type BoolFieldUpdateOperationsInput = {
@@ -71175,6 +72648,20 @@ export namespace Prisma {
     deleteMany?: ServiceCouponScalarWhereInput | ServiceCouponScalarWhereInput[]
   }
 
+  export type DivisionPresetUpdateManyWithoutCreatedByNestedInput = {
+    create?: XOR<DivisionPresetCreateWithoutCreatedByInput, DivisionPresetUncheckedCreateWithoutCreatedByInput> | DivisionPresetCreateWithoutCreatedByInput[] | DivisionPresetUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: DivisionPresetCreateOrConnectWithoutCreatedByInput | DivisionPresetCreateOrConnectWithoutCreatedByInput[]
+    upsert?: DivisionPresetUpsertWithWhereUniqueWithoutCreatedByInput | DivisionPresetUpsertWithWhereUniqueWithoutCreatedByInput[]
+    createMany?: DivisionPresetCreateManyCreatedByInputEnvelope
+    set?: DivisionPresetWhereUniqueInput | DivisionPresetWhereUniqueInput[]
+    disconnect?: DivisionPresetWhereUniqueInput | DivisionPresetWhereUniqueInput[]
+    delete?: DivisionPresetWhereUniqueInput | DivisionPresetWhereUniqueInput[]
+    connect?: DivisionPresetWhereUniqueInput | DivisionPresetWhereUniqueInput[]
+    update?: DivisionPresetUpdateWithWhereUniqueWithoutCreatedByInput | DivisionPresetUpdateWithWhereUniqueWithoutCreatedByInput[]
+    updateMany?: DivisionPresetUpdateManyWithWhereWithoutCreatedByInput | DivisionPresetUpdateManyWithWhereWithoutCreatedByInput[]
+    deleteMany?: DivisionPresetScalarWhereInput | DivisionPresetScalarWhereInput[]
+  }
+
   export type ProfileUncheckedUpdateOneWithoutUserNestedInput = {
     create?: XOR<ProfileCreateWithoutUserInput, ProfileUncheckedCreateWithoutUserInput>
     connectOrCreate?: ProfileCreateOrConnectWithoutUserInput
@@ -71499,6 +72986,20 @@ export namespace Prisma {
     update?: ServiceCouponUpdateWithWhereUniqueWithoutCreatedByInput | ServiceCouponUpdateWithWhereUniqueWithoutCreatedByInput[]
     updateMany?: ServiceCouponUpdateManyWithWhereWithoutCreatedByInput | ServiceCouponUpdateManyWithWhereWithoutCreatedByInput[]
     deleteMany?: ServiceCouponScalarWhereInput | ServiceCouponScalarWhereInput[]
+  }
+
+  export type DivisionPresetUncheckedUpdateManyWithoutCreatedByNestedInput = {
+    create?: XOR<DivisionPresetCreateWithoutCreatedByInput, DivisionPresetUncheckedCreateWithoutCreatedByInput> | DivisionPresetCreateWithoutCreatedByInput[] | DivisionPresetUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: DivisionPresetCreateOrConnectWithoutCreatedByInput | DivisionPresetCreateOrConnectWithoutCreatedByInput[]
+    upsert?: DivisionPresetUpsertWithWhereUniqueWithoutCreatedByInput | DivisionPresetUpsertWithWhereUniqueWithoutCreatedByInput[]
+    createMany?: DivisionPresetCreateManyCreatedByInputEnvelope
+    set?: DivisionPresetWhereUniqueInput | DivisionPresetWhereUniqueInput[]
+    disconnect?: DivisionPresetWhereUniqueInput | DivisionPresetWhereUniqueInput[]
+    delete?: DivisionPresetWhereUniqueInput | DivisionPresetWhereUniqueInput[]
+    connect?: DivisionPresetWhereUniqueInput | DivisionPresetWhereUniqueInput[]
+    update?: DivisionPresetUpdateWithWhereUniqueWithoutCreatedByInput | DivisionPresetUpdateWithWhereUniqueWithoutCreatedByInput[]
+    updateMany?: DivisionPresetUpdateManyWithWhereWithoutCreatedByInput | DivisionPresetUpdateManyWithWhereWithoutCreatedByInput[]
+    deleteMany?: DivisionPresetScalarWhereInput | DivisionPresetScalarWhereInput[]
   }
 
   export type UserCreateNestedOneWithoutProfileInput = {
@@ -73521,6 +75022,22 @@ export namespace Prisma {
     delete?: DojoWhereInput | boolean
     connect?: DojoWhereUniqueInput
     update?: XOR<XOR<DojoUpdateToOneWithWhereWithoutAnnouncementsInput, DojoUpdateWithoutAnnouncementsInput>, DojoUncheckedUpdateWithoutAnnouncementsInput>
+  }
+
+  export type UserCreateNestedOneWithoutDivisionPresetsCreatedInput = {
+    create?: XOR<UserCreateWithoutDivisionPresetsCreatedInput, UserUncheckedCreateWithoutDivisionPresetsCreatedInput>
+    connectOrCreate?: UserCreateOrConnectWithoutDivisionPresetsCreatedInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserUpdateOneWithoutDivisionPresetsCreatedNestedInput = {
+    create?: XOR<UserCreateWithoutDivisionPresetsCreatedInput, UserUncheckedCreateWithoutDivisionPresetsCreatedInput>
+    connectOrCreate?: UserCreateOrConnectWithoutDivisionPresetsCreatedInput
+    upsert?: UserUpsertWithoutDivisionPresetsCreatedInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutDivisionPresetsCreatedInput, UserUpdateWithoutDivisionPresetsCreatedInput>, UserUncheckedUpdateWithoutDivisionPresetsCreatedInput>
   }
 
   export type EventCreateNestedOneWithoutRegistrationsInput = {
@@ -76003,6 +77520,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestCreateNestedManyWithoutDojoActedByInput
     serviceRequestsAdminActed?: ServiceRequestCreateNestedManyWithoutAdminActedByInput
     serviceCouponsCreated?: ServiceCouponCreateNestedManyWithoutCreatedByInput
+    divisionPresetsCreated?: DivisionPresetCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutRoleInput = {
@@ -76041,6 +77559,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestUncheckedCreateNestedManyWithoutDojoActedByInput
     serviceRequestsAdminActed?: ServiceRequestUncheckedCreateNestedManyWithoutAdminActedByInput
     serviceCouponsCreated?: ServiceCouponUncheckedCreateNestedManyWithoutCreatedByInput
+    divisionPresetsCreated?: DivisionPresetUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutRoleInput = {
@@ -76727,6 +78246,7 @@ export namespace Prisma {
     isPremium?: boolean
     ticketPrice?: Decimal | DecimalJsLike | number | string | null
     memberDiscountPercent?: number
+    multiDivisionDiscountPercent?: number
     minAge?: number | null
     participantType?: $Enums.EventParticipantType
     createdAt?: Date | string
@@ -76752,6 +78272,7 @@ export namespace Prisma {
     isPremium?: boolean
     ticketPrice?: Decimal | DecimalJsLike | number | string | null
     memberDiscountPercent?: number
+    multiDivisionDiscountPercent?: number
     minAge?: number | null
     minRankId?: string | null
     participantType?: $Enums.EventParticipantType
@@ -77410,6 +78931,34 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type DivisionPresetCreateWithoutCreatedByInput = {
+    id?: string
+    name: string
+    description?: string | null
+    divisions: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DivisionPresetUncheckedCreateWithoutCreatedByInput = {
+    id?: string
+    name: string
+    description?: string | null
+    divisions: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DivisionPresetCreateOrConnectWithoutCreatedByInput = {
+    where: DivisionPresetWhereUniqueInput
+    create: XOR<DivisionPresetCreateWithoutCreatedByInput, DivisionPresetUncheckedCreateWithoutCreatedByInput>
+  }
+
+  export type DivisionPresetCreateManyCreatedByInputEnvelope = {
+    data: DivisionPresetCreateManyCreatedByInput | DivisionPresetCreateManyCreatedByInput[]
+    skipDuplicates?: boolean
+  }
+
   export type RoleUpsertWithoutUsersInput = {
     update: XOR<RoleUpdateWithoutUsersInput, RoleUncheckedUpdateWithoutUsersInput>
     create: XOR<RoleCreateWithoutUsersInput, RoleUncheckedCreateWithoutUsersInput>
@@ -77816,6 +79365,7 @@ export namespace Prisma {
     isPremium?: BoolFilter<"Event"> | boolean
     ticketPrice?: DecimalNullableFilter<"Event"> | Decimal | DecimalJsLike | number | string | null
     memberDiscountPercent?: IntFilter<"Event"> | number
+    multiDivisionDiscountPercent?: IntFilter<"Event"> | number
     minAge?: IntNullableFilter<"Event"> | number | null
     minRankId?: UuidNullableFilter<"Event"> | string | null
     participantType?: EnumEventParticipantTypeFilter<"Event"> | $Enums.EventParticipantType
@@ -78237,6 +79787,35 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"ServiceCoupon"> | Date | string
   }
 
+  export type DivisionPresetUpsertWithWhereUniqueWithoutCreatedByInput = {
+    where: DivisionPresetWhereUniqueInput
+    update: XOR<DivisionPresetUpdateWithoutCreatedByInput, DivisionPresetUncheckedUpdateWithoutCreatedByInput>
+    create: XOR<DivisionPresetCreateWithoutCreatedByInput, DivisionPresetUncheckedCreateWithoutCreatedByInput>
+  }
+
+  export type DivisionPresetUpdateWithWhereUniqueWithoutCreatedByInput = {
+    where: DivisionPresetWhereUniqueInput
+    data: XOR<DivisionPresetUpdateWithoutCreatedByInput, DivisionPresetUncheckedUpdateWithoutCreatedByInput>
+  }
+
+  export type DivisionPresetUpdateManyWithWhereWithoutCreatedByInput = {
+    where: DivisionPresetScalarWhereInput
+    data: XOR<DivisionPresetUpdateManyMutationInput, DivisionPresetUncheckedUpdateManyWithoutCreatedByInput>
+  }
+
+  export type DivisionPresetScalarWhereInput = {
+    AND?: DivisionPresetScalarWhereInput | DivisionPresetScalarWhereInput[]
+    OR?: DivisionPresetScalarWhereInput[]
+    NOT?: DivisionPresetScalarWhereInput | DivisionPresetScalarWhereInput[]
+    id?: UuidFilter<"DivisionPreset"> | string
+    name?: StringFilter<"DivisionPreset"> | string
+    description?: StringNullableFilter<"DivisionPreset"> | string | null
+    divisions?: JsonFilter<"DivisionPreset">
+    createdById?: UuidNullableFilter<"DivisionPreset"> | string | null
+    createdAt?: DateTimeFilter<"DivisionPreset"> | Date | string
+    updatedAt?: DateTimeFilter<"DivisionPreset"> | Date | string
+  }
+
   export type UserCreateWithoutProfileInput = {
     id: string
     email: string
@@ -78273,6 +79852,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestCreateNestedManyWithoutDojoActedByInput
     serviceRequestsAdminActed?: ServiceRequestCreateNestedManyWithoutAdminActedByInput
     serviceCouponsCreated?: ServiceCouponCreateNestedManyWithoutCreatedByInput
+    divisionPresetsCreated?: DivisionPresetCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutProfileInput = {
@@ -78311,6 +79891,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestUncheckedCreateNestedManyWithoutDojoActedByInput
     serviceRequestsAdminActed?: ServiceRequestUncheckedCreateNestedManyWithoutAdminActedByInput
     serviceCouponsCreated?: ServiceCouponUncheckedCreateNestedManyWithoutCreatedByInput
+    divisionPresetsCreated?: DivisionPresetUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutProfileInput = {
@@ -78365,6 +79946,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestUpdateManyWithoutDojoActedByNestedInput
     serviceRequestsAdminActed?: ServiceRequestUpdateManyWithoutAdminActedByNestedInput
     serviceCouponsCreated?: ServiceCouponUpdateManyWithoutCreatedByNestedInput
+    divisionPresetsCreated?: DivisionPresetUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutProfileInput = {
@@ -78403,6 +79985,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
     serviceRequestsAdminActed?: ServiceRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
     serviceCouponsCreated?: ServiceCouponUncheckedUpdateManyWithoutCreatedByNestedInput
+    divisionPresetsCreated?: DivisionPresetUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserCreateWithoutStudentInput = {
@@ -78441,6 +80024,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestCreateNestedManyWithoutDojoActedByInput
     serviceRequestsAdminActed?: ServiceRequestCreateNestedManyWithoutAdminActedByInput
     serviceCouponsCreated?: ServiceCouponCreateNestedManyWithoutCreatedByInput
+    divisionPresetsCreated?: DivisionPresetCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutStudentInput = {
@@ -78479,6 +80063,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestUncheckedCreateNestedManyWithoutDojoActedByInput
     serviceRequestsAdminActed?: ServiceRequestUncheckedCreateNestedManyWithoutAdminActedByInput
     serviceCouponsCreated?: ServiceCouponUncheckedCreateNestedManyWithoutCreatedByInput
+    divisionPresetsCreated?: DivisionPresetUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutStudentInput = {
@@ -78920,6 +80505,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestUpdateManyWithoutDojoActedByNestedInput
     serviceRequestsAdminActed?: ServiceRequestUpdateManyWithoutAdminActedByNestedInput
     serviceCouponsCreated?: ServiceCouponUpdateManyWithoutCreatedByNestedInput
+    divisionPresetsCreated?: DivisionPresetUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutStudentInput = {
@@ -78958,6 +80544,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
     serviceRequestsAdminActed?: ServiceRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
     serviceCouponsCreated?: ServiceCouponUncheckedUpdateManyWithoutCreatedByNestedInput
+    divisionPresetsCreated?: DivisionPresetUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type DojoUpsertWithoutStudentsInput = {
@@ -79253,6 +80840,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestCreateNestedManyWithoutDojoActedByInput
     serviceRequestsAdminActed?: ServiceRequestCreateNestedManyWithoutAdminActedByInput
     serviceCouponsCreated?: ServiceCouponCreateNestedManyWithoutCreatedByInput
+    divisionPresetsCreated?: DivisionPresetCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutInstructorInput = {
@@ -79291,6 +80879,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestUncheckedCreateNestedManyWithoutDojoActedByInput
     serviceRequestsAdminActed?: ServiceRequestUncheckedCreateNestedManyWithoutAdminActedByInput
     serviceCouponsCreated?: ServiceCouponUncheckedCreateNestedManyWithoutCreatedByInput
+    divisionPresetsCreated?: DivisionPresetUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutInstructorInput = {
@@ -79426,6 +81015,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestUpdateManyWithoutDojoActedByNestedInput
     serviceRequestsAdminActed?: ServiceRequestUpdateManyWithoutAdminActedByNestedInput
     serviceCouponsCreated?: ServiceCouponUpdateManyWithoutCreatedByNestedInput
+    divisionPresetsCreated?: DivisionPresetUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInstructorInput = {
@@ -79464,6 +81054,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
     serviceRequestsAdminActed?: ServiceRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
     serviceCouponsCreated?: ServiceCouponUncheckedUpdateManyWithoutCreatedByNestedInput
+    divisionPresetsCreated?: DivisionPresetUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type DojoUpsertWithoutInstructorsInput = {
@@ -79589,6 +81180,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestCreateNestedManyWithoutDojoActedByInput
     serviceRequestsAdminActed?: ServiceRequestCreateNestedManyWithoutAdminActedByInput
     serviceCouponsCreated?: ServiceCouponCreateNestedManyWithoutCreatedByInput
+    divisionPresetsCreated?: DivisionPresetCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutDojoManagerInput = {
@@ -79627,6 +81219,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestUncheckedCreateNestedManyWithoutDojoActedByInput
     serviceRequestsAdminActed?: ServiceRequestUncheckedCreateNestedManyWithoutAdminActedByInput
     serviceCouponsCreated?: ServiceCouponUncheckedCreateNestedManyWithoutCreatedByInput
+    divisionPresetsCreated?: DivisionPresetUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutDojoManagerInput = {
@@ -79762,6 +81355,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestUpdateManyWithoutDojoActedByNestedInput
     serviceRequestsAdminActed?: ServiceRequestUpdateManyWithoutAdminActedByNestedInput
     serviceCouponsCreated?: ServiceCouponUpdateManyWithoutCreatedByNestedInput
+    divisionPresetsCreated?: DivisionPresetUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDojoManagerInput = {
@@ -79800,6 +81394,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
     serviceRequestsAdminActed?: ServiceRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
     serviceCouponsCreated?: ServiceCouponUncheckedUpdateManyWithoutCreatedByNestedInput
+    divisionPresetsCreated?: DivisionPresetUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type DojoUpsertWithoutManagersInput = {
@@ -79925,6 +81520,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestCreateNestedManyWithoutDojoActedByInput
     serviceRequestsAdminActed?: ServiceRequestCreateNestedManyWithoutAdminActedByInput
     serviceCouponsCreated?: ServiceCouponCreateNestedManyWithoutCreatedByInput
+    divisionPresetsCreated?: DivisionPresetCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutDojoOwnerInput = {
@@ -79963,6 +81559,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestUncheckedCreateNestedManyWithoutDojoActedByInput
     serviceRequestsAdminActed?: ServiceRequestUncheckedCreateNestedManyWithoutAdminActedByInput
     serviceCouponsCreated?: ServiceCouponUncheckedCreateNestedManyWithoutCreatedByInput
+    divisionPresetsCreated?: DivisionPresetUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutDojoOwnerInput = {
@@ -80098,6 +81695,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestUpdateManyWithoutDojoActedByNestedInput
     serviceRequestsAdminActed?: ServiceRequestUpdateManyWithoutAdminActedByNestedInput
     serviceCouponsCreated?: ServiceCouponUpdateManyWithoutCreatedByNestedInput
+    divisionPresetsCreated?: DivisionPresetUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDojoOwnerInput = {
@@ -80136,6 +81734,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
     serviceRequestsAdminActed?: ServiceRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
     serviceCouponsCreated?: ServiceCouponUncheckedUpdateManyWithoutCreatedByNestedInput
+    divisionPresetsCreated?: DivisionPresetUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type DojoUpsertWithoutOwnerInput = {
@@ -80261,6 +81860,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestCreateNestedManyWithoutDojoActedByInput
     serviceRequestsAdminActed?: ServiceRequestCreateNestedManyWithoutAdminActedByInput
     serviceCouponsCreated?: ServiceCouponCreateNestedManyWithoutCreatedByInput
+    divisionPresetsCreated?: DivisionPresetCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutAdminInput = {
@@ -80299,6 +81899,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestUncheckedCreateNestedManyWithoutDojoActedByInput
     serviceRequestsAdminActed?: ServiceRequestUncheckedCreateNestedManyWithoutAdminActedByInput
     serviceCouponsCreated?: ServiceCouponUncheckedCreateNestedManyWithoutCreatedByInput
+    divisionPresetsCreated?: DivisionPresetUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutAdminInput = {
@@ -80353,6 +81954,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestUpdateManyWithoutDojoActedByNestedInput
     serviceRequestsAdminActed?: ServiceRequestUpdateManyWithoutAdminActedByNestedInput
     serviceCouponsCreated?: ServiceCouponUpdateManyWithoutCreatedByNestedInput
+    divisionPresetsCreated?: DivisionPresetUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAdminInput = {
@@ -80391,6 +81993,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
     serviceRequestsAdminActed?: ServiceRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
     serviceCouponsCreated?: ServiceCouponUncheckedUpdateManyWithoutCreatedByNestedInput
+    divisionPresetsCreated?: DivisionPresetUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type GradingCreateWithoutFromRankInput = {
@@ -80580,6 +82183,7 @@ export namespace Prisma {
     isPremium?: boolean
     ticketPrice?: Decimal | DecimalJsLike | number | string | null
     memberDiscountPercent?: number
+    multiDivisionDiscountPercent?: number
     minAge?: number | null
     participantType?: $Enums.EventParticipantType
     createdAt?: Date | string
@@ -80605,6 +82209,7 @@ export namespace Prisma {
     isPremium?: boolean
     ticketPrice?: Decimal | DecimalJsLike | number | string | null
     memberDiscountPercent?: number
+    multiDivisionDiscountPercent?: number
     minAge?: number | null
     participantType?: $Enums.EventParticipantType
     postedById?: string | null
@@ -81104,6 +82709,7 @@ export namespace Prisma {
     isPremium?: boolean
     ticketPrice?: Decimal | DecimalJsLike | number | string | null
     memberDiscountPercent?: number
+    multiDivisionDiscountPercent?: number
     minAge?: number | null
     participantType?: $Enums.EventParticipantType
     createdAt?: Date | string
@@ -81129,6 +82735,7 @@ export namespace Prisma {
     isPremium?: boolean
     ticketPrice?: Decimal | DecimalJsLike | number | string | null
     memberDiscountPercent?: number
+    multiDivisionDiscountPercent?: number
     minAge?: number | null
     minRankId?: string | null
     participantType?: $Enums.EventParticipantType
@@ -82143,6 +83750,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestCreateNestedManyWithoutDojoActedByInput
     serviceRequestsAdminActed?: ServiceRequestCreateNestedManyWithoutAdminActedByInput
     serviceCouponsCreated?: ServiceCouponCreateNestedManyWithoutCreatedByInput
+    divisionPresetsCreated?: DivisionPresetCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutDojoOwnerInvitesSentInput = {
@@ -82181,6 +83789,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestUncheckedCreateNestedManyWithoutDojoActedByInput
     serviceRequestsAdminActed?: ServiceRequestUncheckedCreateNestedManyWithoutAdminActedByInput
     serviceCouponsCreated?: ServiceCouponUncheckedCreateNestedManyWithoutCreatedByInput
+    divisionPresetsCreated?: DivisionPresetUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutDojoOwnerInvitesSentInput = {
@@ -82235,6 +83844,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestUpdateManyWithoutDojoActedByNestedInput
     serviceRequestsAdminActed?: ServiceRequestUpdateManyWithoutAdminActedByNestedInput
     serviceCouponsCreated?: ServiceCouponUpdateManyWithoutCreatedByNestedInput
+    divisionPresetsCreated?: DivisionPresetUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDojoOwnerInvitesSentInput = {
@@ -82273,6 +83883,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
     serviceRequestsAdminActed?: ServiceRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
     serviceCouponsCreated?: ServiceCouponUncheckedUpdateManyWithoutCreatedByNestedInput
+    divisionPresetsCreated?: DivisionPresetUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type BeltRankCreateWithoutGradingEventsInput = {
@@ -83769,6 +85380,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestCreateNestedManyWithoutDojoActedByInput
     serviceRequestsAdminActed?: ServiceRequestCreateNestedManyWithoutAdminActedByInput
     serviceCouponsCreated?: ServiceCouponCreateNestedManyWithoutCreatedByInput
+    divisionPresetsCreated?: DivisionPresetCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutEventsPostedInput = {
@@ -83807,6 +85419,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestUncheckedCreateNestedManyWithoutDojoActedByInput
     serviceRequestsAdminActed?: ServiceRequestUncheckedCreateNestedManyWithoutAdminActedByInput
     serviceCouponsCreated?: ServiceCouponUncheckedCreateNestedManyWithoutCreatedByInput
+    divisionPresetsCreated?: DivisionPresetUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutEventsPostedInput = {
@@ -84022,6 +85635,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestUpdateManyWithoutDojoActedByNestedInput
     serviceRequestsAdminActed?: ServiceRequestUpdateManyWithoutAdminActedByNestedInput
     serviceCouponsCreated?: ServiceCouponUpdateManyWithoutCreatedByNestedInput
+    divisionPresetsCreated?: DivisionPresetUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEventsPostedInput = {
@@ -84060,6 +85674,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
     serviceRequestsAdminActed?: ServiceRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
     serviceCouponsCreated?: ServiceCouponUncheckedUpdateManyWithoutCreatedByNestedInput
+    divisionPresetsCreated?: DivisionPresetUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type DojoUpsertWithoutEventsInput = {
@@ -84240,6 +85855,7 @@ export namespace Prisma {
     isPremium?: boolean
     ticketPrice?: Decimal | DecimalJsLike | number | string | null
     memberDiscountPercent?: number
+    multiDivisionDiscountPercent?: number
     minAge?: number | null
     participantType?: $Enums.EventParticipantType
     createdAt?: Date | string
@@ -84265,6 +85881,7 @@ export namespace Prisma {
     isPremium?: boolean
     ticketPrice?: Decimal | DecimalJsLike | number | string | null
     memberDiscountPercent?: number
+    multiDivisionDiscountPercent?: number
     minAge?: number | null
     minRankId?: string | null
     participantType?: $Enums.EventParticipantType
@@ -84306,6 +85923,7 @@ export namespace Prisma {
     isPremium?: BoolFieldUpdateOperationsInput | boolean
     ticketPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     memberDiscountPercent?: IntFieldUpdateOperationsInput | number
+    multiDivisionDiscountPercent?: IntFieldUpdateOperationsInput | number
     minAge?: NullableIntFieldUpdateOperationsInput | number | null
     participantType?: EnumEventParticipantTypeFieldUpdateOperationsInput | $Enums.EventParticipantType
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -84331,6 +85949,7 @@ export namespace Prisma {
     isPremium?: BoolFieldUpdateOperationsInput | boolean
     ticketPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     memberDiscountPercent?: IntFieldUpdateOperationsInput | number
+    multiDivisionDiscountPercent?: IntFieldUpdateOperationsInput | number
     minAge?: NullableIntFieldUpdateOperationsInput | number | null
     minRankId?: NullableStringFieldUpdateOperationsInput | string | null
     participantType?: EnumEventParticipantTypeFieldUpdateOperationsInput | $Enums.EventParticipantType
@@ -84377,6 +85996,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestCreateNestedManyWithoutDojoActedByInput
     serviceRequestsAdminActed?: ServiceRequestCreateNestedManyWithoutAdminActedByInput
     serviceCouponsCreated?: ServiceCouponCreateNestedManyWithoutCreatedByInput
+    divisionPresetsCreated?: DivisionPresetCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutAnnouncementsPostedInput = {
@@ -84415,6 +86035,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestUncheckedCreateNestedManyWithoutDojoActedByInput
     serviceRequestsAdminActed?: ServiceRequestUncheckedCreateNestedManyWithoutAdminActedByInput
     serviceCouponsCreated?: ServiceCouponUncheckedCreateNestedManyWithoutCreatedByInput
+    divisionPresetsCreated?: DivisionPresetUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutAnnouncementsPostedInput = {
@@ -84550,6 +86171,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestUpdateManyWithoutDojoActedByNestedInput
     serviceRequestsAdminActed?: ServiceRequestUpdateManyWithoutAdminActedByNestedInput
     serviceCouponsCreated?: ServiceCouponUpdateManyWithoutCreatedByNestedInput
+    divisionPresetsCreated?: DivisionPresetUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAnnouncementsPostedInput = {
@@ -84588,6 +86210,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
     serviceRequestsAdminActed?: ServiceRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
     serviceCouponsCreated?: ServiceCouponUncheckedUpdateManyWithoutCreatedByNestedInput
+    divisionPresetsCreated?: DivisionPresetUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type DojoUpsertWithoutAnnouncementsInput = {
@@ -84677,6 +86300,178 @@ export namespace Prisma {
     serviceCoupons?: ServiceCouponUncheckedUpdateManyWithoutDojoNestedInput
   }
 
+  export type UserCreateWithoutDivisionPresetsCreatedInput = {
+    id: string
+    email: string
+    phone?: string | null
+    fullName: string
+    avatarUrl?: string | null
+    bio?: string | null
+    isActive?: boolean
+    memberNumber?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    role?: RoleCreateNestedOneWithoutUsersInput
+    profile?: ProfileCreateNestedOneWithoutUserInput
+    student?: StudentCreateNestedOneWithoutUserInput
+    instructor?: InstructorCreateNestedOneWithoutUserInput
+    dojoManager?: DojoManagerCreateNestedOneWithoutUserInput
+    dojoOwner?: DojoOwnerCreateNestedOneWithoutUserInput
+    admin?: AdminCreateNestedOneWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    orders?: ShopOrderCreateNestedManyWithoutUserInput
+    eventRegistrations?: EventRegistrationCreateNestedManyWithoutUserInput
+    eventCheckIns?: EventRegistrationCreateNestedManyWithoutCheckedInByInput
+    eventsPosted?: EventCreateNestedManyWithoutPostedByInput
+    announcementsPosted?: AnnouncementCreateNestedManyWithoutPostedByInput
+    dojoSalesAsBuyer?: DojoSaleCreateNestedManyWithoutBuyerInput
+    dojoSalesSold?: DojoSaleCreateNestedManyWithoutSoldByInput
+    achievementsAwarded?: StudentAchievementCreateNestedManyWithoutAwardedByInput
+    tournamentEntries?: TournamentParticipantCreateNestedManyWithoutUserInput
+    transfersDojoActed?: StudentTransferRequestCreateNestedManyWithoutDojoActedByInput
+    transfersAdminActed?: StudentTransferRequestCreateNestedManyWithoutAdminActedByInput
+    transfersNewDojoActed?: StudentTransferRequestCreateNestedManyWithoutNewDojoActedByInput
+    dojoHistoryChanges?: StudentDojoHistoryCreateNestedManyWithoutChangedByInput
+    paymentTransactions?: PaymentTransactionCreateNestedManyWithoutUserInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteCreateNestedManyWithoutInvitedByInput
+    serviceRequestsDojoActed?: ServiceRequestCreateNestedManyWithoutDojoActedByInput
+    serviceRequestsAdminActed?: ServiceRequestCreateNestedManyWithoutAdminActedByInput
+    serviceCouponsCreated?: ServiceCouponCreateNestedManyWithoutCreatedByInput
+  }
+
+  export type UserUncheckedCreateWithoutDivisionPresetsCreatedInput = {
+    id: string
+    email: string
+    phone?: string | null
+    fullName: string
+    avatarUrl?: string | null
+    bio?: string | null
+    roleId?: string
+    isActive?: boolean
+    memberNumber?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    profile?: ProfileUncheckedCreateNestedOneWithoutUserInput
+    student?: StudentUncheckedCreateNestedOneWithoutUserInput
+    instructor?: InstructorUncheckedCreateNestedOneWithoutUserInput
+    dojoManager?: DojoManagerUncheckedCreateNestedOneWithoutUserInput
+    dojoOwner?: DojoOwnerUncheckedCreateNestedOneWithoutUserInput
+    admin?: AdminUncheckedCreateNestedOneWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    orders?: ShopOrderUncheckedCreateNestedManyWithoutUserInput
+    eventRegistrations?: EventRegistrationUncheckedCreateNestedManyWithoutUserInput
+    eventCheckIns?: EventRegistrationUncheckedCreateNestedManyWithoutCheckedInByInput
+    eventsPosted?: EventUncheckedCreateNestedManyWithoutPostedByInput
+    announcementsPosted?: AnnouncementUncheckedCreateNestedManyWithoutPostedByInput
+    dojoSalesAsBuyer?: DojoSaleUncheckedCreateNestedManyWithoutBuyerInput
+    dojoSalesSold?: DojoSaleUncheckedCreateNestedManyWithoutSoldByInput
+    achievementsAwarded?: StudentAchievementUncheckedCreateNestedManyWithoutAwardedByInput
+    tournamentEntries?: TournamentParticipantUncheckedCreateNestedManyWithoutUserInput
+    transfersDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutDojoActedByInput
+    transfersAdminActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutAdminActedByInput
+    transfersNewDojoActed?: StudentTransferRequestUncheckedCreateNestedManyWithoutNewDojoActedByInput
+    dojoHistoryChanges?: StudentDojoHistoryUncheckedCreateNestedManyWithoutChangedByInput
+    paymentTransactions?: PaymentTransactionUncheckedCreateNestedManyWithoutUserInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedCreateNestedManyWithoutInvitedByInput
+    serviceRequestsDojoActed?: ServiceRequestUncheckedCreateNestedManyWithoutDojoActedByInput
+    serviceRequestsAdminActed?: ServiceRequestUncheckedCreateNestedManyWithoutAdminActedByInput
+    serviceCouponsCreated?: ServiceCouponUncheckedCreateNestedManyWithoutCreatedByInput
+  }
+
+  export type UserCreateOrConnectWithoutDivisionPresetsCreatedInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutDivisionPresetsCreatedInput, UserUncheckedCreateWithoutDivisionPresetsCreatedInput>
+  }
+
+  export type UserUpsertWithoutDivisionPresetsCreatedInput = {
+    update: XOR<UserUpdateWithoutDivisionPresetsCreatedInput, UserUncheckedUpdateWithoutDivisionPresetsCreatedInput>
+    create: XOR<UserCreateWithoutDivisionPresetsCreatedInput, UserUncheckedCreateWithoutDivisionPresetsCreatedInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutDivisionPresetsCreatedInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutDivisionPresetsCreatedInput, UserUncheckedUpdateWithoutDivisionPresetsCreatedInput>
+  }
+
+  export type UserUpdateWithoutDivisionPresetsCreatedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    fullName?: StringFieldUpdateOperationsInput | string
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: RoleUpdateOneRequiredWithoutUsersNestedInput
+    profile?: ProfileUpdateOneWithoutUserNestedInput
+    student?: StudentUpdateOneWithoutUserNestedInput
+    instructor?: InstructorUpdateOneWithoutUserNestedInput
+    dojoManager?: DojoManagerUpdateOneWithoutUserNestedInput
+    dojoOwner?: DojoOwnerUpdateOneWithoutUserNestedInput
+    admin?: AdminUpdateOneWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    orders?: ShopOrderUpdateManyWithoutUserNestedInput
+    eventRegistrations?: EventRegistrationUpdateManyWithoutUserNestedInput
+    eventCheckIns?: EventRegistrationUpdateManyWithoutCheckedInByNestedInput
+    eventsPosted?: EventUpdateManyWithoutPostedByNestedInput
+    announcementsPosted?: AnnouncementUpdateManyWithoutPostedByNestedInput
+    dojoSalesAsBuyer?: DojoSaleUpdateManyWithoutBuyerNestedInput
+    dojoSalesSold?: DojoSaleUpdateManyWithoutSoldByNestedInput
+    achievementsAwarded?: StudentAchievementUpdateManyWithoutAwardedByNestedInput
+    tournamentEntries?: TournamentParticipantUpdateManyWithoutUserNestedInput
+    transfersDojoActed?: StudentTransferRequestUpdateManyWithoutDojoActedByNestedInput
+    transfersAdminActed?: StudentTransferRequestUpdateManyWithoutAdminActedByNestedInput
+    transfersNewDojoActed?: StudentTransferRequestUpdateManyWithoutNewDojoActedByNestedInput
+    dojoHistoryChanges?: StudentDojoHistoryUpdateManyWithoutChangedByNestedInput
+    paymentTransactions?: PaymentTransactionUpdateManyWithoutUserNestedInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteUpdateManyWithoutInvitedByNestedInput
+    serviceRequestsDojoActed?: ServiceRequestUpdateManyWithoutDojoActedByNestedInput
+    serviceRequestsAdminActed?: ServiceRequestUpdateManyWithoutAdminActedByNestedInput
+    serviceCouponsCreated?: ServiceCouponUpdateManyWithoutCreatedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutDivisionPresetsCreatedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    fullName?: StringFieldUpdateOperationsInput | string
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    roleId?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    profile?: ProfileUncheckedUpdateOneWithoutUserNestedInput
+    student?: StudentUncheckedUpdateOneWithoutUserNestedInput
+    instructor?: InstructorUncheckedUpdateOneWithoutUserNestedInput
+    dojoManager?: DojoManagerUncheckedUpdateOneWithoutUserNestedInput
+    dojoOwner?: DojoOwnerUncheckedUpdateOneWithoutUserNestedInput
+    admin?: AdminUncheckedUpdateOneWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    orders?: ShopOrderUncheckedUpdateManyWithoutUserNestedInput
+    eventRegistrations?: EventRegistrationUncheckedUpdateManyWithoutUserNestedInput
+    eventCheckIns?: EventRegistrationUncheckedUpdateManyWithoutCheckedInByNestedInput
+    eventsPosted?: EventUncheckedUpdateManyWithoutPostedByNestedInput
+    announcementsPosted?: AnnouncementUncheckedUpdateManyWithoutPostedByNestedInput
+    dojoSalesAsBuyer?: DojoSaleUncheckedUpdateManyWithoutBuyerNestedInput
+    dojoSalesSold?: DojoSaleUncheckedUpdateManyWithoutSoldByNestedInput
+    achievementsAwarded?: StudentAchievementUncheckedUpdateManyWithoutAwardedByNestedInput
+    tournamentEntries?: TournamentParticipantUncheckedUpdateManyWithoutUserNestedInput
+    transfersDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
+    transfersAdminActed?: StudentTransferRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
+    transfersNewDojoActed?: StudentTransferRequestUncheckedUpdateManyWithoutNewDojoActedByNestedInput
+    dojoHistoryChanges?: StudentDojoHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+    paymentTransactions?: PaymentTransactionUncheckedUpdateManyWithoutUserNestedInput
+    dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedUpdateManyWithoutInvitedByNestedInput
+    serviceRequestsDojoActed?: ServiceRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
+    serviceRequestsAdminActed?: ServiceRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
+    serviceCouponsCreated?: ServiceCouponUncheckedUpdateManyWithoutCreatedByNestedInput
+  }
+
   export type EventCreateWithoutRegistrationsInput = {
     id?: string
     title: string
@@ -84692,6 +86487,7 @@ export namespace Prisma {
     isPremium?: boolean
     ticketPrice?: Decimal | DecimalJsLike | number | string | null
     memberDiscountPercent?: number
+    multiDivisionDiscountPercent?: number
     minAge?: number | null
     participantType?: $Enums.EventParticipantType
     createdAt?: Date | string
@@ -84717,6 +86513,7 @@ export namespace Prisma {
     isPremium?: boolean
     ticketPrice?: Decimal | DecimalJsLike | number | string | null
     memberDiscountPercent?: number
+    multiDivisionDiscountPercent?: number
     minAge?: number | null
     minRankId?: string | null
     participantType?: $Enums.EventParticipantType
@@ -84768,6 +86565,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestCreateNestedManyWithoutDojoActedByInput
     serviceRequestsAdminActed?: ServiceRequestCreateNestedManyWithoutAdminActedByInput
     serviceCouponsCreated?: ServiceCouponCreateNestedManyWithoutCreatedByInput
+    divisionPresetsCreated?: DivisionPresetCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutEventRegistrationsInput = {
@@ -84806,6 +86604,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestUncheckedCreateNestedManyWithoutDojoActedByInput
     serviceRequestsAdminActed?: ServiceRequestUncheckedCreateNestedManyWithoutAdminActedByInput
     serviceCouponsCreated?: ServiceCouponUncheckedCreateNestedManyWithoutCreatedByInput
+    divisionPresetsCreated?: DivisionPresetUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutEventRegistrationsInput = {
@@ -84849,6 +86648,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestCreateNestedManyWithoutDojoActedByInput
     serviceRequestsAdminActed?: ServiceRequestCreateNestedManyWithoutAdminActedByInput
     serviceCouponsCreated?: ServiceCouponCreateNestedManyWithoutCreatedByInput
+    divisionPresetsCreated?: DivisionPresetCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutEventCheckInsInput = {
@@ -84887,6 +86687,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestUncheckedCreateNestedManyWithoutDojoActedByInput
     serviceRequestsAdminActed?: ServiceRequestUncheckedCreateNestedManyWithoutAdminActedByInput
     serviceCouponsCreated?: ServiceCouponUncheckedCreateNestedManyWithoutCreatedByInput
+    divisionPresetsCreated?: DivisionPresetUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutEventCheckInsInput = {
@@ -84966,6 +86767,7 @@ export namespace Prisma {
     isPremium?: BoolFieldUpdateOperationsInput | boolean
     ticketPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     memberDiscountPercent?: IntFieldUpdateOperationsInput | number
+    multiDivisionDiscountPercent?: IntFieldUpdateOperationsInput | number
     minAge?: NullableIntFieldUpdateOperationsInput | number | null
     participantType?: EnumEventParticipantTypeFieldUpdateOperationsInput | $Enums.EventParticipantType
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -84991,6 +86793,7 @@ export namespace Prisma {
     isPremium?: BoolFieldUpdateOperationsInput | boolean
     ticketPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     memberDiscountPercent?: IntFieldUpdateOperationsInput | number
+    multiDivisionDiscountPercent?: IntFieldUpdateOperationsInput | number
     minAge?: NullableIntFieldUpdateOperationsInput | number | null
     minRankId?: NullableStringFieldUpdateOperationsInput | string | null
     participantType?: EnumEventParticipantTypeFieldUpdateOperationsInput | $Enums.EventParticipantType
@@ -85048,6 +86851,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestUpdateManyWithoutDojoActedByNestedInput
     serviceRequestsAdminActed?: ServiceRequestUpdateManyWithoutAdminActedByNestedInput
     serviceCouponsCreated?: ServiceCouponUpdateManyWithoutCreatedByNestedInput
+    divisionPresetsCreated?: DivisionPresetUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEventRegistrationsInput = {
@@ -85086,6 +86890,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
     serviceRequestsAdminActed?: ServiceRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
     serviceCouponsCreated?: ServiceCouponUncheckedUpdateManyWithoutCreatedByNestedInput
+    divisionPresetsCreated?: DivisionPresetUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUpsertWithoutEventCheckInsInput = {
@@ -85135,6 +86940,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestUpdateManyWithoutDojoActedByNestedInput
     serviceRequestsAdminActed?: ServiceRequestUpdateManyWithoutAdminActedByNestedInput
     serviceCouponsCreated?: ServiceCouponUpdateManyWithoutCreatedByNestedInput
+    divisionPresetsCreated?: DivisionPresetUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEventCheckInsInput = {
@@ -85173,6 +86979,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
     serviceRequestsAdminActed?: ServiceRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
     serviceCouponsCreated?: ServiceCouponUncheckedUpdateManyWithoutCreatedByNestedInput
+    divisionPresetsCreated?: DivisionPresetUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type PaymentTransactionUpsertWithWhereUniqueWithoutEventRegistrationInput = {
@@ -85227,6 +87034,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestCreateNestedManyWithoutDojoActedByInput
     serviceRequestsAdminActed?: ServiceRequestCreateNestedManyWithoutAdminActedByInput
     serviceCouponsCreated?: ServiceCouponCreateNestedManyWithoutCreatedByInput
+    divisionPresetsCreated?: DivisionPresetCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -85265,6 +87073,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestUncheckedCreateNestedManyWithoutDojoActedByInput
     serviceRequestsAdminActed?: ServiceRequestUncheckedCreateNestedManyWithoutAdminActedByInput
     serviceCouponsCreated?: ServiceCouponUncheckedCreateNestedManyWithoutCreatedByInput
+    divisionPresetsCreated?: DivisionPresetUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -85319,6 +87128,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestUpdateManyWithoutDojoActedByNestedInput
     serviceRequestsAdminActed?: ServiceRequestUpdateManyWithoutAdminActedByNestedInput
     serviceCouponsCreated?: ServiceCouponUpdateManyWithoutCreatedByNestedInput
+    divisionPresetsCreated?: DivisionPresetUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -85357,6 +87167,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
     serviceRequestsAdminActed?: ServiceRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
     serviceCouponsCreated?: ServiceCouponUncheckedUpdateManyWithoutCreatedByNestedInput
+    divisionPresetsCreated?: DivisionPresetUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type ShopOrderItemCreateWithoutProductInput = {
@@ -85887,6 +87698,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestCreateNestedManyWithoutDojoActedByInput
     serviceRequestsAdminActed?: ServiceRequestCreateNestedManyWithoutAdminActedByInput
     serviceCouponsCreated?: ServiceCouponCreateNestedManyWithoutCreatedByInput
+    divisionPresetsCreated?: DivisionPresetCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutDojoSalesAsBuyerInput = {
@@ -85925,6 +87737,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestUncheckedCreateNestedManyWithoutDojoActedByInput
     serviceRequestsAdminActed?: ServiceRequestUncheckedCreateNestedManyWithoutAdminActedByInput
     serviceCouponsCreated?: ServiceCouponUncheckedCreateNestedManyWithoutCreatedByInput
+    divisionPresetsCreated?: DivisionPresetUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutDojoSalesAsBuyerInput = {
@@ -85968,6 +87781,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestCreateNestedManyWithoutDojoActedByInput
     serviceRequestsAdminActed?: ServiceRequestCreateNestedManyWithoutAdminActedByInput
     serviceCouponsCreated?: ServiceCouponCreateNestedManyWithoutCreatedByInput
+    divisionPresetsCreated?: DivisionPresetCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutDojoSalesSoldInput = {
@@ -86006,6 +87820,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestUncheckedCreateNestedManyWithoutDojoActedByInput
     serviceRequestsAdminActed?: ServiceRequestUncheckedCreateNestedManyWithoutAdminActedByInput
     serviceCouponsCreated?: ServiceCouponUncheckedCreateNestedManyWithoutCreatedByInput
+    divisionPresetsCreated?: DivisionPresetUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutDojoSalesSoldInput = {
@@ -86175,6 +87990,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestUpdateManyWithoutDojoActedByNestedInput
     serviceRequestsAdminActed?: ServiceRequestUpdateManyWithoutAdminActedByNestedInput
     serviceCouponsCreated?: ServiceCouponUpdateManyWithoutCreatedByNestedInput
+    divisionPresetsCreated?: DivisionPresetUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDojoSalesAsBuyerInput = {
@@ -86213,6 +88029,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
     serviceRequestsAdminActed?: ServiceRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
     serviceCouponsCreated?: ServiceCouponUncheckedUpdateManyWithoutCreatedByNestedInput
+    divisionPresetsCreated?: DivisionPresetUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUpsertWithoutDojoSalesSoldInput = {
@@ -86262,6 +88079,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestUpdateManyWithoutDojoActedByNestedInput
     serviceRequestsAdminActed?: ServiceRequestUpdateManyWithoutAdminActedByNestedInput
     serviceCouponsCreated?: ServiceCouponUpdateManyWithoutCreatedByNestedInput
+    divisionPresetsCreated?: DivisionPresetUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDojoSalesSoldInput = {
@@ -86300,6 +88118,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
     serviceRequestsAdminActed?: ServiceRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
     serviceCouponsCreated?: ServiceCouponUncheckedUpdateManyWithoutCreatedByNestedInput
+    divisionPresetsCreated?: DivisionPresetUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type DojoSaleItemUpsertWithWhereUniqueWithoutSaleInput = {
@@ -86522,6 +88341,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestCreateNestedManyWithoutDojoActedByInput
     serviceRequestsAdminActed?: ServiceRequestCreateNestedManyWithoutAdminActedByInput
     serviceCouponsCreated?: ServiceCouponCreateNestedManyWithoutCreatedByInput
+    divisionPresetsCreated?: DivisionPresetCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutOrdersInput = {
@@ -86560,6 +88380,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestUncheckedCreateNestedManyWithoutDojoActedByInput
     serviceRequestsAdminActed?: ServiceRequestUncheckedCreateNestedManyWithoutAdminActedByInput
     serviceCouponsCreated?: ServiceCouponUncheckedCreateNestedManyWithoutCreatedByInput
+    divisionPresetsCreated?: DivisionPresetUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutOrdersInput = {
@@ -87006,6 +88827,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestUpdateManyWithoutDojoActedByNestedInput
     serviceRequestsAdminActed?: ServiceRequestUpdateManyWithoutAdminActedByNestedInput
     serviceCouponsCreated?: ServiceCouponUpdateManyWithoutCreatedByNestedInput
+    divisionPresetsCreated?: DivisionPresetUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOrdersInput = {
@@ -87044,6 +88866,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
     serviceRequestsAdminActed?: ServiceRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
     serviceCouponsCreated?: ServiceCouponUncheckedUpdateManyWithoutCreatedByNestedInput
+    divisionPresetsCreated?: DivisionPresetUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type DojoUpsertWithoutRenewalOrdersInput = {
@@ -87802,6 +89625,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestCreateNestedManyWithoutDojoActedByInput
     serviceRequestsAdminActed?: ServiceRequestCreateNestedManyWithoutAdminActedByInput
     serviceCouponsCreated?: ServiceCouponCreateNestedManyWithoutCreatedByInput
+    divisionPresetsCreated?: DivisionPresetCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutTournamentEntriesInput = {
@@ -87840,6 +89664,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestUncheckedCreateNestedManyWithoutDojoActedByInput
     serviceRequestsAdminActed?: ServiceRequestUncheckedCreateNestedManyWithoutAdminActedByInput
     serviceCouponsCreated?: ServiceCouponUncheckedCreateNestedManyWithoutCreatedByInput
+    divisionPresetsCreated?: DivisionPresetUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutTournamentEntriesInput = {
@@ -88025,6 +89850,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestUpdateManyWithoutDojoActedByNestedInput
     serviceRequestsAdminActed?: ServiceRequestUpdateManyWithoutAdminActedByNestedInput
     serviceCouponsCreated?: ServiceCouponUpdateManyWithoutCreatedByNestedInput
+    divisionPresetsCreated?: DivisionPresetUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTournamentEntriesInput = {
@@ -88063,6 +89889,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
     serviceRequestsAdminActed?: ServiceRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
     serviceCouponsCreated?: ServiceCouponUncheckedUpdateManyWithoutCreatedByNestedInput
+    divisionPresetsCreated?: DivisionPresetUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type TournamentMatchUpsertWithWhereUniqueWithoutParticipant1Input = {
@@ -88529,6 +90356,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestCreateNestedManyWithoutDojoActedByInput
     serviceRequestsAdminActed?: ServiceRequestCreateNestedManyWithoutAdminActedByInput
     serviceCouponsCreated?: ServiceCouponCreateNestedManyWithoutCreatedByInput
+    divisionPresetsCreated?: DivisionPresetCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutAchievementsAwardedInput = {
@@ -88567,6 +90395,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestUncheckedCreateNestedManyWithoutDojoActedByInput
     serviceRequestsAdminActed?: ServiceRequestUncheckedCreateNestedManyWithoutAdminActedByInput
     serviceCouponsCreated?: ServiceCouponUncheckedCreateNestedManyWithoutCreatedByInput
+    divisionPresetsCreated?: DivisionPresetUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutAchievementsAwardedInput = {
@@ -88725,6 +90554,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestUpdateManyWithoutDojoActedByNestedInput
     serviceRequestsAdminActed?: ServiceRequestUpdateManyWithoutAdminActedByNestedInput
     serviceCouponsCreated?: ServiceCouponUpdateManyWithoutCreatedByNestedInput
+    divisionPresetsCreated?: DivisionPresetUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAchievementsAwardedInput = {
@@ -88763,6 +90593,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
     serviceRequestsAdminActed?: ServiceRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
     serviceCouponsCreated?: ServiceCouponUncheckedUpdateManyWithoutCreatedByNestedInput
+    divisionPresetsCreated?: DivisionPresetUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type StudentCreateWithoutTransferRequestsInput = {
@@ -89085,6 +90916,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestCreateNestedManyWithoutDojoActedByInput
     serviceRequestsAdminActed?: ServiceRequestCreateNestedManyWithoutAdminActedByInput
     serviceCouponsCreated?: ServiceCouponCreateNestedManyWithoutCreatedByInput
+    divisionPresetsCreated?: DivisionPresetCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutTransfersDojoActedInput = {
@@ -89123,6 +90955,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestUncheckedCreateNestedManyWithoutDojoActedByInput
     serviceRequestsAdminActed?: ServiceRequestUncheckedCreateNestedManyWithoutAdminActedByInput
     serviceCouponsCreated?: ServiceCouponUncheckedCreateNestedManyWithoutCreatedByInput
+    divisionPresetsCreated?: DivisionPresetUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutTransfersDojoActedInput = {
@@ -89166,6 +90999,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestCreateNestedManyWithoutDojoActedByInput
     serviceRequestsAdminActed?: ServiceRequestCreateNestedManyWithoutAdminActedByInput
     serviceCouponsCreated?: ServiceCouponCreateNestedManyWithoutCreatedByInput
+    divisionPresetsCreated?: DivisionPresetCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutTransfersAdminActedInput = {
@@ -89204,6 +91038,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestUncheckedCreateNestedManyWithoutDojoActedByInput
     serviceRequestsAdminActed?: ServiceRequestUncheckedCreateNestedManyWithoutAdminActedByInput
     serviceCouponsCreated?: ServiceCouponUncheckedCreateNestedManyWithoutCreatedByInput
+    divisionPresetsCreated?: DivisionPresetUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutTransfersAdminActedInput = {
@@ -89247,6 +91082,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestCreateNestedManyWithoutDojoActedByInput
     serviceRequestsAdminActed?: ServiceRequestCreateNestedManyWithoutAdminActedByInput
     serviceCouponsCreated?: ServiceCouponCreateNestedManyWithoutCreatedByInput
+    divisionPresetsCreated?: DivisionPresetCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutTransfersNewDojoActedInput = {
@@ -89285,6 +91121,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestUncheckedCreateNestedManyWithoutDojoActedByInput
     serviceRequestsAdminActed?: ServiceRequestUncheckedCreateNestedManyWithoutAdminActedByInput
     serviceCouponsCreated?: ServiceCouponUncheckedCreateNestedManyWithoutCreatedByInput
+    divisionPresetsCreated?: DivisionPresetUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutTransfersNewDojoActedInput = {
@@ -89677,6 +91514,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestUpdateManyWithoutDojoActedByNestedInput
     serviceRequestsAdminActed?: ServiceRequestUpdateManyWithoutAdminActedByNestedInput
     serviceCouponsCreated?: ServiceCouponUpdateManyWithoutCreatedByNestedInput
+    divisionPresetsCreated?: DivisionPresetUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTransfersDojoActedInput = {
@@ -89715,6 +91553,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
     serviceRequestsAdminActed?: ServiceRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
     serviceCouponsCreated?: ServiceCouponUncheckedUpdateManyWithoutCreatedByNestedInput
+    divisionPresetsCreated?: DivisionPresetUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUpsertWithoutTransfersAdminActedInput = {
@@ -89764,6 +91603,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestUpdateManyWithoutDojoActedByNestedInput
     serviceRequestsAdminActed?: ServiceRequestUpdateManyWithoutAdminActedByNestedInput
     serviceCouponsCreated?: ServiceCouponUpdateManyWithoutCreatedByNestedInput
+    divisionPresetsCreated?: DivisionPresetUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTransfersAdminActedInput = {
@@ -89802,6 +91642,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
     serviceRequestsAdminActed?: ServiceRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
     serviceCouponsCreated?: ServiceCouponUncheckedUpdateManyWithoutCreatedByNestedInput
+    divisionPresetsCreated?: DivisionPresetUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUpsertWithoutTransfersNewDojoActedInput = {
@@ -89851,6 +91692,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestUpdateManyWithoutDojoActedByNestedInput
     serviceRequestsAdminActed?: ServiceRequestUpdateManyWithoutAdminActedByNestedInput
     serviceCouponsCreated?: ServiceCouponUpdateManyWithoutCreatedByNestedInput
+    divisionPresetsCreated?: DivisionPresetUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTransfersNewDojoActedInput = {
@@ -89889,6 +91731,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
     serviceRequestsAdminActed?: ServiceRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
     serviceCouponsCreated?: ServiceCouponUncheckedUpdateManyWithoutCreatedByNestedInput
+    divisionPresetsCreated?: DivisionPresetUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type StudentDojoHistoryUpsertWithWhereUniqueWithoutTransferRequestInput = {
@@ -90085,6 +91928,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestCreateNestedManyWithoutDojoActedByInput
     serviceRequestsAdminActed?: ServiceRequestCreateNestedManyWithoutAdminActedByInput
     serviceCouponsCreated?: ServiceCouponCreateNestedManyWithoutCreatedByInput
+    divisionPresetsCreated?: DivisionPresetCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutPaymentTransactionsInput = {
@@ -90123,6 +91967,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestUncheckedCreateNestedManyWithoutDojoActedByInput
     serviceRequestsAdminActed?: ServiceRequestUncheckedCreateNestedManyWithoutAdminActedByInput
     serviceCouponsCreated?: ServiceCouponUncheckedCreateNestedManyWithoutCreatedByInput
+    divisionPresetsCreated?: DivisionPresetUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutPaymentTransactionsInput = {
@@ -90331,6 +92176,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestUpdateManyWithoutDojoActedByNestedInput
     serviceRequestsAdminActed?: ServiceRequestUpdateManyWithoutAdminActedByNestedInput
     serviceCouponsCreated?: ServiceCouponUpdateManyWithoutCreatedByNestedInput
+    divisionPresetsCreated?: DivisionPresetUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPaymentTransactionsInput = {
@@ -90369,6 +92215,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
     serviceRequestsAdminActed?: ServiceRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
     serviceCouponsCreated?: ServiceCouponUncheckedUpdateManyWithoutCreatedByNestedInput
+    divisionPresetsCreated?: DivisionPresetUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type StudentCreateWithoutDojoHistoryInput = {
@@ -90681,6 +92528,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestCreateNestedManyWithoutDojoActedByInput
     serviceRequestsAdminActed?: ServiceRequestCreateNestedManyWithoutAdminActedByInput
     serviceCouponsCreated?: ServiceCouponCreateNestedManyWithoutCreatedByInput
+    divisionPresetsCreated?: DivisionPresetCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutDojoHistoryChangesInput = {
@@ -90719,6 +92567,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestUncheckedCreateNestedManyWithoutDojoActedByInput
     serviceRequestsAdminActed?: ServiceRequestUncheckedCreateNestedManyWithoutAdminActedByInput
     serviceCouponsCreated?: ServiceCouponUncheckedCreateNestedManyWithoutCreatedByInput
+    divisionPresetsCreated?: DivisionPresetUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutDojoHistoryChangesInput = {
@@ -91071,6 +92920,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestUpdateManyWithoutDojoActedByNestedInput
     serviceRequestsAdminActed?: ServiceRequestUpdateManyWithoutAdminActedByNestedInput
     serviceCouponsCreated?: ServiceCouponUpdateManyWithoutCreatedByNestedInput
+    divisionPresetsCreated?: DivisionPresetUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDojoHistoryChangesInput = {
@@ -91109,6 +92959,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
     serviceRequestsAdminActed?: ServiceRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
     serviceCouponsCreated?: ServiceCouponUncheckedUpdateManyWithoutCreatedByNestedInput
+    divisionPresetsCreated?: DivisionPresetUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type ServiceRequestCreateWithoutServiceInput = {
@@ -91552,6 +93403,7 @@ export namespace Prisma {
     dojoOwnerInvitesSent?: DojoOwnerInviteCreateNestedManyWithoutInvitedByInput
     serviceRequestsAdminActed?: ServiceRequestCreateNestedManyWithoutAdminActedByInput
     serviceCouponsCreated?: ServiceCouponCreateNestedManyWithoutCreatedByInput
+    divisionPresetsCreated?: DivisionPresetCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutServiceRequestsDojoActedInput = {
@@ -91590,6 +93442,7 @@ export namespace Prisma {
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedCreateNestedManyWithoutInvitedByInput
     serviceRequestsAdminActed?: ServiceRequestUncheckedCreateNestedManyWithoutAdminActedByInput
     serviceCouponsCreated?: ServiceCouponUncheckedCreateNestedManyWithoutCreatedByInput
+    divisionPresetsCreated?: DivisionPresetUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutServiceRequestsDojoActedInput = {
@@ -91633,6 +93486,7 @@ export namespace Prisma {
     dojoOwnerInvitesSent?: DojoOwnerInviteCreateNestedManyWithoutInvitedByInput
     serviceRequestsDojoActed?: ServiceRequestCreateNestedManyWithoutDojoActedByInput
     serviceCouponsCreated?: ServiceCouponCreateNestedManyWithoutCreatedByInput
+    divisionPresetsCreated?: DivisionPresetCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutServiceRequestsAdminActedInput = {
@@ -91671,6 +93525,7 @@ export namespace Prisma {
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedCreateNestedManyWithoutInvitedByInput
     serviceRequestsDojoActed?: ServiceRequestUncheckedCreateNestedManyWithoutDojoActedByInput
     serviceCouponsCreated?: ServiceCouponUncheckedCreateNestedManyWithoutCreatedByInput
+    divisionPresetsCreated?: DivisionPresetUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutServiceRequestsAdminActedInput = {
@@ -92026,6 +93881,7 @@ export namespace Prisma {
     dojoOwnerInvitesSent?: DojoOwnerInviteUpdateManyWithoutInvitedByNestedInput
     serviceRequestsAdminActed?: ServiceRequestUpdateManyWithoutAdminActedByNestedInput
     serviceCouponsCreated?: ServiceCouponUpdateManyWithoutCreatedByNestedInput
+    divisionPresetsCreated?: DivisionPresetUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutServiceRequestsDojoActedInput = {
@@ -92064,6 +93920,7 @@ export namespace Prisma {
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedUpdateManyWithoutInvitedByNestedInput
     serviceRequestsAdminActed?: ServiceRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
     serviceCouponsCreated?: ServiceCouponUncheckedUpdateManyWithoutCreatedByNestedInput
+    divisionPresetsCreated?: DivisionPresetUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUpsertWithoutServiceRequestsAdminActedInput = {
@@ -92113,6 +93970,7 @@ export namespace Prisma {
     dojoOwnerInvitesSent?: DojoOwnerInviteUpdateManyWithoutInvitedByNestedInput
     serviceRequestsDojoActed?: ServiceRequestUpdateManyWithoutDojoActedByNestedInput
     serviceCouponsCreated?: ServiceCouponUpdateManyWithoutCreatedByNestedInput
+    divisionPresetsCreated?: DivisionPresetUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutServiceRequestsAdminActedInput = {
@@ -92151,6 +94009,7 @@ export namespace Prisma {
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedUpdateManyWithoutInvitedByNestedInput
     serviceRequestsDojoActed?: ServiceRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
     serviceCouponsCreated?: ServiceCouponUncheckedUpdateManyWithoutCreatedByNestedInput
+    divisionPresetsCreated?: DivisionPresetUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type DojoCreateWithoutServiceCouponsInput = {
@@ -92301,6 +94160,7 @@ export namespace Prisma {
     dojoOwnerInvitesSent?: DojoOwnerInviteCreateNestedManyWithoutInvitedByInput
     serviceRequestsDojoActed?: ServiceRequestCreateNestedManyWithoutDojoActedByInput
     serviceRequestsAdminActed?: ServiceRequestCreateNestedManyWithoutAdminActedByInput
+    divisionPresetsCreated?: DivisionPresetCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutServiceCouponsCreatedInput = {
@@ -92339,6 +94199,7 @@ export namespace Prisma {
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedCreateNestedManyWithoutInvitedByInput
     serviceRequestsDojoActed?: ServiceRequestUncheckedCreateNestedManyWithoutDojoActedByInput
     serviceRequestsAdminActed?: ServiceRequestUncheckedCreateNestedManyWithoutAdminActedByInput
+    divisionPresetsCreated?: DivisionPresetUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutServiceCouponsCreatedInput = {
@@ -92577,6 +94438,7 @@ export namespace Prisma {
     dojoOwnerInvitesSent?: DojoOwnerInviteUpdateManyWithoutInvitedByNestedInput
     serviceRequestsDojoActed?: ServiceRequestUpdateManyWithoutDojoActedByNestedInput
     serviceRequestsAdminActed?: ServiceRequestUpdateManyWithoutAdminActedByNestedInput
+    divisionPresetsCreated?: DivisionPresetUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutServiceCouponsCreatedInput = {
@@ -92615,6 +94477,7 @@ export namespace Prisma {
     dojoOwnerInvitesSent?: DojoOwnerInviteUncheckedUpdateManyWithoutInvitedByNestedInput
     serviceRequestsDojoActed?: ServiceRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
     serviceRequestsAdminActed?: ServiceRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
+    divisionPresetsCreated?: DivisionPresetUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type ServiceRequestUpsertWithWhereUniqueWithoutCouponInput = {
@@ -92687,6 +94550,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestUpdateManyWithoutDojoActedByNestedInput
     serviceRequestsAdminActed?: ServiceRequestUpdateManyWithoutAdminActedByNestedInput
     serviceCouponsCreated?: ServiceCouponUpdateManyWithoutCreatedByNestedInput
+    divisionPresetsCreated?: DivisionPresetUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRoleInput = {
@@ -92725,6 +94589,7 @@ export namespace Prisma {
     serviceRequestsDojoActed?: ServiceRequestUncheckedUpdateManyWithoutDojoActedByNestedInput
     serviceRequestsAdminActed?: ServiceRequestUncheckedUpdateManyWithoutAdminActedByNestedInput
     serviceCouponsCreated?: ServiceCouponUncheckedUpdateManyWithoutCreatedByNestedInput
+    divisionPresetsCreated?: DivisionPresetUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutRoleInput = {
@@ -92894,6 +94759,7 @@ export namespace Prisma {
     isPremium?: boolean
     ticketPrice?: Decimal | DecimalJsLike | number | string | null
     memberDiscountPercent?: number
+    multiDivisionDiscountPercent?: number
     minAge?: number | null
     minRankId?: string | null
     participantType?: $Enums.EventParticipantType
@@ -93138,6 +95004,15 @@ export namespace Prisma {
     expiresAt?: Date | string | null
     isActive?: boolean
     notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DivisionPresetCreateManyCreatedByInput = {
+    id?: string
+    name: string
+    description?: string | null
+    divisions: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -93483,6 +95358,7 @@ export namespace Prisma {
     isPremium?: BoolFieldUpdateOperationsInput | boolean
     ticketPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     memberDiscountPercent?: IntFieldUpdateOperationsInput | number
+    multiDivisionDiscountPercent?: IntFieldUpdateOperationsInput | number
     minAge?: NullableIntFieldUpdateOperationsInput | number | null
     participantType?: EnumEventParticipantTypeFieldUpdateOperationsInput | $Enums.EventParticipantType
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -93508,6 +95384,7 @@ export namespace Prisma {
     isPremium?: BoolFieldUpdateOperationsInput | boolean
     ticketPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     memberDiscountPercent?: IntFieldUpdateOperationsInput | number
+    multiDivisionDiscountPercent?: IntFieldUpdateOperationsInput | number
     minAge?: NullableIntFieldUpdateOperationsInput | number | null
     minRankId?: NullableStringFieldUpdateOperationsInput | string | null
     participantType?: EnumEventParticipantTypeFieldUpdateOperationsInput | $Enums.EventParticipantType
@@ -93533,6 +95410,7 @@ export namespace Prisma {
     isPremium?: BoolFieldUpdateOperationsInput | boolean
     ticketPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     memberDiscountPercent?: IntFieldUpdateOperationsInput | number
+    multiDivisionDiscountPercent?: IntFieldUpdateOperationsInput | number
     minAge?: NullableIntFieldUpdateOperationsInput | number | null
     minRankId?: NullableStringFieldUpdateOperationsInput | string | null
     participantType?: EnumEventParticipantTypeFieldUpdateOperationsInput | $Enums.EventParticipantType
@@ -94279,6 +96157,33 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type DivisionPresetUpdateWithoutCreatedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    divisions?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DivisionPresetUncheckedUpdateWithoutCreatedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    divisions?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DivisionPresetUncheckedUpdateManyWithoutCreatedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    divisions?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type GradingCreateManyStudentInput = {
     id?: string
     gradingEventId?: string | null
@@ -94824,6 +96729,7 @@ export namespace Prisma {
     isPremium?: boolean
     ticketPrice?: Decimal | DecimalJsLike | number | string | null
     memberDiscountPercent?: number
+    multiDivisionDiscountPercent?: number
     minAge?: number | null
     participantType?: $Enums.EventParticipantType
     postedById?: string | null
@@ -95041,6 +96947,7 @@ export namespace Prisma {
     isPremium?: BoolFieldUpdateOperationsInput | boolean
     ticketPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     memberDiscountPercent?: IntFieldUpdateOperationsInput | number
+    multiDivisionDiscountPercent?: IntFieldUpdateOperationsInput | number
     minAge?: NullableIntFieldUpdateOperationsInput | number | null
     participantType?: EnumEventParticipantTypeFieldUpdateOperationsInput | $Enums.EventParticipantType
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -95066,6 +96973,7 @@ export namespace Prisma {
     isPremium?: BoolFieldUpdateOperationsInput | boolean
     ticketPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     memberDiscountPercent?: IntFieldUpdateOperationsInput | number
+    multiDivisionDiscountPercent?: IntFieldUpdateOperationsInput | number
     minAge?: NullableIntFieldUpdateOperationsInput | number | null
     participantType?: EnumEventParticipantTypeFieldUpdateOperationsInput | $Enums.EventParticipantType
     postedById?: NullableStringFieldUpdateOperationsInput | string | null
@@ -95091,6 +96999,7 @@ export namespace Prisma {
     isPremium?: BoolFieldUpdateOperationsInput | boolean
     ticketPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     memberDiscountPercent?: IntFieldUpdateOperationsInput | number
+    multiDivisionDiscountPercent?: IntFieldUpdateOperationsInput | number
     minAge?: NullableIntFieldUpdateOperationsInput | number | null
     participantType?: EnumEventParticipantTypeFieldUpdateOperationsInput | $Enums.EventParticipantType
     postedById?: NullableStringFieldUpdateOperationsInput | string | null
@@ -95216,6 +97125,7 @@ export namespace Prisma {
     isPremium?: boolean
     ticketPrice?: Decimal | DecimalJsLike | number | string | null
     memberDiscountPercent?: number
+    multiDivisionDiscountPercent?: number
     minAge?: number | null
     minRankId?: string | null
     participantType?: $Enums.EventParticipantType
@@ -95729,6 +97639,7 @@ export namespace Prisma {
     isPremium?: BoolFieldUpdateOperationsInput | boolean
     ticketPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     memberDiscountPercent?: IntFieldUpdateOperationsInput | number
+    multiDivisionDiscountPercent?: IntFieldUpdateOperationsInput | number
     minAge?: NullableIntFieldUpdateOperationsInput | number | null
     participantType?: EnumEventParticipantTypeFieldUpdateOperationsInput | $Enums.EventParticipantType
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -95754,6 +97665,7 @@ export namespace Prisma {
     isPremium?: BoolFieldUpdateOperationsInput | boolean
     ticketPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     memberDiscountPercent?: IntFieldUpdateOperationsInput | number
+    multiDivisionDiscountPercent?: IntFieldUpdateOperationsInput | number
     minAge?: NullableIntFieldUpdateOperationsInput | number | null
     minRankId?: NullableStringFieldUpdateOperationsInput | string | null
     participantType?: EnumEventParticipantTypeFieldUpdateOperationsInput | $Enums.EventParticipantType
@@ -95779,6 +97691,7 @@ export namespace Prisma {
     isPremium?: BoolFieldUpdateOperationsInput | boolean
     ticketPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     memberDiscountPercent?: IntFieldUpdateOperationsInput | number
+    multiDivisionDiscountPercent?: IntFieldUpdateOperationsInput | number
     minAge?: NullableIntFieldUpdateOperationsInput | number | null
     minRankId?: NullableStringFieldUpdateOperationsInput | string | null
     participantType?: EnumEventParticipantTypeFieldUpdateOperationsInput | $Enums.EventParticipantType
