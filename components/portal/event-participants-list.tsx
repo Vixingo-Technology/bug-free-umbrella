@@ -53,12 +53,41 @@ export default async function EventParticipantsList({
         );
     }
 
-    const [total, checkedInCount] = await Promise.all([
-        prisma.eventRegistration.count({ where: { eventId } }),
-        prisma.eventRegistration.count({
-            where: { eventId, checkedInAt: { not: null } },
-        }),
-    ]);
+    // Count distinct people, not division-rows. Same dedup key as the rest of
+    // the app (see lib/events/participant-count.ts) so this page's Registered
+    // stat matches the "N RSVPs" badge everywhere else.
+    const regs = await prisma.eventRegistration.findMany({
+        where: { eventId },
+        select: {
+            id: true,
+            userId: true,
+            paymentGroupId: true,
+            guestEmail: true,
+            guestPhone: true,
+            checkedInAt: true,
+        },
+    });
+    const participantKey = (r: {
+        id: string;
+        userId: string | null;
+        paymentGroupId: string | null;
+        guestEmail: string | null;
+        guestPhone: string | null;
+    }) => {
+        if (r.userId) return `u:${r.userId}`;
+        const email = r.guestEmail?.trim().toLowerCase();
+        if (email) return `e:${email}`;
+        const phone = r.guestPhone?.trim();
+        if (phone) return `p:${phone}`;
+        if (r.paymentGroupId) return `g:${r.paymentGroupId}`;
+        return `r:${r.id}`;
+    };
+    const uniqueParticipants = new Set(regs.map(participantKey));
+    const uniqueCheckedIn = new Set(
+        regs.filter((r) => r.checkedInAt !== null).map(participantKey),
+    );
+    const total = uniqueParticipants.size;
+    const checkedInCount = uniqueCheckedIn.size;
 
     const capacityLabel = event.maxCapacity
         ? `${total} / ${event.maxCapacity}`

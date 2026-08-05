@@ -963,6 +963,11 @@ model EventRegistration {
   // participation card. Cloudinary URL.
   profileImageUrl String? @map("profile_image_url")
 
+  // Snapshot of opt-in fees the entrant picked for THIS division row:
+  // [{ id, label, amountBdt }]. Snapshotting labels/amounts avoids drift
+  // if the admin later renames or reprices a fee.
+  selectedOptionalFees Json? @map("selected_optional_fees")
+
   checkedInAt       DateTime? @map("checked_in_at")
   checkedInByUserId String?   @map("checked_in_by_user_id") @db.Uuid
 

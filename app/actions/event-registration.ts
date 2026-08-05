@@ -259,7 +259,6 @@ export async function registerForTournamentAction(
             multiDivisionDiscountPercent: true,
             dojo: { select: { name: true } },
             tournamentDetail: true,
-            _count: { select: { registrations: true } },
         },
     });
     if (!event || !event.isPublished) {
@@ -271,11 +270,16 @@ export async function registerForTournamentAction(
     ) {
         return { ok: false, error: "Registration for this event has closed." };
     }
-    if (
-        event.maxCapacity !== null &&
-        event._count.registrations >= event.maxCapacity
-    ) {
-        return { ok: false, error: "This event is fully booked." };
+    if (event.maxCapacity !== null) {
+        // Distinct people, not division-entries — matches the number shown
+        // on public listings so the gate can't disagree with the badge.
+        const { countUniqueParticipants } = await import(
+            "@/lib/events/participant-count"
+        );
+        const currentRsvps = await countUniqueParticipants(eventId);
+        if (currentRsvps >= event.maxCapacity) {
+            return { ok: false, error: "This event is fully booked." };
+        }
     }
 
     const customDivisions = event.tournamentDetail
@@ -416,18 +420,33 @@ export async function registerForTournamentAction(
     // the event's multi-division discount is applied on top.
     const round2 = (n: number) => Math.round(n * 100) / 100;
     const pricePerCode = new Map<string, number>();
+    // Snapshot of picked opt-in fees per division, saved on the row so the
+    // participation card can show what the entrant chose.
+    const optionalSnapshotPerCode = new Map<
+        string,
+        { id: string; name: string; amountBdt: number }[]
+    >();
     let divisionsSubtotal = 0;
     for (const { code, division } of divisions) {
         let base = 0;
+        const picked: { id: string; name: string; amountBdt: number }[] = [];
         if (division.fees && division.fees.length > 0) {
             for (const f of division.fees) {
                 if (f.required || chosenOptional.has(`${code}:${f.id}`)) {
                     base += f.amountBdt;
                 }
+                if (!f.required && chosenOptional.has(`${code}:${f.id}`)) {
+                    picked.push({
+                        id: f.id,
+                        name: f.name,
+                        amountBdt: f.amountBdt,
+                    });
+                }
             }
         } else {
             base = division.priceBdt ?? 0;
         }
+        optionalSnapshotPerCode.set(code, picked);
         let effective = base;
         if (effective > 0 && registrantIsMember) {
             effective = applyDiscount(effective, event.memberDiscountPercent);
@@ -615,6 +634,10 @@ export async function registerForTournamentAction(
                 emergencyContactPhone,
                 profileImageUrl,
                 guestDateOfBirth: dob,
+                selectedOptionalFees:
+                    (optionalSnapshotPerCode.get(code) ?? []).length > 0
+                        ? (optionalSnapshotPerCode.get(code) as never)
+                        : undefined,
             },
             select: { id: true, qrToken: true },
         });

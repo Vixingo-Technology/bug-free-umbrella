@@ -455,6 +455,7 @@ exports.Prisma.EventRegistrationScalarFieldEnum = {
   emergencyContactName: 'emergencyContactName',
   emergencyContactPhone: 'emergencyContactPhone',
   profileImageUrl: 'profileImageUrl',
+  selectedOptionalFees: 'selectedOptionalFees',
   checkedInAt: 'checkedInAt',
   checkedInByUserId: 'checkedInByUserId',
   createdAt: 'createdAt'

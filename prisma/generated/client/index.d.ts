@@ -34580,6 +34580,7 @@ export namespace Prisma {
     emergencyContactName: number
     emergencyContactPhone: number
     profileImageUrl: number
+    selectedOptionalFees: number
     checkedInAt: number
     checkedInByUserId: number
     createdAt: number
@@ -34692,6 +34693,7 @@ export namespace Prisma {
     emergencyContactName?: true
     emergencyContactPhone?: true
     profileImageUrl?: true
+    selectedOptionalFees?: true
     checkedInAt?: true
     checkedInByUserId?: true
     createdAt?: true
@@ -34813,6 +34815,7 @@ export namespace Prisma {
     emergencyContactName: string | null
     emergencyContactPhone: string | null
     profileImageUrl: string | null
+    selectedOptionalFees: JsonValue | null
     checkedInAt: Date | null
     checkedInByUserId: string | null
     createdAt: Date
@@ -34866,6 +34869,7 @@ export namespace Prisma {
     emergencyContactName?: boolean
     emergencyContactPhone?: boolean
     profileImageUrl?: boolean
+    selectedOptionalFees?: boolean
     checkedInAt?: boolean
     checkedInByUserId?: boolean
     createdAt?: boolean
@@ -34905,6 +34909,7 @@ export namespace Prisma {
     emergencyContactName?: boolean
     emergencyContactPhone?: boolean
     profileImageUrl?: boolean
+    selectedOptionalFees?: boolean
     checkedInAt?: boolean
     checkedInByUserId?: boolean
     createdAt?: boolean
@@ -34942,6 +34947,7 @@ export namespace Prisma {
     emergencyContactName?: boolean
     emergencyContactPhone?: boolean
     profileImageUrl?: boolean
+    selectedOptionalFees?: boolean
     checkedInAt?: boolean
     checkedInByUserId?: boolean
     createdAt?: boolean
@@ -34979,12 +34985,13 @@ export namespace Prisma {
     emergencyContactName?: boolean
     emergencyContactPhone?: boolean
     profileImageUrl?: boolean
+    selectedOptionalFees?: boolean
     checkedInAt?: boolean
     checkedInByUserId?: boolean
     createdAt?: boolean
   }
 
-  export type EventRegistrationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "eventId" | "userId" | "guestName" | "guestEmail" | "guestPhone" | "qrToken" | "paymentStatus" | "paymentGroupId" | "amountDue" | "paidAt" | "transactionId" | "guestDateOfBirth" | "parentOfMemberNumber" | "divisionCode" | "entrantGender" | "entrantWeightKg" | "entrantBeltRank" | "entrantDojoName" | "coachName" | "teamName" | "teammates" | "guardianName" | "guardianPhone" | "guardianConsent" | "emergencyContactName" | "emergencyContactPhone" | "profileImageUrl" | "checkedInAt" | "checkedInByUserId" | "createdAt", ExtArgs["result"]["eventRegistration"]>
+  export type EventRegistrationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "eventId" | "userId" | "guestName" | "guestEmail" | "guestPhone" | "qrToken" | "paymentStatus" | "paymentGroupId" | "amountDue" | "paidAt" | "transactionId" | "guestDateOfBirth" | "parentOfMemberNumber" | "divisionCode" | "entrantGender" | "entrantWeightKg" | "entrantBeltRank" | "entrantDojoName" | "coachName" | "teamName" | "teammates" | "guardianName" | "guardianPhone" | "guardianConsent" | "emergencyContactName" | "emergencyContactPhone" | "profileImageUrl" | "selectedOptionalFees" | "checkedInAt" | "checkedInByUserId" | "createdAt", ExtArgs["result"]["eventRegistration"]>
   export type EventRegistrationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     event?: boolean | EventDefaultArgs<ExtArgs>
     user?: boolean | EventRegistration$userArgs<ExtArgs>
@@ -35040,6 +35047,7 @@ export namespace Prisma {
       emergencyContactName: string | null
       emergencyContactPhone: string | null
       profileImageUrl: string | null
+      selectedOptionalFees: Prisma.JsonValue | null
       checkedInAt: Date | null
       checkedInByUserId: string | null
       createdAt: Date
@@ -35498,6 +35506,7 @@ export namespace Prisma {
     readonly emergencyContactName: FieldRef<"EventRegistration", 'String'>
     readonly emergencyContactPhone: FieldRef<"EventRegistration", 'String'>
     readonly profileImageUrl: FieldRef<"EventRegistration", 'String'>
+    readonly selectedOptionalFees: FieldRef<"EventRegistration", 'Json'>
     readonly checkedInAt: FieldRef<"EventRegistration", 'DateTime'>
     readonly checkedInByUserId: FieldRef<"EventRegistration", 'String'>
     readonly createdAt: FieldRef<"EventRegistration", 'DateTime'>
@@ -58928,6 +58937,7 @@ export namespace Prisma {
     emergencyContactName: 'emergencyContactName',
     emergencyContactPhone: 'emergencyContactPhone',
     profileImageUrl: 'profileImageUrl',
+    selectedOptionalFees: 'selectedOptionalFees',
     checkedInAt: 'checkedInAt',
     checkedInByUserId: 'checkedInByUserId',
     createdAt: 'createdAt'
@@ -61893,6 +61903,7 @@ export namespace Prisma {
     emergencyContactName?: StringNullableFilter<"EventRegistration"> | string | null
     emergencyContactPhone?: StringNullableFilter<"EventRegistration"> | string | null
     profileImageUrl?: StringNullableFilter<"EventRegistration"> | string | null
+    selectedOptionalFees?: JsonNullableFilter<"EventRegistration">
     checkedInAt?: DateTimeNullableFilter<"EventRegistration"> | Date | string | null
     checkedInByUserId?: UuidNullableFilter<"EventRegistration"> | string | null
     createdAt?: DateTimeFilter<"EventRegistration"> | Date | string
@@ -61931,6 +61942,7 @@ export namespace Prisma {
     emergencyContactName?: SortOrderInput | SortOrder
     emergencyContactPhone?: SortOrderInput | SortOrder
     profileImageUrl?: SortOrderInput | SortOrder
+    selectedOptionalFees?: SortOrderInput | SortOrder
     checkedInAt?: SortOrderInput | SortOrder
     checkedInByUserId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
@@ -61972,6 +61984,7 @@ export namespace Prisma {
     emergencyContactName?: StringNullableFilter<"EventRegistration"> | string | null
     emergencyContactPhone?: StringNullableFilter<"EventRegistration"> | string | null
     profileImageUrl?: StringNullableFilter<"EventRegistration"> | string | null
+    selectedOptionalFees?: JsonNullableFilter<"EventRegistration">
     checkedInAt?: DateTimeNullableFilter<"EventRegistration"> | Date | string | null
     checkedInByUserId?: UuidNullableFilter<"EventRegistration"> | string | null
     createdAt?: DateTimeFilter<"EventRegistration"> | Date | string
@@ -62010,6 +62023,7 @@ export namespace Prisma {
     emergencyContactName?: SortOrderInput | SortOrder
     emergencyContactPhone?: SortOrderInput | SortOrder
     profileImageUrl?: SortOrderInput | SortOrder
+    selectedOptionalFees?: SortOrderInput | SortOrder
     checkedInAt?: SortOrderInput | SortOrder
     checkedInByUserId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
@@ -62052,6 +62066,7 @@ export namespace Prisma {
     emergencyContactName?: StringNullableWithAggregatesFilter<"EventRegistration"> | string | null
     emergencyContactPhone?: StringNullableWithAggregatesFilter<"EventRegistration"> | string | null
     profileImageUrl?: StringNullableWithAggregatesFilter<"EventRegistration"> | string | null
+    selectedOptionalFees?: JsonNullableWithAggregatesFilter<"EventRegistration">
     checkedInAt?: DateTimeNullableWithAggregatesFilter<"EventRegistration"> | Date | string | null
     checkedInByUserId?: UuidNullableWithAggregatesFilter<"EventRegistration"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"EventRegistration"> | Date | string
@@ -66249,6 +66264,7 @@ export namespace Prisma {
     emergencyContactName?: string | null
     emergencyContactPhone?: string | null
     profileImageUrl?: string | null
+    selectedOptionalFees?: NullableJsonNullValueInput | InputJsonValue
     checkedInAt?: Date | string | null
     createdAt?: Date | string
     event: EventCreateNestedOneWithoutRegistrationsInput
@@ -66286,6 +66302,7 @@ export namespace Prisma {
     emergencyContactName?: string | null
     emergencyContactPhone?: string | null
     profileImageUrl?: string | null
+    selectedOptionalFees?: NullableJsonNullValueInput | InputJsonValue
     checkedInAt?: Date | string | null
     checkedInByUserId?: string | null
     createdAt?: Date | string
@@ -66319,6 +66336,7 @@ export namespace Prisma {
     emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    selectedOptionalFees?: NullableJsonNullValueInput | InputJsonValue
     checkedInAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     event?: EventUpdateOneRequiredWithoutRegistrationsNestedInput
@@ -66356,6 +66374,7 @@ export namespace Prisma {
     emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    selectedOptionalFees?: NullableJsonNullValueInput | InputJsonValue
     checkedInAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     checkedInByUserId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -66391,6 +66410,7 @@ export namespace Prisma {
     emergencyContactName?: string | null
     emergencyContactPhone?: string | null
     profileImageUrl?: string | null
+    selectedOptionalFees?: NullableJsonNullValueInput | InputJsonValue
     checkedInAt?: Date | string | null
     checkedInByUserId?: string | null
     createdAt?: Date | string
@@ -66423,6 +66443,7 @@ export namespace Prisma {
     emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    selectedOptionalFees?: NullableJsonNullValueInput | InputJsonValue
     checkedInAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -66456,6 +66477,7 @@ export namespace Prisma {
     emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    selectedOptionalFees?: NullableJsonNullValueInput | InputJsonValue
     checkedInAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     checkedInByUserId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -70418,6 +70440,7 @@ export namespace Prisma {
     emergencyContactName?: SortOrder
     emergencyContactPhone?: SortOrder
     profileImageUrl?: SortOrder
+    selectedOptionalFees?: SortOrder
     checkedInAt?: SortOrder
     checkedInByUserId?: SortOrder
     createdAt?: SortOrder
@@ -78102,6 +78125,7 @@ export namespace Prisma {
     emergencyContactName?: string | null
     emergencyContactPhone?: string | null
     profileImageUrl?: string | null
+    selectedOptionalFees?: NullableJsonNullValueInput | InputJsonValue
     checkedInAt?: Date | string | null
     createdAt?: Date | string
     event: EventCreateNestedOneWithoutRegistrationsInput
@@ -78137,6 +78161,7 @@ export namespace Prisma {
     emergencyContactName?: string | null
     emergencyContactPhone?: string | null
     profileImageUrl?: string | null
+    selectedOptionalFees?: NullableJsonNullValueInput | InputJsonValue
     checkedInAt?: Date | string | null
     checkedInByUserId?: string | null
     createdAt?: Date | string
@@ -78180,6 +78205,7 @@ export namespace Prisma {
     emergencyContactName?: string | null
     emergencyContactPhone?: string | null
     profileImageUrl?: string | null
+    selectedOptionalFees?: NullableJsonNullValueInput | InputJsonValue
     checkedInAt?: Date | string | null
     createdAt?: Date | string
     event: EventCreateNestedOneWithoutRegistrationsInput
@@ -78216,6 +78242,7 @@ export namespace Prisma {
     emergencyContactName?: string | null
     emergencyContactPhone?: string | null
     profileImageUrl?: string | null
+    selectedOptionalFees?: NullableJsonNullValueInput | InputJsonValue
     checkedInAt?: Date | string | null
     createdAt?: Date | string
     transactions?: PaymentTransactionUncheckedCreateNestedManyWithoutEventRegistrationInput
@@ -79310,6 +79337,7 @@ export namespace Prisma {
     emergencyContactName?: StringNullableFilter<"EventRegistration"> | string | null
     emergencyContactPhone?: StringNullableFilter<"EventRegistration"> | string | null
     profileImageUrl?: StringNullableFilter<"EventRegistration"> | string | null
+    selectedOptionalFees?: JsonNullableFilter<"EventRegistration">
     checkedInAt?: DateTimeNullableFilter<"EventRegistration"> | Date | string | null
     checkedInByUserId?: UuidNullableFilter<"EventRegistration"> | string | null
     createdAt?: DateTimeFilter<"EventRegistration"> | Date | string
@@ -85293,6 +85321,7 @@ export namespace Prisma {
     emergencyContactName?: string | null
     emergencyContactPhone?: string | null
     profileImageUrl?: string | null
+    selectedOptionalFees?: NullableJsonNullValueInput | InputJsonValue
     checkedInAt?: Date | string | null
     createdAt?: Date | string
     user?: UserCreateNestedOneWithoutEventRegistrationsInput
@@ -85328,6 +85357,7 @@ export namespace Prisma {
     emergencyContactName?: string | null
     emergencyContactPhone?: string | null
     profileImageUrl?: string | null
+    selectedOptionalFees?: NullableJsonNullValueInput | InputJsonValue
     checkedInAt?: Date | string | null
     checkedInByUserId?: string | null
     createdAt?: Date | string
@@ -91846,6 +91876,7 @@ export namespace Prisma {
     emergencyContactName?: string | null
     emergencyContactPhone?: string | null
     profileImageUrl?: string | null
+    selectedOptionalFees?: NullableJsonNullValueInput | InputJsonValue
     checkedInAt?: Date | string | null
     createdAt?: Date | string
     event: EventCreateNestedOneWithoutRegistrationsInput
@@ -91882,6 +91913,7 @@ export namespace Prisma {
     emergencyContactName?: string | null
     emergencyContactPhone?: string | null
     profileImageUrl?: string | null
+    selectedOptionalFees?: NullableJsonNullValueInput | InputJsonValue
     checkedInAt?: Date | string | null
     checkedInByUserId?: string | null
     createdAt?: Date | string
@@ -92088,6 +92120,7 @@ export namespace Prisma {
     emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    selectedOptionalFees?: NullableJsonNullValueInput | InputJsonValue
     checkedInAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     event?: EventUpdateOneRequiredWithoutRegistrationsNestedInput
@@ -92124,6 +92157,7 @@ export namespace Prisma {
     emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    selectedOptionalFees?: NullableJsonNullValueInput | InputJsonValue
     checkedInAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     checkedInByUserId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -94706,6 +94740,7 @@ export namespace Prisma {
     emergencyContactName?: string | null
     emergencyContactPhone?: string | null
     profileImageUrl?: string | null
+    selectedOptionalFees?: NullableJsonNullValueInput | InputJsonValue
     checkedInAt?: Date | string | null
     checkedInByUserId?: string | null
     createdAt?: Date | string
@@ -94740,6 +94775,7 @@ export namespace Prisma {
     emergencyContactName?: string | null
     emergencyContactPhone?: string | null
     profileImageUrl?: string | null
+    selectedOptionalFees?: NullableJsonNullValueInput | InputJsonValue
     checkedInAt?: Date | string | null
     createdAt?: Date | string
   }
@@ -95168,6 +95204,7 @@ export namespace Prisma {
     emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    selectedOptionalFees?: NullableJsonNullValueInput | InputJsonValue
     checkedInAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     event?: EventUpdateOneRequiredWithoutRegistrationsNestedInput
@@ -95203,6 +95240,7 @@ export namespace Prisma {
     emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    selectedOptionalFees?: NullableJsonNullValueInput | InputJsonValue
     checkedInAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     checkedInByUserId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -95237,6 +95275,7 @@ export namespace Prisma {
     emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    selectedOptionalFees?: NullableJsonNullValueInput | InputJsonValue
     checkedInAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     checkedInByUserId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -95269,6 +95308,7 @@ export namespace Prisma {
     emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    selectedOptionalFees?: NullableJsonNullValueInput | InputJsonValue
     checkedInAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     event?: EventUpdateOneRequiredWithoutRegistrationsNestedInput
@@ -95305,6 +95345,7 @@ export namespace Prisma {
     emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    selectedOptionalFees?: NullableJsonNullValueInput | InputJsonValue
     checkedInAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     transactions?: PaymentTransactionUncheckedUpdateManyWithoutEventRegistrationNestedInput
@@ -95339,6 +95380,7 @@ export namespace Prisma {
     emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    selectedOptionalFees?: NullableJsonNullValueInput | InputJsonValue
     checkedInAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -98372,6 +98414,7 @@ export namespace Prisma {
     emergencyContactName?: string | null
     emergencyContactPhone?: string | null
     profileImageUrl?: string | null
+    selectedOptionalFees?: NullableJsonNullValueInput | InputJsonValue
     checkedInAt?: Date | string | null
     checkedInByUserId?: string | null
     createdAt?: Date | string
@@ -98404,6 +98447,7 @@ export namespace Prisma {
     emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    selectedOptionalFees?: NullableJsonNullValueInput | InputJsonValue
     checkedInAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneWithoutEventRegistrationsNestedInput
@@ -98439,6 +98483,7 @@ export namespace Prisma {
     emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    selectedOptionalFees?: NullableJsonNullValueInput | InputJsonValue
     checkedInAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     checkedInByUserId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -98473,6 +98518,7 @@ export namespace Prisma {
     emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    selectedOptionalFees?: NullableJsonNullValueInput | InputJsonValue
     checkedInAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     checkedInByUserId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string

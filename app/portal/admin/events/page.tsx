@@ -10,6 +10,7 @@ import Pager from "@/components/portal/pager";
 import { requireAdmin } from "@/lib/admin-guard";
 import { prisma } from "@/lib/prisma";
 import { parseCustomDivisions } from "@/lib/tournaments/divisions";
+import { countUniqueParticipantsByEvent } from "@/lib/events/participant-count";
 
 export const metadata: Metadata = {
     title: "Events — Admin",
@@ -61,10 +62,15 @@ export default async function AdminEventsPage({
                   include: {
                       dojo: { select: { id: true, name: true } },
                       postedBy: { select: { fullName: true } },
-                      _count: { select: { registrations: true } },
                   },
               })
             : [];
+
+    // Distinct participants per event (dedupes multi-division submits sharing
+    // paymentGroupId — see lib/events/participant-count.ts).
+    const rsvpCounts = await countUniqueParticipantsByEvent(
+        events.map((e) => e.id),
+    );
 
     const beltRanks =
         tab === "new"
@@ -200,7 +206,7 @@ export default async function AdminEventsPage({
                                         size={12}
                                         className="text-zinc-400"
                                     />
-                                    {e._count.registrations} RSVPs
+                                    {rsvpCounts.get(e.id) ?? 0} RSVPs
                                     {e.maxCapacity
                                         ? ` · cap ${e.maxCapacity}`
                                         : ""}

@@ -102,7 +102,7 @@ export default function EventsClient({ upcomingEvents, pastEvents, myRegistratio
                         {upcomingEvents.map((ev: any, i: number) => {
                             const isRegistered = registrations.has(ev.id);
                             const isLoading = loadingId === ev.id && isPending;
-                            const isFull = ev.maxCapacity && ev._count?.registrations >= ev.maxCapacity;
+                            const isFull = ev.maxCapacity && (ev.rsvpCount ?? 0) >= ev.maxCapacity;
                             const category = ev.category ?? "OTHER";
 
                             return (
@@ -152,7 +152,7 @@ export default function EventsClient({ upcomingEvents, pastEvents, myRegistratio
                                                 {ev.maxCapacity && (
                                                     <span className="flex items-center gap-1">
                                                         <Users size={11} />
-                                                        {ev._count?.registrations ?? 0} / {ev.maxCapacity}
+                                                        {ev.rsvpCount ?? 0} / {ev.maxCapacity}
                                                     </span>
                                                 )}
                                             </div>

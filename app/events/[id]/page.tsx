@@ -7,6 +7,7 @@ import Footer from "@/components/footer";
 import AttachmentViewer from "@/components/attachment-viewer";
 import { prisma } from "@/lib/prisma";
 import { applyDiscount, currentUserIsJkaMember } from "@/lib/auth/is-jka-member";
+import { countUniqueParticipants } from "@/lib/events/participant-count";
 
 type Props = { params: Promise<{ id: string }> };
 
@@ -56,11 +57,13 @@ export default async function EventDetailPage({ params }: Props) {
                     registrationDeadline: true,
                 },
             },
-            _count: { select: { registrations: true } },
         },
     });
 
     if (!e || !e.isPublished) notFound();
+
+    // Count distinct people, not division-entries — see participant-count.ts.
+    const rsvpCount = await countUniqueParticipants(e.id);
 
     const divisions = e.tournamentDetail
         ? (await import("@/lib/tournaments/divisions")).parseCustomDivisions(
@@ -93,8 +96,7 @@ export default async function EventDetailPage({ params }: Props) {
 
     // eslint-disable-next-line react-hooks/purity -- server component re-renders per request (force-dynamic)
     const isPast = e.eventDate.getTime() < Date.now();
-    const isFull =
-        e.maxCapacity !== null && e._count.registrations >= e.maxCapacity;
+    const isFull = e.maxCapacity !== null && rsvpCount >= e.maxCapacity;
     const registrationDeadline = e.tournamentDetail?.registrationDeadline ?? null;
     const registrationClosed = registrationDeadline
         ? registrationDeadline.getTime() < Date.now()
@@ -227,7 +229,7 @@ export default async function EventDetailPage({ params }: Props) {
                                     RSVPs
                                 </p>
                                 <p className="text-sm text-zinc-700 font-semibold">
-                                    {e._count.registrations}
+                                    {rsvpCount}
                                     {e.maxCapacity
                                         ? ` of ${e.maxCapacity}`
                                         : ""}

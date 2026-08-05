@@ -90,6 +90,23 @@ export default async function ParticipationCardPage({
         },
     });
 
+    // Snapshot rows written on register: [{ id, name, amountBdt }].
+    type PickedFee = { id: string; name: string; amountBdt: number };
+    function parsePickedFees(raw: unknown): PickedFee[] {
+        if (!Array.isArray(raw)) return [];
+        return raw
+            .filter((r): r is Record<string, unknown> => !!r && typeof r === "object")
+            .map((r) => ({
+                id: typeof r.id === "string" ? r.id : "",
+                name: typeof r.name === "string" ? r.name : "",
+                amountBdt:
+                    typeof r.amountBdt === "number"
+                        ? r.amountBdt
+                        : Number(r.amountBdt ?? 0),
+            }))
+            .filter((f) => f.name);
+    }
+
     if (!registration) notFound();
 
     // Sibling rows created in the same multi-division submit share
@@ -105,6 +122,7 @@ export default async function ParticipationCardPage({
                   divisionCode: true,
                   paymentStatus: true,
                   amountDue: true,
+                  selectedOptionalFees: true,
               },
           })
         : [];
@@ -121,8 +139,15 @@ export default async function ParticipationCardPage({
             label: div?.label ?? s.divisionCode ?? "Division",
             eventType: div?.eventType ?? null,
             paid: s.paymentStatus !== "PENDING" && s.paymentStatus !== "FAILED",
+            addons: parsePickedFees(s.selectedOptionalFees),
         };
     });
+
+    // Current row's division + picked addons for the single-row display.
+    const currentDivision = registration.divisionCode
+        ? resolveDivision(registration.divisionCode, customDivisions)
+        : null;
+    const currentAddons = parsePickedFees(registration.selectedOptionalFees);
     const groupTotalDue = groupSiblings.length
         ? groupSiblings.reduce(
               (t, s) => t + (s.amountDue ? Number(s.amountDue) : 0),
@@ -328,42 +353,68 @@ export default async function ParticipationCardPage({
                                     </ul>
                                 </div>
 
-                                {groupEntries.length > 1 && (
+                                {groupEntries.length > 1 ? (
                                     <div className="border-t border-zinc-200 pt-4 mt-4 print:pt-2 print:mt-2">
                                         <p className="text-[10px] tracking-widest uppercase font-bold text-zinc-400 mb-2">
                                             Divisions ({groupEntries.length})
                                         </p>
-                                        <ul className="space-y-1.5 text-xs">
+                                        <ul className="space-y-2 text-xs">
                                             {groupEntries.map((g) => (
-                                                <li
-                                                    key={g.qrToken}
-                                                    className="flex items-center gap-2"
-                                                >
-                                                    <span
-                                                        className={`inline-block h-1.5 w-1.5 rounded-full ${g.paid ? "bg-emerald-500" : "bg-amber-500"}`}
-                                                    />
-                                                    {g.isCurrent ? (
-                                                        <span className="font-semibold text-zinc-900">
-                                                            {g.label}
-                                                        </span>
-                                                    ) : (
-                                                        <Link
-                                                            href={`/participants/${g.qrToken}`}
-                                                            className="text-accent-red hover:underline"
-                                                        >
-                                                            {g.label}
-                                                        </Link>
-                                                    )}
-                                                    {g.eventType && (
-                                                        <span className="text-[10px] tracking-widest uppercase text-zinc-400">
-                                                            · {g.eventType === "KATA" ? "Kata" : "Kumite"}
-                                                        </span>
+                                                <li key={g.qrToken}>
+                                                    <div className="flex items-center gap-2">
+                                                        <span
+                                                            className={`inline-block h-1.5 w-1.5 rounded-full ${g.paid ? "bg-emerald-500" : "bg-amber-500"}`}
+                                                        />
+                                                        {g.isCurrent ? (
+                                                            <span className="font-semibold text-zinc-900">
+                                                                {g.label}
+                                                            </span>
+                                                        ) : (
+                                                            <Link
+                                                                href={`/participants/${g.qrToken}`}
+                                                                className="text-accent-red hover:underline"
+                                                            >
+                                                                {g.label}
+                                                            </Link>
+                                                        )}
+                                                    </div>
+                                                    {g.addons.length > 0 && (
+                                                        <ul className="mt-1 ml-3.5 space-y-0.5 text-[10px] text-zinc-500">
+                                                            {g.addons.map((a) => (
+                                                                <li key={a.id}>
+                                                                    + {a.name}
+                                                                </li>
+                                                            ))}
+                                                        </ul>
                                                     )}
                                                 </li>
                                             ))}
                                         </ul>
                                     </div>
-                                )}
+                                ) : currentDivision ? (
+                                    <div className="border-t border-zinc-200 pt-4 mt-4 print:pt-2 print:mt-2">
+                                        <p className="text-[10px] tracking-widest uppercase font-bold text-accent-red mb-2 print:mb-1">
+                                            Division
+                                        </p>
+                                        <p className="text-sm font-bold text-zinc-900 print:text-xs">
+                                            {currentDivision.label}
+                                        </p>
+                                        {currentAddons.length > 0 && (
+                                            <div className="mt-3">
+                                                <p className="text-[10px] tracking-widest uppercase font-bold text-zinc-400 mb-1">
+                                                    Add-ons
+                                                </p>
+                                                <ul className="space-y-0.5 text-xs text-zinc-600">
+                                                    {currentAddons.map((a) => (
+                                                        <li key={a.id}>
+                                                            + {a.name}
+                                                        </li>
+                                                    ))}
+                                                </ul>
+                                            </div>
+                                        )}
+                                    </div>
+                                ) : null}
                             </div>
 
                             {paymentPending ? (

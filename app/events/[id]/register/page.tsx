@@ -51,7 +51,6 @@ export default async function RegisterPage({ params, searchParams }: Props) {
                 multiDivisionDiscountPercent: true,
                 ticketPrice: true,
                 tournamentDetail: true,
-                _count: { select: { registrations: true } },
             },
         }),
         prisma.beltRank.findMany({

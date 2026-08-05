@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import type { ReportKey } from "./report-types";
+import { countUniqueParticipantsByEvent } from "@/lib/events/participant-count";
 
 export interface ReportFilters {
     from?: Date;
@@ -368,10 +369,14 @@ export async function generateReport(
                 include: {
                     dojo: { select: { name: true } },
                     postedBy: { select: { fullName: true } },
-                    _count: { select: { registrations: true } },
                 },
                 orderBy: { eventDate: "desc" },
             });
+            // Distinct participants per event — matches the number shown
+            // everywhere else in the app.
+            const rsvpCounts = await countUniqueParticipantsByEvent(
+                rows.map((e) => e.id),
+            );
             return rows.map((e) => ({
                 id: e.id,
                 title: e.title,
@@ -386,7 +391,7 @@ export async function generateReport(
                 participant_type: e.participantType,
                 dojo: e.dojo?.name ?? "",
                 posted_by: e.postedBy?.fullName ?? "",
-                registration_count: e._count.registrations,
+                registration_count: rsvpCounts.get(e.id) ?? 0,
                 created_at: e.createdAt,
             }));
         }

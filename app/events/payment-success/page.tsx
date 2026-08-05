@@ -28,6 +28,7 @@ export default async function EventPaymentSuccessPage({
             qrToken: true,
             paymentStatus: true,
             amountDue: true,
+            paymentGroupId: true,
             guestName: true,
             user: { select: { fullName: true } },
             event: {
@@ -41,6 +42,19 @@ export default async function EventPaymentSuccessPage({
     });
 
     if (!reg) redirect("/events");
+
+    // A multi-division submit splits amountDue across sibling rows sharing
+    // paymentGroupId — the paid total is their sum, not this row's slice.
+    const paidTotal = reg.paymentGroupId
+        ? await prisma.eventRegistration
+              .aggregate({
+                  where: { paymentGroupId: reg.paymentGroupId },
+                  _sum: { amountDue: true },
+              })
+              .then((r) => (r._sum.amountDue ? Number(r._sum.amountDue) : null))
+        : reg.amountDue
+          ? Number(reg.amountDue)
+          : null;
 
     const participantName =
         reg.user?.fullName ?? reg.guestName ?? "Participant";
@@ -89,14 +103,13 @@ export default async function EventPaymentSuccessPage({
                                 {reg.event.location}
                             </span>
                         </div>
-                        {reg.amountDue !== null && (
+                        {paidTotal !== null && (
                             <div className="flex justify-between pt-3 mt-3 border-t border-zinc-100">
                                 <span className="text-zinc-500">
                                     Amount paid
                                 </span>
                                 <span className="font-semibold text-zinc-900">
-                                    BDT{" "}
-                                    {Number(reg.amountDue).toLocaleString()}
+                                    BDT {paidTotal.toLocaleString()}
                                 </span>
                             </div>
                         )}

@@ -113,6 +113,21 @@ export default async function ParticipantDetailPage({
 
     if (!registration) notFound();
 
+    // A single participant can enter multiple divisions in one submit — those
+    // rows share paymentGroupId and are paid for together. The row's own
+    // amountDue is only its slice; sum siblings to show what the participant
+    // actually paid.
+    const paymentGroupTotal = registration.paymentGroupId
+        ? await prisma.eventRegistration
+              .aggregate({
+                  where: { paymentGroupId: registration.paymentGroupId },
+                  _sum: { amountDue: true },
+              })
+              .then((r) => (r._sum.amountDue ? Number(r._sum.amountDue) : null))
+        : registration.amountDue
+          ? Number(registration.amountDue)
+          : null;
+
     const isMember = !!registration.user;
     const name = registration.user?.fullName ?? registration.guestName ?? "Guest";
     const email = registration.user?.email ?? registration.guestEmail;
@@ -412,8 +427,8 @@ export default async function ParticipantDetailPage({
                         <Datum
                             label="Amount"
                             value={
-                                registration.amountDue
-                                    ? `৳${registration.amountDue.toString()}`
+                                paymentGroupTotal !== null
+                                    ? `৳${paymentGroupTotal.toLocaleString()}`
                                     : "—"
                             }
                         />
