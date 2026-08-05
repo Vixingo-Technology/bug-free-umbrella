@@ -439,24 +439,10 @@ export default function TournamentRegistrationForm({
                     Pick every division you want to enter. Prices add up.
                 </p>
                 {cannotRegister && (
-                    <div className="text-xs text-red-800 bg-red-50 border border-red-200 rounded-sm px-3 py-3 mb-3 space-y-2">
+                    <div className="text-xs text-blue-800 bg-blue-50 border border-blue-200 rounded-sm px-3 py-3 mb-3">
                         <p className="font-semibold">
-                            You cannot register for this event.
+                            No available division for your &quot;Rank/age&quot;
                         </p>
-                        <p className="text-red-700">
-                            None of the published divisions match your details.
-                            Here is why each one is unavailable:
-                        </p>
-                        <ul className="list-disc pl-4 space-y-1 text-red-700">
-                            {eligibility.map(({ d, reason }) => (
-                                <li key={d.code}>
-                                    <span className="font-semibold">
-                                        {d.label}
-                                    </span>{" "}
-                                    — {reason}
-                                </li>
-                            ))}
-                        </ul>
                     </div>
                 )}
                 <ul className="space-y-2">
