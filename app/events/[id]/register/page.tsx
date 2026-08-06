@@ -47,7 +47,6 @@ export default async function RegisterPage({ params, searchParams }: Props) {
                 eventDate: true,
                 location: true,
                 maxCapacity: true,
-                memberDiscountPercent: true,
                 multiDivisionDiscountPercent: true,
                 ticketPrice: true,
                 tournamentDetail: true,
@@ -69,8 +68,9 @@ export default async function RegisterPage({ params, searchParams }: Props) {
         ? parseCustomDivisions(event.tournamentDetail.customDivisions)
         : [];
     const registrantIsMember = user ? await isJkaMember(user.id) : false;
-    const memberDiscountActive =
-        registrantIsMember && event.memberDiscountPercent > 0;
+    // Any per-fee discount kicks in only for signed-in JKA members with an
+    // active membership.
+    const memberDiscountActive = registrantIsMember;
 
     let memberAutofill: MemberAutofill = null;
     if (user) {
@@ -128,7 +128,6 @@ export default async function RegisterPage({ params, searchParams }: Props) {
         title: event.title,
         eventDate: event.eventDate.toISOString(),
         memberDiscountActive,
-        memberDiscountPercent: event.memberDiscountPercent,
         divisions,
         eventTicketPriceBdt: event.ticketPrice ? Number(event.ticketPrice) : null,
         multiDivisionDiscountPercent: event.multiDivisionDiscountPercent,

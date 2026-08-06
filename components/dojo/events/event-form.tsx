@@ -12,6 +12,7 @@ import {
     Bookmark,
     Download,
     Trash2,
+    Percent,
 } from "lucide-react";
 import { createEventAction, updateEventAction } from "@/app/actions/events";
 import {
@@ -70,6 +71,9 @@ type FeeDraft = {
     name: string;
     amountBdt: string;
     required: boolean;
+    // Per-fee JKA member discount percentage (0-100). Empty string when
+    // the admin has cleared the input; treated as 0 on save.
+    memberDiscountPercent: string;
 };
 
 type DivisionDraft = {
@@ -97,6 +101,10 @@ function toDraft(d: CustomDivision): DivisionDraft {
                   name: f.name,
                   amountBdt: String(f.amountBdt),
                   required: f.required,
+                  memberDiscountPercent:
+                      f.memberDiscountPercent > 0
+                          ? String(f.memberDiscountPercent)
+                          : "",
               }))
             : d.priceBdt !== null && d.priceBdt > 0
               ? [
@@ -105,6 +113,7 @@ function toDraft(d: CustomDivision): DivisionDraft {
                         name: "Entry fee",
                         amountBdt: String(d.priceBdt),
                         required: true,
+                        memberDiscountPercent: "",
                     },
                 ]
               : [];
@@ -124,12 +133,21 @@ function draftToDivision(d: DivisionDraft): CustomDivision {
     const minAge = d.minAge.trim() ? Number.parseInt(d.minAge, 10) : NaN;
     const fees: DivisionFee[] = d.fees
         .filter((f) => f.name.trim())
-        .map((f) => ({
-            id: f.id,
-            name: f.name.trim(),
-            amountBdt: Number.parseFloat(f.amountBdt) || 0,
-            required: f.required,
-        }));
+        .map((f) => {
+            const pct = f.memberDiscountPercent.trim()
+                ? Number.parseInt(f.memberDiscountPercent, 10)
+                : NaN;
+            const memberDiscountPercent = Number.isFinite(pct)
+                ? Math.max(0, Math.min(100, pct))
+                : 0;
+            return {
+                id: f.id,
+                name: f.name.trim(),
+                amountBdt: Number.parseFloat(f.amountBdt) || 0,
+                required: f.required,
+                memberDiscountPercent,
+            };
+        });
     const priceBdt = fees
         .filter((f) => f.required)
         .reduce((s, f) => s + (Number.isFinite(f.amountBdt) ? f.amountBdt : 0), 0);
@@ -203,6 +221,7 @@ export default function EventForm({
                         name: "Entry fee",
                         amountBdt: "",
                         required: true,
+                        memberDiscountPercent: "",
                     },
                 ],
             },
@@ -239,6 +258,7 @@ export default function EventForm({
                                   name: "",
                                   amountBdt: "",
                                   required: false,
+                                  memberDiscountPercent: "",
                               },
                           ],
                       }
@@ -715,6 +735,12 @@ export default function EventForm({
                 <p className="text-[10px] tracking-widest uppercase font-bold text-zinc-400 mb-3">
                     Discounts
                 </p>
+                <p className="text-[11px] text-zinc-500 mb-3">
+                    JKA-member discounts are set per fee — use the{" "}
+                    <Percent size={10} className="inline align-baseline" />{" "}
+                    control beside each fee above to pick which fees get a
+                    member discount.
+                </p>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <Field label="Multi-division discount (%)">
                         <input
@@ -735,23 +761,12 @@ export default function EventForm({
                             divisions. Leave 0 to skip.
                         </p>
                     </Field>
-                    <Field label="JKA member discount (%)">
-                        <input
-                            name="memberDiscountPercent"
-                            type="number"
-                            min={0}
-                            max={100}
-                            step="1"
-                            defaultValue={initial?.memberDiscountPercent ?? 0}
-                            placeholder="0"
-                            className={inputCx}
-                        />
-                        <p className="text-[11px] text-zinc-500 mt-1.5">
-                            Applied to each fee when a signed-in JKA member
-                            with an active membership registers.
-                        </p>
-                    </Field>
                 </div>
+                <input
+                    type="hidden"
+                    name="memberDiscountPercent"
+                    value="0"
+                />
             </div>
 
             <div className="mt-3">
@@ -915,67 +930,131 @@ function DivisionRow({
                     </p>
                 ) : (
                     <ul className="space-y-2">
-                        {draft.fees.map((f, fi) => (
-                            <li
-                                key={f.id}
-                                className="grid grid-cols-1 md:grid-cols-[1fr_120px_130px_28px] gap-2 items-end bg-white border border-zinc-200 rounded-sm p-2"
-                            >
-                                <Field label="Fee name">
-                                    <input
-                                        type="text"
-                                        value={f.name}
-                                        onChange={(e) =>
-                                            onUpdateFee(fi, {
-                                                name: e.target.value,
-                                            })
-                                        }
-                                        placeholder="e.g. Entry fee"
-                                        className={inputCx}
-                                    />
-                                </Field>
-                                <Field label="Amount (BDT)">
-                                    <input
-                                        type="number"
-                                        min={0}
-                                        step="0.01"
-                                        value={f.amountBdt}
-                                        onChange={(e) =>
-                                            onUpdateFee(fi, {
-                                                amountBdt: e.target.value,
-                                            })
-                                        }
-                                        placeholder="0"
-                                        className={inputCx}
-                                    />
-                                </Field>
-                                <div>
-                                    <span className="text-[10px] tracking-widest uppercase font-bold text-zinc-500 block mb-1">
-                                        Type
-                                    </span>
-                                    <select
-                                        value={f.required ? "required" : "optional"}
-                                        onChange={(e) =>
-                                            onUpdateFee(fi, {
-                                                required:
-                                                    e.target.value === "required",
-                                            })
-                                        }
-                                        className={inputCx}
-                                    >
-                                        <option value="required">Required</option>
-                                        <option value="optional">Optional</option>
-                                    </select>
-                                </div>
-                                <button
-                                    type="button"
-                                    onClick={() => onRemoveFee(fi)}
-                                    aria-label="Remove fee"
-                                    className="text-zinc-400 hover:text-accent-red mb-2 justify-self-end"
+                        {draft.fees.map((f, fi) => {
+                            const discountOn =
+                                f.memberDiscountPercent.trim() !== "" &&
+                                Number.parseInt(f.memberDiscountPercent, 10) > 0;
+                            return (
+                                <li
+                                    key={f.id}
+                                    className="bg-white border border-zinc-200 rounded-sm p-2"
                                 >
-                                    <X size={14} />
-                                </button>
-                            </li>
-                        ))}
+                                    <div className="grid grid-cols-1 md:grid-cols-[1fr_120px_130px_28px_28px] gap-2 items-end">
+                                        <Field label="Fee name">
+                                            <input
+                                                type="text"
+                                                value={f.name}
+                                                onChange={(e) =>
+                                                    onUpdateFee(fi, {
+                                                        name: e.target.value,
+                                                    })
+                                                }
+                                                placeholder="e.g. Entry fee"
+                                                className={inputCx}
+                                            />
+                                        </Field>
+                                        <Field label="Amount (BDT)">
+                                            <input
+                                                type="number"
+                                                min={0}
+                                                step="0.01"
+                                                value={f.amountBdt}
+                                                onChange={(e) =>
+                                                    onUpdateFee(fi, {
+                                                        amountBdt: e.target.value,
+                                                    })
+                                                }
+                                                placeholder="0"
+                                                className={inputCx}
+                                            />
+                                        </Field>
+                                        <div>
+                                            <span className="text-[10px] tracking-widest uppercase font-bold text-zinc-500 block mb-1">
+                                                Type
+                                            </span>
+                                            <select
+                                                value={f.required ? "required" : "optional"}
+                                                onChange={(e) =>
+                                                    onUpdateFee(fi, {
+                                                        required:
+                                                            e.target.value === "required",
+                                                    })
+                                                }
+                                                className={inputCx}
+                                            >
+                                                <option value="required">Required</option>
+                                                <option value="optional">Optional</option>
+                                            </select>
+                                        </div>
+                                        <button
+                                            type="button"
+                                            onClick={() =>
+                                                onUpdateFee(fi, {
+                                                    memberDiscountPercent: discountOn
+                                                        ? ""
+                                                        : "10",
+                                                })
+                                            }
+                                            aria-label={
+                                                discountOn
+                                                    ? "Remove member discount"
+                                                    : "Add member discount"
+                                            }
+                                            title={
+                                                discountOn
+                                                    ? "Member discount on — click to remove"
+                                                    : "Add JKA member discount"
+                                            }
+                                            className={`h-9 w-9 inline-flex items-center justify-center rounded-sm border mb-0.5 justify-self-end transition-colors ${
+                                                discountOn
+                                                    ? "border-emerald-300 bg-emerald-50 text-emerald-700 hover:bg-emerald-100"
+                                                    : "border-zinc-200 bg-zinc-50 text-zinc-400 hover:text-accent-red hover:border-zinc-300"
+                                            }`}
+                                        >
+                                            <Percent size={14} />
+                                        </button>
+                                        <button
+                                            type="button"
+                                            onClick={() => onRemoveFee(fi)}
+                                            aria-label="Remove fee"
+                                            className="text-zinc-400 hover:text-accent-red mb-2 justify-self-end"
+                                        >
+                                            <X size={14} />
+                                        </button>
+                                    </div>
+                                    {discountOn && (
+                                        <div className="mt-2 flex items-center gap-2 border-t border-dashed border-zinc-200 pt-2">
+                                            <Percent
+                                                size={11}
+                                                className="text-emerald-700"
+                                            />
+                                            <span className="text-[10px] tracking-widest uppercase font-bold text-emerald-700">
+                                                JKA member discount
+                                            </span>
+                                            <input
+                                                type="number"
+                                                min={1}
+                                                max={100}
+                                                step="1"
+                                                value={f.memberDiscountPercent}
+                                                onChange={(e) =>
+                                                    onUpdateFee(fi, {
+                                                        memberDiscountPercent:
+                                                            e.target.value,
+                                                    })
+                                                }
+                                                placeholder="10"
+                                                className="w-20 bg-zinc-50 border border-zinc-200 text-zinc-900 px-2 py-1 focus:outline-none focus:border-accent-red text-sm rounded-sm"
+                                            />
+                                            <span className="text-[11px] text-zinc-500">
+                                                % off this fee for signed-in JKA
+                                                members.
+                                            </span>
+                                        </div>
+                                    )}
+                                </li>
+                            );
+                        })}
                     </ul>
                 )}
             </div>

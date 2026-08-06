@@ -15,11 +15,15 @@ export type DivisionGender = "MALE" | "FEMALE" | "ANY";
 
 // A single fee inside a division. `required` fees are always billed to
 // the participant; `!required` fees are opt-in add-ons at registration.
+// `memberDiscountPercent` (0-100) is applied to this fee's amount when a
+// signed-in JKA member with an active membership registers; 0 = no
+// discount on this fee.
 export type DivisionFee = {
     id: string;
     name: string;
     amountBdt: number;
     required: boolean;
+    memberDiscountPercent: number;
 };
 
 // A division on an event. `code` is a stable slug; `label` is the display
@@ -84,11 +88,17 @@ function parseFees(raw: unknown): DivisionFee[] {
             typeof rec.id === "string" && rec.id
                 ? rec.id
                 : Math.random().toString(36).slice(2, 10);
+        const discountRaw = rec.memberDiscountPercent;
+        let memberDiscountPercent = 0;
+        if (typeof discountRaw === "number" && Number.isFinite(discountRaw)) {
+            memberDiscountPercent = Math.max(0, Math.min(100, Math.trunc(discountRaw)));
+        }
         out.push({
             id,
             name,
             amountBdt: amount < 0 ? 0 : amount,
             required: rec.required !== false,
+            memberDiscountPercent,
         });
     }
     return out;
@@ -98,6 +108,19 @@ export function sumRequiredFees(fees: readonly DivisionFee[]): number {
     let total = 0;
     for (const f of fees) if (f.required) total += f.amountBdt;
     return Math.round(total * 100) / 100;
+}
+
+// Amount billed for a single fee, applying the fee's own member discount
+// when the payer is an active JKA member. Rounded to 2dp.
+export function feeAmountAfterMemberDiscount(
+    fee: DivisionFee,
+    isMember: boolean,
+): number {
+    if (!isMember || fee.memberDiscountPercent <= 0) {
+        return Math.round(fee.amountBdt * 100) / 100;
+    }
+    const pct = Math.min(100, Math.max(0, fee.memberDiscountPercent));
+    return Math.round(fee.amountBdt * (1 - pct / 100) * 100) / 100;
 }
 
 // Base price for a division — sum of required fees when the division has

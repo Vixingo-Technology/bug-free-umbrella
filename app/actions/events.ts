@@ -115,12 +115,25 @@ async function parseDivisionFields(formData: FormData): Promise<DivisionInput> {
                     error: `Fee "${fname}" on "${label}" must be a positive amount.`,
                 };
             }
+            if (
+                !Number.isFinite(f.memberDiscountPercent) ||
+                f.memberDiscountPercent < 0 ||
+                f.memberDiscountPercent > 100
+            ) {
+                return {
+                    error: `Member discount on "${fname}" (${label}) must be 0-100%.`,
+                };
+            }
         }
         const cleanedFees = (d.fees ?? []).map((f) => ({
             id: f.id,
             name: f.name.trim(),
             amountBdt: Math.round(f.amountBdt * 100) / 100,
             required: f.required,
+            memberDiscountPercent: Math.max(
+                0,
+                Math.min(100, Math.trunc(f.memberDiscountPercent)),
+            ),
         }));
         const derivedPrice =
             cleanedFees.length > 0

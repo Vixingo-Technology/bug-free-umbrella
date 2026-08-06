@@ -11,6 +11,7 @@ import { applyDiscount, isJkaMember } from "@/lib/auth/is-jka-member";
 import { uploadImageIfPresent } from "@/lib/attachment-upload";
 import {
     ageOnDate,
+    feeAmountAfterMemberDiscount,
     parseCustomDivisions,
     resolveDivision,
     type CustomDivision,
@@ -249,7 +250,6 @@ export async function registerForTournamentAction(
             eventDate: true,
             location: true,
             dojoId: true,
-            memberDiscountPercent: true,
             // Event-wide base ticket, added on top of the selected division
             // fees. Null / 0 = no base ticket.
             ticketPrice: true,
@@ -415,9 +415,10 @@ export async function registerForTournamentAction(
         if (typeof v === "string" && v.includes(":")) chosenOptional.add(v);
     }
 
-    // Compute per-division prices (required fees + chosen optional fees),
-    // applying the member discount to each. When 2+ divisions are selected,
-    // the event's multi-division discount is applied on top.
+    // Compute per-division prices (required fees + chosen optional fees).
+    // The per-fee memberDiscountPercent is applied to each fee for JKA
+    // members; when 2+ divisions are selected, the event's multi-division
+    // discount is applied on top of the post-member-discount subtotal.
     const round2 = (n: number) => Math.round(n * 100) / 100;
     const pricePerCode = new Map<string, number>();
     // Snapshot of picked opt-in fees per division, saved on the row so the
@@ -428,29 +429,33 @@ export async function registerForTournamentAction(
     >();
     let divisionsSubtotal = 0;
     for (const { code, division } of divisions) {
-        let base = 0;
+        let effective = 0;
         const picked: { id: string; name: string; amountBdt: number }[] = [];
         if (division.fees && division.fees.length > 0) {
             for (const f of division.fees) {
-                if (f.required || chosenOptional.has(`${code}:${f.id}`)) {
-                    base += f.amountBdt;
+                const isActive =
+                    f.required || chosenOptional.has(`${code}:${f.id}`);
+                if (isActive) {
+                    effective += feeAmountAfterMemberDiscount(
+                        f,
+                        registrantIsMember,
+                    );
                 }
                 if (!f.required && chosenOptional.has(`${code}:${f.id}`)) {
                     picked.push({
                         id: f.id,
                         name: f.name,
-                        amountBdt: f.amountBdt,
+                        amountBdt: feeAmountAfterMemberDiscount(
+                            f,
+                            registrantIsMember,
+                        ),
                     });
                 }
             }
         } else {
-            base = division.priceBdt ?? 0;
+            effective = division.priceBdt ?? 0;
         }
         optionalSnapshotPerCode.set(code, picked);
-        let effective = base;
-        if (effective > 0 && registrantIsMember) {
-            effective = applyDiscount(effective, event.memberDiscountPercent);
-        }
         if (effective > 0 && divisions.length >= 2) {
             effective = applyDiscount(
                 effective,
@@ -464,15 +469,11 @@ export async function registerForTournamentAction(
     divisionsSubtotal = round2(divisionsSubtotal);
 
     // Optional event-wide base ticket (paid once per registration group).
-    // Applies the member discount but not the multi-division discount.
+    // Applies neither the per-fee discount nor the multi-division discount —
+    // it's a flat charge separate from division fees.
     let ticketAmount = 0;
     if (event.ticketPrice !== null && Number(event.ticketPrice) > 0) {
-        const t = Number(event.ticketPrice);
-        ticketAmount = round2(
-            registrantIsMember
-                ? applyDiscount(t, event.memberDiscountPercent)
-                : t,
-        );
+        ticketAmount = round2(Number(event.ticketPrice));
         // Attach the ticket to the first division row so per-row accounting
         // stays coherent (payment webhook fans PAID across sibling rows).
         const firstCode = divisions[0]?.code;

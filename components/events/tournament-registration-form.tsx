@@ -6,7 +6,9 @@ import { Ticket, LogIn } from "lucide-react";
 import {
     ageOnDate,
     divisionBasePrice,
+    feeAmountAfterMemberDiscount,
     type CustomDivision,
+    type DivisionFee,
     type Gender,
 } from "@/lib/tournaments/divisions";
 import { registerForTournamentAndRedirect } from "@/app/actions/event-registration";
@@ -21,8 +23,9 @@ export type TournamentRegistrationEvent = {
     id: string;
     title: string;
     eventDate: string; // ISO
+    /** True when the registrant is a signed-in JKA member with an active
+     * membership — used to unlock per-fee member discounts. */
     memberDiscountActive: boolean;
-    memberDiscountPercent: number;
     divisions: CustomDivision[];
     /** Event-wide base ticket price (BDT), added on top of division fees. */
     eventTicketPriceBdt: number | null;
@@ -45,12 +48,6 @@ export type MemberAutofill = {
     emergencyContactPhone: string | null;
     rankOrderIndex: number | null;
 } | null;
-
-function applyDiscount(base: number, pct: number): number {
-    if (pct <= 0) return base;
-    const capped = Math.min(100, Math.max(0, pct));
-    return Math.round(base * (1 - capped / 100) * 100) / 100;
-}
 
 export default function TournamentRegistrationForm({
     event,
@@ -167,57 +164,94 @@ export default function TournamentRegistrationForm({
     const anyTeam = selected.some((d) => d.isTeam);
     const anyKumite = selected.some((d) => d.eventType === "KUMITE");
 
-    // Base price for a division including any opt-in fees the participant
-    // has ticked. Falls back to `divisionBasePrice` (sum of required fees or
-    // legacy priceBdt) when the division has no fee list.
-    function priceFor(d: CustomDivision): number {
+    // Whether a given fee is "active" for the participant — required fees
+    // always are; optional fees are only active once the participant has
+    // ticked them.
+    function feeIsActive(divisionCode: string, fee: DivisionFee): boolean {
+        return (
+            fee.required || selectedOptionalFees.has(`${divisionCode}:${fee.id}`)
+        );
+    }
+
+    // Base (pre-discount) price for a division including any opt-in fees
+    // the participant has ticked. Falls back to `divisionBasePrice` when
+    // the division has no fee list (legacy rows).
+    function priceForBase(d: CustomDivision): number {
+        if (!d.fees || d.fees.length === 0) return divisionBasePrice(d);
+        let total = 0;
+        for (const f of d.fees) if (feeIsActive(d.code, f)) total += f.amountBdt;
+        return Math.round(total * 100) / 100;
+    }
+
+    // Price for a division after per-fee member discounts (but before the
+    // multi-division discount). Legacy fee-less rows have no per-fee
+    // discount to apply.
+    function priceForAfterMember(d: CustomDivision): number {
         if (!d.fees || d.fees.length === 0) return divisionBasePrice(d);
         let total = 0;
         for (const f of d.fees) {
-            if (f.required || selectedOptionalFees.has(`${d.code}:${f.id}`)) {
-                total += f.amountBdt;
-            }
+            if (!feeIsActive(d.code, f)) continue;
+            total += feeAmountAfterMemberDiscount(
+                f,
+                event.memberDiscountActive,
+            );
         }
         return Math.round(total * 100) / 100;
     }
 
-    const totals = useMemo(() => {
-        let divisionsBase = 0;
-        let divisionsAfter = 0;
-        for (const d of selected) {
-            const base = priceFor(d);
-            divisionsBase += base;
-            let eff = event.memberDiscountActive
-                ? applyDiscount(base, event.memberDiscountPercent)
-                : base;
-            if (
-                selected.length >= 2 &&
-                event.multiDivisionDiscountPercent > 0
-            ) {
-                eff = applyDiscount(eff, event.multiDivisionDiscountPercent);
-            }
-            divisionsAfter += eff;
+    // Discount amount saved on a single fee for the current registrant.
+    function feeMemberSavings(fee: DivisionFee): number {
+        if (!event.memberDiscountActive || fee.memberDiscountPercent <= 0) {
+            return 0;
         }
-        const ticketBase = event.eventTicketPriceBdt ?? 0;
-        const ticketAfter =
-            ticketBase > 0 && event.memberDiscountActive
-                ? applyDiscount(ticketBase, event.memberDiscountPercent)
-                : ticketBase;
+        const after = feeAmountAfterMemberDiscount(fee, true);
+        return Math.round((fee.amountBdt - after) * 100) / 100;
+    }
+
+    const totals = useMemo(() => {
         const round2 = (n: number) => Math.round(n * 100) / 100;
+        let divisionsBase = 0;
+        let divisionsAfterMember = 0;
+        let memberSavings = 0;
+        for (const d of selected) {
+            divisionsBase += priceForBase(d);
+            divisionsAfterMember += priceForAfterMember(d);
+            if (event.memberDiscountActive && d.fees) {
+                for (const f of d.fees) {
+                    if (!feeIsActive(d.code, f)) continue;
+                    memberSavings += feeMemberSavings(f);
+                }
+            }
+        }
         const multiActive =
             selected.length >= 2 && event.multiDivisionDiscountPercent > 0;
+        const multiDiscountAmount = multiActive
+            ? round2(
+                  divisionsAfterMember *
+                      (Math.min(100, event.multiDivisionDiscountPercent) / 100),
+              )
+            : 0;
+        const divisionsAfterAll = round2(
+            divisionsAfterMember - multiDiscountAmount,
+        );
+        const ticketBase = event.eventTicketPriceBdt ?? 0;
+        // Event-wide ticket has no per-fee discount — it's a flat charge.
+        const ticketAfter = ticketBase;
         return {
-            total: round2(divisionsAfter + ticketAfter),
+            total: round2(divisionsAfterAll + ticketAfter),
             baseTotal: round2(divisionsBase + ticketBase),
-            divisionsAfter: round2(divisionsAfter),
+            divisionsBase: round2(divisionsBase),
+            divisionsAfterMember: round2(divisionsAfterMember),
+            divisionsAfterAll,
             ticketAfter: round2(ticketAfter),
+            memberSavings: round2(memberSavings),
             multiDiscountActive: multiActive,
+            multiDiscountAmount,
         };
     }, [
         selected,
         selectedOptionalFees,
         event.memberDiscountActive,
-        event.memberDiscountPercent,
         event.eventTicketPriceBdt,
         event.multiDivisionDiscountPercent,
     ]);
@@ -451,10 +485,8 @@ export default function TournamentRegistrationForm({
                         .map(({ d, reason }) => {
                         const checked = effectiveSelected.has(d.code);
                         const disabled = !!reason;
-                        const base = priceFor(d);
-                        const effective = event.memberDiscountActive
-                            ? applyDiscount(base, event.memberDiscountPercent)
-                            : base;
+                        const base = priceForBase(d);
+                        const effective = priceForAfterMember(d);
                         const optionalFees =
                             d.fees?.filter((f) => !f.required) ?? [];
                         return (
@@ -558,10 +590,32 @@ export default function TournamentRegistrationForm({
                                                                     tabIndex={-1}
                                                                 />
                                                                 {f.name}
+                                                                {event.memberDiscountActive &&
+                                                                    f.memberDiscountPercent >
+                                                                        0 && (
+                                                                        <span className="text-[10px] tracking-widest uppercase font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-sm px-1.5 py-0.5">
+                                                                            −
+                                                                            {
+                                                                                f.memberDiscountPercent
+                                                                            }
+                                                                            %
+                                                                        </span>
+                                                                    )}
                                                             </span>
                                                             <span className="text-zinc-600 whitespace-nowrap">
                                                                 +৳
-                                                                {f.amountBdt.toLocaleString()}
+                                                                {feeAmountAfterMemberDiscount(
+                                                                    f,
+                                                                    event.memberDiscountActive,
+                                                                ).toLocaleString()}
+                                                                {event.memberDiscountActive &&
+                                                                    f.memberDiscountPercent >
+                                                                        0 && (
+                                                                        <span className="ml-1.5 text-zinc-400 text-[11px] line-through">
+                                                                            ৳
+                                                                            {f.amountBdt.toLocaleString()}
+                                                                        </span>
+                                                                    )}
                                                             </span>
                                                         </div>
                                                     );
@@ -696,21 +750,168 @@ export default function TournamentRegistrationForm({
 
             {paid ? (
                 <>
-                    <div className="border-t border-zinc-200 pt-4 space-y-2">
-                        {totals.multiDiscountActive && (
-                            <div className="text-[11px] text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-sm px-3 py-2">
-                                Multi-division discount applied: −
-                                {event.multiDivisionDiscountPercent}% on the
-                                sum of your division fees.
+                    <div className="border-t border-zinc-200 pt-4">
+                        <p className="text-[10px] tracking-widest uppercase font-bold text-zinc-500 mb-2">
+                            Subtotal
+                        </p>
+                        <ul className="space-y-1.5 mb-3">
+                            {selected.map((d) => {
+                                const requiredFees =
+                                    d.fees?.filter((f) => f.required) ?? [];
+                                const chosenOptional =
+                                    d.fees?.filter(
+                                        (f) =>
+                                            !f.required &&
+                                            selectedOptionalFees.has(
+                                                `${d.code}:${f.id}`,
+                                            ),
+                                    ) ?? [];
+                                const legacyPrice =
+                                    (!d.fees || d.fees.length === 0)
+                                        ? divisionBasePrice(d)
+                                        : 0;
+                                return (
+                                    <li key={d.code} className="text-xs">
+                                        <div className="text-zinc-700 font-semibold mb-0.5">
+                                            {d.label}
+                                        </div>
+                                        <ul className="pl-3 space-y-0.5 text-zinc-600">
+                                            {requiredFees.map((f) => (
+                                                <li
+                                                    key={f.id}
+                                                    className="flex items-center justify-between gap-3"
+                                                >
+                                                    <span className="truncate">
+                                                        {f.name}
+                                                        {event.memberDiscountActive &&
+                                                            f.memberDiscountPercent >
+                                                                0 && (
+                                                                <span className="ml-1.5 text-[10px] tracking-widest uppercase font-bold text-emerald-700">
+                                                                    −
+                                                                    {
+                                                                        f.memberDiscountPercent
+                                                                    }
+                                                                    %
+                                                                </span>
+                                                            )}
+                                                    </span>
+                                                    <span className="whitespace-nowrap">
+                                                        ৳
+                                                        {feeAmountAfterMemberDiscount(
+                                                            f,
+                                                            event.memberDiscountActive,
+                                                        ).toLocaleString()}
+                                                        {event.memberDiscountActive &&
+                                                            f.memberDiscountPercent >
+                                                                0 && (
+                                                                <span className="ml-1.5 text-zinc-400 line-through">
+                                                                    ৳
+                                                                    {f.amountBdt.toLocaleString()}
+                                                                </span>
+                                                            )}
+                                                    </span>
+                                                </li>
+                                            ))}
+                                            {chosenOptional.map((f) => (
+                                                <li
+                                                    key={f.id}
+                                                    className="flex items-center justify-between gap-3"
+                                                >
+                                                    <span className="truncate">
+                                                        + {f.name}
+                                                        <span className="ml-1 text-[10px] tracking-widest uppercase text-zinc-400">
+                                                            add-on
+                                                        </span>
+                                                        {event.memberDiscountActive &&
+                                                            f.memberDiscountPercent >
+                                                                0 && (
+                                                                <span className="ml-1.5 text-[10px] tracking-widest uppercase font-bold text-emerald-700">
+                                                                    −
+                                                                    {
+                                                                        f.memberDiscountPercent
+                                                                    }
+                                                                    %
+                                                                </span>
+                                                            )}
+                                                    </span>
+                                                    <span className="whitespace-nowrap">
+                                                        ৳
+                                                        {feeAmountAfterMemberDiscount(
+                                                            f,
+                                                            event.memberDiscountActive,
+                                                        ).toLocaleString()}
+                                                        {event.memberDiscountActive &&
+                                                            f.memberDiscountPercent >
+                                                                0 && (
+                                                                <span className="ml-1.5 text-zinc-400 line-through">
+                                                                    ৳
+                                                                    {f.amountBdt.toLocaleString()}
+                                                                </span>
+                                                            )}
+                                                    </span>
+                                                </li>
+                                            ))}
+                                            {legacyPrice > 0 && (
+                                                <li className="flex items-center justify-between gap-3">
+                                                    <span className="truncate">
+                                                        Entry
+                                                    </span>
+                                                    <span className="whitespace-nowrap">
+                                                        ৳
+                                                        {legacyPrice.toLocaleString()}
+                                                    </span>
+                                                </li>
+                                            )}
+                                        </ul>
+                                    </li>
+                                );
+                            })}
+                            {totals.ticketAfter > 0 && (
+                                <li className="flex items-center justify-between gap-3 text-xs text-zinc-600 pt-1 border-t border-dashed border-zinc-200">
+                                    <span>Event ticket</span>
+                                    <span>
+                                        ৳{totals.ticketAfter.toLocaleString()}
+                                    </span>
+                                </li>
+                            )}
+                        </ul>
+
+                        <div className="border-t border-zinc-200 pt-2 space-y-1 text-xs text-zinc-600">
+                            <div className="flex items-center justify-between">
+                                <span>Subtotal</span>
+                                <span>
+                                    ৳{totals.baseTotal.toLocaleString()}
+                                </span>
                             </div>
-                        )}
-                        {totals.ticketAfter > 0 && (
-                            <div className="flex items-center justify-between text-xs text-zinc-600">
-                                <span>Event ticket</span>
-                                <span>৳{totals.ticketAfter.toLocaleString()}</span>
-                            </div>
-                        )}
-                        <div className="flex items-center justify-between text-sm">
+                            {event.memberDiscountActive &&
+                                totals.memberSavings > 0 && (
+                                    <div className="flex items-center justify-between text-emerald-700">
+                                        <span>JKA member discount</span>
+                                        <span>
+                                            −৳
+                                            {totals.memberSavings.toLocaleString()}
+                                        </span>
+                                    </div>
+                                )}
+                            {totals.multiDiscountActive &&
+                                totals.multiDiscountAmount > 0 && (
+                                    <div className="flex items-center justify-between text-emerald-700">
+                                        <span>
+                                            Multi-division discount (−
+                                            {
+                                                event.multiDivisionDiscountPercent
+                                            }
+                                            %)
+                                        </span>
+                                        <span>
+                                            −৳
+                                            {totals.multiDiscountAmount.toLocaleString()}
+                                        </span>
+                                    </div>
+                                )}
+                        </div>
+
+                        <div className="flex items-center justify-between text-sm mt-3 pt-2 border-t border-zinc-200">
                             <span className="font-bold text-zinc-900">
                                 Total
                                 {selected.length > 1 && (
@@ -722,12 +923,11 @@ export default function TournamentRegistrationForm({
                             </span>
                             <span className="font-bold text-zinc-900">
                                 ৳{totals.total.toLocaleString()}
-                                {event.memberDiscountActive &&
-                                    totals.total !== totals.baseTotal && (
-                                        <span className="ml-2 text-zinc-400 text-xs line-through font-normal">
-                                            ৳{totals.baseTotal.toLocaleString()}
-                                        </span>
-                                    )}
+                                {totals.total !== totals.baseTotal && (
+                                    <span className="ml-2 text-zinc-400 text-xs line-through font-normal">
+                                        ৳{totals.baseTotal.toLocaleString()}
+                                    </span>
+                                )}
                             </span>
                         </div>
                     </div>
