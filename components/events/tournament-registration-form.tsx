@@ -563,169 +563,226 @@ export default function TournamentRegistrationForm({
                         const disabled = !!reason;
                         const base = priceForBase(d);
                         const effective = priceForAfterMember(d);
+                        const requiredFees =
+                            d.fees?.filter((f) => f.required) ?? [];
                         const optionalFees =
                             d.fees?.filter((f) => !f.required) ?? [];
                         return (
                             <li key={d.code}>
-                                <label
-                                    className={`flex items-start gap-3 border rounded-sm px-3 py-2.5 cursor-pointer select-none ${
+                                <div
+                                    className={`border rounded-sm ${
                                         disabled
-                                            ? "border-zinc-100 bg-zinc-50 text-zinc-400 cursor-not-allowed"
+                                            ? "border-zinc-100 bg-zinc-50 text-zinc-400"
                                             : checked
                                               ? "border-accent-red bg-accent-red/5"
                                               : "border-zinc-200 bg-white hover:border-zinc-300"
                                     }`}
                                 >
-                                    <input
-                                        type="checkbox"
-                                        className="h-4 w-4 accent-red-600 mt-0.5 shrink-0"
-                                        checked={checked}
-                                        disabled={disabled}
-                                        onChange={() => toggle(d.code)}
-                                    />
-                                    <div className="flex-1 min-w-0">
-                                        <div className="flex items-center justify-between gap-3">
-                                            <span className="text-sm font-semibold text-zinc-900 truncate">
-                                                {d.label}
-                                            </span>
-                                            <span className="text-sm text-zinc-700 whitespace-nowrap">
-                                                {base > 0 ? (
-                                                    <>
-                                                        ৳
-                                                        {effective.toLocaleString()}
-                                                        {event.memberDiscountActive &&
-                                                            effective !== base && (
-                                                                <span className="ml-2 text-zinc-400 text-xs line-through font-normal">
-                                                                    ৳
-                                                                    {base.toLocaleString()}
-                                                                </span>
-                                                            )}
-                                                    </>
-                                                ) : (
-                                                    <span className="text-emerald-700 text-xs uppercase tracking-widest font-bold">
-                                                        Free
+                                    <label
+                                        className={`flex items-start gap-3 px-3 py-2.5 select-none ${
+                                            disabled
+                                                ? "cursor-not-allowed"
+                                                : "cursor-pointer"
+                                        }`}
+                                    >
+                                        <input
+                                            type="checkbox"
+                                            className="h-4 w-4 accent-red-600 mt-0.5 shrink-0"
+                                            checked={checked}
+                                            disabled={disabled}
+                                            onChange={() => toggle(d.code)}
+                                        />
+                                        <div className="flex-1 min-w-0">
+                                            <div className="flex items-center justify-between gap-3">
+                                                <span className="text-sm font-semibold text-zinc-900 truncate">
+                                                    {d.label}
+                                                </span>
+                                                <span className="text-sm text-zinc-700 whitespace-nowrap">
+                                                    {base > 0 ? (
+                                                        <>
+                                                            ৳
+                                                            {effective.toLocaleString()}
+                                                            {event.memberDiscountActive &&
+                                                                effective !== base && (
+                                                                    <span className="ml-2 text-zinc-400 text-xs line-through font-normal">
+                                                                        ৳
+                                                                        {base.toLocaleString()}
+                                                                    </span>
+                                                                )}
+                                                        </>
+                                                    ) : (
+                                                        <span className="text-emerald-700 text-xs uppercase tracking-widest font-bold">
+                                                            Free
+                                                        </span>
+                                                    )}
+                                                </span>
+                                            </div>
+                                            <div className="flex flex-wrap items-center gap-2 mt-1">
+                                                {d.isTeam && (
+                                                    <span className="text-[10px] uppercase tracking-widest font-bold text-zinc-500">
+                                                        Team
                                                     </span>
                                                 )}
-                                            </span>
+                                                {d.gender !== "ANY" && (
+                                                    <span className="text-[10px] uppercase tracking-widest text-zinc-500">
+                                                        ·{" "}
+                                                        {d.gender === "MALE"
+                                                            ? "Male"
+                                                            : "Female"}
+                                                    </span>
+                                                )}
+                                                {(d.minAge !== null ||
+                                                    d.maxAge !== null) && (
+                                                    <span className="text-[10px] uppercase tracking-widest text-zinc-500">
+                                                        · Age{" "}
+                                                        {d.minAge !== null && d.maxAge !== null
+                                                            ? `${d.minAge}–${d.maxAge}`
+                                                            : d.minAge !== null
+                                                              ? `${d.minAge}+`
+                                                              : `≤${d.maxAge}`}
+                                                    </span>
+                                                )}
+                                                {(d.minWeightKg !== null ||
+                                                    d.maxWeightKg !== null) && (
+                                                    <span className="text-[10px] uppercase tracking-widest text-zinc-500">
+                                                        ·{" "}
+                                                        {d.minWeightKg !== null &&
+                                                        d.maxWeightKg !== null
+                                                            ? `${d.minWeightKg}–${d.maxWeightKg} kg`
+                                                            : d.minWeightKg !== null
+                                                              ? `${d.minWeightKg}+ kg`
+                                                              : `≤${d.maxWeightKg} kg`}
+                                                    </span>
+                                                )}
+                                                {d.minRankId && (
+                                                    <span className="text-[10px] uppercase tracking-widest text-zinc-500">
+                                                        ·{" "}
+                                                        {event.beltRanks.find(
+                                                            (r) =>
+                                                                r.id === d.minRankId,
+                                                        )?.name ?? "belt"}
+                                                        +
+                                                    </span>
+                                                )}
+                                                {reason && (
+                                                    <span className="text-[10px] text-amber-700 bg-amber-50 border border-amber-200 rounded-sm px-1.5 py-0.5">
+                                                        Locked: {reason}
+                                                    </span>
+                                                )}
+                                            </div>
                                         </div>
-                                        <div className="flex flex-wrap items-center gap-2 mt-1">
-                                            {d.isTeam && (
-                                                <span className="text-[10px] uppercase tracking-widest font-bold text-zinc-500">
-                                                    Team
-                                                </span>
-                                            )}
-                                            {d.gender !== "ANY" && (
-                                                <span className="text-[10px] uppercase tracking-widest text-zinc-500">
-                                                    ·{" "}
-                                                    {d.gender === "MALE"
-                                                        ? "Male"
-                                                        : "Female"}
-                                                </span>
-                                            )}
-                                            {(d.minAge !== null ||
-                                                d.maxAge !== null) && (
-                                                <span className="text-[10px] uppercase tracking-widest text-zinc-500">
-                                                    · Age{" "}
-                                                    {d.minAge !== null && d.maxAge !== null
-                                                        ? `${d.minAge}–${d.maxAge}`
-                                                        : d.minAge !== null
-                                                          ? `${d.minAge}+`
-                                                          : `≤${d.maxAge}`}
-                                                </span>
-                                            )}
-                                            {(d.minWeightKg !== null ||
-                                                d.maxWeightKg !== null) && (
-                                                <span className="text-[10px] uppercase tracking-widest text-zinc-500">
-                                                    ·{" "}
-                                                    {d.minWeightKg !== null &&
-                                                    d.maxWeightKg !== null
-                                                        ? `${d.minWeightKg}–${d.maxWeightKg} kg`
-                                                        : d.minWeightKg !== null
-                                                          ? `${d.minWeightKg}+ kg`
-                                                          : `≤${d.maxWeightKg} kg`}
-                                                </span>
-                                            )}
-                                            {d.minRankId && (
-                                                <span className="text-[10px] uppercase tracking-widest text-zinc-500">
-                                                    ·{" "}
-                                                    {event.beltRanks.find(
-                                                        (r) =>
-                                                            r.id === d.minRankId,
-                                                    )?.name ?? "belt"}
-                                                    +
-                                                </span>
-                                            )}
-                                            {reason && (
-                                                <span className="text-[10px] text-amber-700 bg-amber-50 border border-amber-200 rounded-sm px-1.5 py-0.5">
-                                                    Locked: {reason}
-                                                </span>
-                                            )}
-                                        </div>
-                                        {checked && optionalFees.length > 0 && (
-                                            <div className="mt-3 pt-3 border-t border-dashed border-zinc-200 space-y-1.5">
-                                                <p className="text-[10px] tracking-widest uppercase font-bold text-zinc-500">
-                                                    Optional add-ons
-                                                </p>
-                                                {optionalFees.map((f) => {
-                                                    const key = `${d.code}:${f.id}`;
-                                                    const feeChecked =
-                                                        selectedOptionalFees.has(key);
-                                                    return (
-                                                        <div
-                                                            key={f.id}
-                                                            className="flex items-center justify-between gap-3 text-xs text-zinc-700 select-none"
-                                                            onClick={(e) => {
-                                                                e.stopPropagation();
-                                                                e.preventDefault();
-                                                                toggleOptionalFee(
-                                                                    d.code,
-                                                                    f.id,
-                                                                );
-                                                            }}
-                                                        >
-                                                            <span className="inline-flex items-center gap-2 cursor-pointer">
-                                                                <input
-                                                                    type="checkbox"
-                                                                    className="h-3.5 w-3.5 accent-red-600 cursor-pointer"
-                                                                    checked={feeChecked}
-                                                                    readOnly
-                                                                    tabIndex={-1}
-                                                                />
-                                                                {f.name}
-                                                                {event.memberDiscountActive &&
-                                                                    f.memberDiscountPercent >
-                                                                        0 && (
-                                                                        <span className="text-[10px] tracking-widest uppercase font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-sm px-1.5 py-0.5">
-                                                                            −
-                                                                            {
-                                                                                f.memberDiscountPercent
-                                                                            }
-                                                                            %
-                                                                        </span>
-                                                                    )}
-                                                            </span>
-                                                            <span className="text-zinc-600 whitespace-nowrap">
-                                                                +৳
-                                                                {feeAmountAfterMemberDiscount(
-                                                                    f,
-                                                                    event.memberDiscountActive,
-                                                                ).toLocaleString()}
-                                                                {event.memberDiscountActive &&
-                                                                    f.memberDiscountPercent >
-                                                                        0 && (
-                                                                        <span className="ml-1.5 text-zinc-400 text-[11px] line-through">
-                                                                            ৳
-                                                                            {f.amountBdt.toLocaleString()}
-                                                                        </span>
-                                                                    )}
-                                                            </span>
-                                                        </div>
-                                                    );
-                                                })}
+                                    </label>
+                                    {checked &&
+                                        (requiredFees.length > 0 ||
+                                            optionalFees.length > 0) && (
+                                            <div className="mx-3 pb-2.5 pt-3 border-t border-dashed border-zinc-200 space-y-3 pl-7">
+                                                {requiredFees.length > 0 && (
+                                                    <div className="space-y-1.5">
+                                                        <p className="text-[10px] tracking-widest uppercase font-bold text-zinc-500">
+                                                            Included
+                                                        </p>
+                                                        {requiredFees.map(
+                                                            (f) => (
+                                                                <div
+                                                                    key={f.id}
+                                                                    className="flex items-center justify-between gap-3 text-xs text-zinc-700"
+                                                                >
+                                                                    <span className="inline-flex items-center gap-2">
+                                                                        {f.name}
+                                                                        {event.memberDiscountActive &&
+                                                                            f.memberDiscountPercent >
+                                                                                0 && (
+                                                                                <span className="text-[10px] tracking-widest uppercase font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-sm px-1.5 py-0.5">
+                                                                                    −
+                                                                                    {
+                                                                                        f.memberDiscountPercent
+                                                                                    }
+                                                                                    %
+                                                                                </span>
+                                                                            )}
+                                                                    </span>
+                                                                    <span className="text-zinc-600 whitespace-nowrap">
+                                                                        ৳
+                                                                        {feeAmountAfterMemberDiscount(
+                                                                            f,
+                                                                            event.memberDiscountActive,
+                                                                        ).toLocaleString()}
+                                                                        {event.memberDiscountActive &&
+                                                                            f.memberDiscountPercent >
+                                                                                0 && (
+                                                                                <span className="ml-1.5 text-zinc-400 text-[11px] line-through">
+                                                                                    ৳
+                                                                                    {f.amountBdt.toLocaleString()}
+                                                                                </span>
+                                                                            )}
+                                                                    </span>
+                                                                </div>
+                                                            ),
+                                                        )}
+                                                    </div>
+                                                )}
+                                                {optionalFees.length > 0 && (
+                                                    <div className="space-y-1.5">
+                                                        <p className="text-[10px] tracking-widest uppercase font-bold text-zinc-500">
+                                                            Choose any from below
+                                                        </p>
+                                                        {optionalFees.map((f) => {
+                                                const key = `${d.code}:${f.id}`;
+                                                const feeChecked =
+                                                    selectedOptionalFees.has(key);
+                                                return (
+                                                    <label
+                                                        key={f.id}
+                                                        className="flex items-center justify-between gap-3 text-xs text-zinc-700 select-none cursor-pointer"
+                                                    >
+                                                        <span className="inline-flex items-center gap-2">
+                                                            <input
+                                                                type="checkbox"
+                                                                className="h-3.5 w-3.5 accent-red-600 cursor-pointer"
+                                                                checked={feeChecked}
+                                                                onChange={() =>
+                                                                    toggleOptionalFee(
+                                                                        d.code,
+                                                                        f.id,
+                                                                    )
+                                                                }
+                                                            />
+                                                            {f.name}
+                                                            {event.memberDiscountActive &&
+                                                                f.memberDiscountPercent >
+                                                                    0 && (
+                                                                    <span className="text-[10px] tracking-widest uppercase font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-sm px-1.5 py-0.5">
+                                                                        −
+                                                                        {
+                                                                            f.memberDiscountPercent
+                                                                        }
+                                                                        %
+                                                                    </span>
+                                                                )}
+                                                        </span>
+                                                        <span className="text-zinc-600 whitespace-nowrap">
+                                                            +৳
+                                                            {feeAmountAfterMemberDiscount(
+                                                                f,
+                                                                event.memberDiscountActive,
+                                                            ).toLocaleString()}
+                                                            {event.memberDiscountActive &&
+                                                                f.memberDiscountPercent >
+                                                                    0 && (
+                                                                    <span className="ml-1.5 text-zinc-400 text-[11px] line-through">
+                                                                        ৳
+                                                                        {f.amountBdt.toLocaleString()}
+                                                                    </span>
+                                                                )}
+                                                        </span>
+                                                    </label>
+                                                );
+                                            })}
+                                                    </div>
+                                                )}
                                             </div>
                                         )}
-                                    </div>
-                                </label>
+                                </div>
                             </li>
                         );
                     })}
