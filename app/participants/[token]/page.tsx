@@ -23,6 +23,8 @@ import {
     parseCustomDivisions,
     resolveDivision,
 } from "@/lib/tournaments/divisions";
+import { computeGroupPayable } from "@/lib/events/pricing";
+import { isJkaMember } from "@/lib/auth/is-jka-member";
 
 type Props = {
     params: Promise<{ token: string }>;
@@ -148,12 +150,6 @@ export default async function ParticipationCardPage({
         ? resolveDivision(registration.divisionCode, customDivisions)
         : null;
     const currentAddons = parsePickedFees(registration.selectedOptionalFees);
-    const groupTotalDue = groupSiblings.length
-        ? groupSiblings.reduce(
-              (t, s) => t + (s.amountDue ? Number(s.amountDue) : 0),
-              0,
-          )
-        : 0;
 
     const participantName =
         registration.user?.fullName ?? registration.guestName ?? "Participant";
@@ -184,15 +180,38 @@ export default async function ParticipationCardPage({
     const paymentPending =
         registration.paymentStatus === "PENDING" ||
         registration.paymentStatus === "FAILED";
-    const singleAmount = registration.amountDue
-        ? Number(registration.amountDue)
+    // Recompute the payable total from row snapshots + current event data so
+    // the displayed amount matches what the retry payment will charge, even
+    // when the base ticket ended up allocated to a sibling that dropped out.
+    const pricingRows = groupSiblings.length
+        ? groupSiblings.map((s) => ({
+              divisionCode: s.divisionCode,
+              selectedOptionalFees: s.selectedOptionalFees,
+          }))
+        : [
+              {
+                  divisionCode: registration.divisionCode,
+                  selectedOptionalFees: registration.selectedOptionalFees,
+              },
+          ];
+    const registrantIsMember = registration.userId
+        ? await isJkaMember(registration.userId)
+        : false;
+    const amountDue = paymentPending
+        ? computeGroupPayable(
+              pricingRows,
+              {
+                  ticketPrice: registration.event.ticketPrice
+                      ? Number(registration.event.ticketPrice)
+                      : null,
+                  multiDivisionDiscountPercent:
+                      registration.event.multiDivisionDiscountPercent,
+                  customDivisions:
+                      registration.event.tournamentDetail?.customDivisions,
+              },
+              registrantIsMember,
+          )
         : null;
-    // When this row is part of a group, the amount shown/paid covers every
-    // sibling — otherwise we fall back to the row's own amountDue.
-    const amountDue =
-        groupSiblings.length > 1
-            ? groupTotalDue
-            : singleAmount;
 
     // Does the current viewer have authority to check this participant in?
     const supabase = await createClient();

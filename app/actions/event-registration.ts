@@ -7,6 +7,7 @@ import { prisma } from "@/lib/prisma";
 import { createClient } from "@/lib/supabase/server";
 import { emitEventRegistered } from "@/lib/n8n";
 import { initiateTicketPayment } from "@/lib/events/ticket-payment";
+import { computeGroupPayable } from "@/lib/events/pricing";
 import { applyDiscount, isJkaMember } from "@/lib/auth/is-jka-member";
 import { uploadImageIfPresent } from "@/lib/attachment-upload";
 import {
@@ -66,7 +67,15 @@ export async function payForRegistrationAction(formData: FormData): Promise<void
     const reg = await prisma.eventRegistration.findUnique({
         where: { qrToken: token },
         include: {
-            event: { select: { id: true, title: true } },
+            event: {
+                select: {
+                    id: true,
+                    title: true,
+                    ticketPrice: true,
+                    multiDivisionDiscountPercent: true,
+                    tournamentDetail: { select: { customDivisions: true } },
+                },
+            },
             user: { select: { fullName: true, email: true, phone: true } },
         },
     });
@@ -204,30 +213,58 @@ export async function checkInParticipantAction(
 
 async function groupTotalFor(reg: {
     id: string;
+    userId: string | null;
     paymentGroupId: string | null;
+    divisionCode: string | null;
+    selectedOptionalFees: unknown;
     amountDue: import("@/prisma/generated/client").Prisma.Decimal | null;
+    event: {
+        ticketPrice: import("@/prisma/generated/client").Prisma.Decimal | null;
+        multiDivisionDiscountPercent: number;
+        tournamentDetail: { customDivisions: unknown } | null;
+    };
 }): Promise<{ amount: number; count: number }> {
+    const eventCtx = {
+        ticketPrice: reg.event.ticketPrice ? Number(reg.event.ticketPrice) : null,
+        multiDivisionDiscountPercent: reg.event.multiDivisionDiscountPercent,
+        customDivisions: reg.event.tournamentDetail?.customDivisions,
+    };
+    const isMember = reg.userId ? await isJkaMember(reg.userId) : false;
+
     if (!reg.paymentGroupId) {
         return {
-            amount: reg.amountDue ? Number(reg.amountDue) : 0,
+            amount: computeGroupPayable(
+                [
+                    {
+                        divisionCode: reg.divisionCode,
+                        selectedOptionalFees: reg.selectedOptionalFees,
+                    },
+                ],
+                eventCtx,
+                isMember,
+            ),
             count: 1,
         };
     }
     const siblings = await prisma.eventRegistration.findMany({
         where: { paymentGroupId: reg.paymentGroupId },
-        select: { amountDue: true },
+        select: {
+            divisionCode: true,
+            selectedOptionalFees: true,
+        },
     });
-    if (siblings.length === 0) {
-        return {
-            amount: reg.amountDue ? Number(reg.amountDue) : 0,
-            count: 1,
-        };
-    }
-    const amount = siblings.reduce(
-        (t, s) => t + (s.amountDue ? Number(s.amountDue) : 0),
-        0,
-    );
-    return { amount, count: siblings.length };
+    const rows = siblings.length
+        ? siblings
+        : [
+              {
+                  divisionCode: reg.divisionCode,
+                  selectedOptionalFees: reg.selectedOptionalFees,
+              },
+          ];
+    return {
+        amount: computeGroupPayable(rows, eventCtx, isMember),
+        count: rows.length,
+    };
 }
 
 // ─────────────────────────────────────────────────────────────────────────
@@ -740,7 +777,21 @@ export async function registerForTournamentAction(
     if (pendingExisting) {
         const full = await prisma.eventRegistration.findUnique({
             where: { id: pendingExisting.id },
-            select: { id: true, paymentGroupId: true, amountDue: true },
+            select: {
+                id: true,
+                userId: true,
+                paymentGroupId: true,
+                divisionCode: true,
+                selectedOptionalFees: true,
+                amountDue: true,
+                event: {
+                    select: {
+                        ticketPrice: true,
+                        multiDivisionDiscountPercent: true,
+                        tournamentDetail: { select: { customDivisions: true } },
+                    },
+                },
+            },
         });
         const groupTotal = full
             ? await groupTotalFor(full)
