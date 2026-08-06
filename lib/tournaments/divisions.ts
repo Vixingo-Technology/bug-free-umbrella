@@ -27,10 +27,11 @@ export type DivisionFee = {
 };
 
 // A division on an event. `code` is a stable slug; `label` is the display
-// name. Optional gates: `minAge` (years on the event date) and `minRankId`
-// (belt_ranks.id). `fees` is the current source of truth for pricing;
-// `priceBdt` is a legacy fallback (equal to sum of required fees) kept so
-// older code paths keep working.
+// name. Optional gates: `minAge`/`maxAge` (years on the event date),
+// `minWeightKg`/`maxWeightKg` (declared weight, in kilograms), and
+// `minRankId` (belt_ranks.id). `fees` is the current source of truth for
+// pricing; `priceBdt` is a legacy fallback (equal to sum of required fees)
+// kept so older code paths keep working.
 export type CustomDivision = {
     code: string;
     label: string;
@@ -38,6 +39,9 @@ export type CustomDivision = {
     gender: DivisionGender;
     isTeam: boolean;
     minAge: number | null;
+    maxAge: number | null;
+    minWeightKg: number | null;
+    maxWeightKg: number | null;
     minRankId: string | null;
     priceBdt: number | null;
     fees: DivisionFee[];
@@ -154,6 +158,18 @@ export function parseCustomDivisions(raw: unknown): CustomDivision[] {
             typeof rec.minAge === "number" && Number.isFinite(rec.minAge)
                 ? Math.trunc(rec.minAge)
                 : null;
+        const maxAge =
+            typeof rec.maxAge === "number" && Number.isFinite(rec.maxAge)
+                ? Math.trunc(rec.maxAge)
+                : null;
+        const minWeightKg =
+            typeof rec.minWeightKg === "number" && Number.isFinite(rec.minWeightKg)
+                ? Math.round(rec.minWeightKg * 100) / 100
+                : null;
+        const maxWeightKg =
+            typeof rec.maxWeightKg === "number" && Number.isFinite(rec.maxWeightKg)
+                ? Math.round(rec.maxWeightKg * 100) / 100
+                : null;
         const minRankId =
             typeof rec.minRankId === "string" && rec.minRankId
                 ? rec.minRankId
@@ -174,6 +190,9 @@ export function parseCustomDivisions(raw: unknown): CustomDivision[] {
             gender,
             isTeam,
             minAge,
+            maxAge,
+            minWeightKg,
+            maxWeightKg,
             minRankId,
             priceBdt,
             fees,
@@ -202,27 +221,37 @@ export function ageOnDate(dob: Date, on: Date): number {
 
 export type EligibilityIssue =
     | "age-below-min"
+    | "age-above-max"
+    | "gender-mismatch"
     | "rank-below-min"
-    | "weight-required";
+    | "weight-required"
+    | "weight-below-min"
+    | "weight-above-max";
 
-// Check that a would-be entrant satisfies the division's gates. Gender is
-// not enforced — admins pick who competes, and the current schema doesn't
-// require gender-split divisions. Kumite divisions still require a weight
-// value (used at weigh-in), even though weight isn't validated against a
-// bracket.
+// Check that a would-be entrant satisfies the division's gates. When the
+// division declares a `gender` other than ANY, the entrant's gender must
+// match. When the division declares a weight range, the entrant must
+// supply a weight and it must fall inside the range. Kumite divisions
+// always require a weight value (used at weigh-in) even when no range is
+// set.
 export function checkDivisionEligibility(
     division: CustomDivision,
     entrant: {
         dob: Date;
         eventDate: Date;
+        gender?: Gender | null;
         weightKg?: number | null;
         rankOrderIndex?: number | null;
     },
     ranks?: readonly { id: string; orderIndex: number }[],
 ): EligibilityIssue | null {
-    if (division.minAge !== null) {
-        const age = ageOnDate(entrant.dob, entrant.eventDate);
-        if (age < division.minAge) return "age-below-min";
+    const age = ageOnDate(entrant.dob, entrant.eventDate);
+    if (division.minAge !== null && age < division.minAge) return "age-below-min";
+    if (division.maxAge !== null && age > division.maxAge) return "age-above-max";
+    if (division.gender !== "ANY") {
+        if (!entrant.gender || entrant.gender !== division.gender) {
+            return "gender-mismatch";
+        }
     }
     if (division.minRankId && ranks) {
         const required = ranks.find((r) => r.id === division.minRankId);
@@ -233,11 +262,25 @@ export function checkDivisionEligibility(
             }
         }
     }
-    if (
-        division.eventType === "KUMITE" &&
-        (entrant.weightKg === null || entrant.weightKg === undefined)
-    ) {
-        return "weight-required";
+    const weightRangeSet =
+        division.minWeightKg !== null || division.maxWeightKg !== null;
+    const needsWeight = weightRangeSet || division.eventType === "KUMITE";
+    if (needsWeight) {
+        if (entrant.weightKg === null || entrant.weightKg === undefined) {
+            return "weight-required";
+        }
+        if (
+            division.minWeightKg !== null &&
+            entrant.weightKg < division.minWeightKg
+        ) {
+            return "weight-below-min";
+        }
+        if (
+            division.maxWeightKg !== null &&
+            entrant.weightKg > division.maxWeightKg
+        ) {
+            return "weight-above-max";
+        }
     }
     return null;
 }

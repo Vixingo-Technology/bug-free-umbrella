@@ -26,6 +26,7 @@ import {
     type DivisionGender,
     type TournamentEventType,
 } from "@/lib/tournaments/divisions";
+import { WKF_PRESETS, WKF_GROUPS, wkfPresetToDivision } from "@/lib/tournaments/wkf-presets";
 
 const CATEGORIES = [
     { value: "SEMINAR", label: "Seminar" },
@@ -85,6 +86,9 @@ type DivisionDraft = {
     gender: DivisionGender;
     isTeam: boolean;
     minAge: string;
+    maxAge: string;
+    minWeightKg: string;
+    maxWeightKg: string;
     minRankId: string;
     fees: FeeDraft[];
 };
@@ -124,13 +128,30 @@ function toDraft(d: CustomDivision): DivisionDraft {
         gender: d.gender,
         isTeam: d.isTeam,
         minAge: d.minAge !== null ? String(d.minAge) : "",
+        maxAge: d.maxAge !== null ? String(d.maxAge) : "",
+        minWeightKg: d.minWeightKg !== null ? String(d.minWeightKg) : "",
+        maxWeightKg: d.maxWeightKg !== null ? String(d.maxWeightKg) : "",
         minRankId: d.minRankId ?? "",
         fees,
     };
 }
 
+function parseOptionalInt(s: string): number | null {
+    if (!s.trim()) return null;
+    const n = Number.parseInt(s, 10);
+    return Number.isFinite(n) ? n : null;
+}
+function parseOptionalFloat(s: string): number | null {
+    if (!s.trim()) return null;
+    const n = Number.parseFloat(s);
+    return Number.isFinite(n) ? Math.round(n * 100) / 100 : null;
+}
+
 function draftToDivision(d: DivisionDraft): CustomDivision {
-    const minAge = d.minAge.trim() ? Number.parseInt(d.minAge, 10) : NaN;
+    const minAge = parseOptionalInt(d.minAge);
+    const maxAge = parseOptionalInt(d.maxAge);
+    const minWeightKg = parseOptionalFloat(d.minWeightKg);
+    const maxWeightKg = parseOptionalFloat(d.maxWeightKg);
     const fees: DivisionFee[] = d.fees
         .filter((f) => f.name.trim())
         .map((f) => {
@@ -157,7 +178,10 @@ function draftToDivision(d: DivisionDraft): CustomDivision {
         eventType: d.eventType,
         gender: d.gender,
         isTeam: d.isTeam,
-        minAge: Number.isFinite(minAge) ? minAge : null,
+        minAge,
+        maxAge,
+        minWeightKg,
+        maxWeightKg,
         minRankId: d.minRankId || null,
         priceBdt: fees.length > 0 ? Math.round(priceBdt * 100) / 100 : null,
         fees,
@@ -193,6 +217,9 @@ export default function EventForm({
     const [presetName, setPresetName] = useState("");
     const [presetMsg, setPresetMsg] = useState<string | null>(null);
     const [presetBusy, startPresetTransition] = useTransition();
+    const [wkfOpen, setWkfOpen] = useState(false);
+    const [wkfSelected, setWkfSelected] = useState<Set<string>>(new Set());
+    const [wkfMsg, setWkfMsg] = useState<string | null>(null);
     const router = useRouter();
 
     const presetLookup = useMemo(() => {
@@ -214,6 +241,9 @@ export default function EventForm({
                 gender: "ANY",
                 isTeam: false,
                 minAge: "",
+                maxAge: "",
+                minWeightKg: "",
+                maxWeightKg: "",
                 minRankId: "",
                 fees: [
                     {
@@ -309,6 +339,43 @@ export default function EventForm({
         });
         setDivisions((prev) => (mode === "replace" ? drafts : [...prev, ...drafts]));
         setPresetMsg(`Imported "${p.name}".`);
+    }
+
+    function toggleWkfSelection(id: string) {
+        setWkfSelected((prev) => {
+            const next = new Set(prev);
+            if (next.has(id)) next.delete(id);
+            else next.add(id);
+            return next;
+        });
+    }
+    function toggleWkfGroup(group: string) {
+        const ids = WKF_PRESETS.filter((p) => p.group === group).map((p) => p.id);
+        setWkfSelected((prev) => {
+            const next = new Set(prev);
+            const allSelected = ids.every((id) => next.has(id));
+            if (allSelected) for (const id of ids) next.delete(id);
+            else for (const id of ids) next.add(id);
+            return next;
+        });
+    }
+    function importWkfPresets(mode: "replace" | "append") {
+        const picks = WKF_PRESETS.filter((p) => wkfSelected.has(p.id));
+        if (picks.length === 0) {
+            setWkfMsg("Pick at least one preset to import.");
+            return;
+        }
+        const drafts = picks.map((p) => {
+            const cd = wkfPresetToDivision(p, makeCustomDivisionCode);
+            const draft = toDraft(cd);
+            draft.fees = draft.fees.map((f) => ({ ...f, id: makeFeeId() }));
+            return draft;
+        });
+        setDivisions((prev) => (mode === "replace" ? drafts : [...prev, ...drafts]));
+        setWkfMsg(
+            `Imported ${picks.length} WKF division${picks.length === 1 ? "" : "s"}. Remember to set fees for each.`,
+        );
+        setWkfSelected(new Set());
     }
 
     async function savePreset() {
@@ -549,14 +616,24 @@ export default function EventForm({
                         <Layers size={11} />
                         Divisions
                     </p>
-                    <button
-                        type="button"
-                        onClick={() => setPresetOpen((v) => !v)}
-                        className="text-[10px] tracking-widest uppercase font-bold text-accent-red hover:underline inline-flex items-center gap-1"
-                    >
-                        <Bookmark size={11} />
-                        Presets
-                    </button>
+                    <div className="flex items-center gap-3">
+                        <button
+                            type="button"
+                            onClick={() => setWkfOpen((v) => !v)}
+                            className="text-[10px] tracking-widest uppercase font-bold text-accent-red hover:underline inline-flex items-center gap-1"
+                        >
+                            <Download size={11} />
+                            WKF presets
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => setPresetOpen((v) => !v)}
+                            className="text-[10px] tracking-widest uppercase font-bold text-accent-red hover:underline inline-flex items-center gap-1"
+                        >
+                            <Bookmark size={11} />
+                            My presets
+                        </button>
+                    </div>
                 </div>
                 <p className="text-[11px] text-zinc-500 mb-3">
                     Add every division participants can enter. Each division
@@ -564,11 +641,130 @@ export default function EventForm({
                     required (always paid) or optional (participant opts in).
                 </p>
 
+                {wkfOpen && (
+                    <div className="mb-4 border border-accent-red/30 rounded-sm p-3 bg-accent-red/[0.03]">
+                        <div className="flex items-center justify-between mb-2">
+                            <span className="text-[10px] tracking-widest uppercase font-bold text-accent-red inline-flex items-center gap-1.5">
+                                <Download size={11} />
+                                WKF standard divisions
+                            </span>
+                            <button
+                                type="button"
+                                onClick={() => setWkfOpen(false)}
+                                className="text-zinc-400 hover:text-accent-red"
+                                aria-label="Close WKF presets panel"
+                            >
+                                <X size={14} />
+                            </button>
+                        </div>
+                        <p className="text-[11px] text-zinc-500 mb-3">
+                            Tick any presets you want to import. Age bands, gender,
+                            and weight ranges are set automatically. Fees are left
+                            empty — you can add entry fees per division after
+                            importing.
+                        </p>
+
+                        <div className="max-h-72 overflow-y-auto border border-zinc-200 rounded-sm bg-white divide-y divide-zinc-100">
+                            {WKF_GROUPS.map((group) => {
+                                const groupItems = WKF_PRESETS.filter(
+                                    (p) => p.group === group,
+                                );
+                                const groupIds = groupItems.map((p) => p.id);
+                                const groupAll = groupIds.every((id) =>
+                                    wkfSelected.has(id),
+                                );
+                                const groupSome = groupIds.some((id) =>
+                                    wkfSelected.has(id),
+                                );
+                                return (
+                                    <div key={group} className="px-3 py-2">
+                                        <label className="flex items-center gap-2 cursor-pointer select-none mb-1.5">
+                                            <input
+                                                type="checkbox"
+                                                className="h-3.5 w-3.5 accent-red-600"
+                                                checked={groupAll}
+                                                ref={(el) => {
+                                                    if (el)
+                                                        el.indeterminate =
+                                                            !groupAll && groupSome;
+                                                }}
+                                                onChange={() => toggleWkfGroup(group)}
+                                            />
+                                            <span className="text-[10px] tracking-widest uppercase font-bold text-zinc-700">
+                                                {group}
+                                            </span>
+                                            <span className="text-[10px] text-zinc-400">
+                                                ({groupItems.length})
+                                            </span>
+                                        </label>
+                                        <ul className="pl-5 space-y-1">
+                                            {groupItems.map((p) => {
+                                                const checked = wkfSelected.has(p.id);
+                                                return (
+                                                    <li key={p.id}>
+                                                        <label className="flex items-center gap-2 text-xs text-zinc-700 cursor-pointer select-none">
+                                                            <input
+                                                                type="checkbox"
+                                                                className="h-3.5 w-3.5 accent-red-600"
+                                                                checked={checked}
+                                                                onChange={() =>
+                                                                    toggleWkfSelection(
+                                                                        p.id,
+                                                                    )
+                                                                }
+                                                            />
+                                                            <span>{p.label}</span>
+                                                        </label>
+                                                    </li>
+                                                );
+                                            })}
+                                        </ul>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                        <div className="flex flex-wrap items-center gap-2 mt-3">
+                            <button
+                                type="button"
+                                onClick={() => importWkfPresets("append")}
+                                disabled={wkfSelected.size === 0}
+                                className="inline-flex items-center gap-1.5 bg-accent-red text-white px-3 py-2 text-[10px] font-bold tracking-widest uppercase hover:bg-accent-red/90 rounded-sm disabled:opacity-40"
+                            >
+                                <Plus size={11} />
+                                Add selected ({wkfSelected.size})
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => importWkfPresets("replace")}
+                                disabled={wkfSelected.size === 0}
+                                className="inline-flex items-center gap-1.5 bg-zinc-900 text-white px-3 py-2 text-[10px] font-bold tracking-widest uppercase hover:bg-zinc-800 rounded-sm disabled:opacity-40"
+                            >
+                                <Download size={11} />
+                                Replace with selected
+                            </button>
+                            {wkfSelected.size > 0 && (
+                                <button
+                                    type="button"
+                                    onClick={() => setWkfSelected(new Set())}
+                                    className="text-[10px] tracking-widest uppercase font-bold text-zinc-500 hover:text-accent-red"
+                                >
+                                    Clear
+                                </button>
+                            )}
+                        </div>
+                        {wkfMsg && (
+                            <p className="text-[11px] text-zinc-600 mt-2">
+                                {wkfMsg}
+                            </p>
+                        )}
+                    </div>
+                )}
+
                 {presetOpen && (
                     <div className="mb-4 border border-zinc-200 rounded-sm p-3 bg-zinc-50/60">
                         <div className="flex items-center justify-between mb-2">
                             <span className="text-[10px] tracking-widest uppercase font-bold text-zinc-500">
-                                Division presets
+                                Saved division presets
                             </span>
                             <button
                                 type="button"
@@ -773,19 +969,23 @@ export default function EventForm({
                 <Field
                     label={
                         isEdit && initial?.attachmentUrl
-                            ? "Replace attachment (optional · PDF or image)"
-                            : "Attachment (optional · PDF or image)"
+                            ? "Replace poster image (optional · JPG/PNG/WebP)"
+                            : "Poster image (optional · JPG/PNG/WebP)"
                     }
                 >
                     <input
                         name="attachment"
                         type="file"
-                        accept="application/pdf,image/jpeg,image/png,image/webp,image/heic,image/avif"
+                        accept="image/jpeg,image/png,image/webp,image/heic,image/avif"
                         className="w-full text-xs text-zinc-600 file:mr-3 file:py-2 file:px-3 file:rounded-sm file:border file:border-zinc-200 file:bg-zinc-50 file:text-zinc-700 file:text-[10px] file:font-bold file:uppercase file:tracking-widest hover:file:bg-zinc-100 cursor-pointer"
                     />
+                    <p className="text-[11px] text-zinc-500 mt-1.5">
+                        Shown at the top of the public event page, above the
+                        description.
+                    </p>
                     {isEdit && initial?.attachmentUrl && (
                         <p className="text-[11px] text-zinc-500 mt-1.5">
-                            Current attachment:{" "}
+                            Current image:{" "}
                             <a
                                 href={initial.attachmentUrl}
                                 target="_blank"
@@ -873,7 +1073,7 @@ function DivisionRow({
                 </button>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 <Field label="Division name">
                     <input
                         type="text"
@@ -884,17 +1084,77 @@ function DivisionRow({
                         className={inputCx}
                     />
                 </Field>
-                <Field label="Minimum age (optional)">
+                <Field label="Gender">
+                    <select
+                        value={draft.gender}
+                        onChange={(e) =>
+                            onChange({
+                                gender: e.target.value as DivisionGender,
+                            })
+                        }
+                        className={inputCx}
+                    >
+                        <option value="ANY">Any</option>
+                        <option value="MALE">Male only</option>
+                        <option value="FEMALE">Female only</option>
+                    </select>
+                </Field>
+            </div>
+
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-3">
+                <Field label="Min age (optional)">
                     <input
                         type="number"
                         min={1}
                         max={100}
                         value={draft.minAge}
                         onChange={(e) => onChange({ minAge: e.target.value })}
-                        placeholder="Any age"
+                        placeholder="Any"
                         className={inputCx}
                     />
                 </Field>
+                <Field label="Max age (optional)">
+                    <input
+                        type="number"
+                        min={1}
+                        max={100}
+                        value={draft.maxAge}
+                        onChange={(e) => onChange({ maxAge: e.target.value })}
+                        placeholder="Any"
+                        className={inputCx}
+                    />
+                </Field>
+                <Field label="Min weight (kg)">
+                    <input
+                        type="number"
+                        min={0}
+                        max={500}
+                        step="0.1"
+                        value={draft.minWeightKg}
+                        onChange={(e) =>
+                            onChange({ minWeightKg: e.target.value })
+                        }
+                        placeholder="Any"
+                        className={inputCx}
+                    />
+                </Field>
+                <Field label="Max weight (kg)">
+                    <input
+                        type="number"
+                        min={0}
+                        max={500}
+                        step="0.1"
+                        value={draft.maxWeightKg}
+                        onChange={(e) =>
+                            onChange({ maxWeightKg: e.target.value })
+                        }
+                        placeholder="Any"
+                        className={inputCx}
+                    />
+                </Field>
+            </div>
+
+            <div className="mt-3">
                 <Field label="Minimum belt rank (optional)">
                     <select
                         value={draft.minRankId}

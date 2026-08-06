@@ -68,6 +68,10 @@ export default function TournamentRegistrationForm({
     const [gender, setGender] = useState<Gender | "">(member?.gender ?? "");
     const [dobStr, setDobStr] = useState<string>(member?.dateOfBirth ?? "");
     const [weightKgStr, setWeightKgStr] = useState<string>("");
+    const weightKg = weightKgStr.trim()
+        ? Number.parseFloat(weightKgStr)
+        : null;
+    const weightProvided = weightKg !== null && Number.isFinite(weightKg);
     const [selectedRankName, setSelectedRankName] = useState<string>(
         member?.currentRank ?? "",
     );
@@ -100,31 +104,74 @@ export default function TournamentRegistrationForm({
         reason: string | null;
     };
 
-    // Per-division eligibility — a filter kicks in only once its input
-    // field is filled. Any unfilled input means we can't say the division
-    // is definitely out, so we leave it selectable.
+    // Per-division eligibility — every declared requirement must be met.
+    // When a division requires a field the entrant hasn't filled yet (e.g.
+    // a gender-locked division and no gender picked), we treat it as a
+    // missing input and disable selection until every prerequisite lands.
     const eligibility = useMemo<EligibleDivision[]>(() => {
         return event.divisions.map((d) => {
             const reasons: string[] = [];
-            if (gender && d.gender !== "ANY" && d.gender !== gender) {
-                reasons.push(
-                    d.gender === "MALE" ? "male only" : "female only",
-                );
+            const hasWeightGate =
+                d.minWeightKg !== null || d.maxWeightKg !== null;
+            const needsWeight = hasWeightGate || d.eventType === "KUMITE";
+            if (d.gender !== "ANY") {
+                if (!gender) {
+                    reasons.push("select your gender");
+                } else if (d.gender !== gender) {
+                    reasons.push(
+                        d.gender === "MALE" ? "male only" : "female only",
+                    );
+                }
             }
-            if (d.minAge !== null && age !== null && age < d.minAge) {
-                reasons.push(`age ${d.minAge}+ on event day (you are ${age})`);
+            if (d.minAge !== null || d.maxAge !== null) {
+                if (age === null) {
+                    reasons.push("enter your date of birth");
+                } else {
+                    if (d.minAge !== null && age < d.minAge) {
+                        reasons.push(
+                            `age ${d.minAge}+ on event day (you are ${age})`,
+                        );
+                    }
+                    if (d.maxAge !== null && age > d.maxAge) {
+                        reasons.push(
+                            `up to age ${d.maxAge} on event day (you are ${age})`,
+                        );
+                    }
+                }
+            }
+            if (needsWeight) {
+                if (!weightProvided) {
+                    reasons.push("enter your weight");
+                } else if (weightKg !== null) {
+                    if (
+                        d.minWeightKg !== null &&
+                        weightKg < d.minWeightKg
+                    ) {
+                        reasons.push(
+                            `min ${d.minWeightKg} kg (you are ${weightKg})`,
+                        );
+                    }
+                    if (
+                        d.maxWeightKg !== null &&
+                        weightKg > d.maxWeightKg
+                    ) {
+                        reasons.push(
+                            `max ${d.maxWeightKg} kg (you are ${weightKg})`,
+                        );
+                    }
+                }
             }
             if (d.minRankId) {
                 const required = rankByOrder.get(d.minRankId);
-                if (
-                    required !== undefined &&
-                    entrantRankOrder !== null &&
-                    entrantRankOrder < required
-                ) {
-                    const rank = event.beltRanks.find(
-                        (r) => r.id === d.minRankId,
-                    );
-                    reasons.push(`min ${rank?.name ?? "belt"}`);
+                if (required !== undefined) {
+                    if (entrantRankOrder === null) {
+                        reasons.push("pick your belt rank");
+                    } else if (entrantRankOrder < required) {
+                        const rank = event.beltRanks.find(
+                            (r) => r.id === d.minRankId,
+                        );
+                        reasons.push(`min ${rank?.name ?? "belt"}`);
+                    }
                 }
             }
             return {
@@ -136,6 +183,8 @@ export default function TournamentRegistrationForm({
         event.divisions,
         gender,
         age,
+        weightKg,
+        weightProvided,
         entrantRankOrder,
         rankByOrder,
         event.beltRanks,
@@ -153,8 +202,21 @@ export default function TournamentRegistrationForm({
         return next;
     }, [selectedCodes, eligibleCodes]);
 
-    const allFiltersProvided = !!gender && !!dobStr && !!selectedRankName;
     const anyEligible = eligibility.some((e) => !e.reason);
+    // "No available division" message shows only once every possible input
+    // is filled and still nothing matches — the entrant has done their
+    // part but no division fits.
+    const allFiltersProvided =
+        !!gender &&
+        !!dobStr &&
+        !!selectedRankName &&
+        (!event.divisions.some(
+            (d) =>
+                d.eventType === "KUMITE" ||
+                d.minWeightKg !== null ||
+                d.maxWeightKg !== null,
+        ) ||
+            weightProvided);
     const cannotRegister = allFiltersProvided && !anyEligible;
 
     const selected = useMemo(
@@ -162,7 +224,22 @@ export default function TournamentRegistrationForm({
         [event.divisions, effectiveSelected],
     );
     const anyTeam = selected.some((d) => d.isTeam);
-    const anyKumite = selected.some((d) => d.eventType === "KUMITE");
+    // Show the weight input whenever any division on the event needs it —
+    // either kumite (weigh-in required) or any custom weight range gate.
+    // That way participants can unlock weight-gated divisions from the
+    // list without having to pick one first.
+    const weightVisible = event.divisions.some(
+        (d) =>
+            d.eventType === "KUMITE" ||
+            d.minWeightKg !== null ||
+            d.maxWeightKg !== null,
+    );
+    const weightRequired = selected.some(
+        (d) =>
+            d.eventType === "KUMITE" ||
+            d.minWeightKg !== null ||
+            d.maxWeightKg !== null,
+    );
 
     // Whether a given fee is "active" for the participant — required fees
     // always are; optional fees are only active once the participant has
@@ -396,8 +473,8 @@ export default function TournamentRegistrationForm({
                 </Field>
             </div>
 
-            {anyKumite && (
-                <Field label="Weight (kg)" required>
+            {weightVisible && (
+                <Field label="Weight (kg)" required={weightRequired}>
                     <input
                         name="entrantWeightKg"
                         type="number"
@@ -406,12 +483,13 @@ export default function TournamentRegistrationForm({
                         step="0.1"
                         value={weightKgStr}
                         onChange={(e) => setWeightKgStr(e.target.value)}
-                        required
+                        required={weightRequired}
                         placeholder="e.g. 67.5"
                         className={inputCx}
                     />
                     <p className="text-[11px] text-zinc-500 mt-1">
-                        Final weight is confirmed at the on-day weigh-in.
+                        Needed to unlock weight-based divisions. Final weight
+                        is confirmed at the on-day weigh-in.
                     </p>
                 </Field>
             )}
@@ -480,9 +558,7 @@ export default function TournamentRegistrationForm({
                     </div>
                 )}
                 <ul className="space-y-2">
-                    {eligibility
-                        .filter(({ reason }) => !cannotRegister && !reason)
-                        .map(({ d, reason }) => {
+                    {eligibility.map(({ d, reason }) => {
                         const checked = effectiveSelected.has(d.code);
                         const disabled = !!reason;
                         const base = priceForBase(d);
@@ -538,9 +614,35 @@ export default function TournamentRegistrationForm({
                                                     Team
                                                 </span>
                                             )}
-                                            {d.minAge !== null && (
+                                            {d.gender !== "ANY" && (
                                                 <span className="text-[10px] uppercase tracking-widest text-zinc-500">
-                                                    · Age {d.minAge}+
+                                                    ·{" "}
+                                                    {d.gender === "MALE"
+                                                        ? "Male"
+                                                        : "Female"}
+                                                </span>
+                                            )}
+                                            {(d.minAge !== null ||
+                                                d.maxAge !== null) && (
+                                                <span className="text-[10px] uppercase tracking-widest text-zinc-500">
+                                                    · Age{" "}
+                                                    {d.minAge !== null && d.maxAge !== null
+                                                        ? `${d.minAge}–${d.maxAge}`
+                                                        : d.minAge !== null
+                                                          ? `${d.minAge}+`
+                                                          : `≤${d.maxAge}`}
+                                                </span>
+                                            )}
+                                            {(d.minWeightKg !== null ||
+                                                d.maxWeightKg !== null) && (
+                                                <span className="text-[10px] uppercase tracking-widest text-zinc-500">
+                                                    ·{" "}
+                                                    {d.minWeightKg !== null &&
+                                                    d.maxWeightKg !== null
+                                                        ? `${d.minWeightKg}–${d.maxWeightKg} kg`
+                                                        : d.minWeightKg !== null
+                                                          ? `${d.minWeightKg}+ kg`
+                                                          : `≤${d.maxWeightKg} kg`}
                                                 </span>
                                             )}
                                             {d.minRankId && (
@@ -555,7 +657,7 @@ export default function TournamentRegistrationForm({
                                             )}
                                             {reason && (
                                                 <span className="text-[10px] text-amber-700 bg-amber-50 border border-amber-200 rounded-sm px-1.5 py-0.5">
-                                                    Not eligible: {reason}
+                                                    Locked: {reason}
                                                 </span>
                                             )}
                                         </div>

@@ -90,6 +90,49 @@ async function parseDivisionFields(formData: FormData): Promise<DivisionInput> {
                 error: `Minimum age for "${label}" must be between 1 and 100.`,
             };
         }
+        if (d.maxAge !== null && (d.maxAge < 1 || d.maxAge > 100)) {
+            return {
+                error: `Maximum age for "${label}" must be between 1 and 100.`,
+            };
+        }
+        if (
+            d.minAge !== null &&
+            d.maxAge !== null &&
+            d.minAge > d.maxAge
+        ) {
+            return {
+                error: `"${label}" minimum age cannot exceed maximum age.`,
+            };
+        }
+        if (
+            d.minWeightKg !== null &&
+            (!Number.isFinite(d.minWeightKg) ||
+                d.minWeightKg < 0 ||
+                d.minWeightKg > 500)
+        ) {
+            return {
+                error: `Minimum weight for "${label}" must be between 0 and 500 kg.`,
+            };
+        }
+        if (
+            d.maxWeightKg !== null &&
+            (!Number.isFinite(d.maxWeightKg) ||
+                d.maxWeightKg < 0 ||
+                d.maxWeightKg > 500)
+        ) {
+            return {
+                error: `Maximum weight for "${label}" must be between 0 and 500 kg.`,
+            };
+        }
+        if (
+            d.minWeightKg !== null &&
+            d.maxWeightKg !== null &&
+            d.minWeightKg > d.maxWeightKg
+        ) {
+            return {
+                error: `"${label}" minimum weight cannot exceed maximum weight.`,
+            };
+        }
         if (d.priceBdt !== null && d.priceBdt < 0) {
             return {
                 error: `Price for "${label}" cannot be negative.`,
@@ -148,6 +191,9 @@ async function parseDivisionFields(formData: FormData): Promise<DivisionInput> {
             gender: d.gender,
             isTeam: d.isTeam,
             minAge: d.minAge,
+            maxAge: d.maxAge,
+            minWeightKg: d.minWeightKg,
+            maxWeightKg: d.maxWeightKg,
             minRankId: d.minRankId,
             priceBdt: derivedPrice,
             fees: cleanedFees,
@@ -344,7 +390,10 @@ export async function createEventAction(formData: FormData): Promise<ActionResul
 
     let attachment: { url: string; type: "IMAGE" | "PDF" } | null;
     try {
-        attachment = await uploadAttachmentIfPresent(formData.get("attachment"));
+        attachment = await uploadAttachmentIfPresent(
+            formData.get("attachment"),
+            { imagesOnly: true },
+        );
     } catch (err) {
         return {
             ok: false,
@@ -445,7 +494,10 @@ export async function updateEventAction(formData: FormData): Promise<ActionResul
 
     let attachment: { url: string; type: "IMAGE" | "PDF" } | null;
     try {
-        attachment = await uploadAttachmentIfPresent(formData.get("attachment"));
+        attachment = await uploadAttachmentIfPresent(
+            formData.get("attachment"),
+            { imagesOnly: true },
+        );
     } catch (err) {
         return {
             ok: false,

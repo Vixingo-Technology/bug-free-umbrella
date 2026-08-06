@@ -250,19 +250,19 @@ export default async function EventDetailPage({ params }: Props) {
                         )}
                     </div>
 
-                    {e.description && (
-                        <div className="prose prose-zinc max-w-none mb-10 text-zinc-700 leading-relaxed whitespace-pre-line text-base md:text-lg">
-                            {e.description}
-                        </div>
-                    )}
-
                     {e.attachmentUrl && e.attachmentType && (
-                        <div className="mt-8">
+                        <div className="mb-8">
                             <AttachmentViewer
                                 url={e.attachmentUrl}
                                 type={e.attachmentType}
                                 title={e.title}
                             />
+                        </div>
+                    )}
+
+                    {e.description && (
+                        <div className="prose prose-zinc max-w-none mb-10 text-zinc-700 leading-relaxed whitespace-pre-line text-base md:text-lg">
+                            {e.description}
                         </div>
                     )}
 
