@@ -5,6 +5,9 @@ import { prisma } from "@/lib/prisma";
 import { createClient } from "@/lib/supabase/server";
 import { uploadAttachmentIfPresent } from "@/lib/attachment-upload";
 import { loadCurrentUser } from "@/lib/auth/load-current-user";
+import { notifyMembers, type NotifyPayload } from "@/lib/notify";
+import { findUserIdsByRoles } from "@/lib/notify/recipients";
+import type { Prisma } from "@/prisma/generated/client";
 import {
     isCustomDivisionCode,
     makeCustomDivisionCode,
@@ -263,6 +266,31 @@ function revalidateAll() {
     revalidatePath("/portal/admin/events");
 }
 
+function buildEventPublishedNotification(event: {
+    id: string;
+    title: string;
+}): NotifyPayload {
+    return {
+        title: "New event published",
+        message: `${event.title} — register now.`,
+        type: "EVENT",
+        link: `/events/${event.id}`,
+    };
+}
+
+async function notifyMembersOfPublishedEvent(
+    event: { id: string; title: string },
+    tx: Prisma.TransactionClient | typeof prisma = prisma,
+): Promise<void> {
+    const recipientIds = await findUserIdsByRoles([
+        "STUDENT",
+        "INSTRUCTOR",
+        "DOJO_MANAGER",
+        "DOJO_OWNER",
+    ]);
+    await notifyMembers(recipientIds, buildEventPublishedNotification(event), tx);
+}
+
 type ParsedCommon = {
     title: string;
     description: string | null;
@@ -468,6 +496,12 @@ export async function createEventAction(formData: FormData): Promise<ActionResul
                 },
             });
         }
+        if (isPublished) {
+            await notifyMembersOfPublishedEvent(
+                { id: event.id, title: event.title },
+                tx,
+            );
+        }
         return event;
     });
 
@@ -484,7 +518,12 @@ export async function updateEventAction(formData: FormData): Promise<ActionResul
 
     const existing = await prisma.event.findUnique({
         where: { id },
-        select: { id: true, attachmentUrl: true, attachmentType: true },
+        select: {
+            id: true,
+            attachmentUrl: true,
+            attachmentType: true,
+            isPublished: true,
+        },
     });
     if (!existing) return { ok: false, error: "Event not found." };
 
@@ -586,6 +625,9 @@ export async function updateEventAction(formData: FormData): Promise<ActionResul
             // event registers as a plain (ticket-only) event.
             await tx.tournamentDetail.deleteMany({ where: { eventId: id } });
         }
+        if (isPublished && !existing.isPublished) {
+            await notifyMembersOfPublishedEvent({ id, title }, tx);
+        }
     });
 
     revalidateAll();
@@ -624,7 +666,7 @@ export async function toggleEventPublishedAction(
 
     const existing = await prisma.event.findUnique({
         where: { id },
-        select: { id: true },
+        select: { id: true, title: true, isPublished: true },
     });
     if (!existing) return { ok: false, error: "Event not found." };
 
@@ -632,6 +674,13 @@ export async function toggleEventPublishedAction(
         where: { id },
         data: { isPublished: next },
     });
+
+    if (next && !existing.isPublished) {
+        await notifyMembersOfPublishedEvent({
+            id: existing.id,
+            title: existing.title,
+        });
+    }
 
     revalidateAll();
     return { ok: true };
