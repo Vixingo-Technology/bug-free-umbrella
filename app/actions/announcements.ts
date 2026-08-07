@@ -1,10 +1,13 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import type { Prisma } from "@/prisma/generated/client";
 import { prisma } from "@/lib/prisma";
 import { createClient } from "@/lib/supabase/server";
 import { uploadAttachmentIfPresent } from "@/lib/attachment-upload";
 import { loadCurrentUser } from "@/lib/auth/load-current-user";
+import { notifyMembers } from "@/lib/notify";
+import { findUserIdsByRoles } from "@/lib/notify/recipients";
 
 type ActionResult = { ok: true; id?: string } | { ok: false; error: string };
 
@@ -44,6 +47,29 @@ function revalidateAll() {
     revalidatePath("/portal/dojo/announcements");
 }
 
+async function notifyDojoMembersOfAnnouncement(
+    announcement: { id: string; title: string; dojoId: string; postedById: string | null },
+    tx: Prisma.TransactionClient | typeof prisma = prisma,
+): Promise<void> {
+    const recipientIds = await findUserIdsByRoles(
+        ["STUDENT", "INSTRUCTOR", "DOJO_MANAGER", "DOJO_OWNER"],
+        { dojoId: announcement.dojoId },
+    );
+    const filtered = announcement.postedById
+        ? recipientIds.filter((id) => id !== announcement.postedById)
+        : recipientIds;
+    await notifyMembers(
+        filtered,
+        {
+            title: "New dojo announcement",
+            message: announcement.title,
+            type: "INFO",
+            link: `/announcements/${announcement.id}`,
+        },
+        tx,
+    );
+}
+
 export async function createAnnouncementAction(formData: FormData): Promise<ActionResult> {
     const auth = await requirePoster();
     if (!auth.ok) return auth;
@@ -65,17 +91,28 @@ export async function createAnnouncementAction(formData: FormData): Promise<Acti
         };
     }
 
-    const created = await prisma.announcement.create({
-        data: {
-            title,
-            body,
-            link,
-            isPublished,
-            attachmentUrl: attachment?.url ?? null,
-            attachmentType: attachment?.type ?? null,
-            postedById: auth.userId,
-            dojoId: auth.dojoId, // null for ADMIN (federation-wide)
-        },
+    const created = await prisma.$transaction(async (tx) => {
+        const row = await tx.announcement.create({
+            data: {
+                title,
+                body,
+                link,
+                isPublished,
+                attachmentUrl: attachment?.url ?? null,
+                attachmentType: attachment?.type ?? null,
+                postedById: auth.userId,
+                dojoId: auth.dojoId, // null for ADMIN (federation-wide)
+            },
+        });
+
+        if (isPublished && auth.role === "DOJO_OWNER" && auth.dojoId) {
+            await notifyDojoMembersOfAnnouncement(
+                { id: row.id, title: row.title, dojoId: auth.dojoId, postedById: auth.userId },
+                tx,
+            );
+        }
+
+        return row;
     });
 
     revalidateAll();
@@ -119,7 +156,7 @@ export async function toggleAnnouncementPublishedAction(
 
     const existing = await prisma.announcement.findUnique({
         where: { id },
-        select: { dojoId: true },
+        select: { dojoId: true, title: true, isPublished: true, postedById: true },
     });
     if (!existing) return { ok: false, error: "Announcement not found." };
 
@@ -127,9 +164,25 @@ export async function toggleAnnouncementPublishedAction(
         return { ok: false, error: "Not allowed." };
     }
 
-    await prisma.announcement.update({
-        where: { id },
-        data: { isPublished: next },
+    await prisma.$transaction(async (tx) => {
+        await tx.announcement.update({
+            where: { id },
+            data: { isPublished: next },
+        });
+
+        // Fire notifications only on a draft → published transition for a
+        // dojo-scoped announcement, so re-toggling doesn't re-notify.
+        if (next && !existing.isPublished && existing.dojoId) {
+            await notifyDojoMembersOfAnnouncement(
+                {
+                    id,
+                    title: existing.title,
+                    dojoId: existing.dojoId,
+                    postedById: existing.postedById,
+                },
+                tx,
+            );
+        }
     });
 
     revalidateAll();
