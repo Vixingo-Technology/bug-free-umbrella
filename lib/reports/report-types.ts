@@ -1,4 +1,4 @@
-export type ReportScope = "ALL" | "DOJO" | "MEMBER";
+export type ReportScope = "ALL" | "DOJO" | "MEMBER" | "EVENT";
 
 export type ReportKey =
     | "members"
@@ -41,6 +41,8 @@ export interface ReportDefinition {
     supportsDojoScope: boolean;
     /** Whether this report can be scoped to a specific member. */
     supportsMemberScope: boolean;
+    /** Whether this report can be scoped to a specific event. */
+    supportsEventScope?: boolean;
     /** Whether this report supports a date range filter. */
     supportsDateRange: boolean;
 }
@@ -60,8 +62,8 @@ export const REPORT_DEFINITIONS: ReportDefinition[] = [
     { key: "grading_applications", label: "Grading Applications", group: "Ranking", supportsDojoScope: true, supportsMemberScope: true, supportsDateRange: true },
     { key: "certificate_requests", label: "Certificate Requests", group: "Ranking", supportsDojoScope: true, supportsMemberScope: true, supportsDateRange: true },
 
-    { key: "events", label: "Events", group: "Events", supportsDojoScope: true, supportsMemberScope: false, supportsDateRange: true },
-    { key: "event_registrations", label: "Event Registrations / Participants", group: "Events", supportsDojoScope: false, supportsMemberScope: true, supportsDateRange: true },
+    { key: "events", label: "Events", group: "Events", supportsDojoScope: true, supportsMemberScope: false, supportsEventScope: true, supportsDateRange: true },
+    { key: "event_registrations", label: "Event Registrations / Participants", group: "Events", supportsDojoScope: true, supportsMemberScope: true, supportsEventScope: true, supportsDateRange: true },
     { key: "announcements", label: "Announcements", group: "Events", supportsDojoScope: true, supportsMemberScope: true, supportsDateRange: true },
 
     { key: "shop_products", label: "Shop Products", group: "Shop", supportsDojoScope: false, supportsMemberScope: false, supportsDateRange: true },

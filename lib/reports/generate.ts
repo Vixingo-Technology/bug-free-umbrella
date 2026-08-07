@@ -7,6 +7,7 @@ export interface ReportFilters {
     to?: Date;
     dojoId?: string;
     userId?: string;
+    eventId?: string;
 }
 
 function dateWhere(from?: Date, to?: Date) {
@@ -30,7 +31,7 @@ export async function generateReport(
     key: ReportKey,
     filters: ReportFilters,
 ): Promise<Row[]> {
-    const { from, to, dojoId, userId } = filters;
+    const { from, to, dojoId, userId, eventId } = filters;
     const createdAt = dateWhere(from, to);
 
     switch (key) {
@@ -365,6 +366,7 @@ export async function generateReport(
                 where: {
                     ...(createdAt ? { createdAt } : {}),
                     ...(dojoId ? { dojoId } : {}),
+                    ...(eventId ? { id: eventId } : {}),
                 },
                 include: {
                     dojo: { select: { name: true } },
@@ -401,6 +403,8 @@ export async function generateReport(
                 where: {
                     ...(createdAt ? { createdAt } : {}),
                     ...(userId ? { userId } : {}),
+                    ...(eventId ? { eventId } : {}),
+                    ...(dojoId ? { event: { dojoId } } : {}),
                 },
                 include: {
                     event: { select: { title: true, eventDate: true, category: true } },

@@ -31,12 +31,21 @@ export async function GET(req: NextRequest) {
     const to = parseDate(url.searchParams.get("to"), true);
     const dojoId = url.searchParams.get("dojoId") ?? undefined;
     const userId = url.searchParams.get("userId") ?? undefined;
+    const eventId = url.searchParams.get("eventId") ?? undefined;
 
-    const rows = await generateReport(report as ReportKey, { from, to, dojoId, userId });
+    const rows = await generateReport(report as ReportKey, { from, to, dojoId, userId, eventId });
     const csv = toCsv(rows);
 
     const stamp = new Date().toISOString().slice(0, 10);
-    const parts = [report, from ? `from-${url.searchParams.get("from")}` : null, to ? `to-${url.searchParams.get("to")}` : null, `generated-${stamp}`].filter(Boolean);
+    const parts = [
+        report,
+        eventId ? `event-${eventId.slice(0, 8)}` : null,
+        dojoId ? `dojo-${dojoId.slice(0, 8)}` : null,
+        userId ? `user-${userId.slice(0, 8)}` : null,
+        from ? `from-${url.searchParams.get("from")}` : null,
+        to ? `to-${url.searchParams.get("to")}` : null,
+        `generated-${stamp}`,
+    ].filter(Boolean);
     const filename = `${parts.join("_")}.csv`;
 
     return csvResponse(csv, filename);

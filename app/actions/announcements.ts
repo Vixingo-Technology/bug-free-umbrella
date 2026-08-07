@@ -47,10 +47,16 @@ function revalidateAll() {
     revalidatePath("/portal/dojo/announcements");
 }
 
-async function notifyDojoMembersOfAnnouncement(
-    announcement: { id: string; title: string; dojoId: string; postedById: string | null },
+async function notifyMembersOfAnnouncement(
+    announcement: {
+        id: string;
+        title: string;
+        dojoId: string | null;
+        postedById: string | null;
+    },
     tx: Prisma.TransactionClient | typeof prisma = prisma,
 ): Promise<void> {
+    const isFederationWide = announcement.dojoId === null;
     const recipientIds = await findUserIdsByRoles(
         ["STUDENT", "INSTRUCTOR", "DOJO_MANAGER", "DOJO_OWNER"],
         { dojoId: announcement.dojoId },
@@ -61,7 +67,7 @@ async function notifyDojoMembersOfAnnouncement(
     await notifyMembers(
         filtered,
         {
-            title: "New dojo announcement",
+            title: isFederationWide ? "New announcement" : "New dojo announcement",
             message: announcement.title,
             type: "INFO",
             link: `/announcements/${announcement.id}`,
@@ -105,8 +111,8 @@ export async function createAnnouncementAction(formData: FormData): Promise<Acti
             },
         });
 
-        if (isPublished && auth.role === "DOJO_OWNER" && auth.dojoId) {
-            await notifyDojoMembersOfAnnouncement(
+        if (isPublished) {
+            await notifyMembersOfAnnouncement(
                 { id: row.id, title: row.title, dojoId: auth.dojoId, postedById: auth.userId },
                 tx,
             );
@@ -170,10 +176,10 @@ export async function toggleAnnouncementPublishedAction(
             data: { isPublished: next },
         });
 
-        // Fire notifications only on a draft → published transition for a
-        // dojo-scoped announcement, so re-toggling doesn't re-notify.
-        if (next && !existing.isPublished && existing.dojoId) {
-            await notifyDojoMembersOfAnnouncement(
+        // Fire notifications only on a draft → published transition, so
+        // re-toggling doesn't re-notify.
+        if (next && !existing.isPublished) {
+            await notifyMembersOfAnnouncement(
                 {
                     id,
                     title: existing.title,

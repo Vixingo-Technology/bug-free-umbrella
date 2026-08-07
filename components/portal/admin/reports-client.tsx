@@ -8,6 +8,7 @@ import {
     Search,
     CalendarRange,
     Building2,
+    Calendar as CalendarIcon,
     User as UserIcon,
     FileSpreadsheet,
     Loader2,
@@ -25,12 +26,20 @@ type Member = {
     memberNumber: string | null;
     roleId: string;
 };
+type EventOption = {
+    id: string;
+    title: string;
+    eventDate: string;
+    category: string;
+    dojoName: string | null;
+};
 
-type Scope = "ALL" | "DOJO" | "MEMBER";
+type Scope = "ALL" | "DOJO" | "MEMBER" | "EVENT";
 
 interface Props {
     dojos: Dojo[];
     members: Member[];
+    events: EventOption[];
 }
 
 const GROUP_ORDER = [
@@ -46,11 +55,13 @@ const GROUP_ORDER = [
     "System",
 ] as const;
 
-export default function ReportsAdminClient({ dojos, members }: Props) {
+export default function ReportsAdminClient({ dojos, members, events }: Props) {
     const [selected, setSelected] = useState<ReportKey>("members");
     const [scope, setScope] = useState<Scope>("ALL");
     const [dojoId, setDojoId] = useState<string>("");
     const [userId, setUserId] = useState<string>("");
+    const [eventId, setEventId] = useState<string>("");
+    const [eventSearch, setEventSearch] = useState<string>("");
     const [from, setFrom] = useState<string>("");
     const [to, setTo] = useState<string>("");
     const [memberSearch, setMemberSearch] = useState<string>("");
@@ -76,6 +87,7 @@ export default function ReportsAdminClient({ dojos, members }: Props) {
         const s: Scope[] = ["ALL"];
         if (definition.supportsDojoScope) s.push("DOJO");
         if (definition.supportsMemberScope) s.push("MEMBER");
+        if (definition.supportsEventScope) s.push("EVENT");
         return s;
     }, [definition]);
 
@@ -97,6 +109,19 @@ export default function ReportsAdminClient({ dojos, members }: Props) {
             .slice(0, 50);
     }, [members, memberSearch]);
 
+    const filteredEvents = useMemo(() => {
+        const q = eventSearch.trim().toLowerCase();
+        if (!q) return events.slice(0, 50);
+        return events
+            .filter(
+                (e) =>
+                    e.title.toLowerCase().includes(q) ||
+                    (e.dojoName ?? "").toLowerCase().includes(q) ||
+                    e.category.toLowerCase().includes(q),
+            )
+            .slice(0, 50);
+    }, [events, eventSearch]);
+
     async function handleDownload() {
         setToast(null);
 
@@ -108,6 +133,10 @@ export default function ReportsAdminClient({ dojos, members }: Props) {
             setToast({ kind: "err", msg: "Please pick a member." });
             return;
         }
+        if (scope === "EVENT" && !eventId) {
+            setToast({ kind: "err", msg: "Please pick an event." });
+            return;
+        }
 
         const params = new URLSearchParams();
         params.set("report", selected);
@@ -117,6 +146,7 @@ export default function ReportsAdminClient({ dojos, members }: Props) {
         }
         if (scope === "DOJO" && dojoId) params.set("dojoId", dojoId);
         if (scope === "MEMBER" && userId) params.set("userId", userId);
+        if (scope === "EVENT" && eventId) params.set("eventId", eventId);
 
         setLoading(true);
         try {
@@ -153,6 +183,7 @@ export default function ReportsAdminClient({ dojos, members }: Props) {
 
     const selectedMember = members.find((m) => m.id === userId);
     const selectedDojo = dojos.find((d) => d.id === dojoId);
+    const selectedEvent = events.find((e) => e.id === eventId);
 
     return (
         <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
@@ -283,7 +314,12 @@ export default function ReportsAdminClient({ dojos, members }: Props) {
                         <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-zinc-500">
                             Scope
                         </label>
-                        <div className="grid grid-cols-3 gap-1 rounded-lg bg-zinc-100 p-1">
+                        <div
+                            className="grid gap-1 rounded-lg bg-zinc-100 p-1"
+                            style={{
+                                gridTemplateColumns: `repeat(${availableScopes.length}, minmax(0, 1fr))`,
+                            }}
+                        >
                             {availableScopes.map((s) => (
                                 <button
                                     key={s}
@@ -294,7 +330,13 @@ export default function ReportsAdminClient({ dojos, members }: Props) {
                                             : "text-zinc-600 hover:text-zinc-900"
                                     }`}
                                 >
-                                    {s === "ALL" ? "All" : s === "DOJO" ? "By Dojo" : "By Member"}
+                                    {s === "ALL"
+                                        ? "All"
+                                        : s === "DOJO"
+                                            ? "By Dojo"
+                                            : s === "MEMBER"
+                                                ? "By Member"
+                                                : "By Event"}
                                 </button>
                             ))}
                         </div>
@@ -379,6 +421,63 @@ export default function ReportsAdminClient({ dojos, members }: Props) {
                             {selectedMember && (
                                 <p className="mt-1.5 text-xs text-zinc-500">
                                     Selected: {selectedMember.fullName}
+                                </p>
+                            )}
+                        </div>
+                    )}
+
+                    {/* Event picker */}
+                    {scope === "EVENT" && (
+                        <div className="mb-5">
+                            <label className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-zinc-500">
+                                <CalendarIcon className="h-3.5 w-3.5" />
+                                Event
+                            </label>
+                            <div className="relative mb-2">
+                                <Search className="pointer-events-none absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
+                                <input
+                                    value={eventSearch}
+                                    onChange={(e) => setEventSearch(e.target.value)}
+                                    placeholder="Search by title, dojo, or category"
+                                    className="w-full rounded-md border border-zinc-300 bg-white pl-8 pr-2 py-1.5 text-sm text-zinc-900 focus:border-red-500 focus:outline-none focus:ring-1 focus:ring-red-500"
+                                />
+                            </div>
+                            <div className="max-h-56 overflow-y-auto rounded-md border border-zinc-200">
+                                {filteredEvents.length === 0 ? (
+                                    <div className="p-3 text-center text-xs text-zinc-500">
+                                        No events match your search.
+                                    </div>
+                                ) : (
+                                    filteredEvents.map((e) => {
+                                        const active = e.id === eventId;
+                                        const dateLabel = new Date(e.eventDate).toLocaleDateString(
+                                            "en-GB",
+                                            { day: "numeric", month: "short", year: "numeric" },
+                                        );
+                                        return (
+                                            <button
+                                                key={e.id}
+                                                onClick={() => setEventId(e.id)}
+                                                className={`flex w-full flex-col items-start gap-0.5 border-b border-zinc-100 px-3 py-2 text-left last:border-b-0 transition ${
+                                                    active
+                                                        ? "bg-red-50 text-red-900"
+                                                        : "hover:bg-zinc-50"
+                                                }`}
+                                            >
+                                                <span className="text-sm font-medium text-zinc-900">
+                                                    {e.title}
+                                                </span>
+                                                <span className="text-xs text-zinc-500">
+                                                    {dateLabel} · {e.dojoName ?? "Federation"}
+                                                </span>
+                                            </button>
+                                        );
+                                    })
+                                )}
+                            </div>
+                            {selectedEvent && (
+                                <p className="mt-1.5 text-xs text-zinc-500">
+                                    Selected: {selectedEvent.title}
                                 </p>
                             )}
                         </div>
