@@ -182,9 +182,9 @@ export default async function AdminEventsPage({
                                         Paid
                                     </span>
                                 )}
-                                {e.isPremium && e.memberDiscountPercent > 0 && (
+                                {e.isPremium && Number(e.memberDiscountPercent) > 0 && (
                                     <span className="text-[10px] tracking-widest uppercase font-bold px-2 py-1 rounded-full border bg-emerald-50 text-emerald-700 border-emerald-200">
-                                        Member −{e.memberDiscountPercent}%
+                                        Member −{Number(e.memberDiscountPercent)}%
                                     </span>
                                 )}
                             </div>

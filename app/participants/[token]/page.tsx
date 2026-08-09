@@ -204,8 +204,9 @@ export default async function ParticipationCardPage({
                   ticketPrice: registration.event.ticketPrice
                       ? Number(registration.event.ticketPrice)
                       : null,
-                  multiDivisionDiscountPercent:
+                  multiDivisionDiscountPercent: Number(
                       registration.event.multiDivisionDiscountPercent,
+                  ),
                   customDivisions:
                       registration.event.tournamentDetail?.customDivisions,
               },

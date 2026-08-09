@@ -130,7 +130,7 @@ export default async function RegisterPage({ params, searchParams }: Props) {
         memberDiscountActive,
         divisions,
         eventTicketPriceBdt: event.ticketPrice ? Number(event.ticketPrice) : null,
-        multiDivisionDiscountPercent: event.multiDivisionDiscountPercent,
+        multiDivisionDiscountPercent: Number(event.multiDivisionDiscountPercent),
         registrationDeadline: event.tournamentDetail?.registrationDeadline
             ? event.tournamentDetail.registrationDeadline.toISOString()
             : null,

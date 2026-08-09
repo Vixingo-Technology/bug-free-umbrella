@@ -52,7 +52,7 @@ export async function currentUserIsJkaMember(): Promise<boolean> {
 export function applyDiscount(basePrice: number, percent: number): number {
     if (!Number.isFinite(basePrice) || basePrice <= 0) return basePrice;
     if (!Number.isFinite(percent) || percent <= 0) return basePrice;
-    const p = Math.max(0, Math.min(100, Math.floor(percent)));
+    const p = Math.max(0, Math.min(100, percent));
     const discounted = basePrice * (1 - p / 100);
     return Math.round(discounted * 100) / 100;
 }

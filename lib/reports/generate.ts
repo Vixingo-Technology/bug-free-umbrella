@@ -388,7 +388,7 @@ export async function generateReport(
                 is_published: e.isPublished,
                 is_premium: e.isPremium,
                 ticket_price: num(e.ticketPrice),
-                member_discount_percent: e.memberDiscountPercent,
+                member_discount_percent: num(e.memberDiscountPercent),
                 max_capacity: e.maxCapacity,
                 participant_type: e.participantType,
                 dojo: e.dojo?.name ?? "",

@@ -156,10 +156,10 @@ function draftToDivision(d: DivisionDraft): CustomDivision {
         .filter((f) => f.name.trim())
         .map((f) => {
             const pct = f.memberDiscountPercent.trim()
-                ? Number.parseInt(f.memberDiscountPercent, 10)
+                ? Number.parseFloat(f.memberDiscountPercent)
                 : NaN;
             const memberDiscountPercent = Number.isFinite(pct)
-                ? Math.max(0, Math.min(100, pct))
+                ? Math.round(Math.max(0, Math.min(100, pct)) * 100) / 100
                 : 0;
             return {
                 id: f.id,
@@ -944,7 +944,7 @@ export default function EventForm({
                             type="number"
                             min={0}
                             max={100}
-                            step="1"
+                            step="0.01"
                             defaultValue={
                                 initial?.multiDivisionDiscountPercent ?? 0
                             }
@@ -1193,7 +1193,7 @@ function DivisionRow({
                         {draft.fees.map((f, fi) => {
                             const discountOn =
                                 f.memberDiscountPercent.trim() !== "" &&
-                                Number.parseInt(f.memberDiscountPercent, 10) > 0;
+                                Number.parseFloat(f.memberDiscountPercent) > 0;
                             return (
                                 <li
                                     key={f.id}
@@ -1293,9 +1293,9 @@ function DivisionRow({
                                             </span>
                                             <input
                                                 type="number"
-                                                min={1}
+                                                min={0}
                                                 max={100}
-                                                step="1"
+                                                step="0.01"
                                                 value={f.memberDiscountPercent}
                                                 onChange={(e) =>
                                                     onUpdateFee(fi, {

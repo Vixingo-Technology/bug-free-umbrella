@@ -77,15 +77,16 @@ export default async function EventDetailPage({ params }: Props) {
     const minPrice = isPremium ? Math.min(...divisionPrices) : null;
     const maxPrice = isPremium ? Math.max(...divisionPrices) : null;
     const isMember = await currentUserIsJkaMember().catch(() => false);
+    const memberDiscountPercent = Number(e.memberDiscountPercent);
     const memberDiscountActive =
-        isPremium && isMember && e.memberDiscountPercent > 0;
+        isPremium && isMember && memberDiscountPercent > 0;
     const displayMin =
         minPrice !== null && memberDiscountActive
-            ? applyDiscount(minPrice, e.memberDiscountPercent)
+            ? applyDiscount(minPrice, memberDiscountPercent)
             : minPrice;
     const displayMax =
         maxPrice !== null && memberDiscountActive
-            ? applyDiscount(maxPrice, e.memberDiscountPercent)
+            ? applyDiscount(maxPrice, memberDiscountPercent)
             : maxPrice;
     const priceLabel =
         displayMin !== null && displayMax !== null
@@ -132,12 +133,12 @@ export default async function EventDetailPage({ params }: Props) {
                                 </span>
                                 {memberDiscountActive && (
                                     <span className="text-[10px] tracking-widest uppercase font-bold px-3 py-1 rounded-full border border-emerald-200 bg-emerald-50 text-emerald-700">
-                                        Member −{e.memberDiscountPercent}%
+                                        Member −{memberDiscountPercent}%
                                     </span>
                                 )}
-                                {!isMember && e.memberDiscountPercent > 0 && (
+                                {!isMember && memberDiscountPercent > 0 && (
                                     <span className="text-[10px] tracking-widest uppercase font-bold px-3 py-1 rounded-full border border-emerald-200 bg-emerald-50 text-emerald-700">
-                                        Members save {e.memberDiscountPercent}%
+                                        Members save {memberDiscountPercent}%
                                     </span>
                                 )}
                             </>

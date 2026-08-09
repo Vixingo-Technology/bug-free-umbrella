@@ -15,9 +15,9 @@ export type DivisionGender = "MALE" | "FEMALE" | "ANY";
 
 // A single fee inside a division. `required` fees are always billed to
 // the participant; `!required` fees are opt-in add-ons at registration.
-// `memberDiscountPercent` (0-100) is applied to this fee's amount when a
-// signed-in JKA member with an active membership registers; 0 = no
-// discount on this fee.
+// `memberDiscountPercent` (0-100, up to 2dp) is applied to this fee's
+// amount when a signed-in JKA member with an active membership registers;
+// 0 = no discount on this fee.
 export type DivisionFee = {
     id: string;
     name: string;
@@ -95,7 +95,8 @@ function parseFees(raw: unknown): DivisionFee[] {
         const discountRaw = rec.memberDiscountPercent;
         let memberDiscountPercent = 0;
         if (typeof discountRaw === "number" && Number.isFinite(discountRaw)) {
-            memberDiscountPercent = Math.max(0, Math.min(100, Math.trunc(discountRaw)));
+            const clamped = Math.max(0, Math.min(100, discountRaw));
+            memberDiscountPercent = Math.round(clamped * 100) / 100;
         }
         out.push({
             id,

@@ -598,23 +598,14 @@ export default function TournamentRegistrationForm({
                                                     {d.label}
                                                 </span>
                                                 <span className="text-sm text-zinc-700 whitespace-nowrap">
-                                                    {base > 0 ? (
-                                                        <>
-                                                            ৳
-                                                            {effective.toLocaleString()}
-                                                            {event.memberDiscountActive &&
-                                                                effective !== base && (
-                                                                    <span className="ml-2 text-zinc-400 text-xs line-through font-normal">
-                                                                        ৳
-                                                                        {base.toLocaleString()}
-                                                                    </span>
-                                                                )}
-                                                        </>
-                                                    ) : (
-                                                        <span className="text-emerald-700 text-xs uppercase tracking-widest font-bold">
-                                                            Free
-                                                        </span>
-                                                    )}
+                                                    ৳{effective.toLocaleString()}
+                                                    {base > 0 &&
+                                                        event.memberDiscountActive &&
+                                                        effective !== base && (
+                                                            <span className="ml-2 text-zinc-400 text-xs line-through font-normal">
+                                                                ৳{base.toLocaleString()}
+                                                            </span>
+                                                        )}
                                                 </span>
                                             </div>
                                             <div className="flex flex-wrap items-center gap-2 mt-1">

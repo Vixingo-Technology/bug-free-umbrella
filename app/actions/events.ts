@@ -176,10 +176,10 @@ async function parseDivisionFields(formData: FormData): Promise<DivisionInput> {
             name: f.name.trim(),
             amountBdt: Math.round(f.amountBdt * 100) / 100,
             required: f.required,
-            memberDiscountPercent: Math.max(
-                0,
-                Math.min(100, Math.trunc(f.memberDiscountPercent)),
-            ),
+            memberDiscountPercent:
+                Math.round(
+                    Math.max(0, Math.min(100, f.memberDiscountPercent)) * 100,
+                ) / 100,
         }));
         const derivedPrice =
             cleanedFees.length > 0
@@ -335,14 +335,14 @@ function parseCommonFields(
     let memberDiscountPercent = 0;
     const discountRaw = ((formData.get("memberDiscountPercent") as string) ?? "").trim();
     if (discountRaw) {
-        const d = Number.parseInt(discountRaw, 10);
+        const d = Number.parseFloat(discountRaw);
         if (!Number.isFinite(d) || d < 0 || d > 100) {
             return {
                 ok: false,
-                error: "Member discount must be a whole number between 0 and 100.",
+                error: "Member discount must be a number between 0 and 100.",
             };
         }
-        memberDiscountPercent = d;
+        memberDiscountPercent = Math.round(d * 100) / 100;
     }
 
     let multiDivisionDiscountPercent = 0;
@@ -350,15 +350,14 @@ function parseCommonFields(
         (formData.get("multiDivisionDiscountPercent") as string) ?? ""
     ).trim();
     if (multiRaw) {
-        const m = Number.parseInt(multiRaw, 10);
+        const m = Number.parseFloat(multiRaw);
         if (!Number.isFinite(m) || m < 0 || m > 100) {
             return {
                 ok: false,
-                error:
-                    "Multi-division discount must be a whole number between 0 and 100.",
+                error: "Multi-division discount must be a number between 0 and 100.",
             };
         }
-        multiDivisionDiscountPercent = m;
+        multiDivisionDiscountPercent = Math.round(m * 100) / 100;
     }
 
     let eventMinAge: number | null = null;

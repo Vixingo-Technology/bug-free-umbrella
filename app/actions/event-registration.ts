@@ -220,13 +220,13 @@ async function groupTotalFor(reg: {
     amountDue: import("@/prisma/generated/client").Prisma.Decimal | null;
     event: {
         ticketPrice: import("@/prisma/generated/client").Prisma.Decimal | null;
-        multiDivisionDiscountPercent: number;
+        multiDivisionDiscountPercent: import("@/prisma/generated/client").Prisma.Decimal;
         tournamentDetail: { customDivisions: unknown } | null;
     };
 }): Promise<{ amount: number; count: number }> {
     const eventCtx = {
         ticketPrice: reg.event.ticketPrice ? Number(reg.event.ticketPrice) : null,
-        multiDivisionDiscountPercent: reg.event.multiDivisionDiscountPercent,
+        multiDivisionDiscountPercent: Number(reg.event.multiDivisionDiscountPercent),
         customDivisions: reg.event.tournamentDetail?.customDivisions,
     };
     const isMember = reg.userId ? await isJkaMember(reg.userId) : false;
@@ -496,7 +496,7 @@ export async function registerForTournamentAction(
         if (effective > 0 && divisions.length >= 2) {
             effective = applyDiscount(
                 effective,
-                event.multiDivisionDiscountPercent,
+                Number(event.multiDivisionDiscountPercent),
             );
         }
         effective = round2(effective);
