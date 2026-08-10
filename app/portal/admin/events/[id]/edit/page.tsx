@@ -77,6 +77,8 @@ export default async function EditAdminEventPage({
             : "SEMINAR",
         maxCapacity: event.maxCapacity,
         memberDiscountPercent: Number(event.memberDiscountPercent),
+        multiDivisionDiscountType:
+            event.multiDivisionDiscountType === "FIXED" ? "FIXED" : "PERCENT",
         multiDivisionDiscountPercent: Number(event.multiDivisionDiscountPercent),
         eventMinAge: event.minAge,
         eventMinRankId: event.minRankId,

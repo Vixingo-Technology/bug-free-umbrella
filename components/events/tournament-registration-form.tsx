@@ -11,6 +11,11 @@ import {
     type DivisionFee,
     type Gender,
 } from "@/lib/tournaments/divisions";
+import {
+    applyTypedDiscount,
+    formatTypedDiscount,
+    type DiscountType,
+} from "@/lib/pricing/discount";
 import { registerForTournamentAndRedirect } from "@/app/actions/event-registration";
 
 export type EventRegistrationBeltRank = {
@@ -29,7 +34,8 @@ export type TournamentRegistrationEvent = {
     divisions: CustomDivision[];
     /** Event-wide base ticket price (BDT), added on top of division fees. */
     eventTicketPriceBdt: number | null;
-    /** % discount applied to division subtotal when 2+ divisions selected. */
+    /** Discount applied to division subtotal when 2+ divisions selected. */
+    multiDivisionDiscountType: DiscountType;
     multiDivisionDiscountPercent: number;
     registrationDeadline: string | null; // ISO
     beltRanks: EventRegistrationBeltRank[];
@@ -278,7 +284,7 @@ export default function TournamentRegistrationForm({
 
     // Discount amount saved on a single fee for the current registrant.
     function feeMemberSavings(fee: DivisionFee): number {
-        if (!event.memberDiscountActive || fee.memberDiscountPercent <= 0) {
+        if (!event.memberDiscountActive || fee.memberDiscountValue <= 0) {
             return 0;
         }
         const after = feeAmountAfterMemberDiscount(fee, true);
@@ -302,15 +308,16 @@ export default function TournamentRegistrationForm({
         }
         const multiActive =
             selected.length >= 2 && event.multiDivisionDiscountPercent > 0;
-        const multiDiscountAmount = multiActive
-            ? round2(
-                  divisionsAfterMember *
-                      (Math.min(100, event.multiDivisionDiscountPercent) / 100),
+        const divisionsAfterAll = multiActive
+            ? applyTypedDiscount(
+                  divisionsAfterMember,
+                  event.multiDivisionDiscountType,
+                  event.multiDivisionDiscountPercent,
               )
+            : round2(divisionsAfterMember);
+        const multiDiscountAmount = multiActive
+            ? round2(divisionsAfterMember - divisionsAfterAll)
             : 0;
-        const divisionsAfterAll = round2(
-            divisionsAfterMember - multiDiscountAmount,
-        );
         const ticketBase = event.eventTicketPriceBdt ?? 0;
         // Event-wide ticket has no per-fee discount — it's a flat charge.
         const ticketAfter = ticketBase;
@@ -330,6 +337,7 @@ export default function TournamentRegistrationForm({
         selectedOptionalFees,
         event.memberDiscountActive,
         event.eventTicketPriceBdt,
+        event.multiDivisionDiscountType,
         event.multiDivisionDiscountPercent,
     ]);
 
@@ -681,14 +689,13 @@ export default function TournamentRegistrationForm({
                                                                     <span className="inline-flex items-center gap-2">
                                                                         {f.name}
                                                                         {event.memberDiscountActive &&
-                                                                            f.memberDiscountPercent >
+                                                                            f.memberDiscountValue >
                                                                                 0 && (
                                                                                 <span className="text-[10px] tracking-widest uppercase font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-sm px-1.5 py-0.5">
-                                                                                    −
-                                                                                    {
-                                                                                        f.memberDiscountPercent
-                                                                                    }
-                                                                                    %
+                                                                                    {formatTypedDiscount(
+                                                                                        f.memberDiscountType,
+                                                                                        f.memberDiscountValue,
+                                                                                    )}
                                                                                 </span>
                                                                             )}
                                                                     </span>
@@ -699,7 +706,7 @@ export default function TournamentRegistrationForm({
                                                                             event.memberDiscountActive,
                                                                         ).toLocaleString()}
                                                                         {event.memberDiscountActive &&
-                                                                            f.memberDiscountPercent >
+                                                                            f.memberDiscountValue >
                                                                                 0 && (
                                                                                 <span className="ml-1.5 text-zinc-400 text-[11px] line-through">
                                                                                     ৳
@@ -740,14 +747,13 @@ export default function TournamentRegistrationForm({
                                                             />
                                                             {f.name}
                                                             {event.memberDiscountActive &&
-                                                                f.memberDiscountPercent >
+                                                                f.memberDiscountValue >
                                                                     0 && (
                                                                     <span className="text-[10px] tracking-widest uppercase font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-sm px-1.5 py-0.5">
-                                                                        −
-                                                                        {
-                                                                            f.memberDiscountPercent
-                                                                        }
-                                                                        %
+                                                                        {formatTypedDiscount(
+                                                                            f.memberDiscountType,
+                                                                            f.memberDiscountValue,
+                                                                        )}
                                                                     </span>
                                                                 )}
                                                         </span>
@@ -758,7 +764,7 @@ export default function TournamentRegistrationForm({
                                                                 event.memberDiscountActive,
                                                             ).toLocaleString()}
                                                             {event.memberDiscountActive &&
-                                                                f.memberDiscountPercent >
+                                                                f.memberDiscountValue >
                                                                     0 && (
                                                                     <span className="ml-1.5 text-zinc-400 text-[11px] line-through">
                                                                         ৳
@@ -934,14 +940,13 @@ export default function TournamentRegistrationForm({
                                                     <span className="truncate">
                                                         {f.name}
                                                         {event.memberDiscountActive &&
-                                                            f.memberDiscountPercent >
+                                                            f.memberDiscountValue >
                                                                 0 && (
                                                                 <span className="ml-1.5 text-[10px] tracking-widest uppercase font-bold text-emerald-700">
-                                                                    −
-                                                                    {
-                                                                        f.memberDiscountPercent
-                                                                    }
-                                                                    %
+                                                                    {formatTypedDiscount(
+                                                                        f.memberDiscountType,
+                                                                        f.memberDiscountValue,
+                                                                    )}
                                                                 </span>
                                                             )}
                                                     </span>
@@ -952,7 +957,7 @@ export default function TournamentRegistrationForm({
                                                             event.memberDiscountActive,
                                                         ).toLocaleString()}
                                                         {event.memberDiscountActive &&
-                                                            f.memberDiscountPercent >
+                                                            f.memberDiscountValue >
                                                                 0 && (
                                                                 <span className="ml-1.5 text-zinc-400 line-through">
                                                                     ৳
@@ -973,14 +978,13 @@ export default function TournamentRegistrationForm({
                                                             add-on
                                                         </span>
                                                         {event.memberDiscountActive &&
-                                                            f.memberDiscountPercent >
+                                                            f.memberDiscountValue >
                                                                 0 && (
                                                                 <span className="ml-1.5 text-[10px] tracking-widest uppercase font-bold text-emerald-700">
-                                                                    −
-                                                                    {
-                                                                        f.memberDiscountPercent
-                                                                    }
-                                                                    %
+                                                                    {formatTypedDiscount(
+                                                                        f.memberDiscountType,
+                                                                        f.memberDiscountValue,
+                                                                    )}
                                                                 </span>
                                                             )}
                                                     </span>
@@ -991,7 +995,7 @@ export default function TournamentRegistrationForm({
                                                             event.memberDiscountActive,
                                                         ).toLocaleString()}
                                                         {event.memberDiscountActive &&
-                                                            f.memberDiscountPercent >
+                                                            f.memberDiscountValue >
                                                                 0 && (
                                                                 <span className="ml-1.5 text-zinc-400 line-through">
                                                                     ৳
@@ -1047,11 +1051,12 @@ export default function TournamentRegistrationForm({
                                 totals.multiDiscountAmount > 0 && (
                                     <div className="flex items-center justify-between text-emerald-700">
                                         <span>
-                                            Multi-division discount (−
-                                            {
-                                                event.multiDivisionDiscountPercent
-                                            }
-                                            %)
+                                            Multi-division discount (
+                                            {formatTypedDiscount(
+                                                event.multiDivisionDiscountType,
+                                                event.multiDivisionDiscountPercent,
+                                            )}
+                                            )
                                         </span>
                                         <span>
                                             −৳

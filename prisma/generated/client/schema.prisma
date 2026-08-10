@@ -797,9 +797,13 @@ model Event {
   // signed-in JKA members with an ACTIVE membership. Zero = no discount.
   memberDiscountPercent Decimal @default(0) @map("member_discount_percent") @db.Decimal(5, 2)
 
-  // Optional discount % (0–100, 2dp) applied when a participant selects 2
-  // or more divisions in this event. Zero = no multi-division discount.
-  multiDivisionDiscountPercent Decimal @default(0) @map("multi_division_discount_percent") @db.Decimal(5, 2)
+  // Optional discount applied when a participant selects 2 or more
+  // divisions in this event. `multiDivisionDiscountType` = "PERCENT" reads
+  // the value as a 0–100 percentage; "FIXED" reads it as a flat BDT
+  // amount subtracted from the division subtotal. Zero value = no
+  // multi-division discount regardless of type.
+  multiDivisionDiscountType    String  @default("PERCENT") @map("multi_division_discount_type")
+  multiDivisionDiscountPercent Decimal @default(0) @map("multi_division_discount_percent") @db.Decimal(10, 2)
 
   // Optional participation gates.
   minAge          Int?                 @map("min_age")

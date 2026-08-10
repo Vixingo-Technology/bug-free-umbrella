@@ -29626,6 +29626,7 @@ export namespace Prisma {
     isPremium: boolean | null
     ticketPrice: Decimal | null
     memberDiscountPercent: Decimal | null
+    multiDivisionDiscountType: string | null
     multiDivisionDiscountPercent: Decimal | null
     minAge: number | null
     minRankId: string | null
@@ -29651,6 +29652,7 @@ export namespace Prisma {
     isPremium: boolean | null
     ticketPrice: Decimal | null
     memberDiscountPercent: Decimal | null
+    multiDivisionDiscountType: string | null
     multiDivisionDiscountPercent: Decimal | null
     minAge: number | null
     minRankId: string | null
@@ -29676,6 +29678,7 @@ export namespace Prisma {
     isPremium: number
     ticketPrice: number
     memberDiscountPercent: number
+    multiDivisionDiscountType: number
     multiDivisionDiscountPercent: number
     minAge: number
     minRankId: number
@@ -29719,6 +29722,7 @@ export namespace Prisma {
     isPremium?: true
     ticketPrice?: true
     memberDiscountPercent?: true
+    multiDivisionDiscountType?: true
     multiDivisionDiscountPercent?: true
     minAge?: true
     minRankId?: true
@@ -29744,6 +29748,7 @@ export namespace Prisma {
     isPremium?: true
     ticketPrice?: true
     memberDiscountPercent?: true
+    multiDivisionDiscountType?: true
     multiDivisionDiscountPercent?: true
     minAge?: true
     minRankId?: true
@@ -29769,6 +29774,7 @@ export namespace Prisma {
     isPremium?: true
     ticketPrice?: true
     memberDiscountPercent?: true
+    multiDivisionDiscountType?: true
     multiDivisionDiscountPercent?: true
     minAge?: true
     minRankId?: true
@@ -29881,6 +29887,7 @@ export namespace Prisma {
     isPremium: boolean
     ticketPrice: Decimal | null
     memberDiscountPercent: Decimal
+    multiDivisionDiscountType: string
     multiDivisionDiscountPercent: Decimal
     minAge: number | null
     minRankId: string | null
@@ -29925,6 +29932,7 @@ export namespace Prisma {
     isPremium?: boolean
     ticketPrice?: boolean
     memberDiscountPercent?: boolean
+    multiDivisionDiscountType?: boolean
     multiDivisionDiscountPercent?: boolean
     minAge?: boolean
     minRankId?: boolean
@@ -29956,6 +29964,7 @@ export namespace Prisma {
     isPremium?: boolean
     ticketPrice?: boolean
     memberDiscountPercent?: boolean
+    multiDivisionDiscountType?: boolean
     multiDivisionDiscountPercent?: boolean
     minAge?: boolean
     minRankId?: boolean
@@ -29984,6 +29993,7 @@ export namespace Prisma {
     isPremium?: boolean
     ticketPrice?: boolean
     memberDiscountPercent?: boolean
+    multiDivisionDiscountType?: boolean
     multiDivisionDiscountPercent?: boolean
     minAge?: boolean
     minRankId?: boolean
@@ -30012,6 +30022,7 @@ export namespace Prisma {
     isPremium?: boolean
     ticketPrice?: boolean
     memberDiscountPercent?: boolean
+    multiDivisionDiscountType?: boolean
     multiDivisionDiscountPercent?: boolean
     minAge?: boolean
     minRankId?: boolean
@@ -30022,7 +30033,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type EventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "eventDate" | "location" | "imageUrl" | "isPublished" | "maxCapacity" | "category" | "attachmentUrl" | "attachmentType" | "isPremium" | "ticketPrice" | "memberDiscountPercent" | "multiDivisionDiscountPercent" | "minAge" | "minRankId" | "participantType" | "postedById" | "dojoId" | "createdAt" | "updatedAt", ExtArgs["result"]["event"]>
+  export type EventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "eventDate" | "location" | "imageUrl" | "isPublished" | "maxCapacity" | "category" | "attachmentUrl" | "attachmentType" | "isPremium" | "ticketPrice" | "memberDiscountPercent" | "multiDivisionDiscountType" | "multiDivisionDiscountPercent" | "minAge" | "minRankId" | "participantType" | "postedById" | "dojoId" | "createdAt" | "updatedAt", ExtArgs["result"]["event"]>
   export type EventInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     registrations?: boolean | Event$registrationsArgs<ExtArgs>
     postedBy?: boolean | Event$postedByArgs<ExtArgs>
@@ -30066,6 +30077,7 @@ export namespace Prisma {
       isPremium: boolean
       ticketPrice: Prisma.Decimal | null
       memberDiscountPercent: Prisma.Decimal
+      multiDivisionDiscountType: string
       multiDivisionDiscountPercent: Prisma.Decimal
       minAge: number | null
       minRankId: string | null
@@ -30516,6 +30528,7 @@ export namespace Prisma {
     readonly isPremium: FieldRef<"Event", 'Boolean'>
     readonly ticketPrice: FieldRef<"Event", 'Decimal'>
     readonly memberDiscountPercent: FieldRef<"Event", 'Decimal'>
+    readonly multiDivisionDiscountType: FieldRef<"Event", 'String'>
     readonly multiDivisionDiscountPercent: FieldRef<"Event", 'Decimal'>
     readonly minAge: FieldRef<"Event", 'Int'>
     readonly minRankId: FieldRef<"Event", 'String'>
@@ -58848,6 +58861,7 @@ export namespace Prisma {
     isPremium: 'isPremium',
     ticketPrice: 'ticketPrice',
     memberDiscountPercent: 'memberDiscountPercent',
+    multiDivisionDiscountType: 'multiDivisionDiscountType',
     multiDivisionDiscountPercent: 'multiDivisionDiscountPercent',
     minAge: 'minAge',
     minRankId: 'minRankId',
@@ -61497,6 +61511,7 @@ export namespace Prisma {
     isPremium?: BoolFilter<"Event"> | boolean
     ticketPrice?: DecimalNullableFilter<"Event"> | Decimal | DecimalJsLike | number | string | null
     memberDiscountPercent?: DecimalFilter<"Event"> | Decimal | DecimalJsLike | number | string
+    multiDivisionDiscountType?: StringFilter<"Event"> | string
     multiDivisionDiscountPercent?: DecimalFilter<"Event"> | Decimal | DecimalJsLike | number | string
     minAge?: IntNullableFilter<"Event"> | number | null
     minRankId?: UuidNullableFilter<"Event"> | string | null
@@ -61527,6 +61542,7 @@ export namespace Prisma {
     isPremium?: SortOrder
     ticketPrice?: SortOrderInput | SortOrder
     memberDiscountPercent?: SortOrder
+    multiDivisionDiscountType?: SortOrder
     multiDivisionDiscountPercent?: SortOrder
     minAge?: SortOrderInput | SortOrder
     minRankId?: SortOrderInput | SortOrder
@@ -61560,6 +61576,7 @@ export namespace Prisma {
     isPremium?: BoolFilter<"Event"> | boolean
     ticketPrice?: DecimalNullableFilter<"Event"> | Decimal | DecimalJsLike | number | string | null
     memberDiscountPercent?: DecimalFilter<"Event"> | Decimal | DecimalJsLike | number | string
+    multiDivisionDiscountType?: StringFilter<"Event"> | string
     multiDivisionDiscountPercent?: DecimalFilter<"Event"> | Decimal | DecimalJsLike | number | string
     minAge?: IntNullableFilter<"Event"> | number | null
     minRankId?: UuidNullableFilter<"Event"> | string | null
@@ -61590,6 +61607,7 @@ export namespace Prisma {
     isPremium?: SortOrder
     ticketPrice?: SortOrderInput | SortOrder
     memberDiscountPercent?: SortOrder
+    multiDivisionDiscountType?: SortOrder
     multiDivisionDiscountPercent?: SortOrder
     minAge?: SortOrderInput | SortOrder
     minRankId?: SortOrderInput | SortOrder
@@ -61623,6 +61641,7 @@ export namespace Prisma {
     isPremium?: BoolWithAggregatesFilter<"Event"> | boolean
     ticketPrice?: DecimalNullableWithAggregatesFilter<"Event"> | Decimal | DecimalJsLike | number | string | null
     memberDiscountPercent?: DecimalWithAggregatesFilter<"Event"> | Decimal | DecimalJsLike | number | string
+    multiDivisionDiscountType?: StringWithAggregatesFilter<"Event"> | string
     multiDivisionDiscountPercent?: DecimalWithAggregatesFilter<"Event"> | Decimal | DecimalJsLike | number | string
     minAge?: IntNullableWithAggregatesFilter<"Event"> | number | null
     minRankId?: UuidNullableWithAggregatesFilter<"Event"> | string | null
@@ -65810,6 +65829,7 @@ export namespace Prisma {
     isPremium?: boolean
     ticketPrice?: Decimal | DecimalJsLike | number | string | null
     memberDiscountPercent?: Decimal | DecimalJsLike | number | string
+    multiDivisionDiscountType?: string
     multiDivisionDiscountPercent?: Decimal | DecimalJsLike | number | string
     minAge?: number | null
     participantType?: $Enums.EventParticipantType
@@ -65837,6 +65857,7 @@ export namespace Prisma {
     isPremium?: boolean
     ticketPrice?: Decimal | DecimalJsLike | number | string | null
     memberDiscountPercent?: Decimal | DecimalJsLike | number | string
+    multiDivisionDiscountType?: string
     multiDivisionDiscountPercent?: Decimal | DecimalJsLike | number | string
     minAge?: number | null
     minRankId?: string | null
@@ -65864,6 +65885,7 @@ export namespace Prisma {
     isPremium?: BoolFieldUpdateOperationsInput | boolean
     ticketPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     memberDiscountPercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    multiDivisionDiscountType?: StringFieldUpdateOperationsInput | string
     multiDivisionDiscountPercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     minAge?: NullableIntFieldUpdateOperationsInput | number | null
     participantType?: EnumEventParticipantTypeFieldUpdateOperationsInput | $Enums.EventParticipantType
@@ -65891,6 +65913,7 @@ export namespace Prisma {
     isPremium?: BoolFieldUpdateOperationsInput | boolean
     ticketPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     memberDiscountPercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    multiDivisionDiscountType?: StringFieldUpdateOperationsInput | string
     multiDivisionDiscountPercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     minAge?: NullableIntFieldUpdateOperationsInput | number | null
     minRankId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -65918,6 +65941,7 @@ export namespace Prisma {
     isPremium?: boolean
     ticketPrice?: Decimal | DecimalJsLike | number | string | null
     memberDiscountPercent?: Decimal | DecimalJsLike | number | string
+    multiDivisionDiscountType?: string
     multiDivisionDiscountPercent?: Decimal | DecimalJsLike | number | string
     minAge?: number | null
     minRankId?: string | null
@@ -65943,6 +65967,7 @@ export namespace Prisma {
     isPremium?: BoolFieldUpdateOperationsInput | boolean
     ticketPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     memberDiscountPercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    multiDivisionDiscountType?: StringFieldUpdateOperationsInput | string
     multiDivisionDiscountPercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     minAge?: NullableIntFieldUpdateOperationsInput | number | null
     participantType?: EnumEventParticipantTypeFieldUpdateOperationsInput | $Enums.EventParticipantType
@@ -65965,6 +65990,7 @@ export namespace Prisma {
     isPremium?: BoolFieldUpdateOperationsInput | boolean
     ticketPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     memberDiscountPercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    multiDivisionDiscountType?: StringFieldUpdateOperationsInput | string
     multiDivisionDiscountPercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     minAge?: NullableIntFieldUpdateOperationsInput | number | null
     minRankId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -70108,6 +70134,7 @@ export namespace Prisma {
     isPremium?: SortOrder
     ticketPrice?: SortOrder
     memberDiscountPercent?: SortOrder
+    multiDivisionDiscountType?: SortOrder
     multiDivisionDiscountPercent?: SortOrder
     minAge?: SortOrder
     minRankId?: SortOrder
@@ -70141,6 +70168,7 @@ export namespace Prisma {
     isPremium?: SortOrder
     ticketPrice?: SortOrder
     memberDiscountPercent?: SortOrder
+    multiDivisionDiscountType?: SortOrder
     multiDivisionDiscountPercent?: SortOrder
     minAge?: SortOrder
     minRankId?: SortOrder
@@ -70166,6 +70194,7 @@ export namespace Prisma {
     isPremium?: SortOrder
     ticketPrice?: SortOrder
     memberDiscountPercent?: SortOrder
+    multiDivisionDiscountType?: SortOrder
     multiDivisionDiscountPercent?: SortOrder
     minAge?: SortOrder
     minRankId?: SortOrder
@@ -78273,6 +78302,7 @@ export namespace Prisma {
     isPremium?: boolean
     ticketPrice?: Decimal | DecimalJsLike | number | string | null
     memberDiscountPercent?: Decimal | DecimalJsLike | number | string
+    multiDivisionDiscountType?: string
     multiDivisionDiscountPercent?: Decimal | DecimalJsLike | number | string
     minAge?: number | null
     participantType?: $Enums.EventParticipantType
@@ -78299,6 +78329,7 @@ export namespace Prisma {
     isPremium?: boolean
     ticketPrice?: Decimal | DecimalJsLike | number | string | null
     memberDiscountPercent?: Decimal | DecimalJsLike | number | string
+    multiDivisionDiscountType?: string
     multiDivisionDiscountPercent?: Decimal | DecimalJsLike | number | string
     minAge?: number | null
     minRankId?: string | null
@@ -79393,6 +79424,7 @@ export namespace Prisma {
     isPremium?: BoolFilter<"Event"> | boolean
     ticketPrice?: DecimalNullableFilter<"Event"> | Decimal | DecimalJsLike | number | string | null
     memberDiscountPercent?: DecimalFilter<"Event"> | Decimal | DecimalJsLike | number | string
+    multiDivisionDiscountType?: StringFilter<"Event"> | string
     multiDivisionDiscountPercent?: DecimalFilter<"Event"> | Decimal | DecimalJsLike | number | string
     minAge?: IntNullableFilter<"Event"> | number | null
     minRankId?: UuidNullableFilter<"Event"> | string | null
@@ -82211,6 +82243,7 @@ export namespace Prisma {
     isPremium?: boolean
     ticketPrice?: Decimal | DecimalJsLike | number | string | null
     memberDiscountPercent?: Decimal | DecimalJsLike | number | string
+    multiDivisionDiscountType?: string
     multiDivisionDiscountPercent?: Decimal | DecimalJsLike | number | string
     minAge?: number | null
     participantType?: $Enums.EventParticipantType
@@ -82237,6 +82270,7 @@ export namespace Prisma {
     isPremium?: boolean
     ticketPrice?: Decimal | DecimalJsLike | number | string | null
     memberDiscountPercent?: Decimal | DecimalJsLike | number | string
+    multiDivisionDiscountType?: string
     multiDivisionDiscountPercent?: Decimal | DecimalJsLike | number | string
     minAge?: number | null
     participantType?: $Enums.EventParticipantType
@@ -82737,6 +82771,7 @@ export namespace Prisma {
     isPremium?: boolean
     ticketPrice?: Decimal | DecimalJsLike | number | string | null
     memberDiscountPercent?: Decimal | DecimalJsLike | number | string
+    multiDivisionDiscountType?: string
     multiDivisionDiscountPercent?: Decimal | DecimalJsLike | number | string
     minAge?: number | null
     participantType?: $Enums.EventParticipantType
@@ -82763,6 +82798,7 @@ export namespace Prisma {
     isPremium?: boolean
     ticketPrice?: Decimal | DecimalJsLike | number | string | null
     memberDiscountPercent?: Decimal | DecimalJsLike | number | string
+    multiDivisionDiscountType?: string
     multiDivisionDiscountPercent?: Decimal | DecimalJsLike | number | string
     minAge?: number | null
     minRankId?: string | null
@@ -85885,6 +85921,7 @@ export namespace Prisma {
     isPremium?: boolean
     ticketPrice?: Decimal | DecimalJsLike | number | string | null
     memberDiscountPercent?: Decimal | DecimalJsLike | number | string
+    multiDivisionDiscountType?: string
     multiDivisionDiscountPercent?: Decimal | DecimalJsLike | number | string
     minAge?: number | null
     participantType?: $Enums.EventParticipantType
@@ -85911,6 +85948,7 @@ export namespace Prisma {
     isPremium?: boolean
     ticketPrice?: Decimal | DecimalJsLike | number | string | null
     memberDiscountPercent?: Decimal | DecimalJsLike | number | string
+    multiDivisionDiscountType?: string
     multiDivisionDiscountPercent?: Decimal | DecimalJsLike | number | string
     minAge?: number | null
     minRankId?: string | null
@@ -85953,6 +85991,7 @@ export namespace Prisma {
     isPremium?: BoolFieldUpdateOperationsInput | boolean
     ticketPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     memberDiscountPercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    multiDivisionDiscountType?: StringFieldUpdateOperationsInput | string
     multiDivisionDiscountPercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     minAge?: NullableIntFieldUpdateOperationsInput | number | null
     participantType?: EnumEventParticipantTypeFieldUpdateOperationsInput | $Enums.EventParticipantType
@@ -85979,6 +86018,7 @@ export namespace Prisma {
     isPremium?: BoolFieldUpdateOperationsInput | boolean
     ticketPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     memberDiscountPercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    multiDivisionDiscountType?: StringFieldUpdateOperationsInput | string
     multiDivisionDiscountPercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     minAge?: NullableIntFieldUpdateOperationsInput | number | null
     minRankId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -86517,6 +86557,7 @@ export namespace Prisma {
     isPremium?: boolean
     ticketPrice?: Decimal | DecimalJsLike | number | string | null
     memberDiscountPercent?: Decimal | DecimalJsLike | number | string
+    multiDivisionDiscountType?: string
     multiDivisionDiscountPercent?: Decimal | DecimalJsLike | number | string
     minAge?: number | null
     participantType?: $Enums.EventParticipantType
@@ -86543,6 +86584,7 @@ export namespace Prisma {
     isPremium?: boolean
     ticketPrice?: Decimal | DecimalJsLike | number | string | null
     memberDiscountPercent?: Decimal | DecimalJsLike | number | string
+    multiDivisionDiscountType?: string
     multiDivisionDiscountPercent?: Decimal | DecimalJsLike | number | string
     minAge?: number | null
     minRankId?: string | null
@@ -86797,6 +86839,7 @@ export namespace Prisma {
     isPremium?: BoolFieldUpdateOperationsInput | boolean
     ticketPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     memberDiscountPercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    multiDivisionDiscountType?: StringFieldUpdateOperationsInput | string
     multiDivisionDiscountPercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     minAge?: NullableIntFieldUpdateOperationsInput | number | null
     participantType?: EnumEventParticipantTypeFieldUpdateOperationsInput | $Enums.EventParticipantType
@@ -86823,6 +86866,7 @@ export namespace Prisma {
     isPremium?: BoolFieldUpdateOperationsInput | boolean
     ticketPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     memberDiscountPercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    multiDivisionDiscountType?: StringFieldUpdateOperationsInput | string
     multiDivisionDiscountPercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     minAge?: NullableIntFieldUpdateOperationsInput | number | null
     minRankId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -94795,6 +94839,7 @@ export namespace Prisma {
     isPremium?: boolean
     ticketPrice?: Decimal | DecimalJsLike | number | string | null
     memberDiscountPercent?: Decimal | DecimalJsLike | number | string
+    multiDivisionDiscountType?: string
     multiDivisionDiscountPercent?: Decimal | DecimalJsLike | number | string
     minAge?: number | null
     minRankId?: string | null
@@ -95400,6 +95445,7 @@ export namespace Prisma {
     isPremium?: BoolFieldUpdateOperationsInput | boolean
     ticketPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     memberDiscountPercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    multiDivisionDiscountType?: StringFieldUpdateOperationsInput | string
     multiDivisionDiscountPercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     minAge?: NullableIntFieldUpdateOperationsInput | number | null
     participantType?: EnumEventParticipantTypeFieldUpdateOperationsInput | $Enums.EventParticipantType
@@ -95426,6 +95472,7 @@ export namespace Prisma {
     isPremium?: BoolFieldUpdateOperationsInput | boolean
     ticketPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     memberDiscountPercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    multiDivisionDiscountType?: StringFieldUpdateOperationsInput | string
     multiDivisionDiscountPercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     minAge?: NullableIntFieldUpdateOperationsInput | number | null
     minRankId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -95452,6 +95499,7 @@ export namespace Prisma {
     isPremium?: BoolFieldUpdateOperationsInput | boolean
     ticketPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     memberDiscountPercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    multiDivisionDiscountType?: StringFieldUpdateOperationsInput | string
     multiDivisionDiscountPercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     minAge?: NullableIntFieldUpdateOperationsInput | number | null
     minRankId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -96771,6 +96819,7 @@ export namespace Prisma {
     isPremium?: boolean
     ticketPrice?: Decimal | DecimalJsLike | number | string | null
     memberDiscountPercent?: Decimal | DecimalJsLike | number | string
+    multiDivisionDiscountType?: string
     multiDivisionDiscountPercent?: Decimal | DecimalJsLike | number | string
     minAge?: number | null
     participantType?: $Enums.EventParticipantType
@@ -96989,6 +97038,7 @@ export namespace Prisma {
     isPremium?: BoolFieldUpdateOperationsInput | boolean
     ticketPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     memberDiscountPercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    multiDivisionDiscountType?: StringFieldUpdateOperationsInput | string
     multiDivisionDiscountPercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     minAge?: NullableIntFieldUpdateOperationsInput | number | null
     participantType?: EnumEventParticipantTypeFieldUpdateOperationsInput | $Enums.EventParticipantType
@@ -97015,6 +97065,7 @@ export namespace Prisma {
     isPremium?: BoolFieldUpdateOperationsInput | boolean
     ticketPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     memberDiscountPercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    multiDivisionDiscountType?: StringFieldUpdateOperationsInput | string
     multiDivisionDiscountPercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     minAge?: NullableIntFieldUpdateOperationsInput | number | null
     participantType?: EnumEventParticipantTypeFieldUpdateOperationsInput | $Enums.EventParticipantType
@@ -97041,6 +97092,7 @@ export namespace Prisma {
     isPremium?: BoolFieldUpdateOperationsInput | boolean
     ticketPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     memberDiscountPercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    multiDivisionDiscountType?: StringFieldUpdateOperationsInput | string
     multiDivisionDiscountPercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     minAge?: NullableIntFieldUpdateOperationsInput | number | null
     participantType?: EnumEventParticipantTypeFieldUpdateOperationsInput | $Enums.EventParticipantType
@@ -97167,6 +97219,7 @@ export namespace Prisma {
     isPremium?: boolean
     ticketPrice?: Decimal | DecimalJsLike | number | string | null
     memberDiscountPercent?: Decimal | DecimalJsLike | number | string
+    multiDivisionDiscountType?: string
     multiDivisionDiscountPercent?: Decimal | DecimalJsLike | number | string
     minAge?: number | null
     minRankId?: string | null
@@ -97681,6 +97734,7 @@ export namespace Prisma {
     isPremium?: BoolFieldUpdateOperationsInput | boolean
     ticketPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     memberDiscountPercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    multiDivisionDiscountType?: StringFieldUpdateOperationsInput | string
     multiDivisionDiscountPercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     minAge?: NullableIntFieldUpdateOperationsInput | number | null
     participantType?: EnumEventParticipantTypeFieldUpdateOperationsInput | $Enums.EventParticipantType
@@ -97707,6 +97761,7 @@ export namespace Prisma {
     isPremium?: BoolFieldUpdateOperationsInput | boolean
     ticketPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     memberDiscountPercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    multiDivisionDiscountType?: StringFieldUpdateOperationsInput | string
     multiDivisionDiscountPercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     minAge?: NullableIntFieldUpdateOperationsInput | number | null
     minRankId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -97733,6 +97788,7 @@ export namespace Prisma {
     isPremium?: BoolFieldUpdateOperationsInput | boolean
     ticketPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     memberDiscountPercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    multiDivisionDiscountType?: StringFieldUpdateOperationsInput | string
     multiDivisionDiscountPercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     minAge?: NullableIntFieldUpdateOperationsInput | number | null
     minRankId?: NullableStringFieldUpdateOperationsInput | string | null

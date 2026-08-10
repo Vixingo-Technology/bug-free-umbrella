@@ -4,7 +4,10 @@ import {
     resolveDivision,
     feeAmountAfterMemberDiscount,
 } from "@/lib/tournaments/divisions";
-import { applyDiscount } from "@/lib/auth/is-jka-member";
+import {
+    applyTypedDiscount,
+    type DiscountType,
+} from "@/lib/pricing/discount";
 
 // Snapshot rows written on register: [{ id, name, amountBdt }]. The id
 // matches a DivisionFee.id and lets us re-derive which optional fees the
@@ -31,6 +34,7 @@ const round2 = (n: number) => Math.round(n * 100) / 100;
 
 export type EventPricingContext = {
     ticketPrice: number | null;
+    multiDivisionDiscountType: DiscountType;
     multiDivisionDiscountPercent: number;
     customDivisions: unknown;
 };
@@ -80,16 +84,17 @@ export function computeGroupPayable(
         } else {
             effective = division.priceBdt ?? 0;
         }
-
-        if (effective > 0 && includedRows.length >= 2) {
-            effective = applyDiscount(
-                effective,
-                event.multiDivisionDiscountPercent,
-            );
-        }
         divisionsSubtotal += round2(effective);
     }
     divisionsSubtotal = round2(divisionsSubtotal);
+
+    if (divisionsSubtotal > 0 && includedRows.length >= 2) {
+        divisionsSubtotal = applyTypedDiscount(
+            divisionsSubtotal,
+            event.multiDivisionDiscountType,
+            event.multiDivisionDiscountPercent,
+        );
+    }
 
     const ticketAmount =
         event.ticketPrice !== null && event.ticketPrice > 0

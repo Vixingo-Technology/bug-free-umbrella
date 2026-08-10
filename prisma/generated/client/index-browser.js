@@ -378,6 +378,7 @@ exports.Prisma.EventScalarFieldEnum = {
   isPremium: 'isPremium',
   ticketPrice: 'ticketPrice',
   memberDiscountPercent: 'memberDiscountPercent',
+  multiDivisionDiscountType: 'multiDivisionDiscountType',
   multiDivisionDiscountPercent: 'multiDivisionDiscountPercent',
   minAge: 'minAge',
   minRankId: 'minRankId',

@@ -47,6 +47,7 @@ export default async function RegisterPage({ params, searchParams }: Props) {
                 eventDate: true,
                 location: true,
                 maxCapacity: true,
+                multiDivisionDiscountType: true,
                 multiDivisionDiscountPercent: true,
                 ticketPrice: true,
                 tournamentDetail: true,
@@ -130,6 +131,8 @@ export default async function RegisterPage({ params, searchParams }: Props) {
         memberDiscountActive,
         divisions,
         eventTicketPriceBdt: event.ticketPrice ? Number(event.ticketPrice) : null,
+        multiDivisionDiscountType:
+            event.multiDivisionDiscountType === "FIXED" ? "FIXED" : "PERCENT",
         multiDivisionDiscountPercent: Number(event.multiDivisionDiscountPercent),
         registrationDeadline: event.tournamentDetail?.registrationDeadline
             ? event.tournamentDetail.registrationDeadline.toISOString()

@@ -26,6 +26,7 @@ import {
     type DivisionGender,
     type TournamentEventType,
 } from "@/lib/tournaments/divisions";
+import type { DiscountType } from "@/lib/pricing/discount";
 import { WKF_PRESETS, WKF_GROUPS, wkfPresetToDivision } from "@/lib/tournaments/wkf-presets";
 
 const CATEGORIES = [
@@ -52,6 +53,7 @@ export type EventFormInitialValues = {
     category: string;
     maxCapacity: number | null;
     memberDiscountPercent: number;
+    multiDivisionDiscountType: DiscountType;
     multiDivisionDiscountPercent: number;
     eventMinAge: number | null;
     eventMinRankId: string | null;
@@ -72,9 +74,11 @@ type FeeDraft = {
     name: string;
     amountBdt: string;
     required: boolean;
-    // Per-fee JKA member discount percentage (0-100). Empty string when
-    // the admin has cleared the input; treated as 0 on save.
-    memberDiscountPercent: string;
+    // Per-fee JKA member discount. `Type` decides whether `Value` is a
+    // 0–100 percentage or a flat BDT amount. Empty value = no discount
+    // regardless of type.
+    memberDiscountType: DiscountType;
+    memberDiscountValue: string;
 };
 
 type DivisionDraft = {
@@ -105,9 +109,10 @@ function toDraft(d: CustomDivision): DivisionDraft {
                   name: f.name,
                   amountBdt: String(f.amountBdt),
                   required: f.required,
-                  memberDiscountPercent:
-                      f.memberDiscountPercent > 0
-                          ? String(f.memberDiscountPercent)
+                  memberDiscountType: f.memberDiscountType,
+                  memberDiscountValue:
+                      f.memberDiscountValue > 0
+                          ? String(f.memberDiscountValue)
                           : "",
               }))
             : d.priceBdt !== null && d.priceBdt > 0
@@ -117,7 +122,8 @@ function toDraft(d: CustomDivision): DivisionDraft {
                         name: "Entry fee",
                         amountBdt: String(d.priceBdt),
                         required: true,
-                        memberDiscountPercent: "",
+                        memberDiscountType: "PERCENT",
+                        memberDiscountValue: "",
                     },
                 ]
               : [];
@@ -155,18 +161,22 @@ function draftToDivision(d: DivisionDraft): CustomDivision {
     const fees: DivisionFee[] = d.fees
         .filter((f) => f.name.trim())
         .map((f) => {
-            const pct = f.memberDiscountPercent.trim()
-                ? Number.parseFloat(f.memberDiscountPercent)
+            const raw = f.memberDiscountValue.trim()
+                ? Number.parseFloat(f.memberDiscountValue)
                 : NaN;
-            const memberDiscountPercent = Number.isFinite(pct)
-                ? Math.round(Math.max(0, Math.min(100, pct)) * 100) / 100
+            const clamped = Number.isFinite(raw)
+                ? f.memberDiscountType === "PERCENT"
+                    ? Math.max(0, Math.min(100, raw))
+                    : Math.max(0, raw)
                 : 0;
+            const memberDiscountValue = Math.round(clamped * 100) / 100;
             return {
                 id: f.id,
                 name: f.name.trim(),
                 amountBdt: Number.parseFloat(f.amountBdt) || 0,
                 required: f.required,
-                memberDiscountPercent,
+                memberDiscountType: f.memberDiscountType,
+                memberDiscountValue,
             };
         });
     const priceBdt = fees
@@ -211,6 +221,8 @@ export default function EventForm({
     const [divisions, setDivisions] = useState<DivisionDraft[]>(() =>
         (initial?.divisions ?? []).map(toDraft),
     );
+    const [multiDivisionDiscountType, setMultiDivisionDiscountType] =
+        useState<DiscountType>(initial?.multiDivisionDiscountType ?? "PERCENT");
     const [error, setError] = useState<string | null>(null);
     const [isPending, startTransition] = useTransition();
     const [presetOpen, setPresetOpen] = useState(false);
@@ -251,7 +263,8 @@ export default function EventForm({
                         name: "Entry fee",
                         amountBdt: "",
                         required: true,
-                        memberDiscountPercent: "",
+                        memberDiscountType: "PERCENT",
+                        memberDiscountValue: "",
                     },
                 ],
             },
@@ -288,7 +301,8 @@ export default function EventForm({
                                   name: "",
                                   amountBdt: "",
                                   required: false,
-                                  memberDiscountPercent: "",
+                                  memberDiscountType: "PERCENT",
+                                  memberDiscountValue: "",
                               },
                           ],
                       }
@@ -938,23 +952,55 @@ export default function EventForm({
                     member discount.
                 </p>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    <Field label="Multi-division discount (%)">
-                        <input
-                            name="multiDivisionDiscountPercent"
-                            type="number"
-                            min={0}
-                            max={100}
-                            step="0.01"
-                            defaultValue={
-                                initial?.multiDivisionDiscountPercent ?? 0
-                            }
-                            placeholder="0"
-                            className={inputCx}
-                        />
+                    <Field
+                        label={
+                            multiDivisionDiscountType === "FIXED"
+                                ? "Multi-division discount (৳)"
+                                : "Multi-division discount (%)"
+                        }
+                    >
+                        <div className="flex gap-2">
+                            <select
+                                value={multiDivisionDiscountType}
+                                onChange={(e) =>
+                                    setMultiDivisionDiscountType(
+                                        e.target.value === "FIXED"
+                                            ? "FIXED"
+                                            : "PERCENT",
+                                    )
+                                }
+                                className="shrink-0 basis-28 bg-zinc-50 border border-zinc-200 text-zinc-900 px-3 py-2 focus:outline-none focus:border-accent-red text-sm transition-colors rounded-sm"
+                                aria-label="Multi-division discount type"
+                            >
+                                <option value="PERCENT">% off</option>
+                                <option value="FIXED">৳ off</option>
+                            </select>
+                            <input
+                                type="hidden"
+                                name="multiDivisionDiscountType"
+                                value={multiDivisionDiscountType}
+                            />
+                            <input
+                                name="multiDivisionDiscountPercent"
+                                type="number"
+                                min={0}
+                                max={
+                                    multiDivisionDiscountType === "PERCENT"
+                                        ? 100
+                                        : undefined
+                                }
+                                step="0.01"
+                                defaultValue={
+                                    initial?.multiDivisionDiscountPercent ?? 0
+                                }
+                                placeholder="0"
+                                className="min-w-0 flex-1 bg-zinc-50 border border-zinc-200 text-zinc-900 px-3 py-2 focus:outline-none focus:border-accent-red text-sm transition-colors rounded-sm"
+                            />
+                        </div>
                         <p className="text-[11px] text-zinc-500 mt-1.5">
-                            Applied to the sum of a participant&apos;s
-                            division fees when they pick 2 or more
-                            divisions. Leave 0 to skip.
+                            {multiDivisionDiscountType === "FIXED"
+                                ? "Flat BDT off the participant's division subtotal when they pick 2 or more divisions. Leave 0 to skip."
+                                : "Percent off the participant's division subtotal when they pick 2 or more divisions. Leave 0 to skip."}
                         </p>
                     </Field>
                 </div>
@@ -1192,8 +1238,9 @@ function DivisionRow({
                     <ul className="space-y-2">
                         {draft.fees.map((f, fi) => {
                             const discountOn =
-                                f.memberDiscountPercent.trim() !== "" &&
-                                Number.parseFloat(f.memberDiscountPercent) > 0;
+                                f.memberDiscountValue.trim() !== "" &&
+                                Number.parseFloat(f.memberDiscountValue) > 0;
+                            const isFixed = f.memberDiscountType === "FIXED";
                             return (
                                 <li
                                     key={f.id}
@@ -1250,9 +1297,12 @@ function DivisionRow({
                                             type="button"
                                             onClick={() =>
                                                 onUpdateFee(fi, {
-                                                    memberDiscountPercent: discountOn
+                                                    memberDiscountValue: discountOn
                                                         ? ""
                                                         : "10",
+                                                    memberDiscountType: discountOn
+                                                        ? f.memberDiscountType
+                                                        : "PERCENT",
                                                 })
                                             }
                                             aria-label={
@@ -1283,7 +1333,7 @@ function DivisionRow({
                                         </button>
                                     </div>
                                     {discountOn && (
-                                        <div className="mt-2 flex items-center gap-2 border-t border-dashed border-zinc-200 pt-2">
+                                        <div className="mt-2 flex items-center gap-2 border-t border-dashed border-zinc-200 pt-2 flex-wrap">
                                             <Percent
                                                 size={11}
                                                 className="text-emerald-700"
@@ -1291,24 +1341,41 @@ function DivisionRow({
                                             <span className="text-[10px] tracking-widest uppercase font-bold text-emerald-700">
                                                 JKA member discount
                                             </span>
+                                            <select
+                                                value={f.memberDiscountType}
+                                                onChange={(e) =>
+                                                    onUpdateFee(fi, {
+                                                        memberDiscountType:
+                                                            e.target.value === "FIXED"
+                                                                ? "FIXED"
+                                                                : "PERCENT",
+                                                    })
+                                                }
+                                                className="bg-zinc-50 border border-zinc-200 text-zinc-900 px-2 py-1 focus:outline-none focus:border-accent-red text-sm rounded-sm"
+                                                aria-label="Discount type"
+                                            >
+                                                <option value="PERCENT">% off</option>
+                                                <option value="FIXED">৳ off</option>
+                                            </select>
                                             <input
                                                 type="number"
                                                 min={0}
-                                                max={100}
+                                                max={isFixed ? undefined : 100}
                                                 step="0.01"
-                                                value={f.memberDiscountPercent}
+                                                value={f.memberDiscountValue}
                                                 onChange={(e) =>
                                                     onUpdateFee(fi, {
-                                                        memberDiscountPercent:
+                                                        memberDiscountValue:
                                                             e.target.value,
                                                     })
                                                 }
-                                                placeholder="10"
-                                                className="w-20 bg-zinc-50 border border-zinc-200 text-zinc-900 px-2 py-1 focus:outline-none focus:border-accent-red text-sm rounded-sm"
+                                                placeholder={isFixed ? "50" : "10"}
+                                                className="w-24 bg-zinc-50 border border-zinc-200 text-zinc-900 px-2 py-1 focus:outline-none focus:border-accent-red text-sm rounded-sm"
                                             />
                                             <span className="text-[11px] text-zinc-500">
-                                                % off this fee for signed-in JKA
-                                                members.
+                                                {isFixed
+                                                    ? "BDT off this fee for signed-in JKA members."
+                                                    : "% off this fee for signed-in JKA members."}
                                             </span>
                                         </div>
                                     )}

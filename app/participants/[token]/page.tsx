@@ -204,6 +204,10 @@ export default async function ParticipationCardPage({
                   ticketPrice: registration.event.ticketPrice
                       ? Number(registration.event.ticketPrice)
                       : null,
+                  multiDivisionDiscountType:
+                      registration.event.multiDivisionDiscountType === "FIXED"
+                          ? "FIXED"
+                          : "PERCENT",
                   multiDivisionDiscountPercent: Number(
                       registration.event.multiDivisionDiscountPercent,
                   ),

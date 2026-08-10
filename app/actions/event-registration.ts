@@ -8,7 +8,11 @@ import { createClient } from "@/lib/supabase/server";
 import { emitEventRegistered } from "@/lib/n8n";
 import { initiateTicketPayment } from "@/lib/events/ticket-payment";
 import { computeGroupPayable } from "@/lib/events/pricing";
-import { applyDiscount, isJkaMember } from "@/lib/auth/is-jka-member";
+import { isJkaMember } from "@/lib/auth/is-jka-member";
+import {
+    applyTypedDiscount,
+    coerceDiscountType,
+} from "@/lib/pricing/discount";
 import { uploadImageIfPresent } from "@/lib/attachment-upload";
 import {
     ageOnDate,
@@ -72,6 +76,7 @@ export async function payForRegistrationAction(formData: FormData): Promise<void
                     id: true,
                     title: true,
                     ticketPrice: true,
+                    multiDivisionDiscountType: true,
                     multiDivisionDiscountPercent: true,
                     tournamentDetail: { select: { customDivisions: true } },
                 },
@@ -220,12 +225,14 @@ async function groupTotalFor(reg: {
     amountDue: import("@/prisma/generated/client").Prisma.Decimal | null;
     event: {
         ticketPrice: import("@/prisma/generated/client").Prisma.Decimal | null;
+        multiDivisionDiscountType: string;
         multiDivisionDiscountPercent: import("@/prisma/generated/client").Prisma.Decimal;
         tournamentDetail: { customDivisions: unknown } | null;
     };
 }): Promise<{ amount: number; count: number }> {
     const eventCtx = {
         ticketPrice: reg.event.ticketPrice ? Number(reg.event.ticketPrice) : null,
+        multiDivisionDiscountType: coerceDiscountType(reg.event.multiDivisionDiscountType),
         multiDivisionDiscountPercent: Number(reg.event.multiDivisionDiscountPercent),
         customDivisions: reg.event.tournamentDetail?.customDivisions,
     };
@@ -290,9 +297,11 @@ export async function registerForTournamentAction(
             // Event-wide base ticket, added on top of the selected division
             // fees. Null / 0 = no base ticket.
             ticketPrice: true,
-            // Optional % discount applied when the participant picks 2+
-            // divisions. Applied to the summed division fees only, not to
-            // the base ticket.
+            // Optional discount applied when the participant picks 2+
+            // divisions. `Type` decides whether the value is a % or a
+            // flat BDT amount. Applied to the summed division fees only,
+            // not to the base ticket.
+            multiDivisionDiscountType: true,
             multiDivisionDiscountPercent: true,
             dojo: { select: { name: true } },
             tournamentDetail: true,
@@ -453,18 +462,19 @@ export async function registerForTournamentAction(
     }
 
     // Compute per-division prices (required fees + chosen optional fees).
-    // The per-fee memberDiscountPercent is applied to each fee for JKA
-    // members; when 2+ divisions are selected, the event's multi-division
-    // discount is applied on top of the post-member-discount subtotal.
+    // The per-fee member discount is applied to each fee for JKA members;
+    // when 2+ divisions are selected, the event's multi-division discount
+    // is applied ONCE to the summed subtotal and pro-rated back across
+    // rows so per-row `amountDue` still adds up.
     const round2 = (n: number) => Math.round(n * 100) / 100;
-    const pricePerCode = new Map<string, number>();
+    const preDiscountPerCode = new Map<string, number>();
     // Snapshot of picked opt-in fees per division, saved on the row so the
     // participation card can show what the entrant chose.
     const optionalSnapshotPerCode = new Map<
         string,
         { id: string; name: string; amountBdt: number }[]
     >();
-    let divisionsSubtotal = 0;
+    let preDiscountSubtotal = 0;
     for (const { code, division } of divisions) {
         let effective = 0;
         const picked: { id: string; name: string; amountBdt: number }[] = [];
@@ -493,15 +503,44 @@ export async function registerForTournamentAction(
             effective = division.priceBdt ?? 0;
         }
         optionalSnapshotPerCode.set(code, picked);
-        if (effective > 0 && divisions.length >= 2) {
-            effective = applyDiscount(
-                effective,
-                Number(event.multiDivisionDiscountPercent),
-            );
-        }
         effective = round2(effective);
-        pricePerCode.set(code, effective);
-        divisionsSubtotal += effective;
+        preDiscountPerCode.set(code, effective);
+        preDiscountSubtotal += effective;
+    }
+    preDiscountSubtotal = round2(preDiscountSubtotal);
+
+    const multiDivisionType = coerceDiscountType(event.multiDivisionDiscountType);
+    const multiDivisionValue = Number(event.multiDivisionDiscountPercent);
+    let divisionsSubtotal = preDiscountSubtotal;
+    const pricePerCode = new Map<string, number>();
+    if (
+        divisions.length >= 2 &&
+        preDiscountSubtotal > 0 &&
+        multiDivisionValue > 0
+    ) {
+        divisionsSubtotal = applyTypedDiscount(
+            preDiscountSubtotal,
+            multiDivisionType,
+            multiDivisionValue,
+        );
+        // Pro-rate the discounted total across rows; put any rounding
+        // remainder on the last non-zero row so the sum matches exactly.
+        const ratio = divisionsSubtotal / preDiscountSubtotal;
+        let allocated = 0;
+        const codes = Array.from(preDiscountPerCode.keys());
+        codes.forEach((code, idx) => {
+            const orig = preDiscountPerCode.get(code) ?? 0;
+            const isLast = idx === codes.length - 1;
+            const scaled = isLast
+                ? round2(divisionsSubtotal - allocated)
+                : round2(orig * ratio);
+            pricePerCode.set(code, Math.max(0, scaled));
+            allocated = round2(allocated + scaled);
+        });
+    } else {
+        for (const [code, price] of preDiscountPerCode) {
+            pricePerCode.set(code, price);
+        }
     }
     divisionsSubtotal = round2(divisionsSubtotal);
 
@@ -787,6 +826,7 @@ export async function registerForTournamentAction(
                 event: {
                     select: {
                         ticketPrice: true,
+                        multiDivisionDiscountType: true,
                         multiDivisionDiscountPercent: true,
                         tournamentDetail: { select: { customDivisions: true } },
                     },

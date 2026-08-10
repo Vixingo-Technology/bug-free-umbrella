@@ -16,6 +16,7 @@ import {
     type CustomDivision,
     type TournamentEventType,
 } from "@/lib/tournaments/divisions";
+import { coerceDiscountType, type DiscountType } from "@/lib/pricing/discount";
 import type { EventCategory } from "@/prisma/generated/client";
 
 type ActionResult = { ok: true; id?: string } | { ok: false; error: string };
@@ -161,26 +162,34 @@ async function parseDivisionFields(formData: FormData): Promise<DivisionInput> {
                     error: `Fee "${fname}" on "${label}" must be a positive amount.`,
                 };
             }
+            if (!Number.isFinite(f.memberDiscountValue) || f.memberDiscountValue < 0) {
+                return {
+                    error: `Member discount on "${fname}" (${label}) must be a non-negative number.`,
+                };
+            }
             if (
-                !Number.isFinite(f.memberDiscountPercent) ||
-                f.memberDiscountPercent < 0 ||
-                f.memberDiscountPercent > 100
+                f.memberDiscountType === "PERCENT" &&
+                f.memberDiscountValue > 100
             ) {
                 return {
-                    error: `Member discount on "${fname}" (${label}) must be 0-100%.`,
+                    error: `Member discount % on "${fname}" (${label}) must be between 0 and 100.`,
                 };
             }
         }
-        const cleanedFees = (d.fees ?? []).map((f) => ({
-            id: f.id,
-            name: f.name.trim(),
-            amountBdt: Math.round(f.amountBdt * 100) / 100,
-            required: f.required,
-            memberDiscountPercent:
-                Math.round(
-                    Math.max(0, Math.min(100, f.memberDiscountPercent)) * 100,
-                ) / 100,
-        }));
+        const cleanedFees = (d.fees ?? []).map((f) => {
+            const clampedValue =
+                f.memberDiscountType === "PERCENT"
+                    ? Math.max(0, Math.min(100, f.memberDiscountValue))
+                    : Math.max(0, f.memberDiscountValue);
+            return {
+                id: f.id,
+                name: f.name.trim(),
+                amountBdt: Math.round(f.amountBdt * 100) / 100,
+                required: f.required,
+                memberDiscountType: f.memberDiscountType,
+                memberDiscountValue: Math.round(clampedValue * 100) / 100,
+            };
+        });
         const derivedPrice =
             cleanedFees.length > 0
                 ? sumRequiredFees(cleanedFees)
@@ -299,6 +308,7 @@ type ParsedCommon = {
     category: EventCategory;
     maxCapacity: number | null;
     memberDiscountPercent: number;
+    multiDivisionDiscountType: DiscountType;
     multiDivisionDiscountPercent: number;
     eventMinAge: number | null;
     eventMinRankId: string | null;
@@ -345,16 +355,25 @@ function parseCommonFields(
         memberDiscountPercent = Math.round(d * 100) / 100;
     }
 
+    const multiDivisionDiscountType = coerceDiscountType(
+        formData.get("multiDivisionDiscountType"),
+    );
     let multiDivisionDiscountPercent = 0;
     const multiRaw = (
         (formData.get("multiDivisionDiscountPercent") as string) ?? ""
     ).trim();
     if (multiRaw) {
         const m = Number.parseFloat(multiRaw);
-        if (!Number.isFinite(m) || m < 0 || m > 100) {
+        if (!Number.isFinite(m) || m < 0) {
             return {
                 ok: false,
-                error: "Multi-division discount must be a number between 0 and 100.",
+                error: "Multi-division discount must be a non-negative number.",
+            };
+        }
+        if (multiDivisionDiscountType === "PERCENT" && m > 100) {
+            return {
+                ok: false,
+                error: "Multi-division discount % must be between 0 and 100.",
             };
         }
         multiDivisionDiscountPercent = Math.round(m * 100) / 100;
@@ -399,6 +418,7 @@ function parseCommonFields(
             category: categoryRaw,
             maxCapacity,
             memberDiscountPercent,
+            multiDivisionDiscountType,
             multiDivisionDiscountPercent,
             eventMinAge,
             eventMinRankId,
@@ -439,6 +459,7 @@ export async function createEventAction(formData: FormData): Promise<ActionResul
         category,
         maxCapacity,
         memberDiscountPercent,
+        multiDivisionDiscountType,
         multiDivisionDiscountPercent,
         eventMinAge,
         eventMinRankId,
@@ -471,6 +492,7 @@ export async function createEventAction(formData: FormData): Promise<ActionResul
                 isPremium,
                 ticketPrice: eventTicketPrice,
                 memberDiscountPercent,
+                multiDivisionDiscountType,
                 multiDivisionDiscountPercent,
                 minAge: eventMinAge,
                 minRankId: eventMinRankId,
@@ -554,6 +576,7 @@ export async function updateEventAction(formData: FormData): Promise<ActionResul
         category,
         maxCapacity,
         memberDiscountPercent,
+        multiDivisionDiscountType,
         multiDivisionDiscountPercent,
         eventMinAge,
         eventMinRankId,
@@ -587,6 +610,7 @@ export async function updateEventAction(formData: FormData): Promise<ActionResul
                 isPremium,
                 ticketPrice: eventTicketPrice,
                 memberDiscountPercent,
+                multiDivisionDiscountType,
                 multiDivisionDiscountPercent,
                 minAge: eventMinAge,
                 minRankId: eventMinRankId,

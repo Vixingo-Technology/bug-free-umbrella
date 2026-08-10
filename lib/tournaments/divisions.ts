@@ -7,6 +7,12 @@
 // on the type for backward compatibility with older rows but is not
 // surfaced in the current UI; new divisions default to "KATA".
 
+import {
+    applyTypedDiscount,
+    coerceDiscountType,
+    type DiscountType,
+} from "@/lib/pricing/discount";
+
 export type TournamentEventType = "KATA" | "KUMITE";
 
 export type Gender = "MALE" | "FEMALE";
@@ -15,15 +21,16 @@ export type DivisionGender = "MALE" | "FEMALE" | "ANY";
 
 // A single fee inside a division. `required` fees are always billed to
 // the participant; `!required` fees are opt-in add-ons at registration.
-// `memberDiscountPercent` (0-100, up to 2dp) is applied to this fee's
+// `memberDiscount` (percent 0–100 or fixed BDT) is applied to this fee's
 // amount when a signed-in JKA member with an active membership registers;
-// 0 = no discount on this fee.
+// value 0 = no discount on this fee.
 export type DivisionFee = {
     id: string;
     name: string;
     amountBdt: number;
     required: boolean;
-    memberDiscountPercent: number;
+    memberDiscountType: DiscountType;
+    memberDiscountValue: number;
 };
 
 // A division on an event. `code` is a stable slug; `label` is the display
@@ -92,18 +99,30 @@ function parseFees(raw: unknown): DivisionFee[] {
             typeof rec.id === "string" && rec.id
                 ? rec.id
                 : Math.random().toString(36).slice(2, 10);
-        const discountRaw = rec.memberDiscountPercent;
-        let memberDiscountPercent = 0;
-        if (typeof discountRaw === "number" && Number.isFinite(discountRaw)) {
-            const clamped = Math.max(0, Math.min(100, discountRaw));
-            memberDiscountPercent = Math.round(clamped * 100) / 100;
+        // Prefer the new shape (memberDiscountType + memberDiscountValue) and
+        // fall back to the legacy memberDiscountPercent on older rows.
+        const rawValue =
+            typeof rec.memberDiscountValue === "number"
+                ? rec.memberDiscountValue
+                : typeof rec.memberDiscountPercent === "number"
+                  ? rec.memberDiscountPercent
+                  : 0;
+        const memberDiscountType = coerceDiscountType(rec.memberDiscountType);
+        let memberDiscountValue = 0;
+        if (Number.isFinite(rawValue) && rawValue > 0) {
+            const clamped =
+                memberDiscountType === "PERCENT"
+                    ? Math.max(0, Math.min(100, rawValue))
+                    : Math.max(0, rawValue);
+            memberDiscountValue = Math.round(clamped * 100) / 100;
         }
         out.push({
             id,
             name,
             amountBdt: amount < 0 ? 0 : amount,
             required: rec.required !== false,
-            memberDiscountPercent,
+            memberDiscountType,
+            memberDiscountValue,
         });
     }
     return out;
@@ -116,16 +135,18 @@ export function sumRequiredFees(fees: readonly DivisionFee[]): number {
 }
 
 // Amount billed for a single fee, applying the fee's own member discount
-// when the payer is an active JKA member. Rounded to 2dp.
+// when the payer is an active JKA member. Rounded to 2dp; never negative.
 export function feeAmountAfterMemberDiscount(
     fee: DivisionFee,
     isMember: boolean,
 ): number {
-    if (!isMember || fee.memberDiscountPercent <= 0) {
-        return Math.round(fee.amountBdt * 100) / 100;
-    }
-    const pct = Math.min(100, Math.max(0, fee.memberDiscountPercent));
-    return Math.round(fee.amountBdt * (1 - pct / 100) * 100) / 100;
+    const base = Math.round(fee.amountBdt * 100) / 100;
+    if (!isMember || fee.memberDiscountValue <= 0) return base;
+    return applyTypedDiscount(
+        base,
+        fee.memberDiscountType,
+        fee.memberDiscountValue,
+    );
 }
 
 // Base price for a division — sum of required fees when the division has
