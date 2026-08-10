@@ -3,7 +3,7 @@
 import { motion } from "motion/react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, Mail, Lock, Loader2 } from "lucide-react";
+import { ArrowLeft, User as UserIcon, Lock, Loader2 } from "lucide-react";
 import Logo from "@/assets/jka_logo.svg";
 import { loginAction } from "@/app/actions/auth";
 import { useState, useTransition } from "react";
@@ -67,14 +67,15 @@ export default function LoginPage() {
                     <form onSubmit={handleSubmit} className="space-y-6">
                         <div className="space-y-1">
                             <label className="text-xs font-bold tracking-widest uppercase text-zinc-600 block pl-1">
-                                Email Address
+                                Email or Member ID
                             </label>
                             <div className="relative">
-                                <Mail size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400" />
+                                <UserIcon size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400" />
                                 <input
-                                    type="email"
-                                    name="email"
-                                    placeholder="sensei@jka.com"
+                                    type="text"
+                                    name="identifier"
+                                    autoComplete="username"
+                                    placeholder="sensei@jka.com or JKA-BD-000001"
                                     className="w-full bg-white/50 border border-zinc-200 rounded-xl py-3 pl-12 pr-4 text-sm focus:outline-none focus:border-accent-red focus:ring-1 focus:ring-accent-red transition-all"
                                     required
                                     disabled={isPending}

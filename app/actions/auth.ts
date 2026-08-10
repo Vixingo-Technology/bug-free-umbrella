@@ -3,15 +3,29 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { provisionMemberFromSupabaseUser } from "@/lib/auth/provision-member";
+import { prisma } from "@/lib/prisma";
+import { isRegNo } from "@/lib/members/reg-no";
 
 export async function loginAction(formData: FormData) {
     const supabase = await createClient();
 
-    const email = formData.get("email") as string;
+    const identifier = ((formData.get("identifier") as string) ?? (formData.get("email") as string) ?? "").trim();
     const password = formData.get("password") as string;
 
-    if (!email || !password) {
-        return { error: "Email and password are required." };
+    if (!identifier || !password) {
+        return { error: "Email or Member ID and password are required." };
+    }
+
+    let email = identifier;
+    if (isRegNo(identifier)) {
+        const user = await prisma.user.findUnique({
+            where: { memberNumber: identifier.toUpperCase() },
+            select: { email: true },
+        });
+        if (!user?.email) {
+            return { error: "No account found for that Member ID." };
+        }
+        email = user.email;
     }
 
     const { error } = await supabase.auth.signInWithPassword({

@@ -4,7 +4,7 @@ import { useState, useTransition } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import {
     User, Phone, Mail, Shield, Loader2,
-    CheckCircle2, AlertCircle, Key, Save, FileText,
+    CheckCircle2, AlertCircle, Key, Save, FileText, IdCard,
 } from "lucide-react";
 import AvatarUploader from "@/components/portal/avatar-uploader";
 import { updateAccountAction, changePasswordAction } from "@/app/portal/account/actions";
@@ -217,16 +217,18 @@ export default function AccountClient({ user }: Props) {
                             />
                         </Field>
 
-                        {user.memberNumber && (
-                            <Field label="Member number">
-                                <input
-                                    type="text"
-                                    value={user.memberNumber}
-                                    readOnly
-                                    className="input bg-zinc-50 text-zinc-500 cursor-not-allowed"
-                                />
-                            </Field>
-                        )}
+                        <Field
+                            label="Member ID"
+                            icon={<IdCard size={14} />}
+                            hint={user.memberNumber ? "Use to log in" : undefined}
+                        >
+                            <input
+                                type="text"
+                                value={user.memberNumber ?? "Not yet assigned"}
+                                readOnly
+                                className="input bg-zinc-50 text-zinc-500 cursor-not-allowed font-mono tracking-wide"
+                            />
+                        </Field>
                     </div>
 
                     <Field
