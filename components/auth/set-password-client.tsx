@@ -12,7 +12,7 @@ export default function SetPasswordClient({
     mode = "invite",
 }: {
     email: string;
-    mode?: "invite" | "reset";
+    mode?: "invite" | "reset" | "first-login";
 }) {
     const [isPending, startTransition] = useTransition();
     const [password, setPassword] = useState("");
@@ -36,12 +36,24 @@ export default function SetPasswordClient({
         });
     }
 
-    const heading = mode === "reset" ? "Reset your password" : "Set your password";
+    const heading =
+        mode === "reset"
+            ? "Reset your password"
+            : mode === "first-login"
+              ? "Choose a new password"
+              : "Set your password";
     const subheading =
         mode === "reset"
             ? "Choose a new password for "
-            : "Welcome! Set a password for ";
-    const cta = mode === "reset" ? "Save New Password" : "Activate Account";
+            : mode === "first-login"
+              ? "Replace the temporary password for "
+              : "Welcome! Set a password for ";
+    const cta =
+        mode === "reset"
+            ? "Save New Password"
+            : mode === "first-login"
+              ? "Save & Continue"
+              : "Activate Account";
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-[#fafafa] px-4">
@@ -72,16 +84,22 @@ export default function SetPasswordClient({
                             <p className="text-sm text-zinc-500 mt-1">
                                 {subheading}
                                 <span className="font-semibold text-zinc-700">{email}</span>
-                                {mode === "reset" ? "." : " to finish activating your account."}
+                                {mode === "reset"
+                                    ? "."
+                                    : mode === "first-login"
+                                      ? " so you can access your portal."
+                                      : " to finish activating your account."}
                             </p>
                         </div>
                     </div>
 
                     <form onSubmit={submit} className="space-y-4">
                         <div>
-                            <label className="block text-xs font-bold tracking-widest uppercase text-zinc-500 mb-2">Email</label>
+                            <label className="block text-xs font-bold tracking-widest uppercase text-zinc-500 mb-2">
+                                {mode === "first-login" ? "Member ID" : "Email"}
+                            </label>
                             <input
-                                type="email"
+                                type="text"
                                 value={email}
                                 readOnly
                                 disabled

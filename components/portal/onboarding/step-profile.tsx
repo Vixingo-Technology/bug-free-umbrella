@@ -46,6 +46,10 @@ interface Props {
     onNext: () => void;
     /** True when returning user has missing required fields (not first-time). */
     isUpdateMode?: boolean;
+    /** True when the account was pre-provisioned by the Dojo Head — the
+     *  dojo is set by the Dojo Head at creation time and must not be
+     *  editable by the student. */
+    dojoLocked?: boolean;
     /** Which required fields are missing — shown as a hint banner. */
     missingFields?: string[];
     /** Existing avatar URL (if any) — used to seed the uploader preview. */
@@ -58,9 +62,13 @@ export default function StepProfile({
     dojos,
     onNext,
     isUpdateMode = false,
+    dojoLocked = false,
     missingFields = [],
     avatarUrl,
 }: Props) {
+    const lockedDojo = dojoLocked
+        ? dojos.find((d) => d.id === value.dojoId) ?? null
+        : null;
     const [isPending, startTransition] = useTransition();
     const [error, setError] = useState<string | null>(null);
 
@@ -199,35 +207,67 @@ export default function StepProfile({
                     />
                 </Field>
 
-                {/* Dojo — pick from the list, the map zooms into your choice. */}
-                <Field label="Preferred Dojo *" icon={<MapPin size={15} />}>
-                    <div className="space-y-3">
-                        <select
-                            name="dojoId"
-                            value={value.dojoId}
-                            onChange={(e) => update("dojoId", e.target.value)}
-                            required
-                            disabled={dojos.length === 0}
-                            className={inputCls}
-                        >
-                            <option value="">
-                                {dojos.length === 0
-                                    ? "No dojos available yet"
-                                    : "Select your dojo"}
-                            </option>
-                            {dojos.map((d) => (
-                                <option key={d.id} value={d.id}>
-                                    {d.name}
-                                    {d.city ? ` — ${d.city}` : ""}
+                {/* Dojo — pick from the list, the map zooms into your choice.
+                 *  When the Dojo Head pre-provisioned the account, the dojo
+                 *  is fixed and shown as a read-only card instead. */}
+                <Field label="Your Dojo *" icon={<MapPin size={15} />}>
+                    {dojoLocked ? (
+                        <>
+                            <input
+                                type="hidden"
+                                name="dojoId"
+                                value={value.dojoId}
+                            />
+                            <div className="flex items-start gap-3 bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3">
+                                <MapPin
+                                    size={15}
+                                    className="text-zinc-400 mt-0.5 flex-shrink-0"
+                                />
+                                <div className="min-w-0">
+                                    <p className="text-sm font-semibold text-zinc-900 truncate">
+                                        {lockedDojo?.name ?? "Your dojo"}
+                                    </p>
+                                    {lockedDojo?.city && (
+                                        <p className="text-xs text-zinc-500 mt-0.5 truncate">
+                                            {lockedDojo.city}
+                                        </p>
+                                    )}
+                                    <p className="text-[11px] text-zinc-400 mt-1.5">
+                                        Set by your Dojo Head. Contact them if
+                                        this needs to change.
+                                    </p>
+                                </div>
+                            </div>
+                        </>
+                    ) : (
+                        <div className="space-y-3">
+                            <select
+                                name="dojoId"
+                                value={value.dojoId}
+                                onChange={(e) => update("dojoId", e.target.value)}
+                                required
+                                disabled={dojos.length === 0}
+                                className={inputCls}
+                            >
+                                <option value="">
+                                    {dojos.length === 0
+                                        ? "No dojos available yet"
+                                        : "Select your dojo"}
                                 </option>
-                            ))}
-                        </select>
-                        <DojoMapPicker
-                            dojos={dojos}
-                            selectedId={value.dojoId}
-                            onSelect={(id) => update("dojoId", id)}
-                        />
-                    </div>
+                                {dojos.map((d) => (
+                                    <option key={d.id} value={d.id}>
+                                        {d.name}
+                                        {d.city ? ` — ${d.city}` : ""}
+                                    </option>
+                                ))}
+                            </select>
+                            <DojoMapPicker
+                                dojos={dojos}
+                                selectedId={value.dojoId}
+                                onSelect={(id) => update("dojoId", id)}
+                            />
+                        </div>
+                    )}
                 </Field>
 
                 {/* Date of birth + Blood group */}

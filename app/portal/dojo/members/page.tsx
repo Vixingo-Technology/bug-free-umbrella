@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Mail, Search, UserRound } from "lucide-react";
 import DojoPageHeader from "@/components/dojo/page-header";
 import InviteMemberModal from "@/components/dojo/invite-member-modal";
+import AddExistingStudentModal from "@/components/dojo/add-existing-student-modal";
 import { InviteActionButtons } from "@/components/dojo/invite-actions-buttons";
 import { requireDojoRole } from "@/lib/dojo-session";
 import { prisma } from "@/lib/prisma";
@@ -248,20 +249,30 @@ export default async function MembersPage({
                 description={description}
                 actions={
                     canInvite ? (
-                        <InviteMemberModal
-                            allowedRoles={invitableRoles}
-                            staffCount={
-                                rosters.INSTRUCTOR.length +
-                                rosters.DOJO_MANAGER.length +
-                                invited.INSTRUCTOR.length +
-                                invited.DOJO_MANAGER.length
-                            }
-                            disabled={
-                                !session.dojo ||
-                                !dojoIsActivated
-                            }
-                            disabledReason={inviteDisabledReason}
-                        />
+                        <>
+                            {session.role === "DOJO_OWNER" && (
+                                <AddExistingStudentModal
+                                    disabled={
+                                        !session.dojo || !dojoIsActivated
+                                    }
+                                    disabledReason={inviteDisabledReason}
+                                />
+                            )}
+                            <InviteMemberModal
+                                allowedRoles={invitableRoles}
+                                staffCount={
+                                    rosters.INSTRUCTOR.length +
+                                    rosters.DOJO_MANAGER.length +
+                                    invited.INSTRUCTOR.length +
+                                    invited.DOJO_MANAGER.length
+                                }
+                                disabled={
+                                    !session.dojo ||
+                                    !dojoIsActivated
+                                }
+                                disabledReason={inviteDisabledReason}
+                            />
+                        </>
                     ) : undefined
                 }
             />

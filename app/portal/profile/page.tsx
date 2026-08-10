@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { prisma } from "@/lib/prisma";
 import ProfileClient from "@/components/portal/profile-client";
+import { serialize } from "@/lib/serialize";
 
 export default async function ProfilePage() {
     const supabase = await createClient();
@@ -40,5 +41,5 @@ export default async function ProfilePage() {
         // DB not configured
     }
 
-    return <ProfileClient member={member} dojos={dojos} userId={user.id} />;
+    return <ProfileClient member={serialize(member)} dojos={dojos} userId={user.id} />;
 }

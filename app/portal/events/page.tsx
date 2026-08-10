@@ -32,6 +32,8 @@ export default async function EventsPage() {
         upcomingEvents = rows.map((e) => ({
             ...e,
             ticketPrice: e.ticketPrice ? Number(e.ticketPrice) : null,
+            memberDiscountPercent: Number(e.memberDiscountPercent),
+            multiDivisionDiscountPercent: Number(e.multiDivisionDiscountPercent),
             rsvpCount: rsvpCounts.get(e.id) ?? 0,
         }));
 
@@ -44,6 +46,8 @@ export default async function EventsPage() {
         ).map((e) => ({
             ...e,
             ticketPrice: e.ticketPrice ? Number(e.ticketPrice) : null,
+            memberDiscountPercent: Number(e.memberDiscountPercent),
+            multiDivisionDiscountPercent: Number(e.multiDivisionDiscountPercent),
         }));
 
         const regs = await prisma.eventRegistration.findMany({

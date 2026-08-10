@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import RenewClient from "@/components/portal/renew-client";
 import { getFees } from "@/lib/settings/fees";
 import { extendExpiry } from "@/lib/renewals/extend-expiry";
+import { serialize } from "@/lib/serialize";
 
 export const metadata = { title: "Renew Membership — JKA Bangladesh" };
 
@@ -138,7 +139,7 @@ export default async function RenewPage({
 
     return (
         <RenewClient
-            member={member}
+            member={serialize(member)}
             membershipFeeBDT={membershipFeeBDT}
             userId={user?.id ?? ""}
             feedback={feedback}

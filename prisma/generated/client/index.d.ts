@@ -9268,6 +9268,7 @@ export namespace Prisma {
     roleId: string | null
     isActive: boolean | null
     memberNumber: string | null
+    mustChangePassword: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -9282,6 +9283,7 @@ export namespace Prisma {
     roleId: string | null
     isActive: boolean | null
     memberNumber: string | null
+    mustChangePassword: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -9296,6 +9298,7 @@ export namespace Prisma {
     roleId: number
     isActive: number
     memberNumber: number
+    mustChangePassword: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -9312,6 +9315,7 @@ export namespace Prisma {
     roleId?: true
     isActive?: true
     memberNumber?: true
+    mustChangePassword?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -9326,6 +9330,7 @@ export namespace Prisma {
     roleId?: true
     isActive?: true
     memberNumber?: true
+    mustChangePassword?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -9340,6 +9345,7 @@ export namespace Prisma {
     roleId?: true
     isActive?: true
     memberNumber?: true
+    mustChangePassword?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -9427,6 +9433,7 @@ export namespace Prisma {
     roleId: string
     isActive: boolean
     memberNumber: string | null
+    mustChangePassword: boolean
     createdAt: Date
     updatedAt: Date
     _count: UserCountAggregateOutputType | null
@@ -9458,6 +9465,7 @@ export namespace Prisma {
     roleId?: boolean
     isActive?: boolean
     memberNumber?: boolean
+    mustChangePassword?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     role?: boolean | RoleDefaultArgs<ExtArgs>
@@ -9500,6 +9508,7 @@ export namespace Prisma {
     roleId?: boolean
     isActive?: boolean
     memberNumber?: boolean
+    mustChangePassword?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     role?: boolean | RoleDefaultArgs<ExtArgs>
@@ -9515,6 +9524,7 @@ export namespace Prisma {
     roleId?: boolean
     isActive?: boolean
     memberNumber?: boolean
+    mustChangePassword?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     role?: boolean | RoleDefaultArgs<ExtArgs>
@@ -9530,11 +9540,12 @@ export namespace Prisma {
     roleId?: boolean
     isActive?: boolean
     memberNumber?: boolean
+    mustChangePassword?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "phone" | "fullName" | "avatarUrl" | "bio" | "roleId" | "isActive" | "memberNumber" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "phone" | "fullName" | "avatarUrl" | "bio" | "roleId" | "isActive" | "memberNumber" | "mustChangePassword" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     role?: boolean | RoleDefaultArgs<ExtArgs>
     profile?: boolean | User$profileArgs<ExtArgs>
@@ -9613,6 +9624,7 @@ export namespace Prisma {
       roleId: string
       isActive: boolean
       memberNumber: string | null
+      mustChangePassword: boolean
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["user"]>
@@ -10074,6 +10086,7 @@ export namespace Prisma {
     readonly roleId: FieldRef<"User", 'String'>
     readonly isActive: FieldRef<"User", 'Boolean'>
     readonly memberNumber: FieldRef<"User", 'String'>
+    readonly mustChangePassword: FieldRef<"User", 'Boolean'>
     readonly createdAt: FieldRef<"User", 'DateTime'>
     readonly updatedAt: FieldRef<"User", 'DateTime'>
   }
@@ -58587,6 +58600,7 @@ export namespace Prisma {
     roleId: 'roleId',
     isActive: 'isActive',
     memberNumber: 'memberNumber',
+    mustChangePassword: 'mustChangePassword',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -59943,6 +59957,7 @@ export namespace Prisma {
     roleId?: StringFilter<"User"> | string
     isActive?: BoolFilter<"User"> | boolean
     memberNumber?: StringNullableFilter<"User"> | string | null
+    mustChangePassword?: BoolFilter<"User"> | boolean
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     role?: XOR<RoleScalarRelationFilter, RoleWhereInput>
@@ -59984,6 +59999,7 @@ export namespace Prisma {
     roleId?: SortOrder
     isActive?: SortOrder
     memberNumber?: SortOrderInput | SortOrder
+    mustChangePassword?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     role?: RoleOrderByWithRelationInput
@@ -60028,6 +60044,7 @@ export namespace Prisma {
     bio?: StringNullableFilter<"User"> | string | null
     roleId?: StringFilter<"User"> | string
     isActive?: BoolFilter<"User"> | boolean
+    mustChangePassword?: BoolFilter<"User"> | boolean
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     role?: XOR<RoleScalarRelationFilter, RoleWhereInput>
@@ -60069,6 +60086,7 @@ export namespace Prisma {
     roleId?: SortOrder
     isActive?: SortOrder
     memberNumber?: SortOrderInput | SortOrder
+    mustChangePassword?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: UserCountOrderByAggregateInput
@@ -60089,6 +60107,7 @@ export namespace Prisma {
     roleId?: StringWithAggregatesFilter<"User"> | string
     isActive?: BoolWithAggregatesFilter<"User"> | boolean
     memberNumber?: StringNullableWithAggregatesFilter<"User"> | string | null
+    mustChangePassword?: BoolWithAggregatesFilter<"User"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
   }
@@ -64065,6 +64084,7 @@ export namespace Prisma {
     bio?: string | null
     isActive?: boolean
     memberNumber?: string | null
+    mustChangePassword?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     role?: RoleCreateNestedOneWithoutUsersInput
@@ -64106,6 +64126,7 @@ export namespace Prisma {
     roleId?: string
     isActive?: boolean
     memberNumber?: string | null
+    mustChangePassword?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     profile?: ProfileUncheckedCreateNestedOneWithoutUserInput
@@ -64145,6 +64166,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
@@ -64186,6 +64208,7 @@ export namespace Prisma {
     roleId?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     profile?: ProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -64226,6 +64249,7 @@ export namespace Prisma {
     roleId?: string
     isActive?: boolean
     memberNumber?: string | null
+    mustChangePassword?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -64239,6 +64263,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -64253,6 +64278,7 @@ export namespace Prisma {
     roleId?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -68839,6 +68865,7 @@ export namespace Prisma {
     roleId?: SortOrder
     isActive?: SortOrder
     memberNumber?: SortOrder
+    mustChangePassword?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -68853,6 +68880,7 @@ export namespace Prisma {
     roleId?: SortOrder
     isActive?: SortOrder
     memberNumber?: SortOrder
+    mustChangePassword?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -68867,6 +68895,7 @@ export namespace Prisma {
     roleId?: SortOrder
     isActive?: SortOrder
     memberNumber?: SortOrder
+    mustChangePassword?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -77545,6 +77574,7 @@ export namespace Prisma {
     bio?: string | null
     isActive?: boolean
     memberNumber?: string | null
+    mustChangePassword?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     profile?: ProfileCreateNestedOneWithoutUserInput
@@ -77584,6 +77614,7 @@ export namespace Prisma {
     bio?: string | null
     isActive?: boolean
     memberNumber?: string | null
+    mustChangePassword?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     profile?: ProfileUncheckedCreateNestedOneWithoutUserInput
@@ -77673,6 +77704,7 @@ export namespace Prisma {
     roleId?: StringFilter<"User"> | string
     isActive?: BoolFilter<"User"> | boolean
     memberNumber?: StringNullableFilter<"User"> | string | null
+    mustChangePassword?: BoolFilter<"User"> | boolean
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
   }
@@ -79885,6 +79917,7 @@ export namespace Prisma {
     bio?: string | null
     isActive?: boolean
     memberNumber?: string | null
+    mustChangePassword?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     role?: RoleCreateNestedOneWithoutUsersInput
@@ -79925,6 +79958,7 @@ export namespace Prisma {
     roleId?: string
     isActive?: boolean
     memberNumber?: string | null
+    mustChangePassword?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     student?: StudentUncheckedCreateNestedOneWithoutUserInput
@@ -79979,6 +80013,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
@@ -80019,6 +80054,7 @@ export namespace Prisma {
     roleId?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     student?: StudentUncheckedUpdateOneWithoutUserNestedInput
@@ -80057,6 +80093,7 @@ export namespace Prisma {
     bio?: string | null
     isActive?: boolean
     memberNumber?: string | null
+    mustChangePassword?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     role?: RoleCreateNestedOneWithoutUsersInput
@@ -80097,6 +80134,7 @@ export namespace Prisma {
     roleId?: string
     isActive?: boolean
     memberNumber?: string | null
+    mustChangePassword?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     profile?: ProfileUncheckedCreateNestedOneWithoutUserInput
@@ -80538,6 +80576,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
@@ -80578,6 +80617,7 @@ export namespace Prisma {
     roleId?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     profile?: ProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -80873,6 +80913,7 @@ export namespace Prisma {
     bio?: string | null
     isActive?: boolean
     memberNumber?: string | null
+    mustChangePassword?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     role?: RoleCreateNestedOneWithoutUsersInput
@@ -80913,6 +80954,7 @@ export namespace Prisma {
     roleId?: string
     isActive?: boolean
     memberNumber?: string | null
+    mustChangePassword?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     profile?: ProfileUncheckedCreateNestedOneWithoutUserInput
@@ -81048,6 +81090,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
@@ -81088,6 +81131,7 @@ export namespace Prisma {
     roleId?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     profile?: ProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -81213,6 +81257,7 @@ export namespace Prisma {
     bio?: string | null
     isActive?: boolean
     memberNumber?: string | null
+    mustChangePassword?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     role?: RoleCreateNestedOneWithoutUsersInput
@@ -81253,6 +81298,7 @@ export namespace Prisma {
     roleId?: string
     isActive?: boolean
     memberNumber?: string | null
+    mustChangePassword?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     profile?: ProfileUncheckedCreateNestedOneWithoutUserInput
@@ -81388,6 +81434,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
@@ -81428,6 +81475,7 @@ export namespace Prisma {
     roleId?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     profile?: ProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -81553,6 +81601,7 @@ export namespace Prisma {
     bio?: string | null
     isActive?: boolean
     memberNumber?: string | null
+    mustChangePassword?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     role?: RoleCreateNestedOneWithoutUsersInput
@@ -81593,6 +81642,7 @@ export namespace Prisma {
     roleId?: string
     isActive?: boolean
     memberNumber?: string | null
+    mustChangePassword?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     profile?: ProfileUncheckedCreateNestedOneWithoutUserInput
@@ -81728,6 +81778,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
@@ -81768,6 +81819,7 @@ export namespace Prisma {
     roleId?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     profile?: ProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -81893,6 +81945,7 @@ export namespace Prisma {
     bio?: string | null
     isActive?: boolean
     memberNumber?: string | null
+    mustChangePassword?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     role?: RoleCreateNestedOneWithoutUsersInput
@@ -81933,6 +81986,7 @@ export namespace Prisma {
     roleId?: string
     isActive?: boolean
     memberNumber?: string | null
+    mustChangePassword?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     profile?: ProfileUncheckedCreateNestedOneWithoutUserInput
@@ -81987,6 +82041,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
@@ -82027,6 +82082,7 @@ export namespace Prisma {
     roleId?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     profile?: ProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -83787,6 +83843,7 @@ export namespace Prisma {
     bio?: string | null
     isActive?: boolean
     memberNumber?: string | null
+    mustChangePassword?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     role?: RoleCreateNestedOneWithoutUsersInput
@@ -83827,6 +83884,7 @@ export namespace Prisma {
     roleId?: string
     isActive?: boolean
     memberNumber?: string | null
+    mustChangePassword?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     profile?: ProfileUncheckedCreateNestedOneWithoutUserInput
@@ -83881,6 +83939,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
@@ -83921,6 +83980,7 @@ export namespace Prisma {
     roleId?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     profile?: ProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -85419,6 +85479,7 @@ export namespace Prisma {
     bio?: string | null
     isActive?: boolean
     memberNumber?: string | null
+    mustChangePassword?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     role?: RoleCreateNestedOneWithoutUsersInput
@@ -85459,6 +85520,7 @@ export namespace Prisma {
     roleId?: string
     isActive?: boolean
     memberNumber?: string | null
+    mustChangePassword?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     profile?: ProfileUncheckedCreateNestedOneWithoutUserInput
@@ -85674,6 +85736,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
@@ -85714,6 +85777,7 @@ export namespace Prisma {
     roleId?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     profile?: ProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -86039,6 +86103,7 @@ export namespace Prisma {
     bio?: string | null
     isActive?: boolean
     memberNumber?: string | null
+    mustChangePassword?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     role?: RoleCreateNestedOneWithoutUsersInput
@@ -86079,6 +86144,7 @@ export namespace Prisma {
     roleId?: string
     isActive?: boolean
     memberNumber?: string | null
+    mustChangePassword?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     profile?: ProfileUncheckedCreateNestedOneWithoutUserInput
@@ -86214,6 +86280,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
@@ -86254,6 +86321,7 @@ export namespace Prisma {
     roleId?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     profile?: ProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -86379,6 +86447,7 @@ export namespace Prisma {
     bio?: string | null
     isActive?: boolean
     memberNumber?: string | null
+    mustChangePassword?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     role?: RoleCreateNestedOneWithoutUsersInput
@@ -86419,6 +86488,7 @@ export namespace Prisma {
     roleId?: string
     isActive?: boolean
     memberNumber?: string | null
+    mustChangePassword?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     profile?: ProfileUncheckedCreateNestedOneWithoutUserInput
@@ -86473,6 +86543,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
@@ -86513,6 +86584,7 @@ export namespace Prisma {
     roleId?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     profile?: ProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -86610,6 +86682,7 @@ export namespace Prisma {
     bio?: string | null
     isActive?: boolean
     memberNumber?: string | null
+    mustChangePassword?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     role?: RoleCreateNestedOneWithoutUsersInput
@@ -86650,6 +86723,7 @@ export namespace Prisma {
     roleId?: string
     isActive?: boolean
     memberNumber?: string | null
+    mustChangePassword?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     profile?: ProfileUncheckedCreateNestedOneWithoutUserInput
@@ -86693,6 +86767,7 @@ export namespace Prisma {
     bio?: string | null
     isActive?: boolean
     memberNumber?: string | null
+    mustChangePassword?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     role?: RoleCreateNestedOneWithoutUsersInput
@@ -86733,6 +86808,7 @@ export namespace Prisma {
     roleId?: string
     isActive?: boolean
     memberNumber?: string | null
+    mustChangePassword?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     profile?: ProfileUncheckedCreateNestedOneWithoutUserInput
@@ -86898,6 +86974,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
@@ -86938,6 +87015,7 @@ export namespace Prisma {
     roleId?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     profile?: ProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -86987,6 +87065,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
@@ -87027,6 +87106,7 @@ export namespace Prisma {
     roleId?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     profile?: ProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -87081,6 +87161,7 @@ export namespace Prisma {
     bio?: string | null
     isActive?: boolean
     memberNumber?: string | null
+    mustChangePassword?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     role?: RoleCreateNestedOneWithoutUsersInput
@@ -87121,6 +87202,7 @@ export namespace Prisma {
     roleId?: string
     isActive?: boolean
     memberNumber?: string | null
+    mustChangePassword?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     profile?: ProfileUncheckedCreateNestedOneWithoutUserInput
@@ -87175,6 +87257,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
@@ -87215,6 +87298,7 @@ export namespace Prisma {
     roleId?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     profile?: ProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -87745,6 +87829,7 @@ export namespace Prisma {
     bio?: string | null
     isActive?: boolean
     memberNumber?: string | null
+    mustChangePassword?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     role?: RoleCreateNestedOneWithoutUsersInput
@@ -87785,6 +87870,7 @@ export namespace Prisma {
     roleId?: string
     isActive?: boolean
     memberNumber?: string | null
+    mustChangePassword?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     profile?: ProfileUncheckedCreateNestedOneWithoutUserInput
@@ -87828,6 +87914,7 @@ export namespace Prisma {
     bio?: string | null
     isActive?: boolean
     memberNumber?: string | null
+    mustChangePassword?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     role?: RoleCreateNestedOneWithoutUsersInput
@@ -87868,6 +87955,7 @@ export namespace Prisma {
     roleId?: string
     isActive?: boolean
     memberNumber?: string | null
+    mustChangePassword?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     profile?: ProfileUncheckedCreateNestedOneWithoutUserInput
@@ -88037,6 +88125,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
@@ -88077,6 +88166,7 @@ export namespace Prisma {
     roleId?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     profile?: ProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -88126,6 +88216,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
@@ -88166,6 +88257,7 @@ export namespace Prisma {
     roleId?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     profile?: ProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -88388,6 +88480,7 @@ export namespace Prisma {
     bio?: string | null
     isActive?: boolean
     memberNumber?: string | null
+    mustChangePassword?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     role?: RoleCreateNestedOneWithoutUsersInput
@@ -88428,6 +88521,7 @@ export namespace Prisma {
     roleId?: string
     isActive?: boolean
     memberNumber?: string | null
+    mustChangePassword?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     profile?: ProfileUncheckedCreateNestedOneWithoutUserInput
@@ -88874,6 +88968,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
@@ -88914,6 +89009,7 @@ export namespace Prisma {
     roleId?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     profile?: ProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -89672,6 +89768,7 @@ export namespace Prisma {
     bio?: string | null
     isActive?: boolean
     memberNumber?: string | null
+    mustChangePassword?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     role?: RoleCreateNestedOneWithoutUsersInput
@@ -89712,6 +89809,7 @@ export namespace Prisma {
     roleId?: string
     isActive?: boolean
     memberNumber?: string | null
+    mustChangePassword?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     profile?: ProfileUncheckedCreateNestedOneWithoutUserInput
@@ -89897,6 +89995,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
@@ -89937,6 +90036,7 @@ export namespace Prisma {
     roleId?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     profile?: ProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -90403,6 +90503,7 @@ export namespace Prisma {
     bio?: string | null
     isActive?: boolean
     memberNumber?: string | null
+    mustChangePassword?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     role?: RoleCreateNestedOneWithoutUsersInput
@@ -90443,6 +90544,7 @@ export namespace Prisma {
     roleId?: string
     isActive?: boolean
     memberNumber?: string | null
+    mustChangePassword?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     profile?: ProfileUncheckedCreateNestedOneWithoutUserInput
@@ -90601,6 +90703,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
@@ -90641,6 +90744,7 @@ export namespace Prisma {
     roleId?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     profile?: ProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -90963,6 +91067,7 @@ export namespace Prisma {
     bio?: string | null
     isActive?: boolean
     memberNumber?: string | null
+    mustChangePassword?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     role?: RoleCreateNestedOneWithoutUsersInput
@@ -91003,6 +91108,7 @@ export namespace Prisma {
     roleId?: string
     isActive?: boolean
     memberNumber?: string | null
+    mustChangePassword?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     profile?: ProfileUncheckedCreateNestedOneWithoutUserInput
@@ -91046,6 +91152,7 @@ export namespace Prisma {
     bio?: string | null
     isActive?: boolean
     memberNumber?: string | null
+    mustChangePassword?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     role?: RoleCreateNestedOneWithoutUsersInput
@@ -91086,6 +91193,7 @@ export namespace Prisma {
     roleId?: string
     isActive?: boolean
     memberNumber?: string | null
+    mustChangePassword?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     profile?: ProfileUncheckedCreateNestedOneWithoutUserInput
@@ -91129,6 +91237,7 @@ export namespace Prisma {
     bio?: string | null
     isActive?: boolean
     memberNumber?: string | null
+    mustChangePassword?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     role?: RoleCreateNestedOneWithoutUsersInput
@@ -91169,6 +91278,7 @@ export namespace Prisma {
     roleId?: string
     isActive?: boolean
     memberNumber?: string | null
+    mustChangePassword?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     profile?: ProfileUncheckedCreateNestedOneWithoutUserInput
@@ -91561,6 +91671,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
@@ -91601,6 +91712,7 @@ export namespace Prisma {
     roleId?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     profile?: ProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -91650,6 +91762,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
@@ -91690,6 +91803,7 @@ export namespace Prisma {
     roleId?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     profile?: ProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -91739,6 +91853,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
@@ -91779,6 +91894,7 @@ export namespace Prisma {
     roleId?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     profile?: ProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -91977,6 +92093,7 @@ export namespace Prisma {
     bio?: string | null
     isActive?: boolean
     memberNumber?: string | null
+    mustChangePassword?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     role?: RoleCreateNestedOneWithoutUsersInput
@@ -92017,6 +92134,7 @@ export namespace Prisma {
     roleId?: string
     isActive?: boolean
     memberNumber?: string | null
+    mustChangePassword?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     profile?: ProfileUncheckedCreateNestedOneWithoutUserInput
@@ -92227,6 +92345,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
@@ -92267,6 +92386,7 @@ export namespace Prisma {
     roleId?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     profile?: ProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -92579,6 +92699,7 @@ export namespace Prisma {
     bio?: string | null
     isActive?: boolean
     memberNumber?: string | null
+    mustChangePassword?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     role?: RoleCreateNestedOneWithoutUsersInput
@@ -92619,6 +92740,7 @@ export namespace Prisma {
     roleId?: string
     isActive?: boolean
     memberNumber?: string | null
+    mustChangePassword?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     profile?: ProfileUncheckedCreateNestedOneWithoutUserInput
@@ -92971,6 +93093,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
@@ -93011,6 +93134,7 @@ export namespace Prisma {
     roleId?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     profile?: ProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -93454,6 +93578,7 @@ export namespace Prisma {
     bio?: string | null
     isActive?: boolean
     memberNumber?: string | null
+    mustChangePassword?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     role?: RoleCreateNestedOneWithoutUsersInput
@@ -93494,6 +93619,7 @@ export namespace Prisma {
     roleId?: string
     isActive?: boolean
     memberNumber?: string | null
+    mustChangePassword?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     profile?: ProfileUncheckedCreateNestedOneWithoutUserInput
@@ -93537,6 +93663,7 @@ export namespace Prisma {
     bio?: string | null
     isActive?: boolean
     memberNumber?: string | null
+    mustChangePassword?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     role?: RoleCreateNestedOneWithoutUsersInput
@@ -93577,6 +93704,7 @@ export namespace Prisma {
     roleId?: string
     isActive?: boolean
     memberNumber?: string | null
+    mustChangePassword?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     profile?: ProfileUncheckedCreateNestedOneWithoutUserInput
@@ -93932,6 +94060,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
@@ -93972,6 +94101,7 @@ export namespace Prisma {
     roleId?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     profile?: ProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -94021,6 +94151,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
@@ -94061,6 +94192,7 @@ export namespace Prisma {
     roleId?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     profile?: ProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -94211,6 +94343,7 @@ export namespace Prisma {
     bio?: string | null
     isActive?: boolean
     memberNumber?: string | null
+    mustChangePassword?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     role?: RoleCreateNestedOneWithoutUsersInput
@@ -94251,6 +94384,7 @@ export namespace Prisma {
     roleId?: string
     isActive?: boolean
     memberNumber?: string | null
+    mustChangePassword?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     profile?: ProfileUncheckedCreateNestedOneWithoutUserInput
@@ -94489,6 +94623,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
@@ -94529,6 +94664,7 @@ export namespace Prisma {
     roleId?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     profile?: ProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -94583,6 +94719,7 @@ export namespace Prisma {
     bio?: string | null
     isActive?: boolean
     memberNumber?: string | null
+    mustChangePassword?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -94601,6 +94738,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     profile?: ProfileUpdateOneWithoutUserNestedInput
@@ -94640,6 +94778,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     profile?: ProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -94679,6 +94818,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     memberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

@@ -292,6 +292,9 @@ model User {
   roleId       String  @default("STUDENT") @map("role_id")
   isActive     Boolean @default(true) @map("is_active")
   memberNumber String? @unique @map("member_number")
+  // Set when a Dojo Head creates the account with a temporary password —
+  // the portal layout redirects the user to /set-password until it clears.
+  mustChangePassword Boolean @default(false) @map("must_change_password")
 
   role        Role         @relation(fields: [roleId], references: [id])
   profile     Profile?

@@ -2,6 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { prisma } from "@/lib/prisma";
 import { provisionMemberFromSupabaseUser } from "@/lib/auth/provision-member";
 import { resolvePostAuthLanding } from "@/lib/auth/post-auth-landing";
 
@@ -27,6 +28,16 @@ export async function setPasswordAction(formData: FormData) {
     // path — otherwise a brand-new invitee looks like "no student row" and
     // we'd still fall through to /portal, defeating the direct redirect.
     await provisionMemberFromSupabaseUser(user);
+
+    // Clear the first-login gate so the portal stops redirecting back to
+    // /set-password. Safe to run for reset/invite flows too — the flag is
+    // only ever set for Dojo-Head-provisioned students.
+    await prisma.user
+        .update({
+            where: { id: user.id },
+            data: { mustChangePassword: false },
+        })
+        .catch(() => null);
 
     redirect(await resolvePostAuthLanding(user.id));
 }

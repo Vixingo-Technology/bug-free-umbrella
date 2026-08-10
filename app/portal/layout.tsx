@@ -106,6 +106,7 @@ export default async function PortalLayout({
         let needsJoining = false;
         let needsDojoActivation = false;
         let needsFeatureRedirect = false;
+        let needsPasswordChange = false;
 
         try {
             let appUser = await prisma.user.findUnique({
@@ -119,6 +120,19 @@ export default async function PortalLayout({
                     where: { id: user.id },
                     select: { roleId: true, phone: true, avatarUrl: true, fullName: true, email: true },
                 });
+            }
+
+            // Isolated read — the `must_change_password` column may not exist
+            // yet on the DB (migration pending). A failure here must NOT sink
+            // the whole layout, or the sidebar renders empty.
+            try {
+                const flag = await prisma.user.findUnique({
+                    where: { id: user.id },
+                    select: { mustChangePassword: true },
+                });
+                if (flag?.mustChangePassword) needsPasswordChange = true;
+            } catch {
+                // column missing — treat as false and continue.
             }
 
             role = (appUser?.roleId as RoleId) ?? "STUDENT";
@@ -257,6 +271,7 @@ export default async function PortalLayout({
         // redirect() throws NEXT_REDIRECT — must run OUTSIDE the try/catch
         // above, otherwise the throw is swallowed and the page renders
         // instead of redirecting.
+        if (needsPasswordChange) redirect("/set-password?mode=first-login");
         if (needsOnboarding) redirect("/portal/onboarding");
         // Locked students trying to reach a non-allow-listed page get
         // bounced to the dashboard, where the lock overlay lives.

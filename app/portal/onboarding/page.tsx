@@ -5,6 +5,7 @@ import { serialize } from "@/lib/serialize";
 import OnboardingWizard from "@/components/portal/onboarding/onboarding-wizard";
 import { isProfileComplete } from "@/lib/profile";
 import { getFees } from "@/lib/settings/fees";
+import type { JoinStage } from "@/prisma/generated/client";
 
 export const metadata = {
     title: "Welcome to JKA Bangladesh",
@@ -27,12 +28,14 @@ export default async function OnboardingPage() {
     let dojos: any[] = [];
     let alreadyComplete = false;
 
+    let joinStage: JoinStage | null = null;
     try {
         const u = await prisma.user.findUnique({
             where: { id: user.id },
             include: { student: true, profile: true },
         });
         if (u) {
+            joinStage = u.student?.joinStage ?? null;
             member = {
                 id: u.id,
                 fullName: u.fullName,
@@ -85,6 +88,12 @@ export default async function OnboardingPage() {
         phone: member?.phone ?? null,
         dojoId: member?.dojoId ?? null,
     }));
+    // Existing-member mode: student provisioned directly by a Dojo Head
+    // (joinStage=JOINED, onboardingComplete=false). Their membership is
+    // already active — they only need to complete their profile.
+    const isExistingMemberMode = !!(
+        member && !member.onboardingComplete && joinStage === "JOINED"
+    );
     const missingFields = getMissingFields(member);
 
     const { membershipFeeBDT } = await getFees();
@@ -95,6 +104,7 @@ export default async function OnboardingPage() {
             member={serialize(member)}
             dojos={dojos}
             isProfileUpdateMode={isProfileUpdateMode}
+            isExistingMemberMode={isExistingMemberMode}
             missingFields={missingFields}
             membershipFeeBDT={membershipFeeBDT}
         />

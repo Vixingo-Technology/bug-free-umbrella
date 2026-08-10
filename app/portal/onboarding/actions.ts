@@ -204,6 +204,72 @@ export async function createOnboardingOrderAction(productIds: string[]) {
     }
 }
 
+// ─── Existing member (created by Dojo Head): finish onboarding ──────────────
+// Dojo-Head-provisioned students land on the profile step with their
+// membership already active and joinStage=JOINED. After they save the
+// profile, this action closes out onboarding and fires their welcome
+// notification with the expiry date they should see on the dashboard.
+
+export async function completeExistingMemberOnboardingAction() {
+    const supabase = await createClient();
+    const {
+        data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) return { error: "Not authenticated." };
+
+    try {
+        const student = await prisma.student.findUnique({
+            where: { id: user.id },
+            select: {
+                onboardingComplete: true,
+                joinStage: true,
+                expiryDate: true,
+            },
+        });
+        if (!student) return { error: "Student profile not found." };
+
+        // Only welcome-notify the first time this transition happens.
+        const alreadyWelcomed = student.onboardingComplete;
+
+        if (!alreadyWelcomed) {
+            await prisma.student.update({
+                where: { id: user.id },
+                data: { onboardingComplete: true },
+            });
+
+            const expiryLabel = student.expiryDate
+                ? student.expiryDate.toLocaleDateString(undefined, {
+                      day: "numeric",
+                      month: "long",
+                      year: "numeric",
+                  })
+                : null;
+
+            await prisma.notification.create({
+                data: {
+                    userId: user.id,
+                    title: "Welcome to the JKA Bangladesh member portal",
+                    message: expiryLabel
+                        ? `Your account is ready. Your membership is active until ${expiryLabel}.`
+                        : "Your account is ready. Explore your dashboard to view your rank, events, and grading history.",
+                    type: "SUCCESS",
+                    link: "/portal",
+                },
+            });
+        }
+
+        revalidatePath("/portal");
+    } catch (err: any) {
+        return { error: err?.message ?? "Failed to finish onboarding." };
+    }
+
+    // redirect() throws NEXT_REDIRECT — must run OUTSIDE the try/catch.
+    // A server-side redirect (rather than a client-side router.push) forces
+    // the shared /portal layout to re-execute; a client push would leave the
+    // layout stuck on its onboarding fullscreen render and hide the sidebar.
+    redirect("/portal");
+}
+
 // ─── Pay Later: Mark onboarding complete, status stays PENDING ───────────────
 
 export async function payLaterAction(orderId: string) {

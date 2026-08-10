@@ -5,7 +5,10 @@ import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "motion/react";
 import StepProfile, { type ProfileData } from "./step-profile";
 import StepWelcome from "./step-welcome";
-import { createOnboardingOrderAction } from "@/app/portal/onboarding/actions";
+import {
+    createOnboardingOrderAction,
+    completeExistingMemberOnboardingAction,
+} from "@/app/portal/onboarding/actions";
 
 interface Props {
     userId: string;
@@ -13,13 +16,17 @@ interface Props {
     dojos: any[];
     /** True when the user already completed onboarding but has missing required fields. */
     isProfileUpdateMode?: boolean;
+    /** True for a student the Dojo Head just provisioned — membership is already
+     *  active, they only need to fill their profile before landing on the portal. */
+    isExistingMemberMode?: boolean;
     /** Human-readable list of fields still missing (for display in Step 1 banner). */
     missingFields?: string[];
     membershipFeeBDT: number;
 }
 
-const STEPS_FULL   = [{ label: "Profile", number: 1 }, { label: "Welcome", number: 2 }];
-const STEPS_UPDATE = [{ label: "Update Profile", number: 1 }];
+const STEPS_FULL     = [{ label: "Profile", number: 1 }, { label: "Welcome", number: 2 }];
+const STEPS_UPDATE   = [{ label: "Update Profile", number: 1 }];
+const STEPS_EXISTING = [{ label: "Complete Profile", number: 1 }];
 
 function initialProfile(member: any): ProfileData {
     return {
@@ -44,6 +51,7 @@ export default function OnboardingWizard({
     member,
     dojos,
     isProfileUpdateMode = false,
+    isExistingMemberMode = false,
     missingFields = [],
     membershipFeeBDT,
 }: Props) {
@@ -53,11 +61,23 @@ export default function OnboardingWizard({
 
     const [profile, setProfile] = useState<ProfileData>(() => initialProfile(member));
 
-    const STEPS = isProfileUpdateMode ? STEPS_UPDATE : STEPS_FULL;
+    const STEPS = isExistingMemberMode
+        ? STEPS_EXISTING
+        : isProfileUpdateMode
+          ? STEPS_UPDATE
+          : STEPS_FULL;
     const totalSteps = STEPS.length;
 
     /** Called when Step 1 (profile) is saved successfully. */
     async function handleProfileNext() {
+        if (isExistingMemberMode) {
+            // Server-side redirect is intentional — it forces the shared
+            // /portal layout to re-execute so the sidebar appears. A
+            // client-side router.push would leave the layout stuck on its
+            // onboarding fullscreen render.
+            await completeExistingMemberOnboardingAction();
+            return;
+        }
         if (isProfileUpdateMode) {
             router.push("/portal");
             return;
@@ -138,6 +158,7 @@ export default function OnboardingWizard({
                                 dojos={dojos}
                                 onNext={handleProfileNext}
                                 isUpdateMode={isProfileUpdateMode}
+                                dojoLocked={isExistingMemberMode}
                                 missingFields={missingFields}
                                 avatarUrl={member?.avatarUrl ?? null}
                             />
