@@ -37,6 +37,15 @@ export const BELT_RANKS_ORDERED = [
   "Brown Belt 2nd Kyu",
   "Brown Belt 1st Kyu",
   "Black Belt 1st Dan",
+  "Black Belt 2nd Dan",
+  "Black Belt 3rd Dan",
+  "Black Belt 4th Dan",
+  "Black Belt 5th Dan",
+  "Black Belt 6th Dan",
+  "Black Belt 7th Dan",
+  "Black Belt 8th Dan",
+  "Black Belt 9th Dan",
+  "Black Belt 10th Dan",
 ] as const;
 
 export const BELT_COLORS: Record<string, string> = {
@@ -51,6 +60,15 @@ export const BELT_COLORS: Record<string, string> = {
   "Brown Belt 2nd Kyu":   "#8B4513",
   "Brown Belt 1st Kyu":   "#8B4513",
   "Black Belt 1st Dan":   "#1a1a1a",
+  "Black Belt 2nd Dan":   "#1a1a1a",
+  "Black Belt 3rd Dan":   "#1a1a1a",
+  "Black Belt 4th Dan":   "#1a1a1a",
+  "Black Belt 5th Dan":   "#1a1a1a",
+  "Black Belt 6th Dan":   "#1a1a1a",
+  "Black Belt 7th Dan":   "#1a1a1a",
+  "Black Belt 8th Dan":   "#1a1a1a",
+  "Black Belt 9th Dan":   "#1a1a1a",
+  "Black Belt 10th Dan":  "#1a1a1a",
 };
 
 export const BLOOD_GROUPS = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"] as const;
