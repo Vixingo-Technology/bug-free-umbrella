@@ -10,7 +10,7 @@ export const siteContent = {
         membership: "Membership",
     },
     hero: {
-        titleLines: ["THE HIGHEST", "TRADITION OF", "MASTERY."],
+        titleLines: ["THE HIGHEST", "TRADITION OF", "KARATE."],
         description:
             "The sole legal representative of Japan Karate Association (JKA) in Bangladesh. Preserving the discipline, respect, and power of traditional karate-do since 1978.",
         primaryCta: "Begin Your Journey",
@@ -24,8 +24,8 @@ export const siteContent = {
         titleHighlight: "spirit of",
         titleAfter: "Shotokan",
         paragraphs: [
-            "Japan Karate Association (JKA) Bangladesh stands as the premier authority of Shotokan Karate in the nation. We are directly affiliated with JKA World Federation, Tokyo, Japan.",
-            "Our mission is to cultivate not just physical strength, but the indomitable spirit, character, and discipline that true martial arts require. We follow the exact syllabus and standards set by the masters in Japan.",
+            "The Japan Karate Association (JKA) is the world's foremost authority in traditional Shotokan Karate, dedicated to preserving the true spirit of Karate-do through discipline, technical excellence, and the values of Budo.",
+            "As the sole officially licensed representative of the JKA in Bangladesh, JKA WF Bangladesh proudly upholds this legacy, connecting Bangladeshi karateka to the authentic traditions, high standards, and lifelong philosophy of the JKA.",
         ],
         stats: [
             { value: "50+", label: "Regional Branches" },
