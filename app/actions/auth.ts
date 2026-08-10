@@ -4,7 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { provisionMemberFromSupabaseUser } from "@/lib/auth/provision-member";
 import { prisma } from "@/lib/prisma";
-import { isRegNo } from "@/lib/members/reg-no";
+import { isRegNo, isDojoOwnerRegNo } from "@/lib/members/reg-no";
 
 export async function loginAction(formData: FormData) {
     const supabase = await createClient();
@@ -17,7 +17,7 @@ export async function loginAction(formData: FormData) {
     }
 
     let email = identifier;
-    if (isRegNo(identifier)) {
+    if (isRegNo(identifier) || isDojoOwnerRegNo(identifier)) {
         const user = await prisma.user.findUnique({
             where: { memberNumber: identifier.toUpperCase() },
             select: { email: true },

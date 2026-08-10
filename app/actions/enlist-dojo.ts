@@ -7,6 +7,7 @@ import { notifyAdmins } from "@/lib/notify";
 import { assignRole } from "@/lib/auth/assign-role";
 import { uploadToCloudinary } from "@/lib/cloudinary";
 import { getFees } from "@/lib/settings/fees";
+import { ensureDojoOwnerRegNo, divisionCode } from "@/lib/members/reg-no";
 
 export type DojoEnlistmentInput = {
     dojoName: string;
@@ -520,6 +521,14 @@ export async function commitDojoEnlistment(
     }
 
     await assignRole(user.id, "DOJO_OWNER", { dojoId });
+
+    // Dojo-owner Reg No format: JKA-BD-{DIV3}-{NNNN}, e.g. JKA-BD-DHA-0001.
+    // Only assigned once the division is known — the enlistment form requires
+    // it, so this normally fires on first commit. Silently no-ops on an
+    // unknown division so the enlistment doesn't fail on a typo.
+    if (division && divisionCode(division)) {
+        await ensureDojoOwnerRegNo(user.id, division);
+    }
 
     // If this owner arrived via an admin-issued invite, stamp acceptedAt so
     // the admin dojos page can tell "invited" apart from "pending".

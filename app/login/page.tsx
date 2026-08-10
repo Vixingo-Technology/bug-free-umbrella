@@ -3,7 +3,14 @@
 import { motion } from "motion/react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, User as UserIcon, Lock, Loader2 } from "lucide-react";
+import {
+    ArrowLeft,
+    User as UserIcon,
+    Lock,
+    Loader2,
+    Eye,
+    EyeOff,
+} from "lucide-react";
 import Logo from "@/assets/jka_logo.svg";
 import { loginAction } from "@/app/actions/auth";
 import { useState, useTransition } from "react";
@@ -11,6 +18,7 @@ import { useState, useTransition } from "react";
 export default function LoginPage() {
     const [error, setError] = useState<string | null>(null);
     const [isPending, startTransition] = useTransition();
+    const [showPassword, setShowPassword] = useState(false);
 
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
@@ -36,7 +44,10 @@ export default function LoginPage() {
                     href="/"
                     className="inline-flex items-center gap-2 text-xs font-bold tracking-widest uppercase text-zinc-500 hover:text-accent-red transition-colors mb-8 group"
                 >
-                    <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
+                    <ArrowLeft
+                        size={16}
+                        className="group-hover:-translate-x-1 transition-transform"
+                    />
                     Back to Home
                 </Link>
 
@@ -47,10 +58,19 @@ export default function LoginPage() {
                     className="glass p-10 rounded-2xl shadow-xl w-full"
                 >
                     <div className="flex flex-col items-center mb-8">
-                        <Image src={Logo} alt="JKA Logo" width={60} height={60} className="mb-4" />
-                        <h1 className="font-serif text-3xl font-bold text-zinc-900 mb-2">Member Login</h1>
+                        <Image
+                            src={Logo}
+                            alt="JKA Logo"
+                            width={60}
+                            height={60}
+                            className="mb-4"
+                        />
+                        <h1 className="font-serif text-3xl font-bold text-zinc-900 mb-2">
+                            Member Login
+                        </h1>
                         <p className="text-zinc-500 text-sm text-center">
-                            Welcome back to JKA Bangladesh. Enter your credentials to access your account.
+                            Welcome back to JKA Bangladesh. Enter your
+                            credentials to access your account.
                         </p>
                     </div>
 
@@ -70,12 +90,15 @@ export default function LoginPage() {
                                 Email or Member ID
                             </label>
                             <div className="relative">
-                                <UserIcon size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400" />
+                                <UserIcon
+                                    size={18}
+                                    className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400"
+                                />
                                 <input
                                     type="text"
                                     name="identifier"
                                     autoComplete="username"
-                                    placeholder="sensei@jka.com or JKA-BD-000001"
+                                    placeholder="sensei@jka.com or JKA-BD-123456"
                                     className="w-full bg-white/50 border border-zinc-200 rounded-xl py-3 pl-12 pr-4 text-sm focus:outline-none focus:border-accent-red focus:ring-1 focus:ring-accent-red transition-all"
                                     required
                                     disabled={isPending}
@@ -88,20 +111,43 @@ export default function LoginPage() {
                                 <label className="text-xs font-bold tracking-widest uppercase text-zinc-600 block">
                                     Password
                                 </label>
-                                <Link href="/forgot-password" className="text-xs font-semibold text-accent-red hover:text-accent-gold transition-colors">
+                                <Link
+                                    href="/forgot-password"
+                                    className="text-xs font-semibold text-accent-red hover:text-accent-gold transition-colors"
+                                >
                                     Forgot?
                                 </Link>
                             </div>
                             <div className="relative">
-                                <Lock size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400" />
+                                <Lock
+                                    size={18}
+                                    className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400"
+                                />
                                 <input
-                                    type="password"
+                                    type={showPassword ? "text" : "password"}
                                     name="password"
                                     placeholder="••••••••"
-                                    className="w-full bg-white/50 border border-zinc-200 rounded-xl py-3 pl-12 pr-4 text-sm focus:outline-none focus:border-accent-red focus:ring-1 focus:ring-accent-red transition-all"
+                                    className="w-full bg-white/50 border border-zinc-200 rounded-xl py-3 pl-12 pr-12 text-sm focus:outline-none focus:border-accent-red focus:ring-1 focus:ring-accent-red transition-all"
                                     required
                                     disabled={isPending}
                                 />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowPassword((v) => !v)}
+                                    disabled={isPending}
+                                    aria-label={
+                                        showPassword
+                                            ? "Hide password"
+                                            : "Show password"
+                                    }
+                                    className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-zinc-400 hover:text-accent-red transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+                                >
+                                    {showPassword ? (
+                                        <EyeOff size={18} />
+                                    ) : (
+                                        <Eye size={18} />
+                                    )}
+                                </button>
                             </div>
                         </div>
 
@@ -112,7 +158,10 @@ export default function LoginPage() {
                         >
                             {isPending ? (
                                 <>
-                                    <Loader2 size={18} className="animate-spin" />
+                                    <Loader2
+                                        size={18}
+                                        className="animate-spin"
+                                    />
                                     Signing In...
                                 </>
                             ) : (
@@ -123,7 +172,10 @@ export default function LoginPage() {
 
                     <div className="mt-8 text-center text-sm text-zinc-600">
                         Don&apos;t have an account?{" "}
-                        <Link href="/signup" className="text-accent-red font-semibold hover:text-accent-gold transition-colors">
+                        <Link
+                            href="/signup"
+                            className="text-accent-red font-semibold hover:text-accent-gold transition-colors"
+                        >
                             Apply for Membership
                         </Link>
                     </div>

@@ -3,6 +3,29 @@ import { prisma } from "@/lib/prisma";
 const PREFIX = "JKA-BD-";
 
 /**
+ * Bangladesh division → 3-letter code used in the dojo-owner Reg No.
+ * Case-insensitive lookup on the division name stored in Dojo.city /
+ * DojoApplication.address.
+ */
+export const DIVISION_CODES: Record<string, string> = {
+    barishal: "BAR",
+    barisal: "BAR",
+    chattogram: "CTG",
+    chittagong: "CTG",
+    dhaka: "DHA",
+    khulna: "KHL",
+    mymensingh: "MYM",
+    rajshahi: "RAJ",
+    rangpur: "RAN",
+    sylhet: "SYL",
+};
+
+export function divisionCode(division: string | null | undefined): string | null {
+    if (!division) return null;
+    return DIVISION_CODES[division.trim().toLowerCase()] ?? null;
+}
+
+/**
  * Reg No format: JKA-BD-xxxxxx (6-digit sequential serial).
  * Example: JKA-BD-000001
  */
@@ -11,8 +34,22 @@ export function formatRegNo(serial: number): string {
     return `${PREFIX}${xxxxxx}`;
 }
 
+/**
+ * Dojo-owner Reg No format: JKA-BD-XYZ-NNNN
+ * where XYZ is the division code and NNNN is a 4-digit serial (0001–9999).
+ * Example: JKA-BD-DHA-0001
+ */
+export function formatDojoOwnerRegNo(code: string, serial: number): string {
+    const nnnn = String(serial).padStart(4, "0");
+    return `${PREFIX}${code}-${nnnn}`;
+}
+
 export function isRegNo(value: string): boolean {
     return /^JKA-BD-\d{6}$/.test(value.trim().toUpperCase());
+}
+
+export function isDojoOwnerRegNo(value: string): boolean {
+    return /^JKA-BD-[A-Z]{3}-\d{4}$/.test(value.trim().toUpperCase());
 }
 
 /**
@@ -46,6 +83,78 @@ export async function generateNextRegNo(now: Date = new Date()): Promise<string>
         );
     }
     return formatRegNo(nextSerial);
+}
+
+/**
+ * Generate the next available dojo-owner Reg No for a given division code.
+ * Scans existing user.memberNumber rows matching JKA-BD-{code}-xxxx and
+ * picks the next serial. Serial range is 0001–9999.
+ */
+export async function generateNextDojoOwnerRegNo(code: string): Promise<string> {
+    const scoped = `${PREFIX}${code}-`;
+    const existing = await prisma.user.findMany({
+        where: { memberNumber: { startsWith: scoped } },
+        select: { memberNumber: true },
+    });
+
+    let maxSerial = 0;
+    for (const u of existing) {
+        const raw = u.memberNumber ?? "";
+        const tail = raw.slice(scoped.length);
+        if (/^\d{4}$/.test(tail)) {
+            const n = Number.parseInt(tail, 10);
+            if (Number.isFinite(n) && n > maxSerial) {
+                maxSerial = n;
+            }
+        }
+    }
+
+    const nextSerial = maxSerial + 1;
+    if (nextSerial > 9999) {
+        throw new Error(
+            `Dojo-owner Reg No range exhausted for division ${code} (max 9999).`,
+        );
+    }
+    return formatDojoOwnerRegNo(code, nextSerial);
+}
+
+/**
+ * Assign a division-scoped Reg No (JKA-BD-XYZ-NNNN) to a dojo owner.
+ * Overwrites any prior generic reg no on the users row so a dojo owner
+ * always carries the division-scoped format once enlistment is committed.
+ * Idempotent when the current value already matches the division.
+ */
+export async function ensureDojoOwnerRegNo(
+    userId: string,
+    division: string,
+): Promise<string | null> {
+    const code = divisionCode(division);
+    if (!code) return null;
+
+    const user = await prisma.user.findUnique({
+        where: { id: userId },
+        select: { memberNumber: true },
+    });
+    if (!user) return null;
+
+    const scoped = `${PREFIX}${code}-`;
+    if (user.memberNumber?.startsWith(scoped)) {
+        return user.memberNumber;
+    }
+
+    for (let attempt = 0; attempt < 5; attempt++) {
+        try {
+            const regNo = await generateNextDojoOwnerRegNo(code);
+            await prisma.user.update({
+                where: { id: userId },
+                data: { memberNumber: regNo },
+            });
+            return regNo;
+        } catch (err: any) {
+            if (err?.code !== "P2002") throw err;
+        }
+    }
+    return null;
 }
 
 /**
