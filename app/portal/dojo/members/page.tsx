@@ -14,6 +14,7 @@ import {
     type InvitableRole,
 } from "@/lib/dojo-roles";
 import { resolveDojoFeatureLocks } from "@/lib/dojo/feature-locks.server";
+import { DEFAULT_TIME_ZONE, formatDate } from "@/lib/format/datetime";
 
 export const metadata: Metadata = {
     title: "Members — Dojo Dashboard",
@@ -132,6 +133,7 @@ export default async function MembersPage({
                     joined: s.joinDate.toLocaleDateString(undefined, {
                         month: "short",
                         year: "numeric",
+                        timeZone: DEFAULT_TIME_ZONE,
                     }),
                     status: s.user.isActive ? "Active" : "Inactive",
                 });
@@ -157,6 +159,7 @@ export default async function MembersPage({
                     joined: i.joinedDate.toLocaleDateString(undefined, {
                         month: "short",
                         year: "numeric",
+                        timeZone: DEFAULT_TIME_ZONE,
                     }),
                     status: "Active",
                 });
@@ -182,6 +185,7 @@ export default async function MembersPage({
                     joined: m.createdAt.toLocaleDateString(undefined, {
                         month: "short",
                         year: "numeric",
+                        timeZone: DEFAULT_TIME_ZONE,
                     }),
                     status: "Active",
                 });
@@ -595,11 +599,7 @@ function relativeTime(date: Date): string {
     if (hours < 24) return `${hours} hour${hours === 1 ? "" : "s"} ago`;
     const days = Math.floor(hours / 24);
     if (days < 30) return `${days} day${days === 1 ? "" : "s"} ago`;
-    return date.toLocaleDateString(undefined, {
-        day: "numeric",
-        month: "short",
-        year: "numeric",
-    });
+    return formatDate(date);
 }
 
 export const dynamic = "force-dynamic";

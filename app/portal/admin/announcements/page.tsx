@@ -5,6 +5,7 @@ import PostedNewTabs, { type TabValue } from "@/components/portal/posted-new-tab
 import Pager from "@/components/portal/pager";
 import { requireAdmin } from "@/lib/admin-guard";
 import { prisma } from "@/lib/prisma";
+import { formatDate } from "@/lib/format/datetime";
 
 export const metadata: Metadata = {
     title: "Announcements — Admin",
@@ -23,7 +24,7 @@ function formatPostedAt(date: Date): string {
     if (hours < 24) return `${hours}h ago`;
     const days = Math.round(hours / 24);
     if (days < 7) return `${days}d ago`;
-    return date.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
+    return formatDate(date);
 }
 
 export default async function AdminAnnouncementsPage({

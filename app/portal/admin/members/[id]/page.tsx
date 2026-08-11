@@ -24,6 +24,7 @@ import {
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/admin-guard";
 import { serialize } from "@/lib/serialize";
+import { DEFAULT_TIME_ZONE } from "@/lib/format/datetime";
 
 export const dynamic = "force-dynamic";
 
@@ -35,6 +36,7 @@ const dateFmt = new Intl.DateTimeFormat("en-GB", {
     day: "2-digit",
     month: "short",
     year: "numeric",
+    timeZone: DEFAULT_TIME_ZONE,
 });
 
 const dateTimeFmt = new Intl.DateTimeFormat("en-GB", {
@@ -43,6 +45,7 @@ const dateTimeFmt = new Intl.DateTimeFormat("en-GB", {
     year: "numeric",
     hour: "2-digit",
     minute: "2-digit",
+    timeZone: DEFAULT_TIME_ZONE,
 });
 
 const ROLE_LABELS: Record<string, string> = {

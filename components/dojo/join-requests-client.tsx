@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { acceptJoinRequestAction } from "@/app/portal/dojo/join-requests/actions";
 import { beltStepsFromWhite } from "@/lib/joining";
+import { DEFAULT_TIME_ZONE } from "@/lib/format/datetime";
 
 type Request = {
     id: string;
@@ -103,7 +104,9 @@ export default function DojoJoinRequestsClient({
                                     <p className="text-sm font-semibold text-zinc-900 truncate">{r.user.fullName}</p>
                                     <p className="text-xs text-zinc-500">
                                         {r.assignedRank ?? "White Belt"}
-                                        {r.joinedAt ? ` · joined ${new Date(r.joinedAt).toLocaleDateString("en-GB", { day: "numeric", month: "short" })}` : ""}
+                                        {r.joinedAt ? ` · joined ${new Date(r.joinedAt).toLocaleDateString("en-GB", { day: "numeric", month: "short" ,
+ timeZone: DEFAULT_TIME_ZONE,
+})}` : ""}
                                     </p>
                                 </div>
                                 <Check size={16} className="text-emerald-500" />
@@ -174,7 +177,9 @@ function RequestCard({
                         )}
                         <span className="inline-flex items-center gap-1">
                             <Clock size={11} />
-                            Requested {new Date(request.createdAt).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })}
+                            Requested {new Date(request.createdAt).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" ,
+ timeZone: DEFAULT_TIME_ZONE,
+})}
                         </span>
                     </div>
 

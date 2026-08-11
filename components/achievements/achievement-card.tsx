@@ -2,6 +2,7 @@ import * as Icons from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import type { AchievementTier } from "@/prisma/generated/client";
 import { TIER_STYLES } from "@/lib/achievements/catalog";
+import { DEFAULT_TIME_ZONE } from "@/lib/format/datetime";
 
 export type AchievementCardProps = {
     name: string;
@@ -74,6 +75,8 @@ export default function AchievementCard({
                             day: "numeric",
                             month: "short",
                             year: "numeric",
+                        
+                            timeZone: DEFAULT_TIME_ZONE,
                         })}
                     </span>
                 )}

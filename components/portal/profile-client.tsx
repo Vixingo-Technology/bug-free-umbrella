@@ -13,6 +13,7 @@ import {
 import { updateProfileAction, changePasswordAction } from "@/app/portal/profile/actions";
 import { BLOOD_GROUPS } from "@/lib/constants";
 import { validatePhone } from "@/lib/validation/phone";
+import { DEFAULT_TIME_ZONE } from "@/lib/format/datetime";
 
 interface Props {
     member: any;
@@ -108,10 +109,14 @@ export default function ProfileClient({ member, dojos, userId }: Props) {
 
     /* ── Derived display values ──────────────────────────────────────────── */
     const expiryDate = member?.expiryDate
-        ? new Date(member.expiryDate).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })
+        ? new Date(member.expiryDate).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" ,
+ timeZone: DEFAULT_TIME_ZONE,
+})
         : null;
     const createdAt = member?.createdAt
-        ? new Date(member.createdAt).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })
+        ? new Date(member.createdAt).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" ,
+ timeZone: DEFAULT_TIME_ZONE,
+})
         : null;
 
     /* ── Handlers ────────────────────────────────────────────────────────── */

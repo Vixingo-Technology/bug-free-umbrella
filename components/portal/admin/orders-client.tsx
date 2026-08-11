@@ -11,6 +11,7 @@ import {
     updateOrderStatusAction,
     updateOrderFulfillmentAction,
 } from "@/app/actions/admin-orders";
+import { DEFAULT_TIME_ZONE } from "@/lib/format/datetime";
 
 type Status = "PENDING" | "PAID" | "FAILED" | "REFUNDED";
 type FulfillmentStatus = "PREPARING" | "IN_TRANSIT" | "DELIVERED" | "RETURNED";
@@ -81,7 +82,8 @@ function formatTimestamp(v: string | Date) {
         year: "numeric",
         hour: "2-digit",
         minute: "2-digit",
-    });
+        timeZone: DEFAULT_TIME_ZONE,
+});
 }
 
 const PAGE_SIZE = 10;

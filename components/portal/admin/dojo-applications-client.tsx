@@ -15,6 +15,7 @@ import {
     approveDojoApplicationAction,
     rejectDojoApplicationAction,
 } from "@/app/actions/admin-dojo-applications";
+import { DEFAULT_TIME_ZONE } from "@/lib/format/datetime";
 
 type Trainer = {
     name?: string;
@@ -273,6 +274,8 @@ function ApplicationRow({
                                     day: "numeric",
                                     month: "short",
                                     year: "numeric",
+                                
+                                    timeZone: DEFAULT_TIME_ZONE,
                                 }
                             )}
                         </span>

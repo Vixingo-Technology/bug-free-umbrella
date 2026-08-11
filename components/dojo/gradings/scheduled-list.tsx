@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { CalendarCheck2, MapPin, Users, ChevronRight, XCircle, CheckCircle2 } from "lucide-react";
 import { prisma } from "@/lib/prisma";
+import { DEFAULT_TIME_ZONE } from "@/lib/format/datetime";
 
 export default async function ScheduledList({ dojoId }: { dojoId: string }) {
   const events = await prisma.gradingEvent.findMany({
@@ -45,8 +46,12 @@ export default async function ScheduledList({ dojoId }: { dojoId: string }) {
                     day: "numeric",
                     month: "short",
                     year: "numeric",
-                  })}{" "}
-                  · {e.eventDate.toLocaleTimeString("en-GB", { hour: "numeric", minute: "2-digit", hour12: true })}
+                  
+                    timeZone: DEFAULT_TIME_ZONE,
+                })}{" "}
+                  · {e.eventDate.toLocaleTimeString("en-GB", { hour: "numeric", minute: "2-digit", hour12: true ,
+ timeZone: DEFAULT_TIME_ZONE,
+})}
                 </p>
                 <div className="flex items-center gap-3 text-[11px] text-zinc-500 mt-1">
                   {e.location && (

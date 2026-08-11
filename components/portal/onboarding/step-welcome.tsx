@@ -5,6 +5,7 @@ import { motion, useMotionValue, useTransform, useSpring } from "motion/react";
 import { CreditCard, Zap, Clock, ChevronLeft, AlertCircle } from "lucide-react";
 import { payNowAction, payLaterAction } from "@/app/portal/onboarding/actions";
 import { BELT_COLORS } from "@/lib/constants";
+import { DEFAULT_TIME_ZONE } from "@/lib/format/datetime";
 
 interface Props {
     member: any;
@@ -58,7 +59,9 @@ export default function StepWelcome({
     // Expiry = 1 year from today
     const expiry = new Date();
     expiry.setFullYear(expiry.getFullYear() + 1);
-    const expiryStr = expiry.toLocaleDateString("en-GB", { month: "2-digit", year: "2-digit" });
+    const expiryStr = expiry.toLocaleDateString("en-GB", { month: "2-digit", year: "2-digit" ,
+ timeZone: DEFAULT_TIME_ZONE,
+});
 
     function handlePay() {
         if (!orderId) return;

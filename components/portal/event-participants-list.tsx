@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ArrowLeft, Calendar, MapPin, CheckCircle2, Circle, QrCode, Trophy } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { parseCustomDivisions, resolveDivision } from "@/lib/tournaments/divisions";
+import { DEFAULT_TIME_ZONE } from "@/lib/format/datetime";
 
 export type EventParticipantsListProps = {
     eventId: string;
@@ -19,7 +20,8 @@ function formatDate(d: Date): string {
         year: "numeric",
         hour: "numeric",
         minute: "2-digit",
-    });
+        timeZone: DEFAULT_TIME_ZONE,
+});
 }
 
 export default async function EventParticipantsList({

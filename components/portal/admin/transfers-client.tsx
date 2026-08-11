@@ -14,6 +14,7 @@ import {
     approveTransferAction,
     denyTransferAction,
 } from "@/app/portal/admin/transfers/actions";
+import { formatDateTime } from "@/lib/format/datetime";
 
 type Row = {
     id: string;
@@ -208,7 +209,7 @@ function RequestCard({
                         </div>
                     )}
                     <div className="text-[11px] text-zinc-400 mt-2 flex items-center gap-1.5">
-                        <Clock size={11} /> {new Date(row.createdAt).toLocaleString("en-GB")}
+                        <Clock size={11} /> {formatDateTime(row.createdAt)}
                     </div>
                 </div>
 

@@ -8,6 +8,7 @@ import {
     XCircle, Clock, Loader2, Shield, CreditCard, X,
 } from "lucide-react";
 import { createRenewalOrderAction } from "@/app/portal/renew/actions";
+import { DEFAULT_TIME_ZONE } from "@/lib/format/datetime";
 
 type Feedback =
     | { kind: "success"; expiry: string | null }
@@ -32,7 +33,9 @@ function ExpiryBanner({ member }: { member: any }) {
         : null;
 
     const expiryFormatted = expiry
-        ? expiry.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })
+        ? expiry.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" ,
+ timeZone: DEFAULT_TIME_ZONE,
+})
         : null;
 
     if (status === "ACTIVE" && daysLeft !== null && daysLeft > 30) {
@@ -175,6 +178,8 @@ export default function RenewClient({ member, membershipFeeBDT, userId, feedback
                         <span className="font-semibold text-zinc-900">
                             {renewedUntil.toLocaleDateString("en-GB", {
                                 day: "numeric", month: "long", year: "numeric",
+                            
+                                timeZone: DEFAULT_TIME_ZONE,
                             })}
                         </span>
                     </div>
@@ -282,6 +287,8 @@ function RenewalPopup({
                                                     day: "numeric",
                                                     month: "long",
                                                     year: "numeric",
+                                                
+                                                    timeZone: DEFAULT_TIME_ZONE,
                                                 },
                                             )}
                                         </p>

@@ -6,6 +6,7 @@ import Link from "next/link";
 import { Trophy, ChevronRight, Lock } from "lucide-react";
 import { TIER_STYLES } from "@/lib/achievements/catalog";
 import type { AchievementTier } from "@/prisma/generated/client";
+import { DEFAULT_TIME_ZONE } from "@/lib/format/datetime";
 
 export type AchievementItem = {
     slug: string;
@@ -105,6 +106,8 @@ export default function AchievementsPanel({ achievements, unlocked, total, pct }
                                     day: "numeric",
                                     month: "short",
                                     year: "numeric",
+                                
+                                    timeZone: DEFAULT_TIME_ZONE,
                                 })}
                             </p>
                         )}

@@ -22,6 +22,7 @@ import {
     markAllReadAction,
     markNotificationReadAction,
 } from "@/app/portal/notifications/actions";
+import { DEFAULT_TIME_ZONE } from "@/lib/format/datetime";
 
 type Notif = {
     id: string;
@@ -61,6 +62,8 @@ function relativeTime(d: Date): string {
     return d.toLocaleDateString("en-GB", {
         day: "numeric",
         month: "short",
+    
+        timeZone: DEFAULT_TIME_ZONE,
     });
 }
 

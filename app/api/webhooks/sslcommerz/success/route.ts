@@ -6,6 +6,7 @@ import { notifyAdmins, notifyMembers } from "@/lib/notify";
 import { findUserIdsByRoles } from "@/lib/notify/recipients";
 import { extendExpiry } from "@/lib/renewals/extend-expiry";
 import { kindForOrder, recordPaymentOutcome } from "@/lib/payments/log";
+import { formatDateLong } from "@/lib/format/datetime";
 
 // Landing pages for the buyer after we finish server-side processing. We
 // prefer the page the buyer came from (renew form, dojo renewal card) so
@@ -478,7 +479,7 @@ export async function POST(request: Request) {
                                 ? "Membership renewed"
                                 : "Payment received",
                     message: renewedExpiryIso
-                        ? `Payment of ${order.currency} ${Number(order.total).toLocaleString()} received. Valid until ${new Date(renewedExpiryIso).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}.`
+                        ? `Payment of ${order.currency} ${Number(order.total).toLocaleString()} received. Valid until ${formatDateLong(renewedExpiryIso)}.`
                         : `Your payment of ${order.currency} ${Number(order.total).toLocaleString()} was successful. Thank you!`,
                     type: "PAYMENT",
                     link: receiptLink,

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { emitWebhook } from "@/lib/n8n";
 import { notifyMembers } from "@/lib/notify";
+import { formatDateLong } from "@/lib/format/datetime";
 
 export const dynamic = "force-dynamic";
 
@@ -85,7 +86,7 @@ export async function GET(request: Request) {
         if (owner?.id) {
             await notifyMembers([owner.id], {
                 title: "Dojo membership expires in 30 days",
-                message: `${dojo.name} — expires ${dojo.expiryDate?.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" }) ?? "soon"}. Renew now to avoid interruption.`,
+                message: `${dojo.name} — expires ${dojo.expiryDate ? formatDateLong(dojo.expiryDate) : "soon"}. Renew now to avoid interruption.`,
                 type: "PAYMENT",
                 link: "/portal/dojo/renewals",
             });
@@ -112,7 +113,7 @@ export async function GET(request: Request) {
         if (u?.id) {
             await notifyMembers([u.id], {
                 title: "Membership expires in 30 days",
-                message: `Your JKA membership expires ${student.expiryDate?.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" }) ?? "soon"}. Renew now to keep training.`,
+                message: `Your JKA membership expires ${student.expiryDate ? formatDateLong(student.expiryDate) : "soon"}. Renew now to keep training.`,
                 type: "PAYMENT",
                 link: "/portal/renew",
             });

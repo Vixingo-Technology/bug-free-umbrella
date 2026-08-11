@@ -24,6 +24,7 @@ import {
     markAllReadAction,
     loadMoreNotificationsAction,
 } from "@/app/portal/notifications/actions";
+import { DEFAULT_TIME_ZONE, formatDateTime } from "@/lib/format/datetime";
 
 interface Props {
     notifications: any[];
@@ -96,6 +97,8 @@ function relativeTime(d: Date): string {
         day: "numeric",
         month: "short",
         year: "numeric",
+    
+        timeZone: DEFAULT_TIME_ZONE,
     });
 }
 
@@ -455,7 +458,7 @@ export default function NotificationsClient({
                                             </p>
                                             <time
                                                 dateTime={new Date(notif.createdAt).toISOString()}
-                                                title={new Date(notif.createdAt).toLocaleString("en-GB")}
+                                                title={formatDateTime(notif.createdAt)}
                                                 className={`text-[11px] flex-shrink-0 ${
                                                     isRead ? "text-zinc-400" : "text-zinc-500"
                                                 }`}

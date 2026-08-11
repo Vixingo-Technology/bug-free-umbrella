@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { ShoppingBag, CreditCard, ChevronDown, ChevronUp, Package } from "lucide-react";
+import { DEFAULT_TIME_ZONE } from "@/lib/format/datetime";
 
 interface Props {
     orders: any[];
@@ -63,7 +64,9 @@ function OrderRow({ order }: { order: any }) {
                             {orderLabel(order, hasOrderItems)}
                         </p>
                         <p className="text-xs text-zinc-500 mt-0.5">
-                            {new Date(order.createdAt).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}
+                            {new Date(order.createdAt).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" ,
+ timeZone: DEFAULT_TIME_ZONE,
+})}
                             {order.paymentMethod && ` · ${order.paymentMethod}`}
                         </p>
                     </div>

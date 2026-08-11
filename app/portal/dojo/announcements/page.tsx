@@ -6,6 +6,7 @@ import PostedNewTabs, { type TabValue } from "@/components/portal/posted-new-tab
 import Pager from "@/components/portal/pager";
 import { requireDojoRole } from "@/lib/dojo-session";
 import { prisma } from "@/lib/prisma";
+import { DEFAULT_TIME_ZONE } from "@/lib/format/datetime";
 
 export const metadata: Metadata = {
     title: "Announcements — Dojo Dashboard",
@@ -24,7 +25,7 @@ function formatPostedAt(date: Date): string {
     if (hours < 24) return `Posted ${hours}h ago`;
     const days = Math.round(hours / 24);
     if (days < 7) return `Posted ${days}d ago`;
-    return `Posted ${date.toLocaleDateString("en-GB", { day: "numeric", month: "short" })}`;
+    return `Posted ${new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short", timeZone: DEFAULT_TIME_ZONE }).format(date)}`;
 }
 
 export default async function AnnouncementsPage({

@@ -17,6 +17,7 @@ import DojoPageHeader from "@/components/dojo/page-header";
 import DojoSetupChecklist from "@/components/portal/dojo-setup-checklist";
 import { hasAtLeast, ROLE_LABEL, type DojoRole } from "@/lib/dojo-roles";
 import { prisma } from "@/lib/prisma";
+import { DEFAULT_TIME_ZONE } from "@/lib/format/datetime";
 
 const WEEK_MS = 7 * 24 * 60 * 60 * 1000;
 
@@ -415,6 +416,8 @@ async function loadRenewalStatus(dojoId: string): Promise<RenewalStatus | null> 
         day: "numeric",
         month: "long",
         year: "numeric",
+    
+        timeZone: DEFAULT_TIME_ZONE,
     });
     return {
         state: daysLeft < 0 ? "EXPIRED" : "EXPIRING",

@@ -6,6 +6,7 @@ import { motion } from "motion/react";
 import { Search, ChevronLeft, ChevronRight, IdCard, X } from "lucide-react";
 import DigitalCardModal from "@/components/portal/digital-card-modal";
 import type { MembershipStatusLabel } from "@/components/portal/digital-card";
+import { DEFAULT_TIME_ZONE } from "@/lib/format/datetime";
 
 export interface DirectoryMember {
     id: string;
@@ -376,6 +377,8 @@ function fmtDate(iso: string | null): string | null {
     return d.toLocaleDateString("en-GB", {
         month: "short",
         year: "numeric",
+    
+        timeZone: DEFAULT_TIME_ZONE,
     });
 }
 

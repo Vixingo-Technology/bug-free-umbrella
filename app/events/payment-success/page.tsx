@@ -3,6 +3,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { ArrowRight, CheckCircle2, Ticket } from "lucide-react";
 import { prisma } from "@/lib/prisma";
+import { DEFAULT_TIME_ZONE } from "@/lib/format/datetime";
 
 export const metadata: Metadata = {
     title: "Ticket confirmed — JKA Bangladesh",
@@ -58,13 +59,14 @@ export default async function EventPaymentSuccessPage({
 
     const participantName =
         reg.user?.fullName ?? reg.guestName ?? "Participant";
-    const eventDate = reg.event.eventDate.toLocaleString("en-GB", {
+    const eventDate = new Intl.DateTimeFormat("en-GB", {
         day: "numeric",
         month: "long",
         year: "numeric",
         hour: "2-digit",
         minute: "2-digit",
-    });
+        timeZone: DEFAULT_TIME_ZONE,
+    }).format(reg.event.eventDate);
 
     return (
         <main className="min-h-screen bg-bg-charcoal pb-24 pt-24">

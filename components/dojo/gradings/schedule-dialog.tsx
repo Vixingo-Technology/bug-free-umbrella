@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react";
 import { Loader2, CalendarPlus, X } from "lucide-react";
 import { scheduleExamAction } from "@/app/portal/dojo/gradings/actions";
+import { DEFAULT_TIME_ZONE } from "@/lib/format/datetime";
 
 export default function ScheduleDialog({
   selectedIds, dojoAddress, onClose, onScheduled,
@@ -12,7 +13,9 @@ export default function ScheduleDialog({
   onClose: () => void;
   onScheduled: () => void;
 }) {
-  const defaultName = `Belt Grading — ${new Date().toLocaleDateString("en-GB", { month: "long", year: "numeric" })}`;
+  const defaultName = `Belt Grading — ${new Date().toLocaleDateString("en-GB", { month: "long", year: "numeric" ,
+ timeZone: DEFAULT_TIME_ZONE,
+})}`;
   const [name, setName] = useState(defaultName);
   const [date, setDate] = useState("");          // yyyy-mm-dd
   const [time, setTime] = useState("10:00");      // HH:mm

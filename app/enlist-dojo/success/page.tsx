@@ -16,6 +16,7 @@ import Logo from "@/assets/jka_logo.svg";
 import { createClient } from "@/lib/supabase/server";
 import { prisma } from "@/lib/prisma";
 import { getFees } from "@/lib/settings/fees";
+import { DEFAULT_TIME_ZONE } from "@/lib/format/datetime";
 import PrintReceiptButton from "./print-button";
 
 export const metadata: Metadata = {
@@ -106,7 +107,7 @@ function SuccessScreen({
     enlistmentFeeBDT: number;
 }) {
     const reference = `DOJO-${application.id.slice(0, 8).toUpperCase()}`;
-    const submittedAt = application.updatedAt.toLocaleString("en-GB", {
+    const submittedAt = new Intl.DateTimeFormat("en-GB", {
         day: "numeric",
         month: "long",
         year: "numeric",
@@ -114,7 +115,8 @@ function SuccessScreen({
         minute: "2-digit",
         second: "2-digit",
         hour12: true,
-    });
+        timeZone: DEFAULT_TIME_ZONE,
+    }).format(application.updatedAt);
 
     const checklist = [
         {

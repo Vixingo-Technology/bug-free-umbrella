@@ -9,6 +9,7 @@ import PipelineTabs, { type PipelineTab } from "@/components/dojo/gradings/pipel
 import { hasAtLeast, ROLE_LABEL } from "@/lib/dojo-roles";
 import { requireDojoRole } from "@/lib/dojo-session";
 import { prisma } from "@/lib/prisma";
+import { DEFAULT_TIME_ZONE, formatDate } from "@/lib/format/datetime";
 
 export const metadata: Metadata = {
     title: "Belt tests — Dojo Dashboard",
@@ -262,12 +263,9 @@ async function loadPipelineRows(
             marks: g.marks,
             isDoublePromotion: g.isDoublePromotion,
             eventName: g.gradingEvent?.name ?? "",
-            publishedOn:
-                g.gradingEvent?.resultsPublishedAt?.toLocaleDateString(undefined, {
-                    day: "numeric",
-                    month: "short",
-                    year: "numeric",
-                }) ?? "",
+            publishedOn: g.gradingEvent?.resultsPublishedAt
+                ? formatDate(g.gradingEvent.resultsPublishedAt)
+                : "",
             certificateStatus: cert?.status ?? null,
             certificateUrl: cert?.certificateUrl ?? null,
         };
@@ -351,6 +349,7 @@ async function loadRealCandidates(dojoId: string): Promise<Candidate[]> {
         appliedOn: a.appliedAt.toLocaleDateString(undefined, {
             day: "numeric",
             month: "short",
+            timeZone: DEFAULT_TIME_ZONE,
         }),
         stage: "APPLIED" as const,
         paymentStatus: "PAID" as const,

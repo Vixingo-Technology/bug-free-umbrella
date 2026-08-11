@@ -9,6 +9,7 @@ import PostedNewTabs, { type TabValue } from "@/components/portal/posted-new-tab
 import Pager from "@/components/portal/pager";
 import { requireAdmin } from "@/lib/admin-guard";
 import { prisma } from "@/lib/prisma";
+import { DEFAULT_TIME_ZONE } from "@/lib/format/datetime";
 import { parseCustomDivisions } from "@/lib/tournaments/divisions";
 import { countUniqueParticipantsByEvent } from "@/lib/events/participant-count";
 
@@ -31,12 +32,13 @@ const CATEGORY_LABEL: Record<string, string> = {
 };
 
 function formatDate(d: Date): string {
-    return d.toLocaleString("en-GB", {
+    return new Intl.DateTimeFormat("en-GB", {
         weekday: "short",
         day: "numeric",
         month: "short",
         year: "numeric",
-    });
+        timeZone: DEFAULT_TIME_ZONE,
+    }).format(d);
 }
 
 export default async function AdminEventsPage({

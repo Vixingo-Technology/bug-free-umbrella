@@ -107,7 +107,7 @@ export default function Hero() {
                 style={{ opacity }}
                 className="relative z-20 max-w-7xl mx-auto px-6 text-center lg:text-left flex flex-col lg:flex-row items-center w-full"
             >
-                <div className="flex-1 mt-20 lg:mt-0">
+                <div className="flex-1 mt-20 lg:mt-0 ">
                     <motion.div
                         initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -134,8 +134,8 @@ export default function Hero() {
                             <br />
                             {copy.hero.titleLines[1]}
                         </span>
-                        <br />
-                        <span className="italic font-light text-accent-red drop-shadow-[0_0_15px_rgba(196,30,58,0.3)]">
+
+                        <span className="italic font-karate text-accent-red ">
                             {copy.hero.titleLines[2]}
                         </span>
                     </motion.h1>

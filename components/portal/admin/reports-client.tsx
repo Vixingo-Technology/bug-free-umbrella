@@ -17,6 +17,7 @@ import {
     ChevronDown,
 } from "lucide-react";
 import { REPORT_DEFINITIONS, type ReportKey, type ReportDefinition } from "@/lib/reports/report-types";
+import { DEFAULT_TIME_ZONE } from "@/lib/format/datetime";
 
 type Dojo = { id: string; name: string; shortName: string | null };
 type Member = {
@@ -452,7 +453,9 @@ export default function ReportsAdminClient({ dojos, members, events }: Props) {
                                         const active = e.id === eventId;
                                         const dateLabel = new Date(e.eventDate).toLocaleDateString(
                                             "en-GB",
-                                            { day: "numeric", month: "short", year: "numeric" },
+                                            { day: "numeric", month: "short", year: "numeric" ,
+ timeZone: DEFAULT_TIME_ZONE,
+},
                                         );
                                         return (
                                             <button

@@ -23,6 +23,7 @@ import {
 } from "@/app/portal/dojo/gradings/actions";
 import { bandForMarks, marksEarnDoublePromotion } from "@/lib/grading-marks";
 import type { DojoRole } from "@/lib/dojo-roles";
+import { DEFAULT_TIME_ZONE } from "@/lib/format/datetime";
 
 type Event = {
   id: string;
@@ -655,5 +656,9 @@ function Banner({ kind, children }: { kind: "muted" | "ok" | "owner"; children: 
 
 function fmtDateTime(s: string): string {
   const d = new Date(s);
-  return `${d.toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short", year: "numeric" })} · ${d.toLocaleTimeString("en-GB", { hour: "numeric", minute: "2-digit", hour12: true })}`;
+  return `${d.toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short", year: "numeric" ,
+ timeZone: DEFAULT_TIME_ZONE,
+})} · ${d.toLocaleTimeString("en-GB", { hour: "numeric", minute: "2-digit", hour12: true ,
+ timeZone: DEFAULT_TIME_ZONE,
+})}`;
 }

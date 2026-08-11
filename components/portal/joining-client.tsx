@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import TiltCard from "./tilt-card";
 import { startMembershipPaymentAction } from "@/app/portal/joining/actions";
+import { DEFAULT_TIME_ZONE } from "@/lib/format/datetime";
 
 type JoinStage = "FEE_UNPAID" | "AWAITING_APPROVAL" | "PAST_BELT_UNPAID" | "JOINED";
 
@@ -442,6 +443,8 @@ function MembershipFeeCard({
                                 day: "numeric",
                                 month: "long",
                                 year: "numeric",
+                            
+                                timeZone: DEFAULT_TIME_ZONE,
                             })}
                         </span>
                     </div>

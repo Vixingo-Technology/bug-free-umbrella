@@ -2,6 +2,7 @@ import Link from "next/link";
 import { CheckCircle2, Clock, XCircle, Ban, Receipt } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/admin-guard";
+import { formatDate, formatTime } from "@/lib/format/datetime";
 import type {
     PaymentTransactionKind,
     PaymentTransactionStatus,
@@ -154,18 +155,11 @@ export default async function AdminTransactionsPage({
                                 {rows.map((r) => {
                                     const style = STATUS_STYLE[r.status];
                                     const Icon = style.Icon;
-                                    const when = new Date(r.createdAt);
                                     return (
                                         <tr key={r.id} className="border-b border-zinc-100 hover:bg-zinc-50 transition-colors">
                                             <td className="px-5 py-3 text-xs text-zinc-500 whitespace-nowrap">
-                                                <p className="font-mono text-zinc-700">
-                                                    {when.toLocaleDateString("en-GB", {
-                                                        day: "2-digit",
-                                                        month: "short",
-                                                        year: "numeric",
-                                                    })}
-                                                </p>
-                                                <p>{when.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" })}</p>
+                                                <p className="font-mono text-zinc-700">{formatDate(r.createdAt)}</p>
+                                                <p>{formatTime(r.createdAt)}</p>
                                             </td>
                                             <td className="px-5 py-3">
                                                 <p className="font-semibold text-zinc-900">

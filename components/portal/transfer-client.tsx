@@ -19,6 +19,7 @@ import {
     cancelPendingTransferAction,
     previewTransferCouponAction,
 } from "@/app/portal/transfer/actions";
+import { DEFAULT_TIME_ZONE } from "@/lib/format/datetime";
 
 type Dojo = { id: string; name: string };
 
@@ -467,6 +468,8 @@ export default function TransferClient({
                                             day: "numeric",
                                             month: "long",
                                             year: "numeric",
+                                        
+                                            timeZone: DEFAULT_TIME_ZONE,
                                         })}
                                     </div>
                                 </div>

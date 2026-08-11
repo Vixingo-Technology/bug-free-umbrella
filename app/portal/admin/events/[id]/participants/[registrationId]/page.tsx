@@ -19,6 +19,7 @@ import {
 import { requireAdmin } from "@/lib/admin-guard";
 import { prisma } from "@/lib/prisma";
 import { parseCustomDivisions, resolveDivision } from "@/lib/tournaments/divisions";
+import { DEFAULT_TIME_ZONE, formatDateLong } from "@/lib/format/datetime";
 
 export const metadata: Metadata = {
     title: "Participant — Admin",
@@ -27,22 +28,19 @@ export const metadata: Metadata = {
 export const dynamic = "force-dynamic";
 
 function formatDate(d: Date): string {
-    return d.toLocaleString("en-GB", {
+    return new Intl.DateTimeFormat("en-GB", {
         weekday: "short",
         day: "numeric",
         month: "short",
         year: "numeric",
         hour: "numeric",
         minute: "2-digit",
-    });
+        timeZone: DEFAULT_TIME_ZONE,
+    }).format(d);
 }
 
 function formatDay(d: Date): string {
-    return d.toLocaleDateString("en-GB", {
-        day: "numeric",
-        month: "long",
-        year: "numeric",
-    });
+    return formatDateLong(d);
 }
 
 type Teammate = { name?: string; memberNumber?: string | null };

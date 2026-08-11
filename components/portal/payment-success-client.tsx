@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { CheckCircle2, Share2, QrCode, Package, ArrowRight, Home } from "lucide-react";
 import { BELT_COLORS } from "@/lib/constants";
+import { DEFAULT_TIME_ZONE } from "@/lib/format/datetime";
 
 interface Props {
     member: any;
@@ -26,7 +27,9 @@ export default function PaymentSuccessClient({ member, order, hasProducts }: Pro
     const memberNumber = member?.memberNumber ?? "JKA-BD";
     const dojo = member?.dojo?.name ?? "JKA Bangladesh";
     const expiryStr = member?.expiryDate
-        ? new Date(member.expiryDate).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })
+        ? new Date(member.expiryDate).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" ,
+ timeZone: DEFAULT_TIME_ZONE,
+})
         : "—";
     const shareUrl = `${typeof window !== "undefined" ? window.location.origin : ""}/verify/${memberNumber}`;
 

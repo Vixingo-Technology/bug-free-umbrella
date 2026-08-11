@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "motion/react";
 import { Calendar, MapPin, X } from "lucide-react";
+import { DEFAULT_TIME_ZONE } from "@/lib/format/datetime";
 
 export type FabEvent = {
     id: string;
@@ -30,7 +31,8 @@ function formatShort(iso: string) {
         month: "short",
         hour: "numeric",
         minute: "2-digit",
-    });
+        timeZone: DEFAULT_TIME_ZONE,
+});
 }
 
 function daysUntil(iso: string) {
@@ -127,14 +129,18 @@ export default function UpcomingEventFabClient({
                                                                 event.eventDate,
                                                             ).toLocaleDateString(
                                                                 "en-GB",
-                                                                { day: "2-digit" },
+                                                                { day: "2-digit" ,
+ timeZone: DEFAULT_TIME_ZONE,
+},
                                                             )}
                                                         </div>
                                                         <div className="text-[9px] tracking-widest font-bold text-zinc-400 mt-1">
                                                             {new Date(event.eventDate)
                                                                 .toLocaleDateString(
                                                                     "en-GB",
-                                                                    { month: "short" },
+                                                                    { month: "short" ,
+ timeZone: DEFAULT_TIME_ZONE,
+},
                                                                 )
                                                                 .toUpperCase()}
                                                         </div>

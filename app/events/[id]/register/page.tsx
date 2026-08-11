@@ -7,6 +7,7 @@ import Footer from "@/components/footer";
 import { prisma } from "@/lib/prisma";
 import { createClient } from "@/lib/supabase/server";
 import { isJkaMember } from "@/lib/auth/is-jka-member";
+import { DEFAULT_TIME_ZONE } from "@/lib/format/datetime";
 import TournamentRegistrationForm, {
     type MemberAutofill,
     type TournamentRegistrationEvent,
@@ -23,14 +24,15 @@ export const metadata: Metadata = {
 };
 
 function formatDate(d: Date): string {
-    return d.toLocaleString("en-GB", {
+    return new Intl.DateTimeFormat("en-GB", {
         weekday: "long",
         day: "numeric",
         month: "long",
         year: "numeric",
         hour: "numeric",
         minute: "2-digit",
-    });
+        timeZone: DEFAULT_TIME_ZONE,
+    }).format(d);
 }
 
 export default async function RegisterPage({ params, searchParams }: Props) {

@@ -11,6 +11,7 @@ import {
   requestBeltTestAction,
   withdrawRequestAction,
 } from "@/app/portal/grading/actions";
+import { DEFAULT_TIME_ZONE } from "@/lib/format/datetime";
 
 type RequestKind = "pending" | "scheduled" | "declined" | "cancelled";
 
@@ -152,7 +153,9 @@ export default function GradingClient({
                     <p className="text-xs text-zinc-500">
                       {new Date(g.createdAt).toLocaleDateString("en-GB", {
                         day: "numeric", month: "short", year: "numeric",
-                      })}
+                      
+                        timeZone: DEFAULT_TIME_ZONE,
+                    })}
                       {g.gradingEvent?.name ? ` · ${g.gradingEvent.name}` : ""}
                     </p>
                   </div>
@@ -245,7 +248,9 @@ function PendingCard({ row, onWithdraw, disabled }: { row: any; onWithdraw: (id:
         Request submitted for {row.targetRank?.name ?? "next rank"}
       </h2>
       <p className="text-xs text-zinc-500">
-        Sent {new Date(row.appliedAt).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })}
+        Sent {new Date(row.appliedAt).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" ,
+ timeZone: DEFAULT_TIME_ZONE,
+})}
       </p>
       {row.notes && <p className="text-sm text-zinc-600 italic">&quot;{row.notes}&quot;</p>}
       <button
@@ -274,9 +279,13 @@ function ScheduledCard({ row }: { row: any }) {
       <div className="space-y-1 text-sm text-zinc-600">
         <p className="flex items-center gap-2">
           <Calendar size={13} />
-          {date.toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short", year: "numeric" })}
+          {date.toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short", year: "numeric" ,
+ timeZone: DEFAULT_TIME_ZONE,
+})}
           {" · "}
-          {date.toLocaleTimeString("en-GB", { hour: "numeric", minute: "2-digit", hour12: true })}
+          {date.toLocaleTimeString("en-GB", { hour: "numeric", minute: "2-digit", hour12: true ,
+ timeZone: DEFAULT_TIME_ZONE,
+})}
         </p>
         {ev.location && (
           <p className="flex items-center gap-2">

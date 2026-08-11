@@ -6,6 +6,7 @@ import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import AttachmentViewer from "@/components/attachment-viewer";
 import { prisma } from "@/lib/prisma";
+import { DEFAULT_TIME_ZONE } from "@/lib/format/datetime";
 
 type Props = { params: Promise<{ id: string }> };
 
@@ -23,12 +24,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 function formatDate(d: Date): string {
-    return d.toLocaleDateString("en-GB", {
+    return new Intl.DateTimeFormat("en-GB", {
         weekday: "long",
         day: "numeric",
         month: "long",
         year: "numeric",
-    });
+        timeZone: DEFAULT_TIME_ZONE,
+    }).format(d);
 }
 
 export default async function AnnouncementDetailPage({ params }: Props) {

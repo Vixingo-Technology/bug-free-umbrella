@@ -16,6 +16,7 @@ import {
     Calendar,
 } from "lucide-react";
 import TiltCard from "./tilt-card";
+import { DEFAULT_TIME_ZONE } from "@/lib/format/datetime";
 
 interface Props {
     member: any;
@@ -243,7 +244,9 @@ export default function ProgressClient({ member, allBeltRanks, gradings }: Props
                                             )}
                                             {g.gradedAt && (
                                                 <p className="text-xs text-zinc-400">
-                                                    {new Date(g.gradedAt).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })}
+                                                    {new Date(g.gradedAt).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" ,
+ timeZone: DEFAULT_TIME_ZONE,
+})}
                                                 </p>
                                             )}
                                         </div>

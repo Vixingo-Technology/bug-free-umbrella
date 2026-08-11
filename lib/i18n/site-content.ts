@@ -12,7 +12,7 @@ export const siteContent = {
     hero: {
         titleLines: ["THE HIGHEST", "TRADITION OF", "KARATE."],
         description:
-            "The sole legal representative of Japan Karate Association (JKA) in Bangladesh. Preserving the discipline, respect, and power of traditional karate-do since 1978.",
+            "The sole legal representative of Japan Karate Association (JKA) in Bangladesh. Preserving the discipline, respect, and power of traditional karate-do since 2015.",
         primaryCta: "Begin Your Journey",
         secondaryCta: "Explore Dojos",
         loadingTitle: "Loading Dojo",

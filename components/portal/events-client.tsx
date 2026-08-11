@@ -9,6 +9,7 @@ import {
     AlertCircle, Loader2, ChevronRight, Ticket,
 } from "lucide-react";
 import { registerForEventAction, cancelEventRegistrationAction } from "@/app/portal/events/actions";
+import { DEFAULT_TIME_ZONE } from "@/lib/format/datetime";
 
 interface Props {
     upcomingEvents: any[];
@@ -118,7 +119,9 @@ export default function EventsClient({ upcomingEvents, pastEvents, myRegistratio
                                                 {new Date(ev.eventDate).getDate()}
                                             </p>
                                             <p className="text-[9px] tracking-widest uppercase opacity-70 mt-0.5">
-                                                {new Date(ev.eventDate).toLocaleDateString("en-GB", { month: "short" })}
+                                                {new Date(ev.eventDate).toLocaleDateString("en-GB", { month: "short" ,
+ timeZone: DEFAULT_TIME_ZONE,
+})}
                                             </p>
                                         </div>
 
@@ -220,7 +223,9 @@ export default function EventsClient({ upcomingEvents, pastEvents, myRegistratio
                                 <p className="text-sm font-semibold text-zinc-800 mt-2">{ev.title}</p>
                                 <p className="text-xs text-zinc-500 mt-1 flex items-center gap-1">
                                     <CalendarDays size={11} />
-                                    {new Date(ev.eventDate).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}
+                                    {new Date(ev.eventDate).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" ,
+ timeZone: DEFAULT_TIME_ZONE,
+})}
                                 </p>
                             </TiltCard>
                             );

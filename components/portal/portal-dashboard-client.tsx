@@ -22,6 +22,7 @@ import TiltCard from "./tilt-card";
 import DigitalCard from "./digital-card";
 import MembershipCardDialog from "./membership-card-dialog";
 import AchievementsPanel, { type AchievementItem } from "./achievements-panel";
+import { DEFAULT_TIME_ZONE } from "@/lib/format/datetime";
 
 type UpcomingItem =
     | { kind: "event";   id: string; title: string;      date: string; location: string | null }
@@ -119,10 +120,14 @@ export default function PortalDashboardClient({ member, membershipStatus, unread
     const [cardOpen, setCardOpen] = useState(false);
 
     const expiryDate = member?.expiryDate
-        ? new Date(member.expiryDate).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })
+        ? new Date(member.expiryDate).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" ,
+ timeZone: DEFAULT_TIME_ZONE,
+})
         : null;
     const joinedDate = member?.joinedDate
-        ? new Date(member.joinedDate).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })
+        ? new Date(member.joinedDate).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" ,
+ timeZone: DEFAULT_TIME_ZONE,
+})
         : null;
 
     // While the student is still working through the joining flow the whole
@@ -309,7 +314,9 @@ export default function PortalDashboardClient({ member, membershipStatus, unread
                                     <div className="mt-auto pt-2">
                                         <p className="text-xs text-zinc-500 flex items-center gap-1">
                                             <Calendar size={11} />
-                                            {new Date(it.date).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })}
+                                            {new Date(it.date).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" ,
+ timeZone: DEFAULT_TIME_ZONE,
+})}
                                         </p>
                                         {it.location && (
                                             <p className="text-xs text-zinc-500 flex items-center gap-1 mt-0.5">

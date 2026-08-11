@@ -6,6 +6,7 @@ import {
     createServiceCouponAction,
     deactivateCouponAction,
 } from "@/app/portal/dojo/coupons/actions";
+import { formatDate } from "@/lib/format/datetime";
 
 type Service = { id: string; name: string; feeBDT: number };
 
@@ -227,7 +228,7 @@ export default function DojoCouponsClient({
                                         {c.usedCount} / {c.usageLimit}
                                     </td>
                                     <td className="px-4 py-3 text-zinc-600">
-                                        {c.expiresAt ? new Date(c.expiresAt).toLocaleDateString() : "Never"}
+                                        {c.expiresAt ? formatDate(c.expiresAt) : "Never"}
                                     </td>
                                     <td className="px-4 py-3">
                                         <span

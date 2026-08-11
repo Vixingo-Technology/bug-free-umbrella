@@ -20,6 +20,7 @@ import AchievementCard from "@/components/achievements/achievement-card";
 import { prisma } from "@/lib/prisma";
 import { TIER_RANK } from "@/lib/achievements/catalog";
 import type { AchievementTier } from "@/prisma/generated/client";
+import { DEFAULT_TIME_ZONE, formatDateLong } from "@/lib/format/datetime";
 
 export const dynamic = "force-dynamic";
 
@@ -248,12 +249,11 @@ export default async function PublicMemberPage({
                                 {member.joinDate && (
                                     <Stat
                                         label="Member since"
-                                        value={new Date(
-                                            member.joinDate,
-                                        ).toLocaleDateString("en-GB", {
+                                        value={new Intl.DateTimeFormat("en-GB", {
                                             month: "short",
                                             year: "numeric",
-                                        })}
+                                            timeZone: DEFAULT_TIME_ZONE,
+                                        }).format(new Date(member.joinDate))}
                                     />
                                 )}
                             </dl>
@@ -405,11 +405,7 @@ function BeltStep({ grading }: { grading: any }) {
                         </p>
                     )}
                     <p className="text-xs text-zinc-400 mt-0.5 font-mono">
-                        {date.toLocaleDateString("en-GB", {
-                            day: "numeric",
-                            month: "long",
-                            year: "numeric",
-                        })}
+                        {formatDateLong(date)}
                     </p>
                 </div>
                 <span className="inline-flex items-center gap-1 text-xs font-bold tracking-widest uppercase text-emerald-700 bg-emerald-50 px-2 py-1 rounded-sm shrink-0">
@@ -445,10 +441,11 @@ function CertificateCard({ grading }: { grading: any }) {
                     {rankName}
                 </p>
                 <p className="text-xs text-zinc-500 mt-0.5">
-                    {date.toLocaleDateString("en-GB", {
+                    {new Intl.DateTimeFormat("en-GB", {
                         month: "short",
                         year: "numeric",
-                    })}
+                        timeZone: DEFAULT_TIME_ZONE,
+                    }).format(date)}
                 </p>
             </div>
             <Download
@@ -476,11 +473,12 @@ function TournamentRow({ entry }: { entry: any }) {
                 </p>
                 <p className="text-xs text-zinc-500 mt-0.5">
                     {date
-                        ? date.toLocaleDateString("en-GB", {
+                        ? new Intl.DateTimeFormat("en-GB", {
                               day: "numeric",
                               month: "short",
                               year: "numeric",
-                          })
+                              timeZone: DEFAULT_TIME_ZONE,
+                          }).format(date)
                         : ""}
                     {t.location ? ` · ${t.location}` : ""}
                 </p>

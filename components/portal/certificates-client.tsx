@@ -3,6 +3,7 @@
 import { motion } from "motion/react";
 import TiltCard from "./tilt-card";
 import { FileText, Download, Eye, Award, Calendar, CheckCircle2, Info } from "lucide-react";
+import { DEFAULT_TIME_ZONE } from "@/lib/format/datetime";
 
 interface Props {
     member: any;
@@ -105,7 +106,9 @@ export default function CertificatesClient({ member, gradings }: Props) {
                                         <div className="flex items-center justify-between text-sm">
                                             <span className="text-zinc-500">Date</span>
                                             <span className="font-medium text-zinc-700">
-                                                {new Date(g.gradedAt).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}
+                                                {new Date(g.gradedAt).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" ,
+ timeZone: DEFAULT_TIME_ZONE,
+})}
                                             </span>
                                         </div>
                                     )}

@@ -9,6 +9,7 @@ import { getFees } from "@/lib/settings/fees";
 import { notifyAdmins, notifyDojoStaff } from "@/lib/notify";
 import { provisionMemberFromSupabaseUser } from "@/lib/auth/provision-member";
 import { ensureRegNo } from "@/lib/members/reg-no";
+import { formatDateLong } from "@/lib/format/datetime";
 
 // Onboarding pages skip the provisioning that the portal layout normally
 // performs, so the users row may not exist yet when these actions fire.
@@ -238,11 +239,7 @@ export async function completeExistingMemberOnboardingAction() {
             });
 
             const expiryLabel = student.expiryDate
-                ? student.expiryDate.toLocaleDateString(undefined, {
-                      day: "numeric",
-                      month: "long",
-                      year: "numeric",
-                  })
+                ? formatDateLong(student.expiryDate)
                 : null;
 
             await prisma.notification.create({

@@ -6,6 +6,7 @@ import {
     approveServiceByAdminAction,
     denyServiceByAdminAction,
 } from "@/app/portal/admin/service-requests/actions";
+import { formatDate } from "@/lib/format/datetime";
 
 type Status = "PENDING_PAYMENT" | "AWAITING_DOJO" | "AWAITING_ADMIN" | "APPROVED" | "DENIED" | "CANCELLED";
 
@@ -117,7 +118,7 @@ export default function AdminServiceRequestsClient({ requests }: { requests: Req
                                     {r.dojo.name}{r.dojo.city ? `, ${r.dojo.city}` : ""}
                                     {payload.requestedRank ? ` — requests ${payload.requestedRank}` : ""}
                                     {" · "}
-                                    {new Date(r.createdAt).toLocaleDateString()}
+                                    {formatDate(r.createdAt)}
                                 </p>
                             </div>
                             {r.dojoDecision === "REJECTED" && (

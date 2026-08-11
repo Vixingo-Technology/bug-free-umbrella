@@ -6,6 +6,7 @@ import {
     approveServiceByDojoAction,
     rejectServiceByDojoAction,
 } from "@/app/portal/dojo/service-requests/actions";
+import { formatDate } from "@/lib/format/datetime";
 
 type Status = "PENDING_PAYMENT" | "AWAITING_DOJO" | "AWAITING_ADMIN" | "APPROVED" | "DENIED" | "CANCELLED";
 
@@ -120,7 +121,7 @@ export default function DojoServiceRequestsClient({ requests }: { requests: Requ
                                     {r.service.name}
                                     {payload.requestedRank ? ` — to ${payload.requestedRank}` : ""}
                                     {" · "}
-                                    {new Date(r.createdAt).toLocaleDateString()}
+                                    {formatDate(r.createdAt)}
                                 </p>
                             </div>
                             <span className={`text-[11px] px-2.5 py-1 rounded-full font-semibold ${STATUS_TONE[r.status]}`}>

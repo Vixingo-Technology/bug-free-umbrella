@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "motion/react";
 import { Calendar, MapPin, ArrowRight } from "lucide-react";
+import { DEFAULT_TIME_ZONE } from "@/lib/format/datetime";
 
 export type EventItem = {
     id: string;
@@ -35,9 +36,13 @@ const CATEGORY_LABEL: Record<EventItem["category"], string> = {
 function dayMonth(iso: string) {
     const d = new Date(iso);
     return {
-        day: d.toLocaleDateString("en-GB", { day: "2-digit" }),
+        day: d.toLocaleDateString("en-GB", { day: "2-digit" ,
+ timeZone: DEFAULT_TIME_ZONE,
+}),
         month: d
-            .toLocaleDateString("en-GB", { month: "short" })
+            .toLocaleDateString("en-GB", { month: "short" ,
+ timeZone: DEFAULT_TIME_ZONE,
+})
             .toUpperCase(),
     };
 }
@@ -51,7 +56,8 @@ function formatFullDate(iso: string) {
         year: "numeric",
         hour: "numeric",
         minute: "2-digit",
-    });
+        timeZone: DEFAULT_TIME_ZONE,
+});
 }
 
 type Tab = "announcements" | "events";

@@ -8,6 +8,7 @@ import AttachmentViewer from "@/components/attachment-viewer";
 import { prisma } from "@/lib/prisma";
 import { applyDiscount, currentUserIsJkaMember } from "@/lib/auth/is-jka-member";
 import { countUniqueParticipants } from "@/lib/events/participant-count";
+import { DEFAULT_TIME_ZONE } from "@/lib/format/datetime";
 
 type Props = { params: Promise<{ id: string }> };
 
@@ -34,14 +35,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 function formatDate(d: Date): string {
-    return d.toLocaleString("en-GB", {
+    return new Intl.DateTimeFormat("en-GB", {
         weekday: "long",
         day: "numeric",
         month: "long",
         year: "numeric",
         hour: "numeric",
         minute: "2-digit",
-    });
+        timeZone: DEFAULT_TIME_ZONE,
+    }).format(d);
 }
 
 export default async function EventDetailPage({ params }: Props) {

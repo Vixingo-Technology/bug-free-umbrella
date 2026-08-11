@@ -3,6 +3,7 @@ import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
 import { createClient } from "@/lib/supabase/server";
 import { prisma } from "@/lib/prisma";
 import { getFees } from "@/lib/settings/fees";
+import { formatDate } from "@/lib/format/datetime";
 
 /**
  * Generate the A4 "Pay Slip" PDF on demand. Only accessible to the
@@ -88,9 +89,7 @@ export async function GET() {
 
     // ── Meta row (issued date + slip no.)
     y -= 18;
-    const issued = new Date().toLocaleDateString("en-GB", {
-        day: "2-digit", month: "short", year: "numeric",
-    });
+    const issued = formatDate(new Date());
     const slipNo = `SLIP-${(u.memberNumber ?? u.id.slice(0, 8)).toUpperCase()}`;
     page.drawText(`Issued: ${issued}`, {
         x: 40, y, size: 9, font: regular, color: muted,
@@ -112,10 +111,7 @@ export async function GET() {
     });
     y -= 16;
 
-    const fmtDate = (d: Date | null | undefined) =>
-        d ? new Date(d).toLocaleDateString("en-GB", {
-            day: "2-digit", month: "short", year: "numeric",
-        }) : "—";
+    const fmtDate = (d: Date | null | undefined) => (d ? formatDate(d) : "—");
 
     const rows: Array<[string, string | null | undefined]> = [
         ["Full Name", u.fullName],

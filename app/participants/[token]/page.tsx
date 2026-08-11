@@ -25,6 +25,7 @@ import {
 } from "@/lib/tournaments/divisions";
 import { computeGroupPayable } from "@/lib/events/pricing";
 import { isJkaMember } from "@/lib/auth/is-jka-member";
+import { DEFAULT_TIME_ZONE } from "@/lib/format/datetime";
 
 type Props = {
     params: Promise<{ token: string }>;
@@ -43,24 +44,26 @@ export const metadata: Metadata = {
 export const dynamic = "force-dynamic";
 
 function formatDate(d: Date): string {
-    return d.toLocaleString("en-GB", {
+    return new Intl.DateTimeFormat("en-GB", {
         weekday: "long",
         day: "numeric",
         month: "long",
         year: "numeric",
         hour: "numeric",
         minute: "2-digit",
-    });
+        timeZone: DEFAULT_TIME_ZONE,
+    }).format(d);
 }
 
 function formatCheckedInAt(d: Date): string {
-    return d.toLocaleString("en-GB", {
+    return new Intl.DateTimeFormat("en-GB", {
         day: "numeric",
         month: "short",
         year: "numeric",
         hour: "numeric",
         minute: "2-digit",
-    });
+        timeZone: DEFAULT_TIME_ZONE,
+    }).format(d);
 }
 
 export default async function ParticipationCardPage({

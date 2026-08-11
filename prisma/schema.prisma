@@ -245,7 +245,7 @@ model Role {
   users           User[]
   rolePermissions RolePermission[]
 
-  createdAt DateTime @default(now()) @map("created_at")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
 
   @@map("roles")
 }
@@ -258,7 +258,7 @@ model Permission {
 
   rolePermissions RolePermission[]
 
-  createdAt DateTime @default(now()) @map("created_at")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
 
   @@map("permissions")
 }
@@ -270,7 +270,7 @@ model RolePermission {
   role       Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
   permission Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
 
-  createdAt DateTime @default(now()) @map("created_at")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
 
   @@id([roleId, permissionId])
   @@map("role_permissions")
@@ -325,8 +325,8 @@ model User {
   serviceCouponsCreated     ServiceCoupon[]          @relation("ServiceCouponCreator")
   divisionPresetsCreated    DivisionPreset[]         @relation("DivisionPresetsCreated")
 
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   @@index([roleId])
   @@map("users")
@@ -350,8 +350,8 @@ model Profile {
 
   user User @relation(fields: [id], references: [id], onDelete: Cascade)
 
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   @@map("profiles")
 }
@@ -363,8 +363,8 @@ model Profile {
 model Student {
   id          String    @id @db.Uuid // = users.id
   currentRank String    @default("White Belt") @map("current_rank")
-  joinDate    DateTime  @default(now()) @map("join_date")
-  expiryDate  DateTime? @map("expiry_date")
+  joinDate    DateTime  @default(now()) @map("join_date") @db.Timestamptz(6)
+  expiryDate  DateTime? @map("expiry_date") @db.Timestamptz(6)
   dojoId      String?   @map("dojo_id") @db.Uuid
 
   onboardingComplete Boolean          @default(false) @map("onboarding_complete")
@@ -376,7 +376,7 @@ model Student {
   assignedRank   String?   @map("assigned_rank") // Rank the dojo owner confirmed on approval
   pastBeltFeeBDT Int?      @map("past_belt_fee_bdt") // Calculated at approval; null when white belt
   joinPdfUrl     String?   @map("join_pdf_url") // "Bring this to your dojo" printable doc
-  joinedAt       DateTime? @map("joined_at")
+  joinedAt       DateTime? @map("joined_at") @db.Timestamptz(6)
 
   user User  @relation(fields: [id], references: [id], onDelete: Cascade)
   dojo Dojo? @relation("DojoStudents", fields: [dojoId], references: [id])
@@ -389,8 +389,8 @@ model Student {
   serviceRequests     ServiceRequest[]
   dojoHistory         StudentDojoHistory[]
 
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   @@index([dojoId])
   @@map("students")
@@ -403,14 +403,14 @@ model Student {
 model Instructor {
   id         String   @id @db.Uuid // = users.id
   dojoId     String?  @map("dojo_id") @db.Uuid
-  joinedDate DateTime @default(now()) @map("joined_date")
+  joinedDate DateTime @default(now()) @map("joined_date") @db.Timestamptz(6)
   bio        String?
 
   user User  @relation(fields: [id], references: [id], onDelete: Cascade)
   dojo Dojo? @relation("DojoInstructors", fields: [dojoId], references: [id])
 
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   @@index([dojoId])
   @@map("instructors")
@@ -427,8 +427,8 @@ model DojoManager {
   user User  @relation(fields: [id], references: [id], onDelete: Cascade)
   dojo Dojo? @relation("DojoManagers", fields: [dojoId], references: [id])
 
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   @@index([dojoId])
   @@map("dojo_managers")
@@ -448,8 +448,8 @@ model DojoOwner {
   user User  @relation(fields: [id], references: [id], onDelete: Cascade)
   dojo Dojo? @relation("DojoOwner", fields: [dojoId], references: [id])
 
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   @@map("dojo_owners")
 }
@@ -464,8 +464,8 @@ model Admin {
 
   user User @relation(fields: [id], references: [id], onDelete: Cascade)
 
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   @@map("admins")
 }
@@ -489,8 +489,8 @@ model BeltRank {
   gradingApplications GradingApplication[] @relation("AppTargetRank")
   minRankEvents       Event[]              @relation("EventMinRank")
 
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   @@map("belt_ranks")
 }
@@ -512,7 +512,7 @@ model Dojo {
   isActive  Boolean @default(true) @map("is_active")
 
   annualFee  Decimal?  @map("annual_fee") @db.Decimal(10, 2)
-  expiryDate DateTime? @map("expiry_date")
+  expiryDate DateTime? @map("expiry_date") @db.Timestamptz(6)
 
   renewalOrders ShopOrder[] @relation("DojoRenewalOrders")
 
@@ -549,8 +549,8 @@ model Dojo {
   serviceRequests ServiceRequest[]         @relation("ServiceRequestDojo")
   serviceCoupons  ServiceCoupon[]          @relation("ServiceCouponDojo")
 
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   @@map("dojos")
 }
@@ -592,8 +592,8 @@ model DojoApplication {
   dojoId String? @unique @map("dojo_id") @db.Uuid
   dojo   Dojo?   @relation("DojoApplicationDojo", fields: [dojoId], references: [id])
 
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   @@index([userId])
   @@index([status])
@@ -615,8 +615,8 @@ model DojoOwnerInvite {
   email       String    @unique
   fullName    String?   @map("full_name")
   invitedById String    @map("invited_by_id") @db.Uuid
-  invitedAt   DateTime  @default(now()) @map("invited_at")
-  acceptedAt  DateTime? @map("accepted_at")
+  invitedAt   DateTime  @default(now()) @map("invited_at") @db.Timestamptz(6)
+  acceptedAt  DateTime? @map("accepted_at") @db.Timestamptz(6)
 
   invitedBy User @relation("DojoOwnerInvites", fields: [invitedById], references: [id], onDelete: Cascade)
 
@@ -631,23 +631,23 @@ model DojoOwnerInvite {
 model GradingEvent {
   id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name         String
-  eventDate    DateTime @map("event_date")
+  eventDate    DateTime @map("event_date") @db.Timestamptz(6)
   location     String?
   targetRankId String?  @map("target_rank_id") @db.Uuid
   isOpen       Boolean  @default(true) @map("is_open")
   notes        String?
 
-  cancelledAt  DateTime? @map("cancelled_at")
+  cancelledAt  DateTime? @map("cancelled_at") @db.Timestamptz(6)
   cancelReason String?   @map("cancel_reason")
 
-  resultsPublishedAt DateTime? @map("results_published_at")
+  resultsPublishedAt DateTime? @map("results_published_at") @db.Timestamptz(6)
 
   targetRank   BeltRank?            @relation("EventTargetRank", fields: [targetRankId], references: [id])
   gradings     Grading[]
   applications GradingApplication[]
 
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   @@map("grading_events")
 }
@@ -664,7 +664,7 @@ model GradingApplication {
   status         ApplicationStatus @default(SUBMITTED)
   notes          String?
   declineReason  String?           @map("decline_reason")
-  appliedAt      DateTime          @default(now()) @map("applied_at")
+  appliedAt      DateTime          @default(now()) @map("applied_at") @db.Timestamptz(6)
 
   student      Student       @relation(fields: [studentId], references: [id], onDelete: Cascade)
   gradingEvent GradingEvent? @relation(fields: [gradingEventId], references: [id], onDelete: Cascade)
@@ -696,9 +696,9 @@ model Grading {
 
   /// Post-publish pipeline stage. Only PASSED rows are meant to advance.
   pipelineStage     GradingPipelineStage @default(QUALIFIED) @map("pipeline_stage")
-  verifiedAt        DateTime?            @map("verified_at")
+  verifiedAt        DateTime?            @map("verified_at") @db.Timestamptz(6)
   verifiedByUserId  String?              @map("verified_by_user_id") @db.Uuid
-  submittedAt       DateTime?            @map("submitted_at")
+  submittedAt       DateTime?            @map("submitted_at") @db.Timestamptz(6)
   submittedByUserId String?              @map("submitted_by_user_id") @db.Uuid
 
   student      Student       @relation(fields: [studentId], references: [id], onDelete: Cascade)
@@ -708,8 +708,8 @@ model Grading {
 
   certificateRequests CertificateRequest[]
 
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   @@map("gradings")
 }
@@ -739,8 +739,8 @@ model CertificateRequest {
   dojo    Dojo       @relation(fields: [dojoId], references: [id])
   order   ShopOrder? @relation("OrderCertificates", fields: [orderId], references: [id])
 
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   @@index([gradingId])
   @@index([dojoId])
@@ -768,8 +768,8 @@ model SystemSettings {
   transferFeeBDT        Decimal? @map("transfer_fee_bdt") @db.Decimal(10, 2)
   pastBeltFeePerRankBDT Decimal? @map("past_belt_fee_per_rank_bdt") @db.Decimal(10, 2)
 
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   @@map("system_settings")
 }
@@ -782,7 +782,7 @@ model Event {
   id          String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   title       String
   description String?
-  eventDate   DateTime      @map("event_date")
+  eventDate   DateTime      @map("event_date") @db.Timestamptz(6)
   location    String?
   imageUrl    String?       @map("image_url")
   isPublished Boolean       @default(false) @map("is_published")
@@ -822,8 +822,8 @@ model Event {
   minRank          BeltRank?           @relation("EventMinRank", fields: [minRankId], references: [id], onDelete: SetNull)
   tournamentDetail TournamentDetail?
 
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   @@index([isPublished, eventDate])
   @@index([category])
@@ -848,14 +848,14 @@ model TournamentDetail {
   // Admin-added categories not in the WKF preset. Shape:
   //   { code: string, label: string, eventType: 'KATA'|'KUMITE', isTeam: boolean }[]
   customDivisions      Json?                 @map("custom_divisions")
-  registrationDeadline DateTime?             @map("registration_deadline")
-  weighInDate          DateTime?             @map("weigh_in_date") // KUMITE only
+  registrationDeadline DateTime?             @map("registration_deadline") @db.Timestamptz(6)
+  weighInDate          DateTime?             @map("weigh_in_date") // KUMITE only @db.Timestamptz(6)
   rulesUrl             String?               @map("rules_url")
 
   event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
 
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   @@map("tournament_details")
 }
@@ -870,7 +870,7 @@ model Announcement {
   body        String?
   link        String?
   isPublished Boolean  @default(true) @map("is_published")
-  publishedAt DateTime @default(now()) @map("published_at")
+  publishedAt DateTime @default(now()) @map("published_at") @db.Timestamptz(6)
 
   attachmentUrl  String?         @map("attachment_url")
   attachmentType AttachmentType? @map("attachment_type")
@@ -881,8 +881,8 @@ model Announcement {
   postedBy User? @relation("AnnouncementsPosted", fields: [postedById], references: [id])
   dojo     Dojo? @relation("DojoAnnouncements", fields: [dojoId], references: [id])
 
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   @@index([isPublished, publishedAt])
   @@map("announcements")
@@ -905,8 +905,8 @@ model DivisionPreset {
   createdById String? @map("created_by_id") @db.Uuid
   createdBy   User?   @relation("DivisionPresetsCreated", fields: [createdById], references: [id], onDelete: SetNull)
 
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   @@index([createdById, createdAt])
   @@map("division_presets")
@@ -936,7 +936,7 @@ model EventRegistration {
   // the siblings.
   paymentGroupId String? @map("payment_group_id") @db.Uuid
   amountDue     Decimal?       @map("amount_due") @db.Decimal(10, 2)
-  paidAt        DateTime?      @map("paid_at")
+  paidAt        DateTime?      @map("paid_at") @db.Timestamptz(6)
   transactionId String?        @map("transaction_id")
 
   // Gate answers collected at registration time.
@@ -975,7 +975,7 @@ model EventRegistration {
   // if the admin later renames or reprices a fee.
   selectedOptionalFees Json? @map("selected_optional_fees")
 
-  checkedInAt       DateTime? @map("checked_in_at")
+  checkedInAt       DateTime? @map("checked_in_at") @db.Timestamptz(6)
   checkedInByUserId String?   @map("checked_in_by_user_id") @db.Uuid
 
   event        Event                @relation(fields: [eventId], references: [id], onDelete: Cascade)
@@ -983,7 +983,7 @@ model EventRegistration {
   checkedInBy  User?                @relation("EventCheckIns", fields: [checkedInByUserId], references: [id])
   transactions PaymentTransaction[] @relation("EventRegistrationTransactions")
 
-  createdAt DateTime @default(now()) @map("created_at")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
 
   @@index([eventId, checkedInAt])
   @@index([eventId, divisionCode])
@@ -1005,8 +1005,8 @@ model Notification {
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   @@map("notifications")
 }
@@ -1039,8 +1039,8 @@ model ShopProduct {
   dojoInventory DojoInventoryItem[] @relation("InventoryProduct")
   dojoSaleItems DojoSaleItem[]      @relation("SaleItemProduct")
 
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   @@map("shop_products")
 }
@@ -1059,8 +1059,8 @@ model DojoInventoryItem {
   dojo    Dojo        @relation("DojoInventoryItems", fields: [dojoId], references: [id], onDelete: Cascade)
   product ShopProduct @relation("InventoryProduct", fields: [productId], references: [id], onDelete: Cascade)
 
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   @@unique([dojoId, productId])
   @@index([dojoId])
@@ -1090,7 +1090,7 @@ model DojoSale {
   soldBy User?          @relation("DojoSaleSeller", fields: [soldByUserId], references: [id], onDelete: SetNull)
   items  DojoSaleItem[]
 
-  createdAt DateTime @default(now()) @map("created_at")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
 
   @@unique([dojoId, receiptNo])
   @@index([dojoId, createdAt])
@@ -1162,8 +1162,8 @@ model ShopOrder {
   serviceRequest      ServiceRequest?         @relation("ServiceRequestOrder")
   transactions        PaymentTransaction[]    @relation("OrderTransactions")
 
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   @@map("shop_orders")
 }
@@ -1194,15 +1194,15 @@ model Tournament {
   id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name        String
   description String?
-  date        DateTime
+  date        DateTime @db.Timestamptz(6)
   location    String?
   isPublished Boolean  @default(false) @map("is_published")
 
   participants TournamentParticipant[]
   matches      TournamentMatch[]
 
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   @@map("tournaments")
 }
@@ -1225,7 +1225,7 @@ model TournamentParticipant {
   matchesAsP2 TournamentMatch[] @relation("MatchParticipant2")
   matchesWon  TournamentMatch[] @relation("MatchWinner")
 
-  createdAt DateTime @default(now()) @map("created_at")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
 
   @@unique([tournamentId, userId])
   @@map("tournament_participants")
@@ -1250,7 +1250,7 @@ model TournamentMatch {
   participant2 TournamentParticipant? @relation("MatchParticipant2", fields: [participant2Id], references: [id])
   winner       TournamentParticipant? @relation("MatchWinner", fields: [winnerId], references: [id])
 
-  createdAt DateTime @default(now()) @map("created_at")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
 
   @@map("tournament_matches")
 }
@@ -1275,8 +1275,8 @@ model Achievement {
 
   studentAchievements StudentAchievement[]
 
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   @@index([tier, orderIndex])
   @@map("achievements")
@@ -1286,7 +1286,7 @@ model StudentAchievement {
   id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   studentId       String   @map("student_id") @db.Uuid
   achievementId   String   @map("achievement_id") @db.Uuid
-  unlockedAt      DateTime @default(now()) @map("unlocked_at")
+  unlockedAt      DateTime @default(now()) @map("unlocked_at") @db.Timestamptz(6)
   progress        Int      @default(0)
   awardedByUserId String?  @map("awarded_by_user_id") @db.Uuid
   note            String?
@@ -1325,12 +1325,12 @@ model StudentTransferRequest {
 
   orderId String? @unique @map("order_id") @db.Uuid
 
-  paidAt            DateTime? @map("paid_at")
-  dojoActedAt       DateTime? @map("dojo_acted_at")
+  paidAt            DateTime? @map("paid_at") @db.Timestamptz(6)
+  dojoActedAt       DateTime? @map("dojo_acted_at") @db.Timestamptz(6)
   dojoActedById     String?   @map("dojo_acted_by_id") @db.Uuid
-  adminActedAt      DateTime? @map("admin_acted_at")
+  adminActedAt      DateTime? @map("admin_acted_at") @db.Timestamptz(6)
   adminActedById    String?   @map("admin_acted_by_id") @db.Uuid
-  newDojoActedAt    DateTime? @map("new_dojo_acted_at")
+  newDojoActedAt    DateTime? @map("new_dojo_acted_at") @db.Timestamptz(6)
   newDojoActedById  String?   @map("new_dojo_acted_by_id") @db.Uuid
   assignedRank      String?   @map("assigned_rank")
 
@@ -1344,8 +1344,8 @@ model StudentTransferRequest {
 
   history StudentDojoHistory[] @relation("HistoryTransferRequest")
 
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   @@index([studentId])
   @@index([fromDojoId, status])
@@ -1387,8 +1387,8 @@ model PaymentTransaction {
   eventRegistration EventRegistration? @relation("EventRegistrationTransactions", fields: [eventRegistrationId], references: [id], onDelete: SetNull)
   user              User?              @relation("UserTransactions", fields: [userId], references: [id], onDelete: SetNull)
 
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   @@index([orderId])
   @@index([eventRegistrationId])
@@ -1414,7 +1414,7 @@ model StudentDojoHistory {
   transferRequest StudentTransferRequest? @relation("HistoryTransferRequest", fields: [transferRequestId], references: [id], onDelete: SetNull)
   changedBy       User?                   @relation("HistoryChangedBy", fields: [changedById], references: [id], onDelete: SetNull)
 
-  createdAt DateTime @default(now()) @map("created_at")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
 
   @@index([studentId])
   @@map("student_dojo_history")
@@ -1439,8 +1439,8 @@ model Service {
   requests ServiceRequest[]
   coupons  ServiceCoupon[]
 
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   @@map("services")
 }
@@ -1475,10 +1475,10 @@ model ServiceRequest {
 
   orderId String? @unique @map("order_id") @db.Uuid
 
-  paidAt         DateTime? @map("paid_at")
-  dojoActedAt    DateTime? @map("dojo_acted_at")
+  paidAt         DateTime? @map("paid_at") @db.Timestamptz(6)
+  dojoActedAt    DateTime? @map("dojo_acted_at") @db.Timestamptz(6)
   dojoActedById  String?   @map("dojo_acted_by_id") @db.Uuid
-  adminActedAt   DateTime? @map("admin_acted_at")
+  adminActedAt   DateTime? @map("admin_acted_at") @db.Timestamptz(6)
   adminActedById String?   @map("admin_acted_by_id") @db.Uuid
 
   student      Student        @relation(fields: [studentId], references: [id], onDelete: Cascade)
@@ -1489,8 +1489,8 @@ model ServiceRequest {
   dojoActedBy  User?          @relation("ServiceRequestDojoActor", fields: [dojoActedById], references: [id], onDelete: SetNull)
   adminActedBy User?          @relation("ServiceRequestAdminActor", fields: [adminActedById], references: [id], onDelete: SetNull)
 
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   @@index([studentId])
   @@index([dojoId, status])
@@ -1512,7 +1512,7 @@ model ServiceCoupon {
   serviceId       String?   @map("service_id") @db.Uuid // null = any service
   usageLimit      Int       @default(1) @map("usage_limit")
   usedCount       Int       @default(0) @map("used_count")
-  expiresAt       DateTime? @map("expires_at")
+  expiresAt       DateTime? @map("expires_at") @db.Timestamptz(6)
   isActive        Boolean   @default(true) @map("is_active")
   notes           String?
 
@@ -1521,8 +1521,8 @@ model ServiceCoupon {
   createdBy User             @relation("ServiceCouponCreator", fields: [createdById], references: [id], onDelete: Cascade)
   requests  ServiceRequest[]
 
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   @@index([dojoId])
   @@index([serviceId])

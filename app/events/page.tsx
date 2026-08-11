@@ -6,6 +6,7 @@ import Footer from "@/components/footer";
 import ArchiveFilters from "@/components/archive-filters";
 import { prisma } from "@/lib/prisma";
 import type { EventCategory } from "@/prisma/generated/client";
+import { DEFAULT_TIME_ZONE, getDatePart } from "@/lib/format/datetime";
 
 export const metadata: Metadata = {
     title: "Announcements & Events — JKA Bangladesh",
@@ -256,11 +257,12 @@ async function getYearsWithContent(): Promise<number[]> {
 }
 
 function RowItem({ row }: { row: Row }) {
-    const day = row.date.toLocaleDateString("en-GB", { day: "2-digit" });
-    const month = row.date
-        .toLocaleDateString("en-GB", { month: "short" })
-        .toUpperCase();
-    const year = row.date.getUTCFullYear();
+    const day = new Intl.DateTimeFormat("en-GB", {
+        day: "2-digit",
+        timeZone: DEFAULT_TIME_ZONE,
+    }).format(row.date);
+    const month = getDatePart(row.date, "monthShort").toUpperCase();
+    const year = getDatePart(row.date, "year");
 
     const href =
         row.kind === "ANNOUNCEMENT"
@@ -321,13 +323,14 @@ function RowItem({ row }: { row: Row }) {
                                     size={12}
                                     className="text-accent-red"
                                 />
-                                {row.eventDate.toLocaleString("en-GB", {
+                                {new Intl.DateTimeFormat("en-GB", {
                                     day: "numeric",
                                     month: "short",
                                     year: "numeric",
                                     hour: "numeric",
                                     minute: "2-digit",
-                                })}
+                                    timeZone: DEFAULT_TIME_ZONE,
+                                }).format(row.eventDate)}
                             </span>
                             {row.location && (
                                 <span className="inline-flex items-center gap-1.5">
