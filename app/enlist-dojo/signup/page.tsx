@@ -182,7 +182,7 @@ export default function EnlistDojoSignupPage() {
         if (s === 2) {
             if (!form.division.trim()) return "Please select a division.";
             if (!form.district.trim()) return "Please enter your district.";
-            if (!form.city.trim()) return "Please enter your city.";
+            if (!form.city.trim()) return "Please enter your thana / police station.";
             if (!form.area.trim()) return "Please enter your area.";
             if (!form.houseRoad.trim())
                 return "Please enter your house / road number.";
@@ -632,12 +632,12 @@ function LocationStep({
                     />
                 </div>
                 <div>
-                    <Label>City *</Label>
+                    <Label>Thana / Police Station *</Label>
                     <input
                         type="text"
                         value={form.city}
                         onChange={(e) => update("city", e.target.value)}
-                        placeholder="e.g. Dhaka"
+                        placeholder="e.g. Kotwali"
                         className={inputClass()}
                     />
                 </div>
@@ -650,7 +650,7 @@ function LocationStep({
                         type="text"
                         value={form.area}
                         onChange={(e) => update("area", e.target.value)}
-                        placeholder="e.g. Dhanmondi"
+                        placeholder="e.g. Aminbazar"
                         className={inputClass()}
                     />
                 </div>
@@ -709,7 +709,7 @@ function ReviewStep({
                 <ReviewRow label="Date of birth" value={form.contactDob} />
                 <ReviewRow label="Division" value={form.division} />
                 <ReviewRow label="District" value={form.district} />
-                <ReviewRow label="City" value={form.city} />
+                <ReviewRow label="Thana / Police Station" value={form.city} />
                 <ReviewRow label="Area" value={form.area} />
                 <ReviewRow label="House / Road" value={form.houseRoad} />
                 <ReviewRow
