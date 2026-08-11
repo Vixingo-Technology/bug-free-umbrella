@@ -1,7 +1,7 @@
 import "server-only";
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
-import { emitEventRegistered } from "@/lib/n8n";
+import { sendEventRegistrationEmail } from "@/lib/email/send-event-registration";
 import { notifyMembers } from "@/lib/notify";
 import { recordPaymentAttempt, recordPaymentOutcome } from "@/lib/payments/log";
 
@@ -178,17 +178,31 @@ export async function markRegistrationPaid(
     }
 
     const cardUrl = `${appUrl()}/participants/${reg.qrToken}`;
-    await emitEventRegistered({
-        registrationId: reg.id,
-        qrToken: reg.qrToken,
+    const invoiceUrl = `${appUrl()}/invoices/${reg.qrToken}`;
+    const recipientEmail = reg.user?.email ?? reg.guestEmail ?? null;
+    const participantName =
+        reg.user?.fullName ?? reg.guestName ?? "Participant";
+
+    // Sum sibling rows so the paid amount reflects the whole payment group
+    // when the participant registered for multiple divisions in one submit.
+    const groupAmount = reg.paymentGroupId
+        ? await prisma.eventRegistration
+              .aggregate({
+                  where: { paymentGroupId: reg.paymentGroupId },
+                  _sum: { amountDue: true },
+              })
+              .then((r) => (r._sum.amountDue ? Number(r._sum.amountDue) : null))
+        : reg.amountDue
+          ? Number(reg.amountDue)
+          : null;
+
+    await sendEventRegistrationEmail(recipientEmail, {
+        participantName,
         participationCardUrl: cardUrl,
-        participantName: reg.user?.fullName ?? reg.guestName ?? "Participant",
-        participantEmail: reg.user?.email ?? reg.guestEmail ?? "",
-        participantPhone: reg.user?.phone ?? reg.guestPhone ?? null,
-        memberId: reg.userId,
-        isGuest: !reg.userId,
+        invoiceUrl,
+        isPaid: true,
+        amountPaidBdt: groupAmount,
         event: {
-            id: reg.event.id,
             title: reg.event.title,
             eventDate: reg.event.eventDate.toISOString(),
             location: reg.event.location,

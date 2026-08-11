@@ -16,6 +16,7 @@ import {
 import DojoPageHeader from "@/components/dojo/page-header";
 import DigitalCard from "@/components/portal/digital-card";
 import StudentResetPasswordAction from "@/components/dojo/student-reset-password-action";
+import StudentGenderEditor from "@/components/dojo/student-gender-editor";
 import { requireDojoRole } from "@/lib/dojo-session";
 import { prisma } from "@/lib/prisma";
 import { serialize } from "@/lib/serialize";
@@ -46,7 +47,7 @@ export default async function StudentDetailPage({
     const student = await prisma.student.findFirst({
         where: { id, dojoId: session.dojo.id },
         include: {
-            user: true,
+            user: { include: { profile: true } },
             dojo: { select: { name: true } },
             gradings: {
                 orderBy: { createdAt: "desc" },
@@ -79,6 +80,7 @@ export default async function StudentDetailPage({
         role: student.user.roleId,
         isActive: student.user.isActive,
         memberNumber: student.user.memberNumber,
+        gender: student.user.profile?.gender ?? null,
     };
 
     const profile = serialize(member) as any;
@@ -141,6 +143,24 @@ export default async function StudentDetailPage({
                             <Field icon={<Users size={14} />} label="Mother's name" value={profile.motherName} />
                             <Field icon={<MapPin size={14} />} label="Address" value={profile.address} fullWidth />
                             <Field icon={<Calendar size={14} />} label="Date of birth" value={profile.dateOfBirth ? fmt.format(new Date(profile.dateOfBirth)) : null} />
+                            {session.role === "DOJO_OWNER" ? (
+                                <StudentGenderEditor
+                                    studentId={profile.id}
+                                    initialGender={profile.gender ?? null}
+                                />
+                            ) : (
+                                <Field
+                                    icon={<User size={14} />}
+                                    label="Gender"
+                                    value={
+                                        profile.gender === "MALE"
+                                            ? "Male"
+                                            : profile.gender === "FEMALE"
+                                              ? "Female"
+                                              : null
+                                    }
+                                />
+                            )}
                             <Field icon={<Shield size={14} />} label="National ID" value={profile.nationalId} />
                             <Field icon={<Phone size={14} />} label="Emergency contact" value={profile.emergencyContactName ? `${profile.emergencyContactName} · ${profile.emergencyContactPhone ?? "—"}` : null} fullWidth />
                         </ProfileGrid>

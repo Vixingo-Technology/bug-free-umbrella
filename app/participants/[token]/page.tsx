@@ -9,6 +9,7 @@ import {
     ArrowLeft,
     AlertCircle,
     Ticket,
+    FileText,
 } from "lucide-react";
 import QRCode from "qrcode";
 import Logo from "@/assets/jka_logo.svg";
@@ -562,8 +563,28 @@ export default async function ParticipationCardPage({
                         </div>
                     )}
 
+                    {registration.paymentStatus === "PAID" && (
+                        <div className="mt-6 bg-white border border-zinc-200 rounded-sm shadow-sm p-5 print:hidden">
+                            <p className="text-[10px] tracking-widest uppercase font-bold text-zinc-400 mb-3">
+                                Invoice
+                            </p>
+                            <p className="text-sm text-zinc-600 mb-4">
+                                Your payment is confirmed. Download your invoice
+                                or view it online — it&apos;s also been emailed
+                                to you.
+                            </p>
+                            <Link
+                                href={`/invoices/${token}`}
+                                className="w-full inline-flex items-center justify-center gap-2 bg-zinc-900 text-white px-4 py-3 text-xs font-bold tracking-widest uppercase hover:bg-accent-red transition-colors rounded-sm"
+                            >
+                                <FileText size={14} />
+                                View / download invoice
+                            </Link>
+                        </div>
+                    )}
+
                     <div className="mt-8 grid sm:grid-cols-2 gap-3 print:hidden">
-                        <PrintButton />
+                        <PrintButton label="Print participation card" />
                         <Link
                             href={`/events/${registration.event.id}`}
                             className="inline-flex items-center justify-center gap-2 border border-zinc-300 text-zinc-700 hover:border-accent-red hover:text-accent-red px-4 py-2.5 text-xs font-bold tracking-widest uppercase rounded-sm transition-colors"

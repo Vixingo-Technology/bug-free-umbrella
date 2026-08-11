@@ -8,7 +8,7 @@ import {
     User, Phone, Mail, MapPin, Shield, Loader2,
     CheckCircle2, AlertCircle, Key, Calendar, Award,
     Droplets, CreditCard, HeartPulse, FileText,
-    Copy, ExternalLink, Share2, Users,
+    Copy, ExternalLink, Share2, Users, UserCircle2,
 } from "lucide-react";
 import { updateProfileAction, changePasswordAction } from "@/app/portal/profile/actions";
 import { BLOOD_GROUPS } from "@/lib/constants";
@@ -72,6 +72,7 @@ export default function ProfileClient({ member, dojos, userId }: Props) {
     const [fullName,              setFullName]              = useState(member?.fullName ?? "");
     const [phone,                 setPhone]                 = useState(member?.phone ?? "");
     const [dateOfBirth,           setDateOfBirth]           = useState(toDateInputValue(member?.dateOfBirth));
+    const [gender,                setGender]                = useState(member?.gender ?? "");
     const [bloodGroup,            setBloodGroup]            = useState(member?.bloodGroup ?? "");
     const [address,               setAddress]               = useState(member?.address ?? "");
     const [nationalId,            setNationalId]            = useState(member?.nationalId ?? "");
@@ -309,7 +310,7 @@ export default function ProfileClient({ member, dojos, userId }: Props) {
                             <p className="text-xs text-zinc-400 mt-1 pl-1">Email cannot be changed here. Contact an admin.</p>
                         </div>
 
-                        {/* Date of birth + Blood group */}
+                        {/* Date of birth + Gender + Blood group */}
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
                                 <label className={labelCls}>Date of Birth</label>
@@ -326,6 +327,23 @@ export default function ProfileClient({ member, dojos, userId }: Props) {
                             </div>
 
                             <div>
+                                <label className={labelCls}>Gender</label>
+                                <div className="relative">
+                                    <UserCircle2 size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400" />
+                                    <select
+                                        name="gender"
+                                        value={gender}
+                                        onChange={(e) => setGender(e.target.value)}
+                                        className={`${inputCls} appearance-none`}
+                                    >
+                                        <option value="">Select…</option>
+                                        <option value="MALE">Male</option>
+                                        <option value="FEMALE">Female</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div className="sm:col-span-2">
                                 <label className={labelCls}>Blood Group</label>
                                 <div className="relative">
                                     <Droplets size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400" />

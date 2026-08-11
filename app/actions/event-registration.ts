@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { createClient } from "@/lib/supabase/server";
-import { emitEventRegistered } from "@/lib/n8n";
+import { sendEventRegistrationEmail } from "@/lib/email/send-event-registration";
 import { initiateTicketPayment } from "@/lib/events/ticket-payment";
 import { computeGroupPayable } from "@/lib/events/pricing";
 import { isJkaMember } from "@/lib/auth/is-jka-member";
@@ -906,18 +906,26 @@ export async function registerForTournamentAction(
         process.env.NEXT_PUBLIC_APP_URL ??
         process.env.APP_URL ??
         "http://localhost:3000";
+    // Free events fire one email per registered row. If the member's account
+    // has a name/email we prefer those, falling back to the guest form values.
+    const recipientEmail = user?.email ?? guestEmail ?? null;
+    let memberName: string | null = null;
+    if (user) {
+        const u = await prisma.user.findUnique({
+            where: { id: user.id },
+            select: { fullName: true },
+        });
+        memberName = u?.fullName ?? null;
+    }
+    const participantName = memberName ?? guestName ?? "Participant";
     for (const row of created) {
-        await emitEventRegistered({
-            registrationId: row.id,
-            qrToken: row.qrToken,
+        await sendEventRegistrationEmail(recipientEmail, {
+            participantName,
             participationCardUrl: `${appUrl}/participants/${row.qrToken}`,
-            participantName: guestName ?? "Participant",
-            participantEmail: user?.email ?? guestEmail ?? "",
-            participantPhone: guestPhone,
-            memberId: userId ?? null,
-            isGuest: !userId,
+            invoiceUrl: null,
+            isPaid: false,
+            amountPaidBdt: null,
             event: {
-                id: event.id,
                 title: event.title,
                 eventDate: event.eventDate.toISOString(),
                 location: event.location,

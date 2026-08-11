@@ -3,7 +3,7 @@
 import { useState, useTransition } from "react";
 import dynamic from "next/dynamic";
 import { motion } from "motion/react";
-import { User, Phone, MapPin, Heart, AlertCircle, ChevronRight, Users } from "lucide-react";
+import { User, Phone, MapPin, Heart, AlertCircle, ChevronRight, Users, UserCircle2 } from "lucide-react";
 import { saveProfileAction } from "@/app/portal/onboarding/actions";
 import { BLOOD_GROUPS } from "@/lib/constants";
 import AvatarUploader from "@/components/portal/avatar-uploader";
@@ -30,6 +30,7 @@ export interface ProfileData {
     phone: string;
     dojoId: string;
     dateOfBirth: string; // ISO yyyy-mm-dd or ""
+    gender: string; // "MALE" | "FEMALE" | ""
     bloodGroup: string;
     address: string;
     nationalId: string;
@@ -90,12 +91,42 @@ export default function StepProfile({
             setError(ageError);
             return;
         }
-        if (value.emergencyContactPhone && value.emergencyContactPhone.trim()) {
-            const emergencyError = validatePhone(value.emergencyContactPhone);
-            if (emergencyError) {
-                setError(`Emergency contact: ${emergencyError}`);
-                return;
-            }
+        if (!value.gender) {
+            setError("Please select your gender.");
+            return;
+        }
+        if (!value.bloodGroup) {
+            setError("Please select your blood group.");
+            return;
+        }
+        if (!value.address.trim()) {
+            setError("Address is required.");
+            return;
+        }
+        if (!value.nationalId.trim()) {
+            setError("National ID, Passport, or Birth Certificate number is required.");
+            return;
+        }
+        if (!value.fatherName.trim()) {
+            setError("Father's name is required.");
+            return;
+        }
+        if (!value.motherName.trim()) {
+            setError("Mother's name is required.");
+            return;
+        }
+        if (!value.emergencyContactName.trim()) {
+            setError("Emergency contact name is required.");
+            return;
+        }
+        if (!value.emergencyContactPhone.trim()) {
+            setError("Emergency contact phone is required.");
+            return;
+        }
+        const emergencyError = validatePhone(value.emergencyContactPhone);
+        if (emergencyError) {
+            setError(`Emergency contact: ${emergencyError}`);
+            return;
         }
 
         const formData = new FormData();
@@ -270,7 +301,7 @@ export default function StepProfile({
                     )}
                 </Field>
 
-                {/* Date of birth + Blood group */}
+                {/* Date of birth + Gender */}
                 <div className="grid grid-cols-2 gap-4">
                     <Field label="Date of Birth *">
                         <input
@@ -284,64 +315,83 @@ export default function StepProfile({
                             className={inputCls}
                         />
                     </Field>
-                    <Field label="Blood Group" icon={<Heart size={15} />}>
+                    <Field label="Gender *" icon={<UserCircle2 size={15} />}>
                         <select
-                            name="bloodGroup"
-                            value={value.bloodGroup}
-                            onChange={(e) => update("bloodGroup", e.target.value)}
+                            name="gender"
+                            value={value.gender}
+                            onChange={(e) => update("gender", e.target.value)}
+                            required
                             className={inputCls}
                         >
-                            <option value="">Unknown</option>
-                            {BLOOD_GROUPS.map((g) => <option key={g} value={g}>{g}</option>)}
+                            <option value="">Select</option>
+                            <option value="MALE">Male</option>
+                            <option value="FEMALE">Female</option>
                         </select>
                     </Field>
                 </div>
 
+                {/* Blood group */}
+                <Field label="Blood Group *" icon={<Heart size={15} />}>
+                    <select
+                        name="bloodGroup"
+                        value={value.bloodGroup}
+                        onChange={(e) => update("bloodGroup", e.target.value)}
+                        required
+                        className={inputCls}
+                    >
+                        <option value="">Select blood group</option>
+                        {BLOOD_GROUPS.map((g) => <option key={g} value={g}>{g}</option>)}
+                    </select>
+                </Field>
+
                 {/* Address */}
-                <Field label="Address">
+                <Field label="Address *">
                     <input
                         name="address"
                         type="text"
                         value={value.address}
                         onChange={(e) => update("address", e.target.value)}
                         placeholder="Your current address"
+                        required
                         className={inputCls}
                     />
                 </Field>
 
-                {/* National ID */}
-                <Field label="National ID / Passport No.">
+                {/* National ID / Passport / Birth Certificate — stored in a
+                    single column; users enter whichever they have. */}
+                <Field label="National ID / Passport / Birth Certificate No. *">
                     <input
                         name="nationalId"
                         type="text"
                         value={value.nationalId}
                         onChange={(e) => update("nationalId", e.target.value)}
-                        placeholder="NID or Passport number"
+                        placeholder="NID, Passport, or Birth Certificate number"
+                        required
                         className={inputCls}
                     />
                 </Field>
 
-                {/* Parent names — used on printed certificates. Optional here
-                    so legacy members editing their profile aren't blocked;
-                    the cert-request flow prompts to fill them at that point. */}
+                {/* Parent names — used on printed certificates. */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <Field label="Father's Name" icon={<Users size={15} />}>
+                    <Field label="Father's Name *" icon={<Users size={15} />}>
                         <input
                             name="fatherName"
                             type="text"
                             value={value.fatherName}
                             onChange={(e) => update("fatherName", e.target.value)}
                             placeholder="As it should appear on the certificate"
+                            required
                             className={inputCls}
                         />
                     </Field>
-                    <Field label="Mother's Name" icon={<Users size={15} />}>
+                    <Field label="Mother's Name *" icon={<Users size={15} />}>
                         <input
                             name="motherName"
                             type="text"
                             value={value.motherName}
                             onChange={(e) => update("motherName", e.target.value)}
                             placeholder="As it should appear on the certificate"
+                            required
                             className={inputCls}
                         />
                     </Field>
@@ -349,29 +399,32 @@ export default function StepProfile({
 
                 {/* Emergency contact */}
                 <div className="pt-2">
-                    <p className="text-xs font-bold tracking-widest uppercase text-zinc-400 mb-3">Emergency Contact</p>
+                    <p className="text-xs font-bold tracking-widest uppercase text-zinc-400 mb-3">Emergency Contact *</p>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <Field label="Contact Name">
+                        <Field label="Contact Name *">
                             <input
                                 name="emergencyContactName"
                                 type="text"
                                 value={value.emergencyContactName}
                                 onChange={(e) => update("emergencyContactName", e.target.value)}
                                 placeholder="Name"
+                                required
                                 className={inputCls}
                             />
                         </Field>
-                        <Field label="Contact Phone">
+                        <Field label="Contact Phone *">
                             <input
                                 name="emergencyContactPhone"
                                 type="tel"
                                 inputMode="numeric"
                                 pattern="\d{11}"
                                 maxLength={11}
+                                minLength={11}
                                 title="Phone number must be exactly 11 digits."
                                 value={value.emergencyContactPhone}
                                 onChange={(e) => update("emergencyContactPhone", e.target.value.replace(/\D/g, "").slice(0, 11))}
                                 placeholder="01XXXXXXXXX"
+                                required
                                 className={inputCls}
                             />
                         </Field>

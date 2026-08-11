@@ -20,6 +20,7 @@ import { requireAdmin } from "@/lib/admin-guard";
 import { prisma } from "@/lib/prisma";
 import { parseCustomDivisions, resolveDivision } from "@/lib/tournaments/divisions";
 import { DEFAULT_TIME_ZONE, formatDateLong } from "@/lib/format/datetime";
+import AdminCancelRegistrationButton from "@/components/portal/admin-cancel-registration-button";
 
 export const metadata: Metadata = {
     title: "Participant — Admin",
@@ -468,6 +469,15 @@ export default async function ParticipantDetailPage({
                         >
                             <QrCode size={12} /> Open participation card
                         </Link>
+                        {registration.paymentStatus === "PAID" && (
+                            <Link
+                                href={`/invoices/${registration.qrToken}`}
+                                target="_blank"
+                                className="inline-flex items-center gap-2 px-3 py-2 text-[10px] tracking-widest uppercase font-bold text-zinc-700 border border-zinc-200 rounded-sm hover:border-accent-red hover:text-accent-red transition-colors"
+                            >
+                                <Ticket size={12} /> Open invoice
+                            </Link>
+                        )}
                         {registration.event.location && (
                             <span className="inline-flex items-center gap-1.5 text-xs text-zinc-500">
                                 <MapPin size={12} className="text-zinc-400" />
@@ -479,6 +489,12 @@ export default async function ParticipantDetailPage({
                             {formatDate(registration.event.eventDate)}
                         </span>
                     </div>
+
+                    <AdminCancelRegistrationButton
+                        registrationId={registration.id}
+                        eventId={registration.event.id}
+                        participantName={name}
+                    />
                 </Card>
             </div>
         </div>

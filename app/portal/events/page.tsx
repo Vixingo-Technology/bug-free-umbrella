@@ -11,7 +11,13 @@ export default async function EventsPage() {
 
     let upcomingEvents: any[] = [];
     let pastEvents: any[] = [];
-    let myRegistrations: string[] = [];
+    // Keyed by eventId — the first registration row for that event (there may
+    // be multiple sibling rows for multi-division tournaments, but they share
+    // the participation card & invoice URLs).
+    let myRegistrations: Record<
+        string,
+        { qrToken: string; paymentStatus: string | null }
+    > = {};
 
     try {
         const now = new Date();
@@ -52,9 +58,19 @@ export default async function EventsPage() {
 
         const regs = await prisma.eventRegistration.findMany({
             where: { userId: user.id },
-            select: { eventId: true },
+            orderBy: { createdAt: "asc" },
+            select: { eventId: true, qrToken: true, paymentStatus: true },
         });
-        myRegistrations = regs.map((r: any) => r.eventId);
+        for (const r of regs) {
+            // First row wins — sibling multi-division rows share the same
+            // invoice, so surfacing one is enough.
+            if (!myRegistrations[r.eventId]) {
+                myRegistrations[r.eventId] = {
+                    qrToken: r.qrToken,
+                    paymentStatus: r.paymentStatus,
+                };
+            }
+        }
     } catch {
         // DB not configured
     }

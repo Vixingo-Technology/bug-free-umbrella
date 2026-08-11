@@ -11,6 +11,9 @@ export async function updateProfileAction(formData: FormData) {
 
     const fullName              = (formData.get("fullName") as string)?.trim();
     const phone                 = (formData.get("phone") as string)?.trim() || null;
+    const genderRaw             = (formData.get("gender") as string)?.trim() || null;
+    const gender: "MALE" | "FEMALE" | null =
+        genderRaw === "MALE" || genderRaw === "FEMALE" ? genderRaw : null;
     const bloodGroup            = (formData.get("bloodGroup") as string) || null;
     const address               = (formData.get("address") as string)?.trim() || null;
     const nationalId            = (formData.get("nationalId") as string)?.trim() || null;
@@ -34,6 +37,7 @@ export async function updateProfileAction(formData: FormData) {
             prisma.profile.upsert({
                 where: { id: user.id },
                 update: {
+                    gender,
                     bloodGroup,
                     address,
                     nationalId,
@@ -45,6 +49,7 @@ export async function updateProfileAction(formData: FormData) {
                 },
                 create: {
                     id: user.id,
+                    gender,
                     bloodGroup,
                     address,
                     nationalId,

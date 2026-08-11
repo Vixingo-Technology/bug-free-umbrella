@@ -36,6 +36,7 @@ function initialProfile(member: any): ProfileData {
         dateOfBirth: member?.dateOfBirth
             ? new Date(member.dateOfBirth).toISOString().split("T")[0]
             : "",
+        gender: member?.gender ?? "",
         bloodGroup: member?.bloodGroup ?? "",
         address: member?.address ?? "",
         nationalId: member?.nationalId ?? "",

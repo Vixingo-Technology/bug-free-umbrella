@@ -1,20 +1,23 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "motion/react";
 import TiltCard from "@/components/portal/tilt-card";
 import {
     CalendarDays, MapPin, Users, CheckCircle2,
-    AlertCircle, Loader2, ChevronRight, Ticket,
+    AlertCircle, Loader2, ChevronRight, Ticket, QrCode, FileText,
 } from "lucide-react";
-import { registerForEventAction, cancelEventRegistrationAction } from "@/app/portal/events/actions";
+import { registerForEventAction } from "@/app/portal/events/actions";
 import { DEFAULT_TIME_ZONE } from "@/lib/format/datetime";
+
+type MyRegistration = { qrToken: string; paymentStatus: string | null };
 
 interface Props {
     upcomingEvents: any[];
     pastEvents: any[];
-    myRegistrations: string[];
+    myRegistrations: Record<string, MyRegistration>;
     userId: string;
 }
 
@@ -27,8 +30,7 @@ const typeColors: Record<string, string> = {
     OTHER:         "bg-zinc-100 text-zinc-600",
 };
 
-export default function EventsClient({ upcomingEvents, pastEvents, myRegistrations, userId }: Props) {
-    const [registrations, setRegistrations] = useState<Set<string>>(new Set(myRegistrations));
+export default function EventsClient({ upcomingEvents, pastEvents, myRegistrations }: Props) {
     const [feedback, setFeedback] = useState<{ type: "success" | "error"; message: string } | null>(null);
     const [loadingId, setLoadingId] = useState<string | null>(null);
     const [isPending, startTransition] = useTransition();
@@ -48,23 +50,8 @@ export default function EventsClient({ upcomingEvents, pastEvents, myRegistratio
             if (res.error) {
                 setFeedback({ type: "error", message: res.error });
             } else {
-                setRegistrations(prev => new Set([...prev, eventId]));
                 setFeedback({ type: "success", message: "Successfully registered!" });
-            }
-        });
-    }
-
-    function handleCancel(eventId: string) {
-        setLoadingId(eventId);
-        setFeedback(null);
-        startTransition(async () => {
-            const res = await cancelEventRegistrationAction(eventId);
-            setLoadingId(null);
-            if (res.error) {
-                setFeedback({ type: "error", message: res.error });
-            } else {
-                setRegistrations(prev => { const s = new Set(prev); s.delete(eventId); return s; });
-                setFeedback({ type: "success", message: "Registration cancelled." });
+                router.refresh();
             }
         });
     }
@@ -101,7 +88,9 @@ export default function EventsClient({ upcomingEvents, pastEvents, myRegistratio
                 {upcomingEvents.length > 0 ? (
                     <div className="space-y-3">
                         {upcomingEvents.map((ev: any, i: number) => {
-                            const isRegistered = registrations.has(ev.id);
+                            const myReg = myRegistrations[ev.id];
+                            const isRegistered = !!myReg;
+                            const isPaid = myReg?.paymentStatus === "PAID";
                             const isLoading = loadingId === ev.id && isPending;
                             const isFull = ev.maxCapacity && (ev.rsvpCount ?? 0) >= ev.maxCapacity;
                             const category = ev.category ?? "OTHER";
@@ -163,15 +152,28 @@ export default function EventsClient({ upcomingEvents, pastEvents, myRegistratio
 
                                         {/* Action */}
                                         <div className="flex-shrink-0 self-center sm:self-start sm:mt-1">
-                                            {isRegistered ? (
-                                                <button
-                                                    onClick={() => handleCancel(ev.id)}
-                                                    disabled={isLoading}
-                                                    className="text-sm font-bold text-zinc-500 hover:text-red-600 border border-zinc-200 hover:border-red-200 px-4 py-2 rounded-xl transition-all flex items-center gap-1.5 disabled:opacity-50"
-                                                >
-                                                    {isLoading ? <Loader2 size={14} className="animate-spin" /> : null}
-                                                    Cancel
-                                                </button>
+                                            {isRegistered && myReg ? (
+                                                <div className="flex flex-col sm:items-end gap-1.5">
+                                                    <Link
+                                                        href={`/participants/${myReg.qrToken}`}
+                                                        className="text-xs font-bold text-white bg-zinc-900 hover:bg-accent-red px-4 py-2 rounded-xl transition-colors flex items-center justify-center gap-1.5"
+                                                    >
+                                                        <QrCode size={12} />
+                                                        Participation card
+                                                    </Link>
+                                                    {isPaid && (
+                                                        <Link
+                                                            href={`/invoices/${myReg.qrToken}`}
+                                                            className="text-xs font-bold text-zinc-700 hover:text-accent-red border border-zinc-200 hover:border-accent-red px-4 py-2 rounded-xl transition-colors flex items-center justify-center gap-1.5"
+                                                        >
+                                                            <FileText size={12} />
+                                                            Download invoice
+                                                        </Link>
+                                                    )}
+                                                    <p className="text-[10px] text-zinc-400 sm:text-right">
+                                                        Contact an admin to cancel
+                                                    </p>
+                                                </div>
                                             ) : isFull ? (
                                                 <span className="text-xs font-bold text-zinc-400 border border-zinc-100 px-4 py-2 rounded-xl">
                                                     Full

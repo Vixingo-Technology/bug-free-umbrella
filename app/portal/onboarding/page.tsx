@@ -47,6 +47,7 @@ export default async function OnboardingPage() {
                 onboardingComplete: u.student?.onboardingComplete ?? false,
                 dojoId: u.student?.dojoId ?? null,
                 dateOfBirth: u.profile?.dateOfBirth ?? null,
+                gender: u.profile?.gender ?? null,
                 bloodGroup: u.profile?.bloodGroup ?? null,
                 address: u.profile?.address ?? null,
                 nationalId: u.profile?.nationalId ?? null,

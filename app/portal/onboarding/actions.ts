@@ -34,7 +34,8 @@ export async function saveProfileAction(formData: FormData) {
     const phone = (formData.get("phone") as string)?.trim() || null;
     const dojoId = (formData.get("dojoId") as string) || null;
     const dateOfBirth = (formData.get("dateOfBirth") as string) || null;
-    const bloodGroup = (formData.get("bloodGroup") as string) || null;
+    const genderRaw = (formData.get("gender") as string)?.trim() || null;
+    const bloodGroup = (formData.get("bloodGroup") as string)?.trim() || null;
     const address = (formData.get("address") as string)?.trim() || null;
     const nationalId = (formData.get("nationalId") as string)?.trim() || null;
     const fatherName = (formData.get("fatherName") as string)?.trim() || null;
@@ -45,6 +46,18 @@ export async function saveProfileAction(formData: FormData) {
     if (!fullName) return { error: "Full name is required." };
     if (!phone) return { error: "Phone number is required." };
     if (!dojoId) return { error: "Please select a dojo." };
+    if (!dateOfBirth) return { error: "Date of birth is required." };
+    if (!genderRaw || (genderRaw !== "MALE" && genderRaw !== "FEMALE")) {
+        return { error: "Please select your gender." };
+    }
+    if (!bloodGroup) return { error: "Please select your blood group." };
+    if (!address) return { error: "Address is required." };
+    if (!nationalId) return { error: "National ID, Passport, or Birth Certificate number is required." };
+    if (!fatherName) return { error: "Father's name is required." };
+    if (!motherName) return { error: "Mother's name is required." };
+    if (!emergencyContactName) return { error: "Emergency contact name is required." };
+    if (!emergencyContactPhone) return { error: "Emergency contact phone is required." };
+    const gender = genderRaw as "MALE" | "FEMALE";
 
     // Guard against the "no dojos available" sentinel and any other non-UUID
     // value sneaking through — Prisma will otherwise blow up on @db.Uuid.
@@ -78,6 +91,7 @@ export async function saveProfileAction(formData: FormData) {
 
     const profileData = {
         dateOfBirth: dateOfBirth ? new Date(dateOfBirth) : null,
+        gender,
         bloodGroup,
         address,
         nationalId,
