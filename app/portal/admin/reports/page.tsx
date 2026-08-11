@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic";
 export default async function AdminReportsPage() {
     await requireAdmin();
 
-    const [dojos, members, events] = await Promise.all([
+    const [dojos, members, events, categoryRows] = await Promise.all([
         prisma.dojo.findMany({
             select: { id: true, name: true, shortName: true },
             orderBy: { name: "asc" },
@@ -33,7 +33,17 @@ export default async function AdminReportsPage() {
             orderBy: { eventDate: "desc" },
             take: 500,
         }),
+        prisma.tournamentParticipant.findMany({
+            where: { category: { not: null } },
+            select: { category: true },
+            distinct: ["category"],
+            orderBy: { category: "asc" },
+        }),
     ]);
+
+    const categories = categoryRows
+        .map((r) => r.category)
+        .filter((c): c is string => !!c && c.trim().length > 0);
 
     return (
         <ReportsAdminClient
@@ -46,6 +56,7 @@ export default async function AdminReportsPage() {
                 category: e.category,
                 dojoName: e.dojo?.name ?? null,
             }))}
+            categories={categories}
         />
     );
 }

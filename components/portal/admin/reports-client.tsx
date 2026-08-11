@@ -15,6 +15,7 @@ import {
     CheckCircle2,
     AlertCircle,
     ChevronDown,
+    Tag,
 } from "lucide-react";
 import { REPORT_DEFINITIONS, type ReportKey, type ReportDefinition } from "@/lib/reports/report-types";
 import { DEFAULT_TIME_ZONE } from "@/lib/format/datetime";
@@ -35,12 +36,13 @@ type EventOption = {
     dojoName: string | null;
 };
 
-type Scope = "ALL" | "DOJO" | "MEMBER" | "EVENT";
+type Scope = "ALL" | "DOJO" | "MEMBER" | "EVENT" | "CATEGORY";
 
 interface Props {
     dojos: Dojo[];
     members: Member[];
     events: EventOption[];
+    categories: string[];
 }
 
 const GROUP_ORDER = [
@@ -56,13 +58,14 @@ const GROUP_ORDER = [
     "System",
 ] as const;
 
-export default function ReportsAdminClient({ dojos, members, events }: Props) {
+export default function ReportsAdminClient({ dojos, members, events, categories }: Props) {
     const [selected, setSelected] = useState<ReportKey>("members");
     const [scope, setScope] = useState<Scope>("ALL");
     const [dojoId, setDojoId] = useState<string>("");
     const [userId, setUserId] = useState<string>("");
     const [eventId, setEventId] = useState<string>("");
     const [eventSearch, setEventSearch] = useState<string>("");
+    const [category, setCategory] = useState<string>("");
     const [from, setFrom] = useState<string>("");
     const [to, setTo] = useState<string>("");
     const [memberSearch, setMemberSearch] = useState<string>("");
@@ -89,6 +92,7 @@ export default function ReportsAdminClient({ dojos, members, events }: Props) {
         if (definition.supportsDojoScope) s.push("DOJO");
         if (definition.supportsMemberScope) s.push("MEMBER");
         if (definition.supportsEventScope) s.push("EVENT");
+        if (definition.supportsCategoryScope) s.push("CATEGORY");
         return s;
     }, [definition]);
 
@@ -138,6 +142,10 @@ export default function ReportsAdminClient({ dojos, members, events }: Props) {
             setToast({ kind: "err", msg: "Please pick an event." });
             return;
         }
+        if (scope === "CATEGORY" && !category) {
+            setToast({ kind: "err", msg: "Please pick a category / division." });
+            return;
+        }
 
         const params = new URLSearchParams();
         params.set("report", selected);
@@ -148,6 +156,7 @@ export default function ReportsAdminClient({ dojos, members, events }: Props) {
         if (scope === "DOJO" && dojoId) params.set("dojoId", dojoId);
         if (scope === "MEMBER" && userId) params.set("userId", userId);
         if (scope === "EVENT" && eventId) params.set("eventId", eventId);
+        if (scope === "CATEGORY" && category) params.set("category", category);
 
         setLoading(true);
         try {
@@ -337,7 +346,9 @@ export default function ReportsAdminClient({ dojos, members, events }: Props) {
                                             ? "By Dojo"
                                             : s === "MEMBER"
                                                 ? "By Member"
-                                                : "By Event"}
+                                                : s === "EVENT"
+                                                    ? "By Event"
+                                                    : "By Category"}
                                 </button>
                             ))}
                         </div>
@@ -481,6 +492,42 @@ export default function ReportsAdminClient({ dojos, members, events }: Props) {
                             {selectedEvent && (
                                 <p className="mt-1.5 text-xs text-zinc-500">
                                     Selected: {selectedEvent.title}
+                                </p>
+                            )}
+                        </div>
+                    )}
+
+                    {/* Category picker */}
+                    {scope === "CATEGORY" && (
+                        <div className="mb-5">
+                            <label className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-zinc-500">
+                                <Tag className="h-3.5 w-3.5" />
+                                Category / Division
+                            </label>
+                            {categories.length === 0 ? (
+                                <p className="rounded-md border border-zinc-200 bg-zinc-50 p-3 text-xs text-zinc-500">
+                                    No categories have been recorded yet.
+                                </p>
+                            ) : (
+                                <div className="relative">
+                                    <select
+                                        value={category}
+                                        onChange={(e) => setCategory(e.target.value)}
+                                        className="w-full appearance-none rounded-md border border-zinc-300 bg-white px-3 py-2 pr-8 text-sm text-zinc-900 focus:border-red-500 focus:outline-none focus:ring-1 focus:ring-red-500"
+                                    >
+                                        <option value="">— Select a category —</option>
+                                        {categories.map((c) => (
+                                            <option key={c} value={c}>
+                                                {c}
+                                            </option>
+                                        ))}
+                                    </select>
+                                    <ChevronDown className="pointer-events-none absolute right-2 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
+                                </div>
+                            )}
+                            {category && (
+                                <p className="mt-1.5 text-xs text-zinc-500">
+                                    Filtering to {category}
                                 </p>
                             )}
                         </div>

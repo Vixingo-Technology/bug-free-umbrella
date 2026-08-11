@@ -32,8 +32,9 @@ export async function GET(req: NextRequest) {
     const dojoId = url.searchParams.get("dojoId") ?? undefined;
     const userId = url.searchParams.get("userId") ?? undefined;
     const eventId = url.searchParams.get("eventId") ?? undefined;
+    const category = url.searchParams.get("category") ?? undefined;
 
-    const rows = await generateReport(report as ReportKey, { from, to, dojoId, userId, eventId });
+    const rows = await generateReport(report as ReportKey, { from, to, dojoId, userId, eventId, category });
     const csv = toCsv(rows);
 
     const stamp = new Date().toISOString().slice(0, 10);
@@ -42,6 +43,7 @@ export async function GET(req: NextRequest) {
         eventId ? `event-${eventId.slice(0, 8)}` : null,
         dojoId ? `dojo-${dojoId.slice(0, 8)}` : null,
         userId ? `user-${userId.slice(0, 8)}` : null,
+        category ? `cat-${category.replace(/[^a-z0-9]+/gi, "-").slice(0, 20)}` : null,
         from ? `from-${url.searchParams.get("from")}` : null,
         to ? `to-${url.searchParams.get("to")}` : null,
         `generated-${stamp}`,

@@ -1,4 +1,4 @@
-export type ReportScope = "ALL" | "DOJO" | "MEMBER" | "EVENT";
+export type ReportScope = "ALL" | "DOJO" | "MEMBER" | "EVENT" | "CATEGORY";
 
 export type ReportKey =
     | "members"
@@ -43,6 +43,8 @@ export interface ReportDefinition {
     supportsMemberScope: boolean;
     /** Whether this report can be scoped to a specific event. */
     supportsEventScope?: boolean;
+    /** Whether this report can be scoped to a specific category / division. */
+    supportsCategoryScope?: boolean;
     /** Whether this report supports a date range filter. */
     supportsDateRange: boolean;
 }
@@ -58,7 +60,7 @@ export const REPORT_DEFINITIONS: ReportDefinition[] = [
     { key: "dojo_applications", label: "Dojo Enlistment Applications", group: "Dojos", supportsDojoScope: false, supportsMemberScope: true, supportsDateRange: true },
 
     { key: "gradings", label: "Gradings (Results)", group: "Ranking", supportsDojoScope: true, supportsMemberScope: true, supportsDateRange: true },
-    { key: "grading_events", label: "Grading Events (Exams)", group: "Ranking", supportsDojoScope: false, supportsMemberScope: false, supportsDateRange: true },
+    { key: "grading_events", label: "Grading Events (Exams)", group: "Ranking", supportsDojoScope: true, supportsMemberScope: false, supportsDateRange: true },
     { key: "grading_applications", label: "Grading Applications", group: "Ranking", supportsDojoScope: true, supportsMemberScope: true, supportsDateRange: true },
     { key: "certificate_requests", label: "Certificate Requests", group: "Ranking", supportsDojoScope: true, supportsMemberScope: true, supportsDateRange: true },
 
@@ -73,8 +75,8 @@ export const REPORT_DEFINITIONS: ReportDefinition[] = [
     { key: "dojo_sale_items", label: "Dojo Sale Items", group: "Shop", supportsDojoScope: true, supportsMemberScope: false, supportsDateRange: true },
     { key: "dojo_inventory", label: "Dojo Inventory", group: "Shop", supportsDojoScope: true, supportsMemberScope: false, supportsDateRange: false },
 
-    { key: "tournaments", label: "Tournaments", group: "Tournaments", supportsDojoScope: false, supportsMemberScope: false, supportsDateRange: true },
-    { key: "tournament_participants", label: "Tournament Participants", group: "Tournaments", supportsDojoScope: false, supportsMemberScope: true, supportsDateRange: true },
+    { key: "tournaments", label: "Tournaments", group: "Tournaments", supportsDojoScope: true, supportsMemberScope: false, supportsCategoryScope: true, supportsDateRange: true },
+    { key: "tournament_participants", label: "Tournament Participants", group: "Tournaments", supportsDojoScope: true, supportsMemberScope: true, supportsCategoryScope: true, supportsDateRange: true },
     { key: "tournament_matches", label: "Tournament Matches", group: "Tournaments", supportsDojoScope: false, supportsMemberScope: false, supportsDateRange: true },
 
     { key: "achievements", label: "Achievements Catalog", group: "Achievements", supportsDojoScope: false, supportsMemberScope: false, supportsDateRange: false },
@@ -85,7 +87,7 @@ export const REPORT_DEFINITIONS: ReportDefinition[] = [
     { key: "services", label: "Services Catalog", group: "Services", supportsDojoScope: false, supportsMemberScope: false, supportsDateRange: false },
     { key: "service_coupons", label: "Service Coupons", group: "Services", supportsDojoScope: true, supportsMemberScope: false, supportsDateRange: true },
 
-    { key: "payment_transactions", label: "Payment Transactions", group: "Payments", supportsDojoScope: false, supportsMemberScope: true, supportsDateRange: true },
+    { key: "payment_transactions", label: "Payment Transactions", group: "Payments", supportsDojoScope: true, supportsMemberScope: true, supportsDateRange: true },
 
     { key: "notifications", label: "Notifications", group: "System", supportsDojoScope: false, supportsMemberScope: true, supportsDateRange: true },
 ];

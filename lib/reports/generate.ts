@@ -8,6 +8,7 @@ export interface ReportFilters {
     dojoId?: string;
     userId?: string;
     eventId?: string;
+    category?: string;
 }
 
 function dateWhere(from?: Date, to?: Date) {
@@ -31,7 +32,7 @@ export async function generateReport(
     key: ReportKey,
     filters: ReportFilters,
 ): Promise<Row[]> {
-    const { from, to, dojoId, userId, eventId } = filters;
+    const { from, to, dojoId, userId, eventId, category } = filters;
     const createdAt = dateWhere(from, to);
 
     switch (key) {
@@ -275,6 +276,14 @@ export async function generateReport(
             const rows = await prisma.gradingEvent.findMany({
                 where: {
                     ...(createdAt ? { createdAt } : {}),
+                    ...(dojoId
+                        ? {
+                              OR: [
+                                  { applications: { some: { student: { dojoId } } } },
+                                  { gradings: { some: { student: { dojoId } } } },
+                              ],
+                          }
+                        : {}),
                 },
                 include: {
                     targetRank: { select: { name: true } },
@@ -621,6 +630,12 @@ export async function generateReport(
             const rows = await prisma.tournament.findMany({
                 where: {
                     ...(createdAt ? { createdAt } : {}),
+                    ...(dojoId
+                        ? { participants: { some: { user: { student: { dojoId } } } } }
+                        : {}),
+                    ...(category
+                        ? { participants: { some: { category } } }
+                        : {}),
                 },
                 include: {
                     _count: { select: { participants: true, matches: true } },
@@ -644,10 +659,19 @@ export async function generateReport(
                 where: {
                     ...(createdAt ? { createdAt } : {}),
                     ...(userId ? { userId } : {}),
+                    ...(dojoId ? { user: { student: { dojoId } } } : {}),
+                    ...(category ? { category } : {}),
                 },
                 include: {
                     tournament: { select: { name: true, date: true } },
-                    user: { select: { fullName: true, email: true, memberNumber: true } },
+                    user: {
+                        select: {
+                            fullName: true,
+                            email: true,
+                            memberNumber: true,
+                            student: { select: { dojo: { select: { name: true } } } },
+                        },
+                    },
                 },
                 orderBy: { createdAt: "desc" },
             });
@@ -658,6 +682,7 @@ export async function generateReport(
                 member_number: p.user.memberNumber,
                 full_name: p.user.fullName,
                 email: p.user.email,
+                dojo: p.user.student?.dojo?.name ?? "",
                 category: p.category,
                 weight_class: p.weightClass,
                 created_at: p.createdAt,
@@ -847,6 +872,15 @@ export async function generateReport(
                 where: {
                     ...(createdAt ? { createdAt } : {}),
                     ...(userId ? { userId } : {}),
+                    ...(dojoId
+                        ? {
+                              OR: [
+                                  { order: { OR: [{ dojoId }, { certDojoId: dojoId }] } },
+                                  { eventRegistration: { event: { dojoId } } },
+                                  { user: { student: { dojoId } } },
+                              ],
+                          }
+                        : {}),
                 },
                 orderBy: { createdAt: "desc" },
             });
