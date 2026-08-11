@@ -46,10 +46,12 @@ export type MemberAutofill = {
     fullName: string;
     email: string;
     phone: string | null;
+    memberNumber: string | null;
     dateOfBirth: string | null;
     gender: Gender | null;
     currentRank: string | null;
     dojoName: string | null;
+    coachName: string | null;
     emergencyContactName: string | null;
     emergencyContactPhone: string | null;
     rankOrderIndex: number | null;
@@ -409,7 +411,8 @@ export default function TournamentRegistrationForm({
 
             {member ? (
                 <div className="text-sm text-zinc-700 bg-emerald-50 border border-emerald-200 rounded-sm px-4 py-3">
-                    Registering as <b>{member.fullName}</b> ({member.email}).
+                    Registering as <b>{member.fullName}</b>
+                    {member.memberNumber ? ` (ID: ${member.memberNumber})` : ""}.
                 </div>
             ) : (
                 <>
@@ -538,7 +541,12 @@ export default function TournamentRegistrationForm({
             )}
 
             <Field label="Coach name (optional)">
-                <input name="coachName" type="text" className={inputCx} />
+                <input
+                    name="coachName"
+                    type="text"
+                    defaultValue={member?.coachName ?? ""}
+                    className={inputCx}
+                />
             </Field>
 
             <Field label="Profile photo (optional · JPG/PNG · appears on your card)">

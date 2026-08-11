@@ -77,28 +77,42 @@ export default async function RegisterPage({ params, searchParams }: Props) {
 
     let memberAutofill: MemberAutofill = null;
     if (user) {
-        const me = await prisma.user.findUnique({
-            where: { id: user.id },
-            select: {
-                fullName: true,
-                email: true,
-                phone: true,
-                profile: {
-                    select: {
-                        dateOfBirth: true,
-                        gender: true,
-                        emergencyContactName: true,
-                        emergencyContactPhone: true,
+        const [me, lastRegistration] = await Promise.all([
+            prisma.user.findUnique({
+                where: { id: user.id },
+                select: {
+                    fullName: true,
+                    email: true,
+                    phone: true,
+                    memberNumber: true,
+                    profile: {
+                        select: {
+                            dateOfBirth: true,
+                            gender: true,
+                            emergencyContactName: true,
+                            emergencyContactPhone: true,
+                        },
+                    },
+                    student: {
+                        select: {
+                            currentRank: true,
+                            dojo: { select: { name: true } },
+                        },
                     },
                 },
-                student: {
-                    select: {
-                        currentRank: true,
-                        dojo: { select: { name: true } },
-                    },
+            }),
+            // Fall back to values the user has previously typed on their own
+            // registrations so gender/coach carry over when the profile
+            // hasn't captured them.
+            prisma.eventRegistration.findFirst({
+                where: { userId: user.id },
+                orderBy: { createdAt: "desc" },
+                select: {
+                    entrantGender: true,
+                    coachName: true,
                 },
-            },
-        });
+            }),
+        ]);
         if (me) {
             let rankOrderIndex: number | null = null;
             if (me.student?.currentRank) {
@@ -113,12 +127,14 @@ export default async function RegisterPage({ params, searchParams }: Props) {
                 fullName: me.fullName ?? "",
                 email: me.email ?? "",
                 phone: me.phone,
+                memberNumber: me.memberNumber ?? null,
                 dateOfBirth: me.profile?.dateOfBirth
                     ? me.profile.dateOfBirth.toISOString().slice(0, 10)
                     : null,
-                gender: me.profile?.gender ?? null,
+                gender: me.profile?.gender ?? lastRegistration?.entrantGender ?? null,
                 currentRank: me.student?.currentRank ?? null,
                 dojoName: me.student?.dojo?.name ?? null,
+                coachName: lastRegistration?.coachName ?? null,
                 emergencyContactName: me.profile?.emergencyContactName ?? null,
                 emergencyContactPhone: me.profile?.emergencyContactPhone ?? null,
                 rankOrderIndex,
