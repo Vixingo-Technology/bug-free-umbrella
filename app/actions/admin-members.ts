@@ -7,6 +7,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { assignRole } from "@/lib/auth/assign-role";
 import { sendEmail } from "@/lib/email/resend";
 import { buildDojoOwnerInviteEmail } from "@/lib/email/templates/dojo-owner-invite";
+import { generateTemporaryPassword } from "@/lib/auth/temporary-password";
 
 type ActionResult = { ok: true } | { ok: false; error: string };
 
@@ -276,6 +277,59 @@ export async function revokeDojoOwnerInviteAction(
 
     revalidatePath("/portal/admin/dojos");
     return { ok: true };
+}
+
+// ─────────────────────────────────────────────────────────────
+// Reset a Dojo Owner's password. Admin-only. Returns a temporary
+// password to display once — the owner is forced to replace it
+// on next login via mustChangePassword.
+// ─────────────────────────────────────────────────────────────
+
+export type ResetOwnerPasswordResult =
+    | { ok: true; temporaryPassword: string }
+    | { ok: false; error: string };
+
+export async function resetDojoOwnerPasswordAction(
+    formData: FormData
+): Promise<ResetOwnerPasswordResult> {
+    const { userId: adminId } = await requireAdmin();
+
+    const ownerId = ((formData.get("ownerId") as string) ?? "").trim();
+    if (!ownerId) return { ok: false, error: "Owner id is required." };
+    if (ownerId === adminId) {
+        return {
+            ok: false,
+            error: "Use Account settings to change your own password.",
+        };
+    }
+
+    const target = await prisma.user.findUnique({
+        where: { id: ownerId },
+        select: { id: true, roleId: true },
+    });
+    if (!target) return { ok: false, error: "User not found." };
+    if (target.roleId !== "DOJO_OWNER") {
+        return {
+            ok: false,
+            error: "This action only resets Dojo Owner passwords.",
+        };
+    }
+
+    const temporaryPassword = generateTemporaryPassword();
+    const admin = createAdminClient();
+    const { error } = await admin.auth.admin.updateUserById(ownerId, {
+        password: temporaryPassword,
+    });
+    if (error) return { ok: false, error: error.message };
+
+    await prisma.user.update({
+        where: { id: ownerId },
+        data: { mustChangePassword: true },
+    });
+
+    revalidatePath("/portal/admin/dojos");
+    revalidatePath("/portal/admin/members");
+    return { ok: true, temporaryPassword };
 }
 
 export async function resendInviteAction(formData: FormData): Promise<ActionResult> {

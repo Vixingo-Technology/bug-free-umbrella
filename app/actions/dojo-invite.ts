@@ -1,11 +1,12 @@
 "use server";
 
-import { randomBytes, randomUUID } from "node:crypto";
+import { randomUUID } from "node:crypto";
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { requireDojoRole } from "@/lib/dojo-session";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { assignRole } from "@/lib/auth/assign-role";
+import { generateTemporaryPassword } from "@/lib/auth/temporary-password";
 import {
     DOJO_STAFF_LIMIT,
     invitableRolesFor,
@@ -320,20 +321,6 @@ export type CreateExistingStudentResult =
     | { ok: true; memberNumber: string; temporaryPassword: string }
     | { ok: false; error: string };
 
-/**
- * URL-safe 12-char temporary password (base64url alphabet, no ambiguous chars).
- * The student is forced to replace it on first login via mustChangePassword.
- */
-function generateTemporaryPassword(): string {
-    const alphabet = "ABCDEFGHJKMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789";
-    const bytes = randomBytes(12);
-    let out = "";
-    for (let i = 0; i < 12; i++) {
-        out += alphabet[bytes[i] % alphabet.length];
-    }
-    return out;
-}
-
 export async function createExistingStudentAction(
     formData: FormData
 ): Promise<CreateExistingStudentResult> {
@@ -464,4 +451,93 @@ export async function createExistingStudentAction(
 
     revalidatePath("/portal/dojo/members");
     return { ok: true, memberNumber, temporaryPassword };
+}
+
+// ─────────────────────────────────────────────────────────────
+// Reset a member's password. Dojo Managers and Owners can reset
+// students in their own dojo; Owners can additionally reset
+// instructors and managers in their own dojo. The action returns
+// a fresh temporary password to display once — the member is
+// forced to replace it on next login via mustChangePassword.
+// ─────────────────────────────────────────────────────────────
+
+export type ResetMemberPasswordResult =
+    | { ok: true; temporaryPassword: string }
+    | { ok: false; error: string };
+
+export async function resetDojoMemberPasswordAction(
+    formData: FormData
+): Promise<ResetMemberPasswordResult> {
+    const session = await requireDojoRole("DOJO_MANAGER");
+    if (!session.dojo) {
+        return { ok: false, error: "Your dojo isn't approved yet." };
+    }
+    if (!session.dojo.isActive) {
+        return {
+            ok: false,
+            error: "Activate your dojo (complete the enlistment payment) before managing members.",
+        };
+    }
+
+    const memberId = ((formData.get("memberId") as string) ?? "").trim();
+    if (!memberId) return { ok: false, error: "Member id is required." };
+    if (memberId === session.userId) {
+        return {
+            ok: false,
+            error: "Use Account settings to change your own password.",
+        };
+    }
+
+    const member = await prisma.user.findUnique({
+        where: { id: memberId },
+        select: {
+            id: true,
+            roleId: true,
+            student: { select: { dojoId: true } },
+            instructor: { select: { dojoId: true } },
+            dojoManager: { select: { dojoId: true } },
+        },
+    });
+    if (!member) return { ok: false, error: "Member not found." };
+
+    const memberDojoId =
+        member.student?.dojoId ??
+        member.instructor?.dojoId ??
+        member.dojoManager?.dojoId ??
+        null;
+    if (memberDojoId !== session.dojo.id) {
+        return { ok: false, error: "Member is not part of your dojo." };
+    }
+
+    // Managers can only reset students; Owners can reset students, instructors,
+    // and other managers in their dojo. Nobody in this flow can touch the
+    // Dojo Owner account — that's an admin-only reset.
+    if (member.roleId === "DOJO_OWNER") {
+        return {
+            ok: false,
+            error: "The Dojo Head's password must be reset by a JKA admin.",
+        };
+    }
+    if (session.role === "DOJO_MANAGER" && member.roleId !== "STUDENT") {
+        return {
+            ok: false,
+            error: "Managers can only reset student passwords.",
+        };
+    }
+
+    const temporaryPassword = generateTemporaryPassword();
+    const admin = createAdminClient();
+    const { error } = await admin.auth.admin.updateUserById(memberId, {
+        password: temporaryPassword,
+    });
+    if (error) return { ok: false, error: error.message };
+
+    await prisma.user.update({
+        where: { id: memberId },
+        data: { mustChangePassword: true },
+    });
+
+    revalidatePath("/portal/dojo/members");
+    revalidatePath(`/portal/dojo/members/${memberId}`);
+    return { ok: true, temporaryPassword };
 }

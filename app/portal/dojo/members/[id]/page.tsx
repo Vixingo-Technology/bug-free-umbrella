@@ -15,10 +15,12 @@ import {
 } from "lucide-react";
 import DojoPageHeader from "@/components/dojo/page-header";
 import DigitalCard from "@/components/portal/digital-card";
+import StudentResetPasswordAction from "@/components/dojo/student-reset-password-action";
 import { requireDojoRole } from "@/lib/dojo-session";
 import { prisma } from "@/lib/prisma";
 import { serialize } from "@/lib/serialize";
 import type { MembershipStatusLabel } from "@/components/portal/digital-card";
+import { hasAtLeast } from "@/lib/dojo-roles";
 
 export const dynamic = "force-dynamic";
 
@@ -106,12 +108,21 @@ export default async function StudentDetailPage({
                 title={member.fullName}
                 description={`Profile, digital card, and certificates for ${member.fullName}.`}
                 actions={
-                    <Link
-                        href="/portal/dojo/members"
-                        className="text-[10px] tracking-widest uppercase font-bold text-zinc-500 hover:text-accent-red"
-                    >
-                        ← Back to roster
-                    </Link>
+                    <div className="flex items-center gap-4">
+                        {hasAtLeast(session.role, "DOJO_MANAGER") && (
+                            <StudentResetPasswordAction
+                                memberId={member.id}
+                                memberName={member.fullName}
+                                dojoName={session.dojo?.name ?? null}
+                            />
+                        )}
+                        <Link
+                            href="/portal/dojo/members"
+                            className="text-[10px] tracking-widest uppercase font-bold text-zinc-500 hover:text-accent-red"
+                        >
+                            ← Back to roster
+                        </Link>
+                    </div>
                 }
             />
 

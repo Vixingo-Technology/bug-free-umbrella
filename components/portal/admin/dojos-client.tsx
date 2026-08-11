@@ -12,7 +12,12 @@ import {
     deleteDojoAction,
     sendDojoRenewalReminderAction,
 } from "@/app/actions/admin-dojos";
-import { inviteMemberAction, revokeDojoOwnerInviteAction } from "@/app/actions/admin-members";
+import {
+    inviteMemberAction,
+    resetDojoOwnerPasswordAction,
+    revokeDojoOwnerInviteAction,
+} from "@/app/actions/admin-members";
+import ResetPasswordButton from "@/components/auth/reset-password-button";
 
 type DojoOwnerInvite = {
     email: string;
@@ -354,6 +359,41 @@ function DojoCard({
                 </div>
 
                 <ExpiryRow dojo={dojo} onFlash={onFlash} />
+
+                {dojo.headInstructor && (
+                    <div className="mt-4 pt-4 border-t border-zinc-100">
+                        <p className="text-[10px] font-bold tracking-widest uppercase text-zinc-500 mb-2">
+                            Dojo Head
+                        </p>
+                        <div className="flex items-center justify-between gap-2">
+                            <div className="min-w-0">
+                                <p className="text-sm font-semibold text-zinc-900 truncate">
+                                    {dojo.headInstructor.fullName}
+                                </p>
+                                <p className="text-xs text-zinc-500 truncate">
+                                    {dojo.headInstructor.email}
+                                </p>
+                            </div>
+                            <ResetPasswordButton
+                                variant="ghost"
+                                label="Reset"
+                                targetName={dojo.headInstructor.fullName}
+                                targetSubtitle={`Dojo Head · ${dojo.name}`}
+                                onConfirm={async () => {
+                                    const fd = new FormData();
+                                    fd.set("ownerId", dojo.headInstructor!.id);
+                                    const res = await resetDojoOwnerPasswordAction(fd);
+                                    if (res.ok) {
+                                        onFlash("ok", "Password reset.");
+                                    } else {
+                                        onFlash("err", res.error);
+                                    }
+                                    return res;
+                                }}
+                            />
+                        </div>
+                    </div>
+                )}
 
                 <div className="flex items-center gap-2 mt-4">
                     <Link
