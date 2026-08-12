@@ -66,15 +66,12 @@ function slugify(label: string): string {
         .slice(0, 40);
 }
 
-// Deterministic code from label + type so the admin form's per-row key is
-// stable across re-renders. Collisions inside a single event are rejected
-// by the server action.
-export function makeCustomDivisionCode(
-    label: string,
-    eventType: TournamentEventType,
-): string {
+// Deterministic code from label so the admin form's per-row key is stable
+// across re-renders. Collisions inside a single event are rejected by the
+// server action.
+export function makeCustomDivisionCode(label: string): string {
     const slug = slugify(label) || Math.random().toString(36).slice(2, 8);
-    return `${CUSTOM_CODE_PREFIX}${eventType}-${slug}`;
+    return `${CUSTOM_CODE_PREFIX}${slug}`;
 }
 
 export function isCustomDivisionCode(code: string): boolean {

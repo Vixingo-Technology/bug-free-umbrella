@@ -244,10 +244,7 @@ export default function EventForm({
         setDivisions((prev) => [
             ...prev,
             {
-                code: makeCustomDivisionCode(
-                    `Division ${prev.length + 1}`,
-                    "KATA",
-                ),
+                code: makeCustomDivisionCode(`Division ${prev.length + 1}`),
                 label: "",
                 eventType: "KATA",
                 gender: "ANY",
@@ -277,7 +274,7 @@ export default function EventForm({
                 if (i !== index) return d;
                 const next = { ...d, ...patch };
                 if (patch.label !== undefined && next.label.trim()) {
-                    next.code = makeCustomDivisionCode(next.label, next.eventType);
+                    next.code = makeCustomDivisionCode(next.label);
                 }
                 return next;
             }),

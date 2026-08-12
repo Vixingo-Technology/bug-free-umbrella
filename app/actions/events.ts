@@ -82,7 +82,7 @@ async function parseDivisionFields(formData: FormData): Promise<DivisionInput> {
         const code =
             d.code && isCustomDivisionCode(d.code)
                 ? d.code
-                : makeCustomDivisionCode(label, d.eventType);
+                : makeCustomDivisionCode(label);
         if (seen.has(code)) {
             return {
                 error: `Two divisions share the same name/type ("${label}"). Rename one.`,

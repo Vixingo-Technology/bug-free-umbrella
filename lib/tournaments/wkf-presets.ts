@@ -133,10 +133,10 @@ export const WKF_PRESETS: WkfPreset[] = [
 // a valid custom row.
 export function wkfPresetToDivision(
     preset: WkfPreset,
-    slugify: (label: string, eventType: TournamentEventType) => string,
+    slugify: (label: string) => string,
 ): CustomDivision {
     return {
-        code: slugify(preset.label, preset.eventType),
+        code: slugify(preset.label),
         label: preset.label,
         eventType: preset.eventType,
         gender: preset.gender,
