@@ -17,6 +17,7 @@ export default async function AdminReportsPage() {
                 id: true,
                 fullName: true,
                 email: true,
+                contactEmail: true,
                 memberNumber: true,
                 roleId: true,
             },

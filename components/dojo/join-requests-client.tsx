@@ -15,6 +15,7 @@ import {
 import { acceptJoinRequestAction } from "@/app/portal/dojo/join-requests/actions";
 import { beltStepsFromWhite } from "@/lib/joining";
 import { DEFAULT_TIME_ZONE } from "@/lib/format/datetime";
+import { displayEmail } from "@/lib/format/email";
 
 type Request = {
     id: string;
@@ -24,6 +25,7 @@ type Request = {
         id: string;
         fullName: string;
         email: string | null;
+        contactEmail: string | null;
         phone: string | null;
         avatarUrl: string | null;
         memberNumber: string | null;
@@ -163,10 +165,10 @@ function RequestCard({
                         )}
                     </div>
                     <div className="mt-1 flex flex-wrap gap-3 text-xs text-zinc-500">
-                        {request.user.email && (
+                        {(displayEmail(request.user) || request.user.email) && (
                             <span className="inline-flex items-center gap-1">
                                 <Mail size={11} />
-                                {request.user.email}
+                                {displayEmail(request.user) || request.user.email}
                             </span>
                         )}
                         {request.user.phone && (

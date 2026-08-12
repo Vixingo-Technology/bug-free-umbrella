@@ -21,6 +21,7 @@ import {
 import { updateStudentProfileAction } from "@/app/portal/dojo/members/[id]/actions";
 import { BLOOD_GROUPS } from "@/lib/constants";
 import { validatePhone } from "@/lib/validation/phone";
+import { isSyntheticEmail } from "@/lib/format/email";
 
 const fmt = new Intl.DateTimeFormat("en-GB", {
     day: "2-digit",
@@ -259,12 +260,14 @@ export default function StudentProfileEditor({
                     label="Joined"
                     value={saved.joinDate ? fmt.format(new Date(saved.joinDate)) : null}
                 />
-                <ReadField
-                    icon={<Mail size={14} />}
-                    label="Login email"
-                    value={saved.email}
-                    mono
-                />
+                {!isSyntheticEmail(saved.email) && (
+                    <ReadField
+                        icon={<Mail size={14} />}
+                        label="Login email"
+                        value={saved.email}
+                        mono
+                    />
+                )}
 
                 {/* Editable fields */}
                 <EditableField

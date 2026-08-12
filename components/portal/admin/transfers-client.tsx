@@ -15,6 +15,7 @@ import {
     denyTransferAction,
 } from "@/app/portal/admin/transfers/actions";
 import { formatDateTime } from "@/lib/format/datetime";
+import { displayEmail } from "@/lib/format/email";
 
 type Row = {
     id: string;
@@ -27,7 +28,7 @@ type Row = {
     paidAt: string | null;
     dojoActedAt: string | null;
     adminActedAt: string | null;
-    student: { user: { id: string; fullName: string; email: string; avatarUrl: string | null } };
+    student: { user: { id: string; fullName: string; email: string; contactEmail: string | null; avatarUrl: string | null } };
     fromDojo: { id: string; name: string; city: string | null };
     toDojo:   { id: string; name: string; city: string | null };
     dojoActedBy:  { id: string; fullName: string } | null;
@@ -179,7 +180,7 @@ function RequestCard({
                     <div className="text-sm font-semibold text-zinc-900">
                         {row.student.user.fullName}
                     </div>
-                    <div className="text-xs text-zinc-500 mt-0.5">{row.student.user.email}</div>
+                    <div className="text-xs text-zinc-500 mt-0.5">{displayEmail(row.student.user) || row.student.user.email}</div>
 
                     <div className="text-sm text-zinc-700 mt-3 flex items-center gap-1.5">
                         <span>{row.fromDojo.name}</span>

@@ -23,6 +23,7 @@ import DigitalCard from "./digital-card";
 import MembershipCardDialog from "./membership-card-dialog";
 import AchievementsPanel, { type AchievementItem } from "./achievements-panel";
 import { DEFAULT_TIME_ZONE } from "@/lib/format/datetime";
+import { displayEmail } from "@/lib/format/email";
 
 type UpcomingItem =
     | { kind: "event";   id: string; title: string;      date: string; location: string | null }
@@ -116,6 +117,7 @@ export default function PortalDashboardClient({ member, membershipStatus, unread
     const dojo = member?.dojo;
     const statusCfg = statusConfig[membershipStatus];
     const StatusIcon = statusCfg.icon;
+    const cardEmail = displayEmail({ email: member?.email, contactEmail: member?.contactEmail });
 
     const [cardOpen, setCardOpen] = useState(false);
 
@@ -253,7 +255,7 @@ export default function PortalDashboardClient({ member, membershipStatus, unread
                             <DigitalCard
                                 interactive
                                 fullName={member?.fullName ?? "Member"}
-                                email={member?.email}
+                                email={cardEmail}
                                 currentRank={member?.currentRank}
                                 dojoName={dojo?.name}
                                 role={member?.role}
@@ -396,7 +398,7 @@ export default function PortalDashboardClient({ member, membershipStatus, unread
                 onClose={() => setCardOpen(false)}
                 memberId={member?.id ?? ""}
                 fullName={member?.fullName ?? "Member"}
-                email={member?.email}
+                email={cardEmail}
                 currentRank={member?.currentRank}
                 dojoName={dojo?.name}
                 role={member?.role}

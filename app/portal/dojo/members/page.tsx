@@ -15,6 +15,7 @@ import {
 } from "@/lib/dojo-roles";
 import { resolveDojoFeatureLocks } from "@/lib/dojo/feature-locks.server";
 import { DEFAULT_TIME_ZONE, formatDate } from "@/lib/format/datetime";
+import { displayEmail } from "@/lib/format/email";
 
 export const metadata: Metadata = {
     title: "Members — Dojo Dashboard",
@@ -127,7 +128,7 @@ export default async function MembersPage({
                 rosters.STUDENT.push({
                     id: s.id,
                     name: s.user.fullName,
-                    email: s.user.email,
+                    email: displayEmail(s.user),
                     role: "STUDENT",
                     rank: s.currentRank,
                     joined: s.joinDate.toLocaleDateString(undefined, {
@@ -141,7 +142,7 @@ export default async function MembersPage({
                 invited.STUDENT.push({
                     id: s.id,
                     name: pretty(s.user.fullName, s.user.email),
-                    email: s.user.email,
+                    email: displayEmail(s.user),
                     role: "STUDENT",
                     invitedAt: relativeTime(s.user.createdAt),
                 });
@@ -153,7 +154,7 @@ export default async function MembersPage({
                 rosters.INSTRUCTOR.push({
                     id: i.id,
                     name: i.user.fullName,
-                    email: i.user.email,
+                    email: displayEmail(i.user),
                     role: "INSTRUCTOR",
                     rank: rankFromBio(i.bio),
                     joined: i.joinedDate.toLocaleDateString(undefined, {
@@ -167,7 +168,7 @@ export default async function MembersPage({
                 invited.INSTRUCTOR.push({
                     id: i.id,
                     name: pretty(i.user.fullName, i.user.email),
-                    email: i.user.email,
+                    email: displayEmail(i.user),
                     role: "INSTRUCTOR",
                     invitedAt: relativeTime(i.user.createdAt),
                 });
@@ -179,7 +180,7 @@ export default async function MembersPage({
                 rosters.DOJO_MANAGER.push({
                     id: m.id,
                     name: m.user.fullName,
-                    email: m.user.email,
+                    email: displayEmail(m.user),
                     role: "DOJO_MANAGER",
                     rank: "—",
                     joined: m.createdAt.toLocaleDateString(undefined, {
@@ -193,7 +194,7 @@ export default async function MembersPage({
                 invited.DOJO_MANAGER.push({
                     id: m.id,
                     name: pretty(m.user.fullName, m.user.email),
-                    email: m.user.email,
+                    email: displayEmail(m.user),
                     role: "DOJO_MANAGER",
                     invitedAt: relativeTime(m.createdAt),
                 });

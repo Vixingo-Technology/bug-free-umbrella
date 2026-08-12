@@ -40,6 +40,7 @@ export default async function OnboardingPage() {
                 id: u.id,
                 fullName: u.fullName,
                 email: u.email,
+                contactEmail: u.contactEmail,
                 phone: u.phone,
                 avatarUrl: u.avatarUrl,
                 role: u.roleId,

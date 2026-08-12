@@ -88,6 +88,7 @@ async function StudentPortalDashboard({ userId }: { userId: string }) {
                 ...student,
                 fullName: student.user.fullName,
                 email: student.user.email,
+                contactEmail: student.user.contactEmail,
                 phone: student.user.phone,
                 avatarUrl: student.user.avatarUrl,
                 role: student.user.roleId,
@@ -246,13 +247,14 @@ async function AdminPortalDashboard({ userId }: { userId: string }) {
             orderBy: { createdAt: "desc" },
             take: 5,
             select: {
-                id: true, fullName: true, email: true, roleId: true, createdAt: true,
+                id: true, fullName: true, email: true, contactEmail: true, roleId: true, createdAt: true,
                 student: { select: { membershipStatus: true, dojo: { select: { name: true } } } },
             },
         }).then((rows) => rows.map((r) => ({
             id: r.id,
             fullName: r.fullName,
             email: r.email,
+            contactEmail: r.contactEmail,
             role: r.roleId,
             createdAt: r.createdAt,
             membershipStatus: r.student?.membershipStatus ?? null,
@@ -264,7 +266,7 @@ async function AdminPortalDashboard({ userId }: { userId: string }) {
             select: {
                 id: true, paymentStatus: true, total: true, createdAt: true,
                 guestName: true, guestEmail: true, isGuestOrder: true,
-                user: { select: { fullName: true, email: true } },
+                user: { select: { fullName: true, email: true, contactEmail: true } },
             },
         }).then((rows) => rows.map((o) => ({
             id: o.id,
@@ -274,7 +276,7 @@ async function AdminPortalDashboard({ userId }: { userId: string }) {
             member: o.user
                 ? o.user
                 : (o.guestName || o.guestEmail)
-                    ? { fullName: o.guestName ?? "Guest", email: o.guestEmail ?? "" }
+                    ? { fullName: o.guestName ?? "Guest", email: o.guestEmail ?? "", contactEmail: null }
                     : null,
         }))),
     ]);

@@ -9,11 +9,13 @@ import {
 import AvatarUploader from "@/components/portal/avatar-uploader";
 import { updateAccountAction, changePasswordAction } from "@/app/portal/account/actions";
 import { validatePhone } from "@/lib/validation/phone";
+import { displayEmail } from "@/lib/format/email";
 
 interface Props {
     user: {
         id: string;
         email: string;
+        contactEmail: string | null;
         phone: string | null;
         fullName: string;
         avatarUrl: string | null;
@@ -189,7 +191,7 @@ export default function AccountClient({ user }: Props) {
                         <Field label="Email" icon={<Mail size={14} />} hint="Contact support to change">
                             <input
                                 type="email"
-                                value={user.email}
+                                value={displayEmail(user)}
                                 readOnly
                                 className="input bg-zinc-50 text-zinc-500 cursor-not-allowed"
                             />

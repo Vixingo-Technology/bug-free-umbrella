@@ -25,6 +25,7 @@ import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/admin-guard";
 import { serialize } from "@/lib/serialize";
 import { DEFAULT_TIME_ZONE } from "@/lib/format/datetime";
+import { displayEmail, isSyntheticEmail } from "@/lib/format/email";
 
 export const dynamic = "force-dynamic";
 
@@ -166,6 +167,8 @@ export default async function AdminMemberDetailPage({
         null;
 
     const initial = (p.fullName ?? "?").charAt(0).toUpperCase();
+    const shownEmail = displayEmail(p);
+    const emailHasSynthetic = isSyntheticEmail(p.email);
 
     return (
         <div className="space-y-6">
@@ -180,7 +183,7 @@ export default async function AdminMemberDetailPage({
                     <h1 className="text-2xl sm:text-3xl font-bold text-zinc-900 truncate">
                         {p.fullName}
                     </h1>
-                    <p className="text-sm text-zinc-500 mt-1 truncate">{p.email}</p>
+                    <p className="text-sm text-zinc-500 mt-1 truncate">{shownEmail || p.email}</p>
                 </div>
                 <Link
                     href={`/members/${p.id}`}
@@ -260,7 +263,14 @@ export default async function AdminMemberDetailPage({
                         <FieldGrid>
                             <Field icon={<UserIcon size={14} />} label="User ID" value={p.id} mono fullWidth />
                             <Field icon={<UserIcon size={14} />} label="Full name" value={p.fullName} />
-                            <Field icon={<Mail size={14} />} label="Email" value={p.email} />
+                            <Field
+                                icon={<Mail size={14} />}
+                                label={emailHasSynthetic ? "Contact email" : "Email"}
+                                value={shownEmail || (emailHasSynthetic ? null : p.email)}
+                            />
+                            {emailHasSynthetic && (
+                                <Field icon={<Mail size={14} />} label="Login (auth)" value={p.email} mono />
+                            )}
                             <Field icon={<Phone size={14} />} label="Phone" value={p.phone} />
                             <Field icon={<Shield size={14} />} label="Role" value={roleLabel} />
                             <Field

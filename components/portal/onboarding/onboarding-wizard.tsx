@@ -32,6 +32,7 @@ function initialProfile(member: any): ProfileData {
     return {
         fullName: member?.fullName ?? "",
         phone: member?.phone ?? "",
+        contactEmail: member?.contactEmail ?? "",
         dojoId: member?.dojoId ?? "",
         dateOfBirth: member?.dateOfBirth
             ? new Date(member.dateOfBirth).toISOString().split("T")[0]
@@ -160,6 +161,7 @@ export default function OnboardingWizard({
                                 onNext={handleProfileNext}
                                 isUpdateMode={isProfileUpdateMode}
                                 dojoLocked={isExistingMemberMode}
+                                askContactEmail={isExistingMemberMode}
                                 missingFields={missingFields}
                                 avatarUrl={member?.avatarUrl ?? null}
                             />

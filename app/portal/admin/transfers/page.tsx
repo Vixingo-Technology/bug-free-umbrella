@@ -14,7 +14,7 @@ export default async function AdminTransfersPage() {
     const requests = await prisma.studentTransferRequest.findMany({
         orderBy: [{ status: "asc" }, { createdAt: "desc" }],
         include: {
-            student: { include: { user: { select: { id: true, fullName: true, email: true, avatarUrl: true } } } },
+            student: { include: { user: { select: { id: true, fullName: true, email: true, contactEmail: true, avatarUrl: true } } } },
             fromDojo: { select: { id: true, name: true, city: true } },
             toDojo:   { select: { id: true, name: true, city: true } },
             dojoActedBy:  { select: { id: true, fullName: true } },

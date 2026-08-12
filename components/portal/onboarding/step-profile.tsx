@@ -3,7 +3,7 @@
 import { useState, useTransition } from "react";
 import dynamic from "next/dynamic";
 import { motion } from "motion/react";
-import { User, Phone, MapPin, Heart, AlertCircle, ChevronRight, Users, UserCircle2 } from "lucide-react";
+import { User, Phone, Mail, MapPin, Heart, AlertCircle, ChevronRight, Users, UserCircle2 } from "lucide-react";
 import { saveProfileAction } from "@/app/portal/onboarding/actions";
 import { BLOOD_GROUPS } from "@/lib/constants";
 import AvatarUploader from "@/components/portal/avatar-uploader";
@@ -28,6 +28,7 @@ const DojoMapPicker = dynamic(
 export interface ProfileData {
     fullName: string;
     phone: string;
+    contactEmail: string;
     dojoId: string;
     dateOfBirth: string; // ISO yyyy-mm-dd or ""
     gender: string; // "MALE" | "FEMALE" | ""
@@ -51,6 +52,10 @@ interface Props {
      *  dojo is set by the Dojo Head at creation time and must not be
      *  editable by the student. */
     dojoLocked?: boolean;
+    /** True when the account was pre-provisioned by the Dojo Head — no
+     *  real email was captured at creation, so the profile step asks the
+     *  student to provide one for notifications. */
+    askContactEmail?: boolean;
     /** Which required fields are missing — shown as a hint banner. */
     missingFields?: string[];
     /** Existing avatar URL (if any) — used to seed the uploader preview. */
@@ -64,6 +69,7 @@ export default function StepProfile({
     onNext,
     isUpdateMode = false,
     dojoLocked = false,
+    askContactEmail = false,
     missingFields = [],
     avatarUrl,
 }: Props) {
@@ -85,6 +91,17 @@ export default function StepProfile({
         if (phoneError) {
             setError(phoneError);
             return;
+        }
+        if (askContactEmail) {
+            const email = value.contactEmail.trim();
+            if (!email) {
+                setError("Contact email is required.");
+                return;
+            }
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                setError("Enter a valid email address.");
+                return;
+            }
         }
         const ageError = validateMinAge(value.dateOfBirth, STUDENT_MIN_AGE);
         if (ageError) {
@@ -237,6 +254,28 @@ export default function StepProfile({
                         className={inputCls}
                     />
                 </Field>
+
+                {/* Contact email — asked only when the Dojo Head provisioned
+                 *  the account without a real email. Login stays by Member ID;
+                 *  this address is used for notifications. */}
+                {askContactEmail && (
+                    <Field label="Contact Email *" icon={<Mail size={15} />}>
+                        <input
+                            name="contactEmail"
+                            type="email"
+                            autoComplete="email"
+                            value={value.contactEmail}
+                            onChange={(e) => update("contactEmail", e.target.value)}
+                            placeholder="you@example.com"
+                            required
+                            className={inputCls}
+                        />
+                        <p className="mt-1.5 text-[11px] text-zinc-400">
+                            Used for notifications and receipts. You&apos;ll
+                            still log in with your Member ID.
+                        </p>
+                    </Field>
+                )}
 
                 {/* Dojo — pick from the list, the map zooms into your choice.
                  *  When the Dojo Head pre-provisioned the account, the dojo

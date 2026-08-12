@@ -14,6 +14,7 @@ import { updateProfileAction, changePasswordAction } from "@/app/portal/profile/
 import { BLOOD_GROUPS } from "@/lib/constants";
 import { validatePhone } from "@/lib/validation/phone";
 import { DEFAULT_TIME_ZONE } from "@/lib/format/datetime";
+import { displayEmail as computeDisplayEmail } from "@/lib/format/email";
 
 interface Props {
     member: any;
@@ -71,6 +72,7 @@ export default function ProfileClient({ member, dojos, userId }: Props) {
     /* ── Personal info state ─────────────────────────────────────────────── */
     const [fullName,              setFullName]              = useState(member?.fullName ?? "");
     const [phone,                 setPhone]                 = useState(member?.phone ?? "");
+    const [contactEmail,          setContactEmail]          = useState(member?.contactEmail ?? "");
     const [dateOfBirth,           setDateOfBirth]           = useState(toDateInputValue(member?.dateOfBirth));
     const [gender,                setGender]                = useState(member?.gender ?? "");
     const [bloodGroup,            setBloodGroup]            = useState(member?.bloodGroup ?? "");
@@ -109,6 +111,8 @@ export default function ProfileClient({ member, dojos, userId }: Props) {
     }
 
     /* ── Derived display values ──────────────────────────────────────────── */
+    const displayEmail = computeDisplayEmail({ email: member?.email, contactEmail });
+
     const expiryDate = member?.expiryDate
         ? new Date(member.expiryDate).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" ,
  timeZone: DEFAULT_TIME_ZONE,
@@ -135,6 +139,10 @@ export default function ProfileClient({ member, dojos, userId }: Props) {
                 setProfileMsg({ type: "error", message: `Emergency contact: ${emergencyError}` });
                 return;
             }
+        }
+        if (contactEmail.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contactEmail.trim())) {
+            setProfileMsg({ type: "error", message: "Enter a valid contact email address." });
+            return;
         }
         const formData = new FormData(e.currentTarget);
         startProfileTransition(async () => {
@@ -185,7 +193,7 @@ export default function ProfileClient({ member, dojos, userId }: Props) {
                     />
                     <div className="flex-1 min-w-0">
                         <h2 className="text-lg font-bold text-zinc-900 truncate">{member?.fullName ?? "Member"}</h2>
-                        <p className="text-sm text-zinc-500 truncate">{member?.email ?? ""}</p>
+                        <p className="text-sm text-zinc-500 truncate">{displayEmail}</p>
                         <div className="flex items-center gap-2 mt-1.5 flex-wrap">
                             <span className="text-[10px] font-bold tracking-widest uppercase bg-blue-50 text-blue-600 px-2 py-0.5 rounded-full border border-blue-200">
                                 {member?.role ?? "STUDENT"}
@@ -300,14 +308,21 @@ export default function ProfileClient({ member, dojos, userId }: Props) {
                             </div>
                         </div>
 
-                        {/* Email (read-only) */}
+                        {/* Email (read-only summary of the contact email below) */}
                         <div>
                             <label className={labelCls}>Email Address</label>
                             <div className="relative">
                                 <Mail size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-300" />
-                                <input type="email" value={member?.email ?? ""} disabled className={disabledCls} />
+                                <input
+                                    type="email"
+                                    value={displayEmail || "Not set"}
+                                    disabled
+                                    className={disabledCls}
+                                />
                             </div>
-                            <p className="text-xs text-zinc-400 mt-1 pl-1">Email cannot be changed here. Contact an admin.</p>
+                            <p className="text-xs text-zinc-400 mt-1 pl-1">
+                                Update your contact email below. You&apos;ll still log in with your Member ID.
+                            </p>
                         </div>
 
                         {/* Date of birth + Gender + Blood group */}
@@ -457,6 +472,25 @@ export default function ProfileClient({ member, dojos, userId }: Props) {
                                     className={inputCls}
                                 />
                             </div>
+                        </div>
+
+                        <div>
+                            <label className={labelCls}>Contact Email</label>
+                            <div className="relative">
+                                <Mail size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400" />
+                                <input
+                                    type="email"
+                                    name="contactEmail"
+                                    autoComplete="email"
+                                    value={contactEmail}
+                                    onChange={(e) => setContactEmail(e.target.value)}
+                                    placeholder="you@example.com"
+                                    className={inputCls}
+                                />
+                            </div>
+                            <p className="text-xs text-zinc-400 mt-1 pl-1">
+                                Used for notifications and receipts. You&apos;ll still log in with your Member ID.
+                            </p>
                         </div>
                     </div>
                 </div>

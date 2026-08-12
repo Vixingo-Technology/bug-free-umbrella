@@ -12,6 +12,7 @@ import {
     updateOrderFulfillmentAction,
 } from "@/app/actions/admin-orders";
 import { DEFAULT_TIME_ZONE } from "@/lib/format/datetime";
+import { displayEmail } from "@/lib/format/email";
 
 type Status = "PENDING" | "PAID" | "FAILED" | "REFUNDED";
 type FulfillmentStatus = "PREPARING" | "IN_TRANSIT" | "DELIVERED" | "RETURNED";
@@ -34,6 +35,7 @@ type Order = {
         id: string | null;
         fullName: string;
         email: string;
+        contactEmail: string | null;
         phone: string | null;
         address: string | null;
         memberNumber: string | null;
@@ -115,6 +117,7 @@ export default function OrdersAdminClient({ orders }: { orders: Order[] }) {
                 o.id.toLowerCase().includes(q) ||
                 o.member.fullName.toLowerCase().includes(q) ||
                 o.member.email.toLowerCase().includes(q) ||
+                (o.member.contactEmail ?? "").toLowerCase().includes(q) ||
                 (o.transactionId ?? "").toLowerCase().includes(q)
             );
         });
@@ -343,7 +346,7 @@ function OrderRow({ order, onFlash }: { order: Order; onFlash: (k: "ok" | "err",
                         </p>
                         <p className="text-xs text-zinc-500 mt-0.5 truncate">
                             <UserIcon size={11} className="inline-block mr-1" />
-                            {order.member.fullName} · {order.member.email}
+                            {order.member.fullName} · {displayEmail(order.member) || order.member.email}
                         </p>
                         <p className="text-[11px] text-zinc-400 mt-0.5">
                             {formatTimestamp(order.createdAt)}
@@ -437,7 +440,7 @@ function OrderRow({ order, onFlash }: { order: Order; onFlash: (k: "ok" | "err",
                                     )}
                                 </p>
                                 <Meta label="Name" value={order.member.fullName} />
-                                <Meta label="Email" value={order.member.email || "—"} />
+                                <Meta label="Email" value={displayEmail(order.member) || order.member.email || "—"} />
                                 <Meta label="Phone" value={order.member.phone ?? "—"} />
                                 <Meta label="Address" value={order.member.address ?? "—"} />
                                 {order.member.memberNumber && (

@@ -27,6 +27,7 @@ import {
 import { computeGroupPayable } from "@/lib/events/pricing";
 import { isJkaMember } from "@/lib/auth/is-jka-member";
 import { DEFAULT_TIME_ZONE } from "@/lib/format/datetime";
+import { displayEmail } from "@/lib/format/email";
 
 type Props = {
     params: Promise<{ token: string }>;
@@ -89,6 +90,7 @@ export default async function ParticipationCardPage({
                 select: {
                     fullName: true,
                     email: true,
+                    contactEmail: true,
                     phone: true,
                     memberNumber: true,
                 },
@@ -158,7 +160,10 @@ export default async function ParticipationCardPage({
     const participantName =
         registration.user?.fullName ?? registration.guestName ?? "Participant";
     const participantEmail =
-        registration.user?.email ?? registration.guestEmail ?? "";
+        (registration.user ? displayEmail(registration.user) : "") ||
+        registration.guestEmail ||
+        registration.user?.email ||
+        "";
     const participantPhone =
         registration.user?.phone ?? registration.guestPhone ?? "";
     const memberNumber = registration.user?.memberNumber ?? null;

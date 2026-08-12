@@ -19,12 +19,14 @@ import {
 } from "lucide-react";
 import { REPORT_DEFINITIONS, type ReportKey, type ReportDefinition } from "@/lib/reports/report-types";
 import { DEFAULT_TIME_ZONE } from "@/lib/format/datetime";
+import { displayEmail } from "@/lib/format/email";
 
 type Dojo = { id: string; name: string; shortName: string | null };
 type Member = {
     id: string;
     fullName: string;
     email: string;
+    contactEmail: string | null;
     memberNumber: string | null;
     roleId: string;
 };
@@ -423,7 +425,7 @@ export default function ReportsAdminClient({ dojos, members, events, categories 
                                                     {m.fullName}
                                                 </span>
                                                 <span className="text-xs text-zinc-500">
-                                                    {m.memberNumber ?? m.roleId} · {m.email}
+                                                    {m.memberNumber ?? m.roleId} · {displayEmail(m) || m.email}
                                                 </span>
                                             </button>
                                         );

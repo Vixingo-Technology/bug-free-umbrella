@@ -6,6 +6,7 @@ import {
     Users, UserPlus, ShieldOff, Building2, Package, ShoppingBag,
     DollarSign, TrendingUp, ArrowRight, AlertCircle, CheckCircle2, Clock,
 } from "lucide-react";
+import { displayEmail } from "@/lib/format/email";
 
 type Stats = {
     totalMembers: number;
@@ -28,6 +29,7 @@ type RecentMember = {
     id: string;
     fullName: string;
     email: string;
+    contactEmail: string | null;
     role: "STUDENT" | "INSTRUCTOR" | "ADMIN";
     membershipStatus: "PENDING" | "ACTIVE" | "EXPIRED" | "SUSPENDED";
     createdAt: string | Date;
@@ -39,7 +41,7 @@ type RecentOrder = {
     paymentStatus: "PENDING" | "PAID" | "FAILED" | "REFUNDED";
     total: number;
     createdAt: string | Date;
-    member: { fullName: string; email: string } | null;
+    member: { fullName: string; email: string; contactEmail: string | null } | null;
 };
 
 const statusStyles: Record<RecentMember["membershipStatus"], string> = {
@@ -189,7 +191,7 @@ export default function AdminDashboardClient({
                                     <div className="flex-1 min-w-0">
                                         <p className="text-sm font-semibold text-zinc-900 truncate">{m.fullName}</p>
                                         <p className="text-xs text-zinc-500 truncate">
-                                            {m.email}
+                                            {displayEmail(m) || m.email}
                                             {m.dojo && <span className="text-zinc-400"> · {m.dojo.name}</span>}
                                         </p>
                                     </div>

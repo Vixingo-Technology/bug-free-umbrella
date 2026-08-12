@@ -13,6 +13,7 @@ export default async function AccountPage() {
         select: {
             id: true,
             email: true,
+            contactEmail: true,
             phone: true,
             fullName: true,
             avatarUrl: true,

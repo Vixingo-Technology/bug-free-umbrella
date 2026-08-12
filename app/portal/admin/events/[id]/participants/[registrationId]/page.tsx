@@ -20,6 +20,7 @@ import { requireAdmin } from "@/lib/admin-guard";
 import { prisma } from "@/lib/prisma";
 import { parseCustomDivisions, resolveDivision } from "@/lib/tournaments/divisions";
 import { DEFAULT_TIME_ZONE, formatDateLong } from "@/lib/format/datetime";
+import { displayEmail } from "@/lib/format/email";
 import AdminCancelRegistrationButton from "@/components/portal/admin-cancel-registration-button";
 
 export const metadata: Metadata = {
@@ -84,6 +85,7 @@ export default async function ParticipantDetailPage({
                     id: true,
                     fullName: true,
                     email: true,
+                    contactEmail: true,
                     phone: true,
                     memberNumber: true,
                     profile: {
@@ -129,7 +131,11 @@ export default async function ParticipantDetailPage({
 
     const isMember = !!registration.user;
     const name = registration.user?.fullName ?? registration.guestName ?? "Guest";
-    const email = registration.user?.email ?? registration.guestEmail;
+    const email =
+        (registration.user ? displayEmail(registration.user) : "") ||
+        registration.guestEmail ||
+        registration.user?.email ||
+        null;
     const phone = registration.user?.phone ?? registration.guestPhone;
     const dob = registration.user?.profile?.dateOfBirth ?? registration.guestDateOfBirth;
     const gender = registration.entrantGender ?? registration.user?.profile?.gender ?? null;

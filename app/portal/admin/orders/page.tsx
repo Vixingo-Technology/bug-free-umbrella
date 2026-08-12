@@ -13,7 +13,7 @@ export default async function AdminOrdersPage() {
         include: {
             user: {
                 select: {
-                    id: true, fullName: true, email: true, phone: true, memberNumber: true,
+                    id: true, fullName: true, email: true, contactEmail: true, phone: true, memberNumber: true,
                     profile: { select: { address: true } },
                 },
             },
@@ -39,6 +39,7 @@ export default async function AdminOrdersPage() {
                 id: o.user.id,
                 fullName: o.user.fullName,
                 email: o.user.email,
+                contactEmail: o.user.contactEmail,
                 phone: o.user.phone,
                 address: o.user.profile?.address ?? null,
                 memberNumber: o.user.memberNumber ?? null,
@@ -48,6 +49,7 @@ export default async function AdminOrdersPage() {
                 id: null,
                 fullName: o.guestName ?? "Guest",
                 email: o.guestEmail ?? "",
+                contactEmail: null,
                 phone: o.guestPhone ?? null,
                 address: o.guestAddress ?? null,
                 memberNumber: null,

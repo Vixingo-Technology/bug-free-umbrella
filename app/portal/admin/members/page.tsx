@@ -70,6 +70,7 @@ export default async function AdminMembersPage() {
             id: u.id,
             fullName: u.fullName,
             email: u.email,
+            contactEmail: u.contactEmail,
             phone: u.phone,
             avatarUrl: u.avatarUrl,
             role,

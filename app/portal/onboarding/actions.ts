@@ -32,6 +32,7 @@ export async function saveProfileAction(formData: FormData) {
 
     const fullName = (formData.get("fullName") as string)?.trim();
     const phone = (formData.get("phone") as string)?.trim() || null;
+    const contactEmailRaw = (formData.get("contactEmail") as string)?.trim().toLowerCase() || null;
     const dojoId = (formData.get("dojoId") as string) || null;
     const dateOfBirth = (formData.get("dateOfBirth") as string) || null;
     const genderRaw = (formData.get("gender") as string)?.trim() || null;
@@ -57,6 +58,9 @@ export async function saveProfileAction(formData: FormData) {
     if (!motherName) return { error: "Mother's name is required." };
     if (!emergencyContactName) return { error: "Emergency contact name is required." };
     if (!emergencyContactPhone) return { error: "Emergency contact phone is required." };
+    if (contactEmailRaw && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contactEmailRaw)) {
+        return { error: "Enter a valid contact email address." };
+    }
     const gender = genderRaw as "MALE" | "FEMALE";
 
     // Guard against the "no dojos available" sentinel and any other non-UUID
@@ -107,11 +111,17 @@ export async function saveProfileAction(formData: FormData) {
             create: {
                 id: user.id,
                 email: user.email!,
+                contactEmail: contactEmailRaw,
                 fullName,
                 phone,
                 roleId: role,
             },
-            update: { fullName, phone, roleId: role },
+            update: {
+                fullName,
+                phone,
+                roleId: role,
+                ...(contactEmailRaw !== null ? { contactEmail: contactEmailRaw } : {}),
+            },
         });
 
         await prisma.profile.upsert({

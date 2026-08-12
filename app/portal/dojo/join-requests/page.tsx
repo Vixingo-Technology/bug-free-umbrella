@@ -38,6 +38,7 @@ export default async function DojoJoinRequestsPage() {
                     id: true,
                     fullName: true,
                     email: true,
+                    contactEmail: true,
                     phone: true,
                     avatarUrl: true,
                     memberNumber: true,

@@ -14,6 +14,7 @@ import {
     resetUserPasswordAction,
 } from "@/app/actions/admin-members";
 import ResetPasswordButton from "@/components/auth/reset-password-button";
+import { displayEmail } from "@/lib/format/email";
 
 type Role = "STUDENT" | "INSTRUCTOR" | "DOJO_MANAGER" | "DOJO_OWNER" | "ADMIN";
 type Status =
@@ -57,6 +58,7 @@ type Member = {
     id: string;
     fullName: string;
     email: string;
+    contactEmail: string | null;
     phone: string | null;
     role: Role;
     status: Status;
@@ -160,6 +162,7 @@ export default function MembersAdminClient({ members }: { members: Member[] }) {
             return (
                 m.fullName.toLowerCase().includes(q) ||
                 m.email.toLowerCase().includes(q) ||
+                (m.contactEmail ?? "").toLowerCase().includes(q) ||
                 (m.phone ?? "").toLowerCase().includes(q) ||
                 (m.memberNumber ?? "").toLowerCase().includes(q)
             );
@@ -514,7 +517,7 @@ function Row({ member, onFlash }: { member: Member; onFlash: (k: "ok" | "err", m
                         <p className="font-semibold text-zinc-900 truncate group-hover:text-accent-red transition-colors">
                             {member.fullName}
                         </p>
-                        <p className="text-xs text-zinc-500 truncate">{member.email}</p>
+                        <p className="text-xs text-zinc-500 truncate">{displayEmail(member) || member.email}</p>
                         {member.memberNumber && (
                             <p className="text-[10px] text-zinc-400 mt-0.5">#{member.memberNumber}</p>
                         )}
@@ -607,7 +610,9 @@ function Row({ member, onFlash }: { member: Member; onFlash: (k: "ok" | "err", m
                             variant="ghost"
                             label="Reset"
                             targetName={member.fullName}
-                            targetSubtitle={`${ROLE_LABELS[member.role as Role] ?? member.role}${member.email ? ` · ${member.email}` : ""}`}
+                            targetSubtitle={`${ROLE_LABELS[member.role as Role] ?? member.role}${
+                                displayEmail(member) ? ` · ${displayEmail(member)}` : ""
+                            }`}
                             onConfirm={async (manual) => {
                                 const fd = new FormData();
                                 fd.set("userId", member.id);
@@ -686,7 +691,7 @@ function DeleteConfirmModal({
                             <p className="font-semibold">
                                 You are about to permanently delete{" "}
                                 <span className="underline decoration-red-400">{member.fullName}</span>{" "}
-                                <span className="text-red-700">({member.email})</span>.
+                                <span className="text-red-700">({displayEmail(member) || member.email})</span>.
                             </p>
                             <ul className="mt-3 list-disc pl-5 space-y-1 text-xs text-red-800/90">
                                 <li>Their authentication account will be removed.</li>

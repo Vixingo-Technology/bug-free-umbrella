@@ -50,6 +50,7 @@ export default async function DojoTransfersPage() {
                                 id: true,
                                 fullName: true,
                                 email: true,
+                                contactEmail: true,
                                 phone: true,
                                 avatarUrl: true,
                             },

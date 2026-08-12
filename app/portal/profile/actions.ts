@@ -11,6 +11,7 @@ export async function updateProfileAction(formData: FormData) {
 
     const fullName              = (formData.get("fullName") as string)?.trim();
     const phone                 = (formData.get("phone") as string)?.trim() || null;
+    const contactEmail          = (formData.get("contactEmail") as string)?.trim().toLowerCase() || null;
     const genderRaw             = (formData.get("gender") as string)?.trim() || null;
     const gender: "MALE" | "FEMALE" | null =
         genderRaw === "MALE" || genderRaw === "FEMALE" ? genderRaw : null;
@@ -27,12 +28,15 @@ export async function updateProfileAction(formData: FormData) {
     const dateOfBirth = dobRaw ? new Date(dobRaw) : null;
 
     if (!fullName) return { error: "Full name is required." };
+    if (contactEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contactEmail)) {
+        return { error: "Enter a valid contact email address." };
+    }
 
     try {
         await prisma.$transaction([
             prisma.user.update({
                 where: { id: user.id },
-                data: { fullName, phone },
+                data: { fullName, phone, contactEmail },
             }),
             prisma.profile.upsert({
                 where: { id: user.id },

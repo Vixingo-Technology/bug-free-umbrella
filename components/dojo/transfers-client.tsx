@@ -18,6 +18,7 @@ import {
     rejectClearanceAction,
     acceptJoinRequestAction,
 } from "@/app/portal/dojo/transfers/actions";
+import { displayEmail } from "@/lib/format/email";
 
 type Row = {
     id: string;
@@ -48,6 +49,7 @@ type IncomingRow = {
             id: string;
             fullName: string;
             email: string | null;
+            contactEmail: string | null;
             phone: string | null;
             avatarUrl: string | null;
         };
@@ -218,9 +220,9 @@ function AcceptJoinDialog({
                 </p>
 
                 <div className="mt-4 rounded-xl bg-zinc-50 border border-zinc-100 p-3 text-xs space-y-1.5">
-                    {row.student.user.email && (
+                    {(displayEmail(row.student.user) || row.student.user.email) && (
                         <div className="flex items-center gap-1.5 text-zinc-700">
-                            <Mail size={12} /> {row.student.user.email}
+                            <Mail size={12} /> {displayEmail(row.student.user) || row.student.user.email}
                         </div>
                     )}
                     {row.student.user.phone && (
