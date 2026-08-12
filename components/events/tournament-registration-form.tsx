@@ -458,19 +458,23 @@ export default function TournamentRegistrationForm({
             <div className="grid grid-cols-2 gap-3">
                 <Field label="Gender" required>
                     <select
-                        name="entrantGender"
+                        name={member?.memberNumber ? undefined : "entrantGender"}
                         value={gender}
                         onChange={(e) => {
                             setGender(e.target.value as Gender);
                             setSelectedCodes(new Set());
                         }}
                         required
-                        className={inputCx}
+                        disabled={!!member?.memberNumber}
+                        className={`${inputCx} disabled:bg-zinc-100 disabled:text-zinc-500 disabled:cursor-not-allowed`}
                     >
                         <option value="">Select…</option>
                         <option value="MALE">Male</option>
                         <option value="FEMALE">Female</option>
                     </select>
+                    {member?.memberNumber && (
+                        <input type="hidden" name="entrantGender" value={gender} />
+                    )}
                 </Field>
                 <Field label="Date of birth" required>
                     <input
@@ -479,7 +483,8 @@ export default function TournamentRegistrationForm({
                         value={dobStr}
                         onChange={(e) => setDobStr(e.target.value)}
                         required
-                        className={inputCx}
+                        readOnly={!!member?.memberNumber}
+                        className={`${inputCx} read-only:bg-zinc-100 read-only:text-zinc-500 read-only:cursor-not-allowed`}
                     />
                 </Field>
             </div>
@@ -508,10 +513,11 @@ export default function TournamentRegistrationForm({
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 <Field label="Belt rank">
                     <select
-                        name="entrantBeltRank"
+                        name={member?.memberNumber ? undefined : "entrantBeltRank"}
                         value={selectedRankName}
                         onChange={(e) => setSelectedRankName(e.target.value)}
-                        className={inputCx}
+                        disabled={!!member?.memberNumber}
+                        className={`${inputCx} disabled:bg-zinc-100 disabled:text-zinc-500 disabled:cursor-not-allowed`}
                     >
                         <option value="">
                             Select your rank (optional)
@@ -522,6 +528,13 @@ export default function TournamentRegistrationForm({
                             </option>
                         ))}
                     </select>
+                    {member?.memberNumber && (
+                        <input
+                            type="hidden"
+                            name="entrantBeltRank"
+                            value={selectedRankName}
+                        />
+                    )}
                 </Field>
                 <Field label="Dojo">
                     <input
@@ -529,7 +542,8 @@ export default function TournamentRegistrationForm({
                         type="text"
                         defaultValue={member?.dojoName ?? ""}
                         placeholder="Home dojo"
-                        className={inputCx}
+                        readOnly={!!member?.memberNumber}
+                        className={`${inputCx} read-only:bg-zinc-100 read-only:text-zinc-500 read-only:cursor-not-allowed`}
                     />
                 </Field>
             </div>

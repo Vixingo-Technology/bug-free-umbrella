@@ -17,6 +17,7 @@ import {
     FileText,
     CalendarDays,
     Lock,
+    UserCog,
 } from "lucide-react";
 import TiltCard from "./tilt-card";
 import DigitalCard from "./digital-card";
@@ -138,6 +139,13 @@ export default function PortalDashboardClient({ member, membershipStatus, unread
     const isLocked = !!joinStage && joinStage !== "JOINED";
     const joinCopy = isLocked ? JOIN_COPY[joinStage as Exclude<JoinStage, "JOINED">] : null;
 
+    const missingProfileFields: string[] = [];
+    if (!member?.address?.toString().trim())               missingProfileFields.push("Address");
+    if (!member?.bloodGroup?.toString().trim())            missingProfileFields.push("Blood group");
+    if (!member?.emergencyContactName?.toString().trim())  missingProfileFields.push("Emergency contact");
+    else if (!member?.emergencyContactPhone?.toString().trim()) missingProfileFields.push("Emergency contact phone");
+    const showProfileBanner = !isLocked && !!member && missingProfileFields.length > 0;
+
     return (
         <div className="space-y-6 max-w-5xl mx-auto">
             {/* Page header */}
@@ -164,6 +172,32 @@ export default function PortalDashboardClient({ member, membershipStatus, unread
                         className="flex-shrink-0 flex items-center gap-1.5 bg-amber-500 hover:bg-amber-400 text-white text-xs font-bold tracking-widest uppercase px-4 py-2 rounded-lg transition-colors"
                     >
                         {joinCopy.banner.cta}
+                    </Link>
+                </motion.div>
+            )}
+
+            {/* Complete-your-profile banner — shown when address, blood group,
+                or emergency contact is still missing from the profile. */}
+            {showProfileBanner && (
+                <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="flex items-center gap-4 p-4 rounded-xl border border-blue-200 bg-blue-50"
+                >
+                    <div className="w-10 h-10 rounded-xl bg-blue-100 border border-blue-200 flex items-center justify-center flex-shrink-0">
+                        <UserCog size={18} className="text-blue-600" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                        <p className="text-sm font-bold text-blue-900">Complete your profile</p>
+                        <p className="text-xs text-blue-700/80 mt-0.5">
+                            Add your {missingProfileFields.join(", ").toLowerCase()} so your dojo can reach you when it matters.
+                        </p>
+                    </div>
+                    <Link
+                        href="/portal/profile"
+                        className="flex-shrink-0 flex items-center gap-1.5 bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold tracking-widest uppercase px-4 py-2 rounded-lg transition-colors"
+                    >
+                        Update →
                     </Link>
                 </motion.div>
             )}

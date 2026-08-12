@@ -74,7 +74,7 @@ async function StudentPortalDashboard({ userId }: { userId: string }) {
             where: { id: userId },
             include: {
                 dojo: true,
-                user: true,
+                user: { include: { profile: true } },
                 gradings: {
                     include: { fromRank: true, toRank: true },
                     orderBy: { createdAt: "desc" },
@@ -94,6 +94,10 @@ async function StudentPortalDashboard({ userId }: { userId: string }) {
                 role: student.user.roleId,
                 isActive: student.user.isActive,
                 memberNumber: student.user.memberNumber,
+                bloodGroup: student.user.profile?.bloodGroup ?? null,
+                address: student.user.profile?.address ?? null,
+                emergencyContactName: student.user.profile?.emergencyContactName ?? null,
+                emergencyContactPhone: student.user.profile?.emergencyContactPhone ?? null,
             };
         }
 

@@ -3,9 +3,8 @@
 import { useState, useTransition } from "react";
 import dynamic from "next/dynamic";
 import { motion } from "motion/react";
-import { User, Phone, Mail, MapPin, Heart, AlertCircle, ChevronRight, Users, UserCircle2 } from "lucide-react";
+import { User, Phone, Mail, MapPin, AlertCircle, ChevronRight, Users, UserCircle2 } from "lucide-react";
 import { saveProfileAction } from "@/app/portal/onboarding/actions";
-import { BLOOD_GROUPS } from "@/lib/constants";
 import AvatarUploader from "@/components/portal/avatar-uploader";
 import { validatePhone } from "@/lib/validation/phone";
 import { validateMinAge, maxDobForAge } from "@/lib/validation/age";
@@ -92,16 +91,10 @@ export default function StepProfile({
             setError(phoneError);
             return;
         }
-        if (askContactEmail) {
-            const email = value.contactEmail.trim();
-            if (!email) {
-                setError("Contact email is required.");
-                return;
-            }
-            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-                setError("Enter a valid email address.");
-                return;
-            }
+        const email = value.contactEmail.trim();
+        if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            setError("Enter a valid email address.");
+            return;
         }
         const ageError = validateMinAge(value.dateOfBirth, STUDENT_MIN_AGE);
         if (ageError) {
@@ -110,14 +103,6 @@ export default function StepProfile({
         }
         if (!value.gender) {
             setError("Please select your gender.");
-            return;
-        }
-        if (!value.bloodGroup) {
-            setError("Please select your blood group.");
-            return;
-        }
-        if (!value.address.trim()) {
-            setError("Address is required.");
             return;
         }
         if (!value.nationalId.trim()) {
@@ -130,19 +115,6 @@ export default function StepProfile({
         }
         if (!value.motherName.trim()) {
             setError("Mother's name is required.");
-            return;
-        }
-        if (!value.emergencyContactName.trim()) {
-            setError("Emergency contact name is required.");
-            return;
-        }
-        if (!value.emergencyContactPhone.trim()) {
-            setError("Emergency contact phone is required.");
-            return;
-        }
-        const emergencyError = validatePhone(value.emergencyContactPhone);
-        if (emergencyError) {
-            setError(`Emergency contact: ${emergencyError}`);
             return;
         }
 
@@ -259,7 +231,7 @@ export default function StepProfile({
                  *  the account without a real email. Login stays by Member ID;
                  *  this address is used for notifications. */}
                 {askContactEmail && (
-                    <Field label="Contact Email *" icon={<Mail size={15} />}>
+                    <Field label="Contact Email (optional)" icon={<Mail size={15} />}>
                         <input
                             name="contactEmail"
                             type="email"
@@ -267,12 +239,12 @@ export default function StepProfile({
                             value={value.contactEmail}
                             onChange={(e) => update("contactEmail", e.target.value)}
                             placeholder="you@example.com"
-                            required
                             className={inputCls}
                         />
                         <p className="mt-1.5 text-[11px] text-zinc-400">
-                            Used for notifications and receipts. You&apos;ll
-                            still log in with your Member ID.
+                            Optional — used for notifications and receipts if
+                            you provide it. You&apos;ll still log in with your
+                            Member ID.
                         </p>
                     </Field>
                 )}
@@ -369,33 +341,6 @@ export default function StepProfile({
                     </Field>
                 </div>
 
-                {/* Blood group */}
-                <Field label="Blood Group *" icon={<Heart size={15} />}>
-                    <select
-                        name="bloodGroup"
-                        value={value.bloodGroup}
-                        onChange={(e) => update("bloodGroup", e.target.value)}
-                        required
-                        className={inputCls}
-                    >
-                        <option value="">Select blood group</option>
-                        {BLOOD_GROUPS.map((g) => <option key={g} value={g}>{g}</option>)}
-                    </select>
-                </Field>
-
-                {/* Address */}
-                <Field label="Address *">
-                    <input
-                        name="address"
-                        type="text"
-                        value={value.address}
-                        onChange={(e) => update("address", e.target.value)}
-                        placeholder="Your current address"
-                        required
-                        className={inputCls}
-                    />
-                </Field>
-
                 {/* National ID / Passport / Birth Certificate — stored in a
                     single column; users enter whichever they have. */}
                 <Field label="National ID / Passport / Birth Certificate No. *">
@@ -436,39 +381,10 @@ export default function StepProfile({
                     </Field>
                 </div>
 
-                {/* Emergency contact */}
-                <div className="pt-2">
-                    <p className="text-xs font-bold tracking-widest uppercase text-zinc-400 mb-3">Emergency Contact *</p>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <Field label="Contact Name *">
-                            <input
-                                name="emergencyContactName"
-                                type="text"
-                                value={value.emergencyContactName}
-                                onChange={(e) => update("emergencyContactName", e.target.value)}
-                                placeholder="Name"
-                                required
-                                className={inputCls}
-                            />
-                        </Field>
-                        <Field label="Contact Phone *">
-                            <input
-                                name="emergencyContactPhone"
-                                type="tel"
-                                inputMode="numeric"
-                                pattern="\d{11}"
-                                maxLength={11}
-                                minLength={11}
-                                title="Phone number must be exactly 11 digits."
-                                value={value.emergencyContactPhone}
-                                onChange={(e) => update("emergencyContactPhone", e.target.value.replace(/\D/g, "").slice(0, 11))}
-                                placeholder="01XXXXXXXXX"
-                                required
-                                className={inputCls}
-                            />
-                        </Field>
-                    </div>
-                </div>
+                <p className="text-xs text-zinc-400 leading-relaxed">
+                    You can add your address, blood group, and emergency
+                    contact later from your profile.
+                </p>
 
                 <button
                     type="submit"

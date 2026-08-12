@@ -51,13 +51,9 @@ export async function saveProfileAction(formData: FormData) {
     if (!genderRaw || (genderRaw !== "MALE" && genderRaw !== "FEMALE")) {
         return { error: "Please select your gender." };
     }
-    if (!bloodGroup) return { error: "Please select your blood group." };
-    if (!address) return { error: "Address is required." };
     if (!nationalId) return { error: "National ID, Passport, or Birth Certificate number is required." };
     if (!fatherName) return { error: "Father's name is required." };
     if (!motherName) return { error: "Mother's name is required." };
-    if (!emergencyContactName) return { error: "Emergency contact name is required." };
-    if (!emergencyContactPhone) return { error: "Emergency contact phone is required." };
     if (contactEmailRaw && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contactEmailRaw)) {
         return { error: "Enter a valid contact email address." };
     }

@@ -3,6 +3,8 @@ import { Inter, Space_Grotesk, Playfair_Display } from "next/font/google";
 import localFont from "next/font/local";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { Suspense } from "react";
+import RouteProgress from "@/components/route-progress";
 import "./globals.css";
 
 const inter = Inter({
@@ -48,6 +50,9 @@ export default function RootLayout({
         className="bg-bg-deep text-zinc-900 font-sans antialiased overflow-x-hidden selection:bg-accent-red selection:text-white"
         suppressHydrationWarning
       >
+        <Suspense fallback={null}>
+          <RouteProgress />
+        </Suspense>
         {children}
         <Analytics />
         <SpeedInsights />

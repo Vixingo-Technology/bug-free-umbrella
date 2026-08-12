@@ -69,7 +69,7 @@ export async function signupAction(formData: FormData) {
     if (password.length < 8) {
         return { error: "Password must be at least 8 characters." };
     }
-    if (!contactEmail || !contactEmail.includes("@")) {
+    if (contactEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contactEmail)) {
         return { error: "Please enter a valid contact email." };
     }
     if (!contactPhone) {
@@ -89,7 +89,7 @@ export async function signupAction(formData: FormData) {
                 last_name: lastName,
                 full_name: `${firstName} ${lastName}`,
                 role: "STUDENT",
-                contact_email: contactEmail,
+                ...(contactEmail ? { contact_email: contactEmail } : {}),
                 contact_phone: contactPhone,
             },
         },
