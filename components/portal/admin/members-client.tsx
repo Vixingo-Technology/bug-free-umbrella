@@ -4,7 +4,22 @@ import { useEffect, useMemo, useState, useTransition } from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
 import { motion } from "motion/react";
-import { UserPlus, Search, Mail, Shield, ShieldCheck, ShieldOff, X, CheckCircle2, AlertCircle, ChevronDown, ChevronLeft, ChevronRight, Trash2, AlertTriangle } from "lucide-react";
+import {
+    UserPlus,
+    Search,
+    Mail,
+    Shield,
+    ShieldCheck,
+    ShieldOff,
+    X,
+    CheckCircle2,
+    AlertCircle,
+    ChevronDown,
+    ChevronLeft,
+    ChevronRight,
+    Trash2,
+    AlertTriangle,
+} from "lucide-react";
 import {
     inviteMemberAction,
     updateMemberRoleAction,
@@ -89,7 +104,14 @@ const statusStyles: Record<Status, string> = {
 
 type Tab = "ALL" | Role;
 
-const TABS: Tab[] = ["ALL", "STUDENT", "INSTRUCTOR", "DOJO_MANAGER", "DOJO_OWNER", "ADMIN"];
+const TABS: Tab[] = [
+    "ALL",
+    "STUDENT",
+    "INSTRUCTOR",
+    "DOJO_MANAGER",
+    "DOJO_OWNER",
+    "ADMIN",
+];
 
 const TAB_LABELS: Record<Tab, string> = {
     ALL: "All",
@@ -137,7 +159,10 @@ export default function MembersAdminClient({ members }: { members: Member[] }) {
     const [statusFilter, setStatusFilter] = useState<"ALL" | Status>("ALL");
     const [page, setPage] = useState(1);
     const [inviteOpen, setInviteOpen] = useState(false);
-    const [toast, setToast] = useState<{ kind: "ok" | "err"; msg: string } | null>(null);
+    const [toast, setToast] = useState<{
+        kind: "ok" | "err";
+        msg: string;
+    } | null>(null);
 
     // Per-tab counts (independent of search / status).
     const tabCounts = useMemo(() => {
@@ -157,7 +182,8 @@ export default function MembersAdminClient({ members }: { members: Member[] }) {
         const q = search.trim().toLowerCase();
         return members.filter((m) => {
             if (tab !== "ALL" && m.role !== tab) return false;
-            if (statusFilter !== "ALL" && m.status !== statusFilter) return false;
+            if (statusFilter !== "ALL" && m.status !== statusFilter)
+                return false;
             if (!q) return true;
             return (
                 m.fullName.toLowerCase().includes(q) ||
@@ -191,34 +217,37 @@ export default function MembersAdminClient({ members }: { members: Member[] }) {
     }
 
     return (
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-7xl mx-auto w-full">
             {/* Header */}
-            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 sm:gap-4 mb-4 sm:mb-6">
-                <div>
-                    <h1 className="text-xl sm:text-2xl font-bold text-zinc-900">Members</h1>
-                    <p className="text-xs sm:text-sm text-zinc-500 mt-1">
-                        {filtered.length} of {members.length} members
+            <div className="flex flex-row items-center justify-between gap-2 mb-3 sm:mb-6">
+                <div className="min-w-0">
+                    <h1 className="text-lg sm:text-2xl font-bold text-zinc-900 leading-tight">
+                        Members
+                    </h1>
+                    <p className="text-[11px] sm:text-sm text-zinc-500 mt-0.5 sm:mt-1">
+                        {filtered.length} of {members.length}
                     </p>
                 </div>
                 <button
                     onClick={() => setInviteOpen(true)}
-                    className="inline-flex items-center justify-center gap-2 bg-accent-red hover:bg-accent-red/90 text-white text-sm font-semibold px-4 py-2.5 rounded-xl shadow-sm transition-all w-full sm:w-auto"
+                    className="inline-flex items-center justify-center gap-1.5 sm:gap-2 bg-accent-red hover:bg-accent-red/90 text-white text-xs sm:text-sm font-semibold px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg sm:rounded-xl shadow-sm transition-all flex-shrink-0"
                 >
-                    <UserPlus size={16} />
-                    Invite Member
+                    <UserPlus size={14} className="sm:hidden" />
+                    <UserPlus size={16} className="hidden sm:block" />
+                    Invite<span className="hidden sm:inline"> Member</span>
                 </button>
             </div>
 
             {/* Role tabs */}
-            <div className="mb-4 border-b border-zinc-200 overflow-x-auto -mx-3 sm:mx-0 px-3 sm:px-0">
-                <div className="flex items-center gap-1 min-w-max">
+            <div className="mb-3 sm:mb-4 border-b border-zinc-200 -mx-3 sm:mx-0 px-3 sm:px-0">
+                <div className="flex flex-wrap items-center gap-y-1 sm:gap-1">
                     {TABS.map((t) => {
                         const isActive = tab === t;
                         return (
                             <button
                                 key={t}
                                 onClick={() => setTab(t)}
-                                className={`inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 text-xs sm:text-sm font-semibold border-b-2 -mb-px transition-colors whitespace-nowrap ${
+                                className={`inline-flex items-center gap-1 sm:gap-2 px-2.5 sm:px-4 py-1.5 sm:py-2.5 text-xs sm:text-sm font-semibold border-b-2 -mb-px transition-colors whitespace-nowrap ${
                                     isActive
                                         ? "border-accent-red text-accent-red"
                                         : "border-transparent text-zinc-500 hover:text-zinc-800 hover:border-zinc-300"
@@ -226,7 +255,7 @@ export default function MembersAdminClient({ members }: { members: Member[] }) {
                             >
                                 {TAB_LABELS[t]}
                                 <span
-                                    className={`text-[10px] font-bold tracking-wider px-1.5 py-0.5 rounded-full ${
+                                    className={`text-[9px] sm:text-[10px] font-bold tracking-wider px-1 sm:px-1.5 py-0.5 rounded-full ${
                                         isActive
                                             ? "bg-accent-red/10 text-accent-red"
                                             : "bg-zinc-100 text-zinc-500"
@@ -241,14 +270,21 @@ export default function MembersAdminClient({ members }: { members: Member[] }) {
             </div>
 
             {/* Filters */}
-            <div className="flex flex-col md:flex-row gap-3 mb-4 sm:mb-6">
+            <div className="flex flex-col md:flex-row gap-2 sm:gap-3 mb-3 sm:mb-6">
                 <div className="relative flex-1">
-                    <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400" />
+                    <Search
+                        size={14}
+                        className="absolute left-2.5 top-1/2 -translate-y-1/2 text-zinc-400 sm:hidden"
+                    />
+                    <Search
+                        size={16}
+                        className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 hidden sm:block"
+                    />
                     <input
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
                         placeholder="Search name, email, phone…"
-                        className="w-full pl-9 pr-3 py-2.5 text-sm bg-white border border-zinc-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-accent-red/30 focus:border-accent-red"
+                        className="w-full pl-8 sm:pl-9 pr-3 py-2 sm:py-2.5 text-xs sm:text-sm bg-white border border-zinc-200 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-accent-red/30 focus:border-accent-red"
                     />
                 </div>
                 <Select
@@ -268,7 +304,9 @@ export default function MembersAdminClient({ members }: { members: Member[] }) {
                                 <th className="px-5 py-3">Dojo / Rank</th>
                                 <th className="px-5 py-3">Role</th>
                                 <th className="px-5 py-3">Status</th>
-                                <th className="px-5 py-3 text-right">Actions</th>
+                                <th className="px-5 py-3 text-right">
+                                    Actions
+                                </th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-zinc-100">
@@ -277,7 +315,10 @@ export default function MembersAdminClient({ members }: { members: Member[] }) {
                             ))}
                             {pageRows.length === 0 && (
                                 <tr>
-                                    <td colSpan={5} className="px-5 py-12 text-center text-sm text-zinc-400">
+                                    <td
+                                        colSpan={5}
+                                        className="px-5 py-12 text-center text-sm text-zinc-400"
+                                    >
                                         No members match the current filters.
                                     </td>
                                 </tr>
@@ -292,7 +333,10 @@ export default function MembersAdminClient({ members }: { members: Member[] }) {
                         page={clampedPage}
                         totalPages={totalPages}
                         pageStart={pageStart}
-                        pageEnd={Math.min(pageStart + PAGE_SIZE, filtered.length)}
+                        pageEnd={Math.min(
+                            pageStart + PAGE_SIZE,
+                            filtered.length,
+                        )}
                         total={filtered.length}
                         onChange={setPage}
                     />
@@ -300,7 +344,7 @@ export default function MembersAdminClient({ members }: { members: Member[] }) {
             </div>
 
             {/* Mobile / tablet / narrow-desktop cards */}
-            <div className="xl:hidden space-y-3">
+            <div className="xl:hidden space-y-2">
                 {pageRows.map((m) => (
                     <MobileCard key={m.id} member={m} onFlash={flash} />
                 ))}
@@ -315,7 +359,10 @@ export default function MembersAdminClient({ members }: { members: Member[] }) {
                             page={clampedPage}
                             totalPages={totalPages}
                             pageStart={pageStart}
-                            pageEnd={Math.min(pageStart + PAGE_SIZE, filtered.length)}
+                            pageEnd={Math.min(
+                                pageStart + PAGE_SIZE,
+                                filtered.length,
+                            )}
                             total={filtered.length}
                             onChange={setPage}
                         />
@@ -342,7 +389,11 @@ export default function MembersAdminClient({ members }: { members: Member[] }) {
                             : "bg-red-600 text-white"
                     }`}
                 >
-                    {toast.kind === "ok" ? <CheckCircle2 size={16} /> : <AlertCircle size={16} />}
+                    {toast.kind === "ok" ? (
+                        <CheckCircle2 size={16} />
+                    ) : (
+                        <AlertCircle size={16} />
+                    )}
                     {toast.msg}
                 </motion.div>
             )}
@@ -351,7 +402,12 @@ export default function MembersAdminClient({ members }: { members: Member[] }) {
 }
 
 function Pagination({
-    page, totalPages, pageStart, pageEnd, total, onChange,
+    page,
+    totalPages,
+    pageStart,
+    pageEnd,
+    total,
+    onChange,
 }: {
     page: number;
     totalPages: number;
@@ -379,9 +435,12 @@ function Pagination({
     return (
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-3 px-4 sm:px-5 py-3 border-t border-zinc-100 bg-zinc-50/60 text-xs text-zinc-600">
             <p>
-                Showing <span className="font-semibold text-zinc-900">{pageStart + 1}</span>–
-                <span className="font-semibold text-zinc-900">{pageEnd}</span> of{" "}
-                <span className="font-semibold text-zinc-900">{total}</span>
+                Showing{" "}
+                <span className="font-semibold text-zinc-900">
+                    {pageStart + 1}
+                </span>
+                –<span className="font-semibold text-zinc-900">{pageEnd}</span>{" "}
+                of <span className="font-semibold text-zinc-900">{total}</span>
             </p>
             <div className="flex items-center gap-1 flex-wrap">
                 <button
@@ -394,7 +453,9 @@ function Pagination({
                 </button>
                 {pages.map((p, i) =>
                     p === "…" ? (
-                        <span key={`e${i}`} className="px-2 text-zinc-400">…</span>
+                        <span key={`e${i}`} className="px-2 text-zinc-400">
+                            …
+                        </span>
                     ) : (
                         <button
                             key={p}
@@ -423,32 +484,50 @@ function Pagination({
 }
 
 function Select({
-    value, onChange, options,
+    value,
+    onChange,
+    options,
 }: {
     value: string;
     onChange: (v: string) => void;
     options: { v: string; l: string }[];
 }) {
     return (
-        <div className="relative">
+        <div className="relative w-full md:w-auto">
             <select
                 value={value}
                 onChange={(e) => onChange(e.target.value)}
-                className="appearance-none pl-3 pr-9 py-2.5 text-sm bg-white border border-zinc-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-accent-red/30 focus:border-accent-red min-w-[180px]"
+                className="appearance-none w-full md:w-auto md:max-w-[220px] pl-3 pr-8 sm:pr-9 py-2 sm:py-2.5 text-xs sm:text-sm bg-white border border-zinc-200 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-accent-red/30 focus:border-accent-red"
             >
                 {options.map((o) => (
-                    <option key={o.v} value={o.v}>{o.l}</option>
+                    <option key={o.v} value={o.v}>
+                        {o.l}
+                    </option>
                 ))}
             </select>
-            <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 pointer-events-none" />
+            <ChevronDown
+                size={14}
+                className="absolute right-2.5 sm:right-3 top-1/2 -translate-y-1/2 text-zinc-400 pointer-events-none"
+            />
         </div>
     );
 }
 
 // Statuses the admin can toggle a student between via the inline dropdown.
-const STUDENT_STATUS_CHOICES: Status[] = ["ACTIVE", "PENDING", "EXPIRED", "SUSPENDED"];
+const STUDENT_STATUS_CHOICES: Status[] = [
+    "ACTIVE",
+    "PENDING",
+    "EXPIRED",
+    "SUSPENDED",
+];
 
-function Row({ member, onFlash }: { member: Member; onFlash: (k: "ok" | "err", m: string) => void }) {
+function Row({
+    member,
+    onFlash,
+}: {
+    member: Member;
+    onFlash: (k: "ok" | "err", m: string) => void;
+}) {
     const [isPending, startTransition] = useTransition();
     const [role, setRole] = useState<Role>(member.role);
     const [status, setStatus] = useState<Status>(member.status);
@@ -515,7 +594,9 @@ function Row({ member, onFlash }: { member: Member; onFlash: (k: "ok" | "err", m
     const initial = member.fullName.charAt(0).toUpperCase();
     // Only students have the "invite pending onboarding" state.
     const isInvitePending =
-        role === "STUDENT" && !member.onboardingComplete && status === "PENDING";
+        role === "STUDENT" &&
+        !member.onboardingComplete &&
+        status === "PENDING";
 
     // Status control varies by role.
     //   STUDENT → full inline dropdown (Active/Pending/Expired/Suspended).
@@ -523,12 +604,16 @@ function Row({ member, onFlash }: { member: Member; onFlash: (k: "ok" | "err", m
     //   STAFF / ADMIN / approved DOJO_OWNER → Active ↔ Suspended toggle only.
     const isReadOnlyStatus =
         role === "DOJO_OWNER" &&
-        (status === "UNPAID" || status === "AWAITING_APPROVAL" || status === "REJECTED");
+        (status === "UNPAID" ||
+            status === "AWAITING_APPROVAL" ||
+            status === "REJECTED");
 
     if (deleted) return null;
 
     return (
-        <tr className={`hover:bg-zinc-50/60 transition-colors ${isPending ? "opacity-60" : ""}`}>
+        <tr
+            className={`hover:bg-zinc-50/60 transition-colors ${isPending ? "opacity-60" : ""}`}
+        >
             <td className="px-5 py-4">
                 <Link
                     href={`/portal/admin/members/${member.id}`}
@@ -542,13 +627,17 @@ function Row({ member, onFlash }: { member: Member; onFlash: (k: "ok" | "err", m
                             {member.fullName}
                         </p>
                         {member.memberNumber && (
-                            <p className="text-xs text-zinc-500 mt-0.5">#{member.memberNumber}</p>
+                            <p className="text-xs text-zinc-500 mt-0.5">
+                                #{member.memberNumber}
+                            </p>
                         )}
                     </div>
                 </Link>
             </td>
             <td className="px-5 py-4 text-xs text-zinc-600">
-                <p className="font-medium text-zinc-800">{member.dojo?.name ?? "—"}</p>
+                <p className="font-medium text-zinc-800">
+                    {member.dojo?.name ?? "—"}
+                </p>
                 <p className="text-[11px] text-zinc-500 mt-0.5">
                     {role === "STUDENT" ? member.currentRank : "—"}
                 </p>
@@ -557,7 +646,10 @@ function Row({ member, onFlash }: { member: Member; onFlash: (k: "ok" | "err", m
                 <InlineSelect
                     value={role}
                     onChange={(v) => changeRole(v as Role)}
-                    options={CHANGEABLE_ROLE_VALUES.map((r) => ({ v: r, l: ROLE_LABELS[r] }))}
+                    options={CHANGEABLE_ROLE_VALUES.map((r) => ({
+                        v: r,
+                        l: ROLE_LABELS[r],
+                    }))}
                     badgeClass={roleStyles[role]}
                     disabled={
                         role === "STUDENT" ||
@@ -568,8 +660,8 @@ function Row({ member, onFlash }: { member: Member; onFlash: (k: "ok" | "err", m
                         role === "STUDENT"
                             ? "Student roles can't be changed here — it would erase their gradings, achievements and transfer history."
                             : role === "DOJO_OWNER"
-                                ? "Dojo Owner roles can't be changed here — reassign via the dojo enlistment flow."
-                                : "Admin roles can't be changed here."
+                              ? "Dojo Owner roles can't be changed here — reassign via the dojo enlistment flow."
+                              : "Admin roles can't be changed here."
                     }
                 />
             </td>
@@ -585,7 +677,10 @@ function Row({ member, onFlash }: { member: Member; onFlash: (k: "ok" | "err", m
                     <InlineSelect
                         value={status}
                         onChange={(v) => changeStatus(v as Status)}
-                        options={STUDENT_STATUS_CHOICES.map((s) => ({ v: s, l: STATUS_LABELS[s] }))}
+                        options={STUDENT_STATUS_CHOICES.map((s) => ({
+                            v: s,
+                            l: STATUS_LABELS[s],
+                        }))}
                         badgeClass={statusStyles[status]}
                     />
                 ) : (
@@ -596,7 +691,11 @@ function Row({ member, onFlash }: { member: Member; onFlash: (k: "ok" | "err", m
                             { v: "ACTIVE", l: "Active" },
                             { v: "SUSPENDED", l: "Suspended" },
                         ]}
-                        badgeClass={statusStyles[status === "SUSPENDED" ? "SUSPENDED" : "ACTIVE"]}
+                        badgeClass={
+                            statusStyles[
+                                status === "SUSPENDED" ? "SUSPENDED" : "ACTIVE"
+                            ]
+                        }
                     />
                 )}
             </td>
@@ -634,7 +733,9 @@ function Row({ member, onFlash }: { member: Member; onFlash: (k: "ok" | "err", m
                             label="Reset"
                             targetName={member.fullName}
                             targetSubtitle={`${ROLE_LABELS[member.role as Role] ?? member.role}${
-                                displayEmail(member) ? ` · ${displayEmail(member)}` : ""
+                                displayEmail(member)
+                                    ? ` · ${displayEmail(member)}`
+                                    : ""
                             }`}
                             onConfirm={async (manual) => {
                                 const fd = new FormData();
@@ -669,7 +770,13 @@ function Row({ member, onFlash }: { member: Member; onFlash: (k: "ok" | "err", m
     );
 }
 
-function MobileCard({ member, onFlash }: { member: Member; onFlash: (k: "ok" | "err", m: string) => void }) {
+function MobileCard({
+    member,
+    onFlash,
+}: {
+    member: Member;
+    onFlash: (k: "ok" | "err", m: string) => void;
+}) {
     const [isPending, startTransition] = useTransition();
     const [role, setRole] = useState<Role>(member.role);
     const [status, setStatus] = useState<Status>(member.status);
@@ -735,54 +842,63 @@ function MobileCard({ member, onFlash }: { member: Member; onFlash: (k: "ok" | "
 
     const initial = member.fullName.charAt(0).toUpperCase();
     const isInvitePending =
-        role === "STUDENT" && !member.onboardingComplete && status === "PENDING";
+        role === "STUDENT" &&
+        !member.onboardingComplete &&
+        status === "PENDING";
     const isReadOnlyStatus =
         role === "DOJO_OWNER" &&
-        (status === "UNPAID" || status === "AWAITING_APPROVAL" || status === "REJECTED");
+        (status === "UNPAID" ||
+            status === "AWAITING_APPROVAL" ||
+            status === "REJECTED");
 
     if (deleted) return null;
 
     return (
-        <div className={`bg-white border border-zinc-100 rounded-2xl shadow-sm overflow-hidden ${isPending ? "opacity-60" : ""}`}>
-            <div className="p-4 space-y-3">
-                {/* Top: avatar + name/email */}
+        <div
+            className={`bg-white border border-zinc-100 rounded-xl shadow-sm overflow-hidden ${isPending ? "opacity-60" : ""}`}
+        >
+            <div className="p-3 space-y-2">
+                {/* Top: avatar + name/id */}
                 <Link
                     href={`/portal/admin/members/${member.id}`}
-                    className="flex items-center gap-3 group"
+                    className="flex items-center gap-2.5 group"
                 >
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-zinc-700 to-zinc-900 flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-zinc-700 to-zinc-900 flex items-center justify-center text-white font-bold text-[11px] flex-shrink-0">
                         {initial}
                     </div>
                     <div className="min-w-0 flex-1">
-                        <p className="font-semibold text-zinc-900 truncate group-hover:text-accent-red transition-colors">
+                        <p className="font-semibold text-sm text-zinc-900 truncate group-hover:text-accent-red transition-colors">
                             {member.fullName}
                         </p>
                         {member.memberNumber && (
-                            <p className="text-xs text-zinc-500 mt-0.5">#{member.memberNumber}</p>
+                            <p className="text-[11px] text-zinc-500">
+                                #{member.memberNumber}
+                            </p>
                         )}
                     </div>
                 </Link>
 
-                {/* Meta grid */}
-                <div className="grid grid-cols-2 gap-2 text-xs pt-1">
-                    <div>
-                        <p className="text-[10px] font-bold tracking-widest uppercase text-zinc-400 mb-1">Dojo</p>
-                        <p className="font-medium text-zinc-800 truncate">{member.dojo?.name ?? "—"}</p>
-                    </div>
-                    <div>
-                        <p className="text-[10px] font-bold tracking-widest uppercase text-zinc-400 mb-1">Rank</p>
-                        <p className="font-medium text-zinc-800 truncate">
-                            {role === "STUDENT" ? member.currentRank : "—"}
-                        </p>
-                    </div>
+                {/* Meta row */}
+                <div className="flex items-baseline gap-3 text-[11px] text-zinc-600">
+                    <span className="font-medium text-zinc-800 truncate min-w-0">
+                        {member.dojo?.name ?? "—"}
+                    </span>
+                    {role === "STUDENT" && member.currentRank !== "—" && (
+                        <span className="text-zinc-500 whitespace-nowrap">
+                            · {member.currentRank}
+                        </span>
+                    )}
                 </div>
 
                 {/* Role + status controls */}
-                <div className="flex flex-wrap items-center gap-2 pt-1">
+                <div className="flex flex-wrap items-center gap-1.5">
                     <InlineSelect
                         value={role}
                         onChange={(v) => changeRole(v as Role)}
-                        options={CHANGEABLE_ROLE_VALUES.map((r) => ({ v: r, l: ROLE_LABELS[r] }))}
+                        options={CHANGEABLE_ROLE_VALUES.map((r) => ({
+                            v: r,
+                            l: ROLE_LABELS[r],
+                        }))}
                         badgeClass={roleStyles[role]}
                         disabled={
                             role === "STUDENT" ||
@@ -793,8 +909,8 @@ function MobileCard({ member, onFlash }: { member: Member; onFlash: (k: "ok" | "
                             role === "STUDENT"
                                 ? "Student roles can't be changed here — it would erase their gradings, achievements and transfer history."
                                 : role === "DOJO_OWNER"
-                                    ? "Dojo Owner roles can't be changed here — reassign via the dojo enlistment flow."
-                                    : "Admin roles can't be changed here."
+                                  ? "Dojo Owner roles can't be changed here — reassign via the dojo enlistment flow."
+                                  : "Admin roles can't be changed here."
                         }
                     />
                     {isReadOnlyStatus ? (
@@ -808,25 +924,36 @@ function MobileCard({ member, onFlash }: { member: Member; onFlash: (k: "ok" | "
                         <InlineSelect
                             value={status}
                             onChange={(v) => changeStatus(v as Status)}
-                            options={STUDENT_STATUS_CHOICES.map((s) => ({ v: s, l: STATUS_LABELS[s] }))}
+                            options={STUDENT_STATUS_CHOICES.map((s) => ({
+                                v: s,
+                                l: STATUS_LABELS[s],
+                            }))}
                             badgeClass={statusStyles[status]}
                         />
                     ) : (
                         <InlineSelect
-                            value={status === "SUSPENDED" ? "SUSPENDED" : "ACTIVE"}
+                            value={
+                                status === "SUSPENDED" ? "SUSPENDED" : "ACTIVE"
+                            }
                             onChange={(v) => changeStatus(v as Status)}
                             options={[
                                 { v: "ACTIVE", l: "Active" },
                                 { v: "SUSPENDED", l: "Suspended" },
                             ]}
-                            badgeClass={statusStyles[status === "SUSPENDED" ? "SUSPENDED" : "ACTIVE"]}
+                            badgeClass={
+                                statusStyles[
+                                    status === "SUSPENDED"
+                                        ? "SUSPENDED"
+                                        : "ACTIVE"
+                                ]
+                            }
                         />
                     )}
                 </div>
             </div>
 
             {/* Actions */}
-            <div className="flex flex-wrap items-center gap-2 px-4 py-3 border-t border-zinc-100 bg-zinc-50/60">
+            <div className="flex flex-wrap items-center gap-1.5 px-3 py-2 border-t border-zinc-100 bg-zinc-50/60">
                 {isInvitePending && (
                     <button
                         onClick={resend}
@@ -859,7 +986,9 @@ function MobileCard({ member, onFlash }: { member: Member; onFlash: (k: "ok" | "
                         label="Reset"
                         targetName={member.fullName}
                         targetSubtitle={`${ROLE_LABELS[member.role as Role] ?? member.role}${
-                            displayEmail(member) ? ` · ${displayEmail(member)}` : ""
+                            displayEmail(member)
+                                ? ` · ${displayEmail(member)}`
+                                : ""
                         }`}
                         onConfirm={async (manual) => {
                             const fd = new FormData();
@@ -895,7 +1024,10 @@ function MobileCard({ member, onFlash }: { member: Member; onFlash: (k: "ok" | "
 }
 
 function DeleteConfirmModal({
-    member, isPending, onCancel, onConfirm,
+    member,
+    isPending,
+    onCancel,
+    onConfirm,
 }: {
     member: Member;
     isPending: boolean;
@@ -905,93 +1037,121 @@ function DeleteConfirmModal({
     const [typed, setTyped] = useState("");
     const [mounted, setMounted] = useState(false);
     const confirmPhrase = "DELETE";
-    const canConfirm = typed.trim().toUpperCase() === confirmPhrase && !isPending;
+    const canConfirm =
+        typed.trim().toUpperCase() === confirmPhrase && !isPending;
 
     useEffect(() => setMounted(true), []);
     if (!mounted) return null;
 
     return createPortal(
-        (
-            <div
-                className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
-                onClick={onCancel}
+        <div
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
+            onClick={onCancel}
+        >
+            <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                onClick={(e) => e.stopPropagation()}
+                className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden"
             >
-                <motion.div
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    onClick={(e) => e.stopPropagation()}
-                    className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden"
-                >
-                    <div className="px-6 py-5 border-b border-zinc-100 flex items-start gap-3">
-                        <div className="p-2 bg-red-50 rounded-xl flex-shrink-0">
-                            <AlertTriangle size={20} className="text-red-600" />
-                        </div>
-                        <div>
-                            <h2 className="text-lg font-bold text-zinc-900">Delete member permanently?</h2>
-                            <p className="text-xs text-zinc-500 mt-1">
-                                This action is <span className="font-semibold text-red-600">irreversible</span>.
-                            </p>
-                        </div>
+                <div className="px-6 py-5 border-b border-zinc-100 flex items-start gap-3">
+                    <div className="p-2 bg-red-50 rounded-xl flex-shrink-0">
+                        <AlertTriangle size={20} className="text-red-600" />
+                    </div>
+                    <div>
+                        <h2 className="text-lg font-bold text-zinc-900">
+                            Delete member permanently?
+                        </h2>
+                        <p className="text-xs text-zinc-500 mt-1">
+                            This action is{" "}
+                            <span className="font-semibold text-red-600">
+                                irreversible
+                            </span>
+                            .
+                        </p>
+                    </div>
+                </div>
+
+                <div className="p-6 space-y-4">
+                    <div className="rounded-xl border border-red-200 bg-red-50/60 p-4 text-sm text-red-900">
+                        <p className="font-semibold">
+                            You are about to permanently delete{" "}
+                            <span className="underline decoration-red-400">
+                                {member.fullName}
+                            </span>{" "}
+                            <span className="text-red-700">
+                                ({displayEmail(member) || member.email})
+                            </span>
+                            .
+                        </p>
+                        <ul className="mt-3 list-disc pl-5 space-y-1 text-xs text-red-800/90">
+                            <li>
+                                Their authentication account will be removed.
+                            </li>
+                            <li>
+                                All linked records (student / instructor /
+                                manager / owner / admin profile) will be
+                                deleted.
+                            </li>
+                            <li>
+                                Attendance, gradings, tournament entries and
+                                other cascaded rows will be lost.
+                            </li>
+                            <li>This cannot be undone — even by an admin.</li>
+                        </ul>
                     </div>
 
-                    <div className="p-6 space-y-4">
-                        <div className="rounded-xl border border-red-200 bg-red-50/60 p-4 text-sm text-red-900">
-                            <p className="font-semibold">
-                                You are about to permanently delete{" "}
-                                <span className="underline decoration-red-400">{member.fullName}</span>{" "}
-                                <span className="text-red-700">({displayEmail(member) || member.email})</span>.
-                            </p>
-                            <ul className="mt-3 list-disc pl-5 space-y-1 text-xs text-red-800/90">
-                                <li>Their authentication account will be removed.</li>
-                                <li>All linked records (student / instructor / manager / owner / admin profile) will be deleted.</li>
-                                <li>Attendance, gradings, tournament entries and other cascaded rows will be lost.</li>
-                                <li>This cannot be undone — even by an admin.</li>
-                            </ul>
-                        </div>
-
-                        <div>
-                            <label className="block text-xs font-bold tracking-widest uppercase text-zinc-500 mb-2">
-                                Type <span className="text-red-600">{confirmPhrase}</span> to confirm
-                            </label>
-                            <input
-                                type="text"
-                                value={typed}
-                                onChange={(e) => setTyped(e.target.value)}
-                                autoFocus
-                                placeholder={confirmPhrase}
-                                className="w-full px-3 py-2.5 text-sm bg-zinc-50 border border-zinc-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500/30 focus:border-red-500 focus:bg-white"
-                            />
-                        </div>
-
-                        <div className="flex items-center gap-3 pt-2">
-                            <button
-                                type="button"
-                                onClick={onCancel}
-                                disabled={isPending}
-                                className="flex-1 px-4 py-2.5 text-sm font-semibold text-zinc-700 hover:bg-zinc-100 rounded-xl transition-colors disabled:opacity-50"
-                            >
-                                Cancel
-                            </button>
-                            <button
-                                type="button"
-                                onClick={onConfirm}
-                                disabled={!canConfirm}
-                                className="flex-1 inline-flex items-center justify-center gap-1.5 px-4 py-2.5 text-sm font-semibold text-white bg-red-600 hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed rounded-xl transition-colors"
-                            >
-                                <Trash2 size={14} />
-                                {isPending ? "Deleting…" : "Delete forever"}
-                            </button>
-                        </div>
+                    <div>
+                        <label className="block text-xs font-bold tracking-widest uppercase text-zinc-500 mb-2">
+                            Type{" "}
+                            <span className="text-red-600">
+                                {confirmPhrase}
+                            </span>{" "}
+                            to confirm
+                        </label>
+                        <input
+                            type="text"
+                            value={typed}
+                            onChange={(e) => setTyped(e.target.value)}
+                            autoFocus
+                            placeholder={confirmPhrase}
+                            className="w-full px-3 py-2.5 text-sm bg-zinc-50 border border-zinc-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500/30 focus:border-red-500 focus:bg-white"
+                        />
                     </div>
-                </motion.div>
-            </div>
-        ),
+
+                    <div className="flex items-center gap-3 pt-2">
+                        <button
+                            type="button"
+                            onClick={onCancel}
+                            disabled={isPending}
+                            className="flex-1 px-4 py-2.5 text-sm font-semibold text-zinc-700 hover:bg-zinc-100 rounded-xl transition-colors disabled:opacity-50"
+                        >
+                            Cancel
+                        </button>
+                        <button
+                            type="button"
+                            onClick={onConfirm}
+                            disabled={!canConfirm}
+                            className="flex-1 inline-flex items-center justify-center gap-1.5 px-4 py-2.5 text-sm font-semibold text-white bg-red-600 hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed rounded-xl transition-colors"
+                        >
+                            <Trash2 size={14} />
+                            {isPending ? "Deleting…" : "Delete forever"}
+                        </button>
+                    </div>
+                </div>
+            </motion.div>
+        </div>,
         document.body,
     );
 }
 
 function InlineSelect({
-    value, onChange, options, badgeClass, disabled, disabledTitle,
+    value,
+    onChange,
+    options,
+    badgeClass,
+    disabled,
+    disabledTitle,
 }: {
     value: string;
     onChange: (v: string) => void;
@@ -1019,17 +1179,30 @@ function InlineSelect({
                 className={`appearance-none pl-2.5 pr-7 py-1 text-[11px] font-bold tracking-widest uppercase border rounded-full cursor-pointer focus:outline-none focus:ring-2 focus:ring-accent-red/30 ${badgeClass}`}
             >
                 {options.map((o) => (
-                    <option key={o.v} value={o.v} className="bg-white text-zinc-900 normal-case tracking-normal text-xs">
+                    <option
+                        key={o.v}
+                        value={o.v}
+                        className="bg-white text-zinc-900 normal-case tracking-normal text-xs"
+                    >
                         {o.l}
                     </option>
                 ))}
             </select>
-            <ChevronDown size={10} className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none opacity-60" />
+            <ChevronDown
+                size={10}
+                className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none opacity-60"
+            />
         </div>
     );
 }
 
-function InviteModal({ onClose, onFlash }: { onClose: () => void; onFlash: (k: "ok" | "err", m: string) => void }) {
+function InviteModal({
+    onClose,
+    onFlash,
+}: {
+    onClose: () => void;
+    onFlash: (k: "ok" | "err", m: string) => void;
+}) {
     const [isPending, startTransition] = useTransition();
     const [email, setEmail] = useState("");
     const [fullName, setFullName] = useState("");
@@ -1053,7 +1226,10 @@ function InviteModal({ onClose, onFlash }: { onClose: () => void; onFlash: (k: "
     }
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm" onClick={onClose}>
+        <div
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm"
+            onClick={onClose}
+        >
             <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -1066,18 +1242,28 @@ function InviteModal({ onClose, onFlash }: { onClose: () => void; onFlash: (k: "
                             <UserPlus size={18} className="text-accent-red" />
                         </div>
                         <div>
-                            <h2 className="text-lg font-bold text-zinc-900">Invite a new member</h2>
-                            <p className="text-xs text-zinc-500">They&rsquo;ll receive an email to set their password.</p>
+                            <h2 className="text-lg font-bold text-zinc-900">
+                                Invite a new member
+                            </h2>
+                            <p className="text-xs text-zinc-500">
+                                They&rsquo;ll receive an email to set their
+                                password.
+                            </p>
                         </div>
                     </div>
-                    <button onClick={onClose} className="p-1.5 rounded-lg text-zinc-400 hover:bg-zinc-100">
+                    <button
+                        onClick={onClose}
+                        className="p-1.5 rounded-lg text-zinc-400 hover:bg-zinc-100"
+                    >
                         <X size={16} />
                     </button>
                 </div>
 
                 <form onSubmit={submit} className="p-6 space-y-4">
                     <div>
-                        <label className="block text-xs font-bold tracking-widest uppercase text-zinc-500 mb-2">Email</label>
+                        <label className="block text-xs font-bold tracking-widest uppercase text-zinc-500 mb-2">
+                            Email
+                        </label>
                         <input
                             type="email"
                             value={email}
@@ -1089,7 +1275,9 @@ function InviteModal({ onClose, onFlash }: { onClose: () => void; onFlash: (k: "
                     </div>
 
                     <div>
-                        <label className="block text-xs font-bold tracking-widest uppercase text-zinc-500 mb-2">Full name (optional)</label>
+                        <label className="block text-xs font-bold tracking-widest uppercase text-zinc-500 mb-2">
+                            Full name (optional)
+                        </label>
                         <input
                             type="text"
                             value={fullName}
@@ -1100,7 +1288,9 @@ function InviteModal({ onClose, onFlash }: { onClose: () => void; onFlash: (k: "
                     </div>
 
                     <div>
-                        <label className="block text-xs font-bold tracking-widest uppercase text-zinc-500 mb-2">Role</label>
+                        <label className="block text-xs font-bold tracking-widest uppercase text-zinc-500 mb-2">
+                            Role
+                        </label>
                         <div className="grid grid-cols-2 gap-2">
                             {INVITABLE_ROLES.map((r) => (
                                 <button
@@ -1124,8 +1314,8 @@ function InviteModal({ onClose, onFlash }: { onClose: () => void; onFlash: (k: "
                                 : "The admin will receive a Supabase email to set their password and go straight to the back-office."}
                         </p>
                         <p className="mt-2 text-[11px] text-zinc-400">
-                            Instructor / Manager / Student invites are issued
-                            by the Dojo Owner from inside their dojo panel.
+                            Instructor / Manager / Student invites are issued by
+                            the Dojo Owner from inside their dojo panel.
                         </p>
                     </div>
 
