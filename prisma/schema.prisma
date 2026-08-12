@@ -284,7 +284,13 @@ model RolePermission {
 
 model User {
   id           String  @id @db.Uuid // = auth.users.id
+  // Supabase auth email. Real for admins (used for password reset); synthetic
+  // `{uuid}@members.jkabangladesh.com` for non-admins so a family can share
+  // one real email across many accounts. Always unique — Supabase requires it.
   email        String  @unique
+  // Real contact email used for notifications. Optional and non-unique — a
+  // parent's inbox can appear on multiple children's accounts.
+  contactEmail String? @map("contact_email")
   phone        String?
   fullName     String  @map("full_name")
   avatarUrl    String? @map("avatar_url")

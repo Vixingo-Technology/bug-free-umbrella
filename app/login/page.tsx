@@ -87,7 +87,7 @@ export default function LoginPage() {
                     <form onSubmit={handleSubmit} className="space-y-6">
                         <div className="space-y-1">
                             <label className="text-xs font-bold tracking-widest uppercase text-zinc-600 block pl-1">
-                                Email or Member ID
+                                Member ID
                             </label>
                             <div className="relative">
                                 <UserIcon
@@ -96,10 +96,10 @@ export default function LoginPage() {
                                 />
                                 <input
                                     type="text"
-                                    name="identifier"
+                                    name="memberId"
                                     autoComplete="username"
-                                    placeholder="sensei@jka.com or JKA-BD-123456"
-                                    className="w-full bg-white/50 border border-zinc-200 rounded-xl py-3 pl-12 pr-4 text-sm focus:outline-none focus:border-accent-red focus:ring-1 focus:ring-accent-red transition-all"
+                                    placeholder="JKA-BD-123456"
+                                    className="w-full bg-white/50 border border-zinc-200 rounded-xl py-3 pl-12 pr-4 text-sm uppercase focus:outline-none focus:border-accent-red focus:ring-1 focus:ring-accent-red transition-all"
                                     required
                                     disabled={isPending}
                                 />

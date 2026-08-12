@@ -295,6 +295,7 @@ export async function resetDojoOwnerPasswordAction(
     const { userId: adminId } = await requireAdmin();
 
     const ownerId = ((formData.get("ownerId") as string) ?? "").trim();
+    const manualPassword = ((formData.get("manualPassword") as string) ?? "").trim();
     if (!ownerId) return { ok: false, error: "Owner id is required." };
     if (ownerId === adminId) {
         return {
@@ -315,20 +316,82 @@ export async function resetDojoOwnerPasswordAction(
         };
     }
 
-    const temporaryPassword = generateTemporaryPassword();
+    const temporaryPassword = manualPassword || generateTemporaryPassword();
+    if (manualPassword && manualPassword.length < 8) {
+        return { ok: false, error: "Password must be at least 8 characters." };
+    }
     const admin = createAdminClient();
     const { error } = await admin.auth.admin.updateUserById(ownerId, {
         password: temporaryPassword,
     });
     if (error) return { ok: false, error: error.message };
 
-    await prisma.user.update({
-        where: { id: ownerId },
-        data: { mustChangePassword: true },
-    });
+    // Only force a password change on next login for AUTO-generated passwords.
+    // A manually-set password is one the admin explicitly picked, so leave the
+    // flag alone.
+    if (!manualPassword) {
+        await prisma.user.update({
+            where: { id: ownerId },
+            data: { mustChangePassword: true },
+        });
+    }
 
     revalidatePath("/portal/admin/dojos");
     revalidatePath("/portal/admin/members");
+    return { ok: true, temporaryPassword };
+}
+
+// ─────────────────────────────────────────────────────────────
+// Generic admin password reset — works on any user (student,
+// instructor, manager, owner, other admin). Supports both
+// auto-generate and manual entry.
+// ─────────────────────────────────────────────────────────────
+
+export type ResetUserPasswordResult =
+    | { ok: true; temporaryPassword: string }
+    | { ok: false; error: string };
+
+export async function resetUserPasswordAction(
+    formData: FormData
+): Promise<ResetUserPasswordResult> {
+    const { userId: adminId } = await requireAdmin();
+
+    const userId = ((formData.get("userId") as string) ?? "").trim();
+    const manualPassword = ((formData.get("manualPassword") as string) ?? "").trim();
+    if (!userId) return { ok: false, error: "User id is required." };
+    if (userId === adminId) {
+        return {
+            ok: false,
+            error: "Use Account settings to change your own password.",
+        };
+    }
+
+    const target = await prisma.user.findUnique({
+        where: { id: userId },
+        select: { id: true, roleId: true },
+    });
+    if (!target) return { ok: false, error: "User not found." };
+
+    if (manualPassword && manualPassword.length < 8) {
+        return { ok: false, error: "Password must be at least 8 characters." };
+    }
+    const temporaryPassword = manualPassword || generateTemporaryPassword();
+
+    const admin = createAdminClient();
+    const { error } = await admin.auth.admin.updateUserById(userId, {
+        password: temporaryPassword,
+    });
+    if (error) return { ok: false, error: error.message };
+
+    if (!manualPassword) {
+        await prisma.user.update({
+            where: { id: userId },
+            data: { mustChangePassword: true },
+        });
+    }
+
+    revalidatePath("/portal/admin/members");
+    revalidatePath("/portal/admin/dojos");
     return { ok: true, temporaryPassword };
 }
 

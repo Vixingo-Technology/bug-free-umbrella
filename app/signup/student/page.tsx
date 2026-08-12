@@ -3,7 +3,7 @@
 import { motion } from "motion/react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, Mail, Lock, User, Loader2, Eye, EyeOff } from "lucide-react";
+import { ArrowLeft, Mail, Lock, Phone, User, Loader2, Eye, EyeOff } from "lucide-react";
 import Logo from "@/assets/jka_logo.svg";
 import { signupAction } from "@/app/actions/auth";
 import { useState, useTransition } from "react";
@@ -101,22 +101,45 @@ export default function SignupPage() {
                             </div>
                         </div>
 
-                        <div className="space-y-1">
-                            <label className="text-xs font-bold tracking-widest uppercase text-zinc-600 block pl-1">
-                                Email Address
-                            </label>
-                            <div className="relative">
-                                <Mail size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400" />
-                                <input
-                                    type="email"
-                                    name="email"
-                                    placeholder="john.doe@example.com"
-                                    className="w-full bg-white/50 border border-zinc-200 rounded-xl py-3 pl-11 pr-4 text-sm focus:outline-none focus:border-accent-red focus:ring-1 focus:ring-accent-red transition-all"
-                                    required
-                                    disabled={isPending}
-                                />
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                            <div className="space-y-1">
+                                <label className="text-xs font-bold tracking-widest uppercase text-zinc-600 block pl-1">
+                                    Contact Email
+                                </label>
+                                <div className="relative">
+                                    <Mail size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400" />
+                                    <input
+                                        type="email"
+                                        name="contactEmail"
+                                        placeholder="parent@example.com"
+                                        className="w-full bg-white/50 border border-zinc-200 rounded-xl py-3 pl-11 pr-4 text-sm focus:outline-none focus:border-accent-red focus:ring-1 focus:ring-accent-red transition-all"
+                                        required
+                                        disabled={isPending}
+                                    />
+                                </div>
+                            </div>
+                            <div className="space-y-1">
+                                <label className="text-xs font-bold tracking-widest uppercase text-zinc-600 block pl-1">
+                                    Phone
+                                </label>
+                                <div className="relative">
+                                    <Phone size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400" />
+                                    <input
+                                        type="tel"
+                                        name="contactPhone"
+                                        inputMode="numeric"
+                                        placeholder="01XXXXXXXXX"
+                                        className="w-full bg-white/50 border border-zinc-200 rounded-xl py-3 pl-11 pr-4 text-sm focus:outline-none focus:border-accent-red focus:ring-1 focus:ring-accent-red transition-all"
+                                        required
+                                        disabled={isPending}
+                                    />
+                                </div>
                             </div>
                         </div>
+
+                        <p className="text-xs text-zinc-500 pl-1 -mt-2">
+                            You&apos;ll sign in with the Member ID your dojo assigns after registration. The same email and phone can be reused across multiple family accounts.
+                        </p>
 
                         <div className="space-y-1">
                             <label className="text-xs font-bold tracking-widest uppercase text-zinc-600 block pl-1">

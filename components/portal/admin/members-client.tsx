@@ -11,7 +11,9 @@ import {
     updateMemberStatusAction,
     resendInviteAction,
     deleteMemberAction,
+    resetUserPasswordAction,
 } from "@/app/actions/admin-members";
+import ResetPasswordButton from "@/components/auth/reset-password-button";
 
 type Role = "STUDENT" | "INSTRUCTOR" | "DOJO_MANAGER" | "DOJO_OWNER" | "ADMIN";
 type Status =
@@ -599,6 +601,23 @@ function Row({ member, onFlash }: { member: Member; onFlash: (k: "ok" | "err", m
                         >
                             <ShieldOff size={12} /> Suspend
                         </button>
+                    )}
+                    {!isInvitePending && (
+                        <ResetPasswordButton
+                            variant="ghost"
+                            label="Reset"
+                            targetName={member.fullName}
+                            targetSubtitle={`${ROLE_LABELS[member.role as Role] ?? member.role}${member.email ? ` · ${member.email}` : ""}`}
+                            onConfirm={async (manual) => {
+                                const fd = new FormData();
+                                fd.set("userId", member.id);
+                                if (manual) fd.set("manualPassword", manual);
+                                const res = await resetUserPasswordAction(fd);
+                                if (res.ok) onFlash("ok", "Password reset.");
+                                else onFlash("err", res.error);
+                                return res;
+                            }}
+                        />
                     )}
                     <button
                         onClick={() => setConfirmDelete(true)}

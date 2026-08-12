@@ -225,9 +225,7 @@ function PaymentContent({ enlistmentFeeBDT }: { enlistmentFeeBDT: number }) {
                     href={
                         existingApplicationId
                             ? "/portal"
-                            : `/enlist-dojo/set-password?email=${encodeURIComponent(
-                                  email
-                              )}`
+                            : `/enlist-dojo/signup?email=${encodeURIComponent(email)}`
                     }
                     className="inline-flex items-center gap-2 text-xs font-bold tracking-widest uppercase text-zinc-500 hover:text-accent-red transition-colors mb-8 group"
                 >

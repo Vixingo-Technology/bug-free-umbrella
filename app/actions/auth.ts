@@ -3,33 +3,38 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { provisionMemberFromSupabaseUser } from "@/lib/auth/provision-member";
+import { resolvePostAuthLanding } from "@/lib/auth/post-auth-landing";
 import { prisma } from "@/lib/prisma";
 import { isRegNo, isDojoOwnerRegNo } from "@/lib/members/reg-no";
 
 export async function loginAction(formData: FormData) {
     const supabase = await createClient();
 
-    const identifier = ((formData.get("identifier") as string) ?? (formData.get("email") as string) ?? "").trim();
+    const memberId = ((formData.get("memberId") as string)
+        ?? (formData.get("identifier") as string) // legacy field name
+        ?? "").trim().toUpperCase();
     const password = formData.get("password") as string;
 
-    if (!identifier || !password) {
-        return { error: "Email or Member ID and password are required." };
+    if (!memberId || !password) {
+        return { error: "Member ID and password are required." };
     }
 
-    let email = identifier;
-    if (isRegNo(identifier) || isDojoOwnerRegNo(identifier)) {
-        const user = await prisma.user.findUnique({
-            where: { memberNumber: identifier.toUpperCase() },
-            select: { email: true },
-        });
-        if (!user?.email) {
-            return { error: "No account found for that Member ID." };
-        }
-        email = user.email;
+    if (!isRegNo(memberId) && !isDojoOwnerRegNo(memberId)) {
+        return {
+            error: "That doesn't look like a Member ID. Use the format JKA-BD-123456 or JKA-BD-DHA-0001.",
+        };
+    }
+
+    const user = await prisma.user.findUnique({
+        where: { memberNumber: memberId },
+        select: { email: true },
+    });
+    if (!user?.email) {
+        return { error: "No account found for that Member ID." };
     }
 
     const { error } = await supabase.auth.signInWithPassword({
-        email,
+        email: user.email,
         password,
     });
 
@@ -40,22 +45,43 @@ export async function loginAction(formData: FormData) {
     redirect("/portal");
 }
 
+// Synthetic Supabase-auth email for non-admin users. Real contact email lives
+// on `users.contact_email` (nullable, non-unique) so families can share one
+// inbox across multiple accounts.
+const SYNTHETIC_EMAIL_DOMAIN = "members.jkabangladesh.com";
+
+function makeSyntheticEmail(): string {
+    return `${crypto.randomUUID()}@${SYNTHETIC_EMAIL_DOMAIN}`;
+}
+
 export async function signupAction(formData: FormData) {
     const supabase = await createClient();
 
-    const firstName = formData.get("firstName") as string;
-    const lastName = formData.get("lastName") as string;
-    const email = formData.get("email") as string;
+    const firstName = ((formData.get("firstName") as string) ?? "").trim();
+    const lastName = ((formData.get("lastName") as string) ?? "").trim();
     const password = formData.get("password") as string;
+    const contactEmail = ((formData.get("contactEmail") as string) ?? "").trim().toLowerCase();
+    const contactPhone = ((formData.get("contactPhone") as string) ?? "").trim();
 
-    if (!firstName || !lastName || !email || !password) {
-        return { error: "All required fields must be filled." };
+    if (!firstName || !lastName || !password) {
+        return { error: "Name and password are required." };
+    }
+    if (password.length < 8) {
+        return { error: "Password must be at least 8 characters." };
+    }
+    if (!contactEmail || !contactEmail.includes("@")) {
+        return { error: "Please enter a valid contact email." };
+    }
+    if (!contactPhone) {
+        return { error: "Contact phone is required." };
     }
 
-    // No emailRedirectTo — Supabase's "Confirm signup" template should render
-    // {{ .Token }} (a 6-digit OTP). The user enters that code on /auth/verify.
+    // Auth email is synthetic — the user never sees or types it. Member ID is
+    // the login credential.
+    const syntheticEmail = makeSyntheticEmail();
+
     const { data, error } = await supabase.auth.signUp({
-        email,
+        email: syntheticEmail,
         password,
         options: {
             data: {
@@ -63,6 +89,8 @@ export async function signupAction(formData: FormData) {
                 last_name: lastName,
                 full_name: `${firstName} ${lastName}`,
                 role: "STUDENT",
+                contact_email: contactEmail,
+                contact_phone: contactPhone,
             },
         },
     });
@@ -70,52 +98,33 @@ export async function signupAction(formData: FormData) {
     if (error) {
         return { error: error.message };
     }
-
-    // Supabase does not throw on duplicate email — instead it returns a
-    // shadow user with an empty `identities` array (an anti-enumeration
-    // measure). Detect that shape and tell the user plainly.
-    if (data.user && (data.user.identities?.length ?? 0) === 0) {
-        return { error: "This email is already registered. Please log in instead." };
+    if (!data.user) {
+        return { error: "Could not create your account. Please try again." };
     }
-
-    // If Supabase returned a session immediately (email confirmation disabled),
-    // provision the member row and skip the OTP step.
-    if (data.session && data.user) {
-        await provisionMemberFromSupabaseUser(data.user);
-        redirect("/portal");
-    }
-
-    redirect(`/auth/verify?email=${encodeURIComponent(email)}`);
-}
-
-export async function verifySignupOtp(email: string, code: string) {
-    if (!email) return { error: "Missing email." };
-    if (!code || code.length < 6) {
-        return { error: "Please enter the 6-digit code from your email." };
-    }
-
-    const supabase = await createClient();
-    const { data, error } = await supabase.auth.verifyOtp({
-        email,
-        token: code,
-        type: "signup",
-    });
-
-    if (error) return { error: error.message };
-    if (!data.user) return { error: "Verification failed. Please try again." };
 
     await provisionMemberFromSupabaseUser(data.user);
-    redirect("/portal/onboarding");
-}
 
-export async function resendSignupOtp(email: string) {
-    if (!email?.trim() || !email.includes("@")) {
-        return { error: "Missing email address." };
+    // If Supabase returned a session (email confirmation disabled), we're
+    // already signed in. Otherwise sign in with the synthetic email + password.
+    if (!data.session) {
+        const { error: signInError } = await supabase.auth.signInWithPassword({
+            email: syntheticEmail,
+            password,
+        });
+        if (signInError) {
+            // Signup succeeded but sign-in failed — surface a helpful message
+            // pointing to the Member ID that was just generated.
+            return {
+                error:
+                    "Account created, but sign-in failed. Please look up your Member ID from your dojo and try logging in.",
+            };
+        }
     }
-    const supabase = await createClient();
-    const { error } = await supabase.auth.resend({ type: "signup", email });
-    if (error) return { error: error.message };
-    return { ok: true };
+
+    // Skip the /portal → /portal/onboarding double-hop — that leaves the
+    // client router on a stale RSC tree and shows a blank screen with a
+    // retry loop until the user reloads.
+    redirect(await resolvePostAuthLanding(data.user.id));
 }
 
 export async function signoutAction() {
@@ -128,6 +137,18 @@ export async function forgotPasswordAction(formData: FormData) {
     const email = (formData.get("email") as string)?.trim().toLowerCase();
     if (!email) return { error: "Email is required." };
 
+    // Only admins can self-reset via email — everyone else has a synthetic
+    // auth email and must go through their Dojo Head or a JKA admin. We
+    // still return `ok` in every non-admin branch so the response shape
+    // doesn't leak whether the address is registered.
+    const target = await prisma.user.findUnique({
+        where: { email },
+        select: { roleId: true },
+    });
+    if (!target || target.roleId !== "ADMIN") {
+        return { ok: true };
+    }
+
     const supabase = await createClient();
     const appUrl =
         process.env.NEXT_PUBLIC_APP_URL ?? process.env.APP_URL ?? "http://localhost:3000";
@@ -136,7 +157,6 @@ export async function forgotPasswordAction(formData: FormData) {
         redirectTo: `${appUrl}/auth/callback?next=${encodeURIComponent("/set-password?mode=reset")}`,
     });
 
-    // Always return ok so the form doesn't leak whether the email exists.
     if (error) console.error("[forgotPasswordAction]", error.message);
     return { ok: true };
 }

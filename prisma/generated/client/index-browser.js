@@ -145,6 +145,7 @@ exports.Prisma.RolePermissionScalarFieldEnum = {
 exports.Prisma.UserScalarFieldEnum = {
   id: 'id',
   email: 'email',
+  contactEmail: 'contactEmail',
   phone: 'phone',
   fullName: 'fullName',
   avatarUrl: 'avatarUrl',

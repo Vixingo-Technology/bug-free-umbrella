@@ -3,6 +3,7 @@
 import { useRef, useState, useTransition } from "react";
 import { Camera, Loader2, AlertCircle, CheckCircle2 } from "lucide-react";
 import { uploadAvatarAction } from "@/app/actions/avatar";
+import AvatarCropperDialog from "./avatar-cropper-dialog";
 
 interface Props {
     initialUrl?: string | null;
@@ -26,10 +27,11 @@ export default function AvatarUploader({
     const [url, setUrl] = useState<string | null>(initialUrl ?? null);
     const [error, setError] = useState<string | null>(null);
     const [justSaved, setJustSaved] = useState(false);
+    const [pendingFile, setPendingFile] = useState<File | null>(null);
     const [isPending, startTransition] = useTransition();
 
     function pickFile() {
-        if (isPending) return;
+        if (isPending || pendingFile) return;
         inputRef.current?.click();
     }
 
@@ -39,13 +41,23 @@ export default function AvatarUploader({
 
         setError(null);
         setJustSaved(false);
+        setPendingFile(file);
+        if (inputRef.current) inputRef.current.value = "";
+    }
 
-        // Optimistic preview while the upload is in flight.
-        const previewUrl = URL.createObjectURL(file);
+    function handleCancelCrop() {
+        setPendingFile(null);
+    }
+
+    function handleConfirmCrop(blob: Blob) {
+        if (!pendingFile) return;
+        const cropped = new File([blob], "avatar.jpg", { type: "image/jpeg" });
+
+        const previewUrl = URL.createObjectURL(blob);
         setUrl(previewUrl);
 
         const fd = new FormData();
-        fd.append("avatar", file);
+        fd.append("avatar", cropped);
 
         startTransition(async () => {
             const res = await uploadAvatarAction(fd);
@@ -59,7 +71,7 @@ export default function AvatarUploader({
                 setTimeout(() => setJustSaved(false), 2400);
             }
             URL.revokeObjectURL(previewUrl);
-            if (inputRef.current) inputRef.current.value = "";
+            setPendingFile(null);
         });
     }
 
@@ -119,6 +131,15 @@ export default function AvatarUploader({
                 <p className="flex items-center gap-1 text-[11px] text-red-600 mt-1 font-medium">
                     <AlertCircle size={12} /> {error}
                 </p>
+            )}
+
+            {pendingFile && (
+                <AvatarCropperDialog
+                    file={pendingFile}
+                    onCancel={handleCancelCrop}
+                    onConfirm={handleConfirmCrop}
+                    busy={isPending}
+                />
             )}
         </div>
     );

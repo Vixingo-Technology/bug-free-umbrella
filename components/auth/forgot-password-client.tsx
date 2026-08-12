@@ -79,9 +79,9 @@ export default function ForgotPasswordClient() {
                                     <Mail size={20} className="text-accent-red" />
                                 </div>
                                 <div>
-                                    <h1 className="text-xl font-bold text-zinc-900">Forgot password?</h1>
+                                    <h1 className="text-xl font-bold text-zinc-900">Admin password reset</h1>
                                     <p className="text-sm text-zinc-500 mt-1">
-                                        Enter your email and we&rsquo;ll send you a link to reset your password.
+                                        Only JKA admin accounts can reset their password by email. Students, instructors, and dojo owners should contact their Dojo Head or a JKA admin for a password reset.
                                     </p>
                                 </div>
                             </div>

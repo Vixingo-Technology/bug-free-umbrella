@@ -5,6 +5,8 @@ import {
     AlertTriangle,
     CheckCircle2,
     Copy,
+    Eye,
+    EyeOff,
     KeyRound,
     Loader2,
     X,
@@ -19,8 +21,11 @@ type Props = {
     targetName: string;
     /** Extra context line (e.g. "STUDENT · Cheltenham Dojo"). */
     targetSubtitle?: string;
-    /** Called when the user confirms. Must return `{ ok, ... }`. */
-    onConfirm: () => Promise<ResetResult>;
+    /**
+     * Called when the user confirms. Receives the manually-entered password
+     * when the user chose "Set manually"; `undefined` means auto-generate.
+     */
+    onConfirm: (manualPassword?: string) => Promise<ResetResult>;
     /** Button label. Defaults to "Reset password". */
     label?: string;
     /** Visual variant of the trigger button. */
@@ -50,6 +55,10 @@ export default function ResetPasswordButton({
     const [error, setError] = useState<string | null>(null);
     const [password, setPassword] = useState<string | null>(null);
     const [copied, setCopied] = useState(false);
+    const [mode, setMode] = useState<"auto" | "manual">("auto");
+    const [manualPassword, setManualPassword] = useState("");
+    const [manualConfirm, setManualConfirm] = useState("");
+    const [showManual, setShowManual] = useState(false);
 
     function close() {
         if (isPending) return;
@@ -57,12 +66,26 @@ export default function ResetPasswordButton({
         setError(null);
         setPassword(null);
         setCopied(false);
+        setMode("auto");
+        setManualPassword("");
+        setManualConfirm("");
+        setShowManual(false);
     }
 
     function submit() {
         setError(null);
+        if (mode === "manual") {
+            if (manualPassword.length < 8) {
+                setError("Password must be at least 8 characters.");
+                return;
+            }
+            if (manualPassword !== manualConfirm) {
+                setError("Passwords do not match.");
+                return;
+            }
+        }
         startTransition(async () => {
-            const result = await onConfirm();
+            const result = await onConfirm(mode === "manual" ? manualPassword : undefined);
             if (!result.ok) {
                 setError(result.error);
                 return;
@@ -205,12 +228,82 @@ export default function ResetPasswordButton({
                                     <AlertTriangle size={16} className="shrink-0 mt-0.5" />
                                     <span>
                                         The current password will stop working
-                                        immediately. A one-time temporary
-                                        password will be shown here — copy it
-                                        and share it in person or through a
-                                        secure channel.
+                                        immediately. Choose auto-generate for a
+                                        secure random password, or set one
+                                        manually.
                                     </span>
                                 </div>
+
+                                <div className="flex gap-2 p-1 bg-zinc-100 rounded-sm">
+                                    <button
+                                        type="button"
+                                        onClick={() => { setMode("auto"); setError(null); }}
+                                        disabled={isPending}
+                                        className={`flex-1 text-xs font-bold tracking-widest uppercase py-2 rounded-sm transition-colors ${
+                                            mode === "auto"
+                                                ? "bg-white text-zinc-900 shadow-sm"
+                                                : "text-zinc-500 hover:text-zinc-800"
+                                        }`}
+                                    >
+                                        Auto-generate
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => { setMode("manual"); setError(null); }}
+                                        disabled={isPending}
+                                        className={`flex-1 text-xs font-bold tracking-widest uppercase py-2 rounded-sm transition-colors ${
+                                            mode === "manual"
+                                                ? "bg-white text-zinc-900 shadow-sm"
+                                                : "text-zinc-500 hover:text-zinc-800"
+                                        }`}
+                                    >
+                                        Set manually
+                                    </button>
+                                </div>
+
+                                {mode === "manual" && (
+                                    <div className="space-y-3">
+                                        <div>
+                                            <label className="block text-[10px] tracking-widest uppercase font-bold text-zinc-500 mb-1.5">
+                                                New password
+                                            </label>
+                                            <div className="relative">
+                                                <input
+                                                    type={showManual ? "text" : "password"}
+                                                    value={manualPassword}
+                                                    onChange={(e) => setManualPassword(e.target.value)}
+                                                    placeholder="At least 8 characters"
+                                                    autoComplete="new-password"
+                                                    minLength={8}
+                                                    disabled={isPending}
+                                                    className="w-full bg-white border border-zinc-200 text-zinc-900 px-3 pr-10 py-2.5 focus:outline-none focus:border-accent-red text-sm rounded-sm"
+                                                />
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setShowManual((s) => !s)}
+                                                    className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-zinc-400 hover:text-accent-red"
+                                                >
+                                                    {showManual ? <EyeOff size={14} /> : <Eye size={14} />}
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <label className="block text-[10px] tracking-widest uppercase font-bold text-zinc-500 mb-1.5">
+                                                Confirm password
+                                            </label>
+                                            <input
+                                                type={showManual ? "text" : "password"}
+                                                value={manualConfirm}
+                                                onChange={(e) => setManualConfirm(e.target.value)}
+                                                placeholder="Re-enter password"
+                                                autoComplete="new-password"
+                                                minLength={8}
+                                                disabled={isPending}
+                                                className="w-full bg-white border border-zinc-200 text-zinc-900 px-3 py-2.5 focus:outline-none focus:border-accent-red text-sm rounded-sm"
+                                            />
+                                        </div>
+                                    </div>
+                                )}
 
                                 {error && (
                                     <div

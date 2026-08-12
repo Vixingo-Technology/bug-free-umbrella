@@ -3,20 +3,13 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import {
     Award,
-    Calendar,
     Download,
     GraduationCap,
-    Mail,
-    MapPin,
-    Phone,
-    Shield,
-    User,
-    Users,
 } from "lucide-react";
 import DojoPageHeader from "@/components/dojo/page-header";
 import DigitalCard from "@/components/portal/digital-card";
 import StudentResetPasswordAction from "@/components/dojo/student-reset-password-action";
-import StudentGenderEditor from "@/components/dojo/student-gender-editor";
+import StudentProfileEditor from "@/components/dojo/student-profile-editor";
 import { requireDojoRole } from "@/lib/dojo-session";
 import { prisma } from "@/lib/prisma";
 import { serialize } from "@/lib/serialize";
@@ -71,16 +64,26 @@ export default async function StudentDetailPage({
 
     if (!student) notFound();
 
+    const p = student.user.profile;
     const member = {
         ...student,
         fullName: student.user.fullName,
         email: student.user.email,
+        contactEmail: student.user.contactEmail,
         phone: student.user.phone,
         avatarUrl: student.user.avatarUrl,
         role: student.user.roleId,
         isActive: student.user.isActive,
         memberNumber: student.user.memberNumber,
-        gender: student.user.profile?.gender ?? null,
+        gender: p?.gender ?? null,
+        bloodGroup: p?.bloodGroup ?? null,
+        fatherName: p?.fatherName ?? null,
+        motherName: p?.motherName ?? null,
+        address: p?.address ?? null,
+        dateOfBirth: p?.dateOfBirth ?? null,
+        nationalId: p?.nationalId ?? null,
+        emergencyContactName: p?.emergencyContactName ?? null,
+        emergencyContactPhone: p?.emergencyContactPhone ?? null,
     };
 
     const profile = serialize(member) as any;
@@ -131,40 +134,28 @@ export default async function StudentDetailPage({
             <div className="grid lg:grid-cols-3 gap-6">
                 {/* Left column — profile facts */}
                 <div className="lg:col-span-2 space-y-6">
-                    <Section title="Profile">
-                        <ProfileGrid>
-                            <Field icon={<User size={14} />} label="Full name" value={profile.fullName} />
-                            <Field icon={<Award size={14} />} label="Member number" value={profile.memberNumber} />
-                            <Field icon={<Shield size={14} />} label="Current rank" value={profile.currentRank} />
-                            <Field icon={<Calendar size={14} />} label="Joined" value={fmt.format(new Date(profile.joinDate))} />
-                            <Field icon={<Mail size={14} />} label="Email" value={profile.email} />
-                            <Field icon={<Phone size={14} />} label="Phone" value={profile.phone} />
-                            <Field icon={<Users size={14} />} label="Father's name" value={profile.fatherName} />
-                            <Field icon={<Users size={14} />} label="Mother's name" value={profile.motherName} />
-                            <Field icon={<MapPin size={14} />} label="Address" value={profile.address} fullWidth />
-                            <Field icon={<Calendar size={14} />} label="Date of birth" value={profile.dateOfBirth ? fmt.format(new Date(profile.dateOfBirth)) : null} />
-                            {session.role === "DOJO_OWNER" ? (
-                                <StudentGenderEditor
-                                    studentId={profile.id}
-                                    initialGender={profile.gender ?? null}
-                                />
-                            ) : (
-                                <Field
-                                    icon={<User size={14} />}
-                                    label="Gender"
-                                    value={
-                                        profile.gender === "MALE"
-                                            ? "Male"
-                                            : profile.gender === "FEMALE"
-                                              ? "Female"
-                                              : null
-                                    }
-                                />
-                            )}
-                            <Field icon={<Shield size={14} />} label="National ID" value={profile.nationalId} />
-                            <Field icon={<Phone size={14} />} label="Emergency contact" value={profile.emergencyContactName ? `${profile.emergencyContactName} · ${profile.emergencyContactPhone ?? "—"}` : null} fullWidth />
-                        </ProfileGrid>
-                    </Section>
+                    <StudentProfileEditor
+                        canEdit={session.role === "DOJO_OWNER"}
+                        initial={{
+                            id: profile.id,
+                            memberNumber: profile.memberNumber ?? null,
+                            currentRank: profile.currentRank ?? null,
+                            joinDate: profile.joinDate ?? null,
+                            fullName: profile.fullName,
+                            email: profile.email,
+                            contactEmail: profile.contactEmail ?? null,
+                            phone: profile.phone ?? null,
+                            fatherName: profile.fatherName ?? null,
+                            motherName: profile.motherName ?? null,
+                            address: profile.address ?? null,
+                            dateOfBirth: profile.dateOfBirth ?? null,
+                            gender: (profile.gender ?? null) as "MALE" | "FEMALE" | null,
+                            bloodGroup: profile.bloodGroup ?? null,
+                            nationalId: profile.nationalId ?? null,
+                            emergencyContactName: profile.emergencyContactName ?? null,
+                            emergencyContactPhone: profile.emergencyContactPhone ?? null,
+                        }}
+                    />
 
                     <Section
                         title="Grading history"
@@ -328,38 +319,6 @@ function Section({
             </header>
             {children}
         </section>
-    );
-}
-
-function ProfileGrid({ children }: { children: React.ReactNode }) {
-    return (
-        <div className="p-5 grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {children}
-        </div>
-    );
-}
-
-function Field({
-    label,
-    value,
-    icon,
-    fullWidth,
-}: {
-    label: string;
-    value: string | null | undefined;
-    icon?: React.ReactNode;
-    fullWidth?: boolean;
-}) {
-    return (
-        <div className={fullWidth ? "sm:col-span-2" : undefined}>
-            <p className="text-[10px] tracking-widest uppercase font-bold text-zinc-400 mb-1 inline-flex items-center gap-1.5">
-                {icon}
-                {label}
-            </p>
-            <p className="text-sm text-zinc-900 break-words">
-                {value && String(value).trim() !== "" ? value : "—"}
-            </p>
-        </div>
     );
 }
 

@@ -27,8 +27,16 @@ export async function provisionMemberFromSupabaseUser(user: User): Promise<void>
 
         const dojoId =
             typeof meta.dojo_id === "string" && meta.dojo_id ? meta.dojo_id : null;
-        const phone =
-            typeof user.phone === "string" && user.phone ? user.phone : null;
+        const contactEmail =
+            typeof meta.contact_email === "string" && meta.contact_email
+                ? meta.contact_email.toLowerCase()
+                : null;
+        const contactPhone =
+            typeof meta.contact_phone === "string" && meta.contact_phone
+                ? meta.contact_phone
+                : typeof user.phone === "string" && user.phone
+                ? user.phone
+                : null;
 
         const wasExisting = await prisma.user.findUnique({
             where: { id: user.id },
@@ -40,7 +48,8 @@ export async function provisionMemberFromSupabaseUser(user: User): Promise<void>
             create: {
                 id: user.id,
                 email: user.email!,
-                phone,
+                contactEmail,
+                phone: contactPhone,
                 fullName,
                 roleId: role,
             },

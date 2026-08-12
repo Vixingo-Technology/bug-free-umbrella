@@ -525,17 +525,25 @@ export async function resetDojoMemberPasswordAction(
         };
     }
 
-    const temporaryPassword = generateTemporaryPassword();
+    const manualPassword = ((formData.get("manualPassword") as string) ?? "").trim();
+    if (manualPassword && manualPassword.length < 8) {
+        return { ok: false, error: "Password must be at least 8 characters." };
+    }
+    const temporaryPassword = manualPassword || generateTemporaryPassword();
     const admin = createAdminClient();
     const { error } = await admin.auth.admin.updateUserById(memberId, {
         password: temporaryPassword,
     });
     if (error) return { ok: false, error: error.message };
 
-    await prisma.user.update({
-        where: { id: memberId },
-        data: { mustChangePassword: true },
-    });
+    // Only force a change-on-next-login for AUTO-generated passwords. A
+    // manually chosen password is one the dojo head deliberately picked.
+    if (!manualPassword) {
+        await prisma.user.update({
+            where: { id: memberId },
+            data: { mustChangePassword: true },
+        });
+    }
 
     revalidatePath("/portal/dojo/members");
     revalidatePath(`/portal/dojo/members/${memberId}`);

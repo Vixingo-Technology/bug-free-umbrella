@@ -379,9 +379,10 @@ function DojoCard({
                                 label="Reset"
                                 targetName={dojo.headInstructor.fullName}
                                 targetSubtitle={`Dojo Head · ${dojo.name}`}
-                                onConfirm={async () => {
+                                onConfirm={async (manual) => {
                                     const fd = new FormData();
                                     fd.set("ownerId", dojo.headInstructor!.id);
+                                    if (manual) fd.set("manualPassword", manual);
                                     const res = await resetDojoOwnerPasswordAction(fd);
                                     if (res.ok) {
                                         onFlash("ok", "Password reset.");

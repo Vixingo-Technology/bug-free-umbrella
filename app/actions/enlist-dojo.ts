@@ -78,103 +78,59 @@ export async function uploadDojoAssetFromDataUrl(
 }
 
 /**
- * Step 1 — kick off enlistment.
- * Sends a Supabase email OTP. We do NOT touch the database yet;
- * the form payload lives in client sessionStorage until commit.
+ * Kick off enlistment: create a Supabase auth user for the Dojo Head with a
+ * synthetic auth email (so the same real email can appear on many accounts)
+ * and their chosen password. Establishes a session so the payment page can
+ * call commitDojoEnlistment. No OTP — the user goes straight from signup to
+ * payment.
  */
 export async function submitDojoEnlistment(
-    input: Pick<DojoEnlistmentInput, "dojoName" | "email">
+    input: Pick<DojoEnlistmentInput, "dojoName" | "email"> & {
+        password: string;
+        contactName: string;
+        phone: string;
+    }
 ): Promise<{ error?: string }> {
     if (!input.email?.trim() || !input.email.includes("@")) {
-        return { error: "Please enter a valid email address." };
+        return { error: "Please enter a valid contact email." };
     }
     if (!input.dojoName?.trim()) {
         return { error: "Dojo name is required." };
     }
+    if (!input.password || input.password.length < 8) {
+        return { error: "Password must be at least 8 characters." };
+    }
 
     const supabase = await createClient();
-    const { error } = await supabase.auth.signInWithOtp({
-        email: input.email,
+    const syntheticEmail = `${crypto.randomUUID()}@members.jkabangladesh.com`;
+
+    const { data, error } = await supabase.auth.signUp({
+        email: syntheticEmail,
+        password: input.password,
         options: {
-            shouldCreateUser: true,
             data: {
                 pending_dojo_name: input.dojoName,
                 role: "DOJO_OWNER",
+                full_name: input.contactName,
+                contact_email: input.email.trim().toLowerCase(),
+                contact_phone: input.phone,
             },
         },
     });
 
-    if (error) {
-        return { error: error.message };
-    }
-    return {};
-}
-
-/**
- * Step 2 — verify the 6-digit OTP. Establishes a Supabase session
- * so subsequent calls (setPassword, commit) run as the dojo owner.
- */
-export async function verifyDojoOtp(
-    email: string,
-    code: string
-): Promise<{ error?: string }> {
-    if (!code || code.length < 6) {
-        return { error: "Please enter the 6-digit code from your email." };
-    }
-    const supabase = await createClient();
-    const { error } = await supabase.auth.verifyOtp({
-        email,
-        token: code,
-        type: "email",
-    });
-    if (error) {
-        return { error: error.message };
-    }
-    return {};
-}
-
-/**
- * Step 3 — set the dojo owner's account password.
- */
-export async function setDojoOwnerPassword(
-    password: string,
-    confirm: string
-): Promise<{ error?: string }> {
-    if (!password || password.length < 8) {
-        return { error: "Password must be at least 8 characters." };
-    }
-    if (password !== confirm) {
-        return { error: "Passwords do not match." };
-    }
-    const supabase = await createClient();
-    const {
-        data: { user },
-    } = await supabase.auth.getUser();
-    if (!user) {
-        return {
-            error: "Your verification has expired. Please restart the enlistment.",
-        };
-    }
-    const { error } = await supabase.auth.updateUser({ password });
     if (error) return { error: error.message };
-    return {};
-}
+    if (!data.user) return { error: "Could not create your account. Please try again." };
 
-/**
- * Resend the OTP email for the current enlistment.
- */
-export async function resendDojoOtp(
-    email: string
-): Promise<{ error?: string }> {
-    if (!email?.trim() || !email.includes("@")) {
-        return { error: "Missing email address." };
+    // If Supabase didn't return a session (e.g. email confirmation still enabled
+    // in the dashboard), sign in explicitly so the payment page has an auth context.
+    if (!data.session) {
+        const { error: signInError } = await supabase.auth.signInWithPassword({
+            email: syntheticEmail,
+            password: input.password,
+        });
+        if (signInError) return { error: signInError.message };
     }
-    const supabase = await createClient();
-    const { error } = await supabase.auth.signInWithOtp({
-        email,
-        options: { shouldCreateUser: true },
-    });
-    if (error) return { error: error.message };
+
     return {};
 }
 
@@ -411,16 +367,21 @@ export async function commitDojoEnlistment(
 
     try {
         await prisma.$transaction(async (tx) => {
+            // NOTE: `users.email` is the synthetic Supabase-auth email (set at
+            // signUp); the real dojo contact address lives on `contact_email`
+            // and `Dojo.email`. Never overwrite `users.email` here.
             await tx.user.upsert({
                 where: { id: user.id },
                 create: {
                     id: user.id,
-                    email: input.email.trim(),
+                    email: user.email!,
+                    contactEmail: input.email.trim().toLowerCase(),
                     fullName: input.contactName.trim(),
                     phone: input.phone.trim(),
                     roleId: "DOJO_OWNER",
                 },
                 update: {
+                    contactEmail: input.email.trim().toLowerCase(),
                     fullName: input.contactName.trim(),
                     phone: input.phone.trim(),
                     roleId: "DOJO_OWNER",

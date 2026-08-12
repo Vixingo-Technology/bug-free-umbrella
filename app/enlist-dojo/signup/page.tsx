@@ -43,6 +43,8 @@ type FormState = {
     contactName: string;
     contactRank: string;
     contactDob: string;
+    password: string;
+    confirmPassword: string;
     division: string;
     district: string;
     city: string;
@@ -93,6 +95,8 @@ const initialState: FormState = {
     contactName: "",
     contactRank: "",
     contactDob: "",
+    password: "",
+    confirmPassword: "",
     division: "",
     district: "",
     city: "",
@@ -178,6 +182,10 @@ export default function EnlistDojoSignupPage() {
                 return "Please select the Dojo Head's belt rank.";
             const dobError = validateMinAge(form.contactDob, DOJO_OWNER_MIN_AGE);
             if (dobError) return dobError;
+            if (!form.password || form.password.length < 8)
+                return "Password must be at least 8 characters.";
+            if (form.password !== form.confirmPassword)
+                return "Passwords do not match.";
         }
         if (s === 2) {
             if (!form.division.trim()) return "Please select a division.";
@@ -235,13 +243,16 @@ export default function EnlistDojoSignupPage() {
             const result = await submitDojoEnlistment({
                 dojoName: finalForm.dojoName,
                 email: finalForm.email,
+                password: finalForm.password,
+                contactName: finalForm.contactName,
+                phone: finalForm.phone,
             });
             if (result?.error) {
                 setError(result.error);
                 return;
             }
             router.push(
-                `/enlist-dojo/verify?email=${encodeURIComponent(form.email)}`
+                `/enlist-dojo/payment?email=${encodeURIComponent(form.email)}`
             );
         });
     }
@@ -412,7 +423,7 @@ export default function EnlistDojoSignupPage() {
                                     </>
                                 ) : (
                                     <>
-                                        Submit & Verify Email
+                                        Submit & Continue to Payment
                                         <ArrowRight
                                             size={14}
                                             className="group-hover:translate-x-1 transition-transform"
@@ -579,6 +590,41 @@ function ContactStep({
                     className={inputClass()}
                 />
             </div>
+
+            <div className="border-t border-zinc-200 pt-6 space-y-4">
+                <div>
+                    <h3 className="text-sm font-bold text-zinc-900 mb-1">Account password</h3>
+                    <p className="text-xs text-zinc-500">
+                        You&apos;ll sign in with the Member ID assigned to you after enlistment, plus this password.
+                    </p>
+                </div>
+                <div className="grid md:grid-cols-2 gap-4">
+                    <div>
+                        <Label>Password *</Label>
+                        <input
+                            type="password"
+                            value={form.password}
+                            onChange={(e) => update("password", e.target.value)}
+                            placeholder="At least 8 characters"
+                            autoComplete="new-password"
+                            minLength={8}
+                            className={inputClass()}
+                        />
+                    </div>
+                    <div>
+                        <Label>Confirm password *</Label>
+                        <input
+                            type="password"
+                            value={form.confirmPassword}
+                            onChange={(e) => update("confirmPassword", e.target.value)}
+                            placeholder="Re-enter password"
+                            autoComplete="new-password"
+                            minLength={8}
+                            className={inputClass()}
+                        />
+                    </div>
+                </div>
+            </div>
         </div>
     );
 }
@@ -692,8 +738,8 @@ function ReviewStep({
                     Review and submit
                 </h2>
                 <p className="text-zinc-500 text-sm">
-                    Confirm your details. After submitting, we&apos;ll email an
-                    OTP to verify ownership.
+                    Confirm your details. Next you&apos;ll pay the one-time
+                    enlistment fee to activate your dojo.
                 </p>
             </div>
 
