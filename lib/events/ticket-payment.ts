@@ -143,7 +143,14 @@ export async function markRegistrationPaid(
                     dojo: { select: { name: true } },
                 },
             },
-            user: { select: { fullName: true, email: true, phone: true } },
+            user: {
+                select: {
+                    fullName: true,
+                    email: true,
+                    contactEmail: true,
+                    phone: true,
+                },
+            },
         },
     });
     if (!reg) return { ok: false, qrToken: null };
@@ -179,7 +186,13 @@ export async function markRegistrationPaid(
 
     const cardUrl = `${appUrl()}/participants/${reg.qrToken}`;
     const invoiceUrl = `${appUrl()}/invoices/${reg.qrToken}`;
-    const recipientEmail = reg.user?.email ?? reg.guestEmail ?? null;
+    const userAuthEmail = reg.user?.email ?? null;
+    const realUserEmail =
+        userAuthEmail && !userAuthEmail.endsWith("@members.jkabangladesh.com")
+            ? userAuthEmail
+            : null;
+    const recipientEmail =
+        reg.user?.contactEmail ?? reg.guestEmail ?? realUserEmail;
     const participantName =
         reg.user?.fullName ?? reg.guestName ?? "Participant";
 

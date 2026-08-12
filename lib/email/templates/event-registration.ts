@@ -46,9 +46,7 @@ export function buildEventRegistrationEmail(
     opts: BuildEventRegistrationEmailOpts,
 ): EventRegistrationEmailContent {
     const eventDate = formatEventDate(opts.event.eventDate);
-    const subject = opts.isPaid
-        ? `Ticket confirmed — ${opts.event.title}`
-        : `You're registered — ${opts.event.title}`;
+    const subject = opts.isPaid ? "Ticket confirmed" : "You're registered";
 
     const amountLine =
         opts.isPaid && opts.amountPaidBdt && opts.amountPaidBdt > 0

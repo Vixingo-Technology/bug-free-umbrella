@@ -908,15 +908,25 @@ export async function registerForTournamentAction(
         "http://localhost:3000";
     // Free events fire one email per registered row. If the member's account
     // has a name/email we prefer those, falling back to the guest form values.
-    const recipientEmail = user?.email ?? guestEmail ?? null;
     let memberName: string | null = null;
+    let memberContactEmail: string | null = null;
+    let memberAuthEmail: string | null = null;
     if (user) {
         const u = await prisma.user.findUnique({
             where: { id: user.id },
-            select: { fullName: true },
+            select: { fullName: true, contactEmail: true, email: true },
         });
         memberName = u?.fullName ?? null;
+        memberContactEmail = u?.contactEmail ?? null;
+        memberAuthEmail = u?.email ?? null;
     }
+    const realMemberAuthEmail =
+        memberAuthEmail &&
+        !memberAuthEmail.endsWith("@members.jkabangladesh.com")
+            ? memberAuthEmail
+            : null;
+    const recipientEmail =
+        memberContactEmail ?? guestEmail ?? realMemberAuthEmail;
     const participantName = memberName ?? guestName ?? "Participant";
     for (const row of created) {
         await sendEventRegistrationEmail(recipientEmail, {
