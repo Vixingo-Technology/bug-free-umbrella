@@ -16,7 +16,6 @@ export type DojoEnlistmentInput = {
     email: string;
     phone: string;
     contactName: string;
-    contactRank: string;
     /** ISO yyyy-mm-dd — Dojo Head's date of birth; must be 18+ at submission. */
     contactDob: string;
     address: string;
@@ -342,7 +341,6 @@ export async function commitDojoEnlistment(
 
     const lat = input.latitude ? parseFloat(input.latitude) : null;
     const lng = input.longitude ? parseFloat(input.longitude) : null;
-    const contactRank = input.contactRank?.trim() || "";
     const division = input.division?.trim() || null;
     const shortName = input.shortName?.trim() || null;
 
@@ -439,7 +437,6 @@ export async function commitDojoEnlistment(
                         phone: input.phone.trim(),
                         contactName: input.contactName.trim(),
                         contactRole: "Head Instructor",
-                        contactRank,
                         contactDob,
                         address: input.address.trim(),
                         latitude: Number.isFinite(lat) ? lat : null,
@@ -460,7 +457,6 @@ export async function commitDojoEnlistment(
                         phone: input.phone.trim(),
                         contactName: input.contactName.trim(),
                         contactRole: "Head Instructor",
-                        contactRank,
                         contactDob,
                         address: input.address.trim(),
                         latitude: Number.isFinite(lat) ? lat : null,

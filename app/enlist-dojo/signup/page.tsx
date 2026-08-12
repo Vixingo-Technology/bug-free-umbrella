@@ -41,7 +41,6 @@ type FormState = {
     email: string;
     phone: string;
     contactName: string;
-    contactRank: string;
     contactDob: string;
     password: string;
     confirmPassword: string;
@@ -93,7 +92,6 @@ const initialState: FormState = {
     email: "",
     phone: "",
     contactName: "",
-    contactRank: "",
     contactDob: "",
     password: "",
     confirmPassword: "",
@@ -107,17 +105,6 @@ const initialState: FormState = {
     longitude: "",
     acceptedTerms: false,
 };
-
-const BELT_RANKS = [
-    "1st Kyu",
-    "Shodan (1st Dan)",
-    "Nidan (2nd Dan)",
-    "Sandan (3rd Dan)",
-    "Yondan (4th Dan)",
-    "Godan (5th Dan)",
-    "Rokudan (6th Dan)",
-    "Nanadan (7th Dan)",
-];
 
 const DRAFT_KEY = "jka.enlistDojo.draft";
 
@@ -178,8 +165,6 @@ export default function EnlistDojoSignupPage() {
             if (phoneError) return phoneError;
             if (!form.contactName.trim())
                 return "Please enter the Dojo Head's name.";
-            if (!form.contactRank.trim())
-                return "Please select the Dojo Head's belt rank.";
             const dobError = validateMinAge(form.contactDob, DOJO_OWNER_MIN_AGE);
             if (dobError) return dobError;
             if (!form.password || form.password.length < 8)
@@ -564,31 +549,16 @@ function ContactStep({
                     />
                 </div>
                 <div>
-                    <Label>Belt rank *</Label>
-                    <select
-                        value={form.contactRank}
-                        onChange={(e) => update("contactRank", e.target.value)}
+                    <Label>Date of birth *</Label>
+                    <input
+                        type="date"
+                        value={form.contactDob}
+                        max={maxDobForAge(DOJO_OWNER_MIN_AGE)}
+                        onChange={(e) => update("contactDob", e.target.value)}
+                        title={`Dojo Head must be at least ${DOJO_OWNER_MIN_AGE} years old.`}
                         className={inputClass()}
-                    >
-                        <option value="">Select your rank…</option>
-                        {BELT_RANKS.map((r) => (
-                            <option key={r} value={r}>
-                                {r}
-                            </option>
-                        ))}
-                    </select>
+                    />
                 </div>
-            </div>
-            <div>
-                <Label>Date of birth *</Label>
-                <input
-                    type="date"
-                    value={form.contactDob}
-                    max={maxDobForAge(DOJO_OWNER_MIN_AGE)}
-                    onChange={(e) => update("contactDob", e.target.value)}
-                    title={`Dojo Head must be at least ${DOJO_OWNER_MIN_AGE} years old.`}
-                    className={inputClass()}
-                />
             </div>
 
             <div className="border-t border-zinc-200 pt-6 space-y-4">
@@ -748,10 +718,7 @@ function ReviewStep({
                 <ReviewRow label="Short name" value={form.shortName} />
                 <ReviewRow label="Email" value={form.email} />
                 <ReviewRow label="Phone" value={form.phone} />
-                <ReviewRow
-                    label="Dojo Head"
-                    value={`${form.contactName} · ${form.contactRank || "—"}`}
-                />
+                <ReviewRow label="Dojo Head" value={form.contactName} />
                 <ReviewRow label="Date of birth" value={form.contactDob} />
                 <ReviewRow label="Division" value={form.division} />
                 <ReviewRow label="District" value={form.district} />

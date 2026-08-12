@@ -17,6 +17,7 @@ import {
     type DiscountType,
 } from "@/lib/pricing/discount";
 import { registerForTournamentAndRedirect } from "@/app/actions/event-registration";
+import { formatBeltRank } from "@/lib/constants";
 
 export type EventRegistrationBeltRank = {
     id: string;
@@ -524,7 +525,7 @@ export default function TournamentRegistrationForm({
                         </option>
                         {event.beltRanks.map((r) => (
                             <option key={r.id} value={r.name}>
-                                {r.name}
+                                {formatBeltRank(r.name)}
                             </option>
                         ))}
                     </select>

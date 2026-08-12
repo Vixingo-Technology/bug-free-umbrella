@@ -20,7 +20,7 @@ import {
     createServiceRequestAction,
     previewServiceCouponAction,
 } from "@/app/portal/services/[slug]/actions";
-import { BELT_RANKS_ORDERED } from "@/lib/constants";
+import { BELT_RANKS_ORDERED, formatBeltRank } from "@/lib/constants";
 
 type Status = "PENDING_PAYMENT" | "AWAITING_DOJO" | "AWAITING_ADMIN" | "APPROVED" | "DENIED" | "CANCELLED";
 
@@ -336,7 +336,7 @@ export default function ServiceRequestClient({
                                 >
                                     <option value="">Pick a rank…</option>
                                     {BELT_RANKS_ORDERED.map((r) => (
-                                        <option key={r} value={r}>{r}</option>
+                                        <option key={r} value={r}>{formatBeltRank(r)}</option>
                                     ))}
                                 </select>
                             </div>

@@ -193,16 +193,16 @@ export default function MembersAdminClient({ members }: { members: Member[] }) {
     return (
         <div className="max-w-7xl mx-auto">
             {/* Header */}
-            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6">
+            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 sm:gap-4 mb-4 sm:mb-6">
                 <div>
-                    <h1 className="text-2xl font-bold text-zinc-900">Members</h1>
-                    <p className="text-sm text-zinc-500 mt-1">
+                    <h1 className="text-xl sm:text-2xl font-bold text-zinc-900">Members</h1>
+                    <p className="text-xs sm:text-sm text-zinc-500 mt-1">
                         {filtered.length} of {members.length} members
                     </p>
                 </div>
                 <button
                     onClick={() => setInviteOpen(true)}
-                    className="inline-flex items-center gap-2 bg-accent-red hover:bg-accent-red/90 text-white text-sm font-semibold px-4 py-2.5 rounded-xl shadow-sm transition-all"
+                    className="inline-flex items-center justify-center gap-2 bg-accent-red hover:bg-accent-red/90 text-white text-sm font-semibold px-4 py-2.5 rounded-xl shadow-sm transition-all w-full sm:w-auto"
                 >
                     <UserPlus size={16} />
                     Invite Member
@@ -210,7 +210,7 @@ export default function MembersAdminClient({ members }: { members: Member[] }) {
             </div>
 
             {/* Role tabs */}
-            <div className="mb-4 border-b border-zinc-200 overflow-x-auto">
+            <div className="mb-4 border-b border-zinc-200 overflow-x-auto -mx-3 sm:mx-0 px-3 sm:px-0">
                 <div className="flex items-center gap-1 min-w-max">
                     {TABS.map((t) => {
                         const isActive = tab === t;
@@ -218,7 +218,7 @@ export default function MembersAdminClient({ members }: { members: Member[] }) {
                             <button
                                 key={t}
                                 onClick={() => setTab(t)}
-                                className={`inline-flex items-center gap-2 px-4 py-2.5 text-sm font-semibold border-b-2 -mb-px transition-colors ${
+                                className={`inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 text-xs sm:text-sm font-semibold border-b-2 -mb-px transition-colors whitespace-nowrap ${
                                     isActive
                                         ? "border-accent-red text-accent-red"
                                         : "border-transparent text-zinc-500 hover:text-zinc-800 hover:border-zinc-300"
@@ -241,13 +241,13 @@ export default function MembersAdminClient({ members }: { members: Member[] }) {
             </div>
 
             {/* Filters */}
-            <div className="flex flex-col md:flex-row gap-3 mb-6">
+            <div className="flex flex-col md:flex-row gap-3 mb-4 sm:mb-6">
                 <div className="relative flex-1">
                     <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400" />
                     <input
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
-                        placeholder="Search name, email, phone, member #…"
+                        placeholder="Search name, email, phone…"
                         className="w-full pl-9 pr-3 py-2.5 text-sm bg-white border border-zinc-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-accent-red/30 focus:border-accent-red"
                     />
                 </div>
@@ -258,8 +258,8 @@ export default function MembersAdminClient({ members }: { members: Member[] }) {
                 />
             </div>
 
-            {/* Table */}
-            <div className="bg-white border border-zinc-100 rounded-2xl overflow-hidden shadow-sm">
+            {/* Desktop table */}
+            <div className="hidden xl:block bg-white border border-zinc-100 rounded-2xl overflow-hidden shadow-sm">
                 <div className="overflow-x-auto">
                     <table className="w-full text-sm">
                         <thead className="bg-zinc-50 border-b border-zinc-100">
@@ -296,6 +296,30 @@ export default function MembersAdminClient({ members }: { members: Member[] }) {
                         total={filtered.length}
                         onChange={setPage}
                     />
+                )}
+            </div>
+
+            {/* Mobile / tablet / narrow-desktop cards */}
+            <div className="xl:hidden space-y-3">
+                {pageRows.map((m) => (
+                    <MobileCard key={m.id} member={m} onFlash={flash} />
+                ))}
+                {pageRows.length === 0 && (
+                    <div className="bg-white border border-zinc-100 rounded-2xl px-5 py-12 text-center text-sm text-zinc-400 shadow-sm">
+                        No members match the current filters.
+                    </div>
+                )}
+                {filtered.length > 0 && (
+                    <div className="bg-white border border-zinc-100 rounded-2xl overflow-hidden shadow-sm">
+                        <Pagination
+                            page={clampedPage}
+                            totalPages={totalPages}
+                            pageStart={pageStart}
+                            pageEnd={Math.min(pageStart + PAGE_SIZE, filtered.length)}
+                            total={filtered.length}
+                            onChange={setPage}
+                        />
+                    </div>
                 )}
             </div>
 
@@ -353,13 +377,13 @@ function Pagination({
     }
 
     return (
-        <div className="flex items-center justify-between gap-3 px-5 py-3 border-t border-zinc-100 bg-zinc-50/60 text-xs text-zinc-600">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-3 px-4 sm:px-5 py-3 border-t border-zinc-100 bg-zinc-50/60 text-xs text-zinc-600">
             <p>
                 Showing <span className="font-semibold text-zinc-900">{pageStart + 1}</span>–
                 <span className="font-semibold text-zinc-900">{pageEnd}</span> of{" "}
                 <span className="font-semibold text-zinc-900">{total}</span>
             </p>
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-1 flex-wrap">
                 <button
                     onClick={() => canPrev && onChange(page - 1)}
                     disabled={!canPrev}
@@ -517,9 +541,8 @@ function Row({ member, onFlash }: { member: Member; onFlash: (k: "ok" | "err", m
                         <p className="font-semibold text-zinc-900 truncate group-hover:text-accent-red transition-colors">
                             {member.fullName}
                         </p>
-                        <p className="text-xs text-zinc-500 truncate">{displayEmail(member) || member.email}</p>
                         {member.memberNumber && (
-                            <p className="text-[10px] text-zinc-400 mt-0.5">#{member.memberNumber}</p>
+                            <p className="text-xs text-zinc-500 mt-0.5">#{member.memberNumber}</p>
                         )}
                     </div>
                 </Link>
@@ -643,6 +666,231 @@ function Row({ member, onFlash }: { member: Member; onFlash: (k: "ok" | "err", m
                 />
             )}
         </tr>
+    );
+}
+
+function MobileCard({ member, onFlash }: { member: Member; onFlash: (k: "ok" | "err", m: string) => void }) {
+    const [isPending, startTransition] = useTransition();
+    const [role, setRole] = useState<Role>(member.role);
+    const [status, setStatus] = useState<Status>(member.status);
+    const [confirmDelete, setConfirmDelete] = useState(false);
+    const [deleted, setDeleted] = useState(false);
+
+    function performDelete() {
+        const fd = new FormData();
+        fd.set("memberId", member.id);
+        startTransition(async () => {
+            const res = await deleteMemberAction(fd);
+            if (res.ok) {
+                setConfirmDelete(false);
+                setDeleted(true);
+                onFlash("ok", `${member.fullName} was permanently deleted.`);
+            } else {
+                onFlash("err", res.error);
+            }
+        });
+    }
+
+    function changeRole(next: Role) {
+        if (next === role) return;
+        const fd = new FormData();
+        fd.set("memberId", member.id);
+        fd.set("role", next);
+        startTransition(async () => {
+            const res = await updateMemberRoleAction(fd);
+            if (res.ok) {
+                setRole(next);
+                onFlash("ok", `Role changed to ${ROLE_LABELS[next]}.`);
+            } else {
+                onFlash("err", res.error);
+            }
+        });
+    }
+
+    function changeStatus(next: Status) {
+        if (next === status) return;
+        const fd = new FormData();
+        fd.set("memberId", member.id);
+        fd.set("status", next);
+        startTransition(async () => {
+            const res = await updateMemberStatusAction(fd);
+            if (res.ok) {
+                setStatus(next);
+                onFlash("ok", `Member ${STATUS_LABELS[next].toLowerCase()}.`);
+            } else {
+                onFlash("err", res.error);
+            }
+        });
+    }
+
+    function resend() {
+        const fd = new FormData();
+        fd.set("email", member.email);
+        startTransition(async () => {
+            const res = await resendInviteAction(fd);
+            if (res.ok) onFlash("ok", "Invite resent.");
+            else onFlash("err", res.error);
+        });
+    }
+
+    const initial = member.fullName.charAt(0).toUpperCase();
+    const isInvitePending =
+        role === "STUDENT" && !member.onboardingComplete && status === "PENDING";
+    const isReadOnlyStatus =
+        role === "DOJO_OWNER" &&
+        (status === "UNPAID" || status === "AWAITING_APPROVAL" || status === "REJECTED");
+
+    if (deleted) return null;
+
+    return (
+        <div className={`bg-white border border-zinc-100 rounded-2xl shadow-sm overflow-hidden ${isPending ? "opacity-60" : ""}`}>
+            <div className="p-4 space-y-3">
+                {/* Top: avatar + name/email */}
+                <Link
+                    href={`/portal/admin/members/${member.id}`}
+                    className="flex items-center gap-3 group"
+                >
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-zinc-700 to-zinc-900 flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
+                        {initial}
+                    </div>
+                    <div className="min-w-0 flex-1">
+                        <p className="font-semibold text-zinc-900 truncate group-hover:text-accent-red transition-colors">
+                            {member.fullName}
+                        </p>
+                        {member.memberNumber && (
+                            <p className="text-xs text-zinc-500 mt-0.5">#{member.memberNumber}</p>
+                        )}
+                    </div>
+                </Link>
+
+                {/* Meta grid */}
+                <div className="grid grid-cols-2 gap-2 text-xs pt-1">
+                    <div>
+                        <p className="text-[10px] font-bold tracking-widest uppercase text-zinc-400 mb-1">Dojo</p>
+                        <p className="font-medium text-zinc-800 truncate">{member.dojo?.name ?? "—"}</p>
+                    </div>
+                    <div>
+                        <p className="text-[10px] font-bold tracking-widest uppercase text-zinc-400 mb-1">Rank</p>
+                        <p className="font-medium text-zinc-800 truncate">
+                            {role === "STUDENT" ? member.currentRank : "—"}
+                        </p>
+                    </div>
+                </div>
+
+                {/* Role + status controls */}
+                <div className="flex flex-wrap items-center gap-2 pt-1">
+                    <InlineSelect
+                        value={role}
+                        onChange={(v) => changeRole(v as Role)}
+                        options={CHANGEABLE_ROLE_VALUES.map((r) => ({ v: r, l: ROLE_LABELS[r] }))}
+                        badgeClass={roleStyles[role]}
+                        disabled={
+                            role === "STUDENT" ||
+                            role === "ADMIN" ||
+                            role === "DOJO_OWNER"
+                        }
+                        disabledTitle={
+                            role === "STUDENT"
+                                ? "Student roles can't be changed here — it would erase their gradings, achievements and transfer history."
+                                : role === "DOJO_OWNER"
+                                    ? "Dojo Owner roles can't be changed here — reassign via the dojo enlistment flow."
+                                    : "Admin roles can't be changed here."
+                        }
+                    />
+                    {isReadOnlyStatus ? (
+                        <span
+                            title="This status comes from the dojo enlistment application — resolve it from the applications queue."
+                            className={`inline-flex items-center pl-2.5 pr-2.5 py-1 text-[11px] font-bold tracking-widest uppercase border rounded-full cursor-not-allowed ${statusStyles[status]}`}
+                        >
+                            {STATUS_LABELS[status]}
+                        </span>
+                    ) : role === "STUDENT" ? (
+                        <InlineSelect
+                            value={status}
+                            onChange={(v) => changeStatus(v as Status)}
+                            options={STUDENT_STATUS_CHOICES.map((s) => ({ v: s, l: STATUS_LABELS[s] }))}
+                            badgeClass={statusStyles[status]}
+                        />
+                    ) : (
+                        <InlineSelect
+                            value={status === "SUSPENDED" ? "SUSPENDED" : "ACTIVE"}
+                            onChange={(v) => changeStatus(v as Status)}
+                            options={[
+                                { v: "ACTIVE", l: "Active" },
+                                { v: "SUSPENDED", l: "Suspended" },
+                            ]}
+                            badgeClass={statusStyles[status === "SUSPENDED" ? "SUSPENDED" : "ACTIVE"]}
+                        />
+                    )}
+                </div>
+            </div>
+
+            {/* Actions */}
+            <div className="flex flex-wrap items-center gap-2 px-4 py-3 border-t border-zinc-100 bg-zinc-50/60">
+                {isInvitePending && (
+                    <button
+                        onClick={resend}
+                        disabled={isPending}
+                        className="inline-flex items-center gap-1.5 text-xs font-semibold text-zinc-600 hover:text-zinc-900 bg-white hover:bg-zinc-100 px-2.5 py-1.5 rounded-lg border border-zinc-200 transition-colors"
+                    >
+                        <Mail size={12} /> Resend
+                    </button>
+                )}
+                {status === "SUSPENDED" ? (
+                    <button
+                        onClick={() => changeStatus("ACTIVE")}
+                        disabled={isPending}
+                        className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-700 hover:text-emerald-900 bg-emerald-50 hover:bg-emerald-100 px-2.5 py-1.5 rounded-lg transition-colors"
+                    >
+                        <ShieldCheck size={12} /> Reactivate
+                    </button>
+                ) : (
+                    <button
+                        onClick={() => changeStatus("SUSPENDED")}
+                        disabled={isPending}
+                        className="inline-flex items-center gap-1.5 text-xs font-semibold text-red-600 hover:text-red-800 bg-red-50 hover:bg-red-100 px-2.5 py-1.5 rounded-lg transition-colors"
+                    >
+                        <ShieldOff size={12} /> Suspend
+                    </button>
+                )}
+                {!isInvitePending && (
+                    <ResetPasswordButton
+                        variant="ghost"
+                        label="Reset"
+                        targetName={member.fullName}
+                        targetSubtitle={`${ROLE_LABELS[member.role as Role] ?? member.role}${
+                            displayEmail(member) ? ` · ${displayEmail(member)}` : ""
+                        }`}
+                        onConfirm={async (manual) => {
+                            const fd = new FormData();
+                            fd.set("userId", member.id);
+                            if (manual) fd.set("manualPassword", manual);
+                            const res = await resetUserPasswordAction(fd);
+                            if (res.ok) onFlash("ok", "Password reset.");
+                            else onFlash("err", res.error);
+                            return res;
+                        }}
+                    />
+                )}
+                <button
+                    onClick={() => setConfirmDelete(true)}
+                    disabled={isPending}
+                    title="Delete member permanently"
+                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-red-700 hover:text-white bg-red-50 hover:bg-red-600 px-2.5 py-1.5 rounded-lg transition-colors ml-auto"
+                >
+                    <Trash2 size={12} /> Delete
+                </button>
+            </div>
+
+            {confirmDelete && (
+                <DeleteConfirmModal
+                    member={member}
+                    isPending={isPending}
+                    onCancel={() => setConfirmDelete(false)}
+                    onConfirm={performDelete}
+                />
+            )}
+        </div>
     );
 }
 

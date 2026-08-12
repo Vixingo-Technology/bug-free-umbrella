@@ -19,6 +19,7 @@ import {
     acceptJoinRequestAction,
 } from "@/app/portal/dojo/transfers/actions";
 import { displayEmail } from "@/lib/format/email";
+import { formatBeltRank } from "@/lib/constants";
 
 type Row = {
     id: string;
@@ -246,7 +247,7 @@ function AcceptJoinDialog({
                     <option value="">Select a rank…</option>
                     {beltRanks.map((r) => (
                         <option key={r.id} value={r.name}>
-                            {r.name}
+                            {formatBeltRank(r.name)}
                         </option>
                     ))}
                 </select>

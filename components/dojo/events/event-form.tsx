@@ -27,6 +27,7 @@ import {
     type TournamentEventType,
 } from "@/lib/tournaments/divisions";
 import type { DiscountType } from "@/lib/pricing/discount";
+import { formatBeltRank } from "@/lib/constants";
 import { WKF_PRESETS, WKF_GROUPS, wkfPresetToDivision } from "@/lib/tournaments/wkf-presets";
 
 const CATEGORIES = [
@@ -601,7 +602,7 @@ export default function EventForm({
                             <option value="">Any rank</option>
                             {beltRanks.map((r) => (
                                 <option key={r.id} value={r.id}>
-                                    {r.name}
+                                    {formatBeltRank(r.name)}
                                 </option>
                             ))}
                         </select>
@@ -1207,7 +1208,7 @@ function DivisionRow({
                         <option value="">Any rank</option>
                         {beltRanks.map((r) => (
                             <option key={r.id} value={r.id}>
-                                {r.name}
+                                {formatBeltRank(r.name)}
                             </option>
                         ))}
                     </select>

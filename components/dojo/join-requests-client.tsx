@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { acceptJoinRequestAction } from "@/app/portal/dojo/join-requests/actions";
 import { beltStepsFromWhite } from "@/lib/joining";
+import { formatBeltRank } from "@/lib/constants";
 import { DEFAULT_TIME_ZONE } from "@/lib/format/datetime";
 import { displayEmail } from "@/lib/format/email";
 
@@ -202,7 +203,7 @@ function RequestCard({
                                 className="w-full sm:w-auto bg-white border border-zinc-200 rounded-lg py-2 pl-3 pr-8 text-sm focus:outline-none focus:border-accent-red"
                             >
                                 {ranks.map((r) => (
-                                    <option key={r} value={r}>{r}</option>
+                                    <option key={r} value={r}>{formatBeltRank(r)}</option>
                                 ))}
                             </select>
                         </label>

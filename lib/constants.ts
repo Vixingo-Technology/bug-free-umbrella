@@ -48,6 +48,30 @@ export const BELT_RANKS_ORDERED = [
   "Black Belt 10th Dan",
 ] as const;
 
+/** Japanese names for Black Belt dan grades — matches the naming used in the
+ *  Dojo Enlistment signup rank dropdown. Values are DB `belt_ranks.name`. */
+export const BLACK_BELT_JAPANESE_NAMES: Record<string, string> = {
+  "Black Belt 1st Dan":   "Shodan",
+  "Black Belt 2nd Dan":   "Nidan",
+  "Black Belt 3rd Dan":   "Sandan",
+  "Black Belt 4th Dan":   "Yondan",
+  "Black Belt 5th Dan":   "Godan",
+  "Black Belt 6th Dan":   "Rokudan",
+  "Black Belt 7th Dan":   "Nanadan",
+  "Black Belt 8th Dan":   "Hachidan",
+  "Black Belt 9th Dan":   "Kudan",
+  "Black Belt 10th Dan":  "Judan",
+};
+
+/** Human-facing label for a belt rank. Black Belt dan grades get their
+ *  Japanese name appended (e.g. "Black Belt 1st Dan (Shodan)"). The DB
+ *  value is preserved for lookups — pass the raw name to Prisma. */
+export function formatBeltRank(name: string | null | undefined): string {
+  if (!name) return "—";
+  const jp = BLACK_BELT_JAPANESE_NAMES[name];
+  return jp ? `${name} (${jp})` : name;
+}
+
 export const BELT_COLORS: Record<string, string> = {
   "White Belt":           "#FFFFFF",
   "Stripe Yellow Belt":   "#FFD700",

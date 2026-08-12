@@ -9,7 +9,7 @@ import {
     X,
 } from "lucide-react";
 import { createExistingStudentAction } from "@/app/actions/dojo-invite";
-import { BELT_RANKS_ORDERED } from "@/lib/constants";
+import { BELT_RANKS_ORDERED, formatBeltRank } from "@/lib/constants";
 
 type Props = {
     disabled?: boolean;
@@ -235,7 +235,7 @@ export default function AddExistingStudentModal({
                                     >
                                         {BELT_RANKS_ORDERED.map((r) => (
                                             <option key={r} value={r}>
-                                                {r}
+                                                {formatBeltRank(r)}
                                             </option>
                                         ))}
                                     </select>
