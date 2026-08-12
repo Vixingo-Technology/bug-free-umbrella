@@ -166,7 +166,7 @@ export default function OrdersClient({ orders }: Props) {
         .reduce((sum: number, o: any) => sum + Number(o.total), 0);
 
     return (
-        <div className="space-y-6 max-w-3xl">
+        <div className="space-y-6 max-w-3xl mx-auto">
             <div>
                 <h1 className="text-2xl sm:text-3xl font-bold text-zinc-900">Shop Orders</h1>
                 <p className="text-zinc-500 mt-1 text-sm">View your purchase history and order status.</p>

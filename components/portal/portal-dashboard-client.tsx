@@ -137,7 +137,7 @@ export default function PortalDashboardClient({ member, membershipStatus, unread
     const joinCopy = isLocked ? JOIN_COPY[joinStage as Exclude<JoinStage, "JOINED">] : null;
 
     return (
-        <div className="space-y-6 max-w-5xl">
+        <div className="space-y-6 max-w-5xl mx-auto">
             {/* Page header */}
             <div>
                 <h1 className="text-2xl sm:text-3xl font-bold text-zinc-900">

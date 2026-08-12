@@ -139,7 +139,7 @@ export default function RenewClient({ member, membershipFeeBDT, userId, feedback
     renewedUntil.setFullYear(renewedUntil.getFullYear() + 1);
 
     return (
-        <div className="space-y-6 max-w-lg">
+        <div className="space-y-6 max-w-lg mx-auto">
             <div>
                 <h1 className="text-2xl sm:text-3xl font-bold text-zinc-900">Renew Membership</h1>
                 <p className="text-zinc-500 mt-1 text-sm">

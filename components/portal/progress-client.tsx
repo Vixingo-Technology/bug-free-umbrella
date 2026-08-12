@@ -70,7 +70,7 @@ export default function ProgressClient({ member, allBeltRanks, gradings }: Props
     const xpPct = Math.max(2, Math.min(100, xpEarned)); // floor at 2 so the bar is visible
 
     return (
-        <div className="space-y-6 max-w-5xl">
+        <div className="space-y-6 max-w-5xl mx-auto">
             <div>
                 <h1 className="text-2xl sm:text-3xl font-bold text-zinc-900">My Progress</h1>
                 <p className="text-zinc-500 mt-1 text-sm">Train. Apply. Unlock the next rank.</p>
