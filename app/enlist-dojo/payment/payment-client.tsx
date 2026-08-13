@@ -31,6 +31,7 @@ type DraftShape = {
     email: string;
     phone: string;
     contactName: string;
+    contactRank?: string;
     contactDob?: string;
     division?: string;
     district?: string;
@@ -95,6 +96,7 @@ function PaymentContent({ enlistmentFeeBDT }: { enlistmentFeeBDT: number }) {
             email: draft.email,
             phone: draft.phone,
             contactName: draft.contactName,
+            contactRank: draft.contactRank ?? "",
             contactDob: draft.contactDob ?? "",
             division: draft.division ?? "",
             address: draft.address,

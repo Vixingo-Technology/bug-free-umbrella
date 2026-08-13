@@ -19,6 +19,7 @@ export default function LoginPage() {
     const [error, setError] = useState<string | null>(null);
     const [isPending, startTransition] = useTransition();
     const [showPassword, setShowPassword] = useState(false);
+    const [showForgotNote, setShowForgotNote] = useState(false);
 
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
@@ -111,12 +112,13 @@ export default function LoginPage() {
                                 <label className="text-xs font-bold tracking-widest uppercase text-zinc-600 block">
                                     Password
                                 </label>
-                                <Link
-                                    href="/forgot-password"
+                                <button
+                                    type="button"
+                                    onClick={() => setShowForgotNote((v) => !v)}
                                     className="text-xs font-semibold text-accent-red hover:text-accent-gold transition-colors"
                                 >
                                     Forgot?
-                                </Link>
+                                </button>
                             </div>
                             <div className="relative">
                                 <Lock
@@ -149,6 +151,17 @@ export default function LoginPage() {
                                     )}
                                 </button>
                             </div>
+                            {showForgotNote && (
+                                <motion.p
+                                    initial={{ opacity: 0, y: -4 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    className="mt-2 pl-1 text-xs text-zinc-600"
+                                >
+                                    Please contact your dojo instructor or a
+                                    JKA Bangladesh administrator to reset your
+                                    password.
+                                </motion.p>
+                            )}
                         </div>
 
                         <button

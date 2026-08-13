@@ -24,6 +24,8 @@ import {
     Building2,
     Check,
     CheckCircle2,
+    Eye,
+    EyeOff,
     Loader2,
     MapPin,
     UserSquare2,
@@ -32,6 +34,7 @@ import Logo from "@/assets/jka_logo.svg";
 import { submitDojoEnlistment } from "@/app/actions/enlist-dojo";
 import { validatePhone } from "@/lib/validation/phone";
 import { validateMinAge, maxDobForAge } from "@/lib/validation/age";
+import { BELT_RANKS_ORDERED, formatBeltRank } from "@/lib/constants";
 
 const DOJO_OWNER_MIN_AGE = 18;
 
@@ -41,6 +44,7 @@ type FormState = {
     email: string;
     phone: string;
     contactName: string;
+    contactRank: string;
     contactDob: string;
     password: string;
     confirmPassword: string;
@@ -92,6 +96,7 @@ const initialState: FormState = {
     email: "",
     phone: "",
     contactName: "",
+    contactRank: "",
     contactDob: "",
     password: "",
     confirmPassword: "",
@@ -165,6 +170,8 @@ export default function EnlistDojoSignupPage() {
             if (phoneError) return phoneError;
             if (!form.contactName.trim())
                 return "Please enter the Dojo Head's name.";
+            if (!form.contactRank.trim())
+                return "Please select the Dojo Head's belt rank.";
             const dobError = validateMinAge(form.contactDob, DOJO_OWNER_MIN_AGE);
             if (dobError) return dobError;
             if (!form.password || form.password.length < 8)
@@ -549,16 +556,31 @@ function ContactStep({
                     />
                 </div>
                 <div>
-                    <Label>Date of birth *</Label>
-                    <input
-                        type="date"
-                        value={form.contactDob}
-                        max={maxDobForAge(DOJO_OWNER_MIN_AGE)}
-                        onChange={(e) => update("contactDob", e.target.value)}
-                        title={`Dojo Head must be at least ${DOJO_OWNER_MIN_AGE} years old.`}
+                    <Label>Belt rank *</Label>
+                    <select
+                        value={form.contactRank}
+                        onChange={(e) => update("contactRank", e.target.value)}
                         className={inputClass()}
-                    />
+                    >
+                        <option value="">Select your rank…</option>
+                        {BELT_RANKS_ORDERED.map((r) => (
+                            <option key={r} value={r}>
+                                {formatBeltRank(r)}
+                            </option>
+                        ))}
+                    </select>
                 </div>
+            </div>
+            <div>
+                <Label>Date of birth *</Label>
+                <input
+                    type="date"
+                    value={form.contactDob}
+                    max={maxDobForAge(DOJO_OWNER_MIN_AGE)}
+                    onChange={(e) => update("contactDob", e.target.value)}
+                    title={`Dojo Head must be at least ${DOJO_OWNER_MIN_AGE} years old.`}
+                    className={inputClass()}
+                />
             </div>
 
             <div className="border-t border-zinc-200 pt-6 space-y-4">
@@ -571,30 +593,56 @@ function ContactStep({
                 <div className="grid md:grid-cols-2 gap-4">
                     <div>
                         <Label>Password *</Label>
-                        <input
-                            type="password"
+                        <PasswordInput
                             value={form.password}
-                            onChange={(e) => update("password", e.target.value)}
+                            onChange={(v) => update("password", v)}
                             placeholder="At least 8 characters"
-                            autoComplete="new-password"
-                            minLength={8}
-                            className={inputClass()}
                         />
                     </div>
                     <div>
                         <Label>Confirm password *</Label>
-                        <input
-                            type="password"
+                        <PasswordInput
                             value={form.confirmPassword}
-                            onChange={(e) => update("confirmPassword", e.target.value)}
+                            onChange={(v) => update("confirmPassword", v)}
                             placeholder="Re-enter password"
-                            autoComplete="new-password"
-                            minLength={8}
-                            className={inputClass()}
                         />
                     </div>
                 </div>
             </div>
+        </div>
+    );
+}
+
+function PasswordInput({
+    value,
+    onChange,
+    placeholder,
+}: {
+    value: string;
+    onChange: (v: string) => void;
+    placeholder: string;
+}) {
+    const [visible, setVisible] = useState(false);
+    return (
+        <div className="relative">
+            <input
+                type={visible ? "text" : "password"}
+                value={value}
+                onChange={(e) => onChange(e.target.value)}
+                placeholder={placeholder}
+                autoComplete="new-password"
+                minLength={8}
+                className={`${inputClass()} pr-10`}
+            />
+            <button
+                type="button"
+                onClick={() => setVisible((v) => !v)}
+                aria-label={visible ? "Hide password" : "Show password"}
+                aria-pressed={visible}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-700 transition-colors"
+            >
+                {visible ? <EyeOff size={16} /> : <Eye size={16} />}
+            </button>
         </div>
     );
 }
@@ -718,7 +766,14 @@ function ReviewStep({
                 <ReviewRow label="Short name" value={form.shortName} />
                 <ReviewRow label="Email" value={form.email} />
                 <ReviewRow label="Phone" value={form.phone} />
-                <ReviewRow label="Dojo Head" value={form.contactName} />
+                <ReviewRow
+                    label="Dojo Head"
+                    value={`${form.contactName} · ${
+                        form.contactRank
+                            ? formatBeltRank(form.contactRank)
+                            : "—"
+                    }`}
+                />
                 <ReviewRow label="Date of birth" value={form.contactDob} />
                 <ReviewRow label="Division" value={form.division} />
                 <ReviewRow label="District" value={form.district} />

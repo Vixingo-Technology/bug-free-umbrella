@@ -84,23 +84,39 @@ export async function approveDojoApplicationAction(
             }
 
             // 2. Upsert the applicant as DOJO_OWNER of the (now approved) dojo.
-            await tx.user.upsert({
+            //    `users.email` is the synthetic Supabase-auth address set during
+            //    signup — never overwrite it with the applicant's real contact
+            //    email (that lives on `contactEmail` and is non-unique so a
+            //    parent's inbox can appear on multiple accounts). Writing the
+            //    real email here trips the unique constraint whenever any
+            //    other user already has it.
+            const existingUser = await tx.user.findUnique({
                 where: { id: application.userId! },
-                update: {
-                    fullName: application.contactName,
-                    email: application.email,
-                    phone: application.phone,
-                    roleId: "DOJO_OWNER",
-                },
-                create: {
-                    id: application.userId!,
-                    fullName: application.contactName,
-                    email: application.email,
-                    phone: application.phone,
-                    roleId: "DOJO_OWNER",
-                    isActive: true,
-                },
+                select: { id: true },
             });
+            if (existingUser) {
+                await tx.user.update({
+                    where: { id: application.userId! },
+                    data: {
+                        fullName: application.contactName,
+                        contactEmail: application.email.trim().toLowerCase(),
+                        phone: application.phone,
+                        roleId: "DOJO_OWNER",
+                    },
+                });
+            } else {
+                await tx.user.create({
+                    data: {
+                        id: application.userId!,
+                        fullName: application.contactName,
+                        email: `${application.userId}@members.jkabangladesh.com`,
+                        contactEmail: application.email.trim().toLowerCase(),
+                        phone: application.phone,
+                        roleId: "DOJO_OWNER",
+                        isActive: true,
+                    },
+                });
+            }
             await tx.student.deleteMany({ where: { id: application.userId! } });
             await tx.instructor.deleteMany({ where: { id: application.userId! } });
             await tx.dojoManager.deleteMany({ where: { id: application.userId! } });
