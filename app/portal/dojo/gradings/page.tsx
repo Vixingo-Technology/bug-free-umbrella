@@ -99,7 +99,7 @@ export default async function GradingsPage() {
     const tabs: PipelineTab[] = [
         {
             key: "applied",
-            label: "1 · Applied",
+            label: "Applied",
             count: applied.length,
             actor: "Instructor schedules the test.",
             body: (
@@ -112,7 +112,7 @@ export default async function GradingsPage() {
         },
         {
             key: "scheduled",
-            label: "2 · Scheduled tests",
+            label: "Scheduled tests",
             count: scheduledCount,
             actor: "Reschedule, draft results with marks, and publish.",
             body: session.dojo ? (
@@ -123,7 +123,7 @@ export default async function GradingsPage() {
         },
         {
             key: "qualified",
-            label: "3 · Qualified",
+            label: "Qualified",
             count: qualifiedPassed.length,
             actor: "Manager verifies dues, membership, and background — then sends to Verified.",
             body: (
@@ -135,7 +135,7 @@ export default async function GradingsPage() {
         },
         {
             key: "verified",
-            label: "4 · Verified",
+            label: "Verified",
             count: verifiedRows.length,
             actor: "Dojo Head submits to JKA HQ to request certificates.",
             body:
@@ -170,7 +170,7 @@ export default async function GradingsPage() {
         },
         {
             key: "submitted",
-            label: "5 · Submitted",
+            label: "Submitted",
             count: submittedRows.length,
             actor: "Federation reviews the request and issues the certificate.",
             body:

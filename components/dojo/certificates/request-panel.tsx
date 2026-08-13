@@ -131,30 +131,108 @@ export default function RequestCertificatesPanel({
                 </div>
             ) : (
                 <>
-                    <div className="px-5 py-3 border-b border-zinc-200 flex items-center gap-3">
-                        <Search size={14} className="text-zinc-400" />
+                    <div className="px-4 sm:px-5 py-3 border-b border-zinc-200 flex items-center gap-3">
+                        <Search size={14} className="text-zinc-400 shrink-0" />
                         <input
                             type="text"
                             value={query}
                             onChange={(e) => setQuery(e.target.value)}
-                            placeholder="Search by name, rank, member number…"
-                            className="flex-1 bg-transparent text-sm focus:outline-none placeholder:text-zinc-400"
+                            placeholder="Search by name, rank, member #…"
+                            className="flex-1 min-w-0 bg-transparent text-sm focus:outline-none placeholder:text-zinc-400"
                         />
                         <button
                             type="button"
                             onClick={toggleAll}
-                            className="inline-flex items-center gap-1 text-[10px] tracking-widest uppercase font-bold text-zinc-500 hover:text-accent-red"
+                            className="inline-flex items-center gap-1 text-[10px] tracking-widest uppercase font-bold text-zinc-500 hover:text-accent-red whitespace-nowrap shrink-0"
                         >
                             {allChecked ? (
                                 <CheckSquare size={12} />
                             ) : (
                                 <Square size={12} />
                             )}
-                            {allChecked ? "Clear all" : "Select all"}
+                            <span className="hidden xs:inline sm:inline">
+                                {allChecked ? "Clear all" : "Select all"}
+                            </span>
                         </button>
                     </div>
 
-                    <div className="overflow-x-auto">
+                    <ul className="sm:hidden divide-y divide-zinc-100">
+                        {filtered.map((i) => {
+                            const checked = selected.has(i.id);
+                            const price = Number(
+                                i.toRank?.certificatePrice ?? 0,
+                            );
+                            const missingParents =
+                                !i.member.fatherName?.trim() ||
+                                !i.member.motherName?.trim();
+                            return (
+                                <li
+                                    key={i.id}
+                                    onClick={() =>
+                                        !missingParents && toggle(i.id)
+                                    }
+                                    className={`px-4 py-4 flex items-start gap-3 ${
+                                        missingParents
+                                            ? "opacity-60"
+                                            : "active:bg-zinc-50 cursor-pointer"
+                                    }`}
+                                >
+                                    <input
+                                        type="checkbox"
+                                        checked={checked}
+                                        disabled={missingParents}
+                                        onChange={() => toggle(i.id)}
+                                        onClick={(e) => e.stopPropagation()}
+                                        className="mt-1 accent-accent-red shrink-0"
+                                    />
+                                    <div className="flex-1 min-w-0">
+                                        <div className="flex items-start justify-between gap-3">
+                                            <div className="min-w-0">
+                                                <p className="font-semibold text-zinc-900 truncate">
+                                                    {i.member.fullName}
+                                                </p>
+                                                <p className="text-[11px] text-zinc-400 uppercase tracking-widest truncate">
+                                                    {i.member.memberNumber ??
+                                                        "—"}
+                                                </p>
+                                            </div>
+                                            <span className="font-mono text-sm text-zinc-700 shrink-0">
+                                                {price > 0
+                                                    ? `৳${price.toLocaleString()}`
+                                                    : "—"}
+                                            </span>
+                                        </div>
+                                        <div className="mt-2 flex items-center gap-2">
+                                            <span
+                                                className="inline-block w-2.5 h-2.5 rounded-full border border-zinc-300 shrink-0"
+                                                style={{
+                                                    backgroundColor:
+                                                        i.toRank?.colorHex ??
+                                                        "#fff",
+                                                }}
+                                            />
+                                            <span className="text-xs text-zinc-700 truncate">
+                                                {i.toRank?.name ?? "—"}
+                                            </span>
+                                        </div>
+                                        {i.gradingEvent?.name && (
+                                            <p className="mt-1 text-[11px] text-zinc-500 truncate">
+                                                {i.gradingEvent.name}
+                                            </p>
+                                        )}
+                                        {missingParents && (
+                                            <p className="mt-2 text-[11px] text-amber-600 inline-flex items-center gap-1">
+                                                <AlertCircle size={10} />
+                                                Parents&apos; names missing
+                                            </p>
+                                        )}
+                                    </div>
+                                </li>
+                            );
+                        })}
+                    </ul>
+
+                    <div className="hidden sm:block overflow-x-auto">
                         <table className="w-full text-sm">
                             <thead>
                                 <tr className="text-left text-[10px] tracking-widest uppercase font-bold text-zinc-400 border-b border-zinc-200">
