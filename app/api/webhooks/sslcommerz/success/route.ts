@@ -147,7 +147,10 @@ export async function POST(request: Request) {
         const isSandbox = process.env.SSLCOMMERZ_ENV !== "live";
 
         if (!storeId || !storePassword) {
-            return NextResponse.redirect(new URL(`/portal/payment-success?orderId=${orderId}`, request.url));
+            return NextResponse.redirect(
+                new URL(`/portal/payment-success?orderId=${orderId}`, request.url),
+                303,
+            );
         }
 
         // Validate IPN
@@ -188,6 +191,7 @@ export async function POST(request: Request) {
                     failureRedirectFor(orderShellRedirect, orderId, reason),
                     request.url,
                 ),
+                303,
             );
         }
 
@@ -509,10 +513,10 @@ export async function POST(request: Request) {
             orderId,
             renewedExpiryIso,
         );
-        return NextResponse.redirect(new URL(target, request.url));
+        return NextResponse.redirect(new URL(target, request.url), 303);
     } catch (err) {
         console.error("SSLCommerz success webhook error:", err);
-        return NextResponse.redirect(new URL("/portal", request.url));
+        return NextResponse.redirect(new URL("/portal", request.url), 303);
     }
 }
 

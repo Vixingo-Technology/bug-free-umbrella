@@ -6,6 +6,7 @@ import Link from "next/link";
 import {
     AlertTriangle,
     Award,
+    CheckCircle2,
     Clock,
     CreditCard,
     Loader2,
@@ -80,6 +81,9 @@ interface Props {
     history: HistoryRow[];
     canRequest: boolean;
     justCompletedFree: boolean;
+    paymentStatus?: "success" | "failed" | null;
+    paymentReason?: string | null;
+    retryCheckoutUrl?: string | null;
 }
 
 const STATUS_LABEL: Record<Status, string> = {
@@ -115,6 +119,9 @@ export default function ServiceRequestClient({
     history,
     canRequest,
     justCompletedFree,
+    paymentStatus,
+    paymentReason,
+    retryCheckoutUrl,
 }: Props) {
     const [isPending, startTransition] = useTransition();
     const [error, setError] = useState<string | null>(null);
@@ -128,6 +135,9 @@ export default function ServiceRequestClient({
     const [checkingCoupon, startCouponCheck] = useTransition();
 
     const [showFreePopup, setShowFreePopup] = useState(justCompletedFree);
+    const [showPaymentPopup, setShowPaymentPopup] = useState(
+        paymentStatus === "success" || paymentStatus === "failed",
+    );
 
     const isKyuDan = service.handler === "kyu-dan-conversion";
     const finalAmount = couponPreview ? couponPreview.finalAmount : service.fee;
@@ -194,6 +204,80 @@ export default function ServiceRequestClient({
                     </p>
                 )}
             </div>
+
+            <AnimatePresence>
+                {showPaymentPopup && paymentStatus && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-50 flex items-center justify-center bg-zinc-950/60 backdrop-blur-sm px-4"
+                        onClick={() => setShowPaymentPopup(false)}
+                    >
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            className="relative w-full max-w-md rounded-2xl bg-white shadow-2xl p-8 text-center"
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            <button
+                                onClick={() => setShowPaymentPopup(false)}
+                                className="absolute top-3 right-3 p-1.5 rounded-full text-zinc-400 hover:text-zinc-900 hover:bg-zinc-100"
+                            >
+                                <X size={16} />
+                            </button>
+                            {paymentStatus === "success" ? (
+                                <>
+                                    <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 text-emerald-600 mb-4">
+                                        <CheckCircle2 size={32} />
+                                    </div>
+                                    <p className="text-[11px] uppercase tracking-[0.35em] text-emerald-600 mb-2">
+                                        Payment received
+                                    </p>
+                                    <h2 className="text-2xl font-bold text-zinc-900">Thank you!</h2>
+                                    <p className="mt-2 text-sm text-zinc-500">
+                                        Your payment for <span className="font-semibold text-zinc-700">{service.name}</span> was successful. Your dojo will review the request next.
+                                    </p>
+                                    <button
+                                        onClick={() => setShowPaymentPopup(false)}
+                                        className="mt-6 w-full inline-flex items-center justify-center bg-zinc-900 hover:bg-accent-red text-white font-bold text-sm py-3 rounded-xl transition-colors"
+                                    >
+                                        Done
+                                    </button>
+                                </>
+                            ) : (
+                                <>
+                                    <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-red-100 text-red-600 mb-4">
+                                        <XCircle size={32} />
+                                    </div>
+                                    <p className="text-[11px] uppercase tracking-[0.35em] text-red-600 mb-2">
+                                        Payment failed
+                                    </p>
+                                    <h2 className="text-2xl font-bold text-zinc-900">Payment didn't go through</h2>
+                                    <p className="mt-2 text-sm text-zinc-500">
+                                        {paymentReason?.trim() || "The payment gateway declined the transaction. No amount was charged."}
+                                    </p>
+                                    {retryCheckoutUrl ? (
+                                        <Link
+                                            href={retryCheckoutUrl}
+                                            className="mt-6 w-full inline-flex items-center justify-center bg-zinc-900 hover:bg-accent-red text-white font-bold text-sm py-3 rounded-xl transition-colors"
+                                        >
+                                            Try again
+                                        </Link>
+                                    ) : (
+                                        <button
+                                            onClick={() => setShowPaymentPopup(false)}
+                                            className="mt-6 w-full inline-flex items-center justify-center bg-zinc-900 hover:bg-accent-red text-white font-bold text-sm py-3 rounded-xl transition-colors"
+                                        >
+                                            Try again
+                                        </button>
+                                    )}
+                                </>
+                            )}
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
             <AnimatePresence>
                 {showFreePopup && (
