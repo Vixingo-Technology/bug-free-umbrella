@@ -63,13 +63,15 @@ export const BLACK_BELT_JAPANESE_NAMES: Record<string, string> = {
   "Black Belt 10th Dan":  "Judan",
 };
 
-/** Human-facing label for a belt rank. Black Belt dan grades get their
- *  Japanese name appended (e.g. "Black Belt 1st Dan (Shodan)"). The DB
- *  value is preserved for lookups — pass the raw name to Prisma. */
+/** Human-facing label for a belt rank. Dan grades drop the "Black Belt "
+ *  prefix and get their Japanese name appended (e.g. "1st Dan (Shodan)").
+ *  The DB value is preserved for lookups — pass the raw name to Prisma. */
 export function formatBeltRank(name: string | null | undefined): string {
   if (!name) return "—";
   const jp = BLACK_BELT_JAPANESE_NAMES[name];
-  return jp ? `${name} (${jp})` : name;
+  if (!jp) return name;
+  const stripped = name.replace(/^Black Belt\s+/, "");
+  return `${stripped} (${jp})`;
 }
 
 export const BELT_COLORS: Record<string, string> = {
