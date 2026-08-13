@@ -12,6 +12,7 @@ import {
   withdrawRequestAction,
 } from "@/app/portal/grading/actions";
 import { DEFAULT_TIME_ZONE } from "@/lib/format/datetime";
+import { bandForMarks } from "@/lib/grading-marks";
 
 type RequestKind = "pending" | "scheduled" | "declined" | "cancelled";
 
@@ -30,6 +31,31 @@ const statusColors: Record<string, string> = {
   APPROVED:  "bg-emerald-50 text-emerald-600",
   REJECTED:  "bg-red-50 text-red-600",
 };
+
+function ResultBadge({ result, marks }: { result: string; marks: number | null | undefined }) {
+  if (result === "ABSENT") {
+    return (
+      <span className="text-[10px] uppercase tracking-widest font-bold px-2 py-1 rounded-full border bg-zinc-50 text-zinc-600 border-zinc-200">
+        Absent
+      </span>
+    );
+  }
+  if (typeof marks === "number") {
+    const band = bandForMarks(marks);
+    return (
+      <span className={`inline-flex items-center gap-1.5 text-[10px] uppercase tracking-widest font-bold px-2 py-1 rounded-full border ${band.color}`}>
+        <span>{marks}</span>
+        <span className="opacity-40">·</span>
+        <span>{band.letter}</span>
+      </span>
+    );
+  }
+  return (
+    <span className={`text-[10px] uppercase tracking-widest font-bold px-2 py-1 rounded-full ${result === "PASSED" ? "bg-emerald-50 text-emerald-600" : "bg-red-50 text-red-600"}`}>
+      {result}
+    </span>
+  );
+}
 
 export default function GradingClient({
   member, currentRequest, myGradings, nextRankName, blockReason,
@@ -159,9 +185,7 @@ export default function GradingClient({
                       {g.gradingEvent?.name ? ` · ${g.gradingEvent.name}` : ""}
                     </p>
                   </div>
-                  <span className={`text-[10px] uppercase tracking-widest font-bold px-2 py-1 rounded-full ${statusColors[g.result] ?? ""}`}>
-                    {g.result}
-                  </span>
+                  <ResultBadge result={g.result} marks={g.marks} />
                 </div>
                 {g.notes && (
                   <p className="text-xs text-zinc-600 italic border-l-2 border-zinc-200 pl-3">
