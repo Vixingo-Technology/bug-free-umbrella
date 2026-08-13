@@ -131,6 +131,9 @@ interface PortalShellProps {
     initialFullName?: string;
     /** Server-known email, shown under the name in the profile dropdown. */
     initialEmail?: string;
+    /** Server-known member number, shown as a badge in the desktop header
+     *  so every user can see their own ID at a glance. */
+    initialMemberNumber?: string | null;
     /** Server-known dojo name for dojo-staff sidebar header. */
     initialDojoName?: string | null;
     /** Server-known dojo short name for dojo-staff sidebar header —
@@ -172,6 +175,7 @@ export default function PortalShell({
     initialAvatarUrl = null,
     initialFullName = "",
     initialEmail = "",
+    initialMemberNumber = null,
     initialDojoName = null,
     initialDojoShortName = null,
     initialDojoLogoUrl = null,
@@ -219,12 +223,13 @@ export default function PortalShell({
         avatarUrl: string | null;
         currentRank: string | null;
         role: string;
+        memberNumber: string | null;
         joinStage: "FEE_UNPAID" | "AWAITING_APPROVAL" | "PAST_BELT_UNPAID" | "JOINED" | null;
     } | null>(
         // Seed with the server-known role + joinStage so admin nav renders
         // AND the student sidebar lock resolves correctly on first paint,
         // without depending on the client-side Supabase query completing.
-        { fullName: initialFullName, email: initialEmail, avatarUrl: initialAvatarUrl, currentRank: initialCurrentRank, role: initialRole, joinStage: initialJoinStage }
+        { fullName: initialFullName, email: initialEmail, avatarUrl: initialAvatarUrl, currentRank: initialCurrentRank, role: initialRole, memberNumber: initialMemberNumber, joinStage: initialJoinStage }
     );
     const [dojoLogoUrl, setDojoLogoUrl] = useState<string | null>(initialDojoLogoUrl);
     const [dojoName, setDojoName] = useState<string | null>(initialDojoName);
@@ -237,13 +242,14 @@ export default function PortalShell({
         async function fetchMember() {
             const { data } = await supabase
                 .from("users")
-                .select("full_name, email, avatar_url, role_id, students(current_rank, join_stage)")
+                .select("full_name, email, avatar_url, role_id, member_number, students(current_rank, join_stage)")
                 .eq("id", userId)
                 .single<{
                     full_name: string;
                     email: string;
                     avatar_url: string | null;
                     role_id: string;
+                    member_number: string | null;
                     students: {
                         current_rank: string | null;
                         join_stage:
@@ -262,6 +268,7 @@ export default function PortalShell({
                     avatarUrl: data.avatar_url ?? prev?.avatarUrl ?? null,
                     currentRank: data.students?.current_rank ?? prev?.currentRank ?? null,
                     role: data.role_id,
+                    memberNumber: data.member_number ?? prev?.memberNumber ?? null,
                     // Prefer the fresh browser value, but if postgrest didn't
                     // return a students row (RLS or missing join), keep the
                     // server-seeded stage rather than dropping it to null.
@@ -712,9 +719,12 @@ export default function PortalShell({
                     </div>
 
                     <div className="flex items-center gap-3">
-                        {member && member.fullName && isAdmin && (
-                            <span className={`bg-gradient-to-r ${roleColor} text-white text-[10px] font-bold tracking-widest uppercase px-3 py-1.5 rounded-full`}>
-                                {member.role}
+                        {member?.memberNumber && (
+                            <span
+                                title="Your member ID"
+                                className={`bg-gradient-to-r ${roleColor} text-white text-[10px] font-bold tracking-widest uppercase px-3 py-1.5 rounded-full`}
+                            >
+                                {member.memberNumber}
                             </span>
                         )}
                         <NotificationBell

@@ -96,6 +96,7 @@ export default async function PortalLayout({
     let initialAvatarUrl: string | null = null;
     let initialFullName: string = "";
     let initialEmail: string = "";
+    let initialMemberNumber: string | null = null;
     let initialDojoName: string | null = null;
     let initialDojoShortName: string | null = null;
     let initialDojoLogoUrl: string | null = null;
@@ -111,14 +112,14 @@ export default async function PortalLayout({
         try {
             let appUser = await prisma.user.findUnique({
                 where: { id: user.id },
-                select: { roleId: true, phone: true, avatarUrl: true, fullName: true, email: true },
+                select: { roleId: true, phone: true, avatarUrl: true, fullName: true, email: true, memberNumber: true },
             });
 
             if (!appUser) {
                 await provisionMemberFromSupabaseUser(user);
                 appUser = await prisma.user.findUnique({
                     where: { id: user.id },
-                    select: { roleId: true, phone: true, avatarUrl: true, fullName: true, email: true },
+                    select: { roleId: true, phone: true, avatarUrl: true, fullName: true, email: true, memberNumber: true },
                 });
             }
 
@@ -139,6 +140,7 @@ export default async function PortalLayout({
             initialAvatarUrl = appUser?.avatarUrl ?? null;
             initialFullName = appUser?.fullName ?? "";
             initialEmail = appUser?.email ?? "";
+            initialMemberNumber = appUser?.memberNumber ?? null;
 
             if (role === "STUDENT") {
                 const student = await prisma.student.findUnique({
@@ -285,12 +287,13 @@ export default async function PortalLayout({
         try {
             const u = await prisma.user.findUnique({
                 where: { id: user.id },
-                select: { roleId: true, avatarUrl: true, fullName: true, email: true },
+                select: { roleId: true, avatarUrl: true, fullName: true, email: true, memberNumber: true },
             });
             if (u?.roleId) role = u.roleId as RoleId;
             initialAvatarUrl = u?.avatarUrl ?? null;
             initialFullName = u?.fullName ?? "";
             initialEmail = u?.email ?? "";
+            initialMemberNumber = u?.memberNumber ?? null;
         } catch {
             // ignore
         }
@@ -308,6 +311,7 @@ export default async function PortalLayout({
             initialAvatarUrl={initialAvatarUrl}
             initialFullName={initialFullName}
             initialEmail={initialEmail}
+            initialMemberNumber={initialMemberNumber}
             initialDojoName={initialDojoName}
             initialDojoShortName={initialDojoShortName}
             initialDojoLogoUrl={initialDojoLogoUrl}
