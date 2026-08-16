@@ -11,6 +11,8 @@ import { updateAccountAction, changePasswordAction } from "@/app/portal/account/
 import { validatePhone } from "@/lib/validation/phone";
 import { displayEmail } from "@/lib/format/email";
 
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 interface Props {
     user: {
         id: string;
@@ -61,6 +63,7 @@ export default function AccountClient({ user }: Props) {
     const [phone, setPhone]       = useState(user.phone ?? "");
     const [avatarUrl, setAvatarUrl] = useState(user.avatarUrl);
     const [bio, setBio]           = useState(user.bio ?? "");
+    const [contactEmail, setContactEmail] = useState(displayEmail(user));
 
     const [accountMsg, setAccountMsg] = useState<{ type: "success" | "error"; message: string } | null>(null);
     const [isAccountPending, startAccountTransition] = useTransition();
@@ -89,20 +92,29 @@ export default function AccountClient({ user }: Props) {
             setAccountMsg({ type: "error", message: "Bio must be 280 characters or less." });
             return;
         }
+        const emailTrimmed = contactEmail.trim();
+        if (emailTrimmed && !EMAIL_PATTERN.test(emailTrimmed)) {
+            setAccountMsg({ type: "error", message: "Please enter a valid email address." });
+            return;
+        }
 
         const fd = new FormData();
         fd.append("fullName", fullName);
         fd.append("phone", phone);
         fd.append("avatarUrl", avatarUrl ?? "");
         fd.append("bio", bio);
+        fd.append("contactEmail", emailTrimmed);
 
         startAccountTransition(async () => {
             const res = await updateAccountAction(fd);
             if (res.error) {
                 setAccountMsg({ type: "error", message: res.error });
             } else {
-                setAccountMsg({ type: "success", message: "Account updated." });
-                setTimeout(() => setAccountMsg(null), 2500);
+                setAccountMsg({
+                    type: "success",
+                    message: res.notice ?? "Account updated.",
+                });
+                setTimeout(() => setAccountMsg(null), res.notice ? 6000 : 2500);
             }
         });
     }
@@ -188,12 +200,14 @@ export default function AccountClient({ user }: Props) {
                             />
                         </Field>
 
-                        <Field label="Email" icon={<Mail size={14} />} hint="Contact support to change">
+                        <Field label="Email" icon={<Mail size={14} />} hint="Where we send notifications">
                             <input
                                 type="email"
-                                value={displayEmail(user)}
-                                readOnly
-                                className="input bg-zinc-50 text-zinc-500 cursor-not-allowed"
+                                value={contactEmail}
+                                onChange={(e) => setContactEmail(e.target.value)}
+                                placeholder="you@example.com"
+                                autoComplete="email"
+                                className="input"
                             />
                         </Field>
 
