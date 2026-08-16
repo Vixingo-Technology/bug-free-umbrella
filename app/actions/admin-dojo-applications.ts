@@ -4,6 +4,12 @@ import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/admin-guard";
 import { notifyMembers } from "@/lib/notify";
+import {
+    divisionCode,
+    ensureDojoOwnerRegNo,
+    ensureRegNo,
+} from "@/lib/members/reg-no";
+import { sendDojoOwnerApprovalEmail } from "@/lib/email/send-dojo-owner-approval";
 
 type Result = { ok: true } | { ok: false; error: string };
 
@@ -143,11 +149,43 @@ export async function approveDojoApplicationAction(
     }
 
     if (application.userId) {
+        // Make sure the owner has a Member ID before we notify them.
+        // enlist-dojo already assigns the division-scoped Reg No, but
+        // legacy applications (submitted before that change) may still be
+        // missing one. Try the division-scoped format first (via the
+        // dojo's city, which stores the division), then fall back to the
+        // generic Reg No so the email never goes out without an ID.
+        const dojo = await prisma.dojo.findUnique({
+            where: { id: application.dojoId ?? undefined },
+            select: { city: true },
+        });
+        const division = dojo?.city ?? null;
+        let memberNumber: string | null = null;
+        if (division && divisionCode(division)) {
+            memberNumber = await ensureDojoOwnerRegNo(
+                application.userId,
+                division,
+            );
+        }
+        if (!memberNumber) {
+            memberNumber = await ensureRegNo(application.userId);
+        }
+
         await notifyMembers([application.userId], {
             title: "Your dojo is approved",
             message: `${application.dojoName} is now active in the federation. Open your dojo console to get started.`,
             type: "SUCCESS",
             link: "/portal",
+        });
+
+        const portalBase =
+            process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, "") ??
+            "https://jkabangladesh.com";
+        await sendDojoOwnerApprovalEmail(application.email, {
+            inviteeName: application.contactName,
+            dojoName: application.dojoName,
+            memberNumber,
+            portalUrl: `${portalBase}/portal`,
         });
     }
 
