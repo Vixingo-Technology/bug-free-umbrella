@@ -142,6 +142,27 @@ export async function initiatePaymentAction(orderId: string) {
                         ? "JKA Membership + Gear"
                         : "JKA Shop Order";
 
+        // SSLCommerz cus_* identity — use the account's real contact details.
+        // Synthetic {uuid}@members.jkabangladesh.com emails are placeholders and
+        // must not be sent to the gateway.
+        const isSyntheticEmail = order.user.email.endsWith(
+            "@members.jkabangladesh.com",
+        );
+        const cusEmail =
+            order.user.contactEmail ??
+            (isSyntheticEmail ? null : order.user.email);
+        const cusPhone = order.user.phone?.trim() || null;
+        if (!cusPhone) {
+            return {
+                error: "Please add a phone number to your profile before paying.",
+            };
+        }
+        if (!cusEmail) {
+            return {
+                error: "Please add a contact email to your profile before paying.",
+            };
+        }
+
         const params = new URLSearchParams({
             store_id: storeId,
             store_passwd: storePassword!,
@@ -153,24 +174,21 @@ export async function initiatePaymentAction(orderId: string) {
             cancel_url: cancelUrl,
             ipn_url: `${appUrl}/api/webhooks/sslcommerz`,
             cus_name: order.user.fullName,
-            cus_email: order.user.email,
-            cus_phone: order.user.phone ?? "01XXXXXXXXX",
+            cus_email: cusEmail,
+            cus_phone: cusPhone,
             cus_add1: order.user.profile?.address ?? "Bangladesh",
             cus_city: "Dhaka",
             cus_postcode: "1000",
             cus_country: "Bangladesh",
             shipping_method: "NO",
-            ship_name: order.user.fullName,
-            ship_add1: order.user.profile?.address ?? "Bangladesh",
-            ship_city: "Dhaka",
-            ship_postcode: "1000",
-            ship_country: "Bangladesh",
             product_name: productName,
             product_category:
-                order.includesTransferRequest || order.includesCertificates
-                    ? "Service"
+                order.includesTransferRequest ||
+                order.includesCertificates ||
+                order.includesServiceRequest
+                    ? "Services"
                     : "Membership",
-            product_profile: "non-physical-goods",
+            product_profile: "general",
             num_of_item: String(
                 Math.max(
                     1,

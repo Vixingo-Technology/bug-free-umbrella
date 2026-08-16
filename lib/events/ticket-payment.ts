@@ -60,6 +60,21 @@ export async function initiateTicketPayment(input: {
         ? "https://sandbox.sslcommerz.com/gwprocess/v4/api.php"
         : "https://securepay.sslcommerz.com/gwprocess/v4/api.php";
 
+    const cusPhone = input.customerPhone?.trim() || null;
+    const cusEmail = input.customerEmail?.trim() || null;
+    if (!cusPhone) {
+        return {
+            kind: "error",
+            message: "A phone number is required to pay for the ticket.",
+        };
+    }
+    if (!cusEmail) {
+        return {
+            kind: "error",
+            message: "A contact email is required to pay for the ticket.",
+        };
+    }
+
     const params = new URLSearchParams({
         store_id: storeId,
         store_passwd: storePassword!,
@@ -71,21 +86,16 @@ export async function initiateTicketPayment(input: {
         cancel_url: `${base}/events/payment-failed?regId=${input.registrationId}&cancelled=1`,
         ipn_url: `${base}/api/webhooks/sslcommerz`,
         cus_name: input.customerName,
-        cus_email: input.customerEmail,
-        cus_phone: input.customerPhone ?? "01XXXXXXXXX",
+        cus_email: cusEmail,
+        cus_phone: cusPhone,
         cus_add1: "Bangladesh",
         cus_city: "Dhaka",
         cus_postcode: "1000",
         cus_country: "Bangladesh",
         shipping_method: "NO",
-        ship_name: input.customerName,
-        ship_add1: "Bangladesh",
-        ship_city: "Dhaka",
-        ship_postcode: "1000",
-        ship_country: "Bangladesh",
         product_name: `Ticket — ${input.eventTitle}`.slice(0, 100),
         product_category: "Event Ticket",
-        product_profile: "non-physical-goods",
+        product_profile: "general",
         num_of_item: "1",
     });
 

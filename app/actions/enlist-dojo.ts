@@ -178,6 +178,32 @@ export async function initiateDojoEnlistmentPayment(
         return { error: "This application is already paid." };
     }
 
+    // SSLCommerz cus_* identity — prefer the account's real details, falling
+    // back to the enlistment form values.
+    const account = await prisma.user.findUnique({
+        where: { id: user.id },
+        select: { fullName: true, email: true, contactEmail: true, phone: true },
+    });
+    const isSyntheticEmail = account?.email.endsWith(
+        "@members.jkabangladesh.com",
+    );
+    const cusName = account?.fullName || application.contactName;
+    const cusEmail =
+        account?.contactEmail ??
+        (isSyntheticEmail ? null : account?.email ?? null) ??
+        application.email;
+    const cusPhone = (account?.phone?.trim() || application.phone.trim()) || null;
+    if (!cusPhone) {
+        return {
+            error: "Please add a phone number to your profile before paying.",
+        };
+    }
+    if (!cusEmail) {
+        return {
+            error: "Please add a contact email to your profile before paying.",
+        };
+    }
+
     const storeId = process.env.SSLCOMMERZ_STORE_ID;
     const storePassword = process.env.SSLCOMMERZ_STORE_PASSWORD;
     const isSandbox = process.env.SSLCOMMERZ_ENV !== "live";
@@ -212,22 +238,17 @@ export async function initiateDojoEnlistmentPayment(
         fail_url: `${appUrl}/enlist-dojo/failed?applicationId=${application.id}`,
         cancel_url: `${appUrl}/enlist-dojo/failed?applicationId=${application.id}&cancelled=1`,
         ipn_url: `${appUrl}/api/webhooks/sslcommerz`,
-        cus_name: application.contactName,
-        cus_email: application.email,
-        cus_phone: application.phone,
+        cus_name: cusName,
+        cus_email: cusEmail,
+        cus_phone: cusPhone,
         cus_add1: application.address,
         cus_city: "Dhaka",
         cus_postcode: "1000",
         cus_country: "Bangladesh",
         shipping_method: "NO",
-        ship_name: application.contactName,
-        ship_add1: application.address,
-        ship_city: "Dhaka",
-        ship_postcode: "1000",
-        ship_country: "Bangladesh",
         product_name: `Dojo enlistment — ${application.dojoName}`.slice(0, 100),
         product_category: "Membership",
-        product_profile: "non-physical-goods",
+        product_profile: "general",
         num_of_item: "1",
     });
 

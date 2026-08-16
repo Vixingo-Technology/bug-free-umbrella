@@ -81,13 +81,30 @@ export async function payForRegistrationAction(formData: FormData): Promise<void
                     tournamentDetail: { select: { customDivisions: true } },
                 },
             },
-            user: { select: { fullName: true, email: true, phone: true } },
+            user: {
+                select: {
+                    fullName: true,
+                    email: true,
+                    contactEmail: true,
+                    phone: true,
+                },
+            },
         },
     });
     if (!reg) redirect("/");
     if (reg.paymentStatus !== "PENDING") {
         redirect(`/participants/${encodeURIComponent(token)}`);
     }
+
+    // Prefer the account's real contactEmail; skip the synthetic
+    // {uuid}@members.jkabangladesh.com auth email so we never send it upstream.
+    const authEmail = reg.user?.email ?? null;
+    const realAuthEmail =
+        authEmail && !authEmail.endsWith("@members.jkabangladesh.com")
+            ? authEmail
+            : null;
+    const buyerEmail =
+        reg.user?.contactEmail ?? realAuthEmail ?? reg.guestEmail ?? "";
 
     const groupTotal = await groupTotalFor(reg);
     const init = await initiateTicketPayment({
@@ -100,7 +117,7 @@ export async function payForRegistrationAction(formData: FormData): Promise<void
                 ? `${reg.event.title} — ${groupTotal.count} divisions`
                 : reg.event.title,
         customerName: reg.user?.fullName ?? reg.guestName ?? "Participant",
-        customerEmail: reg.user?.email ?? reg.guestEmail ?? "",
+        customerEmail: buyerEmail,
         customerPhone: reg.user?.phone ?? reg.guestPhone ?? null,
     });
     if (init.kind === "gateway") redirect(init.url);
@@ -578,6 +595,29 @@ export async function registerForTournamentAction(
         if (!guestPhone) return { ok: false, error: "Your phone is required." };
     }
 
+    // Buyer identity for SSLCommerz — prefer the account's real contact
+    // details, skipping the synthetic {uuid}@members.jkabangladesh.com auth
+    // email so it never leaves our system.
+    const account = userId
+        ? await prisma.user.findUnique({
+              where: { id: userId },
+              select: {
+                  fullName: true,
+                  email: true,
+                  contactEmail: true,
+                  phone: true,
+              },
+          })
+        : null;
+    const realAuthEmail =
+        account?.email && !account.email.endsWith("@members.jkabangladesh.com")
+            ? account.email
+            : null;
+    const buyerName = account?.fullName ?? guestName ?? "Participant";
+    const buyerEmail =
+        account?.contactEmail ?? realAuthEmail ?? guestEmail ?? "";
+    const buyerPhone = account?.phone ?? guestPhone;
+
     const entrantDojoName = trim(formData.get("entrantDojoName")) || null;
     const coachName = trim(formData.get("coachName")) || null;
     const emergencyContactName = trim(formData.get("emergencyContactName")) || null;
@@ -845,9 +885,9 @@ export async function registerForTournamentAction(
                 groupTotal.count > 1
                     ? `${event.title} — ${groupTotal.count} divisions`
                     : event.title,
-            customerName: guestName ?? "Participant",
-            customerEmail: user?.email ?? guestEmail ?? "",
-            customerPhone: guestPhone,
+            customerName: buyerName,
+            customerEmail: buyerEmail,
+            customerPhone: buyerPhone,
         });
         if (init.kind === "gateway") {
             return { ok: true, token: pendingExisting.qrToken, payUrl: init.url };
@@ -888,9 +928,9 @@ export async function registerForTournamentAction(
                 created.length > 1
                     ? `${event.title} — ${created.length} divisions`
                     : event.title,
-            customerName: user ? "Participant" : (guestName ?? "Participant"),
-            customerEmail: user?.email ?? guestEmail ?? "",
-            customerPhone: guestPhone,
+            customerName: buyerName,
+            customerEmail: buyerEmail,
+            customerPhone: buyerPhone,
         });
         if (init.kind === "gateway") {
             return { ok: true, token: primary.qrToken, payUrl: init.url };
