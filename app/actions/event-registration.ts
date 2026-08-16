@@ -364,6 +364,12 @@ export async function registerForTournamentAction(
         divisions.push({ code, division: d });
     }
 
+    // Events with divisions must have at least one picked — the form disables
+    // submit when nothing is selected, but re-check server-side too.
+    if (customDivisions.length > 0 && divisions.length === 0) {
+        return { ok: false, error: "Pick at least one division to register." };
+    }
+
     const genderRaw = trim(formData.get("entrantGender"));
     if (!isGender(genderRaw)) return { ok: false, error: "Select your gender." };
 
@@ -669,6 +675,20 @@ export async function registerForTournamentAction(
             ok: false,
             error: err instanceof Error ? err.message : "Profile image upload failed.",
         };
+    }
+    // No new upload → fall back to the account's own avatar so the
+    // participation card still carries the member's photo.
+    if (!profileImageUrl) {
+        const existing = trim(formData.get("existingProfileImageUrl"));
+        if (existing && /^https?:\/\//i.test(existing)) {
+            profileImageUrl = existing;
+        } else if (userId) {
+            const u = await prisma.user.findUnique({
+                where: { id: userId },
+                select: { avatarUrl: true },
+            });
+            profileImageUrl = u?.avatarUrl ?? null;
+        }
     }
 
     type CreatedRow = { id: string; qrToken: string; divisionCode: string };

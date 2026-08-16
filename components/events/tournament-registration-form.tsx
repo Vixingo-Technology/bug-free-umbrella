@@ -48,6 +48,7 @@ export type MemberAutofill = {
     email: string;
     phone: string | null;
     memberNumber: string | null;
+    avatarUrl: string | null;
     dateOfBirth: string | null;
     gender: Gender | null;
     currentRank: string | null;
@@ -55,6 +56,8 @@ export type MemberAutofill = {
     coachName: string | null;
     emergencyContactName: string | null;
     emergencyContactPhone: string | null;
+    guardianName: string | null;
+    guardianPhone: string | null;
     rankOrderIndex: number | null;
 } | null;
 
@@ -345,6 +348,8 @@ export default function TournamentRegistrationForm({
     ]);
 
     const paid = totals.total > 0;
+    const requiresDivision = event.divisions.length > 0;
+    const missingDivision = requiresDivision && selected.length === 0;
 
     function toggle(code: string) {
         setSelectedCodes((prev) => {
@@ -565,6 +570,27 @@ export default function TournamentRegistrationForm({
             </Field>
 
             <Field label="Profile photo (optional · JPG/PNG · appears on your card)">
+                {member?.avatarUrl && (
+                    <div className="flex items-center gap-3 mb-2">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                            src={member.avatarUrl}
+                            alt="Current profile photo"
+                            className="w-14 h-14 rounded-full object-cover border border-zinc-200"
+                        />
+                        <p className="text-[11px] text-zinc-500">
+                            Using your profile photo. Upload a new one below to
+                            replace it for this event.
+                        </p>
+                    </div>
+                )}
+                {member?.avatarUrl && (
+                    <input
+                        type="hidden"
+                        name="existingProfileImageUrl"
+                        value={member.avatarUrl}
+                    />
+                )}
                 <input
                     name="profileImage"
                     type="file"
@@ -808,9 +834,8 @@ export default function TournamentRegistrationForm({
                     })}
                 </ul>
                 {!cannotRegister && selected.length === 0 && (
-                    <p className="text-[11px] text-zinc-500 bg-zinc-50 border border-zinc-200 rounded-sm px-3 py-2 mt-3">
-                        Divisions are optional — leave all unchecked to
-                        register as a general attendee.
+                    <p className="text-[11px] text-zinc-600 bg-zinc-50 border border-zinc-200 rounded-sm px-3 py-2 mt-3">
+                        Pick at least one division to continue.
                     </p>
                 )}
             </div>
@@ -896,6 +921,7 @@ export default function TournamentRegistrationForm({
                                 name="guardianName"
                                 type="text"
                                 required
+                                defaultValue={member?.guardianName ?? ""}
                                 className={inputCx}
                             />
                         </Field>
@@ -905,6 +931,7 @@ export default function TournamentRegistrationForm({
                                 type="tel"
                                 required
                                 inputMode="numeric"
+                                defaultValue={member?.guardianPhone ?? ""}
                                 className={inputCx}
                             />
                         </Field>
@@ -1111,7 +1138,8 @@ export default function TournamentRegistrationForm({
                     </div>
                     <button
                         type="submit"
-                        className="w-full inline-flex items-center justify-center gap-2 bg-accent-red text-white px-4 py-3 text-xs font-bold tracking-widest uppercase hover:bg-accent-red/90 disabled:opacity-40 transition-colors rounded-sm"
+                        disabled={missingDivision}
+                        className="w-full inline-flex items-center justify-center gap-2 bg-accent-red text-white px-4 py-3 text-xs font-bold tracking-widest uppercase hover:bg-accent-red/90 disabled:opacity-40 disabled:cursor-not-allowed transition-colors rounded-sm"
                     >
                         <Ticket size={14} />
                         Pay ৳{totals.total.toLocaleString()} & register
@@ -1124,7 +1152,8 @@ export default function TournamentRegistrationForm({
             ) : (
                 <button
                     type="submit"
-                    className="w-full inline-flex items-center justify-center gap-2 bg-accent-red text-white px-4 py-3 text-xs font-bold tracking-widest uppercase hover:bg-accent-red/90 disabled:opacity-40 transition-colors rounded-sm"
+                    disabled={missingDivision}
+                    className="w-full inline-flex items-center justify-center gap-2 bg-accent-red text-white px-4 py-3 text-xs font-bold tracking-widest uppercase hover:bg-accent-red/90 disabled:opacity-40 disabled:cursor-not-allowed transition-colors rounded-sm"
                 >
                     Complete registration
                 </button>

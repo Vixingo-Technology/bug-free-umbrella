@@ -85,12 +85,15 @@ export default async function RegisterPage({ params, searchParams }: Props) {
                     email: true,
                     phone: true,
                     memberNumber: true,
+                    avatarUrl: true,
                     profile: {
                         select: {
                             dateOfBirth: true,
                             gender: true,
                             emergencyContactName: true,
                             emergencyContactPhone: true,
+                            fatherName: true,
+                            motherName: true,
                         },
                     },
                     student: {
@@ -128,6 +131,7 @@ export default async function RegisterPage({ params, searchParams }: Props) {
                 email: me.email ?? "",
                 phone: me.phone,
                 memberNumber: me.memberNumber ?? null,
+                avatarUrl: me.avatarUrl ?? null,
                 dateOfBirth: me.profile?.dateOfBirth
                     ? me.profile.dateOfBirth.toISOString().slice(0, 10)
                     : null,
@@ -137,6 +141,11 @@ export default async function RegisterPage({ params, searchParams }: Props) {
                 coachName: lastRegistration?.coachName ?? null,
                 emergencyContactName: me.profile?.emergencyContactName ?? null,
                 emergencyContactPhone: me.profile?.emergencyContactPhone ?? null,
+                guardianName:
+                    me.profile?.fatherName ??
+                    me.profile?.motherName ??
+                    null,
+                guardianPhone: me.profile?.emergencyContactPhone ?? null,
                 rankOrderIndex,
             };
         }
