@@ -6,7 +6,7 @@ import { motion } from "motion/react";
 import {
     Building2, Search, X, Pencil, Trash2, MapPin, Phone, Mail,
     Users, AlertCircle, CheckCircle2, ChevronDown, Power,
-    Calendar, Send, Loader2, UserPlus,
+    Calendar, Send, Loader2, UserPlus, Copy, Check, Hash,
 } from "lucide-react";
 import {
     deleteDojoAction,
@@ -40,7 +40,12 @@ type Dojo = {
     annualFee: number | null;
     expiryDate: string | null;
     headInstructorId: string | null;
-    headInstructor: { id: string; fullName: string; email: string } | null;
+    headInstructor: {
+        id: string;
+        fullName: string;
+        email: string;
+        memberNumber: string | null;
+    } | null;
     _count: { members: number };
     lockedFeatures: string[];
 };
@@ -336,6 +341,11 @@ function DojoCard({
                     )}
                 </div>
 
+                <DojoIdRow
+                    memberId={dojo.headInstructor?.memberNumber ?? null}
+                    onFlash={onFlash}
+                />
+
                 <div className="space-y-2 text-sm">
                     {dojo.address && (
                         <p className="text-xs text-zinc-600 flex items-start gap-1.5">
@@ -524,6 +534,63 @@ function Field({ label, children, required }: { label: string; children: React.R
                 {label}{required && <span className="text-accent-red ml-1">*</span>}
             </label>
             {children}
+        </div>
+    );
+}
+
+function DojoIdRow({
+    memberId,
+    onFlash,
+}: {
+    memberId: string | null;
+    onFlash: (k: "ok" | "err", m: string) => void;
+}) {
+    const [copied, setCopied] = useState(false);
+
+    async function copy() {
+        if (!memberId) return;
+        try {
+            await navigator.clipboard.writeText(memberId);
+            setCopied(true);
+            onFlash("ok", "Member ID copied.");
+            setTimeout(() => setCopied(false), 1500);
+        } catch {
+            onFlash("err", "Could not copy Member ID.");
+        }
+    }
+
+    return (
+        <div className="mb-3 flex items-center gap-2 px-2.5 py-1.5 rounded-lg bg-zinc-50 border border-zinc-100">
+            <Hash size={11} className="text-zinc-400 shrink-0" />
+            <span className="text-[10px] font-bold tracking-widest uppercase text-zinc-500 shrink-0">
+                Member ID
+            </span>
+            {memberId ? (
+                <>
+                    <code
+                        className="text-[11px] font-mono font-semibold text-zinc-800 truncate flex-1"
+                        title={memberId}
+                    >
+                        {memberId}
+                    </code>
+                    <button
+                        type="button"
+                        onClick={copy}
+                        title="Copy Member ID"
+                        className="p-1 rounded text-zinc-400 hover:text-zinc-700 hover:bg-white transition-colors shrink-0"
+                    >
+                        {copied ? (
+                            <Check size={11} className="text-emerald-600" />
+                        ) : (
+                            <Copy size={11} />
+                        )}
+                    </button>
+                </>
+            ) : (
+                <span className="text-[11px] italic text-zinc-400 flex-1">
+                    Not assigned
+                </span>
+            )}
         </div>
     );
 }
