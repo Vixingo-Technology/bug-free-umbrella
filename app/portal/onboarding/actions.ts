@@ -51,7 +51,7 @@ export async function saveProfileAction(formData: FormData) {
     if (!genderRaw || (genderRaw !== "MALE" && genderRaw !== "FEMALE")) {
         return { error: "Please select your gender." };
     }
-    if (!nationalId) return { error: "National ID, Passport, or Birth Certificate number is required." };
+    if (!nationalId) return { error: "Birth Certificate number is required." };
     if (!fatherName) return { error: "Father's name is required." };
     if (!motherName) return { error: "Mother's name is required." };
     if (contactEmailRaw && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contactEmailRaw)) {

@@ -106,7 +106,7 @@ export default function StepProfile({
             return;
         }
         if (!value.nationalId.trim()) {
-            setError("National ID, Passport, or Birth Certificate number is required.");
+            setError("Birth Certificate number is required.");
             return;
         }
         if (!value.fatherName.trim()) {
@@ -341,15 +341,13 @@ export default function StepProfile({
                     </Field>
                 </div>
 
-                {/* National ID / Passport / Birth Certificate — stored in a
-                    single column; users enter whichever they have. */}
-                <Field label="National ID / Passport / Birth Certificate No. *">
+                <Field label="Birth Certificate No. *">
                     <input
                         name="nationalId"
                         type="text"
                         value={value.nationalId}
                         onChange={(e) => update("nationalId", e.target.value)}
-                        placeholder="NID, Passport, or Birth Certificate number"
+                        placeholder="Birth Certificate number"
                         required
                         className={inputCls}
                     />

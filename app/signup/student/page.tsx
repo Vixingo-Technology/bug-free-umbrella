@@ -104,7 +104,7 @@ export default function SignupPage() {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                             <div className="space-y-1">
                                 <label className="text-xs font-bold tracking-widest uppercase text-zinc-600 block pl-1">
-                                    Contact Email <span className="text-zinc-400 font-normal normal-case tracking-normal">(optional)</span>
+                                    Contact Email
                                 </label>
                                 <div className="relative">
                                     <Mail size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400" />
@@ -113,6 +113,7 @@ export default function SignupPage() {
                                         name="contactEmail"
                                         placeholder="parent@example.com"
                                         className="w-full bg-white/50 border border-zinc-200 rounded-xl py-3 pl-11 pr-4 text-sm focus:outline-none focus:border-accent-red focus:ring-1 focus:ring-accent-red transition-all"
+                                        required
                                         disabled={isPending}
                                     />
                                 </div>
