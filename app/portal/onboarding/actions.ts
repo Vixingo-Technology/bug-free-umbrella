@@ -164,6 +164,9 @@ export async function saveProfileAction(formData: FormData) {
 
         return { success: true };
     } catch (err: any) {
+        if (err?.code === "P2002" && err?.meta?.target?.includes?.("national_id")) {
+            return { error: "This Birth Certificate number is already registered to another member." };
+        }
         return { error: err?.message ?? "Failed to save profile." };
     }
 }

@@ -350,6 +350,17 @@ export default function TournamentRegistrationForm({
     const paid = totals.total > 0;
     const requiresDivision = event.divisions.length > 0;
     const missingDivision = requiresDivision && selected.length === 0;
+    // Divisions that expose opt-in fees must have at least one picked before
+    // the participant can submit — mirrors the server-side guard.
+    const divisionsMissingOptional = selected.filter((d) => {
+        const optional = d.fees?.filter((f) => !f.required) ?? [];
+        if (optional.length === 0) return false;
+        return !optional.some((f) =>
+            selectedOptionalFees.has(`${d.code}:${f.id}`),
+        );
+    });
+    const missingOptionalFee = divisionsMissingOptional.length > 0;
+    const submitDisabled = missingDivision || missingOptionalFee;
 
     function toggle(code: string) {
         setSelectedCodes((prev) => {
@@ -771,7 +782,8 @@ export default function TournamentRegistrationForm({
                                                 {optionalFees.length > 0 && (
                                                     <div className="space-y-1.5">
                                                         <p className="text-[10px] tracking-widest uppercase font-bold text-zinc-500">
-                                                            Choose any from below
+                                                            Choose any 1 or more from below{" "}
+                                                            <span className="text-accent-red">*</span>
                                                         </p>
                                                         {optionalFees.map((f) => {
                                                 const key = `${d.code}:${f.id}`;
@@ -1136,9 +1148,18 @@ export default function TournamentRegistrationForm({
                             </span>
                         </div>
                     </div>
+                    {missingOptionalFee && (
+                        <p className="text-[11px] text-amber-800 bg-amber-50 border border-amber-200 rounded-sm px-3 py-2 text-center">
+                            Choose at least one add-on for:{" "}
+                            {divisionsMissingOptional
+                                .map((d) => d.label)
+                                .join(", ")}
+                            .
+                        </p>
+                    )}
                     <button
                         type="submit"
-                        disabled={missingDivision}
+                        disabled={submitDisabled}
                         className="w-full inline-flex items-center justify-center gap-2 bg-accent-red text-white px-4 py-3 text-xs font-bold tracking-widest uppercase hover:bg-accent-red/90 disabled:opacity-40 disabled:cursor-not-allowed transition-colors rounded-sm"
                     >
                         <Ticket size={14} />
@@ -1150,13 +1171,24 @@ export default function TournamentRegistrationForm({
                     </p>
                 </>
             ) : (
-                <button
-                    type="submit"
-                    disabled={missingDivision}
-                    className="w-full inline-flex items-center justify-center gap-2 bg-accent-red text-white px-4 py-3 text-xs font-bold tracking-widest uppercase hover:bg-accent-red/90 disabled:opacity-40 disabled:cursor-not-allowed transition-colors rounded-sm"
-                >
-                    Complete registration
-                </button>
+                <>
+                    {missingOptionalFee && (
+                        <p className="text-[11px] text-amber-800 bg-amber-50 border border-amber-200 rounded-sm px-3 py-2 text-center">
+                            Choose at least one add-on for:{" "}
+                            {divisionsMissingOptional
+                                .map((d) => d.label)
+                                .join(", ")}
+                            .
+                        </p>
+                    )}
+                    <button
+                        type="submit"
+                        disabled={submitDisabled}
+                        className="w-full inline-flex items-center justify-center gap-2 bg-accent-red text-white px-4 py-3 text-xs font-bold tracking-widest uppercase hover:bg-accent-red/90 disabled:opacity-40 disabled:cursor-not-allowed transition-colors rounded-sm"
+                    >
+                        Complete registration
+                    </button>
+                </>
             )}
         </form>
     );

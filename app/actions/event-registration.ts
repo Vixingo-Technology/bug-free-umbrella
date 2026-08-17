@@ -484,6 +484,23 @@ export async function registerForTournamentAction(
         if (typeof v === "string" && v.includes(":")) chosenOptional.add(v);
     }
 
+    // Divisions that expose opt-in fees require the participant to pick at
+    // least one — the form disables submit when a division is missing its
+    // add-on, but re-check here so a hand-crafted POST can't bypass it.
+    for (const { code, division } of divisions) {
+        const optional = division.fees?.filter((f) => !f.required) ?? [];
+        if (optional.length === 0) continue;
+        const anyPicked = optional.some((f) =>
+            chosenOptional.has(`${code}:${f.id}`),
+        );
+        if (!anyPicked) {
+            return {
+                ok: false,
+                error: `Pick at least one add-on for ${division.label}.`,
+            };
+        }
+    }
+
     // Compute per-division prices (required fees + chosen optional fees).
     // The per-fee member discount is applied to each fee for JKA members;
     // when 2+ divisions are selected, the event's multi-division discount

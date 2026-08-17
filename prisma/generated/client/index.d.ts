@@ -60168,6 +60168,7 @@ export namespace Prisma {
 
   export type ProfileWhereUniqueInput = Prisma.AtLeast<{
     id?: string
+    nationalId?: string
     AND?: ProfileWhereInput | ProfileWhereInput[]
     OR?: ProfileWhereInput[]
     NOT?: ProfileWhereInput | ProfileWhereInput[]
@@ -60175,7 +60176,6 @@ export namespace Prisma {
     gender?: EnumGenderNullableFilter<"Profile"> | $Enums.Gender | null
     bloodGroup?: StringNullableFilter<"Profile"> | string | null
     address?: StringNullableFilter<"Profile"> | string | null
-    nationalId?: StringNullableFilter<"Profile"> | string | null
     fatherName?: StringNullableFilter<"Profile"> | string | null
     motherName?: StringNullableFilter<"Profile"> | string | null
     emergencyContactName?: StringNullableFilter<"Profile"> | string | null
@@ -60183,7 +60183,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Profile"> | Date | string
     updatedAt?: DateTimeFilter<"Profile"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
-  }, "id">
+  }, "id" | "nationalId">
 
   export type ProfileOrderByWithAggregationInput = {
     id?: SortOrder

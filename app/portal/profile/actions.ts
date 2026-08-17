@@ -70,6 +70,9 @@ export async function updateProfileAction(formData: FormData) {
         revalidatePath("/portal");
         return { success: true };
     } catch (err: any) {
+        if (err?.code === "P2002" && err?.meta?.target?.includes?.("national_id")) {
+            return { error: "This Birth Certificate number is already registered to another member." };
+        }
         return { error: err?.message ?? "Update failed." };
     }
 }

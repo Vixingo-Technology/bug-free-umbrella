@@ -348,7 +348,7 @@ model Profile {
   gender                Gender?
   bloodGroup            String?   @map("blood_group")
   address               String?
-  nationalId            String?   @map("national_id")
+  nationalId            String?   @unique @map("national_id")
   fatherName            String?   @map("father_name")
   motherName            String?   @map("mother_name")
   emergencyContactName  String?   @map("emergency_contact_name")
