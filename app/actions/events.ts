@@ -17,6 +17,7 @@ import {
     type TournamentEventType,
 } from "@/lib/tournaments/divisions";
 import { coerceDiscountType, type DiscountType } from "@/lib/pricing/discount";
+import { parseDateTimeInput } from "@/lib/format/datetime";
 import type { EventCategory } from "@/prisma/generated/client";
 
 type ActionResult = { ok: true; id?: string } | { ok: false; error: string };
@@ -221,20 +222,16 @@ async function parseDivisionFields(formData: FormData): Promise<DivisionInput> {
     const deadlineRaw = ((formData.get("registrationDeadline") as string) ?? "").trim();
     let registrationDeadline: Date | null = null;
     if (deadlineRaw) {
-        const d = new Date(deadlineRaw);
-        if (Number.isNaN(d.getTime())) {
-            return { error: "Invalid registration deadline." };
-        }
+        const d = parseDateTimeInput(deadlineRaw);
+        if (!d) return { error: "Invalid registration deadline." };
         registrationDeadline = d;
     }
 
     const weighInRaw = ((formData.get("weighInDate") as string) ?? "").trim();
     let weighInDate: Date | null = null;
     if (weighInRaw && enabledTypes.includes("KUMITE")) {
-        const d = new Date(weighInRaw);
-        if (Number.isNaN(d.getTime())) {
-            return { error: "Invalid weigh-in date." };
-        }
+        const d = parseDateTimeInput(weighInRaw);
+        if (!d) return { error: "Invalid weigh-in date." };
         weighInDate = d;
     }
 
@@ -327,8 +324,8 @@ function parseCommonFields(
 
     if (!title) return { ok: false, error: "Title is required." };
     if (!eventDateStr) return { ok: false, error: "Event date is required." };
-    const eventDate = new Date(eventDateStr);
-    if (Number.isNaN(eventDate.getTime())) {
+    const eventDate = parseDateTimeInput(eventDateStr);
+    if (!eventDate) {
         return { ok: false, error: "Invalid date." };
     }
     if (!isCategory(categoryRaw)) {

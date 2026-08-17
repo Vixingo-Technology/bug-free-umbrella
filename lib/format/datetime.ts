@@ -137,3 +137,82 @@ export function toDateInputValue(input: Input, opts: FormatOpts = {}): string {
     const get = (t: string) => parts.find((p) => p.type === t)?.value ?? "";
     return `${get("year")}-${get("month")}-${get("day")}`;
 }
+
+// The offset (in ms) between the given instant's UTC time and the wall-clock
+// time in the target zone. Positive for zones ahead of UTC (Asia/Dhaka → +6h).
+function getZoneOffsetMs(date: Date, zone: string): number {
+    const parts = new Intl.DateTimeFormat("en-US", {
+        timeZone: zone,
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: false,
+    }).formatToParts(date);
+    const get = (t: string) => parts.find((p) => p.type === t)?.value ?? "0";
+    const hour = Number(get("hour")) % 24;
+    return (
+        Date.UTC(
+            Number(get("year")),
+            Number(get("month")) - 1,
+            Number(get("day")),
+            hour,
+            Number(get("minute")),
+            Number(get("second")),
+        ) - date.getTime()
+    );
+}
+
+// "yyyy-mm-ddThh:mm" for HTML <input type="datetime-local"> defaults, shown
+// in the target zone so the picker matches what the viewer reads elsewhere.
+export function toDateTimeInputValue(input: Input, opts: FormatOpts = {}): string {
+    const d = toDate(input);
+    if (!d) return "";
+    const parts = new Intl.DateTimeFormat("en-CA", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false,
+        timeZone: opts.zone ?? DEFAULT_TIME_ZONE,
+    }).formatToParts(d);
+    const get = (t: string) => parts.find((p) => p.type === t)?.value ?? "";
+    // Some ICU builds emit "24" for midnight in hour12:false; normalise.
+    const hour = get("hour") === "24" ? "00" : get("hour");
+    return `${get("year")}-${get("month")}-${get("day")}T${hour}:${get("minute")}`;
+}
+
+// Parse an <input type="datetime-local"> value ("yyyy-mm-ddThh:mm[:ss]") as
+// wall-clock time in the target zone, returning the correct UTC Date. Without
+// this, `new Date(str)` interprets the string in the server's local zone —
+// which is UTC on Vercel — silently shifting Dhaka events by 6 hours.
+export function parseDateTimeInput(
+    str: string | null | undefined,
+    opts: FormatOpts = {},
+): Date | null {
+    if (!str) return null;
+    // Accept "YYYY-MM-DDTHH:MM" or "YYYY-MM-DDTHH:MM:SS".
+    const match = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})(?::(\d{2}))?$/.exec(
+        str.trim(),
+    );
+    if (!match) return null;
+    const [, y, mo, d, h, mi, s] = match;
+    // Anchor at UTC first — the wall-clock parts become UTC parts — then
+    // subtract the zone's offset at that instant to recover the real UTC time.
+    const asUtc = new Date(
+        Date.UTC(
+            Number(y),
+            Number(mo) - 1,
+            Number(d),
+            Number(h),
+            Number(mi),
+            s ? Number(s) : 0,
+        ),
+    );
+    if (!Number.isFinite(asUtc.getTime())) return null;
+    const offsetMs = getZoneOffsetMs(asUtc, opts.zone ?? DEFAULT_TIME_ZONE);
+    return new Date(asUtc.getTime() - offsetMs);
+}

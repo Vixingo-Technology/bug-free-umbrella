@@ -9,6 +9,7 @@ import EventForm, {
 import { requireAdmin } from "@/lib/admin-guard";
 import { prisma } from "@/lib/prisma";
 import { parseCustomDivisions } from "@/lib/tournaments/divisions";
+import { toDateTimeInputValue } from "@/lib/format/datetime";
 
 export const metadata: Metadata = {
     title: "Edit event — Admin",
@@ -17,11 +18,6 @@ export const metadata: Metadata = {
 export const dynamic = "force-dynamic";
 
 const BASE = "/portal/admin/events";
-
-function toDateTimeLocal(d: Date): string {
-    const pad = (n: number) => String(n).padStart(2, "0");
-    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
-}
 
 export default async function EditAdminEventPage({
     params,
@@ -66,7 +62,7 @@ export default async function EditAdminEventPage({
         title: event.title,
         description: event.description,
         location: event.location,
-        eventDate: toDateTimeLocal(event.eventDate),
+        eventDate: toDateTimeInputValue(event.eventDate),
         // Legacy rows may still carry BELT_TEST/OTHER; default those into a
         // valid pick-from-three so the admin can save without touching the
         // category.
@@ -93,10 +89,10 @@ export default async function EditAdminEventPage({
             : [],
         registrationDeadline:
             event.tournamentDetail?.registrationDeadline
-                ? toDateTimeLocal(event.tournamentDetail.registrationDeadline)
+                ? toDateTimeInputValue(event.tournamentDetail.registrationDeadline)
                 : null,
         weighInDate: event.tournamentDetail?.weighInDate
-            ? toDateTimeLocal(event.tournamentDetail.weighInDate)
+            ? toDateTimeInputValue(event.tournamentDetail.weighInDate)
             : null,
         rulesUrl: event.tournamentDetail?.rulesUrl ?? null,
     };
