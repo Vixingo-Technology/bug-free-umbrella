@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import { provisionMemberFromSupabaseUser } from "@/lib/auth/provision-member";
 import { resolvePostAuthLanding } from "@/lib/auth/post-auth-landing";
 import { prisma } from "@/lib/prisma";
-import { isRegNo, isDojoOwnerRegNo } from "@/lib/members/reg-no";
+import { isRegNo, isDojoOwnerRegNo, isAdminRegNo } from "@/lib/members/reg-no";
 
 export async function loginAction(formData: FormData) {
     const supabase = await createClient();
@@ -19,9 +19,9 @@ export async function loginAction(formData: FormData) {
         return { error: "Member ID and password are required." };
     }
 
-    if (!isRegNo(memberId) && !isDojoOwnerRegNo(memberId)) {
+    if (!isRegNo(memberId) && !isDojoOwnerRegNo(memberId) && !isAdminRegNo(memberId)) {
         return {
-            error: "That doesn't look like a Member ID. Use the format JKA-BD-123456 or JKA-BD-DHA-0001.",
+            error: "That doesn't look like a Member ID. Use the format JKA-BD-123456, JKA-BD-DHA-0001, or JKA-BD-ADMIN-001.",
         };
     }
 

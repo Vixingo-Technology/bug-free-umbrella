@@ -42,6 +42,7 @@ function formatDate(d: Date): string {
         year: "numeric",
         hour: "numeric",
         minute: "2-digit",
+        hour12: true,
         timeZone: DEFAULT_TIME_ZONE,
     }).format(d);
 }

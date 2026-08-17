@@ -329,6 +329,7 @@ function RowItem({ row }: { row: Row }) {
                                     year: "numeric",
                                     hour: "numeric",
                                     minute: "2-digit",
+                                    hour12: true,
                                     timeZone: DEFAULT_TIME_ZONE,
                                 }).format(row.eventDate)}
                             </span>
