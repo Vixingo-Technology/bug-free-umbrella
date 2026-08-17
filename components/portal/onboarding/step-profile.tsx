@@ -3,7 +3,16 @@
 import { useState, useTransition } from "react";
 import dynamic from "next/dynamic";
 import { motion } from "motion/react";
-import { User, Phone, Mail, MapPin, AlertCircle, ChevronRight, Users, UserCircle2 } from "lucide-react";
+import {
+    User,
+    Phone,
+    Mail,
+    MapPin,
+    AlertCircle,
+    ChevronRight,
+    Users,
+    UserCircle2,
+} from "lucide-react";
 import { saveProfileAction } from "@/app/portal/onboarding/actions";
 import AvatarUploader from "@/components/portal/avatar-uploader";
 import { validatePhone } from "@/lib/validation/phone";
@@ -73,7 +82,7 @@ export default function StepProfile({
     avatarUrl,
 }: Props) {
     const lockedDojo = dojoLocked
-        ? dojos.find((d) => d.id === value.dojoId) ?? null
+        ? (dojos.find((d) => d.id === value.dojoId) ?? null)
         : null;
     const [isPending, startTransition] = useTransition();
     const [error, setError] = useState<string | null>(null);
@@ -152,10 +161,17 @@ export default function StepProfile({
                             : "bg-red-50 border border-red-200"
                     }`}
                 >
-                    <User size={24} className={isUpdateMode ? "text-amber-500" : "text-accent-red"} />
+                    <User
+                        size={24}
+                        className={
+                            isUpdateMode ? "text-amber-500" : "text-accent-red"
+                        }
+                    />
                 </motion.div>
                 <h1 className="text-2xl font-bold text-zinc-900">
-                    {isUpdateMode ? "Profile Update Required" : "Complete Your Profile"}
+                    {isUpdateMode
+                        ? "Profile Update Required"
+                        : "Complete Your Profile"}
                 </h1>
                 <p className="text-zinc-500 text-sm mt-1">
                     {isUpdateMode
@@ -171,9 +187,14 @@ export default function StepProfile({
                     animate={{ opacity: 1, y: 0 }}
                     className="flex items-start gap-3 bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 mb-6"
                 >
-                    <AlertCircle size={16} className="text-amber-500 flex-shrink-0 mt-0.5" />
+                    <AlertCircle
+                        size={16}
+                        className="text-amber-500 flex-shrink-0 mt-0.5"
+                    />
                     <div>
-                        <p className="text-amber-700 text-sm font-medium">Required fields missing</p>
+                        <p className="text-amber-700 text-sm font-medium">
+                            Required fields missing
+                        </p>
                         <p className="text-amber-600 text-xs mt-0.5">
                             {missingFields.join(" · ")}
                         </p>
@@ -196,7 +217,9 @@ export default function StepProfile({
             <div className="mb-6 pb-6 border-b border-zinc-100">
                 <AvatarUploader
                     initialUrl={avatarUrl ?? null}
-                    fallbackInitial={(value.fullName || "M").charAt(0).toUpperCase()}
+                    fallbackInitial={(value.fullName || "M")
+                        .charAt(0)
+                        .toUpperCase()}
                     sizeClasses="w-24 h-24"
                 />
             </div>
@@ -226,7 +249,12 @@ export default function StepProfile({
                         minLength={11}
                         title="Phone number must be exactly 11 digits."
                         value={value.phone}
-                        onChange={(e) => update("phone", e.target.value.replace(/\D/g, "").slice(0, 11))}
+                        onChange={(e) =>
+                            update(
+                                "phone",
+                                e.target.value.replace(/\D/g, "").slice(0, 11),
+                            )
+                        }
                         placeholder="01XXXXXXXXX"
                         required
                         className={inputCls}
@@ -237,13 +265,18 @@ export default function StepProfile({
                  *  the account without a real email. Login stays by Member ID;
                  *  this address is used for notifications. */}
                 {askContactEmail && (
-                    <Field label="Contact Email (optional)" icon={<Mail size={15} />}>
+                    <Field
+                        label="Contact Email (optional)"
+                        icon={<Mail size={15} />}
+                    >
                         <input
                             name="contactEmail"
                             type="email"
                             autoComplete="email"
                             value={value.contactEmail}
-                            onChange={(e) => update("contactEmail", e.target.value)}
+                            onChange={(e) =>
+                                update("contactEmail", e.target.value)
+                            }
                             placeholder="you@example.com"
                             className={inputCls}
                         />
@@ -292,7 +325,9 @@ export default function StepProfile({
                             <select
                                 name="dojoId"
                                 value={value.dojoId}
-                                onChange={(e) => update("dojoId", e.target.value)}
+                                onChange={(e) =>
+                                    update("dojoId", e.target.value)
+                                }
                                 required
                                 disabled={dojos.length === 0}
                                 className={inputCls}
@@ -327,7 +362,9 @@ export default function StepProfile({
                             required
                             max={maxDobForAge(STUDENT_MIN_AGE)}
                             value={value.dateOfBirth}
-                            onChange={(e) => update("dateOfBirth", e.target.value)}
+                            onChange={(e) =>
+                                update("dateOfBirth", e.target.value)
+                            }
                             title={`You must be at least ${STUDENT_MIN_AGE} years old.`}
                             className={inputCls}
                         />
@@ -347,7 +384,7 @@ export default function StepProfile({
                     </Field>
                 </div>
 
-                <Field label="Birth Certificate No. *">
+                <Field label="Birth Certificate No./NID No./Passport No. *">
                     <input
                         name="nationalId"
                         type="text"
@@ -356,16 +393,21 @@ export default function StepProfile({
                             if (nationalIdError) setNationalIdError(null);
                             update("nationalId", e.target.value);
                         }}
-                        placeholder="Birth Certificate number"
+                        placeholder="Birth Certificate / NID / Passport number"
                         required
                         aria-invalid={nationalIdError ? true : undefined}
                         className={`${inputCls} ${
-                            nationalIdError ? "border-red-400 focus:border-red-500 focus:ring-red-200" : ""
+                            nationalIdError
+                                ? "border-red-400 focus:border-red-500 focus:ring-red-200"
+                                : ""
                         }`}
                     />
                     {nationalIdError && (
                         <p className="mt-1.5 flex items-start gap-1.5 text-xs text-red-600">
-                            <AlertCircle size={13} className="flex-shrink-0 mt-px" />
+                            <AlertCircle
+                                size={13}
+                                className="flex-shrink-0 mt-px"
+                            />
                             <span>{nationalIdError}</span>
                         </p>
                     )}
@@ -378,7 +420,9 @@ export default function StepProfile({
                             name="fatherName"
                             type="text"
                             value={value.fatherName}
-                            onChange={(e) => update("fatherName", e.target.value)}
+                            onChange={(e) =>
+                                update("fatherName", e.target.value)
+                            }
                             placeholder="As it should appear on the certificate"
                             required
                             className={inputCls}
@@ -389,7 +433,9 @@ export default function StepProfile({
                             name="motherName"
                             type="text"
                             value={value.motherName}
-                            onChange={(e) => update("motherName", e.target.value)}
+                            onChange={(e) =>
+                                update("motherName", e.target.value)
+                            }
                             placeholder="As it should appear on the certificate"
                             required
                             className={inputCls}
@@ -398,8 +444,8 @@ export default function StepProfile({
                 </div>
 
                 <p className="text-xs text-zinc-400 leading-relaxed">
-                    You can add your address, blood group, and emergency
-                    contact later from your profile.
+                    You can add your address, blood group, and emergency contact
+                    later from your profile.
                 </p>
 
                 <button
@@ -411,7 +457,11 @@ export default function StepProfile({
                             : "bg-accent-red hover:bg-red-700"
                     }`}
                 >
-                    {isPending ? "Saving…" : isUpdateMode ? "Save & Continue to Portal" : "Continue"}
+                    {isPending
+                        ? "Saving…"
+                        : isUpdateMode
+                          ? "Save & Continue to Portal"
+                          : "Continue"}
                     {!isPending && <ChevronRight size={18} />}
                 </button>
             </form>
@@ -419,7 +469,15 @@ export default function StepProfile({
     );
 }
 
-function Field({ label, icon, children }: { label: string; icon?: React.ReactNode; children: React.ReactNode }) {
+function Field({
+    label,
+    icon,
+    children,
+}: {
+    label: string;
+    icon?: React.ReactNode;
+    children: React.ReactNode;
+}) {
     return (
         <div>
             <label className="flex items-center gap-1.5 text-xs font-semibold text-zinc-500 uppercase tracking-widest mb-2">

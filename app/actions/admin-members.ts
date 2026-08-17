@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/admin-guard";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { assignRole } from "@/lib/auth/assign-role";
+import { ensureAdminRegNo } from "@/lib/members/reg-no";
 import { sendEmail } from "@/lib/email/resend";
 import { buildDojoOwnerInviteEmail } from "@/lib/email/templates/dojo-owner-invite";
 import { generateTemporaryPassword } from "@/lib/auth/temporary-password";
@@ -132,6 +133,7 @@ export async function inviteMemberAction(formData: FormData): Promise<ActionResu
         },
     });
     await assignRole(data.user.id, role);
+    await ensureAdminRegNo(data.user.id);
 
     revalidatePath("/portal/admin/members");
     return { ok: true };
