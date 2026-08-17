@@ -51,13 +51,27 @@ export async function saveProfileAction(formData: FormData) {
     if (!genderRaw || (genderRaw !== "MALE" && genderRaw !== "FEMALE")) {
         return { error: "Please select your gender." };
     }
-    if (!nationalId) return { error: "Birth Certificate number is required." };
+    if (!nationalId) return { error: "Birth Certificate number is required.", field: "nationalId" as const };
     if (!fatherName) return { error: "Father's name is required." };
     if (!motherName) return { error: "Mother's name is required." };
     if (contactEmailRaw && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contactEmailRaw)) {
         return { error: "Enter a valid contact email address." };
     }
     const gender = genderRaw as "MALE" | "FEMALE";
+
+    // Birth Certificate No. must be globally unique. Pre-check so we can
+    // return a friendly, field-scoped error rather than surfacing the raw
+    // Prisma unique-constraint exception.
+    const nationalIdTaken = await prisma.profile.findFirst({
+        where: { nationalId, NOT: { id: user.id } },
+        select: { id: true },
+    });
+    if (nationalIdTaken) {
+        return {
+            error: "This Birth Certificate is already connected to a member account.",
+            field: "nationalId" as const,
+        };
+    }
 
     // Guard against the "no dojos available" sentinel and any other non-UUID
     // value sneaking through — Prisma will otherwise blow up on @db.Uuid.
@@ -164,10 +178,17 @@ export async function saveProfileAction(formData: FormData) {
 
         return { success: true };
     } catch (err: any) {
-        if (err?.code === "P2002" && err?.meta?.target?.includes?.("national_id")) {
-            return { error: "This Birth Certificate number is already registered to another member." };
+        const msg: string = err?.message ?? "";
+        const isNationalIdDupe =
+            (err?.code === "P2002" && err?.meta?.target?.includes?.("national_id")) ||
+            /national_id/i.test(msg);
+        if (isNationalIdDupe) {
+            return {
+                error: "This Birth Certificate is already connected to a member account.",
+                field: "nationalId" as const,
+            };
         }
-        return { error: err?.message ?? "Failed to save profile." };
+        return { error: msg || "Failed to save profile." };
     }
 }
 

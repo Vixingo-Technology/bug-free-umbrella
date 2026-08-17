@@ -77,6 +77,7 @@ export default function StepProfile({
         : null;
     const [isPending, startTransition] = useTransition();
     const [error, setError] = useState<string | null>(null);
+    const [nationalIdError, setNationalIdError] = useState<string | null>(null);
 
     function update<K extends keyof ProfileData>(key: K, v: ProfileData[K]) {
         onChange({ ...value, [key]: v });
@@ -85,6 +86,7 @@ export default function StepProfile({
     function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
         setError(null);
+        setNationalIdError(null);
 
         const phoneError = validatePhone(value.phone);
         if (phoneError) {
@@ -106,7 +108,7 @@ export default function StepProfile({
             return;
         }
         if (!value.nationalId.trim()) {
-            setError("Birth Certificate number is required.");
+            setNationalIdError("Birth Certificate number is required.");
             return;
         }
         if (!value.fatherName.trim()) {
@@ -126,7 +128,11 @@ export default function StepProfile({
         startTransition(async () => {
             const res = await saveProfileAction(formData);
             if (res?.error) {
-                setError(res.error);
+                if ((res as any).field === "nationalId") {
+                    setNationalIdError(res.error);
+                } else {
+                    setError(res.error);
+                }
             } else {
                 onNext();
             }
@@ -346,11 +352,23 @@ export default function StepProfile({
                         name="nationalId"
                         type="text"
                         value={value.nationalId}
-                        onChange={(e) => update("nationalId", e.target.value)}
+                        onChange={(e) => {
+                            if (nationalIdError) setNationalIdError(null);
+                            update("nationalId", e.target.value);
+                        }}
                         placeholder="Birth Certificate number"
                         required
-                        className={inputCls}
+                        aria-invalid={nationalIdError ? true : undefined}
+                        className={`${inputCls} ${
+                            nationalIdError ? "border-red-400 focus:border-red-500 focus:ring-red-200" : ""
+                        }`}
                     />
+                    {nationalIdError && (
+                        <p className="mt-1.5 flex items-start gap-1.5 text-xs text-red-600">
+                            <AlertCircle size={13} className="flex-shrink-0 mt-px" />
+                            <span>{nationalIdError}</span>
+                        </p>
+                    )}
                 </Field>
 
                 {/* Parent names — used on printed certificates. */}
