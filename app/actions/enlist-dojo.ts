@@ -8,6 +8,7 @@ import { assignRole } from "@/lib/auth/assign-role";
 import { uploadToCloudinary } from "@/lib/cloudinary";
 import { getFees } from "@/lib/settings/fees";
 import { ensureDojoOwnerRegNo, divisionCode } from "@/lib/members/reg-no";
+import { sendDojoEnlistmentInvoiceEmail } from "@/lib/email/send-dojo-enlistment-invoice";
 
 export type DojoEnlistmentInput = {
     dojoName: string;
@@ -286,7 +287,14 @@ export async function markDojoEnlistmentPaidInternal(
 ): Promise<{ ok: boolean }> {
     const application = await prisma.dojoApplication.findUnique({
         where: { id: applicationId },
-        select: { id: true, dojoId: true, status: true },
+        select: {
+            id: true,
+            dojoId: true,
+            status: true,
+            dojoName: true,
+            email: true,
+            contactName: true,
+        },
     });
     if (!application) return { ok: false };
     if (application.status === "PAID" || application.status === "APPROVED") {
@@ -308,11 +316,31 @@ export async function markDojoEnlistmentPaidInternal(
                 },
             });
         });
-        return { ok: true };
     } catch (e) {
         console.error("[enlist-dojo] markDojoEnlistmentPaidInternal failed", e);
         return { ok: false };
     }
+
+    // Payment settled — email the owner their invoice. Non-fatal: a failure
+    // here is logged inside the sender and never blocks confirmation. Runs
+    // only on the unpaid→paid transition (idempotent early-return above), so
+    // the invoice is sent exactly once.
+    try {
+        const { dojoEnlistmentFeeBDT } = await getFees();
+        await sendDojoEnlistmentInvoiceEmail(application.email, {
+            invoiceNumber: `INV-DOJO-${application.id.slice(0, 8).toUpperCase()}`,
+            dojoName: application.dojoName,
+            contactName: application.contactName,
+            billedToEmail: application.email,
+            amountBDT: dojoEnlistmentFeeBDT,
+            paymentId,
+            paidAt: new Date(),
+        });
+    } catch (e) {
+        console.error("[enlist-dojo] invoice email failed", e);
+    }
+
+    return { ok: true };
 }
 
 /**

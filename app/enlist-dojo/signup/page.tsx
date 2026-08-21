@@ -563,6 +563,7 @@ function ContactStep({
                         className={inputClass()}
                     >
                         <option value="">Select your rank…</option>
+                        <option value="N/A">N/A</option>
                         {BELT_RANKS_ORDERED.map((r) => (
                             <option key={r} value={r}>
                                 {formatBeltRank(r)}
