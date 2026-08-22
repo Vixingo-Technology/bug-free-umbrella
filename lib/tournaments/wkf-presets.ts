@@ -141,6 +141,7 @@ export function wkfPresetToDivision(
         eventType: preset.eventType,
         gender: preset.gender,
         isTeam: preset.isTeam,
+        membersOnly: false,
         minAge: preset.minAge,
         maxAge: preset.maxAge,
         minWeightKg: preset.minWeightKg,

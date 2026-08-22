@@ -90,6 +90,7 @@ type DivisionDraft = {
     eventType: TournamentEventType;
     gender: DivisionGender;
     isTeam: boolean;
+    membersOnly: boolean;
     minAge: string;
     maxAge: string;
     minWeightKg: string;
@@ -134,6 +135,7 @@ function toDraft(d: CustomDivision): DivisionDraft {
         eventType: d.eventType,
         gender: d.gender,
         isTeam: d.isTeam,
+        membersOnly: d.membersOnly,
         minAge: d.minAge !== null ? String(d.minAge) : "",
         maxAge: d.maxAge !== null ? String(d.maxAge) : "",
         minWeightKg: d.minWeightKg !== null ? String(d.minWeightKg) : "",
@@ -189,6 +191,7 @@ function draftToDivision(d: DivisionDraft): CustomDivision {
         eventType: d.eventType,
         gender: d.gender,
         isTeam: d.isTeam,
+        membersOnly: d.membersOnly,
         minAge,
         maxAge,
         minWeightKg,
@@ -250,6 +253,7 @@ export default function EventForm({
                 eventType: "KATA",
                 gender: "ANY",
                 isTeam: false,
+                membersOnly: false,
                 minAge: "",
                 maxAge: "",
                 minWeightKg: "",
@@ -1213,6 +1217,26 @@ function DivisionRow({
                         ))}
                     </select>
                 </Field>
+            </div>
+
+            <div className="mt-3">
+                <label className="flex items-start gap-2.5 cursor-pointer select-none">
+                    <input
+                        type="checkbox"
+                        checked={draft.membersOnly}
+                        onChange={(e) =>
+                            onChange({ membersOnly: e.target.checked })
+                        }
+                        className="h-4 w-4 accent-red-600 mt-0.5 shrink-0"
+                    />
+                    <span className="text-sm text-zinc-700">
+                        <span className="font-semibold">Members only</span>
+                        <span className="block text-[11px] text-zinc-500">
+                            Only signed-in users can enter this division. Guests
+                            see it locked.
+                        </span>
+                    </span>
+                </label>
             </div>
 
             <div className="mt-4 border-t border-zinc-200/70 pt-3">

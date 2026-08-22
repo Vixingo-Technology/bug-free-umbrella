@@ -200,6 +200,7 @@ export default async function RegisterPage({ params, searchParams }: Props) {
                     <TournamentRegistrationForm
                         event={registrationEvent}
                         member={memberAutofill}
+                        isLoggedIn={!!user}
                         signInHref={`/login?next=/events/${event.id}/register`}
                         initialError={error ?? null}
                     />

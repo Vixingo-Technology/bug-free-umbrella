@@ -36,15 +36,18 @@ export type DivisionFee = {
 // A division on an event. `code` is a stable slug; `label` is the display
 // name. Optional gates: `minAge`/`maxAge` (years on the event date),
 // `minWeightKg`/`maxWeightKg` (declared weight, in kilograms), and
-// `minRankId` (belt_ranks.id). `fees` is the current source of truth for
-// pricing; `priceBdt` is a legacy fallback (equal to sum of required fees)
-// kept so older code paths keep working.
+// `minRankId` (belt_ranks.id). When `membersOnly` is true the division is
+// reserved for signed-in users — guests see it locked and cannot select it.
+// `fees` is the current source of truth for pricing; `priceBdt` is a legacy
+// fallback (equal to sum of required fees) kept so older code paths keep
+// working.
 export type CustomDivision = {
     code: string;
     label: string;
     eventType: TournamentEventType;
     gender: DivisionGender;
     isTeam: boolean;
+    membersOnly: boolean;
     minAge: number | null;
     maxAge: number | null;
     minWeightKg: number | null;
@@ -173,6 +176,8 @@ export function parseCustomDivisions(raw: unknown): CustomDivision[] {
                 ? rec.gender
                 : "ANY";
         const isTeam = typeof rec.isTeam === "boolean" ? rec.isTeam : false;
+        const membersOnly =
+            typeof rec.membersOnly === "boolean" ? rec.membersOnly : false;
         const minAge =
             typeof rec.minAge === "number" && Number.isFinite(rec.minAge)
                 ? Math.trunc(rec.minAge)
@@ -208,6 +213,7 @@ export function parseCustomDivisions(raw: unknown): CustomDivision[] {
             eventType,
             gender,
             isTeam,
+            membersOnly,
             minAge,
             maxAge,
             minWeightKg,

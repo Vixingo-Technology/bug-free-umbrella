@@ -203,6 +203,7 @@ async function parseDivisionFields(formData: FormData): Promise<DivisionInput> {
             eventType: d.eventType,
             gender: d.gender,
             isTeam: d.isTeam,
+            membersOnly: d.membersOnly,
             minAge: d.minAge,
             maxAge: d.maxAge,
             minWeightKg: d.minWeightKg,

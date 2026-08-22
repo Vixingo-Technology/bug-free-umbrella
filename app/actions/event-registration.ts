@@ -448,6 +448,12 @@ export async function registerForTournamentAction(
     }
 
     for (const { division } of divisions) {
+        if (division.membersOnly && !user) {
+            return {
+                ok: false,
+                error: `${division.label} is open to signed-in members only. Please sign in to enter it.`,
+            };
+        }
         if (division.gender !== "ANY" && division.gender !== genderRaw) {
             return {
                 ok: false,

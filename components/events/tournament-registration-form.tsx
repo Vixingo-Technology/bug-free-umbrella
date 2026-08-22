@@ -64,11 +64,15 @@ export type MemberAutofill = {
 export default function TournamentRegistrationForm({
     event,
     member,
+    isLoggedIn,
     signInHref,
     initialError,
 }: {
     event: TournamentRegistrationEvent;
     member: MemberAutofill;
+    /** True when a Supabase user session is present. Members-only divisions
+     * stay locked for guests (no session). */
+    isLoggedIn: boolean;
     signInHref: string;
     initialError: string | null;
 }) {
@@ -123,6 +127,9 @@ export default function TournamentRegistrationForm({
     const eligibility = useMemo<EligibleDivision[]>(() => {
         return event.divisions.map((d) => {
             const reasons: string[] = [];
+            if (d.membersOnly && !isLoggedIn) {
+                reasons.push("members only — sign in");
+            }
             const hasWeightGate =
                 d.minWeightKg !== null || d.maxWeightKg !== null;
             const needsWeight = hasWeightGate || d.eventType === "KUMITE";
@@ -200,6 +207,7 @@ export default function TournamentRegistrationForm({
         entrantRankOrder,
         rankByOrder,
         event.beltRanks,
+        isLoggedIn,
     ]);
 
     // Prune selected divisions that became ineligible as filters tightened.
@@ -680,6 +688,11 @@ export default function TournamentRegistrationForm({
                                                 {d.isTeam && (
                                                     <span className="text-[10px] uppercase tracking-widest font-bold text-zinc-500">
                                                         Team
+                                                    </span>
+                                                )}
+                                                {d.membersOnly && (
+                                                    <span className="text-[10px] uppercase tracking-widest font-bold text-accent-red">
+                                                        Members only
                                                     </span>
                                                 )}
                                                 {d.gender !== "ANY" && (
