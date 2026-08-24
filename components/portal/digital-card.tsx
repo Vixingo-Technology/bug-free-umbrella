@@ -1,4 +1,5 @@
 import { CheckCircle2, XCircle, AlertTriangle, Clock } from "lucide-react";
+import { formatBeltRank } from "@/lib/constants";
 
 export type MembershipStatusLabel =
     | "Active"
@@ -119,7 +120,7 @@ export default function DigitalCard({
                             className="text-[10px] tracking-widest uppercase font-bold whitespace-nowrap"
                             style={{ color: beltTextDark ? "#111" : "#fff" }}
                         >
-                            {belt}
+                            {formatBeltRank(belt)}
                         </p>
                     </div>
                 </div>

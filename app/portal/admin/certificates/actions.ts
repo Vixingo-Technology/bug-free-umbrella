@@ -8,6 +8,7 @@ import { uploadToCloudinary, CLOUDINARY_FOLDERS } from "@/lib/cloudinary";
 import { generateCertificatePdf } from "@/lib/certificates/generate";
 import { notifyMembers } from "@/lib/notify";
 import { findUserIdsByRoles } from "@/lib/notify/recipients";
+import { formatBeltRank } from "@/lib/constants";
 
 const settingsSchema = z.object({
     adminSignerName: z.string().trim().max(200).nullable().optional(),
@@ -176,7 +177,7 @@ export async function approveCertificateRequestAction(
     const ownerIds = await findUserIdsByRoles(["DOJO_OWNER"], { dojoId: req.dojoId });
     await notifyMembers(ownerIds, {
         title: "Certificate approved by JKA HQ",
-        message: `${req.memberName}'s ${req.rankName ?? "certificate"} has been approved. The online copy is ready to download.`,
+        message: `${req.memberName}'s ${req.rankName ? formatBeltRank(req.rankName) : "certificate"} has been approved. The online copy is ready to download.`,
         type: "GRADING",
         link: "/portal/dojo/gradings",
     });

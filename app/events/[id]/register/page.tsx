@@ -102,29 +102,52 @@ export default async function RegisterPage({ params, searchParams }: Props) {
                             dojo: { select: { name: true } },
                         },
                     },
+                    instructor: { select: { dojo: { select: { name: true } } } },
+                    dojoManager: { select: { dojo: { select: { name: true } } } },
+                    dojoOwner: { select: { dojo: { select: { name: true } } } },
                 },
             }),
             // Fall back to values the user has previously typed on their own
-            // registrations so gender/coach carry over when the profile
-            // hasn't captured them.
+            // registrations so gender/rank/dojo/coach carry over when the
+            // profile hasn't captured them (e.g. non-student roles have no
+            // stored belt rank).
             prisma.eventRegistration.findFirst({
                 where: { userId: user.id },
                 orderBy: { createdAt: "desc" },
                 select: {
                     entrantGender: true,
+                    entrantBeltRank: true,
+                    entrantDojoName: true,
                     coachName: true,
                 },
             }),
         ]);
         if (me) {
+            const rawRank =
+                me.student?.currentRank ??
+                lastRegistration?.entrantBeltRank ??
+                null;
+            // Legacy student rows store rank as "White Belt" while belt_ranks
+            // rows carry the full "White Belt 10th Kyu" name. Resolve to the
+            // canonical belt_ranks.name so the <select> option matches.
+            let currentRank: string | null = null;
             let rankOrderIndex: number | null = null;
-            if (me.student?.currentRank) {
-                const rank = await prisma.beltRank.findUnique({
-                    where: { name: me.student.currentRank },
-                    select: { orderIndex: true },
-                });
-                rankOrderIndex = rank?.orderIndex ?? null;
+            if (rawRank) {
+                const match =
+                    beltRanks.find((r) => r.name === rawRank) ??
+                    beltRanks.find((r) => r.name.startsWith(`${rawRank} `));
+                if (match) {
+                    currentRank = match.name;
+                    rankOrderIndex = match.orderIndex;
+                }
             }
+            const dojoName =
+                me.student?.dojo?.name ??
+                me.instructor?.dojo?.name ??
+                me.dojoManager?.dojo?.name ??
+                me.dojoOwner?.dojo?.name ??
+                lastRegistration?.entrantDojoName ??
+                null;
             memberAutofill = {
                 userId: user.id,
                 fullName: me.fullName ?? "",
@@ -136,8 +159,8 @@ export default async function RegisterPage({ params, searchParams }: Props) {
                     ? me.profile.dateOfBirth.toISOString().slice(0, 10)
                     : null,
                 gender: me.profile?.gender ?? lastRegistration?.entrantGender ?? null,
-                currentRank: me.student?.currentRank ?? null,
-                dojoName: me.student?.dojo?.name ?? null,
+                currentRank,
+                dojoName,
                 coachName: lastRegistration?.coachName ?? null,
                 emergencyContactName: me.profile?.emergencyContactName ?? null,
                 emergencyContactPhone: me.profile?.emergencyContactPhone ?? null,

@@ -984,6 +984,14 @@ model EventRegistration {
   checkedInAt       DateTime? @map("checked_in_at") @db.Timestamptz(6)
   checkedInByUserId String?   @map("checked_in_by_user_id") @db.Uuid
 
+  // Set on "shadow" rows created via the add-divisions flow when a member
+  // adds add-ons to a division they had already registered for. The shadow
+  // row holds only the newly-picked add-ons + their delta payment. The
+  // participation card and totals merge shadow rows into their parent.
+  parentRegistrationId String? @map("parent_registration_id") @db.Uuid
+  parent               EventRegistration?  @relation("EventRegistrationAddonChildren", fields: [parentRegistrationId], references: [id], onDelete: Cascade)
+  addonChildren        EventRegistration[] @relation("EventRegistrationAddonChildren")
+
   event        Event                @relation(fields: [eventId], references: [id], onDelete: Cascade)
   user         User?                @relation(fields: [userId], references: [id], onDelete: Cascade)
   checkedInBy  User?                @relation("EventCheckIns", fields: [checkedInByUserId], references: [id])
@@ -993,6 +1001,7 @@ model EventRegistration {
 
   @@index([eventId, checkedInAt])
   @@index([eventId, divisionCode])
+  @@index([parentRegistrationId])
   @@map("event_registrations")
 }
 

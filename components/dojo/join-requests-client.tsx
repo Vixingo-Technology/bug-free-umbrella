@@ -106,7 +106,7 @@ export default function DojoJoinRequestsClient({
                                 <div className="flex-1 min-w-0">
                                     <p className="text-sm font-semibold text-zinc-900 truncate">{r.user.fullName}</p>
                                     <p className="text-xs text-zinc-500">
-                                        {r.assignedRank ?? "White Belt"}
+                                        {formatBeltRank(r.assignedRank ?? "White Belt")}
                                         {r.joinedAt ? ` · joined ${new Date(r.joinedAt).toLocaleDateString("en-GB", { day: "numeric", month: "short" ,
  timeZone: DEFAULT_TIME_ZONE,
 })}` : ""}
@@ -189,7 +189,7 @@ function RequestCard({
                     <div className="mt-4 p-3 rounded-xl bg-zinc-50 border border-zinc-100">
                         <div className="flex items-center gap-2 text-[11px] font-bold tracking-widest uppercase text-zinc-500">
                             <Shield size={12} />
-                            Student requested: {request.requestedRank ?? "White Belt"}
+                            Student requested: {formatBeltRank(request.requestedRank ?? "White Belt")}
                         </div>
 
                         <label className="mt-3 block">

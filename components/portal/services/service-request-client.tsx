@@ -411,7 +411,7 @@ export default function ServiceRequestClient({
                                     Rank you're converting to
                                 </label>
                                 <p className="text-xs text-zinc-500 mb-2">
-                                    Current record: <span className="font-semibold text-zinc-900">{student.currentRank ?? "—"}</span>
+                                    Current record: <span className="font-semibold text-zinc-900">{student.currentRank ? formatBeltRank(student.currentRank) : "—"}</span>
                                 </p>
                                 <select
                                     value={requestedRank}

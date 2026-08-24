@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import CertificatePreview from "@/components/certificates/preview";
 import { getSignedCloudinaryUrl, CLOUDINARY_FOLDERS } from "@/lib/cloudinary";
 import { createClient } from "@/lib/supabase/server";
+import { formatBeltRank } from "@/lib/constants";
 
 export const dynamic = "force-dynamic";
 
@@ -28,9 +29,10 @@ export async function generateMetadata({
     }
 
     if (!req) return { title: "Certificate — JKA Bangladesh" };
+    const rankLabel = formatBeltRank(req.rankName);
     return {
-        title: `${req.memberName} — ${req.rankName} · JKA Bangladesh`,
-        description: `Official JKA Bangladesh ${req.rankName} certificate issued to ${req.memberName}.`,
+        title: `${req.memberName} — ${rankLabel} · JKA Bangladesh`,
+        description: `Official JKA Bangladesh ${rankLabel} certificate issued to ${req.memberName}.`,
     };
 }
 

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowLeft, Download, Loader2 } from "lucide-react";
 import RegenerateButton from "./regenerate-button";
+import { formatBeltRank } from "@/lib/constants";
 
 type Props = {
     requestId: string;
@@ -68,7 +69,7 @@ export default function CertificatePreview(props: Props) {
                         <iframe
                             src={`${props.certificateUrl}#toolbar=0&navpanes=0&view=FitH`}
                             className="w-full h-full"
-                            title={`${props.memberName} — ${props.rankName} certificate`}
+                            title={`${props.memberName} — ${formatBeltRank(props.rankName)} certificate`}
                         />
                     </div>
                 ) : (
@@ -80,7 +81,7 @@ export default function CertificatePreview(props: Props) {
                         <span className="font-bold text-zinc-700">
                             {props.memberName}
                         </span>{" "}
-                        — {props.rankName}
+                        — {formatBeltRank(props.rankName)}
                         {props.dojoName ? ` · ${props.dojoName}` : ""}
                     </p>
                     <p>
@@ -110,7 +111,7 @@ function PendingCard(props: Props) {
                 className="mx-auto text-zinc-400 animate-spin mb-4"
             />
             <p className="text-sm text-zinc-700 font-semibold mb-1">
-                {props.memberName} — {props.rankName}
+                {props.memberName} — {formatBeltRank(props.rankName)}
             </p>
             <p className="text-xs text-zinc-500">{label}</p>
             <p className="text-[10px] tracking-widest uppercase text-zinc-400 mt-4">

@@ -11,7 +11,7 @@ import {
     Copy, ExternalLink, Share2, Users, UserCircle2,
 } from "lucide-react";
 import { updateProfileAction, changePasswordAction } from "@/app/portal/profile/actions";
-import { BLOOD_GROUPS } from "@/lib/constants";
+import { BLOOD_GROUPS, formatBeltRank } from "@/lib/constants";
 import { validatePhone } from "@/lib/validation/phone";
 import { DEFAULT_TIME_ZONE } from "@/lib/format/datetime";
 import { displayEmail as computeDisplayEmail } from "@/lib/format/email";
@@ -199,7 +199,7 @@ export default function ProfileClient({ member, dojos, userId }: Props) {
                                 {member?.role ?? "STUDENT"}
                             </span>
                             <span className="text-[10px] font-bold tracking-widest uppercase bg-amber-50 text-amber-600 px-2 py-0.5 rounded-full border border-amber-200 flex items-center gap-1">
-                                <Award size={10} /> {member?.currentRank ?? "White Belt"}
+                                <Award size={10} /> {formatBeltRank(member?.currentRank ?? "White Belt")}
                             </span>
                             <StatusBadge status={member?.membershipStatus} />
                         </div>
@@ -556,7 +556,7 @@ export default function ProfileClient({ member, dojos, userId }: Props) {
                             <label className={labelCls}>Current Rank</label>
                             <div className="relative">
                                 <Award size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-300" />
-                                <input type="text" value={member?.currentRank ?? "White Belt"} disabled className={disabledCls} />
+                                <input type="text" value={formatBeltRank(member?.currentRank ?? "White Belt")} disabled className={disabledCls} />
                             </div>
                             <p className="text-xs text-zinc-400 mt-1 pl-1">Updated by your instructor after gradings.</p>
                         </div>

@@ -39,7 +39,7 @@ export default function Journey() {
                             className="relative z-10 flex flex-col items-center gap-6 group"
                         >
                             <div className="absolute -top-16 opacity-0 group-hover:opacity-100 transition-opacity text-xs uppercase tracking-widest text-zinc-800 font-bold whitespace-nowrap">
-                                {belt.desktopLabel}
+                                {belt.desktopLabel} - {belt.mobileLabel}
                             </div>
                             <div
                                 className={`w-16 h-16 rounded-full border-[4px] ${belt.border} ${belt.bg} shadow-md flex items-center justify-center transition-transform duration-500 group-hover:scale-125`}
@@ -49,12 +49,6 @@ export default function Journey() {
                                 )} */}
                                 {belt.color === "stripe-yellow" && (
                                     <div className="w-16 h-[2px] bg-yellow-300"></div>
-                                )}
-                                {belt.color === "brown-white" && (
-                                    <div className="w-16 h-[2px] bg-white"></div>
-                                )}
-                                {belt.color === "brown-black" && (
-                                    <div className="w-16 h-[2px] bg-black"></div>
                                 )}
                             </div>
                         </motion.div>
@@ -78,21 +72,12 @@ export default function Journey() {
                                 {belt.color === "stripe-yellow" && (
                                     <div className="w-7 h-[2px] bg-yellow-300 top-[50%] absolute"></div>
                                 )}
-                                {belt.color === "brown-white" && (
-                                    <div className="w-7 h-[2px] bg-white top-[50%] absolute"></div>
-                                )}
-                                {belt.color === "brown-black" && (
-                                    <div className="w-7 h-[2px] bg-black top-[50%] absolute"></div>
-                                )}
 
                             </div>
                             <div>
-                                <h4 className="text-zinc-800 font-heading tracking-widest uppercase text-sm mb-1 font-bold">
-                                    {belt.mobileLabel}
+                                <h4 className="text-zinc-800 font-heading tracking-widest uppercase text-sm font-bold">
+                                    {belt.desktopLabel} - {belt.mobileLabel}
                                 </h4>
-                                <p className="text-zinc-600 text-xs font-mono">
-                                    {belt.desktopLabel}
-                                </p>
                             </div>
                         </motion.div>
                     ))}

@@ -10,6 +10,7 @@ import { hasAtLeast, ROLE_LABEL } from "@/lib/dojo-roles";
 import { requireDojoRole } from "@/lib/dojo-session";
 import { prisma } from "@/lib/prisma";
 import { DEFAULT_TIME_ZONE, formatDate } from "@/lib/format/datetime";
+import { formatBeltRank } from "@/lib/constants";
 
 export const metadata: Metadata = {
     title: "Belt tests — Dojo Dashboard",
@@ -297,9 +298,9 @@ function PipelineRow({
                         {q.name}
                     </Link>
                     <p className="text-xs text-zinc-500">
-                        {q.fromRank ?? "—"} →{" "}
+                        {q.fromRank ? formatBeltRank(q.fromRank) : "—"} →{" "}
                         <span className="text-accent-red font-semibold">
-                            {q.toRank ?? "—"}
+                            {q.toRank ? formatBeltRank(q.toRank) : "—"}
                         </span>
                         {q.isDoublePromotion && (
                             <span className="ml-2 inline-flex items-center gap-1 text-[10px] tracking-widest uppercase font-bold text-amber-700 bg-amber-50 border border-amber-200 px-1.5 py-0.5 rounded">

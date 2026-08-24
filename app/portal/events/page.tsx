@@ -29,19 +29,42 @@ export default async function EventsPage() {
             orderBy: { eventDate: "asc" },
             include: {
                 minRank: { select: { name: true } },
+                // Powers the "Add divisions" entry point — the button shows
+                // only when the event has divisions and the deadline hasn't
+                // passed.
+                tournamentDetail: {
+                    select: {
+                        customDivisions: true,
+                        registrationDeadline: true,
+                    },
+                },
             },
         });
         // Distinct participants per event — dedupes multi-division submits.
         const rsvpCounts = await countUniqueParticipantsByEvent(
             rows.map((e) => e.id),
         );
-        upcomingEvents = rows.map((e) => ({
-            ...e,
-            ticketPrice: e.ticketPrice ? Number(e.ticketPrice) : null,
-            memberDiscountPercent: Number(e.memberDiscountPercent),
-            multiDivisionDiscountPercent: Number(e.multiDivisionDiscountPercent),
-            rsvpCount: rsvpCounts.get(e.id) ?? 0,
-        }));
+        upcomingEvents = rows.map((e) => {
+            const divisions = Array.isArray(e.tournamentDetail?.customDivisions)
+                ? (e.tournamentDetail?.customDivisions as unknown[])
+                : [];
+            const deadline = e.tournamentDetail?.registrationDeadline ?? null;
+            const registrationOpen = deadline
+                ? deadline.getTime() > Date.now()
+                : true;
+            return {
+                ...e,
+                tournamentDetail: undefined,
+                ticketPrice: e.ticketPrice ? Number(e.ticketPrice) : null,
+                memberDiscountPercent: Number(e.memberDiscountPercent),
+                multiDivisionDiscountPercent: Number(
+                    e.multiDivisionDiscountPercent,
+                ),
+                rsvpCount: rsvpCounts.get(e.id) ?? 0,
+                hasDivisions: divisions.length > 0,
+                registrationOpen,
+            };
+        });
 
         pastEvents = (
             await prisma.event.findMany({

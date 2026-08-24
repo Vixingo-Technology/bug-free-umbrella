@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { approveCertificateRequestAction } from "@/app/portal/admin/certificates/actions";
 import { useRouter } from "next/navigation";
+import { formatBeltRank } from "@/lib/constants";
 
 type RecentRequest = {
     id: string;
@@ -190,7 +191,7 @@ function RecentRequestsCard({ requests }: { requests: RecentRequest[] }) {
                                         {r.dojo.name}
                                     </td>
                                     <td className="px-5 py-3 text-zinc-600">
-                                        {r.rankName}
+                                        {formatBeltRank(r.rankName)}
                                     </td>
                                     <td className="px-5 py-3">
                                         <StatusPill status={r.status} />

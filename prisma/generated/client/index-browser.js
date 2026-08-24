@@ -461,6 +461,7 @@ exports.Prisma.EventRegistrationScalarFieldEnum = {
   selectedOptionalFees: 'selectedOptionalFees',
   checkedInAt: 'checkedInAt',
   checkedInByUserId: 'checkedInByUserId',
+  parentRegistrationId: 'parentRegistrationId',
   createdAt: 'createdAt'
 };
 

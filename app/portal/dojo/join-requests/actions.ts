@@ -5,7 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { prisma } from "@/lib/prisma";
 import { loadCurrentUser } from "@/lib/auth/load-current-user";
 import { notifyMembers } from "@/lib/notify";
-import { BELT_RANKS_ORDERED } from "@/lib/constants";
+import { BELT_RANKS_ORDERED, formatBeltRank } from "@/lib/constants";
 
 /**
  * Accept a student's join request and confirm their rank. The student
@@ -61,7 +61,7 @@ export async function acceptJoinRequestAction(
             [studentId],
             {
                 title: "You've joined JKA Bangladesh",
-                message: `Your dojo has accepted your join request at ${assignedRank}. Welcome — full portal access is unlocked.`,
+                message: `Your dojo has accepted your join request at ${formatBeltRank(assignedRank)}. Welcome — full portal access is unlocked.`,
                 type: "INFO",
                 link: "/portal",
             },
@@ -71,7 +71,7 @@ export async function acceptJoinRequestAction(
             [user.id],
             {
                 title: "Student joined successfully",
-                message: `${student.user.fullName} has completed joining at ${assignedRank}.`,
+                message: `${student.user.fullName} has completed joining at ${formatBeltRank(assignedRank)}.`,
                 type: "INFO",
                 link: "/portal/dojo/join-requests",
             },

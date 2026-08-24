@@ -25,6 +25,7 @@ import MembershipCardDialog from "./membership-card-dialog";
 import AchievementsPanel, { type AchievementItem } from "./achievements-panel";
 import { DEFAULT_TIME_ZONE } from "@/lib/format/datetime";
 import { displayEmail } from "@/lib/format/email";
+import { formatBeltRank } from "@/lib/constants";
 
 type UpcomingItem =
     | { kind: "event";   id: string; title: string;      date: string; location: string | null }
@@ -264,7 +265,7 @@ export default function PortalDashboardClient({ member, membershipStatus, unread
 
             {/* Stat cards — equal height via grid */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 auto-rows-fr">
-                <StatCard icon={Award}    label="Current Rank"  value={member?.currentRank ?? "White Belt"} href="/portal/progress"      delay={0}    accentClass="bg-amber-50" />
+                <StatCard icon={Award}    label="Current Rank"  value={formatBeltRank(member?.currentRank ?? "White Belt")} href="/portal/progress"      delay={0}    accentClass="bg-amber-50" />
                 <StatCard icon={MapPin}   label="Dojo"          value={dojo?.name ?? "Not Assigned"}        sub={dojo?.city}              delay={0.05} accentClass="bg-blue-50" />
                 <StatCard icon={Bell}     label="Notifications" value={unreadNotifications > 0 ? `${unreadNotifications} new` : "All read"} href="/portal/notifications" delay={0.1}  accentClass={unreadNotifications > 0 ? "bg-red-50" : "bg-zinc-50"} />
                 <StatCard icon={Calendar} label="Membership"    value={membershipStatus}                    sub={expiryDate ? `Expires ${expiryDate}` : undefined} delay={0.15} accentClass={statusCfg.dot === "bg-emerald-500" ? "bg-emerald-50" : "bg-amber-50"} />

@@ -5644,10 +5644,12 @@ export namespace Prisma {
    */
 
   export type EventRegistrationCountOutputType = {
+    addonChildren: number
     transactions: number
   }
 
   export type EventRegistrationCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    addonChildren?: boolean | EventRegistrationCountOutputTypeCountAddonChildrenArgs
     transactions?: boolean | EventRegistrationCountOutputTypeCountTransactionsArgs
   }
 
@@ -5660,6 +5662,13 @@ export namespace Prisma {
      * Select specific fields to fetch from the EventRegistrationCountOutputType
      */
     select?: EventRegistrationCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * EventRegistrationCountOutputType without action
+   */
+  export type EventRegistrationCountOutputTypeCountAddonChildrenArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EventRegistrationWhereInput
   }
 
   /**
@@ -34554,6 +34563,7 @@ export namespace Prisma {
     profileImageUrl: string | null
     checkedInAt: Date | null
     checkedInByUserId: string | null
+    parentRegistrationId: string | null
     createdAt: Date | null
   }
 
@@ -34587,6 +34597,7 @@ export namespace Prisma {
     profileImageUrl: string | null
     checkedInAt: Date | null
     checkedInByUserId: string | null
+    parentRegistrationId: string | null
     createdAt: Date | null
   }
 
@@ -34622,6 +34633,7 @@ export namespace Prisma {
     selectedOptionalFees: number
     checkedInAt: number
     checkedInByUserId: number
+    parentRegistrationId: number
     createdAt: number
     _all: number
   }
@@ -34667,6 +34679,7 @@ export namespace Prisma {
     profileImageUrl?: true
     checkedInAt?: true
     checkedInByUserId?: true
+    parentRegistrationId?: true
     createdAt?: true
   }
 
@@ -34700,6 +34713,7 @@ export namespace Prisma {
     profileImageUrl?: true
     checkedInAt?: true
     checkedInByUserId?: true
+    parentRegistrationId?: true
     createdAt?: true
   }
 
@@ -34735,6 +34749,7 @@ export namespace Prisma {
     selectedOptionalFees?: true
     checkedInAt?: true
     checkedInByUserId?: true
+    parentRegistrationId?: true
     createdAt?: true
     _all?: true
   }
@@ -34857,6 +34872,7 @@ export namespace Prisma {
     selectedOptionalFees: JsonValue | null
     checkedInAt: Date | null
     checkedInByUserId: string | null
+    parentRegistrationId: string | null
     createdAt: Date
     _count: EventRegistrationCountAggregateOutputType | null
     _avg: EventRegistrationAvgAggregateOutputType | null
@@ -34911,7 +34927,10 @@ export namespace Prisma {
     selectedOptionalFees?: boolean
     checkedInAt?: boolean
     checkedInByUserId?: boolean
+    parentRegistrationId?: boolean
     createdAt?: boolean
+    parent?: boolean | EventRegistration$parentArgs<ExtArgs>
+    addonChildren?: boolean | EventRegistration$addonChildrenArgs<ExtArgs>
     event?: boolean | EventDefaultArgs<ExtArgs>
     user?: boolean | EventRegistration$userArgs<ExtArgs>
     checkedInBy?: boolean | EventRegistration$checkedInByArgs<ExtArgs>
@@ -34951,7 +34970,9 @@ export namespace Prisma {
     selectedOptionalFees?: boolean
     checkedInAt?: boolean
     checkedInByUserId?: boolean
+    parentRegistrationId?: boolean
     createdAt?: boolean
+    parent?: boolean | EventRegistration$parentArgs<ExtArgs>
     event?: boolean | EventDefaultArgs<ExtArgs>
     user?: boolean | EventRegistration$userArgs<ExtArgs>
     checkedInBy?: boolean | EventRegistration$checkedInByArgs<ExtArgs>
@@ -34989,7 +35010,9 @@ export namespace Prisma {
     selectedOptionalFees?: boolean
     checkedInAt?: boolean
     checkedInByUserId?: boolean
+    parentRegistrationId?: boolean
     createdAt?: boolean
+    parent?: boolean | EventRegistration$parentArgs<ExtArgs>
     event?: boolean | EventDefaultArgs<ExtArgs>
     user?: boolean | EventRegistration$userArgs<ExtArgs>
     checkedInBy?: boolean | EventRegistration$checkedInByArgs<ExtArgs>
@@ -35027,11 +35050,14 @@ export namespace Prisma {
     selectedOptionalFees?: boolean
     checkedInAt?: boolean
     checkedInByUserId?: boolean
+    parentRegistrationId?: boolean
     createdAt?: boolean
   }
 
-  export type EventRegistrationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "eventId" | "userId" | "guestName" | "guestEmail" | "guestPhone" | "qrToken" | "paymentStatus" | "paymentGroupId" | "amountDue" | "paidAt" | "transactionId" | "guestDateOfBirth" | "parentOfMemberNumber" | "divisionCode" | "entrantGender" | "entrantWeightKg" | "entrantBeltRank" | "entrantDojoName" | "coachName" | "teamName" | "teammates" | "guardianName" | "guardianPhone" | "guardianConsent" | "emergencyContactName" | "emergencyContactPhone" | "profileImageUrl" | "selectedOptionalFees" | "checkedInAt" | "checkedInByUserId" | "createdAt", ExtArgs["result"]["eventRegistration"]>
+  export type EventRegistrationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "eventId" | "userId" | "guestName" | "guestEmail" | "guestPhone" | "qrToken" | "paymentStatus" | "paymentGroupId" | "amountDue" | "paidAt" | "transactionId" | "guestDateOfBirth" | "parentOfMemberNumber" | "divisionCode" | "entrantGender" | "entrantWeightKg" | "entrantBeltRank" | "entrantDojoName" | "coachName" | "teamName" | "teammates" | "guardianName" | "guardianPhone" | "guardianConsent" | "emergencyContactName" | "emergencyContactPhone" | "profileImageUrl" | "selectedOptionalFees" | "checkedInAt" | "checkedInByUserId" | "parentRegistrationId" | "createdAt", ExtArgs["result"]["eventRegistration"]>
   export type EventRegistrationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    parent?: boolean | EventRegistration$parentArgs<ExtArgs>
+    addonChildren?: boolean | EventRegistration$addonChildrenArgs<ExtArgs>
     event?: boolean | EventDefaultArgs<ExtArgs>
     user?: boolean | EventRegistration$userArgs<ExtArgs>
     checkedInBy?: boolean | EventRegistration$checkedInByArgs<ExtArgs>
@@ -35039,11 +35065,13 @@ export namespace Prisma {
     _count?: boolean | EventRegistrationCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type EventRegistrationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    parent?: boolean | EventRegistration$parentArgs<ExtArgs>
     event?: boolean | EventDefaultArgs<ExtArgs>
     user?: boolean | EventRegistration$userArgs<ExtArgs>
     checkedInBy?: boolean | EventRegistration$checkedInByArgs<ExtArgs>
   }
   export type EventRegistrationIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    parent?: boolean | EventRegistration$parentArgs<ExtArgs>
     event?: boolean | EventDefaultArgs<ExtArgs>
     user?: boolean | EventRegistration$userArgs<ExtArgs>
     checkedInBy?: boolean | EventRegistration$checkedInByArgs<ExtArgs>
@@ -35052,6 +35080,8 @@ export namespace Prisma {
   export type $EventRegistrationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "EventRegistration"
     objects: {
+      parent: Prisma.$EventRegistrationPayload<ExtArgs> | null
+      addonChildren: Prisma.$EventRegistrationPayload<ExtArgs>[]
       event: Prisma.$EventPayload<ExtArgs>
       user: Prisma.$UserPayload<ExtArgs> | null
       checkedInBy: Prisma.$UserPayload<ExtArgs> | null
@@ -35089,6 +35119,7 @@ export namespace Prisma {
       selectedOptionalFees: Prisma.JsonValue | null
       checkedInAt: Date | null
       checkedInByUserId: string | null
+      parentRegistrationId: string | null
       createdAt: Date
     }, ExtArgs["result"]["eventRegistration"]>
     composites: {}
@@ -35484,6 +35515,8 @@ export namespace Prisma {
    */
   export interface Prisma__EventRegistrationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    parent<T extends EventRegistration$parentArgs<ExtArgs> = {}>(args?: Subset<T, EventRegistration$parentArgs<ExtArgs>>): Prisma__EventRegistrationClient<$Result.GetResult<Prisma.$EventRegistrationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    addonChildren<T extends EventRegistration$addonChildrenArgs<ExtArgs> = {}>(args?: Subset<T, EventRegistration$addonChildrenArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EventRegistrationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     event<T extends EventDefaultArgs<ExtArgs> = {}>(args?: Subset<T, EventDefaultArgs<ExtArgs>>): Prisma__EventClient<$Result.GetResult<Prisma.$EventPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     user<T extends EventRegistration$userArgs<ExtArgs> = {}>(args?: Subset<T, EventRegistration$userArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     checkedInBy<T extends EventRegistration$checkedInByArgs<ExtArgs> = {}>(args?: Subset<T, EventRegistration$checkedInByArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
@@ -35548,6 +35581,7 @@ export namespace Prisma {
     readonly selectedOptionalFees: FieldRef<"EventRegistration", 'Json'>
     readonly checkedInAt: FieldRef<"EventRegistration", 'DateTime'>
     readonly checkedInByUserId: FieldRef<"EventRegistration", 'String'>
+    readonly parentRegistrationId: FieldRef<"EventRegistration", 'String'>
     readonly createdAt: FieldRef<"EventRegistration", 'DateTime'>
   }
     
@@ -35947,6 +35981,49 @@ export namespace Prisma {
      * Limit how many EventRegistrations to delete.
      */
     limit?: number
+  }
+
+  /**
+   * EventRegistration.parent
+   */
+  export type EventRegistration$parentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EventRegistration
+     */
+    select?: EventRegistrationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EventRegistration
+     */
+    omit?: EventRegistrationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventRegistrationInclude<ExtArgs> | null
+    where?: EventRegistrationWhereInput
+  }
+
+  /**
+   * EventRegistration.addonChildren
+   */
+  export type EventRegistration$addonChildrenArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EventRegistration
+     */
+    select?: EventRegistrationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EventRegistration
+     */
+    omit?: EventRegistrationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventRegistrationInclude<ExtArgs> | null
+    where?: EventRegistrationWhereInput
+    orderBy?: EventRegistrationOrderByWithRelationInput | EventRegistrationOrderByWithRelationInput[]
+    cursor?: EventRegistrationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: EventRegistrationScalarFieldEnum | EventRegistrationScalarFieldEnum[]
   }
 
   /**
@@ -58982,6 +59059,7 @@ export namespace Prisma {
     selectedOptionalFees: 'selectedOptionalFees',
     checkedInAt: 'checkedInAt',
     checkedInByUserId: 'checkedInByUserId',
+    parentRegistrationId: 'parentRegistrationId',
     createdAt: 'createdAt'
   };
 
@@ -61963,7 +62041,10 @@ export namespace Prisma {
     selectedOptionalFees?: JsonNullableFilter<"EventRegistration">
     checkedInAt?: DateTimeNullableFilter<"EventRegistration"> | Date | string | null
     checkedInByUserId?: UuidNullableFilter<"EventRegistration"> | string | null
+    parentRegistrationId?: UuidNullableFilter<"EventRegistration"> | string | null
     createdAt?: DateTimeFilter<"EventRegistration"> | Date | string
+    parent?: XOR<EventRegistrationNullableScalarRelationFilter, EventRegistrationWhereInput> | null
+    addonChildren?: EventRegistrationListRelationFilter
     event?: XOR<EventScalarRelationFilter, EventWhereInput>
     user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     checkedInBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
@@ -62002,7 +62083,10 @@ export namespace Prisma {
     selectedOptionalFees?: SortOrderInput | SortOrder
     checkedInAt?: SortOrderInput | SortOrder
     checkedInByUserId?: SortOrderInput | SortOrder
+    parentRegistrationId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
+    parent?: EventRegistrationOrderByWithRelationInput
+    addonChildren?: EventRegistrationOrderByRelationAggregateInput
     event?: EventOrderByWithRelationInput
     user?: UserOrderByWithRelationInput
     checkedInBy?: UserOrderByWithRelationInput
@@ -62044,7 +62128,10 @@ export namespace Prisma {
     selectedOptionalFees?: JsonNullableFilter<"EventRegistration">
     checkedInAt?: DateTimeNullableFilter<"EventRegistration"> | Date | string | null
     checkedInByUserId?: UuidNullableFilter<"EventRegistration"> | string | null
+    parentRegistrationId?: UuidNullableFilter<"EventRegistration"> | string | null
     createdAt?: DateTimeFilter<"EventRegistration"> | Date | string
+    parent?: XOR<EventRegistrationNullableScalarRelationFilter, EventRegistrationWhereInput> | null
+    addonChildren?: EventRegistrationListRelationFilter
     event?: XOR<EventScalarRelationFilter, EventWhereInput>
     user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     checkedInBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
@@ -62083,6 +62170,7 @@ export namespace Prisma {
     selectedOptionalFees?: SortOrderInput | SortOrder
     checkedInAt?: SortOrderInput | SortOrder
     checkedInByUserId?: SortOrderInput | SortOrder
+    parentRegistrationId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     _count?: EventRegistrationCountOrderByAggregateInput
     _avg?: EventRegistrationAvgOrderByAggregateInput
@@ -62126,6 +62214,7 @@ export namespace Prisma {
     selectedOptionalFees?: JsonNullableWithAggregatesFilter<"EventRegistration">
     checkedInAt?: DateTimeNullableWithAggregatesFilter<"EventRegistration"> | Date | string | null
     checkedInByUserId?: UuidNullableWithAggregatesFilter<"EventRegistration"> | string | null
+    parentRegistrationId?: UuidNullableWithAggregatesFilter<"EventRegistration"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"EventRegistration"> | Date | string
   }
 
@@ -66345,6 +66434,8 @@ export namespace Prisma {
     selectedOptionalFees?: NullableJsonNullValueInput | InputJsonValue
     checkedInAt?: Date | string | null
     createdAt?: Date | string
+    parent?: EventRegistrationCreateNestedOneWithoutAddonChildrenInput
+    addonChildren?: EventRegistrationCreateNestedManyWithoutParentInput
     event: EventCreateNestedOneWithoutRegistrationsInput
     user?: UserCreateNestedOneWithoutEventRegistrationsInput
     checkedInBy?: UserCreateNestedOneWithoutEventCheckInsInput
@@ -66383,7 +66474,9 @@ export namespace Prisma {
     selectedOptionalFees?: NullableJsonNullValueInput | InputJsonValue
     checkedInAt?: Date | string | null
     checkedInByUserId?: string | null
+    parentRegistrationId?: string | null
     createdAt?: Date | string
+    addonChildren?: EventRegistrationUncheckedCreateNestedManyWithoutParentInput
     transactions?: PaymentTransactionUncheckedCreateNestedManyWithoutEventRegistrationInput
   }
 
@@ -66417,6 +66510,8 @@ export namespace Prisma {
     selectedOptionalFees?: NullableJsonNullValueInput | InputJsonValue
     checkedInAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    parent?: EventRegistrationUpdateOneWithoutAddonChildrenNestedInput
+    addonChildren?: EventRegistrationUpdateManyWithoutParentNestedInput
     event?: EventUpdateOneRequiredWithoutRegistrationsNestedInput
     user?: UserUpdateOneWithoutEventRegistrationsNestedInput
     checkedInBy?: UserUpdateOneWithoutEventCheckInsNestedInput
@@ -66455,7 +66550,9 @@ export namespace Prisma {
     selectedOptionalFees?: NullableJsonNullValueInput | InputJsonValue
     checkedInAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     checkedInByUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    parentRegistrationId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    addonChildren?: EventRegistrationUncheckedUpdateManyWithoutParentNestedInput
     transactions?: PaymentTransactionUncheckedUpdateManyWithoutEventRegistrationNestedInput
   }
 
@@ -66491,6 +66588,7 @@ export namespace Prisma {
     selectedOptionalFees?: NullableJsonNullValueInput | InputJsonValue
     checkedInAt?: Date | string | null
     checkedInByUserId?: string | null
+    parentRegistrationId?: string | null
     createdAt?: Date | string
   }
 
@@ -66558,6 +66656,7 @@ export namespace Prisma {
     selectedOptionalFees?: NullableJsonNullValueInput | InputJsonValue
     checkedInAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     checkedInByUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    parentRegistrationId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -70498,6 +70597,11 @@ export namespace Prisma {
     not?: NestedBoolNullableFilter<$PrismaModel> | boolean | null
   }
 
+  export type EventRegistrationNullableScalarRelationFilter = {
+    is?: EventRegistrationWhereInput | null
+    isNot?: EventRegistrationWhereInput | null
+  }
+
   export type EventRegistrationCountOrderByAggregateInput = {
     id?: SortOrder
     eventId?: SortOrder
@@ -70530,6 +70634,7 @@ export namespace Prisma {
     selectedOptionalFees?: SortOrder
     checkedInAt?: SortOrder
     checkedInByUserId?: SortOrder
+    parentRegistrationId?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -70568,6 +70673,7 @@ export namespace Prisma {
     profileImageUrl?: SortOrder
     checkedInAt?: SortOrder
     checkedInByUserId?: SortOrder
+    parentRegistrationId?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -70601,6 +70707,7 @@ export namespace Prisma {
     profileImageUrl?: SortOrder
     checkedInAt?: SortOrder
     checkedInByUserId?: SortOrder
+    parentRegistrationId?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -71520,11 +71627,6 @@ export namespace Prisma {
     in?: $Enums.PaymentTransactionStatus[] | ListEnumPaymentTransactionStatusFieldRefInput<$PrismaModel>
     notIn?: $Enums.PaymentTransactionStatus[] | ListEnumPaymentTransactionStatusFieldRefInput<$PrismaModel>
     not?: NestedEnumPaymentTransactionStatusFilter<$PrismaModel> | $Enums.PaymentTransactionStatus
-  }
-
-  export type EventRegistrationNullableScalarRelationFilter = {
-    is?: EventRegistrationWhereInput | null
-    isNot?: EventRegistrationWhereInput | null
   }
 
   export type PaymentTransactionCountOrderByAggregateInput = {
@@ -75150,6 +75252,19 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutDivisionPresetsCreatedInput, UserUpdateWithoutDivisionPresetsCreatedInput>, UserUncheckedUpdateWithoutDivisionPresetsCreatedInput>
   }
 
+  export type EventRegistrationCreateNestedOneWithoutAddonChildrenInput = {
+    create?: XOR<EventRegistrationCreateWithoutAddonChildrenInput, EventRegistrationUncheckedCreateWithoutAddonChildrenInput>
+    connectOrCreate?: EventRegistrationCreateOrConnectWithoutAddonChildrenInput
+    connect?: EventRegistrationWhereUniqueInput
+  }
+
+  export type EventRegistrationCreateNestedManyWithoutParentInput = {
+    create?: XOR<EventRegistrationCreateWithoutParentInput, EventRegistrationUncheckedCreateWithoutParentInput> | EventRegistrationCreateWithoutParentInput[] | EventRegistrationUncheckedCreateWithoutParentInput[]
+    connectOrCreate?: EventRegistrationCreateOrConnectWithoutParentInput | EventRegistrationCreateOrConnectWithoutParentInput[]
+    createMany?: EventRegistrationCreateManyParentInputEnvelope
+    connect?: EventRegistrationWhereUniqueInput | EventRegistrationWhereUniqueInput[]
+  }
+
   export type EventCreateNestedOneWithoutRegistrationsInput = {
     create?: XOR<EventCreateWithoutRegistrationsInput, EventUncheckedCreateWithoutRegistrationsInput>
     connectOrCreate?: EventCreateOrConnectWithoutRegistrationsInput
@@ -75175,6 +75290,13 @@ export namespace Prisma {
     connect?: PaymentTransactionWhereUniqueInput | PaymentTransactionWhereUniqueInput[]
   }
 
+  export type EventRegistrationUncheckedCreateNestedManyWithoutParentInput = {
+    create?: XOR<EventRegistrationCreateWithoutParentInput, EventRegistrationUncheckedCreateWithoutParentInput> | EventRegistrationCreateWithoutParentInput[] | EventRegistrationUncheckedCreateWithoutParentInput[]
+    connectOrCreate?: EventRegistrationCreateOrConnectWithoutParentInput | EventRegistrationCreateOrConnectWithoutParentInput[]
+    createMany?: EventRegistrationCreateManyParentInputEnvelope
+    connect?: EventRegistrationWhereUniqueInput | EventRegistrationWhereUniqueInput[]
+  }
+
   export type PaymentTransactionUncheckedCreateNestedManyWithoutEventRegistrationInput = {
     create?: XOR<PaymentTransactionCreateWithoutEventRegistrationInput, PaymentTransactionUncheckedCreateWithoutEventRegistrationInput> | PaymentTransactionCreateWithoutEventRegistrationInput[] | PaymentTransactionUncheckedCreateWithoutEventRegistrationInput[]
     connectOrCreate?: PaymentTransactionCreateOrConnectWithoutEventRegistrationInput | PaymentTransactionCreateOrConnectWithoutEventRegistrationInput[]
@@ -75188,6 +75310,30 @@ export namespace Prisma {
 
   export type NullableBoolFieldUpdateOperationsInput = {
     set?: boolean | null
+  }
+
+  export type EventRegistrationUpdateOneWithoutAddonChildrenNestedInput = {
+    create?: XOR<EventRegistrationCreateWithoutAddonChildrenInput, EventRegistrationUncheckedCreateWithoutAddonChildrenInput>
+    connectOrCreate?: EventRegistrationCreateOrConnectWithoutAddonChildrenInput
+    upsert?: EventRegistrationUpsertWithoutAddonChildrenInput
+    disconnect?: EventRegistrationWhereInput | boolean
+    delete?: EventRegistrationWhereInput | boolean
+    connect?: EventRegistrationWhereUniqueInput
+    update?: XOR<XOR<EventRegistrationUpdateToOneWithWhereWithoutAddonChildrenInput, EventRegistrationUpdateWithoutAddonChildrenInput>, EventRegistrationUncheckedUpdateWithoutAddonChildrenInput>
+  }
+
+  export type EventRegistrationUpdateManyWithoutParentNestedInput = {
+    create?: XOR<EventRegistrationCreateWithoutParentInput, EventRegistrationUncheckedCreateWithoutParentInput> | EventRegistrationCreateWithoutParentInput[] | EventRegistrationUncheckedCreateWithoutParentInput[]
+    connectOrCreate?: EventRegistrationCreateOrConnectWithoutParentInput | EventRegistrationCreateOrConnectWithoutParentInput[]
+    upsert?: EventRegistrationUpsertWithWhereUniqueWithoutParentInput | EventRegistrationUpsertWithWhereUniqueWithoutParentInput[]
+    createMany?: EventRegistrationCreateManyParentInputEnvelope
+    set?: EventRegistrationWhereUniqueInput | EventRegistrationWhereUniqueInput[]
+    disconnect?: EventRegistrationWhereUniqueInput | EventRegistrationWhereUniqueInput[]
+    delete?: EventRegistrationWhereUniqueInput | EventRegistrationWhereUniqueInput[]
+    connect?: EventRegistrationWhereUniqueInput | EventRegistrationWhereUniqueInput[]
+    update?: EventRegistrationUpdateWithWhereUniqueWithoutParentInput | EventRegistrationUpdateWithWhereUniqueWithoutParentInput[]
+    updateMany?: EventRegistrationUpdateManyWithWhereWithoutParentInput | EventRegistrationUpdateManyWithWhereWithoutParentInput[]
+    deleteMany?: EventRegistrationScalarWhereInput | EventRegistrationScalarWhereInput[]
   }
 
   export type EventUpdateOneRequiredWithoutRegistrationsNestedInput = {
@@ -75230,6 +75376,20 @@ export namespace Prisma {
     update?: PaymentTransactionUpdateWithWhereUniqueWithoutEventRegistrationInput | PaymentTransactionUpdateWithWhereUniqueWithoutEventRegistrationInput[]
     updateMany?: PaymentTransactionUpdateManyWithWhereWithoutEventRegistrationInput | PaymentTransactionUpdateManyWithWhereWithoutEventRegistrationInput[]
     deleteMany?: PaymentTransactionScalarWhereInput | PaymentTransactionScalarWhereInput[]
+  }
+
+  export type EventRegistrationUncheckedUpdateManyWithoutParentNestedInput = {
+    create?: XOR<EventRegistrationCreateWithoutParentInput, EventRegistrationUncheckedCreateWithoutParentInput> | EventRegistrationCreateWithoutParentInput[] | EventRegistrationUncheckedCreateWithoutParentInput[]
+    connectOrCreate?: EventRegistrationCreateOrConnectWithoutParentInput | EventRegistrationCreateOrConnectWithoutParentInput[]
+    upsert?: EventRegistrationUpsertWithWhereUniqueWithoutParentInput | EventRegistrationUpsertWithWhereUniqueWithoutParentInput[]
+    createMany?: EventRegistrationCreateManyParentInputEnvelope
+    set?: EventRegistrationWhereUniqueInput | EventRegistrationWhereUniqueInput[]
+    disconnect?: EventRegistrationWhereUniqueInput | EventRegistrationWhereUniqueInput[]
+    delete?: EventRegistrationWhereUniqueInput | EventRegistrationWhereUniqueInput[]
+    connect?: EventRegistrationWhereUniqueInput | EventRegistrationWhereUniqueInput[]
+    update?: EventRegistrationUpdateWithWhereUniqueWithoutParentInput | EventRegistrationUpdateWithWhereUniqueWithoutParentInput[]
+    updateMany?: EventRegistrationUpdateManyWithWhereWithoutParentInput | EventRegistrationUpdateManyWithWhereWithoutParentInput[]
+    deleteMany?: EventRegistrationScalarWhereInput | EventRegistrationScalarWhereInput[]
   }
 
   export type PaymentTransactionUncheckedUpdateManyWithoutEventRegistrationNestedInput = {
@@ -78221,6 +78381,8 @@ export namespace Prisma {
     selectedOptionalFees?: NullableJsonNullValueInput | InputJsonValue
     checkedInAt?: Date | string | null
     createdAt?: Date | string
+    parent?: EventRegistrationCreateNestedOneWithoutAddonChildrenInput
+    addonChildren?: EventRegistrationCreateNestedManyWithoutParentInput
     event: EventCreateNestedOneWithoutRegistrationsInput
     checkedInBy?: UserCreateNestedOneWithoutEventCheckInsInput
     transactions?: PaymentTransactionCreateNestedManyWithoutEventRegistrationInput
@@ -78257,7 +78419,9 @@ export namespace Prisma {
     selectedOptionalFees?: NullableJsonNullValueInput | InputJsonValue
     checkedInAt?: Date | string | null
     checkedInByUserId?: string | null
+    parentRegistrationId?: string | null
     createdAt?: Date | string
+    addonChildren?: EventRegistrationUncheckedCreateNestedManyWithoutParentInput
     transactions?: PaymentTransactionUncheckedCreateNestedManyWithoutEventRegistrationInput
   }
 
@@ -78301,6 +78465,8 @@ export namespace Prisma {
     selectedOptionalFees?: NullableJsonNullValueInput | InputJsonValue
     checkedInAt?: Date | string | null
     createdAt?: Date | string
+    parent?: EventRegistrationCreateNestedOneWithoutAddonChildrenInput
+    addonChildren?: EventRegistrationCreateNestedManyWithoutParentInput
     event: EventCreateNestedOneWithoutRegistrationsInput
     user?: UserCreateNestedOneWithoutEventRegistrationsInput
     transactions?: PaymentTransactionCreateNestedManyWithoutEventRegistrationInput
@@ -78337,7 +78503,9 @@ export namespace Prisma {
     profileImageUrl?: string | null
     selectedOptionalFees?: NullableJsonNullValueInput | InputJsonValue
     checkedInAt?: Date | string | null
+    parentRegistrationId?: string | null
     createdAt?: Date | string
+    addonChildren?: EventRegistrationUncheckedCreateNestedManyWithoutParentInput
     transactions?: PaymentTransactionUncheckedCreateNestedManyWithoutEventRegistrationInput
   }
 
@@ -79435,6 +79603,7 @@ export namespace Prisma {
     selectedOptionalFees?: JsonNullableFilter<"EventRegistration">
     checkedInAt?: DateTimeNullableFilter<"EventRegistration"> | Date | string | null
     checkedInByUserId?: UuidNullableFilter<"EventRegistration"> | string | null
+    parentRegistrationId?: UuidNullableFilter<"EventRegistration"> | string | null
     createdAt?: DateTimeFilter<"EventRegistration"> | Date | string
   }
 
@@ -85480,6 +85649,8 @@ export namespace Prisma {
     selectedOptionalFees?: NullableJsonNullValueInput | InputJsonValue
     checkedInAt?: Date | string | null
     createdAt?: Date | string
+    parent?: EventRegistrationCreateNestedOneWithoutAddonChildrenInput
+    addonChildren?: EventRegistrationCreateNestedManyWithoutParentInput
     user?: UserCreateNestedOneWithoutEventRegistrationsInput
     checkedInBy?: UserCreateNestedOneWithoutEventCheckInsInput
     transactions?: PaymentTransactionCreateNestedManyWithoutEventRegistrationInput
@@ -85516,7 +85687,9 @@ export namespace Prisma {
     selectedOptionalFees?: NullableJsonNullValueInput | InputJsonValue
     checkedInAt?: Date | string | null
     checkedInByUserId?: string | null
+    parentRegistrationId?: string | null
     createdAt?: Date | string
+    addonChildren?: EventRegistrationUncheckedCreateNestedManyWithoutParentInput
     transactions?: PaymentTransactionUncheckedCreateNestedManyWithoutEventRegistrationInput
   }
 
@@ -86686,6 +86859,169 @@ export namespace Prisma {
     serviceCouponsCreated?: ServiceCouponUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
+  export type EventRegistrationCreateWithoutAddonChildrenInput = {
+    id?: string
+    guestName?: string | null
+    guestEmail?: string | null
+    guestPhone?: string | null
+    qrToken: string
+    paymentStatus?: $Enums.PaymentStatus | null
+    paymentGroupId?: string | null
+    amountDue?: Decimal | DecimalJsLike | number | string | null
+    paidAt?: Date | string | null
+    transactionId?: string | null
+    guestDateOfBirth?: Date | string | null
+    parentOfMemberNumber?: string | null
+    divisionCode?: string | null
+    entrantGender?: $Enums.Gender | null
+    entrantWeightKg?: Decimal | DecimalJsLike | number | string | null
+    entrantBeltRank?: string | null
+    entrantDojoName?: string | null
+    coachName?: string | null
+    teamName?: string | null
+    teammates?: NullableJsonNullValueInput | InputJsonValue
+    guardianName?: string | null
+    guardianPhone?: string | null
+    guardianConsent?: boolean | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    profileImageUrl?: string | null
+    selectedOptionalFees?: NullableJsonNullValueInput | InputJsonValue
+    checkedInAt?: Date | string | null
+    createdAt?: Date | string
+    parent?: EventRegistrationCreateNestedOneWithoutAddonChildrenInput
+    event: EventCreateNestedOneWithoutRegistrationsInput
+    user?: UserCreateNestedOneWithoutEventRegistrationsInput
+    checkedInBy?: UserCreateNestedOneWithoutEventCheckInsInput
+    transactions?: PaymentTransactionCreateNestedManyWithoutEventRegistrationInput
+  }
+
+  export type EventRegistrationUncheckedCreateWithoutAddonChildrenInput = {
+    id?: string
+    eventId: string
+    userId?: string | null
+    guestName?: string | null
+    guestEmail?: string | null
+    guestPhone?: string | null
+    qrToken: string
+    paymentStatus?: $Enums.PaymentStatus | null
+    paymentGroupId?: string | null
+    amountDue?: Decimal | DecimalJsLike | number | string | null
+    paidAt?: Date | string | null
+    transactionId?: string | null
+    guestDateOfBirth?: Date | string | null
+    parentOfMemberNumber?: string | null
+    divisionCode?: string | null
+    entrantGender?: $Enums.Gender | null
+    entrantWeightKg?: Decimal | DecimalJsLike | number | string | null
+    entrantBeltRank?: string | null
+    entrantDojoName?: string | null
+    coachName?: string | null
+    teamName?: string | null
+    teammates?: NullableJsonNullValueInput | InputJsonValue
+    guardianName?: string | null
+    guardianPhone?: string | null
+    guardianConsent?: boolean | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    profileImageUrl?: string | null
+    selectedOptionalFees?: NullableJsonNullValueInput | InputJsonValue
+    checkedInAt?: Date | string | null
+    checkedInByUserId?: string | null
+    parentRegistrationId?: string | null
+    createdAt?: Date | string
+    transactions?: PaymentTransactionUncheckedCreateNestedManyWithoutEventRegistrationInput
+  }
+
+  export type EventRegistrationCreateOrConnectWithoutAddonChildrenInput = {
+    where: EventRegistrationWhereUniqueInput
+    create: XOR<EventRegistrationCreateWithoutAddonChildrenInput, EventRegistrationUncheckedCreateWithoutAddonChildrenInput>
+  }
+
+  export type EventRegistrationCreateWithoutParentInput = {
+    id?: string
+    guestName?: string | null
+    guestEmail?: string | null
+    guestPhone?: string | null
+    qrToken: string
+    paymentStatus?: $Enums.PaymentStatus | null
+    paymentGroupId?: string | null
+    amountDue?: Decimal | DecimalJsLike | number | string | null
+    paidAt?: Date | string | null
+    transactionId?: string | null
+    guestDateOfBirth?: Date | string | null
+    parentOfMemberNumber?: string | null
+    divisionCode?: string | null
+    entrantGender?: $Enums.Gender | null
+    entrantWeightKg?: Decimal | DecimalJsLike | number | string | null
+    entrantBeltRank?: string | null
+    entrantDojoName?: string | null
+    coachName?: string | null
+    teamName?: string | null
+    teammates?: NullableJsonNullValueInput | InputJsonValue
+    guardianName?: string | null
+    guardianPhone?: string | null
+    guardianConsent?: boolean | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    profileImageUrl?: string | null
+    selectedOptionalFees?: NullableJsonNullValueInput | InputJsonValue
+    checkedInAt?: Date | string | null
+    createdAt?: Date | string
+    addonChildren?: EventRegistrationCreateNestedManyWithoutParentInput
+    event: EventCreateNestedOneWithoutRegistrationsInput
+    user?: UserCreateNestedOneWithoutEventRegistrationsInput
+    checkedInBy?: UserCreateNestedOneWithoutEventCheckInsInput
+    transactions?: PaymentTransactionCreateNestedManyWithoutEventRegistrationInput
+  }
+
+  export type EventRegistrationUncheckedCreateWithoutParentInput = {
+    id?: string
+    eventId: string
+    userId?: string | null
+    guestName?: string | null
+    guestEmail?: string | null
+    guestPhone?: string | null
+    qrToken: string
+    paymentStatus?: $Enums.PaymentStatus | null
+    paymentGroupId?: string | null
+    amountDue?: Decimal | DecimalJsLike | number | string | null
+    paidAt?: Date | string | null
+    transactionId?: string | null
+    guestDateOfBirth?: Date | string | null
+    parentOfMemberNumber?: string | null
+    divisionCode?: string | null
+    entrantGender?: $Enums.Gender | null
+    entrantWeightKg?: Decimal | DecimalJsLike | number | string | null
+    entrantBeltRank?: string | null
+    entrantDojoName?: string | null
+    coachName?: string | null
+    teamName?: string | null
+    teammates?: NullableJsonNullValueInput | InputJsonValue
+    guardianName?: string | null
+    guardianPhone?: string | null
+    guardianConsent?: boolean | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    profileImageUrl?: string | null
+    selectedOptionalFees?: NullableJsonNullValueInput | InputJsonValue
+    checkedInAt?: Date | string | null
+    checkedInByUserId?: string | null
+    createdAt?: Date | string
+    addonChildren?: EventRegistrationUncheckedCreateNestedManyWithoutParentInput
+    transactions?: PaymentTransactionUncheckedCreateNestedManyWithoutEventRegistrationInput
+  }
+
+  export type EventRegistrationCreateOrConnectWithoutParentInput = {
+    where: EventRegistrationWhereUniqueInput
+    create: XOR<EventRegistrationCreateWithoutParentInput, EventRegistrationUncheckedCreateWithoutParentInput>
+  }
+
+  export type EventRegistrationCreateManyParentInputEnvelope = {
+    data: EventRegistrationCreateManyParentInput | EventRegistrationCreateManyParentInput[]
+    skipDuplicates?: boolean
+  }
+
   export type EventCreateWithoutRegistrationsInput = {
     id?: string
     title: string
@@ -86963,6 +87299,107 @@ export namespace Prisma {
   export type PaymentTransactionCreateManyEventRegistrationInputEnvelope = {
     data: PaymentTransactionCreateManyEventRegistrationInput | PaymentTransactionCreateManyEventRegistrationInput[]
     skipDuplicates?: boolean
+  }
+
+  export type EventRegistrationUpsertWithoutAddonChildrenInput = {
+    update: XOR<EventRegistrationUpdateWithoutAddonChildrenInput, EventRegistrationUncheckedUpdateWithoutAddonChildrenInput>
+    create: XOR<EventRegistrationCreateWithoutAddonChildrenInput, EventRegistrationUncheckedCreateWithoutAddonChildrenInput>
+    where?: EventRegistrationWhereInput
+  }
+
+  export type EventRegistrationUpdateToOneWithWhereWithoutAddonChildrenInput = {
+    where?: EventRegistrationWhereInput
+    data: XOR<EventRegistrationUpdateWithoutAddonChildrenInput, EventRegistrationUncheckedUpdateWithoutAddonChildrenInput>
+  }
+
+  export type EventRegistrationUpdateWithoutAddonChildrenInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    guestName?: NullableStringFieldUpdateOperationsInput | string | null
+    guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    guestPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    qrToken?: StringFieldUpdateOperationsInput | string
+    paymentStatus?: NullableEnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus | null
+    paymentGroupId?: NullableStringFieldUpdateOperationsInput | string | null
+    amountDue?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    transactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    guestDateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    parentOfMemberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    divisionCode?: NullableStringFieldUpdateOperationsInput | string | null
+    entrantGender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    entrantWeightKg?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    entrantBeltRank?: NullableStringFieldUpdateOperationsInput | string | null
+    entrantDojoName?: NullableStringFieldUpdateOperationsInput | string | null
+    coachName?: NullableStringFieldUpdateOperationsInput | string | null
+    teamName?: NullableStringFieldUpdateOperationsInput | string | null
+    teammates?: NullableJsonNullValueInput | InputJsonValue
+    guardianName?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianConsent?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    selectedOptionalFees?: NullableJsonNullValueInput | InputJsonValue
+    checkedInAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    parent?: EventRegistrationUpdateOneWithoutAddonChildrenNestedInput
+    event?: EventUpdateOneRequiredWithoutRegistrationsNestedInput
+    user?: UserUpdateOneWithoutEventRegistrationsNestedInput
+    checkedInBy?: UserUpdateOneWithoutEventCheckInsNestedInput
+    transactions?: PaymentTransactionUpdateManyWithoutEventRegistrationNestedInput
+  }
+
+  export type EventRegistrationUncheckedUpdateWithoutAddonChildrenInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    eventId?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    guestName?: NullableStringFieldUpdateOperationsInput | string | null
+    guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    guestPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    qrToken?: StringFieldUpdateOperationsInput | string
+    paymentStatus?: NullableEnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus | null
+    paymentGroupId?: NullableStringFieldUpdateOperationsInput | string | null
+    amountDue?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    transactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    guestDateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    parentOfMemberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    divisionCode?: NullableStringFieldUpdateOperationsInput | string | null
+    entrantGender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    entrantWeightKg?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    entrantBeltRank?: NullableStringFieldUpdateOperationsInput | string | null
+    entrantDojoName?: NullableStringFieldUpdateOperationsInput | string | null
+    coachName?: NullableStringFieldUpdateOperationsInput | string | null
+    teamName?: NullableStringFieldUpdateOperationsInput | string | null
+    teammates?: NullableJsonNullValueInput | InputJsonValue
+    guardianName?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianConsent?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    selectedOptionalFees?: NullableJsonNullValueInput | InputJsonValue
+    checkedInAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    checkedInByUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    parentRegistrationId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    transactions?: PaymentTransactionUncheckedUpdateManyWithoutEventRegistrationNestedInput
+  }
+
+  export type EventRegistrationUpsertWithWhereUniqueWithoutParentInput = {
+    where: EventRegistrationWhereUniqueInput
+    update: XOR<EventRegistrationUpdateWithoutParentInput, EventRegistrationUncheckedUpdateWithoutParentInput>
+    create: XOR<EventRegistrationCreateWithoutParentInput, EventRegistrationUncheckedCreateWithoutParentInput>
+  }
+
+  export type EventRegistrationUpdateWithWhereUniqueWithoutParentInput = {
+    where: EventRegistrationWhereUniqueInput
+    data: XOR<EventRegistrationUpdateWithoutParentInput, EventRegistrationUncheckedUpdateWithoutParentInput>
+  }
+
+  export type EventRegistrationUpdateManyWithWhereWithoutParentInput = {
+    where: EventRegistrationScalarWhereInput
+    data: XOR<EventRegistrationUpdateManyMutationInput, EventRegistrationUncheckedUpdateManyWithoutParentInput>
   }
 
   export type EventUpsertWithoutRegistrationsInput = {
@@ -92155,6 +92592,8 @@ export namespace Prisma {
     selectedOptionalFees?: NullableJsonNullValueInput | InputJsonValue
     checkedInAt?: Date | string | null
     createdAt?: Date | string
+    parent?: EventRegistrationCreateNestedOneWithoutAddonChildrenInput
+    addonChildren?: EventRegistrationCreateNestedManyWithoutParentInput
     event: EventCreateNestedOneWithoutRegistrationsInput
     user?: UserCreateNestedOneWithoutEventRegistrationsInput
     checkedInBy?: UserCreateNestedOneWithoutEventCheckInsInput
@@ -92192,7 +92631,9 @@ export namespace Prisma {
     selectedOptionalFees?: NullableJsonNullValueInput | InputJsonValue
     checkedInAt?: Date | string | null
     checkedInByUserId?: string | null
+    parentRegistrationId?: string | null
     createdAt?: Date | string
+    addonChildren?: EventRegistrationUncheckedCreateNestedManyWithoutParentInput
   }
 
   export type EventRegistrationCreateOrConnectWithoutTransactionsInput = {
@@ -92403,6 +92844,8 @@ export namespace Prisma {
     selectedOptionalFees?: NullableJsonNullValueInput | InputJsonValue
     checkedInAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    parent?: EventRegistrationUpdateOneWithoutAddonChildrenNestedInput
+    addonChildren?: EventRegistrationUpdateManyWithoutParentNestedInput
     event?: EventUpdateOneRequiredWithoutRegistrationsNestedInput
     user?: UserUpdateOneWithoutEventRegistrationsNestedInput
     checkedInBy?: UserUpdateOneWithoutEventCheckInsNestedInput
@@ -92440,7 +92883,9 @@ export namespace Prisma {
     selectedOptionalFees?: NullableJsonNullValueInput | InputJsonValue
     checkedInAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     checkedInByUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    parentRegistrationId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    addonChildren?: EventRegistrationUncheckedUpdateManyWithoutParentNestedInput
   }
 
   export type UserUpsertWithoutPaymentTransactionsInput = {
@@ -95067,6 +95512,7 @@ export namespace Prisma {
     selectedOptionalFees?: NullableJsonNullValueInput | InputJsonValue
     checkedInAt?: Date | string | null
     checkedInByUserId?: string | null
+    parentRegistrationId?: string | null
     createdAt?: Date | string
   }
 
@@ -95101,6 +95547,7 @@ export namespace Prisma {
     profileImageUrl?: string | null
     selectedOptionalFees?: NullableJsonNullValueInput | InputJsonValue
     checkedInAt?: Date | string | null
+    parentRegistrationId?: string | null
     createdAt?: Date | string
   }
 
@@ -95532,6 +95979,8 @@ export namespace Prisma {
     selectedOptionalFees?: NullableJsonNullValueInput | InputJsonValue
     checkedInAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    parent?: EventRegistrationUpdateOneWithoutAddonChildrenNestedInput
+    addonChildren?: EventRegistrationUpdateManyWithoutParentNestedInput
     event?: EventUpdateOneRequiredWithoutRegistrationsNestedInput
     checkedInBy?: UserUpdateOneWithoutEventCheckInsNestedInput
     transactions?: PaymentTransactionUpdateManyWithoutEventRegistrationNestedInput
@@ -95568,7 +96017,9 @@ export namespace Prisma {
     selectedOptionalFees?: NullableJsonNullValueInput | InputJsonValue
     checkedInAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     checkedInByUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    parentRegistrationId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    addonChildren?: EventRegistrationUncheckedUpdateManyWithoutParentNestedInput
     transactions?: PaymentTransactionUncheckedUpdateManyWithoutEventRegistrationNestedInput
   }
 
@@ -95603,6 +96054,7 @@ export namespace Prisma {
     selectedOptionalFees?: NullableJsonNullValueInput | InputJsonValue
     checkedInAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     checkedInByUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    parentRegistrationId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -95636,6 +96088,8 @@ export namespace Prisma {
     selectedOptionalFees?: NullableJsonNullValueInput | InputJsonValue
     checkedInAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    parent?: EventRegistrationUpdateOneWithoutAddonChildrenNestedInput
+    addonChildren?: EventRegistrationUpdateManyWithoutParentNestedInput
     event?: EventUpdateOneRequiredWithoutRegistrationsNestedInput
     user?: UserUpdateOneWithoutEventRegistrationsNestedInput
     transactions?: PaymentTransactionUpdateManyWithoutEventRegistrationNestedInput
@@ -95672,7 +96126,9 @@ export namespace Prisma {
     profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     selectedOptionalFees?: NullableJsonNullValueInput | InputJsonValue
     checkedInAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    parentRegistrationId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    addonChildren?: EventRegistrationUncheckedUpdateManyWithoutParentNestedInput
     transactions?: PaymentTransactionUncheckedUpdateManyWithoutEventRegistrationNestedInput
   }
 
@@ -95707,6 +96163,7 @@ export namespace Prisma {
     profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     selectedOptionalFees?: NullableJsonNullValueInput | InputJsonValue
     checkedInAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    parentRegistrationId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -98753,6 +99210,7 @@ export namespace Prisma {
     selectedOptionalFees?: NullableJsonNullValueInput | InputJsonValue
     checkedInAt?: Date | string | null
     checkedInByUserId?: string | null
+    parentRegistrationId?: string | null
     createdAt?: Date | string
   }
 
@@ -98786,6 +99244,8 @@ export namespace Prisma {
     selectedOptionalFees?: NullableJsonNullValueInput | InputJsonValue
     checkedInAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    parent?: EventRegistrationUpdateOneWithoutAddonChildrenNestedInput
+    addonChildren?: EventRegistrationUpdateManyWithoutParentNestedInput
     user?: UserUpdateOneWithoutEventRegistrationsNestedInput
     checkedInBy?: UserUpdateOneWithoutEventCheckInsNestedInput
     transactions?: PaymentTransactionUpdateManyWithoutEventRegistrationNestedInput
@@ -98822,7 +99282,9 @@ export namespace Prisma {
     selectedOptionalFees?: NullableJsonNullValueInput | InputJsonValue
     checkedInAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     checkedInByUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    parentRegistrationId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    addonChildren?: EventRegistrationUncheckedUpdateManyWithoutParentNestedInput
     transactions?: PaymentTransactionUncheckedUpdateManyWithoutEventRegistrationNestedInput
   }
 
@@ -98857,7 +99319,43 @@ export namespace Prisma {
     selectedOptionalFees?: NullableJsonNullValueInput | InputJsonValue
     checkedInAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     checkedInByUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    parentRegistrationId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type EventRegistrationCreateManyParentInput = {
+    id?: string
+    eventId: string
+    userId?: string | null
+    guestName?: string | null
+    guestEmail?: string | null
+    guestPhone?: string | null
+    qrToken: string
+    paymentStatus?: $Enums.PaymentStatus | null
+    paymentGroupId?: string | null
+    amountDue?: Decimal | DecimalJsLike | number | string | null
+    paidAt?: Date | string | null
+    transactionId?: string | null
+    guestDateOfBirth?: Date | string | null
+    parentOfMemberNumber?: string | null
+    divisionCode?: string | null
+    entrantGender?: $Enums.Gender | null
+    entrantWeightKg?: Decimal | DecimalJsLike | number | string | null
+    entrantBeltRank?: string | null
+    entrantDojoName?: string | null
+    coachName?: string | null
+    teamName?: string | null
+    teammates?: NullableJsonNullValueInput | InputJsonValue
+    guardianName?: string | null
+    guardianPhone?: string | null
+    guardianConsent?: boolean | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    profileImageUrl?: string | null
+    selectedOptionalFees?: NullableJsonNullValueInput | InputJsonValue
+    checkedInAt?: Date | string | null
+    checkedInByUserId?: string | null
+    createdAt?: Date | string
   }
 
   export type PaymentTransactionCreateManyEventRegistrationInput = {
@@ -98876,6 +99374,115 @@ export namespace Prisma {
     buyerPhone?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+  }
+
+  export type EventRegistrationUpdateWithoutParentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    guestName?: NullableStringFieldUpdateOperationsInput | string | null
+    guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    guestPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    qrToken?: StringFieldUpdateOperationsInput | string
+    paymentStatus?: NullableEnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus | null
+    paymentGroupId?: NullableStringFieldUpdateOperationsInput | string | null
+    amountDue?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    transactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    guestDateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    parentOfMemberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    divisionCode?: NullableStringFieldUpdateOperationsInput | string | null
+    entrantGender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    entrantWeightKg?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    entrantBeltRank?: NullableStringFieldUpdateOperationsInput | string | null
+    entrantDojoName?: NullableStringFieldUpdateOperationsInput | string | null
+    coachName?: NullableStringFieldUpdateOperationsInput | string | null
+    teamName?: NullableStringFieldUpdateOperationsInput | string | null
+    teammates?: NullableJsonNullValueInput | InputJsonValue
+    guardianName?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianConsent?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    selectedOptionalFees?: NullableJsonNullValueInput | InputJsonValue
+    checkedInAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    addonChildren?: EventRegistrationUpdateManyWithoutParentNestedInput
+    event?: EventUpdateOneRequiredWithoutRegistrationsNestedInput
+    user?: UserUpdateOneWithoutEventRegistrationsNestedInput
+    checkedInBy?: UserUpdateOneWithoutEventCheckInsNestedInput
+    transactions?: PaymentTransactionUpdateManyWithoutEventRegistrationNestedInput
+  }
+
+  export type EventRegistrationUncheckedUpdateWithoutParentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    eventId?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    guestName?: NullableStringFieldUpdateOperationsInput | string | null
+    guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    guestPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    qrToken?: StringFieldUpdateOperationsInput | string
+    paymentStatus?: NullableEnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus | null
+    paymentGroupId?: NullableStringFieldUpdateOperationsInput | string | null
+    amountDue?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    transactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    guestDateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    parentOfMemberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    divisionCode?: NullableStringFieldUpdateOperationsInput | string | null
+    entrantGender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    entrantWeightKg?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    entrantBeltRank?: NullableStringFieldUpdateOperationsInput | string | null
+    entrantDojoName?: NullableStringFieldUpdateOperationsInput | string | null
+    coachName?: NullableStringFieldUpdateOperationsInput | string | null
+    teamName?: NullableStringFieldUpdateOperationsInput | string | null
+    teammates?: NullableJsonNullValueInput | InputJsonValue
+    guardianName?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianConsent?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    selectedOptionalFees?: NullableJsonNullValueInput | InputJsonValue
+    checkedInAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    checkedInByUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    addonChildren?: EventRegistrationUncheckedUpdateManyWithoutParentNestedInput
+    transactions?: PaymentTransactionUncheckedUpdateManyWithoutEventRegistrationNestedInput
+  }
+
+  export type EventRegistrationUncheckedUpdateManyWithoutParentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    eventId?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    guestName?: NullableStringFieldUpdateOperationsInput | string | null
+    guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    guestPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    qrToken?: StringFieldUpdateOperationsInput | string
+    paymentStatus?: NullableEnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus | null
+    paymentGroupId?: NullableStringFieldUpdateOperationsInput | string | null
+    amountDue?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    transactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    guestDateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    parentOfMemberNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    divisionCode?: NullableStringFieldUpdateOperationsInput | string | null
+    entrantGender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    entrantWeightKg?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    entrantBeltRank?: NullableStringFieldUpdateOperationsInput | string | null
+    entrantDojoName?: NullableStringFieldUpdateOperationsInput | string | null
+    coachName?: NullableStringFieldUpdateOperationsInput | string | null
+    teamName?: NullableStringFieldUpdateOperationsInput | string | null
+    teammates?: NullableJsonNullValueInput | InputJsonValue
+    guardianName?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianConsent?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    selectedOptionalFees?: NullableJsonNullValueInput | InputJsonValue
+    checkedInAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    checkedInByUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type PaymentTransactionUpdateWithoutEventRegistrationInput = {

@@ -6,6 +6,19 @@ import { markRegistrationPaid } from "@/lib/events/ticket-payment";
 // tran_id is the event_registrations.id. We validate the payment, mark the
 // registration PAID, then land the participant on their card.
 
+function successPathFor(flow: string | null, regId: string): string {
+    return flow === "add"
+        ? `/events/add-divisions-success?regId=${regId}`
+        : `/events/payment-success?regId=${regId}`;
+}
+
+function failPathFor(flow: string | null, regId: string, eventId: string | null): string {
+    const evtParam = eventId ? `&eventId=${eventId}` : "";
+    return flow === "add"
+        ? `/events/add-divisions-failed?regId=${regId}${evtParam}`
+        : `/events/payment-failed?regId=${regId}`;
+}
+
 export async function POST(request: Request) {
     try {
         const formData = await request.formData();
@@ -13,17 +26,15 @@ export async function POST(request: Request) {
         const tranId = formData.get("tran_id") as string;
         const url = new URL(request.url);
         const regId = url.searchParams.get("regId") ?? tranId;
+        const flow = url.searchParams.get("flow");
 
         const reg = await prisma.eventRegistration.findUnique({
             where: { id: regId },
-            select: { qrToken: true, paymentStatus: true },
+            select: { qrToken: true, paymentStatus: true, eventId: true },
         });
         if (!reg) return NextResponse.redirect(new URL("/", request.url));
 
-        const successUrl = new URL(
-            `/events/payment-success?regId=${regId}`,
-            request.url,
-        );
+        const successUrl = new URL(successPathFor(flow, regId), request.url);
 
         if (reg.paymentStatus === "PAID") {
             return NextResponse.redirect(successUrl);
@@ -39,7 +50,7 @@ export async function POST(request: Request) {
             const json = await validation.json();
             if (json.status !== "VALID" && json.status !== "VALIDATED") {
                 return NextResponse.redirect(
-                    new URL(`/events/payment-failed?regId=${regId}`, request.url),
+                    new URL(failPathFor(flow, regId, reg.eventId), request.url),
                 );
             }
         }
@@ -56,6 +67,7 @@ export async function POST(request: Request) {
 export async function GET(request: Request) {
     const url = new URL(request.url);
     const regId = url.searchParams.get("regId");
+    const flow = url.searchParams.get("flow");
     if (!regId) return NextResponse.redirect(new URL("/", request.url));
 
     const reg = await prisma.eventRegistration.findUnique({
@@ -64,6 +76,6 @@ export async function GET(request: Request) {
     });
     if (!reg) return NextResponse.redirect(new URL("/", request.url));
     return NextResponse.redirect(
-        new URL(`/events/payment-success?regId=${regId}`, request.url),
+        new URL(successPathFor(flow, regId), request.url),
     );
 }

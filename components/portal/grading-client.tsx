@@ -13,6 +13,7 @@ import {
 } from "@/app/portal/grading/actions";
 import { DEFAULT_TIME_ZONE } from "@/lib/format/datetime";
 import { bandForMarks } from "@/lib/grading-marks";
+import { formatBeltRank } from "@/lib/constants";
 
 type RequestKind = "pending" | "scheduled" | "declined" | "cancelled";
 
@@ -94,7 +95,7 @@ export default function GradingClient({
       <header className="space-y-1">
         <h1 className="text-2xl font-bold text-zinc-900">Belt grading</h1>
         <p className="text-sm text-zinc-500">
-          Current rank: <span className="font-semibold text-zinc-700">{member?.currentRank ?? "—"}</span>
+          Current rank: <span className="font-semibold text-zinc-700">{formatBeltRank(member?.currentRank)}</span>
         </p>
       </header>
 
@@ -222,7 +223,7 @@ function NoRequestCard({
           <h2 className="text-base font-bold text-zinc-900">Ready to test?</h2>
           <p className="text-sm text-zinc-500">
             {nextRankName
-              ? <>Your next rank is <span className="font-semibold text-zinc-700">{nextRankName}</span>.</>
+              ? <>Your next rank is <span className="font-semibold text-zinc-700">{formatBeltRank(nextRankName)}</span>.</>
               : blockReason ?? "Loading eligibility…"}
           </p>
         </div>
@@ -246,7 +247,7 @@ function NoRequestCard({
             className="inline-flex items-center gap-2 bg-accent-red text-white text-xs font-bold tracking-widest uppercase px-4 py-2.5 rounded-sm hover:bg-accent-red/90 disabled:opacity-40"
           >
             {disabled ? <Loader2 size={14} className="animate-spin" /> : <Send size={14} />}
-            Request belt test{nextRankName ? ` for ${nextRankName}` : ""}
+            Request belt test{nextRankName ? ` for ${formatBeltRank(nextRankName)}` : ""}
           </button>
         </>
       )}

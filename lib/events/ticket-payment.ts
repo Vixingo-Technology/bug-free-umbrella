@@ -32,6 +32,10 @@ export async function initiateTicketPayment(input: {
     customerName: string;
     customerEmail: string;
     customerPhone: string | null;
+    // "register" = first-time ticket purchase, "add" = top-up on an existing
+    // registration via the add-divisions flow. Controls which post-payment
+    // landing pages the buyer returns to.
+    flow?: "register" | "add";
 }): Promise<TicketPaymentInit> {
     const storeId = process.env.SSLCOMMERZ_STORE_ID;
     const storePassword = process.env.SSLCOMMERZ_STORE_PASSWORD;
@@ -75,15 +79,20 @@ export async function initiateTicketPayment(input: {
         };
     }
 
+    const flow = input.flow ?? "register";
+    const flowQuery = flow === "add" ? `&flow=add` : "";
+    const failPath =
+        flow === "add" ? "/events/add-divisions-failed" : "/events/payment-failed";
+
     const params = new URLSearchParams({
         store_id: storeId,
         store_passwd: storePassword!,
         total_amount: input.amount.toFixed(2),
         currency: "BDT",
         tran_id: input.registrationId,
-        success_url: `${base}/api/webhooks/sslcommerz/event-success?regId=${input.registrationId}`,
-        fail_url: `${base}/events/payment-failed?regId=${input.registrationId}`,
-        cancel_url: `${base}/events/payment-failed?regId=${input.registrationId}&cancelled=1`,
+        success_url: `${base}/api/webhooks/sslcommerz/event-success?regId=${input.registrationId}${flowQuery}`,
+        fail_url: `${base}${failPath}?regId=${input.registrationId}&eventId=${input.eventId}`,
+        cancel_url: `${base}${failPath}?regId=${input.registrationId}&eventId=${input.eventId}&cancelled=1`,
         ipn_url: `${base}/api/webhooks/sslcommerz`,
         cus_name: input.customerName,
         cus_email: cusEmail,
@@ -194,8 +203,92 @@ export async function markRegistrationPaid(
         });
     }
 
-    const cardUrl = `${appUrl()}/participants/${reg.qrToken}`;
-    const invoiceUrl = `${appUrl()}/invoices/${reg.qrToken}`;
+    // Merge "shadow" addon-only rows' new addons into their parent
+    // registration's selectedOptionalFees. A shadow row is created by the
+    // add-flow when a member pays for add-ons on a division they had
+    // already registered for; the shadow itself stays as an audit record
+    // (its qrToken can still link back to a live card), but the parent
+    // row's fee snapshot is updated so the primary registration reflects
+    // every add-on the member has paid for.
+    const shadows = await prisma.eventRegistration.findMany({
+        where: reg.paymentGroupId
+            ? {
+                  paymentGroupId: reg.paymentGroupId,
+                  parentRegistrationId: { not: null },
+                  paymentStatus: "PAID",
+              }
+            : {
+                  id: reg.id,
+                  parentRegistrationId: { not: null },
+                  paymentStatus: "PAID",
+              },
+        select: {
+            id: true,
+            parentRegistrationId: true,
+            selectedOptionalFees: true,
+        },
+    });
+
+    type SnapshotFee = { id: string; name: string; amountBdt: number };
+    function parseSnapshot(raw: unknown): SnapshotFee[] {
+        if (!Array.isArray(raw)) return [];
+        return raw
+            .filter(
+                (r): r is Record<string, unknown> =>
+                    !!r && typeof r === "object",
+            )
+            .map((r) => ({
+                id: typeof r.id === "string" ? r.id : "",
+                name: typeof r.name === "string" ? r.name : "",
+                amountBdt:
+                    typeof r.amountBdt === "number"
+                        ? r.amountBdt
+                        : Number(r.amountBdt ?? 0),
+            }))
+            .filter((f) => !!f.id);
+    }
+
+    const shadowsByParent = new Map<string, SnapshotFee[]>();
+    for (const s of shadows) {
+        if (!s.parentRegistrationId) continue;
+        const bucket = shadowsByParent.get(s.parentRegistrationId) ?? [];
+        for (const a of parseSnapshot(s.selectedOptionalFees)) {
+            if (!bucket.some((x) => x.id === a.id)) bucket.push(a);
+        }
+        shadowsByParent.set(s.parentRegistrationId, bucket);
+    }
+
+    for (const [parentId, addons] of shadowsByParent) {
+        const parent = await prisma.eventRegistration.findUnique({
+            where: { id: parentId },
+            select: { selectedOptionalFees: true },
+        });
+        if (!parent) continue;
+        const existing = parseSnapshot(parent.selectedOptionalFees);
+        const merged = [
+            ...existing,
+            ...addons.filter((a) => !existing.some((e) => e.id === a.id)),
+        ];
+        if (merged.length === existing.length) continue;
+        await prisma.eventRegistration.update({
+            where: { id: parentId },
+            data: { selectedOptionalFees: merged as never },
+        });
+    }
+
+    // If the primary row is a shadow (addon-only top-up), its token points at
+    // a row we're about to delete — resolve the parent's qrToken for the
+    // outbound card/invoice links so the email lands on a live card.
+    let effectiveToken = reg.qrToken;
+    if (reg.parentRegistrationId) {
+        const parentTok = await prisma.eventRegistration.findUnique({
+            where: { id: reg.parentRegistrationId },
+            select: { qrToken: true },
+        });
+        if (parentTok?.qrToken) effectiveToken = parentTok.qrToken;
+    }
+    const cardUrl = `${appUrl()}/participants/${effectiveToken}`;
+    const invoiceUrl = `${appUrl()}/invoices/${effectiveToken}`;
     const userAuthEmail = reg.user?.email ?? null;
     const realUserEmail =
         userAuthEmail && !userAuthEmail.endsWith("@members.jkabangladesh.com")
@@ -238,13 +331,14 @@ export async function markRegistrationPaid(
             title: "Ticket confirmed",
             message: `Your ticket for "${reg.event.title}" is confirmed. See you there!`,
             type: "PAYMENT",
-            link: `/participants/${reg.qrToken}`,
+            link: `/participants/${effectiveToken}`,
         });
     }
 
-    revalidatePath(`/participants/${reg.qrToken}`);
+    revalidatePath(`/participants/${effectiveToken}`);
     revalidatePath(`/events/${reg.event.id}`);
     revalidatePath(`/portal/admin/events/${reg.event.id}/participants`);
+    revalidatePath(`/portal/events`);
 
-    return { ok: true, qrToken: reg.qrToken };
+    return { ok: true, qrToken: effectiveToken };
 }

@@ -7,6 +7,7 @@ import {
     rejectServiceByDojoAction,
 } from "@/app/portal/dojo/service-requests/actions";
 import { formatDate } from "@/lib/format/datetime";
+import { formatBeltRank } from "@/lib/constants";
 
 type Status = "PENDING_PAYMENT" | "AWAITING_DOJO" | "AWAITING_ADMIN" | "APPROVED" | "DENIED" | "CANCELLED";
 
@@ -119,7 +120,7 @@ export default function DojoServiceRequestsClient({ requests }: { requests: Requ
                                 </p>
                                 <p className="text-xs text-zinc-500">
                                     {r.service.name}
-                                    {payload.requestedRank ? ` — to ${payload.requestedRank}` : ""}
+                                    {payload.requestedRank ? ` — to ${formatBeltRank(payload.requestedRank)}` : ""}
                                     {" · "}
                                     {formatDate(r.createdAt)}
                                 </p>
@@ -150,13 +151,13 @@ export default function DojoServiceRequestsClient({ requests }: { requests: Requ
                                     {payload.currentRank && (
                                         <div className="flex justify-between">
                                             <span className="text-zinc-500">Current rank</span>
-                                            <span>{payload.currentRank}</span>
+                                            <span>{formatBeltRank(payload.currentRank)}</span>
                                         </div>
                                     )}
                                     {payload.requestedRank && (
                                         <div className="flex justify-between">
                                             <span className="text-zinc-500">Requesting</span>
-                                            <span className="font-semibold">{payload.requestedRank}</span>
+                                            <span className="font-semibold">{formatBeltRank(payload.requestedRank)}</span>
                                         </div>
                                     )}
                                 </div>

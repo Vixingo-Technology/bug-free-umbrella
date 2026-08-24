@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import TiltCard from "./tilt-card";
 import { DEFAULT_TIME_ZONE } from "@/lib/format/datetime";
+import { formatBeltRank } from "@/lib/constants";
 
 interface Props {
     member: any;
@@ -60,7 +61,7 @@ export default function ProgressClient({ member, allBeltRanks, gradings }: Props
 
     // Checklist items — order matters; each unlocks the next.
     const checklist: { label: string; done: boolean; weight: number; icon: typeof Award }[] = [
-        { label: `Earn ${currentRank}`,                      done: true,                             weight: 25, icon: Award },
+        { label: `Earn ${formatBeltRank(currentRank)}`,      done: true,                             weight: 25, icon: Award },
         { label: "Complete required training hours",         done: passedGradings >= 1,              weight: 25, icon: Calendar },
         { label: `Master kata: ${nextRank?.requiredKata ?? "—"}`, done: false,                       weight: 20, icon: Target },
         { label: "Apply for the grading exam",               done: appliedForNext,                   weight: 15, icon: Zap },
@@ -89,7 +90,7 @@ export default function ProgressClient({ member, allBeltRanks, gradings }: Props
                 <div className="flex items-center justify-between mb-5">
                     <h2 className="text-sm font-bold text-zinc-900 flex items-center gap-2">
                         <Sparkles size={16} className="text-amber-500" />
-                        Unlock {nextRank ? beltName(nextRank) : "Next Rank"}
+                        Unlock {nextRank ? formatBeltRank(beltName(nextRank)) : "Next Rank"}
                     </h2>
                     <span className="text-[10px] font-bold tracking-widest uppercase text-zinc-500 bg-zinc-100 px-2.5 py-1 rounded-full">
                         {checklist.filter(c => c.done).length} / {checklist.length} done
@@ -184,10 +185,10 @@ export default function ProgressClient({ member, allBeltRanks, gradings }: Props
                                 />
                                 <div className="flex-1 min-w-0">
                                     <p className={`text-sm font-semibold ${isCurrent ? "text-white" : isAchieved ? "text-emerald-800" : "text-zinc-700"}`}>
-                                        {name}
+                                        {formatBeltRank(name)}
                                     </p>
                                     <p className={`text-xs ${isCurrent ? "text-zinc-400" : "text-zinc-500"}`}>
-                                        {belt.kyuDan ?? ""}{belt.requiredKata ? ` · ${belt.requiredKata}` : ""}
+                                        {belt.requiredKata ?? ""}
                                     </p>
                                 </div>
                                 <div className="flex-shrink-0">
@@ -236,7 +237,7 @@ export default function ProgressClient({ member, allBeltRanks, gradings }: Props
                                     )}
                                     <div className="min-w-0">
                                         <p className="text-sm font-medium text-zinc-900 truncate">
-                                            {beltName(g.fromRank) || "—"} → {beltName(g.toRank) || "—"}
+                                            {beltName(g.fromRank) ? formatBeltRank(beltName(g.fromRank)) : "—"} → {beltName(g.toRank) ? formatBeltRank(beltName(g.toRank)) : "—"}
                                         </p>
                                         <div className="flex items-center gap-2 flex-wrap">
                                             {g.gradingEvent?.title && (
@@ -313,7 +314,7 @@ function ProgressQuest({
     }
     function onLeave() { mx.set(0); my.set(0); }
 
-    const nextName = nextRank ? (nextRank.name ?? nextRank.nameEn ?? "Master Rank") : "Master Rank";
+    const nextName = nextRank ? formatBeltRank(nextRank.name ?? nextRank.nameEn ?? "Master Rank") : "Master Rank";
     const currentColor = beltBg[currentRank] ?? "bg-zinc-700";
     const nextColor = nextRank?.colorHex ?? "#facc15";
 
@@ -373,7 +374,7 @@ function ProgressQuest({
                                 <Award size={26} className={currentRank === "White Belt" ? "text-zinc-400" : "text-white"} />
                             </motion.div>
                             <p className="text-[9px] tracking-[0.25em] uppercase text-zinc-400 mt-2.5 font-bold">You</p>
-                            <p className="text-xs font-semibold text-white mt-0.5 leading-tight max-w-[5rem]">{currentRank}</p>
+                            <p className="text-xs font-semibold text-white mt-0.5 leading-tight max-w-[5rem]">{formatBeltRank(currentRank)}</p>
                         </div>
 
                         {/* Track */}

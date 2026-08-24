@@ -24,6 +24,7 @@ import {
 import { bandForMarks, marksEarnDoublePromotion } from "@/lib/grading-marks";
 import type { DojoRole } from "@/lib/dojo-roles";
 import { DEFAULT_TIME_ZONE } from "@/lib/format/datetime";
+import { formatBeltRank } from "@/lib/constants";
 
 type Event = {
   id: string;
@@ -392,11 +393,11 @@ function ResultsSection({
               <div>
                 <p className="font-semibold text-sm text-zinc-900">{a.memberName}</p>
                 <p className="text-xs text-zinc-500 mt-0.5">
-                  {a.currentRank}
+                  {formatBeltRank(a.currentRank)}
                   {a.targetRankName && (
                     <>
                       {" → "}
-                      <span className="text-accent-red font-semibold">{a.targetRankName}</span>
+                      <span className="text-accent-red font-semibold">{formatBeltRank(a.targetRankName)}</span>
                     </>
                   )}
                 </p>

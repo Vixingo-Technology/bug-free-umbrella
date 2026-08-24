@@ -26,6 +26,7 @@ import { requireAdmin } from "@/lib/admin-guard";
 import { serialize } from "@/lib/serialize";
 import { DEFAULT_TIME_ZONE } from "@/lib/format/datetime";
 import { displayEmail, isSyntheticEmail } from "@/lib/format/email";
+import { formatBeltRank } from "@/lib/constants";
 
 export const dynamic = "force-dynamic";
 
@@ -216,7 +217,7 @@ export default async function AdminMemberDetailPage({
                             </span>
                             {s?.currentRank && (
                                 <span className="text-[10px] font-bold tracking-widest uppercase bg-amber-50 text-amber-600 px-2 py-0.5 rounded-full border border-amber-200 inline-flex items-center gap-1">
-                                    <Award size={10} /> {s.currentRank}
+                                    <Award size={10} /> {formatBeltRank(s.currentRank)}
                                 </span>
                             )}
                             <span
@@ -317,7 +318,7 @@ export default async function AdminMemberDetailPage({
                         <Section title="Student profile">
                             <FieldGrid>
                                 <Field icon={<Award size={14} />} label="Member number" value={p.memberNumber} />
-                                <Field icon={<Award size={14} />} label="Current rank" value={s.currentRank} />
+                                <Field icon={<Award size={14} />} label="Current rank" value={s.currentRank ? formatBeltRank(s.currentRank) : null} />
                                 <Field
                                     icon={<Calendar size={14} />}
                                     label="Join date"
@@ -344,8 +345,8 @@ export default async function AdminMemberDetailPage({
                                     label="Join stage"
                                     value={s.joinStage}
                                 />
-                                <Field icon={<Award size={14} />} label="Requested rank" value={s.requestedRank} />
-                                <Field icon={<Award size={14} />} label="Assigned rank" value={s.assignedRank} />
+                                <Field icon={<Award size={14} />} label="Requested rank" value={s.requestedRank ? formatBeltRank(s.requestedRank) : null} />
+                                <Field icon={<Award size={14} />} label="Assigned rank" value={s.assignedRank ? formatBeltRank(s.assignedRank) : null} />
                             </FieldGrid>
                         </Section>
                     )}
@@ -415,7 +416,7 @@ export default async function AdminMemberDetailPage({
                                                 />
                                                 <div className="min-w-0">
                                                     <p className="text-sm font-semibold text-zinc-900 truncate">
-                                                        {g.toRank?.name ?? "—"}
+                                                        {g.toRank?.name ? formatBeltRank(g.toRank.name) : "—"}
                                                     </p>
                                                     <p className="text-xs text-zinc-500">
                                                         {g.gradingEvent?.name ?? "Direct award"} ·{" "}

@@ -7,6 +7,7 @@ import {
     denyServiceByAdminAction,
 } from "@/app/portal/admin/service-requests/actions";
 import { formatDate } from "@/lib/format/datetime";
+import { formatBeltRank } from "@/lib/constants";
 
 type Status = "PENDING_PAYMENT" | "AWAITING_DOJO" | "AWAITING_ADMIN" | "APPROVED" | "DENIED" | "CANCELLED";
 
@@ -116,7 +117,7 @@ export default function AdminServiceRequestsClient({ requests }: { requests: Req
                                 </p>
                                 <p className="text-xs text-zinc-500 truncate">
                                     {r.dojo.name}{r.dojo.city ? `, ${r.dojo.city}` : ""}
-                                    {payload.requestedRank ? ` — requests ${payload.requestedRank}` : ""}
+                                    {payload.requestedRank ? ` — requests ${formatBeltRank(payload.requestedRank)}` : ""}
                                     {" · "}
                                     {formatDate(r.createdAt)}
                                 </p>
@@ -149,13 +150,13 @@ export default function AdminServiceRequestsClient({ requests }: { requests: Req
                                     {payload.currentRank && (
                                         <div className="flex justify-between">
                                             <span className="text-zinc-500">Current rank</span>
-                                            <span>{payload.currentRank}</span>
+                                            <span>{formatBeltRank(payload.currentRank)}</span>
                                         </div>
                                     )}
                                     {payload.requestedRank && (
                                         <div className="flex justify-between">
                                             <span className="text-zinc-500">Requesting</span>
-                                            <span className="font-semibold">{payload.requestedRank}</span>
+                                            <span className="font-semibold">{formatBeltRank(payload.requestedRank)}</span>
                                         </div>
                                     )}
                                 </div>

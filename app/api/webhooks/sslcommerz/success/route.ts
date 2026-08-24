@@ -7,6 +7,7 @@ import { findUserIdsByRoles } from "@/lib/notify/recipients";
 import { extendExpiry } from "@/lib/renewals/extend-expiry";
 import { kindForOrder, recordPaymentOutcome } from "@/lib/payments/log";
 import { formatDateLong } from "@/lib/format/datetime";
+import { formatBeltRank } from "@/lib/constants";
 
 // Landing pages for the buyer after we finish server-side processing. We
 // prefer the page the buyer came from (renew form, dojo renewal card) so
@@ -375,7 +376,7 @@ export async function POST(request: Request) {
                     const ownerIds = await findUserIdsByRoles(["DOJO_OWNER"], { dojoId: stu.dojoId });
                     await notifyMembers(ownerIds, {
                         title: "New join request",
-                        message: `${stu.user?.fullName ?? "A new student"} has paid the JKA fee and requested to join your dojo (requested rank: ${stu.requestedRank ?? "White Belt"}). Please review and confirm their rank.`,
+                        message: `${stu.user?.fullName ?? "A new student"} has paid the JKA fee and requested to join your dojo (requested rank: ${formatBeltRank(stu.requestedRank ?? "White Belt")}). Please review and confirm their rank.`,
                         type: "INFO",
                         link: "/portal/dojo/join-requests",
                     });
@@ -394,7 +395,7 @@ export async function POST(request: Request) {
                 });
                 await notifyMembers([pastBeltFinalizedForUser], {
                     title: "You've joined JKA Bangladesh",
-                    message: `Welcome! Your rank is set to ${stu?.assignedRank ?? "White Belt"} and your dojo has confirmed you. Full portal access is unlocked.`,
+                    message: `Welcome! Your rank is set to ${formatBeltRank(stu?.assignedRank ?? "White Belt")} and your dojo has confirmed you. Full portal access is unlocked.`,
                     type: "INFO",
                     link: "/portal",
                 });
@@ -402,7 +403,7 @@ export async function POST(request: Request) {
                     const ownerIds = await findUserIdsByRoles(["DOJO_OWNER"], { dojoId: stu.dojoId });
                     await notifyMembers(ownerIds, {
                         title: "Student joined successfully",
-                        message: `${stu.user?.fullName ?? "A new student"} has completed joining at ${stu.assignedRank ?? "White Belt"}.`,
+                        message: `${stu.user?.fullName ?? "A new student"} has completed joining at ${formatBeltRank(stu.assignedRank ?? "White Belt")}.`,
                         type: "INFO",
                         link: "/portal/dojo/join-requests",
                     });

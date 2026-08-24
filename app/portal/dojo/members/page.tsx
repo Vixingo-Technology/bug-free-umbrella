@@ -16,6 +16,7 @@ import {
 import { resolveDojoFeatureLocks } from "@/lib/dojo/feature-locks.server";
 import { DEFAULT_TIME_ZONE, formatDate } from "@/lib/format/datetime";
 import { displayEmail } from "@/lib/format/email";
+import { formatBeltRank } from "@/lib/constants";
 
 export const metadata: Metadata = {
     title: "Members — Dojo Dashboard",
@@ -440,7 +441,7 @@ function RosterTab({
                                         <RoleBadge role={m.role} />
                                     </td>
                                     <td className="px-5 py-3 text-zinc-600">
-                                        {m.rank}
+                                        {formatBeltRank(m.rank)}
                                     </td>
                                     <td className="px-5 py-3 text-zinc-500">
                                         {m.joined}

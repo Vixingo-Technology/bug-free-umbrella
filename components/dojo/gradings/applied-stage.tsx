@@ -5,6 +5,7 @@ import { CalendarPlus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import ScheduleDialog from "./schedule-dialog";
 import DeclineButton from "./decline-button";
+import { formatBeltRank } from "@/lib/constants";
 
 export type AppliedCandidate = {
   id: string;
@@ -54,7 +55,7 @@ export default function AppliedStage({
       {grouped.map(([rankName, rows]) => (
         <div key={rankName}>
           <h3 className="text-[10px] tracking-widest uppercase font-bold text-zinc-500 mb-2">
-            {rankName} — {rows.length} {rows.length === 1 ? "candidate" : "candidates"}
+            {formatBeltRank(rankName)} — {rows.length} {rows.length === 1 ? "candidate" : "candidates"}
           </h3>
           <ul className="divide-y divide-zinc-200">
             {rows.map((c) => (
@@ -77,7 +78,7 @@ export default function AppliedStage({
                   <div>
                     <p className="font-semibold text-zinc-900 text-sm">{c.name}</p>
                     <p className="text-xs text-zinc-500">
-                      {c.currentRank} → <span className="text-accent-red font-semibold">{c.targetRank}</span>
+                      {formatBeltRank(c.currentRank)} → <span className="text-accent-red font-semibold">{formatBeltRank(c.targetRank)}</span>
                     </p>
                     <p className="text-[10px] text-zinc-400 tracking-widest uppercase font-bold mt-1">
                       Applied {c.appliedOn}

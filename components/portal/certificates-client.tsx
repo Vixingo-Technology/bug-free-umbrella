@@ -4,6 +4,7 @@ import { motion } from "motion/react";
 import TiltCard from "./tilt-card";
 import { FileText, Download, Eye, Award, Calendar, CheckCircle2, Info } from "lucide-react";
 import { DEFAULT_TIME_ZONE } from "@/lib/format/datetime";
+import { formatBeltRank } from "@/lib/constants";
 
 interface Props {
     member: any;
@@ -90,10 +91,7 @@ export default function CertificatesClient({ member, gradings }: Props) {
                                             <Award size={18} className={textColor} />
                                         </div>
                                     </div>
-                                    <h3 className={`text-xl font-bold mt-4 ${textColor}`}>{rankName}</h3>
-                                    <p className={`text-sm opacity-80 mt-0.5 ${textColor}`}>
-                                        {g.toRank?.kyuDan ?? ""}
-                                    </p>
+                                    <h3 className={`text-xl font-bold mt-4 ${textColor}`}>{formatBeltRank(rankName)}</h3>
                                 </div>
 
                                 {/* Certificate details */}

@@ -30,6 +30,7 @@ import {
 } from "@/app/actions/admin-members";
 import ResetPasswordButton from "@/components/auth/reset-password-button";
 import { displayEmail } from "@/lib/format/email";
+import { formatBeltRank } from "@/lib/constants";
 
 type Role = "STUDENT" | "INSTRUCTOR" | "DOJO_MANAGER" | "DOJO_OWNER" | "ADMIN";
 type Status =
@@ -639,7 +640,7 @@ function Row({
                     {member.dojo?.name ?? "—"}
                 </p>
                 <p className="text-[11px] text-zinc-500 mt-0.5">
-                    {role === "STUDENT" ? member.currentRank : "—"}
+                    {role === "STUDENT" ? formatBeltRank(member.currentRank) : "—"}
                 </p>
             </td>
             <td className="px-5 py-4">
@@ -885,7 +886,7 @@ function MobileCard({
                     </span>
                     {role === "STUDENT" && member.currentRank !== "—" && (
                         <span className="text-zinc-500 whitespace-nowrap">
-                            · {member.currentRank}
+                            · {formatBeltRank(member.currentRank)}
                         </span>
                     )}
                 </div>

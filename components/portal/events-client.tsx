@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from "motion/react";
 import TiltCard from "@/components/portal/tilt-card";
 import {
     CalendarDays, MapPin, Users, CheckCircle2,
-    AlertCircle, Loader2, ChevronRight, Ticket, QrCode, FileText,
+    AlertCircle, Loader2, ChevronRight, Ticket, QrCode, FileText, PlusCircle,
 } from "lucide-react";
 import { registerForEventAction } from "@/app/portal/events/actions";
 import { DEFAULT_TIME_ZONE } from "@/lib/format/datetime";
@@ -161,6 +161,18 @@ export default function EventsClient({ upcomingEvents, pastEvents, myRegistratio
                                                         <QrCode size={12} />
                                                         Participation card
                                                     </Link>
+                                                    {ev.hasDivisions &&
+                                                        ev.registrationOpen && (
+                                                            <Link
+                                                                href={`/portal/events/${ev.id}/add-divisions`}
+                                                                className="text-xs font-bold text-zinc-700 hover:text-accent-red border border-zinc-200 hover:border-accent-red px-4 py-2 rounded-xl transition-colors flex items-center justify-center gap-1.5"
+                                                            >
+                                                                <PlusCircle
+                                                                    size={12}
+                                                                />
+                                                                Add divisions
+                                                            </Link>
+                                                        )}
                                                     {isPaid && (
                                                         <Link
                                                             href={`/invoices/${myReg.qrToken}`}

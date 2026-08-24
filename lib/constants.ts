@@ -63,9 +63,8 @@ export const BLACK_BELT_JAPANESE_NAMES: Record<string, string> = {
   "Black Belt 10th Dan":  "Judan",
 };
 
-/** Kyu grade for the coloured belts whose DB name does not already carry it.
- *  Brown belts already include "1st/2nd/3rd Kyu" in their name, so they are
- *  intentionally omitted here. Values are DB `belt_ranks.name`. */
+/** Kyu grade for every coloured belt, keyed by DB `belt_ranks.name`.
+ *  Value is the display-facing "{Nth} Kyu" label. */
 export const KYU_GRADES: Record<string, string> = {
   "White Belt":         "10th Kyu",
   "Stripe Yellow Belt": "9th Kyu",
@@ -74,20 +73,46 @@ export const KYU_GRADES: Record<string, string> = {
   "Green Belt":         "6th Kyu",
   "Blue Belt":          "5th Kyu",
   "Purple Belt":        "4th Kyu",
+  "Brown Belt 3rd Kyu": "3rd Kyu",
+  "Brown Belt 2nd Kyu": "2nd Kyu",
+  "Brown Belt 1st Kyu": "1st Kyu",
 };
 
-/** Human-facing label for a belt rank. Coloured belts read Kyu-first —
- *  "10th Kyu - White Belt" down to "1st Kyu - Brown Belt". Brown belts carry
- *  their Kyu in the DB name ("Brown Belt 3rd Kyu"), so it is reordered to the
- *  same shape. Dan grades drop the "Black Belt " prefix and get their Japanese
- *  name appended (e.g. "1st Dan (Shodan)").
+/** Display-facing belt name — kyu ranks strip any embedded kyu suffix so all
+ *  brown belts render as just "Brown Belt". Keyed by DB `belt_ranks.name`. */
+export const BELT_DISPLAY_NAMES: Record<string, string> = {
+  "White Belt":         "White Belt",
+  "Stripe Yellow Belt": "Stripe Yellow Belt",
+  "Yellow Belt":        "Yellow Belt",
+  "Orange Belt":        "Orange Belt",
+  "Green Belt":         "Green Belt",
+  "Blue Belt":          "Blue Belt",
+  "Purple Belt":        "Purple Belt",
+  "Brown Belt 3rd Kyu": "Brown Belt",
+  "Brown Belt 2nd Kyu": "Brown Belt",
+  "Brown Belt 1st Kyu": "Brown Belt",
+};
+
+/** Human-facing label for a belt rank.
+ *  Coloured belts render as "{Kyu} - {Belt}" (e.g. "10th Kyu - White Belt",
+ *  "3rd Kyu - Brown Belt"). Dan grades drop the "Black Belt " prefix and get
+ *  their Japanese name appended (e.g. "1st Dan (Shodan)").
  *  The DB value is preserved for lookups — pass the raw name to Prisma. */
 export function formatBeltRank(name: string | null | undefined): string {
   if (!name) return "—";
   const kyu = KYU_GRADES[name];
-  if (kyu) return `${kyu} - ${name}`;
-  const brown = name.match(/^Brown Belt (\d+(?:st|nd|rd|th) Kyu)$/);
-  if (brown) return `${brown[1]} - Brown Belt`;
+  if (kyu) {
+    const display = BELT_DISPLAY_NAMES[name] ?? name;
+    return `${kyu} - ${display}`;
+  }
+  // DB belt_ranks rows carry the kyu inline ("White Belt 10th Kyu",
+  // "Stripe Yellow Belt 9th Kyu"). Pull the trailing kyu to the front so they
+  // read the same as the canonical short names above.
+  const suffix = name.match(/^(.*?)\s+(\d+(?:st|nd|rd|th)\s+Kyu)$/);
+  if (suffix) {
+    const belt = /brown/i.test(suffix[1]) ? "Brown Belt" : suffix[1];
+    return `${suffix[2]} - ${belt}`;
+  }
   const jp = BLACK_BELT_JAPANESE_NAMES[name];
   if (!jp) return name;
   const stripped = name.replace(/^Black Belt\s+/, "");

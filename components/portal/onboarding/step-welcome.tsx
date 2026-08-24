@@ -4,7 +4,7 @@ import { useEffect, useState, useTransition } from "react";
 import { motion, useMotionValue, useTransform, useSpring } from "motion/react";
 import { CreditCard, Zap, Clock, ChevronLeft, AlertCircle } from "lucide-react";
 import { payNowAction, payLaterAction } from "@/app/portal/onboarding/actions";
-import { BELT_COLORS } from "@/lib/constants";
+import { BELT_COLORS, formatBeltRank } from "@/lib/constants";
 import { DEFAULT_TIME_ZONE } from "@/lib/format/datetime";
 
 interface Props {
@@ -163,7 +163,7 @@ export default function StepWelcome({
                                 <div className="flex items-center gap-3 mt-1.5">
                                     <div>
                                         <p className="text-[9px] text-white/30 uppercase tracking-widest">Rank</p>
-                                        <p className="text-[11px] font-semibold text-white/70">{rank}</p>
+                                        <p className="text-[11px] font-semibold text-white/70">{formatBeltRank(rank)}</p>
                                     </div>
                                     <div className="w-px h-6 bg-white/10" />
                                     <div>

@@ -7,6 +7,7 @@ import {
     AlertCircle, Loader2, ChevronRight, MapPin,
 } from "lucide-react";
 import { initiatePaymentAction } from "@/app/portal/checkout/actions";
+import { formatBeltRank } from "@/lib/constants";
 
 interface Props {
     order: any;
@@ -116,7 +117,7 @@ export default function CheckoutClient({ order, member, paymentFailed }: Props) 
                                     {c.memberName}
                                 </p>
                                 <p className="text-xs text-white/40 mt-0.5 truncate">
-                                    {c.rankName} · Printed certificate
+                                    {formatBeltRank(c.rankName)} · Printed certificate
                                 </p>
                             </div>
                             <p className="text-sm font-bold text-white flex-shrink-0">

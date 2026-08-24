@@ -729,10 +729,13 @@ export default function TournamentRegistrationForm({
                                                 {d.minRankId && (
                                                     <span className="text-[10px] uppercase tracking-widest text-zinc-500">
                                                         ·{" "}
-                                                        {event.beltRanks.find(
-                                                            (r) =>
-                                                                r.id === d.minRankId,
-                                                        )?.name ?? "belt"}
+                                                        {(() => {
+                                                            const r = event.beltRanks.find(
+                                                                (r) =>
+                                                                    r.id === d.minRankId,
+                                                            );
+                                                            return r ? formatBeltRank(r.name) : "belt";
+                                                        })()}
                                                         +
                                                     </span>
                                                 )}

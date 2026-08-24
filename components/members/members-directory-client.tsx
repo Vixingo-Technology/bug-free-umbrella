@@ -7,6 +7,7 @@ import { Search, ChevronLeft, ChevronRight, IdCard, X } from "lucide-react";
 import DigitalCardModal from "@/components/portal/digital-card-modal";
 import type { MembershipStatusLabel } from "@/components/portal/digital-card";
 import { DEFAULT_TIME_ZONE } from "@/lib/format/datetime";
+import { formatBeltRank } from "@/lib/constants";
 
 export interface DirectoryMember {
     id: string;
@@ -232,7 +233,7 @@ export default function MembersDirectoryClient({
                                 </div>
 
                                 <dl className="mt-5 space-y-1.5 text-[11px]">
-                                    <Row label="Rank" value={m.currentRank} />
+                                    <Row label="Rank" value={formatBeltRank(m.currentRank)} />
                                     <Row label="Dojo" value={m.dojoName ?? "—"} />
                                     <Row label="Role" value={m.role} />
                                 </dl>

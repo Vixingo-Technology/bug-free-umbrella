@@ -40,6 +40,7 @@ import { type DojoRole } from "@/lib/dojo-roles";
 import type { FeatureKey } from "@/lib/dojo/feature-locks";
 import NotificationBell from "@/components/portal/notification-bell";
 import ProfileMenu from "@/components/portal/profile-menu";
+import { formatBeltRank } from "@/lib/constants";
 
 const DOJO_ROLE_RANK: Record<DojoRole, number> = {
     INSTRUCTOR: 1,
@@ -481,7 +482,7 @@ export default function PortalShell({
                         )}
                         <div className="min-w-0">
                             <p className="text-sm font-semibold text-zinc-900 truncate">{member.fullName}</p>
-                            <p className="text-[10px] text-zinc-500 truncate">{member.currentRank ?? "White Belt"}</p>
+                            <p className="text-[10px] text-zinc-500 truncate">{formatBeltRank(member.currentRank ?? "White Belt")}</p>
                         </div>
                     </div>
                 </div>

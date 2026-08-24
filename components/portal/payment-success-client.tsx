@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { CheckCircle2, Share2, QrCode, Package, ArrowRight, Home } from "lucide-react";
-import { BELT_COLORS } from "@/lib/constants";
+import { BELT_COLORS, formatBeltRank } from "@/lib/constants";
 import { DEFAULT_TIME_ZONE } from "@/lib/format/datetime";
 
 interface Props {
@@ -110,7 +110,7 @@ export default function PaymentSuccessClient({ member, order, hasProducts }: Pro
                                     <div>
                                         <p className="text-[9px] font-black tracking-[0.3em] uppercase text-white/30 mb-0.5">JKA Bangladesh</p>
                                         <p className="text-white font-bold text-lg">{memberName.toUpperCase()}</p>
-                                        <p className="text-white/50 text-xs mt-0.5">{rank} · {dojo}</p>
+                                        <p className="text-white/50 text-xs mt-0.5">{formatBeltRank(rank)} · {dojo}</p>
                                         <p className="text-white/30 text-[10px] font-mono mt-2">{memberNumber}</p>
                                     </div>
                                     <div

@@ -22,6 +22,7 @@ import { parseCustomDivisions, resolveDivision } from "@/lib/tournaments/divisio
 import { DEFAULT_TIME_ZONE, formatDateLong } from "@/lib/format/datetime";
 import { displayEmail } from "@/lib/format/email";
 import AdminCancelRegistrationButton from "@/components/portal/admin-cancel-registration-button";
+import { formatBeltRank } from "@/lib/constants";
 
 export const metadata: Metadata = {
     title: "Participant — Admin",
@@ -245,7 +246,7 @@ export default async function ParticipantDetailPage({
                             />
                             <Datum
                                 label="Belt rank"
-                                value={beltRank ?? "—"}
+                                value={beltRank ? formatBeltRank(beltRank) : "—"}
                             />
                             <Datum
                                 label="Home dojo"

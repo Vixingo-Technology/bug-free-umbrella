@@ -21,6 +21,7 @@ import { prisma } from "@/lib/prisma";
 import { TIER_RANK } from "@/lib/achievements/catalog";
 import type { AchievementTier } from "@/prisma/generated/client";
 import { DEFAULT_TIME_ZONE, formatDateLong } from "@/lib/format/datetime";
+import { formatBeltRank } from "@/lib/constants";
 
 export const dynamic = "force-dynamic";
 
@@ -37,7 +38,7 @@ export async function generateMetadata({
             select: { fullName: true, student: { select: { currentRank: true } } },
         });
         if (!m) return { title: "Member — JKA Bangladesh" };
-        const rank = m.student?.currentRank ?? "Member";
+        const rank = m.student?.currentRank ? formatBeltRank(m.student.currentRank) : "Member";
         return {
             title: `${m.fullName} — JKA Bangladesh`,
             description: `${m.fullName} (${rank}) — public profile on JKA Bangladesh.`,
@@ -190,7 +191,7 @@ export default async function PublicMemberPage({
                     <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-zinc-600 text-sm">
                         <span className="inline-flex items-center gap-1.5">
                             <Award size={14} className="text-accent-red" />
-                            {member.currentRank}
+                            {formatBeltRank(member.currentRank)}
                         </span>
                         <span className="inline-flex items-center gap-1.5">
                             <GraduationCap size={14} className="text-accent-red" />
@@ -378,7 +379,9 @@ function Stat({ label, value }: { label: string; value: number | string }) {
 
 function BeltStep({ grading }: { grading: any }) {
     const rankColor = grading.toRank?.colorHex || "#cccccc";
-    const rankName = grading.toRank?.name || "Belt rank";
+    const rawRankName = grading.toRank?.name;
+    const rankName = rawRankName ? formatBeltRank(rawRankName) : "Belt rank";
+    const fromRankName = grading.fromRank?.name ? formatBeltRank(grading.fromRank.name) : null;
     const date = grading.gradingEvent?.eventDate
         ? new Date(grading.gradingEvent.eventDate)
         : new Date(grading.createdAt);
@@ -393,9 +396,9 @@ function BeltStep({ grading }: { grading: any }) {
                 <div className="min-w-0">
                     <p className="font-bold text-zinc-900">
                         {rankName}
-                        {grading.fromRank?.name ? (
+                        {fromRankName ? (
                             <span className="text-xs font-normal text-zinc-500 ml-2">
-                                from {grading.fromRank.name}
+                                from {fromRankName}
                             </span>
                         ) : null}
                     </p>
@@ -418,7 +421,8 @@ function BeltStep({ grading }: { grading: any }) {
 }
 
 function CertificateCard({ grading }: { grading: any }) {
-    const rankName = grading.toRank?.name || "Certificate";
+    const rawRankName = grading.toRank?.name;
+    const rankName = rawRankName ? formatBeltRank(rawRankName) : "Certificate";
     const rankColor = grading.toRank?.colorHex || "#1a1a1a";
     const date = grading.gradingEvent?.eventDate
         ? new Date(grading.gradingEvent.eventDate)

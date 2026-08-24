@@ -9,6 +9,7 @@ import {
     Eye,
     Search,
 } from "lucide-react";
+import { formatBeltRank } from "@/lib/constants";
 
 type RequestRow = {
     id: string;
@@ -104,7 +105,7 @@ export default function RequestHistoryList({
                                             {r.member.memberNumber ?? "—"}
                                         </p>
                                         <p className="text-xs text-zinc-600 mt-1 truncate">
-                                            {r.rankName}
+                                            {formatBeltRank(r.rankName)}
                                         </p>
                                     </div>
                                     <div className="flex flex-col items-end gap-1 shrink-0">
@@ -174,7 +175,7 @@ export default function RequestHistoryList({
                                                 {r.member.memberNumber ?? "—"}
                                             </p>
                                         </td>
-                                        <td className="px-5 py-3 text-zinc-600">{r.rankName}</td>
+                                        <td className="px-5 py-3 text-zinc-600">{formatBeltRank(r.rankName)}</td>
                                         <td className="px-5 py-3">
                                             <StatusPill status={r.status} reason={r.failureReason} />
                                         </td>

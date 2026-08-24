@@ -20,11 +20,19 @@ import {
     parseCustomDivisions,
     resolveDivision,
     type CustomDivision,
+    type DivisionFee,
 } from "@/lib/tournaments/divisions";
 import type { Gender } from "@/prisma/generated/client";
 
 type ActionResult =
-    | { ok: true; token: string; payUrl?: string }
+    | {
+          ok: true;
+          token: string;
+          payUrl?: string;
+          // Set by the add-divisions flow; used by the free-path redirect to
+          // land the member on the dedicated add-divisions success page.
+          addFlowRegId?: string;
+      }
     | { ok: false; error: string };
 
 type CheckInResult =
@@ -1040,6 +1048,771 @@ export async function registerForTournamentAndRedirect(
         );
     }
     if (res.payUrl) redirect(res.payUrl);
+    redirect(`/participants/${res.token}`);
+}
+
+// ─────────────────────────────────────────────────────────────────────────
+// ADD DIVISIONS — member expands an existing registration with new picks
+// ─────────────────────────────────────────────────────────────────────────
+
+/**
+ * Extend a member's existing event registration with additional divisions
+ * (and their required + opt-in fees). Existing rows are never modified — this
+ * only creates new EventRegistration rows for divisions the member hasn't yet
+ * entered, and initiates payment for the delta.
+ *
+ * Guest registrations aren't editable here; the member must be signed in and
+ * already own at least one row for this event.
+ */
+export async function addDivisionsToRegistrationAction(
+    formData: FormData,
+): Promise<ActionResult> {
+    const eventId = trim(formData.get("eventId"));
+    if (!eventId) return { ok: false, error: "Missing event id." };
+
+    const supabase = await createClient();
+    const {
+        data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) {
+        return { ok: false, error: "Sign in to modify your registration." };
+    }
+
+    const event = await prisma.event.findUnique({
+        where: { id: eventId },
+        select: {
+            id: true,
+            title: true,
+            isPublished: true,
+            eventDate: true,
+            location: true,
+            dojoId: true,
+            ticketPrice: true,
+            multiDivisionDiscountType: true,
+            multiDivisionDiscountPercent: true,
+            dojo: { select: { name: true } },
+            tournamentDetail: true,
+        },
+    });
+    if (!event || !event.isPublished) {
+        return { ok: false, error: "Event not found." };
+    }
+    if (
+        event.tournamentDetail?.registrationDeadline &&
+        event.tournamentDetail.registrationDeadline.getTime() < Date.now()
+    ) {
+        return { ok: false, error: "Registration for this event has closed." };
+    }
+
+    const customDivisions = event.tournamentDetail
+        ? parseCustomDivisions(event.tournamentDetail.customDivisions)
+        : [];
+    if (customDivisions.length === 0) {
+        return {
+            ok: false,
+            error: "This event has no divisions to add.",
+        };
+    }
+
+    // Every row the member owns for this event. Only PAID rows count as
+    // "already registered" — a stuck PENDING/FAILED row from a prior payment
+    // that never settled must not block the retry, or the user can never
+    // recover the division they were trying to add.
+    const allExistingRows = await prisma.eventRegistration.findMany({
+        where: { eventId, userId: user.id },
+        orderBy: { createdAt: "asc" },
+    });
+    const existingRows = allExistingRows.filter(
+        (r) => r.paymentStatus === "PAID" || r.paymentStatus === null,
+    );
+    if (existingRows.length === 0) {
+        return {
+            ok: false,
+            error: "You aren't registered for this event yet. Please register first.",
+        };
+    }
+    const existingCodes = new Set(
+        existingRows
+            .map((r) => r.divisionCode)
+            .filter((c): c is string => !!c),
+    );
+
+    // Aggregate every addon the member has already PAID for on each division
+    // so an add-flow retry never charges twice for the same opt-in. Stale
+    // PENDING rows are intentionally excluded — those addons were never paid.
+    const alreadyPickedFeeIdsByCode = new Map<string, Set<string>>();
+    for (const r of existingRows) {
+        if (!r.divisionCode) continue;
+        const raw = r.selectedOptionalFees;
+        if (!Array.isArray(raw)) continue;
+        const set =
+            alreadyPickedFeeIdsByCode.get(r.divisionCode) ??
+            new Set<string>();
+        for (const item of raw) {
+            if (!item || typeof item !== "object") continue;
+            const id = (item as Record<string, unknown>).id;
+            if (typeof id === "string" && id) set.add(id);
+        }
+        alreadyPickedFeeIdsByCode.set(r.divisionCode, set);
+    }
+
+    const picked = formData
+        .getAll("divisionCode")
+        .map((v) => (typeof v === "string" ? v.trim() : ""))
+        .filter(Boolean);
+    const codesToAdd = Array.from(new Set(picked));
+
+    for (const code of codesToAdd) {
+        if (existingCodes.has(code)) {
+            const d = resolveDivision(code, customDivisions);
+            return {
+                ok: false,
+                error: `You're already registered for ${d?.label ?? code}.`,
+            };
+        }
+    }
+
+    const divisions: Array<{ code: string; division: CustomDivision }> = [];
+    for (const code of codesToAdd) {
+        const d = resolveDivision(code, customDivisions);
+        if (!d) return { ok: false, error: `Unknown division: ${code}.` };
+        divisions.push({ code, division: d });
+    }
+
+    // Parse addon adds on existing divisions from the same `optionalFee`
+    // inputs — the form posts every ticked add-on regardless of whether the
+    // parent division is new or already registered.
+    type ExistingAddonAdd = {
+        code: string;
+        division: CustomDivision;
+        fee: DivisionFee;
+    };
+    const existingAddonAdds: ExistingAddonAdd[] = [];
+    const seenExistingAddonKeys = new Set<string>();
+    for (const v of formData.getAll("optionalFee")) {
+        if (typeof v !== "string" || !v.includes(":")) continue;
+        const [code, feeId] = v.split(":");
+        if (!code || !feeId) continue;
+        // Skip addon entries that belong to a NEW division being added — those
+        // are already handled inline with the new division below.
+        if (!existingCodes.has(code)) continue;
+        const key = `${code}:${feeId}`;
+        if (seenExistingAddonKeys.has(key)) continue;
+        seenExistingAddonKeys.add(key);
+        const d = resolveDivision(code, customDivisions);
+        if (!d) continue;
+        const fee = d.fees?.find((f) => f.id === feeId && !f.required);
+        if (!fee) {
+            return {
+                ok: false,
+                error: `Unknown add-on for ${d.label}.`,
+            };
+        }
+        if (alreadyPickedFeeIdsByCode.get(code)?.has(feeId)) {
+            // Already paid — skip silently rather than error, so a stale form
+            // resubmit doesn't double-charge.
+            continue;
+        }
+        existingAddonAdds.push({ code, division: d, fee });
+    }
+
+    if (divisions.length === 0 && existingAddonAdds.length === 0) {
+        return {
+            ok: false,
+            error: "Pick at least one new division or a missed add-on to continue.",
+        };
+    }
+
+    // Personal fields carry over from the earliest existing row — the member
+    // already provided them when they first registered. Weight is required
+    // only when a newly-added division is kumite.
+    const base = existingRows[0];
+    const genderRaw = base.entrantGender;
+    if (!genderRaw || !isGender(genderRaw)) {
+        return {
+            ok: false,
+            error: "Your registration is missing a gender. Please contact an admin.",
+        };
+    }
+    const profile = await prisma.profile.findUnique({
+        where: { id: user.id },
+        select: { dateOfBirth: true },
+    });
+    const effectiveDob: Date | null =
+        profile?.dateOfBirth ?? base.guestDateOfBirth ?? null;
+    if (!effectiveDob) {
+        return {
+            ok: false,
+            error: "Your date of birth is required. Update your profile and try again.",
+        };
+    }
+
+    const anyKumite = divisions.some(
+        ({ division }) => division.eventType === "KUMITE",
+    );
+    let weightKg: number | null = base.entrantWeightKg
+        ? Number(base.entrantWeightKg)
+        : null;
+    if (anyKumite) {
+        const raw = trim(formData.get("entrantWeightKg"));
+        if (raw) {
+            const w = Number.parseFloat(raw);
+            if (!Number.isFinite(w) || w <= 0) {
+                return { ok: false, error: "Enter your weight in kg." };
+            }
+            weightKg = Math.round(w * 100) / 100;
+        }
+        if (weightKg === null) {
+            return { ok: false, error: "Enter your weight in kg." };
+        }
+    }
+
+    const currentStudent = await prisma.student.findUnique({
+        where: { id: user.id },
+        select: { currentRank: true },
+    });
+    const entrantBeltRank =
+        currentStudent?.currentRank ?? base.entrantBeltRank ?? null;
+    const anyRankGated = divisions.some(({ division }) => !!division.minRankId);
+    if (anyRankGated && !entrantBeltRank) {
+        return {
+            ok: false,
+            error: "Your registration is missing a belt rank. Please contact an admin.",
+        };
+    }
+
+    const requiredRankIds = Array.from(
+        new Set(
+            divisions
+                .map(({ division }) => division.minRankId)
+                .filter((x): x is string => !!x),
+        ),
+    );
+    const rankRows = requiredRankIds.length
+        ? await prisma.beltRank.findMany({
+              where: { id: { in: requiredRankIds } },
+              select: { id: true, name: true, orderIndex: true },
+          })
+        : [];
+    const rankById = new Map(rankRows.map((r) => [r.id, r]));
+    const declaredRank = entrantBeltRank
+        ? await prisma.beltRank.findUnique({
+              where: { name: entrantBeltRank },
+              select: { orderIndex: true },
+          })
+        : null;
+    const viewerRankOrder: number | null = declaredRank?.orderIndex ?? null;
+
+    const entrantAge = ageOnDate(effectiveDob, event.eventDate);
+    for (const { division } of divisions) {
+        if (division.membersOnly && !user) {
+            return { ok: false, error: `${division.label} is for members only.` };
+        }
+        if (division.gender !== "ANY" && division.gender !== genderRaw) {
+            return {
+                ok: false,
+                error: `${division.label} is restricted to ${
+                    division.gender === "MALE" ? "male" : "female"
+                } participants.`,
+            };
+        }
+        if (division.minAge !== null && entrantAge < division.minAge) {
+            return {
+                ok: false,
+                error: `${division.label} requires minimum age ${division.minAge}.`,
+            };
+        }
+        if (division.maxAge !== null && entrantAge > division.maxAge) {
+            return {
+                ok: false,
+                error: `${division.label} is capped at age ${division.maxAge}.`,
+            };
+        }
+        if (division.minRankId) {
+            const required = rankById.get(division.minRankId);
+            if (required) {
+                if (
+                    viewerRankOrder === null ||
+                    viewerRankOrder < required.orderIndex
+                ) {
+                    return {
+                        ok: false,
+                        error: `${division.label} requires at least ${required.name}.`,
+                    };
+                }
+            }
+        }
+        if (
+            division.eventType === "KUMITE" ||
+            division.minWeightKg !== null ||
+            division.maxWeightKg !== null
+        ) {
+            if (weightKg === null) {
+                return {
+                    ok: false,
+                    error: `${division.label} needs your weight in kg.`,
+                };
+            }
+            if (
+                division.minWeightKg !== null &&
+                weightKg < division.minWeightKg
+            ) {
+                return {
+                    ok: false,
+                    error: `${division.label} requires min ${division.minWeightKg} kg.`,
+                };
+            }
+            if (
+                division.maxWeightKg !== null &&
+                weightKg > division.maxWeightKg
+            ) {
+                return {
+                    ok: false,
+                    error: `${division.label} caps at ${division.maxWeightKg} kg.`,
+                };
+            }
+        }
+    }
+
+    const registrantIsMember = await isJkaMember(user.id);
+
+    const chosenOptional = new Set<string>();
+    for (const v of formData.getAll("optionalFee")) {
+        if (typeof v === "string" && v.includes(":")) chosenOptional.add(v);
+    }
+
+    for (const { code, division } of divisions) {
+        const optional = division.fees?.filter((f) => !f.required) ?? [];
+        if (optional.length === 0) continue;
+        const anyPicked = optional.some((f) =>
+            chosenOptional.has(`${code}:${f.id}`),
+        );
+        if (!anyPicked) {
+            return {
+                ok: false,
+                error: `Pick at least one add-on for ${division.label}.`,
+            };
+        }
+    }
+
+    // Price the newly-added divisions. When existingCount + newCount >= 2 the
+    // event's multi-division discount applies to the added subtotal — the
+    // member is now in "bundle" territory even if they added on later.
+    const round2 = (n: number) => Math.round(n * 100) / 100;
+    const preDiscountPerCode = new Map<string, number>();
+    const optionalSnapshotPerCode = new Map<
+        string,
+        { id: string; name: string; amountBdt: number }[]
+    >();
+    let preDiscountSubtotal = 0;
+    for (const { code, division } of divisions) {
+        let effective = 0;
+        const pickedFees: { id: string; name: string; amountBdt: number }[] = [];
+        if (division.fees && division.fees.length > 0) {
+            for (const f of division.fees) {
+                const isActive =
+                    f.required || chosenOptional.has(`${code}:${f.id}`);
+                if (isActive) {
+                    effective += feeAmountAfterMemberDiscount(
+                        f,
+                        registrantIsMember,
+                    );
+                }
+                if (!f.required && chosenOptional.has(`${code}:${f.id}`)) {
+                    pickedFees.push({
+                        id: f.id,
+                        name: f.name,
+                        amountBdt: feeAmountAfterMemberDiscount(
+                            f,
+                            registrantIsMember,
+                        ),
+                    });
+                }
+            }
+        } else {
+            effective = division.priceBdt ?? 0;
+        }
+        optionalSnapshotPerCode.set(code, pickedFees);
+        effective = round2(effective);
+        preDiscountPerCode.set(code, effective);
+        preDiscountSubtotal += effective;
+    }
+    preDiscountSubtotal = round2(preDiscountSubtotal);
+
+    const multiDivisionType = coerceDiscountType(event.multiDivisionDiscountType);
+    const multiDivisionValue = Number(event.multiDivisionDiscountPercent);
+    const totalDivisionCount = existingCodes.size + divisions.length;
+    let addedSubtotal = preDiscountSubtotal;
+    const pricePerCode = new Map<string, number>();
+    if (
+        totalDivisionCount >= 2 &&
+        preDiscountSubtotal > 0 &&
+        multiDivisionValue > 0
+    ) {
+        addedSubtotal = applyTypedDiscount(
+            preDiscountSubtotal,
+            multiDivisionType,
+            multiDivisionValue,
+        );
+        const ratio = addedSubtotal / preDiscountSubtotal;
+        let allocated = 0;
+        const codes = Array.from(preDiscountPerCode.keys());
+        codes.forEach((code, idx) => {
+            const orig = preDiscountPerCode.get(code) ?? 0;
+            const isLast = idx === codes.length - 1;
+            const scaled = isLast
+                ? round2(addedSubtotal - allocated)
+                : round2(orig * ratio);
+            pricePerCode.set(code, Math.max(0, scaled));
+            allocated = round2(allocated + scaled);
+        });
+    } else {
+        for (const [code, price] of preDiscountPerCode) {
+            pricePerCode.set(code, price);
+        }
+    }
+    addedSubtotal = round2(addedSubtotal);
+
+    // Addons on existing (already-paid) divisions — priced separately without
+    // any multi-division discount. Grouped by division so each existing code
+    // gets one "addon-only" shadow row.
+    const addonAddsByCode = new Map<
+        string,
+        { snapshot: { id: string; name: string; amountBdt: number }[]; amount: number }
+    >();
+    let existingAddonSubtotal = 0;
+    for (const { code, fee } of existingAddonAdds) {
+        const amount = feeAmountAfterMemberDiscount(fee, registrantIsMember);
+        const bucket =
+            addonAddsByCode.get(code) ?? { snapshot: [], amount: 0 };
+        bucket.snapshot.push({
+            id: fee.id,
+            name: fee.name,
+            amountBdt: amount,
+        });
+        bucket.amount = round2(bucket.amount + amount);
+        addonAddsByCode.set(code, bucket);
+        existingAddonSubtotal = round2(existingAddonSubtotal + amount);
+    }
+
+    // Event-wide base ticket was already paid on the original registration,
+    // so it's NOT added here.
+    const totalAmount = round2(addedSubtotal + existingAddonSubtotal);
+    const isPremium = totalAmount > 0;
+    // Every new row created in this add-flow (divisions + addon-only rows)
+    // shares one payment group so the SSLCommerz session covers them all
+    // and `markRegistrationPaid` fans PAID across the batch.
+    const totalNewRows = divisions.length + addonAddsByCode.size;
+    const paymentGroupId =
+        isPremium && totalNewRows > 1 ? randomUUID() : null;
+
+    // Team fields — new team divisions need teammates + team name. Existing
+    // team rows aren't touched.
+    const anyTeam = divisions.some(({ division }) => division.isTeam);
+    let teamName: string | null = null;
+    let teammates: unknown = null;
+    if (anyTeam) {
+        teamName = trim(formData.get("teamName")) || null;
+        const t1n = trim(formData.get("teammate1Name"));
+        const t2n = trim(formData.get("teammate2Name"));
+        if (!teamName || !t1n || !t2n) {
+            return {
+                ok: false,
+                error: "Team name and both teammates are required for team divisions.",
+            };
+        }
+        teammates = [
+            { name: t1n, memberNumber: trim(formData.get("teammate1Member")) || null },
+            { name: t2n, memberNumber: trim(formData.get("teammate2Member")) || null },
+        ];
+    }
+
+    // Personal detail carry-over: emergency contact, guardian, coach, dojo,
+    // profile image — all inherit from the earliest existing row.
+    const account = await prisma.user.findUnique({
+        where: { id: user.id },
+        select: {
+            fullName: true,
+            email: true,
+            contactEmail: true,
+            phone: true,
+        },
+    });
+    const realAuthEmail =
+        account?.email && !account.email.endsWith("@members.jkabangladesh.com")
+            ? account.email
+            : null;
+    const buyerName = account?.fullName ?? base.guestName ?? "Participant";
+    const buyerEmail =
+        account?.contactEmail ?? realAuthEmail ?? base.guestEmail ?? "";
+    const buyerPhone = account?.phone ?? base.guestPhone;
+
+    // Clear out stale PENDING/FAILED rows from a prior add-flow attempt that
+    // touched any of the divisions we're about to (re)create. Leaving them
+    // would let orphans pile up on every retry and would also confuse the
+    // participation card's dedupe. PaymentTransaction rows point at these via
+    // ON DELETE SET NULL, so removing the registrations is safe.
+    const affectedDivisionCodes = new Set<string>([
+        ...codesToAdd,
+        ...existingAddonAdds.map((a) => a.code),
+    ]);
+    const staleRowIdsToDelete = allExistingRows
+        .filter(
+            (r) =>
+                (r.paymentStatus === "PENDING" ||
+                    r.paymentStatus === "FAILED") &&
+                r.divisionCode !== null &&
+                affectedDivisionCodes.has(r.divisionCode),
+        )
+        .map((r) => r.id);
+    if (staleRowIdsToDelete.length > 0) {
+        await prisma.eventRegistration.deleteMany({
+            where: { id: { in: staleRowIdsToDelete } },
+        });
+    }
+
+    type CreatedRow = { id: string; qrToken: string; divisionCode: string };
+    const created: CreatedRow[] = [];
+
+    for (const { code, division } of divisions) {
+        const perRowPrice = pricePerCode.get(code) ?? 0;
+        const qrToken = urlSafeToken();
+        const reg = await prisma.eventRegistration.create({
+            data: {
+                event: { connect: { id: eventId } },
+                user: { connect: { id: user.id } },
+                qrToken,
+                paymentStatus:
+                    isPremium && perRowPrice > 0
+                        ? "PENDING"
+                        : isPremium
+                          ? "PAID"
+                          : null,
+                amountDue: isPremium ? perRowPrice : null,
+                paidAt:
+                    isPremium && perRowPrice === 0 ? new Date() : null,
+                paymentGroupId,
+                divisionCode: code,
+                entrantGender: genderRaw,
+                entrantWeightKg:
+                    division.eventType === "KUMITE" && weightKg !== null
+                        ? weightKg
+                        : null,
+                entrantBeltRank,
+                entrantDojoName: base.entrantDojoName,
+                coachName: base.coachName,
+                teamName: division.isTeam ? teamName : null,
+                teammates: division.isTeam
+                    ? (teammates as never)
+                    : undefined,
+                guardianName: base.guardianName,
+                guardianPhone: base.guardianPhone,
+                guardianConsent: base.guardianConsent,
+                emergencyContactName: base.emergencyContactName,
+                emergencyContactPhone: base.emergencyContactPhone,
+                profileImageUrl: base.profileImageUrl,
+                guestDateOfBirth: effectiveDob,
+                selectedOptionalFees:
+                    (optionalSnapshotPerCode.get(code) ?? []).length > 0
+                        ? (optionalSnapshotPerCode.get(code) as never)
+                        : undefined,
+            },
+            select: { id: true, qrToken: true },
+        });
+        created.push({
+            id: reg.id,
+            qrToken: reg.qrToken,
+            divisionCode: code,
+        });
+    }
+
+    // Shadow rows for addons on already-registered divisions. They carry the
+    // same divisionCode as the parent row (linked via parentRegistrationId,
+    // which excludes them from the unique-per-division constraint), and
+    // store ONLY the newly-added addons in selectedOptionalFees. The
+    // participation card dedupes by divisionCode + parent link on render.
+    const addonPerRowPrice = new Map<string, number>();
+    for (const [code, { snapshot, amount }] of addonAddsByCode) {
+        // Prefer the earliest parent row (not itself a shadow) so a subsequent
+        // add-flow re-parents to the original registration.
+        const parent =
+            existingRows.find(
+                (r) => r.divisionCode === code && !r.parentRegistrationId,
+            ) ??
+            existingRows.find((r) => r.divisionCode === code) ??
+            base;
+        // Free (no-payment) addon adds are applied immediately to the parent
+        // row and no shadow row is created — nothing to track since there is
+        // no payment to wait on.
+        if (!isPremium || amount === 0) {
+            const existingSnap = Array.isArray(parent.selectedOptionalFees)
+                ? (parent.selectedOptionalFees as unknown[])
+                      .filter(
+                          (r): r is Record<string, unknown> =>
+                              !!r && typeof r === "object",
+                      )
+                      .map((r) => ({
+                          id: typeof r.id === "string" ? r.id : "",
+                          name: typeof r.name === "string" ? r.name : "",
+                          amountBdt:
+                              typeof r.amountBdt === "number"
+                                  ? r.amountBdt
+                                  : Number(r.amountBdt ?? 0),
+                      }))
+                      .filter((f) => f.id)
+                : [];
+            const merged = [
+                ...existingSnap,
+                ...snapshot.filter(
+                    (n) => !existingSnap.some((e) => e.id === n.id),
+                ),
+            ];
+            await prisma.eventRegistration.update({
+                where: { id: parent.id },
+                data: {
+                    selectedOptionalFees: merged as never,
+                },
+            });
+            continue;
+        }
+        // Paid addon adds: create a "shadow" registration row that holds ONLY
+        // the delta payment + the newly-picked addons. On payment success,
+        // markRegistrationPaid merges the shadow's addons into the parent
+        // row's selectedOptionalFees so the parent row ends up "updated"
+        // with the add-ons the member paid for.
+        const qrToken = urlSafeToken();
+        const parentWeight = parent.entrantWeightKg
+            ? Number(parent.entrantWeightKg)
+            : null;
+        const reg = await prisma.eventRegistration.create({
+            data: {
+                event: { connect: { id: eventId } },
+                user: { connect: { id: user.id } },
+                qrToken,
+                paymentStatus: "PENDING",
+                amountDue: amount,
+                paymentGroupId,
+                divisionCode: code,
+                parent: { connect: { id: parent.id } },
+                entrantGender: genderRaw,
+                entrantWeightKg: parentWeight,
+                entrantBeltRank,
+                entrantDojoName: parent.entrantDojoName,
+                coachName: parent.coachName,
+                guardianName: parent.guardianName,
+                guardianPhone: parent.guardianPhone,
+                guardianConsent: parent.guardianConsent,
+                emergencyContactName: parent.emergencyContactName,
+                emergencyContactPhone: parent.emergencyContactPhone,
+                profileImageUrl: parent.profileImageUrl,
+                guestDateOfBirth: effectiveDob,
+                selectedOptionalFees: snapshot as never,
+            },
+            select: { id: true, qrToken: true },
+        });
+        addonPerRowPrice.set(reg.id, amount);
+        created.push({
+            id: reg.id,
+            qrToken: reg.qrToken,
+            divisionCode: code,
+        });
+    }
+
+    revalidatePath(`/events/${eventId}`);
+    revalidatePath(`/portal/events`);
+    revalidatePath(`/portal/admin/events/${eventId}/participants`);
+    for (const row of existingRows) {
+        revalidatePath(`/participants/${row.qrToken}`);
+    }
+
+    if (isPremium && totalAmount > 0) {
+        const primary =
+            created.find((row) => {
+                const perDivision = pricePerCode.get(row.divisionCode) ?? 0;
+                const perAddon = addonPerRowPrice.get(row.id) ?? 0;
+                return perDivision > 0 || perAddon > 0;
+            }) ?? created[0];
+        const summaryPieces: string[] = [];
+        if (divisions.length > 0)
+            summaryPieces.push(
+                `${divisions.length} added division${divisions.length === 1 ? "" : "s"}`,
+            );
+        if (addonAddsByCode.size > 0)
+            summaryPieces.push(
+                `${addonAddsByCode.size} add-on batch${addonAddsByCode.size === 1 ? "" : "es"}`,
+            );
+        const init = await initiateTicketPayment({
+            registrationId: primary.id,
+            qrToken: primary.qrToken,
+            amount: totalAmount,
+            eventId: event.id,
+            eventTitle:
+                summaryPieces.length > 0
+                    ? `${event.title} — ${summaryPieces.join(", ")}`
+                    : event.title,
+            customerName: buyerName,
+            customerEmail: buyerEmail,
+            customerPhone: buyerPhone,
+            flow: "add",
+        });
+        if (init.kind === "gateway") {
+            return {
+                ok: true,
+                token: primary.qrToken,
+                payUrl: init.url,
+                addFlowRegId: primary.id,
+            };
+        }
+        if (init.kind === "devPaid") {
+            return {
+                ok: true,
+                token: primary.qrToken,
+                addFlowRegId: primary.id,
+            };
+        }
+        return { ok: false, error: init.message };
+    }
+
+    // Free additions — no payment required. Fire a confirmation email for
+    // each newly-added row (mirrors the free-event branch on register).
+    const appUrl =
+        process.env.NEXT_PUBLIC_APP_URL ??
+        process.env.APP_URL ??
+        "http://localhost:3000";
+    const recipientEmail =
+        account?.contactEmail ?? base.guestEmail ?? realAuthEmail;
+    for (const row of created) {
+        await sendEventRegistrationEmail(recipientEmail, {
+            participantName: buyerName,
+            participationCardUrl: `${appUrl}/participants/${row.qrToken}`,
+            invoiceUrl: null,
+            isPaid: false,
+            amountPaidBdt: null,
+            event: {
+                title: event.title,
+                eventDate: event.eventDate.toISOString(),
+                location: event.location,
+                dojoName: event.dojo?.name ?? null,
+            },
+        });
+    }
+    return { ok: true, token: created[0].qrToken, addFlowRegId: created[0].id };
+}
+
+export async function addDivisionsAndRedirect(
+    formData: FormData,
+): Promise<void> {
+    const eventId = trim(formData.get("eventId"));
+    const res = await addDivisionsToRegistrationAction(formData);
+    if (!res.ok) {
+        redirect(
+            `/portal/events/${eventId}/add-divisions?error=${encodeURIComponent(res.error)}`,
+        );
+    }
+    if (res.payUrl) redirect(res.payUrl);
+    if (res.addFlowRegId) {
+        redirect(`/events/add-divisions-success?regId=${res.addFlowRegId}`);
+    }
     redirect(`/participants/${res.token}`);
 }
 

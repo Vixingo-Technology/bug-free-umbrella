@@ -118,8 +118,11 @@ export default async function ParticipationCardPage({
     if (!registration) notFound();
 
     // Sibling rows created in the same multi-division submit share
-    // paymentGroupId. We render them together so the participant sees "you have
-    // both divisions" and the payment total reflects the whole group.
+    // paymentGroupId. Additionally, members can add more divisions later via
+    // the "Add divisions" flow — those live under a fresh paymentGroupId but
+    // belong on the same card. `groupSiblings` still drives payment math
+    // (only the current group's PENDING rows are billed together); the
+    // display list is broader.
     const groupSiblings = registration.paymentGroupId
         ? await prisma.eventRegistration.findMany({
               where: { paymentGroupId: registration.paymentGroupId },
@@ -134,22 +137,106 @@ export default async function ParticipationCardPage({
               },
           })
         : [];
+    const rawDisplayRows = registration.userId
+        ? await prisma.eventRegistration.findMany({
+              where: {
+                  userId: registration.userId,
+                  eventId: registration.eventId,
+              },
+              orderBy: { createdAt: "asc" },
+              select: {
+                  id: true,
+                  qrToken: true,
+                  divisionCode: true,
+                  paymentStatus: true,
+                  selectedOptionalFees: true,
+                  parentRegistrationId: true,
+              },
+          })
+        : [
+              {
+                  id: registration.id,
+                  qrToken: registration.qrToken,
+                  divisionCode: registration.divisionCode,
+                  paymentStatus: registration.paymentStatus,
+                  selectedOptionalFees: registration.selectedOptionalFees,
+                  parentRegistrationId: registration.parentRegistrationId,
+              },
+              ...groupSiblings
+                  .filter((s) => s.id !== registration.id)
+                  .map((s) => ({
+                      id: s.id,
+                      qrToken: s.qrToken,
+                      divisionCode: s.divisionCode,
+                      paymentStatus: s.paymentStatus,
+                      selectedOptionalFees: s.selectedOptionalFees,
+                      parentRegistrationId: null,
+                  })),
+          ];
+    // Hide unpaid addon-only shadow rows (created by the add-flow when the
+    // member tried to buy add-ons on an already-paid division). Until the
+    // shadow row is PAID, its addons must not appear on the participation
+    // card, or a failed / in-flight payment would visibly alter a
+    // registration the member has not yet paid for. The shadow row is
+    // always linked to its parent via parentRegistrationId; primary rows
+    // (which may themselves be PENDING and DO need to display) never have a
+    // parent, so they're unaffected.
+    const displayRows = rawDisplayRows.filter(
+        (r) =>
+            !r.parentRegistrationId ||
+            (r.paymentStatus !== "PENDING" && r.paymentStatus !== "FAILED"),
+    );
     const customDivisions = parseCustomDivisions(
         registration.event.tournamentDetail?.customDivisions,
     );
-    const groupEntries = groupSiblings.map((s) => {
+    // Merge rows that share a divisionCode. The add-flow creates addon-only
+    // shadow rows with the same divisionCode as an existing parent row; here
+    // they collapse into one entry with combined addons and the earliest
+    // qrToken as the "canonical" card link.
+    type MergedEntry = {
+        key: string;
+        qrToken: string;
+        isCurrent: boolean;
+        label: string;
+        eventType: string | null;
+        paid: boolean;
+        addons: PickedFee[];
+    };
+    const mergedByKey = new Map<string, MergedEntry>();
+    for (const s of displayRows) {
         const div = s.divisionCode
             ? resolveDivision(s.divisionCode, customDivisions)
             : null;
-        return {
-            qrToken: s.qrToken,
-            isCurrent: s.qrToken === token,
-            label: div?.label ?? s.divisionCode ?? "Division",
-            eventType: div?.eventType ?? null,
-            paid: s.paymentStatus !== "PENDING" && s.paymentStatus !== "FAILED",
-            addons: parsePickedFees(s.selectedOptionalFees),
-        };
-    });
+        // Rows without a divisionCode (ticket-only) stay independent — key
+        // them by row id so they don't collide with each other.
+        const key = s.divisionCode ?? `row:${s.id}`;
+        const existing = mergedByKey.get(key);
+        const rowPaid =
+            s.paymentStatus !== "PENDING" && s.paymentStatus !== "FAILED";
+        const rowAddons = parsePickedFees(s.selectedOptionalFees);
+        if (!existing) {
+            mergedByKey.set(key, {
+                key,
+                qrToken: s.qrToken,
+                isCurrent: s.qrToken === token,
+                label: div?.label ?? s.divisionCode ?? "Division",
+                eventType: div?.eventType ?? null,
+                paid: rowPaid,
+                addons: rowAddons,
+            });
+        } else {
+            existing.isCurrent = existing.isCurrent || s.qrToken === token;
+            // A division is "paid" only when every row backing it is paid —
+            // any pending addon row keeps the badge amber.
+            existing.paid = existing.paid && rowPaid;
+            for (const a of rowAddons) {
+                if (!existing.addons.some((x) => x.id === a.id)) {
+                    existing.addons.push(a);
+                }
+            }
+        }
+    }
+    const groupEntries = Array.from(mergedByKey.values());
 
     // Current row's division + picked addons for the single-row display.
     const currentDivision = registration.divisionCode
@@ -432,20 +519,33 @@ export default async function ParticipationCardPage({
                                         <p className="text-sm font-bold text-zinc-900 print:text-xs">
                                             {currentDivision.label}
                                         </p>
-                                        {currentAddons.length > 0 && (
-                                            <div className="mt-3">
-                                                <p className="text-[10px] tracking-widest uppercase font-bold text-zinc-400 mb-1">
-                                                    Add-ons
-                                                </p>
-                                                <ul className="space-y-0.5 text-xs text-zinc-600">
-                                                    {currentAddons.map((a) => (
-                                                        <li key={a.id}>
-                                                            + {a.name}
-                                                        </li>
-                                                    ))}
-                                                </ul>
-                                            </div>
-                                        )}
+                                        {/* Prefer the merged addon list for
+                                        this division — includes addons from
+                                        both the original row and any add-on
+                                        shadow rows created via the add flow. */}
+                                        {(() => {
+                                            const merged =
+                                                mergedByKey.get(
+                                                    registration.divisionCode ??
+                                                        "",
+                                                );
+                                            const addons =
+                                                merged?.addons ?? currentAddons;
+                                            return addons.length > 0 ? (
+                                                <div className="mt-3">
+                                                    <p className="text-[10px] tracking-widest uppercase font-bold text-zinc-400 mb-1">
+                                                        Add-ons
+                                                    </p>
+                                                    <ul className="space-y-0.5 text-xs text-zinc-600">
+                                                        {addons.map((a) => (
+                                                            <li key={a.id}>
+                                                                + {a.name}
+                                                            </li>
+                                                        ))}
+                                                    </ul>
+                                                </div>
+                                            ) : null;
+                                        })()}
                                     </div>
                                 ) : null}
                             </div>

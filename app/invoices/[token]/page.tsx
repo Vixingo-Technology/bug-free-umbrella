@@ -148,6 +148,7 @@ export default async function InvoicePage({ params }: Props) {
                   selectedOptionalFees: true,
                   amountDue: true,
                   paymentStatus: true,
+                  parentRegistrationId: true,
               },
           })
         : [
@@ -158,6 +159,7 @@ export default async function InvoicePage({ params }: Props) {
                   selectedOptionalFees: registration.selectedOptionalFees,
                   amountDue: registration.amountDue,
                   paymentStatus: registration.paymentStatus,
+                  parentRegistrationId: registration.parentRegistrationId,
               },
           ];
 
@@ -194,11 +196,21 @@ export default async function InvoicePage({ params }: Props) {
         const subRows: { label: string; amount: number }[] = [];
         let subtotal = 0;
 
+        // Shadow rows (parentRegistrationId set) represent an add-flow
+        // purchase for a division the member had already paid for — only
+        // the newly-picked opt-in fees were charged this session.
+        const isShadow = !!row.parentRegistrationId;
+
         if (division) {
             if (division.fees && division.fees.length > 0) {
                 for (const f of division.fees) {
-                    const isActive = f.required || pickedIds.has(f.id);
-                    if (!isActive) continue;
+                    if (isShadow) {
+                        // Never re-charge required fees on a top-up.
+                        if (f.required || !pickedIds.has(f.id)) continue;
+                    } else {
+                        const isActive = f.required || pickedIds.has(f.id);
+                        if (!isActive) continue;
+                    }
                     const amt = feeAmountAfterMemberDiscount(
                         f,
                         registrantIsMember,
@@ -211,17 +223,25 @@ export default async function InvoicePage({ params }: Props) {
                     });
                     subtotal += amt;
                 }
-            } else if (division.priceBdt !== null && division.priceBdt !== undefined) {
+            } else if (
+                !isShadow &&
+                division.priceBdt !== null &&
+                division.priceBdt !== undefined
+            ) {
                 subRows.push({
                     label: "Entry fee",
                     amount: division.priceBdt,
                 });
                 subtotal += division.priceBdt;
             }
-            divisionsPreDiscount += subtotal;
+            // Shadow rows don't count toward the multi-division discount —
+            // they're follow-ups on an already-discounted purchase.
+            if (!isShadow) divisionsPreDiscount += subtotal;
             lineItems.push({
                 key: row.id,
-                divisionLabel: division.label,
+                divisionLabel: isShadow
+                    ? `${division.label} — add-ons`
+                    : division.label,
                 rows: subRows,
                 subtotal: round2(subtotal),
             });
@@ -256,13 +276,31 @@ export default async function InvoicePage({ params }: Props) {
                 : `Multi-division discount (${discountValue}%)`;
     }
 
+    // Ticket price is charged once per registration group and only when the
+    // group includes a fresh registration — a shadow-row-only top-up doesn't
+    // re-pay the event ticket.
+    const hasNonShadowRow = groupRows.some((r) => !r.parentRegistrationId);
     const ticketAmount =
+        hasNonShadowRow &&
         registration.event.ticketPrice !== null &&
         Number(registration.event.ticketPrice) > 0
             ? round2(Number(registration.event.ticketPrice))
             : 0;
 
-    const total = round2(divisionsAfterDiscount + ticketAmount);
+    // Add-on-only shadow-row subtotals are included in the invoice total but
+    // sit outside the multi-division discount window.
+    const shadowRowIds = new Set(
+        groupRows
+            .filter((r) => !!r.parentRegistrationId)
+            .map((r) => r.id),
+    );
+    let shadowSubtotal = 0;
+    for (const li of lineItems) {
+        if (shadowRowIds.has(li.key)) shadowSubtotal += li.subtotal;
+    }
+    shadowSubtotal = round2(shadowSubtotal);
+
+    const total = round2(divisionsAfterDiscount + ticketAmount + shadowSubtotal);
 
     const participantName =
         registration.user?.fullName ?? registration.guestName ?? "Participant";

@@ -183,8 +183,8 @@ export const siteContent = {
             },
             {
                 desktopLabel: "3rd Kyu",
-                mobileLabel: "Brown-White Belt",
-                color: "brown-white",
+                mobileLabel: "Brown Belt",
+                color: "brown",
                 bg: "bg-amber-800",
                 border: "border-amber-900",
             },
@@ -197,13 +197,13 @@ export const siteContent = {
             },
             {
                 desktopLabel: "1st Kyu",
-                mobileLabel: "Brown-black Belt",
-                color: "brown-black",
+                mobileLabel: "Brown Belt",
+                color: "brown",
                 bg: "bg-amber-800",
                 border: "border-amber-900",
             },
             {
-                desktopLabel: "1st Dan (Black)",
+                desktopLabel: "1st Dan",
                 mobileLabel: "Black Belt",
                 color: "black",
                 bg: "bg-zinc-950",

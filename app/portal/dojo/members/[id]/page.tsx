@@ -15,6 +15,7 @@ import { prisma } from "@/lib/prisma";
 import { serialize } from "@/lib/serialize";
 import type { MembershipStatusLabel } from "@/components/portal/digital-card";
 import { hasAtLeast } from "@/lib/dojo-roles";
+import { formatBeltRank } from "@/lib/constants";
 
 export const dynamic = "force-dynamic";
 
@@ -174,7 +175,7 @@ export default async function StudentDetailPage({
                                     >
                                         <div>
                                             <p className="text-sm font-semibold text-zinc-900">
-                                                {g.toRank?.name ?? "—"}
+                                                {g.toRank?.name ? formatBeltRank(g.toRank.name) : "—"}
                                             </p>
                                             <p className="text-xs text-zinc-500 mt-0.5">
                                                 {g.gradingEvent?.name ?? "Direct award"}
@@ -221,7 +222,7 @@ export default async function StudentDetailPage({
                                             />
                                             <div className="min-w-0">
                                                 <p className="text-sm font-semibold text-zinc-900 truncate">
-                                                    {c.rankName}
+                                                    {formatBeltRank(c.rankName)}
                                                 </p>
                                                 <p className="text-xs text-zinc-500">
                                                     Issued {fmt.format(new Date(c.issuedAt))}

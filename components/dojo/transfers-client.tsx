@@ -232,7 +232,7 @@ function AcceptJoinDialog({
                         </div>
                     )}
                     <div className="flex items-center gap-1.5 text-zinc-500">
-                        <ShieldCheck size={12} /> Current rank on file: {row.student.currentRank}
+                        <ShieldCheck size={12} /> Current rank on file: {formatBeltRank(row.student.currentRank)}
                     </div>
                 </div>
 
@@ -316,9 +316,9 @@ function IncomingRequestRow({
                     </div>
                     <div className="text-xs text-zinc-500 mt-1">
                         Rank on file:{" "}
-                        <span className="font-semibold text-zinc-700">{row.student.currentRank}</span>
+                        <span className="font-semibold text-zinc-700">{formatBeltRank(row.student.currentRank)}</span>
                         {row.assignedRank && row.status === "APPROVED" && row.assignedRank !== row.student.currentRank && (
-                            <span className="ml-1 text-zinc-400">→ set to {row.assignedRank}</span>
+                            <span className="ml-1 text-zinc-400">→ set to {formatBeltRank(row.assignedRank)}</span>
                         )}
                     </div>
                     {row.reason && (
