@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, Calendar, Clock, MapPin, Users, UserPlus, Ticket } from "lucide-react";
+import { ArrowLeft, Calendar, Clock, MapPin, Users, UserPlus, Ticket, CheckCircle2 } from "lucide-react";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import AttachmentViewer from "@/components/attachment-viewer";
@@ -9,6 +9,7 @@ import { prisma } from "@/lib/prisma";
 import { applyDiscount, currentUserIsJkaMember } from "@/lib/auth/is-jka-member";
 import { countUniqueParticipants } from "@/lib/events/participant-count";
 import { DEFAULT_TIME_ZONE } from "@/lib/format/datetime";
+import { createClient } from "@/lib/supabase/server";
 
 type Props = { params: Promise<{ id: string }> };
 
@@ -79,6 +80,20 @@ export default async function EventDetailPage({ params }: Props) {
     const isPremium = divisionPrices.length > 0;
     const minPrice = isPremium ? Math.min(...divisionPrices) : null;
     const maxPrice = isPremium ? Math.max(...divisionPrices) : null;
+    const supabase = await createClient();
+    const {
+        data: { user: authUser },
+    } = await supabase.auth.getUser();
+    const currentUserId = authUser?.id ?? null;
+    const hasExistingRegistration = currentUserId
+        ? (await prisma.eventRegistration.count({
+              where: {
+                  eventId: e.id,
+                  userId: currentUserId,
+                  parentRegistrationId: null,
+              },
+          })) > 0
+        : false;
     const isMember = await currentUserIsJkaMember().catch(() => false);
     const memberDiscountPercent = Number(e.memberDiscountPercent);
     const memberDiscountActive =
@@ -273,6 +288,29 @@ export default async function EventDetailPage({ params }: Props) {
                     {isPast ? (
                         <div className="mt-12 bg-zinc-100 border border-zinc-200 rounded-sm p-6 text-center text-sm text-zinc-500">
                             This event has already taken place.
+                        </div>
+                    ) : hasExistingRegistration ? (
+                        <div className="mt-12 bg-white border border-emerald-200 rounded-sm shadow-sm p-6 md:p-8 flex flex-col md:flex-row md:items-center justify-between gap-6">
+                            <div className="flex items-start gap-3">
+                                <CheckCircle2
+                                    size={22}
+                                    className="text-emerald-600 mt-0.5 shrink-0"
+                                />
+                                <div>
+                                    <h3 className="font-serif font-bold text-lg text-zinc-900 mb-1">
+                                        You&apos;re registered
+                                    </h3>
+                                    <p className="text-sm text-zinc-600">
+                                        View your participation card, add divisions, or manage your registration from your portal.
+                                    </p>
+                                </div>
+                            </div>
+                            <Link
+                                href="/portal/events"
+                                className="inline-flex items-center justify-center gap-2 bg-zinc-900 text-white px-8 py-3 text-xs font-bold tracking-widest uppercase hover:bg-zinc-800 transition-colors rounded-sm shrink-0"
+                            >
+                                View my registration
+                            </Link>
                         </div>
                     ) : (
                         <div className="mt-12 bg-white border border-zinc-200 rounded-sm shadow-sm p-6 md:p-8 flex flex-col md:flex-row md:items-center justify-between gap-6">

@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Mail, RefreshCcw, XCircle } from "lucide-react";
 import { prisma } from "@/lib/prisma";
+import { markRegistrationFailed } from "@/lib/events/ticket-payment";
+import { recordPaymentOutcome } from "@/lib/payments/log";
 
 export const metadata: Metadata = {
     title: "Ticket payment failed — JKA Bangladesh",
@@ -49,6 +51,20 @@ export default async function EventPaymentFailedPage({
             }
         } catch {
             /* ignore */
+        }
+        // Explicitly flip PENDING → FAILED across the payment group so the
+        // cancelled ticket purchase never sits around as in-flight.
+        try {
+            await markRegistrationFailed(regId);
+            await recordPaymentOutcome({
+                eventRegistrationId: regId,
+                status: isCancelled ? "CANCELLED" : "FAILED",
+                reason: isCancelled
+                    ? "Buyer cancelled the payment"
+                    : reason ?? "The payment gateway declined the transaction",
+            });
+        } catch {
+            /* best-effort */
         }
     }
 

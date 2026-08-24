@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { recordPaymentOutcome } from "@/lib/payments/log";
+import { markRegistrationFailed } from "@/lib/events/ticket-payment";
 
 /**
  * SSLCommerz fail_url / cancel_url handler.
@@ -45,6 +46,13 @@ export async function POST(request: Request) {
                     : "The payment gateway declined the transaction"),
             gatewayTxnId: valId,
         });
+    }
+
+    // Explicitly flip the event registration (and its payment-group siblings)
+    // from PENDING to FAILED so a cancelled top-up never lingers as "in-flight"
+    // and never bleeds the selection back into "already added" on the picker.
+    if (eventRegistrationId) {
+        await markRegistrationFailed(eventRegistrationId);
     }
 
     const target = next && next.startsWith("http") ? next : new URL(next ?? "/portal", request.url).toString();

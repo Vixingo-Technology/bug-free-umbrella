@@ -342,3 +342,50 @@ export async function markRegistrationPaid(
 
     return { ok: true, qrToken: effectiveToken };
 }
+
+/**
+ * Mark a PENDING registration (and every sibling in the same paymentGroup) as
+ * FAILED. Called from the SSLCommerz fail/cancel callbacks so a cancelled
+ * top-up never sits around as PENDING — which would hold a capacity slot
+ * during the grace window and could visually leak the "in-flight" selection
+ * back to the buyer. Idempotent: PAID or already-FAILED rows are untouched.
+ */
+export async function markRegistrationFailed(
+    registrationId: string,
+): Promise<{ ok: boolean }> {
+    const reg = await prisma.eventRegistration.findUnique({
+        where: { id: registrationId },
+        select: {
+            id: true,
+            paymentStatus: true,
+            paymentGroupId: true,
+            eventId: true,
+            qrToken: true,
+            parentRegistrationId: true,
+        },
+    });
+    if (!reg) return { ok: false };
+    if (reg.paymentStatus !== "PENDING") return { ok: true };
+
+    await prisma.eventRegistration.update({
+        where: { id: reg.id },
+        data: { paymentStatus: "FAILED" },
+    });
+    if (reg.paymentGroupId) {
+        await prisma.eventRegistration.updateMany({
+            where: {
+                paymentGroupId: reg.paymentGroupId,
+                id: { not: reg.id },
+                paymentStatus: "PENDING",
+            },
+            data: { paymentStatus: "FAILED" },
+        });
+    }
+
+    revalidatePath(`/participants/${reg.qrToken}`);
+    revalidatePath(`/events/${reg.eventId}`);
+    revalidatePath(`/portal/admin/events/${reg.eventId}/participants`);
+    revalidatePath(`/portal/events`);
+    revalidatePath(`/portal/events/${reg.eventId}/add-divisions`);
+    return { ok: true };
+}

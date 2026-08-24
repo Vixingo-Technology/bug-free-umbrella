@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Mail, RefreshCcw, XCircle } from "lucide-react";
 import { prisma } from "@/lib/prisma";
+import { markRegistrationFailed } from "@/lib/events/ticket-payment";
+import { recordPaymentOutcome } from "@/lib/payments/log";
 
 export const metadata: Metadata = {
     title: "Divisions not added — JKA Bangladesh",
@@ -55,6 +57,22 @@ export default async function AddDivisionsFailedPage({
             }
         } catch {
             /* ignore — page still renders without the row context */
+        }
+        // Explicitly flip the shadow (and every sibling in the same payment
+        // group) from PENDING to FAILED so the cancelled top-up never leaks
+        // back as "already added" on a retry, and doesn't hold a capacity slot
+        // through the 15-minute PENDING grace window.
+        try {
+            await markRegistrationFailed(regId);
+            await recordPaymentOutcome({
+                eventRegistrationId: regId,
+                status: isCancelled ? "CANCELLED" : "FAILED",
+                reason: isCancelled
+                    ? "Buyer cancelled the payment"
+                    : reason ?? "The payment gateway declined the transaction",
+            });
+        } catch {
+            /* best-effort — page still renders even if the flip fails */
         }
     }
 
