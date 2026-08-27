@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { createRenewalOrderAction } from "@/app/portal/renew/actions";
 import { DEFAULT_TIME_ZONE } from "@/lib/format/datetime";
+import { extendExpiry } from "@/lib/renewals/extend-expiry";
 
 type Feedback =
     | { kind: "success"; expiry: string | null }
@@ -133,10 +134,17 @@ export default function RenewClient({ member, membershipFeeBDT, userId, feedback
     }
 
     const currentExpiry = member?.expiryDate ? new Date(member.expiryDate) : null;
-    const renewedUntil = new Date(
-        Math.max(currentExpiry?.getTime() ?? Date.now(), Date.now())
-    );
-    renewedUntil.setFullYear(renewedUntil.getFullYear() + 1);
+    const renewedUntil = extendExpiry(currentExpiry);
+    const dateFmt: Intl.DateTimeFormatOptions = {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+        timeZone: DEFAULT_TIME_ZONE,
+    };
+    const currentExpiryFormatted = currentExpiry
+        ? currentExpiry.toLocaleDateString("en-GB", dateFmt)
+        : null;
+    const renewedUntilFormatted = renewedUntil.toLocaleDateString("en-GB", dateFmt);
 
     return (
         <div className="space-y-6 max-w-lg mx-auto">
@@ -171,16 +179,23 @@ export default function RenewClient({ member, membershipFeeBDT, userId, feedback
                         <span className="font-bold text-zinc-900">৳{membershipFeeBDT.toLocaleString()}</span>
                     </div>
 
+                    {currentExpiryFormatted && (
+                        <div className="flex justify-between items-center text-sm">
+                            <span className="text-zinc-500 flex items-center gap-1.5">
+                                <Calendar size={13} /> Current Expiry
+                            </span>
+                            <span className="font-medium text-zinc-500 line-through">
+                                {currentExpiryFormatted}
+                            </span>
+                        </div>
+                    )}
+
                     <div className="flex justify-between items-center text-sm">
                         <span className="text-zinc-500 flex items-center gap-1.5">
-                            <Calendar size={13} /> Valid Until
+                            <Calendar size={13} /> New Expiry Date
                         </span>
-                        <span className="font-semibold text-zinc-900">
-                            {renewedUntil.toLocaleDateString("en-GB", {
-                                day: "numeric", month: "long", year: "numeric",
-                            
-                                timeZone: DEFAULT_TIME_ZONE,
-                            })}
+                        <span className="font-semibold text-emerald-700">
+                            {renewedUntilFormatted}
                         </span>
                     </div>
 
